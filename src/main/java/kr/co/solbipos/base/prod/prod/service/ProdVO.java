@@ -26,6 +26,10 @@ public class ProdVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
+    /** 브랜드명 */
+    private String hqBrandNm;
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -139,6 +143,36 @@ public class ProdVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the hqBrandCd
+     */
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    /**
+     * @param hqBrandCd the hqBrandCd to set
+     */
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+
+    /**
+     * @return the hqBrandNm
+     */
+
+    public String getHqBrandNm() {
+        return hqBrandNm;
+    }
+
+    /**
+     * @param hqBrandNm the hqBrandNm to set
+     */
+    public void setHqBrandNm(String hqBrandNm) {
+        this.hqBrandNm = hqBrandNm;
     }
 
     /**

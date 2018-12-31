@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.view.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.base.store.view.service.enums.StoreEnv;
 
 /**
 * @Class Name : CopyStoreEnvVO.java
@@ -27,6 +28,21 @@ public class CopyStoreEnvVO extends PageVO {
 
     /** 복사대상매장코드 */
     private String targetStoreCd;
+
+    /** 복사할 매장환경 코드 */
+    private StoreEnv nmcodeCd;
+
+    /** 환경설정 구분 */
+    private String envstFg;
+
+    /** XML 설정구분 */
+    private String confgFg;
+
+    /** XML */
+    private String xml;
+
+    /** 프로시져 실행 결과 */
+    private String result;
 
     /**
      * @return the hqOfficeCd
@@ -71,5 +87,80 @@ public class CopyStoreEnvVO extends PageVO {
      */
     public void setTargetStoreCd(String targetStoreCd) {
         this.targetStoreCd = targetStoreCd;
+    }
+
+    /**
+     * @return the nmcodeCd
+     */
+
+    public StoreEnv getNmcodeCd() {
+        return nmcodeCd;
+    }
+
+    /**
+     * @param nmcodeCd the nmcodeCd to set
+     */
+    public void setNmcodeCd(StoreEnv nmcodeCd) {
+        this.nmcodeCd = nmcodeCd;
+    }
+
+    /**
+     * @return the envstFg
+     */
+
+    public String getEnvstFg() {
+        return envstFg;
+    }
+
+    /**
+     * @param envstFg the envstFg to set
+     */
+    public void setEnvstFg(String envstFg) {
+        this.envstFg = envstFg;
+    }
+
+    /**
+     * @return the confgFg
+     */
+
+    public String getConfgFg() {
+        return confgFg;
+    }
+
+    /**
+     * @param confgFg the confgFg to set
+     */
+    public void setConfgFg(String confgFg) {
+        this.confgFg = confgFg;
+    }
+
+    /**
+     * @return the xml
+     */
+
+    public String getXml() {
+        return xml;
+    }
+
+    /**
+     * @param xml the xml to set
+     */
+    public void setXml(String xml) {
+        this.xml = xml;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

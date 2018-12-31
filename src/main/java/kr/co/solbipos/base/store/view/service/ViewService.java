@@ -5,6 +5,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * @Class Name : ViewService.java
@@ -41,4 +42,7 @@ public interface ViewService {
 
     /** 포스목록 조회 */
     List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
+
+    /** 매장환경 복사 */
+    int copyStoreEnv(CopyStoreEnvVO[] copyStoreEnvVOs, Map<String, Object> posParam, SessionInfoVO sessionInfoVO);
 }

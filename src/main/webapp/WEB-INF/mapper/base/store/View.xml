@@ -170,4 +170,304 @@
     </select>
 
 
+    <!-- 매장 공통코드 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+        PARAM    :
+        COMMENTS : 매장의 공통코드를 복사한다.
+    -->
+    <select id="copyStoreNmcode" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copyStoreNmcode */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_STORE_NNCODE
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 매장 환경 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        PARAM    :
+        COMMENTS : 매장환경을 복사한다.
+    -->
+    <select id="copyStoreEnv" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copyStoreEnv */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_STORE_ENVST
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{envstFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 포스 환경 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    :
+        COMMENTS : 매장환경을 복사한다.
+    -->
+    <select id="copyPosEnv" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copyPosEnv */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_POS_ENVST
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 매장 상품 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD,
+                   TB_MS_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR_CLASS,
+                   TB_MS_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    :
+        COMMENTS : 매장 상품과 상품 관련 테이블 정보를 복사한다.
+    -->
+    <select id="copyProduct" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copyProduct */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 상품 판매가 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE , TB_MS_PRODUCT_SALE_HISTORY
+        PARAM    :
+        COMMENTS : 판매가 테이블 정보를 복사한다.
+    -->
+    <select id="copySalePrice" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copySalePrice */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_SALE_PRICE
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+
+    <!-- 포스 기능키 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_STORE , TB_MS_STORE_FNKEY, TB_MS_POS_FNKEY,
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 포스기능키와 관련 정보를 복사한다.
+    -->
+    <select id="copyPosFnKey" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyPosFnKey */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_POS_FNKEY
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 포스기능키 XML 조회 -->
+    <!--
+        TABLE    : TB_WB_POS_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 포스기능키 구성 XML 정보를 조회한다.
+    -->
+    <select id="getFuncKeyXml" parameterType="DefaultMap" resultType="java.lang.String">
+        /* USE : PosFuncMapper.getFuncKeyXml */
+        SELECT
+            XML
+        FROM
+            TB_WB_POS_CONFG_XML twpcx
+        WHERE
+            twpcx.STORE_CD = #{storeCd}
+            AND twpcx.POS_NO = #{posNo}
+            AND twpcx.CONFG_FG = #{confgFg}
+            AND twpcx.USE_YN = 'Y'
+    </select>
+
+    <!-- 포스 기능키 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_STORE , TB_MS_STORE_FNKEY, TB_MS_POS_FNKEY,
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 포스기능키와 관련 정보를 복사한다.
+    -->
+    <select id="copyPosFnKeyXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyPosFnKey */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_POS_FNKEY_XML
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{confgFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 판매터치키 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_MS_TOUCH_KEY_CLASS
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 판매터치키와 관련 정보를 복사한다.
+    -->
+    <select id="copyTouchKey" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyTouchKey */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 판매터치키 XML 조회 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 판매터치키 구성 XML 정보를 조회한다.
+    -->
+    <select id="getTouchKeyXml" parameterType="DefaultMap" resultType="java.lang.String">
+        /* USE : PosFuncMapper.getTouchKeyXml */
+        SELECT
+            XML
+          FROM
+            TB_WB_STORE_CONFG_XML twscx
+         WHERE
+            twscx.STORE_CD = #{storeCd}
+            AND twscx.CONFG_FG = #{confgFg}
+            AND twscx.USE_YN = 'Y'
+    </select>
+
+    <!-- 판매터치키 XML 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_MS_TOUCH_KEY_CLASS
+                   TB_WB_STORE_CONFG_XML, TB_WB_POS_CONFG_XML (6020, 6021)
+        PARAM    :
+        COMMENTS : 매장 판매터치키와 관련 정보를 복사한다.
+    -->
+    <select id="copyTouchKeyXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyTouchKeyXML */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_XML
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{confgFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 쿠폰분류 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PAY_METHOD_CLASS (3)
+        PARAM    :
+        COMMENTS : 매장 쿠폰분류를 복사한다.
+    -->
+    <select id="copyCouponClass" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyCouponClass */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_COUPON_CLASS
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 상품권 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_PAY_METHOD_CLASS (1), TB_MS_GIFT
+        PARAM    :
+        COMMENTS : 매장 상품권과 관련 정보를 복사한다.
+    -->
+    <select id="copyGift" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyGift */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_GIFT
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>

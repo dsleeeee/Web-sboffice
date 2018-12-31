@@ -1,17 +1,26 @@
 package kr.co.solbipos.base.store.view.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.common.enums.ConfgFg;
+import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
+import kr.co.solbipos.base.store.view.service.enums.StoreEnv;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
+import kr.co.solbipos.sys.cd.envconfg.service.EnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
 * @Class Name : ViewServiceImpl.java
@@ -34,13 +43,15 @@ import java.util.List;
 public class ViewServiceImpl implements ViewService {
 
     private final ViewMapper viewMapper;
+    private final MessageService messageService;
     private final String CORNER_USE_YN_ENVST_CD = "2028"; // 코너사용여부 환경변수
 
 
     /** Constructor Injection */
     @Autowired
-    public ViewServiceImpl(ViewMapper viewMapper) {
+    public ViewServiceImpl(ViewMapper viewMapper, MessageService messageService) {
         this.viewMapper = viewMapper;
+        this.messageService = messageService;
     }
 
     /** 매장정보 리스트조회 */
@@ -87,5 +98,84 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO) {
         return viewMapper.getPosList(storePosEnvVO);
+    }
+
+    /** 매장환경복사 */
+    @Override
+    public int copyStoreEnv(CopyStoreEnvVO[] copyStoreEnvVOs, Map<String, Object> posParam,
+        SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        if(copyStoreEnvVOs.length == 0) {
+            throw new JsonException(Status.FAIL, messageService.get("storeView.no.copy.env"));
+        }
+
+        for(CopyStoreEnvVO copyStoreEnvVO : copyStoreEnvVOs) {
+
+            copyStoreEnvVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            copyStoreEnvVO.setOriginalStoreCd(String.valueOf(posParam.get("originalStoreCd")));
+            copyStoreEnvVO.setTargetStoreCd(String.valueOf(posParam.get("targetStoreCd")));
+            copyStoreEnvVO.setRegDt(currentDt);
+            copyStoreEnvVO.setRegId(sessionInfoVO.getUserId());
+            copyStoreEnvVO.setModDt(currentDt);
+            copyStoreEnvVO.setModId(sessionInfoVO.getUserId());
+
+            String procResult = "";
+
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.STORE_ENV) { // 매장환경 복사 (기본)
+                // 매장 공통코드 복사
+                procResult = viewMapper.copyStoreNmcode(copyStoreEnvVO);
+
+                // 매장 기본환경 복사
+                copyStoreEnvVO.setEnvstFg("00");
+                procResult = viewMapper.copyStoreEnv(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.FOOD_ENV) { // 외식환경
+                copyStoreEnvVO.setEnvstFg("01");
+                procResult = viewMapper.copyStoreEnv(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_ENV) { // 포스환경
+                procResult = viewMapper.copyPosEnv(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.PROD) { // 상품
+                // 상품분류, 상품, 판매가격 함께 복사
+                procResult = viewMapper.copyProduct(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.SALE_PRICE) { // 판매가격
+                procResult = viewMapper.copySalePrice(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_FNKEY) { // 포스기능키
+
+                // 포스 기능키 삭제 후, 복사
+                procResult = viewMapper.copyPosFnKey(copyStoreEnvVO);
+
+                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_LEFT.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+
+                // 오른쪽 키 복사
+                copyStoreEnvVO.setConfgFg(ConfgFg.FUNC_KEY_RIGHT.getCode());
+                procResult = viewMapper.copyPosFnKeyXML(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.POS_TOUCHKEY) { // 판매터치키
+
+                // 터치키 클래스와 터치키 복사
+                procResult = viewMapper.copyTouchKey(copyStoreEnvVO);
+
+                // 터치키 XML 복사
+                copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
+                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO);
+
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.COUPON_CLASS) { // 쿠폰분류
+                procResult = viewMapper.copyCouponClass(copyStoreEnvVO);
+            }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.GIFT) { // 상품권
+                procResult = viewMapper.copyGift(copyStoreEnvVO);
+            }
+        }
+
+        return result;
     }
 }

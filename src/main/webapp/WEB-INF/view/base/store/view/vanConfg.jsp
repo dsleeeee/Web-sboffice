@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="vanConfigLayer" show-trigger="Click" hide-trigger="Click" style="width:650px;height:450px;" fade-in="false" fade-out="false">
+<wj-popup control="vanConfigLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;height:450px;" fade-in="false" fade-out="false">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
