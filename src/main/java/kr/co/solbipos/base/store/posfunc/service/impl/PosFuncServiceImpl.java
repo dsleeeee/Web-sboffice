@@ -114,11 +114,11 @@ public class PosFuncServiceImpl implements PosFuncService{
 
         // 기존 포스 기능 삭제
         procCnt = mapper.deletePosFunc(posFuncVO);
-        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 포스 기능 복사
         procCnt = mapper.copyPosFunc(posFuncVO);
-        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         // 1. 포스기능키 XML 정보 복사 (6020)
         DefaultMap<String> param = new DefaultMap<String>();
@@ -145,7 +145,7 @@ public class PosFuncServiceImpl implements PosFuncService{
         param.replace("posNo", posFuncVO.getTargetPos());
 
         procCnt = mapper.insertFuncKeyConfgXml(param);
-        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
 
         // 포스기능키 XML 조회 (오른쪽)
         param.replace("xml", rightConfXML);
@@ -153,7 +153,7 @@ public class PosFuncServiceImpl implements PosFuncService{
         param.replace("posNo", posFuncVO.getTargetPos());
 
         procCnt = mapper.insertFuncKeyConfgXml(param);
-        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
+//        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("label.insertFail"));
 
         return procCnt;
     }
