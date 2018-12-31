@@ -1002,7 +1002,6 @@
                ) tmpsp
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
---            AND tms.HQ_BRAND_CD = #{hqBrandCd}
            AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
            AND thps.STORE_CD (+)= tms.STORE_CD
            AND thps.PROD_CD (+)= #{prodCd}
