@@ -63,6 +63,12 @@ public interface SideMenuMapper {
     /** 사이드메뉴-선택메뉴탭-선택그룹 삭제 */
     int deleteMenuGrpList(SideMenuSelGroupVO sideMenuSelGroupVO);
 
+    /** 사이드메뉴-선택메뉴탭-선택그룹 수정시 매장적용 */
+    String updateHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택그룹 삭제시 매장적용 */
+    String deleteHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
+
     /** 사이드메뉴-선택메뉴탭-선택분류 목록 조회 */
     List<DefaultMap<String>> getMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
 
@@ -74,6 +80,12 @@ public interface SideMenuMapper {
 
     /** 사이드메뉴-선택메뉴탭-선택분류 삭제 */
     int deleteMenuClassList(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 수정시 매장적용 */
+    String saveHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
+
+    /** 사이드메뉴-선택메뉴탭-선택분류 삭제시 매장적용 */
+    String deleteHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
 
     /** 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회 */
     List<DefaultMap<String>> getProdList(SideMenuSelProdVO sideMenuSelProdVO);
@@ -90,12 +102,20 @@ public interface SideMenuMapper {
     /** 사이드메뉴-선택메뉴탭-선택상품 삭제 */
     int deleteMenuProdList(SideMenuSelProdVO sideMenuSelProdVO);
 
-    /** 사이드메뉴-선택메뉴탭- 선택상품 삭제시 선택분류에 해당하는 상품 개수 체크 */
-    int getSideMenuSelClassProdCnt(SideMenuSelClassVO sideMenuSelClassVO);
+    /** 사이드메뉴-선택메뉴탭-선택상품 수정시 매장적용 */
+    String saveHqMenuProdListToStore(SideMenuSelProdVO sideMenuSelProdVO);
 
-    /** 사이드메뉴-선택메뉴탭- 선택분류 삭제시 선택그룹에 해당하는 분류 개수 체크 */
-    int getSideMenuSelGrpClassCnt(SideMenuSelGroupVO sideMenuSelGroupVO);
+    /** 사이드메뉴-선택메뉴탭-선택상품 삭제시 매장적용 */
+    String deleteHqMenuProdListToStore(SideMenuSelProdVO sideMenuSelProdVO);
 
+
+
+//    /** 사이드메뉴-선택메뉴탭- 선택상품 삭제시 선택분류에 해당하는 상품 개수 체크 */
+//    int getSideMenuSelClassProdCnt(SideMenuSelClassVO sideMenuSelClassVO);
+//
+//    /** 사이드메뉴-선택메뉴탭- 선택분류 삭제시 선택그룹에 해당하는 분류 개수 체크 */
+//    int getSideMenuSelGrpClassCnt(SideMenuSelGroupVO sideMenuSelGroupVO);
+//
 //    /** 사이드메뉴-속성탭-속성분류 생성시 매장 적용 */
 //    String insertHqAttrClassListToStore(SideMenuAttrClassVO sideMenuAttrClassVO);
 //
@@ -114,12 +134,4 @@ public interface SideMenuMapper {
 //    /** 사이드메뉴-속성탭-선택그룹 삭제시 매장 적용 */
 //    String deleteHqMenuGrpListToStore(SideMenuSelGroupVO sideMenuSelGroupVO);
 
-//    /** 사이드메뉴-선택메뉴탭-선택분류 생성시 매장 적용 */
-//    String insertHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
-
-    /** 사이드메뉴-선택메뉴탭-선택분류 수정시 매장 적용 */
-    String updateHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
-
-//    /** 사이드메뉴-선택메뉴탭-선택분류 삭제시 매장 적용 */
-//    String deleteHqMenuClassListToStore(SideMenuSelClassVO sideMenuSelClassVO);
 }

@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class SideMenuSelClassVO extends CmmVO {
 
-    private static final long serialVersionUID = -8812175950912333098L;
+    private static final long serialVersionUID = 5178287084932475311L;
 
     /** 본사코드 */
     private String hqOfficeCd;
