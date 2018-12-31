@@ -1,11 +1,12 @@
 package kr.co.common.data.structure;
 
-import java.util.HashMap;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 
+import java.util.HashMap;
+
 public class DefaultMap<Value> extends HashMap<String, Value> {
-    private static final long serialVersionUID = 717352001507309726L;
+    private static final long serialVersionUID = -7482195151960285597L;
 
     @SuppressWarnings("unchecked")
     public DefaultMap() {

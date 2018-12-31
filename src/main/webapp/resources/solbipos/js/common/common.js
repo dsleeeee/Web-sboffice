@@ -218,13 +218,13 @@
           }
         },
         beforeSend: function() {
-          $("#_loadTent, #_loading").show();
+          $("#_saveTent, #_saving").show();
         },
         complete: function() {
-          $("#_loadTent, #_loading").hide();
+          $("#_saveTent, #_saving").hide();
         },
         error : function(){
-          $("#_loadTent, #_loading").hide();
+          $("#_saveTent, #_saving").hide();
         }
       })
       .fail(function(){
