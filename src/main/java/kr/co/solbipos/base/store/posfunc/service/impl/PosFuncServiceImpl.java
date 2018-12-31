@@ -105,11 +105,11 @@ public class PosFuncServiceImpl implements PosFuncService{
     public int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        String dt = currentDateTimeString();
+        String date = currentDateTimeString();
 
-        posFuncVO.setRegDt(dt);
+        posFuncVO.setRegDt(date);
         posFuncVO.setRegId(sessionInfoVO.getUserId());
-        posFuncVO.setModDt(dt);
+        posFuncVO.setModDt(date);
         posFuncVO.setModId(sessionInfoVO.getUserId());
 
         // 기존 포스 기능 삭제
