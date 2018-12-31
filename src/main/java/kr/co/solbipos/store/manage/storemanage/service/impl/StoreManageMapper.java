@@ -190,9 +190,6 @@ public interface StoreManageMapper {
     /** 메인포스 변경 */
     int updatePosEnv(StorePosEnvVO storePosEnvVO);
 
-    /** 포스 복사 타겟포스의 데이터 삭제 */
-    int deletePosTarget(StorePosEnvVO storePosEnvVO);
-
     /** 포스데이터 복사 */
     int copyPosInfo(StorePosEnvVO storePosEnvVO);
 

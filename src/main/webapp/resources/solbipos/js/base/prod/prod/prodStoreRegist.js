@@ -37,6 +37,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = '';
     params.storeNm    = '';
     params.prodCd     = prodScope.getProdInfo().prodCd;
+    params.hqBrandCd  = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'Y';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
@@ -112,6 +113,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd    = $("#srchStoreCd").val();
     params.storeNm    = $("#srchStoreNm").val();
     params.prodCd     = prodScope.getProdInfo().prodCd;
+    params.hqBrandCd  = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);

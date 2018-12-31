@@ -12,7 +12,6 @@ import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.base.store.view.service.enums.CornerUseYn;
-import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,23 +178,37 @@ public class ViewController {
         // 복사할 매장환경 목록 조회
         CommonCodeVO envVO = cmmCodeUtil.getCommCodeData("101");
 
-        StorePosEnvVO storePosEnvVO = new StorePosEnvVO();
-
-        // 원매장 포스목록 조회
-        storePosEnvVO.setStoreCd(copyStoreEnvVO.getOriginalStoreCd());
-        List<DefaultMap<String>> originalPosList = viewService.getPosList(storePosEnvVO);
-
-        // 복사대상 매장 포스 목록 조회
-        storePosEnvVO.setStoreCd(copyStoreEnvVO.getTargetStoreCd());
-        List<DefaultMap<String>> targetPosList = viewService.getPosList(storePosEnvVO);
-
-
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         resultMap.put("envList", envVO.getCodeList());
-        resultMap.put("originalPosList", originalPosList);
-        resultMap.put("targetPosList", targetPosList);
 
         return returnJson(Status.OK, resultMap);
+    }
+
+
+    /**
+     * 매장환경 복사
+     * @param copyStoreEnvVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2018.12.29
+     */
+    @RequestMapping(value = "/copyStoreEnv/copyStoreEnvInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyStoreEnvInfo(@RequestBody CopyStoreEnvVO[] copyStoreEnvVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> posParam = new HashMap<String, Object>();
+        posParam.put("originalStoreCd", request.getParameter("originalStoreCd"));
+        posParam.put("targetStoreCd", request.getParameter("targetStoreCd"));
+
+        int result = viewService.copyStoreEnv(copyStoreEnvVOs, posParam, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

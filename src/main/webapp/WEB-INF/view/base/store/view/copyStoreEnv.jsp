@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="width:600px;">
+<wj-popup control="copyStoreEnvLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="copyStoreEnvCtrl">
 
     <%-- header --%>
@@ -54,55 +54,8 @@
         </div>
       </div>
 
-      <%-- 포스선택영역 --%>
-      <table class="tblType01">
-        <colgroup>
-          <col class="w20" />
-          <col class="w30" />
-          <col class="w20" />
-          <col class="w30" />
-        </colgroup>
-        <tbody>
-        <tr>
-          <th><s:message code="storeView.original.pos" /></th>
-          <td>
-            <div class="sb-select">
-              <wj-combo-box
-                      id="originalPosNo"
-                      ng-model="originalPosNo"
-                      items-source="originalPosArr"
-                      display-member-path="posCdNm"
-                      selected-value-path="posNo"
-                      is-editable="false"
-                      control="comboDt.originalPosCombo"
-                      initialized="_initComboBox(s)"
-                      ng-readonly="isPosReadonly">
-              </wj-combo-box>
-            </div>
-          </td>
-          <th><s:message code="storeView.target.pos" /></th>
-          <td>
-            <div class="sb-select">
-              <wj-combo-box
-                      id="targetPos"
-                      ng-model="targetPos"
-                      items-source="targetPosArr"
-                      display-member-path="posCdNm"
-                      selected-value-path="posNo"
-                      is-editable="false"
-                      ng-readonly="isPosChk"
-                      control="comboDt.targetPosCombo"
-                      initialized="_initComboBox(s)">
-              </wj-combo-box>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-
-
       <%--위즈모 테이블--%>
-      <div class="theGrid mt10" style="height: 200px;">
+      <div class="theGrid mt10" style="height: 250px;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"
@@ -117,9 +70,6 @@
           <wj-flex-grid-column header="<s:message code="storeView.copy.env"/>" binding="nmcodeCd" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
-      <input type="hidden" ng-model="originalPosNo" id="originalPosNo" />
-      <input type="hidden" ng-model="targetPosNo" id="targetPosNo" />
-
 
       <div class="btnSet">
         <%-- 복사 --%>

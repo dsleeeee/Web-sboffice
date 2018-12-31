@@ -29,6 +29,8 @@
                     thp.HQ_OFFICE_CD,
                     thp.PROD_CD,
                     thp.PROD_NM,
+                    thp.HQ_BRAND_CD,
+                    thb.HQ_BRAND_NM,
                     thp.PROD_CLASS_CD,
                     ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                     NVL(thp.COST_UPRC, 0) COST_UPRC,
@@ -63,6 +65,9 @@
                     ) thpsp ON
                     thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                     AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -109,6 +114,9 @@
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
                 </if>
+                <if test="hqBrandNm != null and hqBrandNm != ''">
+                    AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
+                </if>
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
@@ -118,6 +126,9 @@
                     tmp.STORE_CD,
                     tmp.PROD_CD,
                     tmp.PROD_NM,
+                    tms.HQ_OFFICE_CD,
+                    tmp.HQ_BRAND_CD,
+                    thb.HQ_BRAND_NM,
                     tmp.PROD_CLASS_CD,
                     ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
                     NVL(tmp.COST_UPRC, 0) COST_UPRC,
@@ -151,6 +162,11 @@
                     ) thpsp ON
                     tmp.STORE_CD = thpsp.STORE_CD
                     AND tmp.PROD_CD = thpsp.PROD_CD
+                INNER JOIN TB_MS_STORE tms ON
+                    tms.STORE_CD  = tmp.STORE_CD
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                    thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -1016,6 +1032,7 @@
         COMMENTS : 본사 상품을 적용할 매장을 등록한다.
     -->
     <insert id="insertProdStore" parameterType="prodVO">
+
         /* USE : ProdMapper.insertProdStore */
         INSERT INTO TB_HQ_PRODUCT_STORE
         (
