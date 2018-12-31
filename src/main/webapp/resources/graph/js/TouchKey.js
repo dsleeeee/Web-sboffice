@@ -189,21 +189,14 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
             paramArr.push(scopeLayer.flexLayer.itemsSource.items[i]);
           }
         }
-
         if (paramArr.length <= 0) {
           s_alert.pop(messages["touchKey.msg.select"]);
         }
-        // 터치키 매장 적용
-        $.postJSONArray("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function (result) {
-            $scope._popMsg(messages["cmm.saveSucc"]);
-            scopeLayer.flexLayer.collectionView.clearChanges();
-          },
-          function (result) {
-            $scope._popMsg(result.message);
-          }
-        );
+        // 저장수행
+        $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function () {
+          $scope._popMsg(messages["cmm.saveSucc"]);
+        });
       }
-
     });
   });
 
