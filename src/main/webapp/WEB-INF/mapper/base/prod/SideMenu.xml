@@ -1145,6 +1145,25 @@
       </choose>
     </select>
 
+    <!-- 사이드메뉴-선택메뉴탭-선택분류 생성시 매장 적용 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 본사 사이드메뉴 속성분류를 매장에 적용시킨다.
+    -->
+    <select id="updateHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+        /* USE : SideMenuMapper.updateHqMenuClassListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
 
 </mapper>
 

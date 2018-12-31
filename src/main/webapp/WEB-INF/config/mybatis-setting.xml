@@ -121,6 +121,7 @@
     <typeAlias alias="systemEmpPwdManageVO" type="kr.co.solbipos.base.store.emp.system.service.SystemEmpPwdManageVO"/>
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
+    <typeAlias alias="copyStoreEnvVO" type="kr.co.solbipos.base.store.view.service.CopyStoreEnvVO"/>
 <!--
     <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
     <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>

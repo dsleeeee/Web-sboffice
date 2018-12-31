@@ -46,6 +46,9 @@ public class SideMenuAttrClassVO extends CmmVO {
      */
     private String orgnFg;
 
+    /** 프로시져 결과 */
+    private String result;
+
 
     /**
      * @return the hqOfficeCd
@@ -157,5 +160,20 @@ public class SideMenuAttrClassVO extends CmmVO {
      */
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }
