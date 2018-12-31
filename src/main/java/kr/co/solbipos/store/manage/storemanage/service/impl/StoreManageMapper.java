@@ -247,7 +247,13 @@ public interface StoreManageMapper {
     /** 터치키 복사할 매장 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO);
 
-//    /** 벤사, 코너 정보 조회 */
+    /** 포스기능키 기존설정 조회 */
+    String getFuncKeyXml(DefaultMap<String> param);
+
+    /** 포스기능키 XML 정보 생성 */
+    int insertFuncKeyConfgXml(DefaultMap<String> param);
+
+    //    /** 벤사, 코너 정보 조회 */
 //    List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
 
 }
