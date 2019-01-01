@@ -835,9 +835,10 @@
         COMMENTS : 본사 사이드메뉴 속성분류를 매장에 적용시킨다.
     -->
     <select id="saveHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
-        /* USE : SideMenuMapper.saveHqMenuClassListToStore */
+        /* USE : SideMenuMapper.saveHqMenuClassListToStore   */
+
         {
-          CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
+            CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
           (
             #{hqOfficeCd},
             #{sdselClassCd},
