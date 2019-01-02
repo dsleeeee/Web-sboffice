@@ -4,8 +4,8 @@
 
 <configuration scan="true" scanPeriod="30 seconds"><!-- scanPeriod 마다 설정 파일의 변경을 확인하여 로딩 -->
 
-  <property name="ROOT_LEVEL" value="ERROR"/>
-  <property name="LOG_LEVEL" value="ERROR"/>
+  <property name="ROOT_LEVEL" value="DEBUG"/>
+  <property name="LOG_LEVEL" value="DEBUG"/>
   <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"/>
   <property name="FILE_EXT" value="log"/>
 
