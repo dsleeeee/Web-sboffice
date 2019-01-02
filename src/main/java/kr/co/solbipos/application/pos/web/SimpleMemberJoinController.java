@@ -71,7 +71,8 @@ public class SimpleMemberJoinController {
      */
     @RequestMapping(value = "smjtest.sb", method = RequestMethod.GET)
     public String smjtest(HttpServletRequest request, HttpServletResponse response,
-                       Model model) {
+                       Model model ) {
+
 
         return "application/pos/smjTest";
 
