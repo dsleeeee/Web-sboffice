@@ -1763,6 +1763,10 @@ Format.prototype.setElementsValue = function () {
       this.setBtnStyle();
 
     } else {
+      style = graph.getCellStyle(cell);
+      initFontSize = style['fontSize'];
+      initFontColor = style['fontColor'];
+      initFillColor = style['fillColor'];
       // 자식속성
       if (cell.children) {
         // 다른버튼 선택시에만 변경되도록
@@ -1783,7 +1787,6 @@ Format.prototype.setElementsValue = function () {
   format.fontColor.graph = graph;
   format.fillColor.graph = graph;
 
-  console.log("빰 ", initFontSize );
   format.fontSize.value = initFontSize;
   format.fontColor.value = initFontColor;
   format.fillColor.value = initFillColor;
