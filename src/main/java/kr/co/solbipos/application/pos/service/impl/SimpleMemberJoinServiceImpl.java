@@ -1,5 +1,7 @@
 package kr.co.solbipos.application.pos.service.impl;
 
+import kr.co.common.data.enums.Status;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.pos.service.MemberVO;
 import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
@@ -60,7 +62,13 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         memberVO.setRegId(sessionInfoVO.getUserId());           //등록아이디
         memberVO.setModDt(dt);                                  //수정일시
         memberVO.setModId(sessionInfoVO.getUserId());           //수정아이디
+
+        // 회원등록
         result = mapper.insertMember(memberVO);
+
+        // 선불회원 등록 (자점회원)
+        result = mapper.registMemberPrepaid(memberVO);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
     }
