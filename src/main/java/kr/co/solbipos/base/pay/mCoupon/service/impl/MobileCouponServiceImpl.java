@@ -133,11 +133,14 @@ public class MobileCouponServiceImpl implements MobileCouponService {
             }
         }
 
-        if(procCnt == payMethodClassVOs.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+
+//        if(procCnt == payMethodClassVOs.length) {
+//            return procCnt;
+//        } else {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+
+        return procCnt;
     }
 
 }

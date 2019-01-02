@@ -100,13 +100,13 @@
            AND tmm.MEMBR_NO = #{membrNo}
         </if>
         <if test='membrNm != null and membrNm.toString() != ""'>
-           AND tmm.MEMBR_NM = #{membrNm}
+           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
         </if>
         <if test='telNo != null and telNo.toString() != ""'>
-           AND tmm.TEL_NO = #{telNo}
+           AND tmm.TEL_NO LIKE '%'|| #{telNo} ||'%'
         </if>
         <if test='emailAddr != null and emailAddr.toString() != ""'>
-           AND tmm.EMAIL_ADDR = #{emailAddr}
+           AND tmm.EMAIL_ADDR LIKE '%'|| #{emailAddr}||'%'
         </if>
         <if test='regStoreCd != null and regStoreCd.toString() != ""'>
            AND tmm.REG_STORE_CD IN

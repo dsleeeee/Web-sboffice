@@ -71,7 +71,8 @@ public class SimpleMemberJoinController {
      */
     @RequestMapping(value = "smjtest.sb", method = RequestMethod.GET)
     public String smjtest(HttpServletRequest request, HttpServletResponse response,
-                       Model model) {
+                       Model model ) {
+
 
         return "application/pos/smjTest";
 
@@ -89,6 +90,20 @@ public class SimpleMemberJoinController {
         Model model) {
 
         return "application/pos/agridTest";
+
+    }
+
+    /**
+     * 상품 목록 조회 화면
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "simpleMemberJoin.sb", method = RequestMethod.GET)
+    public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+        return "application/pos/simpleMemberJoin";
 
     }
 

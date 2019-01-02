@@ -115,7 +115,7 @@ public class SalePriceServiceImpl implements SalePriceService {
 
             // 매장 판매가 변경
             result = salePriceMapper.modifyStoreProdSalePrice(salePriceVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         }
         return result;
