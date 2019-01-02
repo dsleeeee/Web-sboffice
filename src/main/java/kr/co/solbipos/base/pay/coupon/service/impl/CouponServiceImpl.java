@@ -108,7 +108,7 @@ public class CouponServiceImpl implements CouponService {
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
 
                     procCnt = couponMapper.updateHqCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
                     String payMethodClassResult = couponMapper.updateHqCouponClassToStore(payMethodClassVO);
@@ -117,7 +117,7 @@ public class CouponServiceImpl implements CouponService {
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
 
                     procCnt = couponMapper.deleteHqCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용. (매장 분류 먼저 삭제)
                     String payMethodClassResult = couponMapper.deleteHqCouponClassToStore(payMethodClassVO);
@@ -138,11 +138,11 @@ public class CouponServiceImpl implements CouponService {
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt = couponMapper.updateStoreCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
                 else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt = couponMapper.deleteStoreCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
             }
             // 권한 확인 필요
