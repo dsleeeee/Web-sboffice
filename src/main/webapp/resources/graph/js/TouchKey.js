@@ -1518,6 +1518,14 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
+        if(s.value.length > 7) {
+          var rgb = s.value;
+          rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+          s.value = (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+        }
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 색상도 같이 변경
         if (cell.children) {
@@ -1537,6 +1545,14 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
+        if(s.value.length > 7) {
+          var rgb = s.value;
+          rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+          s.value = (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+        }
         var cellType = graph.cellTypeCombo.selectedValue;
         var cell = s.graph.getSelectionCells()[0];
         if (cell.children) {
@@ -1767,6 +1783,7 @@ Format.prototype.setElementsValue = function () {
   format.fontColor.graph = graph;
   format.fillColor.graph = graph;
 
+  console.log("빰 ", initFontSize );
   format.fontSize.value = initFontSize;
   format.fontColor.value = initFontColor;
   format.fillColor.value = initFillColor;
@@ -2310,8 +2327,8 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
   graph.addMouseListener({
     // 상품버튼 클릭시 버튼/상품명/금액 구분하여 속성설정 예외처리
     mouseDown: function (sender, me) {
-      // 터치키분류 영역 선택 초기화
-      graph.classArea.getSelectionModel().clear();
+      // 터치키분류 영역 선택 초기화 : 제거 - 문제발생시 다시 원복 할것 : 20190102 노현수
+      // graph.classArea.getSelectionModel().clear();
       // 터치키분류 영역 에디팅 판단하여 에디팅 취소 처리
       if (graph.classArea.cellEditor.getEditingCell() != null) {
         graph.classArea.cellEditor.stopEditing(true);
