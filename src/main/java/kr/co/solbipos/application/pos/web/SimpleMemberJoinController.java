@@ -92,6 +92,20 @@ public class SimpleMemberJoinController {
 
     }
 
+    /**
+     * 상품 목록 조회 화면
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "simpleMemberJoin.sb", method = RequestMethod.GET)
+    public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
+        Model model) {
+        return "application/pos/simpleMemberJoin";
+
+    }
+
 
     /**
      * TODO
