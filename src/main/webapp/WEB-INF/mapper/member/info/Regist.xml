@@ -90,23 +90,23 @@
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = tmm.REG_STORE_CD
            AND tmm.USE_YN = 'Y'
-        <if test='storeCd != null and storeCd.toString() != ""'>
+        <if test='storeCd != null and storeCd != ""'>
            AND tmm.REG_STORE_CD = #{storeCd}
         </if>
-        <if test='membrCardNo != null and membrCardNo.toString() != ""'>
+        <if test='membrCardNo != null and membrCardNo != ""'>
            AND tmm.MEMBR_CARD_NO = #{membrCardNo}
         </if>
-        <if test='membrNo != null and membrNo.toString() != ""'>
-           AND tmm.MEMBR_NO = #{membrNo}
+        <if test='membrNo != null and membrNo != ""'>
+           AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
-        <if test='membrNm != null and membrNm.toString() != ""'>
-           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+        <if test='membrNm != null and membrNm != ""'>
+           AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
         </if>
-        <if test='telNo != null and telNo.toString() != ""'>
-           AND tmm.TEL_NO LIKE '%'|| #{telNo} ||'%'
+        <if test='telNo != null and telNo != ""'>
+           AND tmm.TEL_NO LIKE '%'||#{telNo}||'%'
         </if>
         <if test='emailAddr != null and emailAddr.toString() != ""'>
-           AND tmm.EMAIL_ADDR LIKE '%'|| #{emailAddr}||'%'
+           AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
         </if>
         <if test='regStoreCd != null and regStoreCd.toString() != ""'>
            AND tmm.REG_STORE_CD IN
@@ -518,7 +518,7 @@
         AND tnsp.CD_COMPANY = #{cdCompany}
       </if>
       <if test='cdPartner != null and cdPartner.toString() != ""'>
-        AND tnsp.CD_PARTNER = #{cdPartner}
+        AND tnsp.CD_PARTNER LIKE '%||'#{cdPartner}||'%'
       </if>
       <if test='lnPartner != null and lnPartner.toString() != ""'>
         AND tnsp.LN_PARTNER LIKE '%||'#{lnPartner}||'%'
