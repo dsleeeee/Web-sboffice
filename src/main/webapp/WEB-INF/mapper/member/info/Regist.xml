@@ -521,13 +521,13 @@
         AND tnsp.CD_PARTNER = #{cdPartner}
       </if>
       <if test='lnPartner != null and lnPartner.toString() != ""'>
-        AND tnsp.LN_PARTNER LIKE #{lnPartner}||'%'
+        AND tnsp.LN_PARTNER LIKE '%||'#{lnPartner}||'%'
       </if>
       <if test='noCompany != null and noCompany.toString() != ""'>
         AND tnsp.NO_COMPANY = #{noCompany}
       </if>
       <if test='nmCeo != null and nmCeo.toString() != ""'>
-        AND tnsp.NM_CEO LIKE #{nmCeo}||'%'
+        AND tnsp.NM_CEO LIKE '%'||#{nmCeo}||'%'
       </if>
     </select>
 
