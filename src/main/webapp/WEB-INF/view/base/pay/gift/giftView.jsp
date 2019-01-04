@@ -25,15 +25,28 @@
 
     <%-- 상품권분류등록 --%>
     <div class="mb20 mt20" >
-      <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='gift.regist.class' /></span>
+          <%-- 페이지 스케일  --%>
+          <wj-combo-box
+                  class="w100px fl"
+                  id="listScaleBox"
+                  ng-model="listScale"
+                  items-source="_getComboData('listScaleBox')"
+                  display-member-path="name"
+                  selected-value-path="value"
+                  is-editable="false"
+                  initialized="initComboBox(s)"
+                  visible="false">
+          </wj-combo-box>
+          <%--// 페이지 스케일  --%>
           <button class="btn_skyblue" id="btnClassAdd"    ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
           <%--<button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>--%>
           <button class="btn_skyblue" id="btnClassSave"   ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
         </div>
         <%-- 상품권분류등록 그리드 --%>
-        <div id="giftClassGrid" class="wj-gridWrap" style="height:190px; overflow-y: hidden;">
+        <div id="giftClassGrid" class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -55,20 +68,39 @@
             <wj-flex-grid-column header="<s:message code="gift.giftCnt"/>" binding="giftCnt" visible="false"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+          <%-- id --%>
+          <ul id="giftClassCtrlPager" data-size="10">
+          </ul>
+        </div>
+        <%--//페이지 리스트--%>
       </div>
     </div>
   </div>
   <%-- 상품권등록  --%>
   <div class="mb40" ng-controller="giftCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height:260px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height:495px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='gift.regist.gift' /> <span id="giftSubTitle"></span> </span>
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScale"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)"
+                visible="false">
+        </wj-combo-box>
         <button class="btn_skyblue" id="btnGiftAdd" ng-click="addRow()" ng-if="userUseYn"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
       <%-- 상품권등록 그리드 --%>
-      <div id="giftGrid" class="wj-gridWrap" style="height:190px;overflow-y: hidden;">
+      <div id="giftGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -89,8 +121,16 @@
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
-
       </div>
+
+      <%-- 페이지 리스트 --%>
+      <div class="pageNum mt20">
+        <%-- id --%>
+        <ul id="giftCtrlPager" data-size="10">
+        </ul>
+      </div>
+      <%--//페이지 리스트--%>
+
     </div>
   </div>
 </div>

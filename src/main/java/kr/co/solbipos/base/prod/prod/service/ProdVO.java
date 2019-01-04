@@ -26,6 +26,10 @@ public class ProdVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
+    /** 브랜드명 */
+    private String hqBrandNm;
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -118,6 +122,12 @@ public class ProdVO extends PageVO {
     /** 판매가격구분 (본사판매가 :1, 매장판매가:2) */
     private String salePrcFg;
 
+    /** 판매가 */
+    private String saleUprc;
+
+    /** 변경전 판매가 */
+    private String saleUprcB;
+
     /** 상품 등록 주체 구분 */
     private OrgnFg regOrgnFg;
 
@@ -133,6 +143,36 @@ public class ProdVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the hqBrandCd
+     */
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    /**
+     * @param hqBrandCd the hqBrandCd to set
+     */
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+
+    /**
+     * @return the hqBrandNm
+     */
+
+    public String getHqBrandNm() {
+        return hqBrandNm;
+    }
+
+    /**
+     * @param hqBrandNm the hqBrandNm to set
+     */
+    public void setHqBrandNm(String hqBrandNm) {
+        this.hqBrandNm = hqBrandNm;
     }
 
     /**
@@ -699,6 +739,37 @@ public class ProdVO extends PageVO {
      */
     public void setSalePrcFg(String salePrcFg) {
         this.salePrcFg = salePrcFg;
+    }
+
+
+    /**
+     * @return the saleUprc
+     */
+
+    public String getSaleUprc() {
+        return saleUprc;
+    }
+
+    /**
+     * @param saleUprc the saleUprc to set
+     */
+    public void setSaleUprc(String saleUprc) {
+        this.saleUprc = saleUprc;
+    }
+
+    /**
+     * @return the saleUprcB
+     */
+
+    public String getSaleUprcB() {
+        return saleUprcB;
+    }
+
+    /**
+     * @param saleUprcB the saleUprcB to set
+     */
+    public void setSaleUprcB(String saleUprcB) {
+        this.saleUprcB = saleUprcB;
     }
 
     /**

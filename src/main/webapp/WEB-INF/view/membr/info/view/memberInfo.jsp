@@ -10,12 +10,11 @@
 
 
 <div class="subCon" ng-controller="memberCtrl">
-
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="getMemberList()">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -272,7 +271,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.membr.no"/>" binding="membrNo" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.membr.nm"/>" binding="membrNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="membrClassCd" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.class.nm"/>" binding="membrClassNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="*" align="center" is-read-only="true"></wj-flex-grid-column>

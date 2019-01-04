@@ -29,6 +29,9 @@ public interface CouponService {
     /** 쿠폰분류 저장 */
     int saveCouponClassList(PayMethodClassVO[] payMethodClassVOs, SessionInfoVO sessionInfoVO);
 
+    /** 쿠폰분류 매장 적용 */
+    int applyCouponClassList(PayMethodClassVO[] payMethodClassVOs, SessionInfoVO sessionInfoVO);
+
     /** 쿠폰 조회 */
     List<DefaultMap<String>> getCouponList(CouponVO couponVO, SessionInfoVO sessionInfoVO);
 
@@ -52,4 +55,5 @@ public interface CouponService {
 
     /** 쿠폰 적용 매장 삭제 */
     int deleteCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO);
+
 }

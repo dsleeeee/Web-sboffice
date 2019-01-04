@@ -63,8 +63,22 @@
                     AND thp.PROD_CD = thpsp.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND ( thpc.P_PROD_CLASS_CD = #{prodClassCd} OR thpc.PROD_CLASS_CD = #{prodClassCd} )
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_HQ_PRODUCT_CLASS
+                                                WHERE
+                                                    HQ_OFFICE_CD = #{hqOfficeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                             )
                 </if>
                 ORDER BY thpc.PROD_CLASS_CD, thp.PROD_CD
             </when>
@@ -104,8 +118,22 @@
                     AND tmp.PROD_CD = tmpsp.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
+                    AND tmp.USE_YN = 'Y'
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND ( tmpc.P_PROD_CLASS_CD = #{prodClassCd} OR tmpc.PROD_CLASS_CD = #{prodClassCd} )
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                    PROD_CLASS_CD
+                                                FROM
+                                                    TB_MS_PRODUCT_CLASS
+                                                WHERE
+                                                    STORE_CD = #{storeCd}
+                                                START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd}
+                                                    AND STORE_CD = #{storeCd}
+                                                CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                    AND STORE_CD = #{storeCd}
+                                             )
                 </if>
                 ORDER BY tmpc.PROD_CLASS_CD, tmp.PROD_CD
             </when>
@@ -449,97 +477,93 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                <foreach collection="list" item="item" index="index" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
-                INTO TB_HQ_TOUCH_KEY_CLASS (
-                    HQ_OFFICE_CD,
-                    TUKEY_GRP_CD,
-                    TUKEY_CLASS_CD,
-                    TUKEY_CLASS_NM,
-                    PAGE_NO,
-                    PAGE_ROWS,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    STYLE_CD,
-                    FONT_SIZE,
-                    FONT_COLOR,
-                    FILL_COLOR,
-                    IMG_NM,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
+                INSERT INTO TB_HQ_TOUCH_KEY_CLASS thtkc (
+                    thtkc.HQ_OFFICE_CD,
+                    thtkc.TUKEY_GRP_CD,
+                    thtkc.TUKEY_CLASS_CD,
+                    thtkc.TUKEY_CLASS_NM,
+                    thtkc.PAGE_NO,
+                    thtkc.PAGE_ROWS,
+                    thtkc.X,
+                    thtkc.Y,
+                    thtkc.WIDTH,
+                    thtkc.HEIGHT,
+                    thtkc.STYLE_CD,
+                    thtkc.FONT_SIZE,
+                    thtkc.FONT_COLOR,
+                    thtkc.FILL_COLOR,
+                    thtkc.IMG_NM,
+                    thtkc.REG_DT,
+                    thtkc.REG_ID,
+                    thtkc.MOD_DT,
+                    thtkc.MOD_ID
                 ) VALUES (
-                    #{item.hqOfficeCd},
-                    #{item.tukeyGrpCd},
-                    #{item.tukeyClassCd},
-                    #{item.tukeyClassNm},
-                    #{item.pageNo},
-                    #{item.pageRows},
-                    #{item.x},
-                    #{item.y},
-                    #{item.width},
-                    #{item.height},
-                    #{item.styleCd},
-                    #{item.fontSize, jdbcType=NUMERIC},
-                    #{item.fontColor, jdbcType=VARCHAR},
-                    #{item.fillColor, jdbcType=VARCHAR},
-                    #{item.imgNm, jdbcType=VARCHAR},
-                    #{item.regDt},
-                    #{item.regId},
-                    #{item.regDt},
-                    #{item.regId}
+                    #{hqOfficeCd},
+                    #{tukeyGrpCd},
+                    #{tukeyClassCd},
+                    #{tukeyClassNm},
+                    #{pageNo},
+                    #{pageRows},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
-                </foreach>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                <foreach collection="list" item="item" index="index" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
-                INTO TB_MS_TOUCH_KEY_CLASS (
-                    STORE_CD,
-                    TUKEY_GRP_CD,
-                    TUKEY_CLASS_CD,
-                    TUKEY_CLASS_NM,
-                    PAGE_NO,
-                    PAGE_ROWS,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    STYLE_CD,
-                    FONT_SIZE,
-                    FONT_COLOR,
-                    FILL_COLOR,
-                    IMG_NM,
-                    IN_FG,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
+                INSERT INTO TB_MS_TOUCH_KEY_CLASS tmtkc (
+                    tmtkc.STORE_CD,
+                    tmtkc.TUKEY_GRP_CD,
+                    tmtkc.TUKEY_CLASS_CD,
+                    tmtkc.TUKEY_CLASS_NM,
+                    tmtkc.PAGE_NO,
+                    tmtkc.PAGE_ROWS,
+                    tmtkc.X,
+                    tmtkc.Y,
+                    tmtkc.WIDTH,
+                    tmtkc.HEIGHT,
+                    tmtkc.STYLE_CD,
+                    tmtkc.FONT_SIZE,
+                    tmtkc.FONT_COLOR,
+                    tmtkc.FILL_COLOR,
+                    tmtkc.IMG_NM,
+                    tmtkc.IN_FG,
+                    tmtkc.REG_DT,
+                    tmtkc.REG_ID,
+                    tmtkc.MOD_DT,
+                    tmtkc.MOD_ID
                 ) VALUES (
-                    #{item.storeCd},
-                    #{item.tukeyGrpCd},
-                    #{item.tukeyClassCd},
-                    #{item.tukeyClassNm},
-                    #{item.pageNo},
-                    #{item.pageRows},
-                    #{item.x},
-                    #{item.y},
-                    #{item.width},
-                    #{item.height},
-                    #{item.styleCd},
-                    #{item.fontSize, jdbcType=NUMERIC},
-                    #{item.fontColor, jdbcType=VARCHAR},
-                    #{item.fillColor, jdbcType=VARCHAR},
-                    #{item.imgNm, jdbcType=VARCHAR},
-                    #{item.inFg},
-                    #{item.regDt},
-                    #{item.regId},
-                    #{item.regDt},
-                    #{item.regId}
+                    #{storeCd},
+                    #{tukeyGrpCd},
+                    #{tukeyClassCd},
+                    #{tukeyClassNm},
+                    #{pageNo},
+                    #{pageRows},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{inFg},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
-                </foreach>
             </when>
         </choose>
     </insert>
@@ -585,97 +609,93 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                <foreach collection="list" item="item" index="index" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
-                INTO TB_HQ_TOUCH_KEY (
-                    HQ_OFFICE_CD,
-                    TUKEY_CLASS_CD,
-                    TUKEY_CD,
-                    TUKEY_FG,
-                    PROD_CD,
-                    PAGE_NO,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    STYLE_CD,
-                    FONT_SIZE,
-                    FONT_COLOR,
-                    FILL_COLOR,
-                    IMG_NM,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
+                INSERT INTO TB_HQ_TOUCH_KEY thtk (
+                    thtk.HQ_OFFICE_CD,
+                    thtk.TUKEY_CLASS_CD,
+                    thtk.TUKEY_CD,
+                    thtk.TUKEY_FG,
+                    thtk.PROD_CD,
+                    thtk.PAGE_NO,
+                    thtk.X,
+                    thtk.Y,
+                    thtk.WIDTH,
+                    thtk.HEIGHT,
+                    thtk.STYLE_CD,
+                    thtk.FONT_SIZE,
+                    thtk.FONT_COLOR,
+                    thtk.FILL_COLOR,
+                    thtk.IMG_NM,
+                    thtk.REG_DT,
+                    thtk.REG_ID,
+                    thtk.MOD_DT,
+                    thtk.MOD_ID
                 ) VALUES (
-                    #{item.storeCd},
-                    #{item.tukeyClassCd},
-                    #{item.tukeyCd},
-                    #{item.tukeyFg},
-                    #{item.prodCd},
-                    #{item.pageNo},
-                    #{item.x},
-                    #{item.y},
-                    #{item.width},
-                    #{item.height},
-                    #{item.styleCd},
-                    #{item.fontSize, jdbcType=NUMERIC},
-                    #{item.fontColor, jdbcType=VARCHAR},
-                    #{item.fillColor, jdbcType=VARCHAR},
-                    #{item.imgNm, jdbcType=VARCHAR},
-                    #{item.regDt},
-                    #{item.regId},
-                    #{item.regDt},
-                    #{item.regId}
+                    #{storeCd},
+                    #{tukeyClassCd},
+                    #{tukeyCd},
+                    #{tukeyFg},
+                    #{prodCd},
+                    #{pageNo},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
-                </foreach>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                <foreach collection="list" item="item" index="index" open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
-                INTO TB_MS_TOUCH_KEY (
-                    STORE_CD,
-                    TUKEY_CLASS_CD,
-                    TUKEY_CD,
-                    TUKEY_FG,
-                    PROD_CD,
-                    PAGE_NO,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    STYLE_CD,
-                    FONT_SIZE,
-                    FONT_COLOR,
-                    FILL_COLOR,
-                    IMG_NM,
-                    IN_FG,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID
+                INSERT INTO TB_MS_TOUCH_KEY tmtk (
+                    tmtk.STORE_CD,
+                    tmtk.TUKEY_CLASS_CD,
+                    tmtk.TUKEY_CD,
+                    tmtk.TUKEY_FG,
+                    tmtk.PROD_CD,
+                    tmtk.PAGE_NO,
+                    tmtk.X,
+                    tmtk.Y,
+                    tmtk.WIDTH,
+                    tmtk.HEIGHT,
+                    tmtk.STYLE_CD,
+                    tmtk.FONT_SIZE,
+                    tmtk.FONT_COLOR,
+                    tmtk.FILL_COLOR,
+                    tmtk.IMG_NM,
+                    tmtk.IN_FG,
+                    tmtk.REG_DT,
+                    tmtk.REG_ID,
+                    tmtk.MOD_DT,
+                    tmtk.MOD_ID
                 ) VALUES (
-                    #{item.storeCd},
-                    #{item.tukeyClassCd},
-                    #{item.tukeyCd},
-                    #{item.tukeyFg},
-                    #{item.prodCd},
-                    #{item.pageNo},
-                    #{item.x},
-                    #{item.y},
-                    #{item.width},
-                    #{item.height},
-                    #{item.styleCd},
-                    #{item.fontSize, jdbcType=NUMERIC},
-                    #{item.fontColor, jdbcType=VARCHAR},
-                    #{item.fillColor, jdbcType=VARCHAR},
-                    #{item.imgNm, jdbcType=VARCHAR},
-                    #{item.inFg},
-                    #{item.regDt},
-                    #{item.regId},
-                    #{item.regDt},
-                    #{item.regId}
+                    #{storeCd},
+                    #{tukeyClassCd},
+                    #{tukeyCd},
+                    #{tukeyFg},
+                    #{prodCd},
+                    #{pageNo},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{styleCd},
+                    #{fontSize, jdbcType=NUMERIC},
+                    #{fontColor, jdbcType=VARCHAR},
+                    #{fillColor, jdbcType=VARCHAR},
+                    #{imgNm, jdbcType=VARCHAR},
+                    #{inFg},
+                    #{regDt},
+                    #{regId},
+                    #{regDt},
+                    #{regId}
                 )
-                </foreach>
             </when>
         </choose>
     </insert>
@@ -708,5 +728,194 @@
         </choose>
 
     </delete>
+
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : touchKeyVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* USE : TouchkeyMapper.getStoreList */
+        SELECT
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tcm_sys_stat_fg.NMCODE_NM AS sys_stat_fg_nm,
+            tcm_cls_stat_fg.NMCODE_NM AS cls_fg_nm
+        FROM
+            TB_MS_STORE tms
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
+            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
+            AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
+        LEFT OUTER JOIN TB_CM_NMCODE tcm_cls_stat_fg ON
+            tms.CLS_FG = tcm_cls_stat_fg.NMCODE_CD
+            AND tcm_cls_stat_fg.NMCODE_GRP_CD = '001'
+        WHERE
+            tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+    </select>
+
+    <!-- 판매터치키 분류 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 적용되어 있는 판매터치키 분류 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyClassToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyClassToStore */
+        DELETE
+        FROM
+            TB_MS_TOUCH_KEY_CLASS
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 판매터치키 매장삭제 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 적용되어 있는 판매터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyToStore */
+        DELETE
+        FROM
+            TB_MS_TOUCH_KEY
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 판매터치키 분류 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 분류 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyClassToStore" parameterType="touchKeyVO">
+
+        /* USE : TouchkeyMapper.insertTouchKey */
+        INSERT INTO TB_MS_TOUCH_KEY_CLASS
+        SELECT
+            #{storeCd} AS STORE_CD,
+            TUKEY_GRP_CD,
+            TUKEY_CLASS_CD,
+            TUKEY_CLASS_NM,
+            PAGE_NO,
+            PAGE_ROWS,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            STYLE_CD,
+            FONT_SIZE,
+            FONT_COLOR,
+            FILL_COLOR,
+            IMG_NM,
+            'H',
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_HQ_TOUCH_KEY_CLASS
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
+
+    <!-- 판매터치키 생성 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 정보를 생성한다.
+    -->
+    <insert id="insertTouchKeyToStore" parameterType="touchKeyVO">
+
+        /* USE : TouchkeyMapper.insertTouchKeyToStore */
+        INSERT INTO TB_MS_TOUCH_KEY
+        SELECT
+            #{storeCd} AS STORE_CD,
+            TUKEY_CLASS_CD,
+            TUKEY_CD,
+            TUKEY_FG,
+            PROD_CD,
+            PAGE_NO,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            STYLE_CD,
+            FONT_SIZE,
+            FONT_COLOR,
+            FILL_COLOR,
+            IMG_NM,
+            'H',
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        FROM
+            TB_HQ_TOUCH_KEY
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+
+    </insert>
+
+    <!-- 판매터치키 XML 정보생성 -->
+    <!--
+        TABLE    : TB_WB_STORE_CONFG_XML
+        PARAM    : touchKeyVO
+        COMMENTS : 매장에 판매터치키 XML 정보를 생성한다.
+    -->
+    <update id="saveStoreConfgXml" parameterType="touchKeyVO">
+        /* TouchkeyMapper.saveStoreConfgXml */
+        MERGE INTO TB_WB_STORE_CONFG_XML twscx
+        USING
+        (
+            SELECT
+                #{storeCd} AS STORE_CD,
+                CONFG_FG,
+                XML,
+                USE_YN
+            FROM
+                TB_WB_HQ_CONFG_XML
+            WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND CONFG_FG = '10'
+        ) ORG
+        ON
+        (
+            twscx.STORE_CD = ORG.STORE_CD
+            AND twscx.CONFG_FG = ORG.CONFG_FG
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                twscx.XML = ORG.XML,
+                twscx.USE_YN = 'Y',
+                twscx.MOD_DT = #{regDt},
+                twscx.MOD_ID = #{regId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                twscx.STORE_CD,
+                twscx.CONFG_FG,
+                twscx.XML,
+                twscx.USE_YN,
+                twscx.REG_DT,
+                twscx.REG_ID
+            )
+            VALUES
+            (
+                #{storeCd},
+                ORG.CONFG_FG,
+                ORG.XML,
+                'Y',
+                #{regDt},
+                #{regId}
+            )
+  </update>
 
 </mapper>

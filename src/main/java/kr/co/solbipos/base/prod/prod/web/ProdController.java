@@ -184,4 +184,22 @@ public class ProdController {
     }
 
 
+    /***
+     * 등록매장 판매가 변경
+     * @param prodVOs
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/updateStoreSaleUprc.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateStoreSaleUprc(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.updateStoreSaleUprc(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

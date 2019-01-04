@@ -15,7 +15,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodCtrl')">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -81,7 +81,7 @@
         <td>
           <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
                  placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled />
+          <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
         </td>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
@@ -106,26 +106,15 @@
             </wj-combo-box>
           </div>
         </td>
-        <%-- 상품등록주체 (본사/매장) => 단독매장 제외해야함  // todo --%>
+        <%-- 브랜드 --%>
+        <c:if test="${orgnFg == 'HQ'}">
+          <th><s:message code="prod.brandNm" /></th>
+          <td><input type="text" class="sb-input w100" id="srchBrandNm" ng-model="hqBrandNm" /></td>
+        </c:if>
+        <c:if test="${orgnFg != 'HQ'}">
           <th></th>
           <td></td>
-        <%--
-        <th><s:message code="prod.useYn" /></th>
-        <td>
-          <div class="sb-select">
-            <wj-combo-box
-                    id="srchRegOrgnFg"
-                    ng-model="regOrgnFg"
-                    control="regOrgnFgCombo"
-                    items-source="_getComboData('regOrgnFg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </div>
-        </td>
-        --%>
+        </c:if>
       </tr>
     </tbody>
   </table>
@@ -173,9 +162,12 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.prodClass"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClassCd"/>" binding="prodClassCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.prodClassNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="150" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="410" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
 
         <c:if test="${orgnFg == 'HQ'}">
           <wj-flex-grid-column header="<s:message code="prod.storeCnt"/>" binding="storeCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -211,7 +203,7 @@
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018121201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20181229.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

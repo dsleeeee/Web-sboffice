@@ -24,48 +24,70 @@
 
     <!-- 본사 쿠폰 분류 조회 -->
     <!--
-        TABLE    : TB_HQ_PAY_METHOD_CLASS
-        COMMENTS : 본사의 쿠폰 분류를 조회한다.
+        TABLE    : TB_HQ_PAY_METHOD_CLASS, TB_MS_PAY_METHOD_CLASS
+        COMMENTS : 본사 또는 매장의 쿠폰 분류를 조회한다.
     -->
-    <select id="getHqCouponClassList" parameterType="payMethodClassVO" resultType="DefaultMap">
-        /* USE : CouponMapper.getHqCouponClassList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT thpmc.HQ_OFFICE_CD,
-               thpmc.PAY_CLASS_CD,
-               thpmc.PAY_TYPE_FG,
-               thpmc.PAY_CLASS_NM,
-               thpmc.SER_NO_YN,
-               thpmc.USE_YN,
-               thpmc.REG_ID,
-               (SELECT COUNT(thc.COUPN_CD) FROM TB_HQ_COUPON thc WHERE thc.HQ_OFFICE_CD =thpmc.HQ_OFFICE_CD AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD) COUPON_CNT
-        <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_HQ_PAY_METHOD_CLASS thpmc
-         WHERE thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thpmc.PAY_TYPE_FG = #{payTypeFg}
-        <include refid="CmmSQL.PagingTemplateBottom"/>
-    </select>
+    <select id="getCouponClassList" parameterType="payMethodClassVO" resultType="DefaultMap">
+        /* USE : CouponMapper.getCouponClassList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    thpmc.HQ_OFFICE_CD,
+                    thpmc.PAY_CLASS_CD,
+                    thpmc.PAY_TYPE_FG,
+                    thpmc.PAY_CLASS_NM,
+                    thpmc.SER_NO_YN,
+                    thpmc.USE_YN,
+                    thpmc.REG_ID,
+                    (
+                        SELECT
+                            COUNT(thc.COUPN_CD)
+                        FROM
+                            TB_HQ_COUPON thc
+                        WHERE
+                            thc.HQ_OFFICE_CD = thpmc.HQ_OFFICE_CD
+                            AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD
+                    ) AS COUPON_CNT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_HQ_PAY_METHOD_CLASS thpmc
+                WHERE
+                    thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpmc.PAY_TYPE_FG = #{payTypeFg}
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                    tmpmc.STORE_CD,
+                    tmpmc.PAY_TYPE_FG,
+                    tmpmc.PAY_CLASS_CD,
+                    tmpmc.PAY_CLASS_NM,
+                    tmpmc.SER_NO_YN,
+                    tmpmc.USE_YN,
+                    tmpmc.REG_ID,
+                    (
+                        SELECT
+                            COUNT(tmc.COUPN_CD)
+                        FROM
+                            TB_MS_COUPON tmc
+                        WHERE
+                            tmc.STORE_CD = tmpmc.STORE_CD
+                            AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD
+                    ) AS COUPON_CNT
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                    TB_MS_PAY_METHOD_CLASS tmpmc
+                WHERE
+                    tmpmc.STORE_CD = #{storeCd}
+                    AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
 
-  <!-- 매장 쿠폰 분류 조회 -->
-    <!--
-        TABLE    : TB_MS_PAY_METHOD_CLASS
-        COMMENTS : 매장의 쿠폰 분류를 조회한다.
-    -->
-    <select id="getStoreCouponClassList" parameterType="DefaultMap" resultType="DefaultMap">
-        /* USE : CouponMapper.getStoreCouponClassList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmpmc.STORE_CD,
-               tmpmc.PAY_TYPE_FG,
-               tmpmc.PAY_CLASS_CD,
-               tmpmc.PAY_CLASS_NM,
-               tmpmc.SER_NO_YN,
-               tmpmc.USE_YN,
-               tmpmc.REG_ID,
-               (SELECT COUNT(tmc.COUPN_CD) FROM TB_MS_COUPON tmc WHERE tmc.STORE_CD = tmpmc.STORE_CD AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD) COUPON_CNT
-        <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MS_PAY_METHOD_CLASS tmpmc
-         WHERE tmpmc.STORE_CD = #{storeCd}
-           AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 쿠폰 분류 코드 조회 -->
@@ -241,6 +263,8 @@
                 #{hqOfficeCd},
                 #{payTypeFg, jdbcType=VARCHAR},
                 #{payClassCd},
+                #{regDt},
+                #{regId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
@@ -308,9 +332,12 @@
           FROM TB_HQ_COUPON thc
          WHERE thc.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thc.PAY_CLASS_CD = #{payClassCd}
+           AND thc.USE_YN = 'Y'
+        <!--
         <if test='useYn != null and useYn.toString() == "Y"'>
            AND thc.USE_YN = #{useYn}
         </if>
+        -->
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -337,9 +364,12 @@
           FROM TB_MS_COUPON tmc
          WHERE tmc.STORE_CD = #{storeCd}
            AND tmc.PAY_CLASS_CD = #{payClassCd}
+           AND tmc.USE_YN = 'Y'
+        <!--
         <if test='useYn != null and useYn.toString() == "Y"'>
            AND tmc.USE_YN = #{useYn}
         </if>
+        -->
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -442,28 +472,28 @@
            AND COUPN_CD = #{coupnCd}
     </update>
 
-   <!-- 본사 쿠폰 등록시 프로시져 호출 -->
-   <!--
-       TABLE    : TB_HQ_COUPON, TB_MS_COUPON
-       PARAM    :
-       COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
-   -->
-   <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
-       /* USE : CouponMapper.insertHqCouponToStore */
-       {
-           CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
-           (
-               #{hqOfficeCd},
-               #{payClassCd},
-               #{coupnCd},
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId},
-               #{result, mode=OUT, jdbcType=VARCHAR}
-           )
-       }
-   </select>
+    <!-- 본사 쿠폰 등록시 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_COUPON, TB_MS_COUPON
+        PARAM    :
+        COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
+    -->
+    <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+        /* USE : CouponMapper.insertHqCouponToStore */
+        {
+            CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
+            (
+                #{hqOfficeCd},
+                #{payClassCd},
+                #{coupnCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 
     <!-- 본사 쿠폰 수정시 프로시져 호출 -->
     <!--
@@ -592,7 +622,7 @@
     -->
     <select id="getHqProdList" parameterType="couponProdVO" resultType="DefaultMap">
         /* USE : CouponMapper.getHqProdList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
         SELECT thp.HQ_OFFICE_CD,
                thp.PROD_CLASS_CD,
                thpc.PROD_CLASS_NM,
@@ -600,7 +630,7 @@
                thp.PROD_NM,
                thp.COST_UPRC,
                NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
-        <include refid="CmmSQL.PagingTemplateCount"/>
+        <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
           FROM TB_HQ_PRODUCT thp,
                TB_HQ_PRODUCT_CLASS thpc,
                TB_HQ_COUPON_PROD thcp
@@ -624,7 +654,7 @@
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
            AND thcp.PROD_CD IS NULL
         </if>
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
     </select>
 
     <!-- 쿠폰 적용/미적용 매장 상품 조회 -->
@@ -793,18 +823,18 @@
 
     <!-- 쿠폰 적용/미적용 매장 조회 -->
     <!--
-        TABLE    :
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_HQ_COUPON_STORE
         COMMENTS : 쿠폰 적용 대상인 매장을 조회한다.
     -->
     <select id="getStoreList" parameterType="couponStoreVO" resultType="DefaultMap">
         /* USE : CouponMapper.getStoreList */
-      <include refid="CmmSQL.PagingTemplateHeader"/>
+      <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
         SELECT tms.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
                tms.STORE_CD,
                tms.STORE_NM,
                NVL2(thcs.STORE_CD, 'Y', 'N') AS REG_YN
-      <include refid="CmmSQL.PagingTemplateCount"/>
+      <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_HQ_COUPON_STORE thcs
@@ -832,7 +862,7 @@
         <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
            AND thcs.STORE_CD IS NULL
         </if>
-      <include refid="CmmSQL.PagingTemplateBottom"/>
+      <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
     </select>
 
     <!-- 쿠폰 적용 매장 등록 -->

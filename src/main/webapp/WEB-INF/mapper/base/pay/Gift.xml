@@ -29,6 +29,7 @@
     -->
     <select id="getHqGiftClassList" parameterType="payMethodClassVO" resultType="DefaultMap">
         /* USE : GiftMapper.getHqGiftClassList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT thpmc.HQ_OFFICE_CD,
                thpmc.PAY_CLASS_CD,
                thpmc.PAY_TYPE_FG,
@@ -37,10 +38,12 @@
                thpmc.USE_YN,
                thpmc.REG_ID,
                (SELECT COUNT(thc.GIFT_CD) FROM TB_HQ_GIFT thc WHERE thc.HQ_OFFICE_CD =thpmc.HQ_OFFICE_CD AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD) GIFT_CNT
+      <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_HQ_PAY_METHOD_CLASS thpmc
          WHERE thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thpmc.PAY_TYPE_FG = #{payTypeFg}
          ORDER BY thpmc.PAY_CLASS_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장 상품권 분류 조회 -->
@@ -50,6 +53,7 @@
     -->
     <select id="getStoreGiftClassList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : GiftMapper.getStoreGiftClassList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmpmc.STORE_CD,
                tmpmc.PAY_TYPE_FG,
                tmpmc.PAY_CLASS_CD,
@@ -58,10 +62,12 @@
                tmpmc.USE_YN,
                tmpmc.REG_ID,
                (SELECT COUNT(tmc.GIFT_CD) FROM TB_MS_GIFT tmc WHERE tmc.STORE_CD = tmpmc.STORE_CD AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD) GIFT_CNT
+      <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_PAY_METHOD_CLASS tmpmc
          WHERE tmpmc.STORE_CD = #{storeCd}
            AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
          ORDER BY tmpmc.PAY_CLASS_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 상품권 분류 코드 조회 -->
@@ -134,6 +140,8 @@
                 #{hqOfficeCd},
                 #{payTypeFg, jdbcType=VARCHAR},
                 #{payClassCd},
+                #{regDt},
+                #{regId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
@@ -287,6 +295,7 @@
     -->
     <select id="getHqGiftList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : GiftMapper.getHqGiftList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT thg.HQ_OFFICE_CD,
                thg.GIFT_CD,
                thg.GIFT_NM,
@@ -294,6 +303,7 @@
                thg.GIFT_UPRC,
                thg.USE_YN,
                thg.REG_ID
+      <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_HQ_GIFT thg
          WHERE thg.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thg.PAY_CLASS_CD = #{payClassCd}
@@ -301,6 +311,7 @@
            AND thg.USE_YN = #{useYn}
         </if>
          ORDER BY thg.GIFT_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 매장 상품권 조회 -->
@@ -310,6 +321,7 @@
     -->
     <select id="getStoreGiftList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : GiftMapper.getStoreGiftList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmg.STORE_CD,
                tmg.GIFT_CD,
                tmg.GIFT_NM,
@@ -317,6 +329,7 @@
                tmg.GIFT_UPRC,
                tmg.USE_YN,
                tmg.REG_ID
+      <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_GIFT tmg
          WHERE tmg.STORE_CD = #{storeCd}
            AND tmg.PAY_CLASS_CD = #{payClassCd}
@@ -324,6 +337,7 @@
            AND tmg.USE_YN = #{useYn}
         </if>
          ORDER BY tmg.GIFT_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 상품권 코드 조회 -->

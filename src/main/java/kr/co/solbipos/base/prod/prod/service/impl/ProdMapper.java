@@ -87,7 +87,14 @@ public interface ProdMapper {
     /** 상품 매장 적용 삭제시, 해당 상품의 USE_YN 값 변경 */
     int deleteProdStoreDetail(ProdVO prodVO);
 
+    /** 판매가 변경 히스토리 등록 count 조회 */
+    int getRegistProdCount(ProdVO prodVO);
 
+    /** 매장 상품 판매가 변경 히스토리 등록 */
+    int updateStoreSaleUprcHistory(ProdVO prodVO);
+
+    /** 매장 상품 판매가 변경 */
+    int updateStoreSaleUprc(ProdVO prodVO);
 
 
 }

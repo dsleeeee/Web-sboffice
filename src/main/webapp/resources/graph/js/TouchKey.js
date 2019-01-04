@@ -27,6 +27,10 @@ var touchKeyStyleCd, touchKeyStyleCdList, touchKeyStyles;
 app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('touchKeyCtrl', $scope, $http, false));
+
+  // 접속 사용자의 권한
+  $scope.userOrgnFg = gvOrgnFg;
+
   // 상품분류정보
   $scope.prodClassInfo = {};
   $scope.setProdClassInfo = function(data){
@@ -161,6 +165,40 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
+  // 터치키 적용매장 목록 팝업
+  $scope.$on("showPopUp", function(event, data) {
+    var popup = $scope.popUpApplyStoreLayer;
+    popup.shown.addHandler(function (s) {
+      // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+      setTimeout(function() {
+        $scope._broadcast('popUpApplyStoreCtrl');
+      }, 50)
+    });
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+      // 적용 버튼 눌렀을때만
+      if (popup.dialogResult === "wj-hide-apply") {
+        // 팝업 컨트롤러 Get
+        var scopeLayer = agrid.getScope("popUpApplyStoreCtrl");
+        // 저장 파라미터 설정
+        var paramArr = [];
+
+        for (var i = 0; i < scopeLayer.flexLayer.itemsSource.items.length; i++) {
+          if ( scopeLayer.flexLayer.itemsSource.items[i].gChk === true ) {
+            paramArr.push(scopeLayer.flexLayer.itemsSource.items[i]);
+          }
+        }
+        if (paramArr.length <= 0) {
+          s_alert.pop(messages["touchKey.msg.select"]);
+        }
+        // 저장수행
+        $scope._postJSONSave.withPopUp("/base/prod/touchKey/touchKey/applyStore.sb", paramArr, function () {
+          $scope._popMsg(messages["cmm.saveSucc"]);
+        });
+      }
+    });
+  });
 
 }]);
 
@@ -434,19 +472,22 @@ Sidebar.prototype.initUsed = function (layer) {
 
   //각 상품의 상품코드로 그리드에서 체크 표시
   var model = graph.getModel();
-  var childCount = model.getChildCount(layer);
-  var cell, match, regex, prodCd;
-  for (var i = 0; i < childCount; i++) {
-    cell = model.getChildAt(layer, i);
-    // 정규식 이용하여 prodCd 추출 : 상품코드 길이 가변 대응
-    regex = /prodCd=([^=]*.(?=;))/gm;
-    match = regex.exec(cell.getStyle());
-    if (match) {
-      prodCd = match[1];
-    }
-    var id = getIdByProdCd(prodCd);
-    if (id >= 0) {
-      theGrid.setCellData(id, 'touchKeyUsed', true);
+  var match, regex, prodCd, id;
+  for ( var i in model.cells) {
+    regex = /tukeyFg=([^=]*.(?=;))/gm;
+    match = regex.exec(model.cells[i].getStyle());
+    // 버튼일때만 수행하도록
+    if (match && match[1] === "01") {
+      // 정규식 이용하여 prodCd 추출 : 상품코드 길이 가변 대응
+      regex = /prodCd=([^=]*.(?=;))/gm;
+      match = regex.exec(model.cells[i].getStyle());
+      if (match) {
+        prodCd = match[1];
+      }
+      id = getIdByProdCd(prodCd);
+      if (id >= 0) {
+        theGrid.setCellData(id, 'touchKeyUsed', true);
+      }
     }
   }
 
@@ -1360,6 +1401,8 @@ Format.prototype.initElements = function () {
   // 조회 버튼
   addClickHandler(document.getElementById('btnSearch'), function () {
     format.open(false);
+    var scope = agrid.getScope("touchKeyCtrl");
+    scope._broadcast('touchKeyCtrl');
   });
 
   // 스타일적용 버튼
@@ -1475,6 +1518,14 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
+        if(s.value.length > 7) {
+          var rgb = s.value;
+          rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+          s.value = (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+        }
         var cell = s.graph.getSelectionCells()[0];
         // 하위속성 존재시 하위속성 색상도 같이 변경
         if (cell.children) {
@@ -1494,6 +1545,14 @@ Format.prototype.initElements = function () {
     valueChanged: function (s, e) {
       // cell 영역 선택시에만
       if (s.graph) {
+        if(s.value.length > 7) {
+          var rgb = s.value;
+          rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+          s.value = (rgb && rgb.length === 4) ? "#" +
+            ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+            ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+        }
         var cellType = graph.cellTypeCombo.selectedValue;
         var cell = s.graph.getSelectionCells()[0];
         if (cell.children) {
@@ -1704,6 +1763,10 @@ Format.prototype.setElementsValue = function () {
       this.setBtnStyle();
 
     } else {
+      style = graph.getCellStyle(cell);
+      initFontSize = style['fontSize'];
+      initFontColor = style['fontColor'];
+      initFillColor = style['fillColor'];
       // 자식속성
       if (cell.children) {
         // 다른버튼 선택시에만 변경되도록
@@ -2267,8 +2330,8 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
   graph.addMouseListener({
     // 상품버튼 클릭시 버튼/상품명/금액 구분하여 속성설정 예외처리
     mouseDown: function (sender, me) {
-      // 터치키분류 영역 선택 초기화
-      graph.classArea.getSelectionModel().clear();
+      // 터치키분류 영역 선택 초기화 : 제거 - 문제발생시 다시 원복 할것 : 20190102 노현수
+      // graph.classArea.getSelectionModel().clear();
       // 터치키분류 영역 에디팅 판단하여 에디팅 취소 처리
       if (graph.classArea.cellEditor.getEditingCell() != null) {
         graph.classArea.cellEditor.stopEditing(true);

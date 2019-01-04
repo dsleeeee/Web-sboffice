@@ -386,7 +386,7 @@ public class StoreManageController {
     */
    @RequestMapping(value = "storeManage/copyPosSetting.sb", method = RequestMethod.POST)
    @ResponseBody
-   public Result copyPosSetting(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+   public Result copyPosSetting(@RequestBody StorePosEnvVO storePosEnvVO, HttpServletRequest request,
            HttpServletResponse response, Model model) {
 
        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

@@ -46,4 +46,9 @@ public interface TouchKeyService {
     /** 판매터치키 저장 */
     Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml);
 
+    /** 매장목록 조회 */
+    List<DefaultMap<String>> getStoreList(TouchKeyVO TouchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 터치키 매장적용 */
+    int saveTouchKeyToStore(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO);
 }

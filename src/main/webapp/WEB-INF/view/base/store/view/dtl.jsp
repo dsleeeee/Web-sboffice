@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="storeInfoViewLayer" show-trigger="Click" hide-trigger="Click" style="width:650px;height:570px;" fade-in="false" fade-out="false">
+<wj-popup control="storeInfoViewLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:650px;height:570px;" fade-in="false" fade-out="false">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="storeInfoViewCtrl">
 
     <%-- header --%>

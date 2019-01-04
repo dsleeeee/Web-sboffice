@@ -1,7 +1,7 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<wj-popup id="memberMappingLayer" control="memberMappingLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:650px;">
+<wj-popup id="memberMappingLayer" control="memberMappingLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:800px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -51,8 +51,8 @@
 
         <%--- 거래처 매핑 그리드 --%>
         <div class="w100">
-          <div class="wj-TblWrap mr10" style="height:150px; overflow-y: hidden;">
-            <div id="agencyGrid" style="height: 270px;">
+          <div class="wj-TblWrap mr10" style="height:373px; overflow-y: hidden;">
+            <div id="agencyGrid" style="height: 370px;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"

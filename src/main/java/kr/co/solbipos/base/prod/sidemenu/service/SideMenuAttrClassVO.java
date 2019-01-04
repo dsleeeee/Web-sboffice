@@ -20,7 +20,7 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class SideMenuAttrClassVO extends CmmVO {
 
-    private static final long serialVersionUID = 6170780030398083425L;
+    private static final long serialVersionUID = 7116734554143813867L;
 
     /** 본사코드 */
     private String hqOfficeCd;
@@ -45,6 +45,9 @@ public class SideMenuAttrClassVO extends CmmVO {
      * S : 매장, 가맹점
      */
     private String orgnFg;
+
+    /** 프로시져 결과 */
+    private String result;
 
 
     /**
@@ -157,5 +160,20 @@ public class SideMenuAttrClassVO extends CmmVO {
      */
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
     }
 }

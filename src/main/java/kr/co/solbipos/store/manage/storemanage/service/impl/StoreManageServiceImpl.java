@@ -57,8 +57,8 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     private final String CORNER_USE_YN = "2028";        // 환경변수 : 코너 사용여부
     private final String TABLE_ENVST_CD = "1003";       // 테이블 기본 그룹설정 정보
-    private final String MAIN_POS_YN  = "3021";         // 메인포스여부
-    private final String MAIN_POS_YN_DEFAULT = "0";     // 메인포스여부 - 'Y'
+    private final String MAIN_POS_YN  = "4021";         // 메인포스여부
+    private final String MAIN_POS_YN_DEFAULT = "2";     // 메인포스여부 : 서브
 
     private final String DEFAULT_PRODUCT_CLASS = "0000";// 상품 기본 분류
 
@@ -605,15 +605,53 @@ public class StoreManageServiceImpl implements StoreManageService{
         storePosEnvVO.setEnvstVal(MAIN_POS_YN_DEFAULT);
         procCnt += mapper.updatePosEnv(storePosEnvVO);
 
-        // 2) TB_MS_POS 타겟 포스 데이터 삭제
-        procCnt += mapper.deletePosTarget(storePosEnvVO);
-
-        // 기능키 복사 //TODO
+        // 기능키 복사
         // 3-1) TB_MS_POS_FNKEY 기존 데이터 삭제
         procCnt += mapper.deletePosFunkeyTarget(storePosEnvVO);
 
         // 3-2) TB_MS_POS_FNKEY select insert
         procCnt += mapper.copyPosFunKeyInfo(storePosEnvVO);
+
+        // 3-3) TB_MS_POS_FNKEY 포스 기능 XML 복사
+        DefaultMap<String> param = new DefaultMap<String>();
+        param.put("storeCd", storePosEnvVO.getStoreCd());
+        param.put("posNo", storePosEnvVO.getPosNo());
+
+        param.put("useYn", "Y");
+        param.put("regDt", currentDateTimeString());
+        param.put("regId", sessionInfoVO.getUserId());
+        param.put("modDt", currentDateTimeString());
+        param.put("modId", sessionInfoVO.getUserId());
+
+        // 포스기능키 XML 조회
+        // 왼쪽
+        param.put("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_LEFT.getCode());
+        String leftConfXML = mapper.getFuncKeyXml(param);
+
+//        System.out.println(">>>>>>>>>>>>>>> leftConfXML : "+ leftConfXML);
+
+
+        // 오른쪽
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_RIGHT.getCode());
+        String rightConfXML = mapper.getFuncKeyXml(param);
+
+//        System.out.println(">>>>>>>>>>>>>>> rightConfXML : "+ rightConfXML);
+
+        // 포스기능키 XML 저장 (왼쪽)
+        param.put("xml", leftConfXML);
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_LEFT.getCode());
+        param.replace("posNo", storePosEnvVO.getTargetPosNo());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+
+
+        // 포스기능키 XML 조회 (오른쪽)
+        param.replace("xml", rightConfXML);
+        param.replace("confgFg", kr.co.solbipos.base.common.enums.ConfgFg.FUNC_KEY_RIGHT.getCode());
+        param.replace("posNo", storePosEnvVO.getTargetPosNo());
+
+        procCnt = mapper.insertFuncKeyConfgXml(param);
+
 
         return procCnt;
     }

@@ -16,7 +16,7 @@
 
   <%-- 입금계정 --%>
   <div id="depositGrid" class="w50 fl mt40" style="width: 50%" ng-controller="depositCtrl">
-    <div class="wj-TblWrapBr mr10 pd20" style="height: 400px;">
+    <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="depositBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.deposit' /></span>
         <button class="btn_skyblue"  ng-click="addRow()">
@@ -29,7 +29,7 @@
           <s:message code="cmm.save" />
         </button>
       </div>
-      <div class="wj-gridWrap" style="height:315px">
+      <div class="wj-gridWrap" style="height:370px">
         <div class="row">
           <wj-flex-grid
                   autoGenerateColumns="false"
@@ -57,7 +57,7 @@
 
   <%-- 출금계정 --%>
   <div id="withdrawGrid" class="w50 fr mt40" style="width: 50%" ng-controller="withdrawCtrl">
-    <div class="wj-TblWrapBr ml10 pd20" style="height: 400px;">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="withdrawBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.withdraw' /></span>
         <button class="btn_skyblue" ng-click="addRow()">
@@ -70,7 +70,7 @@
           <s:message code="cmm.save" />
         </button>
       </div>
-      <div class="wj-gridWrap" style="height:310px">
+      <div class="wj-gridWrap" style="height:370px">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"

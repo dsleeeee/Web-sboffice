@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SalePrice.xml
+    판매가 관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2018.12.24     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.salePrice.service.impl.SalePriceMapper">
+
+   <!-- 매장 판매가관리 > 상품의 본사 가격정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 관리 대상의 본사 가격정보를 조회한다.
+    -->
+    <select id="getProdInfo"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getProdInfo */
+      <![CDATA[
+        SELECT thp.HQ_OFFICE_CD,
+               thp.PROD_CD,
+               thp.PROD_NM,
+               thpsp.SALE_UPRC,     -- 본사 판매가
+               thp.PO_UNIT_QTY,		-- 입수
+               thp.COST_UPRC, 		-- 본사 원가
+               thp.SPLY_UPRC   		-- 본사 공급가
+          FROM TB_HQ_PRODUCT thp,
+               TB_HQ_PRODUCT_SALE_PRICE thpsp
+         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thp.PROD_CD = #{prodCd}
+           AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+           AND thpsp.PROD_CD = thp.PROD_CD
+           AND thpsp.START_DATE <= SYSDATE
+           AND thpsp.END_DATE >= SYSDATE
+        ]]>
+    </select>
+
+    <!-- 매장 판매가관리 > 상품 기준 판매가 관리 대상 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 관리 대상 목록을 조회한다.
+    -->
+    <select id="getProdSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getProdSalePriceList */
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tms.STORE_CD,
+               tms.STORE_NM,
+               tmp.PROD_CD,
+               tmp.PROD_NM,
+               tmp.COST_UPRC,                     -- 원가단가
+               tmp.LAST_COST_UPRC,                -- 최종원가단가
+               tmp.SPLY_UPRC,                     -- 공급가
+               tmp.SPLY_UPRC AS STORE_SPLY_UPRC,  -- 매장공급가
+               tmpsp.SALE_UPRC AS SALE_UPRC_P,    -- 변경전 판매금액
+               tmpsp.SALE_UPRC,                   -- 판매금액(변경가능)
+               tmp.PO_UNIT_QTY,                   -- 주문(발주)단위수량
+               tmp.PRC_CTRL_FG
+      <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_PRODUCT tmp,
+               TB_MS_STORE tms,
+               (
+                   SELECT STORE_CD, PROD_CD,
+                          MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                     FROM TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                   <![CDATA[
+                      AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                      AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                   ]]>
+                      AND SALE_PRC_FG = '1'
+                    GROUP BY STORE_CD, PROD_CD
+               ) tmpsp
+         WHERE tmp.PROD_CD = #{prodCd}
+           AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = tmp.STORE_CD
+           AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+           AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+      <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND tms.STORE_CD IN
+        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+          #{item}
+        </foreach>
+      </if>
+         ORDER BY tms.STORE_CD, tmp.PROD_CD
+      <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장 판매가관리 > 판매가 히스토리 등록을 위한 COUNT 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 히스토리 등록을 위한 COUNT 조회한다.
+    -->
+    <select id="getRegistProdCount" parameterType="salePriceVO" resultType="Integer">
+        /* USE : SalePriceMapper.getRegistProdCount */
+        SELECT COUNT(SALE_UPRC) AS CNT
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = #{prcCtrlFg}
+           AND START_DATE = #{startDate}
+    </select>
+
+    <!-- 매장 판매가관리 > 판매가 변경 히스토리 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 판매가 변경 히스토리를 등록한다.
+    -->
+    <insert id="updateStoreProdSalePriceHistory"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.updateStoreProdSalePriceHistory */
+        <![CDATA[
+        INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        SELECT SQ_MS_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+               STORE_CD,
+               PROD_CD,
+               SALE_PRC_FG,
+               START_DATE,
+               END_DATE,
+               SALE_UPRC,
+               #{regDt},
+               #{regId}
+          FROM TB_MS_PRODUCT_SALE_PRICE
+         WHERE STORE_CD = #{storeCd}
+           AND PROD_CD = #{prodCd}
+           AND SALE_PRC_FG = #{prcCtrlFg}
+           AND START_DATE = #{startDate}
+          ]]>
+  </insert>
+
+    <!-- 매장 판매가관리 > 판매가 변경 히스토리 등록 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        COMMENTS : 판매가 변경 히스토리를 등록한다.
+    -->
+    <insert id="insertStoreProdSalePriceHistory"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.insertStoreProdSalePriceHistory */
+        INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
+        (
+            HIS_SEQ,
+            STORE_CD,
+            PROD_CD,
+            SALE_PRC_FG,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            REG_DT,
+            REG_ID
+        )
+        VALUES
+        (
+            SQ_MS_PRODUCT_SALE_PRICE_HISTORY.NEXTVAL,
+            #{storeCd},
+            #{prodCd},
+            #{prcCtrlFg},
+            #{startDate},
+            #{endDate},
+            #{saleUprc},
+            #{regDt},
+            #{regId}
+        )
+    </insert>
+
+    <!-- 매장 판매가관리 > 상품기준 매장 판매가 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 매장 판매가를 일괄 변경한다.
+    -->
+    <insert id="modifyStoreProdSalePrice"  parameterType="salePriceVO" >
+        /* USE : SalePriceMapper.modifyStoreProdSalePrice */
+        MERGE INTO TB_MS_PRODUCT_SALE_PRICE tmpsp
+        USING DUAL
+        ON (
+            tmpsp.STORE_CD = #{storeCd}
+            AND tmpsp.PROD_CD = #{prodCd}
+            AND tmpsp.SALE_PRC_FG = #{prcCtrlFg}
+            AND tmpsp.START_DATE = #{startDate}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            tmpsp.SALE_UPRC = ${saleUprc}, -- 판매가
+            tmpsp.MOD_DT = #{modDt},
+            tmpsp.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            STORE_CD,
+            PROD_CD,
+            SALE_PRC_FG,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{storeCd},
+            #{prodCd},
+            #{prcCtrlFg},
+            #{startDate},
+            #{endDate},
+            #{saleUprc},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+
+
+    <!-- 매장 판매가관리 > 매장 기준 판매가 관리 대상 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : 판매가 관리 대상 목록을 조회한다.
+    -->
+    <select id="getStoreSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+        /* SalePriceMapper.getStoreSalePriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.PROD_CD,
+               tmp.PROD_NM,
+               tmp.PO_UNIT_QTY, -- 입수
+               thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
+               thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+               tmp.SPLY_UPRC AS STORE_SPLY_UPRC,   -- 매장공급가
+               thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+               tmpsp.SALE_UPRC AS STORE_SALE_UPRC, -- 매장판매가
+               tmpsp.SALE_UPRC AS SALE_UPRC, -- 매장변경판매가
+               tmp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_PRODUCT tmp,
+               TB_HQ_PRODUCT thp,
+              (
+                SELECT HQ_OFFICE_CD, PROD_CD,
+                      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                  FROM TB_HQ_PRODUCT_SALE_PRICE
+                 WHERE 1 = 1
+                <![CDATA[
+                   AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                   AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                 ]]>
+                   AND SALE_PRC_FG = '1'
+                 GROUP BY HQ_OFFICE_CD, PROD_CD
+              ) thpsp,
+             (
+                SELECT STORE_CD, PROD_CD,
+                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                  FROM TB_MS_PRODUCT_SALE_PRICE
+                 WHERE 1 = 1
+                <![CDATA[
+               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP BY STORE_CD, PROD_CD
+             ) tmpsp
+        WHERE tmp.STORE_CD = 'DS00001'
+        AND thp.HQ_OFFICE_CD = 'DS001'
+        AND thp.PROD_CD = tmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+          AND tms.STORE_CD IN
+          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+            #{item}
+          </foreach>
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+</mapper>

@@ -582,6 +582,44 @@
         </choose>
     </update>
 
+    <!-- 사이드메뉴-선택메뉴탭-선택그룹 수정시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 본사 사이드메뉴 선택그룹을 매장에 적용시킨다.
+    -->
+    <select id="updateHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+        /* USE : SideMenuMapper.updateHqMenuGrpListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_U
+          (
+            #{hqOfficeCd},
+            #{sdselGrpCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택그룹 삭제시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 본사 사이드메뉴 선택상품을 매장에서 제외시킨다.
+    -->
+    <select id="deleteHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+        /* USE : SideMenuMapper.deleteHqMenuGrpListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_D
+          (
+            #{hqOfficeCd},
+            #{sdselGrpCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
     <!-- 선택분류 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
@@ -789,6 +827,45 @@
             </when>
         </choose>
     </update>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택분류 수정시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 본사 사이드메뉴 속성분류를 매장에 적용시킨다.
+    -->
+    <select id="saveHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+        /* USE : SideMenuMapper.saveHqMenuClassListToStore   */
+
+        {
+            CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택분류 삭제시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 본사 사이드메뉴 속성분류를 매장에서 제외시킨다.
+    -->
+    <select id="deleteHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+        /* USE : SideMenuMapper.deleteHqMenuClassListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_D
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
 
     <!-- 선택할 상품 조회 -->
     <!--
@@ -1034,6 +1111,7 @@
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND PROD_CD = #{prodCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1047,6 +1125,7 @@
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND PROD_CD = #{prodCd}
             </when>
         </choose>
     </update>
@@ -1087,6 +1166,45 @@
         </choose>
     </update>
 
+    <!-- 사이드메뉴-선택메뉴탭-선택상품 수정시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 본사 사이드메뉴 선택상품을 매장에 적용시킨다.
+    -->
+    <select id="saveHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+        /* USE : SideMenuMapper.saveHqMenuProdListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_U
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택상품 삭제시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 본사 사이드메뉴 선택상품을 매장에서 제외시킨다.
+    -->
+    <select id="deleteHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+        /* USE : SideMenuMapper.deleteHqMenuProdListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_D
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
 
 
     <!-- 선택분류에 등록된 선택상품 개수 조회 -->
@@ -1144,7 +1262,6 @@
         </when>
       </choose>
     </select>
-
 
 </mapper>
 

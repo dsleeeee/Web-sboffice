@@ -98,7 +98,7 @@
         </div>
 
         <%-- 포스 설정 --%>
-        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea" >
           <wj-flex-grid
                   autoGenerateColumns="false"
                   control="flex"
@@ -122,7 +122,7 @@
         </div>
 
         <%-- 코너 설정 --%>
-        <div class="wj-gridWrap" style="height:430px; overflow-y: hidden;" ng-controller="cornerCtrl" id="cornerArea" style="display: none;">
+        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; display: none;" ng-controller="cornerCtrl" id="cornerArea" >
           <wj-flex-grid
                   autoGbeginning-editenerateColumns="false"
                   control="flex"

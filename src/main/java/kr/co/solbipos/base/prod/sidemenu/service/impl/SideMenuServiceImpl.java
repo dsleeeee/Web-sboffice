@@ -78,12 +78,15 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 추가
             if ( sideMenuAttrClassVO.getStatus() == GridDataFg.INSERT ) {
                 result += sideMenuMapper.insertAttrClassList(sideMenuAttrClassVO);
+//                String procResult = sideMenuMapper.insertHqAttrClassListToStore(sideMenuAttrClassVO);
                 // 수정
             } else if ( sideMenuAttrClassVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateAttrClassList(sideMenuAttrClassVO);
+//                String procResult = sideMenuMapper.updateHqAttrClassListToStore(sideMenuAttrClassVO);
                 // 삭제
             } else if ( sideMenuAttrClassVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteAttrClassList(sideMenuAttrClassVO);
+//                String procResult = sideMenuMapper.deleteHqAttrClassListToStore(sideMenuAttrClassVO);
             }
 
         }
@@ -164,6 +167,7 @@ public class SideMenuServiceImpl implements SideMenuService {
     public int saveMenuGrpList(SideMenuSelGroupVO[] sideMenuSelGroupVOs,
         SessionInfoVO sessionInfoVO) {
         int result = 0;
+        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuSelGroupVO sideMenuSelGroupVO : sideMenuSelGroupVOs) {
@@ -181,12 +185,15 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 추가
             if ( sideMenuSelGroupVO.getStatus() == GridDataFg.INSERT ) {
                 result += sideMenuMapper.insertMenuGrpList(sideMenuSelGroupVO);
-                // 수정
+                // TODO :: 그룹추가시 매장에 자동으로 내려줄것인가? : 20181231 노현수
+            // 수정
             } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuGrpList(sideMenuSelGroupVO);
-                // 삭제
+                procResult = sideMenuMapper.updateHqMenuGrpListToStore(sideMenuSelGroupVO);
+            // 삭제
             } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteMenuGrpList(sideMenuSelGroupVO);
+                procResult = sideMenuMapper.deleteHqMenuGrpListToStore(sideMenuSelGroupVO);
             }
 
         }
@@ -216,6 +223,7 @@ public class SideMenuServiceImpl implements SideMenuService {
     public int saveMenuClassList(SideMenuSelClassVO[] sideMenuSelClassVOs,
         SessionInfoVO sessionInfoVO) {
         int result = 0;
+        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
@@ -232,22 +240,26 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelClassVO.getStatus() == GridDataFg.INSERT ) {
-                result = sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                // 수정
+                result += sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
+                procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+            // 수정
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.UPDATE ) {
-                result = sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                // 삭제
+                result += sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
+                procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+            // 삭제
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.DELETE ) {
-                result = sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                result += sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
+                procResult = sideMenuMapper.deleteHqMenuClassListToStore(sideMenuSelClassVO);
             }
         }
 
-//        // 선택븐류 삭제 완료 후, 해당 선택그룹에 선택된 분류가 있는지 확인 후, 없으면 선택그룹 사용안함 처리.
+        if ( result == sideMenuSelClassVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+//        // 선택분류 삭제 완료 후, 해당 선택그룹에 선택된 분류가 있는지 확인 후, 없으면 선택그룹 사용안함 처리.
 //        SideMenuSelGroupVO sideMenuSelGroupVO = new SideMenuSelGroupVO();
 //
 //        sideMenuSelGroupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -266,7 +278,6 @@ public class SideMenuServiceImpl implements SideMenuService {
 //            result = sideMenuMapper.deleteMenuGrpList(sideMenuSelGroupVO);
 //            if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 //        }
-        return result;
     }
 
     /** 사이드메뉴-선택메뉴 - 선택할 상품 목록 조회 */
@@ -298,13 +309,12 @@ public class SideMenuServiceImpl implements SideMenuService {
 
     /** 사이드메뉴-선택메뉴탭-선택상품 저장 */
     @Override
-    public int saveMenuProdList(SideMenuSelProdVO[] sideMenuSelProdVOs,
-        SessionInfoVO sessionInfoVO) {
+    public int saveMenuProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
+        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
-
             // 소속구분 설정
             sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -317,20 +327,23 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelProdVO.getStatus() == GridDataFg.INSERT ) {
-                result = sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                // 수정
+                result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
+                procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+            // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
-                result = sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                // 삭제
+                result += sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
+                procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+            // 삭제
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.DELETE ) {
-                result = sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
-                if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+                result += sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
+                procResult = sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
             }
+        }
+
+        if ( result == sideMenuSelProdVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
 //        // 선택상품 삭제 완료 후, 해당 선택분류에 선택된 상품 있는지 확인 후, 없으면 선택분류 사용안함 처리.
@@ -353,7 +366,5 @@ public class SideMenuServiceImpl implements SideMenuService {
 //            result = sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
 //            if(result == 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 //        }
-
-        return result;
     }
 }

@@ -52,7 +52,7 @@ function openCopyFuncLayer(){
   }
 }
 
-
+<%--포스 기능복사 버튼 클릭--%>
 $("#btnFuncCopy").click(function(){
 
   var copyPosVal = copyPosList.selectedValue;

@@ -18,7 +18,7 @@
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')"><s:message code="cmm.search" /></button>
   </div>
 
-  <div class="w100 fl mt40">
+  <div class="w100 fl mt40 mb20">
     <%--위즈모 테이블--%>
     <div id="gridPrintCode" class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10">

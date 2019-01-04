@@ -1,10 +1,13 @@
 package kr.co.solbipos.base.store.view.web;
 
+import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewService;
 import kr.co.solbipos.base.store.view.service.ViewVO;
@@ -37,6 +40,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 * @ ----------  ---------   -------------------------------
  * @ 2018.08.13  김영근      최초생성
  * @ 2018.11.20  김지은      기능오류 수정 및 angular 변경
+ * @ 2018.12.28  김지은      매장환경 복사 팝업 생성
 *
 * @author nhn kcp 개발2팀 김영근
 * @since 2018. 08.13
@@ -52,12 +56,14 @@ public class ViewController {
 
     private final ViewService viewService;
     private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public ViewController(ViewService viewService, SessionService sessionService) {
+    public ViewController(ViewService viewService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
         this.viewService = viewService;
         this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -151,5 +157,58 @@ public class ViewController {
         resultMap.put("cornrTerminalList", cornrTerminalList);
 
         return returnJson(Status.OK, resultMap);
+    }
+
+
+    /**
+     * 매장환경 복사를 위한 정보 조회
+     * @param copyStoreEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/copyStoreEnv/getStoreEnvInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreEnvInfo( CopyStoreEnvVO copyStoreEnvVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        LOGGER.info(copyStoreEnvVO.getProperties());
+
+        // 복사할 매장환경 목록 조회
+        CommonCodeVO envVO = cmmCodeUtil.getCommCodeData("101");
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        resultMap.put("envList", envVO.getCodeList());
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+
+    /**
+     * 매장환경 복사
+     * @param copyStoreEnvVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2018.12.29
+     */
+    @RequestMapping(value = "/copyStoreEnv/copyStoreEnvInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyStoreEnvInfo(@RequestBody CopyStoreEnvVO[] copyStoreEnvVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        Map<String, Object> posParam = new HashMap<String, Object>();
+        posParam.put("originalStoreCd", request.getParameter("originalStoreCd"));
+        posParam.put("targetStoreCd", request.getParameter("targetStoreCd"));
+
+        int result = viewService.copyStoreEnv(copyStoreEnvVOs, posParam, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

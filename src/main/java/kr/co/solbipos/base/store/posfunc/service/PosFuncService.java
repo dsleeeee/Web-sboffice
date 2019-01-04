@@ -39,7 +39,7 @@ public interface PosFuncService {
     int copyPosFunc(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
 
     /** 포스기능 키 목록 조회 */
-    List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO);
+    List<DefaultMap<String>> getPosFuncKeyList(PosFuncVO posFuncVO, SessionInfoVO sessionInfoVO);
 
     /** 포스기능 키 기존설정 조회 */
     String getFuncKeyXml(PosFuncVO posFuncVO);

@@ -20,8 +20,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("areaCd", areaCd);
   $scope._setComboData("envHqOfficeCd", hqList);
 
-  console.log($scope)
-
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;
   // readonly 값 체크 (조회인 경우 readonly : true)
@@ -117,9 +115,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#viewForm")[0].reset();
     $("#storeInfoTitle").text("");
 
-    // console.log($scope.envHqOfficeCdCombo);
-    // console.log($scope.sysStatFgCombo);
-
     $scope.store.storeCd                = '자동채번';
     $scope.store.beforeBizNo            = '';
     $scope.areaCdCombo.selectedIndex    = 0;
@@ -153,7 +148,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var installPosCnt   = response.data.data.instPosCnt;
       var storeDetailInfo = response.data.data.storeDtlInfo;
 
-      // console.log(storeDetailInfo);
+      console.log('storeDetailInfo',storeDetailInfo);
 
       $("#storeInfoTitle").text("[" + storeDetailInfo.storeCd + "] " + storeDetailInfo.storeNm);
 
@@ -361,6 +356,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params         = $scope.store;
     params.sysOpenDate = dateToDaystring($scope.store.sysOpenDate);
+
+    console.log('params',params);
 
 
     var storeScope = agrid.getScope('storeManageCtrl');

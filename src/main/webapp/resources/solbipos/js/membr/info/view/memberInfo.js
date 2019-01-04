@@ -92,7 +92,8 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#regStoreCd").val("");
     $("#regStoreNm").val(messages["cmm.select"]);
 
-    // $scope.getMemberList();
+    $scope.getMemberList();
+
     event.preventDefault();
   });
 
@@ -100,7 +101,24 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getMemberList = function(){
     var params = {};
 
+    params.periodType = $scope.periodType;
+    params.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
+    params.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
+    params.anvType = $scope.anvType;
+    params.anvStartDate = dateToDaystring($scope.anvStartDate).replaceAll('-', '');
+    params.anvEndDate = dateToDaystring($scope.anvEndDate).replaceAll('-', '');
+
+    params.membrNo = $("#memberNo").val();
+    params.membrNm = $("#memberNm").val();
     params.regStoreCd = $("#regStoreCd").val();
+    params.telNo = $("#telNo").val();
+    params.membrCardNo = $("#membrCardNo").val();
+    params.emailAddr = $("#emailAddr").val();
+    params.emailRecvYn = $scope.emailRecvYn;
+    params.smsRecvYn = $scope.smsRecvYn;
+    params.gendrFg = $scope.gendrFg;
+
+    // console.log('params ', params);
 
     $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function() {
     });

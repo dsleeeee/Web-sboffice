@@ -1664,18 +1664,6 @@
            AND ENVST_CD = #{envstCd}
     </update>
 
-    <!-- 타켓 포스 데이터 삭제 -->
-    <!--
-        TABLE    : TB_MS_POS
-        PARAM    : storePosEnvVO
-        COMMENTS : 포스 셋팅 복사 기능 중, 타켓 포스의 데이터 삭제
-    -->
-    <delete id="deletePosTarget" parameterType="storePosEnvVO">
-        /* USE : StoreManageMapper.deletePosTarget */
-        DELETE TB_MS_POS
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO  = LPAD(#{targetPosNo}, 2, '0')
-    </delete>
 
     <!-- 포스마스터 복사 -->
     <!--
@@ -1778,10 +1766,75 @@
            AND tpe.ENVST_CD = '4019'
            AND tpe.STORE_CD = tpk.STORE_CD
            AND tpe.POS_NO = LPAD(#{targetPosNo}, 2, '0')
-           AND 'T' = DECODE(tpe.ENVST_VAL, '00', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
-                                           '01', DECODE(tsf.POS_FG, '0', 'T', 1, 'F', '2', 'T'),
-                                           '02', 'T')
     </insert>
+
+
+
+    <!-- 포스기능키 XML 조회 -->
+    <!--
+        TABLE    : TB_WB_POS_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 포스기능키 구성 XML 정보를 조회한다.
+    -->
+    <select id="getFuncKeyXml" parameterType="DefaultMap" resultType="java.lang.String">
+        /* USE : StoreManageMapper.getFuncKeyXml */
+        SELECT
+            XML
+        FROM
+            TB_WB_POS_CONFG_XML twpcx
+        WHERE
+            twpcx.STORE_CD = #{storeCd}
+            AND twpcx.POS_NO = #{posNo}
+            AND twpcx.CONFG_FG = #{confgFg}
+            AND twpcx.USE_YN = 'Y'
+    </select>
+
+
+    <!-- 포스기능키 XML 생성 -->
+    <!--
+        TABLE    : TB_WB_POS_CONFG_XML
+        PARAM    : DefaultMap
+        COMMENTS : 포스기능키키 구성 XML 정보를 생성한다.
+    -->
+    <insert id="insertFuncKeyConfgXml" parameterType="DefaultMap">
+        /* USE : StoreManageMapper.insertFuncKeyConfgXml */
+        MERGE INTO TB_WB_POS_CONFG_XML twpcx
+        USING (SELECT #{storeCd} AS STORE_CD,
+                      #{posNo} AS POS_NO,
+                      #{confgFg} AS CONFG_FG
+                 FROM DUAL
+              ) tmp
+           ON ( twpcx.STORE_CD = tmp.STORE_CD
+                AND twpcx.POS_NO = tmp.POS_NO
+                AND twpcx.CONFG_FG = tmp.CONFG_FG
+              )
+         WHEN MATCHED THEN
+              UPDATE
+                 SET twpcx.XML = #{xml:CLOB},
+                     twpcx.USE_YN = #{useYn},
+                     twpcx.MOD_DT = #{modDt},
+                     twpcx.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+              INSERT
+              (
+                  twpcx.STORE_CD,
+                  twpcx.POS_NO,
+                  twpcx.CONFG_FG,
+                  twpcx.XML,
+                  twpcx.USE_YN,
+                  twpcx.REG_DT,
+                  twpcx.REG_ID
+              ) VALUES (
+                  #{storeCd},
+                  #{posNo},
+                  #{confgFg},
+                  #{xml:CLOB},
+                  #{useYn},
+                  #{regDt},
+                  #{regId}
+              )
+    </insert>
+
 
     <!-- 포스 설치여부 체크 -->
     <!--

@@ -45,11 +45,11 @@
   </table>
 
   <div class="wj-TblWrap mt40">
-    <div class="w30 fl">
+    <div class="w30 fl" style="overflow-x: visible">
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
-          <div id="listScaleBox" class="w100px fl"></div>
+          <%--<div id="listScaleBox" class="w100px fl" style="display: none;"></div>--%>
           <div class="fr">
             <%-- 전체펼치기 --%>
             <%--<button class="btn_skyblue" id="btnExpand"><s:message code="cmm.all.expand" /></button>--%>
@@ -57,12 +57,12 @@
             <%--<button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>--%>
           </div>
         </div>
-        <div id="storeGrid" style="height: 550px;"></div>
+        <div id="storeGrid" style="height: 550px; overflow-x: hidden;"></div>
 
         <%-- 페이지리스트 --%>
-        <div class="pageNum mt20">
+        <div class="pageNum2 mt20">
           <%-- id --%>
-          <ul id="page" data-size="10">
+          <ul id="page" data-size="15">
           </ul>
         </div>
 
@@ -112,7 +112,7 @@
           {binding:"hqOfficeNm", header:"<s:message code='posFunc.hqOfficeNm' />", visible:false},
           {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", width:80},
           {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:"*"},
-          {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:60},
+          {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:60, visible:false},
           {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:60}
           //{binding:"sysOpenDate", header:"<s:message code='posFunc.sysOpenDate' />", width:"*"}
         ];
@@ -122,7 +122,7 @@
     storeGrid.allowMerging = "Cells";
 
     var ldata         = ${ccu.getListScale()};
-    var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
+    // var listScaleBox  = wcombo.genCommonBox("#listScaleBox", ldata);
 
     <%-- 그리드 포맷 --%>
     storeGrid.formatItem.addHandler(function(s, e) {
@@ -172,7 +172,8 @@
       param.hqOfficeNm = $("#srchHqOfficeNm").val();
       param.storeCd = $("#srchStoreCd").val();
       param.storeNm = $("#srchStoreNm").val();
-      param.listScale   = listScaleBox.selectedValue;
+      param.listScale   = 50;
+      // param.listScale   = listScaleBox.selectedValue;
       param.curr        = index;
 
       $.postJSON("/base/store/posfunc/use/getStoreList.sb", param,

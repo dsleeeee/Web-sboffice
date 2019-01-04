@@ -1,9 +1,11 @@
 package kr.co.solbipos.base.store.view.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.store.view.service.CopyStoreEnvVO;
 import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.base.store.view.service.ViewVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
+import kr.co.solbipos.store.manage.storemanage.service.StorePosEnvVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -42,4 +44,49 @@ public interface ViewMapper {
 
     /** 코너별 승인 목록 조회 */
     List<DefaultMap<String>> getCornerTerminalList(VanConfigVO vanConfigVO);
+
+    /** 포스목록 조회 */
+    List<DefaultMap<String>> getPosList(StorePosEnvVO storePosEnvVO);
+
+    /** 매장 공통코드 복사 */
+    String copyStoreNmcode(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 매장 환경 복사 */
+    String copyStoreEnv(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 포스 환경 복사 */
+    String copyPosEnv(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 상품 복사 */
+    String copyProduct(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 판매가격 복사 */
+    String copySalePrice(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 포스 기능키 XML 조회 */
+    String getFuncKeyXml(DefaultMap<String> param);
+
+    /** 포스 기능키 XML 복사 */
+    String copyPosFnKeyXML(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 포스기능키 복사 */
+    String copyPosFnKey(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 판매터치키 복사 */
+    String copyTouchKey(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 터치키 XML 조회 */
+    String getTouchKeyXml(DefaultMap<String> param);
+
+    /** 터치키 XML 복사 */
+    String copyTouchKeyXML(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 쿠폰분류 복사 */
+    String copyCouponClass(CopyStoreEnvVO copyStoreEnvVO);
+
+    /** 상품권 복사 */
+    String copyGift(CopyStoreEnvVO copyStoreEnvVO);
+
+
+
 }

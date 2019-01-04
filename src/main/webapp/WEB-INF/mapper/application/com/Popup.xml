@@ -19,7 +19,7 @@
         COMMENTS : 벤사 목록을 조회한다.
     -->
     <select id="getVanList" parameterType="vanVO" resultType="DefaultMap">
-        /* USE : PopupMapper.getStoreList */
+        /* USE : PopupMapper.getVanList */
         SELECT VAN_FG,
                VAN_CD,
                VAN_NM
@@ -187,4 +187,67 @@
 
     </select>
 
+    <!-- 상품 목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        PARAM    : prodVO
+        COMMENTS : 상품 목록을 조회한다.
+    -->
+    <select id="getProductList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : PopupMapper.getProductList */
+        <choose>
+          <!-- 본사 -->
+          <when test='orgnFg != null and orgnFg == "H"'>
+              SELECT thp.HQ_OFFICE_CD,
+                     thp.PROD_CLASS_CD,
+                     thp.PROD_CD,
+                     thp.PROD_NM
+                FROM TB_HQ_PRODUCT thp
+               WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                 AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                               FROM    DUAL
+                                              UNION
+                                             SELECT  thpc.PROD_CLASS_CD
+                                               FROM    TB_HQ_PRODUCT_CLASS thpc
+                                              WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                              START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                 )
+            </if>
+            <if test='prodCd != null and prodCd != "" '>
+                 AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+            </if>
+            <if test='prodNm != null and prodNm != "" and prodNm.toString() != "선택"'>
+                 AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+          </when>
+          <!-- 가맹점 -->
+          <when test='orgnFg != null and orgnFg == "S"'>
+              SELECT tmp.HQ_OFFICE_CD,
+                     tmp.PROD_CLASS_CD,
+                     tmp.PROD_CD,
+                     tmp.PROD_NM
+                FROM TB_MS_PRODUCT tmp
+               WHERE tmp.STORE_CD = #{storeCd}
+              <if test='prodClassCd != null and prodClassCd != "" '>
+                 AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                               FROM    DUAL
+                                              UNION
+                                             SELECT  tmpc.PROD_CLASS_CD
+                                               FROM    TB_MS_PRODUCT_CLASS tmpc
+                                              WHERE   tmpc.STORE_CD = #{storeCd}
+                                              START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                            CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+                  )
+              </if>
+              <if test='prodCd != null and prodCd != ""'>
+                 AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+              </if>
+              <if test='prodNm != null and prodNm != "" and prodNm.toString() != "선택"'>
+                 AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+              </if>
+          </when>
+        </choose>
+    </select>
 </mapper>

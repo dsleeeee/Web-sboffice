@@ -118,15 +118,8 @@ public class CouponController {
     public Result getCouponClassList(PayMethodClassVO payMethodClassVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        LOGGER.debug(payMethodClassVO.getProperties());
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
-        LOGGER.debug(sessionInfoVO.getProperties());
-
         List<DefaultMap<String>> list = service.getCouponClassList(payMethodClassVO, sessionInfoVO);
-
-        for( DefaultMap<String> f : list) {
-            System.out.println(f);
-        }
 
         return returnListJson(Status.OK, list, payMethodClassVO);
     }
@@ -148,13 +141,29 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
+        int result = service.saveCouponClassList(payMethodClassVOs, sessionInfoVO);
 
-        try{
-            result = service.saveCouponClassList(payMethodClassVOs, sessionInfoVO);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 쿠폰분류 매장적용 (본사/매장)
+     * @param   payMethodClassVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김지은
+     * @since   2018.12.28
+     */
+    @RequestMapping(value = "/class/applyCouponClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result applyCouponClassList(@RequestBody PayMethodClassVO[] payMethodClassVOs, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result  = service.applyCouponClassList(payMethodClassVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -198,13 +207,7 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.saveCouponList(couponVOs, sessionInfoVO);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        int result = service.saveCouponList(couponVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -246,13 +249,7 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.registCouponProd(couponProdVOs, sessionInfoVO);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        int result =  service.registCouponProd(couponProdVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
@@ -272,13 +269,7 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.deleteCouponProd(couponProdVOs, sessionInfoVO);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        int result = service.deleteCouponProd(couponProdVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
@@ -321,13 +312,7 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.registCouponStore(couponStoreVOs, sessionInfoVO);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+        int result = service.registCouponStore(couponStoreVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
@@ -347,13 +332,7 @@ public class CouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = 0;
-
-        try{
-            result = service.deleteCouponStore(couponStoreVOs, sessionInfoVO);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
+        int result =  service.deleteCouponStore(couponStoreVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }

@@ -101,6 +101,11 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
 
+    <%-- 매장환경 복사 --%>
+    <button class="btn_skyblue fr" id="copyBtn" ng-click="copyStoreEnv()" style="display:none;">
+      <s:message code="storeView.copy.store" />
+    </button>
+
     <%-- 엑셀 다운로드 //todo --%>
     <%--
     <button class="btn_skyblue fr" id="excelBtn">
@@ -124,7 +129,7 @@
         <wj-flex-grid-column header="<s:message code="storeView.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.storeNm"/>" binding="storeNm" width="120" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.storeTypeNm"/>" binding="storeTypeNm" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeView.clsFgNmG"/>" binding="clsFg" width="90" data-map="clsFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.clsFgNmG"/>" binding="clsFg" width="80" data-map="clsFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.bizNo"/>" binding="bizNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.ownerNm"/>" binding="ownerNm" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeView.telNo"/>" binding="telNo" width="5"  is-read-only="true"></wj-flex-grid-column>
@@ -152,7 +157,7 @@ var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=2018112001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20181228.01" charset="utf-8"></script>
 
 
 <%-- 매장 상세정보 --%>
@@ -163,3 +168,6 @@ var areaCd = ${ccu.getCommCodeSelect("061")};
 <c:import url="/WEB-INF/view/base/store/view/vanConfg.jsp">
 </c:import>
 
+<%-- 매장환경복사 --%>
+<c:import url="/WEB-INF/view/base/store/view/copyStoreEnv.jsp">
+</c:import>

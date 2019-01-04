@@ -44,8 +44,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="*" align="left"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -123,9 +123,9 @@
         }
       });
 
-      if ($scope.searchFg == "N") {
+      // if ($scope.searchFg == "N") {
         $scope.searchStore();
-      }
+      // }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
@@ -133,7 +133,7 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
-      $scope._inquirySub("/iostock/order/outstockReqDate/days/selectStoreList.sb", params, function () {
+      $scope._inquirySub("/popup/getStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

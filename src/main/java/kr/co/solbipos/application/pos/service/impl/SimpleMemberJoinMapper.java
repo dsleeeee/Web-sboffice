@@ -30,4 +30,7 @@ public interface SimpleMemberJoinMapper {
     /** 회원 등록 */
     int insertMember(MemberVO memberVO);
 
+    /** 선불회원 등록 */
+    int registMemberPrepaid(MemberVO memberVO);
+
 }

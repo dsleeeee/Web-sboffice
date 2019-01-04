@@ -29,11 +29,8 @@ import java.util.List;
 @Repository
 public interface CouponMapper {
 
-    /** 본사 쿠폰 분류 조회 */
-    List<DefaultMap<String>> getHqCouponClassList(PayMethodClassVO payMethodClassVO);
-
-    /** 매장 쿠폰 분류 조회 */
-    List<DefaultMap<String>> getStoreCouponClassList(PayMethodClassVO payMethodClassVO);
+    /** 쿠폰 분류 조회 */
+    List<DefaultMap<String>> getCouponClassList(PayMethodClassVO payMethodClassVO);
 
     /** 쿠폰 분류코드 조회 */
     String getPayMethodClassCd(PayMethodClassVO payMethodClassVO);

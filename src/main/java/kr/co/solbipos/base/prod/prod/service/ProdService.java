@@ -47,4 +47,7 @@ public interface ProdService {
 
     /** 상품 적용매장 삭제 */
     int deleteProdStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품 등록매장 판매가 변경 */
+    int updateStoreSaleUprc(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 }

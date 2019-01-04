@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="memberRegistLayer" control="memberRegistLayer" show-trigger="Click" hide-trigger="Click" style="width:750px;height:570px;">
+<wj-popup id="memberRegistLayer" control="memberRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:570px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="memberRegistCtrl">
 
     <%-- header --%>
@@ -54,12 +54,12 @@
               <%-- 회원명 --%>
               <th><s:message code="regist.membr.nm" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"class="sb-input w100"   maxlength="15" required>
+                <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"class="sb-input w100" maxlength="30" required>
               </td>
               <%-- 회원닉네임 --%>
               <th><s:message code="regist.membr.nicknm" /></th>
               <td>
-                <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="15" />
+                <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm" class="sb-input w100" maxlength="30" />
               </td>
             </tr>
             <tr>

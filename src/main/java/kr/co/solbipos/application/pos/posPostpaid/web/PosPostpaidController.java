@@ -96,6 +96,7 @@ public class PosPostpaidController {
         return "application/pos/posPostpaid/posPostpaidView";
     }
 
+
     /**
      * TODO
      * POS 화면에서 띄우는건 메뉴등이 필요없기때문에 tiles 에 예외등록해두고 우선은 해당 컨트롤러에서 STORE_CD 와 HW_AUTH_KEY 로 인증체크 후 세션을 맺도록 함.

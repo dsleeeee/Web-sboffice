@@ -74,11 +74,11 @@
     <%--// 페이지 스케일  --%>
 
     <%-- 외상입금 --%>
-    <button class="btn_skyblue ml5 fr" id="btnDeposit" ng-click="deposit()">
+    <button class="btn_skyblue ml5 fr"  ng-click="deposit()">
       <s:message code="postpaid.deposit" />
     </button>
     <%-- 세금계산서 발행입금 --%>
-    <button class="btn_skyblue ml5 fr" id="btnDeposit" ng-click="taxBillDeposit()">
+    <button class="btn_skyblue ml5 fr"  ng-click="taxBillDeposit()">
       <s:message code="postpaid.taxBill.deposit" />
     </button>
   </div>
@@ -99,17 +99,17 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.postpaidNo"/>" binding="postpaidNo" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.postpaidFg"/>" binding="postpaidFg" data-map="postpaidFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.postpaidPayFg"/>" binding="postpaidPayFg" data-map="postpaidPayFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.depositAmt"/>" binding="depositAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="140" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.depositAmt"/>" binding="depositAmt" width="140" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

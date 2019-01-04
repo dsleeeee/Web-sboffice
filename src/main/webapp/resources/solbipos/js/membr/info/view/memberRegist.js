@@ -103,9 +103,9 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
 
     $scope._postJSONQuery.withOutPopUp( '/membr/info/view/base/getMemberInfo.sb', params, function(response){
 
-      console.log(response);
+      // console.log(response);
 
-      if($.isEmptyObject(response.data) ) { ww
+      if($.isEmptyObject(response.data) ) {
         $scope._popMsg(messages["cmm.empty.data"]);
         $scope.memberRegistLayer.hide();
         return false;
@@ -222,7 +222,7 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
     // 회원조회 팝업 핸들러 추가
     $scope.memberMappingLayer.shown.addHandler(function (s) {
       setTimeout(function() {
-        $scope._broadcast('memberMappingCtrl');
+        // $scope._broadcast('memberMappingCtrl');
       }, 50)
     });
   });

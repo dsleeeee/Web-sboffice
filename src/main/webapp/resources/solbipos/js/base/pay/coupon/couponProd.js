@@ -40,7 +40,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     if(selectedCoupon != null && selectedCoupon != ""){
       var params = {};
 
-      params.listScale = "10";
+      // params.listScale = "10";
       params.prodCd = $("#srchProdCd").val();
       params.prodNm = $("#srchProdNm").val();
 
@@ -103,7 +103,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터
       var params = {};
 
-      params.listScale = "10";
+      // params.listScale = "10";
       params.prodCd = $("#srchProdCd").val();
       params.prodNm = $("#srchProdNm").val();
       params.payClassCd = selectedCouponClass.payClassCd;

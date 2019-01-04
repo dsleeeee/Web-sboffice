@@ -6,9 +6,13 @@ import kr.co.common.data.domain.VanVO;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.PopupService;
+import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +43,14 @@ public class PopupServiceImpl implements PopupService{
 
     private final PopupMapper popupMapper;
     private final MessageService messageService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public PopupServiceImpl(PopupMapper popupMapper, MessageService messageService) {
+    public PopupServiceImpl(PopupMapper popupMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.popupMapper = popupMapper;
         this.messageService = messageService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /** 벤사 목록 조회 */
@@ -93,5 +99,22 @@ public class PopupServiceImpl implements PopupService{
         prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return popupMapper.getProdClassCdNm(prodVO);
+    }
+
+    /** 상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getProductList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        if(StringUtil.isEmpty(storeCd)) prodVO.setOrgnFg(OrgnFg.HQ.getCode());
+        else                            prodVO.setOrgnFg(OrgnFg.STORE.getCode());
+
+        prodVO.setHqOfficeCd(hqOfficeCd);
+        prodVO.setStoreCd(storeCd);
+
+        return popupMapper.getProductList(prodVO);
     }
 }

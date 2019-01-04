@@ -48,5 +48,8 @@ public interface PopupMapper {
 
     /** 상품분류 플랫 조회 */
     String getProdClassCdNm(ProdVO prodVO);
+
+    /** 상품 조회 */
+    List<DefaultMap<String>> getProductList(ProdVO prodVO);
 }
 
