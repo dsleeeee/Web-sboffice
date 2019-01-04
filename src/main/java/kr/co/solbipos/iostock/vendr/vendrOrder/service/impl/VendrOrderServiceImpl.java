@@ -246,6 +246,16 @@ public class VendrOrderServiceImpl implements VendrOrderService {
     }
 
 
+    /** 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보) */
+    @Override
+    public DefaultMap<String> getVendrOrderReportInfo(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO) {
+        // regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅
+        vendrOrderVO = setSessionValue(vendrOrderVO, sessionInfoVO, null);
+
+        return vendrOrderMapper.getVendrOrderReportInfo(vendrOrderVO);
+    }
+
+
     /** 거래처 발주등록 - 엑셀업로드 */
     @Override
     public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {

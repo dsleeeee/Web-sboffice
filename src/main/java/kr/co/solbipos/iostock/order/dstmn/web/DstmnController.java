@@ -8,7 +8,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.dstmn.service.DstmnService;
 import kr.co.solbipos.iostock.order.dstmn.service.DstmnVO;
-import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -151,6 +150,7 @@ public class DstmnController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+//        List<DefaultMap<String>> list = dstmnService.getDstmnDtlList(dstmnVO);
         List<DefaultMap<String>> list = dstmnService.getDstmnDtlList(dstmnVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
@@ -198,5 +198,74 @@ public class DstmnController {
         int result = dstmnService.saveOutstockAfter(dstmnVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래명세표 - 세금계산서 공급자 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 02.
+     */
+    @RequestMapping(value = "/taxReport/supplierInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSupplierInfo(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = dstmnService.getSupplierInfo(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래명세표 - 세금계산서 전표 내역 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 02.
+     */
+    @RequestMapping(value = "/taxReport/taxReportInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTaxReportInfoList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getTaxReportInfoList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 거래명세표 전표 내역 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 03.
+     */
+    @RequestMapping(value = "/transReport/transReportInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTransReportInfoList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getTransReportInfoList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
     }
 }

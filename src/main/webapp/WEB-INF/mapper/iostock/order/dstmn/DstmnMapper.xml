@@ -88,8 +88,11 @@
         <if test='slipKind != null and slipKind != ""'>
             AND tphso.SLIP_KIND = #{slipKind}
         </if>
-        <if test='procFg != null and procFg != ""'>
-            AND tphso.PROC_FG = #{procFg}
+        <if test='arrProcFg != null and arrProcFg != ""'>
+            AND tphso.PROC_FG IN
+            <foreach collection="arrProcFg" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND tphso.VENDR_CD = #{vendrCd}
@@ -144,7 +147,7 @@
         <![CDATA[
         SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
-        ,        DECODE(thp.VAT_FG, '1', 1, 0) VAT_FG01
+        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,        tphsod.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC
         ,        TO_NUMBER(DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG)) AS ORDER_UNIT_QTY
         ,        TO_NUMBER(DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG)) AS ORDER_ETC_QTY
@@ -173,20 +176,33 @@
         ,        tphsod.REMARK
         ,        the.ENVST_VAL AS ENVST0011
         ,        thpb.BARCD_CD
+        ,        thp.ORGPLCE_CD
+        ,        thn.NMCODE_NM AS PO_UNIT_FG_NM
         FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
         ,        TB_HQ_PRODUCT thp
         ,        TB_HQ_PRODUCT_BARCD thpb
         ,        TB_HQ_ENVST the
+        ,        TB_HQ_NMCODE thn
         WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
-        AND      tphsod.SLIP_NO         =   #{slipNo}
+        ]]>
+        <if test='arrSlipNo != null and arrSlipNo != ""'>
+            AND tphsod.SLIP_NO IN
+            <foreach collection="arrSlipNo" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
         AND      thpb.PROD_CD       (+) =   tphsod.PROD_CD
         AND      the.HQ_OFFICE_CD       =   #{hqOfficeCd}
         AND      the.ENVST_CD           =   '0011'
+        AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
+        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         ORDER
-        BY       tphsod.PROD_CD, tphsod.SEQ
+        BY       tphsod.SLIP_NO, tphsod.PROD_CD, tphsod.SEQ
         ]]>
     </select>
 
@@ -204,6 +220,128 @@
         WHERE   ENVST_CD  = '176'
         ]]>
     </select>
+
+    <!-- 거래명세표 - 세금계산서 공급자 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 세금계산서 공급자 정보를 조회한다.
+    -->
+    <select id="getSupplierInfo" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getSupplierInfo */
+        <![CDATA[
+        SELECT  tho.HQ_OFFICE_NM AS SUPPLIER_NM
+        ,       tho.OWNER_NM AS SUPPLIER_OWNER_NM
+        ,       tho.BIZ_NO AS SUPPLIER_BIZ_NO
+        ,       tho.ADDR || ' ' || tho.ADDR_DTL AS SUPPLIER_ADDR
+        FROM    TB_HQ_OFFICE tho
+        WHERE   tho.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        ]]>
+    </select>
+
+
+    <!-- 거래명세표 - 세금계산서 전표 내역 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_PRODUCT, TB_MS_STORE
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 세금계산서 전표 내역을 조회한다.
+    -->
+    <select id="getTaxReportInfoList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getTaxReportInfoList */
+        <![CDATA[
+        SELECT  tphso.SLIP_NO, tphso.STORE_CD, tphso.OUT_DATE
+        ,       tms.STORE_NM AS SUPPLIED_NM
+        ,       tms.OWNER_NM AS SUPPLIED_OWNER_NM
+        ,       tms.BIZ_NO AS SUPPLIED_BIZ_NO
+        ,       tms.ADDR || tms.ADDR_DTL AS SUPPLIED_ADDR
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '0', tphsod.OUT_AMT)),0) AS BASE_AMT0
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '0', tphsod.OUT_VAT)),0) AS BASE_VAT0
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '0', tphsod.OUT_TOT)),0) AS BASE_TOT0
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '1', tphsod.OUT_AMT)),0) AS BASE_AMT1
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '1', tphsod.OUT_VAT)),0) AS BASE_VAT1
+        ,       NVL(SUM(DECODE(tmp.VAT_FG, '1', tphsod.OUT_TOT)),0) AS BASE_TOT1
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_STORE tms
+        WHERE   tphso.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        ]]>
+        <if test='arrSlipNo != null and arrSlipNo != ""'>
+            AND tphso.SLIP_NO IN
+            <foreach collection="arrSlipNo" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tphsod.HQ_OFFICE_CD =   tphso.HQ_OFFICE_CD
+        AND     tphsod.SLIP_NO      =   tphso.SLIP_NO
+        AND     tmp.STORE_CD        =   tphsod.STORE_CD
+        AND     tmp.PROD_CD         =   tphsod.PROD_CD
+        AND     tms.STORE_CD        =   tmp.STORE_CD
+        GROUP
+        BY      tphso.SLIP_NO, tphso.STORE_CD, tphso.OUT_DATE
+        ,       tms.STORE_NM
+        ,       tms.OWNER_NM
+        ,       tms.BIZ_NO
+        ,       tms.ADDR || tms.ADDR_DTL
+        ORDER BY tphso.SLIP_NO
+        ]]>
+    </select>
+
+
+    <!-- 거래명세표 - 거래명세표 전표 내역 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_PRODUCT, TB_MS_STORE
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 거래명세표 전표 내역을 조회한다.
+    -->
+    <select id="getTransReportInfoList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getTransReportInfoList */
+        <![CDATA[
+        SELECT  tphso.SLIP_NO, tphso.STORE_CD, tphso.OUT_DATE
+        ,       tms.STORE_NM AS SUPPLIED_NM
+        ,       tms.OWNER_NM AS SUPPLIED_OWNER_NM
+        ,       tms.BIZ_NO AS SUPPLIED_BIZ_NO
+        ,       tms.ADDR || tms.ADDR_DTL AS SUPPLIED_ADDR
+        ,       tphdc.DLVR_NM
+        ,       tphso.REMARK
+        ,       NVL(SUM(tphsod.OUT_AMT),0) AS TOT_AMT
+        ,       NVL(SUM(tphsod.OUT_VAT),0) AS TOT_VAT
+        ,       NVL(SUM(tphsod.OUT_TOT),0) AS TOT_TOT
+        ,       NVL(SUM(tphsod.OUT_TOT_QTY),0) AS TOT_QTY
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_STORE tms
+        ,       TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphso.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        ]]>
+        <if test='arrSlipNo != null and arrSlipNo != ""'>
+            AND tphso.SLIP_NO IN
+            <foreach collection="arrSlipNo" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tphsod.HQ_OFFICE_CD     =   tphso.HQ_OFFICE_CD
+        AND     tphsod.SLIP_NO          =   tphso.SLIP_NO
+        AND     tmp.STORE_CD            =   tphsod.STORE_CD
+        AND     tmp.PROD_CD             =   tphsod.PROD_CD
+        AND     tms.STORE_CD            =   tmp.STORE_CD
+        AND     tphdc.HQ_OFFICE_CD  (+) =   tphso.HQ_OFFICE_CD
+        AND     tphdc.DLVR_CD       (+) =   tphso.DLVR_CD
+        GROUP
+        BY      tphso.SLIP_NO, tphso.STORE_CD, tphso.OUT_DATE
+        ,       tms.STORE_NM
+        ,       tms.OWNER_NM
+        ,       tms.BIZ_NO
+        ,       tms.ADDR || tms.ADDR_DTL
+        ,       tphdc.DLVR_NM
+        ,       tphso.REMARK
+        ORDER BY tphso.SLIP_NO
+        ]]>
+    </select>
+
 
     <!-- 거래명세표 - 출고확정 DTL 수정 -->
     <!--

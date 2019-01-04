@@ -1951,3 +1951,22 @@ div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-
 .ng-hide.ng-hide-animate {
     display: none
 }
+
+
+/**
+ * Report 관련
+ */
+
+/* 거래명세표 */
+.transReport tr {height: 30px;}
+.transReport th {font-size: 13px; color: black; padding: 2px; border: 1px solid black;}
+.transReport td {font-size: 13px; color: black; padding: 2px; border: 1px solid black;}
+.transReport td.br0 {border: 0px solid white;}
+.transReport .w1 {width: 1%;}
+.transReport .w2 {width: 2%;}
+
+/* 세금계산서 */
+.taxReport tr {height: 30px;}
+.taxReport td {font-size: 13px; color: black; padding: 2px;}
+.taxReport > table.brRed td {border: 1px solid red;}
+.taxReport > table.brBlue td {border: 1px solid blue;}

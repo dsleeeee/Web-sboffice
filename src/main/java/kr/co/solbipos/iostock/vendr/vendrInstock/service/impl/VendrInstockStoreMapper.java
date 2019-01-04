@@ -95,4 +95,7 @@ public interface VendrInstockStoreMapper {
     /** 거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
+    /** 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) */
+    DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO);
+
 }

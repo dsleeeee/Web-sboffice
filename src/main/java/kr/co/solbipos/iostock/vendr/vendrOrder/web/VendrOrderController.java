@@ -342,6 +342,29 @@ public class VendrOrderController {
 
 
     /**
+     * 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrOrderVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 27.
+     */
+    @RequestMapping(value = "/vendrOrderReport/vendrOrderReportInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrOrderReportInfo(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrOrderVO vendrOrderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = vendrOrderService.getVendrOrderReportInfo(vendrOrderVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
      * 거래처 발주등록 - 엑셀업로드
      * @param   request
      * @param   response

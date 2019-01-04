@@ -45,4 +45,13 @@ public interface DstmnMapper {
     /** 거래명세표 - 출고확정 이후 저장시 HD 수정 */
     int updateOutstockAfterHd(DstmnVO dstmnVO);
 
+    /** 거래명세표 - 세금계산서 공급자 조회 */
+    DefaultMap<String> getSupplierInfo(DstmnVO dstmnVO);
+
+    /** 거래명세표 - 세금계산서 전표 내역 조회 */
+    List<DefaultMap<String>> getTaxReportInfoList(DstmnVO dstmnVO);
+
+    /** 거래명세표 - 거래명세표 전표 내역 조회 */
+    List<DefaultMap<String>> getTransReportInfoList(DstmnVO dstmnVO);
+
 }

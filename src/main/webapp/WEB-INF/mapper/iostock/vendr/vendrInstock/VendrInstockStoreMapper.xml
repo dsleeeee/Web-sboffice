@@ -145,15 +145,20 @@
         ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+        ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
         FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_VENDOR tmv
+        ,       TB_MS_STORE_NMCODE tmsn
         WHERE   tpsvid.STORE_CD =   #{storeCd}
         AND     tpsvid.SLIP_NO  =   #{slipNo}
         AND     tmp.STORE_CD    =   tpsvid.STORE_CD
         AND     tmp.PROD_CD     =   tpsvid.PROD_CD
         AND     tmv.STORE_CD    =   tpsvid.STORE_CD
         AND     tmv.VENDR_CD    =   #{vendrCd}
+        AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
+        AND     tmsn.NMCODE_GRP_CD (+)=   '097'
+        AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
         ORDER
         BY      tpsvid.PROD_CD
         ]]>
@@ -309,6 +314,40 @@
         AND     tmv.VENDR_CD        =   #{vendrCd}
         ORDER
         BY      tpsvid.PROD_CD
+        ]]>
+    </select>
+
+
+    <!-- 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_VENDOR, TB_PO_STORE_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보)한다.
+    -->
+    <select id="getVendrInstockReportInfo" parameterType="vendrInstockVO" resultType="DefaultMap">
+        <![CDATA[
+        SELECT  tms.STORE_NM AS INSTOCK_NM
+        ,       tms.TEL_NO AS INSTOCK_TEL_NO
+        ,       tms.FAX_NO AS INSTOCK_FAX_NO
+        ,       tms.EMAIL_ADDR AS INSTOCK_EMAIL_ADDR
+        ,       tms.ADDR || ' ' || tms.ADDR_DTL AS INSTOCK_ADDR
+        ,       tmv.VENDR_NM AS SUPPLIER_NM
+        ,       tmv.TEL_NO AS SUPPLIER_TEL_NO
+        ,       tmv.FAX_NO AS SUPPLIER_FAX_NO
+        ,       tmv.EMAIL_ADDR AS SUPPLIER_EMAIL_ADDR
+        ,       tmv.ADDR || ' ' || tmv.ADDR_DTL AS SUPPLIER_ADDR
+        ,       tpsvi.SLIP_NO
+        ,       tpsvi.INSTOCK_DATE
+        ,       tpsvi.REMARK
+        ,       tpsvi.DTL_CNT
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_VENDOR tmv
+        ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
+        WHERE   tms.STORE_CD    =   #{storeCd}
+        AND     tmv.STORE_CD    =   tms.STORE_CD
+        AND     tmv.VENDR_CD    =   #{vendrCd}
+        AND     tpsvi.STORE_CD  =   tms.STORE_CD
+        AND     tpsvi.SLIP_NO   =   #{slipNo}
         ]]>
     </select>
 

@@ -54,6 +54,8 @@ public class StoreCurrVO extends PageVO {
     private String barcdCd;
     /** 거래처코드 */
     private String vendrCd;
+    /** 거래처코드 array */
+    private String arrVendrCd[];
     /** 상품분류코드 */
     private String prodClassCd;
     /** 중량,수량상품구분 */
@@ -395,6 +397,20 @@ public class StoreCurrVO extends PageVO {
      */
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    /**
+     * @return the arrVendrCd
+     */
+    public String[] getArrVendrCd() {
+        return arrVendrCd;
+    }
+
+    /**
+     * @param arrVendrCd the arrVendrCd to set
+     */
+    public void setArrVendrCd(String[] arrVendrCd) {
+        this.arrVendrCd = arrVendrCd;
     }
 
     /**

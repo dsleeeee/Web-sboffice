@@ -20,19 +20,6 @@
     <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
       <div class="w100">
         <div class="oh sb-select dkbr">
-          <%-- 페이지 스케일  --%>
-          <%--<wj-combo-box--%>
-            <%--class="w100px fl"--%>
-            <%--id="listScaleBox"--%>
-            <%--ng-model="listScale"--%>
-            <%--items-source="_getComboData('listScaleBox')"--%>
-            <%--display-member-path="name"--%>
-            <%--selected-value-path="value"--%>
-            <%--is-editable="false"--%>
-            <%--initialized="_initComboBox(s)">--%>
-          <%--</wj-combo-box>--%>
-          <%--// 페이지 스케일  --%>
-          <%-- 선택 --%>
           <button class="btn_skyblue fr" ng-click="storeSelected()">
             <s:message code="cmm.chk"/></button>
         </div>
@@ -43,7 +30,6 @@
             autoGenerateColumns="false"
             selection-mode="Row"
             items-source="data"
-          <%--control="storeGridM"--%>
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
@@ -58,14 +44,6 @@
         </div>
         <%--//위즈모 테이블--%>
       </div>
-
-      <%-- 페이지 리스트 --%>
-      <%--<div class="pageNum mt20">--%>
-        <%--&lt;%&ndash; id &ndash;%&gt;--%>
-        <%--<ul id="<c:out value="${param.targetId}"/>CtrlPager" data-size="10">--%>
-        <%--</ul>--%>
-      <%--</div>--%>
-      <%--//페이지 리스트--%>
     </div>
   </div>
 </wj-popup>
@@ -82,9 +60,6 @@
     var targetId = '${param.targetId}';
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
-
-    //페이지 스케일 콤보박스 데이터 Set
-    // $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

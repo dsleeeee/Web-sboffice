@@ -59,6 +59,9 @@ public interface VendrOrderMapper {
     /** 거래처 발주등록 - 발주정보 DTL의 집계정보 HD에 수정 */
     int updateVendrOrderDtlSumHd(VendrOrderVO vendrOrderVO);
 
+    /** 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보) */
+    DefaultMap<String> getVendrOrderReportInfo(VendrOrderVO vendrOrderVO);
+
     /** 거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가 */
     int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
 

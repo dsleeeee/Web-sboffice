@@ -42,7 +42,7 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  tpsvo.SLIP_NO, tpsvo.PROC_FG, tmv.VENDR_NM
+                SELECT  tpsvo.SLIP_NO, tpsvo.PROC_FG, tpsvo.VENDR_CD, tmv.VENDR_NM
                 ,       tpsvo.ORDER_TYPE, tpsvo.ORDER_DATE, tpsvo.ORDER_REQ_DATE
                 FROM    TB_PO_STORE_VENDR_ORDER tpsvo
                 ,       TB_MS_VENDOR tmv
@@ -211,15 +211,20 @@
                 ,       tphvod.ORDER_TOT*tphvod.SLIP_FG AS ORDER_TOT
                 ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+                ,       thn.NMCODE_NM AS PO_UNIT_FG_NM
                 FROM    TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_PRODUCT thp
                 ,       TB_HQ_VENDOR thv
+                ,       TB_HQ_NMCODE thn
                 WHERE   tphvod.HQ_OFFICE_CD =   #{hqOfficeCd}
                 AND     tphvod.SLIP_NO      =   #{slipNo}
                 AND     thp.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
                 AND     thp.PROD_CD         =   tphvod.PROD_CD
                 AND     thv.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
                 AND     thv.VENDR_CD        =   #{vendrCd}
+                AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
+                AND     thn.NMCODE_GRP_CD(+)=   '097'
+                AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
                 ORDER
                 BY      tphvod.PROD_CD
                 ]]>
@@ -238,15 +243,20 @@
                 ,       tpsvod.ORDER_TOT*tpsvod.SLIP_FG AS ORDER_TOT
                 ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
                 ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+                ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
                 FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
                 ,       TB_MS_PRODUCT tmp
                 ,       TB_MS_VENDOR tmv
-                WHERE   tpsvod.STORE_CD =   #{storeCd}
-                AND     tpsvod.SLIP_NO  =   #{slipNo}
-                AND     tmp.STORE_CD    =   tpsvod.STORE_CD
-                AND     tmp.PROD_CD     =   tpsvod.PROD_CD
-                AND     tmv.STORE_CD    =   tpsvod.STORE_CD
-                AND     tmv.VENDR_CD    =   #{vendrCd}
+                ,       TB_MS_STORE_NMCODE tmsn
+                WHERE   tpsvod.STORE_CD       =   #{storeCd}
+                AND     tpsvod.SLIP_NO        =   #{slipNo}
+                AND     tmp.STORE_CD          =   tpsvod.STORE_CD
+                AND     tmp.PROD_CD           =   tpsvod.PROD_CD
+                AND     tmv.STORE_CD          =   tpsvod.STORE_CD
+                AND     tmv.VENDR_CD          =   #{vendrCd}
+                AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
+                AND     tmsn.NMCODE_GRP_CD (+)=   '097'
+                AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
                 ORDER
                 BY      tpsvod.PROD_CD
                 ]]>
@@ -529,7 +539,76 @@
                 </if>
             </when>
         </choose>
+    </select>
 
+
+    <!-- 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보) -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_HQ_PRODUCT, TB_HQ_VENDOR
+                   TB_PO_STORE_VENDR_ORDER_DTL, TB_MS_PRODUCT, TB_MS_VENDOR
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보)한다.
+    -->
+    <select id="getVendrOrderReportInfo" parameterType="vendrOrderVO" resultType="DefaultMap">
+        /* USE : VendrOrderMapper.getVendrOrderReportInfo */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[
+                SELECT  tho.HQ_OFFICE_NM AS ORDER_NM
+                ,       tho.TEL_NO AS ORDER_TEL_NO
+                ,       tho.FAX_NO AS ORDER_FAX_NO
+                ,       tho.EMAIL_ADDR AS ORDER_EMAIL_ADDR
+                ,       tho.ADDR || ' ' || tho.ADDR_DTL AS ORDER_ADDR
+                ,       thv.VENDR_NM AS SUPPLIER_NM
+                ,       thv.TEL_NO AS SUPPLIER_TEL_NO
+                ,       thv.FAX_NO AS SUPPLIER_FAX_NO
+                ,       thv.EMAIL_ADDR AS SUPPLIER_EMAIL_ADDR
+                ,       thv.ADDR || ' ' || thv.ADDR_DTL AS SUPPLIER_ADDR
+                ,       tphvo.SLIP_NO
+                ,       tphvo.ORDER_DATE
+                ,       tphvo.ORDER_REQ_DATE
+                ,       tphvo.REMARK
+                ,       tphvo.DTL_CNT
+                FROM    TB_HQ_OFFICE tho
+                ,       TB_HQ_VENDOR thv
+                ,       TB_PO_HQ_VENDR_ORDER tphvo
+                WHERE   tho.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                AND     thv.HQ_OFFICE_CD    =   tho.HQ_OFFICE_CD
+                AND     thv.VENDR_CD        =   #{vendrCd}
+                AND     tphvo.HQ_OFFICE_CD  =   tho.HQ_OFFICE_CD
+                AND     tphvo.SLIP_NO       =   #{slipNo}
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  tms.STORE_NM AS ORDER_NM
+                ,       tms.TEL_NO AS ORDER_TEL_NO
+                ,       tms.FAX_NO AS ORDER_FAX_NO
+                ,       tms.EMAIL_ADDR AS ORDER_EMAIL_ADDR
+                ,       tms.ADDR || ' ' || tms.ADDR_DTL AS ORDER_ADDR
+                ,       tmv.VENDR_NM AS SUPPLIER_NM
+                ,       tmv.TEL_NO AS SUPPLIER_TEL_NO
+                ,       tmv.FAX_NO AS SUPPLIER_FAX_NO
+                ,       tmv.EMAIL_ADDR AS SUPPLIER_EMAIL_ADDR
+                ,       tmv.ADDR || ' ' || tmv.ADDR_DTL AS SUPPLIER_ADDR
+                ,       tpsvo.SLIP_NO
+                ,       tpsvo.ORDER_DATE
+                ,       tpsvo.ORDER_REQ_DATE
+                ,       tpsvo.REMARK
+                ,       tpsvo.DTL_CNT
+                FROM    TB_MS_STORE tms
+                ,       TB_MS_VENDOR tmv
+                ,       TB_PO_STORE_VENDR_ORDER tpsvo
+                WHERE   tms.STORE_CD    =   #{storeCd}
+                AND     tmv.STORE_CD    =   tms.STORE_CD
+                AND     tmv.VENDR_CD    =   #{vendrCd}
+                AND     tpsvo.STORE_CD  =   tms.STORE_CD
+                AND     tpsvo.SLIP_NO   =   #{slipNo}
+                ]]>
+            </when>
+        </choose>
     </select>
 
 

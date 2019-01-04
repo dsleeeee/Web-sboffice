@@ -34,6 +34,9 @@ public interface VendrOrderService {
     /** 거래처 발주등록 - 발주상품 추가/변경 등록 리스트 저장 */
     int saveVendrOrderProdReg(VendrOrderVO[] vendrOrderVOs, SessionInfoVO sessionInfoVO);
 
+    /** 거래처 발주등록 - 발주서 발주정보 조회(발주처, 공급자 정보) */
+    DefaultMap<String> getVendrOrderReportInfo(VendrOrderVO vendrOrderVO, SessionInfoVO sessionInfoVO);
+
     /** 엑셀업로드 */
     int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 

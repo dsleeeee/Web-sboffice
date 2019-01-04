@@ -33,6 +33,9 @@ public class DstmnServiceImpl implements DstmnService {
     /** 거래명세표 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDstmnList(DstmnVO dstmnVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getProcFg()).equals("")) {
+            dstmnVO.setArrProcFg(dstmnVO.getProcFg().split(","));
+        }
         return dstmnMapper.getDstmnList(dstmnVO);
     }
 
@@ -45,6 +48,9 @@ public class DstmnServiceImpl implements DstmnService {
     /** 거래명세표 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDstmnDtlList(DstmnVO dstmnVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
         return dstmnMapper.getDstmnDtlList(dstmnVO);
     }
 
@@ -167,5 +173,35 @@ public class DstmnServiceImpl implements DstmnService {
         returnResult += result;
 
         return returnResult;
+    }
+
+
+    /** 거래명세표 - 세금계산서 공급자 조회 */
+    @Override
+    public DefaultMap<String> getSupplierInfo(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getSupplierInfo(dstmnVO);
+    }
+
+
+    /** 거래명세표 - 세금계산서 전표 내역 조회 */
+    @Override
+    public List<DefaultMap<String>> getTaxReportInfoList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getTaxReportInfoList(dstmnVO);
+    }
+
+
+    /** 거래명세표 - 거래명세표 전표 내역 조회 */
+    @Override
+    public List<DefaultMap<String>> getTransReportInfoList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getTransReportInfoList(dstmnVO);
     }
 }

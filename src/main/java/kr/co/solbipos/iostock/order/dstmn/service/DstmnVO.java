@@ -10,6 +10,8 @@ public class DstmnVO extends PageVO {
     private String hqOfficeCd;
     /** 전표번호 YYMM(4)+SEQ(6) */
     private String slipNo;
+    /** 전표번호 array */
+    private String arrSlipNo[];
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -22,6 +24,8 @@ public class DstmnVO extends PageVO {
     private String slipKind;
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String procFg;
+    /** 처리구분 array */
+    private String arrProcFg[];
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String updateProcFg;
     /** 상세건수 */
@@ -176,6 +180,20 @@ public class DstmnVO extends PageVO {
     }
 
     /**
+     * @return the arrSlipNo
+     */
+    public String[] getArrSlipNo() {
+        return arrSlipNo;
+    }
+
+    /**
+     * @param arrSlipNo the arrSlipNo to set
+     */
+    public void setArrSlipNo(String[] arrSlipNo) {
+        this.arrSlipNo = arrSlipNo;
+    }
+
+    /**
      * @return the storeCd
      */
     public String getStoreCd() {
@@ -257,6 +275,20 @@ public class DstmnVO extends PageVO {
      */
     public void setProcFg(String procFg) {
         this.procFg = procFg;
+    }
+
+    /**
+     * @return the arrProcFg
+     */
+    public String[] getArrProcFg() {
+        return arrProcFg;
+    }
+
+    /**
+     * @param arrProcFg the arrProcFg to set
+     */
+    public void setArrProcFg(String[] arrProcFg) {
+        this.arrProcFg = arrProcFg;
     }
 
     /**

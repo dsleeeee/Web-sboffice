@@ -17,9 +17,6 @@
          onchange="angular.element(this).scope().textFileChanged()"
          accept=".txt"/>
 
-  <%--<a href="#" class="btn_grayS" ng-click="excelUploadingPopup(true)">팝업열기</a>--%>
-  <%--<a href="#" class="btn_grayS" ng-click="excelUploadingPopup(false)">팝업닫기</a>--%>
-
   <%--위즈모 테이블--%>
   <div class="wj-gridWrap" style="height: 350px;">
     <wj-flex-grid
@@ -306,13 +303,13 @@
               }
             }
 
+            // 읽어온 파일데이터가 null 이 아닌 경우
             if (nvl(uploadData, '') !== '') {
               var jsonData = $scope.textUploadToJsonConvert(uploadData);
 
               if (jsonData.length > 0) {
                 $timeout(function () {
                   $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-
                   $scope.save(jsonData);
                 }, 10);
               } else {

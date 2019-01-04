@@ -40,6 +40,9 @@ public interface VendrInstockService {
     /** 거래처 입고/반출등록 - 입고/반출상품 발주내역으로 세팅 리스트 조회 */
     List<DefaultMap<String>> getVendrInstockOrderInfoRegList(VendrInstockVO vendrInstockVO, SessionInfoVO sessionInfoVO);
 
+    /** 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) */
+    DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO, SessionInfoVO sessionInfoVO);
+
     /** 엑셀업로드 */
     int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO);
 
