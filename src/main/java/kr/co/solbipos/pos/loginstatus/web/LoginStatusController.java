@@ -1,10 +1,10 @@
-package kr.co.solbipos.pos.confg.loginstatus.web;
+package kr.co.solbipos.pos.loginstatus.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
-import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusService;
-import kr.co.solbipos.pos.confg.loginstatus.service.LoginStatusVO;
+import kr.co.solbipos.pos.loginstatus.service.LoginStatusService;
+import kr.co.solbipos.pos.loginstatus.service.LoginStatusVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class LoginStatusController {
     @RequestMapping(value = "list.sb", method = RequestMethod.GET)
     public String loginstatusList(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        return "pos/confg/loginStatus/loginStatus";
+        return "pos/loginStatus/loginStatus/loginStatus";
     }
 
     /**

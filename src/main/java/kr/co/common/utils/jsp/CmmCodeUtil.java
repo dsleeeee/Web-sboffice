@@ -60,6 +60,27 @@ public class CmmCodeUtil {
         return convertToJson(list);
     }
 
+
+    /**
+     * 조회 건수 리스트 (데이터 수 많음)
+     *
+     * @return
+     */
+    public String getListScale2() {
+//        String listScale[] = {"10", "30", "50"};
+        String listScale[] = {"50", "100", "200"};
+
+        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+        for (int i = 0; i < listScale.length; i++) {
+            HashMap<String, String> m = new HashMap<>();
+            m.put(COMBO_NAME, listScale[i]);
+            m.put(COMBO_VALUE, listScale[i]);
+            list.add(m);
+        }
+
+        return convertToJson(list);
+    }
+
     /**
      * 공통 코드 조회(JSON, 명칭/코드)
      *

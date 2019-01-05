@@ -1226,6 +1226,11 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .btnSet a:hover {transition:all 0.3s;}
 .btn_blue {background:#1e88e5;} .btn_blue:hover {background:#174291;}
 .btn_gray {background:#aeaeae;} .btn_gray:hover {background:#777;}
+/* 2019-01-05 추가 */
+.noTitle .btnSet2 {padding-top:10px; display:table; margin:0 auto;}
+.title .btnSet2 {padding-top:10px; display:table; margin:0 auto;}
+.btnSet2 a {color:#fff; display:inline-block; padding:10px 30px; border-radius:4px; margin:0 5px; transition:all 0.3s;}
+.btnSet2 a:hover {transition:all 0.3s;}
 
 /*.title .btnSet2 {}
 .title .btnSet2 a {color:#fff; display:inline-block; padding:7px 20px; border-radius:4px; font-size:0.75em; transition:all 0.3s;}

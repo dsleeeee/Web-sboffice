@@ -1,7 +1,7 @@
 package kr.co.solbipos.store.manage.storemanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 
 /**
  * @Class Name : StoreManageVO.java

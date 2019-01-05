@@ -1,7 +1,7 @@
 package kr.co.solbipos.store.hq.hqmanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 
 /**
