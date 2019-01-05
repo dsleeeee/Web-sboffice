@@ -257,8 +257,8 @@
             AND SALE_PRC_FG = '1'
             GROUP BY STORE_CD, PROD_CD
              ) tmpsp
-        WHERE tmp.STORE_CD = 'DS00001'
-        AND thp.HQ_OFFICE_CD = 'DS001'
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
