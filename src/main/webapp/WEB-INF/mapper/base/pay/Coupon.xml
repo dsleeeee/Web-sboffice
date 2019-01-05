@@ -921,6 +921,7 @@
     <select id="insertHqCouponProdToStoreProd" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
         /* USE : CouponMapper.insertHqCouponProdToStoreProd */
         {
+
             CALL PKG_HQ_COUPON_STORE.SP_HQ_COUPON_STORE_I
             (
                 #{hqOfficeCd},
