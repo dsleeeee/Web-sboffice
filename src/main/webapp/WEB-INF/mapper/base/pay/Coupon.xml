@@ -528,6 +528,8 @@
                 #{hqOfficeCd},
                 #{payClassCd},
                 #{coupnCd},
+                #{modDt},
+                #{modId},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
