@@ -407,6 +407,19 @@ public class CouponServiceImpl implements CouponService {
         int procCnt = 0;
         String dt = currentDateTimeString();
 
+        CouponVO resultVO = new CouponVO();
+        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
+        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
+        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
+        resultVO.setModDt(dt);
+        resultVO.setModId(sessionInfoVO.getUserId());
+
+        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
+        String couponResult = couponMapper.deleteHqCouponToStore(resultVO);
+
+        // 상품정보도 함께 삭제
+        String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
+
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
 
             // 쿠폰적용 매장 삭제
@@ -416,17 +429,6 @@ public class CouponServiceImpl implements CouponService {
             procCnt += couponMapper.deleteCouponStore(couponStoreVO);
 
         }
-
-        CouponVO resultVO = new CouponVO();
-        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
-        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
-        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
-
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
-        String couponResult = couponMapper.deleteHqCouponToStore(resultVO);
-
-        // 상품정보도 함께 삭제
-        String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
 
         return procCnt;
     }
