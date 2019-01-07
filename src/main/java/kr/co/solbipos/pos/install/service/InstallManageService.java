@@ -2,7 +2,6 @@ package kr.co.solbipos.pos.install.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.pos.confg.func.service.FuncVO;
 
 import java.util.List;
 
@@ -31,37 +30,4 @@ public interface InstallManageService {
 
     /** 설치요청 등록 */
     int saveInstallRequest(InstallVO[] installVOs, SessionInfoVO sessionInfoVO );
-
-    //    /**
-//     * 기능구분 상세 조회
-//     *
-//     * @param funcVO
-//     * @return
-//     */
-//    List<DefaultMap<String>> list(FuncVO funcVO);
-//
-//    /**
-//     * 기능구분상세 저장
-//     *
-//     * @param funcVOs
-//     * @param sessionInfoVO
-//     * @return
-//     */
-//    int save(FuncVO[] funcVOs, SessionInfoVO sessionInfoVO);
-//
-//    /**
-//     * 기능구분 등록매장 조회
-//     *
-//     * @param funcStoreVO
-//     * @return
-//     */
-//    Map<String, Object> getFunStoreList(FuncStoreVO funcStoreVO);
-//
-//    /**
-//     * 기능구분 적용매장 등록 및 삭제
-//     *
-//     * @param funcStoreVOs
-//     * @return
-//     */
-//    int saveFuncStore(FuncStoreVO[] funcStoreVOs, SessionInfoVO sessionInfoVO);
 }
