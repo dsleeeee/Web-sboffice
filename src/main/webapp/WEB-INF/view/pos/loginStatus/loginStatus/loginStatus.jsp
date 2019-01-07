@@ -138,14 +138,13 @@
         <wj-flex-grid-column header="<s:message code="loginStatus.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="120" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loginStatus.storeNm"/>" binding="storeNm" align="left" width="120" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.posNo"/>" binding="posNo" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loginStatus.loginDate"/>" binding="loginDate" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loginStatus.hwAuthKey"/>" binding="hwAuthKey" align="left" width="120" is-read-only="true" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loginStatus.loginIp"/>" binding="loginIp" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.loginDt"/>" binding="loginDt" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.hwAuthKey"/>" binding="hwAuthKey" align="center" width="120" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.loginIp"/>" binding="loginIp" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loginStatus.posVerNo"/>" binding="posVerNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loginStatus.sysStatFgNm"/>" binding="sysStatFg" data-map="sysStatFgDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loginStatus.sysStatFgNm"/>" binding="sysStatFgNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
