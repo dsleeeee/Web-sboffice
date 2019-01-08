@@ -1769,6 +1769,12 @@ select.sb-select {display:block!important; border:1px solid #e8e8e8; height:28px
 div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-height:30px; font-size:1em;}
 
 
+/**
+ * 20190108 추가
+ * textarea에도 sb-input 스타일 적용
+ */
+textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
+
 .templateEdit textarea {
     width: 100%;
     height: 100%;

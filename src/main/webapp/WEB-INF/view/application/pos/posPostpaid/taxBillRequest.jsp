@@ -31,6 +31,12 @@
           <th><s:message code="postpaid.taxBillAmt"/></th>
           <td><input type="text" id="requestAmt" ng-model="requestAmt" /></td>
         </tr>
+        <tr>
+          <%-- 비고 --%>
+          <th><s:message code="postpaid.remark"/></th>
+          <%--<td><input type="text" id="remark" ng-model="remark" /></td>--%>
+          <td><textarea class="sb-input" rows="4" cols="50" name="remark" id="remark" ng-model="remark"></textarea></td>
+        </tr>
         </tbody>
       </table>
       <%-- 버튼 --%>

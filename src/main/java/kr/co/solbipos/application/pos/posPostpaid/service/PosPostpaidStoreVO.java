@@ -40,6 +40,8 @@ public class PosPostpaidStoreVO extends CmmVO {
     private String requestAmt;
     /** 세금계산서 발행 요청 상태 */
     private StatusFg statusFg;
+    /** 비고 */
+    private String remark;
 
 
     /**
@@ -190,5 +192,20 @@ public class PosPostpaidStoreVO extends CmmVO {
      */
     public void setStatusFg(StatusFg statusFg) {
         this.statusFg = statusFg;
+    }
+
+    /**
+     * @return the remark
+     */
+
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * @param remark the remark to set
+     */
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
