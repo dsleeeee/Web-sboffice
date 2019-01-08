@@ -6,8 +6,7 @@
   <select id="selectLoginStatus" parameterType="loginStatusVO" resultType="DefaultMap">
     /* LoginStatusMapper.selectLoginStatus */
     <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT
-           tms.HQ_OFFICE_CD,
+    SELECT tms.HQ_OFFICE_CD,
            tho.HQ_OFFICE_NM,
            tmpll.STORE_CD,
            tms.STORE_NM,

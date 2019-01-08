@@ -15,24 +15,24 @@ var app = agrid.getApp();
 
 function changeTab(val){
 
-  if(val === 'S'){
+  if(val === 'R'){
+    location.href = '/pos/confg/verRecv/verRecv/list.sb';
+  } else if(val === 'S') {
     location.href = '/pos/confg/verRecv/storeRecv/list.sb';
-  } else if(val === 'V') {
-    location.href = '/pos/confg/verRecv/verStore/list.sb';
   }
 }
 
-function searchPosVerList(){
-  var scope = agrid.getScope('verRecvCtrl');
+function getVersionList(){
+  var scope = agrid.getScope('verInfoCtrl');
   scope.getVersionList();
 }
 
 /**********************************************************************
  *  버전목록 그리드
  **********************************************************************/
-app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('verRecvCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('verInfoCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -48,6 +48,8 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    $scope.posFgDatMap = new wijmo.grid.DataMap(posFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -59,7 +61,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
 
-    // 버전 선택
+    // 매장 선택
     s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -67,10 +69,10 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
         if ( col.binding === "verSerNo") {
           var selectedData = s.rows[ht.row].dataItem;
           $scope.setSelectVersion(selectedData);
-          // $scope.versionInfoDetailLayer.show(true);
+          // $scope.storeRecvDtlLayer.show(true);
 
-          var storeScope = agrid.getScope('verRecvStoreCtrl');
-          storeScope._broadcast('verRecvStoreCtrl', $scope.getSelectVersion());
+          var scope = agrid.getScope('verInfoDtlCtrl');
+          scope._pageView('verInfoDtlCtrl',1)
 
           event.preventDefault();
         }
@@ -79,7 +81,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 조회 버튼 클릭
-  $scope.$on("verRecvCtrl", function(event, data) {
+  $scope.$on("verInfoCtrl", function(event, data) {
     $scope.getVersionList();
     event.preventDefault();
   });
@@ -87,34 +89,32 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   // 버전 목록 조회
   $scope.getVersionList = function(){
     var params = {};
-    params.listScale = $scope.listScaleVer;
+    params.listScale = 10;
     params.curr = $scope._getPagingInfo('curr');
-    params.verSerNo = $("#verSerNo").val();
-    params.verSerNm = $("#verSerNm").val();
+    params.verSerNo  = $("#verSerNo").val();
+    params.verSerNm  = $("#verSerNm").val();
 
-    // console.log('params', params);
+    console.log('params', params);
 
-    $scope._inquiryMain("/pos/confg/verRecv/verRecv/list.sb", params, function() {
+    $scope._inquiryMain("/pos/confg/verRecv/verStore/list.sb", params, function() {
     });
   };
 
-
 }]);
 
-
 /**********************************************************************
- *  버전수신매장 그리드
+ *  버전별 매장 목록 그리드
  **********************************************************************/
-app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('verInfoDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('verRecvStoreCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('verInfoDtlCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // 선택 버전
   $scope.selectVersion;
-  $scope.setSelectVersion = function(ver){
+  $scope.setSelectStore = function(ver){
     $scope.selectVersion = ver;
   };
   $scope.getSelectVersion = function(){
@@ -123,23 +123,30 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+    $scope.verRecvFgDatMap = new wijmo.grid.DataMap(verRecvFg, 'value', 'name');
   };
 
   // 조회 버튼 클릭
-  $scope.$on("verRecvStoreCtrl", function(event, data) {
-    $scope.setSelectVersion(data);
-    $scope.getVersionStoreList();
+  $scope.$on("verInfoDtlCtrl", function(event, data) {
+    $scope.getStoreVersionList();
     event.preventDefault();
   });
 
-  // 버전수신정보 목록 조회
-  $scope.getVersionStoreList = function(){
+  // 버전 목록 조회
+  $scope.getStoreVersionList = function(){
     var params = {};
-    params.listScale = $scope.listScale;
-    params.curr = $scope._getPagingInfo('curr');
-    params.verSerNo = $scope.getSelectVersion().verSerNo;
 
-    $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeList.sb", params, function() {
+    var scope = agrid.getScope("verInfoCtrl");
+    scope.getSelectVersion();
+
+    params.listScale = 10;
+    params.curr = $scope._getPagingInfo('curr');
+    params.verSerNo  = scope.getSelectVersion().verSerNo;
+    // params.verSerNm  = $("#verSerNm").val();
+
+    console.log('params', params);
+
+    $scope._inquiryMain("/pos/confg/verRecv/verStore/storeList.sb", params, function() {
     });
   };
 

@@ -10,16 +10,16 @@
 <div class="subCon">
   <%-- 탭 --%>
   <ul class="subTab mb20">
-    <li><a href="#" id="verrecv"><s:message code="verRecv.verrecv" /></a></li>
-    <li><a href="#" id="storerecv"><s:message code="verRecv.storerecv" /></a></li>
-    <li><a href="#" id="verstore" class="on"><s:message code="verRecv.verstore" /></a></li>
+    <li><a href="#" id="verrecv" onclick="changeTab('R')"><s:message code="verRecv.verrecv" /></a></li>
+    <li><a href="#" id="storerecv" onclick="changeTab('S')"><s:message code="verRecv.storerecv" /></a></li>
+    <li><a href="#" id="verstore" class="on" onclick="changeTab('V')"><s:message code="verRecv.verstore" /></a></li>
   </ul>
 
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" >
+      <button class="btn_blue fr" id="btnSearch" onclick="getVersionList()">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -36,12 +36,12 @@
         <%-- 버전일련번호 --%>
         <th><s:message code="verRecv.verSerNo" /></th>
         <td>
-          <input type="text" id="verSerNo" name="verSerNo" class="sb-input" maxlength="50" size="50">
+          <input type="text" id="verSerNo" name="verSerNo" ng-model="verSerNo" class="sb-input" maxlength="50" size="50">
         </td>
         <%-- 버전적용명 --%>
         <th><s:message code="verRecv.verSerNm" /></th>
         <td>
-          <input type="text" id="verSerNm" name="verSerNm" class="sb-input" maxlength="50" size="50">
+          <input type="text" id="verSerNm" name="verSerNm" ng-mode="verSerNm" class="sb-input" maxlength="50" size="50">
         </td>
       </tr>
     </tbody>
@@ -50,7 +50,7 @@
   <%-- 2단 --%>
   <div class="wj-TblWrap mt20" style="overflow-y: hidden;">
     <%--- left --%>
-    <div class="w40 fl">
+    <div class="w40 fl" ng-controller="verInfoCtrl">
       <div class="wj-TblWrapBr mr10 pd20" style="height:460px;">
         <span><s:message code="verRecv.verInfo" /></span>
         <div class="sb-select dkbr mb10 oh">
@@ -61,18 +61,38 @@
           </div>
           --%>
         </div>
-        <%--위즈모 테이블 --%>
-        <div id="theGrid1" style="height:390px;"></div>
+        <%-- 버전정보 그리드 --%>
+        <div class="w100 mt10 mb20">
+          <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+            <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="verSerNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.storeCnt"/>" binding="storeCnt" width="80" align="left" is-read-only="true"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+          </div>
+        </div>
       </div>
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
-        <ul id="page1" data-size="10">
+        <%-- id --%>
+        <ul id="verInfoCtrlPager" data-size="10">
         </ul>
       </div>
+      <%--//페이지 리스트--%>
     </div>
 
     <%-- right --%>
-    <div class="w60 fr">
+    <div class="w60 fr" ng-controller="verInfoDtlCtrl">
       <div class="wj-TblWrapBr ml10 pd20" style="height:460px;">
         <span><s:message code="verRecv.recvStore"/></span>
         <div class="sb-select dkbr mb10 oh">
@@ -84,162 +104,41 @@
           --%>
         </div>
         <p class="s12 bk tl mb10 mt10" id="storeTit"></p>
-        <div id="theGrid2" style="height:390px;"></div>
+        <%-- 버전별 매장수신정보 그리드 --%>
+        <div class="w100 mt10 mb20">
+          <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+            <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="140" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.storeCd"/>" binding="storeCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
       </div>
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
-        <ul id="page2" data-size="10">
+        <%-- id --%>
+        <ul id="verInfoDtlCtrlPager" data-size="10">
         </ul>
       </div>
+      <%--//페이지 리스트--%>
     </div>
   </div>
 </div>
-
 <script>
-
-  <%-- 탭 클릭 --%>
-  $("#verrecv").click(function(e){
-    e.preventDefault();
-    location.href = "/pos/confg/verRecv/verRecv/list.sb";
-  });
-
-  $("#storerecv").click(function(e){
-    e.preventDefault();
-    location.href = "/pos/confg/verRecv/storeRecv/list.sb";
-  });
-
-  $("#verstore").click(function(e){
-    e.preventDefault();
-    location.href = "/pos/confg/verRecv/verStore/list.sb";
-  });
-
-
-  <%-- 공통코드 --%>
-  var progFg = ${ccu.getCommCodeExcpAll("059")};
-  var progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
-
-  <%-- Header --%>
-  var hData1 =
-    [
-      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />", width:100},
-      {binding:"verSerNm", header:"<s:message code='verRecv.verSerNm' />", width:"*"},
-      {binding:"progFg", header:"<s:message code='verRecv.progFg' />", dataMap:progFgDataMap, width:85},
-      {binding:"posCnt", header:"<s:message code='verRecv.posCnt' />", width:60}
-    ];
-
-  var hData2 =
-    [
-      {binding:"verSerNo", header:"<s:message code='verRecv.verSerNo' />", width:90},
-      {binding:"storeCd", header:"<s:message code='verRecv.storeCd' />", width:"*"},
-      {binding:"storeNm", header:"<s:message code='verRecv.storeNm' />", width:60},
-      {binding:"posNo", header:"<s:message code='verRecv.posNo' />", width:100},
-      {binding:"verRecvDt", header:"<s:message code='verRecv.verRecvDt' />", width:"*"},
-      {binding:"posIp", header:"<s:message code='verRecv.posIp' />", width:110}
-    ];
-
-  <%-- 그리드 생성 --%>
-  var grid1 = wgrid.genGrid("#theGrid1", hData1);
-  var grid2 = wgrid.genGrid("#theGrid2", hData2);
-
-  <%-- 그리드 포맷 --%>
-  grid1.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding == "verSerNo" ) {
-        wijmo.addClass(e.cell, 'wijLink');
-      }
-    }
-  });
-
-  var selValue = "";
-
-  <%-- 그리드 선택 이벤트 --%>
-  grid1.addEventListener(grid1.hostElement, 'mousedown', function(e) {
-    var ht = grid1.hitTest(e);
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding == "verSerNo") {
-        var items = grid1.rows[ht.row].dataItem;
-        selValue = items.verSerNo;
-        var storeTitle = "[" + items.verSerNo + "] "+ items.verSerNm;
-        $("#storeTit").text(storeTitle);
-        searchStore(1);
-      }
-    }
-  });
-
-  <%-- 매장조회 --%>
-  function searchStore(index) {
-
-    var param = {};
-    param.verSerNo = selValue;
-    param.listScale = "10";
-    param.curr      = index;
-
-    $.postJSON("${baseUrl}" + "storeList.sb", param, function(result) {
-      var list = result.data.list;
-      grid2.itemsSource = list;
-      page.make("#page2", result.data.page.curr, result.data.page.totalPage);
-    },
-      function (result) {
-        s_alert.pop(result.message);
-        grid2.itemsSource = new wijmo.collections.CollectionView([]);
-        return;
-    });
-  }
-
-  <%-- 조회버튼 클릭 --%>
-  $("#btnSearch").click(function(e){
-    search(1);
-  });
-
-  <%-- 버전리스트 조회  --%>
-  function search(index) {
-    //TODO 조회조건 validation
-
-    var param = {};
-    param.verSerNo  = $("#verSerNo").val();
-    param.verSerNm  = $("#verSerNm").val();
-    param.listScale = "10";
-    param.curr      = index;
-
-    $.postJSON("${baseUrl}" + "list.sb", param, function(result) {
-      var list = result.data.list;
-      if(list.length === undefined || list.length == 0) {
-        s_alert.pop(result.message);
-        grid1.itemsSource = new wijmo.collections.CollectionView([]);
-        grid2.itemsSource = new wijmo.collections.CollectionView([]);
-        return;
-      }
-      grid1.itemsSource = list;
-      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-    },
-      function(result) {
-        s_alert.pop(result.message);
-        return;
-    });
-  }
-
-  <%-- 페이징 --%>
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));
-  });
-
-  $(document).on("click", ".page2", function() {
-    searchStore($(this).data("value"));
-  });
-
-  <%-- 엑셀다운로드 --%>
-  $("#btnExcel1").click(function(e){
-    var name = "${menuNm}";
-    wexcel.down(grid1, name, name + ".xlsx");
-  });
-
-  $("#btnExcel2").click(function(e){
-    var name = "${menuNm}";
-    wexcel.down(grid2, name, name + ".xlsx");
-  });
-
-
+  var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
+  var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 </script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=20190107.01" charset="utf-8"></script>
