@@ -486,6 +486,7 @@
                 #{hqOfficeCd},
                 #{payClassCd},
                 #{coupnCd},
+                #{storeCd},
                 #{regDt},
                 #{regId},
                 #{modDt},
@@ -863,7 +864,7 @@
                TB_HQ_OFFICE tho,
                TB_HQ_COUPON_STORE thcs
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-           AND tms.HQ_OFFICE_CD = #{orgnCd}
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND thcs.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
            AND thcs.STORE_CD (+)= tms.STORE_CD
            AND thcs.PAY_CLASS_CD (+)= #{payClassCd}
@@ -909,7 +910,7 @@
         )
         VALUES
         (
-            #{orgnCd},
+            #{hqOfficeCd},
             #{payClassCd},
             #{coupnCd},
             #{storeCd},
@@ -928,7 +929,7 @@
     <delete id="deleteCouponStore" parameterType="couponStoreVO">
         /* USE : CouponMapper.deleteCouponStore */
         DELETE TB_HQ_COUPON_STORE
-         WHERE HQ_OFFICE_CD = #{orgnCd}
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND PAY_CLASS_CD = #{payClassCd}
            AND COUPN_CD = #{coupnCd}
            AND STORE_CD = #{storeCd}
@@ -949,6 +950,7 @@
                 #{hqOfficeCd},
                 #{payClassCd},
                 #{coupnCd},
+                #{storeCd},
                 #{regDt},
                 #{regId},
                 #{modDt},

@@ -91,7 +91,7 @@ public class CouponServiceImpl implements CouponService {
 
                 PayMethodClassVO resultVO = new PayMethodClassVO();
 
-                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
@@ -126,7 +126,7 @@ public class CouponServiceImpl implements CouponService {
             }
             // 매장 통제
             else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
-                payMethodClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
                 if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
@@ -175,7 +175,7 @@ public class CouponServiceImpl implements CouponService {
 
                 PayMethodClassVO resultVO = new PayMethodClassVO();
 
-                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+                payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
                 // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
                 String payMethodClassResult = couponMapper.insertHqCouponClassToStore(payMethodClassVO);
@@ -358,7 +358,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO, SessionInfoVO sessionInfoVO) {
 
-        couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+        couponStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return couponMapper.getStoreList(couponStoreVO);
     }
@@ -372,30 +372,35 @@ public class CouponServiceImpl implements CouponService {
         String dt = currentDateTimeString();
 
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
-            couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+            couponStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setRegDt(dt);
             couponStoreVO.setRegId(sessionInfoVO.getUserId());
             couponStoreVO.setModDt(dt);
             couponStoreVO.setModId(sessionInfoVO.getUserId());
 
+            // 쿠폰 매장에 등록
             procCnt += couponMapper.insertCouponStore(couponStoreVO);
+
+            // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰 적용.
+            // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
+            String couponResult = couponMapper.insertHqCouponToStore(couponStoreVO);
+
+
+            // 상품정보도 함께 등록
+            CouponVO resultVO = new CouponVO();
+            resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
+            resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
+            resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
+            resultVO.setStoreCd(couponStoreVO.getStoreCd());
+            resultVO.setRegDt(dt);
+            resultVO.setRegId(sessionInfoVO.getUserId());
+            resultVO.setModDt(dt);
+            resultVO.setModId(sessionInfoVO.getUserId());
+
+            String storeResult = couponMapper.insertHqCouponProdToStoreProd(resultVO);
         }
 
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰 적용.
-        // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
-        String couponResult = couponMapper.insertHqCouponToStore(couponStoreVOs[0]);
-
-        // 상품정보도 함께 등록
-        CouponVO resultVO = new CouponVO();
-        resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
-        resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
-        resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
-        resultVO.setRegDt(dt);
-        resultVO.setRegId(sessionInfoVO.getUserId());
-        resultVO.setModDt(dt);
-        resultVO.setModId(sessionInfoVO.getUserId());
-
-        String storeResult = couponMapper.insertHqCouponProdToStoreProd(resultVO);
 
         return procCnt;
     }
@@ -419,7 +424,7 @@ public class CouponServiceImpl implements CouponService {
             resultVO.setStoreCd(couponStoreVO.getStoreCd());
 
             // 쿠폰적용 매장 삭제
-            couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
+            couponStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setUseYn(UseYn.N);
 
             procCnt += couponMapper.deleteCouponStore(couponStoreVO);
