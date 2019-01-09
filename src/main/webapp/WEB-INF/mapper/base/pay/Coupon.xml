@@ -535,6 +535,28 @@
         }
     </select>
 
+    <!-- 본사 쿠폰 적용매장 삭제시 프로시져 호출 -->
+    <!--
+        TABLE    : TB_HQ_COUPON, TB_MS_COUPON
+        PARAM    :
+        COMMENTS : 본사 쿠폰를 매장 쿠폰에 적용시킨다.
+    -->
+    <select id="deleteHqCouponToStoreCoupon" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+        /* USE : CouponMapper.deleteHqCouponToStoreCoupon */
+        {
+            CALL PKG_HQ_COUPON.SP_HQ_COUPON_STORE_D
+            (
+                #{hqOfficeCd},
+                #{payClassCd},
+                #{coupnCd},
+                #{storeCd},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
     <!-- 매장 쿠폰 등록 -->
     <!--
         TABLE    : TB_MS_COUPON
@@ -950,6 +972,7 @@
                 #{hqOfficeCd},
                 #{payClassCd},
                 #{coupnCd},
+                #{storeCd},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }

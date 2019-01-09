@@ -414,13 +414,9 @@ public class CouponServiceImpl implements CouponService {
         resultVO.setModDt(dt);
         resultVO.setModId(sessionInfoVO.getUserId());
 
-        // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
-        String couponResult = couponMapper.deleteHqCouponToStore(resultVO);
-
-        // 상품정보도 함께 삭제
-        String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
-
         for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+
+            resultVO.setStoreCd(couponStoreVO.getStoreCd());
 
             // 쿠폰적용 매장 삭제
             couponStoreVO.setOrgnCd(sessionInfoVO.getHqOfficeCd());
@@ -428,6 +424,11 @@ public class CouponServiceImpl implements CouponService {
 
             procCnt += couponMapper.deleteCouponStore(couponStoreVO);
 
+            // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
+            String couponResult = couponMapper.deleteHqCouponToStoreCoupon(resultVO);
+
+            // 상품정보도 함께 삭제
+            String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
         }
 
         return procCnt;
