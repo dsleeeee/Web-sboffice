@@ -168,4 +168,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20190107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20190110.01" charset="utf-8"></script>

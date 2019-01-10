@@ -100,6 +100,6 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20181231.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20190110.01" charset="utf-8"></script>
 
 
