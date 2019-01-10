@@ -72,6 +72,12 @@
                TB_MS_STORE tms
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+        <if test='verRecvYn != null and verRecvYn == "Y"'>
+           AND tcpvs.VER_RECV_DT IS NOT NULL
+        </if>
+        <if test='verRecvYn != null and verRecvYn == "N"'>
+          AND tcpvs.VER_RECV_DT IS NULL
+        </if>
          ORDER BY tcpvs.STORE_CD
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -137,7 +143,7 @@
        WHERE tms.STORE_CD = #{storeCd}
          AND tcpvs.STORE_CD = tms.STORE_CD
          AND tcpv.VER_SER_NO = tcpvs.VER_SER_NO
-       ORDER BY tcpvs.VER_RECV_DT DESC, tcpvs.REG_DT DESC, tcpv.REG_DT DESC
+       ORDER BY tcpv.REG_DT DESC, tcpvs.REG_DT DESC, tcpvs.VER_RECV_DT DESC
        ]]>
     </select>
 
@@ -192,6 +198,12 @@
                TB_MS_STORE tms
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
+         <if test='verRecvYn != null and verRecvYn == "Y"'>
+           AND tcpvs.VER_RECV_DT IS NOT NULL
+         </if>
+         <if test='verRecvYn != null and verRecvYn == "N"'>
+           AND tcpvs.VER_RECV_DT IS NULL
+         </if>
          ORDER BY tcpvs.STORE_CD ASC, tcpvs.REG_DT DESC, tcpvs.VER_RECV_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

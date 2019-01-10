@@ -19,7 +19,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 * @Copyright (C) by SOLBIPOS CORP. All right reserved.
 */
 public class VerRecvVO extends PageVO {
-    
+
     private static final long serialVersionUID = -6089897008439296961L;
     /** 버전일련번호 */
     private String verSerNo;
@@ -37,8 +37,9 @@ public class VerRecvVO extends PageVO {
     private String lastVer;
     /** 사용여부 */
     private String useYn;
-    
-    
+    /** 수신여부 */
+    private String verRecvYn;
+
     /**
      * @return the verSerNo
      */
@@ -135,5 +136,19 @@ public class VerRecvVO extends PageVO {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
-    
+
+    /**
+     * @return the verRecvYn
+     */
+
+    public String getVerRecvYn() {
+        return verRecvYn;
+    }
+
+    /**
+     * @param verRecvYn the verRecvYn to set
+     */
+    public void setVerRecvYn(String verRecvYn) {
+        this.verRecvYn = verRecvYn;
+    }
 }

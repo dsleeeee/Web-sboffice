@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 조회조건 DropBoxDataMap
+var recvYn = [
+  {"name":"전체","value":""},
+  {"name":"수신","value":"Y"},
+  {"name":"미수신","value":"N"}
+];
+
 function changeTab(val){
 
   if(val === 'S'){
@@ -35,7 +42,7 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('verRecvCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  $scope._setComboData("verRecvYnCombo", recvYn);
 
   // 선택 버전
   $scope.selectVersion;
@@ -87,14 +94,17 @@ app.controller('verRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   // 버전 목록 조회
   $scope.getVersionList = function(){
     var params = {};
-    params.listScale = $scope.listScaleVer;
+    params.listScale = 50;
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo = $("#verSerNo").val();
     params.verSerNm = $("#verSerNm").val();
 
-    // console.log('params', params);
 
     $scope._inquiryMain("/pos/confg/verRecv/verRecv/list.sb", params, function() {
+      $scope.$apply(function() {
+        var storeScope = agrid.getScope('verRecvStoreCtrl');
+        storeScope._gridDataInit();
+      });
     });
   };
 
@@ -110,7 +120,7 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
   angular.extend(this, new RootController('verRecvStoreCtrl', $scope, $http, true));
 
   // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  // $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // 선택 버전
   $scope.selectVersion;
@@ -139,9 +149,14 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
   // 버전수신정보 목록 조회
   $scope.getVersionStoreList = function(){
     var params = {};
-    params.listScale = $scope.listScale;
+    var scope = agrid.getScope('verRecvCtrl');
+
+    params.listScale = 30;
     params.curr = $scope._getPagingInfo('curr');
     params.verSerNo = $scope.getSelectVersion().verSerNo;
+    params.verRecvYn = scope.verRecvYn;
+
+    // console.log('dtl params', params);
 
     $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeList.sb", params, function() {
     });

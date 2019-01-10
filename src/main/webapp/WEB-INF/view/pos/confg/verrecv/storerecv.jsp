@@ -59,27 +59,6 @@
     </tbody>
   </table>
 
-  <%-- 페이지 스케일  --%>
-  <wj-combo-box
-          class="w100px fl"
-          id="listScaleBox"
-          ng-model="listScale"
-          items-source="_getComboData('listScaleBox')"
-          display-member-path="name"
-          selected-value-path="value"
-          is-editable="false"
-          initialized="initComboBox(s)"
-          ng-hide="true">
-  </wj-combo-box>
-
-  <div class="mt20 oh sb-select dkbr">
-    <%-- 엑셀다운로드 버튼 //TODO --%>
-    <%--
-    <div class="w150px fl"></div>
-    <button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>
-    --%>
-  </div>
-
   <%-- 매장별 수신현황 그리드 --%>
   <div class="w100 mt10 mb20">
     <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
@@ -104,16 +83,18 @@
 
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
-    <ul id="page" data-size="10">
+    <%-- id --%>
+    <ul id="storeRecvCtrlPager" data-size="10">
     </ul>
   </div>
+  <%--//페이지 리스트--%>
 </div>
 <script>
   var mainYn = ${cnv.getEnvCodeExcpAll("4021")};
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=20190110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=20190110.02" charset="utf-8"></script>
 
 <%-- 매장추가 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/verrecv/storeRecvDtl.jsp">

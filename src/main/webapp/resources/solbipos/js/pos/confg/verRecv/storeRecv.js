@@ -86,7 +86,7 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
   // 버전 목록 조회
   $scope.getStoreVersionList = function(){
     var params = {};
-    params.listScale = $scope.listScaleVer;
+    params.listScale = 30;
     params.curr = $scope._getPagingInfo('curr');
     params.hqOfficeCd = $("#hqOfficeCd").val();
     params.hqOfficeNm = $("#hqOfficeNm").val();
