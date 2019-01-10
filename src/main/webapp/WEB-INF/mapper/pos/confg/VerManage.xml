@@ -12,6 +12,8 @@
 
 <mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
+
+
     <!-- 포스버전 목록 조회  -->
     <!--
         TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
@@ -39,11 +41,11 @@
                <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN tcpv,
                (
-          SELECT VER_SER_NO,
-                 NVL(SUM(DECODE(VER_RECV_FG , '1' , 1, 0)), 0) REG_CNT,
-                 NVL(SUM(DECODE(VER_RECV_FG , '2' , 1, 0)), 0) RECV_CNT
-            FROM TB_CM_POS_VERSN_STORE
-           GROUP BY VER_SER_NO
+                SELECT VER_SER_NO,
+                       NVL(SUM(DECODE(VER_RECV_FG , '1' , 1, 0)), 0) REG_CNT,
+                       NVL(SUM(DECODE(VER_RECV_FG , '2' , 1, 0)), 0) RECV_CNT
+                  FROM TB_CM_POS_VERSN_STORE
+                 GROUP BY VER_SER_NO
                ) tcpvs
          WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
         <if test='verSerNo != null and verSerNo != ""'>
