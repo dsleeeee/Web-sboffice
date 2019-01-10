@@ -17,6 +17,7 @@
       </button>
     </div>
   </div>
+
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -105,8 +106,8 @@
         <wj-flex-grid-column header="<s:message code="instl.instReqId"/>" binding="instReqId" align="center" width="120" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="instl.instInsDt"/>" binding="instInsDt" align="center" width="140" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="instl.instInsId"/>" binding="instInsId" align="center" width="120" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instl.instReason"/>" binding="instReason" data-map="reasonDatMap" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instl.remark"/>" binding="remark" align="left" width="250" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instl.instReason"/>" binding="instReason" data-map="reasonDatMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instl.remark"/>" binding="remark" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>

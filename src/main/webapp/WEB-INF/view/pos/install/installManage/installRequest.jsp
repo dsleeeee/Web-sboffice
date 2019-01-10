@@ -62,7 +62,7 @@
 
       <%-- 조회 --%>
       <div class="mt10 pdb20 oh">
-        <button class="btn_blue fr" id="searchBtn" ng-click="_pageView('installRegistCtrl', 1)">
+        <button class="btn_skyblue fr" id="searchBtn" ng-click="_pageView('installRegistCtrl', 1)">
           <s:message code="cmm.search" />
         </button>
       </div>
@@ -108,7 +108,7 @@
             <div class="w80 s12 txtIn">
               <input type="text" class="sb-input w100" ng-model="request.remark" maxlength="60" ng-readonly="reasonReadOnly"/>
             </div>
-            <a href="#" class="btn_grayS" ng-click="request()"><s:message code="instl.request"/></a>
+            <a href="#" class="btn_grayS2" ng-click="request()"><s:message code="instl.install.request"/></a>
           </td>
         </tr>
         </tbody>
@@ -159,7 +159,7 @@
       </div>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
+      <div class="pageNum2 mt20">
         <%-- id --%>
         <ul id="installRegistCtrlPager" data-size="10">
         </ul>

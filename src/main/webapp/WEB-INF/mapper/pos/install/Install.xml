@@ -74,9 +74,8 @@
                tms.SYS_STAT_FG,
                tci.SEQ_NO,
                tci.INST_FG,
-      --       tci.INST_REASON,
                tci.AGENCY_CD,
-               tca.AGENCY_NM,
+               tca.AGENCY_NM
       <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_POS tmp,
                TB_MS_STORE tms,
@@ -85,7 +84,6 @@
                SELECT STORE_CD, POS_NO,
                       MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
                       MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
---                       MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
                       MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD
                  FROM TB_CM_INSTLL
                 GROUP BY STORE_CD , POS_NO
@@ -114,7 +112,7 @@
       <if test='instFg != null and instFg == ""'>
            AND tci.INST_FG = #{instFg}
       </if>
-      ORDER BY tms.HQ_OFFICE_CD, tmp.STORE_CD, tci.SEQ_NO DESC
+      ORDER BY tms.HQ_OFFICE_CD, tmp.STORE_CD, tmp.POS_NO,tci.SEQ_NO DESC
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

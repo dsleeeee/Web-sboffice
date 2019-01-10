@@ -43,39 +43,27 @@ app.controller('installReqListCtrl', ['$scope', '$http', function ($scope, $http
     $scope.reasonDatMap = new wijmo.grid.DataMap(reasonData, 'value', 'name');
 
     // ReadOnly 효과설정
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === "posNo") {
-          wijmo.addClass(e.cell, 'wijLink');
-        }
-      }
-    });
+    // s.formatItem.addHandler(function (s, e) {
+    //   if (e.panel === s.cells) {
+    //     var col = s.columns[e.col];
+    //     if (col.binding === "posNo") {
+    //       wijmo.addClass(e.cell, 'wijLink');
+    //     }
+    //   }
+    // });
 
     // 매장 선택
-    s.addEventListener(s.hostElement, 'mousedown', function(e) {
-      var ht = s.hitTest(e);
-      if( ht.cellType === wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        // var selectedRow = s.rows[ht.row].dataItem;
-        if ( col.binding === "posNo") {
-          $scope.setSelectedPos(s.rows[ht.row].dataItem);
-          // var popup = $scope.storeInfoLayer;
-          // // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
-          // popup.shown.addHandler(function (s) {
-          //   setTimeout(function() {
-          //     $scope._broadcast('storeInfoCtrl');
-          //   }, 50)
-          // });
-          //
-          // // 팝업 닫을때
-          // popup.show(true, function (s) {
-          // });
-
-          event.preventDefault();
-        }
-      }
-    });
+    // s.addEventListener(s.hostElement, 'mousedown', function(e) {
+    //   var ht = s.hitTest(e);
+    //   if( ht.cellType === wijmo.grid.CellType.Cell) {
+    //     var col = ht.panel.columns[ht.col];
+    //     // var selectedRow = s.rows[ht.row].dataItem;
+    //     if ( col.binding === "posNo") {
+    //       $scope.setSelectedPos(s.rows[ht.row].dataItem);
+    //       event.preventDefault();
+    //     }
+    //   }
+    // });
   };
 
   $scope.$on("installReqListCtrl", function(event, data) {
