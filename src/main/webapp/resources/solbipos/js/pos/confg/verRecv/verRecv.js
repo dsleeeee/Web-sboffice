@@ -127,7 +127,11 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
 
   // 조회 버튼 클릭
   $scope.$on("verRecvStoreCtrl", function(event, data) {
-    $scope.setSelectVersion(data);
+
+    if( !isEmptyObject(data) ) {
+      $scope.setSelectVersion(data);
+    }
+
     $scope.getVersionStoreList();
     event.preventDefault();
   });

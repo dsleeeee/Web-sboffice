@@ -94,9 +94,13 @@ app.controller('verInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.verSerNo  = $("#verSerNo").val();
     params.verSerNm  = $("#verSerNm").val();
 
-    console.log('params', params);
+    // console.log('params', params);
 
     $scope._inquiryMain("/pos/confg/verRecv/verStore/list.sb", params, function() {
+
+      var dtlScope = agrid.getScope('verInfoDtlCtrl');
+      dtlScope._gridDataInit();
+
     });
   };
 
@@ -128,6 +132,11 @@ app.controller('verInfoDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회 버튼 클릭
   $scope.$on("verInfoDtlCtrl", function(event, data) {
+
+    if(!isEmptyObject(data)) {
+      $scope.setSelectStore(data);
+    }
+
     $scope.getStoreVersionList();
     event.preventDefault();
   });
@@ -144,7 +153,7 @@ app.controller('verInfoDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     params.verSerNo  = scope.getSelectVersion().verSerNo;
     // params.verSerNm  = $("#verSerNm").val();
 
-    console.log('params', params);
+    // console.log('params', params);
 
     $scope._inquiryMain("/pos/confg/verRecv/verStore/storeList.sb", params, function() {
     });

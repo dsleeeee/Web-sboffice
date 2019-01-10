@@ -82,7 +82,15 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 신규버전 등록
   $scope.registVersion = function(){
     $scope.setSelectVersion(null);
-    // $scope.verRegist.show(true);
+    $scope.versionRegistLayer.show(true, function(){
+      var scope = agrid.getScope('verRegistCtrl');
+      console.log('scope.version', scope.version);
+      scope.version = null;
+      scope.progFg = '1';
+      scope.useYn = 'Y';
+
+      $scope._pageView('verManageCtrl', 1);
+    });
   };
 
   // 화면 ready 된 후 설정
@@ -102,12 +110,12 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
       // }, 50)
     });
     //
-    // // 버전신규등록 팝업 핸들러 추가
-    // $scope.memberRegistLayer.shown.addHandler(function (s) {
-    //   setTimeout(function() {
-    //     $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
-    //   }, 50)
-    // });
+    // 버전신규등록 팝업 핸들러 추가
+    $scope.versionRegistLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('verRegistCtrl', $scope.getSelectVersion() );
+      }, 20)
+    });
   });
 
 }]);

@@ -64,7 +64,7 @@
               ng-hide="true">
       </wj-combo-box>
 
-      <div class="wj-TblWrapBr mr10 pd20" style="height:460px;">
+      <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
         <span><s:message code="verRecv.verInfo" /></span>
         <div class="sb-select dkbr mb10 oh">
           <%-- 엑셀 다운로드 //TODO --%>
@@ -95,19 +95,19 @@
             </wj-flex-grid>
           </div>
         </div>
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+          <%-- id --%>
+          <ul id="verRecvCtrlPager" data-size="10">
+          </ul>
+        </div>
+        <%--//페이지 리스트--%>
       </div>
 
-      <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="verRecvCtrlPager" data-size="10">
-        </ul>
-      </div>
-      <%--//페이지 리스트--%>
     </div>
 
     <div class="w65 fr" ng-controller="verRecvStoreCtrl">
-      <div class="wj-TblWrapBr ml10 pd20" style="height:460px; overflow-y: hidden;">
+      <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
         <span><s:message code="verRecv.recvStore"/></span>
         <%-- 페이지 스케일  --%>
         <wj-combo-box
@@ -146,25 +146,26 @@
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.storeCd"/>" binding="storeCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" data-map="progFgDataMap" width="55" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.posNm"/>" binding="posNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
+              <%--<wj-flex-grid-column header="<s:message code="verRecv.posNm"/>" binding="posNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>--%>
+              <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt"  align="center" width="*" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt"  align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.posIp"/>" binding="posIp"  align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+              <%--<wj-flex-grid-column header="<s:message code="verRecv.posIp"/>" binding="posIp"  align="center" width="110" is-read-only="true"></wj-flex-grid-column>--%>
 
             </wj-flex-grid>
           </div>
         </div>
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+          <%-- id --%>
+          <ul id="verRecvStoreCtrlPager" data-size="10">
+          </ul>
+        </div>
+        <%--//페이지 리스트--%>
+      </div>
 
-      </div>
-      <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="verRecvStoreCtrlPager" data-size="10">
-        </ul>
-      </div>
-      <%--//페이지 리스트--%>
     </div>
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20190107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20190110.01" charset="utf-8"></script>
