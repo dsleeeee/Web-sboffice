@@ -17,7 +17,7 @@ function changeTab(val){
 
   if(val === 'R'){
     location.href = '/pos/confg/verRecv/verRecv/list.sb';
-  } else if(val === 'S') {
+  } else if(val === 'V') {
     location.href = '/pos/confg/verRecv/verStore/list.sb';
   }
 }
@@ -94,7 +94,7 @@ app.controller('storeRecvCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeNm = $("#storeNm").val();
     params.lastVer = $("#lastVer").val();
 
-    console.log('params', params);
+    // console.log('params', params);
 
     $scope._inquiryMain("/pos/confg/verRecv/storeRecv/list.sb", params, function() {
     });

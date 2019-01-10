@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="storeRecvDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:770px;">
+<wj-popup control="storeRecvDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:850px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -29,19 +29,21 @@
                     item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" width="110" is-read-only="true"  align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="verSerNm" width="*" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt" width="120" aling="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.posIp"/>" binding="posIp" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>
       </div>
 
       <div class="btnSet2">
-        <span><a href="#" id="btnClose" class="btn_gray" ng-click="close()"><s:message code="cmm.close"/></a></span>
+        <span><a href="#" id="btnClose" class="btn_blue" ng-click="close()"><s:message code="cmm.close"/></a></span>
       </div>
     </div>
   </div>

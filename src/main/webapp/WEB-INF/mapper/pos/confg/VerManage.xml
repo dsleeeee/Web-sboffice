@@ -12,326 +12,302 @@
 
 <mapper namespace="kr.co.solbipos.pos.confg.vermanage.service.impl.VerManageMapper">
 
-  <resultMap id="verListMap" type="DefaultMap">
-    <result column="PGM_YN" property="pgmYn" typeHandler="CustomBooleanTypeHandler"/>
-    <result column="DB_YN" property="dbYn" typeHandler="CustomBooleanTypeHandler"/>
-    <result column="IMG_YN" property="imgYn" typeHandler="CustomBooleanTypeHandler"/>
-  </resultMap>
+    <!-- 포스버전 목록 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
+        COMMENTS : 포스버전 리스트를 조회한다.
+    -->
+    <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
+        /* USE : VerManageMapper.getList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tcpv.VER_SER_NO,
+               tcpv.VER_SER_NM,
+               tcpv.FILE_DESC,
+               tcpv.FILE_SIZE,
+               tcpv.FILE_DIR,
+               tcpv.PROG_FG,
+               tcpv.PGM_YN,
+               tcpv.DB_YN,
+               tcpv.IMG_YN,
+               tcpv.USE_YN,
+               tcpv.REG_DT,
+               tcpv.REG_ID,
+               tcpv.MOD_DT,
+               tcpv.MOD_ID,
+               tcpvs.REG_CNT,
+               tcpvs.RECV_CNT
+               <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_CM_POS_VERSN tcpv,
+               (
+          SELECT VER_SER_NO,
+                 NVL(SUM(DECODE(VER_RECV_FG , '1' , 1, 0)), 0) REG_CNT,
+                 NVL(SUM(DECODE(VER_RECV_FG , '2' , 1, 0)), 0) RECV_CNT
+            FROM TB_CM_POS_VERSN_STORE
+           GROUP BY VER_SER_NO
+               ) tcpvs
+         WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        <if test='verSerNo != null and verSerNo != ""'>
+           AND tcpv.VER_SER_NO = #{verSerNo}
+        </if>
+        <if test='fileDesc != null and fileDesc != ""'>
+           AND tcpv.FILE_DESC = #{fileDesc}
+        </if>
+         ORDER BY tcpv.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
+    <!-- 포스버전정보 상세 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
+    -->
+    <select id="dtlInfo" parameterType="verInfoVO" resultType="DefaultMap">
+        /* USE : VerManageMapper.dtlInfo */
+        SELECT tcpv.VER_SER_NO,
+               tcpv.VER_SER_NM,
+               tcpv.FILE_DIR,
+               tcpv.FILE_NM,
+               tcpv.FILE_EXT,
+               tcpv.FILE_NM || '.' || FILE_EXT AS FILE_TOT_NM,
+               tcpv.FILE_SIZE,
+               tcpv.FILE_MIME_TYPE,
+               tcpv.FILE_ORG_NM,
+               tcpv.FILE_DESC,
+               tcpv.PROG_FG,
+               tcpv.PGM_YN,
+               tcpv.DB_YN,
+               tcpv.IMG_YN,
+               tcpv.DEL_YN,
+               tcpv.USE_YN,
+               tcpv.REG_DT,
+               tcpv.REG_ID
+          FROM TB_CM_POS_VERSN tcpv
+         WHERE tcpv.VER_SER_NO = #{verSerNo}
+           AND tcpv.DEL_YN = 'N'
+    </select>
 
-  <!-- 포스버전 목록 조회  -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
-      COMMENTS : 포스버전 리스트를 조회한다.
-  -->
-  <select id="getList" parameterType="verInfoVO" resultType="DefaultMap">
-    /* USE : VerManageMapper.getList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT A.VER_SER_NO,
-           A.VER_SER_NM,
-           A.FILE_DESC,
-           A.FILE_SIZE,
-           A.FILE_DIR,
-           A.PROG_FG,
-           A.PGM_YN,
-           A.DB_YN,
-           A.IMG_YN,
-           A.USE_YN,
-           A.REG_DT,
-           A.REG_ID,
-           A.MOD_DT,
-           A.MOD_ID,
-           B.REG_CNT,
-           B.RECV_CNT
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_CM_POS_VERSN A,
-           (
-      SELECT VER_SER_NO,
-             SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
-             SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
-        FROM TB_CM_POS_VERSN_STORE
-       GROUP BY VER_SER_NO
-           ) B
-     WHERE B.VER_SER_NO (+)= A.VER_SER_NO
-    <if test='verSerNo != null and verSerNo != ""'>
-      AND A.VER_SER_NO = #{verSerNo}
-    </if>
-    <if test='fileDesc != null and fileDesc != ""'>
-      AND A.FILE_DESC = #{fileDesc}
-    </if>
-    ORDER BY A.REG_DT DESC
-    <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
-
-  <!-- 포스버전정보 상세 조회  -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN
-      COMMENTS : 포스버전에 대한 상세 정보를 조회한다.
-  -->
-  <select id="dtlInfo" parameterType="verInfoVO" resultMap="verListMap">
-    /* USE : VerManageMapper.dtlInfo */
-    SELECT VER_SER_NO,
-           VER_SER_NM,
-           FILE_DIR,
-           FILE_NM,
-           FILE_EXT,
-           FILE_NM || '.' || FILE_EXT AS FILE_TOT_NM,
-           FILE_SIZE,
-           FILE_MIME_TYPE,
-           FILE_ORG_NM,
-           FILE_DESC,
-           PROG_FG,
-           PGM_YN,
-           DB_YN,
-           IMG_YN,
-           DEL_YN,
-           USE_YN,
-           REG_DT,
-           REG_ID
-      FROM TB_CM_POS_VERSN
-     WHERE VER_SER_NO = #{verSerNo}
-       AND DEL_YN = 'N'
-  </select>
-
-  <!-- 버전 등록   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN
-      COMMENTS : 포스버전을 등록한다.
-  -->
-  <insert id="verRegist" parameterType="verInfoVO">
-    /* USE : VerManageMapper.verRegist */
-    <![CDATA[
-    INSERT INTO TB_CM_POS_VERSN
-    (
-      VER_SER_NO,
-      VER_SER_NM,
-      FILE_DIR,
-      FILE_NM,
-      FILE_EXT,
-      FILE_SIZE,
-      FILE_MIME_TYPE,
-      FILE_ORG_NM,
-      FILE_DESC,
-      PROG_FG,
-      PGM_YN,
-      DB_YN,
-      IMG_YN,
-      DEL_YN,
-      USE_YN,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
-    )
-    VALUES
-    (
-      #{verSerNo},
-      #{verSerNm},
-      #{fileDir},
-      #{fileNm},
-      #{fileExt},
-      #{fileSize},
-      #{fileMimeType},
-      #{fileOrgNm},
-      #{fileDesc},
-      #{progFg},
-      #{pgmYn},
-      #{dbYn},
-      #{imgYn},
-      #{delYn},
-      #{useYn},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
-    )
-    ]]>
-  </insert>
-
-  <!-- 버전 수정   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN
-      COMMENTS : 포스버전을 수정한다.
-  -->
-  <update id="verModify" parameterType="verInfoVO">
-    /* USE : VerManageMapper.verModify */
-    <![CDATA[
-    UPDATE TB_CM_POS_VERSN
-       SET VER_SER_NM     = #{verSerNm},
+    <!-- 버전 등록   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        COMMENTS : 포스버전을 등록한다.
+    -->
+    <insert id="verRegist" parameterType="verInfoVO">
+        /* USE : VerManageMapper.verRegist */
+        <![CDATA[
+        INSERT INTO TB_CM_POS_VERSN
+        (
+            VER_SER_NO,
+            VER_SER_NM,
+            FILE_DIR,
+            FILE_NM,
+            FILE_EXT,
+            FILE_SIZE,
+            FILE_MIME_TYPE,
+            FILE_ORG_NM,
+            FILE_DESC,
+            PROG_FG,
+            PGM_YN,
+            DB_YN,
+            IMG_YN,
+            DEL_YN,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{verSerNo},
+            #{verSerNm},
+            #{fileDir},
+            #{fileNm},
+            #{fileExt},
+            #{fileSize},
+            #{fileMimeType},
+            #{fileOrgNm},
+            #{fileDesc},
+            #{progFg},
+            #{pgmYn},
+            #{dbYn},
+            #{imgYn},
+            #{delYn},
+            #{useYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
         ]]>
-       <if test='fileDir != null and fileDir.toString() != ""'>
-         FILE_DIR       = #{fileDir},
-         FILE_NM        = #{fileNm},
-         FILE_EXT       = #{fileExt},
-         FILE_SIZE      = #{fileSize},
-         FILE_MIME_TYPE = #{fileMimeType},
-         FILE_ORG_NM    = #{fileOrgNm},
-       </if>
-       <![CDATA[
-           FILE_DESC      = #{fileDesc},
-           PROG_FG        = #{progFg},
-           PGM_YN         = #{pgmYn},
-           DB_YN          = #{dbYn},
-           IMG_YN         = #{imgYn},
-           USE_YN         = #{useYn},
-           MOD_DT         = #{modDt},
-           MOD_ID         = #{modId}
-     WHERE VER_SER_NO     = #{verSerNo}
-     ]]>
-  </update>
+    </insert>
 
-  <!-- 버전 삭제   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN
-      COMMENTS : 포스버전을 삭제한다.
-  -->
-  <update id="verDelete" parameterType="verInfoVO" >
-    /* USE : VerManageMapper.deleteVersion */
-    UPDATE TB_CM_POS_VERSN
-       SET DEL_YN = 'Y',
-           USE_YN = 'N'
-     WHERE VER_SER_NO = #{verSerNo}
-  </update>
+    <!-- 버전 수정   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        COMMENTS : 포스버전을 수정한다.
+    -->
+    <update id="verModify" parameterType="verInfoVO">
+        /* USE : VerManageMapper.verModify */
+        <![CDATA[
+        UPDATE TB_CM_POS_VERSN
+           SET VER_SER_NM     = #{verSerNm},
+            ]]>
+           <if test='fileDir != null and fileDir.toString() != ""'>
+             FILE_DIR       = #{fileDir},
+             FILE_NM        = #{fileNm},
+             FILE_EXT       = #{fileExt},
+             FILE_SIZE      = #{fileSize},
+             FILE_MIME_TYPE = #{fileMimeType},
+             FILE_ORG_NM    = #{fileOrgNm},
+           </if>
+           <![CDATA[
+               FILE_DESC      = #{fileDesc},
+               PROG_FG        = #{progFg},
+               PGM_YN         = #{pgmYn},
+               DB_YN          = #{dbYn},
+               IMG_YN         = #{imgYn},
+               USE_YN         = #{useYn},
+               MOD_DT         = #{modDt},
+               MOD_ID         = #{modId}
+         WHERE VER_SER_NO     = #{verSerNo}
+         ]]>
+    </update>
 
-  <!-- 등록 매장 목록 조회  -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN_STORE, TB_MS_STORE, TB_MS_POS
-      COMMENTS : 등록 매장 목록을 조회한다.
-  -->
-  <select id="storeList" parameterType="verInfoVO" resultType="DefaultMap">
-    /* USE : VerManageMapper.storeList */
-    SELECT  A.VER_SER_NO,
-            A.STORE_CD,
-            B.STORE_NM,
-            B.SYS_STAT_FG,
-            B.CLS_FG,
-            A.VER_RECV_FG,
-            A.VER_RECV_DT,
-            A.POS_IP,
-            A.REG_DT,
-            A.REG_ID,
-            A.MOD_DT,
-            A.MOD_ID
-            <include refid="CmmSQL.PagingTemplateCount"/>
-       FROM TB_CM_POS_VERSN_STORE A,
-            TB_MS_STORE B
-      WHERE B.STORE_CD = A.STORE_CD
-        AND A.VER_SER_NO = #{verSerNo}
-  </select>
+    <!-- 버전 삭제   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        COMMENTS : 포스버전을 삭제한다.
+    -->
+    <update id="verDelete" parameterType="verInfoVO" >
+        /* USE : VerManageMapper.deleteVersion */
+        UPDATE TB_CM_POS_VERSN
+           SET DEL_YN = 'Y',
+               USE_YN = 'N'
+         WHERE VER_SER_NO = #{verSerNo}
+    </update>
 
-  <!-- 추가가능한 매장 목록 조회   -->
-  <!--
-      TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE
-      COMMENTS : 추가가능한 매장 목록을 조회한다.
-  -->
-  <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
-    /* USE : VerManageMapper.srchStoreList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT tms.STORE_CD,
-           tms.SYS_STAT_FG,
-           tms.VAN_CD,
-           tms.CLS_FG,
-           tms.STORE_NM,
-           tho.HQ_OFFICE_CD,
-           tho.HQ_OFFICE_NM,
-           tcp.LAST_VER_SER_NO
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_MS_STORE tms,
-           TB_HQ_OFFICE tho,
-           (
-      SELECT STORE_CD,
-             MAX(VER_SER_NO) AS  LAST_VER_SER_NO
-        FROM TB_CM_POS_VERSN_STORE
-       GROUP BY STORE_CD
-            ) tcp
-     WHERE tms.STORE_CD NOT IN (SELECT STORE_CD
+    <!-- 등록 매장 목록 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE, TB_MS_STORE, TB_MS_POS
+        COMMENTS : 등록 매장 목록을 조회한다.
+    -->
+    <select id="storeList" parameterType="verInfoVO" resultType="DefaultMap">
+        /* USE : VerManageMapper.storeList */
+        SELECT  tcpvs.VER_SER_NO,
+                tcpvs.STORE_CD,
+                tms.STORE_NM,
+                tms.SYS_STAT_FG,
+                tms.CLS_FG,
+                tcpvs.VER_RECV_FG,
+                tcpvs.VER_RECV_DT,
+                tcpvs.POS_IP,
+                tcpvs.REG_DT,
+                tcpvs.REG_ID,
+                tcpvs.MOD_DT,
+                tcpvs.MOD_ID
+                <include refid="CmmSQL.PagingTemplateCount"/>
+           FROM TB_CM_POS_VERSN_STORE tcpvs,
+                TB_MS_STORE tms
+          WHERE tms.STORE_CD = tcpvs.STORE_CD
+            AND tcpvs.VER_SER_NO = #{verSerNo}
+    </select>
+
+    <!-- 추가가능한 매장 목록 조회   -->
+    <!--
+        TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE
+        COMMENTS : 추가가능한 매장 목록을 조회한다.
+    -->
+    <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
+        /* USE : VerManageMapper.srchStoreList */
+        SELECT tms.STORE_CD,
+               tms.SYS_STAT_FG,
+               tms.VAN_CD,
+               tms.CLS_FG,
+               tms.STORE_NM,
+               tho.HQ_OFFICE_CD,
+               tho.HQ_OFFICE_NM,
+               tcp.LAST_VER_SER_NO
+          FROM TB_MS_STORE tms,
+               TB_HQ_OFFICE tho,
+               (
+                SELECT STORE_CD,
+                       MAX(VER_SER_NO) AS  LAST_VER_SER_NO
+                  FROM TB_CM_POS_VERSN_STORE
+                 GROUP BY STORE_CD
+                ) tcp
+         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+      <if test='searchSatus != null and searchSatus == "Y"'>
+           AND tms.STORE_CD IN (SELECT STORE_CD
                                   FROM TB_CM_POS_VERSN_STORE
                                  WHERE VER_SER_NO = #{verSerNo} )
-       AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-       AND tcp.STORE_CD (+)= tms.STORE_CD
-    <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-       AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-    </if>
-    <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-       AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
-    </if>
-    <if test='storeCd != null and storeCd != ""'>
-      AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
-    </if>
-    <if test='storeNm != null and storeNm != ""'>
-       AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
-    </if>
-    <if test='clsFg != null and clsFg != "" and clsFg.toString() != ""'>
-       AND tms.CLS_FG = #{clsFg}
-    </if>
-    <if test='sysStatFg != null and sysStatFg != "" and sysStatFg.toString() != ""'>
-       AND tms.SYS_STAT_FG = #{sysStatFg}
-    </if>
-    <if test='vanCd != null and vanCd != "" and vanCd.toString() != ""'>
-       AND tms.VAN_CD = #{vanCd}
-    </if>
-     ORDER BY HQ_OFFICE_CD,  STORE_CD
-     <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+      </if>
+      <if test='searchSatus != null and searchSatus == "N"'>
+           AND tms.STORE_CD NOT IN (SELECT STORE_CD
+                                      FROM TB_CM_POS_VERSN_STORE
+                                     WHERE VER_SER_NO = #{verSerNo} )
+      </if>
+           AND tcp.STORE_CD (+)= tms.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+           AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+         ORDER BY HQ_OFFICE_CD,  STORE_CD
+    </select>
 
-  <!-- 버전 적용 매장 등록   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN_STORE
-      COMMENTS : 버전 적용 매장 등록한다.
-  -->
-  <insert id="registStore" parameterType="applcStoreVO" >
-    /* USE : VerManageMapper.registStore */
-    <![CDATA[
-    INSERT INTO TB_CM_POS_VERSN_STORE
-    (
-      VER_SER_NO,
-      STORE_CD,
-      VER_RECV_FG,
-      POS_IP,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID
-    )
-    VALUES
-    (
-      #{verSerNo},
-      #{storeCd},
-      #{verRecvFg},
-      #{posIp},
-      #{regDt},
-      #{regId},
-      #{modDt},
-      #{modId}
-    )
-    ]]>
-  </insert>
+    <!-- 버전 적용 매장 등록   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전 적용 매장 등록한다.
+    -->
+    <select id="registStore" statementType="CALLABLE"  parameterType="applcStoreVO" resultType="String">
+        /* USE : VerManageMapper.registStore */
+        {
+            CALL PKG_CM_VERSN_STORE.SP_CM_VERSN_STORE_I
+            (
+                #{verSerNo},
+                #{storeCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 
-  <!-- 버전 일련번호 중복 체크   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN
-      COMMENTS : 버전 일련번호 중복 체크한다.
-  -->
-  <select id="chkVerSerNo" parameterType="verInfoVO" resultType="Integer">
-    /* USE : VerManageMapper.chkVerSerNo */
-    SELECT COUNT(1)
-      FROM TB_CM_POS_VERSN
-     WHERE VER_SER_NO = #{verSerNo}
-  </select>
+    <!-- 버전 일련번호 중복 체크   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        COMMENTS : 버전 일련번호 중복 체크한다.
+    -->
+    <select id="chkVerSerNo" parameterType="verInfoVO" resultType="Integer">
+        /* USE : VerManageMapper.chkVerSerNo */
+        SELECT COUNT(1) AS CNT
+          FROM TB_CM_POS_VERSN
+         WHERE VER_SER_NO = #{verSerNo}
+    </select>
 
-  <!-- 버전 적용 매장 삭제   -->
-  <!--
-      TABLE    : TB_CM_POS_VERSN_STORE
-      COMMENTS : 버전 적용 매장 삭제한다.
-  -->
-  <delete id="removeStore" parameterType="applcStoreVO" >
-    /* USE : VerManageMapper.removeStore */
-    <![CDATA[
-    DELETE TB_CM_POS_VERSN_STORE
-     WHERE VER_SER_NO = #{verSerNo}
-       AND STORE_CD = #{storeCd}
-    ]]>
-  </delete>
+    <!-- 버전 적용 매장 삭제   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전 적용 매장 삭제한다.
+    -->
+    <delete id="removeStore" parameterType="applcStoreVO" >
+        /* USE : VerManageMapper.removeStore */
+        <![CDATA[
+        DELETE TB_CM_POS_VERSN_STORE
+         WHERE VER_SER_NO = #{verSerNo}
+           AND STORE_CD = #{storeCd}
+        ]]>
+    </delete>
 
 </mapper>
 

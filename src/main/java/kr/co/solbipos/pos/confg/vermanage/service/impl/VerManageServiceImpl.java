@@ -92,15 +92,17 @@ public class VerManageServiceImpl implements VerManageService {
             VerInfoVO verInfo = uploadFile(multi);
 
             String insertDt = currentDateTimeString();
+            String pgmYn = (String) multi.getParameter("pgmYn") == "true" ? "Y": "N";
+            String imgYn = (String)multi.getParameter("imgYn")== "true" ? "Y": "N";
+            String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
-//            verInfo.setFileSize((String)multi.getParameter("fileSize"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn(Boolean.valueOf(multi.getParameter("pgmYn")));
-            verInfo.setImgYn(Boolean.valueOf(multi.getParameter("imgYn")));
-            verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
+            verInfo.setPgmYn(pgmYn);
+            verInfo.setImgYn(imgYn);
+            verInfo.setDbYn(dbYn);
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
@@ -114,9 +116,11 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModDt(insertDt);
             verInfo.setModId(sessionInfo.getUserId());
 
-            verManageMapper.verRegist(verInfo);
-
-            isSuccess = true;
+            if(verManageMapper.verRegist(verInfo) > 0) {
+                isSuccess = true;
+            } else {
+                isSuccess = false;
+            }
 
         }catch(Exception e){
 
@@ -136,14 +140,17 @@ public class VerManageServiceImpl implements VerManageService {
 
             String insertDt = currentDateTimeString();
 
+            String pgmYn = (String)multi.getParameter("pgmYn") == "true" ? "Y": "N";
+            String imgYn = (String)multi.getParameter("imgYn")== "true" ? "Y": "N";
+            String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";
+
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
-//            verInfo.setFileSize((String)multi.getParameter("fileSize"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
-            verInfo.setPgmYn(Boolean.valueOf(multi.getParameter("pgmYn")));
-            verInfo.setImgYn(Boolean.valueOf(multi.getParameter("imgYn")));
-            verInfo.setDbYn(Boolean.valueOf(multi.getParameter("dbYn")));
+            verInfo.setPgmYn(pgmYn);
+            verInfo.setImgYn(imgYn);
+            verInfo.setDbYn(dbYn);
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
@@ -173,10 +180,11 @@ public class VerManageServiceImpl implements VerManageService {
     private VerInfoVO uploadFile(MultipartHttpServletRequest multi) {
         VerInfoVO verInfo = new VerInfoVO();
 
-        // 저장 경로 설정
+        // 저장 경로 설정 (개발시 로컬)
 //        String root = multi.getSession().getServletContext().getRealPath("/");
 //        String path = root+"resources/upload/";
-        // 파일서버 대응 경로 지정
+
+        // 파일서버 대응 경로 지정 (운영)
         String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
         // 업로드 되는 파일명
         String newFileName = "";
@@ -196,6 +204,7 @@ public class VerManageServiceImpl implements VerManageService {
             MultipartFile mFile = multi.getFile(uploadFile);
             String orgFileName = mFile.getOriginalFilename();
             String fileExt = FilenameUtils.getExtension(orgFileName);
+
             if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
 
                 orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
@@ -246,14 +255,16 @@ public class VerManageServiceImpl implements VerManageService {
             applcStore.setVerRecvFg(VerRecvFg.REG);
             applcStore.setVerRecvDt(dt);;
 
-            procCnt += verManageMapper.registStore(applcStore);
+            String result = verManageMapper.registStore(applcStore);
+            procCnt++;
         }
 
-        if(procCnt == applcStores.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+//        if(procCnt == applcStores.length) {
+//            return procCnt;
+//        } else {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+        return procCnt;
     }
 
     /** 버전 적용 매장 삭제 */
@@ -263,13 +274,15 @@ public class VerManageServiceImpl implements VerManageService {
         int procCnt = 0;
 
         for(ApplcStoreVO applcStore : applcStores) {
-            procCnt += verManageMapper.removeStore(applcStore);
+            procCnt = verManageMapper.removeStore(applcStore);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-
-        if(procCnt == applcStores.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+//
+//        if(procCnt == applcStores.length) {
+//            return procCnt;
+//        } else {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+        return procCnt;
     }
 }

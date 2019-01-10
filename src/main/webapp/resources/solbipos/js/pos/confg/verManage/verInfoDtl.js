@@ -40,26 +40,30 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     var scope = agrid.getScope('verManageCtrl');
     params    = scope.getSelectVersion();
 
-    console.log('params' , params);
+    // console.log('params' , params);
 
     $scope._postJSONQuery.withOutPopUp( "/pos/confg/verManage/verInfo/dtlInfo.sb", params, function(response){
 
-      console.log('response',response);
+      // console.log('response',response);
 
       var data = response.data.data;
       $scope.version = data;
 
+      console.log('data.pgmYn', data.pgmYn);
+      console.log('data.dbYn', data.dbYn);
+      console.log('data.imgYn', data.imgYn);
+
       // 포함내역
       var incldDtlsStr = '';
-      if(data.pgmYn) incldDtlsStr += 'PGM';
-      if(data.dbYn) {
+      if(data.pgmYn === 'Y') incldDtlsStr += 'PGM';
+      if(data.dbYn === 'Y') {
         if(incldDtlsStr === '') {
           incldDtlsStr += 'DB';
         } else {
           incldDtlsStr += ' / DB';
         }
       }
-      if(data.imgYn) {
+      if(data.imgYn === 'Y') {
         if(incldDtlsStr === '') {
           incldDtlsStr += 'IMAGE';
         } else {
@@ -68,8 +72,19 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       $scope.version.incldDtls = incldDtlsStr;
     });
-    // $scope._inquiryMain("/pos/confg/verManage/verInfo/dtlInfo.sb", params, function() {
-    // });
+  };
+
+  // 수정
+  $scope.modify = function(){
+    $scope.versionRegistLayer.show(true, function(){
+      var scope = agrid.getScope('verRegistCtrl');
+      console.log('scope.version', scope.version);
+      scope.version = null;
+      scope.progFg = '1';
+      scope.useYn = 'Y';
+
+      $scope.getVersionInfo();
+    });
   };
 
   // 닫기
@@ -79,12 +94,20 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 탭변경
   $scope.changeTab = function(){
-    console.log('changeTab');
     $scope.versionInfoDetailLayer.hide();
-    $scope.storeAddLayer.show(true);
+    $scope.storeAddLayer.show(true, function(){
+      // 탭 닫을때 그리드 초기화
+      var sScope = agrid.getScope("addStoreCtrl");
+      sScope._gridDataInit()
+      var nScope = agrid.getScope("allStoreCtrl");
+      nScope._gridDataInit();
+
+      $("#srchHqOfficeCd").val("");
+      $("#srchHqOfficeNm").val("");
+      $("#srchStoreCd").val("");
+      $("#srchStoreNm").val("");
+    });
   };
 
-
-  //todo 등록매장수를 상세화면이나 리스트에 추가
 }]);
 

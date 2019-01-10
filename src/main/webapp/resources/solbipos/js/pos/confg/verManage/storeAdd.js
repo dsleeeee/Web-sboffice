@@ -13,26 +13,27 @@
  */
 var app = agrid.getApp();
 
-/**********************************************************************
- *  매장추가 그리드
- **********************************************************************/
-app.controller('storeAddCtrl', ['$scope', '$http', function ($scope, $http) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('storeAddCtrl', $scope, $http, true));
+// 탭 변경
+function changeTab(){
+  $scope.storeAddLayer.hide();
+  $scope.versionInfoDetailLayer.show();
+}
 
-  // 콤보박스 데이터
-  $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("clsFgCombo", clsFg);
-  $scope._setComboData("sysStatFgCombo", sysStatFg);
+// 조회
+function search(){
+  var scope = agrid.getScope("addStoreCtrl");
+  scope._pageView('addStoreCtrl', 1);
+}
+
+/**********************************************************************
+ *  적용매장 그리드
+ **********************************************************************/
+app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('addStoreCtrl', $scope, $http, true));
 
   // 조회조건
   // $scope.store;
-
-  // 조회 버튼 클릭
-  $scope.$on("storeAddCtrl", function(event, data) {
-    $scope.storeSearch();
-    event.preventDefault();
-  });
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -40,8 +41,15 @@ app.controller('storeAddCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
   };
 
-  // 매장 목록 조회
-  $scope.storeSearch = function(){
+  // 조회 버튼 클릭
+  $scope.$on("addStoreCtrl", function(event, data) {
+    $scope.addStoreSearch();
+
+    event.preventDefault();
+  });
+
+  // 적용매장 목록 조회
+  $scope.addStoreSearch = function(){
 
     var params = {};
     var scope  = agrid.getScope('verManageCtrl');
@@ -51,21 +59,32 @@ app.controller('storeAddCtrl', ['$scope', '$http', function ($scope, $http) {
       params = $scope.store;
     }
 
+    if( isEmptyObject($('#srchHqOfficeCd').val()) &&  isEmptyObject($('#srchHqOfficeNm').val()) ){
+      $scope._popMsg("본사코드나 본사명을 입력해주세요.");
+      return false;
+    }
+
     params.verSerNo    = ver;
-    params.listScale   = 50;
-    params.curr        = $scope._getPagingInfo('curr');
+    params.searchSatus = 'Y';
+    params.hqOfficeCd = $("#srchHqOfficeCd").val();
+    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
+      // 적용매장 조회 후, 미적용 매장 조회
+      var allStoreScope = agrid.getScope("allStoreCtrl");
+      allStoreScope._pageView('allStoreCtrl', 1);
+
     });
   };
 
-  // 저장
-  $scope.save = function(){
+  // 삭제
+  $scope.delete = function(){
 
     var params = new Array();
     var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
-
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
@@ -79,27 +98,81 @@ app.controller('storeAddCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    console.log('save params',params);
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/pos/confg/verManage/applcStore/removeStore.sb", params, function(){
+      // 적용매장 조회 후, 미적용 매장 조회
+      var addStoreScope = agrid.getScope("addStoreCtrl");
+      addStoreScope._broadcast('addStoreCtrl');
+    });
+  };
+
+}]);
+
+
+/**********************************************************************
+ *  미적용매장 그리드
+ **********************************************************************/
+app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('allStoreCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+  };
+
+  // 조회 버튼 클릭
+  $scope.$on("allStoreCtrl", function(event, data) {
+    $scope.allStoreSearch();
+    event.preventDefault();
+  });
+
+  // 적용매장 목록 조회
+  $scope.allStoreSearch = function(){
+
+    var params = {};
+    var scope  = agrid.getScope('verManageCtrl');
+    var ver    = scope.getSelectVersion().verSerNo;
+
+    params.verSerNo    = ver;
+    params.searchSatus = 'N';
+    params.hqOfficeCd = $("#srchHqOfficeCd").val();
+    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
+
+    $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
+    });
+  };
+
+
+  // 저장
+  $scope.save = function(){
+
+    var params = new Array();
+    var scope  = agrid.getScope('verManageCtrl');
+    var ver    = scope.getSelectVersion().verSerNo;
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].verSerNo = ver;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    if(params.length == 0){
+      $scope._popMsg("선택된 매장이 없습니다.");
+      return false;
+    }
+
+    // console.log('save params',params);
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/pos/confg/verManage/applcStore/regist.sb", params, function(){
-      $scope.storeSearch();
+      // 적용매장 조회 후, 미적용 매장 조회
+      var addStoreScope = agrid.getScope("addStoreCtrl");
+      addStoreScope._broadcast('addStoreCtrl');
     });
-
   };
-
-  // 닫기
-  $scope.close = function(){
-    $scope.versionInfoDetailLayer.hide();
-  };
-
-  // 탭변경
-  $scope.changeTab = function(){
-    $scope.storeAddLayer.hide();
-    $scope.versionInfoDetailLayer.show(true);
-  };
-
-
-  //todo 등록매장수를 상세화면이나 리스트에 추가
 }]);
-
