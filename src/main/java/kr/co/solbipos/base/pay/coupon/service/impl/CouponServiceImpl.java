@@ -76,77 +76,67 @@ public class CouponServiceImpl implements CouponService {
     public int saveCouponClassList(PayMethodClassVO[] payMethodClassVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        String dt = currentDateTimeString();
+        String currentDt = currentDateTimeString();
 
         for(PayMethodClassVO payMethodClassVO : payMethodClassVOs) {
 
-            payMethodClassVO.setRegDt(dt);
+            payMethodClassVO.setRegDt(currentDt);
             payMethodClassVO.setRegId(sessionInfoVO.getUserId());
-            payMethodClassVO.setModDt(dt);
+            payMethodClassVO.setModDt(currentDt);
             payMethodClassVO.setModId(sessionInfoVO.getUserId());
             payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);
 
             // 본사 통제
-            if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
+            if (payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
                 PayMethodClassVO resultVO = new PayMethodClassVO();
-
                 payMethodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-                if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
+                if (payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
                     String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
 
                     procCnt = couponMapper.insertHqCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+                    if (procCnt <= 0) {
+                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
                     String payMethodClassResult = couponMapper.insertHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
-                }
-                else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
-
+                } else if (payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt = couponMapper.updateHqCouponClass(payMethodClassVO);
-//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용.
                     String payMethodClassResult = couponMapper.updateHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
-                }
-                else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
-
+                } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt = couponMapper.deleteHqCouponClass(payMethodClassVO);
-//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
                     // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰분류 적용. (매장 분류 먼저 삭제)
                     String payMethodClassResult = couponMapper.deleteHqCouponClassToStore(payMethodClassVO);
                     resultVO.setResult(payMethodClassResult);
                 }
-            }
+
             // 매장 통제
-            else if(payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
+            } else if (payMethodClassVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
                 payMethodClassVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-                if(payMethodClassVO.getStatus() == GridDataFg.INSERT) {
+                if (payMethodClassVO.getStatus() == GridDataFg.INSERT) {
 
                     String payMethodClassCd = couponMapper.getPayMethodClassCd(payMethodClassVO);
                     payMethodClassVO.setPayClassCd(payMethodClassCd);
 
                     procCnt = couponMapper.insertStoreCouponClass(payMethodClassVO);
-                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                }
-                else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
+                    if (procCnt <= 0) {
+                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+                } else if(payMethodClassVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt = couponMapper.updateStoreCouponClass(payMethodClassVO);
-//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                }
-                else if(payMethodClassVO.getStatus() == GridDataFg.DELETE) {
+                } else if (payMethodClassVO.getStatus() == GridDataFg.DELETE) {
                     procCnt = couponMapper.deleteStoreCouponClass(payMethodClassVO);
-//                    if(procCnt <= 0 )throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-            }
+
             // 권한 확인 필요
-            else {
+            } else {
                 throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
             }
         }
@@ -239,13 +229,13 @@ public class CouponServiceImpl implements CouponService {
                 }
                 else if(couponVO.getStatus() == GridDataFg.UPDATE) {
                     procCnt += couponMapper.updateHqCoupon(couponVO);
-                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
+                    // 본사통제여부가 'Y'일 경우, 매장쿠폰 수정.
                     String couponResult = couponMapper.updateHqCouponToStore(couponVO);
                 }
                 else if(couponVO.getStatus() == GridDataFg.DELETE) {
                     procCnt += couponMapper.deleteHqCoupon(couponVO);
-                    // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
-                    String couponResult = couponMapper.deleteHqCouponToStore(couponVO);
+                    // 본사통제여부가 'Y'일 경우, 매장쿠폰 삭제.
+                    String couponResult = couponMapper.deleteHqCouponToStore01(couponVO);
                 }
             }
             // 매장 통제
@@ -301,49 +291,57 @@ public class CouponServiceImpl implements CouponService {
         return resultProdList;
     }
 
-    /** 쿠폰 적용 상품 등록 */
+    /** 쿠폰적용상품 등록 */
     @Override
     public int registCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        String dt = currentDateTimeString();
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
 
-        for(CouponProdVO couponProdVO : couponProdVOs) {
-            couponProdVO.setRegDt(dt);
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+            couponProdVO.setRegDt(currentDt);
             couponProdVO.setRegId(sessionInfoVO.getUserId());
-            couponProdVO.setModDt(dt);
+            couponProdVO.setModDt(currentDt);
             couponProdVO.setModId(sessionInfoVO.getUserId());
 
-            if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
+            if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
                 procCnt += couponMapper.insertHqCouponProd(couponProdVO);
 
-                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용. // TODO
-                CouponProdVO resultVO = new CouponProdVO();
-                String couponResult = couponMapper.insertHqCouponProdToStore(couponProdVO);
+                // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
+                resultVO = new CouponProdVO();
+                couponResult = couponMapper.insertHqCouponProdToStore01(couponProdVO);
                 resultVO.setResult(couponResult);
 
-            } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
+            } else if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE) {
                 procCnt += couponMapper.insertStoreCouponProd(couponProdVO);
             }
         }
         return procCnt;
     }
 
-    /** 쿠폰 적용 상품 삭제 */
+    /** 쿠폰적용상품 삭제 */
     @Override
     public int deleteCouponProd(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
-        String dt = currentDateTimeString();
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
 
-        for(CouponProdVO couponProdVO : couponProdVOs) {
-            if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ ) {
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if (couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
 
                 procCnt += couponMapper.deleteHqCouponProd(couponProdVO);
 
-                // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분에도 본사의 쿠폰 적용.
-                CouponProdVO resultVO = new CouponProdVO();
-                String couponResult = couponMapper.deleteHqCouponProdToStore(couponProdVO);
+                // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
+                resultVO = new CouponProdVO();
+                couponResult = couponMapper.deleteHqCouponProdToStore01(couponProdVO);
                 resultVO.setResult(couponResult);
 
             } else if(couponProdVO.getCoupnEnvstVal() == CoupnEnvFg.STORE ) {
@@ -363,49 +361,45 @@ public class CouponServiceImpl implements CouponService {
         return couponMapper.getStoreList(couponStoreVO);
     }
 
-    /** 쿠폰 적용 매장 등록 */
+    /** 쿠폰적용매장 등록 : 해당매장에 쿠폰 + 쿠폰별상품 적용 */
     @Override
     public int registCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
 
-
         int procCnt = 0;
-        String dt = currentDateTimeString();
-
-        for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+        String currentDt = currentDateTimeString();
+        CouponVO resultVO = new CouponVO();
+        String couponResult;
+        String storeResult;
+        for (CouponStoreVO couponStoreVO : couponStoreVOs) {
 
             couponStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            couponStoreVO.setRegDt(dt);
+            couponStoreVO.setRegDt(currentDt);
             couponStoreVO.setRegId(sessionInfoVO.getUserId());
-            couponStoreVO.setModDt(dt);
-            couponStoreVO.setModId(sessionInfoVO.getUserId());
 
-            // 쿠폰 매장에 등록
+            // 쿠폰적용 매장등록 ( TB_HQ_COUPON_STORE )
             procCnt += couponMapper.insertCouponStore(couponStoreVO);
 
             // 본사통제여부가 'Y'일 경우, 매장의 쿠폰분류에도 본사의 쿠폰 적용.
             // 적용매장 등록 완료된 후, 첫번째 매장의 등록정보로 등록
-            String couponResult = couponMapper.insertHqCouponToStore(couponStoreVO);
+            couponResult = couponMapper.insertHqCouponToStore(couponStoreVO);
 
-
-            // 상품정보도 함께 등록
-            CouponVO resultVO = new CouponVO();
+            // 쿠폰별 적용상품 정보도 함께 등록
+            resultVO = new CouponVO();
             resultVO.setHqOfficeCd(couponStoreVOs[0].getHqOfficeCd());
             resultVO.setPayClassCd(couponStoreVOs[0].getPayClassCd());
             resultVO.setCoupnCd(couponStoreVOs[0].getCoupnCd());
             resultVO.setStoreCd(couponStoreVO.getStoreCd());
-            resultVO.setRegDt(dt);
+            resultVO.setRegDt(currentDt);
             resultVO.setRegId(sessionInfoVO.getUserId());
-            resultVO.setModDt(dt);
-            resultVO.setModId(sessionInfoVO.getUserId());
 
-            String storeResult = couponMapper.insertHqCouponProdToStoreProd(resultVO);
+            storeResult = couponMapper.insertHqCouponProdToStore02(resultVO);
+
         }
-
 
         return procCnt;
     }
 
-    /** 쿠폰 적용 매장 삭제 */
+    /** 쿠폰적용매장 삭제 : 해당매장에 쿠폰 + 쿠폰별상품 삭제 */
     @Override
     public int deleteCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO) {
 
@@ -419,21 +413,18 @@ public class CouponServiceImpl implements CouponService {
         resultVO.setModDt(dt);
         resultVO.setModId(sessionInfoVO.getUserId());
 
-        for(CouponStoreVO couponStoreVO : couponStoreVOs) {
+        for (CouponStoreVO couponStoreVO : couponStoreVOs) {
 
             resultVO.setStoreCd(couponStoreVO.getStoreCd());
 
             // 쿠폰적용 매장 삭제
             couponStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             couponStoreVO.setUseYn(UseYn.N);
-
             procCnt += couponMapper.deleteCouponStore(couponStoreVO);
-
-            // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
-            String couponResult = couponMapper.deleteHqCouponToStoreCoupon(resultVO);
-
             // 상품정보도 함께 삭제
-            String prodResult = couponMapper.deleteHqCouponToStoreProd(resultVO);
+            String prodResult = couponMapper.deleteHqCouponProdToStore02(resultVO);
+            // 본사통제여부가 'Y'일 경우, 매장의 쿠폰도 삭제
+            String couponResult = couponMapper.deleteHqCouponToStore02(resultVO);
         }
 
         return procCnt;
