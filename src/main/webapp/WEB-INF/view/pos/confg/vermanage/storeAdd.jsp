@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 매장추가 레이어 --%>
-<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:1100px;height:700px;">
+<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:1160px;height:700px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -89,9 +89,8 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="80" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <%--<wj-flex-grid-column header="<s:message code="verManage.store.lastVer"/>" binding="lastVer" align="right" width="90" is-read-only="true"></wj-flex-grid-column>--%>
-                <%--<wj-flex-grid-column header="<s:message code="verManage.store.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
 
               </wj-flex-grid>
             </div>
@@ -121,9 +120,8 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="80" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <%--<wj-flex-grid-column header="<s:message code="verManage.store.lastVer"/>" binding="lastVer" align="right" width="90" is-read-only="true"></wj-flex-grid-column>--%>
-                <%--<wj-flex-grid-column header="<s:message code="verManage.store.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>

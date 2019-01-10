@@ -83,6 +83,7 @@
         <wj-flex-grid-column header="<s:message code="verManage.fileSize"/>" binding="fileSize"  width="120" align="right" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.regCnt"/>" binding="regCnt" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.recvCnt"/>" binding="recvCnt" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>

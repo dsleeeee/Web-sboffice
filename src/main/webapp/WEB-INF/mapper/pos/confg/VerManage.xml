@@ -228,7 +228,8 @@
                tms.STORE_NM,
                tho.HQ_OFFICE_CD,
                tho.HQ_OFFICE_NM,
-               tcp.LAST_VER_SER_NO
+               tcp.LAST_VER_SER_NO,
+               tmp.POS_CNT
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                (
@@ -236,8 +237,15 @@
                        MAX(VER_SER_NO) AS  LAST_VER_SER_NO
                   FROM TB_CM_POS_VERSN_STORE
                  GROUP BY STORE_CD
-                ) tcp
+                ) tcp,
+               (
+               SELECT STORE_CD, COUNT(POS_NO) AS POS_CNT
+                 FROM TB_MS_POS
+                WHERE USE_YN ='Y'
+                GROUP by STORE_CD
+               ) tmp
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+           AND tmp.STORE_CD = tms.STORE_CD
       <if test='searchSatus != null and searchSatus == "Y"'>
            AND tms.STORE_CD IN (SELECT STORE_CD
                                   FROM TB_CM_POS_VERSN_STORE

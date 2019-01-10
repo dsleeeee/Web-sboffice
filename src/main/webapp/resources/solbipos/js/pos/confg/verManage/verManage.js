@@ -37,6 +37,7 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
     $scope.containYnDataMap = new wijmo.grid.DataMap(containYn, 'value', 'name');
+    $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
