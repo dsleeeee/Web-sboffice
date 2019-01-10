@@ -84,11 +84,11 @@ public interface CouponMapper {
      * @param couponVO*/
     String insertHqCouponToStore(CouponStoreVO couponVO);
 
-    /** 본사 쿠폰 등록 프로시져 */
+    /** 본사 쿠폰 수정 프로시져 */
     String updateHqCouponToStore(CouponVO couponVO);
 
-    /** 본사 쿠폰 등록 프로시져 */
-    String deleteHqCouponToStore(CouponVO couponVO);
+    /** 본사 쿠폰 삭제 프로시져 */
+    String deleteHqCouponToStore01(CouponVO couponVO);
 
     /** 매장 쿠폰 등록 */
     int insertStoreCoupon(CouponVO couponVO);
@@ -102,42 +102,42 @@ public interface CouponMapper {
     /** 쿠폰 적용/미적용 본사 상품 조회 */
     List<DefaultMap<String>> getHqProdList(CouponProdVO couponProdVO);
 
-    /** 쿠폰 적용/미저기용 매장 상품 조회 */
+    /** 쿠폰 적용/미적용 매장 상품 조회 */
     List<DefaultMap<String>> getStoreProdList(CouponProdVO couponProdVO);
 
-    /** 본사 쿠폰 적용 상품 등록 */
+    /** 본사 쿠폰적용상품 등록 */
     int insertHqCouponProd(CouponProdVO couponProdVO);
 
-    /** 매장 쿠폰 적용 상품 등록 */
+    /** 매장 쿠폰적용상품 등록 */
     int insertStoreCouponProd(CouponProdVO couponProdVO);
 
-    /** 본사 쿠폰 적용 상품 삭제 */
+    /** 본사 쿠폰적용상품 삭제 */
     int deleteHqCouponProd(CouponProdVO couponProdVO);
 
-    /** 매장 쿠폰 적용 상품 삭제 */
+    /** 매장 쿠폰적용상품 삭제 */
     int deleteStoreCouponProd(CouponProdVO couponProdVO);
 
-    /** 본사 쿠폰 적용 상품 등록 프로시져 */
-    String insertHqCouponProdToStore(CouponProdVO couponProdVO);
+    /** 본사 쿠폰적용상품 등록 프로시져 */
+    String insertHqCouponProdToStore01(CouponProdVO couponProdVO);
 
-    /** 본사 쿠폰 적용 상품 삭제 프로시져 */
-    String deleteHqCouponProdToStore(CouponProdVO couponProdVO);
+    /** 본사 쿠폰적용상품 삭제 프로시져 */
+    String deleteHqCouponProdToStore01(CouponProdVO couponProdVO);
 
     /** 쿠폰 적용/미적용 매장 조회 */
     List<DefaultMap<String>> getStoreList(CouponStoreVO couponStoreVO);
 
-    /** 쿠폰 적용 매장 등록 */
+    /** 쿠폰적용매장 등록 */
     int insertCouponStore(CouponStoreVO couponStoreVO);
 
-    /** 쿠폰 적용 매장 삭제 */
+    /** 쿠폰적용매장 삭제 */
     int deleteCouponStore(CouponStoreVO couponStoreVO);
 
-    /** 본사 쿠폰 적용 매장 등록시, 해당 매장의 적용상품 등록 프로시져 */
-    String insertHqCouponProdToStoreProd(CouponVO couponVO);
+    /** 본사 쿠폰적용매장 등록시, 해당 매장의 적용상품 등록 프로시져 */
+    String insertHqCouponProdToStore02(CouponVO couponVO);
 
-    /** 본사 쿠폰 적용 상품 삭제시, 해당 매장의 적용상품 삭제 프로시져 */
-    String deleteHqCouponToStoreProd(CouponVO couponVO);
+    /** 본사 쿠폰적용매장 삭제시, 해당 매장의 적용상품 삭제 프로시져 */
+    String deleteHqCouponProdToStore02(CouponVO couponVO);
 
-    /** 본사 쿠폰 적용 매장 삭제시, 해당 매장의 적용상품 삭제 프로시져 */
-    String deleteHqCouponToStoreCoupon(CouponVO resultVO);
+    /** 본사 쿠폰적용매장 삭제시, 해당 매장의 해당 쿠폰 삭제 프로시져 */
+    String deleteHqCouponToStore02(CouponVO resultVO);
 }

@@ -298,7 +298,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 적용 매장 등록
+     * 쿠폰 적용 매장 등록 : 해당매장에 쿠폰 + 쿠폰별상품 적용
      * @param couponStoreVOs
      * @param request
      * @param response
@@ -318,7 +318,7 @@ public class CouponController {
     }
 
     /**
-     * 쿠폰 적용 매장 삭제
+     * 쿠폰 적용 매장 삭제 : 해당매장에 쿠폰 + 쿠폰별상품 삭제
      * @param couponStoreVOs
      * @param request
      * @param response
