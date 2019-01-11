@@ -102,7 +102,7 @@
     </wj-combo-box>
 
     <%-- 매장환경 복사 --%>
-    <button class="btn_skyblue fr" id="copyBtn" ng-click="copyStoreEnv()" style="display:none;">
+    <button class="btn_skyblue fr" id="copyBtn" ng-click="copyStoreEnv()" >
       <s:message code="storeView.copy.store" />
     </button>
 
