@@ -5,7 +5,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   $scope.dtlOutDate = wcombo.genDate("#dtlOutDate");
 
-  $scope._setComboData("stmtAcctFg", [
+  $scope._setComboData("dtlStmtAcctFg", [
     {"name": messages["dstmn.stmtAcctAll"], "value": ""},
     {"name": messages["dstmn.stmtAcctSplr"], "value": "1"},
     {"name": messages["dstmn.stmtAcctSplrRcpnt"], "value": "2"}

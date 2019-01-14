@@ -54,4 +54,13 @@ public interface DstmnMapper {
     /** 거래명세표 - 거래명세표 전표 내역 조회 */
     List<DefaultMap<String>> getTransReportInfoList(DstmnVO dstmnVO);
 
+    /** 거래명세표 - 분배지시서(상품) 상품 리스트 조회 */
+    List<DefaultMap<String>> getDstbProdReportList(DstmnVO dstmnVO);
+
+    /** 거래명세표 - 분배지시서(상품-매장) 상품 리스트 조회 */
+    List<DefaultMap<String>> getDstbProdStoreReportList(DstmnVO dstmnVO);
+
+    /** 거래명세표 - 분배지시서(매장-상품) 상품 리스트 조회 */
+    List<DefaultMap<String>> getDstbStoreProdReportList(DstmnVO dstmnVO);
+
 }

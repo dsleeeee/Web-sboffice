@@ -15,30 +15,28 @@
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <table class="tblType01">
         <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
+          <col class="w20"/>
+          <col class="w80"/>
         </colgroup>
         <tbody>
         <tr>
           <%-- 비고 --%>
           <th><s:message code="rtnDstmn.dtl.hdRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
           <%-- 본사비고 --%>
           <th><s:message code="rtnDstmn.dtl.hqRemark"/></th>
-          <td colspan="3">
+          <td>
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
         <tr>
           <%-- 배송기사 --%>
           <th><s:message code="rtnDstmn.dtl.dlvrNm"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="srchDtlDlvrCd"
@@ -55,7 +53,7 @@
         <tr>
           <%-- 거래명세표 --%>
           <th><s:message code="rtnDstmn.dtl.stmtAcct"/></th>
-          <td colspan="3">
+          <td>
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
                 id="stmtAcctFg"

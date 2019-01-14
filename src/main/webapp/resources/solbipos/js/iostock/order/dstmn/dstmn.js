@@ -170,35 +170,8 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   };
 
 
-  // 세금계산서
-  $scope.taxReport = function () {
-    var strSlipNo = '';
-    if (!$scope.flex.collectionView) {
-      $scope.flex.itemsSource = new wijmo.collections.CollectionView();
-    }
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
-      if (item.gChk === true) {
-        strSlipNo += (strSlipNo === '' ? '' : ',') + item.slipNo;
-      }
-    }
-
-    if (strSlipNo === '') {
-      $scope._popMsg(messages['dstmn.require.slipNo']);
-      return false;
-    }
-
-    var params         = {};
-    params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
-    params.billFg      = $scope.billFg;
-    params.taxFg       = $scope.taxFg;
-    params.strSlipNo   = strSlipNo;
-    $scope._broadcast('taxReportCtrl', params);
-  };
-
-
-  // 거래명세표
-  $scope.transReport = function () {
+  // 리포트
+  $scope.report = function (reportFg) {
     var strSlipNo = '';
     if (!$scope.flex.collectionView) {
       $scope.flex.itemsSource = new wijmo.collections.CollectionView();
@@ -216,11 +189,31 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     }
 
     var params = {};
-    // params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
-    // params.billFg      = $scope.billFg;
-    params.stmtAcctFg = $scope.stmtAcctFg;
     params.strSlipNo  = strSlipNo;
-    $scope._broadcast('transReportCtrl', params);
+
+    if(reportFg === 'prod') { // 상품
+      $scope._broadcast('dstbProdReportCtrl', params);
+    }
+    else if(reportFg === 'prodStore') { // 상품-매장
+      $scope._broadcast('dstbProdStoreReportCtrl', params);
+    }
+    else if(reportFg === 'storeProd') { // 매장-상품
+      $scope._broadcast('dstbStoreProdReportCtrl', params);
+    }
+    else if(reportFg === 'dlvr') { // 기사별
+      $scope._broadcast('dstbDlvrReportCtrl', params);
+    }
+    else if(reportFg === 'trans') { // 거래명세표
+      params.stmtAcctFg = $scope.stmtAcctFg;
+      $scope._broadcast('transReportCtrl', params);
+    }
+    else if(reportFg === 'tax') { // 세금계산서
+      params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
+      params.billFg      = $scope.billFg;
+      params.taxFg       = $scope.taxFg;
+      $scope._broadcast('taxReportCtrl', params);
+    }
+
   };
 
 

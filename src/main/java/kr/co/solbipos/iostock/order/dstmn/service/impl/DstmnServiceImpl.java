@@ -204,4 +204,38 @@ public class DstmnServiceImpl implements DstmnService {
         dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dstmnMapper.getTransReportInfoList(dstmnVO);
     }
+
+
+    /** 거래명세표 - 분배지시서(상품) 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDstbProdReportList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getDstbProdReportList(dstmnVO);
+    }
+
+
+    /** 거래명세표 - 분배지시서(상품-매장) 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDstbProdStoreReportList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getDstbProdStoreReportList(dstmnVO);
+    }
+
+
+    /** 거래명세표 - 분배지시서(매장-상품) 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDstbStoreProdReportList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getDstbStoreProdReportList(dstmnVO);
+    }
+
 }

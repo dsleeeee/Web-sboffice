@@ -6,23 +6,19 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/order/dstmn/taxReport/"/>
 
-<style type="text/css">
-</style>
-
 <wj-popup id="wjTaxReportLayer" control="wjTaxReportLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="taxReportLayer" class="wj-dialog wj-dialog-columns" ng-controller="taxReportCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <div class="mt5 tr">
+      <div class="mt5 mb10 tr">
         <%-- 인쇄 --%>
         <button type="button" class="btn_skyblue ml5" id="btnPrint" ng-click="print()">
-          <s:message code="vendrOrder.report.print"/></button>
+          <s:message code="cmm.print"/></button>
       </div>
 
-      <div class="w100 mt10 taxReport" id="taxReport">
+      <div class="taxReport reportPrint w100" id="taxReport">
       </div>
 
     </div>
@@ -60,6 +56,9 @@
 
     // 공급자 정보 조회
     $scope.supplierInfo = function () {
+      // 로딩바 show
+      $scope.$broadcast('loadingPopupActive');
+
       var params = {};
 
       // ajax 통신 설정
@@ -88,6 +87,8 @@
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
+        // 로딩바 hide
+        $scope.$broadcast('loadingPopupInactive');
         if (response.data.message) {
           $scope._popMsg(response.data.message);
         } else {
@@ -119,8 +120,8 @@
             var loopCnt  = dataList.length;
             // console.log(response.data.data);
 
-            var taxReportHtml   = '';
-            var nextPageHtml = '<p style="page-break-before:always; margin-top: 5px;"></p>'; // 프린트 출력시 다음 페이지로 넘기기 위한 html
+            var taxReportHtml = '';
+            var nextPageHtml  = '<p class="nextPage mt5"></p>'; // 프린트 출력시 다음 페이지로 넘기기 위한 html
             for (var i = 0; i < loopCnt; i++) {
               taxReportHtml = '';
               // 첫번째 페이지가 아닌 경우 세금계산서를 그리기 전에 프린트 출력시 다음 페이지로 넘기기 위한 html 을 붙여준다.
@@ -163,18 +164,19 @@
               }
 
               var brColor = 'brRed'; // border color 를 위한 class. 공급자는 red, 공급받는자는 blue
-              var subTxt  = messages["dstmn.report.supplier"];
+              var subTxt  = messages["dstmn.taxReport.supplierStorage"];
               // 공급자 보관용과 공급받는자 보관용을 만들기 위해 for 문 2번 돈다.
               for (var k = 0; k < 2; k++) {
                 if (k > 0) {
                   brColor = 'brBlue';
-                  subTxt  = messages["dstmn.report.supplied"];
-                  taxReportHtml += '<div class="w100 mt10 mb10 tc">'
+                  subTxt  = messages["dstmn.taxReport.suppliedStorage"];
+                  taxReportHtml += '<div class="w100 mt5 mb5 tc s12">'
                     + '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
                     + '</div>';
                 }
 
                 taxReportHtml += '<table class="w100 ' + brColor + '">'
+                  + '<colgroup>'
                   + '<col style="width: 30px;">'
                   + '<col style="width: 30px;">'
                   + '<col style="width: 30px;">'
@@ -203,10 +205,11 @@
                   + '<col style="width: 30px;">'
                   + '<col style="width: 30px;">'
                   + '<col style="width: 30px;">'
-                  + '<tr>'
-                  + '<td rowspan="2" colspan="14" class="tc"><p class="txtIn" style="font-size: 25px; color: black;">' + messages["dstmn.report.taxReport"] + '</p> (' + subTxt + ')</td>'
-                  + '<td colspan="6" class="tc">권</td>'
-                  + '<td colspan="8" class="tc">호</td>'
+                  + '</colgroup>'
+                  + '<tr class="h20">'
+                  + '<td rowspan="2" colspan="14" class="tc"><p class="txtIn s25 bk">' + messages["dstmn.taxReport.taxReport"] + '</p> (' + subTxt + ')</td>'
+                  + '<td colspan="6" class="tc">' + messages["dstmn.taxReport.gwon"] + '</td>'
+                  + '<td colspan="8" class="tc">' + messages["dstmn.taxReport.ho"] + '</td>'
                   + '</tr>'
                   + '<tr>'
                   + '<td colspan="2" class="tc"></td>'
@@ -218,11 +221,11 @@
                   + '<td colspan="2" class="tc"></td>'
                   + '</tr>'
                   + '<tr>'
-                  + '<td rowspan="4" class="tc">공<br><br><br>급<br><br><br>자</td>'
-                  + '<td colspan="2" class="tc">등록<br>번호</td>'
+                  + '<td rowspan="4" class="tc">' + messages["dstmn.taxReport.supplier"] + '</td>'
+                  + '<td colspan="2" class="tc">' + messages["dstmn.taxReport.regNum"] + '</td>'
                   + '<td colspan="9" class="tc">' + supplierBizNo + '</td>'
-                  + '<td rowspan="4" class="tc">공<br><br>급<br><br>받<br><br>는<br><br>자</td>'
-                  + '<td colspan="3" class="tc">등록<br>번호</td>'
+                  + '<td rowspan="4" class="tc">' + messages["dstmn.taxReport.supplied"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.regNum"] + '</td>'
                   + '<td class="tc">' + nvl($scope.suppliedBizNo.substr(0, 1), '') + '</td>'
                   + '<td class="tc">' + nvl($scope.suppliedBizNo.substr(1, 1), '') + '</td>'
                   + '<td class="tc">' + nvl($scope.suppliedBizNo.substr(2, 1), '') + '</td>'
@@ -237,63 +240,63 @@
                   + '<td class="tc">' + nvl($scope.suppliedBizNo.substr(9, 1), '') + '</td>'
                   + '</tr>'
                   + '<tr>'
-                  + '<td colspan="2" class="tc">상호<br>(법인명)</td>'
+                  + '<td colspan="2" class="tc">' + messages["dstmn.taxReport.storeNm"] + '</td>'
                   + '<td colspan="4" class="tl">' + $scope.supplierNm + '</td>'
-                  + '<td class="tc">성명</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ownerNm"] + '</td>'
                   + '<td colspan="4" class="tl">' + $scope.supplierOwnerNm + '</td>'
-                  + '<td colspan="3" class="tc">상호<br>(법인명)</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.storeNm"] + '</td>'
                   + '<td colspan="5" class="tl">' + $scope.suppliedNm + '</td>'
-                  + '<td class="tc">성명</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ownerNm"] + '</td>'
                   + '<td colspan="6" class="tl">' + $scope.suppliedOwnerNm + '</td>'
                   + '</tr>'
                   + '<tr>'
-                  + '<td colspan="2" class="tc">사업장<br>주소</td>'
+                  + '<td colspan="2" class="tc">' + messages["dstmn.taxReport.storeAddr"] + '</td>'
                   + '<td colspan="9" class="tl">' + $scope.supplierAddr + '</td>'
-                  + '<td colspan="3" class="tc">사업장<br>주소</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.storeAddr"] + '</td>'
                   + '<td colspan="12" class="tl">' + $scope.suppliedAddr + '</td>'
                   + '</tr>'
                   + '<tr>'
-                  + '<td colspan="2" class="tc">업태</td>'
+                  + '<td colspan="2" class="tc">' + messages["dstmn.taxReport.bizType"] + '</td>'
                   + '<td colspan="4" class="tl">' + $scope.supplierBizType + '</td>'
-                  + '<td class="tc">종목</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.bizItem"] + '</td>'
                   + '<td colspan="4" class="tl">' + $scope.supplierBizItem + '</td>'
-                  + '<td colspan="3" class="tc">업태</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.bizType"] + '</td>'
                   + '<td colspan="5" class="tl">' + $scope.suppliedBizType + '</td>'
-                  + '<td class="tc">종목</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.bizItem"] + '</td>'
                   + '<td colspan="6" class="tl">' + $scope.suppliedBizItem + '</td>'
                   + '</tr>'
-                  + '<tr>'
-                  + '<td colspan="3" class="tc">작성</td>'
-                  + '<td colspan="12" class="tc">공급가액</td>'
-                  + '<td colspan="10" class="tc">세액</td>'
-                  + '<td colspan="3" class="tc">비고</td>'
+                  + '<tr class="h20">'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.write"] + '</td>'
+                  + '<td colspan="12" class="tc">' + messages["dstmn.taxReport.splyUprc"] + '</td>'
+                  + '<td colspan="10" class="tc">' + messages["dstmn.taxReport.taxAmt"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.remark"] + '</td>'
                   + '</tr>'
                   + '<tr>'
-                  + '<td class="tc">년</td>'
-                  + '<td class="tc">월</td>'
-                  + '<td class="tc">일</td>'
-                  + '<td style="text-align: center; width:35px;">공란<br>수</td>'
-                  + '<td class="tc">백</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">억</td>'
-                  + '<td class="tc">천</td>'
-                  + '<td class="tc">백</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">만</td>'
-                  + '<td class="tc">천</td>'
-                  + '<td class="tc">백</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">일</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">억</td>'
-                  + '<td class="tc">천</td>'
-                  + '<td class="tc">백</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">만</td>'
-                  + '<td class="tc">천</td>'
-                  + '<td class="tc">백</td>'
-                  + '<td class="tc">십</td>'
-                  + '<td class="tc">일</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.year"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.month"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.day"] + '</td>'
+                  + '<td style="text-align: center; width:40px;">' + messages["dstmn.taxReport.blankCount"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.hundred"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.billion"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.thousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.hundred"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.tenThousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.thousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.hundred"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.one"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.billion"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.thousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.hundred"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.tenThousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.thousand"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.hundred"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.ten"] + '</td>'
+                  + '<td class="tc">' + messages["dstmn.taxReport.one"] + '</td>'
                   + '<td rowspan="2" colspan="3" class="tc"></td>'
                   + '</tr>'
                   + '<tr>'
@@ -323,20 +326,20 @@
                   + '<td class="tc">' + nvl(arrBaseVat[8], '') + '</td>'
                   + '<td class="tc">' + nvl(arrBaseVat[9], '') + '</td>'
                   + '</tr>'
-                  + '<tr>'
-                  + '<td colspan="2" class="tc">월 일</td>'
-                  + '<td colspan="6" class="tc">품목</td>'
-                  + '<td colspan="3" class="tc">규격</td>'
-                  + '<td colspan="3" class="tc">수량</td>'
-                  + '<td colspan="3" class="tc">단가</td>'
-                  + '<td colspan="4" class="tc">공급가액</td>'
-                  + '<td colspan="4" class="tc">세액</td>'
-                  + '<td colspan="3" class="tc">비고</td>'
+                  + '<tr  class="h20">'
+                  + '<td colspan="2" class="tc">' + messages["dstmn.taxReport.month"] + ' ' + messages["dstmn.taxReport.day"] + '</td>'
+                  + '<td colspan="6" class="tc">' + messages["dstmn.taxReport.prodNm"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.poUnitFg"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.qty"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.uprc"] + '</td>'
+                  + '<td colspan="4" class="tc">' + messages["dstmn.taxReport.splyUprc"] + '</td>'
+                  + '<td colspan="4" class="tc">' + messages["dstmn.taxReport.taxAmt"] + '</td>'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.remark"] + '</td>'
                   + '</tr>'
                   + '<tr>'
                   + '<td class="tc">' + $scope.outMonth + '</td>'
                   + '<td class="tc">' + $scope.outDay + '</td>'
-                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '0' ? '물품대' : '물품대-과세') + '</td>'
+                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '0' ? messages["dstmn.taxReport.prodPay"] : messages["dstmn.taxReport.prodPay"] + '-' + messages["dstmn.taxReport.taxation"]) + '</td>'
                   + '<td colspan="3" class="tc"></td>'
                   + '<td colspan="3" class="tr"></td>'
                   + '<td colspan="3" class="tr"></td>'
@@ -347,7 +350,7 @@
                   + '<tr>'
                   + '<td class="tc">' + ($scope.taxFg === '0' ? '' : $scope.outMonth) + '</td>'
                   + '<td class="tc">' + ($scope.taxFg === '0' ? '' : $scope.outDay) + '</td>'
-                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '0' ? '전표번호 : ' + $scope.slipNo : '물품대-면세') + '</td>'
+                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '0' ? messages["dstmn.taxReport.slipNo"] + ' : ' + $scope.slipNo : messages["dstmn.taxReport.prodPay"] + '-' + messages["dstmn.taxReport.taxFree"]) + '</td>'
                   + '<td colspan="3" class="tc"></td>'
                   + '<td colspan="3" class="tr"></td>'
                   + '<td colspan="3" class="tr"></td>'
@@ -358,7 +361,7 @@
                   + '<tr>'
                   + '<td class="tc"></td>'
                   + '<td class="tc"></td>'
-                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '1' ? '전표번호 : ' + $scope.slipNo : '') + '</td>'
+                  + '<td colspan="6" class="tc">' + ($scope.taxFg === '1' ? messages["dstmn.taxReport.slipNo"] + ' : ' + $scope.slipNo : '') + '</td>'
                   + '<td colspan="3" class="tc"></td>'
                   + '<td colspan="3" class="tr"></td>'
                   + '<td colspan="3" class="tr"></td>'
@@ -377,12 +380,12 @@
                   + '<td colspan="4" class="tr">0</td>'
                   + '<td colspan="3" class="tc"></td>'
                   + '</tr>'
-                  + '<tr>'
-                  + '<td colspan="3" class="tc">물품대</td>'
-                  + '<td colspan="4" class="tc">미수금</td>'
-                  + '<td colspan="5" class="tc">입금 및 기타</td>'
-                  + '<td colspan="5" class="tc">청구금액</td>'
-                  + '<td rowspan="2" colspan="11" class="tc">이 금액을 <b>' + ($scope.billFg === '0' ? '청구' : '영수') + '</b> 함</td>'
+                  + '<tr  class="h20">'
+                  + '<td colspan="3" class="tc">' + messages["dstmn.taxReport.prodPay"] + '</td>'
+                  + '<td colspan="4" class="tc">' + messages["dstmn.taxReport.unpaidAmt"] + '</td>'
+                  + '<td colspan="5" class="tc">' + messages["dstmn.taxReport.depositAndEtc"] + '</td>'
+                  + '<td colspan="5" class="tc">' + messages["dstmn.taxReport.billAmt"] + '</td>'
+                  + '<td rowspan="2" colspan="11" class="tc">' + messages["dstmn.taxReport.txt1"] + ' <b>' + ($scope.billFg === '0' ? messages["dstmn.taxReport.bill"] : messages["dstmn.taxReport.receipt"]) + '</b> ' + messages["dstmn.taxReport.txt2"] + '</td>'
                   + '</tr>'
                   + '<tr>'
                   + '<td colspan="3" class="tr">' + addComma($scope.baseTot) + '</td>'
@@ -392,16 +395,20 @@
                   + '</tr>'
                   + '</table>';
               }
-              // console.log(taxReportHtml);
               $('#taxReport').append(taxReportHtml);
             }
 
-            // $('#taxReport').append(taxReportHtml);
+            // console.log($('#taxReport').html());
+
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
           }
         }
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
+        // 로딩바 hide
+        $scope.$broadcast('loadingPopupInactive');
         if (response.data.message) {
           $scope._popMsg(response.data.message);
         } else {
@@ -411,22 +418,31 @@
       }).then(function () {
         // "complete" code here
       });
-    }
+    };
 
 
     // 인쇄
     $scope.print = function () {
       // create document
-      var doc  = new wijmo.PrintDocument({
-        title: '세금계산서'
+      var doc = new wijmo.PrintDocument({
+        title: messages["dstmn.taxReport.taxReport"]
       });
+
+      // 브라우저 체크하여 크롬인 경우 위에 빈칸 9mm 를 둔다. ie와 비슷하게 맞추기 위함...
+      var browser = navigator.userAgent.toLowerCase();
+      if (-1 != browser.indexOf('chrome')) {
+        // doc.append('<div style="height: 9mm;"></div>');
+      }
+
       // add content to it
       var view = document.querySelector('#taxReport');
       doc.append(view);
+      // console.log(view);
 
       // and print it
       doc.print();
     };
+
 
   }]);
 

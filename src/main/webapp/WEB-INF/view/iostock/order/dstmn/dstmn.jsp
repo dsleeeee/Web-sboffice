@@ -96,10 +96,10 @@
       <%-- 분배지시서 --%>
       <th><s:message code="dstmn.dstbDrctn"/></th>
       <td colspan="3">
-        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.prodPrint"/></a>
-        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.prodStorePrint"/></a>
-        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.storeProdPrint"/></a>
-        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.dlvrPrint"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('prod')"><s:message code="dstmn.prodPrint"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('prodStore')"><s:message code="dstmn.prodStorePrint"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('storeProd')"><s:message code="dstmn.storeProdPrint"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('dlvr')"><s:message code="dstmn.dlvrPrint"/></a>
       </td>
     </tr>
     <tr>
@@ -117,8 +117,8 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
         </span>
-        <a href="#" class="btn_grayS" ng-click="transReport()"><s:message code="dstmn.stmtAcctPrint"/></a>
-        <a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.stmtAcctExcel"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('trans')"><s:message code="dstmn.stmtAcctPrint"/></a>
+        <%--<a href="#" class="btn_grayS" ng-click=""><s:message code="dstmn.stmtAcctExcel"/></a>--%>
       </td>
     </tr>
     <tr>
@@ -150,7 +150,7 @@
             initialized="_initComboBox(s)">
           </wj-combo-box>
         </span>
-        <a href="#" class="btn_grayS" ng-click="taxReport()"><s:message code="dstmn.taxBillIssue"/></a>
+        <a href="#" class="btn_grayS" ng-click="report('tax')"><s:message code="dstmn.taxBillIssue"/></a>
       </td>
     </tr>
     </tbody>
@@ -229,6 +229,24 @@
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(상품) 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbProdReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(상품-매장) 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbProdStoreReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(매장-상품) 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbStoreProdReport.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

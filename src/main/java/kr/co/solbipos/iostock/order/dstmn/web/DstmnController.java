@@ -268,4 +268,74 @@ public class DstmnController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
     }
+
+
+    /**
+     * 거래명세표 - 분배지시서(상품) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 10.
+     */
+    @RequestMapping(value = "/dstbProdReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbProdReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbProdReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(상품-매장) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 11.
+     */
+    @RequestMapping(value = "/dstbProdStoreReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbProdStoreReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbProdStoreReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(매장-상품) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 11.
+     */
+    @RequestMapping(value = "/dstbStoreProdReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbStoreProdReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbStoreProdReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
 }

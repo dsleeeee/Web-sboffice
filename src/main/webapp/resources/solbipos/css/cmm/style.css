@@ -1956,17 +1956,98 @@ div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-
 /**
  * Report 관련
  */
+/*@page {*/
+    /*size: A4;*/
+    /*margin: 0;*/
+/*}*/
+/*@media print {*/
+    /*div.reportA4 {*/
+    /*!*body {*!*/
+        /*!*width: 210mm;*!*/
+        /*!*height: 296mm;*!*/
+        /*!*padding: 40px 30px 0 30px;*!*/
+        /*!*padding: 15mm 10mm 0 10mm;*!*/
+        /*padding-top: 10mm;*/
+    /*}*/
+/*}*/
+
+
+/* 공통 */
+.reportPrint tr {height: 30px;}
+.reportPrint tr.h20 {height: 20px;}
+.reportPrint tr.h25 {height: 25px;}
+.reportPrint tr.h100 {height: 100px;}
+.reportPrint th {font-size: 15px; color: black; padding: 2px; border: 1px solid black;}
+.reportPrint td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}
+.reportPrint input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; color: black !important; }
+.reportPrint .br0 {border: 0px solid;}
+.reportPrint .br1 {border: 1px solid black;}
+.reportPrint .brt0 {border-top: 0px solid;}
+.reportPrint .brl1 {border-left: 1px solid black;}
+.reportPrint .s20 {font-size: 20px;}
+.reportPrint .s25 {font-size: 25px;}
+.reportPrint .s35 {font-size: 35px;}
+.reportPrint .nextPage {page-break-before: always;}
+
+
+/* 발주서 */
+/*.vendrOrderReport th {font-size: 15px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.vendrOrderReport td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.vendrOrderReport .br0 {border: 0px solid;}*/
+/*.vendrOrderReport .br1 {border: 1px solid black;}*/
+/*.vendrOrderReport .brt0 {border-top: 0px solid;}*/
+/*.vendrOrderReport .brl1 {border-left: 1px solid black;}*/
+/*.vendrOrderReport .s35 {font-size: 35px; color: black;}*/
+/*.vendrOrderReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
+
+/* 반출서 */
+/*.vendrInstockReport tr {height: 30px;}*/
+/*.vendrInstockReport tr.h20 {height: 20px;}*/
+/*.vendrInstockReport tr.h25 {height: 25px;}*/
+/*.vendrInstockReport tr.h100 {height: 100px;}*/
+/*.vendrInstockReport th {font-size: 15px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.vendrInstockReport td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.vendrInstockReport .br0 {border: 0px solid;}*/
+/*.vendrInstockReport .br1 {border: 1px solid black;}*/
+/*.vendrInstockReport .brt0 {border-top: 0px solid;}*/
+/*.vendrInstockReport .brl1 {border-left: 1px solid black;}*/
+/*.vendrInstockReport .s35 {font-size: 35px; color: black;}*/
+/*.vendrInstockReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
 
 /* 거래명세표 */
-.transReport tr {height: 30px;}
-.transReport th {font-size: 13px; color: black; padding: 2px; border: 1px solid black;}
-.transReport td {font-size: 13px; color: black; padding: 2px; border: 1px solid black;}
-.transReport td.br0 {border: 0px solid white;}
+/*.transReport tr {height: 30px;}*/
+/*.transReport tr.h25 {height: 25px;}*/
+.transReport th {font-size: 12px !important;}
+/*.transReport td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.transReport .br0 {border: 0px solid;}*/
+/*.transReport .brt0 {border-top: 0px solid;}*/
 .transReport .w1 {width: 1%;}
 .transReport .w2 {width: 2%;}
+/*.transReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
 
 /* 세금계산서 */
-.taxReport tr {height: 30px;}
-.taxReport td {font-size: 13px; color: black; padding: 2px;}
-.taxReport > table.brRed td {border: 1px solid red;}
-.taxReport > table.brBlue td {border: 1px solid blue;}
+/*.taxReport tr {height: 30px;}*/
+/*.taxReport tr.h20 {height: 20px;}*/
+/*.taxReport td {font-size: 12px; color: black; padding: 2px;}*/
+.taxReport table.brRed td {border: 1px solid red;}
+.taxReport table.brBlue td {border: 1px solid blue;}
+/*.taxReport .s25 {font-size: 25px;}*/
+/*.taxReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
+
+/* 분배지시서(상품) */
+/*.dstbProdReport tr {height: 30px;}*/
+/*.dstbProdReport tr.h25 {height: 25px;}*/
+/*.dstbProdReport th {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.dstbProdReport td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.dstbProdReport .br0 {border: 0px solid;}*/
+/*.dstbProdReport .s20 {font-size: 20px;}*/
+/*.dstbProdReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
+
+/* 분배지시서(상품-매장) */
+/*.dstbProdStoreReport tr {height: 30px;}*/
+/*.dstbProdStoreReport tr.h25 {height: 25px;}*/
+/*.dstbProdStoreReport th {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.dstbProdStoreReport td {font-size: 12px; color: black; padding: 2px; border: 1px solid black;}*/
+/*.dstbProdStoreReport .br0 {border: 0px solid;}*/
+/*.dstbProdStoreReport .s20 {font-size: 20px;}*/
+/*.dstbProdStoreReport input[readonly] {font-size: 12px; border: 0px; background-color: #fff !important; }*/
