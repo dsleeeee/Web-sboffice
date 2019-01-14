@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -1841,48 +1841,50 @@ var __extends = this && this.__extends || function() {
           var o = this;
           this._errorBarEles = [], a.cancel = !0;
           var s = this.chart,
-            u = this._getAxisY(),
-            l = this._getAxisX(),
-            c = (u.origin, a.engine),
-            h = s.series.indexOf(this),
-            f = this._plotter;
-          f.plotSeries(c, l, u, this, s, a.index, a.count, function(i) {
-            var a, _, p, m = o._paddings,
-              y = o._showPlus,
-              d = o._showMinus,
-              g = s._isRotated(),
-              b = o.errorBarStyle && o.errorBarStyle["stroke-width"] || 2;
-            p = (_ = g ? l : u).actualMax, a = _.convert(p);
-            var v = c.stroke,
-              x = c.strokeWidth;
-            c.stroke = "black", c.strokeWidth = 1, i && i.length && i.forEach(function(i, s) {
+            u = s._plotRect,
+            l = this._getAxisY(),
+            c = this._getAxisX(),
+            h = (l.origin, a.engine),
+            f = s.series.indexOf(this),
+            _ = this._plotter;
+          _.plotSeries(h, c, l, this, s, a.index, a.count, function(i) {
+            var a, p, m, y = o._paddings,
+              d = o._showPlus,
+              g = o._showMinus,
+              b = s._isRotated(),
+              v = o.errorBarStyle && o.errorBarStyle["stroke-width"] || 2;
+            m = (p = b ? c : l).actualMax, a = p.convert(m);
+            var x = h.stroke,
+              P = h.strokeWidth;
+            h.stroke = "black", h.strokeWidth = 1, i && i.length && i.forEach(function(i, s) {
               if (null != i.x && null != i.y) {
-                var u = m[s],
-                  l = u && u.minus || 0,
-                  v = u && u.plus || 0,
-                  x = Math.abs(_.convert(p - l) - a),
-                  P = Math.abs(_.convert(p + v) - a),
-                  w = new t.Point(i.x, i.y),
-                  O = new t.Point(i.x, i.y);
-                g ? (o.errorAmount === n.StandardDeviation && (i = new t.Point(_.convert(o._mean), i.y), w.x = i.x, O.x = i.x), d && (w.x = w.x - x), y && (O.x = O.x + P)) : (o.errorAmount === n.StandardDeviation && (i = new t.Point(i.x, _.convert(o._mean)), w.y = i.y, O.y = i.y), d && (w.y = w.y + x), y && (O.y = O.y - P));
-                var S = void 0;
-                S = g ? new t.Rect(w.x, w.y - b, Math.abs(O.x - w.x), 2 * b) : new t.Rect(O.x - b, O.y, 2 * b, Math.abs(O.y - w.y));
-                var V = new e._RectArea(S),
-                  M = new e._DataPoint(h, s, s, u.val);
-                V.tag = M, f.hitTester.add(V, h);
-                var L = [c.drawLine(w.x, w.y, O.x, O.y, "error-bar", o.errorBarStyle)];
-                if (o._errorBarEles[s] = L, o.endStyle === r.Cap) {
-                  if (y) {
-                    var j = void 0;
-                    j = g ? c.drawLine(O.x, O.y - b, O.x, O.y + b, "error-bar", o.errorBarStyle) : c.drawLine(O.x - b, O.y, O.x + b, O.y, "error-bar", o.errorBarStyle), L.push(j)
-                  }
+                var l = y[s],
+                  c = l && l.minus || 0,
+                  x = l && l.plus || 0,
+                  P = Math.abs(p.convert(m - c) - a),
+                  w = Math.abs(p.convert(m + x) - a),
+                  O = new t.Point(i.x, i.y),
+                  S = new t.Point(i.x, i.y);
+                b ? (o.errorAmount === n.StandardDeviation && (i = new t.Point(p.convert(o._mean), i.y), O.x = i.x, S.x = i.x), g && (O.x = O.x - P), d && (S.x = S.x + w)) : (o.errorAmount === n.StandardDeviation && (i = new t.Point(i.x, p.convert(o._mean)), O.y = i.y, S.y = i.y), g && (O.y = O.y + P), d && (S.y = S.y - w));
+                var V = void 0;
+                V = b ? new t.Rect(O.x, O.y - v, Math.abs(S.x - O.x), 2 * v) : new t.Rect(S.x - v, S.y, 2 * v, Math.abs(S.y - O.y));
+                var M = new e._RectArea(V);
+                M.ignoreLabel = !0;
+                var L = new e._DataPoint(f, s, s, l.val);
+                M.tag = L, _.hitTester.add(M, f);
+                var j = [h.drawLine(Math.max(O.x, u.left), Math.min(O.y, u.bottom), Math.min(S.x, u.right), Math.max(S.y, u.top), "error-bar", o.errorBarStyle)];
+                if (o._errorBarEles[s] = j, o.endStyle === r.Cap) {
                   if (d) {
                     var E = void 0;
-                    E = g ? c.drawLine(w.x, w.y - b, w.x, w.y + b, "error-bar", o.errorBarStyle) : c.drawLine(w.x - b, w.y, w.x + b, w.y, "error-bar", o.errorBarStyle), L.push(E)
+                    b ? S.x <= u.right && (E = h.drawLine(S.x, S.y - v, S.x, S.y + v, "error-bar", o.errorBarStyle), j.push(E)) : S.y >= u.top && (E = h.drawLine(S.x - v, S.y, S.x + v, S.y, "error-bar", o.errorBarStyle), j.push(E))
+                  }
+                  if (g) {
+                    var X = void 0;
+                    b ? O.x >= u.left && (X = h.drawLine(O.x, O.y - v, O.x, O.y + v, "error-bar", o.errorBarStyle), j.push(X)) : O.y <= u.bottom && (X = h.drawLine(O.x - v, O.y, O.x + v, O.y, "error-bar", o.errorBarStyle), j.push(X))
                   }
                 }
               }
-            }), c.stroke = v, c.strokeWidth = x
+            }), h.stroke = x, h.strokeWidth = P
           })
         }, o.prototype.getPlotElement = function(t) {
           if (this.hostElement && t < this._pointIndexes.length) {

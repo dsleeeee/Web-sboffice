@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -608,7 +608,7 @@ var wijmo;
             i._forceTTShowing || n.call(r)
           }), o && (o.addEventListener("click", function(t) {
             i._toggleTooltip(r, t, o)
-          }), o.addEventListener("mousemove", function(t) {
+          }), document.addEventListener("mousemove", function(t) {
             i._showTooltip() && i._toggleTooltip(r, t, o)
           }))
         }, i.prototype._showTooltip = function() {
@@ -637,7 +637,10 @@ var wijmo;
               o._layer = this, this._renderAnnotation(o);
               break;
             case t.collections.NotifyCollectionChangedAction.Remove:
-              this._destroyAnnotation(o)
+              this._destroyAnnotation(o);
+              break;
+            default:
+              this._destroyAnnotations(), this._renderAnnotations()
           }
         }, i.prototype._renderAnnotations = function() {
           var t, e = this.items,
@@ -658,7 +661,8 @@ var wijmo;
         }, i.prototype._destroyAnnotations = function() {
           var t, e = this.items,
             n = e.length;
-          for (t = 0; t < n; t++) this._destroyAnnotation(e[t])
+          for (t = 0; t < n; t++) this._destroyAnnotation(e[t]);
+          this._layerEle.innerHTML = ""
         }, i.prototype._destroyAnnotation = function(t) {
           this._layerEle && this._layerEle.removeChild(t._element), t.destroy()
         }, i._CSS_Layer = "wj-chart-annotationlayer", i

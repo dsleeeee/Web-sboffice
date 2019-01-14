@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -301,7 +301,7 @@ var __extends = this && this.__extends || function() {
     }
     var a = function() {
       function n(t, n) {
-        this._hasOutlines = !1, this._pageCount = 0, this._supportedExportDescriptions = [], this._isLoadCompleted = !1, this._isDisposed = !1, this._errors = [], this.pageCountChanged = new e.Event, this.disposed = new e.Event, this.pageSettingsChanged = new e.Event, this.loading = new e.Event, this.loadCompleted = new e.Event, this.queryLoadingData = new e.Event, this._httpHandler = n, this._service = this._createDocumentService(t), this._paginated = t.paginated
+        this._hasOutlines = !1, this._pageCount = 0, this._supportedExportDescriptions = [], this._isLoadCompleted = !1, this._isInstanceCreated = !1, this._isDisposed = !1, this._errors = [], this.pageCountChanged = new e.Event, this.disposed = new e.Event, this.pageSettingsChanged = new e.Event, this.loading = new e.Event, this.loadCompleted = new e.Event, this.queryLoadingData = new e.Event, this._httpHandler = n, this._service = this._createDocumentService(t), this._paginated = t.paginated
       }
       return n.prototype.onQueryLoadingData = function(e) {
         this.queryLoadingData.raise(this, e)
@@ -342,6 +342,12 @@ var __extends = this && this.__extends || function() {
       }), Object.defineProperty(n.prototype, "isLoadCompleted", {
         get: function() {
           return this._isLoadCompleted
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "isInstanceCreated", {
+        get: function() {
+          return this._isInstanceCreated
         },
         enumerable: !0,
         configurable: !0
@@ -451,7 +457,7 @@ var __extends = this && this.__extends || function() {
           e._updateExecutionInfo(t)
         })
       }, n.prototype._updateExecutionInfo = function(e) {
-        null != e && (this._executionDateTime = this._getExecutionDateTime(e), this._expiredDateTime = this._getExpiredDateTime(e), this._updatePageSettings(e.pageSettings), this._features = e.features, this._updateDocumentStatus(e.status))
+        null != e && (this._executionDateTime = this._getExecutionDateTime(e), this._expiredDateTime = this._getExpiredDateTime(e), this._updatePageSettings(e.pageSettings), this._features = e.features, this._isInstanceCreated = null != e.status && e.status.status !== t._ExecutionStatus.notFound && e.status.status !== t._ExecutionStatus.cleared, this._updateDocumentStatus(e.status))
       }, n.prototype._updateDocumentStatus = function(e) {
         e && (this._errors = e.errorList, this._initialPosition = e.initialPosition, this._updatePageCount(this._getPageCount(e)), this._expiredDateTime = this._getExpiredDateTime(e), this._hasOutlines = this._checkHasOutlines(e), this._updateIsLoadCompleted(this._checkIsLoadCompleted(e)))
       }, n.prototype._getExecutionDateTime = function(e) {
@@ -533,7 +539,7 @@ var __extends = this && this.__extends || function() {
         var o = new p;
         return this._innerService.getExportedUrl(e).then(function(e) {
           var r = new u(e, null);
-          t && n.httpHandler.onBeforeSendRequest(r), o.resolve(r.url)
+          t && n.httpHandler.beforeSend(r), o.resolve(r.url)
         }), o
       }, n.prototype.search = function(e) {
         return this._innerService.search(e)
@@ -646,11 +652,11 @@ var __extends = this && this.__extends || function() {
           "Content-Type": "application/x-www-form-urlencoded"
         })
       }
-      n.requestHeaders && ((o = o || {}).requestHeaders = o.requestHeaders || {}, Object.keys(n.requestHeaders).forEach(function(e) {
+      n && n.requestHeaders && ((o = o || {}).requestHeaders = o.requestHeaders || {}, Object.keys(n.requestHeaders).forEach(function(e) {
         o.requestHeaders[e] = n.requestHeaders[e]
       }));
       var s = new u(t, o);
-      return n && n.onBeforeSendRequest && n.onBeforeSendRequest(s), e.httpRequest(s.url, s.settings)
+      return n && n.beforeSend && n.beforeSend(s), e.httpRequest(s.url, s.settings)
     }, t._saveBlob = function(e, t) {
       if (e && e instanceof Blob && t)
         if (navigator.msSaveBlob) navigator.msSaveBlob(e, t);
@@ -992,12 +998,12 @@ var __extends = this && this.__extends || function() {
         var o = n.call(this, e, t) || this;
         return o._hasParameters = !1, o
       }
-      return __extends(o, n), o.getReportNames = function(e, t) {
-        return a.getReportNames(e, t)
-      }, o.getReports = function(t, n, o) {
+      return __extends(o, n), o.getReportNames = function(e, t, n) {
+        return a.getReportNames(e, t, n)
+      }, o.getReports = function(t, n, o, r) {
         return e.isBoolean(o) && (o = {
           recursive: o
-        }), a.getReports(t, n, o)
+        }), a.getReports(t, n, o, r)
       }, Object.defineProperty(o.prototype, "reportName", {
         get: function() {
           return this._innerService ? this._innerService.reportName : null
@@ -1061,26 +1067,26 @@ var __extends = this && this.__extends || function() {
         },
         enumerable: !0,
         configurable: !0
-      }), r.getReportNames = function(e, t) {
-        return r.getReports(e, t).then(function(e) {
+      }), r.getReportNames = function(e, t, n) {
+        return r.getReports(e, t, null, n).then(function(e) {
           if (!e) return null;
           var t = [];
           return e.items.forEach(function(e) {
             e.type === u.Report && t.push(e.name)
           }), t
         })
-      }, r.getReports = function(n, o, r) {
-        var i = new t._Promise,
-          a = t._joinUrl(n, o);
-        return e.viewer._httpRequest(a, null, {
+      }, r.getReports = function(n, o, r, i) {
+        var a = new t._Promise,
+          s = t._joinUrl(n, o);
+        return e.viewer._httpRequest(s, i, {
           data: r,
           success: function(e) {
-            i.resolve(JSON.parse(e.responseText))
+            a.resolve(JSON.parse(e.responseText))
           },
           error: function(e) {
-            return i.reject(e)
+            return a.reject(e)
           }
-        }), i
+        }), a
       }, Object.defineProperty(r.prototype, "reportName", {
         get: function() {
           return this._reportName
@@ -3386,7 +3392,7 @@ var __extends = this && this.__extends || function() {
         return this.hostElement.offsetWidth - parseFloat(e.marginLeft) - parseFloat(e.marginRight)
       }, r.prototype._setPageTransform = function(e, n) {
         var o;
-        if (e) {
+        if (e && !(n < 0)) {
           var r = this._getPageSize(n),
             i = this._pages[n].rotateAngle;
           e.style.height = r.height.valueInPixel * this._zoomFactor + "px", e.style.width = r.width.valueInPixel * this._zoomFactor + "px", (o = e.querySelector("g")) && (o.parentNode.setAttribute("height", r.height.valueInPixel * this._zoomFactor + "px"), o.parentNode.setAttribute("width", r.width.valueInPixel * this._zoomFactor + "px"), t._transformSvg(o.parentNode, this._pages[n].size.width.valueInPixel, this._pages[n].size.height.valueInPixel, this._zoomFactor, i))
@@ -3420,9 +3426,10 @@ var __extends = this && this.__extends || function() {
       }, r.prototype.moveToPosition = function(e) {
         var n = this,
           o = e.pageIndex || 0,
-          r = new t._Promise;
-        return !this.pages || o < 0 ? (r.resolve(o), r) : (o = this.resolvePageIndex(o), e.pageIndex = o, o !== this._pageIndex ? (this._updatePageIndex(o), r = this._render(o)) : r.resolve(o), r.then(function() {
-          n.pages && n._moveToPagePosition(e)
+          r = new t._Promise,
+          i = this.pageIndex;
+        return !this.pages || o < 0 ? (r.resolve(o), r) : (o = this.resolvePageIndex(o), e.pageIndex = o, o !== i ? (this._updatePageIndex(o), r = this._render(o)) : r.resolve(o), r.then(function() {
+          n.pages && (e.samePage = o === i, n._moveToPagePosition(e))
         }), r.then(function(e) {
           return o
         }).then(function() {
@@ -3746,7 +3753,7 @@ var __extends = this && this.__extends || function() {
           o = e.pageBounds ? i._pageMargin : 0,
           r = this.pages[this.pageIndex],
           a = t._getTransformedPosition(n, r.size, r.rotateAngle, this.zoomFactor);
-        this._pagesContainer.scrollTop = a.y + o, this._pagesContainer.scrollLeft = a.x + o
+        e.samePage || (this._pagesContainer.scrollTop = a.y + o, this._pagesContainer.scrollLeft = a.x + o)
       }, o.prototype._hitTestPageIndex = function(e) {
         return this.pageIndex
       }, o.prototype._pointInViewPanelClientArea = function(e, t) {
@@ -3887,9 +3894,11 @@ var __extends = this && this.__extends || function() {
           n.style.height = o.height.valueInPixel * this.zoomFactor + "px", n.style.width = o.width.valueInPixel * this.zoomFactor + "px"
         }
       }, r.prototype._updatePageViewTransform = function() {
-        var e;
-        e = this._pagesWrapper.querySelectorAll(".wj-view-page");
-        for (var t = 0; t < e.length; t++) this._setPageTransform(e.item(t), t)
+        if (this.pages && this.pages.length) {
+          var e;
+          e = this._pagesWrapper.querySelectorAll(".wj-view-page");
+          for (var t = 0; t < e.length; t++) this._setPageTransform(e.item(t), t)
+        }
       }, r.prototype._zoomToViewWidth = function() {
         if (this.pages && 0 != this.pages.length) {
           var e, t;
@@ -4142,7 +4151,7 @@ var __extends = this && this.__extends || function() {
     var n = function(n) {
       function o(e, o, r) {
         var i = n.call(this, document.createElement("div"), r) || this;
-        return i.owner = o, i.hostElement.style.display = "none", i.owner.appendChild(i.hostElement), i.showDropDownButton = !1, i.itemClicked.addHandler(i._onItemClicked, i), i.formatItem.addHandler(i._formatItem, i), i._viewer = e, i.displayMemberPath = "title", i.selectedValuePath = "commandTag", i._bindMenuItems(), i._viewer._viewerActionStatusChanged.addHandler(function(e, n) {
+        return i.owner = o, i.hostElement.style.display = "none", i.owner.appendChild(i.hostElement), i.showDropDownButton = !1, i.itemClicked.addHandler(i._onItemClicked, i), i.formatItem.addHandler(i._formatItem, i), i._viewer = e, i._bindMenuItems(), i.displayMemberPath = "title", i.selectedValuePath = "commandTag", i._viewer._viewerActionStatusChanged.addHandler(function(e, n) {
           var o = i.dropDown.querySelector("[" + t._commandTagAttr + '="' + n.action.actionType.toString() + '"]');
           i._updateActionStatusCore(o, n.action)
         }), i
@@ -4922,7 +4931,7 @@ var __extends = this && this.__extends || function() {
         })
       }, u.prototype._ensureExportFormatsLoaded = function() {
         var e = this;
-        if (!this._exportFormats && this._documentSource && !this._documentSource.isDisposed) return this._documentSource.getSupportedExportDescriptions().then(function(t) {
+        if (!this._exportFormats && this._documentSource && !this._documentSource.isDisposed && this._documentSource.isInstanceCreated) return this._documentSource.getSupportedExportDescriptions().then(function(t) {
           e._exportFormats = t, e._setViewerAction(l.ShowExportsPanel)
         });
         var n = new t._Promise;
@@ -5481,7 +5490,7 @@ var __extends = this && this.__extends || function() {
         this._isPositionEquals(t, n.position, e) && this.viewMode === n.viewMode && this.zoomMode === n.zoomMode && this.zoomFactor === n.zoomFactor && !this._isPageAnglesChanged(n.pageAngles) || (n.position = n.position || this._getCurrentPosition(), n.viewMode = null == n.viewMode ? this.viewMode : n.viewMode, n.zoomMode = null == n.zoomMode ? this.zoomMode : n.zoomMode, n.zoomFactor = null == n.zoomFactor ? this.zoomFactor : n.zoomFactor, n.pageAngles || this._updateCurrentPageAngles(n), this._historyManager.add(), this._updateHistoryCurrent())
       }, u.prototype._addHistory = function(e, t, n) {
         var o = this;
-        this.isUpdating || this._historyMoving || (t ? (this._mergeHistory(n), null != this._historyTimer && clearTimeout(this._historyTimer), this._historyTimer = setTimeout(function() {
+        this.isUpdating || this._historyMoving || !this._isDocumentSourceLoaded() || (t ? (this._mergeHistory(n), null != this._historyTimer && clearTimeout(this._historyTimer), this._historyTimer = setTimeout(function() {
           o._historyTimer = null, o._innerAddHistory(e)
         }, u._historyTimeout)) : this._innerAddHistory(e))
       }, u.prototype._updateCurrentPageAngles = function(e) {
@@ -5615,7 +5624,9 @@ var __extends = this && this.__extends || function() {
         this.queryLoadingData.raise(this, e)
       }, u.prototype.onBeforeSendRequest = function(e) {
         this.beforeSendRequest.raise(this, e)
-      }, u._seperatorHtml = "<div class='wj-separator' style='width:100%;height: 1px;margin: 3px 0;background-color:rgba(0,0,0,.2)'/>", u._viewpanelContainerMinHeight = 300, u._miniToolbarPinnedTime = 3e3, u._narrowCss = "narrow", u._narrowWidthThreshold = 400, u._thumbnailWidth = 100, u._historyTimeout = 300, u._defaultZoomValues = [{
+      }, u.prototype.beforeSend = function(e) {
+        this.onBeforeSendRequest(e)
+      }, u._seperatorHtml = "<div class='wj-separator' style='width:100%;height: 1px;margin: 3px 0;background-color:rgba(0,0,0,.2)'></div>", u._viewpanelContainerMinHeight = 300, u._miniToolbarPinnedTime = 3e3, u._narrowCss = "narrow", u._narrowWidthThreshold = 400, u._thumbnailWidth = 100, u._historyTimeout = 300, u._defaultZoomValues = [{
         name: e.Globalize.format(.05, "p0"),
         value: .05
       }, {
@@ -5920,10 +5931,10 @@ var __extends = this && this.__extends || function() {
           },
           enumerable: !0,
           configurable: !0
-        }), i.getReportNames = function(e, n) {
-          return t._Report.getReportNames(e, n)
-        }, i.getReports = function(e, n, o) {
-          return t._Report.getReports(e, n, o)
+        }), i.getReportNames = function(e, n, o) {
+          return t._Report.getReportNames(e, n, o)
+        }, i.getReports = function(e, n, o, r) {
+          return t._Report.getReports(e, n, o, r)
         }, i.prototype.onQueryLoadingData = function(e) {
           var t = this;
           this.parameters && Object.keys(this.parameters).forEach(function(n) {
@@ -5939,12 +5950,10 @@ var __extends = this && this.__extends || function() {
               e.Control.getControl(this._sidePanel).active(this._parametersPageId)
           }
         }, i.prototype._executeCustomAction = function(e) {
-          if (this._isArReport()) {
-            if (e.arKind === t._ArActionKind.Drillthrough) {
-              var n = JSON.parse(e.data),
-                r = this._getDocumentSource();
-              r._innerService.setDrillthroughData(n), r._updateIsLoadCompleted(!1), this._loadDocument(r, !0, !1)
-            }
+          if (this._isArReport() && e.arKind === t._ArActionKind.Drillthrough) {
+            var n = JSON.parse(e.data),
+              r = this._getDocumentSource();
+            r._innerService.setDrillthroughData(n), r._updateIsLoadCompleted(!1), this._loadDocument(r, !0, !1)
           } else o.prototype._executeCustomAction.call(this, e)
         }, i.prototype._actionIsDisabled = function(e) {
           switch (e) {

@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -38,7 +38,7 @@ var __extends = this && this.__extends || function() {
           return o && t.save(o), t
         }, o.saveAsync = function(e, l, o, t, r) {
           var n = this._saveFlexGridToWorkbook(e, l);
-          return n.saveAsync(o, t, r), n
+          return o && n.saveAsync(o, t, r), n
         }, o.load = function(l, o, t) {
           var r = this;
           if (o instanceof Blob) {
@@ -190,45 +190,45 @@ var __extends = this && this.__extends || function() {
             j && (o.wj_sheetInfo.name = x.name, o.wj_sheetInfo.visible = !0 === M || !1 !== x.visible, o.wj_sheetInfo.styledCells = F, o.wj_sheetInfo.mergedRanges = B, o.wj_sheetInfo.fonts = H, o.wj_sheetInfo.tables = x.tables)
           }
         }, o._parseFlexGridRowToSheetRow = function(o, t, n, s, i, a, d, u, c, f, h, p) {
-          var x, g, m, w, y, b, _, C, k, v, S, T, W, R, A, F, B, H, N, D, E, I, z, G, L, O, M, j, P = !1,
-            V = !1;
-          for (H = (x = o.grid).wj_sheetInfo, null == (g = o.rows[n]).recordIndex ? (I = 0, o.cellType === e.grid.CellType.ColumnHeader && o.rows.length > 1 && (I = n === i.length ? n - 1 : n)) : I = g.recordIndex, t.cells || (t.cells = []), t.visible = g.isVisible, t.height = g.renderHeight || o.rows.defaultSize, t.groupLevel = f, c && (t.collapsed = g.isCollapsed), g.wordWrap && (t.style = {
+          var x, g, m, w, y, b, _, C, k, v, S, T, W, R, A, F, B, H, N, D, E, I, z, G, L, O, M, j, P, V, U = !1,
+            X = !1;
+          for ((N = (x = o.grid).wj_sheetInfo) && (D = N.evaluateFormula), null == (g = o.rows[n]).recordIndex ? (G = 0, o.cellType === e.grid.CellType.ColumnHeader && o.rows.length > 1 && (G = n === i.length ? n - 1 : n)) : G = g.recordIndex, t.cells || (t.cells = []), t.visible = g.isVisible, t.height = g.renderHeight || o.rows.defaultSize, t.groupLevel = f, c && (t.collapsed = g.isCollapsed), g.wordWrap && (t.style = {
             wordWrap: g.wordWrap
-          }), (g.constructor === e.grid.Row || g.constructor === e.grid._NewRowTemplate || e.grid.detail && g.constructor === e.grid.detail.DetailRow || e.grid.multirow && g.constructor === e.grid.multirow._MultiRow) && (P = !0), e.grid.detail && g.constructor === e.grid.detail.DetailRow && (V = !0), w = 0; w < o.columns.length; w++)
-            if (y = null, B = 1, F = 1, M = 0, E = !1, R = null, L = null, G = null, C = null, D = x._getBindingColumn(o, n, o.columns[w]), A = null, H && o === x.cells ? (W = n * o.columns.length + w, H.mergedRanges && (A = this._getMergedRange(n, w, H.mergedRanges)), H.styledCells && (R = H.styledCells[W])) : a && (G = this._getMeasureCell(o, w, d, u), R = (A = x.getMergedRange(o, n, w, !1)) ? this._getCellStyle(o, G, A.bottomRow, A.rightCol) || {} : this._getCellStyle(o, G, n, w) || {}), A || (A = x.getMergedRange(o, n, w, !1)), A ? n === A.topRow && w === A.leftCol && (F = A.bottomRow - A.topRow + 1, B = this._getColSpan(o, A, h), E = !0) : E = !0, !h || h(D)) {
-              if (m = i[I] ? i[I][w + s] : null, P || c ? (_ = E ? o.getCellData(n, w, !0) : null, k = E ? o.getCellData(n, w, !1) : null, S = !1, _ && e.isString(_) && _.length > 1 && "=" === _[0] && (S = !0), N = e.isDate(k), R && R.format ? (y = R.format, /[hsmyt\:]/i.test(y) && (N = !0), b = e.xlsx.Workbook._parseCellFormat(R.format, N)) : m && m.style && m.style.format ? (y = D.format, b = m.style.format) : b = null, b || (N ? b = "m/d/yyyy" : e.isNumber(k) && !D.dataMap ? b = e.isInt(k) ? "#,##0" : "#,##0.00" : S ? (T = _.toLowerCase()).indexOf("now()") > -1 ? (b = "m/d/yyyy h:mm", N = !0) : T.indexOf("today()") > -1 || T.indexOf("date(") > -1 ? (b = "m/d/yyyy", N = !0) : T.indexOf("time(") > -1 && (b = "h:mm AM/PM", N = !0) : b = "General")) : (_ = E ? x.columnHeaders.getCellData(0, w, !0) : null, b = "General"), e.isString(_) && -1 !== _.indexOf("<span") && (C = this._parseToTextRuns(_), _ = null), L = this._parseCellStyle(R) || {}, o === x.cells && c && g.hasChildren && w === x.columns.firstVisibleIndex) {
-                if (_ ? v = _ : E && (v = g.getGroupHeader().replace(/<\/?\w+>/g, "").replace(/&#39;/g, "'")), null == v && !R) continue;
-                !(N = e.isDate(v)) && y && "d" === y.toLowerCase() && e.isInt(v) && (b = "0"), v = e.isString(v) ? e.xlsx.Workbook._unescapeXML(v) : v, w === x.columns.firstVisibleIndex && x.treeIndent && (M = f), z = {
+          }), (g.constructor === e.grid.Row || g.constructor === e.grid._NewRowTemplate || e.grid.detail && g.constructor === e.grid.detail.DetailRow || e.grid.multirow && g.constructor === e.grid.multirow._MultiRow) && (U = !0), e.grid.detail && g.constructor === e.grid.detail.DetailRow && (X = !0), w = 0; w < o.columns.length; w++)
+            if (y = null, H = 1, B = 1, P = 0, z = !1, A = null, M = null, O = null, C = null, I = x._getBindingColumn(o, n, o.columns[w]), F = null, N && o === x.cells ? (R = n * o.columns.length + w, N.mergedRanges && (F = this._getMergedRange(n, w, N.mergedRanges)), N.styledCells && (A = N.styledCells[R])) : a && (O = this._getMeasureCell(o, w, d, u), A = (F = x.getMergedRange(o, n, w, !1)) ? this._getCellStyle(o, O, F.bottomRow, F.rightCol) || {} : this._getCellStyle(o, O, n, w) || {}), F || (F = x.getMergedRange(o, n, w, !1)), F ? n === F.topRow && w === F.leftCol && (B = F.bottomRow - F.topRow + 1, H = this._getColSpan(o, F, h), z = !0) : z = !0, !h || h(I)) {
+              if (m = i[G] ? i[G][w + s] : null, U || c ? (_ = z ? o.getCellData(n, w, !0) : null, k = z ? o.getCellData(n, w, !1) : null, S = !1, W = null, _ && e.isString(_) && _.length > 1 && "=" === _[0] && (S = !0), E = e.isDate(k), A && A.format ? (y = A.format, /[hsmyt\:]/i.test(y) && (E = !0), b = e.xlsx.Workbook._parseCellFormat(A.format, E)) : m && m.style && m.style.format ? (y = I.format, b = m.style.format) : b = null, S && null != D && e.isFunction(D) && (W = D(_)), b || (E ? b = "m/d/yyyy" : e.isNumber(k) && !I.dataMap ? b = e.isInt(k) ? "#,##0" : "#,##0.00" : S ? (T = _.toLowerCase()).indexOf("now()") > -1 ? (b = "m/d/yyyy h:mm", E = !0) : T.indexOf("today()") > -1 || T.indexOf("date(") > -1 ? (b = "m/d/yyyy", E = !0) : T.indexOf("time(") > -1 && (b = "h:mm AM/PM", E = !0) : b = "General")) : (_ = z ? x.columnHeaders.getCellData(0, w, !0) : null, b = "General"), e.isString(_) && -1 !== _.indexOf("<span") && (C = this._parseToTextRuns(_), _ = null), M = this._parseCellStyle(A) || {}, o === x.cells && c && g.hasChildren && w === x.columns.firstVisibleIndex) {
+                if (S && null != W ? v = W : _ ? v = _ : z && (v = g.getGroupHeader().replace(/<\/?\w+>/g, "").replace(/&#39;/g, "'")), null == v && !A) continue;
+                !(E = e.isDate(v)) && y && "d" === y.toLowerCase() && e.isInt(v) && (b = "0"), v = e.isString(v) ? e.xlsx.Workbook._unescapeXML(v) : v, w === x.columns.firstVisibleIndex && x.treeIndent && (P = f), L = {
                   value: v,
-                  isDate: N,
-                  formula: S ? this._parseToExcelFormula(_, N) : null,
-                  colSpan: B,
-                  rowSpan: F,
-                  style: this._extend(L, {
+                  isDate: E,
+                  formula: S ? this._parseToExcelFormula(_, E) : null,
+                  colSpan: H,
+                  rowSpan: B,
+                  style: this._extend(M, {
                     format: b,
                     font: {
                       bold: !0
                     },
                     hAlign: e.xlsx.HAlign.Left,
-                    indent: M
+                    indent: P
                   }),
                   textRuns: C
                 }
-              } else _ = e.isString(_) ? e.xlsx.Workbook._unescapeXML(_) : _, k = e.isString(k) ? e.xlsx.Workbook._unescapeXML(k) : k, !N && y && "d" === y.toLowerCase() && e.isInt(k) && (b = "0"), O = L && L.hAlign ? L.hAlign : m && m.style && null != m.style.hAlign ? e.asEnum(m.style.hAlign, e.xlsx.HAlign, !0) : e.isDate(k) ? e.xlsx.HAlign.Left : e.xlsx.HAlign.General, w !== x.columns.firstVisibleIndex || !x.treeIndent || O !== e.xlsx.HAlign.Left && O !== e.xlsx.HAlign.General || (M = f), z = {
-                value: S ? null : "General" === b ? _ : k,
-                isDate: N,
-                formula: S ? this._parseToExcelFormula(_, N) : null,
-                colSpan: w < x.columns.firstVisibleIndex ? 1 : B,
-                rowSpan: F,
-                style: this._extend(L, {
+              } else _ = e.isString(_) ? e.xlsx.Workbook._unescapeXML(_) : _, k = e.isString(k) ? e.xlsx.Workbook._unescapeXML(k) : k, !E && y && "d" === y.toLowerCase() && e.isInt(k) && (b = "0"), j = M && M.hAlign ? M.hAlign : m && m.style && null != m.style.hAlign ? e.asEnum(m.style.hAlign, e.xlsx.HAlign, !0) : e.isDate(k) ? e.xlsx.HAlign.Left : e.xlsx.HAlign.General, w !== x.columns.firstVisibleIndex || !x.treeIndent || j !== e.xlsx.HAlign.Left && j !== e.xlsx.HAlign.General || (P = f), L = {
+                value: S ? W : "General" === b ? _ : k,
+                isDate: E,
+                formula: S ? this._parseToExcelFormula(_, E) : null,
+                colSpan: w < x.columns.firstVisibleIndex ? 1 : H,
+                rowSpan: B,
+                style: this._extend(M, {
                   format: b,
-                  hAlign: O,
-                  vAlign: F > 1 ? o === x.cells || !1 === x.centerHeadersVertically ? e.xlsx.VAlign.Top : e.xlsx.VAlign.Center : null,
-                  indent: M
+                  hAlign: j,
+                  vAlign: B > 1 ? o === x.cells || !1 === x.centerHeadersVertically ? e.xlsx.VAlign.Top : e.xlsx.VAlign.Center : null,
+                  indent: P
                 }),
                 textRuns: C
-              }, V && (j = o.getCellElement(n, w)) && j.appendChild(g.detail);
-              p && p(new r(o, new l.CellRange(n, w), G, d, u, z)), t.cells.push(z)
+              }, X && (V = o.getCellElement(n, w)) && V.appendChild(g.detail);
+              p && p(new r(o, new l.CellRange(n, w), O, d, u, L)), t.cells.push(L)
             }
           return s + w
         }, o._parseCellStyle = function(l, o) {

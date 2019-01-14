@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -220,21 +220,16 @@ var __extends = this && this.__extends || function() {
             case t.CellType.ColumnHeader:
               var c = a._cellGroupsByColumn[i];
               e.assert(c instanceof o._CellGroup, "Failed to get the group!");
-              var u = r.cellType == t.CellType.ColumnHeader ? c.getMergedRange(r, l - 1, i) : c.getMergedRange(r, l, i);
-              if (u && r.columns.frozen) {
+              var u = r.cellType == t.CellType.ColumnHeader ? c.getMergedRange(r, l - 1, i) : c.getMergedRange(r, l, i),
                 p = r.columns.frozen;
-                u.col < p && u.col2 >= p && (i < p ? u.col2 = p - 1 : u.col = p)
-              }
-              if (u && r.rows.frozen && r.cellType == t.CellType.Cell) {
-                var p = r.rows.frozen;
-                u.row < p && u.row2 >= p && (l < p ? u.row2 = p - 1 : u.row = p)
-              }
-              return u;
+              p && u && u.columnSpan > 1 && u.col < p && u.col2 >= p && (u = u.clone(), i < p ? u.col2 = p - 1 : u.col = p);
+              var d = r.rows.frozen;
+              return d && u && u.rowSpan > 1 && r.cellType == t.CellType.Cell && u.row < d && u.row2 >= d && (u = u.clone(), l < d ? u.row2 = d - 1 : u.row = d), u;
             case t.CellType.RowHeader:
-              var d = a._rowsPerItem,
-                _ = l - r.rows[l].recordIndex,
-                h = Math.min(_ + d - 1, r.rows.length - 1);
-              return new t.CellRange(_, 0, h, r.columns.length - 1);
+              var _ = a._rowsPerItem,
+                h = l - r.rows[l].recordIndex,
+                f = Math.min(h + _ - 1, r.rows.length - 1);
+              return new t.CellRange(h, 0, f, r.columns.length - 1);
             case t.CellType.TopLeft:
               return new t.CellRange(0, 0, r.rows.length - 1, r.columns.length - 1)
           }
@@ -384,11 +379,8 @@ var __extends = this && this.__extends || function() {
         }), r.prototype.getBindingColumn = function(e, t, o) {
           return this._getBindingColumn(e, t, e.columns[o])
         }, r.prototype.getColumn = function(e) {
-          for (var t = this._cellBindingGroups, o = 0; o < t.length; o++) {
-            var n = t[o].getColumn(e);
-            if (t[o].getBindingColumn, n) return n
-          }
-          return null
+          for (var t, o = this._cellBindingGroups, n = 0; n < o.length && !t; n++) t = o[n].getColumn(e);
+          return t
         }, Object.defineProperty(r.prototype, "centerHeadersVertically", {
           get: function() {
             return this._centerVert
@@ -467,20 +459,23 @@ var __extends = this && this.__extends || function() {
           return o
         }, r.prototype._cvCollectionChanged = function(n, r) {
           if (this.autoGenerateColumns && 0 == this.columns.length) this._bindGrid(!0);
-          else switch (r.action) {
-            case e.collections.NotifyCollectionChangedAction.Change:
-              this.invalidate();
-              break;
-            case e.collections.NotifyCollectionChangedAction.Add:
-              if (r.index == this.collectionView.items.length - 1) {
-                for (var l = this.rows.length; l > 0 && this.rows[l - 1] instanceof t._NewRowTemplate;) l--;
-                for (var i = 0; i < this._rowsPerItem; i++) this.rows.insert(l + i, new o._MultiRow(r.item, r.index, i));
-                return
-              }
-              e.assert(!1, "added item should be the last one.");
-              break;
-            default:
-              this._bindGrid(!1)
+          else {
+            var l = e.collections.NotifyCollectionChangedAction;
+            switch (r.action) {
+              case l.Change:
+                this.invalidate();
+                break;
+              case l.Add:
+                if (r.index == this.collectionView.items.length - 1) {
+                  for (var i = this.rows.length; i > 0 && this.rows[i - 1] instanceof t._NewRowTemplate;) i--;
+                  for (var s = 0; s < this._rowsPerItem; s++) this.rows.insert(i + s, new o._MultiRow(r.item, r.index, s));
+                  return
+                }
+                e.assert(!1, "added item should be the last one.");
+                break;
+              default:
+                this._bindGrid(!1)
+            }
           }
         }, r.prototype._parseCellGroups = function(e) {
           var t = [],
@@ -497,28 +492,34 @@ var __extends = this && this.__extends || function() {
           var l = this._rowsPerItem,
             i = r.panel.cellType,
             s = r.panel.rows[r.range.row],
-            a = r.panel.rows[r.range.row2];
-          if (i == t.CellType.ColumnHeader && e.toggleClass(r.cell, "wj-group-header", 0 == r.range.row), i == t.CellType.Cell || i == t.CellType.ColumnHeader) {
-            var c = this._cellGroupsByColumn[r.col];
-            e.assert(c instanceof o._CellGroup, "Failed to get the group!"), e.toggleClass(r.cell, "wj-group-start", c._colstart == r.range.col), e.toggleClass(r.cell, "wj-group-end", c._colstart + c._colspan - 1 == r.range.col2)
+            a = r.panel.rows[r.range.row2],
+            c = r.cell;
+          if (i == t.CellType.ColumnHeader && e.toggleClass(c, "wj-group-header", 0 == r.range.row), i == t.CellType.Cell || i == t.CellType.ColumnHeader) {
+            var u = this._cellGroupsByColumn[r.col];
+            e.assert(u instanceof o._CellGroup, "Failed to get the group!"), e.toggleClass(c, "wj-group-start", u._colstart == r.range.col), e.toggleClass(c, "wj-group-end", u._colstart + u._colspan - 1 == r.range.col2)
           }
-          if (l > 1 && (i != t.CellType.Cell && i != t.CellType.RowHeader || (e.toggleClass(r.cell, "wj-record-start", s instanceof o._MultiRow && 0 == s.recordIndex), e.toggleClass(r.cell, "wj-record-end", a instanceof o._MultiRow && a.recordIndex == l - 1))), this.showAlternatingRows && e.toggleClass(r.cell, "wj-alt", s instanceof o._MultiRow && s.dataIndex % 2 != 0), this._centerVert)
-            if (r.cell.hasChildNodes && r.range.rowSpan > 1) {
-              var u = e.createElement('<div style="display:table-cell;vertical-align:middle"></div>'),
-                p = document.createRange();
-              p.selectNodeContents(r.cell), p.surroundContents(u), e.setCss(r.cell, {
+          if (l > 1 && (i != t.CellType.Cell && i != t.CellType.RowHeader || (e.toggleClass(c, "wj-record-start", s instanceof o._MultiRow && 0 == s.recordIndex), e.toggleClass(c, "wj-record-end", a instanceof o._MultiRow && a.recordIndex == l - 1))), this.showAlternatingRows && e.toggleClass(c, "wj-alt", s instanceof o._MultiRow && s.dataIndex % 2 != 0), this._centerVert)
+            if (c.hasChildNodes && r.range.rowSpan > 1) {
+              var p = document.createElement("div"),
+                d = document.createRange();
+              e.setCss(p, {
+                display: "table-cell",
+                verticalAlign: "middle",
+                overflow: "inherit",
+                textOverflow: "inherit"
+              }), d.selectNodeContents(c), d.surroundContents(p), e.setCss(c, {
                 display: "table",
                 tableLayout: "fixed",
                 paddingTop: 0,
                 paddingBottom: 0
               })
             } else {
-              var d = r.cell.querySelector("input") ? "0px" : "";
-              e.setCss(r.cell, {
+              var _ = c.querySelector("input") && !c.querySelector("input[type=checkbox]") ? "0" : "";
+              e.setCss(c, {
                 display: "",
                 tableLayout: "",
-                paddingTop: d,
-                paddingBottom: d
+                paddingTop: _,
+                paddingBottom: _
               })
             }
         }, r.prototype._updateButtonGlyph = function() {

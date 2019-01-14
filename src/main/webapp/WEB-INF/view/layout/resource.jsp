@@ -7,7 +7,7 @@
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=2018112001" media="all"/>
-<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=520182500"/>
+<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=520183550"/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=2018112001"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=470" />
 <%-- third-party plug-in --%>
@@ -19,21 +19,21 @@
 <script type="text/javascript" src="/resource/vendor/angularjs/angular-route.min.js?ver=175"></script>
 <script type="text/javascript" src="/resource/vendor/prefixfree/prefixfree.min.js?ver=106" charset="utf-8"></script>
 <%-- wijmo plug-in --%>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js?ver=520182500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.min.js?ver=520183550" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.license.key.js?ver=20181231" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/cultures/wijmo.culture.ko.min.js?ver=520182500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/cultures/wijmo.culture.ko.min.js?ver=520183550" charset="utf-8"></script>
 <%-- wijmo-modules plug-in --%>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.xlsx.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/output/wijmo.xlsx.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/input/wijmo.input.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/nav/wijmo.nav.min.js?ver=520182500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.xlsx.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/output/wijmo.xlsx.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/input/wijmo.input.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/nav/wijmo.nav.min.js?ver=520183550" charset="utf-8"></script>
 <%-- wijmo-xlsx plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jszip/js/jszip.min.js?ver=315 " charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.animation.min.js?ver=520182500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.animation.min.js?ver=520183550" charset="utf-8"></script>
 <%-- wijmo-angularJS plug-in --%>
-<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=520182500" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=520183550" charset="utf-8"></script>
 <%-- solbi plug-in --%>
 <script type="text/javascript" src="/resource/solbipos/js/common/common.js?ver=2018123001" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/StringUtil.js?ver=2018100401" charset="utf-8"></script>

@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -49,24 +49,30 @@ var __extends = this && this.__extends || function() {
         t.setAriaLabel(o._btn.querySelector("button"), r.tgl);
         var a = o._tbx;
         o._elRef = a, t.disableAutoComplete(a), o._createDropDown(), o._updateBtn(), t.removeChild(o._dropDown), t.addClass(o.hostElement, "wj-state-collapsed");
-        var l = o._updateFocusState.bind(o);
-        o.addEventListener(o.dropDown, "blur", l, !0), o.addEventListener(o.dropDown, "focus", l);
-        var h = o._keydown.bind(o);
-        return o.addEventListener(o.hostElement, "keydown", h), o.addEventListener(o.dropDown, "keydown", h), o.addEventListener(a, "keypress", function(t) {
+        var l = o.addEventListener.bind(o),
+          h = o._updateFocusState.bind(o);
+        l(o.dropDown, "blur", h, !0), l(o.dropDown, "focus", h);
+        var c = o._keydown.bind(o);
+        return l(o.hostElement, "keydown", c), l(o.dropDown, "keydown", c), l(a, "keypress", function(t) {
           9787 == t.keyCode && o._altDown && t.preventDefault()
-        }), o.addEventListener(a, "input", function() {
+        }), l(a, "keyup", function(t) {
+          o._altDown = o._altDown || t.altKey
+        }), l(a, "input", function() {
           o._setText(o.text, !1)
-        }), o.addEventListener(a, "click", function() {
+        }), l(a, "click", function() {
           o._autoExpand && o._expandSelection()
-        }), t.isIE9() && o.addEventListener(a, "keyup", function() {
+        }), l(o._btn, "mousedown", function(t) {
+          t.defaultPrevented || 0 != t.button || (o._btn.focus(), o._btnclick(t), t.preventDefault())
+        }), t.isIE() && o._elRef == o._tbx && l(o.hostElement, "mouseup", function(e) {
+          if (!e.defaultPrevented && 0 == e.button && t.hasClass(e.target, "wj-btn")) {
+            var i = t.getActiveElement();
+            i && i != e.target && setTimeout(function() {
+              i.focus()
+            })
+          }
+        }), t.isIE9() && l(a, "keyup", function() {
           o._setText(o.text, !1)
-        }), o.addEventListener(o._btn, "mousedown", function(t) {
-          t.defaultPrevented || 0 != t.button || setTimeout(function() {
-            o._btnclick(t)
-          })
-        }), o.addEventListener(o._dropDown, "click", function(t) {
-          t.stopPropagation()
-        }), o
+        }), l(o._dropDown, "click", o._dropDownClick.bind(o)), o
       }
       return __extends(i, e), Object.defineProperty(i.prototype, "text", {
         get: function() {
@@ -119,15 +125,18 @@ var __extends = this && this.__extends || function() {
           var i = this;
           if ((e = t.asBoolean(e) && !this.isDisabled && !this.isReadOnly) != this.isDroppedDown && this.onIsDroppedDownChanging(new t.CancelEventArgs)) {
             var n = this.hostElement,
-              o = this._dropDown,
-              s = o.style;
-            if (e) s.minWidth || (s.minWidth = n.getBoundingClientRect().width + "px"), s.display = "block", this._updateDropDown(), this.addEventListener(document.body, "touchstart", function(e) {
-              t.contains(n, e.target) || t.contains(o, e.target) || (i.isDroppedDown = !1)
+              o = this._dropDown;
+            if (e) this._minWidthDropdown = o.style.minWidth, o.style.display = "block", this._updateDropDown(), this.addEventListener(window, "touchstart", function(e) {
+              for (var o = e.target; o;) {
+                if (o == n) return;
+                o = o[t.Control._OWNR_KEY] || o.parentNode
+              }
+              t.Control._touching = !0, i.isDroppedDown = !1, t.Control._touching = !1
             });
             else {
-              this.removeEventListener(document.body, "touchstart");
-              var r = this.containsFocus();
-              t.hidePopup(o), r && (this.isTouching && this.showDropDownButton ? this.hostElement.focus() : this.selectAll())
+              this.removeEventListener(window, "touchstart");
+              var s = this.containsFocus();
+              t.hidePopup(o), s && (this.isTouching && this.showDropDownButton ? n.focus() : this.selectAll()), o.style.minWidth = this._minWidthDropdown
             }
             this._updateFocusState(), t.toggleClass(n, "wj-state-collapsed", !this.isDroppedDown), this.onIsDroppedDownChanged()
           }
@@ -199,12 +208,14 @@ var __extends = this && this.__extends || function() {
         }
         e.prototype.dispose.call(this)
       }, i.prototype.refresh = function(i) {
-        if (void 0 === i && (i = !0), e.prototype.refresh.call(this, i), this.isDroppedDown && "none" != getComputedStyle(this.hostElement).display) {
+        if (void 0 === i && (i = !0), e.prototype.refresh.call(this, i), this.hostElement.offsetHeight && this.isDroppedDown) {
           var n = t.getActiveElement();
-          t.showPopup(this._dropDown, this.hostElement, !1, !1, null == this.dropDownCssClass), n instanceof HTMLElement && n != t.getActiveElement() && n.focus()
+          this.isAnimated && "" != this._dropDown.style.opacity || t.showPopup(this._dropDown, this.hostElement, !1, !1, null == this.dropDownCssClass), n instanceof HTMLElement && n != t.getActiveElement() && n.focus()
         }
       }, i.prototype._handleResize = function() {
         this.isDroppedDown && this.refresh()
+      }, i.prototype._dropDownClick = function(t) {
+        t.stopPropagation()
       }, i.prototype._expandSelection = function() {
         var e = this._tbx,
           i = e.value,
@@ -243,8 +254,12 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._updateBtn = function() {
         this._btn.style.display = this._showBtn ? "" : "none"
       }, i.prototype._createDropDown = function() {}, i.prototype._commitText = function() {}, i.prototype._updateDropDown = function() {
-        this.isDroppedDown && (this._commitText(), t.showPopup(this._dropDown, this.hostElement, !1, this._animate, null == this.dropDownCssClass))
-      }, i.controlTemplate = '<div class="wj-template" style="position:relative"><div class="wj-input"><div class="wj-input-group wj-input-btn-visible"><input wj-part="input" type="text" class="wj-form-control"/><span wj-part="btn" class="wj-input-group-btn"><button class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-down"></span></button></span></div></div><div wj-part="dropdown" class="wj-content wj-dropdown-panel" style="display:none"></div></div>', i
+        if (this.isDroppedDown) {
+          this._commitText();
+          var e = this.dropDown;
+          t.setAttribute(e, "dir", this.rightToLeft ? "rtl" : null), t.showPopup(e, this.hostElement, !1, this._animate, null == this.dropDownCssClass)
+        }
+      }, i.controlTemplate = '<div class="wj-template"><div class="wj-input"><div class="wj-input-group wj-input-btn-visible"><input wj-part="input" type="text" class="wj-form-control"/><span wj-part="btn" class="wj-input-group-btn"><button class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-down"></span></button></span></div></div><div wj-part="dropdown" class="wj-content wj-dropdown-panel" style="display:none"></div></div>', i
     }(t.Control);
     e.DropDown = i
   }(t.input || (t.input = {}))
@@ -288,10 +303,17 @@ var __extends = this && this.__extends || function() {
     }(i = e.DateSelectionMode || (e.DateSelectionMode = {}));
     var n = function(n) {
       function o(e, o) {
-        var s = n.call(this, e) || this;
-        s._readOnly = !1, s._selMode = i.Day, s._fmtYrMo = "y", s._fmtYr = "yyyy", s._fmtDayHdr = "ddd", s._fmtDay = "d ", s._fmtMonths = "MMM", s.valueChanged = new t.Event, s.displayMonthChanged = new t.Event, s.formatItem = new t.Event;
+        var s = n.call(this, e, null, !0) || this;
+        s._readOnly = !1, s._selMode = i.Day, s._yrPicker = !0, s._fmtYrMo = "y", s._fmtYr = "yyyy", s._fmtDayHdr = "ddd", s._fmtDay = "d ", s._fmtMonths = "MMM", s.valueChanged = new t.Event, s.displayMonthChanged = new t.Event, s.formatItem = new t.Event;
         var r = s.hostElement;
-        return r.tabIndex = -1, s._value = t.DateTime.newDate(), s._currMonth = s._getMonth(s._value), s._createChildren(), s.addEventListener(r, "mouseup", s._click.bind(s)), s.addEventListener(r, "keydown", s._keydown.bind(s)), s.initialize(o), s.refresh(!0), s
+        return r.tabIndex = -1, s._value = t.DateTime.newDate(), s._currMonth = s._getMonth(s._value), s._createChildren(), s._createYearPicker(), s.addEventListener(r, "keydown", s._keydown.bind(s)), s.addEventListener(r, "click", s._click.bind(s)), s.addEventListener(r, "mousedown", function() {
+          s._yrPickerWasVisible = s._lbYears.hostElement.offsetHeight > 0
+        }), s._rptUp = new t._ClickRepeater(s._btnPrv), s._rptDn = new t._ClickRepeater(s._btnNxt), s.addEventListener(r, "wheel", function(e) {
+          if (!e.defaultPrevented && !s.isReadOnly && s.containsFocus()) {
+            t.clamp(-e.deltaY, -1, 1);
+            e.deltaY < 0 ? s._btnPrv.click() : s._btnNxt.click(), e.preventDefault()
+          }
+        }), s.initialize(o), s.refresh(!0), s
       }
       return __extends(o, n), Object.defineProperty(o.prototype, "value", {
         get: function() {
@@ -341,6 +363,24 @@ var __extends = this && this.__extends || function() {
         },
         set: function(e) {
           this._readOnly = t.asBoolean(e), t.toggleClass(this.hostElement, "wj-state-readonly", this.isReadOnly)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(o.prototype, "repeatButtons", {
+        get: function() {
+          return !this._rptUp.disabled
+        },
+        set: function(e) {
+          this._rptUp.disabled = this._rptDn.disabled = !t.asBoolean(e)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(o.prototype, "showYearPicker", {
+        get: function() {
+          return this._yrPicker
+        },
+        set: function(e) {
+          this._yrPicker = t.asBoolean(e)
         },
         enumerable: !0,
         configurable: !0
@@ -456,35 +496,40 @@ var __extends = this && this.__extends || function() {
         this.displayMonthChanged.raise(this, t)
       }, o.prototype.onFormatItem = function(t) {
         this.formatItem.raise(this, t)
+      }, o.prototype.containsFocus = function() {
+        return n.prototype.containsFocus.call(this) || this._lbYears.containsFocus()
+      }, o.prototype.dispose = function() {
+        this._rptUp.element = null, this._rptDn.element = null, this._lbYears.dispose(), n.prototype.dispose.call(this)
       }, o.prototype.refresh = function(i) {
         void 0 === i && (i = !0);
         var o, s, r, a = this.displayMonth,
           l = null != this.firstDayOfWeek ? this.firstDayOfWeek : t.Globalize.getFirstDayOfWeek(),
           h = this.hostElement,
           c = t.getActiveElement(),
-          u = t.contains(h, c) ? c : null;
+          u = this.containsFocus(),
+          p = t.contains(h, c) ? c : null;
         n.prototype.refresh.call(this, i), this._firstDay = t.DateTime.addDays(a, -(a.getDay() - l + 7) % 7), t.setText(this._spMth, t.Globalize.format(a, this._fmtYrMo)), o = this._tbMth.querySelectorAll("td");
-        for (b = 0; b < 7 && b < o.length; b++) r = t.DateTime.addDays(this._firstDay, b), t.setText(o[b], t.Globalize.format(r, this._fmtDayHdr));
-        for (b = 7; b < o.length; b++) {
-          s = o[b], r = t.DateTime.addDays(this._firstDay, b - 7), t.setText(s, t.Globalize.format(r, this._fmtDay));
-          var p = !this._valid(r),
-            d = this._selMode && t.DateTime.sameDate(r, this.value),
-            f = r.getDay();
-          if (t.toggleClass(s, "wj-state-invalid", p), t.toggleClass(s, "wj-state-selected", d), t.toggleClass(s, "wj-day-weekend", 0 == f || 6 == f), t.toggleClass(s, "wj-day-today", t.DateTime.sameDate(r, t.DateTime.newDate())), t.toggleClass(s, "wj-day-othermonth", p || r.getMonth() != a.getMonth() || !this._inValidRange(r)), t.setAttribute(s, "aria-selected", d), s.tabIndex = -1, this.itemFormatter && this.itemFormatter(r, s), this.formatItem.hasHandlers) {
-            var _ = new e.FormatItemEventArgs(b, r, s);
-            this.onFormatItem(_)
+        for (y = 0; y < 7 && y < o.length; y++) r = t.DateTime.addDays(this._firstDay, y), t.setText(o[y], t.Globalize.format(r, this._fmtDayHdr));
+        for (y = 7; y < o.length; y++) {
+          s = o[y], r = t.DateTime.addDays(this._firstDay, y - 7), t.setText(s, t.Globalize.format(r, this._fmtDay));
+          var d = !this._valid(r),
+            f = this._selMode && t.DateTime.sameDate(r, this.value),
+            _ = r.getDay();
+          if (t.toggleClass(s, "wj-state-invalid", d), t.toggleClass(s, "wj-state-selected", f), t.toggleClass(s, "wj-day-weekend", 0 == _ || 6 == _), t.toggleClass(s, "wj-day-today", t.DateTime.sameDate(r, t.DateTime.newDate())), t.toggleClass(s, "wj-day-othermonth", d || r.getMonth() != a.getMonth() || !this._inValidRange(r)), t.setAttribute(s, "aria-selected", f), s.tabIndex = -1, this.itemFormatter && this.itemFormatter(r, s), this.formatItem.hasHandlers) {
+            var m = new e.FormatItemEventArgs(y, r, s);
+            this.onFormatItem(m)
           }
         }
-        var m = this._tbMth.querySelectorAll("tr");
-        m.length && (r = t.DateTime.addDays(this._firstDay, 28), m[m.length - 2].style.display = r.getMonth() == a.getMonth() ? "" : "none", r = t.DateTime.addDays(this._firstDay, 35), m[m.length - 1].style.display = r.getMonth() == a.getMonth() ? "" : "none"), (o = this._tbYr.querySelectorAll("td")).length && t.setText(o[0], t.Globalize.format(a, this._fmtYr));
-        for (var b = 1; b < o.length; b++) {
-          r = t.DateTime.newDate(a.getFullYear(), b - 1, 1);
-          var p = !this._monthInValidRange(r),
-            d = this._sameMonth(r, this.value);
-          s = o[b], t.setText(s, t.Globalize.format(r, this._fmtMonths)), t.toggleClass(s, "wj-state-disabled", p), t.toggleClass(s, "wj-state-selected", d), t.setAttribute(s, "aria-selected", d), s.tabIndex = -1
+        var b = this._tbMth.querySelectorAll("tr");
+        b.length && (r = t.DateTime.addDays(this._firstDay, 28), b[b.length - 2].style.display = r.getMonth() == a.getMonth() ? "" : "none", r = t.DateTime.addDays(this._firstDay, 35), b[b.length - 1].style.display = r.getMonth() == a.getMonth() ? "" : "none"), (o = this._tbYr.querySelectorAll("td")).length && t.setText(o[0], t.Globalize.format(a, this._fmtYr));
+        for (var y = 1; y < o.length; y++) {
+          r = t.DateTime.newDate(a.getFullYear(), y - 1, 1);
+          var d = !this._monthInValidRange(r),
+            f = this._sameMonth(r, this.value);
+          s = o[y], t.setText(s, t.Globalize.format(r, this._fmtMonths)), t.toggleClass(s, "wj-state-disabled", d), t.toggleClass(s, "wj-state-selected", f), t.setAttribute(s, "aria-selected", f), s.tabIndex = -1
         }
-        var y = (this.monthView ? this._tbMth : this._tbYr).querySelector("td.wj-state-selected") || h;
-        y.tabIndex = this._orgTabIndex, u && u != y && (y.focus(), u.tabIndex = -1)
+        var g = (this.monthView ? this._tbMth : this._tbYr).querySelector("td.wj-state-selected") || h;
+        g.tabIndex = this._orgTabIndex, u && (p && p != g && (p.tabIndex = -1), g.focus())
       }, o.prototype._canChangeValue = function() {
         return !this._readOnly && this._selMode != i.None
       }, o.prototype._valid = function(e) {
@@ -504,7 +549,7 @@ var __extends = this && this.__extends || function() {
       }, o.prototype._yearInValidRange = function(e) {
         if (this.min || this.max) {
           var i = e.getFullYear(),
-            n = t.DateTime.newDate(i, 0),
+            n = t.DateTime.newDate(i, 0, 1),
             o = t.DateTime.newDate(i, 11, 31);
           if (this.min && this.min > o) return !1;
           if (this.max && this.max < n) return !1
@@ -555,36 +600,71 @@ var __extends = this && this.__extends || function() {
           n = this._createElement("tr", this._tbYr);
           for (var a = 0; a < 4; a++) this._createElement("td", n)
         }
+      }, o.prototype._createYearPicker = function() {
+        var e = this,
+          i = this.hostElement,
+          n = this._createElement("div", null, "wj-dropdown-panel wj-yearpicker");
+        n.tabIndex = this._orgTabIndex, this._lbYears = new t.input.ListBox(n, {
+          lostFocus: function(i, o) {
+            if (t.hidePopup(n), e.removeEventListener(window, "touchstart"), i.selectedIndex > -1) {
+              var s = t.DateTime.clone(e.displayMonth);
+              s.setFullYear(i.selectedIndex + i.itemsSource[0]), e.displayMonth = s
+            }
+          }
+        }), this.addEventListener(n, "keydown", function(n) {
+          switch (n.keyCode) {
+            case t.Key.Enter:
+              i.focus();
+              break;
+            case t.Key.Escape:
+              e._lbYears.selectedIndex = -1, i.focus()
+          }
+          n.defaultPrevented && n.stopPropagation()
+        }), this.addEventListener(n, "click", function(t) {
+          i.focus()
+        })
       }, o.prototype._createElement = function(e, i, n) {
         var o = document.createElement(e);
-        if (i && i.appendChild(o), n && t.addClass(o, n), "TD" == o.tagName) {
+        if (o.tabIndex = -1, n && t.addClass(o, n), "TD" == o.tagName) {
           var s = t.closest(o, ".wj-header") ? "columnheader" : "gridcell";
           t.setAttribute(o, "role", s), t.setAttribute(o, "aria-selected", !1)
         }
-        return o
+        return i && i.appendChild(o), o
       }, o.prototype._click = function(e) {
+        var i = this;
         if (!e.defaultPrevented && 0 == e.button) {
-          var i = !1,
-            n = e.target;
-          if (t.contains(this._btnMth, n) && !this._monthMode() ? (this.monthView = !this.monthView, i = !0) : t.contains(this._btnPrv, n) ? (this._navigate(-1), i = !0) : t.contains(this._btnNxt, n) ? (this._navigate(1), i = !0) : t.contains(this._btnTdy, n) && (this._navigate(0), i = !0), n && !i && (n = t.closest(n, "TD")))
-            if (this.monthView) {
-              if ((o = this._getCellIndex(this._tbMth, n)) > 6 && this._canChangeValue()) {
-                s = t.DateTime.fromDateTime(t.DateTime.addDays(this._firstDay, o - 7), this.value);
-                this._inValidRange(s) && this._valid(s) && (this.value = s), i = !0
+          var n = !1,
+            o = e.target;
+          if (t.contains(this._btnMth, o) && !this._monthMode() ? (this.monthView = !this.monthView, n = !0) : t.contains(this._btnPrv, o) ? (this._navigate(-1), n = !0) : t.contains(this._btnNxt, o) ? (this._navigate(1), n = !0) : t.contains(this._btnTdy, o) && (this._navigate(0), n = !0), o && !n && this._yrPicker && !this._yrPickerWasVisible && t.closest(o, ".wj-header") && t.closest(o, ".wj-calendar-year")) {
+            for (var s = t.closest(o, ".wj-header"), r = this.displayMonth.getFullYear(), a = this.min ? this.min.getFullYear() : r - 100, l = this.max ? this.max.getFullYear() : r + 100, h = [], c = a; c <= l; c++) h.push(c);
+            var u = this._lbYears,
+              p = u.hostElement;
+            return u.itemsSource = h, u.selectedIndex = r - h[0], t.setAttribute(p, "dir", this.rightToLeft ? "rtl" : null), p.style.minWidth = "", t.showPopup(p, s, !1, !1, this.hostElement), u.focus(), this.addEventListener(window, "touchstart", function(e) {
+              t.contains(p, e.target) || (t.hidePopup(p), i.removeEventListener(window, "touchstart"))
+            }), void e.preventDefault()
+          }
+          if (o && !n) {
+            var d = t.closest(o, "TD");
+            if (d)
+              if (this.monthView) {
+                if ((f = this._getCellIndex(this._tbMth, d)) > 6 && this._canChangeValue()) {
+                  _ = t.DateTime.fromDateTime(t.DateTime.addDays(this._firstDay, f - 7), this.value);
+                  this._inValidRange(_) && this._valid(_) && (this.value = _), n = !0
+                }
+              } else {
+                var f = this._getCellIndex(this._tbYr, d);
+                if (f > 0) {
+                  if (this.displayMonth = t.DateTime.newDate(this.displayMonth.getFullYear(), f - 1, 1), this._monthMode()) {
+                    if (this._canChangeValue()) {
+                      var _ = t.DateTime.fromDateTime(this.displayMonth, this.value);
+                      this._inValidRange(_) && (this.value = _)
+                    }
+                  } else this.monthView = !0;
+                  n = !0
+                }
               }
-            } else {
-              var o = this._getCellIndex(this._tbYr, n);
-              if (o > 0) {
-                if (this.displayMonth = t.DateTime.newDate(this.displayMonth.getFullYear(), o - 1, 1), this._monthMode()) {
-                  if (this._canChangeValue()) {
-                    var s = t.DateTime.fromDateTime(this.displayMonth, this.value);
-                    this._inValidRange(s) && (this.value = s)
-                  }
-                } else this.monthView = !0;
-                i = !0
-              }
-            }
-          i && (e.preventDefault(), this.focus())
+          }
+          n && (e.preventDefault(), this.focus())
         }
       }, o.prototype._getCellIndex = function(t, e) {
         for (var i = t.querySelectorAll("TD"), n = 0; n < i.length; n++)
@@ -600,37 +680,11 @@ var __extends = this && this.__extends || function() {
               return this._navigate(0), void e.preventDefault()
           }
           if (!(e.ctrlKey || e.metaKey || e.shiftKey)) {
-            var i = 0,
+            var i = this._getKeyCode(e),
               n = 0,
-              o = !0;
-            if (this.monthView) switch (e.keyCode) {
-              case t.Key.Left:
-                i = -1;
-                break;
-              case t.Key.Right:
-                i = 1;
-                break;
-              case t.Key.Up:
-                i = -7;
-                break;
-              case t.Key.Down:
-                i = 7;
-                break;
-              case t.Key.PageDown:
-                n = e.altKey ? 12 : 1;
-                break;
-              case t.Key.PageUp:
-                n = e.altKey ? -12 : -1;
-                break;
-              case t.Key.Home:
-                this._canChangeValue() && (s = this._getValidDate(this.value, !0)) && (this.value = t.DateTime.fromDateTime(s, this.value));
-                break;
-              case t.Key.End:
-                this._canChangeValue() && (s = this._getValidDate(this.value, !1)) && (this.value = t.DateTime.fromDateTime(s, this.value));
-                break;
-              default:
-                o = !1
-            } else switch (e.keyCode) {
+              o = 0,
+              s = !0;
+            if (this.monthView) switch (i) {
               case t.Key.Left:
                 n = -1;
                 break;
@@ -638,41 +692,69 @@ var __extends = this && this.__extends || function() {
                 n = 1;
                 break;
               case t.Key.Up:
-                n = -4;
+                n = -7;
                 break;
               case t.Key.Down:
-                n = 4;
+                n = 7;
                 break;
               case t.Key.PageDown:
-                n = e.altKey ? 120 : 12;
+                o = e.altKey ? 12 : 1;
                 break;
               case t.Key.PageUp:
-                n = e.altKey ? -120 : -12;
+                o = e.altKey ? -12 : -1;
                 break;
               case t.Key.Home:
-                n = this.value ? -this.value.getMonth() : 0;
-                break;
               case t.Key.End:
-                n = this.value ? 11 - this.value.getMonth() : 0;
-                break;
-              case t.Key.Enter:
-                this._monthMode() ? o = !1 : this.monthView = !0;
+                if (this._canChangeValue()) {
+                  a = this.value || this.displayMonth;
+                  (r = this._getValidDate(a, i == t.Key.Home)) && (this.value = t.DateTime.fromDateTime(r, this.value))
+                }
                 break;
               default:
-                o = !1
+                s = !1
+            } else switch (i) {
+              case t.Key.Left:
+                o = -1;
+                break;
+              case t.Key.Right:
+                o = 1;
+                break;
+              case t.Key.Up:
+                o = -4;
+                break;
+              case t.Key.Down:
+                o = 4;
+                break;
+              case t.Key.PageDown:
+                o = e.altKey ? 120 : 12;
+                break;
+              case t.Key.PageUp:
+                o = e.altKey ? -120 : -12;
+                break;
+              case t.Key.Home:
+                o = this.value ? -this.value.getMonth() : 0;
+                break;
+              case t.Key.End:
+                o = this.value ? 11 - this.value.getMonth() : 0;
+                break;
+              case t.Key.Enter:
+                this._monthMode() ? s = !1 : this.monthView = !0;
+                break;
+              default:
+                s = !1
             }
-            if (this._canChangeValue() && (i || n)) {
-              var s = this.value;
-              if (s ? (s = t.DateTime.addDays(s, i), s = t.DateTime.addMonths(s, n)) : s = this._getValidDate(new Date, !0), n && !this._valid(s))
-                for (var r = s.getMonth(), a = 1; a < 31 && !this._valid(s); a++) {
-                  var l = t.DateTime.addDays(s, +a),
-                    h = t.DateTime.addDays(s, -a);
-                  this._valid(l) && l.getMonth() == r ? s = l : this._valid(h) && h.getMonth() == r && (s = h)
+            if (this._canChangeValue() && (n || o)) {
+              var r = this.value;
+              if (r ? (r = t.DateTime.addDays(r, n), r = t.DateTime.addMonths(r, o)) : r = this._getValidDate(new Date, !0), o && !this._valid(r))
+                for (var a = r.getMonth(), l = 1; l < 31 && !this._valid(r); l++) {
+                  var h = t.DateTime.addDays(r, +l),
+                    c = t.DateTime.addDays(r, -l);
+                  this._valid(h) && h.getMonth() == a ? r = h : this._valid(c) && c.getMonth() == a && (r = c)
                 }
-              for (a = 0; a < 31 && !this._valid(s); a++) s = t.DateTime.addDays(s, i > 0 || n > 0 ? 1 : -1);
-              this.value = s
+              for (l = 0; l < 31 && !this._valid(r); l++) r = t.DateTime.addDays(r, n > 0 || o > 0 ? 1 : -1);
+              this.value = r
             }
-            o && e.preventDefault()
+            s && e.preventDefault()
           }
         }
       }, o.prototype._getMonth = function(e) {
@@ -868,10 +950,10 @@ var __extends = this && this.__extends || function() {
     var i = function(e) {
       function i(i, n) {
         var o = e.call(this, i) || this;
-        o._pathDisplay = new t.Binding(null), o._pathValue = new t.Binding(null), o._pathChecked = new t.Binding(null), o._html = !1, o._checkedItems = [], o._itemRole = "option", o._search = "", o._fmtItemHandlers = 0, o.selectedIndexChanged = new t.Event, o.itemsChanged = new t.Event, o.loadingItems = new t.Event, o.loadedItems = new t.Event, o.itemChecked = new t.Event, o.checkedItemsChanged = new t.Event, o.formatItem = new t.Event, o.applyTemplate("wj-control wj-content wj-listbox", null, null);
+        o._pathDisplay = new t.Binding(null), o._pathValue = new t.Binding(null), o._pathChecked = new t.Binding(null), o._html = !1, o._shGroups = !1, o._checkedItems = [], o._itemRole = "option", o._search = "", o._fmtItemHandlers = 0, o._itemCount = 0, o.selectedIndexChanged = new t.Event, o.itemsChanged = new t.Event, o.loadingItems = new t.Event, o.loadedItems = new t.Event, o.itemChecked = new t.Event, o.checkedItemsChanged = new t.Event, o.formatItem = new t.Event, o.applyTemplate("wj-control wj-content wj-listbox", null, null);
         var s = o.hostElement;
         return t.setAttribute(s, "role", "listbox", !0), "SELECT" == o._orgTag && o._initFromSelect(o.hostElement), o.addEventListener(s, "click", o._click.bind(o)), o.addEventListener(s, "keydown", o._keydown.bind(o)), o.addEventListener(s, "keypress", o._keypress.bind(o)), o.addEventListener(s, "wheel", function(t) {
-          s.scrollHeight > s.offsetHeight && (t.deltaY < 0 && 0 == s.scrollTop || t.deltaY > 0 && s.scrollTop + s.offsetHeight >= s.scrollHeight) && (t.preventDefault(), t.stopPropagation())
+          s.scrollHeight > s.offsetHeight && (t.deltaY < 0 && 0 == s.scrollTop || t.deltaY > 0 && s.scrollTop + s.offsetHeight >= s.scrollHeight) && t.preventDefault()
         }), o.initialize(n), o
       }
       return __extends(i, e), Object.defineProperty(i.prototype, "itemsSource", {
@@ -886,6 +968,15 @@ var __extends = this && this.__extends || function() {
       }), Object.defineProperty(i.prototype, "collectionView", {
         get: function() {
           return this._cv
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(i.prototype, "showGroups", {
+        get: function() {
+          return this._shGroups
+        },
+        set: function(e) {
+          e != this._shGroups && (this._shGroups = t.asBoolean(e), this._populateList())
         },
         enumerable: !0,
         configurable: !0
@@ -945,17 +1036,15 @@ var __extends = this && this.__extends || function() {
         configurable: !0
       }), i.prototype.getDisplayValue = function(e) {
         var i = null;
-        e > -1 && t.hasItems(this._cv) && (i = this._cv.items[e], this.displayMemberPath && (i = this._pathDisplay.getValue(i)));
+        e > -1 && t.hasItems(this._cv) && (i = this._cv.items[e], this._pathDisplay && (i = this._pathDisplay.getValue(i)));
         var n = null != i ? i.toString() : "";
-        return this.itemFormatter && (n = this.itemFormatter(e, n)), n
+        return this._itemFormatter && (n = this._itemFormatter(e, n)), n
       }, i.prototype.getDisplayText = function(t) {
-        var e = this.hostElement.children,
-          i = t > -1 && t < e.length ? e[t] : null;
-        return null != i ? i.textContent : ""
+        var e = this._getChild(t);
+        return null != e ? e.textContent : ""
       }, i.prototype.isItemEnabled = function(e) {
-        if (!this.getDisplayText(e)) return !1;
-        var i = this.hostElement.children[e];
-        return !(!i || i.hasAttribute("disabled") || t.hasClass(i, "wj-state-disabled"))
+        var i = this._getChild(e);
+        return null != i && !i.hasAttribute("disabled") && !t.hasClass(i, "wj-state-disabled")
       }, Object.defineProperty(i.prototype, "selectedIndex", {
         get: function() {
           return this._cv ? this._cv.currentPosition : -1
@@ -1007,24 +1096,35 @@ var __extends = this && this.__extends || function() {
         },
         enumerable: !0,
         configurable: !0
-      }), i.prototype.showSelection = function() {
-        for (var e, i = this.selectedIndex, n = this.hostElement, o = n.children, s = 0; s < o.length; s++) {
-          var r = s == i;
-          e = o[s], t.toggleClass(e, "wj-state-selected", r), e.tabIndex = r ? this._orgTabIndex : -1, t.setAttribute(e, "aria-selected", r)
+      }), i.prototype.showSelection = function(e) {
+        var i = this.selectedIndex,
+          n = this.hostElement,
+          o = n.children;
+        i = this._getElementIndex(i);
+        for (var s = 0; s < o.length; s++) {
+          var r = o[s],
+            a = s == i;
+          t.toggleClass(r, "wj-state-selected", a), t.setAttribute(r, "aria-selected", a), r.tabIndex = a ? this._orgTabIndex : -1
         }
         if (i > -1 && i < o.length) {
-          var a = (e = o[i]).getBoundingClientRect(),
-            l = n.getBoundingClientRect();
-          a.bottom > l.bottom ? n.scrollTop += a.bottom - l.bottom : a.top < l.top && (n.scrollTop -= l.top - a.top)
+          var l = (r = o[i]).getBoundingClientRect(),
+            h = n.getBoundingClientRect(),
+            c = 0;
+          if (this._shGroups) {
+            var u = o[0];
+            t.hasClass(u, "wj-header") && (c = u.offsetHeight)
+          }
+          l.bottom > h.bottom ? n.scrollTop += l.bottom - h.bottom : l.top < h.top + c && (n.scrollTop -= h.top + c - l.top)
         }
-        i > -1 && this.containsFocus() && (e = o[i]) instanceof HTMLElement && !t.contains(e, t.getActiveElement()) && e.focus(), n.tabIndex = i < 0 ? this._orgTabIndex : -1
+        i > -1 && (null == e && (e = this.containsFocus()), e && (r = o[i]) instanceof HTMLElement && !t.contains(r, t.getActiveElement()) && r.focus()), n.tabIndex = i < 0 ? this._orgTabIndex : -1
       }, i.prototype.loadList = function() {
         this._populateList()
       }, i.prototype.getItemChecked = function(e) {
-        var i = this._cv.items[e];
-        if (t.isObject(i) && this.checkedMemberPath) return this._pathChecked.getValue(i);
-        var n = this._getCheckbox(e);
-        return !!n && n.checked
+        var i = this._cv.items[e],
+          n = this._pathChecked;
+        if (t.isObject(i) && n.path) return n.getValue(i);
+        var o = this._getCheckbox(e);
+        return !!o && o.checked
       }, i.prototype.setItemChecked = function(t, e) {
         this._setItemChecked(t, e, !0)
       }, i.prototype.toggleItemChecked = function(t) {
@@ -1038,18 +1138,27 @@ var __extends = this && this.__extends || function() {
         set: function(e) {
           var i = this._cv,
             n = this.hostElement,
-            o = t.asArray(e, !1);
+            o = t.asArray(e, !1),
+            s = !1;
           if (i && o) {
-            for (var s = i.currentPosition, r = n.scrollTop, a = 0; a < i.items.length; a++) {
-              var l = i.items[a];
-              this._setItemChecked(a, o.indexOf(l) > -1, !1)
+            for (var r = i.currentPosition, a = n.scrollTop, l = 0; l < i.items.length; l++) {
+              var h = i.items[l];
+              this._setItemChecked(l, o.indexOf(h) > -1, !1) && (s = !0)
             }
-            i.moveCurrentToPosition(s), n.scrollTop = r, this.onCheckedItemsChanged()
+            i.moveCurrentToPosition(r), n.scrollTop = a, s && this.onCheckedItemsChanged()
           }
         },
         enumerable: !0,
         configurable: !0
-      }), i.prototype.onSelectedIndexChanged = function(t) {
+      }), i.prototype.indexOf = function(e) {
+        if (this._shGroups && t.hasClass(e, "wj-header")) return -1;
+        for (var i = this.hostElement.children, n = 0, o = 0; n < i.length; n++) {
+          var s = i[n];
+          if (t.contains(i[n], e)) return o;
+          this._shGroups && t.hasClass(s, "wj-header") || o++
+        }
+        return -1
+      }, i.prototype.onSelectedIndexChanged = function(t) {
         this.selectedIndexChanged.raise(this, t)
       }, i.prototype.onItemsChanged = function(t) {
         this.itemsChanged.raise(this, t)
@@ -1064,58 +1173,90 @@ var __extends = this && this.__extends || function() {
       }, i.prototype.onFormatItem = function(t) {
         this.formatItem.raise(this, t)
       }, i.prototype.refresh = function(t) {
-        void 0 === t && (t = !0), e.prototype.refresh.call(this, t), this.formatItem.handlerCount != this._fmtItemHandlers && (this._e.offsetHeight || this._e.offsetWidth) && (this._fmtItemHandlers = this.formatItem.handlerCount, this._populateList())
+        void 0 === t && (t = !0), e.prototype.refresh.call(this, t), (this._cv ? this._cv.items.length : 0) == this._itemCount && this.formatItem.handlerCount == this._fmtItemHandlers || (this._e.offsetHeight || this._e.offsetWidth) && (this._fmtItemHandlers = this.formatItem.handlerCount, this._populateList())
+      }, i.prototype._getChild = function(t) {
+        return t = this._getElementIndex(t), this.hostElement.children[t]
+      }, i.prototype._getElementIndex = function(e) {
+        if (this._shGroups)
+          for (var i = this.hostElement.children, n = 0; n <= e && n < i.length; n++) {
+            var o = i[n];
+            t.hasClass(o, "wj-header") && e++
+          }
+        return e
       }, i.prototype._setItemChecked = function(e, i, n) {
         void 0 === n && (n = !0);
-        var o = this._cv.items[e];
-        if (t.isObject(o)) {
-          var s = t.tryCast(this._cv, "IEditableCollectionView");
-          this._pathChecked.getValue(o) != i && (this._checking = !0, s ? (s.editItem(o), this._pathChecked.setValue(o, i), s.commitEdit()) : (this._pathChecked.setValue(o, i), this._cv.refresh()), this._checking = !1)
+        var o = this._cv.items[e],
+          s = this._pathChecked,
+          r = !1;
+        if (t.isObject(o) && s.path) {
+          var a = t.tryCast(this._cv, "IEditableCollectionView");
+          s.getValue(o) != i && (r = !0, this._checking = !0, a ? (a.editItem(o), s.setValue(o, i), a.commitEdit()) : (s.setValue(o, i), this._cv.refresh()), this._checking = !1)
+        } else r = !0;
+        var l = this._getCheckbox(e);
+        if (l) {
+          l.checked = i;
+          var h = t.closest(l, ".wj-listbox-item");
+          h && t.toggleClass(h, "wj-state-checked", i)
         }
-        var r = this._getCheckbox(e);
-        if (r) {
-          r.checked = i;
-          var a = t.closest(r, ".wj-listbox-item");
-          a && t.toggleClass(a, "wj-state-checked", i)
-        }
-        n && (this.onItemChecked(), this.onCheckedItemsChanged())
+        return n && r && (this.onItemChecked(), this.onCheckedItemsChanged()), r
       }, i.prototype._cvCollectionChanged = function(t, e) {
         this._checking || (this._populateList(), this.onItemsChanged())
       }, i.prototype._cvCurrentChanged = function(t, e) {
         this._checking || (this.showSelection(), this.onSelectedIndexChanged())
       }, i.prototype._populateList = function() {
         var e = this.hostElement;
-        if (e) {
-          var i = this.containsFocus();
-          if (this.onLoadingItems(), e.textContent = "", this._cv) {
-            for (var o = document.createDocumentFragment(), s = 0; s < this._cv.items.length; s++) {
-              var r = this.getDisplayValue(s);
-              1 != this._html && (r = t.escapeHtml(r));
-              var a = !1;
-              this.checkedMemberPath && (r = '<label><input tabindex="-1" type="checkbox"' + ((a = this._pathChecked.getValue(this._cv.items[s])) ? " checked" : "") + "> " + r + "</label>");
-              var l = document.createElement("div"),
-                h = "wj-listbox-item";
-              if (l.innerHTML = r, t.hasClass(l.firstChild, "wj-separator") && (h += " wj-separator"), a && (h += " wj-state-checked"), l.className = h, this.itemRole && t.setAttribute(l, "role", this.itemRole), t.setAttribute(l, "aria-selected", !1), this.formatItem.hasHandlers) {
-                var c = new n(s, this._cv.items[s], l);
-                this.onFormatItem(c)
+        if (this._itemCount = this._cv ? this._cv.items.length : 0, e) {
+          var i = this.containsFocus(),
+            o = -1,
+            s = void 0;
+          this.onLoadingItems(), e.textContent = "", e.scrollTop = 0;
+          var r = this._cv;
+          if (r) {
+            var a = [],
+              l = 0,
+              h = void 0;
+            if (o = r.currentPosition, this._shGroups && r.groups && r.groups.length) {
+              s = {};
+              for (var c = 0; c < r.groups.length; c++) {
+                var u = r.groups[c];
+                s[l] = u, h = this._createHeaderItem(u), a.push(h);
+                for (_ = 0; _ < u.items.length; _++, l++) h = this._createItem(l), a.push(h)
               }
-              o.appendChild(l)
-            }
-            e.appendChild(o)
+            } else
+              for (_ = 0; _ < r.items.length; _++, l++) h = this._createItem(l), a.push(h);
+            e.innerHTML = a.join("")
           }
-          0 == e.children.length && e.appendChild(document.createElement("div")), i && !this.containsFocus() && this.focus(), this.showSelection(), this.onLoadedItems()
+          if (this.formatItem.hasHandlers && r)
+            for (var p = e.children, d = r.items, l = 0, f = new n(0, null, null), _ = 0; _ < p.length; _++) f._item = p[_], this._shGroups && t.hasClass(f._item, "wj-header") ? (f._index = -1, f._data = s[l]) : (f._index = l, f._data = d[l], l++), this.onFormatItem(f);
+          0 == e.children.length && e.appendChild(document.createElement("div")), e.tabIndex = o < 0 ? this._orgTabIndex : -1, i ? (o >= 0 ? e.children[this._getElementIndex(o)] : e).focus() : o > 0 && this.showSelection(), this.onLoadedItems()
         }
-      }, i.prototype._click = function(e) {
-        if (0 == e.button && !e.defaultPrevented) {
-          for (var i = this.hostElement.children, n = 0; n < i.length; n++)
-            if (t.contains(i[n], e.target)) {
-              this.selectedIndex = n;
-              break
-            }
-          var o = this.selectedIndex;
-          if (this.checkedMemberPath && o > -1) {
-            var s = this._getCheckbox(o);
-            s == e.target && (i[o].focus(), this.setItemChecked(o, s.checked))
+      }, i.prototype._createItem = function(e) {
+        var i = this._cv.items[e],
+          n = e == this._cv.currentPosition,
+          o = this.getDisplayValue(e);
+        1 != this._html && (o = t.escapeHtml(o));
+        var s = !1;
+        this.checkedMemberPath && (o = '<label><input tabindex="-1" type="checkbox"' + ((s = this._pathChecked.getValue(i)) ? " checked" : "") + "> " + o + "</label>");
+        var r = "wj-listbox-item";
+        if (n && (r += " wj-state-selected"), s && (r += " wj-state-checked"), this._html) {
+          var a = ["wj-separator", "wj-state-disabled"];
+          if (o.indexOf(a[0]) > -1 || o.indexOf(a[1]) > -1) {
+            var l = t.createElement(o);
+            a.forEach(function(e) {
+              t.hasClass(l, e) && (r += " " + e)
+            })
+          }
+        }
+        return '<div class="' + r + '" role="' + this.itemRole + '" aria-selected="' + n + '" tabindex="' + (n ? this._orgTabIndex : -1) + '">' + o + "</div>"
+      }, i.prototype._createHeaderItem = function(e) {
+        return '<div class="wj-listbox-item wj-header wj-state-disabled" role="presentation" tabindex="-1">' + t.escapeHtml(e.name) + "</div>"
+      }, i.prototype._click = function(t) {
+        if (0 == t.button && !t.defaultPrevented) {
+          var e = this.indexOf(t.target);
+          if (e > -1 && (this.selectedIndex = e, this.checkedMemberPath)) {
+            var i = this._getCheckbox(e),
+              n = this.hostElement.children[e];
+            i != t.target && t.target != n || (n.focus(), this.setItemChecked(e, i.checked))
           }
         }
       }, i.prototype._keydown = function(e) {
@@ -1200,8 +1341,9 @@ var __extends = this && this.__extends || function() {
         }
         return -1
       }, i.prototype._getCheckbox = function(t) {
-        var e = this.hostElement;
-        return e && t > -1 && t < e.children.length ? e.children[t].querySelector("input[type=checkbox]") : null
+        var e = this.hostElement,
+          i = e ? e.children : null;
+        return t = this._getElementIndex(t), e && t > -1 && t < i.length ? i[t].querySelector("input[type=checkbox]") : null
       }, i.prototype._initFromSelect = function(t) {
         for (var e = t.children, i = [], n = -1, o = 0; o < e.length; o++) {
           var s = e[o];
@@ -1210,7 +1352,7 @@ var __extends = this && this.__extends || function() {
             val: s.getAttribute("value"),
             cmdParam: s.getAttribute("cmd-param")
           }) : i.push({
-            hdr: '<div class="wj-separator"/>'
+            hdr: '<div class="wj-separator"></div>'
           }), t.removeChild(s), o--)
         }
         i && (this.displayMemberPath = "hdr", this.selectedValuePath = "val", this.itemsSource = i, this.selectedIndex = n)
@@ -1220,7 +1362,7 @@ var __extends = this && this.__extends || function() {
     var n = function(e) {
       function i(i, n, o) {
         var s = e.call(this) || this;
-        return s._index = t.asNumber(i), s._data = n, s._item = t.asType(o, HTMLElement), s
+        return s._index = t.asNumber(i), s._data = n, s._item = t.asType(o, HTMLElement, !0), s
       }
       return __extends(i, e), Object.defineProperty(i.prototype, "index", {
         get: function() {
@@ -1276,12 +1418,7 @@ var __extends = this && this.__extends || function() {
           o._composing = !1, setTimeout(function() {
             o._setText(o.text, !0)
           })
-        }), o.addEventListener(s, "wheel", function(e) {
-          if (!e.defaultPrevented && !o.isDroppedDown && !o.isReadOnly && o.containsFocus() && o.selectedIndex > -1) {
-            var i = t.clamp(-e.deltaY, -1, 1);
-            o.selectedIndex = t.clamp(o.selectedIndex - i, 0, o.collectionView.items.length - 1), e.preventDefault()
-          }
-        }), "SELECT" == o._orgTag && o._lbx._initFromSelect(s), o._lbx.loadedItems.addHandler(function(t) {
+        }), o.addEventListener(s, "wheel", o._wheel.bind(o)), "SELECT" == o._orgTag && o._lbx._initFromSelect(s), o._lbx.loadedItems.addHandler(function(t) {
           o.selectedIndex > -1 && (o.selectedIndex = o._lbx.selectedIndex)
         }), o.isRequired = !0, o.initialize(n), o
       }
@@ -1297,6 +1434,15 @@ var __extends = this && this.__extends || function() {
       }), Object.defineProperty(n.prototype, "collectionView", {
         get: function() {
           return this._lbx.collectionView
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "showGroups", {
+        get: function() {
+          return this._lbx.showGroups
+        },
+        set: function(t) {
+          this._lbx.showGroups = t
         },
         enumerable: !0,
         configurable: !0
@@ -1412,7 +1558,8 @@ var __extends = this && this.__extends || function() {
           return parseInt(t.style.maxWidth)
         },
         set: function(e) {
-          this._dropDown.style.maxWidth = t.asNumber(e) + "px"
+          var i = this._dropDown;
+          i.style.maxWidth = t.asNumber(e) + "px", i.style.minWidth = ""
         },
         enumerable: !0,
         configurable: !0
@@ -1455,7 +1602,7 @@ var __extends = this && this.__extends || function() {
       }, n.prototype.onIsDroppedDownChanging = function(e) {
         return this.isDroppedDown || t.hasItems(this.collectionView) ? i.prototype.onIsDroppedDownChanging.call(this, e) : (e.cancel = !0, !1)
       }, n.prototype.onIsDroppedDownChanged = function(e) {
-        i.prototype.onIsDroppedDownChanged.call(this, e), this.isDroppedDown && (this._lbx.showSelection(), this.isTouching || this.selectAll()), t.setAttribute(this.dropDown, "aria-expanded", this.isDroppedDown)
+        i.prototype.onIsDroppedDownChanged.call(this, e), this.isDroppedDown && this._lbx.showSelection(), this.containsFocus() && !this.isTouching && this.selectAll(), t.setAttribute(this.dropDown, "aria-expanded", this.isDroppedDown)
       }, n.prototype._updateBtn = function() {
         var e = this.collectionView,
           n = this._tbx,
@@ -1474,9 +1621,14 @@ var __extends = this && this.__extends || function() {
           t.setAttribute(i._tbx, "aria-activedescendant", o && o.length ? o : null), i.selectedIndex = e, i.onSelectedIndexChanged()
         }), this._lbx.itemsChanged.addHandler(function() {
           i._updateBtn()
-        }), this.addEventListener(this._dropDown, "click", this._dropDownClick.bind(this))
+        })
+      }, n.prototype._wheel = function(e) {
+        if (!e.defaultPrevented && !this.isDroppedDown && !this.isReadOnly && this.containsFocus() && this.selectedIndex > -1) {
+          var i = t.clamp(-e.deltaY, -1, 1);
+          this.selectedIndex = t.clamp(this.selectedIndex - i, 0, this.collectionView.items.length - 1), e.preventDefault()
+        }
       }, n.prototype._dropDownClick = function(t) {
-        t.defaultPrevented || t.target != this._dropDown && (this.isDroppedDown = !1)
+        t.defaultPrevented || t.target != this._dropDown && (this.isDroppedDown = !1), i.prototype._dropDownClick.call(this, t)
       }, n.prototype._setText = function(e, n) {
         if (!this._composing && !this._settingText) {
           this._settingText = !0, null == e && (e = ""), e = e.toString();
@@ -1485,7 +1637,7 @@ var __extends = this && this.__extends || function() {
             r = this._getSelStart(),
             a = -1,
             l = !0;
-          if (this.isEditable && (!this._delKey && this.containsFocus() || (n = !0, l = !1)), o = this.indexOf(e, n), l && (o < 0 && n && (o = this.indexOf(e, !1)), o < 0 && r > 0 && (o = this.indexOf(e.substr(0, r), !1))), o < 0 && !this.isEditable && t.hasItems(s) && (this.isRequired || e)) {
+          if (this.isEditable && (this._delKey || this._getSelEnd() < e.length || !this.containsFocus()) && (n = !0, l = !1), o = this.indexOf(e, n), l && (o < 0 && n && (o = this.indexOf(e, !1)), o < 0 && r > 0 && (o = this.indexOf(e.substr(0, r), !1))), o < 0 && !this.isEditable && t.hasItems(s) && (this.isRequired || e)) {
             var h = this._oldText || "";
             o = Math.max(0, this.indexOf(h, !1));
             for (var c = 0; c < e.length && c < h.length; c++)
@@ -1503,10 +1655,8 @@ var __extends = this && this.__extends || function() {
           s = this.listBox;
         if (n && o && e) {
           t = t.toLowerCase();
-          for (var r = i + e; r > -1 && r < o; r += e) {
-            var a = this.getDisplayText(r).toLowerCase();
-            if (a && 0 == a.indexOf(t) && (!this.dropDown.children[r] || s.isItemEnabled(r))) return r
-          }
+          for (var r = i + e; r > -1 && r < o; r += e)
+            if (0 == this.getDisplayText(r).toLowerCase().indexOf(t) && (!this.dropDown.children[r] || s.isItemEnabled(r))) return r
         }
         return i
       }, n.prototype._keydown = function(e) {
@@ -1529,10 +1679,10 @@ var __extends = this && this.__extends || function() {
               n == this.text.length && (n = 0), this.selectedIndex = this._findNext(this.text.substr(0, n), e.keyCode == t.Key.Up ? -1 : 1), this._setSelRange(n, this.text.length), e.preventDefault();
               break;
             case t.Key.PageUp:
-              this._lbx._selectPrevPage(), e.preventDefault();
+              this._lbx._selectPrevPage(), this.selectAll(), e.preventDefault();
               break;
             case t.Key.PageDown:
-              this._lbx._selectNextPage(), e.preventDefault()
+              this._lbx._selectNextPage(), this.selectAll(), e.preventDefault()
           }
         }
       }, n.prototype._updateInputSelection = function(t) {
@@ -1638,7 +1788,7 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._setText = function(e) {
         var i = this;
         if (!this._inCallback) {
-          if (!e && this.selectedIndex > -1 && (this.selectedIndex = -1), e != this._oldText && (this._tbx.value != e && (this._tbx.value = e), this._oldText = e, this.onTextChanged(), !e && this.collectionView)) return this._rxHighlight = null, this.collectionView.filter = this._query = null, void(this.isDroppedDown = !1);
+          if (!e && this.selectedIndex > -1 && this.getDisplayText() && (this.selectedIndex = -1), e != this._oldText && (this._tbx.value != e && (this._tbx.value = e), this._oldText = e, this.onTextChanged(), !e && this.collectionView)) return (this._query || this.selectedIndex < 0) && (this.isDroppedDown = !1), this._query = this._rxHighlight = null, void(this.collectionView.filter = null);
           this._toSearch && clearTimeout(this._toSearch), e != this.getDisplayText() && (this._toSearch = setTimeout(function() {
             i._toSearch = null;
             var e = i.text.trim().toLowerCase();
@@ -1653,10 +1803,10 @@ var __extends = this && this.__extends || function() {
         this._inCallback = !0;
         var i = t.asCollectionView(e);
         i && i.moveCurrentToPosition(-1), this.itemsSource = i, this._inCallback = !1, this.containsFocus() && (this.isDroppedDown = !0, this.refresh())
-      }, i.prototype.onIsDroppedDownChanged = function(e) {
-        if (this.isDroppedDownChanged.raise(this, e), this.isDroppedDown && this._lbx.showSelection(), t.setAttribute(this.dropDown, "aria-expanded", this.isDroppedDown), this.containsFocus() && !this.isDroppedDown && !this.isTouching && null == this.selectedItem) {
-          var i = this.text.length;
-          t.setSelectionRange(this._tbx, i)
+      }, i.prototype.onIsDroppedDownChanged = function(i) {
+        if (this.containsFocus() ? (this.isDroppedDownChanged.raise(this, i), this.isDroppedDown && this._lbx.showSelection(), t.setAttribute(this.dropDown, "aria-expanded", this.isDroppedDown)) : e.prototype.onIsDroppedDownChanged.call(this, i), this.containsFocus() && !this.isDroppedDown && !this.isTouching && null == this.selectedItem) {
+          var n = this.text.length;
+          t.setSelectionRange(this._tbx, n)
         }
         this._query = ""
       }, i.prototype._updateItems = function() {
@@ -1709,17 +1859,19 @@ var __extends = this && this.__extends || function() {
     var i = function(e) {
       function i(i, n) {
         var o = e.call(this, i) || this;
-        o.itemClicked = new t.Event;
+        o._isButton = !1, o._openOnHover = !1, o._hoverEnterBnd = o._hoverEnter.bind(o), o._hoverLeaveBnd = o._hoverLeave.bind(o), o._hoverOverBnd = o._hoverOver.bind(o), o.itemClicked = new t.Event;
         var s = o.hostElement,
-          r = o._tbx;
+          r = o._tbx,
+          a = o._lbx,
+          l = o.dropDown;
         t.addClass(s, "wj-menu"), r.style.display = "none";
-        o._hdr = o._elRef = t.createElement('<div wj-part="header" class="wj-form-control" style="cursor:default"/>'), r.parentElement.insertBefore(o._hdr, o._tbx);
-        var a = o._orgOuter.match(/tabindex="?(-?\d+)"?/i);
-        return a && (s.tabIndex = parseInt(a[1])), o.isRequired = !1, t.setAttribute(s, "role", "menubar", !0), t.setAttribute(r, "role", null), t.setAttribute(r, "aria-autocomplete", null), t.setAttribute(r, "aria-owns", null), t.setAttribute(o.dropDown, "role", "menu"), o.listBox.itemRole = "menuitem", "SELECT" == o._orgTag && (o.header = s.getAttribute("header"), o._lbx.itemsSource && (o.commandParameterPath = "cmdParam")), o.isContentHtml = !0, o.maxDropDownHeight = 500, o.addEventListener(o._hdr, "click", function(t) {
-          t.defaultPrevented || (o._isButton ? (o.isDroppedDown = !1, o._raiseCommand()) : o.isDroppedDown = !o.isDroppedDown)
-        }), o.listBox.lostFocus.addHandler(function() {
+        o._hdr = o._elRef = t.createElement('<div wj-part="header" class="wj-form-control"/>'), r.parentElement.insertBefore(o._hdr, o._tbx);
+        var h = o._orgOuter.match(/tabindex="?(-?\d+)"?/i);
+        return s.tabIndex = h ? parseInt(h[1]) : 0, o.isRequired = !1, t.setAttribute(s, "role", "menubar", !0), t.setAttribute(r, "role", null), t.setAttribute(r, "aria-autocomplete", null), t.setAttribute(r, "aria-owns", null), t.setAttribute(l, "role", "menu"), a.itemRole = "menuitem", "SELECT" == o._orgTag && (o.header = s.getAttribute("header"), o._lbx.itemsSource && (o.commandParameterPath = "cmdParam")), o.isContentHtml = !0, o.maxDropDownHeight = 500, o.addEventListener(o._hdr, "click", function(t) {
+          t.defaultPrevented || (o._clearHover(), o._isButton ? (o.isDroppedDown = !1, o._raiseCommand()) : o.isDroppedDown = !o.isDroppedDown)
+        }), a.lostFocus.addHandler(function() {
           o.containsFocus() || (o.isDroppedDown = !1)
-        }), o.initialize(n), o
+        }), t.addClass(l, "wj-menu-items"), a.formatItem.addHandler(o._formatMenuItem.bind(o)), o.initialize(n), o
       }
       return __extends(i, e), Object.defineProperty(i.prototype, "header", {
         get: function() {
@@ -1732,10 +1884,10 @@ var __extends = this && this.__extends || function() {
         configurable: !0
       }), Object.defineProperty(i.prototype, "command", {
         get: function() {
-          return this._command
+          return this._cmd
         },
         set: function(t) {
-          this._command = t
+          this._cmd = t
         },
         enumerable: !0,
         configurable: !0
@@ -1754,6 +1906,29 @@ var __extends = this && this.__extends || function() {
         },
         set: function(e) {
           this._cmdParamPath = t.asString(e)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(i.prototype, "subItemsPath", {
+        get: function() {
+          return this._subPath
+        },
+        set: function(t) {
+          t != this._subPath && (this._subPath = t, this.refresh(!0))
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(i.prototype, "openOnHover", {
+        get: function() {
+          return this._openOnHover
+        },
+        set: function(e) {
+          this._openOnHover = t.asBoolean(e);
+          var i = this.hostElement,
+            n = this.dropDown,
+            o = this.addEventListener.bind(this),
+            s = this.removeEventListener.bind(this);
+          s(i, "mouseenter", this._hoverEnterBnd), s(i, "mouseleave", this._hoverLeaveBnd), s(n, "mouseover", this._hoverOverBnd), s(n, "mouseleave", this._hoverLeaveBnd), this._openOnHover && (o(i, "mouseenter", this._hoverEnterBnd), o(i, "mouseleave", this._hoverLeaveBnd), o(n, "mouseover", this._hoverOverBnd), o(n, "mouseleave", this._hoverLeaveBnd))
         },
         enumerable: !0,
         configurable: !0
@@ -1778,7 +1953,7 @@ var __extends = this && this.__extends || function() {
       }), i.prototype.show = function(e) {
         if (!this.isDroppedDown) {
           var i = this.dropDown;
-          this.selectedIndex = -1, this.onIsDroppedDownChanging(new t.CancelEventArgs) && (this.owner && (i[t.Control._OWNR_KEY] = this.owner), t.showPopup(i, e), this.onIsDroppedDownChanged(), i.focus())
+          this.selectedIndex = -1, this.onIsDroppedDownChanging(new t.CancelEventArgs) && (this.owner && (i[t.Control._OWNR_KEY] = this.owner), t.showPopup(i, e, !1, this.isAnimated), this.onIsDroppedDownChanged(), i.focus())
         }
       }, i.prototype.hide = function() {
         this.isDroppedDown && this.onIsDroppedDownChanging(new t.CancelEventArgs) && (t.hidePopup(this.dropDown), this.onIsDroppedDownChanged())
@@ -1788,22 +1963,78 @@ var __extends = this && this.__extends || function() {
         void 0 === t && (t = !0), e.prototype.refresh.call(this, t), this._enableDisableItems()
       }, i.prototype.onIsDroppedDownChanged = function(t) {
         e.prototype.onIsDroppedDownChanged.call(this, t), this.isDroppedDown ? (this._closing = !0, this._defaultItem = this.selectedItem, this.isRequired = !1, this.selectedIndex = -1, this._enableDisableItems(), this._closing = !1, this.dropDown.focus()) : this.selectedItem || (this.selectedItem = this._defaultItem)
-      }, i.prototype._keydown = function(i) {
-        i.defaultPrevented || i.keyCode == t.Key.Enter && (this.isDroppedDown ? this.getDisplayText(this.selectedIndex) && this._raiseCommand() : (this.isDroppedDown = !0, i.preventDefault())), e.prototype._keydown.call(this, i)
-      }, i.prototype._dropDownClick = function(t) {
-        t.defaultPrevented || t.target == this.dropDown || this.getDisplayText(this.selectedIndex) && this._raiseCommand(), e.prototype._dropDownClick.call(this, t)
-      }, i.prototype._raiseCommand = function(t) {
-        var e = this.selectedItem,
-          i = this._getCommand(e);
-        if (i) {
-          var n = this._cmdParamPath ? e[this._cmdParamPath] : null;
-          if (!this._canExecuteCommand(i, n)) return;
-          this._executeCommand(i, n)
+      }, i.prototype._getSubItems = function(e) {
+        var i = this.subItemsPath,
+          n = e && i ? e[i] : null;
+        return t.isArray(n) && n.length ? n : null
+      }, i.prototype._formatMenuItem = function(e, i) {
+        var n = i.item;
+        this._getSubItems(i.data) ? t.addClass(n, "wj-subitems") : "-" == n.innerHTML && (n.innerHTML = "", t.addClass(n, "wj-separator"))
+      }, i.prototype._keydown = function(n) {
+        if (!n.defaultPrevented) {
+          var o = this._getKeyCode(n);
+          if (this.isDroppedDown) switch (o) {
+            case t.Key.Enter:
+            case t.Key.Right:
+              if (this._showSubMenu()) return void n.preventDefault();
+              break;
+            case t.Key.Left:
+              var s = t.Control.getControl(this.owner);
+              if (s instanceof i) {
+                var r = s.dropDown,
+                  a = s.selectedIndex;
+                return (a > -1 ? r.children[a] : r).focus(), void n.preventDefault()
+              }
+          }
+          o == t.Key.Enter && (this.isDroppedDown ? this.getDisplayText(this.selectedIndex) && this._raiseCommand() : (this.isDroppedDown = !0, n.preventDefault()))
         }
-        this.onItemClicked(t)
+        e.prototype._keydown.call(this, n)
+      }, i.prototype._dropDownClick = function(t) {
+        if (!t.defaultPrevented && t.target != this.dropDown) {
+          if (this._clearHover(), this._showSubMenu()) return void t.preventDefault();
+          this.getDisplayText(this.selectedIndex) && this._raiseCommand()
+        }
+        e.prototype._dropDownClick.call(this, t)
+      }, i.prototype._showSubMenu = function() {
+        var e = this,
+          n = this._getSubItems(this.selectedItem);
+        if (!n) return null;
+        var o = this.dropDown.children[this.selectedIndex].getBoundingClientRect(),
+          s = new t.Point(o.right, o.top);
+        if (0 == o.height) return null;
+        var r = this.rightToLeft || "rtl" == this.dropDown.getAttribute("dir");
+        r && (s.x = o.left);
+        var a = new i(document.createElement("div"), {
+          owner: this.hostElement,
+          itemsSource: n,
+          itemClicked: function(t, i) {
+            e.itemClicked.raise(t, i)
+          }
+        });
+        "displayMemberPath,selectedValuePath,isContentHtml,command,commandPath,commandParameterPath,maxDropDownWidth,maxDropDownHeight,dropDownCssClass,isAnimated,subItemsPath,openOnHover".split(",").forEach(function(t) {
+          a[t] = e[t]
+        });
+        var l = a.dropDown;
+        return t.setAttribute(l, "dir", r ? "rtl" : null), a.show(s), l[t.Control._OWNR_KEY] = this.dropDown, l.focus(), a
+      }, i.prototype._raiseCommand = function(e) {
+        var n = this.selectedItem,
+          o = this._getSubItems(n),
+          s = this._getCommand(n);
+        if (s && !o) {
+          var r = this._getCommandParm(n);
+          if (!this._canExecuteCommand(s, r)) return;
+          this._executeCommand(s, r)
+        }
+        if (this.onItemClicked(e), this.containsFocus()) {
+          for (var a = this; a instanceof i && a.owner;) a = t.Control.getControl(a.owner);
+          a instanceof i && (a.isDroppedDown = !1, a.focus())
+        }
       }, i.prototype._getCommand = function(t) {
-        var e = t && this.commandPath ? t[this.commandPath] : null;
-        return e || this.command
+        var e = t && this._cmdPath ? t[this._cmdPath] : null;
+        return e || this._cmd
+      }, i.prototype._getCommandParm = function(t) {
+        var e = this._cmdParamPath;
+        return t && e ? t[e] : t
       }, i.prototype._executeCommand = function(e, i) {
         e && !t.isFunction(e) && (e = e.executeCommand), t.isFunction(e) && e(i)
       }, i.prototype._canExecuteCommand = function(e, i) {
@@ -1813,15 +2044,37 @@ var __extends = this && this.__extends || function() {
         }
         return !0
       }, i.prototype._enableDisableItems = function() {
-        if (this.collectionView && (this.command || this.commandPath))
+        if (this.collectionView && (this._cmd || this._cmdPath))
           for (var e = this.collectionView.items, i = 0; i < e.length; i++) {
-            var n = this._getCommand(e[i]),
-              o = this.commandParameterPath ? e[i][this.commandParameterPath] : null;
-            if (n) {
-              var s = this._lbx.hostElement.children[i];
-              t.toggleClass(s, "wj-state-disabled", !this._canExecuteCommand(n, o))
+            var n = e[i],
+              o = this._getCommand(n);
+            if (o) {
+              var s = this._lbx.hostElement.children[i],
+                r = this._getCommandParm(n);
+              t.toggleClass(s, "wj-state-disabled", !this._canExecuteCommand(o, r))
             }
           }
+      }, i.prototype._clearHover = function() {
+        this._toHover && clearTimeout(this._toHover), this._toHover = null
+      }, i.prototype._hoverEnter = function(e) {
+        var i = this;
+        this._clearHover(), this._toHover = setTimeout(function() {
+          i._toHover = null, i.isDroppedDown = !0
+        }, t.Control._HOVER_DELAY)
+      }, i.prototype._hoverLeave = function(e) {
+        if (this._clearHover(), this.isDroppedDown) {
+          var i = document.elementFromPoint(e.clientX, e.clientY),
+            n = t.closest(i, ".wj-listbox.wj-menu-items"),
+            o = this._subMenu;
+          n || t.contains(this.hostElement, i) || (this.isDroppedDown = !1, o && (o.isDroppedDown = !1))
+        }
+      }, i.prototype._hoverOver = function(e) {
+        var i = this;
+        this._clearHover(), this._toHover = setTimeout(function() {
+          i._toHover = null;
+          var t = i.listBox.indexOf(e.target);
+          t > -1 && (i.selectedIndex = t, i._subMenu = i._showSubMenu())
+        }, t.Control._HOVER_DELAY)
       }, i
     }(e.ComboBox);
     e.Menu = i
@@ -1854,8 +2107,8 @@ var __extends = this && this.__extends || function() {
     var i = function(e) {
       function i(i, n) {
         var o = e.call(this, i) || this;
-        return o._maxHdrItems = 2, o._readOnly = !1, o._hdrFmt = t.culture.MultiSelect.itemsSelected, o.checkedItemsChanged = new t.Event, t.addClass(o.hostElement, "wj-multiselect"), o._tbx.readOnly = !0, o.checkedMemberPath = null, o.addEventListener(o.inputElement, "click", function() {
-          o.isDroppedDown = !o.isDroppedDown
+        return o._maxHdrItems = 2, o._readOnly = !1, o._hdrFmt = t.culture.MultiSelect.itemsSelected, o.checkedItemsChanged = new t.Event, t.addClass(o.hostElement, "wj-multiselect"), o._tbx.readOnly = !0, o.checkedMemberPath = null, o.addEventListener(o.inputElement, "click", function(t) {
+          document.elementFromPoint(t.clientX, t.clientY) == o.inputElement && (o.isDroppedDown = !o.isDroppedDown)
         }), o.addEventListener(o._selectAll, "click", function(e) {
           t.hasItems(o.collectionView) && e.target == o._selectAllCheckbox && (o.checkedItems = e.target.checked ? o.collectionView.items : [])
         }), o.removeEventListener(o.dropDown, "click"), o._updateHeader(), o.listBox.itemsChanged.addHandler(function() {
@@ -1933,7 +2186,7 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._createDropDown = function() {
         this._selectAll = t.createElement('<div class="wj-listbox-item wj-header wj-select-all" tabindex="0" style="display:none"><label><input type="checkbox"> <span></span></label></div>', this._dropDown), this._selectAllCheckbox = this._selectAll.querySelector("input[type=checkbox]"), this._selectAllSpan = this._selectAll.querySelector("label>span"), t.setText(this._selectAllSpan, t.culture.MultiSelect.selectAll);
         var i = t.createElement('<div style="width:100%;border:none"></div>', this._dropDown);
-        this._lbx = new t.input.ListBox(i), e.prototype._createDropDown.call(this), t.addClass(this.dropDown, "wj-control wj-listbox")
+        this._lbx = new t.input.ListBox(i), e.prototype._createDropDown.call(this), t.addClass(this.dropDown, "wj-control wj-listbox"), this.dropDown.style.overflow = "hidden"
       }, Object.defineProperty(i.prototype, "isReadOnly", {
         get: function() {
           return this._readOnly
@@ -2016,10 +2269,10 @@ var __extends = this && this.__extends || function() {
         configurable: !0
       }), Object.defineProperty(i.prototype, "maxSelectedItems", {
         get: function() {
-          return this._maxtems
+          return this._maxSelItems
         },
         set: function(e) {
-          this._maxtems != e && (this._maxtems = t.asNumber(e, !0), this._updateMaxItems(), this._refreshHeader(), this._clearSelIndex())
+          this._maxSelItems != e && (this._maxSelItems = t.asNumber(e, !0), this._updateMaxItems(), this._refreshHeader(), this._clearSelIndex())
         },
         enumerable: !0,
         configurable: !0
@@ -2085,7 +2338,7 @@ var __extends = this && this.__extends || function() {
               } else if (this._tbx !== n) return;
             default:
               if (i.keyCode === t.Key.Back || i.keyCode === t.Key.Delete) return;
-              this._itemOff(), null != this._maxtems && this._selItems.length >= this._maxtems && i.preventDefault()
+              this._itemOff(), null != this._maxSelItems && this._selItems.length >= this._maxSelItems && i.preventDefault()
           }
           this._tbx.disabled || e.prototype._keydown.call(this, i)
         }
@@ -2105,15 +2358,14 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._refreshHeader = function() {
         for (var t = this.hostElement.querySelectorAll(".wj-token"), e = 0; e < t.length; e++) this._wjTpl.removeChild(t[e]);
         var i = this.selectedItems;
-        if (i && 0 !== i.length) {
-          for (e = 0; e < i.length; e++) this._insertToken(i[e]);
-          this._wjInput.style.cssFloat = this.rightToLeft ? "right" : "left", this._adjustInputWidth()
-        }
+        if (!i || 0 === i.length) return this._wjInput.style.cssFloat = this.rightToLeft ? "right" : "left", void this._adjustInputWidth();
+        for (e = 0; e < i.length; e++) this._insertToken(i[e]);
+        this._wjInput.style.cssFloat = this.rightToLeft ? "right" : "left", this._adjustInputWidth()
       }, i.prototype._insertToken = function(e) {
         var i = this._getItemText(e, !0);
-        this.isContentHtml ? (this._cvt || (this._cvt = document.createElement("div")), this._cvt.innerHTML = i, i = this._cvt.textContent.trim()) : i = t.escapeHtml(i), this._wjTpl.insertBefore(this._createItem(i), this._wjInput)
+        this.isContentHtml || (i = t.escapeHtml(i)), this._wjTpl.insertBefore(this._createItem(i), this._wjInput)
       }, i.prototype._updateMaxItems = function() {
-        null != this._maxtems && this._selItems && this._selItems.length > this._maxtems && (this._selItems = this._selItems.slice(0, this._maxtems))
+        null != this._maxSelItems && this._selItems && this._selItems.length > this._maxSelItems && (this._selItems = this._selItems.slice(0, this._maxSelItems))
       }, i.prototype._updateFocus = function() {
         var e = this,
           n = this._wjTpl.querySelector("." + i._clsActive);
@@ -2128,7 +2380,7 @@ var __extends = this && this.__extends || function() {
         t && !o || (o ? (n = this._getItemIndex(o)) > -1 && (e = this._selItems[n], s = !0) : this._selItems.length > 0 && (e = this._selItems[this._selItems.length - 1], s = !0), s && (this._updateSelItems(e, !1), this._refreshHeader(), this._clearSelIndex(), this._disableInput(!1)), this._tbx.focus())
       }, i.prototype._updateSelItems = function(t, e) {
         if (e) {
-          if (this._selItems && 0 !== this._selItems.length || (this._selItems = []), null != this._maxtems && this._selItems.length >= this._maxtems) return;
+          if (this._selItems && 0 !== this._selItems.length || (this._selItems = []), null != this._maxSelItems && this._selItems.length >= this._maxSelItems) return;
           this._selItems.push(t)
         } else {
           var i = this._selItems.indexOf(t);
@@ -2183,7 +2435,7 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._hasSelectedMemeberPath = function() {
         return this.selectedMemberPath && "" !== this.selectedMemberPath
       }, i.prototype._disableInput = function(t) {
-        null != this._maxtems && (this._selItems.length < this._maxtems ? (this._tbx.disabled = !1, this._tbx.focus()) : (this._tbx.disabled = !0, this.hostElement.focus()))
+        null != this._maxSelItems && (this._selItems.length < this._maxSelItems ? (this._tbx.disabled = !1, this._tbx.focus()) : (this._tbx.disabled = !0, this.hostElement.focus()))
       }, i.prototype._adjustInputWidth = function() {
         this._tbx.style.width = "60px";
         var e, i = t.getElementRect(this.hostElement),
@@ -2251,7 +2503,7 @@ var __extends = this && this.__extends || function() {
           if (s.isVisible && s._modal) {
             for (var e = t.target; e && e != document.body; e = e.parentElement)
               if (e.scrollHeight > e.clientHeight) return;
-            t.preventDefault(), t.stopPropagation()
+            t.preventDefault()
           }
         }), s.initialize(o), s
       }
@@ -2362,25 +2614,27 @@ var __extends = this && this.__extends || function() {
         },
         enumerable: !0,
         configurable: !0
-      }), o.prototype.show = function(e, i) {
-        var n = this;
+      }), o.prototype.show = function(e, n) {
+        var o = this;
         if (!this.isVisible) {
-          var o = this.hostElement;
+          var s = this.hostElement;
           this.dialogResult = null, this._callback = null, this._hideAnim && (clearInterval(this._hideAnim), this._hideAnim = null);
-          var s = new t.CancelEventArgs;
-          this.onShowing(s) && (null != e && (this.modal = t.asBoolean(e)), null != i && (this._callback = t.asFunction(i)), t.showPopup(o, this._owner, !1, this._fadeIn, !1), this._modal && this._showBackdrop(), this._composing = !1, this._visible = !0, this.onShown(s), this.modal && this.addEventListener(window, "focus", function() {
-            n.containsFocus() || t.moveFocus(o, 0)
-          }), this._makeDraggable(this._draggable), setTimeout(function() {
-            if (!n.isTouching) {
-              var e = o.querySelector("input[autofocus]");
-              e && e.clientHeight > 0 && !e.disabled && e.tabIndex > -1 && !t.closest(e, "[disabled],.wj-state-disabled") ? (e.focus(), e.select()) : t.moveFocus(o, 0)
+          var r = new t.CancelEventArgs;
+          this.onShowing(r) && (null != e && (this.modal = t.asBoolean(e)), null != n && (this._callback = t.asFunction(n)), t.showPopup(s, this._owner, !1, this._fadeIn, !1), this._modal && this._showBackdrop(), this._composing = !1, this._visible = !0, this.onShown(r), this.modal && this.addEventListener(window, "focus", function() {
+            o.containsFocus() || t.moveFocus(s, 0)
+          }), this._dragged = !1, this._makeDraggable(this._draggable), this.addEventListener(window, "touchstart", function(e) {
+            t.contains(s, e.target) || o.isVisible && o._hideTrigger & i.Blur && o.hide()
+          }), setTimeout(function() {
+            if (!o.isTouching) {
+              var e = s.querySelector("input[autofocus]");
+              e && e.clientHeight > 0 && !e.disabled && e.tabIndex > -1 && !t.closest(e, "[disabled],.wj-state-disabled") ? (e.focus(), e.select()) : t.moveFocus(s, 0)
             }
-            n.containsFocus() || (o.tabIndex = 0, o.focus())
+            o.containsFocus() || (s.tabIndex = 0, s.focus())
           }, 200))
         }
       }, o.prototype.hide = function(i) {
         var n = this;
-        if (this._makeDraggable(!1), this.isVisible) {
+        if (this._makeDraggable(!1), this.removeEventListener(window, "touchstart"), this.isVisible) {
           t.isUndefined(i) || (this.dialogResult = i);
           var o = new t.CancelEventArgs;
           if (this.onHiding(o)) {
@@ -2413,39 +2667,42 @@ var __extends = this && this.__extends || function() {
           t.showPopup(this.hostElement, o), this._modal && i instanceof HTMLElement && i != t.getActiveElement() && i.focus(), this._refreshing = !1
         }
       }, o.prototype._makeDraggable = function(e) {
-        var i, n, o = this,
-          s = this.hostElement,
-          r = s ? s.querySelector(".wj-dialog-header") : null,
-          a = document,
-          l = "mouseup",
-          h = "touchend",
-          c = function(e) {
-            s && t.contains(r, e.target) && (i = new t.Point(s.offsetLeft, s.offsetTop), n = t.mouseToPage(e), ["mousemove", l, "touchmove", h].forEach(function(t) {
-              o.removeEventListener(a, t)
+        var i, n, s = this,
+          r = this.hostElement,
+          a = r ? r.querySelector(".wj-dialog-header") : null,
+          l = document,
+          h = "mouseup",
+          c = "touchend",
+          u = !1,
+          p = function(e) {
+            r && t.contains(a, e.target) && !e.button && (i = new t.Point(r.offsetLeft, r.offsetTop), n = t.mouseToPage(e), u = !1, ["mousemove", h, "touchmove", c].forEach(function(t) {
+              s.removeEventListener(l, t)
             }), ["mousemove", "touchmove"].forEach(function(t) {
-              o.addEventListener(a, t, u)
-            }), [l, h].forEach(function(t) {
-              o.addEventListener(a, t, p)
+              s.addEventListener(l, t, d, !1, !0)
+            }), [h, c].forEach(function(t) {
+              s.addEventListener(l, t, f)
             }))
           },
-          u = function(e) {
-            var r = t.mouseToPage(e);
-            t.setCss(s, {
-              left: Math.max(i.x + (r.x - n.x), 50 - s.offsetWidth),
-              top: Math.max(i.y + (r.y - n.y), 0)
-            }), o._dragged = !0
+          d = function(e) {
+            var a = t.mouseToPage(e),
+              l = a.x - n.x,
+              h = a.y - n.y;
+            (u || Math.abs(l) + Math.abs(h) > o._DRAG_THRESHOLD) && (t.setCss(r, {
+              left: Math.max(i.x + l, 50 - r.offsetWidth),
+              top: Math.max(i.y + (a.y - n.y), 0)
+            }), s._dragged = !0, u = !0)
           },
-          p = function(t) {
-            ["mousemove", l, "touchmove", h].forEach(function(t) {
-              o.removeEventListener(a, t)
+          f = function(t) {
+            ["mousemove", h, "touchmove", c].forEach(function(t) {
+              s.removeEventListener(l, t)
             })
           };
         ["mousedown", "touchstart"].forEach(function(t) {
-          o.removeEventListener(a, t)
-        }), this._dragged = !1, r && (t.setCss(r, {
+          s.removeEventListener(l, t)
+        }), a && (t.setCss(a, {
           touchAction: e ? "none" : ""
         }), e && ["mousedown", "touchstart"].forEach(function(t) {
-          o.addEventListener(a, t, c)
+          s.addEventListener(l, t, p)
         }))
       }, o.prototype._handleResize = function() {
         this.isVisible && !this._dragged && this.refresh()
@@ -2466,7 +2723,7 @@ var __extends = this && this.__extends || function() {
       }, o.prototype._validateAndHide = function(t) {
         var e = this.hostElement.querySelector(":invalid");
         e ? e.focus() : this.hide(t)
-      }, o
+      }, o._DRAG_THRESHOLD = 6, o
     }(t.Control);
     e.Popup = n
   }(t.input || (t.input = {}))
@@ -2513,7 +2770,7 @@ var __extends = this && this.__extends || function() {
           if (t.DateTime.equals(this._value, e)) this._tbx.value = t.Globalize.format(e, this.format);
           else {
             var i = !this.isRequired || null == e && null == this.value;
-            e = t.asDate(e, i), e = this._clamp(e), this._isValidDate(e) ? (this._tbx.value = e ? t.Globalize.format(e, this.format) : "", e == this._value || t.DateTime.equals(this._value, e) || (this._value = e, this.onValueChanged())) : this._tbx.value = e ? t.Globalize.format(this.value, this.format) : "", this.text != this._oldText && (this._oldText = this.text, this.onTextChanged())
+            e = t.asDate(e, i), e = this._clamp(e), this._isValidDate(e) ? (this._tbx.value = e ? t.Globalize.format(e, this.format) : "", e == this._value || t.DateTime.equals(this._value, e) || (this._value = e, this.onValueChanged())) : this._tbx.value = e ? t.Globalize.format(this.value, this.format) : "", this._calChanging = !0, this._calendar.value = this.value, this._calChanging = !1, this.text != this._oldText && (this._oldText = this.text, this.onTextChanged())
           }
         },
         enumerable: !0,
@@ -2551,6 +2808,24 @@ var __extends = this && this.__extends || function() {
         },
         set: function(e) {
           this._calendar.max = t.asDate(e, !0)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "repeatButtons", {
+        get: function() {
+          return this.calendar.repeatButtons
+        },
+        set: function(e) {
+          this.calendar.repeatButtons = t.asBoolean(e)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "showYearPicker", {
+        get: function() {
+          return this.calendar.showYearPicker
+        },
+        set: function(e) {
+          this.calendar.showYearPicker = t.asBoolean(e)
         },
         enumerable: !0,
         configurable: !0
@@ -2620,9 +2895,10 @@ var __extends = this && this.__extends || function() {
       }, n.prototype._createDropDown = function() {
         var i = this;
         this._calendar = new e.Calendar(this._dropDown), this._calendar.valueChanged.addHandler(function() {
-          i.value = t.DateTime.fromDateTime(i._calendar.value, i.value), i._calChanged = !0
+          i._calChanging || (i.value = t.DateTime.fromDateTime(i._calendar.value, i.value), i._calChanged = !0)
         }), this.addEventListener(this._dropDown, "click", function(e) {
-          i._calChanged && !t.closest(e.target, ".wj-calendar-header") ? i.isDroppedDown = !1 : "btn-today" == e.target.getAttribute("wj-part") && (i.isDroppedDown = !1)
+          var n = e.target;
+          t.closest(e.target, ".wj-header") && t.closest(e.target, ".wj-calendar-year") || (i._calChanged && !t.closest(n, ".wj-calendar-header") ? i.isDroppedDown = !1 : (n = t.closest(n, ".wj-btn")) && "btn-today" == n.getAttribute("wj-part") && (i.isDroppedDown = !1))
         })
       }, n.prototype._updateDropDown = function() {
         this._commitText();
@@ -2717,7 +2993,7 @@ var __extends = this && this.__extends || function() {
           return this._value
         },
         set: function(e) {
-          (e = t.asDate(e, !this.isRequired)) && (null != this._min && this._getTime(e) < this._getTime(this._min) && (e = t.DateTime.fromDateTime(e, this._min)), null != this._max && this._getTime(e) > this._getTime(this._max) && (e = t.DateTime.fromDateTime(e, this._max))), this._setText(e ? t.Globalize.format(e, this.format) : "", !0), this.selectedItem && this.selectedItem.value && (e = t.DateTime.fromDateTime(e, this.selectedItem.value)), e == this._value || t.DateTime.equals(e, this._value) || (this._value = e, this.onValueChanged())
+          (e = t.asDate(e, !this.isRequired)) && (e = this._clamp(e)), this._setText(e ? t.Globalize.format(e, this.format) : "", !0), this.selectedItem && this.selectedItem.value && (e = t.DateTime.fromDateTime(e, this.selectedItem.value)), e == this._value || t.DateTime.equals(e, this._value) || (this._value = e, this.onValueChanged())
         },
         enumerable: !0,
         configurable: !0
@@ -2779,12 +3055,6 @@ var __extends = this && this.__extends || function() {
         this.valueChanged.raise(this, t)
       }, i.prototype.onItemsSourceChanged = function(t) {
         e.prototype.onItemsSourceChanged.call(this, t), this._hasCustomItems = null != this.itemsSource
-      }, i.prototype._updateInputSelection = function(i) {
-        if (this._delKey) e.prototype._updateInputSelection.call(this, i);
-        else {
-          for (var n = this._tbx.value; i < n.length && !n[i].match(/[a-z0-9]/i);) i++;
-          t.setSelectionRange(this._tbx, i, this._tbx.value.length)
-        }
       }, i.prototype.refresh = function(i) {
         void 0 === i && (i = !0), e.prototype.refresh.call(this, i), this.isDroppedDown = !1, this._msk.refresh(), this._tbx.value = t.Globalize.format(this.value, this.format), this._updateItems()
       }, i.prototype.onSelectedIndexChanged = function(i) {
@@ -2794,6 +3064,20 @@ var __extends = this && this.__extends || function() {
           this.value = t.DateTime.fromDateTime(n, o)
         }
         e.prototype.onSelectedIndexChanged.call(this, i)
+      }, i.prototype._clamp = function(e) {
+        return null != this._min && this._getTime(e) < this._getTime(this._min) && (e = t.DateTime.fromDateTime(e, this._min)), null != this._max && this._getTime(e) > this._getTime(this._max) && (e = t.DateTime.fromDateTime(e, this._max)), e
+      }, i.prototype._wheel = function(i) {
+        if (!i.defaultPrevented && !this.isDroppedDown && !this.isReadOnly && this.containsFocus() && this.selectedIndex < 0 && this.value && t.isNumber(this.step) && this.step > 0) {
+          var n = t.DateTime.addMinutes(this.value, this.step * t.clamp(i.deltaY, -1, 1));
+          this.value = this._clamp(n), this.selectAll(), i.preventDefault()
+        }
+        e.prototype._wheel.call(this, i)
+      }, i.prototype._updateInputSelection = function(i) {
+        if (this._delKey) e.prototype._updateInputSelection.call(this, i);
+        else {
+          for (var n = this._tbx.value; i < n.length && !n[i].match(/[a-z0-9]/i);) i++;
+          t.setSelectionRange(this._tbx, i, this._tbx.value.length)
+        }
       }, i.prototype._updateItems = function() {
         if (!this._hasCustomItems) {
           var e = [],
@@ -2861,27 +3145,27 @@ var __extends = this && this.__extends || function() {
         var s = i.call(this, n) || this;
         t.addClass(s.hostElement, "wj-inputdatetime"), s._btnTm = s.hostElement.querySelector('[wj-part="btn-tm"]');
         var r = t.culture.InputDateTime.ariaLabels;
-        t.setAriaLabel(s._btn, r.tglDate), t.setAriaLabel(s._btnTm, r.tglTime), s._format = "g", s._inputTime = new e.InputTime(document.createElement("div"), {
+        t.setAriaLabel(s._btn, r.tglDate), t.setAriaLabel(s._btnTm, r.tglTime), s.format = "g", s._inputTime = new e.InputTime(document.createElement("div"), {
           isDroppedDownChanging: function(t, e) {
             s._hadFocus = s.containsFocus()
           },
           isDroppedDownChanged: function(t, e) {
-            !t.isDroppedDown && s._hadFocus && s._tbx.focus()
+            s._hadFocus && !s.isDroppedDown && (s.isTouching ? s.hostElement.focus() : s.selectAll())
           },
           valueChanged: function(e, i) {
             s.value = t.DateTime.fromDateTime(s.value, e.value)
           }
         });
         var a = s._inputTime.dropDown,
-          l = s._keydown.bind(s);
-        return s.addEventListener(a, "keydown", l, !0), s.addEventListener(a, "blur", function() {
+          l = s.calendar.hostElement,
+          h = s.addEventListener.bind(s),
+          c = s._keydown.bind(s);
+        return h(a, "keydown", c, !0), h(a, "blur", function() {
           s._updateFocusState()
-        }, !0), s.addEventListener(s._btn, "mousedown", function(t) {
-          s._setDropdown(s.calendar.hostElement)
-        }), s.addEventListener(s._btnTm, "mousedown", function(t) {
-          s._inputTime.dropDownCssClass = s.dropDownCssClass, s._setDropdown(a), setTimeout(function() {
-            s._btnclick(t)
-          })
+        }, !0), h(s._btn, "mousedown", function(t) {
+          s._setDropdown(l) && s._btnclick(t)
+        }), h(s._btnTm, "mousedown", function(t) {
+          s._setDropdown(a), s._btnclick(t)
         }), s.initialize(o), s
       }
       return __extends(n, i), Object.defineProperty(n.prototype, "timeMin", {
@@ -2941,11 +3225,14 @@ var __extends = this && this.__extends || function() {
           i ? this.value = i : this._tbx.value = t.Globalize.format(this.value, this.format)
         } else this.value = null
       }, n.prototype._setDropdown = function(t) {
-        this._dropDown != t && (this.isDroppedDown && (this.isDroppedDown = !1), this._dropDown = t)
+        if (this._dropDown == t) return !1;
+        this.isDroppedDown && (this.isDroppedDown = !1);
+        var e = this.dropDownCssClass;
+        return this.dropDownCssClass = "", this._dropDown = t, this.dropDownCssClass = e, !0
       }, n.prototype._updateDropDown = function() {
         var t = this._inputTime;
         this._dropDown == t.dropDown ? (this._commitText(), i.prototype._updateDropDown.call(this), t.isRequired = this.isRequired, t.value = this.value, this.isDroppedDown && t.listBox.showSelection()) : i.prototype._updateDropDown.call(this)
-      }, n.controlTemplate = '<div class="wj-template" style="position:relative"><div class="wj-input"><div class="wj-input-group wj-input-btn-visible"><input wj-part="input" type="text" class="wj-form-control" /><span class="wj-input-group-btn"><button wj-part="btn" class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-calendar"></span></button><button wj-part="btn-tm" class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-clock"></span></button></span></div></div><div wj-part="dropdown" class="wj-content wj-dropdown-panel" style="display:none"></div></div>', n
+      }, n.controlTemplate = '<div class="wj-template"><div class="wj-input"><div class="wj-input-group wj-input-btn-visible"><input wj-part="input" type="text" class="wj-form-control"/><span class="wj-input-group-btn"><button wj-part="btn" class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-calendar"></span></button><button wj-part="btn-tm" class="wj-btn wj-btn-default" tabindex="-1"><span class="wj-glyph-clock"></span></button></span></div></div><div wj-part="dropdown" class="wj-content wj-dropdown-panel" style="display:none"></div></div>', n
     }(e.InputDate);
     e.InputDateTime = i
   }(t.input || (t.input = {}))
@@ -3464,8 +3751,8 @@ var __extends = this && this.__extends || function() {
     var i = function(i) {
       function n(e, n) {
         var o = i.call(this, e) || this;
-        o.valueChanged = new t.Event, t.addClass(o.hostElement, "wj-inputcolor"), o._tbx.style.paddingLeft = "24px";
-        return o._ePreview = t.createElement('<div class="wj-inputcolorbox" style="position:absolute;left:6px;top:6px;width:12px;bottom:6px;border:1px solid black"></div>', o.hostElement.firstElementChild), "INPUT" == o._orgTag && (o._tbx.type = "", o._commitText()), o.value = "#ffffff", o.isRequired = !0, o.initialize(n), o.addEventListener(o._colorPicker.hostElement, "click", function(e) {
+        o.valueChanged = new t.Event, t.addClass(o.hostElement, "wj-inputcolor");
+        return o._ePreview = t.createElement('<div class="wj-inputcolorbox"></div>', o.hostElement.firstElementChild), "INPUT" == o._orgTag && (o._tbx.type = "", o._commitText()), o.value = "#ffffff", o.isRequired = !0, o.initialize(n), o.addEventListener(o._colorPicker.hostElement, "click", function(e) {
           var i = e.target;
           i && "DIV" == i.tagName && (t.closest(i, '[wj-part="div-pal"]') || t.closest(i, '[wj-part="div-pv"]')) && i.style.backgroundColor && (o.isDroppedDown = !1)
         }), o
@@ -3514,6 +3801,8 @@ var __extends = this && this.__extends || function() {
         configurable: !0
       }), n.prototype.onValueChanged = function(t) {
         this.valueChanged.raise(this, t)
+      }, n.prototype.onIsDroppedDownChanged = function(t) {
+        i.prototype.onIsDroppedDownChanged.call(this, t), this.isDroppedDown && !this.isTouching && this.selectAll()
       }, n.prototype._createDropDown = function() {
         var i = this;
         this._colorPicker = new e.ColorPicker(this._dropDown), t.setCss(this._dropDown, {

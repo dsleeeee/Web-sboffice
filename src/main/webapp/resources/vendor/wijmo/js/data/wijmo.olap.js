@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -148,8 +148,8 @@ var wijmo;
                   var c = d._getValue(this._item, !0),
                     p = d._getValue(t._item, !0),
                     _ = e.Globalize.parseDate(c, h),
-                    g = e.Globalize.parseDate(p, h);
-                  _ && g ? (a = _, u = g) : (a = c, u = p)
+                    f = e.Globalize.parseDate(p, h);
+                  _ && f ? (a = _, u = f) : (a = c, u = p)
                 }
               }
               if (!(a == u || e.DateTime.equals(a, u))) return null == a ? 1 : null == u ? -1 : (i = a < u ? -1 : 1, d.descending ? -i : i)
@@ -327,7 +327,7 @@ var __extends = this && this.__extends || function() {
     "use strict";
     var i = function() {
       function i(i, n, r, o) {
-        this.propertyChanged = new e.Event, this._ng = i, this._binding = new e.Binding(n), this._header = r || e.toHeaderCase(n), this._aggregate = e.Aggregate.Sum, this._showAs = t.ShowAs.NoCalculation, this._isContentHtml = !1, this._format = "", this._filter = new t.PivotFilter(this), o && e.copy(this, o)
+        this.propertyChanged = new e.Event, this._ng = i, this._binding = new e.Binding(n), this._header = r || e.toHeaderCase(n), this._aggregate = e.Aggregate.Sum, this._showAs = t.ShowAs.NoCalculation, this._isContentHtml = !1, this._visible = !0, this._format = "", this._filter = new t.PivotFilter(this), o && e.copy(this, o)
       }
       return Object.defineProperty(i.prototype, "binding", {
         get: function() {
@@ -347,6 +347,15 @@ var __extends = this && this.__extends || function() {
             var s = new e.PropertyChangedEventArgs("binding", i, t);
             this.onPropertyChanged(s)
           }
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(i.prototype, "getValue", {
+        get: function() {
+          return this._getValueFn
+        },
+        set: function(t) {
+          this._getValueFn = e.asFunction(t, !0)
         },
         enumerable: !0,
         configurable: !0
@@ -460,6 +469,15 @@ var __extends = this && this.__extends || function() {
         },
         enumerable: !0,
         configurable: !0
+      }), Object.defineProperty(i.prototype, "visible", {
+        get: function() {
+          return this._visible
+        },
+        set: function(t) {
+          this._setProp("_visible", e.asBoolean(t))
+        },
+        enumerable: !0,
+        configurable: !0
       }), Object.defineProperty(i.prototype, "sortComparer", {
         get: function() {
           return this._srtCmp
@@ -553,13 +571,12 @@ var __extends = this && this.__extends || function() {
       }, i.prototype._getName = function() {
         return this.header || this.binding
       }, i.prototype._getValue = function(t, i) {
-        var n = this._binding,
-          r = this._ng.isServer ? t[this.key] : n._key ? t[n._key] : n.getValue(t);
-        return i && "string" != typeof r ? e.Globalize.format(r, this._format) : r
+        var n, r = this._binding;
+        return n = e.isFunction(this._getValueFn) ? this._getValueFn.call(this, t) : this._ng.isServer ? t[this.key] : r._key ? t[r._key] : r.getValue(t), i && "string" != typeof n ? e.Globalize.format(n, this._format) : n
       }, i.prototype._getWeight = function(t) {
         var i = this._weightField ? this._weightField._getValue(t, !1) : null;
         return e.isNumber(i) ? i : null
-      }, i._props = ["dataType", "format", "width", "wordWrap", "aggregate", "showAs", "descending", "isContentHtml"], i
+      }, i._props = ["dataType", "format", "width", "wordWrap", "aggregate", "showAs", "descending", "isContentHtml", "visible"], i
     }();
     t.PivotField = i;
     var n = function(t) {
@@ -775,8 +792,8 @@ var __extends = this && this.__extends || function() {
         return e.setText(r._gDlg, s.dialogHeader), e.setText(r._gHdr, s.header), e.setText(r._gAgg, s.summary), e.setText(r._gShw, s.showAs), e.setText(r._gWfl, s.weighBy), e.setText(r._gSrt, s.sort), e.setText(r._gFlt, s.filter), e.setText(r._gFmt, s.format), e.setText(r._gSmp, s.sample), e.setText(r._btnFltEdt, s.edit), e.setText(r._btnFltClr, s.clear), e.setText(r._btnApply, s.ok), e.setText(r._btnCancel, s.cancel), r._cmbHdr = new e.input.ComboBox(r._dHdr), r._cmbAgg = new e.input.ComboBox(r._dAgg), r._cmbShw = new e.input.ComboBox(r._dShw), r._cmbWFl = new e.input.ComboBox(r._dWFl), r._cmbSrt = new e.input.ComboBox(r._dSrt), r._cmbFmt = new e.input.ComboBox(r._dFmt), r._cmbSmp = new e.input.ComboBox(r._dSmp), r._initAggregateOptions(), r._initShowAsOptions(), r._initFormatOptions(), r._initSortOptions(), r._updatePreview(), r._cmbShw.textChanged.addHandler(r._updateFormat, r), r._cmbFmt.textChanged.addHandler(r._updatePreview, r), r.addEventListener(r._btnFltEdt, "click", function(e) {
           r._editFilter(), e.preventDefault()
         }), r.addEventListener(r._btnFltClr, "click", function(t) {
-          e.enable(r._btnFltClr, !1), r._createFilterEditor(), setTimeout(function() {
-            r._eFlt.clearEditor()
+          r._createFilterEditor(), setTimeout(function() {
+            r._eFlt.clearEditor(), r._btnFltEdt.focus(), e.enable(r._btnFltClr, !1)
           }), t.preventDefault()
         }), r.addEventListener(r._btnApply, "click", function(e) {
           r.updateField()
@@ -1285,6 +1302,10 @@ var __extends = this && this.__extends || function() {
       PivotChart: {
         by: "by",
         and: "and"
+      },
+      Slicer: {
+        multiSelect: "Multi-Select",
+        clearFilter: "Clear Filter"
       }
     });
     var i;
@@ -1652,7 +1673,7 @@ var __extends = this && this.__extends || function() {
           a = new t._PivotNode(this._rowFields, 0, null, -1, null),
           u = this.valueFields;
         0 == u.length && this.columnFields.length > 0 && (u = new t.PivotFieldCollection(this)).push(new t.PivotField(this, ""));
-        for (var d = i, h = this._rowFields.length, c = this._getShowRowTotals(), p = c == d.None ? h : 0, _ = c == d.GrandTotals ? Math.max(1, h) : 1, g = this._columnFields.length, f = this._getShowColTotals(), v = f == d.None ? g : 0, y = f == d.GrandTotals ? Math.max(1, g) : 1, m = u.length, w = this, b = n; b < l; b++) {
+        for (var d = i, h = this._rowFields.length, c = this._getShowRowTotals(), p = c == d.None ? h : 0, _ = c == d.GrandTotals ? Math.max(1, h) : 1, f = this._columnFields.length, g = this._getShowColTotals(), v = g == d.None ? f : 0, y = g == d.GrandTotals ? Math.max(1, f) : 1, m = u.length, w = this, b = n; b < l; b++) {
           var F = function(i) {
             if (w._async && i - n >= r._BATCH_SIZE && Date.now() - w._batchStart > r._BATCH_DELAY) return w._toUpdateTallies = setTimeout(function() {
               s.onUpdatingView(new o(Math.round(i / e.length * 100))), s._batchStart = Date.now(), s._updateTallies(e, i)
@@ -1665,20 +1686,20 @@ var __extends = this && this.__extends || function() {
               w._cntFiltered++;
               for (var d = p; d <= h; d += _) {
                 var c = a.getNode(w._rowFields, d, null, -1, l),
-                  f = c.key,
-                  b = f.toString(),
+                  g = c.key,
+                  b = g.toString(),
                   F = w._tallies[b];
-                F || (w._keys[b] = f, w._tallies[b] = F = {});
-                for (var C = v; C <= g; C += y)
+                F || (w._keys[b] = g, w._tallies[b] = F = {});
+                for (var C = v; C <= f; C += y)
                   for (var x = 0; x < m; x++) {
                     var P = c.tree.getNode(w._columnFields, C, u, x, l).key,
                       T = P.toString(),
                       S = F[T];
                     S || (w._keys[T] = P, S = F[T] = new t._Tally);
                     var E = u[x],
-                      A = E._getValue(l, !1),
-                      D = E._weightField ? E._getWeight(l) : null;
-                    S.add(A, D)
+                      j = E._getValue(l, !1),
+                      A = E._weightField ? E._getWeight(l) : null;
+                    S.add(j, A)
                   }
               }
             }
@@ -1704,12 +1725,12 @@ var __extends = this && this.__extends || function() {
               p = e._tallies[c],
               _ = {};
             _[t._PivotKey._ROW_KEY_NAME] = e._getKey(c);
-            for (var g = 0; g < d.length; g++) {
-              var f = d[g],
-                v = p[f],
-                y = e._getKey(f),
+            for (var f = 0; f < d.length; f++) {
+              var g = d[f],
+                v = p[g],
+                y = e._getKey(g),
                 m = v ? v.getAggregate(y.aggregate) : null;
-              0 != m || e._showZeros || (m = null), _[f] = m
+              0 != m || e._showZeros || (m = null), _[g] = m
             }
             i.push(_)
           }
@@ -1728,13 +1749,13 @@ var __extends = this && this.__extends || function() {
             case n.RunTot:
             case n.RunTotPct:
               for (h = o; h < r._colBindings.length; h += i) {
-                for (g = 0; g < t.length; g++)(c = t[g])[f = r._colBindings[h]] = r._getRunningTotal(t, g, h, s.showAs);
+                for (f = 0; f < t.length; f++)(c = t[f])[g = r._colBindings[h]] = r._getRunningTotal(t, f, h, s.showAs);
                 if (s.showAs == n.RunTotPct)
-                  for (g = 0; g < t.length; g++) {
-                    var l = (c = t[g])[f = r._colBindings[h]];
+                  for (f = 0; f < t.length; f++) {
+                    var l = (c = t[f])[g = r._colBindings[h]];
                     if (e.isNumber(l)) {
-                      var a = r._getLastValueInRowGroup(t, g, h);
-                      0 != a && (c[f] = l / a)
+                      var a = r._getLastValueInRowGroup(t, f, h);
+                      0 != a && (c[g] = l / a)
                     }
                   }
               }
@@ -1754,26 +1775,26 @@ var __extends = this && this.__extends || function() {
               }, h = o; h < r._colBindings.length; h += i) d(h);
               break;
             case n.PctRow:
-              for (g = 0; g < t.length; g++) {
-                for (var c = t[g], p = 0, h = o; h < r._colBindings.length; h += i) - 1 == r._getColLevel(h) && (_ = c[f = r._colBindings[h]], e.isNumber(_) && (p += _));
+              for (f = 0; f < t.length; f++) {
+                for (var c = t[f], p = 0, h = o; h < r._colBindings.length; h += i) - 1 == r._getColLevel(h) && (_ = c[g = r._colBindings[h]], e.isNumber(_) && (p += _));
                 for (h = o; h < r._colBindings.length; h += i) {
-                  var _ = c[f = r._colBindings[h]];
-                  e.isNumber(_) && (c[f] = 0 != p ? _ / p : null)
+                  var _ = c[g = r._colBindings[h]];
+                  e.isNumber(_) && (c[g] = 0 != p ? _ / p : null)
                 }
               }
               break;
             case n.DiffRow:
             case n.DiffRowPct:
               for (h = o; h < r._colBindings.length; h += i)
-                for (g = t.length - 1; g >= 0; g--)(c = t[g])[f = r._colBindings[h]] = r._getRowDifference(t, g, h, s.showAs);
+                for (f = t.length - 1; f >= 0; f--)(c = t[f])[g = r._colBindings[h]] = r._getRowDifference(t, f, h, s.showAs);
               break;
             case n.DiffCol:
             case n.DiffColPct:
-              for (var g = 0; g < t.length; g++)
+              for (var f = 0; f < t.length; f++)
                 for (h = r._colBindings.length - i + o; h >= 0; h -= i) {
-                  var c = t[g],
-                    f = r._colBindings[h];
-                  c[f] = r._getColDifference(t, g, h, s.showAs)
+                  var c = t[f],
+                    g = r._colBindings[h];
+                  c[g] = r._getColDifference(t, f, h, s.showAs)
                 }
           }
         }(o)
@@ -1831,9 +1852,9 @@ var __extends = this && this.__extends || function() {
             }
             var p = this._colBindings[r],
               _ = e[t][p],
-              g = e[u][p],
-              f = _ - g;
-            return o == n.DiffRowPct && (f /= g), f
+              f = e[u][p],
+              g = _ - f;
+            return o == n.DiffRowPct && (g /= f), g
           }
           if (d > s) break
         }
@@ -1850,10 +1871,10 @@ var __extends = this && this.__extends || function() {
               if (c.values[a] != p.values[a]) return null
             }
             var _ = e[t],
-              g = _[this._colBindings[r]],
-              f = _[this._colBindings[d]],
-              v = g - f;
-            return o == n.DiffColPct && (v /= f), v
+              f = _[this._colBindings[r]],
+              g = _[this._colBindings[d]],
+              v = f - g;
+            return o == n.DiffColPct && (v /= g), v
           }
           if (h > s) break
         }
@@ -1936,7 +1957,7 @@ var __extends = this && this.__extends || function() {
       }, r.prototype._fieldPropertyChanged = function(e, t) {
         if (this.onViewDefinitionChanged(), e.isActive) {
           var i = t.propertyName;
-          "width" != i && "wordWrap" != i && "isContentHtml" != i ? "format" == i && this.valueFields.indexOf(e) > -1 ? this._pivotView.refresh() : "showAs" != i ? "descending" != i ? "aggregate" != i ? this.invalidate() : this.valueFields.indexOf(e) > -1 && !this.isUpdating && (this._server ? this._updateView() : this._updatePivotView()) : this._updatePivotView() : this.valueFields.indexOf(e) > -1 && !this.isUpdating && this._updatePivotView() : this._pivotView.refresh()
+          "visible" != i && ("width" != i && "wordWrap" != i && "isContentHtml" != i ? "format" == i && this.valueFields.indexOf(e) > -1 ? this._pivotView.refresh() : "showAs" != i ? "descending" != i ? "aggregate" != i ? this.invalidate() : this.valueFields.indexOf(e) > -1 && !this.isUpdating && (this._server ? this._updateView() : this._updatePivotView()) : this._updatePivotView() : this.valueFields.indexOf(e) > -1 && !this.isUpdating && this._updatePivotView() : this._pivotView.refresh())
         }
       }, r.prototype._copyProps = function(e, t, i) {
         for (var n = 0; n < i.length; n++) {
@@ -2250,10 +2271,10 @@ var __extends = this && this.__extends || function() {
             var c = i._getAggregatedFieldCount(e, r.rowFields),
               p = a.getNode(r.rowFields, o - c, null, -1, e),
               _ = p.key,
-              g = _.toString(),
-              f = _.toString(d > 0 ? d : null),
-              v = r._tallies[f];
-            v || (g !== u && (d = 0, f = g), u = g, r._keys[f] = _, r._tallies[f] = v = {}), c = i._getAggregatedFieldCount(e, r.columnFields);
+              f = _.toString(),
+              g = _.toString(d > 0 ? d : null),
+              v = r._tallies[g];
+            v || (f !== u && (d = 0, g = f), u = f, r._keys[g] = _, r._tallies[g] = v = {}), c = i._getAggregatedFieldCount(e, r.columnFields);
             for (var y = 0; y < l; y++) {
               var m = p.tree.getNode(r.columnFields, s - c, r.valueFields, y, e).key,
                 w = m.toString(),
@@ -2527,7 +2548,7 @@ var __extends = this && this.__extends || function() {
           r = this._url;
         return e.httpRequest(r, {
           async: !1,
-          data: g(t, n._cubeName),
+          data: f(t, n._cubeName),
           method: "POST",
           requestHeaders: {
             "Content-Type": "text/xml"
@@ -2696,7 +2717,7 @@ var __extends = this && this.__extends || function() {
           o = this._url;
         return e.httpRequest(o, {
           async: !0,
-          data: f(t, i),
+          data: g(t, i),
           method: "POST",
           requestHeaders: {
             "Content-Type": "text/xml"
@@ -2787,10 +2808,10 @@ var __extends = this && this.__extends || function() {
       _ = function(e, t) {
         return '\n    <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">\n        <Header>\n            <XA:Session soap:mustUnderstand="1" SessionId="' + e + '" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:XA="urn:schemas-microsoft-com:xml-analysis" />\n        </Header>\n        <Body>\n            <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">\n                <RequestType>MDSCHEMA_KPIS</RequestType>\n                <Restrictions>\n                    <RestrictionList>\n                        <CUBE_NAME>' + t + "</CUBE_NAME>\n                    </RestrictionList>\n                </Restrictions>\n                <Properties>\n                </Properties>\n            </Discover>\n        </Body>\n    </Envelope>"
       },
-      g = function(e, t) {
+      f = function(e, t) {
         return '\n    <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">\n        <Header>\n            <XA:Session soap:mustUnderstand="1" SessionId="' + e + '" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:XA="urn:schemas-microsoft-com:xml-analysis" />\n        </Header>\n        <Body>\n            <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">\n                <RequestType>MDSCHEMA_PROPERTIES</RequestType>\n                <Restrictions>\n                    <RestrictionList>\n                        <CUBE_NAME>' + t + "</CUBE_NAME>\n                        <PROPERTY_NAME>MEMBER_VALUE</PROPERTY_NAME>\n                    </RestrictionList>\n                </Restrictions>\n                <Properties>\n                </Properties>\n            </Discover>\n        </Body>\n    </Envelope>"
       },
-      f = function(e, t) {
+      g = function(e, t) {
         return '\n    <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">\n        <Header>\n            <XA:Session soap:mustUnderstand="1" SessionId="' + e + '" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:XA="urn:schemas-microsoft-com:xml-analysis" />\n        </Header>\n        <Body>\n            <Execute xmlns="urn:schemas-microsoft-com:xml-analysis">\n                <Command>\n                    <Statement>\n                        <![CDATA[\n                        ' + t + "\n                        ]]>\n                    </Statement>\n                </Command>\n                <Properties>\n                    <PropertyList>\n                        <Content>Data</Content>\n                    </PropertyList>\n                </Properties>\n            </Execute>\n        </Body>\n    </Envelope>"
       }
   }(e.olap || (e.olap = {}))
@@ -3083,9 +3104,14 @@ var __extends = this && this.__extends || function() {
           return this._ng
         },
         set: function(i) {
+          var n = this;
           this._ng && (this._ng.itemsSourceChanged.removeHandler(this._itemsSourceChanged), this._ng.viewDefinitionChanged.removeHandler(this._viewDefinitionChanged), this._ng.updatingView.removeHandler(this._updatingView), this._ng.updatedView.removeHandler(this._updatedView), this._ng.error.removeHandler(this._requestError)), i = e.asType(i, t.PivotEngine, !1), this._ng = i, this._ng.itemsSourceChanged.addHandler(this._itemsSourceChanged, this), this._ng.viewDefinitionChanged.addHandler(this._viewDefinitionChanged, this), this._ng.updatingView.addHandler(this._updatingView, this), this._ng.updatedView.addHandler(this._updatedView, this), this._ng.error.addHandler(this._requestError, this), this._lbFields.itemsSource = i.fields, this._lbFilters.itemsSource = i.filterFields, this._lbRows.itemsSource = i.rowFields, this._lbCols.itemsSource = i.columnFields, this._lbVals.itemsSource = i.valueFields, this._lbFields.collectionView.filter = function(e) {
-            return null == e.parentField
-          }
+            return e.visible && null == e.parentField
+          }, "Filters,Rows,Cols,Vals".split(",").forEach(function(e) {
+            n["_lb" + e].collectionView.filter = function(e) {
+              return e.visible
+            }
+          })
         },
         enumerable: !0,
         configurable: !0
@@ -3191,7 +3217,11 @@ var __extends = this && this.__extends || function() {
       }, n.prototype.onUpdatedView = function(e) {
         this.updatedView.raise(this, e)
       }, n.prototype.refresh = function(e) {
-        void 0 === e && (e = !0), this._lbFields.refresh(), this._lbFilters.refresh(), this._lbRows.refresh(), this._lbCols.refresh(), this._lbVals.refresh(), e && (this._globalize(), this._ctxMenuShort.refresh(), this._ctxMenuFull.refresh()), i.prototype.refresh.call(this, e)
+        var t = this;
+        void 0 === e && (e = !0), "Fields,Filters,Rows,Cols,Vals".split(",").forEach(function(e) {
+          var i = t["_lb" + e];
+          i.refresh(), i.collectionView.refresh()
+        }), e && (this._globalize(), this._ctxMenuShort.refresh(), this._ctxMenuFull.refresh()), i.prototype.refresh.call(this, e)
       }, n.prototype._copy = function(e, t) {
         switch (e) {
           case "engine":
@@ -3294,10 +3324,11 @@ var __extends = this && this.__extends || function() {
               o = r.row;
             o > -1 ? (n = t.getCellBoundingRect(o, 0), r.point.y > n.top + n.height / 2 && (n.top += n.height, o++), this._dropIndex = o) : (o = t.viewRange.bottomRow, (n = t.getCellBoundingRect(o, 0)).top += n.height, this._dropIndex = o + 1)
           } else(n = e.Rect.fromBoundingRect(t.hostElement.getBoundingClientRect())).top += 4, this._dropIndex = 0;
-          var s = this.hostElement.getBoundingClientRect();
+          var s = this.hostElement,
+            l = s.getBoundingClientRect();
           e.setCss(this._dMarker, {
-            left: Math.round(n.left - s.left),
-            top: Math.round(n.top - s.top - 2),
+            left: Math.round(n.left - l.left) + s.scrollLeft,
+            top: Math.round(n.top - l.top - 2) + s.scrollTop,
             width: Math.round(n.width),
             height: 4,
             display: ""
@@ -3361,18 +3392,19 @@ var __extends = this && this.__extends || function() {
         this._targetField = null, this._htDown = null;
         var i = e.Control.getControl(this.owner),
           n = i.engine,
-          r = i.hitTest(t);
+          r = i.hitTest(t),
+          o = e.grid.CellType;
         switch (r.cellType) {
-          case e.grid.CellType.Cell:
+          case o.Cell:
             i.select(r.range), this._targetField = n.valueFields[r.col % n.valueFields.length], this._htDown = r;
             break;
-          case e.grid.CellType.ColumnHeader:
+          case o.ColumnHeader:
             this._targetField = n.columnFields[r.row];
             break;
-          case e.grid.CellType.RowHeader:
+          case o.RowHeader:
             this._targetField = n.rowFields[r.col];
             break;
-          case e.grid.CellType.TopLeft:
+          case o.TopLeft:
             r.row == r.panel.rows.length - 1 && (this._targetField = n.rowFields[r.col])
         }
         return null != this._targetField
@@ -3505,9 +3537,9 @@ var __extends = this && this.__extends || function() {
           if (a != u) return new e.grid.CellRange(a, n, u, n)
         }
         var c, p, _ = r ? r.col : 0,
-          g = r ? r.col2 : t.columns.length - 1;
+          f = r ? r.col2 : t.columns.length - 1;
         for (c = n; c > _ && this._sameRowValues(t, i, n, c - 1); c--);
-        for (p = n; p < g && this._sameRowValues(t, i, n, p + 1); p++);
+        for (p = n; p < f && this._sameRowValues(t, i, n, p + 1); p++);
         return c != p ? new e.grid.CellRange(i, c, i, p) : null
       }, n.prototype._sameRowValues = function(e, t, i, n) {
         for (; t >= 0; t--)
@@ -3557,6 +3589,12 @@ var __extends = this && this.__extends || function() {
         },
         set: function(t) {
           this._showDetailOnDoubleClick = e.asBoolean(t)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "detailDialog", {
+        get: function() {
+          return this._dlgDetail || (this._dlgDetail = new t.DetailDialog(document.createElement("div"))), this._dlgDetail
         },
         enumerable: !0,
         configurable: !0
@@ -3628,12 +3666,10 @@ var __extends = this && this.__extends || function() {
         var n = this.rows[e.asInt(t)].dataItem,
           r = this.columns[e.asInt(i)].binding;
         return this._ng.getDetailView(n, r)
-      }, n.prototype.showDetail = function(i, n) {
+      }, n.prototype.showDetail = function(t, i) {
         if (this._ng.valueFields.length) {
-          var r = new t.DetailDialog(document.createElement("div"));
-          r.showDetail(this, new e.grid.CellRange(i, n));
-          var o = new e.input.Popup(document.createElement("div"));
-          o.content = r.hostElement, o.show(!0)
+          var n = this.detailDialog;
+          n.showDetail(this, new e.grid.CellRange(t, i)), n.show(!0)
         }
       }, n.prototype.collapseRowsToLevel = function(e) {
         this._collapseRowsToLevel(e)
@@ -3651,13 +3687,13 @@ var __extends = this && this.__extends || function() {
           if (o || (s = r._collapsedKeys = {}), i.prototype._bindGrid.call(r, n), r._ng && o && !e.isEmpty(s)) {
             for (var u = r._ng.totalsBeforeData, d = u ? l.length - 1 : 0, h = u ? -1 : l.length, c = u ? -1 : 1, p = d; p != h; p += c) {
               var _ = l[p].dataItem;
-              (f = _ ? _[t._PivotKey._ROW_KEY_NAME] : null) && f.level > 0 && s[f.toString()] && r._setRowCollapsed(new e.grid.CellRange(p, f.level - 1), !0)
+              (g = _ ? _[t._PivotKey._ROW_KEY_NAME] : null) && g.level > 0 && s[g.toString()] && r._setRowCollapsed(new e.grid.CellRange(p, g.level - 1), !0)
             }
             d = u ? a.length - 1 : 0, h = u ? -1 : a.length, c = u ? -1 : 1;
             for (p = d; p != h; p += c) {
-              var g = a[p].binding,
-                f = r._ng._getKey(g);
-              f && f.level > 0 && s[f.toString()] && r._setColCollapsed(new e.grid.CellRange(f.level - 1, p), !0)
+              var f = a[p].binding,
+                g = r._ng._getKey(f);
+              g && g.level > 0 && s[g.toString()] && r._setColCollapsed(new e.grid.CellRange(g.level - 1, p), !0)
             }
           }
         })
@@ -3668,7 +3704,7 @@ var __extends = this && this.__extends || function() {
       }, n.prototype.onItemsSourceChanged = function(e) {
         this._ng && (this._ng.updatedView.removeHandler(this._updatedView, this), this._ng.viewDefinitionChanged.removeHandler(this._viewDefinitionChanged, this)), this._collapsedKeys = {};
         var n = this.collectionView;
-        this._ng = n instanceof t.PivotCollectionView ? n.engine : null, this._ng && (this._ng.updatedView.addHandler(this._updatedView, this), this._ng.viewDefinitionChanged.addHandler(this._viewDefinitionChanged, this)), this._updateFixedCounts(), this._bindGrid(!0), i.prototype.onItemsSourceChanged.call(this, e)
+        this._ng = n instanceof t.PivotCollectionView ? n.engine : null, this._ng && (this._ng.updatedView.addHandler(this._updatedView, this), this._ng.viewDefinitionChanged.addHandler(this._viewDefinitionChanged, this)), this._updatedView(), this._bindGrid(!0), i.prototype.onItemsSourceChanged.call(this, e)
       }, n.prototype.onResizedColumn = function(e) {
         var t = this._ng;
         if (t) {
@@ -3778,23 +3814,31 @@ var __extends = this && this.__extends || function() {
           n.panel == this.columnHeaders && (r.valueFields.length < 2 || n.row < n.panel.rows.length - 1) && (n.cell.style.textAlign = "");
           var s = null;
           n.panel == this.topLeftCells && n.row == n.panel.rows.length - 1 && this.allowDragging & e.grid.AllowDragging.Columns && (s = !0), e.setAttribute(n.cell, "draggable", s);
-          var l = r._getRowLevel(n.row),
-            a = r._getColLevel(n.panel.columns[n.col].binding);
-          if (e.toggleClass(n.cell, "wj-aggregate", l > -1 || a > -1), this._collapsibleSubtotals) {
+          var l;
+          switch (n.panel) {
+            case this.rowHeaders:
+              l = r.rowFields[n.col % r.rowFields.length];
+              break;
+            case this.columnHeaders:
+              l = r.columnFields[n.row];
+              break;
+            case this.cells:
+              l = r.valueFields[n.col]
+          }
+          l && l.isContentHtml && (n.cell.innerHTML = n.cell.textContent);
+          var a = r._getRowLevel(n.row),
+            u = r._getColLevel(n.panel.columns[n.col].binding);
+          if (e.toggleClass(n.cell, "wj-aggregate", a > -1 || u > -1), this._collapsibleSubtotals) {
             if (n.panel == this.rowHeaders && r._getShowRowTotals() == t.ShowTotals.Subtotals) {
-              u = this.getMergedRange(n.panel, n.row, n.col, !1) || n.range;
-              n.col < r.rowFields.length - 1 && u.rowSpan > 1 && (n.cell.innerHTML = this._getCollapsedGlyph(this._getRowCollapsed(u)) + n.cell.innerHTML)
+              d = this.getMergedRange(n.panel, n.row, n.col, !1) || n.range;
+              n.col < r.rowFields.length - 1 && d.rowSpan > 1 && (n.cell.innerHTML = this._getCollapsedGlyph(this._getRowCollapsed(d)) + n.cell.innerHTML)
             }
             if (n.panel == this.columnHeaders && r._getShowColTotals() == t.ShowTotals.Subtotals) {
-              var u = this.getMergedRange(n.panel, n.row, n.col, !1) || n.range;
-              n.row < r.columnFields.length - 1 && u.columnSpan > 1 && (n.cell.innerHTML = this._getCollapsedGlyph(this._getColCollapsed(u)) + n.cell.innerHTML)
+              var d = this.getMergedRange(n.panel, n.row, n.col, !1) || n.range;
+              n.row < r.columnFields.length - 1 && d.columnSpan > 1 && (n.cell.innerHTML = this._getCollapsedGlyph(this._getColCollapsed(d)) + n.cell.innerHTML)
             }
           }
-          if (n.panel == this.topLeftCells && this.showRowFieldSort && n.col < r.rowFields.length && n.row == this._getSortRowIndex()) {
-            var d = r.rowFields[n.col];
-            e.toggleClass(n.cell, "wj-sort-asc", !d.descending), e.toggleClass(n.cell, "wj-sort-desc", d.descending), n.cell.innerHTML += ' <span class="wj-glyph-' + (d.descending ? "down" : "up") + '"></span>'
-          }
-          if (this._centerVert && n.cell.hasChildNodes && (n.panel == this.rowHeaders || n.panel == this.columnHeaders)) {
+          if (n.panel == this.topLeftCells && this.showRowFieldSort && n.col < r.rowFields.length && n.row == this._getSortRowIndex() && (l = r.rowFields[n.col], e.toggleClass(n.cell, "wj-sort-asc", !l.descending), e.toggleClass(n.cell, "wj-sort-desc", l.descending), n.cell.innerHTML += ' <span class="wj-glyph-' + (l.descending ? "down" : "up") + '"></span>'), this._centerVert && n.cell.hasChildNodes && (n.panel == this.rowHeaders || n.panel == this.columnHeaders)) {
             var h = e.createElement('<div style="display:table-cell;vertical-align:middle"></div>');
             this._docRange || (this._docRange = document.createRange()), this._docRange.selectNodeContents(n.cell), this._docRange.surroundContents(h), e.setCss(n.cell, {
               display: "table",
@@ -3995,9 +4039,9 @@ var __extends = this && this.__extends || function() {
     "use strict";
     var i = function(i) {
       function n(t, n) {
-        var r = i.call(this, t, null, !0) || this,
+        var r = i.call(this, t, null) || this,
           o = r.getTemplate();
-        r.applyTemplate("wj-control wj-content wj-detaildialog", o, {
+        r.applyTemplate("wj-control wj-detaildialog", o, {
           _sCnt: "sp-cnt",
           _dSummary: "div-summary",
           _dGrid: "div-grid",
@@ -4020,29 +4064,57 @@ var __extends = this && this.__extends || function() {
         var l = i.engine,
           a = e.culture.olap.DetailDialog,
           u = "",
-          d = i.rows[n.row].dataItem[t._PivotKey._ROW_KEY_NAME],
-          h = this._getHeader(d);
-        h && (u += a.row + ": <b>" + e.escapeHtml(h) + "</b><br>");
-        var c = l._getKey(i.columns[n.col].binding),
-          p = this._getHeader(c);
-        p && (u += a.col + ": <b>" + e.escapeHtml(p) + "</b><br>");
-        var _ = l.valueFields,
-          g = _[n.col % _.length].header,
-          f = i.getCellData(n.row, n.col, !0);
-        u += e.escapeHtml(g) + ": <b>" + e.escapeHtml(f) + "</b>", this._dSummary.innerHTML = u
-      }, n.prototype._updateDetailCount = function(t) {
+          d = i.rows[n.row].dataItem[t._PivotKey._ROW_KEY_NAME];
+        this._rowHdr = e.escapeHtml(this._getHeader(d)), this._rowHdr && (u += a.row + ": <b>" + this._rowHdr + "</b><br>");
+        var h = l._getKey(i.columns[n.col].binding);
+        this._colHdr = e.escapeHtml(this._getHeader(h)), this._colHdr && (u += a.col + ": <b>" + this._colHdr + "</b><br>");
+        var c = l.valueFields,
+          p = c[n.col % c.length],
+          _ = i.getCellData(n.row, n.col, !0);
+        this._cellHdr = e.escapeHtml(p.header), this._cellValue = e.escapeHtml(_), u += this._cellHdr + ": <b>" + this._cellValue + "</b>", this._dSummary.innerHTML = u
+      }, Object.defineProperty(n.prototype, "rowHeader", {
+        get: function() {
+          return this._rowHdr
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "columnHeader", {
+        get: function() {
+          return this._colHdr
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "cellHeader", {
+        get: function() {
+          return this._cellHdr
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "cellValue", {
+        get: function() {
+          return this._cellValue
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "detailCount", {
+        get: function() {
+          return this._detailCount
+        },
+        enumerable: !0,
+        configurable: !0
+      }), n.prototype._updateDetailCount = function(t) {
         var i = e.culture.olap.DetailDialog;
         this._sCnt.textContent = e.format(1 == t ? i.item : i.items, {
           cnt: t
-        })
+        }), this._detailCount = t
       }, n.prototype._getHeader = function(e) {
         if (e && e.values && e.values.length) {
           for (var t = [], i = 0; i < e.values.length; i++) t.push(e.getValue(i, !0));
           return t.join(" - ")
         }
         return null
-      }, n.controlTemplate = '<div><div class="wj-dialog-header"><span wj-part="g-hdr">Detail View:</span> <span wj-part="sp-cnt"></span></div><div class="wj-dialog-body"><div wj-part="div-summary"></div><div wj-part="div-grid"></div></div><div class="wj-dialog-footer"><button wj-part="btn-ok"class="wj-hide wj-btn">OK</button>&nbsp;&nbsp;</div></div>', n
-    }(e.Control);
+      }, n.controlTemplate = '<div><div class="wj-dialog-header"><span wj-part="g-hdr">Detail View:</span> <span wj-part="sp-cnt"></span></div><div class="wj-dialog-body"><div wj-part="div-summary" class="wj-summary"></div><div wj-part="div-grid"></div></div><div class="wj-dialog-footer"><button wj-part="btn-ok"class="wj-hide wj-btn">OK</button>&nbsp;&nbsp;</div></div>', n
+    }(e.input.Popup);
     t.DetailDialog = i
   }(e.olap || (e.olap = {}))
 }(wijmo || (wijmo = {}));
@@ -4232,7 +4304,7 @@ var __extends = this && this.__extends || function() {
         enumerable: !0,
         configurable: !0
       }), o.prototype.refresh = function(e) {
-        void 0 === e && (e = !0), r.prototype.refresh.call(this, e), this._isPieChart() ? this._flexPie && this._flexPie.refresh(e) : this._flexChart && this._flexChart.refresh(e)
+        void 0 === e && (e = !0), r.prototype.refresh.call(this, e), this._isPieChart() ? this._flexPie && this._flexPie.refresh(e) : this._flexChart && this._flexChart.refresh(e), this._updatePivotChart()
       }, o.prototype.saveImageToDataUrl = function(e, t) {
         this._isPieChart() ? this._flexPie && this._flexPie.saveImageToDataUrl(e, t) : this._flexChart && this._flexChart.saveImageToDataUrl(e, t)
       }, o.prototype.saveImageToFile = function(e) {
@@ -4349,8 +4421,8 @@ var __extends = this && this.__extends || function() {
       }, o.prototype._getColumns = function(e) {
         var i, n = 0;
         if (e) {
-          this._colItms.length = 0;
-          for (var r in e) e.hasOwnProperty(r) && r !== t._PivotKey._ROW_KEY_NAME && n < this._maxSeries && (this._showTotals && this._isTotalColumn(r) || !this._showTotals && !this._isTotalColumn(r)) && (i = this._ng._getKey(r), this._getLabel(i), this._colItms.push({
+          this._colItms = [];
+          for (var r in e) e.hasOwnProperty(r) && r !== t._PivotKey._ROW_KEY_NAME && n < this._maxSeries && this._isValidColumn(r) && (i = this._ng._getKey(r), this._getLabel(i), this._colItms.push({
             prop: r,
             text: this._getLabel(i)
           }), n++)
@@ -4456,9 +4528,10 @@ var __extends = this && this.__extends || function() {
       }, o.prototype._getTitle = function(e) {
         for (var t = "", i = 0; i < e.length; i++) t.length > 0 && (t += "; "), t += e[i].header;
         return t
-      }, o.prototype._isTotalColumn = function(e) {
-        var t = e.split(";");
-        return !!(t && t.length - 2 < this._ng.columnFields.length)
+      }, o.prototype._isValidColumn = function(e) {
+        var t = e.split(";"),
+          i = this._showTotals;
+        return 0 === this._ng.columnFields.length || (t && 2 === t.length ? i : !(!t || t.length - 2 !== this._ng.columnFields.length) && !i)
       }, o.prototype._isTotalRow = function(e) {
         return e.values.length < this._ng.rowFields.length
       }, o.prototype._isPieChart = function() {
@@ -4481,5 +4554,124 @@ var __extends = this && this.__extends || function() {
       }, o.MAX_SERIES = 100, o.MAX_POINTS = 100, o.HRHAXISCSS = "wj-hierarchicalaxes-line", o
     }(e.Control);
     t.PivotChart = r
+  }(e.olap || (e.olap = {}))
+}(wijmo || (wijmo = {}));
+var __extends = this && this.__extends || function() {
+    var e = Object.setPrototypeOf || {
+        __proto__: []
+      }
+      instanceof Array && function(e, t) {
+        e.__proto__ = t
+      } || function(e, t) {
+        for (var i in t) t.hasOwnProperty(i) && (e[i] = t[i])
+      };
+    return function(t, i) {
+      function n() {
+        this.constructor = t
+      }
+      e(t, i), t.prototype = null === i ? Object.create(i) : (n.prototype = i.prototype, new n)
+    }
+  }(),
+  wijmo;
+! function(e) {
+  ! function(t) {
+    "use strict";
+    var i = function(i) {
+      function n(t, n) {
+        var r = i.call(this, t, null, e.isIE() && !e.isEdge()) || this;
+        r._mSel = !1, r._fldPropChangeBnd = r._fldPropChange.bind(r);
+        var o = r.getTemplate();
+        r.applyTemplate("wj-slicer wj-nocheck wj-control wj-content", o, {
+          _root: "root",
+          _divHdr: "div-hdr",
+          _divHdrText: "div-hdr-text",
+          _btnMSel: "btn-msel",
+          _btnClear: "btn-clear"
+        });
+        var s = e.culture.olap.Slicer,
+          l = new e.Tooltip;
+        return e.setAttribute(r._btnMSel, "aria-label", s.multiSelect), e.setAttribute(r._btnClear, "aria-label", s.clearFilter), l.setTooltip(r._btnMSel, s.multiSelect), l.setTooltip(r._btnClear, s.clearFilter), r.addEventListener(r._btnClear, "click", function(e) {
+          r._clear()
+        }), r.addEventListener(r._btnMSel, "click", function(e) {
+          r.multiSelect = !r.multiSelect
+        }), r.initialize(n), r
+      }
+      return __extends(n, i), Object.defineProperty(n.prototype, "field", {
+        get: function() {
+          return this._fld
+        },
+        set: function(i) {
+          var n = this;
+          if (i != this._fld) {
+            this._divListBox && (this.removeEventListener(this._divListBox, "click"), e.removeChild(this._divListBox), this._divListBox = null, this._lbx.dispose(), this._lbx = null), this._edt && (this._clear(), this._edt.dispose());
+            var r = this._fld;
+            if (r && r.propertyChanged.removeHandler(this._fldPropChangeBnd), (r = this._fld = e.asType(i, t.PivotField, !0)).propertyChanged.addHandler(this._fldPropChangeBnd), r && !r.isActive && r.engine.filterFields.push(r), r) {
+              var o = document.createElement("div");
+              this._edt = new e.grid.filter.ValueFilterEditor(o, r.filter.valueFilter)
+            }
+            this._edt && (this._divListBox = this._edt.hostElement.querySelector(".wj-listbox"), this._root.appendChild(this._divListBox), this._lbx = e.Control.getControl(this._divListBox), this._lbx.checkedItemsChanged.addHandler(function(e, t) {
+              n.multiSelect || (n._mSel = !0, n._lbx.checkedItems = [n._lbx.selectedItem], n._mSel = !1), n._edt && r && (n._edt.updateFilter(), r.engine.invalidate())
+            })), this._updateHeader(), e.isIE() && !e.isEdge() && this.refresh()
+          }
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "header", {
+        get: function() {
+          return this._hdr
+        },
+        set: function(t) {
+          t != this._hdr && (this._hdr = e.asString(t), this._updateHeader())
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "showHeader", {
+        get: function() {
+          return "none" != this._divHdr.style.display
+        },
+        set: function(t) {
+          this._divHdr.style.display = e.asBoolean(t) ? "" : "none"
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "showCheckboxes", {
+        get: function() {
+          return !e.hasClass(this.hostElement, "wj-nocheck")
+        },
+        set: function(t) {
+          e.toggleClass(this.hostElement, "wj-nocheck", !e.asBoolean(t))
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(n.prototype, "multiSelect", {
+        get: function() {
+          return this._mSel
+        },
+        set: function(t) {
+          this._mSel = e.asBoolean(t), e.toggleClass(this._btnMSel, "wj-state-active", this._mSel)
+        },
+        enumerable: !0,
+        configurable: !0
+      }), n.prototype.refresh = function(t) {
+        void 0 === t && (t = !0), e.isIE() && !e.isEdge() && this.hostElement && e.setCss(this._lbx.hostElement, {
+          height: this.hostElement.clientHeight - this._divHdr.offsetHeight
+        }), i.prototype.refresh.call(this, t)
+      }, n.prototype._fldPropChange = function(e, t) {
+        switch (t.propertyName) {
+          case "header":
+            this._updateHeader();
+            break;
+          case "format":
+          case "binding":
+            e.filter.clear(), this._edt.updateEditor()
+        }
+      }, n.prototype._updateHeader = function() {
+        var e = this._hdr;
+        e || null == this._fld || (e = this._fld.header), this._divHdrText.textContent = e
+      }, n.prototype._clear = function() {
+        this._edt && (this._edt.clearEditor(), this._edt.updateFilter(), this._fld.engine.invalidate())
+      }, n.controlTemplate = '<div wj-part="root"><div wj-part="div-hdr" class="wj-header"><div wj-part="div-hdr-text"></div><button wj-part="btn-msel" class="wj-btn btn-msel" tabindex="-1"><span class="wj-glyph">&#8801;</span></button><button wj-part="btn-clear" class="wj-btn btn-clear" tabindex="-1"><span class="wj-glyph">&times;</span></button></div></div>', n
+    }(e.Control);
+    t.Slicer = i
   }(e.olap || (e.olap = {}))
 }(wijmo || (wijmo = {}));

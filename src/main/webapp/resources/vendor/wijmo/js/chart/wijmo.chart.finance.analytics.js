@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -1169,7 +1169,9 @@ var __extends = this && this.__extends || function() {
             },
             enumerable: !0,
             configurable: !0
-          }), n.prototype.getDataRect = function(n, a) {
+          }), n.prototype.legendItemLength = function() {
+            return this.name.indexOf(",") > -1 ? 2 : 1
+          }, n.prototype.getDataRect = function(n, a) {
             if (a) return a;
             var r = null;
             if (s.prototype._getLength.call(this) <= 0) return r;

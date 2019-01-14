@@ -118,4 +118,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20190109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20190114.01" charset="utf-8"></script>
