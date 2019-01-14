@@ -99,10 +99,10 @@
              (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD AND STORE_CD = tmm.REG_STORE_CD) AS STORE_NM,
              tmm.MEMBR_NO,
              tmm.MEMBR_NM
-      FROM TB_MB_MEMBER tmm
-      WHERE MEMBR_ORGN_CD = 'DS001' --todo
+        FROM TB_MB_MEMBER tmm
+       WHERE MEMBR_ORGN_CD = #{hqOfficeCd}
       <if test='defaultStoreCd != null and defaultStoreCd != ""'>
-        AND tmm.REG_STORE_CD != #{defaultStoreCd}
+         AND tmm.REG_STORE_CD != #{defaultStoreCd}
       </if>
   </select>
 

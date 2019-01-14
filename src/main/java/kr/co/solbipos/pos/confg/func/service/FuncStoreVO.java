@@ -1,8 +1,7 @@
 package kr.co.solbipos.pos.confg.func.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
-import kr.co.solbipos.application.common.service.PageVO;
-import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 
 /**
  * @Class Name : FuncStoreVO.java

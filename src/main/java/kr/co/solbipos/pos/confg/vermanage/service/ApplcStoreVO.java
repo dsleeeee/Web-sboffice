@@ -49,6 +49,10 @@ public class ApplcStoreVO extends PageVO {
     private String posIp;
     /** 최종버전 */
     private String lastVer;
+    /** 등록여부 */
+    private String searchSatus;
+    /** 프로시져 결과 */
+    private String result;
 
 
     /**
@@ -220,4 +224,33 @@ public class ApplcStoreVO extends PageVO {
         this.lastVer = lastVer;
     }
 
+    /**
+     * @return the searchSatus
+     */
+
+    public String getSearchSatus() {
+        return searchSatus;
+    }
+
+    /**
+     * @param searchSatus the searchSatus to set
+     */
+    public void setSearchSatus(String searchSatus) {
+        this.searchSatus = searchSatus;
+    }
+
+    /**
+     * @return the result
+     */
+
+    public String getResult() {
+        return result;
+    }
+
+    /**
+     * @param result the result to set
+     */
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

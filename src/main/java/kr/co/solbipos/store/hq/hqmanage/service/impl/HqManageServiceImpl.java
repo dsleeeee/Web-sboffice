@@ -9,15 +9,14 @@ import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.pos.confg.loginstatus.enums.SysStatFg;
+import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import kr.co.solbipos.store.hq.hqmanage.service.*;
 import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;

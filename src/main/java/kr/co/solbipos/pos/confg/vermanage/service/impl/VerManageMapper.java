@@ -51,7 +51,7 @@ public interface VerManageMapper {
     List<DefaultMap<String>> srchStoreList(ApplcStoreVO applcStore);
 
     /** 버전 적용 매장 등록 */
-    int registStore(ApplcStoreVO applcStore);
+    String registStore(ApplcStoreVO applcStore);
 
     /** 버전 적용 매장 삭제 */
     int removeStore(ApplcStoreVO applcStore);

@@ -47,15 +47,10 @@
           </tr>
           </tbody>
         </table>
-        <div class="mt10 fr" style="display:block;position: relative;margin-top: 6px;">
-          <button class="btn_skyblue" id="btnSearch" ng-click="searchEnvList()">
-            <s:message code="cmm.search" />
-          </button>
-        </div>
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="theGrid mt10" style="height: 250px;">
+      <div class="theGrid" style="height: 250px;">
         <wj-flex-grid
                 autoGenerateColumns="false"
                 selection-mode="Row"

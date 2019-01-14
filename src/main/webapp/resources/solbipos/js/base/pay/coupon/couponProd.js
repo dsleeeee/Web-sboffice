@@ -57,7 +57,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
   // 등록 상품 삭제
   $scope.delete = function(){
 
-    var params = new Array();
+    var params = [];
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
@@ -122,7 +122,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
     var couponGrid = agrid.getScope("couponCtrl");
     var selectedRow = couponGrid.flex.selectedRows[0]._data;
 
-    var params = new Array();
+    var params = [];
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       $scope.flex.collectionView.items[i].payClassCd = couponClassGrid.flex.selectedItems[0].payClassCd;
@@ -133,7 +133,9 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save(baseUrl + "prod/registCouponProd.sb", params, function(){ $scope.allSearch() });
+    $scope._save(baseUrl + "prod/registCouponProd.sb", params, function(){
+      $scope.allSearch()
+    });
   };
 
   // 상품 등록 완료 후처리 (상품수량 변화)

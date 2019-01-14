@@ -1,180 +1,211 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    VerRecv.xml
+    포스 버전 수신현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김지은     2019.01.03     최초작성
+-->
 <mapper namespace="kr.co.solbipos.pos.confg.verrecv.service.impl.VerRecvMapper">
 
-  <select id="selectVerList" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectVerList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT
-           A.VER_SER_NO,
-           A.VER_SER_NM,
-           A.USE_YN,
-           TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
-           A.REG_ID,
-           TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
-           A.MOD_ID,
-           NVL(B.REG_CNT, 0) REG_CNT,
-           NVL(B.RECV_CNT, 0) RECV_CNT
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_CM_POS_VERSN A,
-          (
-     SELECT VER_SER_NO,
-            SUM(DECODE(VER_RECV_FG , '1' , 1, 0)) REG_CNT,
-            SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
-       FROM TB_CM_POS_VERSN_STORE
-      GROUP BY VER_SER_NO
-           ) B
-     WHERE B.VER_SER_NO (+)= A.VER_SER_NO
-      <if test='verSerNo != null and verSerNo != ""'>
-       AND A.VER_SER_NO = #{verSerNo}
-      </if>
-      <if test='verSerNm != null and verSerNm != ""'>
-       AND A.VER_SER_NM = #{verSerNm}
-      </if>
-     ORDER BY REG_DT DESC
-     <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+    <!-- 버전별 수신형황 > 버전정보 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전정보 목록 조회
+    -->
+    <select id="selectVerList" parameterType="verRecvVO" resultType="DefaultMap">
+        /* VerRecvMapper.selectVerList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tcpv.VER_SER_NO,
+               tcpv.VER_SER_NM,
+               tcpv.USE_YN,
+               TO_CHAR(TO_DATE(tcpv.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
+               tcpv.REG_ID,
+               TO_CHAR(TO_DATE(tcpv.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS MOD_DT,
+               tcpv.MOD_ID,
+               NVL(tcpvs.REG_CNT, 0) AS REG_CNT,
+               NVL(tcpvs.RECV_CNT, 0) AS RECV_CNT
+               <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_CM_POS_VERSN tcpv,
+              (
+         SELECT VER_SER_NO,
+                SUM(DECODE(VER_RECV_FG, '1', 1, '2', 1, 0)) REG_CNT,
+                SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
+           FROM TB_CM_POS_VERSN_STORE
+          GROUP BY VER_SER_NO
+               ) tcpvs
+         WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+          <if test='verSerNo != null and verSerNo != ""'>
+           AND tcpv.VER_SER_NO = #{verSerNo}
+          </if>
+          <if test='verSerNm != null and verSerNm != ""'>
+           AND tcpv.VER_SER_NM = #{verSerNm}
+          </if>
+         ORDER BY tcpv.REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
-  <select id="selectStoreList" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectStoreList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT A.VER_SER_NO,
-           A.STORE_CD,
-           B.STORE_NM,
-           A.VER_RECV_FG,
-           TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
-           A.POS_IP,
-           TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
-           A.REG_ID,
-           TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') MOD_DT,
-           A.MOD_ID,
-           A.POS_NO
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_CM_POS_VERSN_STORE A,
-           TB_MS_STORE B
-     WHERE A.VER_SER_NO = #{verSerNo}
-       AND B.STORE_CD = A.STORE_CD
-     ORDER BY STORE_CD
-     <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+    <!-- 버전별 수신현황 > 버전별 매장수신정보 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN, TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전정보 목록 조회
+    -->
+    <select id="selectStoreList" parameterType="verRecvVO" resultType="DefaultMap">
+        /* VerRecvMapper.selectStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tcpvs.VER_SER_NO,
+               tcpvs.STORE_CD,
+               tms.STORE_NM,
+               tcpvs.POS_NO,
+               tcpvs.VER_RECV_FG,
+               TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
+               tcpvs.POS_IP,
+               TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
+               tcpvs.REG_ID,
+               TO_CHAR(TO_DATE(tcpvs.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS MOD_DT,
+               tcpvs.MOD_ID
+         <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_CM_POS_VERSN_STORE tcpvs,
+               TB_MS_STORE tms
+         WHERE tcpvs.VER_SER_NO = #{verSerNo}
+           AND tms.STORE_CD = tcpvs.STORE_CD
+        <if test='verRecvYn != null and verRecvYn == "Y"'>
+           AND tcpvs.VER_RECV_DT IS NOT NULL
+        </if>
+        <if test='verRecvYn != null and verRecvYn == "N"'>
+          AND tcpvs.VER_RECV_DT IS NULL
+        </if>
+         ORDER BY tcpvs.STORE_CD
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
-  <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectStoreRecvList */
-    <![CDATA[
-    SELECT A.HQ_OFFICE_CD,
-           A.HQ_OFFICE_NM,
-           B.STORE_CD,
-           B.STORE_NM,
-           C.POS_NO,
-           C.POS_NM,
-           C.POS_VER_NO LAST_VER,
-           TO_CHAR(TO_DATE(D.LOGIN_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') LAST_LOGIN_DT,
-           D.LOGIN_IP LAST_LOGIN_IP,
-           E.ENVST_VAL MAIN_YN,
-           F.ENVST_VAL POS_FG
-      FROM TB_HQ_OFFICE A,
-           TB_MS_STORE B,
-           TB_MS_POS C,
-           (
-      SELECT ROW_NUMBER() OVER(PARTITION BY STORE_CD, POS_NO, POS_VER_NO ORDER BY LOGIN_DT DESC) AS SRNUM,
-             STORE_CD,
-             POS_NO,
-             LOGIN_DT,
-             LOGIN_IP
-        FROM TB_MS_POS_LOGIN_LOG A
-           ) D,
-           TB_MS_POS_ENVST E,
-           TB_MS_POS_ENVST F
-     WHERE B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
-       AND C.STORE_CD = B.STORE_CD
-       AND D.SRNUM = 1
-       AND D.STORE_CD = B.STORE_CD
-       AND D.POS_NO = C.POS_NO
-       AND E.STORE_CD = B.STORE_CD
-       AND E.POS_NO = C.POS_NO
-       AND E.ENVST_CD = '4021'
-       AND E.USE_YN = 'Y'
-       AND F.STORE_CD = B.STORE_CD
-       AND F.POS_NO = C.POS_NO
-       AND F.ENVST_CD = '4020'
-       AND F.USE_YN = 'Y'
-    ]]>
-    <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-       AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-    </if>
-    <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-       AND A.HQ_OFFICE_NM = #{hqOfficeNm}
-    </if>
-    <if test='storeCd != null and storeCd != ""'>
-       AND B.STORE_CD = #{storeCd}
-    </if>
-    <if test='storeNm != null and storeNm != ""'>
-       AND B.STORE_NM = #{storeNm}
-    </if>
-    <if test='lastVer != null and lastVer != ""'>
-       AND C.POS_VER_NO = #{lastVer}
-    </if>
-     ORDER BY A.HQ_OFFICE_CD, B.STORE_CD
-  </select>
+    <!-- 매장별 수신현황 > 버전별 매장수신정보 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_POS
+        COMMENTS : 버전정보 목록 조회
+    -->
+    <select id="selectStoreRecvList" parameterType="verRecvVO" resultType="DefaultMap">
+        /* VerRecvMapper.selectStoreRecvList */
+        <![CDATA[
+        SELECT tho.HQ_OFFICE_CD,
+          	   tho.HQ_OFFICE_NM,
+          	   tms.STORE_CD,
+          	   tms.STORE_NM,
+          	   NVL(tmp.POS_CNT, 0) AS POS_CNT
+          FROM TB_HQ_OFFICE tho,
+               TB_MS_STORE tms,
+               (
+               SELECT tmp.STORE_CD, count(tmp.POS_NO) POS_CNT
+                 FROM TB_MS_POS tmp
+                WHERE tmp.USE_YN = 'Y'
+                GROUP BY tmp.STORE_CD
+               ) tmp
+         WHERE tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+           AND tmp.STORE_CD = tms.STORE_CD
+        ]]>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+           AND tho.HQ_OFFICE_NM = #{hqOfficeNm}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+           AND tms.STORE_NM = #{storeNm}
+        </if>
+         ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
+    </select>
 
-  <select id="selectStoreDtl" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectStoreDtl */
-    <![CDATA[
-    SELECT A.VER_SER_NO,
-         B.VER_SER_NM,
-         B.PROG_FG,
-         A.VER_RECV_FG,
-         B.FILE_NM,
-         TO_CHAR(TO_DATE(B.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') REG_DT,
-         TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT
-    FROM TB_CM_POS_VERSN_STORE A,
-         TB_CM_POS_VERSN B
-   WHERE A.STORE_CD = #{storeCd}
-     AND B.VER_SER_NO = A.VER_SER_NO
-     ]]>
-  </select>
+    <!-- 매장별 수신현황 > 버전정보 상세 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_CM_POS_VERSN_STORE, TB_CM_POS_VERSN
+        COMMENTS : 버전정보 목록 조회
+    -->
+    <select id="selectStoreDtl" parameterType="verRecvVO" resultType="DefaultMap">
+      /* VerRecvMapper.selectStoreDtl */
+      <![CDATA[
+      SELECT tms.STORE_CD,
+             tcpvs.POS_NO,
+             tcpvs.VER_SER_NO,
+             tcpv.VER_SER_NM,
+             tcpvs.VER_RECV_FG,
+             TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
+             TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
+             tcpvs.POS_IP
+        FROM TB_MS_STORE tms,
+             TB_CM_POS_VERSN_STORE tcpvs,
+             TB_CM_POS_VERSN tcpv
+       WHERE tms.STORE_CD = #{storeCd}
+         AND tcpvs.STORE_CD = tms.STORE_CD
+         AND tcpv.VER_SER_NO = tcpvs.VER_SER_NO
+       ORDER BY tcpv.REG_DT DESC, tcpvs.REG_DT DESC, tcpvs.VER_RECV_DT DESC
+       ]]>
+    </select>
 
-  <select id="selectVerStoreList" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectVerStoreList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT A.VER_SER_NO,
-           A.VER_SER_NM,
-           A.PROG_FG,
-           B.POS_CNT
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_CM_POS_VERSN A,
-           (
-      SELECT VER_SER_NO, COUNT(POS_NO) POS_CNT
-        FROM TB_CM_POS_VERSN_STORE
-       GROUP BY VER_SER_NO
-            ) B
-      WHERE B.VER_SER_NO = A.VER_SER_NO
-    <if test='verSerNo != null and verSerNo != ""'>
-        AND A.VER_SER_NO = #{verSerNo}
-    </if>
-    <if test='verSerNm != null and verSerNm != ""'>
-        AND A.VER_SER_NM = #{verSerNm}
-    </if>
-      ORDER BY A.VER_SER_NO DESC
-      <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+    <!-- 버전별 매장현황 > 버전정보 목록 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE, TB_MS_STORE
+        COMMENTS : 버전별 매장현황 버전정보 목록 상세 조회
+    -->
+    <select id="selectVerStoreList" parameterType="verRecvVO" resultType="DefaultMap">
+        /* VerRecvMapper.selectVerStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tcpv.VER_SER_NO,
+               tcpv.VER_SER_NM,
+               tcpv.PROG_FG,
+               NVL(tcpvs.STORE_CNT, 0) AS STORE_CNT
+               <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_CM_POS_VERSN tcpv,
+               (
+                SELECT VER_SER_NO, COUNT(STORE_CD) AS STORE_CNT
+                  FROM TB_CM_POS_VERSN_STORE
+                 GROUP BY VER_SER_NO
+               ) tcpvs
+         WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
+        <if test='verSerNo != null and verSerNo != ""'>
+           AND tcpv.VER_SER_NO = #{verSerNo}
+        </if>
+        <if test='verSerNm != null and verSerNm != ""'>
+           AND tcpv.VER_SER_NM = #{verSerNm}
+        </if>
+         ORDER BY tcpv.REG_DT DESC, tcpv.VER_SER_NO DESC
+          <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
-  <select id="selectVerStoreDtlList" parameterType="verRecvVO" resultType="DefaultMap">
-    /* VerRecvMapper.selectVerStoreDtlList */
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT A.VER_SER_NO,
-           A.STORE_CD,
-           B.STORE_NM,
-           A.POS_NO,
-           TO_CHAR(TO_DATE(A.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') VER_RECV_DT,
-           A.POS_IP
-           <include refid="CmmSQL.PagingTemplateCount"/>
-      FROM TB_CM_POS_VERSN_STORE A,
-           TB_MS_STORE B
-     WHERE A.VER_SER_NO = #{verSerNo}
-       AND B.STORE_CD = A.STORE_CD
-    <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+     <!-- 버전별 매장현황 > 매장 수신 상세 -->
+     <!--
+         TABLE    : TB_CM_POS_VERSN_STORE, TB_MS_STORE
+         COMMENTS : 버전별 매장현황 매장 수신 상세 조회
+     -->
+    <select id="selectVerStoreDtlList" parameterType="verRecvVO" resultType="DefaultMap">
+        /* VerRecvMapper.selectVerStoreDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tcpvs.VER_SER_NO,
+               tcpvs.STORE_CD,
+               tms.STORE_NM,
+               tcpvs.POS_NO,
+               tcpvs.VER_RECV_FG,
+               TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
+               TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
+               tcpvs.POS_IP
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_CM_POS_VERSN_STORE tcpvs,
+               TB_MS_STORE tms
+         WHERE tcpvs.VER_SER_NO = #{verSerNo}
+           AND tms.STORE_CD = tcpvs.STORE_CD
+         <if test='verRecvYn != null and verRecvYn == "Y"'>
+           AND tcpvs.VER_RECV_DT IS NOT NULL
+         </if>
+         <if test='verRecvYn != null and verRecvYn == "N"'>
+           AND tcpvs.VER_RECV_DT IS NULL
+         </if>
+         ORDER BY tcpvs.STORE_CD ASC, tcpvs.REG_DT DESC, tcpvs.VER_RECV_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
 </mapper>
