@@ -76,7 +76,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       var allStoreScope = agrid.getScope("allStoreCtrl");
       allStoreScope._pageView('allStoreCtrl', 1);
 
-    });
+    }, false);
   };
 
   // 삭제
@@ -143,7 +143,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeNm = $("#srchStoreNm").val();
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
-    });
+    }, false);
   };
 
 

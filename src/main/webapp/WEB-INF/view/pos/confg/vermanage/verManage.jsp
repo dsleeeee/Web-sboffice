@@ -75,7 +75,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.verSerNo"/>" binding="verSerNo" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.verSerNm"/>" binding="verSerNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.fileDesc"/>" binding="fileDesc" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.contain.pgm"/>" binding="pgmYn" data-map="containYnDataMap"  align="center" width="90" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.contain.db"/>" binding="dbYn" data-map="containYnDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>

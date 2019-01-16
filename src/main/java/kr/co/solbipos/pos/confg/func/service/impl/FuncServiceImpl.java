@@ -105,22 +105,8 @@ public class FuncServiceImpl implements FuncService {
 
     /** 기능구분 등록매장 조회 */
     @Override
-    public Map<String, Object> getFunStoreList(FuncStoreVO funcStoreVO) {
-
-        Map<String, Object> result = new HashMap<String,Object>();
-
-        // 기능키 적용매장 조회
-        funcStoreVO.setRegYn("Y");
-        List<DefaultMap<String>> regStoreList = mapper.getStoreList(funcStoreVO);
-
-        // 기능키 미적용매장 조회
-        funcStoreVO.setRegYn("N");
-        List<DefaultMap<String>> noRegStoreList = mapper.getStoreList(funcStoreVO);
-
-        result.put("regStoreList", regStoreList);
-        result.put("noRegStoreList", noRegStoreList);
-
-        return result;
+    public List<DefaultMap<String>> getFunStoreList(FuncStoreVO funcStoreVO) {
+        return mapper.getStoreList(funcStoreVO);
     }
 
     /** 기능구분 적용매장 등록 및 삭제 */
@@ -129,6 +115,9 @@ public class FuncServiceImpl implements FuncService {
 
         int procCnt = 0;
         String dt = currentDateTimeString();
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> funcStoreVOs.length : " + funcStoreVOs.length);
+
 
         for(FuncStoreVO funcStoreVO : funcStoreVOs) {
 

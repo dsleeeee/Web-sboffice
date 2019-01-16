@@ -1,168 +1,158 @@
 /****************************************************************
  *
  * 파일명 : store.js
- * 설  명 : 매장등록 JavaScript
+ * 설  명 : 포스 기능정의 - 기능별 매장등록 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
  * 2018.08.13     김지은      1.0
+ * 2019.01.16     김지은      2.0            angular 변경
  *
  * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
-$(document).ready(function(){
-
-  var srchClsFgCb     = wcombo.genCommonBox("#srchClsFg", clsFg);
-  var srchSysStatFgCb = wcombo.genCommonBox("#srchSysStatFg", sysStatFg);
-
-  var clsFgDataMap        = new wijmo.grid.DataMap(clsFg, 'value', 'name');
-  var sysStatFgDataMap    = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
-
-  var regStoreGridHeader =
-    [
-      {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-      {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
-      {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
-      {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-      {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true}
-      // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},
-      // {binding:"sysStatFg", header:messages["func.sysStatFg"], dataMap:sysStatFgDataMap, width:"*", isReadOnly:true}
-    ];
-
-  var noRegStoreGridHeader =
-      [
-        {binding:"gChk", header:messages["cmm.chk"], dataType:wijmo.DataType.Boolean, width:40},
-        {binding:"hqOfficeCd", header:messages["func.hqOfficeCd"], width:"*", isReadOnly:true, visible:false},
-        {binding:"hqOfficeNm", header:messages["func.hqOfficeNm"], width:"*", isReadOnly:true, visible:false},
-        {binding:"storeCd", header:messages["func.storeCd"], maxLength:3, width:"*", isReadOnly:true},
-        {binding:"storeNm", header:messages["func.storeNm"], maxLength:20, width:"*", isReadOnly:true}
-        // {binding:"clsFg", header:messages["func.clsFg"], dataMap:clsFgDataMap, width:"*", isReadOnly:true},
-        // {binding:"sysStatFg", header:messages["func.sysStatFg"], dataMap:sysStatFgDataMap, width:"*", isReadOnly:true}
-      ];
-
-  var regStoreGrid = wgrid.genGrid("#regStoreGrid", regStoreGridHeader);
-  var noRegStoreGrid = wgrid.genGrid("#noRegStoreGrid", noRegStoreGridHeader);
-
-  regStoreGrid.itemsSource =  new wijmo.collections.CollectionView([]);
-  noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView([]);
-
-  regStoreGrid.isReadOnly = false;
-  noRegStoreGrid.isReadOnly = false;
-
-  // 매장 조회 버튼 클릭
-  $("#btnStoreSearch").click(function(){
-
-    $("#storeLayerSubTitle").text("[" + selectedFnkey.fnkeyNo + "]  " + selectedFnkey.fnkeyNm);
-
-    var param = {};
-    param.fnkeyFg = selectedFnkey.fnkeyFg;
-    param.fnkeyNo = selectedFnkey.fnkeyNo;
-    param.hqOfficeCd = $("#srchHqOfficeCd").val();
-    param.hqOfficeNm = $("#srchHqOfficeNm").val();;
-    param.storeCd = $("#srchStoreCd").val();;
-    param.storeNm = $("#srchStoreNm").val();;
-    param.clsFg = srchClsFgCb.selectedValue;
-    param.sysStatFg = srchSysStatFgCb.selectedValue;
-
-    $.postJSON(baseUrl+"getFuncStoreList.sb", param,
-      function(result) {
-        // console.log(result);
-
-        if(result.status === "FAIL") {
-          s_alert.pop(result.message);
-          return;
-        }
-
-        var regStoreList = result.data.list.regStoreList;
-        var noRegStoreList = result.data.list.noRegStoreList;
-
-        regStoreGrid.itemsSource = new wijmo.collections.CollectionView(regStoreList);
-        noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView(noRegStoreList);
-
-        regStoreGrid.itemsSource.trackChanges = true;
-        noRegStoreGrid.itemsSource.trackChanges = true;
-
-      },
-      function(){
-        s_alert.pop("Ajax Fail");
-      });
-  });
-
-
-  // 등록 버튼 클릭
-  $("#btnStoreReg").click(function(){
-
-    var paramArr = new Array();
-
-    for(var i=0; i<noRegStoreGrid.itemsSource.items.length; i++){
-      if(noRegStoreGrid.itemsSource.items[i].gChk){
-        noRegStoreGrid.itemsSource.items[i].status = "I";
-        noRegStoreGrid.itemsSource.items[i].fnkeyFg = selectedFnkey.fnkeyFg;
-        noRegStoreGrid.itemsSource.items[i].fnkeyNo = selectedFnkey.fnkeyNo;
-        paramArr.push(noRegStoreGrid.itemsSource.items[i]);
-      }
-    }
-
-    if(paramArr.length <= 0) {
-      s_alert.pop(messages["cmm.not.modify"]);
-      return;
-    }
-    // console.log(paramArr);
-
-    $.postJSONArray(baseUrl + "saveFuncStore.sb", paramArr,
-        function(result) {
-          s_alert.pop(messages["cmm.saveSucc"]);
-          $("#btnStoreSearch").click();
-        },
-        function(result) {
-          s_alert.pop(result.data.msg);
-        }
-    );
-  });
-
-
-  // 삭제 버튼 클릭
-  $("#btnStoreDel").click(function(){
-
-    var paramArr = new Array();
-
-    for(var i=0; i<regStoreGrid.itemsSource.items.length; i++){
-      if(regStoreGrid.itemsSource.items[i].gChk){
-        regStoreGrid.itemsSource.items[i].status = "D";
-        paramArr.push(regStoreGrid.itemsSource.items[i]);
-      }
-    }
-
-    if(paramArr.length <= 0) {
-      s_alert.pop(messages["cmm.not.modify"]);
-      return;
-    }
-    console.log(paramArr);
-
-    $.postJSONArray(baseUrl + "saveFuncStore.sb", paramArr,
-        function(result) {
-          s_alert.pop(messages["cmm.saveSucc"]);
-          $("#btnStoreSearch").click();
-
-        },
-        function(result) {
-          s_alert.pop(result.data.msg);
-        }
-    );
-  });
-
-  $("#storeLayer .btn_close").click(function(){
-    $("#storeDim").hide();
-    $("#storeLayer").hide();
-
-    regStoreGrid.itemsSource =  new wijmo.collections.CollectionView([]);
-    noRegStoreGrid.itemsSource = new wijmo.collections.CollectionView([]);
-  });
-});
-
-
-function showStoreLayer() {
-  $("#storeDim").show();
-  $("#storeLayer").show();
-
-  $("#storeLayerSubTitle").text("[" + selectedFnkey.fnkeyNo + "]  " + selectedFnkey.fnkeyNm);
+// 조회
+function search(){
+  var scope = agrid.getScope("regStoreCtrl");
+  scope._pageView('regStoreCtrl', 1);
 }
+
+/**********************************************************************
+ *  적용매장 그리드
+ **********************************************************************/
+app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
+
+  // 조회 버튼 클릭
+  $scope.$on("regStoreCtrl", function(event, data) {
+    $scope.addStoreSearch();
+
+    event.preventDefault();
+  });
+
+  // 적용매장 목록 조회
+  $scope.addStoreSearch = function(){
+
+    var params = {};
+    var scope  = agrid.getScope('funcCtrl');
+
+    params.fnkeyFg = scope.getSelectedFunc().fnkeyFg;
+    params.fnkeyNo = scope.getSelectedFunc().fnkeyNo;
+    params.hqOfficeCd = '';
+    params.hqOfficeNm = '';
+    params.storeCd = '';
+    params.storeNm = '';
+    params.regYn = 'Y';
+
+    $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
+      // 적용매장 조회 후, 미적용 매장 조회
+      var allStoreScope = agrid.getScope("noRegStoreCtrl");
+      allStoreScope._pageView('noRegStoreCtrl', 1);
+
+    }, false);
+  };
+
+  // 삭제
+  $scope.delete = function(){
+
+    var params = new Array();
+    var scope  = agrid.getScope('funcCtrl');
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].status = "D";
+        $scope.flex.collectionView.items[i].fnkeyFg = scope.getSelectedFunc().fnkeyFg;
+        $scope.flex.collectionView.items[i].fnkeyNo = scope.getSelectedFunc().fnkeyNo;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    if(params.length == 0){
+      $scope._popMsg("선택된 매장이 없습니다.");
+      return false;
+    }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/pos/confg/func/func/saveFuncStore.sb", params, function(){
+      $scope.addStoreSearch();
+      // 적용매장 조회 후, 미적용 매장 조회
+      var addStoreScope = agrid.getScope("noRegStoreCtrl");
+      addStoreScope._broadcast('noRegStoreCtrl');
+    });
+  };
+
+}]);
+
+
+/**********************************************************************
+ *  미적용매장 그리드
+ **********************************************************************/
+app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('noRegStoreCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+  };
+
+  // 조회 버튼 클릭
+  $scope.$on("noRegStoreCtrl", function(event, data) {
+    $scope.allStoreSearch();
+    event.preventDefault();
+  });
+
+  // 적용매장 목록 조회
+  $scope.allStoreSearch = function(){
+
+    var params = {};
+    var scope  = agrid.getScope('funcCtrl');
+
+    params.fnkeyFg = scope.getSelectedFunc().fnkeyFg;
+    params.fnkeyNo = scope.getSelectedFunc().fnkeyNo;
+    params.hqOfficeCd = $("#srchHqOfficeCd").val();
+    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
+    params.regYn = 'N';
+
+    $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
+    }, false);
+  };
+
+
+  // 저장
+  $scope.regist = function(){
+
+    var params = new Array();
+    var scope  = agrid.getScope('funcCtrl');
+
+
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        $scope.flex.collectionView.items[i].status = "I";
+        $scope.flex.collectionView.items[i].fnkeyFg = scope.getSelectedFunc().fnkeyFg;
+        $scope.flex.collectionView.items[i].fnkeyNo = scope.getSelectedFunc().fnkeyNo;
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    if(params.length == 0){
+      $scope._popMsg("선택된 매장이 없습니다.");
+      return false;
+    }
+
+    console.log('save params',params);
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/pos/confg/func/func/saveFuncStore.sb", params, function(){
+      // 적용매장 조회 후, 미적용 매장 조회
+      var addStoreScope = agrid.getScope("regStoreCtrl");
+      addStoreScope._broadcast('regStoreCtrl');
+    });
+  };
+}]);
+
