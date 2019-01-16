@@ -96,11 +96,13 @@ public class FuncServiceImpl implements FuncService {
             }
         }
 
-        if(procCnt == funcVOs.length) {
-            return procCnt;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+//        if(procCnt == funcVOs.length) {
+//            return procCnt;
+//        } else {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+
+        return procCnt;
     }
 
     /** 기능구분 등록매장 조회 */
@@ -115,9 +117,6 @@ public class FuncServiceImpl implements FuncService {
 
         int procCnt = 0;
         String dt = currentDateTimeString();
-
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>> funcStoreVOs.length : " + funcStoreVOs.length);
-
 
         for(FuncStoreVO funcStoreVO : funcStoreVOs) {
 

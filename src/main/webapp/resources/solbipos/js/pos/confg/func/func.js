@@ -454,7 +454,7 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/pos/confg/func/func//save.sb', params, function(response) {
+    $scope._save('/pos/confg/func/func/save.sb', params, function() {
       // 저장 후 재조회
       $scope._broadcast('funcCtrl', $scope.getSelectedFuncFg());
     });
