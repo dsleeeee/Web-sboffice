@@ -54,7 +54,7 @@
         </if>
         <if test='storeCd != null and storeCd != ""'>
           <![CDATA[
-             AND tmm.REG_STORE_CD = #{storeCd}
+             AND tmmp.STORE_CD = #{storeCd}
              ]]>
         </if>
         <if test='membrNm != null and membrNm != ""'>
