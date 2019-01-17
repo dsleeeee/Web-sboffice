@@ -55,7 +55,7 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
     }
 
     var params = $scope.requestMember;
-    params.requestAmt = $scope.requestAmt;
+    params.requestAmt = removeComma($scope.requestAmt);
     params.remark = $scope.remark;
     // console.log('remark : '+ $scope.remark)
 
