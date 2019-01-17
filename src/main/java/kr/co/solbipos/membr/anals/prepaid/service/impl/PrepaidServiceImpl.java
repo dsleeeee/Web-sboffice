@@ -63,6 +63,7 @@ public class PrepaidServiceImpl implements PrepaidService {
 
         String[] storeCds = prepaidStoreVO.getStoreCds().split(",");
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prepaidStoreVO.setStoreCd(sessionInfoVO.getStoreCd());
         prepaidStoreVO.setStoreCdList(storeCds);
 
         return mapper.getPrepaidMemberList(prepaidStoreVO);

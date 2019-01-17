@@ -53,7 +53,7 @@
            FROM TB_MB_MEMBER_PREPAID tmmp
              ) tmmp
       <where>
-          <if test='storeCds != null and storeCds != "ALL"'>
+          <if test='storeCds != null and storeCds != ""'>
             AND tmmp.STORE_CD IN
               <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                  #{item}
@@ -64,6 +64,9 @@
           </if>
           <if test='memberNm != null and memberNm != ""'>
             AND tmmp.MEMBR_NM = #{memberNm}
+          </if>
+          <if test='storeCd != null and storeCd != ""'>
+            AND tmmp.STORE_CD = #{storeCd}
           </if>
       </where>
       <if test='array != null and array.toString == "1"'>

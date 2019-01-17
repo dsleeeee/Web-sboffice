@@ -46,7 +46,7 @@ public interface FuncService {
      * @param funcStoreVO
      * @return
      */
-    Map<String, Object> getFunStoreList(FuncStoreVO funcStoreVO);
+    List<DefaultMap<String>> getFunStoreList(FuncStoreVO funcStoreVO);
 
     /**
      * 기능구분 적용매장 등록 및 삭제

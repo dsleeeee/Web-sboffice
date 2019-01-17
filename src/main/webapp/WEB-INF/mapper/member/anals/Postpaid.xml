@@ -52,6 +52,11 @@
            AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
            ]]>
         </if>
+        <if test='storeCd != null and storeCd != ""'>
+          <![CDATA[
+             AND tmmp.STORE_CD = #{storeCd}
+             ]]>
+        </if>
         <if test='membrNm != null and membrNm != ""'>
           <![CDATA[
            AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
