@@ -23,6 +23,8 @@ public class PrepaidStoreVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
+    /** 매장코드 */
+    private String storeCd;
     /** 회원번호 */
     private String memberNo;
     /** 회원명 */
@@ -68,6 +70,21 @@ public class PrepaidStoreVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the storeCd
+     */
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 
     /**
