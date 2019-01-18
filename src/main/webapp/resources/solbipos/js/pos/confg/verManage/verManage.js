@@ -85,11 +85,11 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.setSelectVersion(null);
     $scope.versionRegistLayer.show(true, function(){
       var scope = agrid.getScope('verRegistCtrl');
-      console.log('scope.version', scope.version);
       scope.version = null;
       scope.progFg = '1';
       scope.useYn = 'Y';
 
+      $('#file').val(null);
       $scope._pageView('verManageCtrl', 1);
     });
   };

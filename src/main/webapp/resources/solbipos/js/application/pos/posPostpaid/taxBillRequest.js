@@ -49,15 +49,17 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
       return false;
     }
 
-    if( $scope.requestAmt >  $scope.requestMember.postpaidBalAmt) {
+    var reqAmt = removeComma($scope.requestAmt);
+
+    if( reqAmt >  $scope.requestMember.postpaidBalAmt) {
       $scope._popMsg(messages["postpaid.taxBillAmt.not.overTot"]);
       return false;
     }
 
     var params = $scope.requestMember;
-    params.requestAmt = $scope.requestAmt;
+    params.requestAmt = reqAmt;
     params.remark = $scope.remark;
-    // console.log('remark : '+ $scope.remark)
+    console.log('remark : '+ $scope.remark)
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._postJSONSave.withPopUp( "/application/pos/posPostpaid/posPostpaid/saveTaxBillRequet.sb", params, function(response){

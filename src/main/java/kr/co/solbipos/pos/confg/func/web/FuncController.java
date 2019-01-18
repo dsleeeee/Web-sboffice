@@ -128,7 +128,7 @@ public class FuncController {
     public Result getFuncStoreList(FuncStoreVO funcStoreVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        Map<String, Object> result = service.getFunStoreList(funcStoreVO);
+        List<DefaultMap<String>> result = service.getFunStoreList(funcStoreVO);
 
         return returnListJson(Status.OK, result);
     }

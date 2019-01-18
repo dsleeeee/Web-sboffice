@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.anals.postpaid.service;
 
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidFg;
 import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidPayFg;
 
@@ -22,6 +23,8 @@ import kr.co.solbipos.membr.anals.postpaid.enums.PostpaidPayFg;
  */
 public class PostpaidStoreVO extends PageVO {
 
+    /** 회원소속구분 */
+    private OrgnFg membrOrgnFg;
     /** 회원소속코드 */
     private String membrOrgnCd;
     /** 회원번호 */
@@ -61,6 +64,20 @@ public class PostpaidStoreVO extends PageVO {
     /** 등록여부  */
     private UseYn regYn;
 
+    /**
+     * @return the membrOrgnFg
+     */
+
+    public OrgnFg getMembrOrgnFg() {
+        return membrOrgnFg;
+    }
+
+    /**
+     * @param membrOrgnFg the membrOrgnFg to set
+     */
+    public void setMembrOrgnFg(OrgnFg membrOrgnFg) {
+        this.membrOrgnFg = membrOrgnFg;
+    }
 
     /**
      * @return the membrOrgnCd
