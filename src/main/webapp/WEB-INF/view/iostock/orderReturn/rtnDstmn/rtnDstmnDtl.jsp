@@ -56,17 +56,17 @@
           <td>
             <span class="txtIn w150px sb-select fl mr5">
               <wj-combo-box
-                id="stmtAcctFg"
-                ng-model="stmtAcctFg"
-                items-source="_getComboData('stmtAcctFg')"
+                id="dtlStmtAcctFg"
+                ng-model="dtlStmtAcctFg"
+                items-source="_getComboData('dtlStmtAcctFg')"
                 display-member-path="name"
                 selected-value-path="value"
                 is-editable="false"
                 initialized="_initComboBox(s)">
               </wj-combo-box>
             </span>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="rtnDstmn.dtl.stmtAcctPrint"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="rtnDstmn.dtl.stmtAcctExcel"/></a>
+            <a href="#" class="btn_grayS" ng-click="reportTrans()"><s:message code="rtnDstmn.dtl.stmtAcctPrint"/></a>
+            <%--<a href="#" class="btn_grayS" ng-click=""><s:message code="rtnDstmn.dtl.stmtAcctExcel"/></a>--%>
           </td>
         </tr>
         </tbody>

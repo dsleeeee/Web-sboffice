@@ -130,6 +130,8 @@ public class DstmnVO extends PageVO {
     private String hqRemark;
     /** 배송기사코드 */
     private String dlvrCd;
+    /** 배송기사코드 array */
+    private String arrDlvrCd[];
     /** 출고확정여부 */
     private String confirmFg;
     /** 순번 본사코드_전표번호에 따른 순번 */
@@ -1017,6 +1019,20 @@ public class DstmnVO extends PageVO {
      */
     public void setDlvrCd(String dlvrCd) {
         this.dlvrCd = dlvrCd;
+    }
+
+    /**
+     * @return the arrDlvrCd
+     */
+    public String[] getArrDlvrCd() {
+        return arrDlvrCd;
+    }
+
+    /**
+     * @param arrDlvrCd the arrDlvrCd to set
+     */
+    public void setArrDlvrCd(String[] arrDlvrCd) {
+        this.arrDlvrCd = arrDlvrCd;
     }
 
     /**

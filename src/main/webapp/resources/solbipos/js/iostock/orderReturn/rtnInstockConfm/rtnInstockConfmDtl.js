@@ -14,14 +14,14 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 배송기사
-    var comboParams             = {};
-    var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+    var comboParams = {};
+    var url         = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
-    comboParams         = {};
+    comboParams             = {};
     comboParams.nmcodeGrpCd = "097";
-    url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+    url                     = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
@@ -83,6 +83,7 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnInstockConfmDtlCtrl", function (event, data) {
+    $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjRtnInstockConfmDtlLayer.show(true);
 
@@ -121,7 +122,7 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
 
           // 출고확정
           if ($scope.procFg === "20") {
-            $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+            $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["rtnInstockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["rtnInstockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate));
             $scope.instockBtnLayerDisplay(true);
           }
           // 수주확정 또는 입고확정
@@ -131,11 +132,11 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
 
             // 수주확정
             if ($scope.procFg === "10") {
-              $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["rtnInstockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["rtnInstockConfm.dtl.reqDate"] + ' : ' + getFormatDate($scope.outDate));
             }
             // 입고확정
             else if ($scope.procFg === "30") {
-              $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["rtnInstockConfm.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["rtnInstockConfm.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["rtnInstockConfm.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+              $("#spanDtlTitle").html(messages["rtnInstockConfm.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["rtnInstockConfm.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["rtnInstockConfm.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate) + ', ' + messages["rtnInstockConfm.dtl.inDate"] + ' : ' + getFormatDate($scope.inDate));
             }
           }
 
@@ -220,8 +221,7 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   $scope.fnConfirmChk = function () {
     if ($("#instockConfirmFg").prop("checked")) {
       $("#divDtlInDate").show();
-    }
-    else {
+    } else {
       $("#divDtlInDate").hide();
     }
   };
@@ -242,17 +242,26 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   };
 
 
-  $scope.instockBtnLayerDisplay = function(isVisible) {
-    if(isVisible) {
+  $scope.instockBtnLayerDisplay = function (isVisible) {
+    if (isVisible) {
       $("#instockBtnLayer").show();
-    }
-    else {
+    } else {
       $("#instockBtnLayer").hide();
     }
 
     $scope.spanInstockConfirmFg = isVisible;
-    $scope.btnSetOutToIn = isVisible;
-    $scope.btnDtlSave = isVisible;
+    $scope.btnSetOutToIn        = isVisible;
+    $scope.btnDtlSave           = isVisible;
+  };
+
+
+  // 거래명세표
+  $scope.reportTrans = function () {
+    var params        = {};
+    params.slipFg     = $scope.slipFg;
+    params.strSlipNo  = $scope.slipNo;
+    params.stmtAcctFg = $scope.stmtAcctFg;
+    $scope._broadcast('transReportCtrl', params);
   };
 
 

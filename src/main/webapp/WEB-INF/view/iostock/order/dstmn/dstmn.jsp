@@ -215,7 +215,7 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstmn/dstmn.js?ver=20181224.01" charset="utf-8"></script>
 
-<%-- 출고자료생성 상세 레이어 --%>
+<%-- 거래명세표 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/dstmnDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
@@ -247,6 +247,24 @@
 
 <%-- 분배지시서(매장-상품) 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/dstbStoreProdReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(기사별) 배송기사 리스트 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbDlvr.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(기사별) 배송기사 상품-매장 리포트 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbDlvrProdStoreReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 분배지시서(기사별) 배송기사 매장-상품 리포트 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/dstbDlvrStoreProdReport.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -26,13 +26,6 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
     {id: "30", name: messages["rtnDstmn.procFg30"]},
   ], 'id', 'name');
 
-  // 거래명세표
-  $scope._setComboData("stmtAcctFg", [
-    {"name": messages["rtnDstmn.stmtAcctAll"], "value": ""},
-    {"name": messages["rtnDstmn.stmtAcctSplr"], "value": "1"},
-    {"name": messages["rtnDstmn.stmtAcctSplrRcpnt"], "value": "2"}
-  ]);
-
   // 진행구분
   $scope._setComboData("srchProcFg", [
     {"name": messages["rtnDstmn.procFgAll"], "value": ""},
@@ -40,6 +33,25 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
     {"name": messages["rtnDstmn.procFg20"], "value": "20"},
     {"name": messages["rtnDstmn.procFg30"], "value": "30"},
     {"name": messages["rtnDstmn.procFg2030"], "value": "20,30"}
+  ]);
+
+  // 거래명세표
+  $scope._setComboData("stmtAcctFg", [
+    {"name": messages["rtnDstmn.stmtAcctAll"], "value": ""},
+    {"name": messages["rtnDstmn.stmtAcctSplr"], "value": "1"},
+    {"name": messages["rtnDstmn.stmtAcctSplrRcpnt"], "value": "2"}
+  ]);
+
+  // 세금계산서 청구, 영수 구분
+  $scope._setComboData("billFg", [
+    {"name": messages["rtnDstmn.billFg0"], "value": "0"},
+    {"name": messages["rtnDstmn.billFg1"], "value": "1"}
+  ]);
+
+  // 세금계산서 일반, 과세/면세
+  $scope._setComboData("taxFg", [
+    {"name": messages["rtnDstmn.taxFg0"], "value": "0"},
+    {"name": messages["rtnDstmn.taxFg1"], "value": "1"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -95,6 +107,7 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
           $scope._broadcast('rtnDstmnDtlCtrl', params);
         }
@@ -156,6 +169,69 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnDstmn/rtnDstmn/list.sb", params);
+  };
+
+
+  // 리포트
+  $scope.report = function (reportFg) {
+    var strSlipNo = '';
+    var strDlvrCd = '';
+    if (!$scope.flex.collectionView) {
+      $scope.flex.itemsSource = new wijmo.collections.CollectionView();
+    }
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      var item = $scope.flex.collectionView.itemsEdited[i];
+      if (item.gChk === true) {
+        strSlipNo += (strSlipNo === '' ? '' : ',') + item.slipNo;
+        if (nvl(item.dlvrCd, '') !== '' && strDlvrCd.indexOf(item.dlvrCd) < 0) {
+          strDlvrCd += (strDlvrCd === '' ? '' : ',') + item.dlvrCd;
+        }
+      }
+    }
+
+    if (strSlipNo === '') {
+      $scope._popMsg(messages['dstmn.require.slipNo']);
+      return false;
+    }
+
+    var params       = {};
+    params.slipFg    = $scope.slipFg;
+    params.strSlipNo = strSlipNo;
+
+    // 상품
+    if (reportFg === 'prod') {
+      $scope._broadcast('dstbProdReportCtrl', params);
+    }
+    // 상품-매장
+    else if (reportFg === 'prodStore') {
+      $scope._broadcast('dstbProdStoreReportCtrl', params);
+    }
+    // 매장-상품
+    else if (reportFg === 'storeProd') {
+      $scope._broadcast('dstbStoreProdReportCtrl', params);
+    }
+    // 기사별
+    else if (reportFg === 'dlvr') {
+      if (strDlvrCd === '') {
+        $scope._popMsg(messages['dstmn.require.dlvr']);
+        return false;
+      }
+      params.strDlvrCd = strDlvrCd;
+      $scope._broadcast('dstbDlvrCtrl', params);
+    }
+    // 거래명세표
+    else if (reportFg === 'trans') {
+      params.stmtAcctFg = $scope.stmtAcctFg;
+      $scope._broadcast('transReportCtrl', params);
+    }
+    // 세금계산서
+    else if (reportFg === 'tax') {
+      params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
+      params.billFg      = $scope.billFg;
+      params.taxFg       = $scope.taxFg;
+      $scope._broadcast('taxReportCtrl', params);
+    }
+
   };
 
 

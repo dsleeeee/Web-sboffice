@@ -5,7 +5,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   $scope.dtlOutDate = wcombo.genDate("#dtlOutDate");
 
-  $scope._setComboData("stmtAcctFg", [
+  $scope._setComboData("dtlStmtAcctFg", [
     {"name": messages["rtnDstmn.dtl.stmtAcctAll"], "value": ""},
     {"name": messages["rtnDstmn.dtl.stmtAcctSplr"], "value": "1"},
     {"name": messages["rtnDstmn.dtl.stmtAcctSplrRcpnt"], "value": "2"}
@@ -84,6 +84,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnDstmnDtlCtrl", function (event, data) {
+    $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjRtnDstmnDtlLayer.show(true);
 
@@ -255,6 +256,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     });
   };
 
+
   $scope.fnConfirm = function () {
     if ($("#outstockConfirmFg").prop("checked")) {
       $("#divDtlOutDate").show();
@@ -262,6 +264,16 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     else {
       $("#divDtlOutDate").hide();
     }
+  };
+
+
+  // 거래명세표
+  $scope.reportTrans = function () {
+    var params        = {};
+    params.slipFg     = $scope.slipFg;
+    params.strSlipNo  = $scope.slipNo;
+    params.stmtAcctFg = $scope.dtlStmtAcctFg;
+    $scope._broadcast('transReportCtrl', params);
   };
 
 

@@ -146,8 +146,14 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnInstockConfm/rtnInstockConfm.js?ver=20181224.01" charset="utf-8"></script>
 
-<%-- 출고자료생성 상세 레이어 --%>
+<%-- 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 거래명세표 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

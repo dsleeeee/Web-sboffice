@@ -238,4 +238,29 @@ public class DstmnServiceImpl implements DstmnService {
         return dstmnMapper.getDstbStoreProdReportList(dstmnVO);
     }
 
+
+    /** 거래명세표 - 분배지시서(기사) 배송기사 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDstbDlvrList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getDlvrCd()).equals("")) {
+            dstmnVO.setArrDlvrCd(dstmnVO.getDlvrCd().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getDstbDlvrList(dstmnVO);
+    }
+
+
+    /** 거래명세표 - 분배지시서(기사) 배송기사별 상품 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDstbDlvrReportList(DstmnVO dstmnVO, SessionInfoVO sessionInfoVO) {
+        if(!StringUtil.getOrBlank(dstmnVO.getSlipNo()).equals("")) {
+            dstmnVO.setArrSlipNo(dstmnVO.getSlipNo().split(","));
+        }
+        if(!StringUtil.getOrBlank(dstmnVO.getDlvrCd()).equals("")) {
+            dstmnVO.setArrDlvrCd(dstmnVO.getDlvrCd().split(","));
+        }
+        dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return dstmnMapper.getDstbDlvrReportList(dstmnVO);
+    }
+
 }

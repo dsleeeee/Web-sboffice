@@ -83,6 +83,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("instockConfmDtlCtrl", function (event, data) {
+    $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjInstockConfmDtlLayer.show(true);
 
@@ -262,6 +263,16 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
     $scope.spanInstockConfirmFg = isVisible;
     $scope.btnSetOutToIn        = isVisible;
     $scope.btnDtlSave           = isVisible;
+  };
+
+
+  // 거래명세표
+  $scope.reportTrans = function () {
+    var params        = {};
+    params.slipFg     = $scope.slipFg;
+    params.strSlipNo  = $scope.slipNo;
+    params.stmtAcctFg = $scope.stmtAcctFg;
+    $scope._broadcast('transReportCtrl', params);
   };
 
 

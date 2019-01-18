@@ -4,13 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/order/dstmn/transReport/"/>
+<c:set var="baseUrl" value="/iostock/order/dstmn/dstbDlvrStoreProdReport/"/>
 
-
-<wj-popup id="wjTransReportLayer" control="wjTransReportLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="transReportLayer" class="wj-dialog wj-dialog-columns" ng-controller="transReportCtrl">
+<wj-popup id="wjDstbDlvrStoreProdReportLayer" control="wjDstbDlvrStoreProdReportLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div id="dstbDlvrStoreProdReportLayer" class="wj-dialog wj-dialog-columns" ng-controller="dstbDlvrStoreProdReportCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
@@ -20,11 +18,11 @@
           <s:message code="cmm.print"/></button>
       </div>
 
-      <div class="transReport reportPrint w100" id="transReport">
+      <div class="dstbDlvrStoreProdReport reportPrint w100" id="dstbDlvrStoreProdReport">
       </div>
 
     </div>
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstmn/transReport.js?ver=20190116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstmn/dstbDlvrStoreProdReport.js?ver=20190116.01" charset="utf-8"></script>

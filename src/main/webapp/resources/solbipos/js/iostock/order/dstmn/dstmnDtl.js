@@ -16,7 +16,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 주문단위
     var comboParams         = {};
     comboParams.nmcodeGrpCd = "097";
-    var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
+    var url                 = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
@@ -84,6 +84,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("dstmnDtlCtrl", function (event, data) {
+    $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjDstmnDtlLayer.show(true);
 
@@ -122,28 +123,28 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
           // 수주확정
           if ($scope.procFg === "10") {
-            $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["dstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["dstmn.dtl.reqDate"]+' : ' + getFormatDate($scope.outDate));
+            $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["dstmn.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["dstmn.dtl.reqDate"] + ' : ' + getFormatDate($scope.outDate));
             $("#outstockBtnLayer").show();
-            $scope.spanOutstockConfirmFg = true;
-            $scope.btnDtlSave = true;
+            $scope.spanOutstockConfirmFg   = true;
+            $scope.btnDtlSave              = true;
             $scope.btnOutstockAfterDtlSave = false;
-            $scope.flex.isReadOnly = false;
+            $scope.flex.isReadOnly         = false;
           }
           // 출고확정 또는 입고확정
           else if ($scope.procFg === "20" || $scope.procFg === "30") {
             $("#outstockBtnLayer").hide();
-            $scope.spanOutstockConfirmFg = false;
-            $scope.btnDtlSave = false;
+            $scope.spanOutstockConfirmFg   = false;
+            $scope.btnDtlSave              = false;
             $scope.btnOutstockAfterDtlSave = true;
-            $scope.flex.isReadOnly = true;
+            $scope.flex.isReadOnly         = true;
 
             // 출고확정
             if ($scope.procFg === "20") {
-              $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["dstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["dstmn.dtl.outDate"]+' : ' + getFormatDate($scope.outDate));
+              $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["dstmn.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["dstmn.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate));
             }
             // 입고확정
             else if ($scope.procFg === "30") {
-              $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"]+' : ' + $scope.slipNo + ', '+messages["dstmn.dtl.store"]+' : ' + $scope.storeNm + ', '+messages["dstmn.dtl.outDate"]+' : ' + getFormatDate($scope.outDate) + ', '+messages["dstmn.dtl.inDate"]+' : ' + getFormatDate($scope.inDate));
+              $("#spanDtlTitle").html(messages["dstmn.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["dstmn.dtl.store"] + ' : ' + $scope.storeNm + ', ' + messages["dstmn.dtl.outDate"] + ' : ' + getFormatDate($scope.outDate) + ', ' + messages["dstmn.dtl.inDate"] + ' : ' + getFormatDate($scope.inDate));
             }
           }
 
@@ -254,13 +255,23 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     });
   };
 
+
   $scope.fnConfirm = function () {
     if ($("#outstockConfirmFg").prop("checked")) {
       $("#divDtlOutDate").show();
-    }
-    else {
+    } else {
       $("#divDtlOutDate").hide();
     }
+  };
+
+
+  // 거래명세표
+  $scope.reportTrans = function () {
+    var params        = {};
+    params.slipFg     = $scope.slipFg;
+    params.strSlipNo  = $scope.slipNo;
+    params.stmtAcctFg = $scope.dtlStmtAcctFg;
+    $scope._broadcast('transReportCtrl', params);
   };
 
 

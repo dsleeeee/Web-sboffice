@@ -44,6 +44,7 @@ app.controller('instockConfmCtrl', ['$scope', '$http', '$timeout', function ($sc
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
           $scope._broadcast('instockConfmDtlCtrl', params);
         }

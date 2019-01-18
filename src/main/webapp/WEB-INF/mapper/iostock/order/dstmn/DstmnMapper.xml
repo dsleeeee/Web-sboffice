@@ -471,6 +471,87 @@
     </select>
 
 
+    <!-- 거래명세표 - 분배지시서(기사) 배송기사 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 분배지시서(기사) 배송기사 리스트를 조회한다.
+    -->
+    <select id="getDstbDlvrList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getDstbDlvrList */
+        <![CDATA[
+        SELECT  tphdc.DLVR_CD, tphdc.DLVR_NM
+        FROM    TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphdc.HQ_OFFICE_CD  = #{hqOfficeCd}
+        ]]>
+        <if test='arrDlvrCd != null and arrDlvrCd != ""'>
+            AND tphdc.DLVR_CD IN
+            <foreach collection="arrDlvrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        ORDER
+        BY       tphdc.DLVR_CD
+        ]]>
+    </select>
+
+
+    <!-- 거래명세표 - 분배지시서(기사) 배송기사별 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_HQ_PRODUCT, TB_HQ_NMCODE, TB_MS_STORE
+        PARAM    : dstmnVO
+        COMMENTS : 거래명세표 - 분배지시서(기사) 배송기사별 상품 리스트를 조회한다.
+    -->
+    <select id="getDstbDlvrReportList" parameterType="dstmnVO" resultType="DefaultMap">
+        /* USE : DstmnMapper.getDstbDlvrReportList */
+        <![CDATA[
+        SELECT   tphso.DLVR_CD, tphdc.DLVR_NM, tphsod.PROD_CD, thp.PROD_NM
+        ,        thn.NMCODE_NM AS PO_UNIT_FG_NM
+        ,        tphsod.STORE_CD, tms.STORE_NM
+        ,        SUM(tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG) AS OUT_UNIT_QTY
+        ,        SUM(tphsod.OUT_ETC_QTY *tphsod.SLIP_FG) AS OUT_ETC_QTY
+        ,        MAX(tphsod.REMARK) AS REMARK
+        FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,        TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+        ,        TB_HQ_PRODUCT thp
+        ,        TB_HQ_NMCODE thn
+        ,        TB_MS_STORE tms
+        ,        TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE    tphso.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND      tphsod.SLIP_NO       =   tphso.SLIP_NO
+        ]]>
+        <if test='arrSlipNo != null and arrSlipNo != ""'>
+            AND tphso.SLIP_NO IN
+            <foreach collection="arrSlipNo" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test='arrDlvrCd != null and arrDlvrCd != ""'>
+            AND tphso.DLVR_CD IN
+            <foreach collection="arrDlvrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
+        AND      thp.PROD_CD            =   tphsod.PROD_CD
+        AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
+        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
+        AND      tms.STORE_CD           =   tphsod.STORE_CD
+        AND      tphdc.HQ_OFFICE_CD     =   tphso.HQ_OFFICE_CD
+        AND      tphdc.DLVR_CD          =   tphso.DLVR_CD
+        GROUP
+        BY       tphso.DLVR_CD, tphdc.DLVR_NM, tphsod.PROD_CD, thp.PROD_NM
+        ,        thn.NMCODE_NM
+        ,        tphsod.STORE_CD, tms.STORE_NM
+        ORDER
+        BY       tphso.DLVR_CD, tphsod.PROD_CD, tphsod.STORE_CD
+        ]]>
+    </select>
+
+
     <!-- 거래명세표 - 출고확정 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL

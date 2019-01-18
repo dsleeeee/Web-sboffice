@@ -106,6 +106,7 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
           $scope._broadcast('dstmnDtlCtrl', params);
         }
@@ -173,6 +174,7 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   // 리포트
   $scope.report = function (reportFg) {
     var strSlipNo = '';
+    var strDlvrCd = '';
     if (!$scope.flex.collectionView) {
       $scope.flex.itemsSource = new wijmo.collections.CollectionView();
     }
@@ -180,6 +182,9 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       var item = $scope.flex.collectionView.itemsEdited[i];
       if (item.gChk === true) {
         strSlipNo += (strSlipNo === '' ? '' : ',') + item.slipNo;
+        if (nvl(item.dlvrCd, '') !== '' && strDlvrCd.indexOf(item.dlvrCd) < 0) {
+          strDlvrCd += (strDlvrCd === '' ? '' : ',') + item.dlvrCd;
+        }
       }
     }
 
@@ -188,26 +193,38 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       return false;
     }
 
-    var params = {};
-    params.strSlipNo  = strSlipNo;
+    var params       = {};
+    params.slipFg    = $scope.slipFg;
+    params.strSlipNo = strSlipNo;
 
-    if(reportFg === 'prod') { // 상품
+    // 상품
+    if (reportFg === 'prod') {
       $scope._broadcast('dstbProdReportCtrl', params);
     }
-    else if(reportFg === 'prodStore') { // 상품-매장
+    // 상품-매장
+    else if (reportFg === 'prodStore') {
       $scope._broadcast('dstbProdStoreReportCtrl', params);
     }
-    else if(reportFg === 'storeProd') { // 매장-상품
+    // 매장-상품
+    else if (reportFg === 'storeProd') {
       $scope._broadcast('dstbStoreProdReportCtrl', params);
     }
-    else if(reportFg === 'dlvr') { // 기사별
-      $scope._broadcast('dstbDlvrReportCtrl', params);
+    // 기사별
+    else if (reportFg === 'dlvr') {
+      if (strDlvrCd === '') {
+        $scope._popMsg(messages['dstmn.require.dlvr']);
+        return false;
+      }
+      params.strDlvrCd = strDlvrCd;
+      $scope._broadcast('dstbDlvrCtrl', params);
     }
-    else if(reportFg === 'trans') { // 거래명세표
+    // 거래명세표
+    else if (reportFg === 'trans') {
       params.stmtAcctFg = $scope.stmtAcctFg;
       $scope._broadcast('transReportCtrl', params);
     }
-    else if(reportFg === 'tax') { // 세금계산서
+    // 세금계산서
+    else if (reportFg === 'tax') {
       params.writtenDate = wijmo.Globalize.format(writtenDate.value, 'yyyyMMdd');
       params.billFg      = $scope.billFg;
       params.taxFg       = $scope.taxFg;

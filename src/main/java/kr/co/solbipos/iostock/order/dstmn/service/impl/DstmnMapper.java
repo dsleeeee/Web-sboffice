@@ -63,4 +63,10 @@ public interface DstmnMapper {
     /** 거래명세표 - 분배지시서(매장-상품) 상품 리스트 조회 */
     List<DefaultMap<String>> getDstbStoreProdReportList(DstmnVO dstmnVO);
 
+    /** 거래명세표 - 분배지시서(기사) 배송기사 리스트 조회 */
+    List<DefaultMap<String>> getDstbDlvrList(DstmnVO dstmnVO);
+
+    /** 거래명세표 - 분배지시서(기사) 배송기사별 상품 리스트 조회 */
+    List<DefaultMap<String>> getDstbDlvrReportList(DstmnVO dstmnVO);
+
 }
