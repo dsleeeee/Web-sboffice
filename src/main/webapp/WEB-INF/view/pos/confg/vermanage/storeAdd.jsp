@@ -24,51 +24,72 @@
         <li><a id="storeEnv" href="#" class="on"><s:message code="verManage.store.registed" /></a></li>
       </ul>
 
-      <div>
-        <table class="tblType01">
-          <colgroup>
-            <col class="w15" />
-            <col class="w35" />
-            <col class="w15" />
-            <col class="w35" />
-          </colgroup>
-          <tbody>
-          <tr>
-            <%-- 본사코드 --%>
-            <th><s:message code="verManage.store.hqOfficeCd" /></th>
-            <td>
-              <input type="text" id="srchHqOfficeCd" class="sb-input w100" maxlength="5" ng-value=""/>
-            </td>
-            <%-- 본사명 --%>
-            <th><s:message code="verManage.store.hqOfficeNm" /></th>
-            <td>
-              <input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="20" ng-value=""/>
-            </td>
-          </tr>
-          <tr>
-            <%-- 매장코드 --%>
-            <th><s:message code="verManage.store.storeCd" /></th>
-            <td>
-              <input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7" ng-value=""/>
-            </td>
-            <%-- 매장명 --%>
-            <th><s:message code="verManage.store.storeNm" /></th>
-            <td>
-              <input type="text" id="srchStoreNm" class="sb-input w100" maxlength="20" ng-value=""/>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <div class="mt10 tr">
-          <%-- 조회 --%>
-          <button id="btnSearchStore" class="btn_skyblue" onclick="search()"><s:message code="cmm.search" /></button>
+      <div  ng-controller="addStoreCtrl">
+        <div class="oh">
+          <table class="tblType01">
+            <colgroup>
+              <col class="w15" />
+              <col class="w35" />
+              <col class="w15" />
+              <col class="w35" />
+            </colgroup>
+            <tbody>
+            <tr>
+              <%-- 본사 --%>
+              <th><s:message code="verManage.store.hqOffice" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchHqOffice"
+                          ng-model="hqOfficeCd"
+                          control="hqOfficeCombo"
+                          items-source="_getComboData('hqOffice')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          selected-index-changed="setSelectedHqOffice(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%-- 본사코드 --%>
+              <%--
+              <th><s:message code="verManage.store.hqOfficeCd" /></th>
+              <td>
+                <input type="text" id="srchHqOfficeCd" class="sb-input w100" maxlength="5" ng-value=""/>
+              </td>
+              --%>
+              <%-- 본사명 --%>
+              <%--
+              <th><s:message code="verManage.store.hqOfficeNm" /></th>
+              <td>
+                <input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="20" ng-value=""/>
+              </td>
+              --%>
+            </tr>
+            <tr>
+              <%-- 매장코드 --%>
+              <th><s:message code="verManage.store.storeCd" /></th>
+              <td>
+                <input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7" ng-value=""/>
+              </td>
+              <%-- 매장명 --%>
+              <th><s:message code="verManage.store.storeNm" /></th>
+              <td>
+                <input type="text" id="srchStoreNm" class="sb-input w100" maxlength="20" ng-value=""/>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="mt10 tr">
+            <%-- 조회 --%>
+            <button id="btnSearchStore" class="btn_skyblue" onclick="search()"><s:message code="cmm.search" /></button>
+          </div>
         </div>
-      </div>
 
-      <div class="oh mt40">
         <%-- 등록매장 그리드 --%>
-        <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;" ng-controller="addStoreCtrl">
+        <div class="oh mt40 w50 fl">
+          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.registed"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -96,9 +117,11 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <%--- 미등록매장 그리드 --%>
-        <div class="w50 fr">
+      <%--- 미등록매장 그리드 --%>
+      <div class="oh mt40 w50 ">
+        <div class=" ">
           <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="allStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.noRegisted" /></span>

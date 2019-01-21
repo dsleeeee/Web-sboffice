@@ -15,8 +15,8 @@ var app = agrid.getApp();
 
 // 탭 변경
 function changeTab(){
-  $scope.storeAddLayer.hide();
-  $scope.versionInfoDetailLayer.show();
+  var scope = agrid.getScope("addStoreCtrl");
+  scope.changeTab();
 }
 
 // 조회
@@ -33,7 +33,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('addStoreCtrl', $scope, $http, true));
 
   // 조회조건
-  // $scope.store;
+  $scope._setComboData("hqOffice", hqList);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -48,6 +48,14 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
+  $scope.selectedHqOffice;
+  $scope.setSelectedHqOffice = function(s) {
+    $scope.selectedHqOffice = s.selectedValue;
+  };
+  $scope.getSelectedHqOffice = function(){
+    return $scope.selectedHqOffice;
+  };
+
   // 적용매장 목록 조회
   $scope.addStoreSearch = function(){
 
@@ -59,17 +67,8 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       params = $scope.store;
     }
 
-    if( isEmptyObject($('#srchHqOfficeCd').val()) &&  isEmptyObject($('#srchHqOfficeNm').val()) ){
-      $scope._popMsg("본사코드나 본사명을 입력해주세요.");
-      return false;
-    }
-
     params.verSerNo    = ver;
     params.searchSatus = 'Y';
-    params.hqOfficeCd = $("#srchHqOfficeCd").val();
-    params.hqOfficeNm = $("#srchHqOfficeNm").val();
-    params.storeCd = $("#srchStoreCd").val();
-    params.storeNm = $("#srchStoreNm").val();
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
@@ -106,6 +105,12 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
+  //탭변경
+  $scope.changeTab = function(){
+    $scope.storeAddLayer.hide();
+    $scope.versionInfoDetailLayer.show();
+  };
+
 }]);
 
 
@@ -135,10 +140,11 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var scope  = agrid.getScope('verManageCtrl');
     var ver    = scope.getSelectVersion().verSerNo;
 
+    var addStoreScope = agrid.getScope('addStoreCtrl');
+
     params.verSerNo    = ver;
     params.searchSatus = 'N';
-    params.hqOfficeCd = $("#srchHqOfficeCd").val();
-    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.hqOfficeCd = addStoreScope.getSelectedHqOffice();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
 

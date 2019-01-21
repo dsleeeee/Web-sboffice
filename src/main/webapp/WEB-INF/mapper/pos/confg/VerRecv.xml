@@ -20,7 +20,7 @@
         /* VerRecvMapper.selectVerList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tcpv.VER_SER_NO,
-               tcpv.VER_SER_NM,
+               tcpv.FILE_DESC AS VER_SER_NM,
                tcpv.USE_YN,
                TO_CHAR(TO_DATE(tcpv.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
                tcpv.REG_ID,
@@ -110,13 +110,13 @@
            AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-           AND tho.HQ_OFFICE_NM = #{hqOfficeNm}
+           AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
         </if>
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-           AND tms.STORE_NM = #{storeNm}
+           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
          ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
     </select>
@@ -132,7 +132,7 @@
       SELECT tms.STORE_CD,
              tcpvs.POS_NO,
              tcpvs.VER_SER_NO,
-             tcpv.VER_SER_NM,
+             tcpv.FILE_DESC AS VER_SER_NM,
              tcpvs.VER_RECV_FG,
              TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
              TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
@@ -156,7 +156,7 @@
         /* VerRecvMapper.selectVerStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tcpv.VER_SER_NO,
-               tcpv.VER_SER_NM,
+               tcpv.FILE_DESC AS VER_SER_NM,
                tcpv.PROG_FG,
                NVL(tcpvs.STORE_CNT, 0) AS STORE_CNT
                <include refid="CmmSQL.PagingTemplateCount"/>
