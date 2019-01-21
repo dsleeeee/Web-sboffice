@@ -84,37 +84,6 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('noRegStoreCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    // ReadOnly 효과설정 : checkbox disabled
-    s.formatItem.addHandler(function (s, e) {
-      // 전체선택 사용불가 설정
-      if (e.panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-        var col = s.columns[e.col];
-        if (col.binding === 'gChk' || col.format === 'checkBox' || col.format === 'checkBoxText') {
-          e.cell.children[0].disabled = true;
-        }
-      }
-    });
-    // grid 수정 이벤트
-    s.beginningEdit.addHandler(function (s, e) {
-      var col = s.columns[e.col];
-      if (col.binding === "gChk") {
-        var dataItem = s.rows[e.row].dataItem;
-        setTimeout(function () {
-          if ( dataItem.gChk === true ) {
-            var chk = 0;
-            for (var i = 0; i < s.itemsSource.items.length; i++) {
-              if ( s.itemsSource.items[i].gChk === true ) {
-                chk++;
-              }
-            }
-            if ( chk > 10 ) {
-              $scope._popMsg("매장적용은 10개 매장까지만 선택 가능합니다.");
-              s.setCellData(e.row, "gChk", false);
-            }
-          }
-        }, 10);
-      }
-    });
 
   };
 

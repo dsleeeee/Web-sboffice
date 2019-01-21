@@ -58,9 +58,6 @@
                     </tbody>
                 </table>
             </div>
-            <div style="font-size: 13px;">
-                ※ 일괄적용시 시스템부하 방지를 위하여 전체선택 개수를 10개로 제한합니다.
-            </div>
             <%-- 조회 --%>
             <div class="tr mt10 pdb20 oh bb">
                 <button class="btn_blue" id="btnSrchApplyStore" ng-click="_broadcast('popUpApplyStoreCtrl')">

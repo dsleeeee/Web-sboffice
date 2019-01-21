@@ -8,7 +8,6 @@
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prod.regStore" />
-      <span id="prodTitle" class="ml20"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
@@ -22,6 +21,10 @@
           <col class="w35" />
         </colgroup>
         <tbody>
+        <tr>
+          <th>적용대상상품</th>
+          <td colspan="3" id="prodTitle"></td>
+        </tr>
         <tr>
           <th><s:message code="prod.storeCd"/></th>
           <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
@@ -101,4 +104,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20181227.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=2019012101" charset="utf-8"></script>

@@ -301,6 +301,10 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
           });
+          // 매장 등록 팝업 핸들러 추가
+          $scope.couponStoreLayer.shown.addHandler(function (s) {
+            $("#couponTitle").text('['+selectedCoupon.coupnCd +'] '+selectedCoupon.coupnNm);
+          });
         }
       }
     });

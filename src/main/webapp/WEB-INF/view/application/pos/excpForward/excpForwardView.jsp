@@ -96,7 +96,7 @@
 
     </div>
   </div>
-  <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=20181218.01" charset="utf-8"></script></div>
+  <script type="text/javascript" src="/resource/solbipos/js/application/pos/excpForward/excpForward.js?ver=2018121801" charset="utf-8"></script></div>
 </body>
 
 <%-- 상품분류 조회 팝업 --%>

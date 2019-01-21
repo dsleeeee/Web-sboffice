@@ -106,5 +106,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=2019011601" charset="utf-8"></script>
 

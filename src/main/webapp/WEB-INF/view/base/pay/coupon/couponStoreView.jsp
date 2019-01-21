@@ -22,6 +22,10 @@
         </colgroup>
         <tbody>
         <tr>
+          <th>적용대상쿠폰</th>
+          <td colspan="3" id="couponTitle"></td>
+        </tr>
+        <tr>
           <th><s:message code="coupon.hqOfficeCd"/></th>
           <td><input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" /></td>
           <th><s:message code="coupon.hqOfficeNm"/></th>
@@ -118,4 +122,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20190114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=2019012101" charset="utf-8"></script>
