@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -545,9 +545,9 @@ var __extends = this && this.__extends || function() {
               C = this.stacking != e.Stacking.None && !h._isCustomAxisY(),
               k = this.stacking == e.Stacking.Stacked100pc && !h._isCustomAxisY();
             void 0 !== h._getChartType() && (C = k = !1);
-            for (var S = this.chart.interpolateNulls, w = !1, I = 0; I < f; I++) {
+            for (var S = h.interpolateNulls, w = !1, I = 0; I < f; I++) {
               var N = g ? d[I] : I,
-                O = p[I];
+                O = null == p[I] ? 0 : p[I];
               if (e._DataInfo.isValid(N) && e._DataInfo.isValid(O)) {
                 if (C)
                   if (k && (O /= this.dataInfo.getStackedAbsSum(N)), O >= 0) {
@@ -662,7 +662,7 @@ var __extends = this && this.__extends || function() {
             _._isCustomAxisY() && (g = v = !1), u._areas[h] || (u._areas[h] = []);
             for (var j = 0; j < M; j++) {
               var R = m ? m[j] : j,
-                X = x[j];
+                X = null == x[j] ? 0 : x[j];
               if (this._getSymbolOrigin && i.convert(this._getSymbolOrigin(S, j, M)), this._getSymbolStyles) {
                 var F = this._getSymbolStyles(j, M);
                 P = F && F.fill ? F.fill : P, b = F && F.fill ? F.fill : b, T = F && F.stroke ? F.stroke : T, L = F && F.stroke ? F.stroke : L

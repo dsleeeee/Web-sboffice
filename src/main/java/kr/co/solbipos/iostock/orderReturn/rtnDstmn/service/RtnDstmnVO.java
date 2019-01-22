@@ -22,6 +22,8 @@ public class RtnDstmnVO extends PageVO {
     private String slipKind;
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String procFg;
+    /** 처리구분 array */
+    private String arrProcFg[];
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String updateProcFg;
     /** 상세건수 */
@@ -257,6 +259,20 @@ public class RtnDstmnVO extends PageVO {
      */
     public void setProcFg(String procFg) {
         this.procFg = procFg;
+    }
+
+    /**
+     * @return the arrProcFg
+     */
+    public String[] getArrProcFg() {
+        return arrProcFg;
+    }
+
+    /**
+     * @param arrProcFg the arrProcFg to set
+     */
+    public void setArrProcFg(String[] arrProcFg) {
+        this.arrProcFg = arrProcFg;
     }
 
     /**

@@ -130,7 +130,7 @@
   var sysStatFg = ${ccu.getCommCodeExcpAll("005")};
   var reasonData = ${ccu.getCommCodeExcpAll("102")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequestList.js?ver=20190102.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequestList.js?ver=2019010201" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/pos/install/installManage/installRequest.jsp">

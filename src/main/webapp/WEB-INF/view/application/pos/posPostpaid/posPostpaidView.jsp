@@ -89,7 +89,7 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/posPostpaid.js?ver=20181203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/posPostpaid.js?ver=2018120301" charset="utf-8"></script>
 
 <%-- 예외출고 수량 등록 팝업 --%>
 <c:import url="/WEB-INF/view/application/pos/posPostpaid/taxBillRequest.jsp">

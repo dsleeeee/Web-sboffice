@@ -1,6 +1,6 @@
 ﻿/*
     *
-    * Wijmo Library 5.20182.500
+    * Wijmo Library 5.20183.550
     * http://wijmo.com/
     *
     * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -278,6 +278,10 @@ var wijmo;
                 item: '{cnt} 항목',
                 row: 'Row',
                 col: '세로 막대형'
+            },
+            Slicer: {
+                multiSelect: '다중 선택',
+                clearFilter: '필터 지우기'
             }
         },
         Viewer: {
@@ -409,6 +413,17 @@ var wijmo;
             selectParameterValue: '(값을 선택)',
             apply: '적용',
             errorOccured: '오류가 발생했습니다.'
+        },
+        FlexSheet: {
+            insertRow: '행 삽입',
+            deleteRow: '행 삭제',
+            insertCol: '열 삽입',
+            deleteCol: 'Delete Column',
+            convertTable: '표 변환',
+            copyCells: '셀 복사',
+            fillSeries: '연속 데이터 채우기',
+            fillFormat: '서식만 채우기',
+            fillWithoutFormat: '서식 없이 채우기'
         }
     };
     var updc = window['wijmo']._updateCulture;

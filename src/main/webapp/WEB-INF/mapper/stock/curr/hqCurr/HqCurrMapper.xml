@@ -94,6 +94,27 @@
         <if test='weightFg == "1"'>
             AND thp.PROD_TYPE_FG IN ('2', '3')
         </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+                                        FROM    DUAL
+                                        UNION
+                                        SELECT  thpc.PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                                      )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND thp.PROD_CD IN    ( SELECT  PROD_CD
+                                    FROM    TB_HQ_VENDOR_PROD
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     VENDR_CD IN
+                                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                  )
+        </if>
         ORDER BY tshsc.PROD_CD
     </select>
 

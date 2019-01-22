@@ -33,6 +33,9 @@ public class RtnDstmnServiceImpl implements RtnDstmnService {
     /** 반품명세표 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getRtnDstmnList(RtnDstmnVO rtnDstmnVO) {
+        if(!StringUtil.getOrBlank(rtnDstmnVO.getProcFg()).equals("")) {
+            rtnDstmnVO.setArrProcFg(rtnDstmnVO.getProcFg().split(","));
+        }
         return rtnDstmnMapper.getRtnDstmnList(rtnDstmnVO);
     }
 

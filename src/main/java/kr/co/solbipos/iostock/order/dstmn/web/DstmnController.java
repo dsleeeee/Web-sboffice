@@ -8,7 +8,6 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.dstmn.service.DstmnService;
 import kr.co.solbipos.iostock.order.dstmn.service.DstmnVO;
-import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -151,6 +150,7 @@ public class DstmnController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         dstmnVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+//        List<DefaultMap<String>> list = dstmnService.getDstmnDtlList(dstmnVO);
         List<DefaultMap<String>> list = dstmnService.getDstmnDtlList(dstmnVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
@@ -198,5 +198,189 @@ public class DstmnController {
         int result = dstmnService.saveOutstockAfter(dstmnVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래명세표 - 세금계산서 공급자 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 02.
+     */
+    @RequestMapping(value = "/taxReport/supplierInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSupplierInfo(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = dstmnService.getSupplierInfo(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
+     * 거래명세표 - 세금계산서 전표 내역 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 02.
+     */
+    @RequestMapping(value = "/taxReport/taxReportInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTaxReportInfoList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getTaxReportInfoList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 거래명세표 전표 내역 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 03.
+     */
+    @RequestMapping(value = "/transReport/transReportInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTransReportInfoList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getTransReportInfoList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(상품) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 10.
+     */
+    @RequestMapping(value = "/dstbProdReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbProdReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbProdReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(상품-매장) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 11.
+     */
+    @RequestMapping(value = "/dstbProdStoreReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbProdStoreReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbProdStoreReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(매장-상품) 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 11.
+     */
+    @RequestMapping(value = "/dstbStoreProdReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbStoreProdReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbStoreProdReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(기사) 배송기사 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 15.
+     */
+    @RequestMapping(value = "/dstbDlvr/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbDlvrList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbDlvrList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
+    }
+
+
+    /**
+     * 거래명세표 - 분배지시서(기사) 배송기사별 상품 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstmnVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 15.
+     */
+    @RequestMapping(value = "/dstbDlvrReport/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbDlvrReportList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstmnVO dstmnVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dstmnService.getDstbDlvrReportList(dstmnVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dstmnVO);
     }
 }

@@ -163,4 +163,4 @@
 <script>
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=20190105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501" charset="utf-8"></script>

@@ -91,4 +91,4 @@ var mobileCouponApplyFg  = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl = "${baseUrl}";
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupon/mobileCoupon.js?ver=20180813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupon/mobileCoupon.js?ver=2018081301" charset="utf-8"></script>

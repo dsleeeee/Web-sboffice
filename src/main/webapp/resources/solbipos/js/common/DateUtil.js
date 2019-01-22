@@ -23,6 +23,31 @@ function getCurDate(seperator) {
 }
 
 /***
+ * 현재 시간 가져오기
+ * @param seperator
+ * @returns {*}
+ */
+function getCurTime(seperator) {
+  try {
+    if (seperator === undefined) seperator = "";
+
+    var date = new Date();
+    var hour = date.getHours();
+    var min = date.getMinutes();
+    var second = date.getSeconds();
+
+    if (("" + hour).length === 1) hour = "0" + hour;
+    if (("" + min).length === 1) min = "0" + min;
+    if (("" + second).length === 1) second = "0" + second;
+
+    return (hour + seperator + min + seperator + second);
+  }
+  catch (e) {
+    //alert('udfMainFrm.js : '+e);
+  }
+}
+
+/***
  * 날짜 포맷
  * @param date
  * @param seperator

@@ -145,15 +145,20 @@
         ,       tphvid.IN_TOT*tphvid.SLIP_FG AS IN_TOT
         ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+        ,       thn.NMCODE_NM AS PO_UNIT_FG_NM
         FROM    TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
         ,       TB_HQ_PRODUCT thp
         ,       TB_HQ_VENDOR thv
+        ,       TB_HQ_NMCODE thn
         WHERE   tphvid.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tphvid.SLIP_NO      =   #{slipNo}
         AND     thp.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thp.PROD_CD         =   tphvid.PROD_CD
         AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
+        AND     thn.NMCODE_GRP_CD(+)=   '097'
+        AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
         ORDER
         BY      tphvid.PROD_CD
         ]]>
@@ -312,6 +317,39 @@
         ]]>
     </select>
 
+
+    <!-- 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_VENDOR, TB_PO_HQ_VENDR_INSTOCK
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보)한다.
+    -->
+    <select id="getVendrInstockReportInfo" parameterType="vendrInstockVO" resultType="DefaultMap">
+        <![CDATA[
+        SELECT  tho.HQ_OFFICE_NM AS INSTOCK_NM
+        ,       tho.TEL_NO AS INSTOCK_TEL_NO
+        ,       tho.FAX_NO AS INSTOCK_FAX_NO
+        ,       tho.EMAIL_ADDR AS INSTOCK_EMAIL_ADDR
+        ,       tho.ADDR || ' ' || tho.ADDR_DTL AS INSTOCK_ADDR
+        ,       thv.VENDR_NM AS SUPPLIER_NM
+        ,       thv.TEL_NO AS SUPPLIER_TEL_NO
+        ,       thv.FAX_NO AS SUPPLIER_FAX_NO
+        ,       thv.EMAIL_ADDR AS SUPPLIER_EMAIL_ADDR
+        ,       thv.ADDR || ' ' || thv.ADDR_DTL AS SUPPLIER_ADDR
+        ,       tphvi.SLIP_NO
+        ,       tphvi.INSTOCK_DATE
+        ,       tphvi.REMARK
+        ,       tphvi.DTL_CNT
+        FROM    TB_HQ_OFFICE tho
+        ,       TB_HQ_VENDOR thv
+        ,       TB_PO_HQ_VENDR_INSTOCK tphvi
+        WHERE   tho.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thv.HQ_OFFICE_CD    =   tho.HQ_OFFICE_CD
+        AND     thv.VENDR_CD        =   #{vendrCd}
+        AND     tphvi.HQ_OFFICE_CD  =   tho.HQ_OFFICE_CD
+        AND     tphvi.SLIP_NO       =   #{slipNo}
+        ]]>
+    </select>
 
     <!-- 거래처 입고/반출등록 - 입고/반출정보 HD 등록 -->
     <!--

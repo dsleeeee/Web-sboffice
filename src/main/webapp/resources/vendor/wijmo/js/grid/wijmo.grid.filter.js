@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -116,10 +116,10 @@ var wijmo;
             a = e.collectionView,
             s = a ? a.sourceCollection : [];
           if (i && a && a.sourceCollection && a.filter) {
-            var c = this.showValues;
+            var u = this.showValues;
             this.showValues = null;
-            for (var u = [], o = 0; o < s.length; o++) a.filter(s[o]) && u.push(s[o]);
-            s = u, this.showValues = c
+            for (var c = [], o = 0; o < s.length; o++) a.filter(s[o]) && c.push(s[o]);
+            s = c, this.showValues = u
           }
           for (o = 0; o < s.length; o++) {
             var d = e._binding.getValue(s[o]),
@@ -162,19 +162,21 @@ var __extends = this && this.__extends || function() {
           var o = i.call(this, n) || this;
           o._filter = t.asType(r, e.ValueFilter, !1);
           var l = o.getTemplate();
-          o.applyTemplate("wj-control", l, {
+          o.applyTemplate("wj-control wj-valuefilter-editor", l, {
             _divFilter: "div-filter",
             _cbSelectAll: "cb-select-all",
             _spSelectAll: "sp-select-all",
             _divValues: "div-values"
           }), o._cbSelectAll.tabIndex = 0;
           var a = t.culture.FlexGridFilter;
-          if (t.setText(o._spSelectAll, a.selectAll), o._view = new t.collections.CollectionView, r.sortValues) {
-            var s = r.column.dataMap || r.dataMap ? "text" : "value",
+          t.setText(o._spSelectAll, a.selectAll);
+          var s = o._view = new t.collections.CollectionView;
+          if (s.sortNullsFirst = !0, r.sortValues) {
+            var u = r.column.dataMap || r.dataMap ? "text" : "value",
               c = r.column.dataType != t.DataType.Boolean;
-            o._view.sortDescriptions.push(new t.collections.SortDescription(s, c))
+            s.sortDescriptions.push(new t.collections.SortDescription(u, c))
           }
-          return o._view.filter = o._filterValues.bind(o), o._view.collectionChanged.addHandler(o._updateSelectAllCheck, o), o._filterText = "", o._cmbFilter = new t.input.ComboBox(o._divFilter, {
+          return s.filter = o._filterValues.bind(o), s.collectionChanged.addHandler(o._updateSelectAllCheck, o), o._filterText = "", o._cmbFilter = new t.input.ComboBox(o._divFilter, {
             placeholder: a.search
           }), o._lbValues = new t.input.ListBox(o._divValues, {
             displayMemberPath: "text",
@@ -182,9 +184,6 @@ var __extends = this && this.__extends || function() {
             itemsSource: o._view,
             itemFormatter: function(t, e) {
               return e || a.null
-            },
-            gotFocus: function(t, e) {
-              t.selectedIndex < 0 && (t.selectedIndex = 0)
             }
           }), t.setAriaLabel(o._cmbFilter.inputElement, a.ariaLabels.search), o._cmbFilter.textChanged.addHandler(o._filterTextChanged, o), o._cbSelectAll.addEventListener("click", o._cbSelectAllClicked.bind(o)), o.updateEditor(), o
         }
@@ -209,8 +208,8 @@ var __extends = this && this.__extends || function() {
                 }
           } else
             for (var o = 0; o < i.length; o++) i[o].show = !0;
-          this._view.pageSize = 20, this._view.sourceCollection = i, this._view.moveCurrentTo(null), setTimeout(function() {
-            t._view.pageSize = t._filter.maxValues, t._cmbFilter.text = t._filter.filterText, t._filterText = t._cmbFilter.text.toLowerCase()
+          this._view.pageSize = 20, this._view.sourceCollection = i, setTimeout(function() {
+            t._view.pageSize = t._filter.maxValues, t._cmbFilter.text = t._filter.filterText || "", t._filterText = t._cmbFilter.text.toLowerCase()
           })
         }, n.prototype.clearEditor = function() {
           this._cmbFilter.text = "", this._filterText = "", this._view.pageSize = 0, this._view.refresh();
@@ -237,8 +236,8 @@ var __extends = this && this.__extends || function() {
         }, n.prototype._filterValues = function(t) {
           return !this._filterText || !(!t || !t.text) && t.text.toLowerCase().indexOf(this._filterText) > -1
         }, n.prototype._cbSelectAllClicked = function() {
-          for (var t = this._cbSelectAll.checked, e = this._view.items, i = 0; i < e.length; i++) e[i].show = t;
-          this._view.refresh()
+          for (var t = this._cbSelectAll.checked, e = this._view.items, i = this._divValues.scrollTop, n = 0; n < e.length; n++) e[n].show = t;
+          this._view.refresh(), this._divValues.scrollTop = i
         }, n.prototype._updateSelectAllCheck = function() {
           for (var t = 0, e = this._view.items, i = 0; i < e.length; i++) e[i].show && t++;
           0 == t ? (this._cbSelectAll.checked = !1, this._cbSelectAll.indeterminate = !1) : t == e.length ? (this._cbSelectAll.checked = !0, this._cbSelectAll.indeterminate = !1) : this._cbSelectAll.indeterminate = !0
@@ -344,7 +343,7 @@ var __extends = this && this.__extends || function() {
           var o = i.call(this, n) || this;
           o._filter = t.asType(r, e.ConditionFilter, !1);
           var l = o.getTemplate();
-          o.applyTemplate("wj-control", l, {
+          o.applyTemplate("wj-control wj-conditionfilter-editor", l, {
             _divHdr: "div-hdr",
             _divCmb1: "div-cmb1",
             _divVal1: "div-val1",
@@ -358,8 +357,8 @@ var __extends = this && this.__extends || function() {
           var a = t.culture.FlexGridFilter,
             s = a.ariaLabels;
           t.setAriaLabel(o._btnAnd, s.and), t.setAriaLabel(o._btnOr, s.or), t.setText(o._divHdr, a.header), t.setText(o._spAnd, a.and), t.setText(o._spOr, a.or), o._cmb1 = o._createOperatorCombo(o._divCmb1, s.op1), o._cmb2 = o._createOperatorCombo(o._divCmb2, s.op2), o._val1 = o._createValueInput(o._divVal1, s.val1), o._val2 = o._createValueInput(o._divVal2, s.val2);
-          var c = o.hostElement;
-          return o.addEventListener(c, "change", o._btnAndOrChanged.bind(o)), o.addEventListener(c, "keydown", o._keydown.bind(o)), o.updateEditor(), o
+          var u = o.hostElement;
+          return o.addEventListener(u, "change", o._btnAndOrChanged.bind(o)), o.addEventListener(u, "keydown", o._keydown.bind(o)), o.updateEditor(), o
         }
         return __extends(n, i), Object.defineProperty(n.prototype, "filter", {
           get: function() {
@@ -478,29 +477,31 @@ var wijmo;
           this.operator = null, this.value = null
         }, e.prototype.apply = function(e) {
           var i = this._mapVal || this._strVal || this._val;
-          switch (t.isString(e) && (e = e.toLowerCase()), t.isString(i) && null == e && (e = ""), this._op) {
+          t.isString(e) && (e = e.toLowerCase()), t.isString(i) && null == e && (e = "");
+          var r = n;
+          switch (this._op) {
             case null:
               return !0;
-            case n.EQ:
-              return t.isDate(e) && t.isDate(i) ? t.DateTime.sameDate(e, i) : e == i;
-            case n.NE:
-              return e != i;
-            case n.GT:
+            case r.EQ:
+              return null != e && null != i ? e.valueOf() == i.valueOf() : e == i;
+            case r.NE:
+              return null != e && null != i ? e.valueOf() != i.valueOf() : e != i;
+            case r.GT:
               return e > i;
-            case n.GE:
+            case r.GE:
               return e >= i;
-            case n.LT:
+            case r.LT:
               return e < i;
-            case n.LE:
+            case r.LE:
               return e <= i;
-            case n.BW:
-              return !(!this._strVal || !t.isString(e)) && 0 == e.indexOf(this._strVal);
-            case n.EW:
-              return !!(this._strVal && t.isString(e) && e.length >= this._strVal.length) && e.substr(e.length - this._strVal.length) == i;
-            case n.CT:
-              return !(!this._strVal || !t.isString(e)) && e.indexOf(this._strVal) > -1;
-            case n.NC:
-              return !(!this._strVal || !t.isString(e)) && e.indexOf(this._strVal) < 0
+            case r.BW:
+              return !(null == this._strVal || !t.isString(e)) && 0 == e.indexOf(this._strVal);
+            case r.EW:
+              return !!(null != this._strVal && t.isString(e) && e.length >= this._strVal.length) && e.substr(e.length - this._strVal.length) == i;
+            case r.CT:
+              return !(null == this._strVal || !t.isString(e)) && e.indexOf(this._strVal) > -1;
+            case r.NC:
+              return !(null == this._strVal || !t.isString(e)) && e.indexOf(this._strVal) < 0
           }
           throw "Unknown operator"
         }, e
@@ -715,15 +716,15 @@ var __extends = this && this.__extends || function() {
             _btnClear: "btn-clear"
           });
           var s = t.culture.FlexGridFilter,
-            c = s.ariaLabels,
-            u = l.hostElement,
+            u = s.ariaLabels,
+            c = l.hostElement,
             d = l.filter.column,
             p = d.grid.collectionView;
-          t.setAttribute(u, "role", "dialog"), t.setAriaLabel(u, c.dialog + " " + d.header), t.setAriaLabel(l._btnAsc, c.asc), t.setAriaLabel(l._btnDsc, c.dsc), t.setText(l._btnAsc, s.ascending), t.setText(l._btnDsc, s.descending), t.setText(l._aVal, s.values), t.setText(l._aCnd, s.conditions), t.setText(l._btnApply, s.apply), t.setText(l._btnCancel, s.cancel), t.setText(l._btnClear, s.clear);
+          t.setAttribute(c, "role", "dialog"), t.setAriaLabel(c, u.dialog + " " + d.header), t.setAriaLabel(l._btnAsc, u.asc), t.setAriaLabel(l._btnDsc, u.dsc), t.setText(l._btnAsc, s.ascending), t.setText(l._btnDsc, s.descending), t.setText(l._aVal, s.values), t.setText(l._aCnd, s.conditions), t.setText(l._btnApply, s.apply), t.setText(l._btnCancel, s.cancel), t.setText(l._btnClear, s.clear);
           var h = l.filter.conditionFilter.isActive || 0 == (r.filterType & i.FilterType.Value) ? i.FilterType.Condition : i.FilterType.Value;
           l._showFilter(h), o && p && p.canSort || (l._divSort.style.display = "none");
           var f = l._btnClicked.bind(l);
-          return l._btnApply.addEventListener("click", f), l._btnCancel.addEventListener("click", f), l._btnClear.addEventListener("click", f), l._btnAsc.addEventListener("click", f), l._btnDsc.addEventListener("click", f), l._aVal.addEventListener("click", f), l._aCnd.addEventListener("click", f), u.addEventListener("keydown", function(e) {
+          return l._btnApply.addEventListener("click", f), l._btnCancel.addEventListener("click", f), l._btnClear.addEventListener("click", f), l._btnAsc.addEventListener("click", f), l._btnDsc.addEventListener("click", f), l._aVal.addEventListener("click", f), l._aCnd.addEventListener("click", f), c.addEventListener("keydown", function(e) {
             if (!e.defaultPrevented) {
               var i = e.target.tagName.match(/^(a|button)$/i);
               switch (e.keyCode) {
@@ -765,14 +766,16 @@ var __extends = this && this.__extends || function() {
         }, r.prototype._handleResize = function() {
           this.isTouching || this._wasTouching || this.onButtonClicked()
         }, r.prototype._showFilter = function(t) {
-          switch (this._wasTouching = this.isTouching, t == i.FilterType.Value && null == this._edtVal && (this._edtVal = new i.ValueFilterEditor(this._divEdtVal, this.filter.valueFilter)), t == i.FilterType.Condition && null == this._edtCnd && (this._edtCnd = new i.ConditionFilterEditor(this._divEdtCnd, this.filter.conditionFilter)), 0 != (t & this.filter.filterType) && (t == i.FilterType.Value ? (this._divEdtVal.style.display = "", this._divEdtCnd.style.display = "none", this._enableLink(this._aVal, !1), this._enableLink(this._aCnd, !0), this._edtVal.focus()) : (this._divEdtVal.style.display = "none", this._divEdtCnd.style.display = "", this._enableLink(this._aVal, !0), this._enableLink(this._aCnd, !1), this._edtCnd.focus())), this.filter.filterType) {
+          this._wasTouching = this.isTouching, t == i.FilterType.Value && null == this._edtVal && (this._edtVal = new i.ValueFilterEditor(this._divEdtVal, this.filter.valueFilter)), t == i.FilterType.Condition && null == this._edtCnd && (this._edtCnd = new i.ConditionFilterEditor(this._divEdtCnd, this.filter.conditionFilter)), 0 != (t & this.filter.filterType) && (t == i.FilterType.Value ? (this._divEdtVal.style.display = "", this._divEdtCnd.style.display = "none", this._enableLink(this._aVal, !1), this._enableLink(this._aCnd, !0), this._edtVal.focus()) : (this._divEdtVal.style.display = "none", this._divEdtCnd.style.display = "", this._enableLink(this._aVal, !0), this._enableLink(this._aCnd, !1), this._edtCnd.focus()));
+          var e = this._divType.style;
+          switch (this.filter.filterType) {
             case i.FilterType.None:
             case i.FilterType.Condition:
             case i.FilterType.Value:
-              this._divType.style.display = "none";
+              e.display = "none";
               break;
             default:
-              this._divType.style.display = ""
+              e.display = ""
           }
         }, r.prototype._enableLink = function(e, i) {
           t.toggleClass(e, "wj-state-disabled", !i), t.setAttribute(e, "href", i ? "" : null), t.setAttribute(e, "disabled", i ? null : "disabled")
@@ -780,19 +783,20 @@ var __extends = this && this.__extends || function() {
           var t = e.filter.FilterType;
           return "none" != this._divEdtVal.style.display ? t.Value : t.Condition
         }, r.prototype._btnClicked = function(e) {
-          if (e.preventDefault(), e.stopPropagation(), !t.hasClass(e.target, "wj-state-disabled")) {
-            if (e.target == this._aVal) return this._showFilter(i.FilterType.Value), void t.moveFocus(this._edtVal.hostElement, 0);
-            if (e.target == this._aCnd) return this._showFilter(i.FilterType.Condition), void t.moveFocus(this._edtCnd.hostElement, 0);
-            if (e.target == this._btnAsc || e.target == this._btnDsc) {
-              var n = this.filter.column,
-                r = n.sortMemberPath ? n.sortMemberPath : n.binding,
-                o = n.grid.collectionView,
-                l = new t.collections.SortDescription(r, e.target == this._btnAsc);
-              o.sortDescriptions.deferUpdate(function() {
-                o.sortDescriptions.clear(), o.sortDescriptions.push(l)
+          var n = e.target;
+          if (e.preventDefault(), e.stopPropagation(), !t.hasClass(n, "wj-state-disabled")) {
+            if (n == this._aVal) return this._showFilter(i.FilterType.Value), void t.moveFocus(this._edtVal.hostElement, 0);
+            if (n == this._aCnd) return this._showFilter(i.FilterType.Condition), void t.moveFocus(this._edtCnd.hostElement, 0);
+            if (n == this._btnAsc || n == this._btnDsc) {
+              var r = this.filter.column,
+                o = r.sortMemberPath ? r.sortMemberPath : r.binding,
+                l = r.grid.collectionView,
+                a = new t.collections.SortDescription(o, e.target == this._btnAsc);
+              l.sortDescriptions.deferUpdate(function() {
+                l.sortDescriptions.clear(), l.sortDescriptions.push(a)
               })
             }
-            e.target == this._btnApply ? (this.updateFilter(), this.onFilterChanged()) : e.target == this._btnClear ? this.filter.isActive && (this.filter.clear(), this.onFilterChanged()) : this.updateEditor(), this.onButtonClicked()
+            n == this._btnApply ? (this.updateFilter(), this.onFilterChanged()) : n == this._btnClear ? this.filter.isActive && (this.filter.clear(), this.onFilterChanged()) : this.updateEditor(), this.onButtonClicked()
           }
         }, r.controlTemplate = '<div><div wj-part="div-sort"><button wj-part="btn-asc" class="wj-btn" style="min-width:95px"></button>&nbsp;&nbsp;&nbsp;<button wj-part="btn-dsc" class="wj-btn" style="min-width:95px"></button></div><div wj-part="div-type" class="wj-filtertype"><a wj-part="a-cnd" href="" draggable="false"></a>&nbsp;|&nbsp;<a wj-part="a-val" href="" draggable="false"></a></div><div wj-part="div-edt-val" tabindex="-1"></div><div wj-part="div-edt-cnd" tabindex="-1"></div><div style="text-align:right;margin-top:10px"><button wj-part="btn-apply" class="wj-btn"></button>&nbsp;&nbsp;<button wj-part="btn-cancel" class="wj-btn"></button>&nbsp;&nbsp;<button wj-part="btn-clear" class="wj-btn"></button></div>', r
       }(t.Control);
@@ -875,31 +879,36 @@ var wijmo;
               filters: []
             }, e = 0; e < this._filters.length; e++) {
               var i = this._filters[e];
-              if (i && i.column && i.column.binding)
+              if (i && i.column && i.column.binding && (i.isActive || i.filterType != this.defaultFilterType)) {
+                var n = {
+                  binding: i.column.binding
+                };
                 if (i.conditionFilter.isActive) {
-                  var n = i.conditionFilter;
-                  t.filters.push({
+                  var r = i.conditionFilter;
+                  n = {
                     binding: i.column.binding,
                     type: "condition",
                     condition1: {
-                      operator: n.condition1.operator,
-                      value: n.condition1.value
+                      operator: r.condition1.operator,
+                      value: r.condition1.value
                     },
-                    and: n.and,
+                    and: r.and,
                     condition2: {
-                      operator: n.condition2.operator,
-                      value: n.condition2.value
+                      operator: r.condition2.operator,
+                      value: r.condition2.value
                     }
-                  })
+                  }
                 } else if (i.valueFilter.isActive) {
-                  var r = i.valueFilter;
-                  t.filters.push({
+                  var o = i.valueFilter;
+                  n = {
                     binding: i.column.binding,
                     type: "value",
-                    filterText: r.filterText,
-                    showValues: r.showValues
-                  })
+                    filterText: o.filterText,
+                    showValues: o.showValues
+                  }
                 }
+                i.filterType != this.defaultFilterType && (n.filterType = i.filterType), t.filters.push(n)
+              }
             }
             return JSON.stringify(t)
           },
@@ -907,18 +916,18 @@ var wijmo;
             if (e = t.asString(e), this.clear(), e) {
               var i = JSON.parse(e);
               this.defaultFilterType = i.defaultFilterType;
-              for (var n = 0; n < i.filters.length; n++) {
-                var r = i.filters[n],
-                  o = this._g.getColumn(r.binding),
-                  l = this.getColumnFilter(o, !0);
-                if (l) switch (r.type) {
+              for (var r = 0; r < i.filters.length; r++) {
+                var o = i.filters[r],
+                  l = this._g.getColumn(o.binding),
+                  a = this.getColumnFilter(l, !0);
+                if (a) switch (null != o.filterType && (a.filterType = t.asEnum(o.filterType, n)), o.type) {
                   case "condition":
-                    var a = l.conditionFilter;
-                    a.condition1.value = o.dataType == t.DataType.Date ? t.changeType(r.condition1.value, o.dataType, null) : r.condition1.value, a.condition1.operator = r.condition1.operator, a.and = r.and, a.condition2.value = o.dataType == t.DataType.Date ? t.changeType(r.condition2.value, o.dataType, null) : r.condition2.value, a.condition2.operator = r.condition2.operator;
+                    var s = a.conditionFilter;
+                    s.condition1.value = l.dataType == t.DataType.Date ? t.changeType(o.condition1.value, l.dataType, null) : o.condition1.value, s.condition1.operator = o.condition1.operator, s.and = o.and, s.condition2.value = l.dataType == t.DataType.Date ? t.changeType(o.condition2.value, l.dataType, null) : o.condition2.value, s.condition2.operator = o.condition2.operator;
                     break;
                   case "value":
-                    var s = l.valueFilter;
-                    s.filterText = r.filterText, s.showValues = r.showValues
+                    var u = a.valueFilter;
+                    u.filterText = o.filterText, u.showValues = o.showValues
                 }
               }
             }
@@ -932,43 +941,44 @@ var wijmo;
           },
           enumerable: !0,
           configurable: !0
-        }), r.prototype.editColumnFilter = function(n, r) {
-          var o = this;
+        }), r.prototype.editColumnFilter = function(n, r, o) {
+          var l = this;
           this.closeEditor(), n = this._asColumn(n);
-          var l = document.createElement("div"),
-            a = this.getColumnFilter(n),
-            s = new i.ColumnFilterEditor(l, a, this.showSortButtons);
-          t.addClass(l, "wj-dropdown-panel"), this._divEdt = l, this._edtCol = n;
-          var c = new e.CellRangeEventArgs(this._g.cells, new e.CellRange(-1, n.index));
-          if (this.onFilterChanging(c)) {
-            c.cancel = !0, this._g.rightToLeft && (l.dir = "rtl"), s.filterChanged.addHandler(function() {
-              c.cancel = !1, setTimeout(function() {
-                c.cancel || o.apply()
+          var a = this._g,
+            s = new e.CellRangeEventArgs(a.cells, new e.CellRange(-1, n.index));
+          if (this.onFilterChanging(s)) {
+            s.cancel = !0;
+            var u = t.createElement('<div class="wj-dropdown-panel"></div>'),
+              c = this.getColumnFilter(n),
+              d = new i.ColumnFilterEditor(u, c, this.showSortButtons);
+            this._divEdt = u, this._edtCol = n, a.rightToLeft && (u.dir = "rtl"), d.filterChanged.addHandler(function() {
+              s.cancel = !1, setTimeout(function() {
+                s.cancel || l.apply()
               })
-            }), s.buttonClicked.addHandler(function() {
-              o.closeEditor(), o._g.focus(), o.onFilterChanged(c)
-            }), s.lostFocus.addHandler(function() {
+            }), d.buttonClicked.addHandler(function() {
+              l.closeEditor(), a.focus(), l.onFilterChanged(s)
+            }), d.lostFocus.addHandler(function() {
               setTimeout(function() {
-                var e = t.Control.getControl(o._divEdt);
-                e && !e.containsFocus() && o.closeEditor()
+                var e = t.Control.getControl(l._divEdt);
+                e && !e.containsFocus() && l.closeEditor()
               }, 10)
             });
-            var u = this._g;
-            u._edtHdl._commitRowEdits(), u.scrollIntoView(-1, n.index, !0);
-            var d = this._g.columnHeaders,
-              p = r && r.panel == d ? r.row : d.rows.length - 1,
-              h = r ? r.col : n.index,
-              f = d.getCellBoundingRect(p, h),
-              _ = d.getCellElement(p, h);
-            _ ? t.showPopup(l, _, !1, !1, !1) : t.showPopup(l, f), this._setAriaExpanded(_, !0), this._setAriaExpanded(u.cells.getCellElement(-1, h), !0);
-            for (var b = s.hostElement.querySelectorAll("input"), v = 0; v < b.length; v++) {
-              var g = b[v];
-              if (g.offsetHeight > 0 && g.tabIndex > -1 && !g.disabled) {
-                g.focus();
+            var p = r ? r.col : n.index;
+            r || a.columns[p].binding == n.binding || (p = a.selection.leftCol), a._edtHdl._commitRowEdits(), a.scrollIntoView(-1, p, !0);
+            var h = a.columnHeaders,
+              f = r && r.panel == h ? r.row : h.rows.length - 1,
+              _ = p,
+              b = h.getCellBoundingRect(f, _),
+              v = o || h.getCellElement(f, _);
+            v ? t.showPopup(u, v, !1, !1, !1) : t.showPopup(u, b), this._setAriaExpanded(v, !0), this._setAriaExpanded(a.cells.getCellElement(-1, _), !0);
+            for (var y = d.hostElement.querySelectorAll("input"), g = 0; g < y.length; g++) {
+              var m = y[g];
+              if (m.offsetHeight > 0 && m.tabIndex > -1 && !m.disabled) {
+                m.focus();
                 break
               }
             }
-            s.containsFocus() || s.focus()
+            d.containsFocus() || d.focus()
           } else this._divEdt = this._edtCol = null
         }, r.prototype._setAriaExpanded = function(e, i) {
           if (e) {
@@ -1015,16 +1025,16 @@ var wijmo;
               l = o.getMergedRange(r.panel, r.row, r.col) || new e.CellRange(r.row, r.col),
               a = o.columns[l.col],
               s = o._getBindingColumn(r.panel, r.row, a),
-              c = r.cell;
+              u = r.cell;
             if (l.row2 == r.panel.rows.length - 1 || a != s) {
-              var u = this.getColumnFilter(s, this.defaultFilterType != n.None);
-              this._filterColumns && this._filterColumns.indexOf(s.binding) < 0 && (u = null), u ? (t.toggleClass(c, "wj-filter-on", u.isActive), t.toggleClass(c, "wj-filter-off", !u.isActive)) : (t.removeClass(c, "wj-filter-on"), t.removeClass(c, "wj-filter-off")), u && u.filterType != n.None && (this._showIcons && this._addFilterButton(s, u, c), 0 == r.row && (c = o.cells.getCellElement(-1, r.col)) && this._addFilterButton(a, u, c))
+              var c = this.getColumnFilter(s, this.defaultFilterType != n.None);
+              this._filterColumns && this._filterColumns.indexOf(s.binding) < 0 && (c = null), c ? (t.toggleClass(u, "wj-filter-on", c.isActive), t.toggleClass(u, "wj-filter-off", !c.isActive)) : (t.removeClass(u, "wj-filter-on"), t.removeClass(u, "wj-filter-off")), c && c.filterType != n.None && (this._showIcons && this._addFilterButton(s, c, u), 0 == r.row && (u = o.cells.getCellElement(-1, r.col)) && this._addFilterButton(a, c, u))
             }
           }
         }, r.prototype._addFilterButton = function(e, i, n) {
           var o = r._WJC_FILTER,
             l = t.createElement('<button class="wj-btn wj-btn-glyph wj-right ' + o + '" type="button" tabindex="-1"><span class="wj-glyph-filter"></span></button>');
-          t.setAriaLabel(l, t.culture.FlexGridFilter.ariaLabels.edit + " " + e.header), t.setAttribute(l, "aria-haspopup", "dialog"), t.setAttribute(l, "aria-expanded", !1), t.setAttribute(l, "aria-describedby", e.describedById), t.setAttribute(l, "aria-pressed", i.isActive), n.querySelector("." + o) || n.appendChild(l)
+          t.setAriaLabel(l, t.culture.FlexGridFilter.ariaLabels.edit + " " + e.header), t.setAttribute(l, "aria-haspopup", "dialog"), t.setAttribute(l, "aria-expanded", !1), t.setAttribute(l, "aria-describedby", e.describedById), t.setAttribute(l, "aria-pressed", i.isActive), n.querySelector("." + o) || (1 == n.children.length && (n = n.querySelector("div") || n), n.appendChild(l))
         }, r.prototype._mousedown = function(t) {
           this._toggleEditor(t) && (this._tmd = !0, t.stopPropagation(), t.preventDefault())
         }, r.prototype._click = function(t) {
@@ -1046,9 +1056,11 @@ var wijmo;
           return !1
         }, r.prototype._keydown = function(e) {
           if (!e.defaultPrevented && !e.ctrlKey && e.altKey && (e.keyCode == t.Key.Down || e.keyCode == t.Key.Up)) {
-            var i = this.grid.selection,
-              n = i.col > -1 ? this.grid.columns[i.col] : null;
-            n && !n.dataMap && this.getColumnFilter(n, !0) && (this.editColumnFilter(n), e.preventDefault(), e.stopPropagation())
+            var i = this.grid,
+              n = i.selection,
+              r = n.col > -1 ? i.columns[n.col] : null,
+              o = r ? i._getBindingColumn(i.cells, n.row, r) : null;
+            o && !o.dataMap && this.getColumnFilter(o, !0) && (this.editColumnFilter(o), e.preventDefault(), e.stopPropagation())
           }
         }, r._WJC_FILTER = "wj-elem-filter", r
       }();

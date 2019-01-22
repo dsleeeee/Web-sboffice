@@ -461,6 +461,23 @@ public class VendrInstockServiceImpl implements VendrInstockService {
     }
 
 
+    /** 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) */
+    @Override
+    public DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO, SessionInfoVO sessionInfoVO) {
+        DefaultMap<String> result = new DefaultMap<String>();
+        // regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅
+        vendrInstockVO = setSessionValue(vendrInstockVO, sessionInfoVO, null);
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            result = vendrInstockHqMapper.getVendrInstockReportInfo(vendrInstockVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            result = vendrInstockStoreMapper.getVendrInstockReportInfo(vendrInstockVO);
+        }
+        return result;
+    }
+
+
     /** 거래처 발주등록 - 엑셀업로드 */
     @Override
     public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {

@@ -37,7 +37,7 @@ public class PosPostpaidStoreVO extends CmmVO {
     /** 세금계산서 발행 요청 일시 */
     private String requestDt;
     /** 세금계산서 발행 요청 금액 */
-    private int requestAmt;
+    private String requestAmt;
     /** 세금계산서 발행 요청 상태 */
     private StatusFg statusFg;
     /** 비고 */
@@ -168,14 +168,14 @@ public class PosPostpaidStoreVO extends CmmVO {
      * @return the requestAmt
      */
 
-    public int getRequestAmt() {
+    public String getRequestAmt() {
         return requestAmt;
     }
 
     /**
      * @param requestAmt the requestAmt to set
      */
-    public void setRequestAmt(int requestAmt) {
+    public void setRequestAmt(String requestAmt) {
         this.requestAmt = requestAmt;
     }
 

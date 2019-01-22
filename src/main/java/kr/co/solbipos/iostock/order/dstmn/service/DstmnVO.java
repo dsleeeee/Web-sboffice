@@ -10,6 +10,8 @@ public class DstmnVO extends PageVO {
     private String hqOfficeCd;
     /** 전표번호 YYMM(4)+SEQ(6) */
     private String slipNo;
+    /** 전표번호 array */
+    private String arrSlipNo[];
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -22,6 +24,8 @@ public class DstmnVO extends PageVO {
     private String slipKind;
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String procFg;
+    /** 처리구분 array */
+    private String arrProcFg[];
     /** 처리구분 TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정 */
     private String updateProcFg;
     /** 상세건수 */
@@ -126,6 +130,8 @@ public class DstmnVO extends PageVO {
     private String hqRemark;
     /** 배송기사코드 */
     private String dlvrCd;
+    /** 배송기사코드 array */
+    private String arrDlvrCd[];
     /** 출고확정여부 */
     private String confirmFg;
     /** 순번 본사코드_전표번호에 따른 순번 */
@@ -173,6 +179,20 @@ public class DstmnVO extends PageVO {
      */
     public void setSlipNo(String slipNo) {
         this.slipNo = slipNo;
+    }
+
+    /**
+     * @return the arrSlipNo
+     */
+    public String[] getArrSlipNo() {
+        return arrSlipNo;
+    }
+
+    /**
+     * @param arrSlipNo the arrSlipNo to set
+     */
+    public void setArrSlipNo(String[] arrSlipNo) {
+        this.arrSlipNo = arrSlipNo;
     }
 
     /**
@@ -257,6 +277,20 @@ public class DstmnVO extends PageVO {
      */
     public void setProcFg(String procFg) {
         this.procFg = procFg;
+    }
+
+    /**
+     * @return the arrProcFg
+     */
+    public String[] getArrProcFg() {
+        return arrProcFg;
+    }
+
+    /**
+     * @param arrProcFg the arrProcFg to set
+     */
+    public void setArrProcFg(String[] arrProcFg) {
+        this.arrProcFg = arrProcFg;
     }
 
     /**
@@ -985,6 +1019,20 @@ public class DstmnVO extends PageVO {
      */
     public void setDlvrCd(String dlvrCd) {
         this.dlvrCd = dlvrCd;
+    }
+
+    /**
+     * @return the arrDlvrCd
+     */
+    public String[] getArrDlvrCd() {
+        return arrDlvrCd;
+    }
+
+    /**
+     * @param arrDlvrCd the arrDlvrCd to set
+     */
+    public void setArrDlvrCd(String[] arrDlvrCd) {
+        this.arrDlvrCd = arrDlvrCd;
     }
 
     /**

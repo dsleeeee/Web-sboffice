@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -17,7 +17,7 @@ var wijmo;
       "use strict";
       var n = function() {
         function n(t) {
-          this._expressionCache = {}, this._idChars = "$:!", this._functionTable = {}, this._cacheSize = 0, this._tableRefStart = !1, this.unknownFunction = new e.Event, this._owner = t, this._buildSymbolTable(), this._registerAggregateFunction(), this._registerMathFunction(), this._registerLogicalFunction(), this._registerTextFunction(), this._registerDateFunction(), this._registLookUpReferenceFunction(), this._registFinacialFunction()
+          this._expressionCache = {}, this._idChars = "$:!", this._functionTable = {}, this._cacheSize = 0, this._tableRefStart = !1, this.unknownFunction = new e.Event, this._owner = t, this._buildSymbolTable(), this._registerAggregateFunction(), this._registerMathFunction(), this._registerLogicalFunction(), this._registerTextFunction(), this._registerDateFunction(), this._registLookUpReferenceFunction(), this._registFinacialFunction(), this._registAddressRelatedFunction()
         }
         return n.prototype.onUnknownFunction = function(e, t) {
           var n, i;
@@ -29,6 +29,7 @@ var wijmo;
           throw 'The function "' + e + '" has not supported in FlexSheet yet.'
         }, n.prototype.evaluate = function(t, n, i, l, s) {
           var r;
+          if (!this._owner.enableFormulas) return t;
           try {
             if (t && t.length > 1 && "=" === t[0]) {
               for (this._containsCellRef = !1, this._rowIndex = l, this._columnIndex = s, this._sheet = i || this._owner.selectedSheet, r = this._checkCache(t).evaluate(l, s, i); r instanceof o._Expression;) r = r.evaluate(l, s, i);
@@ -106,80 +107,85 @@ var wijmo;
             return t._getSumProduct(e, o)
           }, 255, 1)
         }, n.prototype._registerMathFunction = function() {
-          var t = this,
-            n = ["abs", "acos", "asin", "atan", "cos", "exp", "ln", "sin", "sqrt", "tan"],
-            i = ["ceiling", "floor"],
-            s = ["round", "rounddown", "roundup"];
-          t._functionTable.pi = new l(function() {
+          var e = this,
+            t = ["abs", "acos", "asin", "atan", "cos", "exp", "ln", "sin", "sqrt", "tan"],
+            n = ["ceiling", "floor"],
+            i = ["round", "rounddown", "roundup"];
+          e._functionTable.pi = new l(function() {
             return Math.PI
-          }, 0, 0), t._functionTable.rand = new l(function() {
+          }, 0, 0), e._functionTable.rand = new l(function() {
             return Math.random()
-          }, 0, 0), t._functionTable.power = new l(function(e, n) {
-            return Math.pow(o._Expression.toNumber(e[0], t._rowIndex, t._columnIndex, n), o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n))
-          }, 2, 2), t._functionTable.atan2 = new l(function(e, n) {
-            var i = o._Expression.toNumber(e[0], t._rowIndex, t._columnIndex, n),
-              l = o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n);
+          }, 0, 0), e._functionTable.power = new l(function(t, n) {
+            return Math.pow(o._Expression.toNumber(t[0], e._rowIndex, e._columnIndex, n), o._Expression.toNumber(t[1], e._rowIndex, e._columnIndex, n))
+          }, 2, 2), e._functionTable.atan2 = new l(function(t, n) {
+            var i = o._Expression.toNumber(t[0], e._rowIndex, e._columnIndex, n),
+              l = o._Expression.toNumber(t[1], e._rowIndex, e._columnIndex, n);
             if (0 === i && 0 === l) throw "The x number and y number can't both be zero for the atan2 function";
             return Math.atan2(l, i)
-          }, 2, 2), t._functionTable.mod = new l(function(e, n) {
-            return o._Expression.toNumber(e[0], t._rowIndex, t._columnIndex, n) % o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n)
-          }, 2, 2), t._functionTable.trunc = new l(function(e, n) {
-            var i, l = o._Expression.toNumber(e[0], t._rowIndex, t._columnIndex, n),
-              s = 2 === e.length ? o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n) : 0;
-            return 0 === s ? l >= 0 ? Math.floor(l) : Math.ceil(l) : (i = Math.pow(10, s), l >= 0 ? Math.floor(l * i) / i : Math.ceil(l * i) / i)
-          }, 2, 1), i.forEach(function(e) {
-            t._functionTable[e] = new l(function(n, i) {
-              var l, s, r, a = o._Expression.toNumber(n[0], t._rowIndex, t._columnIndex, i),
-                h = 2 === n.length ? o._Expression.toNumber(n[1], t._rowIndex, t._columnIndex, i) : 1;
+          }, 2, 2), e._functionTable.mod = new l(function(t, n) {
+            var i = o._Expression.toNumber(t[0], e._rowIndex, e._columnIndex, n),
+              l = o._Expression.toNumber(t[1], e._rowIndex, e._columnIndex, n),
+              s = Math.abs(i) % Math.abs(l);
+            return l < 0 && (s = -s), s
+          }, 2, 2), e._functionTable.trunc = new l(function(t, n) {
+            var i, l, s, r = o._Expression.toNumber(t[0], e._rowIndex, e._columnIndex, n),
+              a = 2 === t.length ? o._Expression.toNumber(t[1], e._rowIndex, e._columnIndex, n) : 0;
+            if (0 === a ? (s = "n0", l = r >= 0 ? Math.floor(r) : Math.ceil(r)) : (s = "n" + ((a = a > 0 ? Math.floor(a) : Math.ceil(a)) > 0 ? a : 0), i = Math.pow(10, a), l = r >= 0 ? Math.floor(r * i) / i : Math.ceil(r * i) / i), null != l) return {
+              value: l,
+              format: s
+            }
+          }, 2, 1), n.forEach(function(t) {
+            e._functionTable[t] = new l(function(n, i) {
+              var l, s, r, a = o._Expression.toNumber(n[0], e._rowIndex, e._columnIndex, i),
+                h = 2 === n.length ? o._Expression.toNumber(n[1], e._rowIndex, e._columnIndex, i) : 1;
               if (isNaN(a)) throw "Invalid Number!";
               if (isNaN(h)) throw "Invalid Significance!";
               if (a > 0 && h < 0) throw "The significance has to be positive, if the number is positive.";
               if (0 === a || 0 === h) return 0;
               if (l = h - Math.floor(h), s = 1, 0 !== l)
                 for (; l < 1;) s *= 10, l *= 10;
-              return r = "ceiling" === e ? Math.ceil(a / h) : Math.floor(a / h), h * s * r / s
+              return r = "ceiling" === t ? Math.ceil(a / h) : Math.floor(a / h), h * s * r / s
             }, 2, 1)
-          }), s.forEach(function(n) {
-            t._functionTable[n] = new l(function(i, l) {
-              var s, r, a, h = o._Expression.toNumber(i[0], t._rowIndex, t._columnIndex, l),
-                c = o._Expression.toNumber(i[1], t._rowIndex, t._columnIndex, l);
+          }), i.forEach(function(t) {
+            e._functionTable[t] = new l(function(n, i) {
+              var l, s, r, a, h = o._Expression.toNumber(n[0], e._rowIndex, e._columnIndex, i),
+                c = o._Expression.toNumber(n[1], e._rowIndex, e._columnIndex, i);
               if (0 === c) {
-                switch (n) {
+                switch (t) {
                   case "rounddown":
-                    s = h >= 0 ? Math.floor(h) : Math.ceil(h);
+                    l = h >= 0 ? Math.floor(h) : Math.ceil(h);
                     break;
                   case "roundup":
-                    s = h >= 0 ? Math.ceil(h) : Math.floor(h);
+                    l = h >= 0 ? Math.ceil(h) : Math.floor(h);
                     break;
                   case "round":
-                    s = Math.round(h);
+                    a = h >= 0 ? 0 : .1, l = Math.round(h - a);
                     break;
                   default:
-                    s = Math.floor(h)
+                    l = Math.floor(h)
                 }
-                r = "n0"
-              } else if (c > 0 && e.isInt(c)) {
-                switch (a = Math.pow(10, c), n) {
+                s = "n0"
+              } else {
+                switch (c = c > 0 ? Math.floor(c) : Math.ceil(c), r = Math.pow(10, c), t) {
                   case "rounddown":
-                    s = h >= 0 ? Math.floor(h * a) / a : Math.ceil(h * a) / a;
+                    l = h >= 0 ? Math.floor(h * r) / r : Math.ceil(h * r) / r;
                     break;
                   case "roundup":
-                    s = h >= 0 ? Math.ceil(h * a) / a : Math.floor(h * a) / a;
+                    l = h >= 0 ? Math.ceil(h * r) / r : Math.floor(h * r) / r;
                     break;
                   case "round":
-                    s = Math.round(h * a) / a
+                    a = h >= 0 ? 0 : 1 * r / 10, l = Math.round(h * r - a) / r
                 }
-                r = "n" + c
+                s = "n" + (c > 0 ? c : 0)
               }
-              if (null != s) return {
-                value: s,
-                format: r
-              };
-              throw "Invalid precision!"
+              if (null != l) return {
+                value: l,
+                format: s
+              }
             }, 2, 2)
-          }), n.forEach(function(e) {
-            t._functionTable[e] = new l(function(n, i) {
-              return "ln" === e ? Math.log(o._Expression.toNumber(n[0], t._rowIndex, t._columnIndex, i)) : Math[e](o._Expression.toNumber(n[0], t._rowIndex, t._columnIndex, i))
+          }), t.forEach(function(t) {
+            e._functionTable[t] = new l(function(n, i) {
+              return "ln" === t ? Math.log(o._Expression.toNumber(n[0], e._rowIndex, e._columnIndex, i)) : Math[t](o._Expression.toNumber(n[0], e._rowIndex, e._columnIndex, i))
             }, 1, 1)
           })
         }, n.prototype._registerLogicalFunction = function() {
@@ -216,13 +222,13 @@ var wijmo;
             return l
           }, Number.MAX_VALUE, 1), t._functionTable.left = new l(function(e, n) {
             var i = o._Expression.toString(e[0], t._rowIndex, t._columnIndex, n),
-              l = Math.floor(o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n));
+              l = null == e[1] ? 1 : Math.floor(o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n));
             return i && i.length > 0 ? i.slice(0, l) : null
-          }, 2, 2), t._functionTable.right = new l(function(e, n) {
+          }, 2, 1), t._functionTable.right = new l(function(e, n) {
             var i = o._Expression.toString(e[0], t._rowIndex, t._columnIndex, n),
-              l = Math.floor(o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n));
+              l = null == e[1] ? 1 : Math.floor(o._Expression.toNumber(e[1], t._rowIndex, t._columnIndex, n));
             return i && i.length > 0 ? i.slice(-l) : null
-          }, 2, 2), t._functionTable.find = new l(function(n, i) {
+          }, 2, 1), t._functionTable.find = new l(function(n, i) {
             var l, s = o._Expression.toString(n[0], t._rowIndex, t._columnIndex, i),
               r = o._Expression.toString(n[1], t._rowIndex, t._columnIndex, i),
               a = null != n[2] ? e.asInt(o._Expression.toNumber(n[2], t._rowIndex, t._columnIndex, i)) : 0;
@@ -248,7 +254,9 @@ var wijmo;
             return i && i.length > 0 ? i.toUpperCase() : null
           }, 1, 1), t._functionTable.proper = new l(function(e, n) {
             var i = o._Expression.toString(e[0], t._rowIndex, t._columnIndex, n);
-            return i && i.length > 0 ? i[0].toUpperCase() + i.substring(1).toLowerCase() : null
+            return i && i.length > 0 ? i.replace(/\b[\w']+\b/g, function(e) {
+              return e && e.length > 0 ? e[0].toUpperCase() + e.substring(1).toLowerCase() : e
+            }) : null
           }, 1, 1), t._functionTable.trim = new l(function(e, n) {
             var i = o._Expression.toString(e[0], t._rowIndex, t._columnIndex, n);
             return i && i.length > 0 ? i.trim() : null
@@ -298,7 +306,7 @@ var wijmo;
             else {
               if (!e.isNumber(s)) return s;
               if ((l = r.match(/^(\d+)(\.\d+)?\E\+(\d+)(\.\d+)?$/)) && 5 === l.length) return t._parseToScientificValue(s, l[1], l[2], l[3], l[4]);
-              /M{1,4}|d{1,4}|y{1,4}/.test(r) ? s = new Date(1900, 0, s - 1) : r && r.indexOf("#") > -1 && (r = e.xlsx.Workbook.fromXlsxFormat(r)[0])
+              /M{1,4}|d{1,4}|y{1,4}/.test(r) ? s = new Date(1900, 0, s - 1) : r && (r = e.xlsx.Workbook.fromXlsxFormat(r)[0])
             }
             if (e.isDate(s)) switch (r) {
               case "d":
@@ -398,33 +406,33 @@ var wijmo;
           e._functionTable.column = new l(function(t, n, i, l) {
             var s;
             if (null == t) return l + 1;
-            if (s = t[0], (s = e._ensureNonFunctionExpression(s)) instanceof o._CellRangeExpression) return s.cells.col + 1;
+            if (s = t[0], (s = e._ensureNonFunctionExpression(s, n)) instanceof o._CellRangeExpression) return s.cells.col + 1;
             throw "Invalid Cell Reference."
           }, 1, 0), e._functionTable.columns = new l(function(t, n) {
             var i = t[0];
-            if ((i = e._ensureNonFunctionExpression(i)) instanceof o._CellRangeExpression) return i.cells.columnSpan;
+            if ((i = e._ensureNonFunctionExpression(i, n)) instanceof o._CellRangeExpression) return i.cells.columnSpan;
             throw "Invalid Cell Reference."
           }, 1, 1), e._functionTable.row = new l(function(t, n, i, l) {
             var s;
             if (null == t) return i + 1;
-            if (s = t[0], (s = e._ensureNonFunctionExpression(s)) instanceof o._CellRangeExpression) return s.cells.row + 1;
+            if (s = t[0], (s = e._ensureNonFunctionExpression(s, n)) instanceof o._CellRangeExpression) return s.cells.row + 1;
             throw "Invalid Cell Reference."
           }, 1, 0), e._functionTable.rows = new l(function(t, n) {
             var i = t[0];
-            if ((i = e._ensureNonFunctionExpression(i)) instanceof o._CellRangeExpression) return i.cells.rowSpan;
+            if ((i = e._ensureNonFunctionExpression(i, n)) instanceof o._CellRangeExpression) return i.cells.rowSpan;
             throw "Invalid Cell Reference."
           }, 1, 1), e._functionTable.choose = new l(function(t, n) {
             var i = o._Expression.toNumber(t[0], e._rowIndex, e._columnIndex, n);
             if (isNaN(i)) throw "Invalid index number.";
             if (i < 1 || i >= t.length) throw "The index number is out of the list range.";
-            return t[i].evaluate(e._rowIndex, e._columnIndex, n)
+            return i = Math.floor(i), t[i].evaluate(e._rowIndex, e._columnIndex, n)
           }, 255, 2), e._functionTable.index = new l(function(n, i) {
             var l, s = n[0],
               r = o._Expression.toNumber(n[1], e._rowIndex, e._columnIndex, i),
               a = null != n[2] ? o._Expression.toNumber(n[2], e._rowIndex, e._columnIndex, i) : 0;
             if (isNaN(r) || r < 0) throw "Invalid Row Number.";
             if (isNaN(a) || a < 0) throw "Invalid Column Number.";
-            if ((s = e._ensureNonFunctionExpression(s)) instanceof o._CellRangeExpression) {
+            if ((s = e._ensureNonFunctionExpression(s, i)) instanceof o._CellRangeExpression) {
               if (l = s.cells, r > l.rowSpan || a > l.columnSpan) throw "Index is out of the cell range.";
               if (r > 0 && a > 0) return e._owner.getCellValue(l.topRow + r - 1, l.leftCol + a - 1, !0, i);
               if (0 === r && 0 === a) return s;
@@ -443,6 +451,37 @@ var wijmo;
               format: "p2"
             }
           }, 6, 3)
+        }, n.prototype._registAddressRelatedFunction = function() {
+          var t = this;
+          t._functionTable.indirect = new l(function(n, i) {
+            var l, s, r, a, h, c, d, u, _ = t._ensureNonFunctionExpression(n[0], i);
+            if (_ instanceof o._CellRangeExpression ? (l = _.cells, s = _.evaluate(l.row, l.col, i)) : s = _.evaluate(t._rowIndex, t._columnIndex, i), e.isString(s)) {
+              if (2 === (r = s.split("!")).length ? (a = r[0].toLowerCase(), h = r[1].toLowerCase()) : h = r[0].toLowerCase(), c = t._getDefinedName(h, a || t._sheet.name.toLowerCase()), i = i || t._owner.selectedSheet, c) {
+                if (c.sheetName && c.sheetName.toLowerCase() !== i.name.toLowerCase()) throw "Invalid Cell Reference.";
+                s = c.value
+              }
+              if (d = t._getCellRange(s)) {
+                if (d.sheetRef) {
+                  for (var g = 0; g < t._owner.sheets.length; g++)
+                    if (t._owner.sheets[g].name.toLowerCase() === d.sheetRef.toLowerCase()) {
+                      u = t._owner.sheets[g];
+                      break
+                    }
+                } else u = t._owner.selectedSheet;
+                if (u) return t._owner.getCellValue(d.cellRef.cellRange.row, d.cellRef.cellRange.col, !0, i)
+              }
+            }
+            throw "Invalid Cell Reference."
+          }, 2, 1), t._functionTable.address = new l(function(n, i) {
+            var l, s, r = o._Expression.toNumber(n[0], t._rowIndex, t._columnIndex, i),
+              a = o._Expression.toNumber(n[1], t._rowIndex, t._columnIndex, i),
+              h = !1,
+              c = !1;
+            if (isNaN(r) || !e.isInt(r) || r < 1 || r > 1048576) throw "Invalid row number.";
+            if (isNaN(a) || !e.isInt(a) || a < 1 || a > 16384) throw "Invalid column number.";
+            if (null != n[2] && (l = o._Expression.toNumber(n[2], t._rowIndex, t._columnIndex, i), isNaN(l) || !e.isInt(l) || l < 1 || l > 4)) throw "Invalid absolute type.";
+            return null != n[4] && (s = o._Expression.toString(n[4], t._rowIndex, t._columnIndex, i)), null == l || 1 === l ? (h = !0, c = !0) : 2 === l ? h = !0 : 3 === l && (c = !0), (null != s ? s + "!" : "") + (c ? "$" : "") + t._numAlpha(a) + (h ? "$" : "") + r.toString()
+          }, 5, 2)
         }, n.prototype._addToken = function(e, t, o) {
           var n = new i(e, t, o);
           this._tokenTable[e] = n
@@ -494,7 +533,7 @@ var wijmo;
                 break
               }
               if (l = this._getCellRange(e)) {
-                this._containsCellRef = !0, p = new o._CellRangeExpression(l.cellRef.cellRange, l.sheetRef, this._owner, e.indexOf(":") > -1, l.cellRef.absRow, l.cellRef.absCol, l.cellRef.absRow2, l.cellRef.absCol2);
+                this._containsCellRef = !0, p = new o._CellRangeExpression(l.cellRef.cellRange, l.sheetRef, this._owner, e.indexOf(":") > -1, l.cellRef.absRow, l.cellRef.absCol, l.cellRef.absRow2, l.cellRef.absCol2, l.isWholeRow);
                 break
               }
               n = this._getParameters(), p = this.onUnknownFunction(e, n);
@@ -510,23 +549,26 @@ var wijmo;
           if (null === p) throw "";
           return this._getToken(), p
         }, n.prototype._getToken = function() {
-          for (var e, t, o, n, l, a = "", h = "", c = new RegExp("[　-〿぀-ゟ゠-ヿ＀-ﾟ一-龯㐀-䶿]"); this._pointer < this._expressLength && " " === this._expression[this._pointer];) this._pointer++;
+          for (var e, t, o, n, l, a, h = "", c = "", d = new RegExp("[　-〿぀-ゟ゠-ヿ＀-ﾟ一-龯㐀-䶿]"); this._pointer < this._expressLength && " " === this._expression[this._pointer];) this._pointer++;
           if (this._pointer >= this._expressLength) this._token = new i(null, r.END, s.GROUP);
           else {
-            if (t = this._expression[this._pointer], n = t >= "a" && t <= "z" || t >= "A" && t <= "Z" || c.test(t), l = t >= "0" && t <= "9" || "." == t, !n && !l) {
-              var d = this._tokenTable[t];
-              if (d) return this._token = d, this._pointer++, void(this._pointer < this._expressLength && (">" === t || "<" === t) && (d = this._tokenTable[this._expression.substring(this._pointer - 1, this._pointer + 1)]) && (this._token = d, this._pointer++))
+            if (t = this._expression[this._pointer], l = t >= "a" && t <= "z" || t >= "A" && t <= "Z" || d.test(t), a = t >= "0" && t <= "9" || "." == t, !l && !a) {
+              var u = this._tokenTable[t];
+              if (u) return this._token = u, this._pointer++, void(this._pointer < this._expressLength && (">" === t || "<" === t) && (u = this._tokenTable[this._expression.substring(this._pointer - 1, this._pointer + 1)]) && (this._token = u, this._pointer++))
             }
-            if (l) this._parseDigit();
-            else if ('"' !== t) {
-              if ("'" !== t || (h = this._parseSheetRef()))
+            if (a) {
+              if (n = this._pointer, this._parseDigit(), ":" !== this._expression[this._pointer]) return;
+              this._pointer = n
+            }
+            if ('"' !== t) {
+              if ("'" !== t || (c = this._parseSheetRef()))
                 if ("#" !== t) {
-                  if (!n && "_" !== t && this._idChars.indexOf(t) < 0 && !h) throw "Identifier expected.";
+                  if (!l && !a && "_" !== t && this._idChars.indexOf(t) < 0 && !c) throw "Identifier expected.";
                   for (e = 1; e + this._pointer < this._expressLength; e++)
-                    if (t = this._expression[this._pointer + e], n = t >= "a" && t <= "z" || t >= "A" && t <= "Z" || c.test(t), l = t >= "0" && t <= "9", "'" !== t || ":" !== o) {
-                      if (o = t, !n && !l && "_" !== t && this._idChars.indexOf(t) < 0) break
-                    } else a = h + this._expression.substring(this._pointer, this._pointer + e), this._pointer += e, h = this._parseSheetRef(), e = 0;
-                  a += h + this._expression.substring(this._pointer, this._pointer + e), this._pointer += e, this._token = new i(a, r.ATOM, s.IDENTIFIER)
+                    if (t = this._expression[this._pointer + e], l = t >= "a" && t <= "z" || t >= "A" && t <= "Z" || d.test(t), a = t >= "0" && t <= "9", "'" !== t || ":" !== o) {
+                      if (o = t, !l && !a && "_" !== t && this._idChars.indexOf(t) < 0) break
+                    } else h = c + this._expression.substring(this._pointer, this._pointer + e), this._pointer += e, c = this._parseSheetRef(), e = 0;
+                  h += c + this._expression.substring(this._pointer, this._pointer + e), this._pointer += e, this._token = new i(h, r.ATOM, s.IDENTIFIER)
                 } else this._parseDate()
             } else this._parseString()
           }
@@ -582,9 +624,14 @@ var wijmo;
           return o = this._expression.substring(this._pointer + 1, this._pointer + e), this._pointer += e + 1, "!" === this._expression[this._pointer] ? o.replace(/\'\'/g, "'") : ""
         }, n.prototype._getCellRange = function(e) {
           var t, o, n, i, l;
-          if (e && (t = e.split(":")).length > 0 && t.length < 3 && (o = this._parseCell(t[0]), (i = o.cellRef ? o.cellRef.cellRange : null) && 2 === t.length)) {
-            if (n = this._parseCell(t[1]), l = n.cellRef.cellRange, o.sheetRef && !n.sheetRef && (n.sheetRef = o.sheetRef), o.sheetRef !== n.sheetRef) throw "The cell reference must be in the same sheet!";
-            l ? (i.col2 = l.col, i.row2 = l.row) : i = null
+          if (e && (t = e.split(":")).length > 0 && t.length < 3) {
+            if (null == (o = this._parseCell(t[0])).cellRef) return null;
+            if (i = o.cellRef.cellRange, null != o.cellRef.isWholeRow && 1 === t.length) return null;
+            if (i && 2 === t.length) {
+              if (n = this._parseCell(t[1]), l = n.cellRef.cellRange, null != o.cellRef.isWholeRow && o.cellRef.isWholeRow !== n.cellRef.isWholeRow) return null;
+              if (o.sheetRef && !n.sheetRef && (n.sheetRef = o.sheetRef), o.sheetRef !== n.sheetRef) throw "The cell reference must be in the same sheet!";
+              l ? (i.col2 = l.col, i.row2 = l.row) : i = null
+            }
           }
           return null == i ? null : {
             cellRef: {
@@ -594,28 +641,30 @@ var wijmo;
               absRow2: n ? n.cellRef.absRow : null,
               absCol2: n ? n.cellRef.absCol : null
             },
-            sheetRef: o.sheetRef
+            sheetRef: o.sheetRef,
+            isWholeRow: o.cellRef.isWholeRow
           }
         }, n.prototype._parseCellRange = function(e) {
-          var o, n, i = -1,
-            l = -1,
-            s = !1,
-            r = !1;
+          var o, n, i, l, s = -1,
+            r = -1,
+            a = !1,
+            h = !1;
           for (o = 0; o < e.length; o++)
-            if ("$" !== (n = e[o]) || s) {
-              if (!(n >= "a" && n <= "z" || n >= "A" && n <= "Z")) break;
-              i < 0 && (i = 0), i = 26 * i + (n.toUpperCase().charCodeAt(0) - "A".charCodeAt(0) + 1)
-            } else s = !0;
+            if ("$" !== (i = e[o]) || a) {
+              if (!(i >= "a" && i <= "z" || i >= "A" && i <= "Z")) break;
+              s < 0 && (s = 0), s = 26 * s + (i.toUpperCase().charCodeAt(0) - "A".charCodeAt(0) + 1)
+            } else a = !0;
           for (; o < e.length; o++)
-            if ("$" !== (n = e[o]) || r) {
-              if (!(n >= "0" && n <= "9")) break;
-              l < 0 && (l = 0), l = 10 * l + (+n - 0)
-            } else r = !0;
-          return o < e.length && (l = i = -1), -1 === l || -1 === i ? null : {
-            cellRange: new t.CellRange(l - 1, i - 1),
-            absRow: r,
-            absCol: s
-          }
+            if ("$" !== (i = e[o]) || h) {
+              if (!(i >= "0" && i <= "9")) break;
+              r < 0 && (r = 0), r = 10 * r + (+i - 0)
+            } else h = !0;
+          return o < e.length ? null : (r > -1 && s > -1 ? n = new t.CellRange(r - 1, s - 1) : -1 === s ? (l = !0, n = new t.CellRange(r - 1, 0)) : -1 === r && (l = !1, n = new t.CellRange(0, s - 1)), {
+            cellRange: n,
+            absRow: h,
+            absCol: a,
+            isWholeRow: l
+          })
         }, n.prototype._parseCell = function(e) {
           var t, o, n, i;
           if ((o = e.lastIndexOf("!")) > 0 && o < e.length - 1) i = e.substring(0, o), n = e.substring(o + 1);
@@ -711,15 +760,15 @@ var wijmo;
             case a.Rank:
               if (s = o._Expression.toNumber(t[0], this._rowIndex, this._columnIndex, n), r = t[2] ? o._Expression.toNumber(t[2], this._rowIndex, this._columnIndex, n) : 0, isNaN(s)) throw "Invalid number.";
               if (isNaN(r)) throw "Invalid order.";
-              if (t[1] = this._ensureNonFunctionExpression(t[1]), t[1] instanceof o._CellRangeExpression) return i = this._getItemList([t[1]], n), this._getRankOfCellRange(s, i.items, r);
+              if (t[1] = this._ensureNonFunctionExpression(t[1], n), t[1] instanceof o._CellRangeExpression) return i = this._getItemList([t[1]], n), this._getRankOfCellRange(s, i.items, r);
               throw "Invalid Cell Reference.";
             case a.CountIf:
-              if (t[0] = this._ensureNonFunctionExpression(t[0]), t[0] instanceof o._CellRangeExpression) return i = this._getItemList([t[0]], n, !1), this._countCellsByCriterias([i.items], [t[1]], n);
+              if (t[0] = this._ensureNonFunctionExpression(t[0], n), t[0] instanceof o._CellRangeExpression) return i = this._getItemList([t[0]], n, !1), this._countCellsByCriterias([i.items], [t[1]], n);
               throw "Invalid Cell Reference.";
             case a.CountIfs:
               return this._handleCountIfs(t, n);
             case a.SumIf:
-              if (t[0] = this._ensureNonFunctionExpression(t[0]), t[0] instanceof o._CellRangeExpression) return i = this._getItemList([t[0]], n, !1), t[2] = this._ensureNonFunctionExpression(t[2]), null != t[2] && t[2] instanceof o._CellRangeExpression && (l = this._getItemList([t[2]], n)), this._sumCellsByCriterias([i.items], [t[1]], l ? l.items : null, n);
+              if (t[0] = this._ensureNonFunctionExpression(t[0], n), t[0] instanceof o._CellRangeExpression) return i = this._getItemList([t[0]], n, !1), t[2] = this._ensureNonFunctionExpression(t[2], n), null != t[2] && t[2] instanceof o._CellRangeExpression && (l = this._getItemList([t[2]], n)), this._sumCellsByCriterias([i.items], [t[1]], l ? l.items : null, n);
               throw "Invalid Cell Reference.";
             case a.SumIfs:
               return this._handleSumIfs(t, n);
@@ -729,28 +778,34 @@ var wijmo;
           throw "Invalid aggregate type."
         }, n.prototype._getItemList = function(t, n, i, l, s, r) {
           void 0 === i && (i = !0), void 0 === l && (l = !1), void 0 === s && (s = !0);
-          var a, h, c, d, u, _, g, f, p, w, m = new Array;
+          var a, h, c, d, u, _, g, f, p, w, m, C = new Array;
           for (h = 0; h < t.length; h++)
-            if (u = t[h], (u = this._ensureNonFunctionExpression(u)) instanceof o._CellRangeExpression) {
-              for (d = u.getValues(s, r, n), 0 === h && ((p = (f = u._getSheet() || n || this._sheet).getCellStyle(u.cells.topRow, u.cells.leftCol)) && (g = p.format), g || (w = f.grid.columns[u.cells.leftCol]) && (g = w.format)), c = 0; c < d.length; c++)
+            if (u = t[h], (u = this._ensureNonFunctionExpression(u, n)) instanceof o._CellRangeExpression) {
+              d = u.getValues(s, r, n), 0 === h && ((p = (f = u._getSheet() || n || this._sheet).getCellStyle(u.cells.topRow, u.cells.leftCol)) && (g = p.format), g || (w = f.grid.columns[u.cells.leftCol]) && (g = w.format));
+              e: for (c = 0; c < d.length; c++)
+                if (a = d[c], null == _ && null != a && !e.isString(a)) {
+                  _ = e.isDate(a);
+                  break e
+                }
+              for (c = 0; c < d.length; c++)
                 if (a = d[c], l || null != a && "" !== a) {
                   if (e.isString(a) && 0 === a.indexOf("Error: ")) {
-                    m = [0];
+                    C = [0];
                     break
                   }
-                  null == _ && (_ = a instanceof Date), a = i && !e.isBoolean(a) ? +a : a, m.push(a)
+                  m = e.isString(a) ? _ ? e.changeType(a, e.DataType.Date, "") : e.changeType(a, e.DataType.Number, "") : a, i && !e.isBoolean(m) ? isNaN(+m) || C.push(+m) : C.push(a)
                 }
             } else {
               if (a = u instanceof o._Expression ? u.evaluate(this._rowIndex, this._columnIndex, n) : u, e.isPrimitive(a) || (a = a.value), !l && (null == a || "" === a)) continue;
               if (e.isString(a) && 0 === a.indexOf("Error: ")) {
-                m = [0];
+                C = [0];
                 break
               }
-              null == _ && (_ = a instanceof Date), a = i ? +a : a, m.push(a)
+              i ? isNaN(+a) || C.push(+a) : C.push(a), null == _ && C.length > 0 && (_ = a instanceof Date)
             }
-          return 0 === m.length && (_ = !1), {
+          return 0 === C.length && (_ = !1), {
             isDate: _,
-            items: m,
+            items: C,
             format: g
           }
         }, n.prototype._countBlankCells = function(t) {
@@ -776,7 +831,7 @@ var wijmo;
             h = [];
           if (e.length % 2 != 0) throw "Invalid params.";
           for (; r < e.length / 2; r++) {
-            if (i = e[2 * r], !((i = this._ensureNonFunctionExpression(i)) instanceof o._CellRangeExpression)) throw "Invalid Cell Reference.";
+            if (i = e[2 * r], !((i = this._ensureNonFunctionExpression(i, t)) instanceof o._CellRangeExpression)) throw "Invalid Cell Reference.";
             if (0 === r) {
               if (!i.cells) throw "Invalid Cell Reference.";
               l = i.cells.rowSpan, s = i.cells.columnSpan
@@ -808,10 +863,10 @@ var wijmo;
             c = [],
             d = [];
           if (e.length % 2 != 1) throw "Invalid params.";
-          if (l = e[0], !((l = this._ensureNonFunctionExpression(l)) instanceof o._CellRangeExpression)) throw "Invalid Sum Cell Reference.";
+          if (l = e[0], !((l = this._ensureNonFunctionExpression(l, t)) instanceof o._CellRangeExpression)) throw "Invalid Sum Cell Reference.";
           if (!l.cells) throw "Invalid Sum Cell Reference.";
           for (r = l.cells.rowSpan, a = l.cells.columnSpan, i = this._getItemList([l], t); h < (e.length + 1) / 2; h++) {
-            if (s = e[2 * h - 1], !((s = this._ensureNonFunctionExpression(s)) instanceof o._CellRangeExpression)) throw "Invalid Criteria Cell Reference.";
+            if (s = e[2 * h - 1], !((s = this._ensureNonFunctionExpression(s, t)) instanceof o._CellRangeExpression)) throw "Invalid Criteria Cell Reference.";
             if (!s.cells) throw "Invalid Criteria Cell Reference.";
             if (s.cells.rowSpan !== r || s.cells.columnSpan !== a) throw "The row span and column span of each cell range has to be same with each other.";
             n = this._getItemList([s], t, !1), c[h - 1] = n.items, d[h - 1] = e[2 * h]
@@ -846,9 +901,10 @@ var wijmo;
             for (; n < t.length; n++) o = t[n], e.isNumber(o) && !isNaN(o) && (i *= o, l = !0);
           return l ? i : 0
         }, n.prototype._handleSubtotal = function(t, n) {
-          var i, l, s, r, a = !0;
+          var i, l, s, r, a = !0,
+            c = !0;
           if ((i = o._Expression.toNumber(t[0], this._rowIndex, this._columnIndex, n)) >= 1 && i <= 11 || i >= 101 && i <= 111) {
-            switch (i >= 101 && i <= 111 && (a = !1), i = e.asEnum(i, h), l = this._getItemList(t.slice(1), n, !0, !1, a), i) {
+            switch (i >= 101 && i <= 111 && (a = !1), (i = e.asEnum(i, h)) !== h.CountA && i !== h.CountAWithoutHidden || (c = !1), l = this._getItemList(t.slice(1), n, c, !1, a), i) {
               case h.Count:
               case h.CountWithoutHidden:
                 return this._countNumberCells(l.items);
@@ -896,7 +952,7 @@ var wijmo;
         }, n.prototype._handleDCount = function(e, t) {
           var n, i, l, s = e[0],
             r = e[2];
-          if (s = this._ensureNonFunctionExpression(s), r = this._ensureNonFunctionExpression(r), s instanceof o._CellRangeExpression && r instanceof o._CellRangeExpression && (n = e[1].evaluate(this._rowIndex, this._columnIndex, t), i = this._getColumnIndexByField(s, n), (l = this._getItemList([s], t, !0, !1, !0, i)).items && l.items.length > 1)) return this._DCountWithCriterias(l.items.slice(1), s, r);
+          if (s = this._ensureNonFunctionExpression(s, t), r = this._ensureNonFunctionExpression(r, t), s instanceof o._CellRangeExpression && r instanceof o._CellRangeExpression && (n = e[1].evaluate(this._rowIndex, this._columnIndex, t), i = this._getColumnIndexByField(s, n), (l = this._getItemList([s], t, !0, !1, !0, i)).items && l.items.length > 1)) return this._DCountWithCriterias(l.items.slice(1), s, r);
           throw "Invalid Count Cell Reference."
         }, n.prototype._DCountWithCriterias = function(e, t, n) {
           var i, l, s, r, a, h, c, d, u, _, g, f = n.cells,
@@ -936,7 +992,7 @@ var wijmo;
         }, n.prototype._getItemListForSumProduct = function(e, t) {
           var n, i, l, s, r, a, h = [new Array];
           for (l = 0; l < e.length; l++) {
-            if (a = e[l], n = new Array, (a = this._ensureNonFunctionExpression(a)) instanceof o._CellRangeExpression)
+            if (a = e[l], n = new Array, (a = this._ensureNonFunctionExpression(a, t)) instanceof o._CellRangeExpression)
               for (r = a.getValues(!0, null, t), s = 0; s < r.length; s++) i = r[s], n.push(+i);
             else i = a instanceof o._Expression ? a.evaluate(this._rowIndex, this._columnIndex, t) : a, n.push(+i);
             if (l > 0 && n.length !== h[0].length) throw "The cell ranges of the sumProduct formula must have the same dimensions.";
@@ -951,7 +1007,7 @@ var wijmo;
         }, n.prototype._parseRightExpr = function(e) {
           var t, o, n = !1;
           if (e.indexOf("?") > -1 || e.indexOf("*") > -1) {
-            if (null == (t = e.match(/([\?\*]*)(\w+)([\?\*]*)(\w+)([\?\*]*)/)) || 6 !== t.length) throw "Invalid Criteria.";
+            if (null == (t = e.match(/=?([\?\*]*)(\w*)([\?\*]*)(\w*)([\?\*]*)/)) || 6 !== t.length) throw "Invalid Criteria.";
             return o = new RegExp("^" + (t[1].length > 0 ? this._parseRegCriteria(t[1]) : "") + t[2] + (t[3].length > 0 ? this._parseRegCriteria(t[3]) : "") + t[4] + (t[5].length > 0 ? this._parseRegCriteria(t[5]) : "") + "$", "i"), /^[<>=]/.test(e) ? "=" === e.trim()[0] && (n = !0) : n = !0, {
               reg: o,
               checkMathces: n
@@ -982,7 +1038,7 @@ var wijmo;
             a = null == e[3] || o._Expression.toBoolean(e[3], this._rowIndex, this._columnIndex, t);
           if (null == l || "" == l) throw "Invalid lookup value.";
           if (isNaN(r) || r < 0) throw "Invalid row index.";
-          if ((s = this._ensureNonFunctionExpression(s)) instanceof o._CellRangeExpression) {
+          if ((s = this._ensureNonFunctionExpression(s, t)) instanceof o._CellRangeExpression) {
             if (n = s.cells, r > n.rowSpan) throw "Row index is out of the cell range.";
             if (a ? -1 === (i = this._exactMatch(l, n, t, !1)) && (i = this._approximateMatch(l, n, t)) : i = this._exactMatch(l, n, t), -1 === i) throw "Lookup Value is not found.";
             return this._owner.getCellValue(n.topRow + r - 1, i, !1, t)
@@ -1042,6 +1098,9 @@ var wijmo;
                 if (o.sheetName.toLowerCase() === t) return o
               } else n = o;
           return n
+        }, n.prototype._numAlpha = function(e) {
+          var t = Math.floor((e - 1) / 26);
+          return (t > 0 ? this._numAlpha(t) : "") + String.fromCharCode((e - 1) % 26 + 65)
         }, n
       }();
       o._CalcEngine = n;
@@ -1151,43 +1210,31 @@ var __extends = this && this.__extends || function() {
         }, t.toString = function(t, o, n, i) {
           var l = t.evaluate(o, n, i);
           return e.isPrimitive(l) || (l = l.value), null != l ? l.toString() : ""
-        }, t.toNumber = function(t, o, n, i) {
-          var l = t.evaluate(o, n, i),
-            s = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-          if (e.isPrimitive(l) || (l = l.value), e.isNumber(l)) return l;
-          if (e.isBoolean(l)) return l ? 1 : 0;
-          if (e.isDate(l)) return this._toOADate(l);
-          if (e.isString(l)) {
-            if (l) {
-              if (isNaN(+l)) {
-                for (var r in s)
-                  if (l.indexOf(s[r]) > -1) return this._toOADate(new Date(l));
-                return +l
-              }
-              return +l
-            }
-            return 0
-          }
-          return e.changeType(l, e.DataType.Number, "")
+        }, t.toNumber = function(t, n, i, l) {
+          var s = t.evaluate(n, i, l);
+          return e.isPrimitive(s) || (s = s.value), e.isNumber(s) ? s : e.isBoolean(s) ? s ? 1 : 0 : e.isDate(s) ? o.FlexSheet._toOADate(s) : e.isString(s) ? s ? isNaN(+s) ? this.isDateValue(s) ? o.FlexSheet._toOADate(new Date(s)) : e.changeType(s, e.DataType.Number, "") : +s : 0 : e.changeType(s, e.DataType.Number, "")
         }, t.toBoolean = function(t, o, n, i) {
           var l = t.evaluate(o, n, i);
           return e.isPrimitive(l) || (l = l.value), e.isBoolean(l) ? l : e.isNumber(l) ? 0 !== l : e.changeType(l, e.DataType.Boolean, "")
-        }, t.toDate = function(t, o, n, i) {
-          var l = t.evaluate(o, n, i);
-          return e.isPrimitive(l) || (l = l.value), e.isDate(l) ? l : e.isNumber(l) ? this._fromOADate(l) : e.changeType(l, e.DataType.Date, "")
-        }, t._toOADate = function(e) {
-          var t = Date.UTC(1899, 11, 30);
-          return (Date.UTC(e.getFullYear(), e.getMonth(), e.getDate(), e.getHours(), e.getMinutes(), e.getSeconds(), e.getMilliseconds()) - t) / 864e5
-        }, t._fromOADate = function(e) {
-          var t = Date.UTC(1899, 11, 30),
-            o = new Date,
-            n = e >= 60 ? 0 : 864e5;
-          return new Date(864e5 * e + t + 6e4 * o.getTimezoneOffset() + n)
-        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i) {
+        }, t.toDate = function(t, n, i, l) {
+          var s = t.evaluate(n, i, l);
+          return e.isPrimitive(s) || (s = s.value), e.isDate(s) ? s : e.isNumber(s) ? o.FlexSheet._fromOADate(s) : e.changeType(s, e.DataType.Date, "")
+        }, t.isDateValue = function(t) {
+          var o, n = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          if (e.isPrimitive(t) || (t = t.value), !(o = e.isDate(t)) && e.isString(t))
+            for (var i in n)
+              if (t.indexOf(n[i]) > -1) {
+                o = !0;
+                break
+              }
+          return o
+        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i, l) {
           return !1
         }, t.prototype._moveCellRangeExp = function(e, t, o, n, i) {
           return void 0 === n && (n = !1), void 0 === i && (i = !1), !1
         }, t.prototype._updateCellRangeExpForReorderingRows = function(e) {
+          return !1
+        }, t.prototype._updateCellBoundary = function(e, t) {
           return !1
         }, t.prototype._getStringExpression = function() {
           return null == this._token.value ? "" : e.isString(this._token.value) ? '"' + this._token.value + '"' : this._token.value.toString()
@@ -1203,8 +1250,8 @@ var __extends = this && this.__extends || function() {
           if (this.token.tokenID === o._TokenID.SUB) return null == this._evaluatedValue && (this._evaluatedValue = -n.toNumber(this._expr, e, t, i)), this._evaluatedValue;
           if (this.token.tokenID === o._TokenID.ADD) return null == this._evaluatedValue && (this._evaluatedValue = +n.toNumber(this._expr, e, t, i)), this._evaluatedValue;
           throw "Bad expression."
-        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i) {
-          return this._expr._updateCellRangeExp(e, t, o, n, i)
+        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i, l) {
+          return this._expr._updateCellRangeExp(e, t, o, n, i, l)
         }, t.prototype._moveCellRangeExp = function(e, t, o, n, i) {
           return void 0 === n && (n = !1), void 0 === i && (i = !1), this._expr._moveCellRangeExp(e, t, o, n, i)
         }, t.prototype._updateCellRangeExpForReorderingRows = function(e) {
@@ -1219,57 +1266,57 @@ var __extends = this && this.__extends || function() {
           var i = t.call(this, e) || this;
           return i._leftExpr = o, i._rightExpr = n, i
         }
-        return __extends(i, t), i.prototype.evaluate = function(e, t, i) {
-          var l, s, r, a, h, c, d, u = !1;
+        return __extends(i, t), i.prototype.evaluate = function(t, i, l) {
+          var s, r, a, h, c, d, u, _, g, f = !1;
           if (null != this._evaluatedValue) return this._evaluatedValue;
-          if (l = n.toString(this._leftExpr, e, t, i), s = n.toString(this._rightExpr, e, t, i), this.token.tokenType === o._TokenType.CONCAT) return this._evaluatedValue = l + s, this._evaluatedValue;
-          if (r = this._leftExpr.evaluate(e, t, i), a = this._rightExpr.evaluate(e, t, i), u = this._isDateValue(r) || this._isDateValue(a), h = n.toNumber(this._leftExpr, e, t, i), c = n.toNumber(this._rightExpr, e, t, i), d = h - c, this.token.tokenType === o._TokenType.COMPARE) switch (this.token.tokenID) {
+          if (s = n.toString(this._leftExpr, t, i, l), r = n.toString(this._rightExpr, t, i, l), this.token.tokenType === o._TokenType.CONCAT) return this._evaluatedValue = s + r, this._evaluatedValue;
+          if (a = this._leftExpr.evaluate(t, i, l), e.isPrimitive(a) || (c = a.format, a = a.value), h = this._rightExpr.evaluate(t, i, l), e.isPrimitive(h) || (d = h.format, h = h.value), (f = n.isDateValue(a) || n.isDateValue(h)) ? (u = e.isDate(a) ? o.FlexSheet._toOADate(a) : e.isNumber(a) ? a : o.FlexSheet._toOADate(new Date(a)), _ = e.isDate(h) ? o.FlexSheet._toOADate(h) : e.isNumber(h) ? h : o.FlexSheet._toOADate(new Date(h))) : (u = n.toNumber(this._leftExpr, t, i, l), _ = n.toNumber(this._rightExpr, t, i, l)), g = u - _, this.token.tokenType === o._TokenType.COMPARE) switch (this.token.tokenID) {
             case o._TokenID.GT:
-              return d > 0;
+              return g > 0;
             case o._TokenID.LT:
-              return d < 0;
+              return g < 0;
             case o._TokenID.GE:
-              return d >= 0;
+              return g >= 0;
             case o._TokenID.LE:
-              return d <= 0;
+              return g <= 0;
             case o._TokenID.EQ:
-              return isNaN(d) ? (this._evaluatedValue = l.toLowerCase() === s.toLowerCase(), this._evaluatedValue) : (this._evaluatedValue = 0 === d, this._evaluatedValue);
+              return isNaN(g) ? (this._evaluatedValue = s.toLowerCase() === r.toLowerCase(), this._evaluatedValue) : (this._evaluatedValue = 0 === g, this._evaluatedValue);
             case o._TokenID.NE:
-              return isNaN(d) ? (this._evaluatedValue = l.toLowerCase() !== s.toLowerCase(), this._evaluatedValue) : (this._evaluatedValue = 0 !== d, this._evaluatedValue)
+              return isNaN(g) ? (this._evaluatedValue = s.toLowerCase() !== r.toLowerCase(), this._evaluatedValue) : (this._evaluatedValue = 0 !== g, this._evaluatedValue)
           }
           switch (this.token.tokenID) {
             case o._TokenID.ADD:
-              this._evaluatedValue = h + c;
+              this._evaluatedValue = u + _;
               break;
             case o._TokenID.SUB:
-              this._evaluatedValue = h - c;
+              this._evaluatedValue = u - _;
               break;
             case o._TokenID.MUL:
-              this._evaluatedValue = h * c;
+              this._evaluatedValue = u * _;
               break;
             case o._TokenID.DIV:
-              this._evaluatedValue = h / c;
+              this._evaluatedValue = u / _;
               break;
             case o._TokenID.DIVINT:
-              this._evaluatedValue = Math.floor(h / c);
+              this._evaluatedValue = Math.floor(u / _);
               break;
             case o._TokenID.MOD:
-              this._evaluatedValue = Math.floor(h % c);
+              this._evaluatedValue = Math.floor(u % _);
               break;
             case o._TokenID.POWER:
-              0 === c && (this._evaluatedValue = 1), .5 === c && (this._evaluatedValue = Math.sqrt(h)), 1 === c && (this._evaluatedValue = h), 2 === c && (this._evaluatedValue = h * h), 3 === c && (this._evaluatedValue = h * h * h), 4 === c && (this._evaluatedValue = h * h * h * h), this._evaluatedValue = Math.pow(h, c);
+              0 === _ && (this._evaluatedValue = 1), .5 === _ && (this._evaluatedValue = Math.sqrt(u)), 1 === _ && (this._evaluatedValue = u), 2 === _ && (this._evaluatedValue = u * u), 3 === _ && (this._evaluatedValue = u * u * u), 4 === _ && (this._evaluatedValue = u * u * u * u), this._evaluatedValue = Math.pow(u, _);
               break;
             default:
               this._evaluatedValue = NaN
           }
-          if (!isNaN(this._evaluatedValue)) return u && (this._evaluatedValue = {
-            value: n._fromOADate(this._evaluatedValue),
-            format: r.format || a.format
+          if (!isNaN(this._evaluatedValue)) return f && (this._evaluatedValue = {
+            value: o.FlexSheet._fromOADate(this._evaluatedValue),
+            format: c || d
           }), this._evaluatedValue;
           throw "Bad expression."
-        }, i.prototype._updateCellRangeExp = function(e, t, o, n, i) {
-          var l, s = !1;
-          return l = this._leftExpr._updateCellRangeExp(e, t, o, n, i), s = s || l, l = this._rightExpr._updateCellRangeExp(e, t, o, n, i), s || l
+        }, i.prototype._updateCellRangeExp = function(e, t, o, n, i, l) {
+          var s, r = !1;
+          return s = this._leftExpr._updateCellRangeExp(e, t, o, n, i, l), r = r || s, s = this._rightExpr._updateCellRangeExp(e, t, o, n, i, l), r || s
         }, i.prototype._moveCellRangeExp = function(e, t, o, n, i) {
           void 0 === n && (n = !1), void 0 === i && (i = !1);
           var l, s = !1;
@@ -1320,50 +1367,39 @@ var __extends = this && this.__extends || function() {
               return ""
           }
           return this._leftExpr._getStringExpression() + e + this._rightExpr._getStringExpression()
-        }, i.prototype._isDateValue = function(t) {
-          return e.isPrimitive(t) ? e.isDate(t) : e.isDate(t.value)
         }, i
       }(n);
       o._BinaryExpression = l;
       var s = function(o) {
-        function n(e, n, i, l, s, r, a, h) {
+        function n(e, n, i, l, s, r, a, h, c) {
           void 0 === l && (l = !0), void 0 === s && (s = !1), void 0 === r && (r = !1), void 0 === a && (a = !1), void 0 === h && (h = !1);
-          var c = o.call(this) || this;
-          return c._cells = new t.CellRange(e.topRow, e.leftCol, e.bottomRow, e.rightCol), c._sheetRef = n, c._flex = i, c._evalutingRange = {}, c._isCellRange = l, c._absRow = s, c._absCol = r, c._absRow2 = a, c._absCol2 = h, c
+          var d = o.call(this) || this;
+          return d._cells = new t.CellRange(e.topRow, e.leftCol, e.bottomRow, e.rightCol), d._sheetRef = n, d._flex = i, d._evalutingRange = {}, d._isCellRange = l, d._absRow = s, d._absCol = r, d._absRow2 = a, d._absCol2 = h, d._isWholeRow = c, d
         }
         return __extends(n, o), n.prototype.evaluate = function(e, t, o) {
-          return null == this._evaluatedValue && (this._evaluatedValue = this._getCellValue(this._cells, o, e, t)), this._evaluatedValue
+          var n = this._cells.clone();
+          return null == this._evaluatedValue && (null != this._isWholeRow && (this._isWholeRow ? (n.col = 0, n.col2 = o ? o.grid.columns.length - 1 : this._flex.columns.length - 1) : (n.row = 0, n.row2 = o ? o.grid.rows.length - 1 : this._flex.rows.length - 1)), this._evaluatedValue = this._getCellValue(n, o, e, t)), this._evaluatedValue
         }, n.prototype.getValues = function(o, n, i) {
           void 0 === o && (o = !0);
-          var l, s, n, r, a, h = [],
-            c = 0;
-          if (r = null == n || isNaN(+n) ? this._cells.leftCol : n, a = null == n || isNaN(+n) ? this._cells.rightCol : n, !(i = this._getSheet() || i || this._flex.selectedSheet)) return null;
-          for (s = this._cells.topRow; s <= this._cells.bottomRow; s++) {
-            if (s >= i.grid.rows.length) throw "The cell reference is out of the cell range of the flexsheet.";
+          var l, s, n, r, a, h, c = [],
+            d = 0;
+          if (!(i = this._getSheet() || i || this._flex.selectedSheet)) return null;
+          for (h = this._cells.clone(), null != this._isWholeRow && (this._isWholeRow ? (h.col = 0, h.col2 = i.grid.columns.length - 1) : (h.row = 0, h.row2 = i.grid.rows.length - 1)), r = null == n || isNaN(+n) ? h.leftCol : n, a = null == n || isNaN(+n) ? h.rightCol : n, s = h.topRow; s <= h.bottomRow && s < i.grid.rows.length; s++)
             if (o || !1 !== i.grid.rows[s].isVisible)
-              for (n = r; n <= a; n++) {
-                if (n >= i.grid.columns.length) throw "The cell reference is out of the cell range of the flexsheet.";
-                (o || !1 !== i.grid.columns[n].isVisible) && (l = this._getCellValue(new t.CellRange(s, n), i), e.isPrimitive(l) || (l = l.value), h[c] = l, c++)
-              }
-          }
-          return h
+              for (n = r; n <= a && n < i.grid.columns.length; n++) l = this._getCellValue(new t.CellRange(s, n), i), e.isPrimitive(l) || (l = l.value), c[d] = l, d++;
+          return c
         }, n.prototype.getValuseWithTwoDimensions = function(o, n) {
           void 0 === o && (o = !0);
-          var i, l, s, r, a = [],
-            h = 0,
-            c = 0;
+          var i, l, s, r, a, h = [],
+            c = 0,
+            d = 0;
           if (!(n = this._getSheet() || n || this._flex.selectedSheet)) return null;
-          for (s = this._cells.topRow; s <= this._cells.bottomRow; s++) {
-            if (s >= n.grid.rows.length) throw "The cell reference is out of the cell range of the flexsheet.";
+          for (a = this._cells.clone(), null != this._isWholeRow && (this._isWholeRow ? (a.col = 0, a.col2 = n.grid.columns.length - 1) : (a.row = 0, a.row2 = n.grid.rows.length - 1)), s = a.topRow; s <= a.bottomRow && s < n.grid.rows.length; s++)
             if (o || !1 !== n.grid.rows[s].isVisible) {
-              for (l = [], c = 0, r = this._cells.leftCol; r <= this._cells.rightCol; r++) {
-                if (r >= n.grid.columns.length) throw "The cell reference is out of the cell range of the flexsheet.";
-                o || !1 !== n.grid.columns[r].isVisible ? (i = this._getCellValue(new t.CellRange(s, r), n), e.isPrimitive(i) || (i = i.value), l[c] = i, c++) : c++
-              }
-              a[h] = l, h++
-            } else h++
-          }
-          return a
+              for (l = [], d = 0, r = a.leftCol; r <= a.rightCol && r < n.grid.columns.length; r++) o || !1 !== n.grid.columns[r].isVisible ? (i = this._getCellValue(new t.CellRange(s, r), n), e.isPrimitive(i) || (i = i.value), l[d] = i, d++) : d++;
+              h[c] = l, c++
+            } else c++;
+          return h
         }, Object.defineProperty(n.prototype, "cells", {
           get: function() {
             return this._cells
@@ -1377,12 +1413,12 @@ var __extends = this && this.__extends || function() {
           enumerable: !0,
           configurable: !0
         }), n.prototype._getCellValue = function(e, t, o, n) {
-          var t, i, l, s;
+          var t, i, l, s, r, a;
           if (!(t = this._getSheet() || t || this._flex.selectedSheet)) return null;
           if (e.isSingleCell ? (l = e.row, s = e.col) : (null != o && o >= e.topRow && o <= e.bottomRow && e.col === e.col2 && (l = o, s = e.col), null != n && n >= e.leftCol && n <= e.rightCol && e.row === e.row2 && (l = e.row, s = n)), null == l || null == s) throw "Invalid Cell Reference.";
           if (i = t.name + ":" + l + "," + s + "-" + l + "," + s, this._evalutingRange[i]) throw "Circular Reference";
           try {
-            if (this._flex) return this._evalutingRange[i] = !0, l < t.rowCount && s < t.columnCount ? this._flex.getCellValue(l, s, !1, t) : 0
+            if (this._flex) return this._evalutingRange[i] = !0, l < t.rowCount && s < t.columnCount ? (r = t.grid.columns[s], a = this._flex.getCellValue(l, s, !1, t), r.dataMap && (a = r.dataMap.getDisplayValue(a)), a) : 0
           } finally {
             delete this._evalutingRange[i]
           }
@@ -1392,22 +1428,32 @@ var __extends = this && this.__extends || function() {
           for (; t < this._flex.sheets.length; t++)
             if ((e = this._flex.sheets[t]).name.toLowerCase() === this._sheetRef) return e;
           throw "Invalid sheet reference"
-        }, n.prototype._updateCellRangeExp = function(e, t, o, n, i) {
-          var l = this._cells,
-            s = !1;
+        }, n.prototype._updateCellRangeExp = function(e, t, o, n, i, l) {
+          var s = this._cells,
+            r = !1;
           if (this._tableParams && this._tableParams.length > 0) return !1;
           if (e === this._flex.selectedSheetIndex) {
             if (this._sheetRef && this._sheetRef.toLowerCase() !== this._flex.selectedSheet.name.toLowerCase()) return !1
           } else if (!this._sheetRef || this._sheetRef.toLowerCase() !== this._flex.selectedSheet.name.toLowerCase()) return !1;
-          return i ? n ? l.topRow >= t ? (l.row += o, l.row2 += o, s = !0) : l.topRow < t && l.bottomRow >= t && (l.row2 += o, s = !0) : l.topRow > t ? (l.row -= o, l.row2 -= o, s = !0) : l.isSingleCell ? l.row >= t - o + 1 && (l.row = t - o + 1, l.row2 = t - o + 1, s = !0) : l.topRow >= t - o + 1 ? (l.row = t - o + 1, l.row2 -= o, s = !0) : l.topRow < t - o + 1 && l.bottomRow >= t - o + 1 && (l.bottomRow > t ? l.row2 -= o : l.row2 = t - o, s = !0) : n ? l.leftCol >= t ? (l.col += o, l.col2 += o, s = !0) : l.leftCol < t && l.rightCol >= t && (l.col2 += o, s = !0) : l.leftCol > t ? (l.col -= o, l.col2 -= o, s = !0) : l.isSingleCell ? l.col >= t - o + 1 && (l.col = t - o + 1, l.col2 = t - o + 1, s = !0) : l.leftCol >= t - o + 1 ? (l.col = t - o + 1, l.col2 -= o, s = !0) : l.leftCol < t - o + 1 && l.rightCol >= t - o + 1 && (l.rightCol > t ? l.col2 -= o : l.col2 = t - o, s = !0), s
+          if (i) {
+            if (l && (s.leftCol > l.rightCol || s.rightCol < l.leftCol)) return !1;
+            n ? s.topRow >= t ? (s.row += o, s.row2 += o, r = !0) : s.topRow < t && s.bottomRow >= t && (s.row2 += o, r = !0) : s.topRow > t ? (s.row -= o, s.row2 -= o, r = !0) : s.isSingleCell ? s.row >= t - o + 1 && (s.row = t - o + 1, s.row2 = t - o + 1, r = !0) : s.topRow >= t - o + 1 ? (s.row = t - o + 1, s.row2 -= o, r = !0) : s.topRow < t - o + 1 && s.bottomRow >= t - o + 1 && (s.bottomRow > t ? s.row2 -= o : s.row2 = t - o, r = !0)
+          } else {
+            if (l && (s.topRow > l.bottomRow || s.bottomRow < l.topRow)) return !1;
+            n ? s.leftCol >= t ? (s.col += o, s.col2 += o, r = !0) : s.leftCol < t && s.rightCol >= t && (s.col2 += o, r = !0) : s.leftCol > t ? (s.col -= o, s.col2 -= o, r = !0) : s.isSingleCell ? s.col >= t - o + 1 && (s.col = t - o + 1, s.col2 = t - o + 1, r = !0) : s.leftCol >= t - o + 1 ? (s.col = t - o + 1, s.col2 -= o, r = !0) : s.leftCol < t - o + 1 && s.rightCol >= t - o + 1 && (s.rightCol > t ? s.col2 -= o : s.col2 = t - o, r = !0)
+          }
+          return r
         }, n.prototype._moveCellRangeExp = function(e, t, o, n, i) {
           void 0 === n && (n = !1), void 0 === i && (i = !1);
           var l, s, r = this._cells,
             a = !1;
-          return !(this._tableParams && this._tableParams.length > 0) && (l = o.topRow - t.topRow, s = o.leftCol - t.leftCol, i ? (0 !== l && (r.row += i && this._absRow ? 0 : l, r.row2 += this._isCellRange ? i && this._absRow2 ? 0 : l : i && this._absRow ? 0 : l, a = !0), 0 !== s && (r.col += i && this._absCol ? 0 : s, r.col2 += this._isCellRange ? i && this._absCol2 ? 0 : s : i && this._absCol ? 0 : s, a = !0), a) : (t.contains(r) ? (0 !== l && (r.row += l, r.row2 += l, a = !0), 0 !== s && (r.col += s, r.col2 += s, a = !0)) : t.intersects(r) ? (t.intersectsRow(r) && 0 !== l && (t.topRow <= r.topRow ? l < 0 ? (r.row += l, a = !0) : l > 0 && n && (t.topRow < r.topRow && (r.row -= r.topRow - t.topRow), r.row2 -= t.rowSpan, a = !0) : t.bottomRow >= r.bottomRow ? l > 0 ? (r.row2 += l, a = !0) : l < 0 && n && (t.bottomRow > r.bottomRow && (r.row2 += t.bottomRow - r.bottomRow), r.row += t.rowSpan, a = !0) : n && (l < 0 ? r.row += t.rowSpan : r.row2 -= t.rowSpan, a = !0)), t.intersectsColumn(r) && 0 !== s && (t.leftCol <= r.leftCol ? s < 0 ? (r.col += s, a = !0) : s > 0 && n && (t.leftCol < r.leftCol && (r.col -= r.leftCol - t.leftCol), r.col2 -= t.columnSpan, a = !0) : t.rightCol >= r.rightCol ? s > 0 ? (r.col2 += s, a = !0) : s < 0 && n && (t.rightCol > r.rightCol && (r.col2 += t.rightCol - r.rightCol), r.col += t.columnSpan, a = !0) : n && (s < 0 ? r.col += t.columnSpan : r.col2 -= t.columnSpan, a = !0))) : n && (r.topRow > t.bottomRow && l > 0 && (r.row -= t.rowSpan, r.row2 -= t.rowSpan, a = !0), r.bottomRow < t.topRow && l < 0 && (r.row += t.rowSpan, r.row2 += t.rowSpan, a = !0), r.leftCol > t.rightCol && s > 0 && (r.col -= t.columnSpan, r.col2 -= t.columnSpan, a = !0), r.rightCol < t.leftCol && s < 0 && (r.col += t.columnSpan, r.col2 += t.columnSpan, a = !0)), a))
+          return !(this._tableParams && this._tableParams.length > 0) && (l = o.topRow - t.topRow, s = o.leftCol - t.leftCol, i ? (0 !== l && (r.row += i && this._absRow ? 0 : l, r.row2 += this._isCellRange ? i && this._absRow2 ? 0 : l : i && this._absRow ? 0 : l, a = !0), 0 !== s && (r.col += i && this._absCol ? 0 : s, r.col2 += this._isCellRange ? i && this._absCol2 ? 0 : s : i && this._absCol ? 0 : s, a = !0), a) : (t.contains(r) ? (0 !== l && (r.row += l, r.row2 += l, a = !0), 0 !== s && (r.col += s, r.col2 += s, a = !0)) : t.intersects(r) ? (t.intersectsRow(r) && 0 !== l && (t.topRow <= r.topRow ? l < 0 ? (r.row += l, a = !0) : l > 0 && n && (t.topRow < r.topRow && (r.row -= r.topRow - t.topRow), r.row2 -= t.rowSpan, a = !0) : t.bottomRow >= r.bottomRow ? l > 0 ? (r.row2 += l, a = !0) : l < 0 && n && (t.bottomRow > r.bottomRow && (r.row2 += t.bottomRow - r.bottomRow), r.row += t.rowSpan, a = !0) : n && (l < 0 && o.topRow < r.topRow && (r.row += t.rowSpan), l > 0 && o.bottomRow > r.bottomRow && (r.row2 -= t.rowSpan), a = !0)), t.intersectsColumn(r) && 0 !== s && (t.leftCol <= r.leftCol ? s < 0 ? (r.col += s, a = !0) : s > 0 && n && (t.leftCol < r.leftCol && (r.col -= r.leftCol - t.leftCol), r.col2 -= t.columnSpan, a = !0) : t.rightCol >= r.rightCol ? s > 0 ? (r.col2 += s, a = !0) : s < 0 && n && (t.rightCol > r.rightCol && (r.col2 += t.rightCol - r.rightCol), r.col += t.columnSpan, a = !0) : n && (s < 0 ? r.col += t.columnSpan : r.col2 -= t.columnSpan, a = !0))) : n && (r.topRow >= o.topRow && r.topRow < t.topRow && l < 0 && (r.row += o.rowSpan, r.row2 += o.rowSpan, a = !0), r.topRow > t.bottomRow && r.bottomRow <= o.bottomRow && l > 0 && (r.row -= o.rowSpan, r.row2 -= o.rowSpan, a = !0), r.leftCol >= o.leftCol && r.leftCol < t.leftCol && s < 0 && (r.col += o.columnSpan, r.col2 += o.columnSpan, a = !0), r.leftCol > t.rightCol && r.rightCol <= o.rightCol && s > 0 && (r.col -= o.columnSpan, r.col2 -= o.columnSpan, a = !0)), a))
         }, n.prototype._updateCellRangeExpForReorderingRows = function(e) {
           var t, o = this._cells;
           return (t = this._cells.row + e) < 0 ? t = 0 : t >= this._flex.rows.length && (t = this._flex.rows.length - 1), o.row = t, this._isCellRange && ((t = this._cells.row2 + e) < 0 ? t = 0 : t >= this._flex.rows.length && (t = this._flex.rows.length - 1)), o.row2 = t, !0
+        }, n.prototype._updateCellBoundary = function(e, t) {
+          var o = this._cells;
+          return (!this._sheetRef || this._sheetRef.toLowerCase() === this._flex.selectedSheet.name.toLowerCase()) && (o.row === o.row2 && o.row === e && t === o.col2 + 1 ? (o.col2 += 1, !0) : o.col === o.col2 && o.col === t && e === o.row2 + 1 && (o.row2 += 1, !0))
         }, n.prototype._getStringExpression = function() {
           return this._tableParams && this._tableParams.length > 0 ? this._getTableParamsStringExpression() : (this._sheetRef ? this._sheetRef + "!" : "") + e.xlsx.Workbook.xlsxAddress(this._cells.row, this._cells.col, this._absRow, this._absCol) + (this._isCellRange ? ":" + e.xlsx.Workbook.xlsxAddress(this._cells.row2, this._cells.col2, this._absRow2, this._absCol2) : "")
         }, n.prototype._getTableParamsStringExpression = function() {
@@ -1424,11 +1470,11 @@ var __extends = this && this.__extends || function() {
         }
         return __extends(t, e), t.prototype.evaluate = function(e, t, o) {
           return this._needCacheEvaluatedVal ? (null == this._evaluatedValue && (this._evaluatedValue = this._funcDefinition.func(this._params, o, e, t)), this._evaluatedValue) : this._funcDefinition.func(this._params, o, e, t)
-        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i) {
-          var l, s, r = !1;
+        }, t.prototype._updateCellRangeExp = function(e, t, o, n, i, l) {
+          var s, r, a = !1;
           if (this._params && this._params.length > 0)
-            for (l = 0; l < this._params.length; l++) s = this._params[l]._updateCellRangeExp(e, t, o, n, i), r || (r = r || s);
-          return r
+            for (s = 0; s < this._params.length; s++) r = this._params[s]._updateCellRangeExp(e, t, o, n, i, l), a || (a = a || r);
+          return a
         }, t.prototype._moveCellRangeExp = function(e, t, o, n, i) {
           void 0 === n && (n = !1), void 0 === i && (i = !1);
           var l, s, r = !1;
@@ -1440,6 +1486,9 @@ var __extends = this && this.__extends || function() {
           if (this._params && this._params.length > 0)
             for (t = 0; t < this._params.length; t++) o = this._params[t]._updateCellRangeExpForReorderingRows(e), n || (n = n || o);
           return n
+        }, t.prototype._updateCellBoundary = function(e, t) {
+          var o;
+          return !!(this._params && 1 === this._params.length && (o = this._params[0]) instanceof s) && o._updateCellBoundary(e, t)
         }, t.prototype._getStringExpression = function() {
           return this._funcId + this._parseParamsExpToString()
         }, t.prototype._parseParamsExpToString = function() {
@@ -1547,14 +1596,16 @@ var __extends = this && this.__extends || function() {
         }, t.prototype._handleUndoRedo = function(e) {
           var t = this;
           t._owner._clearCalcEngine(), t._owner.selectedSheet.selectionRanges.clear(), t._owner.deferUpdate(function() {
-            var o, n, i, l, s = e ? t._oldValues : t._newValues;
+            var o, n, i, l, s, r, a, h = e ? t._oldValues : t._newValues;
             if (t._deletedTables && t._deletedTables.length > 0)
               for (o = 0; o < t._deletedTables.length; o++) n = t._deletedTables[o], e ? t._owner.selectedSheet.tables.push(n) : t._owner.selectedSheet.tables.remove(n);
             for (i = 0; i < t._selections.length; i++) l = t._selections[i], t._owner.selectedSheet.selectionRanges.push(l);
-            Object.keys(s).forEach(function(e) {
-              var o = s[e];
+            if (Object.keys(h).forEach(function(e) {
+              var o = h[e];
               t._owner.setCellData(o.row, o.col, o.value)
-            }), e ? (t._mergeAction.undo(), t._cellStyleAction.undo()) : (t._mergeAction.redo(), t._cellStyleAction.redo()), t._owner.refresh(!1)
+            }), t._affectedFormulas && (s = e ? t._affectedFormulas.oldFormulas : t._affectedFormulas.newFormulas), s && s.length > 0)
+              for (a = 0; a < s.length; a++) r = s[a], t._owner.setCellData(r.point.x, r.point.y, r.formula);
+            e ? (t._mergeAction.undo(), t._cellStyleAction.undo()) : (t._mergeAction.redo(), t._cellStyleAction.redo()), t._owner.refresh(!1)
           })
         }, t
       }(n);
@@ -1623,7 +1674,8 @@ var __extends = this && this.__extends || function() {
             styledCells: this._owner.selectedSheet ? this._owner._cloneObject(this._owner.selectedSheet._styledCells) : null,
             mergedCells: this._owner.selectedSheet ? this._owner.selectedSheet._cloneMergedCells() : null,
             tableRanges: s,
-            selection: this._owner.selection
+            selection: this._owner.selection,
+            filterDef: this._owner.selectedSheet._filterDefinition
           }, e ? this._oldValue = i : this._newValue = i
         }, t.prototype._handleUndoRedo = function(e) {
           var t, o, n, i, l, s, r, a, h, c, d, u, _ = this,
@@ -1643,7 +1695,7 @@ var __extends = this && this.__extends || function() {
             if (_._affectedDefinedNameVals && (h = e ? _._affectedDefinedNameVals.oldDefinedNameVals : _._affectedDefinedNameVals.newDefinedNameVals), h && h.length > 0)
               for (n = 0; n < h.length; n++) c = h[n], (d = _._owner._getDefinedNameIndexByName(c.name)) > -1 && (_._owner.definedNames[d].value = c.value);
             _._owner.selectedSheet.grid.wj_sheetInfo.styledCells = _._owner.selectedSheet._styledCells, _._owner.selectedSheet.grid.wj_sheetInfo.mergedRanges = _._owner.selectedSheet._mergedRanges, _._owner._isUndoing = !1
-          }), _._owner._copyColumnsToSelectedSheet(), _._owner.sortManager.sortDescriptions.sourceCollection = g.sortList.slice(), _._owner.sortManager.commitSort(!1), _._owner.selection = g.selection)
+          }), _._owner._copyColumnsToSelectedSheet(), _._owner.sortManager.sortDescriptions.sourceCollection = g.sortList.slice(), _._owner.selectedSheet._filterDefinition = g.filterDef, _._owner.sortManager.commitSort(!1), _._owner.selection = g.selection)
         }, t
       }(n);
       o._ColumnsChangedAction = r;
@@ -1659,60 +1711,65 @@ var __extends = this && this.__extends || function() {
         }, o.prototype.saveNewState = function() {
           return this._saveValues(!1), !0
         }, o.prototype._saveValues = function(t) {
-          var o, n, i, l, s, r, a = [],
-            h = [],
-            c = [];
+          var o, n, i, l, s, r, a, h, c = [],
+            d = [],
+            u = [];
           if (null == this._isAdding)
             if (this._owner.itemsSource)
-              for (s = this._owner.itemsSource instanceof e.collections.CollectionView ? this._owner.itemsSource.sourceCollection.slice() : this._owner.itemsSource.slice(), n = 0; n < this._owner.columns.length; n++) h.push(this._owner.columns[n]);
+              for (r = this._owner.itemsSource instanceof e.collections.CollectionView ? this._owner.itemsSource.sourceCollection.slice() : this._owner.itemsSource.slice(), i = 0; i < this._owner.columns.length; i++) d.push(this._owner.columns[i]);
             else
-              for (o = 0; o < this._owner.rows.length; o++) a.push(this._owner.rows[o]);
-          else if (t && !this._isAdding || !t && this._isAdding)
-            for (o = this._rowIndex; o < this._rowIndex + this._count && o < this._owner.rows.length; o++) a.push(this._owner.rows[o]);
+              for (o = 0; o < this._owner.rows.length; o++) c.push(this._owner.rows[o]);
+          else {
+            if (t && !this._isAdding || !t && this._isAdding)
+              for (o = this._rowIndex; o < this._rowIndex + this._count && o < this._owner.rows.length; o++)(n = this._owner.rows[o]).isVisible || this._isAdding ? c.push(n) : c.push(null);
+            this._owner.collectionView && this._owner.collectionView.sortDescriptions.length > 0 && (a = this._owner.collectionView._view.slice())
+          }
           if (this._owner.selectedSheet.tables && this._owner.selectedSheet.tables.length > 0)
-            for (i = 0; i < this._owner.selectedSheet.tables.length; i++)(l = this._owner.selectedSheet.tables[i]) && l.sheet.name === this._owner.selectedSheet.name && c.push({
-              name: l.name,
-              range: l.getRange(),
+            for (l = 0; l < this._owner.selectedSheet.tables.length; l++)(s = this._owner.selectedSheet.tables[l]) && s.sheet.name === this._owner.selectedSheet.name && u.push({
+              name: s.name,
+              range: s.getRange(),
               setting: {
-                showHeaderRow: l.showHeaderRow,
-                showTotalRow: l.showTotalRow
+                showHeaderRow: s.showHeaderRow,
+                showTotalRow: s.showTotalRow
               }
             });
-          r = {
-            rows: a,
-            columns: h,
-            itemsSource: s,
+          h = {
+            rows: c,
+            columns: d,
+            itemsSource: r,
             styledCells: this._owner.selectedSheet ? this._owner._cloneObject(this._owner.selectedSheet._styledCells) : null,
             mergedCells: this._owner.selectedSheet ? this._owner.selectedSheet._cloneMergedCells() : null,
-            tableSettings: c,
-            selection: this._owner.selection
-          }, t ? this._oldValue = r : this._newValue = r
+            tableSettings: u,
+            selection: this._owner.selection,
+            dataView: a,
+            scrollPosition: this._owner.scrollPosition
+          }, t ? this._oldValue = h : this._newValue = h
         }, o.prototype._handleUndoRedo = function(t) {
-          var o, n, i, l, s, r, a, h, c, d, u, _, g, f, p = this,
-            w = this,
-            m = !!w._owner.itemsSource,
-            C = t ? w._oldValue : w._newValue;
-          w._owner.selectedSheet && (w._owner.deferUpdate(function() {
-            if (w._owner._isUndoing = !0, w._owner._clearCalcEngine(), w._owner.finishEditing(), null == w._isAdding && (w._owner.itemsSource && w._owner.columns.clear(), w._owner.rows.clear(), w._rowIndex = 0), w._owner.selectedSheet._styledCells = null, w._owner.selectedSheet._mergedRanges.length = 0, null == p._isAdding && m) {
-              for (w._owner.collectionView.beginUpdate(), w._owner.autoGenerateColumns = !1, w._owner.itemsSource instanceof e.collections.CollectionView ? (f = [0, w._owner.itemsSource.sourceCollection.length].concat(C.itemsSource), Array.prototype.splice.apply(w._owner.itemsSource.sourceCollection, f)) : w._owner.itemsSource = C.itemsSource.slice(), w._owner.columns.beginUpdate(), i = 0; i < C.columns.length; i++) w._owner.columns.push(C.columns[i]);
-              w._owner.columns.endUpdate(), w._owner.collectionView.endUpdate()
+          var o, n, i, l, s, r, a, h, c, d, u, _, g, f, p, w, m, C = this,
+            b = this,
+            y = !!b._owner.itemsSource,
+            S = t ? b._oldValue : b._newValue;
+          b._owner.selectedSheet && (b._owner.deferUpdate(function() {
+            if (b._owner._isUndoing = !0, b._owner._clearCalcEngine(), b._owner.finishEditing(), null == b._isAdding && (b._owner.itemsSource && b._owner.columns.clear(), b._owner.rows.clear(), b._rowIndex = 0), b._owner.selectedSheet._styledCells = null, b._owner.selectedSheet._mergedRanges.length = 0, null == C._isAdding && y) {
+              for (p = b._owner.autoGenerateColumns, b._owner.autoGenerateColumns = !1, b._owner.collectionView.beginUpdate(), b._owner.itemsSource instanceof e.collections.CollectionView ? (f = [0, b._owner.itemsSource.sourceCollection.length].concat(S.itemsSource), Array.prototype.splice.apply(b._owner.itemsSource.sourceCollection, f)) : b._owner.itemsSource = S.itemsSource.slice(), b._owner.columns.beginUpdate(), i = 0; i < S.columns.length; i++) b._owner.columns.push(S.columns[i]);
+              b._owner.columns.endUpdate(), b._owner.collectionView.endUpdate(), b._owner.autoGenerateColumns = p
             } else {
-              if (m ? w._owner.collectionView.beginUpdate() : w._owner.rows.beginUpdate(), C.rows && C.rows.length > 0)
-                for (o = 0; o < C.rows.length; o++) n = C.rows[o], m && n.dataItem ? (w._owner.itemsSource instanceof e.collections.CollectionView ? w._owner.itemsSource.sourceCollection.splice(w._rowIndex + o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 0, n.dataItem) : w._owner.itemsSource.splice(w._rowIndex + o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 0, n.dataItem), w._owner.selectedSheet._orgItemsSource && w._owner.selectedSheet._orgItemsSource.splice(w._rowIndex + o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 0, n.dataItem)) : w._owner.rows.insert(w._rowIndex + o, n);
+              if (y ? (p = b._owner.autoGenerateColumns, b._owner.autoGenerateColumns = !1, w = b._rowIndex - (b._owner.allowAddNew && b._owner.newRowAtTop ? 2 : 1), b._owner.collectionView.beginUpdate()) : b._owner.rows.beginUpdate(), S.rows && S.rows.length > 0)
+                for (o = 0; o < S.rows.length; o++)(n = S.rows[o]) && (y && n.dataItem ? (m = null != n.dataItem._itemIdx ? n.dataItem._itemIdx : w + o, b._owner.itemsSource instanceof e.collections.CollectionView ? (b._owner._updateItemIndexForInsertingRow(b._owner.itemsSource.sourceCollection, m, 1), b._owner.itemsSource.sourceCollection.splice(m, 0, n.dataItem)) : (b._owner._updateItemIndexForInsertingRow(b._owner.itemsSource, m, 1), b._owner.itemsSource.splice(m, 0, n.dataItem))) : b._owner.rows.insert(b._rowIndex + o, n));
               else
-                for (o = w._rowIndex + w._count - 1; o >= w._rowIndex; o--)(n = w._owner.rows[o]) && n.isVisible && (m && n.dataItem ? (w._owner.itemsSource instanceof e.collections.CollectionView ? w._owner.itemsSource.sourceCollection.splice(o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 1) : w._owner.itemsSource.splice(o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 1), w._owner.selectedSheet._orgItemsSource && w._owner.selectedSheet._orgItemsSource.splice(o - (w._owner.allowAddNew && w._owner.newRowAtTop ? 2 : 1), 1)) : w._owner.rows.removeAt(o));
-              m ? w._owner.collectionView.endUpdate() : w._owner.rows.endUpdate()
+                for (o = b._rowIndex + b._count - 1; o >= b._rowIndex; o--)(n = b._owner.rows[o]) && (y && n.dataItem ? (m = null != n.dataItem._itemIdx ? n.dataItem._itemIdx : o - (b._owner.allowAddNew && b._owner.newRowAtTop ? 2 : 1), b._owner.itemsSource instanceof e.collections.CollectionView ? (b._owner.itemsSource.sourceCollection.splice(m, 1), b._owner._updateItemIndexForRemovingRow(b._owner.itemsSource.sourceCollection, m)) : (b._owner.itemsSource.splice(m, 1), b._owner._updateItemIndexForRemovingRow(b._owner.itemsSource, m))) : b._owner.rows.removeAt(o));
+              y ? (b._owner._lastCount = b._owner.collectionView.itemCount, b._owner.collectionView.endUpdate(), S.dataView && S.dataView.length > 0 && (b._owner.collectionView._view = S.dataView, b._owner.collectionView._pgView = b._owner.collectionView._getPageView(), b._owner.itemsSource instanceof e.collections.CollectionView || (b._owner.selectedSheet.grid.collectionView._view = S.dataView, b._owner.selectedSheet.grid.collectionView._pgView = b._owner.selectedSheet.grid.collectionView._getPageView()), b._owner._bindGrid(!1), b._owner.selectedSheet.grid._bindGrid(!1)), b._owner.autoGenerateColumns = p) : b._owner.rows.endUpdate()
             }
-            for (w._owner.selectedSheet._styledCells = w._owner._cloneObject(C.styledCells), g = 0; g < C.mergedCells.length; g++) w._owner.selectedSheet._mergedRanges[g] = C.mergedCells[g];
-            for (s = 0; s < C.tableSettings.length; s++) r = C.tableSettings[s], (a = w._owner._getTable(r.name)) && (a._showHeaderRow = r.setting.showHeaderRow, a._showTotalRow = r.setting.showTotalRow, a._setTableRange(r.range));
-            if (w._affectedFormulas && (c = t ? w._affectedFormulas.oldFormulas : w._affectedFormulas.newFormulas), c && c.length > 0)
-              for (l = 0; l < c.length; l++) null != (h = c[l]).point ? h.sheet.name === w._owner.selectedSheet.name ? w._owner.setCellData(h.point.x, h.point.y, h.formula) : h.sheet.grid.setCellData(h.point.x, h.point.y, h.formula) : h.row._ubv[h.column._hash] = h.formula;
-            if (w._deletedTables && w._deletedTables.length > 0)
-              for (s = 0; s < w._deletedTables.length; s++) a = w._deletedTables[s], t ? w._owner.selectedSheet.tables.push(a) : w._owner.selectedSheet.tables.remove(a);
-            if (w._affectedDefinedNameVals && (d = t ? w._affectedDefinedNameVals.oldDefinedNameVals : w._affectedDefinedNameVals.newDefinedNameVals), d && d.length > 0)
-              for (l = 0; l < d.length; l++) u = d[l], (_ = w._owner._getDefinedNameIndexByName(u.name)) > -1 && (w._owner.definedNames[_].value = u.value);
-            w._owner.selectedSheet.grid.wj_sheetInfo.styledCells = w._owner.selectedSheet._styledCells, w._owner.selectedSheet.grid.wj_sheetInfo.mergedRanges = w._owner.selectedSheet._mergedRanges, w._owner.selection = C.selection, w._owner._isUndoing = !1
-          }), w._owner._copyRowsToSelectedSheet())
+            for (b._owner.selectedSheet._styledCells = b._owner._cloneObject(S.styledCells), g = 0; g < S.mergedCells.length; g++) b._owner.selectedSheet._mergedRanges[g] = S.mergedCells[g];
+            for (s = 0; s < S.tableSettings.length; s++) r = S.tableSettings[s], (a = b._owner._getTable(r.name)) && (a._showHeaderRow = r.setting.showHeaderRow, a._showTotalRow = r.setting.showTotalRow, a._setTableRange(r.range));
+            if (b._affectedFormulas && (c = t ? b._affectedFormulas.oldFormulas : b._affectedFormulas.newFormulas), c && c.length > 0)
+              for (l = 0; l < c.length; l++) null != (h = c[l]).point ? h.sheet.name === b._owner.selectedSheet.name ? b._owner.setCellData(h.point.x, h.point.y, h.formula) : h.sheet.grid.setCellData(h.point.x, h.point.y, h.formula) : h.row._ubv[h.column._hash] = h.formula;
+            if (b._deletedTables && b._deletedTables.length > 0)
+              for (s = 0; s < b._deletedTables.length; s++) a = b._deletedTables[s], t ? b._owner.selectedSheet.tables.push(a) : b._owner.selectedSheet.tables.remove(a);
+            if (b._affectedDefinedNameVals && (d = t ? b._affectedDefinedNameVals.oldDefinedNameVals : b._affectedDefinedNameVals.newDefinedNameVals), d && d.length > 0)
+              for (l = 0; l < d.length; l++) u = d[l], (_ = b._owner._getDefinedNameIndexByName(u.name)) > -1 && (b._owner.definedNames[_].value = u.value);
+            b._owner.selectedSheet.grid.wj_sheetInfo.styledCells = b._owner.selectedSheet._styledCells, b._owner.selectedSheet.grid.wj_sheetInfo.mergedRanges = b._owner.selectedSheet._mergedRanges, b._owner.selection = S.selection, b._owner.scrollPosition = S.scrollPosition, b._owner._isUndoing = !1
+          }), b._owner._copyRowsToSelectedSheet())
         }, o
       }(n);
       o._RowsChangedAction = a;
@@ -1764,46 +1821,51 @@ var __extends = this && this.__extends || function() {
         }, t
       }(n);
       o._CellMergeAction = c;
-      var d = function(o) {
-        function n(e) {
-          var t = o.call(this, e) || this;
-          return t._saveValues(!0), t
+      var d = function(t) {
+        function o(e) {
+          var o = t.call(this, e) || this;
+          return o._saveValues(!0), o
         }
-        return __extends(n, o), n.prototype.undo = function() {
+        return __extends(o, t), o.prototype.undo = function() {
           this._handleUndoRedo(!0)
-        }, n.prototype.redo = function() {
+        }, o.prototype.redo = function() {
           this._handleUndoRedo(!1)
-        }, n.prototype.saveNewState = function() {
+        }, o.prototype.saveNewState = function() {
           return this._saveValues(!1), !0
-        }, n.prototype._saveValues = function(e) {
-          var t, o, n, i, l, s = [];
-          for (o = 0; o < this._owner.columns.length; o++) s.push(this._owner.columns[o]);
-          if (this._owner.itemsSource) i = this._owner.collectionView._view.slice();
-          else
+        }, o.prototype._saveValues = function(e) {
+          var t, o, n, i, l, s, r, a, h, c = [];
+          for (o = 0; o < this._owner.columns.length; o++) c.push(this._owner.columns[o]);
+          if (this._owner.itemsSource) {
+            i = this._owner.allowAddNew && this._owner.newRowAtTop ? 2 : 1, l = [];
+            for (var d = 0; d < this._owner.rows.length - i; d++)(r = (s = this._owner.rows[d + i]).dataItem) && (l[null != r._itemIdx ? r._itemIdx : d] = s.visible);
+            e && (h = this._owner.collectionView._view.slice())
+          } else
             for (n = [], t = 0; t < this._owner.rows.length; t++) n.push(this._owner.rows[t]);
-          l = {
+          a = {
             sortList: this._owner.sortManager._committedList.slice(),
             rows: n,
-            columns: s,
+            columns: c,
             selection: this._owner.selection.clone(),
-            items: i,
             formulas: this._owner._scanFormulas(),
-            styledCells: this._owner.selectedSheet ? this._owner._cloneObject(this._owner.selectedSheet._styledCells) : null
-          }, e ? this._oldValue = l : this._newValue = l
-        }, n.prototype._handleUndoRedo = function(o) {
-          var n, i, l, s, r, a, h = this,
-            c = this,
-            d = o ? c._oldValue : c._newValue,
-            u = !!c._owner.itemsSource,
-            _ = this._owner.itemsSource instanceof e.collections.CollectionView;
-          c._owner.selectedSheet && (c._owner._isUndoing = !0, c._owner.deferUpdate(function() {
-            if (c._owner._clearCalcEngine(), c._owner.sortManager.sortDescriptions.sourceCollection = d.sortList.slice(), c._owner.sortManager._committedList = d.sortList.slice(), c._owner.selectedSheet._styledCells = c._owner._cloneObject(d.styledCells), u) c._owner.autoGenerateColumns = !1, _ ? c._owner.itemsSource.sourceCollection = d.items : (a = c._owner.selectedSheet._filterDefinition, c._owner.itemsSource = d.items);
-            else
-              for (c._owner.rows.clear(), c._owner.selectedSheet.grid.rows.clear(), n = 0; n < d.rows.length; n++) l = d.rows[n], c._owner.selectedSheet.grid.rows.push(l), c._owner.rows.push(l);
-            for (c._owner.columns.clear(), u && !_ && (r = h._owner.rows[0] instanceof t._NewRowTemplate ? h._owner.rows[1] : h._owner.rows[0]), i = 0; i < d.columns.length; i++) s = d.columns[i], c._owner.columns.push(s), r && (r._ubv || (r._ubv = {}), r._ubv[s._hash] = s.header);
-            u && (_ || (c._owner.filter.filterDefinition = a), c._owner.selection = d.selection), c._owner._resetFormulas(d.formulas), c._owner._isUndoing = !1
+            styledCells: this._owner.selectedSheet ? this._owner._cloneObject(this._owner.selectedSheet._styledCells) : null,
+            rowsVisible: l,
+            dataView: h
+          }, e ? this._oldValue = a : this._newValue = a
+        }, o.prototype._handleUndoRedo = function(t) {
+          var o, n, i, l, s = this,
+            r = t ? s._oldValue : s._newValue,
+            a = !!s._owner.itemsSource,
+            h = this._owner.itemsSource instanceof e.collections.CollectionView;
+          s._owner.selectedSheet && (s._owner._isUndoing = !0, s._owner.deferUpdate(function() {
+            if (s._owner._clearCalcEngine(), s._owner.sortManager.sortDescriptions.sourceCollection = r.sortList.slice(), s._owner.sortManager.commitSort(!1), s._owner.selectedSheet._styledCells = s._owner._cloneObject(r.styledCells), a) r.dataView && r.dataView.length > 0 && (s._owner.collectionView._view = r.dataView, s._owner.collectionView._pgView = s._owner.collectionView._getPageView(), h || (s._owner.selectedSheet.grid.collectionView._view = r.dataView, s._owner.selectedSheet.grid.collectionView._pgView = s._owner.selectedSheet.grid.collectionView._getPageView()), s._owner._bindGrid(!1), s._owner.selectedSheet.grid._bindGrid(!1));
+            else {
+              for (s._owner.rows.clear(), s._owner.selectedSheet.grid.rows.clear(), o = 0; o < r.rows.length; o++) i = r.rows[o], s._owner.selectedSheet.grid.rows.push(i), s._owner.rows.push(i);
+              for (s._owner.columns.clear(), n = 0; n < r.columns.length; n++) l = r.columns[n], s._owner.columns.push(l);
+              s._owner._resetFormulas(r.formulas)
+            }
+            s._owner._isUndoing = !1
           }))
-        }, n
+        }, o
       }(n);
       o._SortColumnAction = d;
       var u = function(t) {
@@ -1976,7 +2038,7 @@ var __extends = this && this.__extends || function() {
       var f = function(e) {
         function t(t, o) {
           var n = e.call(this, t) || this;
-          return n._addedTable = o, n
+          return n._addedTable = o, o.showHeaderRow && (n._orgHeaderCellsContent = o._orgHeaderCellsContent.slice()), n
         }
         return __extends(t, e), t.prototype.undo = function() {
           this._handleUndoRedo(!0)
@@ -1984,9 +2046,9 @@ var __extends = this && this.__extends || function() {
           this._handleUndoRedo(!1)
         }, t.prototype._handleUndoRedo = function(e) {
           var t, o, n;
-          if (this._addedTable.showHeaderRow)
-            for (o = this._addedTable.getRange(), n = this._addedTable.getColumns(), t = 0; t < o.columnSpan; t++) this._owner.setCellData(o.topRow, o.leftCol + t, e ? this._addedTable._orgHeaderCellsContent[t] : n[t].name);
-          e ? this._owner.selectedSheet.tables.remove(this._addedTable) : this._owner.selectedSheet.tables.push(this._addedTable), this._owner.refresh()
+          if (e ? this._owner.selectedSheet.tables.remove(this._addedTable) : this._owner.selectedSheet.tables.push(this._addedTable), this._addedTable.showHeaderRow)
+            for (o = this._addedTable.getRange(), n = this._addedTable.getColumns(), t = 0; t < o.columnSpan; t++) this._owner.setCellData(o.topRow, o.leftCol + t, e ? this._orgHeaderCellsContent[t] : n[t].name);
+          this._owner.refresh()
         }, t
       }(n);
       o._TableAction = f;
@@ -2011,7 +2073,27 @@ var __extends = this && this.__extends || function() {
           for (var t, o = e ? this._oldRowsVisible : this._newRowsVisible, n = 0; n < o.length; n++)(t = this._owner.rows[n]) && (t.visible = o[n])
         }, t
       }(n);
-      o._FilteringAction = p
+      o._FilteringAction = p;
+      var w = function(e) {
+        function o(t, o) {
+          var n = e.call(this, t) || this;
+          return n._fillSource = o.clone(), n._oldCellSettings = t._orgCellSettings, n
+        }
+        return __extends(o, e), o.prototype.undo = function() {
+          this._handleUndoRedo(!0)
+        }, o.prototype.redo = function() {
+          this._handleUndoRedo(!1)
+        }, o.prototype.saveNewState = function() {
+          return this._fillRange = this._owner.selection.clone(), this._newCellSettings = this._owner._getCellSettingsForFill(this._fillSource, this._fillRange), !0
+        }, o.prototype._handleUndoRedo = function(e) {
+          var o, n, i, l, s, r, a = e ? this._oldCellSettings : this._newCellSettings,
+            h = e ? this._fillSource : this._fillRange;
+          if (this._owner.beginUpdate(), r = this._fillRange.topRow < this._fillSource.topRow ? new t.CellRange(this._fillRange.topRow, this._fillRange.col, this._fillSource.topRow - 1, this._fillRange.col2) : this._fillRange.leftCol === this._fillSource.leftCol && this._fillRange.rightCol === this._fillSource.rightCol ? new t.CellRange(this._fillSource.bottomRow + 1, this._fillRange.col, this._fillRange.bottomRow, this._fillRange.col2) : this._fillRange.leftCol < this._fillSource.leftCol ? new t.CellRange(this._fillRange.row, this._fillRange.leftCol, this._fillRange.row2, this._fillSource.leftCol - 1) : new t.CellRange(this._fillRange.row, this._fillSource.rightCol + 1, this._fillRange.row2, this._fillRange.rightCol), this._owner._resetMergedRange(r), a && a.length > 0)
+            for (o = 0; o < a.length; o++) i = (n = a[o]).row, l = n.col, s = i * this._owner.columns.length + l, this._owner.selectedSheet._styledCells[s] = n.style, this._owner.setCellData(i, l, n.value), n.mergedCell && this._owner.mergeRange(n.mergedCell);
+          this._owner.selection = h, this._owner.endUpdate()
+        }, o
+      }(n);
+      o._FillAction = w
     }(t.sheet || (t.sheet = {}))
   }(e.grid || (e.grid = {}))
 }(wijmo || (wijmo = {}));
@@ -2039,11 +2121,12 @@ var __extends = this && this.__extends || function() {
       var o = function(o) {
         function n(e, t) {
           var n = o.call(this, e) || this;
-          return n._idx = -1, n._isDisableDelRow = !1, n._owner = t, n.applyTemplate("", n.getTemplate(), {
+          return n._idx = -1, n._isDisableDelRow = !1, n._isDisableConvertTable = !1, n._owner = t, n.applyTemplate("", n.getTemplate(), {
             _insRows: "insert-rows",
             _delRows: "delete-rows",
             _insCols: "insert-columns",
             _delCols: "delete-columns",
+            _splitter: "splitter",
             _convertTable: "convert-table"
           }), n._init(), n
         }
@@ -2057,12 +2140,12 @@ var __extends = this && this.__extends || function() {
           if (this._owner.selectedSheet) {
             var n = (o ? o.x : t.clientX) + (t ? window.pageXOffset : 0),
               i = (o ? o.y : t.clientY) + (t ? window.pageYOffset : 0);
-            this.hostElement.style.position = "absolute", this.hostElement.style.display = "inline", this._owner._isDisableDeleteRow(this._owner.selection.topRow, this._owner.selection.bottomRow) && (this._isDisableDelRow = !0, e.addClass(this._delRows, "wj-state-disabled")), this._showTableOperation(), this._owner.selection.isValid || e.addClass(this._convertTable, "wj-state-disabled"), i + this.hostElement.clientHeight > window.innerHeight && (i -= this.hostElement.clientHeight), n + this.hostElement.clientWidth > window.innerWidth && (n -= this.hostElement.clientWidth), this.hostElement.style.top = i + "px", this.hostElement.style.left = n + "px"
+            this.hostElement.style.position = "absolute", this.hostElement.style.display = "inline", this._owner._isDisableDeleteRow(this._owner.selection.topRow, this._owner.selection.bottomRow) && (this._isDisableDelRow = !0, e.addClass(this._delRows, "wj-state-disabled")), this._showTableOperation(), this._owner.selection.isValid || (this._isDisableConvertTable = !0, e.addClass(this._convertTable, "wj-state-disabled")), i + this.hostElement.clientHeight > window.innerHeight + (t ? window.pageYOffset : 0) && (i -= this.hostElement.clientHeight), n + this.hostElement.clientWidth > window.innerWidth + (t ? window.pageXOffset : 0) && (n -= this.hostElement.clientWidth), this.hostElement.style.top = i + "px", this.hostElement.style.left = n + "px"
           }
         }, n.prototype.hide = function() {
           this._idx = -1;
           var t = this.hostElement.querySelectorAll(".wj-context-menu-item");
-          this._removeSelectedState(t), this.hostElement.style.display = "none", this._isDisableDelRow = !1, e.removeClass(this._delRows, "wj-state-disabled"), e.removeClass(this._convertTable, "wj-state-disabled")
+          this._removeSelectedState(t), this.hostElement.style.display = "none", this._isDisableDelRow = !1, this._isDisableConvertTable = !1, e.removeClass(this._delRows, "wj-state-disabled"), e.removeClass(this._convertTable, "wj-state-disabled")
         }, n.prototype.moveToNext = function() {
           var t = this.hostElement.querySelectorAll(".wj-context-menu-item");
           for (this._removeSelectedState(t), this._idx++, 1 === this._idx && this._isDisableDelRow && this._idx++; t[this._idx] && "none" === t[this._idx].style.display;) this._idx++;
@@ -2099,22 +2182,23 @@ var __extends = this && this.__extends || function() {
             this.hide(), this._owner.hostElement.focus()
           }
         }, n.prototype._init = function() {
-          var e = this,
-            t = this.hostElement.querySelectorAll(".wj-context-menu-item");
-          e.hostElement.style.zIndex = "9999", document.querySelector("body").appendChild(e.hostElement), e.addEventListener(document.body, "mousemove", function() {
-            e._removeSelectedState(t)
-          }), e.addEventListener(e.hostElement, "contextmenu", function(e) {
+          var t = e.culture.FlexSheet,
+            o = this,
+            n = this.hostElement.querySelectorAll(".wj-context-menu-item");
+          o._insRows.textContent = t.insertRow, o._delRows.textContent = t.deleteRow, o._insCols.textContent = t.insertCol, o._delCols.textContent = t.deleteCol, o._convertTable.textContent = t.convertTable, o.hostElement.style.zIndex = "9999", document.querySelector("body").appendChild(o.hostElement), o.addEventListener(document.body, "mousemove", function() {
+            o._removeSelectedState(n)
+          }), o.addEventListener(o.hostElement, "contextmenu", function(e) {
             e.preventDefault()
-          }), e.addEventListener(e._insRows, "click", function(t) {
-            e._owner.insertRows(), e.hide(), e._owner.hostElement.focus()
-          }), e.addEventListener(e._delRows, "click", function(t) {
-            e._isDisableDelRow || e._owner.deleteRows(), e.hide(), e._owner.hostElement.focus()
-          }), e.addEventListener(e._insCols, "click", function(t) {
-            e._owner.insertColumns(), e.hide(), e._owner.hostElement.focus()
-          }), e.addEventListener(e._delCols, "click", function(t) {
-            e._owner.deleteColumns(), e.hide(), e._owner.hostElement.focus()
-          }), e.addEventListener(e._convertTable, "click", function(t) {
-            e._addTable(), e.hide(), e._owner.hostElement.focus()
+          }), o.addEventListener(o._insRows, "click", function(e) {
+            o._owner.insertRows(), o.hide(), o._owner.hostElement.focus()
+          }), o.addEventListener(o._delRows, "click", function(e) {
+            o._isDisableDelRow || o._owner.deleteRows(), o.hide(), o._owner.hostElement.focus()
+          }), o.addEventListener(o._insCols, "click", function(e) {
+            o._owner.insertColumns(), o.hide(), o._owner.hostElement.focus()
+          }), o.addEventListener(o._delCols, "click", function(e) {
+            o._owner.deleteColumns(), o.hide(), o._owner.hostElement.focus()
+          }), o.addEventListener(o._convertTable, "click", function(e) {
+            o._isDisableConvertTable || o._addTable(), o.hide(), o._owner.hostElement.focus()
           })
         }, n.prototype._removeSelectedState = function(t) {
           for (var o = 0; o < t.length; o++) e.removeClass(t[o], "wj-context-menu-item-selected")
@@ -2122,12 +2206,15 @@ var __extends = this && this.__extends || function() {
           var e, t, o = this._owner.selection;
           for (e = o.topRow; e <= o.bottomRow; e++)
             for (t = o.leftCol; t <= o.rightCol; t++)
-              if (null != this._owner.selectedSheet.findTable(e, t)) return this._convertTable.style.display = "none", void(this._convertTable.parentElement.style.display = "none");
-          o.isSingleCell || this._owner._containsMergedCells(o) ? (this._convertTable.style.display = "none", this._convertTable.parentElement.style.display = "none") : (this._convertTable.style.display = "inline", this._convertTable.parentElement.style.display = "inline")
+              if (null != this._owner.selectedSheet.findTable(e, t)) return this._convertTable.style.display = "none", void(this._splitter.style.display = "none");
+          o.isSingleCell || this._owner._containsMergedCells(o) ? (this._convertTable.style.display = "none", this._splitter.style.display = "none") : (this._convertTable.style.display = "", this._splitter.style.display = "")
         }, n.prototype._addTable = function() {
           var e, o;
-          0 !== this._owner.undoStack.stackSize && (e = this._owner.selectedSheet._addTable(this._owner.selection), o = new t._TableAction(this._owner, e), this._owner.undoStack._addAction(o))
-        }, n.controlTemplate = '<div class="wj-context-menu wj-control wj-flexsheet-context-menu" width="150px"><div class="wj-context-menu-item" wj-part="insert-rows">Insert Row</div><div class="wj-context-menu-item" wj-part="delete-rows">Delete Rows</div><div class="wj-context-menu-item" wj-part="insert-columns">Insert Column</div><div class="wj-context-menu-item" wj-part="delete-columns">Delete Columns</div><div><div class="wj-state-disabled" style="width:100%;height:1px;background-color:lightgray;"></div><div class="wj-context-menu-item" wj-part="convert-table">Convert To Table</div></div></div>', n
+          if (e = this._owner.selectedSheet._addTable(this._owner.selection)) {
+            if (0 === this._owner.undoStack.stackSize) return;
+            o = new t._TableAction(this._owner, e), this._owner.undoStack._addAction(o)
+          }
+        }, n.controlTemplate = '<div class="wj-context-menu wj-control wj-flexsheet-context-menu" width="150px"><div class="wj-context-menu-item" wj-part="insert-rows"></div><div class="wj-context-menu-item" wj-part="delete-rows"></div><div class="wj-context-menu-item" wj-part="insert-columns"></div><div class="wj-context-menu-item" wj-part="delete-columns"></div><div class="wj-state-disabled" wj-part="splitter" style="width:100%;height:1px;background-color:lightgray;"></div><div class="wj-context-menu-item" wj-part="convert-table"></div></div>', n
       }(e.Control);
       t._ContextMenu = o
     }(t.sheet || (t.sheet = {}))
@@ -2232,7 +2319,7 @@ var __extends = this && this.__extends || function() {
         }
         return __extends(i, n), i.prototype.updateCell = function(i, l, s, r, a) {
           var h, c, d, u, _, g, f, p, w, m, C, b, y, S, R, v = i.grid;
-          switch (i.cellType === t.CellType.Cell && this._resetCellStyle(i.columns[s], r), n.prototype.updateCell.call(this, i, l, s, r, a), a && !a.isSingleCell && (l = a.row, s = a.col, a.row2, a.col2), R = v.selectedSheet, m = v._getBindingColumn(i, l, i.columns[s]), i.cellType) {
+          switch (i.cellType === t.CellType.Cell && this._resetCellStyle(r), n.prototype.updateCell.call(this, i, l, s, r, a), a && !a.isSingleCell && (l = a.row, s = a.col, a.row2, a.col2), R = v.selectedSheet, m = v._getBindingColumn(i, l, i.columns[s]), i.cellType) {
             case t.CellType.RowHeader:
               r.textContent = l + 1 + "";
               break;
@@ -2241,15 +2328,15 @@ var __extends = this && this.__extends || function() {
               break;
             case t.CellType.Cell:
               if (c = l * v.columns.length + s, f = R && R._styledCells ? R._styledCells[c] : null, a && !a.isSingleCell && (l = (b = this._getFirstVisibleCell(v, a)).row, s = b.col), i.rows[l] instanceof o.HeaderRow) i.columns[s].dataType === e.DataType.Boolean ? 1 === r.childElementCount && r.firstElementChild instanceof HTMLInputElement && "checkbox" === r.firstElementChild.type && (r.innerHTML = e.escapeHtml(v.getCellValue(l, s))) : r.innerHTML || (r.innerHTML = e.escapeHtml(v.getCellValue(l, s))), e.addClass(r, "wj-header-row");
-              else if (u = v.getCellValue(l, s, !1), _ = v.getCellData(l, s, !1), g = null != _ && "string" == typeof _ && "=" === _[0], y = i.rows[l] instanceof t.GroupRow, C = (f ? f.format : null) || (y ? null : m.format), v.editRange && v.editRange.contains(l, s) ? !e.isNumber(u) || m.dataMap || g || (C && (u = this._getFormattedValue(u, C)), (w = r.querySelector("input")) && (w.value = u)) : i.columns[s].dataType === e.DataType.Boolean ? (p = r.querySelector('[type="checkbox"]')) && (p.checked = v.getCellValue(l, s), p.disabled = p.disabled || !v.canEditCell(l, s)) : m.dataMap && !y ? (u = v.getCellValue(l, s, !0), (d = r.firstChild) && 3 === d.nodeType && d.nodeValue !== u && (d.nodeValue = u)) : 0 === r.childElementCount && r.textContent === v.getCellData(l, s, !0) && ("" !== (u = v.getCellValue(l, s, !0)) && e.isNumber(+u) && !isNaN(+u) && /[hsmy\:]/i.test(C) && (S = o._Expression._fromOADate(+u), isNaN(S.getTime()) || (u = e.Globalize.formatDate(S, C))), !C && y || (u = e.isString(u) ? u.replace(/^(\')(\s*[\w|=])/, "$2") : u, e.isString(u) ? u && this._isURL(u) ? r.innerHTML = '<a href="' + u + '" target="_blank">' + e.escapeHtml(u) + "</a>" : r.innerHTML = e.escapeHtml(u) : r.innerHTML = u)), f) {
+              else if (u = v.getCellValue(l, s, !1), _ = v.getCellData(l, s, !1), g = null != _ && "string" == typeof _ && "=" === _[0], y = i.rows[l] instanceof t.GroupRow, C = (f ? f.format : null) || (y ? null : m.format), v.editRange && v.editRange.contains(l, s) ? !e.isNumber(u) || m.dataMap || g || (C && (u = this._getFormattedValue(u, C)), (w = r.querySelector("input")) && (w.value = u)) : i.columns[s].dataType === e.DataType.Boolean ? (p = r.querySelector('[type="checkbox"]')) && (p.checked = v.getCellValue(l, s), p.disabled = p.disabled || !v.canEditCell(l, s)) : m.dataMap && !y ? (u = v.getCellValue(l, s, !0), (d = r.firstChild) && 3 === d.nodeType && d.nodeValue !== u && (d.nodeValue = u)) : 0 === r.childElementCount && r.textContent === v.getCellData(l, s, !0) && ("" !== (u = v.getCellValue(l, s, !0)) && e.isNumber(+u) && !isNaN(+u) && /[hsmy\:]/i.test(C) && (S = o.FlexSheet._fromOADate(+u), isNaN(S.getTime()) || (u = e.Globalize.formatDate(S, C))), !C && y || (u = e.isString(u) ? u.replace(/^(\')(\s*[\w|=])/, "$2") : u, e.isString(u) ? u && this._isURL(u) ? r.innerHTML = '<a href="' + u + '" target="_blank">' + e.escapeHtml(u) + "</a>" : r.innerHTML = e.escapeHtml(u) : r.innerHTML = u)), f) {
                 var x, T = r.style;
-                for (var k in f) "className" === k ? f.className && e.addClass(r, f.className) : "format" !== k && (x = f[k]) && (!e.hasClass(r, "wj-state-selected") && !e.hasClass(r, "wj-state-multi-selected") || "color" !== k && "backgroundColor" !== k ? T[k] = "whiteSpace" === k && "normal" === x ? "" : x : T[k] = "")
+                for (var I in f) "className" === I ? f.className && e.addClass(r, f.className) : "format" !== I && (x = f[I]) && (!e.hasClass(r, "wj-state-selected") && !e.hasClass(r, "wj-state-multi-selected") || "color" !== I && "backgroundColor" !== I ? T[I] = "whiteSpace" === I && "normal" === x ? "" : x : T[I] = "")
               }(r.style.backgroundColor || r.style.color) && (f || (f = {}, R && R._styledCells[c]), r.style.backgroundColor && (f.backgroundColor = r.style.backgroundColor), r.style.color && (f.color = r.style.color))
           }
           i.cellType === t.CellType.Cell && (l !== v._lastVisibleFrozenRow || e.hasClass(r, "wj-frozen-row") || e.addClass(r, "wj-frozen-row"), s !== v._lastVisibleFrozenColumn || e.hasClass(r, "wj-frozen-col") || e.addClass(r, "wj-frozen-col"))
-        }, i.prototype._resetCellStyle = function(e, t) {
-          ["fontFamily", "fontSize", "fontStyle", "fontWeight", "textDecoration", "textAlign", "verticalAlign", "backgroundColor", "color", "whiteSpace", "borderLeftStyle", "borderLeftColor", "borderLeftWidth", "borderRightStyle", "borderRightColor", "borderRightWidth", "borderTopStyle", "borderTopColor", "borderTopWidth", "borderBottomStyle", "borderBottomColor", "borderBottomWidth"].forEach(function(o) {
-            "textAlign" === o ? t.style.textAlign = e.getAlignment() : t.style[o] = ""
+        }, i.prototype._resetCellStyle = function(e) {
+          ["fontFamily", "fontSize", "fontStyle", "fontWeight", "textDecoration", "textAlign", "verticalAlign", "backgroundColor", "color", "whiteSpace", "borderLeftStyle", "borderLeftColor", "borderLeftWidth", "borderRightStyle", "borderRightColor", "borderRightWidth", "borderTopStyle", "borderTopColor", "borderTopWidth", "borderBottomStyle", "borderBottomColor", "borderBottomWidth"].forEach(function(t) {
+            e.style[t] = ""
           })
         }, i.prototype._getFormattedValue = function(t, o) {
           return t !== Math.round(t) && (o = o.replace(/([a-z])(\d*)(.*)/gi, "$0112$3")), e.Globalize.formatNumber(t, o, !0)
@@ -2287,12 +2374,26 @@ var __extends = this && this.__extends || function() {
   ! function(t) {
     ! function(o) {
       "use strict";
+      e._addCultureInfo("FlexSheet", {
+        insertRow: "Insert Row",
+        deleteRow: "Delete Rows",
+        insertCol: "Insert Column",
+        deleteCol: "Delete Columns",
+        convertTable: "Convert To Table",
+        copyCells: "Copy Cells",
+        fillSeries: "Fill Series",
+        fillFormat: "Fill Formatting Only",
+        fillWithoutFormat: "Fill Without Formatting"
+      });
       var n = [{
           name: "abs",
           description: "Returns the absolute value of a number."
         }, {
           name: "acos",
           description: "Returns the arccosine of a number."
+        }, {
+          name: "address",
+          description: "Obtains the address of a cell in a worksheet by given specified row and column numbers."
         }, {
           name: "and",
           description: "Returns TRUE if all of its arguments are TRUE."
@@ -2383,6 +2484,9 @@ var __extends = this && this.__extends || function() {
         }, {
           name: "index",
           description: "Uses an index to choose a value from a reference."
+        }, {
+          name: "indirect",
+          description: "Returns the reference specified by a text string. References are immediately evaluated to display their contents."
         }, {
           name: "left",
           description: "Returns the leftmost characters from a text value."
@@ -2537,9 +2641,9 @@ var __extends = this && this.__extends || function() {
         i = function(i) {
           function s(n, l) {
             var s = i.call(this, n, l) || this;
-            return s._selectedSheetIndex = -1, s._columnHeaderClicked = !1, s._addingSheet = !1, s._mouseMoveHdl = s._mouseMove.bind(s), s._clickHdl = s._click.bind(s), s._touchStartHdl = s._touchStart.bind(s), s._touchEndHdl = s._touchEnd.bind(s), s._isContextMenuKeyDown = !1, s._isClicking = !1, s._definedNames = new e.collections.ObservableArray, s._builtInTableStylesCache = null, s._needCopyToSheet = !0, s._isSorting = !1, s.selectedSheetChanged = new e.Event, s.draggingRowColumn = new e.Event, s.droppingRowColumn = new e.Event, s.loaded = new e.Event, s.unknownFunction = new e.Event, s.sheetCleared = new e.Event, s.prepareChangingRow = new e.Event, s.prepareChangingColumn = new e.Event, s.rowChanged = new e.Event, s.columnChanged = new e.Event, s._needCopyToSheet = !1, s._colorThemes = ["FFFFFF", "000000", "EEECE1", "1F497D", "4F818D", "C0504D", "9BBB59", "8064A2", "4BACC6", "F79646"], s._eCt.style.backgroundColor = "white", e.addClass(s.hostElement, "wj-flexsheet"), e.setCss(s.hostElement, {
+            return s._selectedSheetIndex = -1, s._columnHeaderClicked = !1, s._addingSheet = !1, s._mouseMoveHdl = s._mouseMove.bind(s), s._clickHdl = s._click.bind(s), s._touchStartHdl = s._touchStart.bind(s), s._touchEndHdl = s._touchEnd.bind(s), s._keydownHdl = s._keydown.bind(s), s._isContextMenuKeyDown = !1, s._isClicking = !1, s._definedNames = new e.collections.ObservableArray, s._builtInTableStylesCache = null, s._needCopyToSheet = !0, s._isSorting = !1, s._fillingData = !1, s._endDragFillOperationHdl = s._endDragFillOperation.bind(s), s._enableDragDrop = !0, s._enableFormulas = !0, s.selectedSheetChanged = new e.Event, s.draggingRowColumn = new e.Event, s.droppingRowColumn = new e.Event, s.loaded = new e.Event, s.unknownFunction = new e.Event, s.sheetCleared = new e.Event, s.prepareChangingRow = new e.Event, s.prepareChangingColumn = new e.Event, s.rowChanged = new e.Event, s.columnChanged = new e.Event, s._needCopyToSheet = !1, s._colorThemes = ["FFFFFF", "000000", "EEECE1", "1F497D", "4F818D", "C0504D", "9BBB59", "8064A2", "4BACC6", "F79646"], s._eCt.style.backgroundColor = "white", e.addClass(s.hostElement, "wj-flexsheet"), e.setCss(s.hostElement, {
               fontFamily: "Arial"
-            }), s._cf = new o._FlexSheetCellFactory, s._bndSortConverter = s._sheetSortConverter.bind(s), s.quickAutoSize = !1, s._init(), s.showSort = !1, s.allowSorting = !1, s.showGroups = !1, s.showMarquee = !0, s.showSelectedHeaders = t.HeadersVisibility.All, s.allowResizing = t.AllowResizing.Both, s.allowDragging = t.AllowDragging.None, s._needCopyToSheet = !0, s
+            }), s._cf = new o._FlexSheetCellFactory, s._bndSortConverter = s._sheetSortConverter.bind(s), s.quickAutoSize = !1, s._init(), s.showSort = !1, s.allowSorting = !1, s.showGroups = !1, s.showMarquee = !0, s.showSelectedHeaders = t.HeadersVisibility.All, s.allowResizing = t.AllowResizing.Both, s.allowDragging = t.AllowDragging.None, s.keyActionTab = t.KeyAction.CycleOut, s._needCopyToSheet = !0, s
           }
           return __extends(s, i), s.prototype._getProductInfo = function() {
             return "R20I,FlexSheet"
@@ -2612,6 +2716,24 @@ var __extends = this && this.__extends || function() {
             },
             enumerable: !0,
             configurable: !0
+          }), Object.defineProperty(s.prototype, "enableDragDrop", {
+            get: function() {
+              return this._enableDragDrop
+            },
+            set: function(e) {
+              this._enableDragDrop = e
+            },
+            enumerable: !0,
+            configurable: !0
+          }), Object.defineProperty(s.prototype, "enableFormulas", {
+            get: function() {
+              return this._enableFormulas
+            },
+            set: function(e) {
+              this._enableFormulas !== e && (this._enableFormulas = e, this.refresh())
+            },
+            enumerable: !0,
+            configurable: !0
           }), s.prototype.onSelectedSheetChanged = function(e) {
             this.selectedSheetChanged.raise(this, e)
           }, s.prototype.onDraggingRowColumn = function(e) {
@@ -2651,10 +2773,10 @@ var __extends = this && this.__extends || function() {
                   break
                 }
             if (this.selectedSheet) {
-              if (this.selectedSheet._freezeHiddenRowCnt > 0)
-                for (t = 0; t < this.selectedSheet._freezeHiddenRowCnt; t++)(o = this.rows[t]) instanceof h || (o.visible = !1);
-              if (this.selectedSheet._freezeHiddenColumnCnt > 0)
-                for (n = 0; n < this.selectedSheet._freezeHiddenColumnCnt; n++) this.columns[n].visible = !1
+              if (this.selectedSheet._freezeHiddenRows && this.selectedSheet._freezeHiddenRows.length > 0)
+                for (t = 0; t < this.selectedSheet._freezeHiddenRows.length; t++)(o = this.rows[t]) instanceof h || !this.selectedSheet._freezeHiddenRows[t] || (o.visible = !1);
+              if (this.selectedSheet._freezeHiddenCols && this.selectedSheet._freezeHiddenCols.length > 0)
+                for (n = 0; n < this.selectedSheet._freezeHiddenCols.length; n++) this.selectedSheet._freezeHiddenCols[n] && (this.columns[n].visible = !1)
             }
             i.prototype.refresh.call(this, e), this._tabHolder.adjustSize()
           }, s.prototype.setCellData = function(t, o, n, i, l) {
@@ -2671,53 +2793,45 @@ var __extends = this && this.__extends || function() {
             return t && (i.itemsSource = t, this.childItemsPath && (i.grid.childItemsPath = this.childItemsPath)), 0 === i.selectionRanges.length && i.selectionRanges.push(this.selection), i
           }, s.prototype.applyCellsStyle = function(e, t, n) {
             void 0 === n && (n = !1);
-            var i, l, s, r, a, h = t || [this.selection];
+            var i, l, s, r, a, h = null != t && t.length > 0,
+              c = t || [this.selection];
             if (this.selectedSheet) {
               if (!e && this._cloneStyle) return this.selectedSheet._styledCells = this._cloneObject(this._cloneStyle), this._cloneStyle = null, void this.refresh(!1);
-              if (h) {
-                for (t || n ? n && !this._cloneStyle && (this._cloneStyle = this._cloneObject(this.selectedSheet._styledCells)) : (this.undoStack.stackSize > 0 && (a = new o._CellStyleAction(this, this._cloneStyle)), this._cloneStyle = null), r = 0; r < h.length; r++)
-                  for (i = (s = h[r]).topRow; i <= s.bottomRow; i++)
-                    for (l = s.leftCol; l <= s.rightCol; l++) this._applyStyleForCell(i, l, e);
+              if (c) {
+                for (t || n ? n && !this._cloneStyle && (this._cloneStyle = this._cloneObject(this.selectedSheet._styledCells)) : (this.undoStack.stackSize > 0 && (a = new o._CellStyleAction(this, this._cloneStyle)), this._cloneStyle = null), r = 0; r < c.length; r++)
+                  for (i = (s = c[r]).topRow; i <= s.bottomRow; i++)
+                    for (l = s.leftCol; l <= s.rightCol; l++) this._applyStyleForCell(i, l, e, h);
                 a && (a.saveNewState(), this._undoStack._addAction(a))
               }
               t || this.refresh(!1)
             }
           }, s.prototype.freezeAtCursor = function() {
-            var e, t, o, n, i, l = this;
-            if (l.selectedSheet) {
-              if (l.selection && 0 === l.frozenRows && 0 === l.frozenColumns) {
-                if (l._ptScrl.y < 0)
-                  for (e = 0; e < l.selection.topRow - 1; e++)
-                    if (!((i = l.rows[e]) instanceof h)) {
-                      if (!(i._pos + l._ptScrl.y < 0)) {
-                        l.selectedSheet._freezeHiddenRowCnt = e;
-                        break
-                      }
-                      i.visible = !1
+            var e, t, o, n, i, l, s = this;
+            if (s.selectedSheet) {
+              if (this.selectedSheet._freezeHiddenRows = null, this.selectedSheet._freezeHiddenCols = null, s.selection && 0 === s.frozenRows && 0 === s.frozenColumns) {
+                if (s._ptScrl.y < 0)
+                  for (this.selectedSheet._freezeHiddenRows = [], e = 0; e < s.selection.topRow - 1; e++)
+                    if (!((i = s.rows[e]) instanceof h)) {
+                      if (!(i._pos + s._ptScrl.y < 0 && i.visible)) break;
+                      i.visible = !1, this.selectedSheet._freezeHiddenRows[e] = !0
                     }
-                if (l._ptScrl.x < 0)
-                  for (t = 0; t < l.selection.leftCol - 1; t++) {
-                    if (!(l.columns[t]._pos + l._ptScrl.x < 0)) {
-                      l.selectedSheet._freezeHiddenColumnCnt = t;
-                      break
-                    }
-                    l.columns[t].visible = !1
-                  }
-                o = l.selection.leftCol > 0 ? l.selection.leftCol : 0, n = l.selection.topRow > 0 ? l.selection.topRow : 0
+                if (s._ptScrl.x < 0)
+                  for (this.selectedSheet._freezeHiddenCols = [], t = 0; t < s.selection.leftCol - 1 && ((l = s.columns[t])._pos + s._ptScrl.x < 0 && l.visible); t++) l.visible = !1, this.selectedSheet._freezeHiddenCols[t] = !0;
+                o = s.selection.leftCol > 0 ? s.selection.leftCol : 0, n = s.selection.topRow > 0 ? s.selection.topRow : 0
               } else {
-                for (e = 0; e < l.frozenRows - 1; e++) l.rows[e].visible = !0;
-                for (t = 0; t < l.frozenColumns - 1; t++) l.columns[t].visible = !0;
-                l._filter.apply(), o = 0, n = 0, l.selectedSheet._freezeHiddenRowCnt = 0, l.selectedSheet._freezeHiddenColumnCnt = 0
+                for (e = 0; e < s.frozenRows - 1; e++) s.rows[e].visible = !0;
+                for (t = 0; t < s.frozenColumns - 1; t++) s.columns[t].visible = !0;
+                s._filter.apply(), o = 0, n = 0
               }
-              l.frozenRows = l.selectedSheet.grid.frozenRows = n, l.frozenColumns = l.selectedSheet.grid.frozenColumns = o, setTimeout(function() {
-                l._setFlexSheetToDirty(), l.invalidate(), l.scrollIntoView(l.selection.topRow, l.selection.leftCol)
+              s.frozenRows = s.selectedSheet.grid.frozenRows = n, s.frozenColumns = s.selectedSheet.grid.frozenColumns = o, setTimeout(function() {
+                s._setFlexSheetToDirty(), s.invalidate(), s.scrollIntoView(s.selection.topRow, s.selection.leftCol)
               }, 10)
             }
           }, s.prototype.showColumnFilter = function() {
             var e = this.selection.col > 0 ? this.selection.col : 0;
             this.columns.length > 0 && this._filter.editColumnFilter(this.columns[e])
           }, s.prototype.clear = function() {
-            this.beginUpdate(), this.selection = new t.CellRange, this.sheets.clear(), this._selectedSheetIndex = -1, this.columns.clear(), this.rows.clear(), this.columnHeaders.columns.clear(), this.rowHeaders.rows.clear(), this._undoStack.clear(), this._ptScrl = new e.Point, this._clearCalcEngine(), this._definedNames.clear(), this._builtInTableStylesCache = null, this.addUnboundSheet(), this.endUpdate()
+            this.beginUpdate(), this.selection = new t.CellRange, this.sheets.clear(), this._selectedSheetIndex = -1, this.columns.clear(), this.rows.clear(), this.columnHeaders.columns.clear(), this.rowHeaders.rows.clear(), this._undoStack.clear(), this._ptScrl = new e.Point, this._clearCalcEngine(), this._definedNames.clear(), this._builtInTableStylesCache = null, this._copiedRanges = null, this._copiedSheet = null, this._isCutting = !1, this._cutValue = null, this._reservedContent = null, this._lastVisibleFrozenRow = -1, this._lastVisibleFrozenColumn = -1, this.addUnboundSheet(), this.endUpdate()
           }, s.prototype.getSelectionFormatState = function() {
             var e, t, o = this.rows.length,
               n = this.columns.length,
@@ -2736,35 +2850,38 @@ var __extends = this && this.__extends || function() {
             }
             return i
           }, s.prototype.insertRows = function(n, i) {
-            var l, s, a, c, d, u, _ = e.isNumber(n) && n >= 0 ? n : this.selection && this.selection.topRow > -1 ? this.selection.topRow : 0,
-              g = e.isNumber(i) ? i : 1,
-              f = this.rows[_],
-              p = !1;
-            if (this.selectedSheet) {
-              if (this.rows.length > 0 ? _ >= this.rows.length && (_ = this.rows.length - 1) : _ = 0, this._clearCalcEngine(), this.finishEditing(), 0 === _ && f && f.constructor === h && (_ = 1), this.onPrepareChangingRow(new r(_, g, !0)), this.undoStack.stackSize > 0 && (l = new o._RowsChangedAction(this, _, g, !0)), this._updateCellsForUpdatingRow(this.rows.length, _, g), (!this.collectionView || 0 === this.collectionView.sortDescriptions.length) && (s = this._updateAffectedFormula(_, g, !0, !0), a = this._updateAffectedNamedRanges(_, g, !0, !0)), l && (l._affectedFormulas = s, l._affectedDefinedNameVals = a), this.collectionView) {
-                for (p = !0, d = this.itemsSource instanceof e.collections.CollectionView, this.collectionView.beginUpdate(), c = 0; c < g; c++) d ? (u = this.itemsSource.newItemCreator ? this.itemsSource.newItemCreator() : {}, this.itemsSource.sourceCollection.splice(_ - (this.allowAddNew && this.newRowAtTop ? 2 : 1), 0, u)) : (this.selectedSheet.grid.collectionView.beginUpdate(), u = {}, this.itemsSource.splice(_ - (this.allowAddNew && this.newRowAtTop ? 2 : 1), 0, u), this.itemsSource !== this.selectedSheet.grid.itemsSource && this.selectedSheet.grid.itemsSource.splice(_ - (this.allowAddNew && this.newRowAtTop ? 2 : 1), 0, u)), this.selectedSheet._orgItemsSource && this.selectedSheet._orgItemsSource.splice(_ - (this.allowAddNew && this.newRowAtTop ? 2 : 1), 0, u);
-                d || this.selectedSheet.grid.collectionView.endUpdate(), this.collectionView.endUpdate()
+            var l, s, a, c, d, u, _, g, f, p = this,
+              w = e.isNumber(n) && n >= 0 ? n : p.selection && p.selection.topRow > -1 ? p.selection.topRow : 0,
+              m = e.isNumber(i) ? i : 1,
+              C = p.rows[w],
+              b = !1;
+            if (p.selectedSheet) {
+              if (p.rows.length > 0 ? w >= p.rows.length && (w = p.rows.length - 1) : w = 0, p._clearCalcEngine(), p.finishEditing(), 0 === w && C && C.constructor === h && (w = 1), p.onPrepareChangingRow(new r(w, m, !0)), p.undoStack.stackSize > 0 && (l = new o._RowsChangedAction(p, w, m, !0)), p._updateCellsForUpdatingRow(p.rows.length, w, m), (!p.collectionView || 0 === p.collectionView.sortDescriptions.length) && (s = p._updateAffectedFormula(w, m, !0, !0), a = p._updateAffectedNamedRanges(w, m, !0, !0)), l && (l._affectedFormulas = s, l._affectedDefinedNameVals = a), p.collectionView) {
+                for (p.selectedSheet._dataView = p.collectionView._view.slice(), b = !0, d = p.itemsSource instanceof e.collections.CollectionView, g = p.autoGenerateColumns, p.autoGenerateColumns = !1, p.collectionView.beginUpdate(), d || (f = p.selectedSheet.grid.autoGenerateColumns, p.selectedSheet.grid.autoGenerateColumns = !1, p.selectedSheet.grid.collectionView.beginUpdate()), c = 0; c < m; c++) _ = w - (p.allowAddNew && p.newRowAtTop ? 2 : 1), d ? (u = p.itemsSource.newItemCreator ? p.itemsSource.newItemCreator() : {}, p.itemsSource.sourceCollection.splice(_, 0, u)) : (u = {}, p.itemsSource.splice(_, 0, u), p.itemsSource !== p.selectedSheet.grid.itemsSource && p.selectedSheet.grid.itemsSource.splice(_, 0, u)), p.selectedSheet._dataView.splice(_, 0, u);
+                p._updateItemIndexForInsertingRow(p.collectionView.sourceCollection, _, m), d || (p.selectedSheet.grid.collectionView.endUpdate(), p.selectedSheet.grid.autoGenerateColumns = f), p.collectionView.endUpdate(), p.collectionView.sortDescriptions.length > 0 && (p.collectionView._view = p.selectedSheet._dataView, p.collectionView._pgView = p.collectionView._getPageView(), d || (p.selectedSheet.grid.collectionView._view = p.selectedSheet._dataView, p.selectedSheet.grid.collectionView._pgView = p.selectedSheet.grid.collectionView._getPageView()), p._bindGrid(!1), p.selectedSheet.grid._bindGrid(!1)), setTimeout(function() {
+                  p._filter.apply()
+                }), p.autoGenerateColumns = g
               } else {
-                for (this.rows.beginUpdate(), c = 0; c < g; c++) this.rows.insert(_, new t.Row);
-                this.rows.endUpdate()
+                for (p.rows.beginUpdate(), c = 0; c < m; c++) p.rows.insert(w, new t.Row);
+                p.rows.endUpdate()
               }
-              this._updateTablesForUpdatingRow(_, g), this.selection && -1 !== this.selection.row && -1 !== this.selection.col || (this.selection = new t.CellRange(0, 0)), l && (l.saveNewState(), this._undoStack._addAction(l)), this.onRowChanged(new r(_, g, !0)), p && this.refresh()
+              p._updateTablesForUpdatingRow(w, m), p.selection && -1 !== p.selection.row && -1 !== p.selection.col || (p.selection = new t.CellRange(0, 0)), l && (l.saveNewState(), p._undoStack._addAction(l)), p.onRowChanged(new r(w, m, !0)), b && p.refresh()
             }
           }, s.prototype.deleteRows = function(n, i) {
-            var l, s, a, c, d, u, _, g, f, p = e.isNumber(i) && i >= 0 ? i : this.selection && this.selection.topRow > -1 ? this.selection.bottomRow - this.selection.topRow + 1 : 1,
-              w = e.isNumber(n) && n >= 0 ? n : this.selection && this.selection.topRow > -1 ? this.selection.topRow : -1,
-              m = e.isNumber(n) && n >= 0 ? n + p - 1 : this.selection && this.selection.topRow > -1 ? this.selection.bottomRow : -1,
-              C = !1;
-            if (this.selectedSheet && !(w >= this.rows.length) && (m = Math.min(m, this.rows.length - 1), this._clearCalcEngine(), this.finishEditing(), w > -1 && m > -1)) {
-              for (this.onPrepareChangingRow(new r(w, p, !1)), this.undoStack.stackSize > 0 && (l = new o._RowsChangedAction(this, w, p, !1)), this._updateCellsForUpdatingRow(this.rows.length, w, p, !0), s = this._updateAffectedFormula(m, m - w + 1, !1, !0), a = this._updateAffectedNamedRanges(m, m - w + 1, !1, !0), c = this._updateTablesForUpdatingRow(w, p, !0), l && (l._affectedFormulas = s, l._affectedDefinedNameVals = a, l._deletedTables = c), f = !!this.collectionView && this.itemsSource instanceof e.collections.CollectionView, this.rows.beginUpdate(); m >= w; m--)(!(d = this.rows[m]) || d.constructor !== h && d.isVisible) && (d.dataItem && this.collectionView ? (C = !0, this.collectionView.beginUpdate(), (u = this._getCvIndex(m)) > -1 && (_ = this.collectionView.items[u], f ? this.itemsSource.sourceCollection.splice(this.itemsSource.sourceCollection.indexOf(_), 1) : (this.selectedSheet.grid.collectionView.beginUpdate(), this.itemsSource.splice(this.itemsSource.indexOf(_), 1), this.itemsSource !== this.selectedSheet.grid.itemsSource && this.selectedSheet.grid.itemsSource.splice(this.itemsSource.indexOf(_), 1)), this.selectedSheet._orgItemsSource && this.selectedSheet._orgItemsSource.splice(this.selectedSheet._orgItemsSource.indexOf(_), 1)), f || this.selectedSheet.grid.collectionView.endUpdate(), this.collectionView.endUpdate()) : this.rows.removeAt(m));
-              this.rows.endUpdate(), g = this.rows.length, this.selectedSheet.selectionRanges.clear(), 0 === g ? (this.select(new t.CellRange), "move" === this.hostElement.style.cursor && (this.hostElement.style.cursor = "default")) : m === g - 1 ? this.select(new t.CellRange(m, 0, m, this.columns.length - 1)) : this.select(new t.CellRange(this.selection.topRow, this.selection.col, this.selection.topRow, this.selection.col2)), l && (l.saveNewState(), this._undoStack._addAction(l)), this.onRowChanged(new r(w, p, !1)), C && this.refresh()
+            var l, s, a, c, d, u, _, g, f, p, w, m, C, b = e.isNumber(i) && i >= 0 ? i : this.selection && this.selection.topRow > -1 ? this.selection.bottomRow - this.selection.topRow + 1 : 1,
+              y = e.isNumber(n) && n >= 0 ? n : this.selection && this.selection.topRow > -1 ? this.selection.topRow : -1,
+              S = e.isNumber(n) && n >= 0 ? n + b - 1 : this.selection && this.selection.topRow > -1 ? this.selection.bottomRow : -1,
+              R = !1;
+            if (this.selectedSheet && !(y >= this.rows.length) && (S = Math.min(S, this.rows.length - 1), this._clearCalcEngine(), this.finishEditing(), y > -1 && S > -1)) {
+              for (this.onPrepareChangingRow(new r(y, b, !1)), this.undoStack.stackSize > 0 && (l = new o._RowsChangedAction(this, y, b, !1)), this._updateCellsForUpdatingRow(this.rows.length, y, b, !0), a = this._updateAffectedFormula(S, S - y + 1, !1, !0), c = this._updateAffectedNamedRanges(S, S - y + 1, !1, !0), d = this._updateTablesForUpdatingRow(y, b, !0), l && (l._affectedFormulas = a, l._affectedDefinedNameVals = c, l._deletedTables = d), s = b === this.rows.length, w = (R = !!this.collectionView) && this.itemsSource instanceof e.collections.CollectionView, this.rows.beginUpdate(), R && (this.selectedSheet._dataView = this.collectionView._view.slice(), m = this.autoGenerateColumns, this.autoGenerateColumns = !1, this.collectionView.beginUpdate(), w || (C = this.selectedSheet.grid.autoGenerateColumns, this.selectedSheet.grid.autoGenerateColumns = !1, this.selectedSheet.grid.collectionView.beginUpdate())); S >= y; S--)(!(u = this.rows[S]) || (u.constructor !== h || s) && u.isVisible) && (u.dataItem && this.collectionView ? (_ = this._getCvIndex(S)) > -1 && (g = this.collectionView.items[_], w ? (f = this.itemsSource.sourceCollection.indexOf(g), this.itemsSource.sourceCollection.splice(f, 1)) : (f = this.itemsSource.indexOf(g), this.itemsSource.splice(f, 1), this.itemsSource !== this.selectedSheet.grid.itemsSource && this.selectedSheet.grid.itemsSource.splice(f, 1)), this.selectedSheet._dataView.splice(this.selectedSheet._dataView.indexOf(g), 1), this._updateItemIndexForRemovingRow(this.collectionView.sourceCollection, f)) : this.rows.removeAt(S));
+              R && (w || (this.selectedSheet.grid.collectionView.endUpdate(), this.selectedSheet.grid.autoGenerateColumns = C), this.collectionView.endUpdate(), this.collectionView.sortDescriptions.length > 0 && (this.collectionView._view = this.selectedSheet._dataView, this.collectionView._pgView = this.collectionView._getPageView(), w || (this.selectedSheet.grid.collectionView._view = this.selectedSheet._dataView, this.selectedSheet.grid.collectionView._pgView = this.selectedSheet.grid.collectionView._getPageView()), this._bindGrid(!1), this.selectedSheet.grid._bindGrid(!1)), this.autoGenerateColumns = m), this.rows.endUpdate(), p = this.rows.length, this.selectedSheet.selectionRanges.clear(), 0 === p ? (this.select(new t.CellRange), "move" === this.hostElement.style.cursor && (this.hostElement.style.cursor = "default")) : S === p - 1 ? this.select(new t.CellRange(S, 0, S, this.columns.length - 1)) : this.select(new t.CellRange(this.selection.topRow, this.selection.col, this.selection.topRow, this.selection.col2)), l && (l.saveNewState(), this._undoStack._addAction(l)), this.onRowChanged(new r(y, b, !1)), R && this.refresh()
             }
           }, s.prototype.insertColumns = function(n, i) {
             var l, s, a, h, c, d, u = e.isNumber(n) && n >= 0 ? n : this.selection && this.selection.leftCol > -1 ? this.selection.leftCol : 0,
               _ = e.isNumber(i) ? i : 1;
             if (this.selectedSheet) {
               for (this.columns.length > 0 ? u >= this.columns.length && (u = this.columns.length - 1) : u = 0, this._clearCalcEngine(), this.finishEditing(), this.onPrepareChangingColumn(new r(u, _, !0)), this.undoStack.stackSize > 0 && (l = new o._ColumnsChangedAction(this, u, _, !0)), this._updateCellsForUpdatingColumn(this.columns.length, u, _), c = this._updateAffectedFormula(u, _, !0, !1), d = this._updateAffectedNamedRanges(u, _, !0, !1), l && (l._affectedFormulas = c, l._affectedDefinedNameVals = d), this.columns.beginUpdate(), a = 0; a < _; a++)(s = new t.Column).isRequired = !1, this.itemsSource && (s.binding = this._getUniqueColumnName(), (h = this.allowAddNew && this.newRowAtTop ? this.rows[1] : this.rows[0]) && (h._ubv || (h._ubv = {}), h._ubv[s._hash] = s.header)), this.columns.insert(u, s);
-              this.columns.endUpdate(), this._sortManager._updateSortSortDescription(u, _), this._sortManager.commitSort(!1), this._updateTablesForUpdatingColumn(u, _), this.selection && -1 !== this.selection.row && -1 !== this.selection.col || (this.selection = new t.CellRange(0, 0)), l && (l.saveNewState(), this._undoStack._addAction(l)), this.onColumnChanged(new r(u, _, !0))
+              this.columns.endUpdate(), this.selectedSheet._filterDefinition = this._filter.filterDefinition, this._sortManager._updateSortSortDescription(u, _), this._sortManager.commitSort(!1), this._updateTablesForUpdatingColumn(u, _), this.selection && -1 !== this.selection.row && -1 !== this.selection.col || (this.selection = new t.CellRange(0, 0)), l && (l.saveNewState(), this._undoStack._addAction(l)), this.onColumnChanged(new r(u, _, !0))
             }
           }, s.prototype.deleteColumns = function(n, i) {
             var l, s, a, h, c, d = e.isNumber(i) && i >= 0 ? i : this.selection && this.selection.leftCol > -1 ? this.selection.rightCol - this.selection.leftCol + 1 : 1,
@@ -2772,33 +2889,33 @@ var __extends = this && this.__extends || function() {
               _ = e.isNumber(n) && n >= 0 ? n + d - 1 : this.selection && this.selection.leftCol > -1 ? this.selection.rightCol : -1;
             if (this.selectedSheet && !(u >= this.columns.length) && (_ = Math.min(_, this.columns.length - 1), this._clearCalcEngine(), this.finishEditing(), u > -1 && _ > -1)) {
               for (this.onPrepareChangingColumn(new r(u, d, !1)), this.undoStack.stackSize > 0 && (s = new o._ColumnsChangedAction(this, u, d, !1)), this._updateCellsForUpdatingColumn(this.columns.length, u, d, !0), a = this._updateAffectedFormula(_, _ - u + 1, !1, !1), h = this._updateAffectedNamedRanges(_, _ - u + 1, !1, !1), c = this._updateTablesForUpdatingColumn(u, d, !0), s && (s._affectedFormulas = a, s._affectedDefinedNameVals = h, s._deletedTables = c), this.columns.beginUpdate(); _ >= u; _--) this.columns[_].isVisible && (this.columns.removeAt(_), this._sortManager.deleteSortLevel(_));
-              this.columns.endUpdate(), this._sortManager._updateSortSortDescription(u, d, !1), this._sortManager.commitSort(!1), l = this.columns.length, this.selectedSheet.selectionRanges.clear(), 0 === l ? (this.select(new t.CellRange), "move" === this.hostElement.style.cursor && (this.hostElement.style.cursor = "default")) : _ === l - 1 ? this.select(new t.CellRange(0, _, this.rows.length - 1, _)) : this.select(new t.CellRange(this.selection.row, this.selection.leftCol, this.selection.row2, this.selection.leftCol)), s && (s.saveNewState(), this._undoStack._addAction(s)), this.onColumnChanged(new r(u, d, !1))
+              this.columns.endUpdate(), this.selectedSheet._filterDefinition = this._filter.filterDefinition, this._sortManager._updateSortSortDescription(u, d, !1), this._sortManager.commitSort(!1), l = this.columns.length, this.selectedSheet.selectionRanges.clear(), 0 === l ? (this.select(new t.CellRange), "move" === this.hostElement.style.cursor && (this.hostElement.style.cursor = "default")) : _ === l - 1 ? this.select(new t.CellRange(0, _, this.rows.length - 1, _)) : this.select(new t.CellRange(this.selection.row, this.selection.leftCol, this.selection.row2, this.selection.leftCol)), s && (s.saveNewState(), this._undoStack._addAction(s)), this.onColumnChanged(new r(u, d, !1))
             }
           }, s.prototype.mergeRange = function(e, n) {
             void 0 === n && (n = !1);
-            var i, l, s, r = e || this.selection,
-              a = -1,
-              h = -1;
+            var i, l, s, r, a, h = e || this.selection,
+              c = -1,
+              d = -1;
             if (this.selectedSheet) {
-              if (r) {
-                if (1 === r.rowSpan && 1 === r.columnSpan) return;
-                for (i = r.topRow; i <= r.bottomRow; i++)
-                  for (l = r.leftCol; l <= r.rightCol; l++)
+              if (h) {
+                if (1 === h.rowSpan && 1 === h.columnSpan) return;
+                for (i = h.topRow; i <= h.bottomRow; i++)
+                  for (l = h.leftCol; l <= h.rightCol; l++)
                     if (this.selectedSheet.findTable(i, l)) return;
-                if (e || n || (this.undoStack.stackSize > 0 && (s = new o._CellMergeAction(this)), this.hostElement.focus()), !this._resetMergedRange(r)) {
-                  for (i = r.topRow; i <= r.bottomRow; i++)
-                    if (this.rows[i].isVisible) {
-                      a = i;
+                if (e || n || (this.undoStack.stackSize > 0 && (a = new o._CellMergeAction(this)), this.hostElement.focus()), !this._resetMergedRange(h)) {
+                  for (i = h.topRow; i <= h.bottomRow; i++)
+                    if ((s = this.rows[i]) && s.isVisible) {
+                      c = i;
                       break
                     }
-                  for (l = r.leftCol; l <= r.rightCol; l++)
-                    if (this.columns[l].isVisible) {
-                      h = l;
+                  for (l = h.leftCol; l <= h.rightCol; l++)
+                    if ((r = this.columns[l]) && r.isVisible) {
+                      d = l;
                       break
                     }
-                  a > -1 && h > -1 && this.selectedSheet._mergedRanges.push(new t.CellRange(a, h, r.bottomRow, r.rightCol))
+                  c > -1 && d > -1 && this.selectedSheet._mergedRanges.push(new t.CellRange(c, d, h.bottomRow, h.rightCol))
                 }
-                s && (s.saveNewState(), this._undoStack._addAction(s))
+                a && (a.saveNewState(), this._undoStack._addAction(a))
               }
               e || this.refresh()
             }
@@ -2814,14 +2931,12 @@ var __extends = this && this.__extends || function() {
             void 0 === n && (n = !1);
             var l, s, r = i && i !== this.selectedSheet ? i.grid.columns[o] : this.columns[o],
               a = this._getCellStyle(t, o, i);
-            return l = a && a.format ? a.format : "", s = i && i !== this.selectedSheet ? i.grid.getCellData(t, o, !1) : this.getCellData(t, o, !1), e.isString(s) && "=" === s[0] && (s = this._evaluate(s, n ? l : "", i, t, o)), n ? (l || null == s || e.isPrimitive(s) || (a ? a.format = s.format : this._applyStyleForCell(t, o, {
-              format: s.format
-            })), s = this._formatEvaluatedResult(s, r, l)) : null == s || e.isPrimitive(s) || (s = s.value), null == s ? "" : s
+            return l = a && a.format ? a.format : "", s = i && i !== this.selectedSheet ? i.grid.getCellData(t, o, !1) : this.getCellData(t, o, !1), e.isString(s) && "=" === s[0] && (s = this._evaluate(s, n ? l : "", i, t, o)), n ? (l || null == s || e.isPrimitive(s) || (l = s.format), s = this._formatEvaluatedResult(s, r, l)) : null == s || e.isPrimitive(s) || (s = s.value), null == s ? "" : s
           }, s.prototype.showFunctionList = function(t) {
             var o, n, i = this,
               l = i._cumulativeOffset(t),
               s = i._cumulativeOffset(i._root);
-            i._functionTarget = e.tryCast(t, HTMLInputElement), i._functionTarget && i._functionTarget.value && "=" === i._functionTarget.value[0] ? (i._functionList._cv.filter = function(e) {
+            i._enableFormulas && (i._functionTarget = e.tryCast(t, HTMLInputElement), i._functionTarget && i._functionTarget.value && "=" === i._functionTarget.value[0] ? (i._functionList._cv.filter = function(e) {
               var t, o = e.actualvalue.toLowerCase(),
                 n = i._getCurrentFormulaIndex(i._functionTarget.value);
               return -1 === n && (n = 0), (t = i._functionTarget.value.substr(n + 1).trim().toLowerCase()).length > 0 && 0 === o.indexOf(t) || "=" === i._functionTarget.value
@@ -2833,7 +2948,7 @@ var __extends = this && this.__extends || function() {
             }), i._functionListHost.scrollTop = 0, i._functionListHost.offsetHeight + o > s.y + i._root.offsetHeight ? o = o - t.clientHeight - i._functionListHost.offsetHeight - 5 : o += 5, i._functionListHost.offsetWidth + n > s.x + i._root.offsetWidth && (n = s.x + i._root.offsetWidth - i._functionListHost.offsetWidth), e.setCss(i._functionListHost, {
               top: o,
               left: n
-            })) : i.hideFunctionList()
+            })) : i.hideFunctionList())
           }, s.prototype.hideFunctionList = function() {
             this._functionListHost.style.display = "none"
           }, s.prototype.selectPreviousFunction = function() {
@@ -2843,14 +2958,14 @@ var __extends = this && this.__extends || function() {
           }, s.prototype.applyFunctionToCell = function() {
             var e, t = this;
             t._functionTarget && (-1 === (e = t._getCurrentFormulaIndex(t._functionTarget.value)) ? e = t._functionTarget.value.indexOf("=") : e += 1, t._functionTarget.value = t._functionTarget.value.substring(0, e) + t._functionList.selectedValue + "(", "=" !== t._functionTarget.value[0] && (t._functionTarget.value = "=" + t._functionTarget.value), t._functionTarget.focus(), t.hideFunctionList())
-          }, s.prototype.save = function(e) {
-            var t = this._saveToWorkbook();
-            return e && t.save(e), t
-          }, s.prototype.saveAsync = function(e, t, o) {
-            var n = this._saveToWorkbook();
-            return n.saveAsync(e, t, o), n
-          }, s.prototype.saveToWorkbookOM = function() {
-            return this._saveToWorkbook()._serialize()
+          }, s.prototype.save = function(e, t) {
+            var o = this._saveToWorkbook(t);
+            return e && o.save(e), o
+          }, s.prototype.saveAsync = function(e, t, o, n) {
+            var i = this._saveToWorkbook(n);
+            return i.saveAsync(e, t, o), i
+          }, s.prototype.saveToWorkbookOM = function(e) {
+            return this._saveToWorkbook(e)._serialize()
           }, s.prototype.load = function(t) {
             var o, n, i = this;
             if (t instanceof Blob)(n = new FileReader).onload = function() {
@@ -2905,7 +3020,7 @@ var __extends = this && this.__extends || function() {
             this._calcEngine.addFunction(e, t, n, i), this._addCustomFunctionDescription(e, o)
           }, s.prototype.dispose = function() {
             var e = window.navigator.userAgent;
-            this._needCopyToSheet = !1, document.removeEventListener("mousemove", this._mouseMoveHdl), document.body.removeEventListener("click", this._clickHdl), (e.match(/iPad/i) || e.match(/iPhone/i)) && (document.body.removeEventListener("touchstart", this._touchStartHdl), document.body.removeEventListener("touchend", this._touchEndHdl)), this.hideFunctionList(), i.prototype.dispose.call(this)
+            this._needCopyToSheet = !1, this.removeEventListener(document.body, "mousemove", this._mouseMoveHdl), this.removeEventListener(document.body, "keydown", this._keydownHdl), this.removeEventListener(document.body, "click", this._clickHdl), (e.match(/iPad/i) || e.match(/iPhone/i)) && (this.removeEventListener(document.body, "touchstart", this._touchStartHdl), this.removeEventListener(document.body, "touchend", this._touchEndHdl)), this.hideFunctionList(), i.prototype.dispose.call(this)
           }, s.prototype.getClipString = function(o) {
             var n, l, s, r, a, h, c = "",
               d = !0;
@@ -2940,16 +3055,16 @@ var __extends = this && this.__extends || function() {
               }
             return c
           }, s.prototype.setClipString = function(o, n) {
-            var l, s, r, a, h, c, d, u, _, g, f, p, w, m, C, b, y, S, R, v, x, T, k, I = null == n,
-              E = !1,
-              D = !1;
+            var l, s, r, a, h, c, d, u, _, g, f, p, w, m, C, b, y, S, R, v, x, T, I, k = null == n,
+              A = !1,
+              E = !1;
             if (this.selectedSheet) {
-              if (n = n ? e.asType(n, t.CellRange) : this.selection, (o = e.asString(o).replace(/\r\n/g, "\n").replace(/\r/g, "\n")) && "\n" == o[o.length - 1] && (o = o.substring(0, o.length - 1)), x = o, u = this._edtHdl._parseClipString(e.asString(o)), I && !n.isSingleCell && u.length && this._edtHdl._expandClipRows(u, n), D = this._containsMultiLineText(u), (!this._copiedRanges || 0 === this._copiedRanges.length || x.trim() !== this._getRangeString(this._copiedRanges, this._copiedSheet).trim() && !this._containsRandFormula(this._copiedRanges, this._copiedSheet) || this._cutValue) && !D) return x !== this._cutValue && (this._cutValue = null, i.prototype.setClipString.call(this, o)), this._copiedRanges = null, void(this._copiedSheet = null);
-              if (T = this._getRangeString(this._copiedRanges, this._copiedSheet, !1), (T = e.asString(T).replace(/\r\n/g, "\n").replace(/\r/g, "\n")) && "\n" == T[T.length - 1] && (T = T.substring(0, T.length - 1)), u = this._edtHdl._parseClipString(e.asString(T)), I && !n.isSingleCell && u.length && this._edtHdl._expandClipRows(u, n), (a = n.topRow + u.length - 1) >= this.rows.length && (a = this.rows.length - 1), (h = n.leftCol + u[0].length - 1) >= this.columns.length && (h = this.columns.length - 1), l = new t.CellRange(n.topRow, n.leftCol, a, h), !this.onPasting(new t.CellRangeEventArgs(this.cells, l))) return this._cutValue = null, this._copiedRanges = null, this._copiedSheet = null, !1;
-              if (this.beginUpdate(), D || !this._copiedRanges || this._copiedRanges.length > 1 || 0 === this._copiedRanges.length)
+              if (n = n ? e.asType(n, t.CellRange) : this.selection, (o = e.asString(o).replace(/\r\n/g, "\n").replace(/\r/g, "\n")) && "\n" == o[o.length - 1] && (o = o.substring(0, o.length - 1)), x = o, u = this._edtHdl._parseClipString(e.asString(o)), k && !n.isSingleCell && u.length && this._edtHdl._expandClipRows(u, n), E = this._containsMultiLineText(u), (!this._copiedRanges || 0 === this._copiedRanges.length || x.trim() !== this._getRangeString(this._copiedRanges, this._copiedSheet).trim() && !this._containsRandFormula(this._copiedRanges, this._copiedSheet) || this._cutValue) && !E) return x !== this._cutValue && (this._cutValue = null, i.prototype.setClipString.call(this, o)), this._copiedRanges = null, void(this._copiedSheet = null);
+              if (T = this._getRangeString(this._copiedRanges, this._copiedSheet, !1), (T = e.asString(T).replace(/\r\n/g, "\n").replace(/\r/g, "\n")) && "\n" == T[T.length - 1] && (T = T.substring(0, T.length - 1)), u = this._edtHdl._parseClipString(e.asString(T)), k && !n.isSingleCell && u.length && this._edtHdl._expandClipRows(u, n), (a = n.topRow + u.length - 1) >= this.rows.length && (a = this.rows.length - 1), (h = n.leftCol + u[0].length - 1) >= this.columns.length && (h = this.columns.length - 1), l = new t.CellRange(n.topRow, n.leftCol, a, h), !this.onPasting(new t.CellRangeEventArgs(this.cells, l))) return this._cutValue = null, this._copiedRanges = null, this._copiedSheet = null, !1;
+              if (this.beginUpdate(), E || !this._copiedRanges || this._copiedRanges.length > 1 || 0 === this._copiedRanges.length)
                 for (s = n.topRow, c = (S = this._copiedRanges && this._copiedRanges.length > 1 ? this._copiedRanges[0] : new t.CellRange).topRow, f = 0; f < u.length && s < this.rows.length; f++, s++)
                   if (this.rows[s].isVisible) {
-                    for (_ = u[f], d = S.leftCol, m = (r = n.leftCol) - d, p = 0; p < _.length && r < this.columns.length; p++, r++) this.columns[r].isVisible ? (g = _[p], this.columns[r].isReadOnly || this.rows[s].isReadOnly || (E = this._postSetClipStringProcess(g, s, r, c, d), l.row2 = Math.max(l.row2, s), l.col2 = Math.max(l.col2, r)), d >= 0 && d++) : p--;
+                    for (_ = u[f], d = S.leftCol, m = (r = n.leftCol) - d, p = 0; p < _.length && r < this.columns.length; p++, r++) this.columns[r].isVisible ? (g = _[p], this.columns[r].isReadOnly || this.rows[s].isReadOnly || (A = this._postSetClipStringProcess(g, s, r, c, d), l.row2 = Math.max(l.row2, s), l.col2 = Math.max(l.col2, r)), d >= 0 && d++) : p--;
                     c >= 0 && c++
                   } else f--;
               else if (this._copiedRanges && 1 === this._copiedRanges.length)
@@ -2961,24 +3076,26 @@ var __extends = this && this.__extends || function() {
                       if (this.columns[r] && this.columns[r].isVisible) {
                         if (v >= S.columnSpan && (v %= S.columnSpan), !this._copiedSheet.grid.columns[S.leftCol + v]) break;
                         if (m = r - S.leftCol - v, !this.columns[r].isReadOnly && !this.rows[s].isReadOnly) {
-                          if (null != this._copiedSheet.grid.columns[S.leftCol + v].dataMap, g = _[p], k = this._getCellStyle(S.topRow + R, S.leftCol + v, this._copiedSheet), g && "string" == typeof g && "=" === g[0] && (0 !== w || 0 !== m)) try {
+                          if (null != this._copiedSheet.grid.columns[S.leftCol + v].dataMap, g = _[p], I = this._getCellStyle(S.topRow + R, S.leftCol + v, this._copiedSheet), g && "string" == typeof g && "=" === g[0] && (0 !== w || 0 !== m)) try {
                             C = this._calcEngine._parse(g), b = new t.CellRange(S.topRow + R, S.leftCol + v), y = new t.CellRange(S.topRow + R + w, S.leftCol + v + m), C._moveCellRangeExp(this.selectedSheetIndex, b, y, !1, !0) && (g = "=" + C._getStringExpression())
                           } catch (e) {}
-                          this._copiedSheet.grid.columns[S.leftCol + v].format && (k ? k.format || (k.format = this._copiedSheet.grid.columns[S.leftCol + v].format) : k = {
+                          this._copiedSheet.grid.columns[S.leftCol + v].format && !this.columns[r].format && (I ? I.format || (I.format = this._copiedSheet.grid.columns[S.leftCol + v].format) : I = {
                             format: this._copiedSheet.grid.columns[S.leftCol + v].format
-                          }), E = this._postSetClipStringProcess(g, s, r, S.topRow + R, S.leftCol + v, k), l.row2 = Math.max(l.row2, s), l.col2 = Math.max(l.col2, r)
+                          }), A = this._postSetClipStringProcess(g, s, r, S.topRow + R, S.leftCol + v, I), l.row2 = Math.max(l.row2, s), l.col2 = Math.max(l.col2, r)
                         }
                         v++
                       } else p--;
                     R++
                   } else f--;
-              this._isCutting && (this._delCutData(u.length, u[0].length), this._isCutting = !1, this._cutValue = x, this._copiedRanges = null, this._copiedSheet = null), this.endUpdate(), this.collectionView && E && this.collectionView.refresh(), this.select(l), this.onPasted(new t.CellRangeEventArgs(this.cells, l))
+              this._isCutting && (this._delCutData(u.length, u[0].length), this._isCutting = !1, this._cutValue = x, this._copiedRanges = null, this._copiedSheet = null), this.endUpdate(), this.collectionView && A && this.collectionView.refresh(), this.select(l), this.onPasted(new t.CellRangeEventArgs(this.cells, l))
             } else i.prototype.setClipString.call(this, o, n)
           }, s.prototype.getBuiltInTableStyle = function(e) {
             var t;
             return null == this._builtInTableStylesCache && (this._builtInTableStylesCache = {}), null == (t = this._builtInTableStylesCache[e.toLowerCase()]) && (t = this._createBuiltInTableStyle(e), Object.freeze(t), this._builtInTableStylesCache[e.toLowerCase()] = t), t
           }, s.prototype._getCvIndex = function(e) {
             return e > -1 && this.collectionView ? this.rows[e] instanceof h ? e : i.prototype._getCvIndex.call(this, e) : -1
+          }, s.prototype._bindGrid = function(e) {
+            this.itemsSource && i.prototype._bindGrid.call(this, e)
           }, s.prototype._init = function() {
             var n = this,
               i = this,
@@ -2986,13 +3103,15 @@ var __extends = this && this.__extends || function() {
               s = function(e) {
                 document.removeEventListener("mouseup", s), i._mouseUp(e)
               };
-            i.hostElement.setAttribute("tabindex", "-1"), i._divContainer = i.hostElement.querySelector('[wj-part="container"]'), i._tabHolder = new o._TabHolder(i.hostElement.querySelector('[wj-part="tab-holder"]'), i), i._contextMenu = new o._ContextMenu(i.hostElement.querySelector('[wj-part="context-menu"]'), i), i._gpCells = new a(i, t.CellType.Cell, i.rows, i.columns, i._eCt), i._gpCHdr = new a(i, t.CellType.ColumnHeader, i._hdrRows, i.columns, i._eCHdrCt), i._gpRHdr = new a(i, t.CellType.RowHeader, i.rows, i._hdrCols, i._eRHdrCt), i._gpTL = new a(i, t.CellType.TopLeft, i._hdrRows, i._hdrCols, i._eTLCt), i._sortManager = new o.SortManager(i), i._filter = new o.FlexSheetFilter(i), i._filter.filterApplied.addHandler(function() {
+            i.hostElement.setAttribute("tabindex", "-1"), i._divContainer = i.hostElement.querySelector('[wj-part="container"]'), i._tabHolder = new o._TabHolder(i.hostElement.querySelector('[wj-part="tab-holder"]'), i), i._contextMenu = new o._ContextMenu(i.hostElement.querySelector('[wj-part="context-menu"]'), i), i._gpCells = new a(i, t.CellType.Cell, i.rows, i.columns, i._eCt), i._gpCHdr = new a(i, t.CellType.ColumnHeader, i._hdrRows, i.columns, i._eCHdrCt), i._gpRHdr = new a(i, t.CellType.RowHeader, i.rows, i._hdrCols, i._eRHdrCt), i._gpTL = new a(i, t.CellType.TopLeft, i._hdrRows, i._hdrCols, i._eTLCt), i._syncSelection = i._flexSheetSyncSelection.bind(i), i._sortManager = new o.SortManager(i), i._filter = new o.FlexSheetFilter(i), i._filter.filterApplied.addHandler(function() {
               i.selectedSheet && (i.selectedSheet._filterDefinition = i._filter.filterDefinition, i.selectedSheet.itemsSource && (i.selectedSheet._storeRowSettings(), i.selectedSheet._setRowSettings()))
             }), i._calcEngine = new o._CalcEngine(i), i._calcEngine.unknownFunction.addHandler(function(e, t) {
               i.onUnknownFunction(t)
             }, i), i._initFuncsList(), i._undoStack = new o.UndoStack(i), i.loadedRows.addHandler(function() {
-              if (i.itemsSource && !(i.rows[0] instanceof h)) {
-                for (var e, o = new h, n = 0; n < i.columns.length; n++) e = i.columns[n], o._ubv || (o._ubv = {}), o._ubv[e._hash] = e.header;
+              if (i.collectionView && !(i.rows[0] instanceof h)) {
+                var e, o = new h;
+                o.isReadOnly = !0;
+                for (var n = 0; n < i.columns.length; n++) e = i.columns[n], o._ubv || (o._ubv = {}), o._ubv[e._hash] = e.header;
                 i.rows[0] instanceof t._NewRowTemplate && i.newRowAtTop ? i.rows.insert(1, o) : i.rows.insert(0, o)
               }
               i._filter && i._filter.apply()
@@ -3021,13 +3140,40 @@ var __extends = this && this.__extends || function() {
               i._columnHeaderClicked = !1
             }), i.addEventListener(i.hostElement, "contextmenu", function(o) {
               var n, l, s, r, a, h, c, d, u;
-              !o.defaultPrevented && i.selectedSheet && (i.activeEditor || (i._isContextMenuKeyDown && i.selection.row > -1 && i.selection.col > -1 && i.rows.length > 0 && i.columns.length > 0 ? (s = i.columns[i.selection.col], l = i.rows[i.selection.row], c = i._cumulativeOffset(i.hostElement), d = i._cumulativeScrollOffset(i.hostElement), r = s.pos + i._eCt.offsetLeft + c.x + s.renderSize / 2 + i._ptScrl.x, a = l.pos + i._eCt.offsetTop + c.y + l.renderSize / 2 + i._ptScrl.y, h = new e.Point(r - d.x, a - d.y), n = i.hitTest(r, a), i._isContextMenuKeyDown = !1) : n = i.hitTest(o), o.preventDefault(), n && n.cellType !== t.CellType.None && (n.cellType === t.CellType.TopLeft ? u = new t.CellRange(0, 0, i.rows.length - 1, i.columns.length - 1) : n.cellType === t.CellType.Cell && (u = new t.CellRange(n.row, n.col)).intersects(i.selection) && (u = null), u && (i.selection = u, i.selectedSheet && (i.selectedSheet.selectionRanges.clear(), i.selectedSheet.selectionRanges.push(u))), i._contextMenu.show(o, h))))
+              if (!o.defaultPrevented && i.selectedSheet) {
+                if (!i.activeEditor && (i._isContextMenuKeyDown && i.selection.row > -1 && i.selection.col > -1 && i.rows.length > 0 && i.columns.length > 0 ? (s = i.columns[i.selection.col], l = i.rows[i.selection.row], c = i._cumulativeOffset(i.hostElement), d = i._cumulativeScrollOffset(i.hostElement), r = s.pos + i._eCt.offsetLeft + c.x + s.renderSize / 2 + i._ptScrl.x, a = l.pos + i._eCt.offsetTop + c.y + l.renderSize / 2 + i._ptScrl.y, h = new e.Point(r - d.x, a - d.y), n = i.hitTest(r, a)) : n = i.hitTest(o), o.preventDefault(), n && n.cellType !== t.CellType.None)) {
+                  switch (n.cellType) {
+                    case t.CellType.TopLeft:
+                      u = new t.CellRange(0, 0, i.rows.length - 1, i.columns.length - 1);
+                      break;
+                    case t.CellType.RowHeader:
+                      u = new t.CellRange(n.row, 0, n.row, i.columns.length - 1);
+                      break;
+                    case t.CellType.ColumnHeader:
+                      u = new t.CellRange(i.itemsSource && i.rows[0] && !i.rows[0].isVisible ? 1 : 0, n.col, i.rows.length - 1, n.col);
+                      break;
+                    case t.CellType.Cell:
+                      u = new t.CellRange(n.row, n.col)
+                  }
+                  i.selection.contains(u) && (u = null), u && (i.selectedSheet && (i.selectedSheet.selectionRanges.clear(), i.selectedSheet.selectionRanges.push(u)), i.selection = u), i._contextMenu.show(o, h)
+                }
+                i._isContextMenuKeyDown = !1
+              }
             }), i.prepareCellForEdit.addHandler(i._prepareCellForEditHandler, i), i.cellEditEnded.addHandler(function(e, t) {
               (!t.data || 46 !== t.data.keyCode && 8 !== t.data.keyCode) && setTimeout(function() {
                 i.hideFunctionList()
               }, 200)
             }), i.cellEditEnding.addHandler(function(e, t) {
-              (!t.data || 46 !== t.data.keyCode && 8 !== t.data.keyCode) && i._clearCalcEngine()
+              if (!t.data || 46 !== t.data.keyCode && 8 !== t.data.keyCode) {
+                var n, l, s;
+                n = i.getCellData(t.row, t.col, !1), l = i.cellFactory.getEditorValue(i), null != n && "" !== n || null == l || "" === l || isNaN(+l) || (s = i._updateFormulaBoundaryForEditingCell(t.row, t.col), i._undoStack._pendingAction && i._undoStack._pendingAction instanceof o._EditAction && (i._undoStack._pendingAction._affectedFormulas = s)), i._clearCalcEngine()
+              }
+            }), i.rowEditEnding.addHandler(function(e, t) {
+              var o = i.collectionView;
+              o && (i._orgRowVisible = i.rows[t.row].visible, o.sortDescriptions.length > 0 && (i.selectedSheet._dataView = o._view.slice(), i.selectedSheet._scrollPosition = i.scrollPosition))
+            }), i.rowEditEnded.addHandler(function(t, o) {
+              var n = i.collectionView;
+              n && (n.sortDescriptions.length > 0 && (n._view = i.selectedSheet._dataView, n._pgView = n._getPageView(), i.itemsSource instanceof e.collections.CollectionView || (i.selectedSheet.grid.collectionView._view = i.selectedSheet._dataView, i.selectedSheet.grid.collectionView._pgView = i.selectedSheet.grid.collectionView._getPageView()), i._bindGrid(!1), i.selectedSheet.grid._bindGrid(!1), i.scrollPosition = i.selectedSheet._scrollPosition), i.rows[o.row].visible = i._orgRowVisible)
             }), i.pasting.addHandler(function() {
               i._needCopyToSheet = !1, i._isPasting = !0
             }), i.pasted.addHandler(function() {
@@ -3057,28 +3203,24 @@ var __extends = this && this.__extends || function() {
                           e.assert(!1, "Cut operation cannot be used on multiple selections.")
                         } else s = !0, r = !0;
                       else r && (r = !1);
-                  i.selectedSheet.selectionRanges.length > 0 && (1 === i.selectedSheet.selectionRanges.length ? (i.finishEditing(), n = new t.CellRangeEventArgs(i.cells, i.selection), i.onCopying(n) && (i._cutValue = null, l = i.getClipString(), i._isCutting = !0, e.Clipboard.copy(l), i.onCopied(n))) : e.assert(!1, "Cut operation cannot be used on multiple selections."))
+                  i.selectedSheet.selectionRanges.length > 1 ? e.assert(!1, "Cut operation cannot be used on multiple selections.") : (i.finishEditing(), n = new t.CellRangeEventArgs(i.cells, i.selection), i.onCopying(n) && (i._cutValue = null, l = i.getClipString(), i._isCutting = !0, e.Clipboard.copy(l), i.onCopied(n)))
                 }
                 o.keyCode === e.Key.Space && i.selection.isValid && i.selectionMode === t.SelectionMode.CellRange && i.select(new t.CellRange(0, i.selection.col, i.rows.length - 1, i.selection.col))
               }
-              if (o.keyCode === e.Key.Escape && i._contextMenu.hide(), (93 === o.keyCode || o.shiftKey && 121 === o.keyCode) && (i._isContextMenuKeyDown = !0), i.selectedSheet && !i._edtHdl.activeEditor) switch (o.keyCode) {
-                case e.Key.Left:
-                case e.Key.Right:
-                case e.Key.Up:
-                case e.Key.Down:
-                case e.Key.PageUp:
-                case e.Key.PageDown:
-                case e.Key.Home:
-                case e.Key.End:
-                case e.Key.Tab:
-                case e.Key.Enter:
-                  i.selectedSheet._addSelection(i.selection), i.scrollIntoView(i.selection.row, i.selection.col)
-              }
-            }), i.addEventListener(document.body, "keydown", function(t) {
-              !i._isDescendant(i.hostElement, t.target) && i.hostElement !== t.target || i._edtHdl.activeEditor || !i.selectedSheet || t.keyCode !== e.Key.Delete && t.keyCode !== e.Key.Back || (i._delSeletionContent(t), t.preventDefault()), i._contextMenu.visible && (t.keyCode === e.Key.Down && i._contextMenu.moveToNext(), t.keyCode === e.Key.Up && i._contextMenu.moveToPrev(), t.keyCode === e.Key.Home && i._contextMenu.moveToFirst(), t.keyCode === e.Key.End && i._contextMenu.moveToLast(), t.keyCode === e.Key.Enter && i._contextMenu.handleContextMenu(), t.preventDefault())
-            }, !0), document.body.addEventListener("click", i._clickHdl), document.addEventListener("mousemove", i._mouseMoveHdl), (l.match(/iPad/i) || l.match(/iPhone/i)) && (document.body.addEventListener("touchstart", i._touchStartHdl), document.body.addEventListener("touchend", i._touchEndHdl)), i.addEventListener(i.hostElement, "drop", function() {
+              o.keyCode === e.Key.Escape && i._contextMenu.hide(), (93 === o.keyCode || o.shiftKey && 121 === o.keyCode) && (i._contextMenu.visible && !e.isFirefox() ? i._isContextMenuKeyDown = !1 : i._isContextMenuKeyDown = !0)
+            }), i.addEventListener(document.body, "keydown", i._keydownHdl, !0), i.addEventListener(document.body, "click", i._clickHdl), i.addEventListener(document.body, "mousemove", i._mouseMoveHdl), (l.match(/iPad/i) || l.match(/iPhone/i)) && (i.addEventListener(document.body, "touchstart", i._touchStartHdl), i.addEventListener(document.body, "touchend", i._touchEndHdl)), i.addEventListener(i.hostElement, "drop", function() {
               i._htDown = null
             })
+          }, s.prototype._flexSheetSyncSelection = function(o) {
+            if (this.collectionView && this.selectionMode != t.SelectionMode.None) {
+              var n = this.selection,
+                i = n.row > -1 && n.row < this.rows.length ? this.rows[n.row] : null,
+                l = i ? i.dataItem : null;
+              if ((i instanceof h || this.newRowAtTop && i instanceof t._NewRowTemplate || l instanceof e.collections.CollectionViewGroup) && (l = null), (l != this.collectionView.currentItem || o) && (!this.editableCollectionView || !this.editableCollectionView.currentAddItem)) {
+                var s = this._getRowIndex(this.collectionView.currentPosition);
+                s != n.row && (n.row = n.row2 = s, this.select(n, !1), this.selectionMode && this.scrollIntoView(n.row, -1))
+              }
+            }
           }, s.prototype._initFuncsList = function() {
             var t = this;
             t._functionListHost = document.createElement("div"), e.addClass(t._functionListHost, "wj-flexsheet-formula-list"), document.querySelector("body").appendChild(t._functionListHost), t._functionListHost.style.display = "none", t._functionListHost.style.position = "absolute", t._functionList = new e.input.ListBox(t._functionListHost), t._functionList.isContentHtml = !0, t._functionList.itemsSource = t._getFunctions(), t._functionList.displayMemberPath = "displayValue", t._functionList.selectedValuePath = "actualvalue", t.addEventListener(t._functionListHost, "click", t.applyFunctionToCell.bind(t)), t.addEventListener(t._functionListHost, "keydown", function(o) {
@@ -3148,10 +3290,11 @@ var __extends = this && this.__extends || function() {
             this.invalidate(!0)
           }, s.prototype._sheetVisibleChange = function(e, t) {
             t.item.visible || t.index === this.selectedSheetIndex && (this.selectedSheetIndex === this.sheets.length - 1 ? this.selectedSheetIndex = t.index - 1 : this.selectedSheetIndex = t.index + 1)
-          }, s.prototype._applyStyleForCell = function(e, t, o) {
-            var n, i, l, s = this,
-              r = s.rows[e];
-            null == r || r instanceof h || !r.isVisible || (l = e * s.columns.length + t, (i = s.selectedSheet._getMergedRange(e, t)) && (l = i.topRow * s.columns.length + i.leftCol), (n = s.selectedSheet._styledCells[l]) ? (n.className = "normal" === o.className ? "" : o.className || n.className, n.textAlign = o.textAlign || n.textAlign, n.verticalAlign = o.verticalAlign || n.verticalAlign, n.fontFamily = o.fontFamily || n.fontFamily, n.fontSize = o.fontSize || n.fontSize, n.backgroundColor = o.backgroundColor || n.backgroundColor, n.color = o.color || n.color, n.fontStyle = "none" === o.fontStyle ? "" : o.fontStyle || n.fontStyle, n.fontWeight = "none" === o.fontWeight ? "" : o.fontWeight || n.fontWeight, n.textDecoration = "none" === o.textDecoration ? "" : o.textDecoration || n.textDecoration, n.format = o.format || n.format, n.whiteSpace = o.whiteSpace || n.whiteSpace, n.borderTopColor = o.borderTopColor || n.borderTopColor, n.borderTopStyle = o.borderTopStyle || n.borderTopStyle, n.borderTopWidth = o.borderTopWidth || n.borderTopWidth, n.borderBottomColor = o.borderBottomColor || n.borderBottomColor, n.borderBottomStyle = o.borderBottomStyle || n.borderBottomStyle, n.borderBottomWidth = o.borderBottomWidth || n.borderBottomWidth, n.borderLeftColor = o.borderLeftColor || n.borderLeftColor, n.borderLeftStyle = o.borderLeftStyle || n.borderLeftStyle, n.borderLeftWidth = o.borderLeftWidth || n.borderLeftWidth, n.borderRightColor = o.borderRightColor || n.borderRightColor, n.borderRightStyle = o.borderRightStyle || n.borderRightStyle, n.borderRightWidth = o.borderRightWidth || n.borderRightWidth) : s.selectedSheet._styledCells[l] = {
+          }, s.prototype._applyStyleForCell = function(e, t, o, n) {
+            void 0 === n && (n = !1);
+            var i, l, s, r = this,
+              a = r.rows[e];
+            null == a || a instanceof h || !a.isVisible && !n || (s = e * r.columns.length + t, (l = r.selectedSheet._getMergedRange(e, t)) && (s = l.topRow * r.columns.length + l.leftCol), (i = r.selectedSheet._styledCells[s]) ? (i.className = "normal" === o.className ? "" : o.className || i.className, i.textAlign = o.textAlign || i.textAlign, i.verticalAlign = o.verticalAlign || i.verticalAlign, i.fontFamily = o.fontFamily || i.fontFamily, i.fontSize = o.fontSize || i.fontSize, i.backgroundColor = o.backgroundColor || i.backgroundColor, i.color = o.color || i.color, i.fontStyle = "none" === o.fontStyle ? "" : o.fontStyle || i.fontStyle, i.fontWeight = "none" === o.fontWeight ? "" : o.fontWeight || i.fontWeight, i.textDecoration = "none" === o.textDecoration ? "" : o.textDecoration || i.textDecoration, i.format = o.format || i.format, i.whiteSpace = o.whiteSpace || i.whiteSpace, i.borderTopColor = o.borderTopColor || i.borderTopColor, i.borderTopStyle = o.borderTopStyle || i.borderTopStyle, i.borderTopWidth = o.borderTopWidth || i.borderTopWidth, i.borderBottomColor = o.borderBottomColor || i.borderBottomColor, i.borderBottomStyle = o.borderBottomStyle || i.borderBottomStyle, i.borderBottomWidth = o.borderBottomWidth || i.borderBottomWidth, i.borderLeftColor = o.borderLeftColor || i.borderLeftColor, i.borderLeftStyle = o.borderLeftStyle || i.borderLeftStyle, i.borderLeftWidth = o.borderLeftWidth || i.borderLeftWidth, i.borderRightColor = o.borderRightColor || i.borderRightColor, i.borderRightStyle = o.borderRightStyle || i.borderRightStyle, i.borderRightWidth = o.borderRightWidth || i.borderRightWidth) : r.selectedSheet._styledCells[s] = {
               className: o.className,
               textAlign: o.textAlign,
               verticalAlign: o.verticalAlign,
@@ -3208,11 +3351,11 @@ var __extends = this && this.__extends || function() {
             for (var n in t) t.hasOwnProperty(n) && null != t[n] && (t[n].clone ? o[n] = t[n].clone() : o[n] = this._cloneObject(t[n]));
             return o
           }, s.prototype._evaluate = function(e, t, o, n, i) {
-            return e && e.length > 1 ? (e = "=" === e[0] ? e : "=" + e, this._calcEngine.evaluate(e, t, o, n, i)) : e
+            return e && e.length > 1 && this._enableFormulas ? (e = "=" === e[0] ? e : "=" + e, this._calcEngine.evaluate(e, t, o, n, i)) : e
           }, s.prototype._copyTo = function(e) {
             var o, n, i, l = this,
               s = e.grid.autoGenerateColumns;
-            if (e._storeRowSettings(), i = this.selection.clone(), e.grid.selection = new t.CellRange, e.grid.rows.clear(), e.grid.columns.clear(), e.grid.columnHeaders.columns.clear(), e.grid.rowHeaders.rows.clear(), l.itemsSource) e.grid.autoGenerateColumns = !1, e.itemsSource = l.itemsSource, e.grid.collectionView.beginUpdate();
+            if (e._storeRowSettings(), i = this.selection.clone(), e.grid.selection = new t.CellRange, e.grid.rows.clear(), e.grid.columns.clear(), e.grid.columnHeaders.columns.clear(), e.grid.rowHeaders.rows.clear(), l.itemsSource) e.grid.autoGenerateColumns = !1, e.itemsSource = l.itemsSource, l.collectionView.sortDescriptions.length > 0 && (e._dataView = l.collectionView._view.slice()), e.grid.collectionView.beginUpdate();
             else
               for (e.itemsSource = null, n = 0; n < l.rows.length; n++) e.grid.rows.push(l.rows[n]);
             for (e._sortList = l.sortManager._committedList.slice(), e._getFilterSetting(), o = 0; o < l.columns.length; o++) e.grid.columns.push(l.columns[o]);
@@ -3221,29 +3364,20 @@ var __extends = this && this.__extends || function() {
             }, 10)
           }, s.prototype._copyFrom = function(o, n) {
             void 0 === n && (n = !0);
-            var i, l, s, r, a, h, c = this,
-              d = c.autoGenerateColumns;
-            if (c._isCopying = !0, c._dragable = !1, c.itemsSource = null, c.rows.clear(), c.columns.clear(), c.columnHeaders.columns.clear(), c.rowHeaders.rows.clear(), h = o.grid.selection.clone(), c.selection = new t.CellRange, o.selectionRanges.length > 1 && c.selectionMode === t.SelectionMode.CellRange && (c._enableMulSel = !0), o.itemsSource) c.autoGenerateColumns = !1, c.itemsSource = o.itemsSource, c.collectionView.beginUpdate();
+            var i, l, s, r, a, c, d, u = this,
+              _ = u.autoGenerateColumns;
+            if (u._isCopying = !0, u._dragable = !1, u.itemsSource = null, u.rows.clear(), u.columns.clear(), u.columnHeaders.columns.clear(), u.rowHeaders.rows.clear(), c = o.grid.selection.clone(), u.selection = new t.CellRange, o.selectionRanges.length > 1 && u.selectionMode === t.SelectionMode.CellRange && (u._enableMulSel = !0), o.itemsSource) u.autoGenerateColumns = !1, u.itemsSource = o.itemsSource, u.collectionView.beginUpdate();
             else
-              for (l = 0; l < o.grid.rows.length; l++) c.rows.push(o.grid.rows[l]);
-            for (c.sortManager.sortDescriptions.sourceCollection = o._sortList.slice(), c.sortManager._committedList = o._sortList.slice(), i = 0; i < o.grid.columns.length; i++)(r = o.grid.columns[i]).isRequired = !1, c.columns.push(r);
-            for (c.collectionView && (c._resetMappedColumns(c), c.collectionView.endUpdate(), c.collectionView.collectionChanged.addHandler(function(t, n) {
-              switch (n.action) {
-                case e.collections.NotifyCollectionChangedAction.Add:
-                  o._orgItemsSource && o._orgItemsSource.splice(n.index, 0, n.item);
-                  break;
-                case e.collections.NotifyCollectionChangedAction.Remove:
-                  o._orgItemsSource && o._orgItemsSource.splice(o._orgItemsSource.indexOf(n.item), 1);
-                  break;
-                case e.collections.NotifyCollectionChangedAction.Reset:
-                  setTimeout(function() {
-                    c.invalidate()
-                  }, 10)
-              }
-            }, c)), c.rows.length && c.columns.length && (c.selection = h), o._applyFilterSetting(), l = 0; l < c.rows.length; l++)(s = o._rowSettings[l]) && ((a = c.rows[l]).height = s.height, a.allowMerging = s.allowMerging, a.visible = s.visible, a instanceof t.GroupRow && (a.isCollapsed = !!s.isCollapsed), a.isSelected = !!s.isSelected, a.isReadOnly = !!s.readOnly);
-            c.autoGenerateColumns = d, c.frozenRows = o.grid.frozenRows, c.frozenColumns = o.grid.frozenColumns, c._isCopying = !1, c._addingSheet ? (c._toRefresh && (clearTimeout(c._toRefresh), c._toRefresh = null), c._toRefresh = setTimeout(function() {
-              c._setFlexSheetToDirty(), c.invalidate()
-            }, 10), c._addingSheet = !1) : n && c.refresh(), c.scrollPosition = o._scrollPosition, c._ptScrl = o._scrollPosition
+              for (l = 0; l < o.grid.rows.length; l++) u.rows.push(o.grid.rows[l]);
+            for (u.sortManager.sortDescriptions.sourceCollection = o._sortList.slice(), u.sortManager._committedList = o._sortList.slice(), i = 0; i < o.grid.columns.length; i++)(r = o.grid.columns[i]).isRequired = !1, u.columns.push(r);
+            for (u.collectionView && (u.collectionView.moveCurrentToPosition(u._getCvIndex(c.row)), u._resetMappedColumns(u), u.collectionView.endUpdate(), o._dataView && (u.collectionView._view = o._dataView, u.collectionView._pgView = u.collectionView._getPageView(), u.itemsSource instanceof e.collections.CollectionView || (o.grid.collectionView._view = o._dataView, o.grid.collectionView._pgView = o.grid.collectionView._getPageView()), u._bindGrid(!1), o.grid._bindGrid(!1)), u.collectionView.collectionChanged.addHandler(function(t, o) {
+              o.action === e.collections.NotifyCollectionChangedAction.Reset && setTimeout(function() {
+                u.invalidate()
+              }, 10)
+            }, u)), u.rows.length && u.columns.length && (u.selection = c), o._applyFilterSetting(), l = 0; l < u.rows.length; l++)(s = o._rowSettings[l]) && (d = (a = u.rows[l]) instanceof h, a.height = s.height, a.allowMerging = s.allowMerging, a.visible = s.visible, a instanceof t.GroupRow && (a.isCollapsed = !!s.isCollapsed), a.isSelected = !!s.isSelected, a.isReadOnly = d || !!s.readOnly);
+            u.autoGenerateColumns = _, u.frozenRows = o.grid.frozenRows, u.frozenColumns = o.grid.frozenColumns, u._isCopying = !1, u._addingSheet ? (u._toRefresh && (clearTimeout(u._toRefresh), u._toRefresh = null), u._toRefresh = setTimeout(function() {
+              u._setFlexSheetToDirty(), u.invalidate()
+            }, 10), u._addingSheet = !1) : n && u.refresh(), u.scrollPosition = o._scrollPosition, u._ptScrl = o._scrollPosition
           }, s.prototype._resetMappedColumns = function(e) {
             var t, o, n = 0;
             if (e._mappedColumns = null, e.collectionView)
@@ -3267,64 +3401,83 @@ var __extends = this && this.__extends || function() {
                 for (l = 0; l < t.definedNames.length; l++) n = t.definedNames[l], r.definedNames.push(new c(r, n.name, n.value, n.sheetName));
               r.endUpdate(), r.onLoaded()
             }
-          }, s.prototype._saveToWorkbook = function() {
-            var t, o, n, i, l, s;
-            if (0 === this.sheets.length) throw "The flexsheet is empty.";
-            if (i = this.sheets[0], 0 === this.selectedSheetIndex && (i._storeRowSettings(), i.itemsSource instanceof e.collections.CollectionView || this._copyRowsToSelectedSheet()), i._setRowSettings(), i.tables.length > 0)
-              for (i.grid.wj_sheetInfo.tables = [], s = 0; s < i.tables.length; s++) i.grid.wj_sheetInfo.tables.push(this._parseToWorkbookTable(i.tables[s]));
-            for ((t = e.grid.xlsx.FlexGridXlsxConverter.save(i.grid, {
-              sheetName: i.name,
-              sheetVisible: i.visible,
+          }, s.prototype._saveToWorkbook = function(t) {
+            var o, n, i, l, s, r, a = this,
+              h = !(!t || !t.includeFormulaValues),
+              c = function(e) {
+                return a.evaluate(e, null, l)
+              };
+            if (0 === a.sheets.length) throw "The flexsheet is empty.";
+            if (l = a.sheets[0], h && (l.grid.wj_sheetInfo.evaluateFormula = c), 0 === a.selectedSheetIndex && (l._storeRowSettings(), l.itemsSource instanceof e.collections.CollectionView || a._copyRowsToSelectedSheet()), l._setRowSettings(), l.tables.length > 0)
+              for (l.grid.wj_sheetInfo.tables = [], r = 0; r < l.tables.length; r++) l.grid.wj_sheetInfo.tables.push(a._parseToWorkbookTable(l.tables[r]));
+            for (o = e.grid.xlsx.FlexGridXlsxConverter.save(l.grid, {
+              sheetName: l.name,
+              sheetVisible: l.visible,
               includeColumnHeaders: !1
-            })).reservedContent = this._reservedContent, l = 1; l < this.sheets.length; l++) {
-              if (i = this.sheets[l], this.selectedSheetIndex === l && (i._storeRowSettings(), i.itemsSource instanceof e.collections.CollectionView || this._copyRowsToSelectedSheet()), i._setRowSettings(), i.tables.length > 0)
-                for (i.grid.wj_sheetInfo.tables = [], s = 0; s < i.tables.length; s++) i.grid.wj_sheetInfo.tables.push(this._parseToWorkbookTable(i.tables[s]));
-              o = e.grid.xlsx.FlexGridXlsxConverter.save(i.grid, {
-                sheetName: i.name,
-                sheetVisible: i.visible,
+            }), a._checkTableHeaderRow(l.tables, o), l.grid.wj_sheetInfo.evaluateFormula && (l.grid.wj_sheetInfo.evaluateFormula = null), o.reservedContent = a._reservedContent, s = 1; s < a.sheets.length; s++) {
+              if (l = a.sheets[s], h && (l.grid.wj_sheetInfo.evaluateFormula = c), a.selectedSheetIndex === s && (l._storeRowSettings(), l.itemsSource instanceof e.collections.CollectionView || a._copyRowsToSelectedSheet()), l._setRowSettings(), l.tables.length > 0)
+                for (l.grid.wj_sheetInfo.tables = [], r = 0; r < l.tables.length; r++) l.grid.wj_sheetInfo.tables.push(a._parseToWorkbookTable(l.tables[r]));
+              n = e.grid.xlsx.FlexGridXlsxConverter.save(l.grid, {
+                sheetName: l.name,
+                sheetVisible: l.visible,
                 includeColumnHeaders: !1
-              }), t._addWorkSheet(o.sheets[0], l)
+              }), a._checkTableHeaderRow(l.tables, n), l.grid.wj_sheetInfo.evaluateFormula && (l.grid.wj_sheetInfo.evaluateFormula = null), o._addWorkSheet(n.sheets[0], s)
             }
-            for (t.activeWorksheet = this.selectedSheetIndex, s = 0; s < this.definedNames.length; s++) {
-              var r = this.definedNames[s];
-              (n = new e.xlsx.DefinedName).name = r.name, n.value = r.value, n.sheetName = r.sheetName, t.definedNames.push(n)
+            for (o.activeWorksheet = a.selectedSheetIndex, r = 0; r < a.definedNames.length; r++) {
+              var d = a.definedNames[r];
+              (i = new e.xlsx.DefinedName).name = d.name, i.value = d.value, i.sheetName = d.sheetName, o.definedNames.push(i)
             }
-            if (this._colorThemes && this._colorThemes.length > 0)
-              for (s = 0; s < this._colorThemes.length; s++) t.colorThemes[s] = this._colorThemes[s];
-            return t
+            if (a._colorThemes && a._colorThemes.length > 0)
+              for (r = 0; r < a._colorThemes.length; r++) o.colorThemes[r] = a._colorThemes[r];
+            return o
           }, s.prototype._mouseDown = function(o) {
-            var n, i, s, r = window.navigator.userAgent,
-              a = this.hitTest(o);
+            var n, i, s = window.navigator.userAgent,
+              r = this.hitTest(o);
             this.columns;
-            if (this.selectedSheet && (this.selectedSheet._scrollPosition = this.scrollPosition), this._dragable) return this._isDragging = !0, this._draggingMarker = document.createElement("div"), e.setCss(this._draggingMarker, {
+            if (this.selectedSheet && (this.selectedSheet._scrollPosition = this.scrollPosition), r.cellType !== t.CellType.None && (this._isClicking = !0), this._dragable) return this._isDragging = !0, this._draggingMarker = document.createElement("div"), e.setCss(this._draggingMarker, {
               position: "absolute",
               display: "none",
               borderStyle: "dotted",
               cursor: "move"
             }), document.body.appendChild(this._draggingMarker), this._draggingTooltip = new e.Tooltip, this._draggingCells = this.selection, this.selectedSheet && this.selectedSheet.selectionRanges.clear(), this.onDraggingRowColumn(new l(this._draggingRow, o.shiftKey)), void o.preventDefault();
-            if (a.cellType !== t.CellType.None && (this._isClicking = !0), this.selectionMode === t.SelectionMode.CellRange ? o.ctrlKey ? this._enableMulSel || (this._enableMulSel = !0) : a.cellType !== t.CellType.None && (this.selectedSheet && this.selectedSheet.selectionRanges.clear(), this._enableMulSel && this.refresh(!1), this._enableMulSel = !1) : (this._enableMulSel = !1, this.selectedSheet && this.selectedSheet.selectionRanges.clear()), this._htDown = a, 0 !== this.rows.length && 0 !== this.columns.length && (r.match(/iPad/i) || r.match(/iPhone/i) || this._contextMenu.hide(), this.selectionMode === t.SelectionMode.CellRange)) {
-              if (a.cellType === t.CellType.RowHeader && 3 === o.which) return s = new t.CellRange(a.row, 0, a.row, this.columns.length - 1), void(this.selection.contains(s) || (this.selection = s));
-              if ((a.cellType === t.CellType.ColumnHeader || a.cellType === t.CellType.None) && !(a.col > -1 && this.columns[a.col].isSelected) && e.hasClass(o.target, "wj-cell") && !a.edgeRight) {
-                if (this._columnHeaderClicked = !0, i = this.itemsSource && this.rows[0] && !this.rows[0].isVisible ? 1 : 0, o.shiftKey) this._multiSelectColumns(a);
-                else {
-                  if (n = new t.CellRange(i, a.col, this.rows.length - 1, a.col), 3 === o.which && this.selection.contains(n)) return;
-                  this.select(n)
-                }
-                this._eCt.children[i] && this._eCt.children[i].children[a.col] && this._eCt.children[i].children[a.col].focus()
+            if ("crosshair" === this.hostElement.style.cursor && null == this._fillingMarker) return this.finishEditing(), this._fillingData = !0, this._fillingPoint = new e.Point(o.clientX - this.scrollPosition.x, o.clientY - this.scrollPosition.y), this._fillingSource = this.selection.clone(), this._fillingMarker = document.createElement("div"), e.setCss(this._fillingMarker, {
+              position: "absolute",
+              display: "none",
+              border: "2px dashed"
+            }), this._root.appendChild(this._fillingMarker), this._fillingTooltip = new e.Tooltip, void o.preventDefault();
+            if (this.selectionMode === t.SelectionMode.CellRange ? o.ctrlKey ? this._enableMulSel || (this._enableMulSel = !0, 0 === this.selectedSheet.selectionRanges.length && this.selectedSheet.selectionRanges.push(this.selection)) : r.cellType !== t.CellType.None && (this.selectedSheet && this.selectedSheet.selectionRanges.clear(), this._enableMulSel && this.refresh(!1), this._enableMulSel = !1) : (this._enableMulSel = !1, this.selectedSheet && this.selectedSheet.selectionRanges.clear()), this._htDown = r, 0 !== this.rows.length && 0 !== this.columns.length && (s.match(/iPad/i) || s.match(/iPhone/i) || this._contextMenu.hide(), 3 !== o.which && this.selectionMode === t.SelectionMode.CellRange && (r.cellType === t.CellType.ColumnHeader || r.cellType === t.CellType.None) && !(r.col > -1 && this.columns[r.col].isSelected) && e.hasClass(o.target, "wj-cell") && !r.edgeRight)) {
+              if (this._columnHeaderClicked = !0, i = this.itemsSource && this.rows[0] && !this.rows[0].isVisible ? 1 : 0, o.shiftKey) this._multiSelectColumns(r);
+              else {
+                if (n = new t.CellRange(i, r.col, this.rows.length - 1, r.col), 3 === o.which && this.selection.contains(n)) return;
+                this.select(n)
               }
+              this._eCt.children[i] && this._eCt.children[i].children[r.col] && this._eCt.children[i].children[r.col].focus(), o.preventDefault()
             }
           }, s.prototype._mouseMove = function(e) {
             var o, n = this.hitTest(e),
-              i = this.selection,
+              i = this.selection.clone(),
               l = this.rows.length,
               s = this.columns.length,
               r = this.hostElement.style.cursor;
-            return 0 === this.rows.length || 0 === this.columns.length ? (this._dragable = !1, void(n.cellType === t.CellType.Cell && (this.hostElement.style.cursor = "default"))) : this._isDragging ? (this.hostElement.style.cursor = "move", void this._showDraggingMarker(e)) : (o = this.itemsSource ? 0 === i.topRow || 1 === i.topRow : 0 === i.topRow, i && n.cellType !== t.CellType.None && !this.itemsSource && (this._draggingColumn = o && i.bottomRow === l - 1, this._draggingRow = 0 === i.leftCol && i.rightCol === s - 1, n.cellType === t.CellType.Cell ? (this._draggingColumn && ((n.col === i.leftCol - 1 || n.col === i.rightCol) && n.edgeRight || n.row === l - 1 && n.edgeBottom) && (r = "move"), this._draggingRow && !this._containsGroupRows(i) && ((n.row === i.topRow - 1 || n.row === i.bottomRow) && n.edgeBottom || n.col === s - 1 && n.edgeRight) && (r = "move")) : n.cellType === t.CellType.ColumnHeader ? n.edgeBottom && (this._draggingColumn && n.col >= i.leftCol && n.col <= i.rightCol ? r = "move" : this._draggingRow && 0 === i.topRow && (r = "move")) : n.cellType === t.CellType.RowHeader && n.edgeRight && (this._draggingColumn && 0 === i.leftCol ? r = "move" : this._draggingRow && n.row >= i.topRow && n.row <= i.bottomRow && !this._containsGroupRows(i) && (r = "move")), this._dragable = "move" === r, this.hostElement.style.cursor = r), void(this._htDown && this._htDown.panel && (n = new t.HitTestInfo(this._htDown.panel, e), this._multiSelectColumns(n), n.cellType === t.CellType.Cell && this.scrollIntoView(n.row, n.col))))
-          }, s.prototype._mouseUp = function(e) {
+            if (0 === this.rows.length || 0 === this.columns.length) return this._dragable = !1, void(n.cellType === t.CellType.Cell && (this.hostElement.style.cursor = "default"));
+            if (this._isDragging) return this.hostElement.style.cursor = "move", void this._showDraggingMarker(e);
+            if (!this._isClicking && n.edgeBottom && n.edgeRight && n.row === i.bottomRow && n.col === i.rightCol) this.hostElement.style.cursor = "crosshair";
+            else {
+              if (this._fillingData) return this.hostElement.style.cursor = "crosshair", void this._showFillMarker(e);
+              o = this.itemsSource ? 0 === i.topRow || 1 === i.topRow : 0 === i.topRow, this._isClicking || !i || n.cellType === t.CellType.None || this.itemsSource || this.isReadOnly || !this._enableDragDrop || (this._draggingColumn = o && i.bottomRow === l - 1, this._draggingRow = 0 === i.leftCol && i.rightCol === s - 1, n.cellType === t.CellType.Cell ? (this._draggingColumn && ((n.col === i.leftCol - 1 || n.col === i.rightCol) && n.edgeRight || n.row === l - 1 && n.edgeBottom) && (r = "move"), this._draggingRow && !this._containsGroupRows(i) && ((n.row === i.topRow - 1 || n.row === i.bottomRow) && n.edgeBottom || n.col === s - 1 && n.edgeRight) && (r = "move")) : n.cellType === t.CellType.ColumnHeader ? n.edgeBottom && (this._draggingColumn && n.col >= i.leftCol && n.col <= i.rightCol ? r = "move" : this._draggingRow && 0 === i.topRow && (r = "move")) : n.cellType === t.CellType.RowHeader && n.edgeRight && (this._draggingColumn && 0 === i.leftCol ? r = "move" : this._draggingRow && n.row >= i.topRow && n.row <= i.bottomRow && !this._containsGroupRows(i) && (r = "move")), this._dragable = "move" === r, this.hostElement.style.cursor = r), this._htDown && this._htDown.panel && (n = new t.HitTestInfo(this._htDown.panel, e), this._multiSelectColumns(n), n.cellType === t.CellType.Cell && this.scrollIntoView(n.row, n.col))
+            }
+          }, s.prototype._mouseUp = function(n) {
             try {
-              this._isDragging && (this._draggingCells.equals(this._dropRange) || (this._handleDropping(e), this.onDroppingRowColumn()))
+              if (this._isDragging) this._draggingCells.equals(this._dropRange) || (this._handleDropping(n), this.onDroppingRowColumn());
+              else if (this._fillingData) {
+                var i = d.CopyContent,
+                  l = this._fillingRange,
+                  s = this._fillingSource,
+                  r = void 0;
+                this._orgCellSettings = null, this._fillingRange && this._fillingRange.isValid && (e.assert(this._canDoFillOperation(), "To do this, all the merged cells need be the same size."), s.leftCol === l.leftCol && s.rightCol === l.rightCol ? s.row !== s.row2 && (i = d.FillSeries) : s.col !== s.col2 && (i = d.FillSeries), this._orgCellSettings = this._getCellSettingsForFill(), r = new o._FillAction(this, this._fillingSource), this._undoStack._addAction(r), i = d.CopyFormat | i, this._fillData(i), this._showFillMenuSmartTag(i))
+              }
             } finally {
-              this._isDragging && (this._draggingCells = null, this._dropRange = null, document.body.removeChild(this._draggingMarker), this._draggingMarker = null, this._draggingTooltip.hide(), this._draggingTooltip = null, this._isDragging = !1, this._draggingColumn = !1, this._draggingRow = !1), this._htDown && this._htDown.cellType !== t.CellType.None && this.selectedSheet && (this._htDown.cellType === t.CellType.TopLeft && this.selectionMode === t.SelectionMode.CellRange && (this.selection = new t.CellRange(0, 0, this.rows.length - 1, this.columns.length - 1)), this.selection.isValid && this.selectedSheet._addSelection(this.selection), this._enableMulSel = !1), this._isClicking = !1, this._columnHeaderClicked = !1, this._htDown = null
+              this._isDragging && (this._draggingCells = null, this._dropRange = null, document.body.removeChild(this._draggingMarker), this._draggingMarker = null, this._draggingTooltip.hide(), this._draggingTooltip = null, this._isDragging = !1, this._draggingColumn = !1, this._draggingRow = !1), this._htDown && this._htDown.cellType !== t.CellType.None && this.selectedSheet && (this._htDown.cellType === t.CellType.TopLeft && this.selectionMode === t.SelectionMode.CellRange && (this.selection = new t.CellRange(0, 0, this.rows.length - 1, this.columns.length - 1)), this.selection.isValid && this.selectedSheet._addSelection(this.selection), this._enableMulSel = !1), this._fillingData && (this._fillingData = !1, this._fillingPoint = null, this._fillingRange = null, this._root.removeChild(this._fillingMarker), this._fillingMarker = null, this._fillingTooltip.hide(), this._fillingTooltip = null, this.hostElement.style.cursor = "default"), this._isClicking = !1, this._columnHeaderClicked = !1, this._htDown = null
             }
           }, s.prototype._click = function() {
             var e = this,
@@ -3340,6 +3493,8 @@ var __extends = this && this.__extends || function() {
             }, 500)
           }, s.prototype._touchEnd = function() {
             clearTimeout(this._longClickTimer)
+          }, s.prototype._keydown = function(t) {
+            this._endDragFillOperation(t), !this._isDescendant(this.hostElement, t.target) && this.hostElement !== t.target || this._edtHdl.activeEditor || !this.selectedSheet || t.keyCode !== e.Key.Delete && t.keyCode !== e.Key.Back || (this._delSeletionContent(t), t.preventDefault()), this._contextMenu.visible && (t.keyCode === e.Key.Down && this._contextMenu.moveToNext(), t.keyCode === e.Key.Up && this._contextMenu.moveToPrev(), t.keyCode === e.Key.Home && this._contextMenu.moveToFirst(), t.keyCode === e.Key.End && this._contextMenu.moveToLast(), t.keyCode === e.Key.Enter && this._contextMenu.handleContextMenu(), t.preventDefault())
           }, s.prototype._showDraggingMarker = function(o) {
             var n, i, l, r, a, h, c, d, u, _ = new t.HitTestInfo(this.cells, o),
               g = this.selection,
@@ -3370,6 +3525,105 @@ var __extends = this && this.__extends || function() {
               } else if (b + this._eCHdr.offsetHeight !== u.top || C + this._root.offsetWidth + 1 < u.left + u.width) return;
               e.setCss(this._draggingMarker, u), this._draggingTooltip.show(this.hostElement, d, n)
             }
+          }, s.prototype._showFillMarker = function(o) {
+            var n, i, l, s, r, a, h, c, d = new t.HitTestInfo(this.cells, o);
+            d.row > -1 && d.col > -1 && (n = o.clientX - this.scrollPosition.x - this._fillingPoint.x, i = o.clientY - this.scrollPosition.y - this._fillingPoint.y, Math.abs(n) >= Math.abs(i) ? (l = this._fillingSource.topRow, r = this._fillingSource.bottomRow, s = n >= 0 ? this._fillingSource.leftCol : d.col, a = n >= 0 ? d.col : this._fillingSource.rightCol) : (l = i >= 0 ? this._fillingSource.topRow : d.row, r = i >= 0 ? d.row : this._fillingSource.bottomRow, s = this._fillingSource.leftCol, a = this._fillingSource.rightCol), h = this.cells.getCellBoundingRect(l, s, !0), c = this.cells.getCellBoundingRect(r, a, !0), e.setCss(this._fillingMarker, {
+              left: h.left + this.cells.hostElement.offsetLeft - 2,
+              top: h.top + this.cells.hostElement.offsetTop - 2,
+              width: c.right - h.left + 4,
+              height: c.bottom - h.top + 4,
+              display: "",
+              zIndex: "9999"
+            }), this._fillingRange = new t.CellRange(l, s, r, a), this.scrollIntoView(d.row, d.col), this._showFillTooltip())
+          }, s.prototype._showFillTooltip = function() {
+            var t, o, n, i, l, s, r, a, h, c, d, u, _ = this._fillingSource,
+              g = this._fillingRange;
+            this._fillingTooltip.hide(), g.equals(_) || _.contains(g) || ((o = _.leftCol === g.leftCol && _.rightCol === g.rightCol) ? (g.bottomRow > _.bottomRow ? ((t = this.cells.getCellBoundingRect(g.bottomRow, g.rightCol)).top = t.bottom + 10, n = g.bottomRow - _.topRow) : ((t = this.cells.getCellBoundingRect(g.topRow, g.rightCol)).top += 10, n = g.topRow - _.topRow), t.left = t.right, (i = n % _.rowSpan) < 0 && (i += _.rowSpan), _.row === _.row2 && (l = !0), h = this.selectedSheet.getCellStyle(_.topRow + i, _.leftCol), c = this.getMergedRange(this.cells, _.topRow + i, _.leftCol), d = this.columns[_.leftCol], u = h && h.format ? h.format : d.format, l ? (a = this.getCellData(c ? c.topRow : _.topRow + i, _.leftCol, !1), a = e.isString(a) && "=" === a[0] ? "" : e.Globalize.format(a, u)) : (s = this.getCellData(_.topRow + i, _.leftCol, !1), e.isNumber(s) || e.isDate(s) ? (r = this._getFillSeries(o, 0, i)) ? (a = this._getFillData(i, n, _, o, r, !0), a = e.Globalize.format(a, u)) : a = "" : (a = s, e.isString(a) && "=" === a[0] && (a = "")))) : (g.rightCol > _.rightCol ? (t = this.cells.getCellBoundingRect(g.bottomRow, g.rightCol), n = g.rightCol - _.leftCol) : (t = this.cells.getCellBoundingRect(g.bottomRow, g.leftCol), n = g.leftCol - _.leftCol), t.top = t.bottom + 10, (i = n % _.columnSpan) < 0 && (i += _.columnSpan), _.col === _.col2 && (l = !0), h = this.selectedSheet.getCellStyle(_.topRow, _.leftCol + i), c = this.getMergedRange(this.cells, _.topRow, _.leftCol + i), d = this.columns[_.leftCol + i], u = h && h.format ? h.format : d.format, l ? (a = this.getCellData(_.topRow, c ? c.leftCol : _.leftCol + i, !1), a = e.isString(a) && "=" === a[0] ? "" : e.Globalize.format(a, u)) : (s = this.getCellData(_.topRow, _.leftCol + i, !1), e.isNumber(s) || e.isDate(s) ? (r = this._getFillSeries(o, 0, i)) ? (a = this._getFillData(i, n, _, o, r, !0), a = e.Globalize.format(a, u)) : a = "" : (a = s, e.isString(a) && "=" === a[0] && (a = "")))), t.top += this.cells.hostElement.offsetTop, this._fillingTooltip.show(this.hostElement, a, t))
+          }, s.prototype._showFillMenuSmartTag = function(t) {
+            var o = this,
+              n = document.createElement("img"),
+              i = document.createElement("img"),
+              l = o.selection,
+              s = o.cells.getCellBoundingRect(l.bottomRow, l.rightCol, !0),
+              r = s.right + o.cells.hostElement.offsetLeft,
+              a = s.bottom + o.cells.hostElement.offsetTop;
+            o.addEventListener(document.body, "mousedown", o._endDragFillOperationHdl, !0), o._fillSmartTagHost = document.createElement("div"), e.addClass(o._fillSmartTagHost, "wj-flexsheet-smart-tag"), r + o._ptScrl.x + 32 + (o.cells.hostElement.offsetHeight > o._root.offsetHeight ? 17 : 0) > o._root.offsetWidth && (r -= 32), a + o._ptScrl.y + 18 + (o.cells.hostElement.offsetWidth > o._root.offsetWidth ? 17 : 0) > o._root.offsetHeight && (a -= 18), e.setCss(o._fillSmartTagHost, {
+              left: r,
+              top: a
+            }), n.setAttribute("src", "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4YSRudE8o9VGjUYPjGnGXOMk423GbcajJgYmISZLTepN7ppSTbmmKaY7TDtMx83MzaLN1pk1mz0x1zLnm+eb15vft2BaeFostqi2uGVJsuRaplnutrxuhVo5WaVYVVpds0atna0l1rutu6cRp7lOk06rntZnw7Dxtsm2qbcZsOXYBtuutm22fWFnYhdnt8Wuw+6TvZN9un2N/T0HDYfZDqsdWh1+c7RyFDpWOt6azpzuP33F9JbpL2dYzxDP2DPjthPLKcRpnVOb00dnF2e5c4PziIuJS4LLLpc+Lpsbxt3IveRKdPVxXeF60vWdm7Obwu2o26/uNu5p7ofcn8w0nymeWTNz0MPIQ+BR5dE/C5+VMGvfrH5PQ0+BZ7XnIy9jL5FXrdewt6V3qvdh7xc+9j5yn+M+4zw33jLeWV/MN8C3yLfLT8Nvnl+F30N/I/9k/3r/0QCngCUBZwOJgUGBWwL7+Hp8Ib+OPzrbZfay2e1BjKC5QRVBj4KtguXBrSFoyOyQrSH355jOkc5pDoVQfujW0Adh5mGLw34MJ4WHhVeGP45wiFga0TGXNXfR3ENz30T6RJZE3ptnMU85ry1KNSo+qi5qPNo3ujS6P8YuZlnM1VidWElsSxw5LiquNm5svt/87fOH4p3iC+N7F5gvyF1weaHOwvSFpxapLhIsOpZATIhOOJTwQRAqqBaMJfITdyWOCnnCHcJnIi/RNtGI2ENcKh5O8kgqTXqS7JG8NXkkxTOlLOW5hCepkLxMDUzdmzqeFpp2IG0yPTq9MYOSkZBxQqohTZO2Z+pn5mZ2y6xlhbL+xW6Lty8elQfJa7OQrAVZLQq2QqboVFoo1yoHsmdlV2a/zYnKOZarnivN7cyzytuQN5zvn//tEsIS4ZK2pYZLVy0dWOa9rGo5sjxxedsK4xUFK4ZWBqw8uIq2Km3VT6vtV5eufr0mek1rgV7ByoLBtQFr6wtVCuWFfevc1+1dT1gvWd+1YfqGnRs+FYmKrhTbF5cVf9go3HjlG4dvyr+Z3JS0qavEuWTPZtJm6ebeLZ5bDpaql+aXDm4N2dq0Dd9WtO319kXbL5fNKNu7g7ZDuaO/PLi8ZafJzs07P1SkVPRU+lQ27tLdtWHX+G7R7ht7vPY07NXbW7z3/T7JvttVAVVN1WbVZftJ+7P3P66Jqun4lvttXa1ObXHtxwPSA/0HIw6217nU1R3SPVRSj9Yr60cOxx++/p3vdy0NNg1VjZzG4iNwRHnk6fcJ3/ceDTradox7rOEH0x92HWcdL2pCmvKaRptTmvtbYlu6T8w+0dbq3nr8R9sfD5w0PFl5SvNUyWna6YLTk2fyz4ydlZ19fi753GDborZ752PO32oPb++6EHTh0kX/i+c7vDvOXPK4dPKy2+UTV7hXmq86X23qdOo8/pPTT8e7nLuarrlca7nuer21e2b36RueN87d9L158Rb/1tWeOT3dvfN6b/fF9/XfFt1+cif9zsu72Xcn7q28T7xf9EDtQdlD3YfVP1v+3Njv3H9qwHeg89HcR/cGhYPP/pH1jw9DBY+Zj8uGDYbrnjg+OTniP3L96fynQ89kzyaeF/6i/suuFxYvfvjV69fO0ZjRoZfyl5O/bXyl/erA6xmv28bCxh6+yXgzMV70VvvtwXfcdx3vo98PT+R8IH8o/2j5sfVT0Kf7kxmTk/8EA5jz/GMzLdsAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAAFJJREFUeNrclEEKACAIBOfp/Xy7i4WSRnRYBIVRVhFJVIhyEAxllQa5E/wBSnsU6Rza2nugqNmASi57C/KKNg/Iqn+iVWzx6M4bOdUEAAD//wMAAYRMfiNaiqEAAAAASUVORK5CYII="), e.setCss(n, {
+              float: "left",
+              height: 18,
+              margin: 0
+            }), i.setAttribute("src", "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAcAAAASCAYAAACXScT7AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKTWlDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVN3WJP3Fj7f92UPVkLY8LGXbIEAIiOsCMgQWaIQkgBhhBASQMWFiApWFBURnEhVxILVCkidiOKgKLhnQYqIWotVXDjuH9yntX167+3t+9f7vOec5/zOec8PgBESJpHmomoAOVKFPDrYH49PSMTJvYACFUjgBCAQ5svCZwXFAADwA3l4fnSwP/wBr28AAgBw1S4kEsfh/4O6UCZXACCRAOAiEucLAZBSAMguVMgUAMgYALBTs2QKAJQAAGx5fEIiAKoNAOz0ST4FANipk9wXANiiHKkIAI0BAJkoRyQCQLsAYFWBUiwCwMIAoKxAIi4EwK4BgFm2MkcCgL0FAHaOWJAPQGAAgJlCLMwAIDgCAEMeE80DIEwDoDDSv+CpX3CFuEgBAMDLlc2XS9IzFLiV0Bp38vDg4iHiwmyxQmEXKRBmCeQinJebIxNI5wNMzgwAABr50cH+OD+Q5+bk4eZm52zv9MWi/mvwbyI+IfHf/ryMAgQAEE7P79pf5eXWA3DHAbB1v2upWwDaVgBo3/ldM9sJoFoK0Hr5i3k4/EAenqFQyDwdHAoLC+0lYqG9MOOLPv8z4W/gi372/EAe/tt68ABxmkCZrcCjg/1xYW52rlKO58sEQjFu9+cj/seFf/2OKdHiNLFcLBWK8ViJuFAiTcd5uVKRRCHJleIS6X8y8R+W/QmTdw0ArIZPwE62B7XLbMB+7gECiw5Y0nYAQH7zLYwaC5EAEGc0Mnn3AACTv/mPQCsBAM2XpOMAALzoGFyolBdMxggAAESggSqwQQcMwRSswA6cwR28wBcCYQZEQAwkwDwQQgbkgBwKoRiWQRlUwDrYBLWwAxqgEZrhELTBMTgN5+ASXIHrcBcGYBiewhi8hgkEQcgIE2EhOogRYo7YIs4IF5mOBCJhSDSSgKQg6YgUUSLFyHKkAqlCapFdSCPyLXIUOY1cQPqQ28ggMor8irxHMZSBslED1AJ1QLmoHxqKxqBz0XQ0D12AlqJr0Rq0Hj2AtqKn0UvodXQAfYqOY4DRMQ5mjNlhXIyHRWCJWBomxxZj5Vg1Vo81Yx1YN3YVG8CeYe8IJAKLgBPsCF6EEMJsgpCQR1hMWEOoJewjtBK6CFcJg4Qxwicik6hPtCV6EvnEeGI6sZBYRqwm7iEeIZ4lXicOE1+TSCQOyZLkTgohJZAySQtJa0jbSC2kU6Q+0hBpnEwm65Btyd7kCLKArCCXkbeQD5BPkvvJw+S3FDrFiOJMCaIkUqSUEko1ZT/lBKWfMkKZoKpRzame1AiqiDqfWkltoHZQL1OHqRM0dZolzZsWQ8ukLaPV0JppZ2n3aC/pdLoJ3YMeRZfQl9Jr6Afp5+mD9HcMDYYNg8dIYigZaxl7GacYtxkvmUymBdOXmchUMNcyG5lnmA+Yb1VYKvYqfBWRyhKVOpVWlX6V56pUVXNVP9V5qgtUq1UPq15WfaZGVbNQ46kJ1Bar1akdVbupNq7OUndSj1DPUV+jvl/9gvpjDbKGhUaghkijVGO3xhmNIRbGMmXxWELWclYD6yxrmE1iW7L57Ex2Bfsbdi97TFNDc6pmrGaRZp3mcc0BDsax4PA52ZxKziHODc57LQMtPy2x1mqtZq1+rTfaetq+2mLtcu0W7eva73VwnUCdLJ31Om0693UJuja6UbqFutt1z+o+02PreekJ9cr1Dund0Uf1bfSj9Rfq79bv0R83MDQINpAZbDE4Y/DMkGPoa5hpuNHwhOGoEctoupHEaKPRSaMnuCbuh2fjNXgXPmasbxxirDTeZdxrPGFiaTLbpMSkxeS+Kc2Ua5pmutG003TMzMgs3KzYrMnsjjnVnGueYb7ZvNv8jYWlRZzFSos2i8eW2pZ8ywWWTZb3rJhWPlZ5VvVW16xJ1lzrLOtt1ldsUBtXmwybOpvLtqitm63Edptt3xTiFI8p0in1U27aMez87ArsmuwG7Tn2YfYl9m32zx3MHBId1jt0O3xydHXMdmxwvOuk4TTDqcSpw+lXZxtnoXOd8zUXpkuQyxKXdpcXU22niqdun3rLleUa7rrStdP1o5u7m9yt2W3U3cw9xX2r+00umxvJXcM970H08PdY4nHM452nm6fC85DnL152Xlle+70eT7OcJp7WMG3I28Rb4L3Le2A6Pj1l+s7pAz7GPgKfep+Hvqa+It89viN+1n6Zfgf8nvs7+sv9j/i/4XnyFvFOBWABwQHlAb2BGoGzA2sDHwSZBKUHNQWNBbsGLww+FUIMCQ1ZH3KTb8AX8hv5YzPcZyya0RXKCJ0VWhv6MMwmTB7WEY6GzwjfEH5vpvlM6cy2CIjgR2yIuB9pGZkX+X0UKSoyqi7qUbRTdHF09yzWrORZ+2e9jvGPqYy5O9tqtnJ2Z6xqbFJsY+ybuIC4qriBeIf4RfGXEnQTJAntieTE2MQ9ieNzAudsmjOc5JpUlnRjruXcorkX5unOy553PFk1WZB8OIWYEpeyP+WDIEJQLxhP5aduTR0T8oSbhU9FvqKNolGxt7hKPJLmnVaV9jjdO31D+miGT0Z1xjMJT1IreZEZkrkj801WRNberM/ZcdktOZSclJyjUg1plrQr1zC3KLdPZisrkw3keeZtyhuTh8r35CP5c/PbFWyFTNGjtFKuUA4WTC+oK3hbGFt4uEi9SFrUM99m/ur5IwuCFny9kLBQuLCz2Lh4WfHgIr9FuxYji1MXdy4xXVK6ZHhp8NJ9y2jLspb9UOJYUlXyannc8o5Sg9KlpUMrglc0lamUycturvRauWMVYZVkVe9ql9VbVn8qF5VfrHCsqK74sEa45uJXTl/VfPV5bdra3kq3yu3rSOuk626s91m/r0q9akHV0IbwDa0b8Y3lG19tSt50oXpq9Y7NtM3KzQM1YTXtW8y2rNvyoTaj9nqdf13LVv2tq7e+2Sba1r/dd3vzDoMdFTve75TsvLUreFdrvUV99W7S7oLdjxpiG7q/5n7duEd3T8Wej3ulewf2Re/ranRvbNyvv7+yCW1SNo0eSDpw5ZuAb9qb7Zp3tXBaKg7CQeXBJ9+mfHvjUOihzsPcw83fmX+39QjrSHkr0jq/dawto22gPaG97+iMo50dXh1Hvrf/fu8x42N1xzWPV56gnSg98fnkgpPjp2Snnp1OPz3Umdx590z8mWtdUV29Z0PPnj8XdO5Mt1/3yfPe549d8Lxw9CL3Ytslt0utPa49R35w/eFIr1tv62X3y+1XPK509E3rO9Hv03/6asDVc9f41y5dn3m978bsG7duJt0cuCW69fh29u0XdwruTNxdeo94r/y+2v3qB/oP6n+0/rFlwG3g+GDAYM/DWQ/vDgmHnv6U/9OH4dJHzEfVI0YjjY+dHx8bDRq98mTOk+GnsqcTz8p+Vv9563Or59/94vtLz1j82PAL+YvPv655qfNy76uprzrHI8cfvM55PfGm/K3O233vuO+638e9H5ko/ED+UPPR+mPHp9BP9z7nfP78L/eE8/sl0p8zAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAGCSURBVHjafNFPKKRxHAbw5/v7GYdBYUQjLm5SkoNykCQHtcx431/KgdKumJvSrAO7Nwc3RQ5kd3OkHJC/hUJREluonVcToqRh3sRFPA6M1Mbhc3z6Pj1fkMRHQNJL0uPeul731lU37o1y49cqHr8GvvgWQRLBsmpM/P0j4XAXiooKcXl1CZDEzl4EJBEwAZBUwWAQsVgsFSRR11gmM8trimSa3WypzZ31l5v2/vfk/4oAcv9aSGyUSz4gg/AIAOET0YQswIQWaNrnH+2OeSaY0BJN2+wDTi/OpCrwkxX1vW8q63p5cnaaB+Z/09u7x0nFJTVMiEajPsNCQaC6Ryb8THKcw/Tikho6zj//0RGUNV6gMZ1H8fmpH5iTHDlwsiOhO7FrN5RdP6aBIUj/pvJ2bkFbkxAzBzELELNCQQqgrJ5ST1/jqmYOJcHa7dYYGV5TrQ3d+vfUU+b7IfrOIRCGBYD0o1VGmaHaB6DZkqvMD2hUfF1UAISkvE/+yqbCZ89+HgBtwgFOrBUzJgAAAABJRU5ErkJggg=="), e.setCss(i, {
+              float: "left",
+              margin: 0,
+              height: 18,
+              display: "none"
+            }), o._fillSmartTagHost.appendChild(n), o._fillSmartTagHost.appendChild(i), o._root.appendChild(o._fillSmartTagHost), o.addEventListener(o._fillSmartTagHost, "mouseover", function() {
+              o._fillSmartTagHost.style.width = "32px", i.style.display = ""
+            }), o.addEventListener(o._fillSmartTagHost, "mouseleave", function() {
+              o._fillMenuHost || (o._fillSmartTagHost.style.width = "18px", i.style.display = "none")
+            }), o.addEventListener(o._fillSmartTagHost, "mousedown", function(n) {
+              e.hasClass(o._fillSmartTagHost, "wj-flexsheet-smart-tag-active") ? (e.removeClass(o._fillSmartTagHost, "wj-flexsheet-smart-tag-active"), o._fillMenuHost.style.display = "none") : (e.addClass(o._fillSmartTagHost, "wj-flexsheet-smart-tag-active"), o._showFillMenu(t), t = null), n.preventDefault()
+            }, !0)
+          }, s.prototype._showFillMenu = function(t) {
+            var o, n, i = e.culture.FlexSheet,
+              l = this,
+              s = l._fillSmartTagHost.offsetLeft,
+              r = l._fillSmartTagHost.offsetTop + 18;
+            if (!l._fillMenuHost) {
+              l._fillMenuHost = document.createElement("div"), e.setCss(l._fillMenuHost, {
+                display: "none",
+                zIndex: 100
+              }), l._fillMenuHost.innerHTML = '<div class="wj-flexsheet-fill-menu-item">' + i.copyCells + '</div><div class="wj-flexsheet-fill-menu-item">' + i.fillSeries + '</div><div class="wj-flexsheet-fill-menu-item">' + i.fillFormat + '</div><div class="wj-flexsheet-fill-menu-item">' + i.fillWithoutFormat + "</div>", e.addClass(l._fillMenuHost, "wj-flexsheet-fill-menu"), l._root.appendChild(l._fillMenuHost);
+              for (var a = function(t) {
+                o = l._fillMenuHost.childNodes[t], l.addEventListener(o, "mousedown", function(o) {
+                  var n;
+                  switch (l._removeActiveStyleForFillMenuItem(), e.addClass(o.target, "wj-flexsheet-fill-menu-item-active"), t) {
+                    case 0:
+                      n = d.CopyFormat | d.CopyContent;
+                      break;
+                    case 1:
+                      n = d.CopyFormat | d.FillSeries;
+                      break;
+                    case 2:
+                      n = d.CopyFormat;
+                      break;
+                    case 3:
+                      n = d.FillSeries
+                  }
+                  l._fillData(n), l._fillMenuHost.style.display = "none", e.removeClass(l._fillSmartTagHost, "wj-flexsheet-smart-tag-active"), o.preventDefault()
+                }, !0)
+              }, h = 0; h < l._fillMenuHost.childElementCount; h++) a(h)
+            }
+            if (t) {
+              switch (l._removeActiveStyleForFillMenuItem(), t) {
+                case d.CopyFormat | d.CopyContent:
+                  n = 0;
+                  break;
+                case d.CopyFormat | d.FillSeries:
+                  n = 1;
+                  break;
+                case d.CopyFormat:
+                  n = 2;
+                  break;
+                case d.FillSeries:
+                  n = 3
+              }
+              e.addClass(l._fillMenuHost.childNodes[n], "wj-flexsheet-fill-menu-item-active")
+            }
+            e.setCss(l._fillMenuHost, {
+              display: ""
+            }), s + l._ptScrl.x + l._fillMenuHost.offsetWidth + (l.cells.hostElement.offsetHeight > l._root.offsetHeight ? 17 : 0) > l._root.offsetWidth && (s = s - l._fillMenuHost.offsetWidth + l._fillSmartTagHost.offsetWidth), r + l._ptScrl.y + l._fillMenuHost.offsetHeight + +(l.cells.hostElement.offsetWidth > l._root.offsetWidth ? 17 : 0) > l._root.offsetHeight && (r = l._fillSmartTagHost.offsetTop - l._fillMenuHost.offsetHeight), l._fillMenuHost.style.left = s + "px", l._fillMenuHost.style.top = r + "px"
+          }, s.prototype._endDragFillOperation = function(e) {
+            this._fillSmartTagHost && (e instanceof MouseEvent && (e.target === this._fillSmartTagHost || this._isDescendant(this._fillSmartTagHost, e.target) || e.target === this._fillMenuHost || this._isDescendant(this._fillMenuHost, e.target)) || (this.removeEventListener(document.body, "mousedown", this._endDragFillOperationHdl), this._disposeFillSmartTag(), this._fillMenuHost && this._disposeFillMenu(), this._undoStack._updateCurrentAction(o._FillAction)))
+          }, s.prototype._removeActiveStyleForFillMenuItem = function() {
+            for (var t, o = 0; o < this._fillMenuHost.childElementCount; o++) t = this._fillMenuHost.childNodes[o], e.removeClass(t, "wj-flexsheet-fill-menu-item-active")
+          }, s.prototype._disposeFillSmartTag = function() {
+            this.removeEventListener(this._fillSmartTagHost), this._root.removeChild(this._fillSmartTagHost), this._fillSmartTagHost = null, this._orgCellSettings = null
+          }, s.prototype._disposeFillMenu = function() {
+            for (var e, t = 0; t < this._fillMenuHost.childElementCount; t++) e = this._fillMenuHost.childNodes[t], this.removeEventListener(e);
+            this._root.removeChild(this._fillMenuHost), this._fillMenuHost = null
           }, s.prototype._handleDropping = function(t) {
             var n, i, l, s, r, a, h, c = this;
             if (c.selectedSheet && c._draggingCells && c._dropRange && !c._containsMergedCells(c._draggingCells) && !c._containsMergedCells(c._dropRange)) {
@@ -3408,19 +3662,25 @@ var __extends = this && this.__extends || function() {
                 }
               t.ctrlKey || (a = c._updateFormulaForDropping(t.shiftKey), h = c._updateNamedRangesForDropping(t.shiftKey)), r && r.saveNewState() && (r._affectedFormulas = a, r._affectedDefinedNameVals = h, c._undoStack._addAction(r)), c._undoStack._pendingAction && (c._undoStack._pendingAction._affectedFormulas = a, c._undoStack._pendingAction._affectedDefinedNameVals = h), c.select(c._dropRange), c.selectedSheet._addSelection(c.selection), c.hostElement.focus()
             }
-          }, s.prototype._moveCellContent = function(e, t, o, n, i) {
-            var l, s, r, a, h, c, d, u, _ = this.getCellData(e, t, !1),
-              g = e * this.columns.length + t,
-              f = o * this.columns.length + n,
-              p = this.selectedSheet._styledCells[g],
-              w = !0;
-            if ((s = this.selectedSheet.findTable(o, n)) && (d = s.getRange(), u = s.getColumns(), s.showHeaderRow && o === d.topRow && (h = u[a = n - d.leftCol].name, null == _ || "" === _ ? w = !1 : u[a].name = _)), w ? this.setCellData(o, n, _) : w = !0, p ? this.selectedSheet._styledCells[f] = this._cloneObject(p) : delete this.selectedSheet._styledCells[f], i)(l = this.selectedSheet.findTable(e, t)) && (c = l.getRange(), l === s && e === o && l.showHeaderRow && e === c.topRow && (r = t - c.leftCol, l._updateColumnName(r, _)));
+          }, s.prototype._moveCellContent = function(e, o, n, i, l) {
+            var s, r, a, h, c, d, u, _, g, f = this.getCellData(e, o, !1),
+              p = e * this.columns.length + o,
+              w = n * this.columns.length + i,
+              m = this.selectedSheet._styledCells[p],
+              C = !0;
+            if ((r = this.selectedSheet.findTable(n, i)) && (u = r.getRange(), _ = r.getColumns(), r.showHeaderRow && n === u.topRow && (c = _[h = i - u.leftCol].name, null == f || "" === f ? C = !1 : _[h].name = f)), C) {
+              if (l && f && "string" == typeof f && "=" === f[0] && w - p != 0) try {
+                (g = this._calcEngine._parse(f))._moveCellRangeExp(this.selectedSheetIndex, new t.CellRange(e, o), new t.CellRange(n, i), !1, !0) && (f = "=" + g._getStringExpression())
+              } catch (e) {}
+              this.setCellData(n, i, f)
+            } else C = !0;
+            if (m ? this.selectedSheet._styledCells[w] = this._cloneObject(m) : delete this.selectedSheet._styledCells[w], l)(s = this.selectedSheet.findTable(e, o)) && (d = s.getRange(), s === r && e === n && s.showHeaderRow && e === d.topRow && (a = o - d.leftCol, s._updateColumnName(a, f)));
             else {
-              if (delete this.selectedSheet._styledCells[g], l = this.selectedSheet.findTable(e, t)) {
-                if (c = l.getRange(), l === s && e === o && l.showHeaderRow && e === c.topRow) return r = t - c.leftCol, void l._updateColumnName(r, h);
-                if (l.showHeaderRow && e === c.topRow) return
+              if (delete this.selectedSheet._styledCells[p], s = this.selectedSheet.findTable(e, o)) {
+                if (d = s.getRange(), s === r && e === n && s.showHeaderRow && e === d.topRow) return a = o - d.leftCol, void s._updateColumnName(a, c);
+                if (s.showHeaderRow && e === d.topRow) return
               }
-              this.setCellData(e, t, null)
+              this.setCellData(e, o, null)
             }
           }, s.prototype._allowExchangeCells = function(e, n) {
             var i, l, s, r, a, h = this.selectedSheet.tables;
@@ -3453,11 +3713,10 @@ var __extends = this && this.__extends || function() {
             for (t = this._dropRange.topRow; t <= this._dropRange.bottomRow; t++)
               for (o = this._dropRange.leftCol; o <= this._dropRange.rightCol; o++) n = t * this.columns.length + o, r[s] ? this.selectedSheet._styledCells[n] = r[s] : delete this.selectedSheet._styledCells[n], s++
           }, s.prototype._containsMergedCells = function(e, t) {
-            var o, n, i, l, s;
-            if (t = t || this.selectedSheet, s = t === this.selectedSheet ? this : t.grid, !t) return !1;
-            for (o = e.topRow; o <= e.bottomRow; o++)
-              for (n = e.leftCol; n <= e.rightCol; n++)
-                if (i = o * s.columns.length + n, (l = t._mergedRanges[i]) && l.isValid && !l.isSingleCell) return !0;
+            var o, n;
+            if (!(t = t || this.selectedSheet)) return !1;
+            for (o = 0; o < t._mergedRanges.length; o++)
+              if (n = t._mergedRanges[o], e.intersects(n)) return !0;
             return !1
           }, s.prototype._multiSelectColumns = function(e) {
             var o;
@@ -3491,47 +3750,47 @@ var __extends = this && this.__extends || function() {
               if (this.rows[o] instanceof t.GroupRow) return !0;
             return !1
           }, s.prototype._delSeletionContent = function(n) {
-            var i, l, s, r, a, h, c, d, u, _, g = this.selectedSheet.selectionRanges.slice(),
-              f = !1,
-              p = new o._EditAction(this),
-              w = this.editableCollectionView,
-              m = !1,
-              C = this.scrollPosition;
+            var i, l, s, r, a, h, c, d, u, _, g, f = this.selectedSheet.selectionRanges.slice(),
+              p = !1,
+              w = new o._EditAction(this),
+              m = this.editableCollectionView,
+              C = !1,
+              b = this.scrollPosition;
             if (!this.isReadOnly)
               if (this.allowDelete && this.selection.isValid && 0 === this.selection.leftCol && this.selection.rightCol === this.columns.length - 1) this.deleteRows(this.selection.topRow, this.selection.rowSpan);
               else {
-                for (this.beginUpdate(), this.undoStack.stackSize > 0 && (p = new o._EditAction(this)), null != g && 0 !== g.length || (g = [this.selection]), s = 0; s < g.length; s++) {
-                  if (i = g[s], l = new t.CellRange, u = new t.CellEditEndingEventArgs(this.cells, l, n), this.selectedSheet.tables.length > 0)
-                    for (h = 0; h < this.selectedSheet.tables.length; h++) c = this.selectedSheet.tables[h], i.contains(c.getRange()) && (p && p._storeDeletedTables(c), this.selectedSheet.tables.remove(c));
+                for (this.beginUpdate(), this.undoStack.stackSize > 0 && (w = new o._EditAction(this)), null != f && 0 !== f.length || (f = [this.selection]), s = 0; s < f.length; s++) {
+                  if (i = f[s], l = new t.CellRange, _ = new t.CellEditEndingEventArgs(this.cells, l, n), (d = this.selectedSheet.tables.length) > 0)
+                    for (h = d - 1; h >= 0; h--) c = this.selectedSheet.tables[h], i.contains(c.getRange()) && (w && w._storeDeletedTables(c), this.selectedSheet.tables.remove(c));
                   for (a = i.topRow; a <= i.bottomRow; a++)
-                    if ((_ = this.rows[a]) && !_.isReadOnly)
-                      for (r = i.leftCol; r <= i.rightCol; r++)(!(d = this._getBindingColumn(this.cells, a, this.columns[r])).isReadOnly && !1 === d.isRequired || null == d.isRequired && d.dataType == e.DataType.String) && this.getCellData(a, r, !0) && (l.setRange(a, r), u.cancel = !1, this.onBeginningEdit(u) && (w && (m || (m = !0, w.beginUpdate()), w.editItem(_.dataItem), this._edtHdl._edItem = w.currentEditItem), this.setCellData(a, r, "", !0), f = !0, this.onCellEditEnding(u), this.onCellEditEnded(u)));
-                  m && (w.endUpdate(), i.rowSpan > 1 && w.commitEdit())
+                    if ((g = this.rows[a]) && !g.isReadOnly && (g.visible || this.selectedSheet._freezeHiddenRows && this.selectedSheet._freezeHiddenRows[a]))
+                      for (r = i.leftCol; r <= i.rightCol; r++)(u = this._getBindingColumn(this.cells, a, this.columns[r])).isReadOnly || !1 !== u.isRequired && (null != u.isRequired || u.dataType != e.DataType.String) || !u.visible && !this.selectedSheet._freezeHiddenCols[r] || this.getCellData(a, r, !0) && (l.setRange(a, r), _.cancel = !1, this.onBeginningEdit(_) && (m && (C || (C = !0, m.beginUpdate()), m.editItem(g.dataItem), this._edtHdl._edItem = m.currentEditItem), this.setCellData(a, r, "", !0), p = !0, this.onCellEditEnding(_), this.onCellEditEnded(_)));
+                  C && (m.endUpdate(), m._pendingRefresh = !1, i.rowSpan > 1 && m.commitEdit())
                 }
-                f && p && (p.saveNewState(), this._undoStack._addAction(p)), this.selection = i, this.scrollPosition = C, this.endUpdate()
+                p && w && (w.saveNewState(), this._undoStack._addAction(w)), this.selection = i, this.scrollPosition = b, this.endUpdate()
               }
-          }, s.prototype._updateAffectedFormula = function(t, o, n, i) {
-            var l, s, r, a, h, c, d, u, _, g = [],
-              f = [],
-              p = this.selection.clone();
-            for (this.selectedSheet._storeRowSettings(), this.beginUpdate(), l = 0; l < this.sheets.length; l++)
-              for (r = (s = this.sheets[l]).grid, a = 0; a < r.rows.length; a++)
-                for (h = 0; h < r.columns.length; h++)
-                  if ((u = r.getCellData(a, h, !1)) && e.isString(u) && "=" === u[0] && (_ = this._updateCellRef(u, l, t, o, n, i))) {
-                    if (g.push({
-                      sheet: s,
-                      point: new e.Point(a, h),
-                      formula: u
-                    }), c = a, d = h, l === this.selectedSheetIndex && (i ? a >= t && (n ? c += o : c -= o) : h >= t && (n ? d += o : d -= o), !n && (i && a <= t && a >= t - o + 1 || !i && h <= t && h >= t - o + 1))) continue;
-                    r.setCellData(a, h, _, !1), f.push({
-                      sheet: s,
-                      point: new e.Point(c, d),
+          }, s.prototype._updateAffectedFormula = function(t, o, n, i, l) {
+            var s, r, a, h, c, d, u, _, g, f = [],
+              p = [],
+              w = this.selection.clone();
+            for (this.selectedSheet._storeRowSettings(), this.beginUpdate(), s = 0; s < this.sheets.length; s++)
+              for (a = (r = this.sheets[s]).grid, h = 0; h < a.rows.length; h++)
+                for (c = 0; c < a.columns.length; c++)
+                  if ((_ = a.getCellData(h, c, !1)) && e.isString(_) && "=" === _[0] && (g = this._updateCellRef(_, s, t, o, n, i, l))) {
+                    if (f.push({
+                      sheet: r,
+                      point: new e.Point(h, c),
                       formula: _
+                    }), d = h, u = c, s === this.selectedSheetIndex && (i ? h >= t && (n ? d += o : d -= o) : c >= t && (n ? u += o : u -= o), !n && (i && h <= t && h >= t - o + 1 || !i && c <= t && c >= t - o + 1))) continue;
+                    a.setCellData(h, c, g, !1), p.push({
+                      sheet: r,
+                      point: new e.Point(d, u),
+                      formula: g
                     })
                   }
-            return this.selection = p, this.endUpdate(), {
-              oldFormulas: g,
-              newFormulas: f
+            return this.selection = w, this.endUpdate(), {
+              oldFormulas: f,
+              newFormulas: p
             }
           }, s.prototype._updateAffectedNamedRanges = function(t, o, n, i) {
             var l, s, r, a, h = [],
@@ -3546,6 +3805,27 @@ var __extends = this && this.__extends || function() {
             return {
               oldDefinedNameVals: h,
               newDefinedNameVals: c
+            }
+          }, s.prototype._updateFormulaBoundaryForEditingCell = function(t, o) {
+            var n, i, l, s, r = [],
+              a = [];
+            for (this.beginUpdate(), n = t; n < this.rows.length; n++)(l = this.getCellData(n, o, !1)) && e.isString(l) && "=" === l[0] && (s = this._updateCellBoundary(l, t, o)) && (r.push({
+              point: new e.Point(n, o),
+              formula: l
+            }), this.setCellData(n, o, s, !1), a.push({
+              point: new e.Point(n, o),
+              formula: s
+            }));
+            for (i = o; i < this.columns.length; i++)(l = this.getCellData(t, i, !1)) && e.isString(l) && "=" === l[0] && (s = this._updateCellBoundary(l, t, o)) && (r.push({
+              point: new e.Point(t, i),
+              formula: l
+            }), this.setCellData(t, i, s, !1), a.push({
+              point: new e.Point(t, i),
+              formula: s
+            }));
+            return this.endUpdate(), {
+              oldFormulas: r,
+              newFormulas: a
             }
           }, s.prototype._updateColumnFiler = function(e, t) {
             for (var o = JSON.parse(this._filter.filterDefinition), n = 0; n < o.filters.length; n++) {
@@ -3627,15 +3907,15 @@ var __extends = this && this.__extends || function() {
               if ((n = i[l]).topRow !== o.topRow || n.bottomRow !== o.bottomRow) return !1;
             return !0
           }, s.prototype._postSetClipStringProcess = function(o, n, i, l, s, r) {
-            var a, h, c, d, u, _ = !1;
-            return l >= 0 && s >= 0 && this._copiedSheet && (a = this._copiedSheet._getMergedRange(l, s)) && a.topRow === l && a.leftCol === s && (h = (h = n + a.rowSpan - 1) < this.rows.length ? h : this.rows.length - 1, c = (c = i + a.columnSpan - 1) < this.columns.length ? c : this.columns.length - 1, this.mergeRange(new t.CellRange(n, i, h, c), !0)), d = new t.CellRangeEventArgs(this.cells, new t.CellRange(n, i), o), this.onPastingCell(d) && this.cells.setCellData(n, i, d.data) && (e.isString(d.data) && (u = d.data.match(/\n/g)) && u.length > 0 && (r ? r.whiteSpace = "pre" : r = {
+            var a, h, c, d, u, _, g, f = !1;
+            return d = new t.CellRangeEventArgs(this.cells, new t.CellRange(n, i), o), this.onPastingCell(d) && (l >= 0 && s >= 0 && this._copiedSheet && (a = this._copiedSheet._getMergedRange(l, s)) && a.topRow === l && a.leftCol === s && (h = (h = n + a.rowSpan - 1) < this.rows.length ? h : this.rows.length - 1, c = (c = i + a.columnSpan - 1) < this.columns.length ? c : this.columns.length - 1, this.mergeRange(new t.CellRange(n, i, h, c), !0)), this.cells.setCellData(n, i, d.data) && (e.isString(d.data) && (u = d.data.match(/\n/g)) && u.length > 0 && (r ? r.whiteSpace = "pre" : r = {
               whiteSpace: "pre"
-            }, this.rows[n].height = this.rows.defaultSize * (u.length + 1)), r && this._applyStyleForCell(n, i, r), this.onPastedCell(d), _ = !0), _
+            }, this.rows[n].height = this.rows.defaultSize * (u.length + 1)), _ = n * this.columns.length + i, (a = this.selectedSheet._getMergedRange(n, i)) && (_ = a.topRow * this.columns.length + a.leftCol), r && (g = this._cloneObject(r)), this.selectedSheet._styledCells[_] = g, this.onPastedCell(d), f = !0)), f
           }, s.prototype._delCutData = function(o, n) {
             var i, l, s, r, a = this._copiedSheet === this.selectedSheet ? this : this._copiedSheet.grid;
             for (i = (r = this.selectionMode === t.SelectionMode.ListBox ? this._getSelectionForListBoxMode(a) : this._copiedRanges[0]).topRow; i <= r.bottomRow; i++)
               if (null != a.rows[i])
-                for (l = r.leftCol; l <= r.rightCol; l++)(this._copiedSheet !== this.selectedSheet || i < this.selection.topRow || i > this.selection.topRow + o || l < this.selection.leftCol || l > this.selection.leftCol + n) && (0 == (s = a._getBindingColumn(a.cells, i, a.columns[l])).isRequired || null == s.isRequired && s.dataType == e.DataType.String) && a.getCellData(i, l, !0) && a.setCellData(i, l, "", !0)
+                for (l = r.leftCol; l <= r.rightCol; l++)(this._copiedSheet !== this.selectedSheet || i < this.selection.topRow || i > this.selection.topRow + o - 1 || l < this.selection.leftCol || l > this.selection.leftCol + n - 1) && (0 == (s = a._getBindingColumn(a.cells, i, a.columns[l])).isRequired || null == s.isRequired && s.dataType == e.DataType.String) && a.getCellData(i, l, !0) && a.setCellData(i, l, "", !0)
           }, s.prototype._containsMultiLineText = function(e) {
             for (var t = 0; t < e.length; t++)
               for (var o = e[t], n = 0; n < o.length; n++)
@@ -3780,15 +4060,13 @@ var __extends = this && this.__extends || function() {
               for (n = this.selectedSheet.tables.length - 1; n >= 0; n--)
                 if (i = this.selectedSheet.tables[n], l = i.getRange(), o)
                   if ((s = e + t - 1) < l.topRow) i._updateTableRange(-t, -t, 0, 0);
-                  else if (s >= l.topRow && s <= l.bottomRow)
-                    if (e < l.topRow) i.showHeaderRow && (i._showHeaderRow = !1), i._updateTableRange(e - l.topRow, -t, 0, 0);
-                    else {
-                      if (e === l.topRow && t === l.rowSpan) {
-                        null == r && (r = []), r.push(i), this.selectedSheet.tables.remove(i);
-                        continue
-                      }
-                      e === l.topRow && i.showHeaderRow && (i._showHeaderRow = !1), s === l.bottomRow && i.showTotalRow && (i._showTotalRow = !1), i._updateTableRange(0, -t, 0, 0)
-                    } else e <= l.topRow ? (null == r && (r = []), r.push(i), this.selectedSheet.tables.remove(i)) : e <= l.bottomRow && (i.showTotalRow && (i._showTotalRow = !1), i._updateTableRange(0, e - l.bottomRow - 1, 0, 0));
+                  else if (s >= l.topRow && s <= l.bottomRow) {
+                    if (e <= l.topRow && s === l.bottomRow) {
+                      null == r && (r = []), r.push(i), this.selectedSheet.tables.remove(i);
+                      continue
+                    }
+                    e < l.topRow ? (i.showHeaderRow && (i._showHeaderRow = !1), i._updateTableRange(e - l.topRow, -t, 0, 0)) : (e === l.topRow && i.showHeaderRow && (i._showHeaderRow = !1), s === l.bottomRow && i.showTotalRow && (i._showTotalRow = !1), i._updateTableRange(0, -t, 0, 0))
+                  } else e <= l.topRow ? (null == r && (r = []), r.push(i), this.selectedSheet.tables.remove(i)) : e <= l.bottomRow && (i.showTotalRow && (i._showTotalRow = !1), i._updateTableRange(0, e - l.bottomRow - 1, 0, 0));
                 else e <= l.topRow ? i._updateTableRange(t, t, 0, 0) : e > l.topRow && e <= l.bottomRow && i._updateTableRange(0, t, 0, 0);
             return r
           }, s.prototype._updateTablesForUpdatingColumn = function(e, t, o) {
@@ -3798,15 +4076,11 @@ var __extends = this && this.__extends || function() {
                 if (i = this.selectedSheet.tables[n], l = i.getRange(), o)
                   if ((s = e + t - 1) < l.leftCol) i._updateTableRange(0, 0, -t, -t);
                   else if (s >= l.leftCol && s <= l.rightCol) {
-                    if (e < l.leftCol) r = t - l.leftCol + e, a = l.leftCol, i._updateTableRange(0, 0, e - l.leftCol, -t);
-                    else {
-                      if (e === l.leftCol && t === l.columnSpan) {
-                        null == c && (c = []), c.push(i), this.selectedSheet.tables.remove(i);
-                        continue
-                      }
-                      r = t, a = e, i._updateTableRange(0, 0, 0, -r)
+                    if (e <= l.leftCol && s === l.rightCol) {
+                      null == c && (c = []), c.push(i), this.selectedSheet.tables.remove(i);
+                      continue
                     }
-                    i._columns.splice(a - l.leftCol, r)
+                    e < l.leftCol ? (r = t - l.leftCol + e, a = l.leftCol, i._updateTableRange(0, 0, e - l.leftCol, -t)) : (r = t, a = e, i._updateTableRange(0, 0, 0, -r)), i._columns.splice(a - l.leftCol, r)
                   } else e <= l.leftCol ? (null == c && (c = []), c.push(i), this.selectedSheet.tables.remove(i)) : e <= l.rightCol && (r = l.rightCol - e + 1, i._updateTableRange(0, 0, 0, -r), i._columns.splice(e, r));
                 else if (e <= l.leftCol) i._updateTableRange(0, 0, t, t);
                 else if (e > l.leftCol && e <= l.rightCol)
@@ -3836,15 +4110,170 @@ var __extends = this && this.__extends || function() {
           }, s.prototype._sheetSortConverter = function(t, o, n, l) {
             return n = i.prototype._sortConverter.call(this, t, o, n, l), e.isString(n) && n.length > 0 && "=" === n[0] && (n = this.evaluate(n)), n
           }, s.prototype._formatEvaluatedResult = function(t, o, n) {
-            return e.isPrimitive(t) ? (o.dataMap && (t = o.dataMap.getDisplayValue(t)), !e.isInt(t) || o.format || o.dataMap || n ? ((n || o.format) && e.isString(t) && (+t).toString() === t && (t = +t), t = null != t ? e.Globalize.format(t, n || o.format) : "") : t = t.toString()) : t && (!e.isInt(t.value) || o.format || o.dataMap || n || t.format ? (e.isString(t.value) && (+t.value).toString() === t.value && (t.value = +t.value), t = null != t.value ? e.Globalize.format(t.value, n || t.format || o.format) : "") : t = t.value.toString()), t
-          }, s.prototype._updateCellRef = function(e, t, o, n, i, l) {
-            var s;
+            return e.isPrimitive(t) ? (o.dataMap && (t = o.dataMap.getDisplayValue(t)), !e.isInt(t) || o.format || o.dataMap || n ? ((n && "@" !== n || o.format && "@" !== o.format) && e.isString(t) && (+t).toString() === t && (t = +t), t = null != t ? e.Globalize.format(t, n || o.format) : "") : t = t.toString()) : t && (!e.isInt(t.value) || o.format || o.dataMap || n || t.format ? (e.isString(t.value) && (+t.value).toString() === t.value && (t.value = +t.value), t = null != t.value ? e.Globalize.format(t.value, n || t.format || o.format) : "") : t = t.value.toString()), t
+          }, s.prototype._updateCellRef = function(e, t, o, n, i, l, s) {
+            var r;
             try {
-              s = this._calcEngine._parse(e)
+              r = this._calcEngine._parse(e)
             } catch (e) {
               return null
             }
-            return s._updateCellRangeExp(t, o, n, i, l) ? "=" + s._getStringExpression() : null
+            return r._updateCellRangeExp(t, o, n, i, l, s) ? "=" + r._getStringExpression() : null
+          }, s.prototype._updateCellBoundary = function(e, t, n) {
+            var i;
+            try {
+              i = this._calcEngine._parse(e)
+            } catch (e) {
+              return null
+            }
+            return i instanceof o._FunctionExpression && i._updateCellBoundary(t, n) ? "=" + i._getStringExpression() : null
+          }, s.prototype._fillData = function(o) {
+            var n, i, l, s, r, a, h, c, u, _, g, f, p, w, m, C, b, y = this._fillingRange || this.selection,
+              S = this._fillingSource,
+              R = !o || 0 != (o & d.CopyFormat),
+              v = !!o && 0 != (o & d.CopyContent),
+              x = !o || 0 != (o & d.FillSeries),
+              T = S.leftCol === y.leftCol && S.rightCol === y.rightCol,
+              I = [];
+            for (this.beginUpdate(), this._resetCellsForFillRange(o), n = 0; n < y.rowSpan; n++)
+              for ((l = (c = (r = y.topRow + n) - S.topRow) % S.rowSpan) < 0 && (l += S.rowSpan), i = 0; i < y.columnSpan; i++) u = (a = y.leftCol + i) - S.leftCol, c >= 0 && c < S.rowSpan && u >= 0 && u < S.columnSpan || ((s = u % S.columnSpan) < 0 && (s += S.columnSpan), w = !1, (p = this.getMergedRange(this.cells, S.topRow + l, S.leftCol + s)) && (w = p.topRow === S.topRow + l && p.leftCol === S.leftCol + s) && (this.getMergedRange(this.cells, r, a) || this.mergeRange(new t.CellRange(r, a, r + p.rowSpan - 1, a + p.columnSpan - 1))), R && (f = null, (g = this.selectedSheet.getCellStyle(S.topRow + l, S.leftCol + s)) && (f = this._cloneObject(g)), h = r * this.columns.length + a, this.selectedSheet._styledCells[h] = f), p && !w || (v ? (_ = this.getCellData(S.topRow + l, S.leftCol + s, !1)) && e.isString(_) && "=" === _[0] ? this._fillFormula(_, S.topRow + l, S.leftCol + s, r, a) : this.setCellData(r, a, _) : x && (T ? (m = i, C = l) : (m = n, C = s), null == (_ = this.getCellData(S.topRow + l, S.leftCol + s, !1)) || e.isString(_) ? (_ && e.isString(_) && "=" === _[0] ? this._fillFormula(_, S.topRow + l, S.leftCol + s, r, a) : this.setCellData(r, a, _), I[m] = null) : (I[m] || (I[m] = this._getFillSeries(T, m, C)), (b = I[m]) && (b.items, T ? (_ = this._getFillData(l, c, S, T, b, null != o || 0 === m), b.endIndex === S.topRow + l && (I[m] = null)) : (_ = this._getFillData(s, u, S, T, b, null != o || 0 === m), b.endIndex === S.leftCol + s && (I[m] = null)), this.setCellData(r, a, _))))));
+            this._fillingRange && this.select(this._fillingRange, !1), this.endUpdate()
+          }, s.prototype._getFillData = function(e, t, o, n, i, l) {
+            var r, a, h = i.items;
+            return 1 !== h.length || l ? (r = n ? Math.floor(t / o.rowSpan) * i.itemIndexes[i.itemIndexes.length - 1] + o.topRow + e - i.startIndex + 1 : Math.floor(t / o.columnSpan) * i.itemIndexes[i.itemIndexes.length - 1] + o.leftCol + e - i.startIndex + 1, a = this._getLinearBestFitTrendData(h, i.itemIndexes, r), "date" === i.type && (a = s._fromOADate(a)), a) : h[0]
+          }, s.prototype._fillFormula = function(e, o, n, i, l) {
+            var s, r, a;
+            try {
+              s = this._calcEngine._parse(e), r = new t.CellRange(o, n), a = new t.CellRange(i, l), s._moveCellRangeExp(this.selectedSheetIndex, r, a, !1, !0) && (e = "=" + s._getStringExpression())
+            } catch (e) {} finally {
+              this.setCellData(i, l, e)
+            }
+          }, s.prototype._getFillSeries = function(t, o, n) {
+            var i, l, r, a, h, c, d, u, _ = this._fillingSource,
+              g = [],
+              f = [];
+            if (t)
+              for (n = _.topRow + n, a = 0, h = _.topRow; h <= _.bottomRow; h++) {
+                if (c = this.getMergedRange(this.cells, h, _.leftCol + o))
+                  if (d && !c.equals(d)) {
+                    if (a += d.rowSpan, d = c, c.leftCol !== _.leftCol + o) continue
+                  } else {
+                    if (c.topRow !== h || c.leftCol !== _.leftCol + o) continue;
+                    a += 1, d = c
+                  } else d ? (a += d.rowSpan, d = null) : a += 1;
+                if (null != (u = this.getCellData(h, _.leftCol + o, !1)) && "" !== u)
+                  if (e.isNumber(u) || e.isDate(u))
+                    if (i = e.isNumber(u) ? "number" : "date", e.isDate(u) && (u = s._toOADate(u)), 0 === g.length) r = h, l = i, g.push(u), f.push(a);
+                    else if (i === l) g.push(u), f.push(a);
+                    else {
+                      if (n >= r && n <= h) return {
+                        type: l,
+                        startIndex: r,
+                        endIndex: h - 1,
+                        items: g,
+                        itemIndexes: f
+                      };
+                      g.splice(0, g.length), f.splice(0, f.length)
+                    } else if (g.length > 0) {
+                    if (n >= r && n <= h) return {
+                      type: l,
+                      startIndex: r,
+                      endIndex: h - 1,
+                      items: g,
+                      itemIndexes: f
+                    };
+                    g.splice(0, g.length), f.splice(0, f.length)
+                  }
+              } else
+              for (n = _.leftCol + n, a = 0, h = _.leftCol; h <= _.rightCol; h++) {
+                if (c = this.getMergedRange(this.cells, _.topRow + o, h))
+                  if (d && !c.equals(d)) {
+                    if (a += d.columnSpan, d = c, c.topRow !== _.topRow + o) continue
+                  } else {
+                    if (c.leftCol !== h || c.topRow !== _.topRow + o) continue;
+                    a += 1, d = c
+                  } else d ? (a += d.columnSpan, d = null) : a += 1;
+                if (null != (u = this.getCellData(_.topRow + o, h, !1)) && "" !== u)
+                  if (e.isNumber(u) || e.isDate(u))
+                    if (i = e.isNumber(u) ? "number" : "date", e.isDate(u) && (u = s._toOADate(u)), 0 === g.length) r = h, l = i, g.push(u), f.push(a);
+                    else if (i === l) g.push(u), f.push(a);
+                    else {
+                      if (n >= r && n <= h) return {
+                        type: l,
+                        startIndex: r,
+                        endIndex: h - 1,
+                        items: g,
+                        itemIndexes: f
+                      };
+                      g.splice(0, g.length), f.splice(0, f.length)
+                    } else if (g.length > 0) {
+                    if (n >= r && n <= h) return {
+                      type: l,
+                      startIndex: r,
+                      endIndex: h - 1,
+                      items: g,
+                      itemIndexes: f
+                    };
+                    g.splice(0, g.length), f.splice(0, f.length)
+                  }
+              }
+            return g.length > 0 ? {
+              type: l,
+              startIndex: r,
+              endIndex: h - 1,
+              items: g,
+              itemIndexes: f
+            } : null
+          }, s.prototype._getLinearBestFitTrendData = function(e, t, o) {
+            var n, i, l, s, r, a, h = 0,
+              c = 0,
+              d = 0,
+              u = 0;
+            if (1 === (s = e.length)) return e[0] + o - 1;
+            for (n = 0; n < t.length; n++) h += i = t[n], d += i * i, c += l = e[n], u += i * l;
+            return r = (s * u - h * c) / (s * d - h * h), a = (c * d - h * u) / (s * d - h * h), o * r + a
+          }, s.prototype._getCellSettingsForFill = function(e, t) {
+            var o, n, i, l, s, r;
+            for (e || (e = this._fillingSource), t || (t = this._fillingRange), s = [], o = t.topRow; o <= t.bottomRow; o++)
+              for (n = t.leftCol; n <= t.rightCol; n++) o >= e.topRow && o <= e.bottomRow && n >= e.leftCol && n <= e.rightCol || (i = this.getCellData(o, n, !1), l = this._cloneObject(this.selectedSheet.getCellStyle(o, n)), (r = this.getMergedRange(this.cells, o, n)) && r.topRow === o && r.leftCol === n || (r = null), s.push({
+                row: o,
+                col: n,
+                value: i,
+                style: l,
+                mergedCell: r ? r.clone() : null
+              }));
+            return s
+          }, s.prototype._resetCellsForFillRange = function(e) {
+            var t, o, n, i, l, s = !e || 0 != (e & d.CopyFormat),
+              r = !!e && 0 != (e & d.CopyContent),
+              a = !e || 0 != (e & d.FillSeries);
+            if (this._orgCellSettings && this._orgCellSettings.length > 0)
+              for (t = 0; t < this._orgCellSettings.length; t++) n = (o = this._orgCellSettings[t]).row, i = o.col, s || (l = n * this.columns.length + i, this.selectedSheet._styledCells[l] = o.style), r || a || this.setCellData(n, i, o.value)
+          }, s.prototype._canDoFillOperation = function() {
+            var e, t, o, n, i, l, s, r, a, h, c, d, u, _, g, f = this._fillingSource,
+              p = this._fillingRange,
+              w = !1;
+            for (e = f.topRow; e <= f.bottomRow; e++)
+              for (t = f.leftCol; t <= f.rightCol; t++)
+                if (h = this.getMergedRange(this.cells, e, t), c) {
+                  if (!h || !c.equals(h)) {
+                    w = !0;
+                    break
+                  }
+                } else c = h;
+            for (o = p.topRow; o <= p.bottomRow; o++)
+              for ((n = (i = o - f.topRow) % f.rowSpan) < 0 && (n += f.rowSpan), n += f.topRow, l = p.leftCol; l <= p.rightCol; l++)
+                if (r = l - f.leftCol, !(i >= 0 && i < f.rowSpan && r >= 0 && r < f.columnSpan) && ((s = r % f.columnSpan) < 0 && (s += f.columnSpan), s += f.leftCol, h = this.getMergedRange(this.cells, n, s), a = this.getMergedRange(this.cells, o, l))) {
+                  if (w || !h) return !1;
+                  if (d = a ? o - a.topRow : NaN, u = a ? l - a.leftCol : NaN, _ = h ? n - h.topRow : NaN, g = h ? s - h.leftCol : NaN, d !== _ || u !== g) return !1
+                }
+            return !0
+          }, s.prototype._updateItemIndexForInsertingRow = function(e, t, o) {
+            var n, i;
+            for (n = 0; n < e.length; n++)(i = e[n]) && null != i._itemIdx && i._itemIdx >= t && (i._itemIdx += o)
+          }, s.prototype._updateItemIndexForRemovingRow = function(e, t) {
+            var o, n;
+            for (o = 0; o < e.length; o++)(n = e[o]) && null != n._itemIdx && n._itemIdx >= t && (n._itemIdx -= 1)
           }, s.prototype._copyRowsToSelectedSheet = function() {
             var e, t = this;
             if (t.selectedSheet) {
@@ -3927,6 +4356,11 @@ var __extends = this && this.__extends || function() {
               for (o = this.sheets[i].tables, n = 0; n < o.length; n++)
                 if ((t = o[n]).name.toLowerCase() === e.toLowerCase()) return t;
             return null
+          }, s.prototype._checkTableHeaderRow = function(e, t) {
+            var n, i, l, s, r;
+            for (i = 0; i < e.length; i++)
+              if ((n = e[i]).showHeaderRow)
+                for (l = (r = n.getRange(o.TableSection.Header)).row, s = r.leftCol; s <= r.rightCol; s++) t.sheets[0].rows[l].cells[s].isDate = !1
           }, s.prototype._isTableColumnRef = function(e, t) {
             return new RegExp("\\[(\\s*@)?" + t + "\\]", "i").test(e)
           }, s.prototype._getThemeColor = function(t, o) {
@@ -4249,6 +4683,17 @@ var __extends = this && this.__extends || function() {
               fontWeight: "bold",
               color: this._getThemeColor(1)
             }, n
+          }, s._toOADate = function(e) {
+            var t, o = new Date(1900, 0, 0),
+              n = Date.UTC(1900, 0, 0),
+              i = o.getTime() - n - 6e4 * o.getTimezoneOffset(),
+              l = 6e4 * (e.getTimezoneOffset() - o.getTimezoneOffset());
+            return t = (e.getTime() - o.getTime() - (0 !== l ? l - i : 0)) / 864e5, t += t > 59 ? 1 : 0
+          }, s._fromOADate = function(e) {
+            var t, o, n, i = new Date(1900, 0, 0),
+              l = Date.UTC(1900, 0, 0),
+              s = i.getTime() - l - 6e4 * i.getTimezoneOffset();
+            return o = e > 59 ? 1 : 0, n = new Date(i.getTime() + 864e5 * (e - o)), 0 !== (t = 6e4 * (n.getTimezoneOffset() - i.getTimezoneOffset())) ? new Date(i.getTime() + t - s + 864e5 * (e - o)) : n
           }, s.controlTemplate = '<div style="width:100%;height:100%"><div wj-part="container" style="width:100%">' + t.FlexGrid.controlTemplate + '</div><div wj-part="tab-holder" class="wj-tabholder" style="width:100%; min-width:100px"></div><div wj-part="context-menu" style="display:none;z-index:100"></div></div>', s
         }(t.FlexGrid);
       o.FlexSheet = i;
@@ -4324,14 +4769,14 @@ var __extends = this && this.__extends || function() {
         }), o
       }(e.EventArgs);
       o.RowColumnChangedEventArgs = r;
-      var a = function(o) {
-        function n(e, t, n, i, l) {
-          return o.call(this, e, t, n, i, l) || this
+      var a = function(n) {
+        function i(e, t, o, i, l) {
+          return n.call(this, e, t, o, i, l) || this
         }
-        return __extends(n, o), n.prototype.getSelectedState = function(e, n, i) {
+        return __extends(i, n), i.prototype.getSelectedState = function(e, o, i) {
           var l, s, r, a, h, c;
           if (this.grid) {
-            if (c = this.grid.getMergedRange(this, e, n), l = this.grid.selectedSheet ? this.grid.selectedSheet.selectionRanges : null, h = o.prototype.getSelectedState.call(this, e, n, i), s = l ? l.length : 0, h === t.SelectedState.None && s > 0)
+            if (c = this.grid.getMergedRange(this, e, o), l = this.grid.selectedSheet ? this.grid.selectedSheet.selectionRanges : null, h = n.prototype.getSelectedState.call(this, e, o, i), s = l ? l.length : 0, h === t.SelectedState.None && s > 0)
               for (r = 0; r < l.length; r++)
                 if ((a = l[r]) && a instanceof t.CellRange) {
                   if (this.cellType === t.CellType.Cell) {
@@ -4339,28 +4784,41 @@ var __extends = this && this.__extends || function() {
                       if (c.contains(a.row, a.col)) return r !== s - 1 || this.grid._isClicking ? t.SelectedState.Selected : this.grid.showMarquee ? t.SelectedState.None : t.SelectedState.Cursor;
                       if (c.intersects(a)) return t.SelectedState.Selected
                     }
-                    if (a.row === e && a.col === n) return r !== s - 1 || this.grid._isClicking ? t.SelectedState.Selected : this.grid.showMarquee ? t.SelectedState.None : t.SelectedState.Cursor;
-                    if (a.contains(e, n)) return t.SelectedState.Selected
+                    if (a.row === e && a.col === o) return r !== s - 1 || this.grid._isClicking ? t.SelectedState.Selected : this.grid.showMarquee ? t.SelectedState.None : t.SelectedState.Cursor;
+                    if (a.contains(e, o)) return t.SelectedState.Selected
                   }
                   if (this.grid.showSelectedHeaders & t.HeadersVisibility.Row && this.cellType === t.CellType.RowHeader && a.containsRow(e)) return t.SelectedState.Selected;
-                  if (this.grid.showSelectedHeaders & t.HeadersVisibility.Column && this.cellType === t.CellType.ColumnHeader && a.containsColumn(n)) return t.SelectedState.Selected
+                  if (this.grid.showSelectedHeaders & t.HeadersVisibility.Column && this.cellType === t.CellType.ColumnHeader && a.containsColumn(o)) return t.SelectedState.Selected
                 }
             return h
           }
-        }, n.prototype.getCellData = function(t, n, i) {
-          var l, s, r, a, h;
-          if (e.isString(n) && (n = this.columns.indexOf(n)) < 0) throw "Invalid column name or binding.";
-          return t >= this.rows.length || e.asNumber(n, !1, !0) >= this.columns.length ? null : (l = o.prototype.getCellData.call(this, t, n, i), s = this.columns[e.asNumber(n, !1, !0)], r = this.grid ? this.grid._getBindingColumn(this, t, s) : s, i && (h = o.prototype.getCellData.call(this, t, n, !1), a = this.grid ? this.grid._getCellStyle(t, n) : null, !e.isNumber(h) || 0 === h || !r || r.format || r.dataMap || a || (l = h.toString())), l)
-        }, n.prototype.setCellData = function(t, n, i, l, s) {
-          if (void 0 === l && (l = !0), void 0 === s && (s = !0), t >= this.rows.length || n >= this.columns.length) return !1;
-          var r, a = this.getCellData(t, n, !1),
-            h = this.grid._isPasting;
-          return l && i && e.isString(i) && "'" !== i[0] && (this.grid.columns[n].dataType === e.DataType.String || e.isNullOrWhiteSpace(i) || isNaN(+i) ? this.grid.columns[n].dataType === e.DataType.Boolean ? i = e.changeType(i, e.DataType.Boolean, null) : "=" !== i[0] && (r = e.Globalize.parseDate(i, "")) && (i = r) : i === (+i).toString() ? i = +i : l = !1), (i && e.isString(i) && ("=" === i[0] || "'" === i[0]) || e.isString(a)) && (l = !1), o.prototype.setCellData.call(this, t, n, i, l && !h, s)
-        }, n.prototype._renderCell = function(t, n, i, l, s, r) {
-          var a, h, c, d, u = n * this.grid.columns.length + i,
-            _ = this.grid.getMergedRange(this, n, i);
-          return d = o.prototype._renderCell.call(this, t, n, i, l, s, r), this.cellType !== e.grid.CellType.Cell ? d : _ && u > _.topRow * this.grid.columns.length + _.leftCol ? d : ((a = t.childNodes[r]) && (null != this.grid.editRange && this.grid.editRange.contains(n, i) || this.grid.selectedSheet && (c = this.grid.selectedSheet.findTable(n, i)) && c._updateCell(n, i, a), e.hasClass(a, "wj-state-selected") || e.hasClass(a, "wj-state-multi-selected") ? (a.style.backgroundColor = "", a.style.color = "") : this.grid.selectedSheet && (h = this.grid.selectedSheet._styledCells[u]) && ("" !== h.backgroundColor && (a.style.backgroundColor = h.backgroundColor), "" !== h.color && (a.style.color = h.color))), d)
-        }, n
+        }, i.prototype.getCellData = function(t, o, i) {
+          var l, s, r, a, h, c;
+          if (e.isString(o) && (o = this.columns.indexOf(o)) < 0) throw "Invalid column name or binding.";
+          return t >= this.rows.length || e.asNumber(o, !1, !0) >= this.columns.length ? null : (l = n.prototype.getCellData.call(this, t, o, i), s = this.columns[e.asNumber(o, !1, !0)], r = this.grid ? this.grid._getBindingColumn(this, t, s) : s, i && (h = n.prototype.getCellData.call(this, t, o, !1), a = this.grid ? this.grid._getCellStyle(t, o) : null, e.isNumber(h) && 0 !== h && (r && r.dataMap || ("" === (c = a ? a.format : "") && (c = r ? r.format : ""), l = e.Globalize.format(h, c)))), l)
+        }, i.prototype.setCellData = function(t, i, l, s, r) {
+          if (void 0 === s && (s = !0), void 0 === r && (r = !0), t >= this.rows.length || i >= this.columns.length) return !1;
+          var a, c, d, u, _, g = this.getCellData(t, i, !1),
+            f = this.grid._isPasting,
+            p = this.columns[i],
+            w = this.grid ? this.grid._getBindingColumn(this, t, p) : p,
+            m = this.rows[t],
+            C = this.grid ? this.grid._getCellStyle(t, i) : null,
+            b = e.getType(g),
+            y = e.culture.Globalize.numberFormat.currency.symbol;
+          if (this.grid && (d = this.grid.selectedSheet.findTable(t, i)) && d.showHeaderRow && (u = d.getRange(o.TableSection.Header), t === u.row && i >= u.leftCol && i <= u.rightCol)) return null == l || e.isString(l) && e.isNullOrWhiteSpace(l) ? void 0 : n.prototype.setCellData.call(this, t, i, l.toString(), !1, r);
+          if (s && l && e.isString(l) && "'" !== l[0] && "=" !== l[0]) {
+            if (this.getCellData(t, i, !0) === l) return;
+            var S = C ? C.format : "";
+            /[hsmt\:]/.test(S) || (S = ""), (a = e.Globalize.parseDate(l, S)) ? l = a : (_ = new RegExp("[^\\d,\\.\\" + y + "]", "g"), w.dataType === e.DataType.String || e.isNullOrWhiteSpace(l) || null != g && b !== e.DataType.Number || _.test(l) && "%" !== l[l.length - 1] ? w.dataType === e.DataType.Boolean && (l = e.changeType(l, e.DataType.Boolean, null)) : (c = e.changeType(l, e.DataType.Number, ""), e.isNumber(c) ? l = c : s = !1))
+          }
+          if ((l && e.isString(l) && ("=" === l[0] || "'" === l[0]) || !w.dataType) && (s = !1), !(m instanceof h)) return n.prototype.setCellData.call(this, t, i, l, s && !f, r);
+          m._ubv[w._hash] = l
+        }, i.prototype._renderCell = function(t, o, i, l, s, r) {
+          var a, h, c, d, u = o * this.grid.columns.length + i,
+            _ = this.grid.getMergedRange(this, o, i);
+          return d = n.prototype._renderCell.call(this, t, o, i, l, s, r), this.cellType !== e.grid.CellType.Cell ? d : _ && u > _.topRow * this.grid.columns.length + _.leftCol ? d : ((a = t.childNodes[r]) && (null != this.grid.editRange && this.grid.editRange.contains(o, i) || this.grid.selectedSheet && (c = this.grid.selectedSheet.findTable(o, i)) && c._updateCell(o, i, a), e.hasClass(a, "wj-state-selected") || e.hasClass(a, "wj-state-multi-selected") ? (a.style.backgroundColor = "", a.style.color = "") : this.grid.selectedSheet && (h = this.grid.selectedSheet._styledCells[u]) && ("" !== h.backgroundColor && (a.style.backgroundColor = h.backgroundColor), "" !== h.color && (a.style.color = h.color))), d)
+        }, i
       }(t.GridPanel);
       o.FlexSheetPanel = a;
       var h = function(e) {
@@ -4408,7 +4866,11 @@ var __extends = this && this.__extends || function() {
           configurable: !0
         }), e
       }();
-      o.DefinedName = c
+      o.DefinedName = c;
+      var d;
+      ! function(e) {
+        e[e.CopyFormat = 1] = "CopyFormat", e[e.CopyContent = 2] = "CopyContent", e[e.FillSeries = 4] = "FillSeries"
+      }(d || (d = {}))
     }(t.sheet || (t.sheet = {}))
   }(e.grid || (e.grid = {}))
 }(wijmo || (wijmo = {}));
@@ -4435,7 +4897,7 @@ var __extends = this && this.__extends || function() {
       "use strict";
       var n = function() {
         function n(t, n, i, l, r) {
-          this._visible = !0, this._unboundSortDesc = new e.collections.ObservableArray, this._currentStyledCells = {}, this._currentMergedRanges = [], this._isEmptyGrid = !1, this._rowSettings = [], this._scrollPosition = new e.Point, this._freezeHiddenRowCnt = 0, this._freezeHiddenColumnCnt = 0, this._showDefaultHeader = !1, this.nameChanged = new e.Event, this.visibleChanged = new e.Event;
+          this._visible = !0, this._unboundSortDesc = new e.collections.ObservableArray, this._currentStyledCells = {}, this._currentMergedRanges = [], this._isEmptyGrid = !1, this._rowSettings = [], this._scrollPosition = new e.Point, this._showDefaultHeader = !1, this.nameChanged = new e.Event, this.visibleChanged = new e.Event;
           var a = this;
           a._owner = t, a._name = i, a._sortList = [new o.ColumnSortDescription(-1, !0)], e.isNumber(l) && !isNaN(l) && l >= 0 ? a._rowCount = l : a._rowCount = 200, e.isNumber(r) && !isNaN(r) && r >= 0 ? a._columnCount = r : a._columnCount = 20, n ? (a._showDefaultHeader = !0, a._grid = n) : a._grid = this._createGrid(), a._grid.loadedRows.addHandler(function() {
             a._addHeaderRow(), a._setRowSettings()
@@ -4537,7 +4999,7 @@ var __extends = this && this.__extends || function() {
             var o = this;
             return this._selectionRanges || (this._selectionRanges = new e.collections.ObservableArray, this._selectionRanges.collectionChanged.addHandler(function() {
               var e, n;
-              o._owner && !o._owner._isClicking && ((e = o._selectionRanges.length) > 0 && (n = o._selectionRanges[e - 1]) && n instanceof t.CellRange && (o._owner.selection = n), e > 1 ? (o._owner._enableMulSel = !0, o._owner.refresh(!1)) : o._owner.refresh(), o._owner._enableMulSel = !1)
+              o._owner && !o._owner._isClicking && ((e = o._selectionRanges.length) > 0 && (n = o._selectionRanges[e - 1]) && n instanceof t.CellRange && (o._owner.selection = n), e > 1 && (o._owner._enableMulSel = !0, o._owner.refresh(!1)), o._owner._enableMulSel = !1)
             }, this)), this._selectionRanges
           },
           enumerable: !0,
@@ -4548,7 +5010,7 @@ var __extends = this && this.__extends || function() {
           },
           set: function(e) {
             var t = this;
-            null == t._grid && (t._createGrid(), t._grid.itemsSourceChanged.addHandler(t._gridItemsSourceChanged, t)), t._isEmptyGrid && t._clearGrid(), t._grid.itemsSource = e, t._owner && t._owner._isCopying || null == e || (t._orgItemsSource = t._grid.collectionView._view.slice())
+            null == t._grid && (t._createGrid(), t._grid.itemsSourceChanged.addHandler(t._gridItemsSourceChanged, t)), t._isEmptyGrid && t._clearGrid(), t._grid.itemsSource = e
           },
           enumerable: !0,
           configurable: !0
@@ -4586,6 +5048,11 @@ var __extends = this && this.__extends || function() {
           this.nameChanged.raise(this, e)
         }, n.prototype.onVisibleChanged = function(e) {
           this.visibleChanged.raise(this, e)
+        }, n.prototype.dispose = function() {
+          if (this._clearGrid(), this._grid.wj_sheetInfo = null, this._grid.dispose(), this._grid = null, null != this._tables) {
+            for (var e = 0; e < this._tables.length; e++) this._tables[e] = null;
+            this._tables = null
+          }
         }, n.prototype.getCellStyle = function(e, t) {
           var o, n = this._grid.rows.length,
             i = this._grid.columns.length;
@@ -4600,9 +5067,9 @@ var __extends = this && this.__extends || function() {
           var v = null == (h && h.showHeaderRow) || h.showHeaderRow,
             x = !(!h || !h.showTotalRow),
             T = n + (v ? 1 : 0),
-            k = T + l.length - 1 + (x ? 1 : 0);
+            I = T + l.length - 1 + (x ? 1 : 0);
           for (d = [], C = 0; C < s.length; C++) b = s[C], u = new o.TableColumn(b), 0 === C ? u._totalRowLabel = "Total" : C === s.length - 1 && (u._totalRowFunction = "Sum"), d.push(u);
-          if (_ = new t.CellRange(n, i, k, i + s.length - 1), 0 !== (g = this._needShiftForTable(_))) {
+          if (_ = new t.CellRange(n, i, I, i + s.length - 1), 0 !== (g = this._needShiftForTable(_))) {
             if (!c) return null;
             if (!this._canShiftCells(_)) return null;
             if (f = this._needAddRowCountForAddTable(g, _), R.collectionView) {
@@ -4644,7 +5111,7 @@ var __extends = this && this.__extends || function() {
             readOnly: e.isReadOnly
           })
         }, n.prototype._setRowSettings = function() {
-          for (var e, o, n = 0; n < this._rowSettings.length; n++)(o = this._rowSettings[n]) && (e = this._grid.rows[n]) && (e.height = o.height, e.allowMerging = o.allowMerging, e.visible = o.visible, e instanceof t.GroupRow && (e.isCollapsed = !!o.isCollapsed), e.isSelected = !!o.isSelected, e.isReadOnly = !!o.readOnly)
+          for (var e, n, i, l = 0; l < this._rowSettings.length; l++)(n = this._rowSettings[l]) && (e = this._grid.rows[l]) && (i = e instanceof o.HeaderRow, e.height = n.height, e.allowMerging = n.allowMerging, e.visible = n.visible, e instanceof t.GroupRow && (e.isCollapsed = !!n.isCollapsed), e.isSelected = !!n.isSelected, e.isReadOnly = i || !!n.readOnly)
         }, n.prototype._addTable = function(e, t, n, i, l) {
           if (!e.isValid) return null;
           var s;
@@ -4686,9 +5153,12 @@ var __extends = this && this.__extends || function() {
             e._owner._setFlexSheetToDirty(), e._owner.invalidate()
           }, 10))
         }, n.prototype._addHeaderRow = function() {
-          if (this._grid.itemsSource && !(this._grid.rows[0] instanceof o.HeaderRow)) {
-            for (var e, t = new o.HeaderRow, n = 0; n < this._grid.columns.length; n++) e = this._grid.columns[n], t._ubv || (t._ubv = {}), t._ubv[e._hash] = e.header;
-            this._grid.rows.insert(0, t)
+          var e;
+          if (this._grid.collectionView && !this._grid.collectionView.isEmpty && !(this._grid.rows[0] instanceof o.HeaderRow)) {
+            var t;
+            (e = new o.HeaderRow).isReadOnly = !0;
+            for (var n = 0; n < this._grid.columns.length; n++) t = this._grid.columns[n], e._ubv || (e._ubv = {}), e._ubv[t._hash] = t.header;
+            this._grid.rows.insert(0, e)
           }
         }, n.prototype._getUniqueTableName = function() {
           for (var e = "Table1", t = 2;;) {
@@ -4788,9 +5258,7 @@ var __extends = this && this.__extends || function() {
               value: i.conditionFilter.condition2.value
             }, h = i.conditionFilter.and, null != t.dataMap && (i.dataMap = t.dataMap), null != t.filterType && (i.filterType = t.filterType), (o = t.valueFilterSetting) && (o.dataMap && (i.valueFilter.dataMap = o.dataMap), null != o.maxValues && (i.valueFilter.maxValues = o.maxValues), null != o.sortValues && (i.valueFilter.sortValues = o.sortValues), o.uniqueValues && (i.valueFilter.uniqueValues = o.uniqueValues)), (n = t.conditionFilterSetting) && n.dataMap && (i.conditionFilter.dataMap = n.dataMap), i.valueFilter.showValues = l, i.valueFilter.filterText = s, i.conditionFilter.condition1.operator = r.operator, i.conditionFilter.condition1.value = r.value, i.conditionFilter.condition2.operator = a.operator, i.conditionFilter.condition2.value = a.value, i.conditionFilter.and = h)
         }, n.prototype._clearFilterSetting = function() {
-          var e, t = 0;
-          for (this._owner.filter.filterColumns = null; t < this._owner.filter._filters.length; t++)(e = this._owner.filter._filters[t]) && (e.filterType = null, e.dataMap = null, e.valueFilter.uniqueValues = null, e.valueFilter.dataMap = null, e.valueFilter.maxValues = 250, e.valueFilter.showValues = null, e.conditionFilter.dataMap = null);
-          this._filterDefinition && (this._owner.filter.filterDefinition = this._filterDefinition)
+          this._owner.filter._filters = [], this._owner.filter.filterColumns = null, this._filterDefinition && (this._owner.filter.filterDefinition = this._filterDefinition)
         }, n.prototype._cloneMergedCells = function() {
           for (var e, t = 0, o = []; t < this._mergedRanges.length; t++) e = this._mergedRanges[t], o.push(e.clone());
           return o
@@ -4850,6 +5318,7 @@ var __extends = this && this.__extends || function() {
         }, o.prototype.show = function(e) {
           return !(e < 0 && e >= this.length) && (this[e].visible = !0, this._moveCurrentTo(e), !0)
         }, o.prototype.clear = function() {
+          for (var e = 0; e < this.length; e++) this[e].dispose(), null;
           t.prototype.clear.call(this), this._current = -1, this.onSheetCleared()
         }, o.prototype.isValidSheetName = function(e) {
           var t = this._getSheetIndexFrom(e.name),
@@ -5069,15 +5538,15 @@ var __extends = this && this.__extends || function() {
 var wijmo;
 ! function(e) {
   ! function(t) {
-    ! function(o) {
+    ! function(t) {
       "use strict";
-      var n = function() {
-        function n(t) {
-          this._owner = t, this._sortDescriptions = new e.collections.CollectionView, this._committedList = [new i(-1, !0)], this._sortDescriptions.newItemCreator = function() {
-            return new i(-1, !0)
+      var o = function() {
+        function o(t) {
+          this._owner = t, this._sortDescriptions = new e.collections.CollectionView, this._committedList = [new n(-1, !0)], this._sortDescriptions.newItemCreator = function() {
+            return new n(-1, !0)
           }
         }
-        return Object.defineProperty(n.prototype, "sortDescriptions", {
+        return Object.defineProperty(o.prototype, "sortDescriptions", {
           get: function() {
             return this._sortDescriptions
           },
@@ -5086,22 +5555,22 @@ var wijmo;
           },
           enumerable: !0,
           configurable: !0
-        }), n.prototype.addSortLevel = function(t, o) {
+        }), o.prototype.addSortLevel = function(t, o) {
           void 0 === o && (o = !0);
           var n = this._sortDescriptions.addNew();
           null != t && !isNaN(t) && e.isInt(t) && (n.columnIndex = t), n.ascending = o, this._sortDescriptions.commitNew()
-        }, n.prototype.deleteSortLevel = function(e) {
+        }, o.prototype.deleteSortLevel = function(e) {
           var t;
           (t = null != e ? this._getSortItem(e) : this._sortDescriptions.currentItem) && this._sortDescriptions.remove(t)
-        }, n.prototype.copySortLevel = function() {
+        }, o.prototype.copySortLevel = function() {
           var e = this._sortDescriptions.currentItem;
           if (e) {
             var t = this._sortDescriptions.addNew();
             t.columnIndex = parseInt(e.columnIndex), t.ascending = e.ascending, this._sortDescriptions.commitNew()
           }
-        }, n.prototype.editSortLevel = function(e, t) {
+        }, o.prototype.editSortLevel = function(e, t) {
           null != e && (this._sortDescriptions.currentItem.columnIndex = e), null != t && (this._sortDescriptions.currentItem.ascending = t)
-        }, n.prototype.moveSortLevel = function(e) {
+        }, o.prototype.moveSortLevel = function(e) {
           var t = this._sortDescriptions.currentItem;
           if (t) {
             var o = this._sortDescriptions.sourceCollection,
@@ -5109,49 +5578,52 @@ var wijmo;
               i = n + e;
             n > -1 && i > -1 && (o.splice(n, 1), o.splice(i, 0, t), this._sortDescriptions.refresh(), this._sortDescriptions.moveCurrentTo(t))
           }
-        }, n.prototype.checkSortItemExists = function(e) {
+        }, o.prototype.checkSortItemExists = function(e) {
           for (var t = 0, o = this._sortDescriptions.itemCount; t < o; t++)
             if (+this._sortDescriptions.items[t].columnIndex === e) return t;
           return -1
-        }, n.prototype.commitSort = function(t) {
-          void 0 === t && (t = !0);
-          var n, l, s, r, a, h, c, d, u, _, g, f, p, w = this._owner.itemsSource instanceof e.collections.CollectionView,
-            m = {},
-            C = {};
-          if (this._owner.selectedSheet && 0 !== this._owner.columns.length) {
-            if (this._owner._needCopyToSheet = !1, h = this._owner.selectedSheet._unboundSortDesc, t && this._owner.undoStack.stackSize > 0 && (c = new o._SortColumnAction(this._owner)), this._sortDescriptions.itemCount > 0 ? this._committedList = this._cloneSortList(this._sortDescriptions.items) : this._committedList = [new i(-1, !0)], this._owner.collectionView) {
-              for (this._owner._isSorting = !0, this._owner.beginUpdate(), this._owner.collectionView.canSort = !0, (d = this._owner.editableCollectionView) && d.currentEditItem && -1 !== d.items.indexOf(d.currentEditItem) && !this._isEmpty(d.currentEditItem) && d.commitEdit(), this._owner.collectionView.beginUpdate(), this._owner.selectedSheet.grid.collectionView.beginUpdate(), (s = this._owner.collectionView.sortDescriptions).clear(), u = this._owner.selection.clone(), g = this._owner.collectionView._view.slice(), a = 0; a < g.length; a++) null != (p = g[a]).index && (a !== p.index && this._owner._updateFormulaForReorderingRows(p.index + 1, a + 1, !0), this._owner._updateCellStyleForReorderingRows(a + 1, p.index + 1, m));
-              for (Object.keys(m).length > 0 && (this._owner.selectedSheet._styledCells = m), w ? this._owner.itemsSource.sourceCollection = this._owner.selectedSheet._orgItemsSource.slice() : (this._owner.autoGenerateColumns = !1, this._owner.selectedSheet.grid.collectionView.canSort = !0, _ = this._owner.selectedSheet._filterDefinition, this._owner.itemsSource = this._owner.selectedSheet._orgItemsSource.slice(), this._synchColumn(), (r = this._owner.selectedSheet.grid.collectionView.sortDescriptions).clear()), this._owner.collectionView.sourceCollection.map(function(e, t) {
-                e.index = t
-              }), this._owner.selection = u, navigator.userAgent.toLowerCase().indexOf("chrome") > -1 && (this._owner.collectionView.useStableSort = !0, w || (this._owner.selectedSheet.grid.collectionView.useStableSort = !0)), a = 0; a < this._sortDescriptions.itemCount; a++)(n = this._sortDescriptions.items[a]).columnIndex > -1 && (l = new e.collections.SortDescription(this._owner.columns[n.columnIndex].binding, n.ascending), s.push(l), w || (this._owner.collectionView.sortDescriptions.push(l), r.push(l)));
-              for (this._owner.selectedSheet.selectionRanges.clear(), this._owner.collectionView.endUpdate(), this._owner.selectedSheet.grid.collectionView.endUpdate(), u = this._owner.selection.clone(), f = this._owner.collectionView._view.slice(), w ? this._owner.itemsSource.sourceCollection = f : (this._owner.itemsSource = f, this._synchColumn(), _ && (this._owner.filter.filterDefinition = _), this._owner.selectedSheet.grid.collectionView.canSort = !1), a = 0; a < f.length; a++) a !== (p = f[a]).index && this._owner._updateFormulaForReorderingRows(p.index + 1, a + 1), this._owner._updateCellStyleForReorderingRows(p.index + 1, a + 1, C);
-              this._owner.selectedSheet._styledCells = C, this._owner.selection = u, this._owner.collectionView.canSort = !1, this._owner.endUpdate(), this._owner._isSorting = !1
-            } else
-              for (h.clear(), a = 0; a < this._sortDescriptions.itemCount; a++)(n = this._sortDescriptions.items[a]).columnIndex > -1 && h.push(new o._UnboundSortDescription(this._owner.columns[n.columnIndex], n.ascending));
-            c && (c.saveNewState(), this._owner.undoStack._addAction(c)), this._owner._copiedRanges = null, this._owner._needCopyToSheet = !0
+        }, o.prototype.commitSort = function(o) {
+          void 0 === o && (o = !0);
+          var i, l, s, r, a, h, c, d, u, _, g, f, p, w, m, C, b = this,
+            y = b._owner,
+            S = b._owner.itemsSource instanceof e.collections.CollectionView,
+            R = {};
+          if (b._owner.selectedSheet && 0 !== b._owner.columns.length) {
+            if (y._needCopyToSheet = !1, h = y.selectedSheet._unboundSortDesc, o && y.undoStack.stackSize > 0 && (c = new t._SortColumnAction(y)), b._sortDescriptions.itemCount > 0 ? b._committedList = b._cloneSortList(b._sortDescriptions.items) : b._committedList = [new n(-1, !0)], _ = y.selectedSheet._filterDefinition, y.collectionView) {
+              for (y._isSorting = !0, y.beginUpdate(), (d = y.editableCollectionView) && d.currentEditItem && -1 !== d.items.indexOf(d.currentEditItem) && !b._isEmpty(d.currentEditItem) && d.commitEdit(), y.collectionView.beginUpdate(), y.selectedSheet.grid.collectionView.beginUpdate(), (s = y.collectionView.sortDescriptions).clear(), u = y.selection.clone(), C = y.allowAddNew && y.newRowAtTop ? 2 : 1, f = [], a = 0; a < y.rows.length - C; a++)(m = (w = y.rows[a + C]).dataItem) && (f[p = null != m._itemIdx ? m._itemIdx : a] = w.visible);
+              for (S || (r = y.selectedSheet.grid.collectionView.sortDescriptions).clear(), y.collectionView.sourceCollection.map(function(e, t) {
+                e._itemIdx = t
+              }), y.selection = u, navigator.userAgent.toLowerCase().indexOf("chrome") > -1 && (y.collectionView.useStableSort = !0, S || (y.selectedSheet.grid.collectionView.useStableSort = !0)), a = 0; a < b._sortDescriptions.itemCount; a++)(i = b._sortDescriptions.items[a]).columnIndex > -1 && (l = new e.collections.SortDescription(y.columns[i.columnIndex].binding, i.ascending), s.push(l), S || (y.collectionView.sortDescriptions.push(l), r.push(l)));
+              for (y.selectedSheet.selectionRanges.clear(), y.collectionView.endUpdate(), y.selectedSheet.grid.collectionView.endUpdate(), u = y.selection.clone(), g = y.collectionView._view.slice(), a = 0; a < g.length; a++) a !== (m = g[a])._itemIdx && y._updateFormulaForReorderingRows(m._itemIdx + C, a + C), y._updateCellStyleForReorderingRows(m._itemIdx + C, a + C, R);
+              for (a = 0; a < y.rows.length - C; a++)(m = (w = y.rows[a + C]).dataItem) && (p = null != m._itemIdx ? m._itemIdx : a, w.visible = f[p]);
+              y.selectedSheet._styledCells = R, y.selection = u, y.endUpdate(), y._copyColumnsToSelectedSheet(), y._isSorting = !1
+            } else {
+              for (h.clear(), a = 0; a < b._sortDescriptions.itemCount; a++)(i = b._sortDescriptions.items[a]).columnIndex > -1 && h.push(new t._UnboundSortDescription(y.columns[i.columnIndex], i.ascending));
+              setTimeout(function() {
+                _ && (y.filter.filterDefinition = _)
+              }, 10)
+            }
+            c && (c.saveNewState(), y.undoStack._addAction(c)), y._copiedRanges = null, y._needCopyToSheet = !0
           }
-        }, n.prototype.cancelSort = function() {
+        }, o.prototype.cancelSort = function() {
           this._sortDescriptions.sourceCollection = this._committedList.slice()
-        }, n.prototype.clearSort = function() {
+        }, o.prototype.clearSort = function() {
           this._sortDescriptions.sourceCollection = [], this.commitSort()
-        }, n.prototype._getColumnIndex = function(e) {
+        }, o.prototype._getColumnIndex = function(e) {
           for (var t = 0, o = this._owner.columns.length; t < o; t++)
             if (this._owner.columns[t].binding === e) return t;
           return -1
-        }, n.prototype._getSortItem = function(e) {
+        }, o.prototype._getSortItem = function(e) {
           var t = this.checkSortItemExists(e);
           if (t > -1) return this._sortDescriptions.items[t]
-        }, n.prototype._cloneSortList = function(e) {
+        }, o.prototype._cloneSortList = function(e) {
           for (var t = [], o = 0; o < e.length; o++) t[o] = e[o].clone();
           return t
-        }, n.prototype._updateSortSortDescription = function(e, t, o) {
+        }, o.prototype._updateSortSortDescription = function(e, t, o) {
           void 0 === o && (o = !0);
           var n, i;
           for (n = this._sortDescriptions.items.length - 1; n >= 0; n--) i = this._sortDescriptions.items[n], o ? i.columnIndex > e && (i.columnIndex += t) : i.columnIndex >= e + t ? i.columnIndex -= t : i.columnIndex >= e && this._sortDescriptions.remove(i)
-        }, n.prototype._synchColumn = function() {
-          var e, o, n;
-          for (this._owner.columns.clear(), e = this._owner.rows[0] instanceof t._NewRowTemplate ? this._owner.rows[1] : this._owner.rows[0], o = 0; o < this._owner.selectedSheet.grid.columns.length; o++)(n = this._owner.selectedSheet.grid.columns[o]).isRequired = !1, this._owner.columns.push(n), e._ubv || (e._ubv = {}), e._ubv[n._hash] = n.header
-        }, n.prototype._isEmpty = function(e) {
+        }, o.prototype._isEmpty = function(e) {
           var t = Object.prototype.hasOwnProperty;
           if (null == e) return !0;
           if (e.length > 0) return !1;
@@ -5159,10 +5631,10 @@ var wijmo;
           for (var o in e)
             if (t.call(e, o)) return !1;
           return !0
-        }, n
+        }, o
       }();
-      o.SortManager = n;
-      var i = function() {
+      t.SortManager = o;
+      var n = function() {
         function e(e, t) {
           this._columnIndex = e, this._ascending = t
         }
@@ -5188,7 +5660,7 @@ var wijmo;
           return new e(this._columnIndex, this._ascending)
         }, e
       }();
-      o.ColumnSortDescription = i
+      t.ColumnSortDescription = n
     }(t.sheet || (t.sheet = {}))
   }(e.grid || (e.grid = {}))
 }(wijmo || (wijmo = {}));
@@ -5250,13 +5722,16 @@ var wijmo;
         }, o.prototype.redo = function() {
           var e;
           this.canRedo && (this._pointer++, e = this._stack[this._pointer], this._beforeUndoRedo(e), e.redo(), this.onUndoStackChanged())
+        }, o.prototype.clear = function() {
+          this._stack.length = 0
         }, o.prototype._addAction = function(e) {
           this._stack.length > 0 && this._stack.length > this._pointer + 1 && this._stack.splice(this._pointer + 1, this._stack.length - this._pointer - 1), this._stack.length >= this.stackSize && this._stack.splice(0, this._stack.length - this.stackSize + 1), this._pointer = this._stack.length, this._stack.push(e), this.onUndoStackChanged()
         }, o.prototype._pop = function() {
           var e;
           return this._pointer < 0 ? null : (e = this._stack[this._pointer], this._pointer--, e)
-        }, o.prototype.clear = function() {
-          this._stack.length = 0
+        }, o.prototype._updateCurrentAction = function(e) {
+          var t;
+          this._pointer < 0 || (t = this._stack[this._pointer]) instanceof e && t.saveNewState()
         }, o.prototype._initCellEditAction = function(e, o) {
           0 !== this.stackSize && this._owner.selectedSheet && (this._pendingAction = new t._EditAction(this._owner, o.range))
         }, o.prototype._initCellEditActionForPasting = function() {
@@ -5469,7 +5944,7 @@ var wijmo;
           var o, n, l, s, r, a = this._sheet === this._owner.selectedSheet ? this._owner : this._sheet.grid;
           if (!this._range.isValid) throw "The range of the table is invalid.";
           this._columns = [];
-          for (var h = 0; h < this._range.columnSpan; h++) s = this._sheet.grid.columns[this._range.leftCol + h], r = this._range.topRow * this._sheet.grid.columns.length + this._range.leftCol + h, 1 === this._range.rowSpan ? o = this._getUniqueColumnName(h + 1) : (o = this._sheet.grid.getCellData(this._range.topRow, this._range.leftCol + h, !1) || "", e.isString(o) && "=" === o[0] && (o = this._owner.evaluate(o, "", this._sheet, !1)), l = this._sheet._styledCells[r], o = this._owner._formatEvaluatedResult(o, s, l ? l.format : ""), o = this._getUniqueColumnName(h + 1, o.toString())), t && this._range.rowSpan > 1 && (this._orgHeaderCellsContent[h] = this._sheet.grid.getCellData(this._range.topRow, this._range.leftCol + h, !1), isNaN(+o) || s.format || l && l.format || (l ? l.format = "@" : this._sheet._styledCells[r] = {
+          for (var h = 0; h < this._range.columnSpan; h++) s = this._sheet.grid.columns[this._range.leftCol + h], r = this._range.topRow * this._sheet.grid.columns.length + this._range.leftCol + h, 1 === this._range.rowSpan ? o = this._getUniqueColumnName(h + 1) : (null == (o = this._sheet.grid.getCellData(this._range.topRow, this._range.leftCol + h, !1)) && (o = ""), e.isString(o) && "=" === o[0] && (o = this._owner.evaluate(o, "", this._sheet, !1)), l = this._sheet._styledCells[r], o = this._owner._formatEvaluatedResult(o, s, l ? l.format : ""), o = this._getUniqueColumnName(h + 1, o.toString())), t && this._range.rowSpan > 1 && (this._orgHeaderCellsContent[h] = this._sheet.grid.getCellData(this._range.topRow, this._range.leftCol + h, !1), isNaN(+o) || s.format || l && l.format || (l ? l.format = "@" : this._sheet._styledCells[r] = {
             format: "@"
           }), a.setCellData(this._range.topRow, this._range.leftCol + h, o, !1)), (n = new i(o))._attach(this), 0 === h ? n._totalRowLabel = "Total" : h === this._range.columnSpan - 1 && (n._totalRowFunction = "Sum"), this._columns.push(n)
         }, n.prototype._getTableCellAppliedStyles = function(e, t) {
@@ -5524,12 +5999,12 @@ var wijmo;
         }, n.prototype._adjustTableRangeWithTotalRow = function() {
           var o, n, i, l = this._sheet === this._owner.selectedSheet ? this._owner : this._sheet.grid;
           if (n = this.getRange(), i = new t.CellRange(n.bottomRow + 1, n.col, n.bottomRow + 1, n.col2), this._showTotalRow) {
-            if (this._sheet._canShiftCells(i)) 1 === this._sheet._needAddRowCountForInsertTableRows(1, n) && (l.collectionView ? (l.collectionView.beginUpdate(), l.itemsSource instanceof e.collections.CollectionView ? l.itemsSource.sourceCollection.push({}) : l.itemsSource.push({}), l.collectionView.endUpdate()) : l.rows.push(new t.Row)), this._sheet._moveDownCells(1, i), this._owner._updateAffectedFormula(this._range.bottomRow + 1, 1, !0, !0);
+            if (this._sheet._canShiftCells(i)) 1 === this._sheet._needAddRowCountForInsertTableRows(1, n) && (l.collectionView ? (l.collectionView.beginUpdate(), l.itemsSource instanceof e.collections.CollectionView ? l.itemsSource.sourceCollection.push({}) : l.itemsSource.push({}), l.collectionView.endUpdate()) : l.rows.push(new t.Row)), this._sheet._moveDownCells(1, i), this._owner._updateAffectedFormula(this._range.bottomRow + 1, 1, !0, !0, this.getRange());
             else if (!this._beneathRowIsEmpty()) throw "The operation is not allowed.  The operation is attempting to shift the cells in a table or a merged cell on the current sheet.";
             this._range.row <= this._range.row2 ? this._range.row2 += 1 : this._range.row += 1, this._updateTotalRow()
           } else {
             for (o = this._range.leftCol; o <= this._range.rightCol; o++) l.setCellData(this._range.bottomRow, o, "");
-            this._sheet._canShiftCells(i) && (this._sheet._moveUpCells(1, i), this._owner._updateAffectedFormula(this._range.bottomRow + 1, 1, !1, !0)), this._range.row <= this._range.row2 ? this._range.row2 -= 1 : this._range.row -= 1
+            this._sheet._canShiftCells(i) && (this._owner._updateAffectedFormula(this._range.bottomRow, 1, !1, !0, this.getRange()), this._sheet._moveUpCells(1, i)), this._range.row <= this._range.row2 ? this._range.row2 -= 1 : this._range.row -= 1
           }
         }, n.prototype._updateTotalRow = function() {
           var e;
@@ -5537,7 +6012,7 @@ var wijmo;
             for (var t = 0; t < this._columns.length; t++) e = this._columns[t], this._updateColumnTotalRowContent(e, t)
         }, n.prototype._getUniqueColumnName = function(e, t) {
           var o, n = 1;
-          if (t || (t = "Column" + e), this._checkColumnNameExist(t)) {
+          if (null != t && "" !== t || (t = "Column" + e), this._checkColumnNameExist(t)) {
             for (o = t + n; this._checkColumnNameExist(o);) o = t + ++n;
             t = o
           }
@@ -5928,7 +6403,7 @@ var __extends = this && this.__extends || function() {
           if (!(h instanceof o.FlexSheet)) return !0;
           if (!this.isActive) return !0;
           if (h.rows[n] instanceof t._NewRowTemplate) return !0;
-          "" === (i = h.getCellValue(n, a.index)) && a.dataType !== e.DataType.String && (i = null), l = s = i, (r = this.dataMap || a.dataMap) ? l = s = i = r.getDisplayValue(i) : e.isDate(i) ? (e.isString(c.value) || e.isString(d.value)) && (l = s = i = h.getCellValue(n, a.index, !0)) : e.isNumber(i) && (l = s = i = e.Globalize.parseFloat(h.getCellValue(n, a.index, !0)), 0 !== i || a.dataType || (c.isActive && "" === c.value && (l = i.toString()), d.isActive && "" === d.value && (s = s.toString())));
+          "" === (i = h.getCellValue(n, a.index)) && a.dataType !== e.DataType.String && (i = null), l = s = i, (r = this.dataMap || a.dataMap) ? l = s = i = r.getDisplayValue(i) : e.isDate(i) ? (e.isString(c.value) || e.isString(d.value)) && (l = s = i = h.getCellValue(n, a.index, !0)) : e.isNumber(i) ? (l = s = i = e.Globalize.parseFloat(h.getCellValue(n, a.index, !0)), 0 !== i || a.dataType || (c.isActive && "" === c.value && (l = i.toString()), d.isActive && "" === d.value && (s = s.toString()))) : null == i && (c.isActive && e.isNumber(c.value) && (l = NaN), d.isActive && e.isNumber(d.value) && (s = NaN));
           var u = c.apply(l),
             _ = d.apply(s);
           return c.isActive && d.isActive ? this.and ? u && _ : u || _ : c.isActive ? u : !d.isActive || _
@@ -6007,7 +6482,7 @@ var __extends = this && this.__extends || function() {
         }, n.prototype._sortBtnClick = function(e, t) {
           var o, n, i = this.filter.column,
             l = i.grid.sortManager;
-          e.preventDefault(), e.stopPropagation(), (o = l.checkSortItemExists(i.index)) > -1 ? (l.sortDescriptions.moveCurrentToPosition(o), l.sortDescriptions.currentItem.ascending = t, n = -o) : (l.addSortLevel(i.index, t), n = -(l.sortDescriptions.items.length - 1)), l.moveSortLevel(n), l.commitSort(), this.updateEditor(), this.onButtonClicked()
+          e.preventDefault(), e.stopPropagation(), (o = l.checkSortItemExists(i.index)) > -1 ? (l.sortDescriptions.moveCurrentToPosition(o), l.sortDescriptions.currentItem.ascending = t, n = -o) : (l.addSortLevel(i.index, t), n = -(l.sortDescriptions.items.length - 1)), l.moveSortLevel(n), l.commitSort(), this.onButtonClicked()
         }, n.prototype.cloneElement = function(e) {
           for (var t = e.cloneNode(); e.firstChild;) t.appendChild(e.lastChild);
           return t
@@ -6048,7 +6523,7 @@ var __extends = this && this.__extends || function() {
               filters: []
             }, t = 0; t < this._filters.length; t++) {
               var o = this._filters[t];
-              if (o && o.column)
+              if (o && o.column && this.grid.columns.indexOf(o.column) > -1)
                 if (o.conditionFilter.isActive) {
                   var n = o.conditionFilter;
                   e.filters.push({

@@ -48,7 +48,7 @@
 </div>
 </body>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/production/production.js?ver=20180914.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/production/production.js?ver=2018091401" charset="utf-8"></script>
 
 <%-- 예외출고 수량 등록 팝업 --%>
 <c:import url="/WEB-INF/view/application/pos/production/productionRegist.jsp">

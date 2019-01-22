@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -321,13 +321,13 @@ var __extends = this && this.__extends || function() {
           if (c !== e.ChartType.HighLowOpenClose && c !== e.ChartType.Candlestick || s === o) return null;
           if (a) {
             for (var u = NaN, _ = NaN, p = NaN, g = NaN, f = a.length, d = 0; d < f; d++) {
-              var y = this._getItem(d),
-                m = a[d];
-              if (isFinite(m) && [m, o ? y[o] : null, l ? y[l] : null, h ? y[h] : null].forEach(function(t) {
+              var m = this._getItem(d),
+                y = a[d];
+              if (isFinite(y) && [y, o ? m[o] : null, l ? m[l] : null, h ? m[h] : null].forEach(function(t) {
                 e._DataInfo.isValid(t) && null !== t && ((isNaN(_) || t < _) && (_ = t), (isNaN(g) || t > g) && (g = t))
               }), r) {
                 var v = r[d];
-                isFinite(v) && (isNaN(u) ? u = p = v : v < u ? u = v : m > g && (p = v))
+                isFinite(v) && (isNaN(u) ? u = p = v : v < u ? u = v : y > g && (p = v))
               }
             }
             if (r || (u = 0, p = f - 1), !isNaN(_)) return new t.Rect(u, _, p - u, g - _)
@@ -482,23 +482,23 @@ var __extends = this && this.__extends || function() {
               []
             ];
           if (i <= 0) return r;
-          for (var o, l, h, c, u, _, p, g, f, d, y = 1; y < i; y++) {
-            if (c = r.length, u = c - 1, l = a ? this.xs[y] : y, d = y, f = !1, this.fields === t.DataFields.HighLow)
+          for (var o, l, h, c, u, _, p, g, f, d, m = 1; m < i; m++) {
+            if (c = r.length, u = c - 1, l = a ? this.xs[m] : m, d = m, f = !1, this.fields === t.DataFields.HighLow)
               if (-1 === u)
-                if (this.highs[y] > this.highs[0]) h = this.highs[y];
+                if (this.highs[m] > this.highs[0]) h = this.highs[m];
                 else {
-                  if (!(this.lows[y] < this.lows[0])) continue;
-                  h = this.lows[y]
+                  if (!(this.lows[m] < this.lows[0])) continue;
+                  h = this.lows[m]
                 } else if ((g = s[1][u] - s[0][u]) > 0)
-                if (this.highs[y] > s[1][u]) h = this.highs[y];
+                if (this.highs[m] > s[1][u]) h = this.highs[m];
                 else {
-                  if (!(this.lows[y] < s[1][u])) continue;
-                  h = this.lows[y]
-                } else if (this.lows[y] < s[1][u]) h = this.lows[y];
+                  if (!(this.lows[m] < s[1][u])) continue;
+                  h = this.lows[m]
+                } else if (this.lows[m] < s[1][u]) h = this.lows[m];
               else {
-                if (!(this.highs[y] > s[1][u])) continue;
-                h = this.highs[y]
-              } else h = n[y];
+                if (!(this.highs[m] > s[1][u])) continue;
+                h = this.highs[m]
+              } else h = n[m];
             if (this.unit === t.RangeMode.Percentage && (e = h * this.size), -1 === u) {
               if (l = a ? this.xs[0] : 0, d = 0, o = this.fields === t.DataFields.HighLow ? null == this.highs[0] ? this.highs[this.highs.length - 1] : this.highs[0] : null == n[0] ? n[n.length - 1] : n[0], (g = Math.abs(o - h) || 0) < e) continue
             } else if (g = s[1][u] - s[0][u], p = Math.max(s[0][u], s[1][u]), _ = Math.min(s[0][u], s[1][u]), g > 0)
@@ -561,8 +561,8 @@ var __extends = this && this.__extends || function() {
             if (g = h - o, !(Math.abs(g) < e)) {
               g = t._trunc(g / e);
               for (var d = 0; d < Math.abs(g); d++) {
-                var y = {};
-                this.rounding && (o = this._round(o, e)), s[0].push(o), y.open = o, o = g > 0 ? o + e : o - e, s[1].push(o), y.close = o, y.x = l, y.pointIndex = f, y.high = Math.max(y.open, y.close), y.low = Math.min(y.open, y.close), r.push(y)
+                var m = {};
+                this.rounding && (o = this._round(o, e)), s[0].push(o), m.open = o, o = g > 0 ? o + e : o - e, s[1].push(o), m.close = o, m.x = l, m.pointIndex = f, m.high = Math.max(m.open, m.close), m.low = Math.min(m.open, m.close), r.push(m)
               }
             }
           }
@@ -617,35 +617,35 @@ var __extends = this && this.__extends || function() {
             d > 0 && (p *= d)
           } else _ = this.dataInfo.getXVals();
           _ ? g = Math.min(g, _.length) : (f = !1, _ = new Array(g));
-          var y = this._DEFAULT_WIDTH,
-            m = c._getSymbolFill(u),
+          var m = this._DEFAULT_WIDTH,
+            y = c._getSymbolFill(u),
             v = c._getAltSymbolFill(u) || "transparent",
-            w = c._getSymbolStroke(u),
-            x = c._getAltSymbolStroke(u) || w,
+            x = c._getSymbolStroke(u),
+            w = c._getAltSymbolStroke(u) || x,
             b = p,
             k = r.getDataType(1) || r.chart._xDataType;
-          i.strokeWidth = y;
-          for (var P, C, V, A, F, T, L, M, D = n.actualMin, S = n.actualMax, O = 0, B = 0; B < g; B++)
+          i.strokeWidth = m;
+          for (var P, C, V, A, F, M, T, L, D = n.actualMin, S = n.actualMax, O = 0, B = 0; B < g; B++)
             if (V = f ? _[B] : B, e._DataInfo.isValid(V) && D <= V && V <= S) {
-              if (F = this._haValues[B].high, T = this._haValues[B].low, L = this._haValues[B].open, M = this._haValues[B].close, P = L < M ? v : m, C = L < M ? x : w, i.fill = P, i.stroke = C, i.startGroup(), A = this._getDataPoint(u, B, V, r), this.chart.itemFormatter) {
+              if (F = this._haValues[B].high, M = this._haValues[B].low, T = this._haValues[B].open, L = this._haValues[B].close, P = T < L ? v : y, C = T < L ? w : x, i.fill = P, i.stroke = C, i.startGroup(), A = this._getDataPoint(u, B, V, r), this.chart.itemFormatter) {
                 var j = new e.HitTestInfo(this.chart, new t.Point(n.convert(V), a.convert(F)), e.ChartElement.SeriesSymbol);
                 j._setData(c, B), j._setDataPoint(A), this.chart.itemFormatter(i, j, function() {
-                  h._drawSymbol(i, n, a, u, B, P, b, V, F, T, L, M, A, k)
+                  h._drawSymbol(i, n, a, u, B, P, b, V, F, M, T, L, A, k)
                 })
-              } else this._drawSymbol(i, n, a, u, B, P, b, V, F, T, L, M, A, k);
+              } else this._drawSymbol(i, n, a, u, B, P, b, V, F, M, T, L, A, k);
               i.endGroup(), r._setPointIndex(B, O), O++
             }
         }, a.prototype._drawSymbol = function(i, n, a, r, s, o, l, h, c, u, _, p, g, f) {
-          var d, y = null,
-            m = null,
+          var d, m = null,
+            y = null,
             v = null,
-            w = null,
-            x = f === t.DataType.Date ? 432e5 : .5;
-          if (v = n.convert(h - x * l), w = n.convert(h + x * l), v > w) {
+            x = null,
+            w = f === t.DataType.Date ? 432e5 : .5;
+          if (v = n.convert(h - w * l), x = n.convert(h + w * l), v > x) {
             var b = v;
-            v = w, w = b
+            v = x, x = b
           }
-          h = n.convert(h), e._DataInfo.isValid(_) && e._DataInfo.isValid(p) && (_ = a.convert(_), p = a.convert(p), m = (y = Math.min(_, p)) + Math.abs(_ - p), i.drawRect(v, y, w - v, m - y), (d = new e._RectArea(new t.Rect(v, y, w - v, m - y))).tag = g, this.hitTester.add(d, r)), e._DataInfo.isValid(c) && (c = a.convert(c), null !== y && i.drawLine(h, y, h, c)), e._DataInfo.isValid(u) && (u = a.convert(u), null !== m && i.drawLine(h, m, h, u))
+          h = n.convert(h), e._DataInfo.isValid(_) && e._DataInfo.isValid(p) && (_ = a.convert(_), p = a.convert(p), y = (m = Math.min(_, p)) + Math.abs(_ - p), i.drawRect(v, m, x - v, y - m), (d = new e._RectArea(new t.Rect(v, m, x - v, y - m))).tag = g, this.hitTester.add(d, r)), e._DataInfo.isValid(c) && (c = a.convert(c), null !== m && (i.drawLine(h, m, h, c), d.rect.top = c, d.rect.height = d.rect.height + c)), e._DataInfo.isValid(u) && (u = a.convert(u), null !== y && (i.drawLine(h, y, h, u), d.rect.height = d.rect.height + u))
         }, a.prototype._getDataPoint = function(t, i, n, a) {
           var r = new e._DataPoint(t, i, n, this._haValues[i].high),
             s = a._getItem(i),
@@ -725,25 +725,25 @@ var __extends = this && this.__extends || function() {
             g = this._DEFAULT_WIDTH,
             f = this._symFactor,
             d = r._getSymbolFill(c),
-            y = r._getAltSymbolFill(c) || "transparent",
-            m = r._getSymbolStroke(c),
-            v = r._getAltSymbolStroke(c) || m;
+            m = r._getAltSymbolFill(c) || "transparent",
+            y = r._getSymbolStroke(c),
+            v = r._getAltSymbolStroke(c) || y;
           i.strokeWidth = g;
-          for (var w, x, b, k, P = 0, C = 0; C < u; C++)
-            if (w = C, e._DataInfo.isValid(w) && _ <= w && w <= p) {
-              if (x = this._rangeValues[C].open, b = this._rangeValues[C].close, i.fill = x > b ? d : y, i.stroke = x > b ? m : v, k = this._getDataPoint(c, C, r, Math.max(x, b)), i.startGroup(), this.chart.itemFormatter) {
-                var V = new e.HitTestInfo(this.chart, new t.Point(n.convert(w), a.convert(b)), e.ChartElement.SeriesSymbol);
+          for (var x, w, b, k, P = 0, C = 0; C < u; C++)
+            if (x = C, e._DataInfo.isValid(x) && _ <= x && x <= p) {
+              if (w = this._rangeValues[C].open, b = this._rangeValues[C].close, i.fill = w > b ? d : m, i.stroke = w > b ? y : v, k = this._getDataPoint(c, C, r, Math.max(w, b)), i.startGroup(), this.chart.itemFormatter) {
+                var V = new e.HitTestInfo(this.chart, new t.Point(n.convert(x), a.convert(b)), e.ChartElement.SeriesSymbol);
                 V._setData(r, C), V._setDataPoint(k), this.chart.itemFormatter(i, V, function() {
-                  h._drawSymbol(i, n, a, c, P, f, w, x, b, k)
+                  h._drawSymbol(i, n, a, c, P, f, x, w, b, k)
                 })
-              } else this._drawSymbol(i, n, a, c, P, f, w, x, b, k);
+              } else this._drawSymbol(i, n, a, c, P, f, x, w, b, k);
               i.endGroup(), r._setPointIndex(C, P), P++
             }
         }, n.prototype._drawSymbol = function(i, n, a, r, s, o, l, h, c, u) {
           var _, p, g, f, d;
           if (g = n.convert(l - .5 * o), f = n.convert(l + .5 * o), g > f) {
-            var y = g;
-            g = f, f = y
+            var m = g;
+            g = f, f = m
           }
           e._DataInfo.isValid(h) && e._DataInfo.isValid(c) && (h = a.convert(h), c = a.convert(c), p = (_ = Math.min(h, c)) + Math.abs(h - c), i.drawRect(g, _, f - g, p - _), (d = new e._RectArea(new t.Rect(g, _, f - g, p - _))).tag = u, this.hitTester.add(d, r))
         }, n.prototype._getDataPoint = function(t, i, n, a) {
@@ -914,12 +914,12 @@ var __extends = this && this.__extends || function() {
             g = r._getSymbolStroke(h),
             f = r._getAltSymbolStroke(h) || g,
             d = [],
-            y = [];
+            m = [];
           i.stroke = g, i.strokeWidth = p;
-          var m, v, w, x, b, k, P, C = 0;
+          var y, v, x, w, b, k, P, C = 0;
           i.startGroup();
-          for (var V = 0; V < c; V++) m = V, e._DataInfo.isValid(m) && u <= m && m <= _ && (v = this._rangeValues[V].open, w = this._rangeValues[V].close, 0 === V ? (x = Math.min(v, w), b = Math.max(v, w), i.strokeWidth = v > w ? p : 2 * p, i.stroke = v > w ? g : f, i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(w)), i.drawLine(n.convert(m - 1) - i.strokeWidth / 2, a.convert(v), n.convert(m) + i.strokeWidth / 2, a.convert(v))) : i.strokeWidth === p ? w > v ? (w > b ? (i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(b)), i.strokeWidth = 2 * p, i.stroke = f, i.drawLine(n.convert(m), a.convert(b), n.convert(m), a.convert(w)), x = v) : i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(w)), b = w) : i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(w)) : i.strokeWidth / 2 === p && (w < v ? (w < x ? (i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(x)), i.strokeWidth = p, i.stroke = g, i.drawLine(n.convert(m), a.convert(x), n.convert(m), a.convert(w)), b = v) : i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(w)), x = w) : i.drawLine(n.convert(m), a.convert(v), n.convert(m), a.convert(w))), V < c - 1 && i.drawLine(n.convert(m) - i.strokeWidth / 2, a.convert(w), n.convert(m + 1) + i.strokeWidth / 2, a.convert(w)), P = this._getDataPoint(h, V, r, w), (k = new e._CircleArea(new t.Point(n.convert(m), a.convert(w)), .5 * i.strokeWidth)).tag = P, this.hitTester.add(k, h), r._setPointIndex(V, C), C++, d.push(n.convert(m)), y.push(a.convert(v)), d.push(n.convert(m)), y.push(a.convert(w)));
-          i.endGroup(), this.hitTester.add(new e._LinesArea(d, y), h)
+          for (var V = 0; V < c; V++) y = V, e._DataInfo.isValid(y) && u <= y && y <= _ && (v = this._rangeValues[V].open, x = this._rangeValues[V].close, 0 === V ? (w = Math.min(v, x), b = Math.max(v, x), i.strokeWidth = v > x ? p : 2 * p, i.stroke = v > x ? g : f, i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(x)), i.drawLine(n.convert(y - 1) - i.strokeWidth / 2, a.convert(v), n.convert(y) + i.strokeWidth / 2, a.convert(v))) : i.strokeWidth === p ? x > v ? (x > b ? (i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(b)), i.strokeWidth = 2 * p, i.stroke = f, i.drawLine(n.convert(y), a.convert(b), n.convert(y), a.convert(x)), w = v) : i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(x)), b = x) : i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(x)) : i.strokeWidth / 2 === p && (x < v ? (x < w ? (i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(w)), i.strokeWidth = p, i.stroke = g, i.drawLine(n.convert(y), a.convert(w), n.convert(y), a.convert(x)), b = v) : i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(x)), w = x) : i.drawLine(n.convert(y), a.convert(v), n.convert(y), a.convert(x))), V < c - 1 && i.drawLine(n.convert(y) - i.strokeWidth / 2, a.convert(x), n.convert(y + 1) + i.strokeWidth / 2, a.convert(x)), P = this._getDataPoint(h, V, r, x), (k = new e._CircleArea(new t.Point(n.convert(y), a.convert(x)), .5 * i.strokeWidth)).tag = P, this.hitTester.add(k, h), r._setPointIndex(V, C), C++, d.push(n.convert(y)), m.push(a.convert(v)), d.push(n.convert(y)), m.push(a.convert(x)));
+          i.endGroup(), this.hitTester.add(new e._LinesArea(d, m), h)
         }, a.prototype._init = function() {
           n.prototype._init.call(this), this._reversalAmount = this.getNumOption("reversalAmount", "kagi") || 14, this._rangeMode = this.getOption("rangeMode", "kagi") || i.RangeMode.Fixed, this._rangeMode = t.asEnum(this._rangeMode, i.RangeMode, !0), this._fields = this.getOption("fields", "kagi") || i.DataFields.Close, this._fields = t.asEnum(this._fields, i.DataFields, !0)
         }, a.prototype.clear = function() {
@@ -962,7 +962,7 @@ var __extends = this && this.__extends || function() {
         return __extends(r, a), r.prototype.clear = function() {
           a.prototype.clear.call(this), this._boxSize = null, this._fields = null, this._reversal = null, this._scaling = null
         }, r.prototype.unload = function() {
-          a.prototype.unload.call(this), this.chart.axisX.itemsSource = this._xlbls
+          a.prototype.unload.call(this)
         }, r.prototype._init = function() {
           this._boxSize = this.getNumOption("boxSize", "pointAndFigure") || 1, this._reversal = this.getNumOption("reversal", "pointAndFigure") || 3, this._period = this.getNumOption("period", "pointAndFigure") || 20, this._fields = this.getOption("fields", "pointAndFigure") || i.DataFields.Close, this._fields = t.asEnum(this._fields, i.DataFields, !0), t.assert(this._fields == i.DataFields.Close || this._fields == i.DataFields.HighLow, "Only DataFields.Close and DataFields.HighLow are supported"), this._scaling = this.getOption("scaling", "pointAndFigure") || n.Traditional, this._scaling = t.asEnum(this._scaling, n, !0), this._xlbls = []
         }, r.prototype.adjustLimits = function(e, n) {
@@ -986,16 +986,16 @@ var __extends = this && this.__extends || function() {
                 var d = this._pfdata.reduce(function(t, e) {
                     return Math.max(t, e.max)
                   }, this._pfdata[0].max),
-                  y = this._pfdata.reduce(function(t, e) {
+                  m = this._pfdata.reduce(function(t, e) {
                     return Math.min(t, e.min)
                   }, this._pfdata[0].min);
-                a = new t.Rect(-.5, y - .5 * f, this._pfdata.length, d - y + f);
-                for (var m = 1; m < this._pfdata.length; m++) {
-                  var v = this._pfdata[m - 1],
-                    w = this._pfdata[m];
-                  t.isDate(w.date) && t.isDate(v.date) && w.date.getYear() != v.date.getYear() && this._xlbls.push({
-                    value: m,
-                    text: t.Globalize.formatNumber(w.date.getFullYear() % 100, "d2")
+                a = new t.Rect(-.5, m - .5 * f, this._pfdata.length, d - m + f);
+                for (var y = 1; y < this._pfdata.length; y++) {
+                  var v = this._pfdata[y - 1],
+                    x = this._pfdata[y];
+                  t.isDate(x.date) && t.isDate(v.date) && x.date.getYear() != v.date.getYear() && this._xlbls.push({
+                    value: y,
+                    text: t.Globalize.formatNumber(x.date.getFullYear() % 100, "d2")
                   })
                 }
               }
@@ -1003,12 +1003,13 @@ var __extends = this && this.__extends || function() {
           }
           return 0 == this._xlbls.length && this._xlbls.push({
             value: 0
-          }), this.chart.axisY.majorGrid = !1, this.chart.axisX.itemsSource = this._xlbls, a
+          }), this.chart.axisX._beginUpdate(), this.chart.axisY._beginUpdate(), this.axisYMajorGrid = this.chart.axisY.majorGrid, this.axisXItemsSource = this.chart.axisX.itemsSource, this.chart.axisY.majorGrid = !1, this.chart.axisX.itemsSource = this._xlbls, a
         }, r.prototype.plotSeries = function(t, e, i, n, a, r, s) {
           if (this._pfdata && this._pfdata.length > 0) {
             var o = this._actualBoxSize;
             this.renderGrid(t, this._pfdata, o), this.renderData(this.chart, t, this._pfdata, o)
           }
+          this.chart.axisY.majorGrid = this.axisYMajorGrid, this.chart.axisX.itemsSource = this.axisXItemsSource, this.chart.axisX._cancelUpdate(), this.chart.axisY._cancelUpdate()
         }, r.prototype.calcBoxSize = function(t, e, a) {
           var r = t.reduce(function(t, i) {
               return Math.max(t, i[e])
@@ -1106,12 +1107,12 @@ var __extends = this && this.__extends || function() {
               for (var g = (p.y - _.y) / u, f = 0; f < u + 1; f++)
                 if (n.strokeWidth = 1.5, c.rise ? (n.stroke = o, n.drawLine(_.x, _.y + (f - .5) * g, p.x, _.y + (f + .5) * g), n.drawLine(p.x, _.y + (f - .5) * g, _.x, _.y + (f + .5) * g)) : (n.stroke = l, n.drawEllipse(.5 * (_.x + p.x), _.y + f * g, .5 * Math.abs(_.x - p.x), .5 * Math.abs(g))), this.hitTester) {
                   var d = c.min + f * r,
-                    y = new e._DataPoint(0, h, c.date, d);
-                  y.y = d, y.yfmt = this.chart.axisY._formatValue(d), t.isDate(c.date) && (y.x = c.date, y.xfmt = t.Globalize.formatDate(c.date, "d"));
-                  var m = new t.Rect(Math.min(_.x, p.x), _.y + f * g - .5 * g, Math.abs(p.x - _.x), g);
-                  m.height < 0 && (m.top += g, m.height = -m.height);
-                  var v = new e._RectArea(m);
-                  v.tag = y, this.hitTester.add(v, 0)
+                    m = new e._DataPoint(0, h, c.date, d);
+                  m.y = d, m.yfmt = this.chart.axisY._formatValue(d), t.isDate(c.date) && (m.x = c.date, m.xfmt = t.Globalize.formatDate(c.date, "d"));
+                  var y = new t.Rect(Math.min(_.x, p.x), _.y + f * g - .5 * g, Math.abs(p.x - _.x), g);
+                  y.height < 0 && (y.top += g, y.height = -y.height);
+                  var v = new e._RectArea(y);
+                  v.tag = m, this.hitTester.add(v, 0)
                 }
             }
           }

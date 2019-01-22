@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -338,7 +338,7 @@ var __extends = this && this.__extends || function() {
                 else if (p._playUpdateAnimation(y, e, a, i, c && c.ele || null), e === _ - 1 && e < r - 1)
                   for (e++; e <= r - 1; e++) p._playUpdateAnimation(y, e, a, null, c.ele)
               }
-            p._adjustAnimations(a, y), y.length && p._playAnimation(y), p.axisAnimation && p._playAxesAnimation()
+            p._adjustAnimations(a, y), y.length && p._playAnimation(y), p.axisAnimation && !d && p._playAxesAnimation()
           }, o.prototype._playAxesAnimation = function() {
             var e, n, i, a = this,
               o = a._chart.axes,

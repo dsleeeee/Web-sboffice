@@ -81,8 +81,11 @@
                     <if test='slipKind != null and slipKind != ""'>
                         AND tphso.SLIP_KIND = #{slipKind}
                     </if>
-                    <if test='procFg != null and procFg != ""'>
-                        AND tphso.PROC_FG = #{procFg}
+                    <if test='arrProcFg != null and arrProcFg != ""'>
+                        AND tphso.PROC_FG IN
+                        <foreach collection="arrProcFg" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
                     </if>
                     <if test='vendrCd != null and vendrCd != ""'>
                         AND tphso.VENDR_CD = #{vendrCd}
@@ -124,8 +127,11 @@
         <if test='slipKind != null and slipKind != ""'>
             AND tphso.SLIP_KIND = #{slipKind}
         </if>
-        <if test='procFg != null and procFg != ""'>
-            AND tphso.PROC_FG = #{procFg}
+        <if test='arrProcFg != null and arrProcFg != ""'>
+            AND tphso.PROC_FG IN
+            <foreach collection="arrProcFg" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND tphso.VENDR_CD = #{vendrCd}

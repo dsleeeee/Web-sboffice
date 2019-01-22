@@ -21,6 +21,10 @@
         </colgroup>
         <tbody>
         <tr>
+          <th>적용대상쿠폰</th>
+          <td colspan="3" id="couponProdTitle"></td>
+        </tr>
+        <tr>
           <th><s:message code="coupon.prodCd"/></th>
           <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
           <th><s:message code="coupon.prodNm"/></th>

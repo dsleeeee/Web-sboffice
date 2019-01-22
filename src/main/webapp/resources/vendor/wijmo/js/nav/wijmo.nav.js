@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -39,7 +39,7 @@ var __extends = this && this.__extends || function() {
         });
         var l = o.hostElement;
         return e.setAttribute(l, "role", "tree", !0), e.addClass(o._root, i._CNDL), e.setAttribute(o._root, "role", "group", !0), o.addEventListener(l, "mousedown", o._mousedown.bind(o)), o.addEventListener(l, "click", o._click.bind(o)), o.addEventListener(l, "keydown", o._keydown.bind(o)), o.addEventListener(l, "keypress", o._keypress.bind(o)), o.addEventListener(l, "wheel", function(e) {
-          l.scrollHeight > l.offsetHeight && (e.deltaY < 0 && 0 == l.scrollTop || e.deltaY > 0 && l.scrollTop + l.offsetHeight >= l.scrollHeight) && (e.preventDefault(), e.stopPropagation())
+          l.scrollHeight > l.offsetHeight && (e.deltaY < 0 && 0 == l.scrollTop || e.deltaY > 0 && l.scrollTop + l.offsetHeight >= l.scrollHeight) && e.preventDefault()
         }), o.addEventListener(l, "blur", function(t) {
           o._edtNode && !e.contains(o._edtNode.element, e.getActiveElement()) && o.finishEditing()
         }, !0), o.initialize(s), o.refresh(), o
@@ -371,7 +371,7 @@ var __extends = this && this.__extends || function() {
         }
       }, i.prototype._keydown = function(t) {
         if (!t.defaultPrevented) {
-          var n = t.keyCode,
+          var n = this._getKeyCode(t),
             i = this._selNode,
             r = void 0,
             s = !0;
@@ -1208,19 +1208,15 @@ var __extends = this && this.__extends || function() {
         for (; e.firstChild;) e.removeChild(e.firstChild)
       }, n.prototype._click = function(e) {
         var t = this._getTabIndex(e.target);
-        t > -1 && (this.selectedIndex = t)
+        if (t > -1) {
+          var n = this._tabs[t];
+          !n.isDisabled && n.isVisible && (this.selectedIndex = t)
+        }
       }, n.prototype._keydown = function(t) {
         if (!t.defaultPrevented) {
           var n = this._getTabIndex(e.getActiveElement());
           if (n > -1) {
-            var i = t.keyCode;
-            if (this.rightToLeft) switch (i) {
-              case e.Key.Left:
-                i = e.Key.Right;
-                break;
-              case e.Key.Right:
-                i = e.Key.Left
-            }
+            var i = this._getKeyCode(t);
             switch (i) {
               case e.Key.Left:
               case e.Key.Up:

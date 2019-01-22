@@ -322,6 +322,29 @@ public class VendrInstockController {
 
 
     /**
+     * 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   vendrInstockVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 12. 31.
+     */
+    @RequestMapping(value = "/vendrInstockReport/vendrInstockReportInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrInstockReportInfo(HttpServletRequest request, HttpServletResponse response,
+        Model model, VendrInstockVO vendrInstockVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = vendrInstockService.getVendrInstockReportInfo(vendrInstockVO, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+
+    /**
      * 거래처 입고/반출등록 - 엑셀업로드
      * @param   request
      * @param   response

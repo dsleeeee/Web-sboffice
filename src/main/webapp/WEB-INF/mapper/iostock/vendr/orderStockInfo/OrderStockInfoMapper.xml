@@ -352,6 +352,9 @@
                 <if test='slipNo != null and slipNo != ""'>
                   AND tphvi.ORDER_SLIP_NO = #{slipNo}
                 </if>
+                <if test='inSlipNo != null and inSlipNo != ""'>
+                    AND tphvi.SLIP_NO = #{inSlipNo}
+                </if>
                 <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
                     AND tphvi.INSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
@@ -375,6 +378,9 @@
                 ]]>
                 <if test='slipNo != null and slipNo != ""'>
                     AND tpsvi.ORDER_SLIP_NO = #{slipNo}
+                </if>
+                <if test='inSlipNo != null and inSlipNo != ""'>
+                    AND tpsvi.SLIP_NO = #{inSlipNo}
                 </if>
                 <![CDATA[
                 ORDER BY tpsvi.INSTOCK_DATE, tpsvi.SLIP_NO

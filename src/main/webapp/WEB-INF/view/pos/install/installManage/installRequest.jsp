@@ -169,5 +169,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=20190103.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010301" charset="utf-8"></script>
 
