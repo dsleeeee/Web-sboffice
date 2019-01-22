@@ -21,6 +21,10 @@
         </colgroup>
         <tbody>
         <tr>
+          <th>적용대상쿠폰</th>
+          <td colspan="3" id="couponProdTitle"></td>
+        </tr>
+        <tr>
           <th><s:message code="coupon.prodCd"/></th>
           <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
           <th><s:message code="coupon.prodNm"/></th>
@@ -108,4 +112,4 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20181228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=2018122801" charset="utf-8"></script>

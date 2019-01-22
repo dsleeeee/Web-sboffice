@@ -310,7 +310,7 @@ var regstrStoreList = ${regstrStoreList};
 var memberClassList = ${memberClassList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20181109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=2018110901" charset="utf-8"></script>
 
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">

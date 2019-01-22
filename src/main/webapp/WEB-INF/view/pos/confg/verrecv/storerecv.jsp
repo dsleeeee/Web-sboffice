@@ -94,7 +94,7 @@
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=20190110.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/storeRecv.js?ver=2019011002" charset="utf-8"></script>
 
 <%-- 매장추가 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/verrecv/storeRecvDtl.jsp">

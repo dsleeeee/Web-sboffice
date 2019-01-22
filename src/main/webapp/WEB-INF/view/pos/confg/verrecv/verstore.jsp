@@ -149,4 +149,4 @@
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
   var verRecvFg = ${ccu.getCommCodeExcpAll("060")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=20190110.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verStore.js?ver=2019011002" charset="utf-8"></script>

@@ -144,4 +144,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20190110.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=2019011002" charset="utf-8"></script>

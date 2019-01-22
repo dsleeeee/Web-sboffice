@@ -105,4 +105,4 @@
   var sysStatFgComboData = ${ccu.getCommCode("005")};
   var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/popUpTemplate.js?ver=20180914.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/popUpTemplate.js?ver=2018091401" charset="utf-8"></script>

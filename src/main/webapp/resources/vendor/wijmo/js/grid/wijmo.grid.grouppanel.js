@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -41,8 +41,8 @@ var __extends = this && this.__extends || function() {
             _divMarkers: "div-markers",
             _divPH: "div-ph"
           });
-          var a = o.hostElement;
-          return o.addEventListener(a, "dragstart", o._dragStart.bind(o)), o.addEventListener(a, "dragover", o._dragOver.bind(o)), o.addEventListener(a, "drop", o._drop.bind(o)), o.addEventListener(a, "dragend", o._dragEnd.bind(o)), o.addEventListener(a, "click", o._click.bind(o)), o.initialize(n), o
+          var l = o.hostElement;
+          return o.addEventListener(l, "dragstart", o._dragStart.bind(o)), o.addEventListener(l, "dragover", o._dragOver.bind(o)), o.addEventListener(l, "drop", o._drop.bind(o)), o.addEventListener(l, "dragend", o._dragEnd.bind(o)), o.addEventListener(l, "click", o._click.bind(o)), o.initialize(n), o
         }
         return __extends(r, i), Object.defineProperty(r.prototype, "hideGroupedColumns", {
           get: function() {
@@ -58,7 +58,12 @@ var __extends = this && this.__extends || function() {
             return this._maxGroups
           },
           set: function(t) {
-            t != this._maxGroups && (this._maxGroups = e.asNumber(t))
+            if (t != this._maxGroups) {
+              this._maxGroups = e.asNumber(t);
+              var i = this._gds,
+                r = this._maxGroups;
+              i && r > -1 && r < i.length && i.splice(r, i.length - r)
+            }
           },
           enumerable: !0,
           configurable: !0
@@ -76,24 +81,39 @@ var __extends = this && this.__extends || function() {
             return this._g
           },
           set: function(i) {
-            (i = e.asType(i, t.FlexGrid, !0)) != this._g && (this._g && (this._g.draggingColumn.removeHandler(this._draggingColumn), this._g.sortedColumn.removeHandler(this.invalidate), this._g.itemsSourceChanging.removeHandler(this._itemsSourceChanging), this._g.itemsSourceChanged.removeHandler(this._itemsSourceChanged), this._g.columns.collectionChanged.removeHandler(this._itemsSourceChanged)), this._g = i, this._hiddenCols = [], this._g && (this._g.draggingColumn.addHandler(this._draggingColumn, this), this._g.sortedColumn.addHandler(this.invalidate, this), this._g.itemsSourceChanging.addHandler(this._itemsSourceChanging, this), this._g.itemsSourceChanged.addHandler(this._itemsSourceChanged, this), this._g.columns.collectionChanged.addHandler(this._itemsSourceChanged, this)), this._itemsSourceChanged(this._g, null))
+            if ((i = e.asType(i, t.FlexGrid, !0)) != this._g) {
+              var r = this._g;
+              r && (r.draggingColumn.removeHandler(this._draggingColumn), r.itemsSourceChanging.removeHandler(this._itemsSourceChanging), r.itemsSourceChanged.removeHandler(this._itemsSourceChanged), r.columns.collectionChanged.removeHandler(this._itemsSourceChanged)), r = this._g = i, this._hiddenCols = [], r && (r.draggingColumn.addHandler(this._draggingColumn, this), r.itemsSourceChanging.addHandler(this._itemsSourceChanging, this), r.itemsSourceChanged.addHandler(this._itemsSourceChanged, this), r.columns.collectionChanged.addHandler(this._itemsSourceChanged, this)), this._itemsSourceChanged(r, null)
+            }
+          },
+          enumerable: !0,
+          configurable: !0
+        }), Object.defineProperty(r.prototype, "filter", {
+          get: function() {
+            return this._filter
+          },
+          set: function(t) {
+            if ((t = e.asType(t, e.grid.filter.FlexGridFilter, !0)) != this._filter) {
+              var i = this._filter;
+              i && i.filterApplied.removeHandler(this.refresh, this), (i = this._filter = t) && i.filterApplied.addHandler(this.refresh, this), this.refresh()
+            }
           },
           enumerable: !0,
           configurable: !0
         }), r.prototype.refresh = function() {
           if (i.prototype.refresh.call(this), this._divMarkers.innerHTML = "", this._dragMarker = this._dragCol = null, this._gds) {
-            for (var t = 0; t < this._gds.length; t++) {
-              for (var r = this._gds[t], n = this._g.columnHeaders, o = -1, s = -1, a = n.rows.length - 1; a >= 0 && s < 0; a--)
-                for (var d = 0; d < n.columns.length && s < 0; d++) {
-                  var l = this._g._getBindingColumn(n, a, n.columns[d]);
-                  if (l && l.binding == r.propertyName) {
-                    s = d, o = a;
+            for (var t = this._g, r = t.columnHeaders, n = 0; n < this._gds.length; n++) {
+              for (var o = this._gds[n], s = -1, l = -1, a = r.rows.length - 1; a >= 0 && l < 0; a--)
+                for (var d = 0; d < r.columns.length && l < 0; d++) {
+                  var h = t._getBindingColumn(r, a, r.columns[d]);
+                  if (h && h.binding == o.propertyName) {
+                    l = d, s = a;
                     break
                   }
                 }
-              if (s > -1 && o > -1) {
-                var h = document.createElement("div");
-                this._g.cellFactory.updateCell(this._g.columnHeaders, o, s, h), h.setAttribute("class", "wj-cell wj-header wj-groupmarker"), e.setCss(h, {
+              if (l > -1 && s > -1) {
+                var g = document.createElement("div");
+                t.cellFactory.updateCell(this._g.columnHeaders, s, l, g), g.setAttribute("class", "wj-cell wj-header wj-groupmarker"), e.setCss(g, {
                   position: "static",
                   display: "inline-block",
                   verticalAlign: "top",
@@ -103,25 +123,38 @@ var __extends = this && this.__extends || function() {
                   height: "auto",
                   width: "auto"
                 });
-                var g = h.querySelector(".wj-elem-filter");
-                g && e.removeChild(g);
-                e.createElement('<span wj-remove="" style="font-weight:normal;cursor:pointer;pointer;padding:12px;padding-right:3px">&times;</span>', h);
-                this._divMarkers.appendChild(h)
+                var u = g.querySelector(".wj-elem-filter");
+                u && e.removeChild(u);
+                var p = this._getColumnFilter(r.columns[l]);
+                p && (u = e.createElement('<span class="wj-filter wj-glyph-filter"></span>', g), e.toggleClass(u, "wj-filter-on", p.isActive), e.toggleClass(u, "wj-filter-off", !p.isActive)), e.createElement('<span class="wj-remove">&times;</span>', g), this._divMarkers.appendChild(g)
               }
             }
-            this._divMarkers.children.length > 0 ? (this._divPH.style.display = "none", this._divMarkers.style.display = "") : (this._divPH.style.display = "", this._divMarkers.style.display = "none")
+            var c = this._divMarkers.children.length > 0;
+            this._divPH.style.display = c ? "none" : "", this._divMarkers.style.display = c ? "" : "none"
           }
+        }, r.prototype._getColumnFilter = function(e) {
+          var t = this._filter,
+            i = null;
+          return t && (i = t.filterColumns && t.filterColumns.indexOf(e.binding) < 0 ? null : t.getColumnFilter(e)), i
+        }, r.prototype._editFilter = function(e) {
+          var t = this._gds,
+            i = this._getElementIndex(e),
+            r = t && i > -1 ? t[i] : null,
+            n = r ? r.propertyName : null,
+            o = n ? this._g.columns.getColumn(n) : null;
+          o && this._filter.editColumnFilter(o, null, e)
         }, r.prototype._addGroup = function(t, i) {
-          for (var r = this._getIndex(i), n = this._gds, o = 0; o < n.length; o++)
-            if (n[o].propertyName == t.binding) {
-              n.removeAt(o), o < r && r--;
+          for (var r = this._getIndex(i), n = this._gds, o = this._maxGroups, s = 0; s < n.length; s++)
+            if (n[s].propertyName == t.binding) {
+              n.removeAt(s), s < r && r--;
               break
             }
-          for (o = this.maxGroups - 1; o < n.length; o++) this._removeGroup(o, n), o < r && r--;
-          n.deferUpdate(function() {
+          if (o > -1)
+            for (s = o - 1; s < n.length; s++) this._removeGroup(s, n), s < r && r--;
+          (o < 0 || n.length < o) && (n.deferUpdate(function() {
             var i = new e.collections.PropertyGroupDescription(t.binding);
             n.insert(r, i)
-          }), t && this.hideGroupedColumns && (t.visible = !1, this._hiddenCols.push(t)), this.invalidate()
+          }), t && this.hideGroupedColumns && (t.visible = !1, this._hiddenCols.push(t)))
         }, r.prototype._moveGroup = function(e, t) {
           var i = this._gds,
             r = this._getElementIndex(this._dragMarker),
@@ -161,9 +194,9 @@ var __extends = this && this.__extends || function() {
             e.visible = !0
           }), this._hiddenCols = []
         }, r.prototype._itemsSourceChanged = function(e, t) {
-          this._gds && this._gds.collectionChanged.removeHandler(this._groupsChanged), this._gds = null, this._g.collectionView && (this._gds = this._g.collectionView.groupDescriptions, this._gds.collectionChanged.addHandler(this._groupsChanged, this)), this.invalidate()
-        }, r.prototype._groupsChanged = function(e, t) {
-          this.invalidate()
+          this._view && this._view.collectionChanged.removeHandler(this._collectionChanged), this._view = this._g ? this._g.collectionView : null, this._gds = this._view ? this._view.groupDescriptions : null, this._view && this._view.collectionChanged.addHandler(this._collectionChanged, this), this.invalidate()
+        }, r.prototype._collectionChanged = function(t, i) {
+          i.action == e.collections.NotifyCollectionChangedAction.Reset && this.invalidate()
         }, r.prototype._dragStart = function(t) {
           e._startDrag(t.dataTransfer, "move"), this._dragMarker = t.target, this._dragCol = null
         }, r.prototype._dragOver = function(e) {
@@ -174,21 +207,23 @@ var __extends = this && this.__extends || function() {
           this._dragMarker = this._dragCol = null
         }, r.prototype._click = function(t) {
           var i = t.target,
-            r = null != i.getAttribute("wj-remove"),
-            n = e.closest(i, ".wj-cell");
-          if (e.hasClass(n, "wj-cell")) {
-            var o = this._getElementIndex(n),
-              s = this._g.collectionView.sortDescriptions;
-            if (r) this._removeGroup(o);
-            else if (t.ctrlKey) s.clear(), this.invalidate();
+            r = e.hasClass(i, "wj-remove"),
+            n = e.hasClass(i, "wj-filter"),
+            o = e.closest(i, ".wj-cell");
+          if (e.hasClass(o, "wj-cell")) {
+            var s = this._getElementIndex(o),
+              l = this._g.collectionView.sortDescriptions;
+            if (n) this._editFilter(o);
+            else if (r) this._removeGroup(s);
+            else if (t.ctrlKey) l.clear();
             else {
-              for (var a = this._gds[o], d = !0, l = 0; l < s.length; l++)
-                if (s[l].property == a.propertyName) {
-                  d = !s[l].ascending;
+              for (var a = this._gds[s], d = !0, h = 0; h < l.length; h++)
+                if (l[h].property == a.propertyName) {
+                  d = !l[h].ascending;
                   break
                 }
-              var h = new e.collections.SortDescription(a.propertyName, d);
-              s.splice(0, s.length, h), this.invalidate()
+              var g = new e.collections.SortDescription(a.propertyName, d);
+              l.splice(0, l.length, g)
             }
           }
         }, r.controlTemplate = '<div style="cursor:default;overflow:hidden;height:100%;width:100%;min-height:1em"><div wj-part="div-ph"></div><div wj-part="div-markers"></div></div>', r

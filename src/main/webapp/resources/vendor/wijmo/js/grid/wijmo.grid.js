@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -208,7 +208,10 @@ var __extends = this && this.__extends || function() {
           return null != this._imeHdl
         },
         set: function(i) {
-          e.asBoolean(i) != this.imeEnabled && this.finishEditing() && (this._imeHdl && (this._imeHdl.dispose(), this._imeHdl = null), i && (this._imeHdl = new t._ImeHandler(this)))
+          if (e.asBoolean(i) != this.imeEnabled && this.finishEditing()) {
+            var o = this.containsFocus();
+            this._imeHdl && (this._imeHdl.dispose(), this._imeHdl = null), i && (this._imeHdl = new t._ImeHandler(this)), o && this.focus()
+          }
         },
         enumerable: !0,
         configurable: !0
@@ -607,7 +610,12 @@ var __extends = this && this.__extends || function() {
       }, n.prototype.dispose = function() {
         this.finishEditing(!0), this.itemsSource = null, o.prototype.dispose.call(this)
       }, n.prototype.refresh = function(e) {
-        void 0 === e && (e = !0), o.prototype.refresh.call(this, e), this.finishEditing(), e && (this._updateColumnTypes(), this.scrollPosition = this._ptScrl), this.refreshCells(e)
+        if (void 0 === e && (e = !0), o.prototype.refresh.call(this, e), this.finishEditing(), e) {
+          this._updateColumnTypes(), this.scrollPosition = this._ptScrl;
+          var t = this._getDefaultRowHeight();
+          this._rows._setDefaultSize(t), this._cols._setDefaultSize(4 * t), this._hdrRows._setDefaultSize(t), this._hdrCols._setDefaultSize(Math.round(1.25 * t)), this._ftrRows._setDefaultSize(t)
+        }
+        this.refreshCells(e)
       }, n.prototype.refreshCells = function(e, t, i) {
         this.isUpdating || (e ? this._updateLayout() : this._updateContent(t, i))
       }, n.prototype.autoSizeColumn = function(e, t, i) {
@@ -755,7 +763,7 @@ var __extends = this && this.__extends || function() {
         enumerable: !0,
         configurable: !0
       }), n.prototype.scrollIntoView = function(t, i, o) {
-        null == this._maxOffsetY && this._updateLayout();
+        (null == this._maxOffsetY || this._rows._dirty || this._cols._dirty) && this._updateLayout();
         var n = this.scrollPosition,
           r = this._szClient.width,
           s = this._szClient.height - this._gpCFtr.rows.getTotalSize(),
@@ -765,12 +773,12 @@ var __extends = this && this.__extends || function() {
             c = this.cells.height > s ? Math.round(a.pos / (this.cells.height - s) * 100) / 100 : 0,
             h = Math.round(this._maxOffsetY * c),
             u = a.pos - h,
-            d = u + a.renderSize - 1;
+            d = u + a.renderSize;
           d > s - n.y && (n.y = Math.max(-u, s - d)), u - l.y < -n.y && (n.y = -(u - l.y))
         }
         if ((i = e.asInt(i)) > -1 && i < this._cols.length && i >= this._cols.frozen) {
           var g = this._cols[i],
-            p = g.pos + g.renderSize - 1;
+            p = g.pos + g.renderSize;
           p > -n.x + r && (n.x = Math.max(-g.pos, r - p)), g.pos - l.x < -n.x && (n.x = -(g.pos - l.x))
         }
         return !n.equals(this._ptScrl) && (this.scrollPosition = n, o && (this._updateScrollPosition(), this.refresh()), !0)
@@ -963,14 +971,7 @@ var __extends = this && this.__extends || function() {
             o = this.activeEditor,
             n = this._activeCell,
             r = this._eFocus;
-          if (o) e.contains(o, i) || (o.focus(), r.tabIndex = -1);
-          else if (n) {
-            if (!e.contains(n, i) && i != this._root) {
-              var s = !1;
-              e.isIE() && (this._setFocusNoScroll(n), s = !0), s || (n.tabIndex = this._orgTabIndex, n.focus()), r.tabIndex = -1
-            }
-          } else e.contains(r, i) || i == this._root || (r.tabIndex = this._orgTabIndex, r.focus());
-          this.containsFocus() || (r.tabIndex = this._orgTabIndex, r.focus())
+          o ? e.contains(o, i) || (o.focus(), r.tabIndex = -1) : n ? e.contains(n, i) || i != this._root && (n.tabIndex = this._orgTabIndex, n.focus(), r.tabIndex = -1) : e.contains(r, i) || i == this._root || (r.tabIndex = this._orgTabIndex, r.focus()), this.containsFocus() || (r.tabIndex = this._orgTabIndex, r.focus())
         }
       }, n.prototype._setFocusNoScroll = function(t) {
         if (t.tabIndex = this._orgTabIndex, e.supportsFocusOptions()) t.focus({
@@ -987,8 +988,8 @@ var __extends = this && this.__extends || function() {
       }, n.prototype._getDefaultRowHeight = function() {
         var t = this._eFocus,
           i = null;
-        t.scrollHeight || (t = (i = e.createElement('<div class="wj-flexgrid"><div class="wj-cell">0</div></div>', document.body)).children[0]);
-        var o = t.scrollHeight;
+        t.offsetHeight || ((i = e.createElement('<div><div class="wj-cell">0</div></div>', document.body)).setAttribute("class", this.hostElement.getAttribute("class")), t = i.children[0]);
+        var o = t.offsetHeight;
         return (isNaN(o) || o <= 6) && (o = 28), e.removeChild(i), o
       }, n.prototype._getDefaultCellPadding = function() {
         var e = getComputedStyle(this._eFocus);
@@ -1019,16 +1020,19 @@ var __extends = this && this.__extends || function() {
         for (var r = 0, s = 0; s < t.columns.length; s++) {
           var l = t.columns[s];
           if (l.isVisible) {
-            var a = void 0,
-              c = this.getMergedRange(t, i, s, !1),
-              h = {
-                ct: t.cellType,
-                col: s,
-                rng: c && c.rowSpan > 1 ? c.rowSpan : 1,
-                content: l.dataType == e.DataType.Number ? "1" : t.getCellData(i, s, !0)
-              },
-              u = JSON.stringify(h);
-            null == (a = n[u]) && (a = this._getDesiredHeight(t, i, s, o), n[u] = a), r = Math.max(r, a)
+            var a = this.getMergedRange(t, i, s, !1),
+              c = void 0;
+            if (this._getQuickAutoSize()) {
+              var h = {
+                  ct: t.cellType,
+                  col: s,
+                  rng: a && a.rowSpan > 1 ? a.rowSpan : 1,
+                  content: l.dataType == e.DataType.Number ? "1" : t.getCellData(i, s, !0)
+                },
+                u = JSON.stringify(h);
+              null == (c = n[u]) && (c = this._getDesiredHeight(t, i, s, o), n[u] = c)
+            } else c = this._getDesiredHeight(t, i, s, o);
+            r = Math.max(r, c)
           }
         }
         return r
@@ -1088,37 +1092,43 @@ var __extends = this && this.__extends || function() {
           var n = this._selHdl.selection;
           n.row = n.row2 = -1
         }
-        this._cv && this._syncSelection(i)
+        this._cv && setTimeout(function() {
+          o._syncSelection(i)
+        })
       }, n.prototype._cvCollectionChanged = function(i, o) {
         if (this.autoGenerateColumns && 0 == this.columns.length) this._bindGrid(!0);
-        else if (this.childItemsPath && o.action != e.collections.NotifyCollectionChangedAction.Change) this._bindGrid(!1);
         else {
-          switch (o.action) {
-            case e.collections.NotifyCollectionChangedAction.Change:
-              return void this.invalidate();
-            case e.collections.NotifyCollectionChangedAction.Add:
-              if (o.index == this._cv.items.length - 1) {
-                var n = this.rows.length;
-                return this.rows[n - 1] instanceof t._NewRowTemplate && n--, void this.rows.insert(n, new t.Row(o.item))
-              }
-              e.assert(!1, "added item should be the last one.");
-              break;
-            case e.collections.NotifyCollectionChangedAction.Remove:
-              var r = this._findRow(o.item);
-              if (r > -1) return this.rows.removeAt(r), void this._syncSelection(!1);
-              e.assert(!1, "removed item not found on grid.")
+          var n = e.collections.NotifyCollectionChangedAction;
+          if (this.childItemsPath && o.action != n.Change) this._bindGrid(!1);
+          else {
+            switch (o.action) {
+              case n.Change:
+                return void this.invalidate();
+              case n.Add:
+                if (o.index == this._cv.items.length - 1) {
+                  var r = this.rows.length;
+                  return this.rows[r - 1] instanceof t._NewRowTemplate && r--, void this.rows.insert(r, new t.Row(o.item))
+                }
+                e.assert(!1, "added item should be the last one.");
+                break;
+              case n.Remove:
+                var s = this._findRow(o.item);
+                if (s > -1) return this.rows.removeAt(s), void this._syncSelection(!1);
+                e.assert(!1, "removed item not found on grid.")
+            }
+            this._bindGrid(!1)
           }
-          this._bindGrid(!1)
         }
       }, n.prototype._cvCurrentChanged = function(e, t) {
         this._syncSelection(!1)
       }, n.prototype._syncSelection = function(i) {
         if (this._cv && this.selectionMode != t.SelectionMode.None) {
           var o = this.selection,
-            n = o.row > -1 && o.row < this.rows.length ? this.rows[o.row].dataItem : null;
-          if (n instanceof e.collections.CollectionViewGroup && (n = null), (n != this._cv.currentItem || i) && (!this.childItemsPath || !this.editableCollectionView || !this.editableCollectionView.currentAddItem)) {
-            var r = this._getRowIndex(this._cv.currentPosition);
-            r == o.row && this.childItemsPath || (o.row = o.row2 = r, this.select(o, !1), this.selectionMode && this.scrollIntoView(o.row, -1))
+            n = o.row > -1 && o.row < this.rows.length ? this.rows[o.row] : null,
+            r = n ? n.dataItem : null;
+          if (this.newRowAtTop && n instanceof t._NewRowTemplate && (r = null), r instanceof e.collections.CollectionViewGroup && (r = null), (r != this._cv.currentItem || i) && (!this.childItemsPath || !this.editableCollectionView || !this.editableCollectionView.currentAddItem)) {
+            var s = this._getRowIndex(this._cv.currentPosition);
+            s == o.row && this.childItemsPath || (o.row = o.row2 = s, this.select(o, !1), this.selectionMode && this.scrollIntoView(o.row, -1))
           }
         }
       }, n.prototype._getRowIndex = function(e) {
@@ -1149,7 +1159,6 @@ var __extends = this && this.__extends || function() {
       }, n.prototype._updateLayout = function() {
         var t = new e.CancelEventArgs;
         if (this.onUpdatingLayout(t)) {
-          this._hasValidation = e.isFunction(this._itemValidator) || this._cv && e.isFunction(this._cv.getError);
           var o = this._hdrVis & i.Row ? this._hdrCols.getTotalSize() : 0,
             r = this._hdrVis & i.Column ? this._hdrRows.getTotalSize() : 0,
             s = this._ftrRows.getTotalSize(),
@@ -1292,7 +1301,7 @@ var __extends = this && this.__extends || function() {
           c = this._activeCell,
           h = new e.CancelEventArgs;
         if (this.onUpdatingView(h)) {
-          if (e.setAttribute(s, "role", this.rows.maxGroupLevel < 0 ? "grid" : "treegrid"), this._offsetY = 0, this._heightBrowser > this._szClient.height) {
+          if (e.setAttribute(s, "role", this.rows.maxGroupLevel < 0 ? "grid" : "treegrid"), this._hasValidation = e.isFunction(this._itemValidator) || this._cv && e.isFunction(this._cv.getError), this._offsetY = 0, this._heightBrowser > this._szClient.height) {
             var u = Math.round(-this._ptScrl.y / (this._heightBrowser - this._szClient.height) * 100) / 100;
             this._offsetY = Math.round(this._maxOffsetY * u)
           }
@@ -1334,9 +1343,11 @@ var __extends = this && this.__extends || function() {
             }!a && d && (d.tabIndex = this._orgTabIndex), c && c != d && (c.tabIndex = -1), this._fixScroll(), this._rcBounds = null, this.onUpdatedView(h)
         }
       }, n.prototype._fixScroll = function() {
-        [this.hostElement, this._root ? this._root.parentElement : null].forEach(function(e) {
-          e && e.scrollTop && (e.scrollTop = 0)
-        })
+        if (!this._updating) {
+          var e = this.hostElement,
+            t = this._root ? this._root.parentElement : null;
+          e && e.scrollTop && (e.scrollTop = 0), t && t.scrollTop && (t.scrollTop = 0)
+        }
       }, n.prototype._clearCells = function() {
         for (var e in this)
           if ("_" == e[0]) {
@@ -1347,18 +1358,19 @@ var __extends = this && this.__extends || function() {
       }, n.prototype._useFrozenDiv = function() {
         return e.isBoolean(this._fzClone) ? this._fzClone : e.isIE() || e.isFirefox() || e.isSafari() || e.isMobile()
       }, n.prototype._updateFrozenCells = function(t) {
+        var i = this._fCt;
         if (this.frozenRows || this.frozenColumns) {
-          var i = this._eCt.querySelectorAll(".wj-frozen");
-          if (t && this._fCt.children.length == i.length) {
-            for (o = 0; o < i.length; o++) this._fCt.children[o].className = i[o].className;
+          var o = this._eCt.querySelectorAll(".wj-frozen");
+          if (t && i.children.length == o.length) {
+            for (n = 0; n < o.length; n++) i.children[n].className = o[n].className;
             return
           }
-          if (e.setText(this._fCt, null), !this.activeEditor)
-            for (var o = 0; o < i.length; o++) {
-              var n = i[o].cloneNode(!0);
-              this._fCt.appendChild(n)
+          if (e.setText(i, null), !this.activeEditor)
+            for (var n = 0; n < o.length; n++) {
+              var r = o[n];
+              e.closest(r, ".wj-flexgrid") == this.hostElement && (r = o[n].cloneNode(!0), i.appendChild(r))
             }
-        } else e.setText(this._fCt, null)
+        } else e.setText(i, null)
       }, n.prototype._getMarqueeRect = function(i) {
         var o = this.getMergedRange(this.cells, i.topRow, i.leftCol) || new t.CellRange(i.topRow, i.leftCol),
           n = this.getMergedRange(this.cells, i.bottomRow, i.rightCol) || new t.CellRange(i.bottomRow, i.rightCol),
@@ -2001,108 +2013,119 @@ var wijmo;
           C = p.renderHeight,
           b = o.cellType,
           R = "wj-cell",
-          S = {
+          S = "",
+          E = {
             display: ""
           };
         if (0 != a && s.firstElementChild && (1 == s.childNodes.length && "checkbox" == s.firstElementChild.type || (s.textContent = "")), l && !l.isSingleCell) {
           n = l.row, r = l.col, _ = l.row2, w = l.col2, p = d[n], f = g[r], m = p instanceof t.GroupRow ? p : null;
-          var E = l.getRenderSize(o);
-          C = E.height, v = E.width
+          var z = l.getRenderSize(o);
+          C = z.height, v = z.width
         }
         var x = c._getBindingColumn(o, n, f),
-          z = x.dataType == e.DataType.Boolean && !x.dataMap,
-          T = f.pos,
-          H = p.pos;
-        if (c._useFrozenDiv() && b == u.Cell && !c.editRange ? (n < d.frozen && r >= g.frozen && (T += c._ptScrl.x), r < g.frozen && n >= d.frozen && (H += c._ptScrl.y)) : (n < d.frozen && (H -= c._ptScrl.y), r < g.frozen && (T -= c._ptScrl.x)), h ? S.right = T + "px" : S.left = T + "px", S.top = H - o._getOffsetY() + "px", S.width = v + "px", S.height = C + "px", S.zIndex = "", (n < d.frozen || r < g.frozen) && (S.zIndex = n < d.frozen && r < g.frozen ? 2 : 1), b == u.Cell ? (m && (R += " wj-group"), c.showAlternatingRows && p.visibleIndex % 2 != 0 && (l && l.row != l.row2 || (R += " wj-alt")), (n < d.frozen || r < g.frozen) && (R += " wj-frozen"), y && (R += " wj-new"), p.cssClass && (R += " " + p.cssClass), x.cssClass && (R += " " + x.cssClass)) : (R += " wj-header", c.showAlternatingRows && n % 2 != 0 && (R += " wj-header-alt")), (b == u.Cell || b == u.RowHeader) && c._getShowErrors()) {
-          var P = c._getError(o, n, r);
-          e.setAttribute(s, "title", P), P && (R += " wj-state-invalid")
+          T = x.dataType == e.DataType.Boolean && !x.dataMap,
+          H = f.pos,
+          P = p.pos;
+        if (c._useFrozenDiv() && b == u.Cell && !c.editRange ? (n < d.frozen && r >= g.frozen && (H += c._ptScrl.x), r < g.frozen && n >= d.frozen && (P += c._ptScrl.y)) : (n < d.frozen && (P -= c._ptScrl.y), r < g.frozen && (H -= c._ptScrl.x)), h ? E.right = H + "px" : E.left = H + "px", E.top = P - o._getOffsetY() + "px", E.width = v + "px", E.height = C + "px", E.zIndex = "", (n < d.frozen || r < g.frozen) && (E.zIndex = n < d.frozen && r < g.frozen ? 2 : 1), b == u.Cell ? (m && (R += " wj-group"), c.showAlternatingRows && p.visibleIndex % 2 != 0 && (l && l.row != l.row2 || (R += " wj-alt")), (n < d.frozen || r < g.frozen) && (R += " wj-frozen"), y && (R += " wj-new"), p.cssClass && (R += " " + p.cssClass), x.cssClass && (R += " " + x.cssClass)) : (R += " wj-header", c.showAlternatingRows && n % 2 != 0 && (R += " wj-header-alt")), (b == u.Cell || b == u.RowHeader) && c._getShowErrors()) {
+          var M = c._getError(o, n, r);
+          e.setAttribute(s, "title", M), M && (R += " wj-state-invalid")
         }
-        var M = t.SelectedState,
-          j = o.getSelectedState(n, r, l);
-        switch (j != M.None && b == u.Cell && !z && c.editRange && c.editRange.contains(n, r) && (j = M.None), j) {
-          case M.Active:
+        var j = t.SelectedState,
+          A = o.getSelectedState(n, r, l);
+        switch (A != j.None && b == u.Cell && !T && c.editRange && c.editRange.contains(n, r) && (A = j.None), A) {
+          case j.Active:
             R += " wj-state-active";
             break;
-          case M.Cursor:
+          case j.Cursor:
             R += " wj-state-selected wj-state-active";
             break;
-          case M.Selected:
+          case j.Selected:
             R += " wj-state-multi-selected"
         }
-        if (_ == d.frozen - 1 && (R += " wj-frozen-row"), w == g.frozen - 1 && (R += " wj-frozen-col"), (x.wordWrap || p.wordWrap) && (R += " wj-wrap"), (x.multiLine || p.multiLine) && (R += " wj-multiline"), S.textAlign = x.getAlignment(), S.textAlignLast = S.textJustify = "", "justify-all" == S.textAlign && (S.textAlign = S.textAlignLast = "justify", S.textJustify = "distribute"), S.paddingLeft = S.paddingRight = S.paddingTop = S.paddingBottom = "", b == u.Cell && c.rows.maxGroupLevel > -1 && r == c.columns.firstVisibleIndex && c.treeIndent) {
-          var A = m ? Math.max(0, m.level) : c.rows.maxGroupLevel + 1,
-            L = c.treeIndent * A + c._cellPadding;
-          h ? S.paddingRight = L + "px" : S.paddingLeft = L + "px"
+        switch (_ == d.frozen - 1 && (R += " wj-frozen-row"), w == g.frozen - 1 && (R += " wj-frozen-col"), (x.wordWrap || p.wordWrap) && (R += " wj-wrap"), (x.multiLine || p.multiLine) && (R += " wj-multiline"), x.getAlignment()) {
+          case "right":
+            S = " wj-align-right";
+            break;
+          case "center":
+            S = " wj-align-center";
+            break;
+          case "justify":
+            S = " wj-align-justify"
+        }
+        if (E.paddingLeft = E.paddingRight = E.paddingTop = E.paddingBottom = "", b == u.Cell && c.rows.maxGroupLevel > -1 && r == c.columns.firstVisibleIndex && c.treeIndent) {
+          var D = m ? Math.max(0, m.level) : c.rows.maxGroupLevel + 1,
+            O = c.treeIndent * D + c._cellPadding;
+          h ? E.paddingRight = O + "px" : E.paddingLeft = O + "px"
         }
         if (0 != a) {
-          var D = o.getCellData(n, r, !1),
-            O = o.getCellData(n, r, !0);
+          var L = o.getCellData(n, r, !1),
+            I = o.getCellData(n, r, !0);
           if (b == u.Cell && r == c.columns.firstVisibleIndex && m && m.hasChildren && !this._isEditingCell(c, n, r)) {
-            U = this._getTreeBtn(m);
-            O = e.escapeHtml(O) || m.getGroupHeader(), s.innerHTML = U.outerHTML + " " + O, S.textAlign = ""
-          } else if (b == u.ColumnHeader && x.currentSort && c.showSort && (_ == c._getSortRowIndex() || x != f)) R += " wj-sort-" + ("+" == x.currentSort ? "asc" : "desc"), s.innerHTML = e.escapeHtml(O) + "&nbsp;" + this._getSortIcon(x);
-          else if (b != u.RowHeader || r != c.rowHeaders.columns.length - 1 || O)
-            if (b != u.Cell || x.dataType != e.DataType.Boolean || x.dataMap || m && !e.isBoolean(D))
+            Y = this._getTreeBtn(m);
+            I = e.escapeHtml(I) || m.getGroupHeader(), s.innerHTML = Y.outerHTML + " " + I, S = ""
+          } else if (b == u.ColumnHeader && x.currentSort && c.showSort && (_ == c._getSortRowIndex() || x != f)) R += " wj-sort-" + ("+" == x.currentSort ? "asc" : "desc"), s.innerHTML = e.escapeHtml(I) + "&nbsp;" + this._getSortIcon(x);
+          else if (b != u.RowHeader || r != c.rowHeaders.columns.length - 1 || I)
+            if (b != u.Cell || x.dataType != e.DataType.Boolean || x.dataMap || m && !e.isBoolean(L))
               if (b == u.Cell && this._isEditingCell(c, n, r)) {
-                var I = x.inputType;
-                if (x.inputType || (I = x.dataType != e.DataType.Number || x.dataMap ? "text" : "tel"), !x.dataMap && !x.mask) {
-                  var N = o.getCellData(n, r, !1);
-                  if (e.isNumber(N)) {
-                    var B = N.toString(),
-                      k = x.format;
-                    if (k && N != Math.round(N)) {
-                      var F = B.match(/\.(\d+)/)[1].length;
-                      k = k.replace(/([a-z])(\d*)(.*)/gi, "$01" + F + "$3")
+                var N = x.inputType;
+                if (x.inputType || (N = x.dataType != e.DataType.Number || x.dataMap ? "text" : "tel"), !x.dataMap && !x.mask) {
+                  var B = o.getCellData(n, r, !1);
+                  if (e.isNumber(B)) {
+                    var k = B.toString(),
+                      F = x.format;
+                    if (F && B != Math.round(B)) {
+                      var V = k.match(/\.(\d+)/)[1].length;
+                      F = F.replace(/([a-z])(\d*)(.*)/gi, "$01" + V + "$3")
                     }
-                    O = e.Globalize.formatNumber(N, k, !0)
+                    I = e.Globalize.formatNumber(B, F, !0)
                   }
                 }
-                s.innerHTML = (x.multiLine || p.multiLine) && "checkbox" != I ? '<textarea wrap="soft"></textarea>' : '<input type="' + I + '"/>';
-                var V = s.children[0];
-                e.addClass(V, "wj-grid-editor wj-form-control"), e.disableAutoComplete(V), V.value = O, V.required = x.getIsRequired(), e.setAttribute(V, "aria-required", V.required), x.maxLength && (V.maxLength = x.maxLength), V.style.textAlign = x.getAlignment(), x.mask && new e._MaskProvider(V, x.mask), c._edtHdl._edt = V
-              } else b == u.Cell && (p.isContentHtml || x.isContentHtml) ? s.innerHTML = O : s.textContent = O || "";
+                s.innerHTML = (x.multiLine || p.multiLine) && "checkbox" != N ? '<textarea wrap="soft"></textarea>' : '<input type="' + N + '"/>';
+                var G = s.children[0];
+                e.addClass(G, "wj-grid-editor wj-form-control"), e.disableAutoComplete(G), G.value = I, G.required = x.getIsRequired(), e.setAttribute(G, "aria-required", G.required), x.maxLength && (G.maxLength = x.maxLength), G.style.textAlign = x.getAlignment(), x.mask && new e._MaskProvider(G, x.mask), c._edtHdl._edt = G
+              } else b == u.Cell && (p.isContentHtml || x.isContentHtml) ? s.innerHTML = I : s.textContent = I || "";
             else {
-              var G = s.firstChild;
-              G instanceof HTMLInputElement && "checkbox" == G.type || (s.innerHTML = '<input type="checkbox" class="wj-cell-check" tabindex="-1"/>', G = s.firstChild), G.checked = 1 == D, G.indeterminate = null == D, G.disabled = !c.canEditCell(n, r), G.disabled && (G.style.cursor = "default"), c.editRange && c.editRange.contains(n, r) && (c._edtHdl._edt = G)
+              var K = s.firstChild;
+              K instanceof HTMLInputElement && "checkbox" == K.type || (s.innerHTML = '<input type="checkbox" class="wj-cell-check" tabindex="-1"/>', K = s.firstChild), K.checked = 1 == L, K.indeterminate = null == L, K.disabled = !c.canEditCell(n, r), K.disabled && (K.style.cursor = "default"), c.editRange && c.editRange.contains(n, r) && (c._edtHdl._edt = K)
             } else {
-            var K = c.editableCollectionView,
-              W = K ? K.currentEditItem : null;
-            W && p.dataItem == W ? s.innerHTML = '<span class="wj-glyph-pencil"></span>' : p instanceof t._NewRowTemplate && (s.innerHTML = '<span class="wj-glyph-asterisk"></span>')
+            var W = c.editableCollectionView,
+              q = W ? W.currentEditItem : null;
+            q && p.dataItem == q ? s.innerHTML = '<span class="wj-glyph-pencil"></span>' : p instanceof t._NewRowTemplate && (s.innerHTML = '<span class="wj-glyph-asterisk"></span>')
           }
           if (b == u.Cell && e.input && x.dataMap && c.showDropDown && 0 != x.showDropDown && c.canEditCell(n, r)) {
             if (!i._ddBtn) {
-              var q = i._WJC_DROPDOWN,
-                U = e.createElement('<button class="wj-btn wj-btn-glyph wj-right ' + q + '" type="button" tabindex="-1"><span class="wj-glyph-down"></span></button>');
-              e.setAriaLabel(U, e.culture.FlexGrid.ariaLabels.toggleDropDown), e.setAttribute(U, "aria-expanded", !1), i._ddBtn = U
+              var U = i._WJC_DROPDOWN,
+                Y = e.createElement('<button class="wj-btn wj-btn-glyph wj-right ' + U + '" type="button" tabindex="-1"><span class="wj-glyph-down"></span></button>');
+              e.setAriaLabel(Y, e.culture.FlexGrid.ariaLabels.toggleDropDown), e.setAttribute(Y, "aria-expanded", !1), i._ddBtn = Y
             }
-            var Y = i._ddBtn.cloneNode(!0);
-            s.appendChild(Y)
+            var J = i._ddBtn.cloneNode(!0);
+            s.appendChild(J)
           }
         }
-        var J = !1;
+        var X = !1;
         switch (b) {
           case u.RowHeader:
-            J = !m && !y && p.allowDragging && 0 != (c.allowDragging & t.AllowDragging.Rows), e.setAttribute(s, "draggable", J ? "true" : null);
+            X = !m && !y && p.allowDragging && 0 != (c.allowDragging & t.AllowDragging.Rows), e.setAttribute(s, "draggable", X ? "true" : null);
             break;
           case u.ColumnHeader:
-            J = f.allowDragging && 0 != (c.allowDragging & t.AllowDragging.Columns), e.setAttribute(s, "draggable", J ? "true" : null)
+            X = f.allowDragging && 0 != (c.allowDragging & t.AllowDragging.Columns), e.setAttribute(s, "draggable", X ? "true" : null)
         }
-        s.className != R && (s.className = R);
-        var X = s.style;
-        for (var Z in S) X[Z] !== S[Z] && (X[Z] = S[Z]);
+        R += S, s.className != R && (s.className = R);
+        var Z = s.style;
+        for (var Q in E) Z[Q] !== E[Q] && (Z[Q] = E[Q]);
         if (c._edtHdl._edt && c._edtHdl._edt.parentElement == s) {
-          var Q = c._root,
-            $ = Q.getBoundingClientRect(),
-            ee = s.getBoundingClientRect(),
-            te = $.top + Q.clientHeight - ee.top,
-            ie = $.left + Q.clientWidth - ee.left;
-          ee.height > te && (s.style.height = te + "px"), ee.width > ie && (s.style.width = ie + "px")
+          var $ = c._root,
+            ee = $.getBoundingClientRect(),
+            te = s.getBoundingClientRect(),
+            ie = ee.top + $.clientHeight - te.top,
+            oe = ee.left + $.clientWidth - te.left;
+          te.height > ie && (s.style.height = ie + "px"), te.width > oe && (s.style.width = oe + "px")
         }
         if (c.itemFormatter && c.itemFormatter(o, n, r, s), c.formatItem.hasHandlers) {
-          var oe = i._fmtRng;
-          oe ? oe.setRange(n, r, _, w) : oe = i._fmtRng = new t.CellRange(n, r, _, w);
-          var ne = new t.FormatItemEventArgs(o, oe, s);
-          c.onFormatItem(ne)
+          var ne = i._fmtRng;
+          ne ? ne.setRange(n, r, _, w) : ne = i._fmtRng = new t.CellRange(n, r, _, w);
+          var re = new t.FormatItemEventArgs(o, ne, s);
+          c.onFormatItem(re)
         }
       }, i.prototype.disposeCell = function(e) {}, i.prototype.getEditorValue = function(t) {
         var i = t._edtHdl._edt;
@@ -2803,14 +2826,20 @@ var __extends = this && this.__extends || function() {
     var l = function(i) {
       function o(o, n) {
         var r = i.call(this) || this;
-        return r._frozen = 0, r._vlen = 0, r._szDef = 28, r._szTot = 0, r._dirty = !1, r._g = e.asType(o, t.FlexGrid), r._szDef = e.asNumber(n, !1, !0), r
+        return r._frozen = 0, r._vlen = 0, r._szDef = 28, r._szTot = 0, r._szCustom = !1, r._dirty = !1, r._g = e.asType(o, t.FlexGrid), r._szDef = e.asNumber(n, !1, !0), r
       }
-      return __extends(o, i), Object.defineProperty(o.prototype, "defaultSize", {
+      return __extends(o, i), Object.defineProperty(o.prototype, "grid", {
+        get: function() {
+          return this._g
+        },
+        enumerable: !0,
+        configurable: !0
+      }), Object.defineProperty(o.prototype, "defaultSize", {
         get: function() {
           return this._szDef
         },
         set: function(t) {
-          this._szDef != t && (this._szDef = e.asNumber(t, !1, !0), this._dirty = !0, this._g.invalidate())
+          this._szCustom = !0, this._szDef != t && (this._szDef = e.asNumber(t, !1, !0), this._dirty = !0, this._g.invalidate())
         },
         enumerable: !0,
         configurable: !0
@@ -2910,6 +2939,8 @@ var __extends = this && this.__extends || function() {
         return o && (o._list = this), i.prototype.splice.call(this, e, t, o)
       }, o.prototype.beginUpdate = function() {
         this._update(), i.prototype.beginUpdate.call(this)
+      }, o.prototype._setDefaultSize = function(e) {
+        this._szCustom || (this.defaultSize = e, this._szCustom = !1)
       }, o.prototype._update = function() {
         if (this._dirty && !this.isUpdating) {
           this._dirty = !1;
@@ -3053,12 +3084,12 @@ var wijmo;
             var E = o._SZEDGE[this._g.isTouching ? 1 : 0];
             if (this._g.isTouching && (E = o._SZEDGE[1], n.x -= E / 2), this._row = n.y > R ? -1 : m.getItemAt(n.y), this._col = n.x > S ? -1 : y.getItemAt(n.x), this._row < 0 || this._col < 0) return void(this._p = null);
             if (this._col > -1) {
-              var x = y[this._col];
-              n.x - x.pos <= E && (this._edge |= 1), x.pos + x.renderSize - n.x <= E && (this._edge |= 4)
+              var z = y[this._col];
+              n.x - z.pos <= E && (this._edge |= 1), z.pos + z.renderSize - n.x <= E && (this._edge |= 4)
             }
             if (this._row > -1) {
-              var z = m[this._row];
-              n.y - z.pos <= E && (this._edge |= 2), z.pos + z.renderSize - n.y <= E && (this._edge |= 8)
+              var x = m[this._row];
+              n.y - x.pos <= E && (this._edge |= 2), x.pos + x.renderSize - n.y <= E && (this._edge |= 8)
             }
           }
           if (!(8 & this._edge) && s instanceof MouseEvent) {
@@ -3153,57 +3184,64 @@ var wijmo;
       }
       return o.prototype.getMergedRange = function(o, n, r, s) {
         void 0 === s && (s = !0);
-        var l, a, c = o.cellType,
-          h = o.columns,
-          u = o.rows,
-          d = u[n],
-          g = h[r];
-        if (d instanceof t._NewRowTemplate) return null;
-        if (d instanceof t.GroupRow && d.dataItem instanceof e.collections.CollectionViewGroup) {
-          if (l = new t.CellRange(n, r), g.aggregate == e.Aggregate.None) {
-            for (; l.col > 0 && h[l.col - 1].aggregate == e.Aggregate.None && l.col != h.frozen;) l.col--;
-            for (; l.col2 < h.length - 1 && h[l.col2 + 1].aggregate == e.Aggregate.None && l.col2 + 1 != h.frozen;) l.col2++
+        var l = this._g,
+          a = o.cellType,
+          c = o.columns,
+          h = o.rows,
+          u = h[n],
+          d = c[r];
+        if (u instanceof t._NewRowTemplate) return null;
+        if (u instanceof t.GroupRow && u.dataItem instanceof e.collections.CollectionViewGroup) {
+          p = new t.CellRange(n, r);
+          if (d.aggregate == e.Aggregate.None) {
+            for (; p.col > 0 && c[p.col - 1].aggregate == e.Aggregate.None && p.col != c.frozen;) p.col--;
+            for (; p.col2 < c.length - 1 && c[p.col2 + 1].aggregate == e.Aggregate.None && p.col2 + 1 != c.frozen;) p.col2++
           }
-          for (; l.col < r && !h[l.col].visible;) l.col++;
-          return l.isSingleCell ? null : l
+          for (; p.col < r && !c[p.col].visible;) p.col++;
+          return p.isSingleCell ? null : p
         }
-        var p = !1;
+        var g = !1;
         switch (this._g.allowMerging) {
           case i.None:
-            p = !0;
+            g = !0;
             break;
           case i.Cells:
-            p = c != t.CellType.Cell;
+            g = a != t.CellType.Cell;
             break;
           case i.ColumnHeaders:
-            p = c != t.CellType.ColumnHeader && c != t.CellType.TopLeft;
+            g = a != t.CellType.ColumnHeader && a != t.CellType.TopLeft;
             break;
           case i.RowHeaders:
-            p = c != t.CellType.RowHeader && c != t.CellType.TopLeft;
+            g = a != t.CellType.RowHeader && a != t.CellType.TopLeft;
             break;
           case i.AllHeaders:
-            p = c == t.CellType.Cell
+            g = a == t.CellType.Cell
         }
-        if (p) return null;
-        if (h[r].allowMerging) {
-          l = new t.CellRange(n, r);
-          var f = 0,
-            _ = u.length - 1;
-          n >= u.frozen ? !s || c != t.CellType.Cell && c != t.CellType.RowHeader || (f = (a = o._getViewRange()).topRow, _ = a.bottomRow) : _ = u.frozen - 1;
-          for (var w = n - 1; w >= f && this._mergeCell(o, w, r, n, r); w--) l.row = w;
-          for (var m = n + 1; m <= _ && this._mergeCell(o, n, r, m, r); m++) l.row2 = m;
-          for (; l.row < n && !u[l.row].visible;) l.row++;
-          if (!l.isSingleCell) return l
+        if (g) return null;
+        if (c[r].allowMerging) {
+          var p = new t.CellRange(n, r),
+            f = 0,
+            _ = h.length - 1;
+          n >= h.frozen ? !s || a != t.CellType.Cell && a != t.CellType.RowHeader || l._vtRows < h.length && (f = (C = o._getViewRange()).topRow, _ = C.bottomRow) : _ = h.frozen - 1;
+          for (var w = n - 1; w >= f && this._mergeCell(o, w, r, n, r); w--) p.row = w;
+          for (var m = n + 1; m <= _ && this._mergeCell(o, n, r, m, r); m++) p.row2 = m;
+          for (; p.row < n && !h[p.row].visible;) p.row++;
+          if (!p.isSingleCell) return p
         }
-        if (u[n].allowMerging) {
-          l = new t.CellRange(n, r);
-          var y = 0,
-            v = h.length - 1;
-          r >= h.frozen ? !s || c != t.CellType.Cell && c != t.CellType.ColumnHeader || (y = (a = o._getViewRange()).leftCol, v = a.rightCol) : v = h.frozen - 1;
-          for (var C = r - 1; C >= y && this._mergeCell(o, n, C, n, r); C--) l.col = C;
-          for (var b = r + 1; b <= v && this._mergeCell(o, n, r, n, b); b++) l.col2 = b;
-          for (; l.col < r && !h[l.col].visible;) l.col++;
-          if (!l.isSingleCell) return l
+        if (h[n].allowMerging) {
+          var p = new t.CellRange(n, r),
+            y = 0,
+            v = c.length - 1;
+          if (r >= c.frozen) {
+            if (s && (a == t.CellType.Cell || a == t.CellType.ColumnHeader) && l._vtCols < c.length) {
+              var C = o._getViewRange();
+              y = C.leftCol, v = C.rightCol
+            }
+          } else v = c.frozen - 1;
+          for (var b = r - 1; b >= y && this._mergeCell(o, n, b, n, r); b--) p.col = b;
+          for (var R = r + 1; R <= v && this._mergeCell(o, n, r, n, R); R++) p.col2 = R;
+          for (; p.col < r && !c[p.col].visible;) p.col++;
+          if (!p.isSingleCell) return p
         }
         return null
       }, o.prototype._mergeCell = function(e, i, o, n, r) {
@@ -3475,117 +3513,111 @@ var wijmo;
       }
       return o.prototype._keydown = function(i) {
         var o = this._g,
-          n = o.selection,
-          r = i.ctrlKey || i.metaKey,
-          s = i.shiftKey,
-          l = (i.target, !0);
+          n = o._edtHdl,
+          r = o.selection,
+          s = i.ctrlKey || i.metaKey,
+          l = i.shiftKey,
+          a = (i.target, !0);
         if (this._altDown = !1, !o._wantsInput(i.target)) {
-          var a = i.defaultPrevented && !(i.target instanceof HTMLInputElement);
-          if (o.isRangeValid(n) && !a && (!o.activeEditor || !o._edtHdl._keydown(i))) {
-            var c = e.tryCast(o.rows[n.row], t.GroupRow),
-              h = o.editableCollectionView,
-              u = i.keyCode;
+          var c = i.defaultPrevented && !(i.target instanceof HTMLInputElement);
+          if (o.isRangeValid(r) && !c && (!o.activeEditor || !n._keydown(i))) {
+            var h = e.tryCast(o.rows[r.row], t.GroupRow),
+              u = o.editableCollectionView,
+              d = o._getKeyCode(i);
             if (o.autoClipboard) {
-              if (r && (67 == u || 45 == u)) {
-                var d = new t.CellRangeEventArgs(o.cells, n);
-                if (o.onCopying(d)) {
-                  var g = o.getClipString() + "\r\n";
-                  e.Clipboard.copy(g), o.onCopied(d)
+              if (s && (67 == d || 45 == d)) {
+                var g = new t.CellRangeEventArgs(o.cells, r);
+                if (o.onCopying(g)) {
+                  var p = o.getClipString() + "\r\n";
+                  e.Clipboard.copy(p), o.onCopied(g)
                 }
                 return void i.stopPropagation()
               }
-              if (r && 86 == u || s && 45 == u) return o.isReadOnly || e.Clipboard.paste(function(e) {
+              if (s && 86 == d || l && 45 == d) return o.isReadOnly || e.Clipboard.paste(function(e) {
                 o.setClipString(e)
               }), void i.stopPropagation()
             }
-            if (o.rightToLeft) switch (u) {
-              case e.Key.Left:
-                u = e.Key.Right;
-                break;
-              case e.Key.Right:
-                u = e.Key.Left
-            }
-            var p = t.SelMove,
-              f = t.SelectionMode;
-            switch (u) {
+            var f = t.SelMove,
+              _ = t.SelectionMode;
+            switch (d) {
               case e.Key.Space:
-                if (s && n.isValid) switch (o.selectionMode) {
-                  case f.CellRange:
-                  case f.Row:
-                  case f.RowRange:
-                  case f.ListBox:
-                    o.select(new t.CellRange(n.row, 0, n.row, o.columns.length - 1))
-                } else if (r && n.isValid) switch (o.selectionMode) {
-                  case f.CellRange:
-                    o.select(new t.CellRange(0, n.col, o.rows.length - 1, n.col))
-                } else(l = this._startEditing(!0, i)) && setTimeout(function() {
+                if (l && r.isValid) switch (o.selectionMode) {
+                  case _.CellRange:
+                  case _.Row:
+                  case _.RowRange:
+                  case _.ListBox:
+                    o.select(new t.CellRange(r.row, 0, r.row, o.columns.length - 1))
+                } else if (s && r.isValid) switch (o.selectionMode) {
+                  case _.CellRange:
+                    o.select(new t.CellRange(0, r.col, o.rows.length - 1, r.col))
+                } else(a = this._startEditing(!0, i)) && setTimeout(function() {
                   var t = o.activeEditor;
                   t && (t.disabled || t.readOnly ? o.finishEditing() : "checkbox" == t.type ? (t.checked = !t.checked, o.finishEditing()) : e.setSelectionRange(t, t.value.length))
                 });
                 break;
               case 65:
-                if (r) switch (o.selectionMode) {
-                  case f.CellRange:
-                  case f.Row:
-                  case f.RowRange:
-                  case f.ListBox:
+                if (s) switch (o.selectionMode) {
+                  case _.CellRange:
+                  case _.Row:
+                  case _.RowRange:
+                  case _.ListBox:
                     o.select(new t.CellRange(0, 0, o.rows.length - 1, o.columns.length - 1))
-                } else l = !1;
+                } else a = !1;
                 break;
               case e.Key.Left:
-                r || i.altKey ? l = !1 : n.isValid && 0 == n.col && null != c && !c.isCollapsed && c.hasChildren ? c.isCollapsed = !0 : this._moveSel(p.None, r ? p.Home : p.Prev, s);
+                s || i.altKey ? a = !1 : r.isValid && 0 == r.col && null != h && !h.isCollapsed && h.hasChildren ? h.isCollapsed = !0 : this._moveSel(f.None, s ? f.Home : f.Prev, l);
                 break;
               case e.Key.Right:
-                r || i.altKey ? l = !1 : n.isValid && 0 == n.col && null != c && c.isCollapsed ? c.isCollapsed = !1 : this._moveSel(p.None, r ? p.End : p.Next, s);
+                s || i.altKey ? a = !1 : r.isValid && 0 == r.col && null != h && h.isCollapsed ? h.isCollapsed = !1 : this._moveSel(f.None, s ? f.End : f.Next, l);
                 break;
               case e.Key.Up:
-                r ? l = !1 : (this._altDown = i.altKey, i.altKey ? l = o._edtHdl._toggleListBox(i) : this._moveSel(p.Prev, p.None, s));
+                s ? a = !1 : (this._altDown = i.altKey, i.altKey ? a = n._toggleListBox(i) : this._moveSel(f.Prev, f.None, l));
                 break;
               case e.Key.Down:
-                r ? l = !1 : (this._altDown = i.altKey, i.altKey ? l = o._edtHdl._toggleListBox(i) : this._moveSel(p.Next, p.None, s));
+                s ? a = !1 : (this._altDown = i.altKey, i.altKey ? a = n._toggleListBox(i) : this._moveSel(f.Next, f.None, l));
                 break;
               case e.Key.PageUp:
-                if (this._altDown = i.altKey, this._moveSel(i.altKey ? p.Home : p.PrevPage, p.None, s), o.rows.frozen && o.selection.row < o.rows.frozen) {
-                  var _ = o.scrollPosition;
-                  _.y && (o.scrollPosition = new e.Point(_.x, 0))
+                if (this._altDown = i.altKey, this._moveSel(i.altKey ? f.Home : f.PrevPage, f.None, l), o.rows.frozen && o.selection.row < o.rows.frozen) {
+                  var w = o.scrollPosition;
+                  w.y && (o.scrollPosition = new e.Point(w.x, 0))
                 }
                 break;
               case e.Key.PageDown:
-                this._altDown = i.altKey, this._moveSel(i.altKey ? p.End : p.NextPage, p.None, s);
+                this._altDown = i.altKey, this._moveSel(i.altKey ? f.End : f.NextPage, f.None, l);
                 break;
               case e.Key.Home:
-                this._moveSel(r ? p.Home : p.None, p.Home, s);
+                this._moveSel(s ? f.Home : f.None, f.Home, l);
                 break;
               case e.Key.End:
-                this._moveSel(r ? p.End : p.None, p.End, s);
+                this._moveSel(s ? f.End : f.None, f.End, l);
                 break;
               case e.Key.Tab:
-                l = this._performKeyAction(o.keyActionTab, s);
+                a = this._performKeyAction(o.keyActionTab, l);
                 break;
               case e.Key.Enter:
-                l = this._performKeyAction(o.keyActionEnter, s), !s && h && null != h.currentEditItem && o._edtHdl._commitRowEdits();
+                a = this._performKeyAction(o.keyActionEnter, l), !l && u && null != u.currentEditItem && n._commitRowEdits();
                 break;
               case e.Key.Escape:
-                if (l = !1, h && (h.currentAddItem || h.currentEditItem)) {
-                  var w = new t.CellRangeEventArgs(o.cells, o.selection);
-                  w.cancel = !0, o.onRowEditEnding(w), h.currentAddItem && h.cancelNew(), h.currentEditItem && h.cancelEdit(), o.onRowEditEnded(w), l = !0
+                if (a = !1, u && (u.currentAddItem || u.currentEditItem)) {
+                  var m = new t.CellRangeEventArgs(o.cells, o.selection);
+                  m.cancel = !0, o.onRowEditEnding(m), u.currentAddItem && u.cancelNew(), u.currentEditItem && u.cancelEdit(), o.onRowEditEnded(m), a = !0
                 }
                 o._mouseHdl.resetMouseState();
                 break;
               case e.Key.Delete:
               case e.Key.Back:
-                l = this._deleteSel(i);
+                a = this._deleteSel(i);
                 break;
               case e.Key.F2:
-                l = this._startEditing(!0, i);
+                a = this._startEditing(!0, i);
                 break;
               case e.Key.F4:
-                l = o._edtHdl._toggleListBox(i);
+                a = n._toggleListBox(i);
                 break;
               default:
-                l = !1
+                a = !1
             }
-            l && (o.containsFocus() || o.focus(), i.preventDefault(), i.stopPropagation())
+            a && (o.containsFocus() || o.focus(), i.preventDefault(), i.stopPropagation())
           }
         }
       }, o.prototype._performKeyAction = function(e, o) {
@@ -3605,30 +3637,31 @@ var wijmo;
         return !1
       }, o.prototype._keypress = function(t) {
         var i = this,
-          o = this._g;
+          o = this._g,
+          n = o._edtHdl;
         if (!o._wantsInput(t.target) && !t.defaultPrevented)
           if (this._altDown) t.preventDefault();
-          else if (o.activeEditor) o._edtHdl._keypress(t);
+          else if (o.activeEditor) n._keypress(t);
           else if (t.charCode > e.Key.Space)
             if (this._startEditing(!1, t) && o.activeEditor) {
-              var n = e.getActiveElement();
-              if (n instanceof HTMLInputElement && "checkbox" != n.type || n instanceof HTMLTextAreaElement) {
-                var r = o._selHdl.selection,
-                  s = o.getCellData(r.row, r.col, !0),
-                  l = o.getCellData(r.row, r.col, !1);
-                n.value = String.fromCharCode(t.charCode), e.isNumber(l) && s.indexOf("%") > -1 && (n.value += "%"), e.setSelectionRange(n, 1), n.dispatchEvent(o._edtHdl._evtInput), o._edtHdl._keypress(t), t.preventDefault()
+              var r = e.getActiveElement();
+              if (r instanceof HTMLInputElement && "checkbox" != r.type || r instanceof HTMLTextAreaElement) {
+                var s = o._selHdl.selection,
+                  l = o.getCellData(s.row, s.col, !0),
+                  a = o.getCellData(s.row, s.col, !1);
+                r.value = String.fromCharCode(t.charCode), e.isNumber(a) && l.indexOf("%") > -1 && (r.value += "%"), e.setSelectionRange(r, 1), r.dispatchEvent(n._evtInput), n._keypress(t), n._edtValue = r.value != l ? r.value : null, t.preventDefault()
               }
             } else if (o.autoSearch) {
-              var a = !1,
-                r = o._selHdl.selection;
+              var c = !1,
+                s = o._selHdl.selection;
               if (t.charCode > 32 || 32 == t.charCode && this._search) {
                 t.preventDefault(), this._search += String.fromCharCode(t.charCode).toLowerCase(), this._toSearch && clearTimeout(this._toSearch), this._toSearch = setTimeout(function() {
                   i._toSearch = null, i._search = ""
                 }, e.Control._SEARCH_DELAY);
-                var c = this._findNext(r.row, r.col);
-                c < 0 && this._search.length > 1 && (this._search = this._search[this._search.length - 1], c = this._findNext(r.row, r.col)), c > -1 && (a = !0, o.select(c, r.col))
+                var h = this._findNext(s.row, s.col);
+                h < 0 && this._search.length > 1 && (this._search = this._search[this._search.length - 1], h = this._findNext(s.row, s.col)), h > -1 && (c = !0, o.select(h, s.col))
               }
-              a || (this._search = "")
+              c || (this._search = "")
             }
       }, o.prototype._findNext = function(e, t) {
         var i = this._g,
@@ -3726,68 +3759,73 @@ var wijmo;
       function n(i) {
         var o = this;
         this._tsLast = 0;
-        var n = i.hostElement;
-        this._g = i, this._dvMarker = e.createElement('<div class="wj-marker">&nbsp;</div>'), i.addEventListener(n, "mousedown", function(n) {
+        var n = i.hostElement,
+          r = i.addEventListener.bind(i),
+          s = i.removeEventListener.bind(i);
+        this._g = i, this._dvMarker = e.createElement('<div class="wj-marker">&nbsp;</div>'), r(n, "mousedown", function(n) {
           if (i._rcBounds = null, !n.defaultPrevented && 0 == n.button) {
-            var l = n.target;
+            var c = n.target;
             if (!i.containsFocus()) {
-              var a = l instanceof HTMLElement && l.tabIndex > -1 ? l : i._eFocus;
-              i._setFocusNoScroll(a)
+              var h = c instanceof HTMLElement && c.tabIndex > -1 ? c : i._eFocus;
+              i._setFocusNoScroll(h)
             }
             if (setTimeout(function() {
               n.defaultPrevented || i.focus()
-            }), e.closest(n.target, ".wj-flexgrid") != i.hostElement || !i.activeEditor && i._isInputElement(l)) {
-              var c = i.hitTest(n);
-              switch (c.cellType) {
+            }), e.closest(c, ".wj-flexgrid") != i.hostElement || !i.activeEditor && i._isInputElement(c)) {
+              var u = i.hitTest(n);
+              switch (u.cellType) {
                 case t.CellType.Cell:
-                  i.select(c.range, !1), l.focus();
+                  i.select(u.range, !1), c.focus();
                   break;
                 case t.CellType.ColumnHeader:
                 case t.CellType.ColumnFooter:
-                  i.scrollIntoView(-1, c.col);
+                  i.scrollIntoView(-1, u.col);
                   break;
                 case t.CellType.RowHeader:
-                  i.scrollIntoView(c.row, -1)
+                  i.scrollIntoView(u.row, -1)
               }
               return
             }
-            var h = document;
-            i.removeEventListener(h, "mousemove"), i.removeEventListener(h, "mouseup"), i.addEventListener(h, "mousemove", r), i.addEventListener(h, "mouseup", s), o._isDown = !0, o._mousedown(n)
+            var d = document;
+            s(d, "mousemove"), s(d, "mouseup"), r(d, "mousemove", l), r(d, "mouseup", a), o._isDown = !0, o._mousedown(n)
           }
         });
-        var r = function(e) {
+        var l = function(e) {
             o._mousemove(e)
           },
-          s = function(e) {
-            o._isDown = !1, i.removeEventListener(document, "mousemove"), i.removeEventListener(document, "mouseup"), o._mouseup(e)
+          a = function(e) {
+            o._isDown = !1, s(document, "mousemove"), s(document, "mouseup"), o._mouseup(e)
           };
-        i.addEventListener(n, "mouseup", function(e) {
+        r(n, "mouseup", function(e) {
           o._tsLast = Date.now()
-        }), i.addEventListener(n, "mouseenter", function(e) {
+        }), r(n, "mouseenter", function(e) {
           i._rcBounds = null
-        }), i.addEventListener(n, "mousemove", this._hover.bind(this)), i.addEventListener(n, "dblclick", this._dblclick.bind(this)), i.addEventListener(n, "click", this._click.bind(this)), i.addEventListener(n, "selectstart", function(e) {
+        }), r(n, "mousemove", this._hover.bind(this)), r(n, "dblclick", this._dblclick.bind(this)), r(n, "click", this._click.bind(this)), r(n, "selectstart", function(e) {
           i._isInputElement(e.target) || e.preventDefault()
-        }), i.addEventListener(n, "wheel", function(t) {
-          var o = i.cells.hostElement.parentElement,
-            n = t.deltaY;
-          if (n && !t.ctrlKey && !t.metaKey && o.scrollHeight > o.offsetHeight && e.closest(t.target, ".wj-flexgrid") == i.hostElement) {
-            switch (t.deltaMode) {
-              case 1:
-                o.scrollTop += i.rows.defaultSize * (n < 0 ? -1 : 1);
-                break;
-              case 2:
-                o.scrollTop += o.clientHeight * (n < 0 ? -1 : 1);
-                break;
-              case 0:
-              default:
-                e.isSafari() && (n = e.clamp(n, -150, 150)), o.scrollTop += n
+        }), r(n, "wheel", function(t) {
+          if (!t.defaultPrevented && t.deltaY && !t.ctrlKey && !t.metaKey) {
+            var o = i.cells.hostElement.parentElement,
+              n = t.deltaY,
+              r = 0;
+            if (o.scrollHeight > o.offsetHeight && e.closest(t.target, ".wj-flexgrid") == i.hostElement) {
+              switch (t.deltaMode) {
+                case 1:
+                  r = i.rows.defaultSize * (n < 0 ? -1 : 1);
+                  break;
+                case 2:
+                  r = o.clientHeight * (n < 0 ? -1 : 1);
+                  break;
+                case 0:
+                default:
+                  e.isSafari() && (n = e.clamp(n, -150, 150)), r = n
+              }
+              o.scrollTop += r, t.preventDefault()
             }
-            t.preventDefault(), t.stopImmediatePropagation()
           }
-        }), i.addEventListener(n, "dragstart", this._dragstart.bind(this)), i.addEventListener(n, "dragover", this._dragover.bind(this)), i.addEventListener(n, "dragleave", this._dragover.bind(this)), i.addEventListener(n, "drop", this._drop.bind(this)), i.addEventListener(n, "dragend", this._dragend.bind(this)), this._enableTouchResizing()
+        }), r(n, "dragstart", this._dragstart.bind(this)), r(n, "dragover", this._dragover.bind(this)), r(n, "dragleave", this._dragover.bind(this)), r(n, "drop", this._drop.bind(this)), r(n, "dragend", this._dragend.bind(this)), this._enableTouchResizing()
       }
       return n.prototype.resetMouseState = function() {
-        this._dragSrc && e.removeClass(this._dragSrc, "wj-state-dragsrc"), this._showDragMarker(null);
+        this._updating && (this._updating = !1, this._g.endUpdate()), this._dragSrc && e.removeClass(this._dragSrc, "wj-state-dragsrc"), this._showDragMarker(null);
         var t = this._g.hostElement;
         t && (t.style.cursor = "");
         var i = this._g;
@@ -3805,7 +3843,7 @@ var wijmo;
         }), i.addEventListener(o, n[1], function(e) {
           null != e.pointerType && "touch" != e.pointerType || t._szRowCol && (t._mousemove(e), e.preventDefault())
         }), i.addEventListener(o, n[2], function(i) {
-          if (e.Control._touching = !1, (null == i.pointerType || "touch" == i.pointerType) && t._szRowCol) {
+          if ((null == i.pointerType || "touch" == i.pointerType) && t._szRowCol) {
             if (t._szArgs) t._finishResizing(t._eMouse);
             else {
               var n = e.closest(i.target, ".wj-cell");
@@ -3860,7 +3898,7 @@ var wijmo;
             r = t.SelectionMode;
           if (n && !e.defaultPrevented)
             if (this._szArgs) this._finishResizing(e);
-            else if (n.panel != i.topLeftCells || this._szArgs) n.panel != i.columnHeaders || e.dataTransfer ? n.panel == i.cells && (e.ctrlKey || e.metaKey || e.shiftKey || o.panel == n.panel && o.range.equals(n.range) && i.selection.equals(this._selDown) && i._edtHdl.startEditing(!0, o.row, o.col, !0, e)) : o.panel == n.panel && o.col == n.col && !o.edgeRight && o.col > -1 && this._clickSort(e, o);
+            else if (n.panel != i.topLeftCells || this._szArgs) n.panel != i.columnHeaders || e.dataTransfer ? n.panel == i.cells && (this._szRowCol || e.ctrlKey || e.metaKey || e.shiftKey || o.panel == n.panel && o.range.equals(n.range) && i.selection.equals(this._selDown) && i._edtHdl.startEditing(!0, o.row, o.col, !0, e)) : o.panel == n.panel && o.col == n.col && !o.edgeRight && o.col > -1 && this._clickSort(e, o);
             else if (o.panel == n.panel && o.row == n.row && o.col == n.col && i.rows.length && i.columns.length) switch (i.selectionMode) {
               case r.CellRange:
               case r.RowRange:
@@ -4022,7 +4060,7 @@ var wijmo;
           this._dragSrc && i.dataTransfer && !i.defaultPrevented && (this._htDrag = r, e._startDrag(i.dataTransfer, "move"), i.stopPropagation(), e.addClass(this._dragSrc, "wj-state-dragsrc"), n.beginUpdate(), this._updating = !0)
         }
       }, n.prototype._dragend = function(e) {
-        this._updating && (this._g.endUpdate(), this._updating = !1), this._dragSrc = null, this._htDrag = null, this.resetMouseState()
+        this._dragSrc = null, this._htDrag = null, this.resetMouseState()
       }, n.prototype._dragover = function(i) {
         var o = this._g,
           n = o.hitTest(i),
@@ -4065,14 +4103,14 @@ var wijmo;
           bottom: 0,
           width: 3,
           height: ""
-        }, o.rightToLeft && (s.left = r.clientWidth - s.left - s.width), l != a.TopLeft && l != a.RowHeader || (s.left -= o.topLeftCells.hostElement.offsetWidth)) : (s = {
+        }, o.rightToLeft && (s.left = r.clientWidth - s.left - s.width), l != a.TopLeft && l != a.RowHeader || (s.left -= o._eTL.offsetWidth)) : (s = {
           left: -1e3,
           top: this._szRowCol.pos + i - 1,
           right: 0,
           bottom: "",
           width: "",
           height: 3
-        }, l != a.TopLeft && l != a.ColumnHeader || (s.top -= o.topLeftCells.hostElement.offsetHeight)), e.setCss(n, s)
+        }, l != a.TopLeft && l != a.ColumnHeader || (s.top -= o._eTL.offsetHeight)), e.setCss(n, s)
       }, n.prototype._showDragMarker = function(i) {
         var o = this._g,
           n = this._dvMarker;
@@ -4160,7 +4198,7 @@ var wijmo;
     var i = function() {
       function i(i) {
         var o = this;
-        this._fullEdit = !1, this._list = null, this._g = i, this._evtInput = document.createEvent("HTMLEvents"), this._evtInput.initEvent("input", !0, !1), i.selectionChanging.addHandler(function(e, t) {
+        this._fullEdit = !1, this._list = null, this._g = i, this._evtInput = document.createEvent("HTMLEvents"), this._evtInput.initEvent("input", !0, !1), this._evtChange = document.createEvent("HTMLEvents"), this._evtChange.initEvent("change", !0, !1), i.selectionChanging.addHandler(function(e, t) {
           if (o.finishEditing()) {
             var n = i._selHdl.selection.row;
             if (n != t.row) {
@@ -4173,7 +4211,9 @@ var wijmo;
             var t = e.getActiveElement();
             t && "fixed" == getComputedStyle(t).position || o._commitRowEdits()
           }
-        }), i.addEventListener(i.hostElement, "mousedown", function(n) {
+        });
+        var n = i.hostElement;
+        i.addEventListener(n, "mousedown", function(n) {
           if (!n.defaultPrevented && 0 == n.button && !i._mouseHdl._szRowCol) {
             i.selection;
             var r = i.hitTest(n);
@@ -4183,9 +4223,9 @@ var wijmo;
               o._isNativeCheckbox(s) && (s != o.activeEditor && (n.preventDefault(), o.startEditing(!1, r.row, r.col, !0, n) && (s = o.activeEditor)), !s || "checkbox" != s.type || s.disabled || s.readOnly || (s.checked = !s.checked, s.focus(), o.finishEditing()))
             }
           }
-        }, !0), i.addEventListener(i.hostElement, "click", function(e) {
+        }, !0), i.addEventListener(n, "click", function(e) {
           o._isNativeCheckbox(e.target) && e.preventDefault()
-        })
+        }), i.addEventListener(n, "compositionend", this._keypress.bind(this))
       }
       return i.prototype.startEditing = function(i, o, n, r, s) {
         void 0 === i && (i = !0);
@@ -4194,7 +4234,7 @@ var wijmo;
         var a = l.getMergedRange(l.cells, o, n, !1);
         a || (a = new t.CellRange(o, n));
         var c = l.rows[o].dataItem;
-        if (l.select(a, !0), !l.rows[o] || c != l.rows[o].dataItem) return !1;
+        if (l.scrollIntoView(a.row, a.col, !0), l.select(a, !0), !l.rows[o] || c != l.rows[o].dataItem) return !1;
         if (a.equals(this._rng)) return !0;
         if (this.activeEditor && !this.finishEditing()) return !1;
         var h = new t.CellRangeEventArgs(l.cells, a, s);
@@ -4208,13 +4248,13 @@ var wijmo;
         if (p) {
           if ("checkbox" == p.type) this._fullEdit = !1;
           else if (r) {
+            l._setFocusNoScroll(p);
             var f = e.culture.Globalize.numberFormat["%"] || "%";
             if (e.isNumber(l.getCellData(o, n, !1)) && p.value.indexOf(f) > -1) {
               for (var _ = p.value, w = 0, m = _.length; m > 0 && _[m - 1] == f;) m--;
               for (; w < m && _[w] == f;) w++;
               e.setSelectionRange(p, w, m)
-            } else e.setSelectionRange(p, 0, p.value.length);
-            l._setFocusNoScroll(p)
+            } else e.setSelectionRange(p, 0, p.value.length)
           }
           if (l.onPrepareCellForEdit(h), p.disabled || p.readOnly) return !1
         }
@@ -4245,9 +4285,10 @@ var wijmo;
         if (!s.cancel) {
           s.data = n.cells.getCellData(r.topRow, r.leftCol, !1);
           for (var d = n.cellFactory.getEditorValue(n), g = r.topRow; g <= r.bottomRow && g < n.rows.length; g++)
-            for (var p = r.leftCol; p <= r.rightCol && p < n.columns.length; p++) n.cells.setCellData(g, p, d, !0, !1)
+            for (var p = r.leftCol; p <= r.rightCol && p < n.columns.length; p++) n.cells.setCellData(g, p, d, !0, !1);
+          o.value == this._edtValue && o.dispatchEvent(this._evtChange)
         }
-        this._edt = null, this._rng = null, this._list = null, this._removeListBox();
+        this._edt = null, this._rng = null, this._list = null, this._edtValue = null, this._removeListBox();
         var f = e.closest(o, ".wj-cell");
         return e.contains(f, e.getActiveElement()) && f.focus(), s.cancel || !s.refresh ? this._updateEditorCell(r.row, r.col, !1) : n.refresh(!1), l && n.focus(), n.onCellEditEnded(s), !0
       }, Object.defineProperty(i.prototype, "activeEditor", {
@@ -4283,7 +4324,7 @@ var wijmo;
             for (var c = i.leftCol, h = !0; c <= i.rightCol; c++)
               if (o.columns[c].isVisible) {
                 h || (n += "\t"), h = !1;
-                var u = o.cells.getCellData(a, c, !0).toString();
+                var u = o.getCellData(a, c, !0);
                 (u = u.replace(/\t/g, " ")).indexOf("\n") > -1 && (u = '"' + u.replace(/"/g, '""') + '"'), n += u
               }
           }
@@ -4310,27 +4351,36 @@ var wijmo;
           d = o.topRow,
           g = !1;
         r.deferUpdate(function() {
-          u && u.beginUpdate();
-          for (var e = 0; e < a.length && d < r.rows.length; e++, d++)
-            if (r.rows[d].isVisible)
-              for (var i = a[e], s = o.leftCol, l = 0; l < i.length && s < r.columns.length; l++, s++) {
-                var p = r.columns[s];
-                if (p.isVisible) {
-                  if (n._allowEditing(d, s)) {
-                    var f = i[l];
-                    p.maxLength && (f = f.substr(0, p.maxLength));
-                    var _ = new t.CellRangeEventArgs(r.cells, new t.CellRange(d, s), f);
-                    r.onPastingCell(_) && (u && (u.editItem(r.rows[d].dataItem), n._edItem = u.currentEditItem), r.cells.setCellData(d, s, _.data) && (r.onPastedCell(_), g = !0)), c.row2 = Math.max(c.row2, d), c.col2 = Math.max(c.col2, s)
+          u && a.length > 1 && u.beginUpdate();
+          for (var i = 0; i < a.length && d < r.rows.length; i++, d++)
+            if (r.rows[d].isVisible) {
+              for (var s = a[i], l = o.leftCol, p = 0; p < s.length && l < r.columns.length; p++, l++) {
+                var f = r.columns[l];
+                if (f.isVisible) {
+                  if (n._allowEditing(d, l)) {
+                    var _ = s[p];
+                    f.maxLength && (_ = _.substr(0, f.maxLength));
+                    var w = new t.CellRangeEventArgs(r.cells, new t.CellRange(d, l), _);
+                    r.onPastingCell(w) && (u && (u.editItem(r.rows[d].dataItem), n._edItem = u.currentEditItem), r.cells.setCellData(d, l, w.data) && (r.onPastedCell(w), g = !0)), c.row2 = Math.max(c.row2, d), c.col2 = Math.max(c.col2, l)
                   }
-                } else l--
-              } else e--;
-          u && u.endUpdate(), r.select(c), r.onPasted(h)
+                } else p--
+              }
+              if (n._edItem && u instanceof e.collections.CollectionView) {
+                var m = new e.collections.NotifyCollectionChangedEventArgs(e.collections.NotifyCollectionChangedAction.Change, n._edItem, d);
+                u.onCollectionChanged(m)
+              }
+            } else i--;
+          if (u && a.length > 1 && u.endUpdate(), r.select(c), r.onPasted(h), g && e.closest(r.hostElement, "form")) {
+            var y = e.createElement("<input>", r.hostElement),
+              v = document.createEvent("HTMLEvents");
+            v.initEvent("change", !0, !1), y.dispatchEvent(v), e.removeChild(y)
+          }
         })
       }, i.prototype._isNativeCheckbox = function(t) {
         return t instanceof HTMLInputElement && "checkbox" == t.type && !t.disabled && !t.readOnly && e.hasClass(t, "wj-cell-check") && e.closest(t, ".wj-flexgrid") == this._g.hostElement
       }, i.prototype._parseClipString = function(e) {
         var t = [];
-        e = (e = e.replace(/\r\n/g, "\n").replace(/\r/g, "\n")).replace(/\n+$/g, "");
+        e = (e = e.replace(/\r\n/g, "\n").replace(/\r/g, "\n")).replace(/\n$/, "");
         var i = 0,
           o = 0;
         for (i = 0; i < e.length; i++) {
@@ -4349,7 +4399,7 @@ var wijmo;
             }
           }
           if (o == e.length) {
-            this._parseClipCell(t, e, i, e.length, !1);
+            this._parseClipCell(t, e, i, o, !1);
             break
           }
         }
@@ -4358,7 +4408,7 @@ var wijmo;
         e.length || e.push([]);
         var r = t.substr(i, o - i),
           s = r.length;
-        s > 1 && '"' == r[0] && '"' == r[s - 1] && (r = (r = r.substr(1, s - 2)).replace(/""/g, '"')), e[e.length - 1].push(r), n && e.push([])
+        s > 1 && '"' == r[0] && '"' == r[s - 1] ? r = (r = r.substr(1, s - 2)).replace(/""/g, '"') : "\t" == r && (r = ""), e[e.length - 1].push(r), n && e.push([])
       }, i.prototype._expandClipRows = function(e, t) {
         for (var i = e.length, o = 0, n = 0; n < i; n++) o = Math.max(o, e[n].length);
         for (var r = this._g, s = 0, l = 0, a = t.topRow; a <= t.bottomRow; a++) r.rows[a].isVisible && s++;
@@ -4477,13 +4527,14 @@ var wijmo;
         }
         return !!i && (t.preventDefault(), !0)
       }, i.prototype._keypress = function(t) {
-        var i = this._edt;
-        if (i && "checkbox" != i.type && this._list && this._list.length > 0 && t.charCode >= 32 && e.getActiveElement() == i) {
-          var o = i.selectionStart,
-            n = i.value.substr(0, o);
-          t.target == i && (n += String.fromCharCode(t.charCode), o++);
-          var r = this._findString(this._list, n, !0);
-          r < 0 && (r = this._findString(this._list, n, !1)), r > -1 && (i.value = this._list[r], e.setSelectionRange(i, o, i.value.length), i.dispatchEvent(this._evtInput), t.preventDefault())
+        var i = this._edt,
+          o = t.charCode || 32;
+        if (i && "checkbox" != i.type && e.getActiveElement() == i && this._list && this._list.length > 0 && o >= 32) {
+          var n = i.selectionStart,
+            r = i.value.substr(0, n);
+          t.target == i && t.charCode && (r += String.fromCharCode(t.charCode), n++);
+          var s = this._findString(this._list, r, !0);
+          s < 0 && (s = this._findString(this._list, r, !1)), s > -1 && (i.value = this._list[s], e.setSelectionRange(i, n, i.value.length), i.dispatchEvent(this._evtInput), t.preventDefault && t.preventDefault())
         }
       }, i.prototype._findString = function(e, t, i) {
         i || (t = t.toLowerCase());
@@ -4494,40 +4545,41 @@ var wijmo;
         return -1
       }, i.prototype._toggleListBox = function(t, i) {
         var o = this._g,
-          n = o._selHdl.selection;
+          n = o._selHdl.selection,
+          r = o.isTouching;
         if (i || (i = n), this._lbx && (this._removeListBox(), n.contains(i))) return o.activeEditor ? o.activeEditor.focus() : o.containsFocus() || o.focus(), !0;
-        var r = o.isTouching,
-          s = o._getBindingColumn(o.cells, i.row, o.columns[i.col]);
+        var s = o._getBindingColumn(o.cells, i.row, o.columns[i.col]);
         return !(!e.input || !s.dataMap || !1 === s.showDropDown) && (!(!e.input || !this.startEditing(!0, i.row, i.col, !r, t)) && (this._lbx = this._createListBox(), this._lbx.showSelection(), r && this._lbx.focus(), !0))
       }, i.prototype._createListBox = function() {
         var i = this,
           o = this._g,
-          n = this._rng,
-          r = o.rows[n.row],
-          s = o._getBindingColumn(o.cells, n.row, o.columns[n.col]),
-          l = document.createElement("div");
-        this._removeListBox(), e.addClass(l, "wj-dropdown-panel wj-grid-listbox"), e.addClass(l, s.dropDownCssClass);
-        var a = new e.input.ListBox(l, {
-          maxHeight: 4 * r.renderHeight,
-          isContentHtml: s.isContentHtml,
-          itemsSource: s.dataMap.getDisplayValues(r.dataItem),
-          selectedValue: o.activeEditor ? o.activeEditor.value : o.getCellData(n.row, n.col, !0)
+          n = o.activeEditor,
+          r = this._rng,
+          s = o.rows[r.row],
+          l = o._getBindingColumn(o.cells, r.row, o.columns[r.col]),
+          a = document.createElement("div");
+        this._removeListBox(), e.addClass(a, "wj-dropdown-panel wj-grid-listbox"), e.addClass(a, l.dropDownCssClass);
+        var c = new e.input.ListBox(a, {
+          maxHeight: 4 * s.renderHeight,
+          isContentHtml: l.isContentHtml,
+          itemsSource: l.dataMap.getDisplayValues(s.dataItem),
+          selectedValue: n ? n.value : o.getCellData(r.row, r.col, !0)
         });
-        a.addEventListener(a.hostElement, "click", function() {
+        c.addEventListener(c.hostElement, "click", function() {
           i._removeListBox(), o.focus(), i.finishEditing()
-        }), a.lostFocus.addHandler(function() {
+        }), c.lostFocus.addHandler(function() {
           i._removeListBox()
-        }), a.selectedIndexChanged.addHandler(function() {
+        }), c.selectedIndexChanged.addHandler(function() {
           var t = o.activeEditor;
-          t && (t.value = a.selectedValue, t.dispatchEvent(i._evtInput), e.setSelectionRange(t, 0, t.value.length))
+          t && (t.value = c.selectedValue, t.dispatchEvent(i._evtInput), e.setSelectionRange(t, 0, t.value.length))
         });
-        var c = o.cells.getCellElement(n.row, n.col);
-        if (c) {
-          e.showPopup(l, c, !1, !1, !1);
-          var h = c.querySelector("." + t.CellFactory._WJC_DROPDOWN);
-          e.setAttribute(h, "aria-expanded", !0)
-        } else e.showPopup(l, o.getCellBoundingRect(n.row, n.col)), l[e.Control._OWNR_KEY] = o.hostElement;
-        return a
+        var h = o.cells.getCellElement(r.row, r.col);
+        if (h) {
+          e.showPopup(a, h, !1, !1, !1);
+          var u = h.querySelector("." + t.CellFactory._WJC_DROPDOWN);
+          e.setAttribute(u, "aria-expanded", !0)
+        } else e.showPopup(a, o.getCellBoundingRect(r.row, r.col)), a[e.Control._OWNR_KEY] = o.hostElement;
+        return c
       }, i.prototype._removeListBox = function() {
         var t = this._lbx;
         t && (this._lbx = null, e.hidePopup(t.hostElement, function() {
@@ -4612,17 +4664,18 @@ var __extends = this && this.__extends || function() {
         }
       }, i.prototype._rowEditEnded = function(e, t) {
         var i = this,
-          o = this._g.editableCollectionView,
-          n = this._nrt.dataItem;
-        if (o)
-          if (o.isAddingNew) o.commitNew();
-          else if (n && !t.cancel) {
-            this._nrt.dataItem = null;
-            var r = o.addNew();
-            for (var s in n) r[s] = n[s];
-            this._g.onRowAdded(t), t.cancel ? o.cancelNew() : o.commitNew(), setTimeout(function() {
-              i._g.select(0, i._g.columns.firstVisibleIndex), i.updateNewRowTemplate()
-            }, 20)
+          o = this._g,
+          n = o.editableCollectionView,
+          r = this._nrt.dataItem;
+        if (n && !this._committing)
+          if (n.isAddingNew) n.commitNew();
+          else if (r && !t.cancel) {
+            this._committing = !0, this._nrt.dataItem = null;
+            var s = n.addNew();
+            for (var l in r) s[l] = r[l];
+            o.onRowAdded(t), t.cancel ? n.cancelNew() : n.commitNew(), setTimeout(function() {
+              o.select(0, o.columns.firstVisibleIndex), i.updateNewRowTemplate()
+            }, 20), this._committing = !1
           }
       }, i
     }();
@@ -4642,16 +4695,19 @@ var wijmo;
     "use strict";
     var i = function() {
       function t(i) {
-        this._compStartBnd = this._compositionstart.bind(this), this._updateImeFocusBnd = this._updateImeFocus.bind(this), this._mouseDownBnd = this._mousedown.bind(this), this._mouseUpBnd = this._mouseup.bind(this), this._g = i, this._tbx = e.createElement('<textarea class="wj-grid-editor wj-form-control wj-grid-ime"/>'), e.disableAutoComplete(this._tbx), e.setCss(this._tbx, t._cssHidden), i.cells.hostElement.parentElement.appendChild(this._tbx), this._updateImeFocus();
-        var o = i.hostElement,
-          n = i.addEventListener.bind(this);
-        n(this._tbx, "compositionstart", this._compStartBnd), n(o, "blur", this._updateImeFocusBnd), n(o, "focus", this._updateImeFocusBnd), n(o, "mousedown", this._mouseDownBnd, !0), n(o, "mouseup", this._mouseUpBnd, !0), i.cellEditEnded.addHandler(this._cellEditEnded, this), i.selectionChanged.addHandler(this._updateImeFocus, this)
+        this._updateImeFocusBnd = this._updateImeFocus.bind(this), this._cmpstartBnd = this._compositionstart.bind(this), this._mousedownBnd = this._mousedown.bind(this), this._mouseupBnd = this._mouseup.bind(this), this._keypressBnd = this._keypress.bind(this), this._g = i;
+        var o = e.createElement('<textarea class="wj-grid-editor wj-form-control wj-grid-ime" aria-hidden="true"/>');
+        e.disableAutoComplete(o), e.setCss(o, t._cssHidden), this._tbx = o, i.cells.hostElement.parentElement.appendChild(o), this._updateImeFocus();
+        var n = i.hostElement,
+          r = i.addEventListener.bind(i);
+        r(o, "compositionstart", this._cmpstartBnd), r(n, "blur", this._updateImeFocusBnd), r(n, "focus", this._updateImeFocusBnd), r(n, "mousedown", this._mousedownBnd, !0), r(n, "mouseup", this._mouseupBnd, !0), r(n, "keypress", this._keypressBnd, !0), i.cellEditEnded.addHandler(this._cellEditEnded, this), i.selectionChanged.addHandler(this._updateImeFocus, this)
       }
       return t.prototype.dispose = function() {
         var t = this._g,
           i = t.hostElement,
-          o = t.removeEventListener.bind(this);
-        o(this._tbx, "compositionstart", this._compStartBnd), o(i, "blur", this._updateImeFocusBnd), o(i, "focus", this._updateImeFocusBnd), o(i, "mousedown", this._mouseDownBnd), o(i, "mouseup", this._mouseUpBnd), t.cellEditEnded.removeHandler(this._cellEditEnded), t.selectionChanged.removeHandler(this._updateImeFocus), e.removeChild(this._tbx)
+          o = this._tbx,
+          n = t.removeEventListener.bind(t);
+        n(o, "compositionstart", this._cmpstartBnd), n(i, "blur", this._updateImeFocusBnd), n(i, "focus", this._updateImeFocusBnd), n(i, "mousedown", this._mousedownBnd), n(i, "mouseup", this._mouseupBnd), n(i, "keypress", this._keypressBnd), t.cellEditEnded.removeHandler(this._cellEditEnded), t.selectionChanged.removeHandler(this._updateImeFocus), e.removeChild(o)
       }, t.prototype._compositionstart = function() {
         var t = this._g;
         if (null == t.activeEditor) {
@@ -4667,32 +4723,37 @@ var wijmo;
               c = o.parentElement,
               h = getComputedStyle(c),
               u = c.style.zIndex;
-            i.isSingleCell || (a.width = c.offsetWidth, a.height = c.offsetHeight), i.row < t.frozenRows && (l += r.parentElement.scrollTop), i.col < t.frozenColumns && (s += r.parentElement.scrollLeft), "minLength,maxLength,pattern".split(",").forEach(function(t) {
+            i.isSingleCell || (a.width = c.offsetWidth, a.height = c.offsetHeight), i.row < t.frozenRows && (l += r.parentElement.scrollTop), i.col < t.frozenColumns && (s += r.parentElement.scrollLeft);
+            var d = c.querySelector(".wj-btn.wj-right");
+            d && (a.width -= d.offsetWidth), "minLength,maxLength,pattern".split(",").forEach(function(t) {
               e.setAttribute(n, t, o.getAttribute(t))
-            }), e.setAttribute(n, "wrap", o instanceof HTMLTextAreaElement ? "soft" : "off"), o.value = "", e.setCss(n, {
+            }), e.setAttribute(n, "wrap", o instanceof HTMLTextAreaElement ? "soft" : "off"), e.setCss(n, {
               position: "absolute",
-              pointerEvents: "",
-              opacity: "",
               left: s,
               top: l,
-              paddingLeft: h.paddingLeft,
-              paddingTop: h.paddingTop,
               width: a.width - 1,
               height: a.height - 1,
+              paddingLeft: h.paddingLeft,
+              paddingTop: h.paddingTop,
               zIndex: u
-            }), t._edtHdl._edt = n
+            }), t._edtHdl._edt = n, o.value = ""
           }
         }
       }, t.prototype._cellEditEnded = function() {
-        e.setCss(this._tbx, t._cssHidden), this._tbx.value = ""
+        var i = this;
+        e.setCss(this._tbx, t._cssHidden), setTimeout(function() {
+          i._tbx.value = ""
+        })
       }, t.prototype._mousedown = function(e) {
         this._isMouseDown = !0, this._updateImeFocus()
       }, t.prototype._mouseup = function(e) {
         this._isMouseDown = !1, this._updateImeFocus()
+      }, t.prototype._keypress = function(e) {
+        null == this._g.activeEditor && (this._tbx.value = "", this._compositionstart(), e.stopPropagation())
       }, t.prototype._updateImeFocus = function() {
         var t = this._g,
           i = e.getActiveElement();
-        if (!t.activeEditor && !t.isTouching && !this._isMouseDown && e.closest(i, ".wj-flexgrid") == t.hostElement) {
+        if (!t.activeEditor && e.closest(i, ".wj-flexgrid") == t.hostElement) {
           var o = this._tbx;
           this._enableIme() ? i != o && (o.disabled = !1, o.select(), o.focus()) : o.disabled = !0
         }
@@ -4703,11 +4764,10 @@ var wijmo;
         return !!t.canEditCell(i.row, i.col) && !(!o || o.dataType == e.DataType.Boolean)
       }, t._cssHidden = {
         position: "fixed",
-        pointerEvents: "none",
-        opacity: 0,
         left: -10,
         top: -10,
-        width: 0
+        width: "1px",
+        overflow: "hidden"
       }, t
     }();
     t._ImeHandler = i

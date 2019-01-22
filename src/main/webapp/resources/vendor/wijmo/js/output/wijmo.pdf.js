@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -211,9 +211,9 @@ var wijmo;
           "./object": 18,
           "./page": 19,
           "./reference": 21,
-          buffer: 28,
-          fs: 26,
-          stream: 204
+          buffer: 31,
+          fs: 29,
+          stream: 207
         }],
         3: [function(t, e, n) {
           (function(n) {
@@ -258,8 +258,8 @@ var wijmo;
         }, {
           "./font/embedded": 5,
           "./font/standard": 6,
-          buffer: 28,
-          fontkit: 30
+          buffer: 31,
+          fontkit: 33
         }],
         4: [function(t, e, n) {
           var r;
@@ -380,7 +380,11 @@ var wijmo;
               return i = this.layout(t, n, !0).advanceWidth, r = e / 1e3, i * r
             }, e.prototype.embed = function() {
               var t, e, n, r, i, o, a, s, u, c, l;
-              return s = null != this.subset.cff, o = this.document.ref(), s && (o.data.Subtype = "CIDFontType0C"), this.subset.encodeStream().pipe(o), r = ((null != (l = this.font["OS/2"]) ? l.sFamilyClass : void 0) || 0) >> 8, i = 0, this.font.post.isFixedPitch && (i |= 1), 1 <= r && r <= 7 && (i |= 2), i |= 4, 10 === r && (i |= 8), this.font.head.macStyle.italic && (i |= 64), c = function() {
+              return s = null != this.subset.cff, o = this.document.ref(), s && (o.data.Subtype = "CIDFontType0C"), this.subset.encodeStream().on("data", function(t) {
+                return o.write(t)
+              }).on("end", function() {
+                return o.end()
+              }), r = ((null != (l = this.font["OS/2"]) ? l.sFamilyClass : void 0) || 0) >> 8, i = 0, this.font.post.isFixedPitch && (i |= 1), 1 <= r && r <= 7 && (i |= 2), i |= 4, 10 === r && (i |= 8), this.font.head.macStyle.italic && (i |= 64), c = function() {
                 var t, e;
                 for (e = [], a = t = 0; t < 6; a = ++t) e.push(String.fromCharCode(26 * Math.random() + 65));
                 return e
@@ -521,7 +525,7 @@ var wijmo;
         }, {
           "../font": 3,
           "./afm": 4,
-          fs: 26
+          fs: 29
         }],
         7: [function(t, e, n) {
           var r, i, o, a = {}.hasOwnProperty,
@@ -674,8 +678,8 @@ var wijmo;
           "./data": 1,
           "./image/jpeg": 9,
           "./image/png": 10,
-          buffer: 28,
-          fs: 26
+          buffer: 31,
+          fs: 29
         }],
         9: [function(t, e, n) {
           var r, i = [].indexOf || function(t) {
@@ -714,7 +718,7 @@ var wijmo;
             }, t
           }(), e.localExports = r
         }, {
-          fs: 26
+          fs: 29
         }],
         10: [function(t, e, n) {
           (function(n) {
@@ -787,9 +791,9 @@ var wijmo;
             }(), e.localExports = i
           }).call(this, t("buffer").Buffer)
         }, {
-          buffer: 28,
-          "png-js": 201,
-          zlib: 25
+          buffer: 31,
+          "png-js": 204,
+          zlib: 28
         }],
         11: [function(t, e, n) {
           var r, i, o, a = {}.hasOwnProperty,
@@ -863,8 +867,8 @@ var wijmo;
             }, e
           }(), e.localExports = o
         }, {
-          events: 29,
-          linebreak: 188
+          events: 32,
+          linebreak: 191
         }],
         12: [function(t, e, n) {
           e.localExports = {
@@ -1482,7 +1486,7 @@ var wijmo;
           }).call(this, t("buffer").Buffer)
         }, {
           "./reference": 21,
-          buffer: 28
+          buffer: 31
         }],
         19: [function(t, e, n) {
           var r;
@@ -1748,52 +1752,35 @@ var wijmo;
         21: [function(t, e, n) {
           (function(n) {
             var r, i, o, a = function(t, e) {
-                return function() {
-                  return t.apply(e, arguments)
-                }
-              },
-              s = {}.hasOwnProperty,
-              u = function(t, e) {
-                function n() {
-                  this.constructor = t
-                }
-                for (var r in e) s.call(e, r) && (t[r] = e[r]);
-                return n.prototype = e.prototype, t.prototype = new n, t.__super__ = e.prototype, t
-              };
-            o = t("zlib"), i = function(t) {
-              function e(t, n, r) {
-                this.document = t, this.id = n, this.data = null != r ? r : {}, this.finalize = a(this.finalize, this), e.__super__.constructor.call(this, {
-                  decodeStrings: !1
-                }), this.gen = 0, this.deflate = null, this.compress = this.document.compress && !this.data.Filter, this.uncompressedLength = 0, this.chunks = []
+              return function() {
+                return t.apply(e, arguments)
               }
-              return u(e, t), e.prototype.initDeflate = function() {
-                return this.data.Filter = "FlateDecode", this.deflate = o.createDeflate(), this.deflate.on("data", function(t) {
-                  return function(e) {
-                    return t.chunks.push(e), t.data.Length += e.length
+            };
+            o = t("zlib"), i = function() {
+              function t(t, e, n) {
+                this.document = t, this.id = e, this.data = null != n ? n : {}, this.finalize = a(this.finalize, this), this.gen = 0, this.compress = this.document.compress && !this.data.Filter, this.chunks = []
+              }
+              return t.prototype.write = function(t, e) {
+                var r;
+                return n.isBuffer(t) || (t = new n(t + "\n", "binary")), null == (r = this.data).Length && (r.Length = 0), this.compress && (this.data.Filter = "FlateDecode"), this.chunks.push(t), this.data.Length += t.length
+              }, t.prototype.end = function(t) {
+                return t && this.write(t), this.compress && this.chunks.length ? o.deflate(n.concat(this.chunks), function(t) {
+                  return function(e, n) {
+                    return t.chunks = n, t.data.Length = t.chunks.length, t.finalize()
                   }
-                }(this)), this.deflate.on("end", this.finalize)
-              }, e.prototype._write = function(t, e, r) {
-                var i;
-                return n.isBuffer(t) || (t = new n(t + "\n", "binary")), this.uncompressedLength += t.length, null == (i = this.data).Length && (i.Length = 0), this.compress ? (this.deflate || this.initDeflate(), this.deflate.write(t)) : (this.chunks.push(t), this.data.Length += t.length), r()
-              }, e.prototype.end = function(t) {
-                return e.__super__.end.apply(this, arguments), this.deflate ? this.deflate.end() : this.finalize()
-              }, e.prototype.finalize = function() {
-                var t, e, n, i;
-                if (this.offset = this.document._offset, this.document._write(this.id + " " + this.gen + " obj"), this.document._write(r.convert(this.data)), this.chunks.length) {
-                  for (this.document._write("stream"), e = 0, n = (i = this.chunks).length; e < n; e++) t = i[e], this.document._write(t);
-                  this.chunks.length = 0, this.document._write("\nendstream")
-                }
-                return this.document._write("endobj"), this.document._refEnd(this)
-              }, e.prototype.toString = function() {
+                }(this)) : this.finalize()
+              }, t.prototype.finalize = function() {
+                var t;
+                return this.offset = this.document._offset, this.document._write(this.id + " " + this.gen + " obj"), this.document._write(r.convert(this.data)), this.chunks.length && (this.document._write("stream"), t = n.isBuffer(this.chunks) ? this.chunks : n.concat(this.chunks), this.document._write(t), t = null, this.chunks = [], this.document._write("\nendstream")), this.document._write("endobj"), this.document._refEnd(this)
+              }, t.prototype.toString = function() {
                 return this.id + " " + this.gen + " R"
-              }, e
-            }(t("stream").Writable), e.localExports = i, r = t("./object")
+              }, t
+            }(), e.localExports = i, r = t("./object")
           }).call(this, t("buffer").Buffer)
         }, {
           "./object": 18,
-          buffer: 28,
-          stream: 204,
-          zlib: 25
+          buffer: 31,
+          zlib: 28
         }],
         22: [function(t, e, n) {
           function r(t, e) {
@@ -1915,9 +1902,284 @@ var wijmo;
             return e
           }
         }, {
-          "util/": 214
+          "util/": 25
         }],
         23: [function(t, e, n) {
+          "function" == typeof Object.create ? e.localExports = function(t, e) {
+            t.super_ = e, t.prototype = Object.create(e.prototype, {
+              constructor: {
+                value: t,
+                enumerable: !1,
+                writable: !0,
+                configurable: !0
+              }
+            })
+          } : e.localExports = function(t, e) {
+            t.super_ = e;
+            var n = function() {};
+            n.prototype = e.prototype, t.prototype = new n, t.prototype.constructor = t
+          }
+        }, {}],
+        24: [function(t, e, n) {
+          e.localExports = function(t) {
+            return t && "object" == typeof t && "function" == typeof t.copy && "function" == typeof t.fill && "function" == typeof t.readUInt8
+          }
+        }, {}],
+        25: [function(t, e, n) {
+          (function(e, r) {
+            function i(t, e) {
+              var r = {
+                seen: [],
+                stylize: a
+              };
+              return arguments.length >= 3 && (r.depth = arguments[2]), arguments.length >= 4 && (r.colors = arguments[3]), g(e) ? r.showHidden = e : e && n._extend(r, e), y(r.showHidden) && (r.showHidden = !1), y(r.depth) && (r.depth = 2), y(r.colors) && (r.colors = !1), y(r.customInspect) && (r.customInspect = !0), r.colors && (r.stylize = o), u(r, t, r.depth)
+            }
+
+            function o(t, e) {
+              var n = i.styles[e];
+              return n ? "[" + i.colors[n][0] + "m" + t + "[" + i.colors[n][1] + "m" : t
+            }
+
+            function a(t, e) {
+              return t
+            }
+
+            function s(t) {
+              var e = {};
+              return t.forEach(function(t, n) {
+                e[t] = !0
+              }), e
+            }
+
+            function u(t, e, r) {
+              if (t.customInspect && e && C(e.inspect) && e.inspect !== n.inspect && (!e.constructor || e.constructor.prototype !== e)) {
+                var i = e.inspect(r, t);
+                return v(i) || (i = u(t, i, r)), i
+              }
+              var o = c(t, e);
+              if (o) return o;
+              var a = Object.keys(e),
+                g = s(a);
+              if (t.showHidden && (a = Object.getOwnPropertyNames(e)), S(e) && (a.indexOf("message") >= 0 || a.indexOf("description") >= 0)) return l(e);
+              if (0 === a.length) {
+                if (C(e)) {
+                  var _ = e.name ? ": " + e.name : "";
+                  return t.stylize("[Function" + _ + "]", "special")
+                }
+                if (b(e)) return t.stylize(RegExp.prototype.toString.call(e), "regexp");
+                if (x(e)) return t.stylize(Date.prototype.toString.call(e), "date");
+                if (S(e)) return l(e)
+              }
+              var m = "",
+                y = !1,
+                w = ["{", "}"];
+              if (p(e) && (y = !0, w = ["[", "]"]), C(e) && (m = " [Function" + (e.name ? ": " + e.name : "") + "]"), b(e) && (m = " " + RegExp.prototype.toString.call(e)), x(e) && (m = " " + Date.prototype.toUTCString.call(e)), S(e) && (m = " " + l(e)), 0 === a.length && (!y || 0 == e.length)) return w[0] + m + w[1];
+              if (r < 0) return b(e) ? t.stylize(RegExp.prototype.toString.call(e), "regexp") : t.stylize("[Object]", "special");
+              t.seen.push(e);
+              var k;
+              return k = y ? h(t, e, r, g, a) : a.map(function(n) {
+                return f(t, e, r, g, n, y)
+              }), t.seen.pop(), d(k, m, w)
+            }
+
+            function c(t, e) {
+              if (y(e)) return t.stylize("undefined", "undefined");
+              if (v(e)) {
+                var n = "'" + JSON.stringify(e).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
+                return t.stylize(n, "string")
+              }
+              return m(e) ? t.stylize("" + e, "number") : g(e) ? t.stylize("" + e, "boolean") : _(e) ? t.stylize("null", "null") : void 0
+            }
+
+            function l(t) {
+              return "[" + Error.prototype.toString.call(t) + "]"
+            }
+
+            function h(t, e, n, r, i) {
+              for (var o = [], a = 0, s = e.length; a < s; ++a) P(e, String(a)) ? o.push(f(t, e, n, r, String(a), !0)) : o.push("");
+              return i.forEach(function(i) {
+                i.match(/^\d+$/) || o.push(f(t, e, n, r, i, !0))
+              }), o
+            }
+
+            function f(t, e, n, r, i, o) {
+              var a, s, c;
+              if ((c = Object.getOwnPropertyDescriptor(e, i) || {
+                value: e[i]
+              }).get ? s = c.set ? t.stylize("[Getter/Setter]", "special") : t.stylize("[Getter]", "special") : c.set && (s = t.stylize("[Setter]", "special")), P(r, i) || (a = "[" + i + "]"), s || (t.seen.indexOf(c.value) < 0 ? (s = _(n) ? u(t, c.value, null) : u(t, c.value, n - 1)).indexOf("\n") > -1 && (s = o ? s.split("\n").map(function(t) {
+                return "  " + t
+              }).join("\n").substr(2) : "\n" + s.split("\n").map(function(t) {
+                return "   " + t
+              }).join("\n")) : s = t.stylize("[Circular]", "special")), y(a)) {
+                if (o && i.match(/^\d+$/)) return s;
+                (a = JSON.stringify("" + i)).match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/) ? (a = a.substr(1, a.length - 2), a = t.stylize(a, "name")) : (a = a.replace(/'/g, "\\'").replace(/\\"/g, '"').replace(/(^"|"$)/g, "'"), a = t.stylize(a, "string"))
+              }
+              return a + ": " + s
+            }
+
+            function d(t, e, n) {
+              var r = 0;
+              return t.reduce(function(t, e) {
+                return r++, e.indexOf("\n") >= 0 && r++, t + e.replace(/\u001b\[\d\d?m/g, "").length + 1
+              }, 0) > 60 ? n[0] + ("" === e ? "" : e + "\n ") + " " + t.join(",\n  ") + " " + n[1] : n[0] + e + " " + t.join(", ") + " " + n[1]
+            }
+
+            function p(t) {
+              return Array.isArray(t)
+            }
+
+            function g(t) {
+              return "boolean" == typeof t
+            }
+
+            function _(t) {
+              return null === t
+            }
+
+            function m(t) {
+              return "number" == typeof t
+            }
+
+            function v(t) {
+              return "string" == typeof t
+            }
+
+            function y(t) {
+              return void 0 === t
+            }
+
+            function b(t) {
+              return w(t) && "[object RegExp]" === k(t)
+            }
+
+            function w(t) {
+              return "object" == typeof t && null !== t
+            }
+
+            function x(t) {
+              return w(t) && "[object Date]" === k(t)
+            }
+
+            function S(t) {
+              return w(t) && ("[object Error]" === k(t) || t instanceof Error)
+            }
+
+            function C(t) {
+              return "function" == typeof t
+            }
+
+            function k(t) {
+              return Object.prototype.toString.call(t)
+            }
+
+            function E(t) {
+              return t < 10 ? "0" + t.toString(10) : t.toString(10)
+            }
+
+            function A() {
+              var t = new Date,
+                e = [E(t.getHours()), E(t.getMinutes()), E(t.getSeconds())].join(":");
+              return [t.getDate(), O[t.getMonth()], e].join(" ")
+            }
+
+            function P(t, e) {
+              return Object.prototype.hasOwnProperty.call(t, e)
+            }
+            var j = /%[sdj%]/g;
+            n.format = function(t) {
+              if (!v(t)) {
+                for (var e = [], n = 0; n < arguments.length; n++) e.push(i(arguments[n]));
+                return e.join(" ")
+              }
+              for (var n = 1, r = arguments, o = r.length, a = String(t).replace(j, function(t) {
+                if ("%%" === t) return "%";
+                if (n >= o) return t;
+                switch (t) {
+                  case "%s":
+                    return String(r[n++]);
+                  case "%d":
+                    return Number(r[n++]);
+                  case "%j":
+                    try {
+                      return JSON.stringify(r[n++])
+                    } catch (t) {
+                      return "[Circular]"
+                    }
+                  default:
+                    return t
+                }
+              }), s = r[n]; n < o; s = r[++n]) _(s) || !w(s) ? a += " " + s : a += " " + i(s);
+              return a
+            }, n.deprecate = function(t, i) {
+              if (y(r.process)) return function() {
+                return n.deprecate(t, i).apply(this, arguments)
+              };
+              if (!0 === e.noDeprecation) return t;
+              var o = !1;
+              return function() {
+                if (!o) {
+                  if (e.throwDeprecation) throw new Error(i);
+                  e.traceDeprecation ? console.trace(i) : console.error(i), o = !0
+                }
+                return t.apply(this, arguments)
+              }
+            };
+            var I, L = {};
+            n.debuglog = function(t) {
+              if (y(I) && (I = e.env.NODE_DEBUG || ""), t = t.toUpperCase(), !L[t])
+                if (new RegExp("\\b" + t + "\\b", "i").test(I)) {
+                  var r = e.pid;
+                  L[t] = function() {
+                    var e = n.format.apply(n, arguments);
+                    console.error("%s %d: %s", t, r, e)
+                  }
+                } else L[t] = function() {};
+              return L[t]
+            }, n.inspect = i, i.colors = {
+              bold: [1, 22],
+              italic: [3, 23],
+              underline: [4, 24],
+              inverse: [7, 27],
+              white: [37, 39],
+              grey: [90, 39],
+              black: [30, 39],
+              blue: [34, 39],
+              cyan: [36, 39],
+              green: [32, 39],
+              magenta: [35, 39],
+              red: [31, 39],
+              yellow: [33, 39]
+            }, i.styles = {
+              special: "cyan",
+              number: "yellow",
+              boolean: "yellow",
+              undefined: "grey",
+              null: "bold",
+              string: "green",
+              date: "magenta",
+              regexp: "red"
+            }, n.isArray = p, n.isBoolean = g, n.isNull = _, n.isNullOrUndefined = function(t) {
+              return null == t
+            }, n.isNumber = m, n.isString = v, n.isSymbol = function(t) {
+              return "symbol" == typeof t
+            }, n.isUndefined = y, n.isRegExp = b, n.isObject = w, n.isDate = x, n.isError = S, n.isFunction = C, n.isPrimitive = function(t) {
+              return null === t || "boolean" == typeof t || "number" == typeof t || "string" == typeof t || "symbol" == typeof t || void 0 === t
+            }, n.isBuffer = t("./support/isBuffer");
+            var O = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            n.log = function() {
+              console.log("%s - %s", A(), n.format.apply(n, arguments))
+            }, n.inherits = t("inherits"), n._extend = function(t, e) {
+              if (!e || !w(e)) return t;
+              for (var n = Object.keys(e), r = n.length; r--;) t[n[r]] = e[n[r]];
+              return t
+            }
+          }).call(this, t("v3go1D"), "undefined" != typeof self ? self : "undefined" != typeof window ? window : {})
+        }, {
+          "./support/isBuffer": 24,
+          inherits: 23,
+          v3go1D: 205
+        }],
+        26: [function(t, e, n) {
           var r = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
           ! function(t) {
             "use strict";
@@ -1965,7 +2227,7 @@ var wijmo;
             }
           }(void 0 === n ? this.base64js = {} : n)
         }, {}],
-        24: [function(t, e, n) {
+        27: [function(t, e, n) {
           (function(e, r) {
             function i(t) {
               if (t < n.DEFLATE || t > n.UNZIP) throw new TypeError("Bad argument");
@@ -2053,15 +2315,15 @@ var wijmo;
             }, n.Zlib = i
           }).call(this, t("v3go1D"), t("buffer").Buffer)
         }, {
-          buffer: 28,
-          "pako/lib/zlib/constants": 192,
-          "pako/lib/zlib/deflate.js": 194,
-          "pako/lib/zlib/inflate.js": 196,
-          "pako/lib/zlib/messages": 198,
-          "pako/lib/zlib/zstream": 200,
-          v3go1D: 202
+          buffer: 31,
+          "pako/lib/zlib/constants": 195,
+          "pako/lib/zlib/deflate.js": 197,
+          "pako/lib/zlib/inflate.js": 199,
+          "pako/lib/zlib/messages": 201,
+          "pako/lib/zlib/zstream": 203,
+          v3go1D: 205
         }],
-        25: [function(t, e, n) {
+        28: [function(t, e, n) {
           (function(e, r) {
             function i(t, e, n) {
               function i() {
@@ -2278,15 +2540,15 @@ var wijmo;
             }, _.inherits(a, d), _.inherits(s, d), _.inherits(u, d), _.inherits(c, d), _.inherits(l, d), _.inherits(h, d), _.inherits(f, d)
           }).call(this, t("v3go1D"), t("buffer").Buffer)
         }, {
-          "./binding": 24,
-          _stream_transform: 208,
+          "./binding": 27,
+          _stream_transform: 211,
           assert: 22,
-          buffer: 28,
-          util: 214,
-          v3go1D: 202
+          buffer: 31,
+          util: 216,
+          v3go1D: 205
         }],
-        26: [function(t, e, n) {}, {}],
-        27: [function(t, e, n) {
+        29: [function(t, e, n) {}, {}],
+        30: [function(t, e, n) {
           function r(t) {
             if (t && !s.isEncoding(t)) throw new Error("Unknown encoding: " + t)
           }
@@ -2371,9 +2633,9 @@ var wijmo;
             return e
           }
         }, {
-          buffer: 28
+          buffer: 31
         }],
-        28: [function(t, e, n) {
+        31: [function(t, e, n) {
           function r(t, e, n) {
             if (!(this instanceof r)) return new r(t, e, n);
             var i = typeof t;
@@ -2861,10 +3123,10 @@ var wijmo;
             return t._isBuffer = !0, t._get = t.get, t._set = t.set, t.get = W.get, t.set = W.set, t.write = W.write, t.toString = W.toString, t.toLocaleString = W.toString, t.toJSON = W.toJSON, t.copy = W.copy, t.slice = W.slice, t.readUInt8 = W.readUInt8, t.readUInt16LE = W.readUInt16LE, t.readUInt16BE = W.readUInt16BE, t.readUInt32LE = W.readUInt32LE, t.readUInt32BE = W.readUInt32BE, t.readInt8 = W.readInt8, t.readInt16LE = W.readInt16LE, t.readInt16BE = W.readInt16BE, t.readInt32LE = W.readInt32LE, t.readInt32BE = W.readInt32BE, t.readFloatLE = W.readFloatLE, t.readFloatBE = W.readFloatBE, t.readDoubleLE = W.readDoubleLE, t.readDoubleBE = W.readDoubleBE, t.writeUInt8 = W.writeUInt8, t.writeUInt16LE = W.writeUInt16LE, t.writeUInt16BE = W.writeUInt16BE, t.writeUInt32LE = W.writeUInt32LE, t.writeUInt32BE = W.writeUInt32BE, t.writeInt8 = W.writeInt8, t.writeInt16LE = W.writeInt16LE, t.writeInt16BE = W.writeInt16BE, t.writeInt32LE = W.writeInt32LE, t.writeInt32BE = W.writeInt32BE, t.writeFloatLE = W.writeFloatLE, t.writeFloatBE = W.writeFloatBE, t.writeDoubleLE = W.writeDoubleLE, t.writeDoubleBE = W.writeDoubleBE, t.fill = W.fill, t.inspect = W.inspect, t.toArrayBuffer = W.toArrayBuffer, t
           }
         }, {
-          "base64-js": 23,
-          ieee754: 185
+          "base64-js": 26,
+          ieee754: 188
         }],
-        29: [function(t, e, n) {
+        32: [function(t, e, n) {
           function r() {
             this._events = this._events || {}, this._maxListeners = this._maxListeners || void 0
           }
@@ -2959,7 +3221,7 @@ var wijmo;
             return t._events && t._events[e] ? i(t._events[e]) ? 1 : t._events[e].length : 0
           }
         }, {}],
-        30: [function(t, e, n) {
+        33: [function(t, e, n) {
           (function(n, r) {
             "use strict";
 
@@ -5561,137 +5823,137 @@ var wijmo;
             O.registerFormat(qt), O.registerFormat(Wt), O.registerFormat($t), e.localExports = O
           }).call(this, t("v3go1D"), t("buffer").Buffer)
         }, {
-          "babel-runtime/core-js/array/from": 31,
-          "babel-runtime/core-js/get-iterator": 32,
-          "babel-runtime/core-js/map": 33,
-          "babel-runtime/core-js/object/define-property": 35,
-          "babel-runtime/core-js/object/freeze": 36,
-          "babel-runtime/core-js/object/get-own-property-descriptor": 37,
-          "babel-runtime/core-js/object/keys": 38,
-          "babel-runtime/core-js/set": 40,
-          "babel-runtime/core-js/string/from-code-point": 41,
-          "babel-runtime/helpers/classCallCheck": 44,
-          "babel-runtime/helpers/createClass": 45,
-          "babel-runtime/helpers/inherits": 46,
-          "babel-runtime/helpers/possibleConstructorReturn": 47,
-          "babel-runtime/helpers/typeof": 48,
-          buffer: 28,
-          clone: 49,
-          restructure: 164,
-          "unicode-properties": 183,
-          v3go1D: 202
+          "babel-runtime/core-js/array/from": 34,
+          "babel-runtime/core-js/get-iterator": 35,
+          "babel-runtime/core-js/map": 36,
+          "babel-runtime/core-js/object/define-property": 38,
+          "babel-runtime/core-js/object/freeze": 39,
+          "babel-runtime/core-js/object/get-own-property-descriptor": 40,
+          "babel-runtime/core-js/object/keys": 41,
+          "babel-runtime/core-js/set": 43,
+          "babel-runtime/core-js/string/from-code-point": 44,
+          "babel-runtime/helpers/classCallCheck": 47,
+          "babel-runtime/helpers/createClass": 48,
+          "babel-runtime/helpers/inherits": 49,
+          "babel-runtime/helpers/possibleConstructorReturn": 50,
+          "babel-runtime/helpers/typeof": 51,
+          buffer: 31,
+          clone: 52,
+          restructure: 167,
+          "unicode-properties": 186,
+          v3go1D: 205
         }],
-        31: [function(t, e, n) {
+        34: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/array/from"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/array/from": 50
+          "core-js/library/fn/array/from": 53
         }],
-        32: [function(t, e, n) {
+        35: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/get-iterator"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/get-iterator": 51
+          "core-js/library/fn/get-iterator": 54
         }],
-        33: [function(t, e, n) {
+        36: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/map"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/map": 52
+          "core-js/library/fn/map": 55
         }],
-        34: [function(t, e, n) {
+        37: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/create"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/create": 53
+          "core-js/library/fn/object/create": 56
         }],
-        35: [function(t, e, n) {
+        38: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/define-property"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/define-property": 54
+          "core-js/library/fn/object/define-property": 57
         }],
-        36: [function(t, e, n) {
+        39: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/freeze"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/freeze": 55
+          "core-js/library/fn/object/freeze": 58
         }],
-        37: [function(t, e, n) {
+        40: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/get-own-property-descriptor"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/get-own-property-descriptor": 56
+          "core-js/library/fn/object/get-own-property-descriptor": 59
         }],
-        38: [function(t, e, n) {
+        41: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/keys"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/keys": 57
+          "core-js/library/fn/object/keys": 60
         }],
-        39: [function(t, e, n) {
+        42: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/object/set-prototype-of"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/object/set-prototype-of": 58
+          "core-js/library/fn/object/set-prototype-of": 61
         }],
-        40: [function(t, e, n) {
+        43: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/set"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/set": 59
+          "core-js/library/fn/set": 62
         }],
-        41: [function(t, e, n) {
+        44: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/string/from-code-point"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/string/from-code-point": 60
+          "core-js/library/fn/string/from-code-point": 63
         }],
-        42: [function(t, e, n) {
+        45: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/symbol"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/symbol": 61
+          "core-js/library/fn/symbol": 64
         }],
-        43: [function(t, e, n) {
+        46: [function(t, e, n) {
           e.localExports = {
             default: t("core-js/library/fn/symbol/iterator"),
             __esModule: !0
           }
         }, {
-          "core-js/library/fn/symbol/iterator": 62
+          "core-js/library/fn/symbol/iterator": 65
         }],
-        44: [function(t, e, n) {
+        47: [function(t, e, n) {
           "use strict";
           n.__esModule = !0, n.default = function(t, e) {
             if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function")
           }
         }, {}],
-        45: [function(t, e, n) {
+        48: [function(t, e, n) {
           "use strict";
           n.__esModule = !0;
           var r = function(t) {
@@ -5711,9 +5973,9 @@ var wijmo;
             }
           }()
         }, {
-          "../core-js/object/define-property": 35
+          "../core-js/object/define-property": 38
         }],
-        46: [function(t, e, n) {
+        49: [function(t, e, n) {
           "use strict";
 
           function r(t) {
@@ -5737,11 +5999,11 @@ var wijmo;
             }), e && (i.default ? i.default(t, e) : t.__proto__ = e)
           }
         }, {
-          "../core-js/object/create": 34,
-          "../core-js/object/set-prototype-of": 39,
-          "../helpers/typeof": 48
+          "../core-js/object/create": 37,
+          "../core-js/object/set-prototype-of": 42,
+          "../helpers/typeof": 51
         }],
-        47: [function(t, e, n) {
+        50: [function(t, e, n) {
           "use strict";
           n.__esModule = !0;
           var r = function(t) {
@@ -5754,9 +6016,9 @@ var wijmo;
             return !e || "object" !== (void 0 === e ? "undefined" : r.default(e)) && "function" != typeof e ? t : e
           }
         }, {
-          "../helpers/typeof": 48
+          "../helpers/typeof": 51
         }],
-        48: [function(t, e, n) {
+        51: [function(t, e, n) {
           "use strict";
 
           function r(t) {
@@ -5778,10 +6040,10 @@ var wijmo;
             return t && "function" == typeof o.default && t.constructor === o.default && t !== o.default.prototype ? "symbol" : void 0 === t ? "undefined" : a(t)
           }
         }, {
-          "../core-js/symbol": 42,
-          "../core-js/symbol/iterator": 43
+          "../core-js/symbol": 45,
+          "../core-js/symbol/iterator": 46
         }],
-        49: [function(t, e, n) {
+        52: [function(t, e, n) {
           (function(t) {
             var n = function() {
               "use strict";
@@ -5840,150 +6102,150 @@ var wijmo;
             "object" == typeof e && e.localExports && (e.localExports = n)
           }).call(this, t("buffer").Buffer)
         }, {
-          buffer: 28
-        }],
-        50: [function(t, e, n) {
-          t("../../modules/es6.string.iterator"), t("../../modules/es6.array.from"), e.localExports = t("../../modules/_core").Array.from
-        }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.array.from": 141,
-          "../../modules/es6.string.iterator": 153
-        }],
-        51: [function(t, e, n) {
-          t("../modules/web.dom.iterable"), t("../modules/es6.string.iterator"), e.localExports = t("../modules/core.get-iterator")
-        }, {
-          "../modules/core.get-iterator": 140,
-          "../modules/es6.string.iterator": 153,
-          "../modules/web.dom.iterable": 163
-        }],
-        52: [function(t, e, n) {
-          t("../modules/es6.object.to-string"), t("../modules/es6.string.iterator"), t("../modules/web.dom.iterable"), t("../modules/es6.map"), t("../modules/es7.map.to-json"), t("../modules/es7.map.of"), t("../modules/es7.map.from"), e.localExports = t("../modules/_core").Map
-        }, {
-          "../modules/_core": 77,
-          "../modules/es6.map": 143,
-          "../modules/es6.object.to-string": 150,
-          "../modules/es6.string.iterator": 153,
-          "../modules/es7.map.from": 155,
-          "../modules/es7.map.of": 156,
-          "../modules/es7.map.to-json": 157,
-          "../modules/web.dom.iterable": 163
+          buffer: 31
         }],
         53: [function(t, e, n) {
+          t("../../modules/es6.string.iterator"), t("../../modules/es6.array.from"), e.localExports = t("../../modules/_core").Array.from
+        }, {
+          "../../modules/_core": 80,
+          "../../modules/es6.array.from": 144,
+          "../../modules/es6.string.iterator": 156
+        }],
+        54: [function(t, e, n) {
+          t("../modules/web.dom.iterable"), t("../modules/es6.string.iterator"), e.localExports = t("../modules/core.get-iterator")
+        }, {
+          "../modules/core.get-iterator": 143,
+          "../modules/es6.string.iterator": 156,
+          "../modules/web.dom.iterable": 166
+        }],
+        55: [function(t, e, n) {
+          t("../modules/es6.object.to-string"), t("../modules/es6.string.iterator"), t("../modules/web.dom.iterable"), t("../modules/es6.map"), t("../modules/es7.map.to-json"), t("../modules/es7.map.of"), t("../modules/es7.map.from"), e.localExports = t("../modules/_core").Map
+        }, {
+          "../modules/_core": 80,
+          "../modules/es6.map": 146,
+          "../modules/es6.object.to-string": 153,
+          "../modules/es6.string.iterator": 156,
+          "../modules/es7.map.from": 158,
+          "../modules/es7.map.of": 159,
+          "../modules/es7.map.to-json": 160,
+          "../modules/web.dom.iterable": 166
+        }],
+        56: [function(t, e, n) {
           t("../../modules/es6.object.create");
           var r = t("../../modules/_core").Object;
           e.localExports = function(t, e) {
             return r.create(t, e)
           }
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.create": 144
+          "../../modules/_core": 80,
+          "../../modules/es6.object.create": 147
         }],
-        54: [function(t, e, n) {
+        57: [function(t, e, n) {
           t("../../modules/es6.object.define-property");
           var r = t("../../modules/_core").Object;
           e.localExports = function(t, e, n) {
             return r.defineProperty(t, e, n)
           }
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.define-property": 145
+          "../../modules/_core": 80,
+          "../../modules/es6.object.define-property": 148
         }],
-        55: [function(t, e, n) {
+        58: [function(t, e, n) {
           t("../../modules/es6.object.freeze"), e.localExports = t("../../modules/_core").Object.freeze
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.freeze": 146
+          "../../modules/_core": 80,
+          "../../modules/es6.object.freeze": 149
         }],
-        56: [function(t, e, n) {
+        59: [function(t, e, n) {
           t("../../modules/es6.object.get-own-property-descriptor");
           var r = t("../../modules/_core").Object;
           e.localExports = function(t, e) {
             return r.getOwnPropertyDescriptor(t, e)
           }
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.get-own-property-descriptor": 147
-        }],
-        57: [function(t, e, n) {
-          t("../../modules/es6.object.keys"), e.localExports = t("../../modules/_core").Object.keys
-        }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.keys": 148
-        }],
-        58: [function(t, e, n) {
-          t("../../modules/es6.object.set-prototype-of"), e.localExports = t("../../modules/_core").Object.setPrototypeOf
-        }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.set-prototype-of": 149
-        }],
-        59: [function(t, e, n) {
-          t("../modules/es6.object.to-string"), t("../modules/es6.string.iterator"), t("../modules/web.dom.iterable"), t("../modules/es6.set"), t("../modules/es7.set.to-json"), t("../modules/es7.set.of"), t("../modules/es7.set.from"), e.localExports = t("../modules/_core").Set
-        }, {
-          "../modules/_core": 77,
-          "../modules/es6.object.to-string": 150,
-          "../modules/es6.set": 151,
-          "../modules/es6.string.iterator": 153,
-          "../modules/es7.set.from": 158,
-          "../modules/es7.set.of": 159,
-          "../modules/es7.set.to-json": 160,
-          "../modules/web.dom.iterable": 163
+          "../../modules/_core": 80,
+          "../../modules/es6.object.get-own-property-descriptor": 150
         }],
         60: [function(t, e, n) {
-          t("../../modules/es6.string.from-code-point"), e.localExports = t("../../modules/_core").String.fromCodePoint
+          t("../../modules/es6.object.keys"), e.localExports = t("../../modules/_core").Object.keys
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.string.from-code-point": 152
+          "../../modules/_core": 80,
+          "../../modules/es6.object.keys": 151
         }],
         61: [function(t, e, n) {
-          t("../../modules/es6.symbol"), t("../../modules/es6.object.to-string"), t("../../modules/es7.symbol.async-iterator"), t("../../modules/es7.symbol.observable"), e.localExports = t("../../modules/_core").Symbol
+          t("../../modules/es6.object.set-prototype-of"), e.localExports = t("../../modules/_core").Object.setPrototypeOf
         }, {
-          "../../modules/_core": 77,
-          "../../modules/es6.object.to-string": 150,
-          "../../modules/es6.symbol": 154,
-          "../../modules/es7.symbol.async-iterator": 161,
-          "../../modules/es7.symbol.observable": 162
+          "../../modules/_core": 80,
+          "../../modules/es6.object.set-prototype-of": 152
         }],
         62: [function(t, e, n) {
-          t("../../modules/es6.string.iterator"), t("../../modules/web.dom.iterable"), e.localExports = t("../../modules/_wks-ext").f("iterator")
+          t("../modules/es6.object.to-string"), t("../modules/es6.string.iterator"), t("../modules/web.dom.iterable"), t("../modules/es6.set"), t("../modules/es7.set.to-json"), t("../modules/es7.set.of"), t("../modules/es7.set.from"), e.localExports = t("../modules/_core").Set
         }, {
-          "../../modules/_wks-ext": 137,
-          "../../modules/es6.string.iterator": 153,
-          "../../modules/web.dom.iterable": 163
+          "../modules/_core": 80,
+          "../modules/es6.object.to-string": 153,
+          "../modules/es6.set": 154,
+          "../modules/es6.string.iterator": 156,
+          "../modules/es7.set.from": 161,
+          "../modules/es7.set.of": 162,
+          "../modules/es7.set.to-json": 163,
+          "../modules/web.dom.iterable": 166
         }],
         63: [function(t, e, n) {
+          t("../../modules/es6.string.from-code-point"), e.localExports = t("../../modules/_core").String.fromCodePoint
+        }, {
+          "../../modules/_core": 80,
+          "../../modules/es6.string.from-code-point": 155
+        }],
+        64: [function(t, e, n) {
+          t("../../modules/es6.symbol"), t("../../modules/es6.object.to-string"), t("../../modules/es7.symbol.async-iterator"), t("../../modules/es7.symbol.observable"), e.localExports = t("../../modules/_core").Symbol
+        }, {
+          "../../modules/_core": 80,
+          "../../modules/es6.object.to-string": 153,
+          "../../modules/es6.symbol": 157,
+          "../../modules/es7.symbol.async-iterator": 164,
+          "../../modules/es7.symbol.observable": 165
+        }],
+        65: [function(t, e, n) {
+          t("../../modules/es6.string.iterator"), t("../../modules/web.dom.iterable"), e.localExports = t("../../modules/_wks-ext").f("iterator")
+        }, {
+          "../../modules/_wks-ext": 140,
+          "../../modules/es6.string.iterator": 156,
+          "../../modules/web.dom.iterable": 166
+        }],
+        66: [function(t, e, n) {
           e.localExports = function(t) {
             if ("function" != typeof t) throw TypeError(t + " is not a function!");
             return t
           }
         }, {}],
-        64: [function(t, e, n) {
+        67: [function(t, e, n) {
           e.localExports = function() {}
         }, {}],
-        65: [function(t, e, n) {
+        68: [function(t, e, n) {
           e.localExports = function(t, e, n, r) {
             if (!(t instanceof e) || void 0 !== r && r in t) throw TypeError(n + ": incorrect invocation!");
             return t
           }
         }, {}],
-        66: [function(t, e, n) {
+        69: [function(t, e, n) {
           var r = t("./_is-object");
           e.localExports = function(t) {
             if (!r(t)) throw TypeError(t + " is not an object!");
             return t
           }
         }, {
-          "./_is-object": 96
+          "./_is-object": 99
         }],
-        67: [function(t, e, n) {
+        70: [function(t, e, n) {
           var r = t("./_for-of");
           e.localExports = function(t, e) {
             var n = [];
             return r(t, !1, n.push, n, e), n
           }
         }, {
-          "./_for-of": 87
+          "./_for-of": 90
         }],
-        68: [function(t, e, n) {
+        71: [function(t, e, n) {
           var r = t("./_to-iobject"),
             i = t("./_to-length"),
             o = t("./_to-absolute-index");
@@ -6001,11 +6263,11 @@ var wijmo;
             }
           }
         }, {
-          "./_to-absolute-index": 128,
-          "./_to-iobject": 130,
-          "./_to-length": 131
+          "./_to-absolute-index": 131,
+          "./_to-iobject": 133,
+          "./_to-length": 134
         }],
-        69: [function(t, e, n) {
+        72: [function(t, e, n) {
           var r = t("./_ctx"),
             i = t("./_iobject"),
             o = t("./_to-object"),
@@ -6037,13 +6299,13 @@ var wijmo;
             }
           }
         }, {
-          "./_array-species-create": 71,
-          "./_ctx": 79,
-          "./_iobject": 93,
-          "./_to-length": 131,
-          "./_to-object": 132
+          "./_array-species-create": 74,
+          "./_ctx": 82,
+          "./_iobject": 96,
+          "./_to-length": 134,
+          "./_to-object": 135
         }],
-        70: [function(t, e, n) {
+        73: [function(t, e, n) {
           var r = t("./_is-object"),
             i = t("./_is-array"),
             o = t("./_wks")("species");
@@ -6052,19 +6314,19 @@ var wijmo;
             return i(t) && ("function" != typeof(e = t.constructor) || e !== Array && !i(e.prototype) || (e = void 0), r(e) && null === (e = e[o]) && (e = void 0)), void 0 === e ? Array : e
           }
         }, {
-          "./_is-array": 95,
-          "./_is-object": 96,
-          "./_wks": 138
+          "./_is-array": 98,
+          "./_is-object": 99,
+          "./_wks": 141
         }],
-        71: [function(t, e, n) {
+        74: [function(t, e, n) {
           var r = t("./_array-species-constructor");
           e.localExports = function(t, e) {
             return new(r(t))(e)
           }
         }, {
-          "./_array-species-constructor": 70
+          "./_array-species-constructor": 73
         }],
-        72: [function(t, e, n) {
+        75: [function(t, e, n) {
           var r = t("./_cof"),
             i = t("./_wks")("toStringTag"),
             o = "Arguments" == r(function() {
@@ -6080,16 +6342,16 @@ var wijmo;
             return void 0 === t ? "Undefined" : null === t ? "Null" : "string" == typeof(n = a(e = Object(t), i)) ? n : o ? r(e) : "Object" == (s = r(e)) && "function" == typeof e.callee ? "Arguments" : s
           }
         }, {
-          "./_cof": 73,
-          "./_wks": 138
+          "./_cof": 76,
+          "./_wks": 141
         }],
-        73: [function(t, e, n) {
+        76: [function(t, e, n) {
           var r = {}.toString;
           e.localExports = function(t) {
             return r.call(t).slice(8, -1)
           }
         }, {}],
-        74: [function(t, e, n) {
+        77: [function(t, e, n) {
           "use strict";
           var r = t("./_object-dp").f,
             i = t("./_object-create"),
@@ -6166,20 +6428,20 @@ var wijmo;
             }
           }
         }, {
-          "./_an-instance": 65,
-          "./_ctx": 79,
-          "./_descriptors": 81,
-          "./_for-of": 87,
-          "./_iter-define": 99,
-          "./_iter-step": 101,
-          "./_meta": 104,
-          "./_object-create": 105,
-          "./_object-dp": 106,
-          "./_redefine-all": 118,
-          "./_set-species": 123,
-          "./_validate-collection": 135
+          "./_an-instance": 68,
+          "./_ctx": 82,
+          "./_descriptors": 84,
+          "./_for-of": 90,
+          "./_iter-define": 102,
+          "./_iter-step": 104,
+          "./_meta": 107,
+          "./_object-create": 108,
+          "./_object-dp": 109,
+          "./_redefine-all": 121,
+          "./_set-species": 126,
+          "./_validate-collection": 138
         }],
-        75: [function(t, e, n) {
+        78: [function(t, e, n) {
           var r = t("./_classof"),
             i = t("./_array-from-iterable");
           e.localExports = function(t) {
@@ -6189,10 +6451,10 @@ var wijmo;
             }
           }
         }, {
-          "./_array-from-iterable": 67,
-          "./_classof": 72
+          "./_array-from-iterable": 70,
+          "./_classof": 75
         }],
-        76: [function(t, e, n) {
+        79: [function(t, e, n) {
           "use strict";
           var r = t("./_global"),
             i = t("./_export"),
@@ -6231,27 +6493,27 @@ var wijmo;
             })) : (b = _.getConstructor(e, t, m, w), u(b.prototype, n), o.NEED = !0), f(b, t), S[t] = b, i(i.G + i.W + i.F, S), v || _.setStrong(b, t, m), b
           }
         }, {
-          "./_an-instance": 65,
-          "./_array-methods": 69,
-          "./_descriptors": 81,
-          "./_export": 85,
-          "./_fails": 86,
-          "./_for-of": 87,
-          "./_global": 88,
-          "./_hide": 90,
-          "./_is-object": 96,
-          "./_meta": 104,
-          "./_object-dp": 106,
-          "./_redefine-all": 118,
-          "./_set-to-string-tag": 124
+          "./_an-instance": 68,
+          "./_array-methods": 72,
+          "./_descriptors": 84,
+          "./_export": 88,
+          "./_fails": 89,
+          "./_for-of": 90,
+          "./_global": 91,
+          "./_hide": 93,
+          "./_is-object": 99,
+          "./_meta": 107,
+          "./_object-dp": 109,
+          "./_redefine-all": 121,
+          "./_set-to-string-tag": 127
         }],
-        77: [function(t, e, n) {
+        80: [function(t, e, n) {
           var r, i = e.localExports = {
-            version: "2.5.5"
+            version: "2.5.7"
           };
           "number" == typeof r && (r = i)
         }, {}],
-        78: [function(t, e, n) {
+        81: [function(t, e, n) {
           "use strict";
           var r = t("./_object-dp"),
             i = t("./_property-desc");
@@ -6259,10 +6521,10 @@ var wijmo;
             e in t ? r.f(t, e, i(0, n)) : t[e] = n
           }
         }, {
-          "./_object-dp": 106,
-          "./_property-desc": 117
+          "./_object-dp": 109,
+          "./_property-desc": 120
         }],
-        79: [function(t, e, n) {
+        82: [function(t, e, n) {
           var r = t("./_a-function");
           e.localExports = function(t, e, n) {
             if (r(t), void 0 === e) return t;
@@ -6285,15 +6547,15 @@ var wijmo;
             }
           }
         }, {
-          "./_a-function": 63
+          "./_a-function": 66
         }],
-        80: [function(t, e, n) {
+        83: [function(t, e, n) {
           e.localExports = function(t) {
             if (void 0 == t) throw TypeError("Can't call method on  " + t);
             return t
           }
         }, {}],
-        81: [function(t, e, n) {
+        84: [function(t, e, n) {
           e.localExports = !t("./_fails")(function() {
             return 7 != Object.defineProperty({}, "a", {
               get: function() {
@@ -6302,9 +6564,9 @@ var wijmo;
             }).a
           })
         }, {
-          "./_fails": 86
+          "./_fails": 89
         }],
-        82: [function(t, e, n) {
+        85: [function(t, e, n) {
           var r = t("./_is-object"),
             i = t("./_global").document,
             o = r(i) && r(i.createElement);
@@ -6312,13 +6574,13 @@ var wijmo;
             return o ? i.createElement(t) : {}
           }
         }, {
-          "./_global": 88,
-          "./_is-object": 96
+          "./_global": 91,
+          "./_is-object": 99
         }],
-        83: [function(t, e, n) {
+        86: [function(t, e, n) {
           e.localExports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",")
         }, {}],
-        84: [function(t, e, n) {
+        87: [function(t, e, n) {
           var r = t("./_object-keys"),
             i = t("./_object-gops"),
             o = t("./_object-pie");
@@ -6330,11 +6592,11 @@ var wijmo;
             return e
           }
         }, {
-          "./_object-gops": 111,
-          "./_object-keys": 114,
-          "./_object-pie": 115
+          "./_object-gops": 114,
+          "./_object-keys": 117,
+          "./_object-pie": 118
         }],
-        85: [function(t, e, n) {
+        88: [function(t, e, n) {
           var r = t("./_global"),
             i = t("./_core"),
             o = t("./_ctx"),
@@ -6371,13 +6633,13 @@ var wijmo;
             };
           u.F = 1, u.G = 2, u.S = 4, u.P = 8, u.B = 16, u.W = 32, u.U = 64, u.R = 128, e.localExports = u
         }, {
-          "./_core": 77,
-          "./_ctx": 79,
-          "./_global": 88,
-          "./_has": 89,
-          "./_hide": 90
+          "./_core": 80,
+          "./_ctx": 82,
+          "./_global": 91,
+          "./_has": 92,
+          "./_hide": 93
         }],
-        86: [function(t, e, n) {
+        89: [function(t, e, n) {
           e.localExports = function(t) {
             try {
               return !!t()
@@ -6386,7 +6648,7 @@ var wijmo;
             }
           }
         }, {}],
-        87: [function(t, e, n) {
+        90: [function(t, e, n) {
           var r = t("./_ctx"),
             i = t("./_iter-call"),
             o = t("./_is-array-iter"),
@@ -6410,24 +6672,24 @@ var wijmo;
                 if ((_ = i(g, v, p.value, e)) === c || _ === l) return _
           }).BREAK = c, n.RETURN = l
         }, {
-          "./_an-object": 66,
-          "./_ctx": 79,
-          "./_is-array-iter": 94,
-          "./_iter-call": 97,
-          "./_to-length": 131,
-          "./core.get-iterator-method": 139
+          "./_an-object": 69,
+          "./_ctx": 82,
+          "./_is-array-iter": 97,
+          "./_iter-call": 100,
+          "./_to-length": 134,
+          "./core.get-iterator-method": 142
         }],
-        88: [function(t, e, n) {
+        91: [function(t, e, n) {
           var r, i = e.localExports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();
           "number" == typeof r && (r = i)
         }, {}],
-        89: [function(t, e, n) {
+        92: [function(t, e, n) {
           var r = {}.hasOwnProperty;
           e.localExports = function(t, e) {
             return r.call(t, e)
           }
         }, {}],
-        90: [function(t, e, n) {
+        93: [function(t, e, n) {
           var r = t("./_object-dp"),
             i = t("./_property-desc");
           e.localExports = t("./_descriptors") ? function(t, e, n) {
@@ -6436,17 +6698,17 @@ var wijmo;
             return t[e] = n, t
           }
         }, {
-          "./_descriptors": 81,
-          "./_object-dp": 106,
-          "./_property-desc": 117
+          "./_descriptors": 84,
+          "./_object-dp": 109,
+          "./_property-desc": 120
         }],
-        91: [function(t, e, n) {
+        94: [function(t, e, n) {
           var r = t("./_global").document;
           e.localExports = r && r.documentElement
         }, {
-          "./_global": 88
+          "./_global": 91
         }],
-        92: [function(t, e, n) {
+        95: [function(t, e, n) {
           e.localExports = !t("./_descriptors") && !t("./_fails")(function() {
             return 7 != Object.defineProperty(t("./_dom-create")("div"), "a", {
               get: function() {
@@ -6455,19 +6717,19 @@ var wijmo;
             }).a
           })
         }, {
-          "./_descriptors": 81,
-          "./_dom-create": 82,
-          "./_fails": 86
+          "./_descriptors": 84,
+          "./_dom-create": 85,
+          "./_fails": 89
         }],
-        93: [function(t, e, n) {
+        96: [function(t, e, n) {
           var r = t("./_cof");
           e.localExports = Object("z").propertyIsEnumerable(0) ? Object : function(t) {
             return "String" == r(t) ? t.split("") : Object(t)
           }
         }, {
-          "./_cof": 73
+          "./_cof": 76
         }],
-        94: [function(t, e, n) {
+        97: [function(t, e, n) {
           var r = t("./_iterators"),
             i = t("./_wks")("iterator"),
             o = Array.prototype;
@@ -6475,23 +6737,23 @@ var wijmo;
             return void 0 !== t && (r.Array === t || o[i] === t)
           }
         }, {
-          "./_iterators": 102,
-          "./_wks": 138
+          "./_iterators": 105,
+          "./_wks": 141
         }],
-        95: [function(t, e, n) {
+        98: [function(t, e, n) {
           var r = t("./_cof");
           e.localExports = Array.isArray || function(t) {
             return "Array" == r(t)
           }
         }, {
-          "./_cof": 73
+          "./_cof": 76
         }],
-        96: [function(t, e, n) {
+        99: [function(t, e, n) {
           e.localExports = function(t) {
             return "object" == typeof t ? null !== t : "function" == typeof t
           }
         }, {}],
-        97: [function(t, e, n) {
+        100: [function(t, e, n) {
           var r = t("./_an-object");
           e.localExports = function(t, e, n, i) {
             try {
@@ -6502,9 +6764,9 @@ var wijmo;
             }
           }
         }, {
-          "./_an-object": 66
+          "./_an-object": 69
         }],
-        98: [function(t, e, n) {
+        101: [function(t, e, n) {
           "use strict";
           var r = t("./_object-create"),
             i = t("./_property-desc"),
@@ -6518,13 +6780,13 @@ var wijmo;
             }), o(t, e + " Iterator")
           }
         }, {
-          "./_hide": 90,
-          "./_object-create": 105,
-          "./_property-desc": 117,
-          "./_set-to-string-tag": 124,
-          "./_wks": 138
+          "./_hide": 93,
+          "./_object-create": 108,
+          "./_property-desc": 120,
+          "./_set-to-string-tag": 127,
+          "./_wks": 141
         }],
-        99: [function(t, e, n) {
+        102: [function(t, e, n) {
           "use strict";
           var r = t("./_library"),
             i = t("./_export"),
@@ -6575,17 +6837,17 @@ var wijmo;
             return v
           }
         }, {
-          "./_export": 85,
-          "./_hide": 90,
-          "./_iter-create": 98,
-          "./_iterators": 102,
-          "./_library": 103,
-          "./_object-gpo": 112,
-          "./_redefine": 119,
-          "./_set-to-string-tag": 124,
-          "./_wks": 138
+          "./_export": 88,
+          "./_hide": 93,
+          "./_iter-create": 101,
+          "./_iterators": 105,
+          "./_library": 106,
+          "./_object-gpo": 115,
+          "./_redefine": 122,
+          "./_set-to-string-tag": 127,
+          "./_wks": 141
         }],
-        100: [function(t, e, n) {
+        103: [function(t, e, n) {
           var r = t("./_wks")("iterator"),
             i = !1;
           try {
@@ -6613,9 +6875,9 @@ var wijmo;
             return n
           }
         }, {
-          "./_wks": 138
+          "./_wks": 141
         }],
-        101: [function(t, e, n) {
+        104: [function(t, e, n) {
           e.localExports = function(t, e) {
             return {
               value: e,
@@ -6623,13 +6885,13 @@ var wijmo;
             }
           }
         }, {}],
-        102: [function(t, e, n) {
+        105: [function(t, e, n) {
           e.localExports = {}
         }, {}],
-        103: [function(t, e, n) {
+        106: [function(t, e, n) {
           e.localExports = !0
         }, {}],
-        104: [function(t, e, n) {
+        107: [function(t, e, n) {
           var r = t("./_uid")("meta"),
             i = t("./_is-object"),
             o = t("./_has"),
@@ -6674,13 +6936,13 @@ var wijmo;
               }
             }
         }, {
-          "./_fails": 86,
-          "./_has": 89,
-          "./_is-object": 96,
-          "./_object-dp": 106,
-          "./_uid": 134
+          "./_fails": 89,
+          "./_has": 92,
+          "./_is-object": 99,
+          "./_object-dp": 109,
+          "./_uid": 137
         }],
-        105: [function(t, e, n) {
+        108: [function(t, e, n) {
           var r = t("./_an-object"),
             i = t("./_object-dps"),
             o = t("./_enum-bug-keys"),
@@ -6697,14 +6959,14 @@ var wijmo;
             return null !== t ? (s.prototype = r(t), n = new s, s.prototype = null, n[a] = t) : n = u(), void 0 === e ? n : i(n, e)
           }
         }, {
-          "./_an-object": 66,
-          "./_dom-create": 82,
-          "./_enum-bug-keys": 83,
-          "./_html": 91,
-          "./_object-dps": 107,
-          "./_shared-key": 125
+          "./_an-object": 69,
+          "./_dom-create": 85,
+          "./_enum-bug-keys": 86,
+          "./_html": 94,
+          "./_object-dps": 110,
+          "./_shared-key": 128
         }],
-        106: [function(t, e, n) {
+        109: [function(t, e, n) {
           var r = t("./_an-object"),
             i = t("./_ie8-dom-define"),
             o = t("./_to-primitive"),
@@ -6717,12 +6979,12 @@ var wijmo;
             return "value" in n && (t[e] = n.value), t
           }
         }, {
-          "./_an-object": 66,
-          "./_descriptors": 81,
-          "./_ie8-dom-define": 92,
-          "./_to-primitive": 133
+          "./_an-object": 69,
+          "./_descriptors": 84,
+          "./_ie8-dom-define": 95,
+          "./_to-primitive": 136
         }],
-        107: [function(t, e, n) {
+        110: [function(t, e, n) {
           var r = t("./_object-dp"),
             i = t("./_an-object"),
             o = t("./_object-keys");
@@ -6732,12 +6994,12 @@ var wijmo;
             return t
           }
         }, {
-          "./_an-object": 66,
-          "./_descriptors": 81,
-          "./_object-dp": 106,
-          "./_object-keys": 114
+          "./_an-object": 69,
+          "./_descriptors": 84,
+          "./_object-dp": 109,
+          "./_object-keys": 117
         }],
-        108: [function(t, e, n) {
+        111: [function(t, e, n) {
           var r = t("./_object-pie"),
             i = t("./_property-desc"),
             o = t("./_to-iobject"),
@@ -6752,15 +7014,15 @@ var wijmo;
             if (s(t, e)) return i(!r.f.call(t, e), t[e])
           }
         }, {
-          "./_descriptors": 81,
-          "./_has": 89,
-          "./_ie8-dom-define": 92,
-          "./_object-pie": 115,
-          "./_property-desc": 117,
-          "./_to-iobject": 130,
-          "./_to-primitive": 133
+          "./_descriptors": 84,
+          "./_has": 92,
+          "./_ie8-dom-define": 95,
+          "./_object-pie": 118,
+          "./_property-desc": 120,
+          "./_to-iobject": 133,
+          "./_to-primitive": 136
         }],
-        109: [function(t, e, n) {
+        112: [function(t, e, n) {
           var r = t("./_to-iobject"),
             i = t("./_object-gopn").f,
             o = {}.toString,
@@ -6776,23 +7038,23 @@ var wijmo;
             return a && "[object Window]" == o.call(t) ? s(t) : i(r(t))
           }
         }, {
-          "./_object-gopn": 110,
-          "./_to-iobject": 130
+          "./_object-gopn": 113,
+          "./_to-iobject": 133
         }],
-        110: [function(t, e, n) {
+        113: [function(t, e, n) {
           var r = t("./_object-keys-internal"),
             i = t("./_enum-bug-keys").concat("length", "prototype");
           n.f = Object.getOwnPropertyNames || function(t) {
             return r(t, i)
           }
         }, {
-          "./_enum-bug-keys": 83,
-          "./_object-keys-internal": 113
+          "./_enum-bug-keys": 86,
+          "./_object-keys-internal": 116
         }],
-        111: [function(t, e, n) {
+        114: [function(t, e, n) {
           n.f = Object.getOwnPropertySymbols
         }, {}],
-        112: [function(t, e, n) {
+        115: [function(t, e, n) {
           var r = t("./_has"),
             i = t("./_to-object"),
             o = t("./_shared-key")("IE_PROTO"),
@@ -6801,11 +7063,11 @@ var wijmo;
             return t = i(t), r(t, o) ? t[o] : "function" == typeof t.constructor && t instanceof t.constructor ? t.constructor.prototype : t instanceof Object ? a : null
           }
         }, {
-          "./_has": 89,
-          "./_shared-key": 125,
-          "./_to-object": 132
+          "./_has": 92,
+          "./_shared-key": 128,
+          "./_to-object": 135
         }],
-        113: [function(t, e, n) {
+        116: [function(t, e, n) {
           var r = t("./_has"),
             i = t("./_to-iobject"),
             o = t("./_array-includes")(!1),
@@ -6819,25 +7081,25 @@ var wijmo;
             return c
           }
         }, {
-          "./_array-includes": 68,
-          "./_has": 89,
-          "./_shared-key": 125,
-          "./_to-iobject": 130
+          "./_array-includes": 71,
+          "./_has": 92,
+          "./_shared-key": 128,
+          "./_to-iobject": 133
         }],
-        114: [function(t, e, n) {
+        117: [function(t, e, n) {
           var r = t("./_object-keys-internal"),
             i = t("./_enum-bug-keys");
           e.localExports = Object.keys || function(t) {
             return r(t, i)
           }
         }, {
-          "./_enum-bug-keys": 83,
-          "./_object-keys-internal": 113
+          "./_enum-bug-keys": 86,
+          "./_object-keys-internal": 116
         }],
-        115: [function(t, e, n) {
+        118: [function(t, e, n) {
           n.f = {}.propertyIsEnumerable
         }, {}],
-        116: [function(t, e, n) {
+        119: [function(t, e, n) {
           var r = t("./_export"),
             i = t("./_core"),
             o = t("./_fails");
@@ -6849,11 +7111,11 @@ var wijmo;
             }), "Object", a)
           }
         }, {
-          "./_core": 77,
-          "./_export": 85,
-          "./_fails": 86
+          "./_core": 80,
+          "./_export": 88,
+          "./_fails": 89
         }],
-        117: [function(t, e, n) {
+        120: [function(t, e, n) {
           e.localExports = function(t, e) {
             return {
               enumerable: !(1 & t),
@@ -6863,21 +7125,21 @@ var wijmo;
             }
           }
         }, {}],
-        118: [function(t, e, n) {
+        121: [function(t, e, n) {
           var r = t("./_hide");
           e.localExports = function(t, e, n) {
             for (var i in e) n && t[i] ? t[i] = e[i] : r(t, i, e[i]);
             return t
           }
         }, {
-          "./_hide": 90
+          "./_hide": 93
         }],
-        119: [function(t, e, n) {
+        122: [function(t, e, n) {
           e.localExports = t("./_hide")
         }, {
-          "./_hide": 90
+          "./_hide": 93
         }],
-        120: [function(t, e, n) {
+        123: [function(t, e, n) {
           "use strict";
           var r = t("./_export"),
             i = t("./_a-function"),
@@ -6894,12 +7156,12 @@ var wijmo;
             })
           }
         }, {
-          "./_a-function": 63,
-          "./_ctx": 79,
-          "./_export": 85,
-          "./_for-of": 87
+          "./_a-function": 66,
+          "./_ctx": 82,
+          "./_export": 88,
+          "./_for-of": 90
         }],
-        121: [function(t, e, n) {
+        124: [function(t, e, n) {
           "use strict";
           var r = t("./_export");
           e.localExports = function(t) {
@@ -6911,9 +7173,9 @@ var wijmo;
             })
           }
         }, {
-          "./_export": 85
+          "./_export": 88
         }],
-        122: [function(t, e, n) {
+        125: [function(t, e, n) {
           var r = t("./_is-object"),
             i = t("./_an-object"),
             o = function(t, e) {
@@ -6933,12 +7195,12 @@ var wijmo;
             check: o
           }
         }, {
-          "./_an-object": 66,
-          "./_ctx": 79,
-          "./_is-object": 96,
-          "./_object-gopd": 108
+          "./_an-object": 69,
+          "./_ctx": 82,
+          "./_is-object": 99,
+          "./_object-gopd": 111
         }],
-        123: [function(t, e, n) {
+        126: [function(t, e, n) {
           "use strict";
           var r = t("./_global"),
             i = t("./_core"),
@@ -6955,13 +7217,13 @@ var wijmo;
             })
           }
         }, {
-          "./_core": 77,
-          "./_descriptors": 81,
-          "./_global": 88,
-          "./_object-dp": 106,
-          "./_wks": 138
+          "./_core": 80,
+          "./_descriptors": 84,
+          "./_global": 91,
+          "./_object-dp": 109,
+          "./_wks": 141
         }],
-        124: [function(t, e, n) {
+        127: [function(t, e, n) {
           var r = t("./_object-dp").f,
             i = t("./_has"),
             o = t("./_wks")("toStringTag");
@@ -6972,30 +7234,37 @@ var wijmo;
             })
           }
         }, {
-          "./_has": 89,
-          "./_object-dp": 106,
-          "./_wks": 138
+          "./_has": 92,
+          "./_object-dp": 109,
+          "./_wks": 141
         }],
-        125: [function(t, e, n) {
+        128: [function(t, e, n) {
           var r = t("./_shared")("keys"),
             i = t("./_uid");
           e.localExports = function(t) {
             return r[t] || (r[t] = i(t))
           }
         }, {
-          "./_shared": 126,
-          "./_uid": 134
+          "./_shared": 129,
+          "./_uid": 137
         }],
-        126: [function(t, e, n) {
-          var r = t("./_global"),
-            i = r["__core-js_shared__"] || (r["__core-js_shared__"] = {});
-          e.localExports = function(t) {
-            return i[t] || (i[t] = {})
-          }
+        129: [function(t, e, n) {
+          var r = t("./_core"),
+            i = t("./_global"),
+            o = i["__core-js_shared__"] || (i["__core-js_shared__"] = {});
+          (e.localExports = function(t, e) {
+            return o[t] || (o[t] = void 0 !== e ? e : {})
+          })("versions", []).push({
+            version: r.version,
+            mode: t("./_library") ? "pure" : "global",
+            copyright: "© 2018 Denis Pushkarev (zloirock.ru)"
+          })
         }, {
-          "./_global": 88
+          "./_core": 80,
+          "./_global": 91,
+          "./_library": 106
         }],
-        127: [function(t, e, n) {
+        130: [function(t, e, n) {
           var r = t("./_to-integer"),
             i = t("./_defined");
           e.localExports = function(t) {
@@ -7007,10 +7276,10 @@ var wijmo;
             }
           }
         }, {
-          "./_defined": 80,
-          "./_to-integer": 129
+          "./_defined": 83,
+          "./_to-integer": 132
         }],
-        128: [function(t, e, n) {
+        131: [function(t, e, n) {
           var r = t("./_to-integer"),
             i = Math.max,
             o = Math.min;
@@ -7018,43 +7287,43 @@ var wijmo;
             return (t = r(t)) < 0 ? i(t + e, 0) : o(t, e)
           }
         }, {
-          "./_to-integer": 129
+          "./_to-integer": 132
         }],
-        129: [function(t, e, n) {
+        132: [function(t, e, n) {
           var r = Math.ceil,
             i = Math.floor;
           e.localExports = function(t) {
             return isNaN(t = +t) ? 0 : (t > 0 ? i : r)(t)
           }
         }, {}],
-        130: [function(t, e, n) {
+        133: [function(t, e, n) {
           var r = t("./_iobject"),
             i = t("./_defined");
           e.localExports = function(t) {
             return r(i(t))
           }
         }, {
-          "./_defined": 80,
-          "./_iobject": 93
+          "./_defined": 83,
+          "./_iobject": 96
         }],
-        131: [function(t, e, n) {
+        134: [function(t, e, n) {
           var r = t("./_to-integer"),
             i = Math.min;
           e.localExports = function(t) {
             return t > 0 ? i(r(t), 9007199254740991) : 0
           }
         }, {
-          "./_to-integer": 129
+          "./_to-integer": 132
         }],
-        132: [function(t, e, n) {
+        135: [function(t, e, n) {
           var r = t("./_defined");
           e.localExports = function(t) {
             return Object(r(t))
           }
         }, {
-          "./_defined": 80
+          "./_defined": 83
         }],
-        133: [function(t, e, n) {
+        136: [function(t, e, n) {
           var r = t("./_is-object");
           e.localExports = function(t, e) {
             if (!r(t)) return t;
@@ -7065,25 +7334,25 @@ var wijmo;
             throw TypeError("Can't convert object to primitive value")
           }
         }, {
-          "./_is-object": 96
+          "./_is-object": 99
         }],
-        134: [function(t, e, n) {
+        137: [function(t, e, n) {
           var r = 0,
             i = Math.random();
           e.localExports = function(t) {
             return "Symbol(".concat(void 0 === t ? "" : t, ")_", (++r + i).toString(36))
           }
         }, {}],
-        135: [function(t, e, n) {
+        138: [function(t, e, n) {
           var r = t("./_is-object");
           e.localExports = function(t, e) {
             if (!r(t) || t._t !== e) throw TypeError("Incompatible receiver, " + e + " required!");
             return t
           }
         }, {
-          "./_is-object": 96
+          "./_is-object": 99
         }],
-        136: [function(t, e, n) {
+        139: [function(t, e, n) {
           var r = t("./_global"),
             i = t("./_core"),
             o = t("./_library"),
@@ -7096,18 +7365,18 @@ var wijmo;
             })
           }
         }, {
-          "./_core": 77,
-          "./_global": 88,
-          "./_library": 103,
-          "./_object-dp": 106,
-          "./_wks-ext": 137
+          "./_core": 80,
+          "./_global": 91,
+          "./_library": 106,
+          "./_object-dp": 109,
+          "./_wks-ext": 140
         }],
-        137: [function(t, e, n) {
+        140: [function(t, e, n) {
           n.f = t("./_wks")
         }, {
-          "./_wks": 138
+          "./_wks": 141
         }],
-        138: [function(t, e, n) {
+        141: [function(t, e, n) {
           var r = t("./_shared")("wks"),
             i = t("./_uid"),
             o = t("./_global").Symbol,
@@ -7116,11 +7385,11 @@ var wijmo;
             return r[t] || (r[t] = a && o[t] || (a ? o : i)("Symbol." + t))
           }).store = r
         }, {
-          "./_global": 88,
-          "./_shared": 126,
-          "./_uid": 134
+          "./_global": 91,
+          "./_shared": 129,
+          "./_uid": 137
         }],
-        139: [function(t, e, n) {
+        142: [function(t, e, n) {
           var r = t("./_classof"),
             i = t("./_wks")("iterator"),
             o = t("./_iterators");
@@ -7128,12 +7397,12 @@ var wijmo;
             if (void 0 != t) return t[i] || t["@@iterator"] || o[r(t)]
           }
         }, {
-          "./_classof": 72,
-          "./_core": 77,
-          "./_iterators": 102,
-          "./_wks": 138
+          "./_classof": 75,
+          "./_core": 80,
+          "./_iterators": 105,
+          "./_wks": 141
         }],
-        140: [function(t, e, n) {
+        143: [function(t, e, n) {
           var r = t("./_an-object"),
             i = t("./core.get-iterator-method");
           e.localExports = t("./_core").getIterator = function(t) {
@@ -7142,11 +7411,11 @@ var wijmo;
             return r(e.call(t))
           }
         }, {
-          "./_an-object": 66,
-          "./_core": 77,
-          "./core.get-iterator-method": 139
+          "./_an-object": 69,
+          "./_core": 80,
+          "./core.get-iterator-method": 142
         }],
-        141: [function(t, e, n) {
+        144: [function(t, e, n) {
           "use strict";
           var r = t("./_ctx"),
             i = t("./_export"),
@@ -7175,17 +7444,17 @@ var wijmo;
             }
           })
         }, {
-          "./_create-property": 78,
-          "./_ctx": 79,
-          "./_export": 85,
-          "./_is-array-iter": 94,
-          "./_iter-call": 97,
-          "./_iter-detect": 100,
-          "./_to-length": 131,
-          "./_to-object": 132,
-          "./core.get-iterator-method": 139
+          "./_create-property": 81,
+          "./_ctx": 82,
+          "./_export": 88,
+          "./_is-array-iter": 97,
+          "./_iter-call": 100,
+          "./_iter-detect": 103,
+          "./_to-length": 134,
+          "./_to-object": 135,
+          "./core.get-iterator-method": 142
         }],
-        142: [function(t, e, n) {
+        145: [function(t, e, n) {
           "use strict";
           var r = t("./_add-to-unscopables"),
             i = t("./_iter-step"),
@@ -7200,13 +7469,13 @@ var wijmo;
             return !t || n >= t.length ? (this._t = void 0, i(1)) : "keys" == e ? i(0, n) : "values" == e ? i(0, t[n]) : i(0, [n, t[n]])
           }, "values"), o.Arguments = o.Array, r("keys"), r("values"), r("entries")
         }, {
-          "./_add-to-unscopables": 64,
-          "./_iter-define": 99,
-          "./_iter-step": 101,
-          "./_iterators": 102,
-          "./_to-iobject": 130
+          "./_add-to-unscopables": 67,
+          "./_iter-define": 102,
+          "./_iter-step": 104,
+          "./_iterators": 105,
+          "./_to-iobject": 133
         }],
-        143: [function(t, e, n) {
+        146: [function(t, e, n) {
           "use strict";
           var r = t("./_collection-strong"),
             i = t("./_validate-collection");
@@ -7224,30 +7493,30 @@ var wijmo;
             }
           }, r, !0)
         }, {
-          "./_collection": 76,
-          "./_collection-strong": 74,
-          "./_validate-collection": 135
+          "./_collection": 79,
+          "./_collection-strong": 77,
+          "./_validate-collection": 138
         }],
-        144: [function(t, e, n) {
+        147: [function(t, e, n) {
           var r = t("./_export");
           r(r.S, "Object", {
             create: t("./_object-create")
           })
         }, {
-          "./_export": 85,
-          "./_object-create": 105
+          "./_export": 88,
+          "./_object-create": 108
         }],
-        145: [function(t, e, n) {
+        148: [function(t, e, n) {
           var r = t("./_export");
           r(r.S + r.F * !t("./_descriptors"), "Object", {
             defineProperty: t("./_object-dp").f
           })
         }, {
-          "./_descriptors": 81,
-          "./_export": 85,
-          "./_object-dp": 106
+          "./_descriptors": 84,
+          "./_export": 88,
+          "./_object-dp": 109
         }],
-        146: [function(t, e, n) {
+        149: [function(t, e, n) {
           var r = t("./_is-object"),
             i = t("./_meta").onFreeze;
           t("./_object-sap")("freeze", function(t) {
@@ -7256,11 +7525,11 @@ var wijmo;
             }
           })
         }, {
-          "./_is-object": 96,
-          "./_meta": 104,
-          "./_object-sap": 116
+          "./_is-object": 99,
+          "./_meta": 107,
+          "./_object-sap": 119
         }],
-        147: [function(t, e, n) {
+        150: [function(t, e, n) {
           var r = t("./_to-iobject"),
             i = t("./_object-gopd").f;
           t("./_object-sap")("getOwnPropertyDescriptor", function() {
@@ -7269,11 +7538,11 @@ var wijmo;
             }
           })
         }, {
-          "./_object-gopd": 108,
-          "./_object-sap": 116,
-          "./_to-iobject": 130
+          "./_object-gopd": 111,
+          "./_object-sap": 119,
+          "./_to-iobject": 133
         }],
-        148: [function(t, e, n) {
+        151: [function(t, e, n) {
           var r = t("./_to-object"),
             i = t("./_object-keys");
           t("./_object-sap")("keys", function() {
@@ -7282,23 +7551,23 @@ var wijmo;
             }
           })
         }, {
-          "./_object-keys": 114,
-          "./_object-sap": 116,
-          "./_to-object": 132
+          "./_object-keys": 117,
+          "./_object-sap": 119,
+          "./_to-object": 135
         }],
-        149: [function(t, e, n) {
+        152: [function(t, e, n) {
           var r = t("./_export");
           r(r.S, "Object", {
             setPrototypeOf: t("./_set-proto").set
           })
         }, {
-          "./_export": 85,
-          "./_set-proto": 122
+          "./_export": 88,
+          "./_set-proto": 125
         }],
-        150: [function(t, e, n) {
-          e.localExports = t(26)
+        153: [function(t, e, n) {
+          e.localExports = t(29)
         }, {}],
-        151: [function(t, e, n) {
+        154: [function(t, e, n) {
           "use strict";
           var r = t("./_collection-strong"),
             i = t("./_validate-collection");
@@ -7312,11 +7581,11 @@ var wijmo;
             }
           }, r)
         }, {
-          "./_collection": 76,
-          "./_collection-strong": 74,
-          "./_validate-collection": 135
+          "./_collection": 79,
+          "./_collection-strong": 77,
+          "./_validate-collection": 138
         }],
-        152: [function(t, e, n) {
+        155: [function(t, e, n) {
           var r = t("./_export"),
             i = t("./_to-absolute-index"),
             o = String.fromCharCode,
@@ -7331,10 +7600,10 @@ var wijmo;
             }
           })
         }, {
-          "./_export": 85,
-          "./_to-absolute-index": 128
+          "./_export": 88,
+          "./_to-absolute-index": 131
         }],
-        153: [function(t, e, n) {
+        156: [function(t, e, n) {
           "use strict";
           var r = t("./_string-at")(!0);
           t("./_iter-define")(String, "String", function(t) {
@@ -7351,10 +7620,10 @@ var wijmo;
             })
           })
         }, {
-          "./_iter-define": 99,
-          "./_string-at": 127
+          "./_iter-define": 102,
+          "./_string-at": 130
         }],
-        154: [function(t, e, n) {
+        157: [function(t, e, n) {
           "use strict";
           var r = t("./_global"),
             i = t("./_has"),
@@ -7503,86 +7772,86 @@ var wijmo;
             }
           }), L.prototype[N] || t("./_hide")(L.prototype, N, L.prototype.valueOf), h(L, "Symbol"), h(Math, "Math", !0), h(r.JSON, "JSON", !0)
         }, {
-          "./_an-object": 66,
-          "./_descriptors": 81,
-          "./_enum-keys": 84,
-          "./_export": 85,
-          "./_fails": 86,
-          "./_global": 88,
-          "./_has": 89,
-          "./_hide": 90,
-          "./_is-array": 95,
-          "./_is-object": 96,
-          "./_library": 103,
-          "./_meta": 104,
-          "./_object-create": 105,
-          "./_object-dp": 106,
-          "./_object-gopd": 108,
-          "./_object-gopn": 110,
-          "./_object-gopn-ext": 109,
-          "./_object-gops": 111,
-          "./_object-keys": 114,
-          "./_object-pie": 115,
-          "./_property-desc": 117,
-          "./_redefine": 119,
-          "./_set-to-string-tag": 124,
-          "./_shared": 126,
-          "./_to-iobject": 130,
-          "./_to-primitive": 133,
-          "./_uid": 134,
-          "./_wks": 138,
-          "./_wks-define": 136,
-          "./_wks-ext": 137
+          "./_an-object": 69,
+          "./_descriptors": 84,
+          "./_enum-keys": 87,
+          "./_export": 88,
+          "./_fails": 89,
+          "./_global": 91,
+          "./_has": 92,
+          "./_hide": 93,
+          "./_is-array": 98,
+          "./_is-object": 99,
+          "./_library": 106,
+          "./_meta": 107,
+          "./_object-create": 108,
+          "./_object-dp": 109,
+          "./_object-gopd": 111,
+          "./_object-gopn": 113,
+          "./_object-gopn-ext": 112,
+          "./_object-gops": 114,
+          "./_object-keys": 117,
+          "./_object-pie": 118,
+          "./_property-desc": 120,
+          "./_redefine": 122,
+          "./_set-to-string-tag": 127,
+          "./_shared": 129,
+          "./_to-iobject": 133,
+          "./_to-primitive": 136,
+          "./_uid": 137,
+          "./_wks": 141,
+          "./_wks-define": 139,
+          "./_wks-ext": 140
         }],
-        155: [function(t, e, n) {
+        158: [function(t, e, n) {
           t("./_set-collection-from")("Map")
         }, {
-          "./_set-collection-from": 120
+          "./_set-collection-from": 123
         }],
-        156: [function(t, e, n) {
+        159: [function(t, e, n) {
           t("./_set-collection-of")("Map")
         }, {
-          "./_set-collection-of": 121
+          "./_set-collection-of": 124
         }],
-        157: [function(t, e, n) {
+        160: [function(t, e, n) {
           var r = t("./_export");
           r(r.P + r.R, "Map", {
             toJSON: t("./_collection-to-json")("Map")
           })
         }, {
-          "./_collection-to-json": 75,
-          "./_export": 85
+          "./_collection-to-json": 78,
+          "./_export": 88
         }],
-        158: [function(t, e, n) {
+        161: [function(t, e, n) {
           t("./_set-collection-from")("Set")
         }, {
-          "./_set-collection-from": 120
+          "./_set-collection-from": 123
         }],
-        159: [function(t, e, n) {
+        162: [function(t, e, n) {
           t("./_set-collection-of")("Set")
         }, {
-          "./_set-collection-of": 121
+          "./_set-collection-of": 124
         }],
-        160: [function(t, e, n) {
+        163: [function(t, e, n) {
           var r = t("./_export");
           r(r.P + r.R, "Set", {
             toJSON: t("./_collection-to-json")("Set")
           })
         }, {
-          "./_collection-to-json": 75,
-          "./_export": 85
+          "./_collection-to-json": 78,
+          "./_export": 88
         }],
-        161: [function(t, e, n) {
+        164: [function(t, e, n) {
           t("./_wks-define")("asyncIterator")
         }, {
-          "./_wks-define": 136
+          "./_wks-define": 139
         }],
-        162: [function(t, e, n) {
+        165: [function(t, e, n) {
           t("./_wks-define")("observable")
         }, {
-          "./_wks-define": 136
+          "./_wks-define": 139
         }],
-        163: [function(t, e, n) {
+        166: [function(t, e, n) {
           t("./es6.array.iterator");
           for (var r = t("./_global"), i = t("./_hide"), o = t("./_iterators"), a = t("./_wks")("toStringTag"), s = "CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,TextTrackList,TouchList".split(","), u = 0; u < s.length; u++) {
             var c = s[u],
@@ -7591,13 +7860,13 @@ var wijmo;
             h && !h[a] && i(h, a, c), o[c] = o.Array
           }
         }, {
-          "./_global": 88,
-          "./_hide": 90,
-          "./_iterators": 102,
-          "./_wks": 138,
-          "./es6.array.iterator": 142
+          "./_global": 91,
+          "./_hide": 93,
+          "./_iterators": 105,
+          "./_wks": 141,
+          "./es6.array.iterator": 145
         }],
-        164: [function(t, e, n) {
+        167: [function(t, e, n) {
           (function() {
             var e, r, i, o;
             n.EncodeStream = t("./src/EncodeStream"), n.DecodeStream = t("./src/DecodeStream"), n.Array = t("./src/Array"), n.LazyArray = t("./src/LazyArray"), n.Bitfield = t("./src/Bitfield"), n.Boolean = t("./src/Boolean"), n.Buffer = t("./src/Buffer"), n.Enum = t("./src/Enum"), n.Optional = t("./src/Optional"), n.Reserved = t("./src/Reserved"), n.String = t("./src/String"), n.Struct = t("./src/Struct"), n.VersionedStruct = t("./src/VersionedStruct"), i = t("./src/Number");
@@ -7606,23 +7875,23 @@ var wijmo;
             for (e in o) r = o[e], n[e] = r
           }).call(this)
         }, {
-          "./src/Array": 165,
-          "./src/Bitfield": 166,
-          "./src/Boolean": 167,
-          "./src/Buffer": 168,
-          "./src/DecodeStream": 169,
-          "./src/EncodeStream": 170,
-          "./src/Enum": 171,
-          "./src/LazyArray": 172,
-          "./src/Number": 173,
-          "./src/Optional": 174,
-          "./src/Pointer": 175,
-          "./src/Reserved": 176,
-          "./src/String": 177,
-          "./src/Struct": 178,
-          "./src/VersionedStruct": 179
+          "./src/Array": 168,
+          "./src/Bitfield": 169,
+          "./src/Boolean": 170,
+          "./src/Buffer": 171,
+          "./src/DecodeStream": 172,
+          "./src/EncodeStream": 173,
+          "./src/Enum": 174,
+          "./src/LazyArray": 175,
+          "./src/Number": 176,
+          "./src/Optional": 177,
+          "./src/Pointer": 178,
+          "./src/Reserved": 179,
+          "./src/String": 180,
+          "./src/Struct": 181,
+          "./src/VersionedStruct": 182
         }],
-        165: [function(t, e, n) {
+        168: [function(t, e, n) {
           (function() {
             var n, r, i;
             r = t("./Number").Number, i = t("./utils"), n = function() {
@@ -7670,10 +7939,10 @@ var wijmo;
             }(), e.localExports = n
           }).call(this)
         }, {
-          "./Number": 173,
-          "./utils": 180
+          "./Number": 176,
+          "./utils": 183
         }],
-        166: [function(t, e, n) {
+        169: [function(t, e, n) {
           (function() {
             var t;
             t = function() {
@@ -7694,7 +7963,7 @@ var wijmo;
             }(), e.localExports = t
           }).call(this)
         }, {}],
-        167: [function(t, e, n) {
+        170: [function(t, e, n) {
           (function() {
             var t;
             t = function() {
@@ -7711,7 +7980,7 @@ var wijmo;
             }(), e.localExports = t
           }).call(this)
         }, {}],
-        168: [function(t, e, n) {
+        171: [function(t, e, n) {
           (function() {
             var n, r, i;
             i = t("./utils"), r = t("./Number").Number, n = function() {
@@ -7729,10 +7998,10 @@ var wijmo;
             }(), e.localExports = n
           }).call(this)
         }, {
-          "./Number": 173,
-          "./utils": 180
+          "./Number": 176,
+          "./utils": 183
         }],
-        169: [function(t, e, n) {
+        172: [function(t, e, n) {
           (function(t) {
             (function() {
               var n, r;
@@ -7795,9 +8064,9 @@ var wijmo;
             }).call(this)
           }).call(this, t("buffer").Buffer)
         }, {
-          buffer: 28
+          buffer: 31
         }],
-        170: [function(t, e, n) {
+        173: [function(t, e, n) {
           (function(n) {
             (function() {
               var r, i, o, a, s = {}.hasOwnProperty,
@@ -7863,11 +8132,11 @@ var wijmo;
             }).call(this)
           }).call(this, t("buffer").Buffer)
         }, {
-          "./DecodeStream": 169,
-          buffer: 28,
-          stream: 204
+          "./DecodeStream": 172,
+          buffer: 31,
+          stream: 207
         }],
-        171: [function(t, e, n) {
+        174: [function(t, e, n) {
           (function() {
             var t;
             t = function() {
@@ -7887,7 +8156,7 @@ var wijmo;
             }(), e.localExports = t
           }).call(this)
         }, {}],
-        172: [function(t, e, n) {
+        175: [function(t, e, n) {
           (function() {
             var n, r, i, o, a, s, u = {}.hasOwnProperty,
               c = function(t, e) {
@@ -7931,12 +8200,12 @@ var wijmo;
             }(), e.localExports = i
           }).call(this)
         }, {
-          "./Array": 165,
-          "./Number": 173,
-          "./utils": 180,
-          util: 214
+          "./Array": 168,
+          "./Number": 176,
+          "./utils": 183,
+          util: 216
         }],
-        173: [function(t, e, n) {
+        176: [function(t, e, n) {
           (function() {
             var e, r, i, o = {}.hasOwnProperty,
               a = function(t, e) {
@@ -7969,9 +8238,9 @@ var wijmo;
             }(), n.Fixed = r, n.fixed16be = n.fixed16 = new r(16, "BE"), n.fixed16le = new r(16, "LE"), n.fixed32be = n.fixed32 = new r(32, "BE"), n.fixed32le = new r(32, "LE")
           }).call(this)
         }, {
-          "./DecodeStream": 169
+          "./DecodeStream": 172
         }],
-        174: [function(t, e, n) {
+        177: [function(t, e, n) {
           (function() {
             var t;
             t = function() {
@@ -7991,7 +8260,7 @@ var wijmo;
             }(), e.localExports = t
           }).call(this)
         }, {}],
-        175: [function(t, e, n) {
+        178: [function(t, e, n) {
           (function() {
             var e, r, i;
             i = t("./utils"), e = function() {
@@ -8074,9 +8343,9 @@ var wijmo;
             }(), n.Pointer = e, n.VoidPointer = r
           }).call(this)
         }, {
-          "./utils": 180
+          "./utils": 183
         }],
-        176: [function(t, e, n) {
+        179: [function(t, e, n) {
           (function() {
             var n, r;
             r = t("./utils"), n = function() {
@@ -8094,9 +8363,9 @@ var wijmo;
             }(), e.localExports = n
           }).call(this)
         }, {
-          "./utils": 180
+          "./utils": 183
         }],
-        177: [function(t, e, n) {
+        180: [function(t, e, n) {
           (function(n) {
             (function() {
               var r, i, o;
@@ -8122,11 +8391,11 @@ var wijmo;
             }).call(this)
           }).call(this, t("buffer").Buffer)
         }, {
-          "./Number": 173,
-          "./utils": 180,
-          buffer: 28
+          "./Number": 176,
+          "./utils": 183,
+          buffer: 31
         }],
-        178: [function(t, e, n) {
+        181: [function(t, e, n) {
           (function() {
             var n, r;
             r = t("./utils"), n = function() {
@@ -8180,9 +8449,9 @@ var wijmo;
             }(), e.localExports = n
           }).call(this)
         }, {
-          "./utils": 180
+          "./utils": 183
         }],
-        179: [function(t, e, n) {
+        182: [function(t, e, n) {
           (function() {
             var n, r, i = {}.hasOwnProperty,
               o = function(t, e) {
@@ -8233,9 +8502,9 @@ var wijmo;
             }(), e.localExports = r
           }).call(this)
         }, {
-          "./Struct": 178
+          "./Struct": 181
         }],
-        180: [function(t, e, n) {
+        183: [function(t, e, n) {
           (function() {
             var e, r;
             e = t("./Number").Number, n.resolveLength = function(t, n, r) {
@@ -8251,9 +8520,9 @@ var wijmo;
             }(), n.PropertyDescriptor = r
           }).call(this)
         }, {
-          "./Number": 173
+          "./Number": 176
         }],
-        181: [function(t, e, n) {
+        184: [function(t, e, n) {
           function r() {
             this.table = new Uint16Array(16), this.trans = new Uint16Array(288)
           }
@@ -8389,7 +8658,7 @@ var wijmo;
             return o.destLen < o.dest.length ? "function" == typeof o.dest.slice ? o.dest.slice(0, o.destLen) : o.dest.subarray(0, o.destLen) : o.dest
           }
         }, {}],
-        182: [function(t, e, n) {
+        185: [function(t, e, n) {
           e.localExports = {
             categories: ["Cc", "Zs", "Po", "Sc", "Ps", "Pe", "Sm", "Pd", "Nd", "Lu", "Sk", "Pc", "Ll", "So", "Lo", "Pi", "Cf", "No", "Pf", "Lt", "Lm", "Mn", "Me", "Mc", "Nl", "Zl", "Zp", "Cs", "Co"],
             combiningClasses: ["Not_Reordered", "Above", "Above_Right", "Below", "Attached_Above_Right", "Attached_Below", "Overlay", "Iota_Subscript", "Double_Below", "Double_Above", "Below_Right", "Above_Left", "CCC10", "CCC11", "CCC12", "CCC13", "CCC14", "CCC15", "CCC16", "CCC17", "CCC18", "CCC19", "CCC20", "CCC21", "CCC22", "CCC23", "CCC24", "CCC25", "CCC30", "CCC31", "CCC32", "CCC27", "CCC28", "CCC29", "CCC33", "CCC34", "CCC35", "CCC36", "Nukta", "Virama", "CCC84", "CCC91", "CCC103", "CCC107", "CCC118", "CCC122", "CCC129", "CCC130", "CCC132", "Attached_Above", "Below_Left", "Left", "Kana_Voicing", "CCC26", "Right"],
@@ -8397,7 +8666,7 @@ var wijmo;
             eaw: ["N", "Na", "A", "W", "H", "F"]
           }
         }, {}],
-        183: [function(t, e, n) {
+        186: [function(t, e, n) {
           (function(e) {
             var r, i, o, a, s, u, c, l, h, f, d, p, g, _, m, v;
             p = t("unicode-trie"), _ = t("./data.json"), v = new p(e("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", "base64")), m = Math.log2 || function(t) {
@@ -8453,11 +8722,11 @@ var wijmo;
             }
           }).call(this, t("buffer").Buffer)
         }, {
-          "./data.json": 182,
-          buffer: 28,
-          "unicode-trie": 184
+          "./data.json": 185,
+          buffer: 31,
+          "unicode-trie": 187
         }],
-        184: [function(t, e, n) {
+        187: [function(t, e, n) {
           var r, i;
           i = t("tiny-inflate"), r = function() {
             function t(t) {
@@ -8470,9 +8739,9 @@ var wijmo;
             }, t
           }(), e.localExports = r
         }, {
-          "tiny-inflate": 181
+          "tiny-inflate": 184
         }],
-        185: [function(t, e, n) {
+        188: [function(t, e, n) {
           n.read = function(t, e, n, r, i) {
             var o, a, s = 8 * i - r - 1,
               u = (1 << s) - 1,
@@ -8502,28 +8771,15 @@ var wijmo;
             t[n + d - p] |= 128 * g
           }
         }, {}],
-        186: [function(t, e, n) {
-          "function" == typeof Object.create ? e.localExports = function(t, e) {
-            t.super_ = e, t.prototype = Object.create(e.prototype, {
-              constructor: {
-                value: t,
-                enumerable: !1,
-                writable: !0,
-                configurable: !0
-              }
-            })
-          } : e.localExports = function(t, e) {
-            t.super_ = e;
-            var n = function() {};
-            n.prototype = e.prototype, t.prototype = new n, t.prototype.constructor = t
-          }
+        189: [function(t, e, n) {
+          e.localExports = t(23)
         }, {}],
-        187: [function(t, e, n) {
+        190: [function(t, e, n) {
           (function() {
             n.OP = 0, n.CL = 1, n.CP = 2, n.QU = 3, n.GL = 4, n.NS = 5, n.EX = 6, n.SY = 7, n.IS = 8, n.PR = 9, n.PO = 10, n.NU = 11, n.AL = 12, n.HL = 13, n.ID = 14, n.IN = 15, n.HY = 16, n.BA = 17, n.BB = 18, n.B2 = 19, n.ZW = 20, n.CM = 21, n.WJ = 22, n.H2 = 23, n.H3 = 24, n.JL = 25, n.JV = 26, n.JT = 27, n.RI = 28, n.AI = 29, n.BK = 30, n.CB = 31, n.CJ = 32, n.CR = 33, n.LF = 34, n.NL = 35, n.SA = 36, n.SG = 37, n.SP = 38, n.XX = 39
           }).call(this)
         }, {}],
-        188: [function(t, e, n) {
+        191: [function(t, e, n) {
           (function() {
             var n, r, i, o, a, s, u, c, l, h, f, d, p, g, _, m, v, y, b, w, x, S, C, k, E, A, P;
             b = t("unicode-trie"), S = t("base64-js"), A = t("./classes"), o = A.BK, l = A.CR, d = A.LF, g = A.NL, a = A.CB, i = A.BA, y = A.SP, w = A.WJ, y = A.SP, o = A.BK, d = A.LF, g = A.NL, n = A.AI, r = A.AL, m = A.SA, v = A.SG, x = A.XX, u = A.CJ, A.ID, _ = A.NS, A.characterClasses, P = t("./pairs"), h = P.DI_BRK, f = P.IN_BRK, s = P.CI_BRK, c = P.CP_BRK, P.PR_BRK, E = P.pairTable, k = S.toByteArray("AA4IAAAAAAAAAhqg5VV7NJtZvz7fTC8zU5deplUlMrQoWqmqahD5So0aipYWrUhVFSVBQ10iSTtUtW6nKDVF6k7d75eQfEUbFcQ9KiFS90tQEolcP23nrLPmO+esr/+f39rr/a293t/e7/P8nmfvlz0O6RvrBJADtbBNaD88IOKTOmOrCqhu9zE770vc1pBV/xL5dxj2V7Zj4FGSomFKStCWNlV7hG1VabZfZ1LaHbFrRwzzLjzPoi1UHDnlV/lWbhgIIJvLBp/pu7AHEdRnIY+ROdXxg4fNpMdTxVnnm08OjozejAVsBqwqz8kddGRlRxsd8c55dNZoPuex6a7Dt6L0NNb03sqgTlR2/OT7eTt0Y0WnpUXxLsp5SMANc4DsmX4zJUBQvznwexm9tsMH+C9uRYMPOd96ZHB29NZjCIM2nfO7tsmQveX3l2r7ft0N4/SRJ7kO6Y8ZCaeuUQ4gMTZ67cp7TgxvlNDsPgOBdZi2YTam5Q7m3+00l+XG7PrDe6YoPmHgK+yLih7fAR16ZFCeD9WvOVt+gfNW/KT5/M6rb/9KERt+N1lad5RneVjzxXHsLofuU+TvrEsr3+26sVz5WJh6L/svoPK3qepFH9bysDljWtD1F7KrxzW1i9r+e/NLxV/acts7zuo304J9+t3Pd6Y6u8f3EAqxNRgv5DZjaI3unyvkvHPya/v3mWVYOC38qBq11+yHZ2bAyP1HbkV92vdno7r2lxz9UwCdCJVfd14NLcpO2CadHS/XPJ9doXgz5vLv/1OBVS3gX0D9n6LiNIDfpilO9RsLgZ2W/wIy8W/Rh93jfoz4qmRV2xElv6p2lRXQdO6/Cv8f5nGn3u0wLXjhnvClabL1o+7yvIpvLfT/xsKG30y/sTvq30ia9Czxp9dr9v/e7Yn/O0QJXxxBOJmceP/DBFa1q1v6oudn/e6qc/37dUoNvnYL4plQ9OoneYOh/r8fOFm7yl7FETHY9dXd5K2n/qEc53dOEe1TTJcvCfp1dpTC334l0vyaFL6mttNEbFjzO+ZV2mLk0qc3BrxJ4d9gweMmjRorxb7vic0rSq6D4wzAyFWas1TqPE0sLI8XLAryC8tPChaN3ALEZSWmtB34SyZcxXYn/E4Tg0LeMIPhgPKD9zyHGMxxhxnDDih7eI86xECTM8zodUCdgffUmRh4rQ8zyA6ow/Aei+01a8OMfziQQ+GAEkhwN/cqUFYAVzA9ex4n6jgtsiMvXf5BtXxEU4hSphvx3v8+9au8eEekEEpkrkne/zB1M+HAPuXIz3paxKlfe8aDMfGWAX6Md6PuuAdKHFVH++Ed5LEji94Z5zeiJIxbmWeN7rr1/ZcaBl5/nimdHsHgIH/ssyLUXZ4fDQ46HnBb+hQqG8yNiKRrXL/b1IPYDUsu3dFKtRMcjqlRvONd4xBvOufx2cUHuk8pmG1D7PyOQmUmluisVFS9OWS8fPIe8LiCtjwJKnEC9hrS9uKmISI3Wa5+vdXUG9dtyfr7g/oJv2wbzeZU838G6mEvntUb3SVV/fBZ6H/sL+lElzeRrHy2Xbe7UWX1q5sgOQ81rv+2baej4fP4m5Mf/GkoxfDtT3++KP7do9Jn26aa6xAhCf5L9RZVfkWKCcjI1eYbm2plvTEqkDxKC402bGzXCYaGnuALHabBT1dFLuOSB7RorOPEhZah1NjZIgR/UFGfK3p1ElYnevOMBDLURdpIjrI+qZk4sffGbRFiXuEmdFjiAODlQCJvIaB1rW61Ljg3y4eS4LAcSgDxxZQs0DYa15wA032Z+lGUfpoyOrFo3mg1sRQtN/fHHCx3TrM8eTrldMbYisDLXbUDoXMLejSq0fUNuO1muX0gEa8vgyegkqiqqbC3W0S4cC9Kmt8MuS/hFO7Xei3f8rSvIjeveMM7kxjUixOrl6gJshe4JU7PhOHpfrRYvu7yoAZKa3Buyk2J+K5W+nNTz1nhJDhRUfDJLiUXxjxXCJeeaOe/r7HlBP/uURc/5efaZEPxr55Qj39rfTLkugUGyMrwo7HAglfEjDriehF1jXtwJkPoiYkYQ5aoXSA7qbCBGKq5hwtu2VkpI9xVDop/1xrC52eiIvCoPWx4lLl40jm9upvycVPfpaH9/o2D4xKXpeNjE2HPQRS+3RFaYTc4Txw7Dvq5X6JBRwzs9mvoB49BK6b+XgsZVJYiInTlSXZ+62FT18mkFVcPKCJsoF5ahb19WheZLUYsSwdrrVM3aQ2XE6SzU2xHDS6iWkodk5AF6F8WUNmmushi8aVpMPwiIfEiQWo3CApONDRjrhDiVnkaFsaP5rjIJkmsN6V26li5LNM3JxGSyKgomknTyyrhcnwv9Qcqaq5utAh44W30SWo8Q0XHKR0glPF4fWst1FUCnk2woFq3iy9fAbzcjJ8fvSjgKVOfn14RDqyQuIgaGJZuswTywdCFSa89SakMf6fe+9KaQMYQlKxiJBczuPSho4wmBjdA+ag6QUOr2GdpcbSl51Ay6khhBt5UXdrnxc7ZGMxCvz96A4oLocxh2+px+1zkyLacCGrxnPzTRSgrLKpStFpH5ppKWm7PgMKZtwgytKLOjbGCOQLTm+KOowqa1sdut9raj1CZFkZD0jbaKNLpJUarSH5Qknx1YiOxdA5L6d5sfI/unmkSF65Ic/AvtXt98Pnrdwl5vgppQ3dYzWFwknZsy6xh2llmLxpegF8ayLwniknlXRHiF4hzzrgB8jQ4wdIqcaHCEAxyJwCeGkXPBZYSrrGa4vMwZvNN9aK0F4JBOK9mQ8g8EjEbIQVwvfS2D8GuCYsdqwqSWbQrfWdTRUJMqmpnWPax4Z7E137I6brHbvjpPlfNZpF1d7PP7HB/MPHcHVKTMhLO4f3CZcaccZEOiS2DpKiQB5KXDJ+Ospcz4qTRCRxgrKEQIgUkKLTKKwskdx2DWo3bg3PEoB5h2nA24olwfKSR+QR6TAvEDi/0czhUT59RZmO1MGeKGeEfuOSPWfL+XKmhqpZmOVR9mJVNDPKOS49Lq+Um10YsBybzDMtemlPCOJEtE8zaXhsaqEs9bngSJGhlOTTMlCXly9Qv5cRN3PVLK7zoMptutf7ihutrQ/Xj7VqeCdUwleTTKklOI8Wep9h7fCY0kVtDtIWKnubWAvbNZtsRRqOYl802vebPEkZRSZc6wXOfPtpPtN5HI63EUFfsy7U/TLr8NkIzaY3vx4A28x765XZMzRZTpMk81YIMuwJ5+/zoCuZj1wGnaHObxa5rpKZj4WhT670maRw04w0e3cZW74Z0aZe2n05hjZaxm6urenz8Ef5O6Yu1J2aqYAlqsCXs5ZB5o1JJ5l3xkTVr8rJQ09NLsBqRRDT2IIjOPmcJa6xQ1R5yGP9jAsj23xYDTezdyqG8YWZ7vJBIWK56K+iDgcHimiQOTIasNSua1fOBxsKMMEKd15jxTl+3CyvGCR+UyRwuSI2XuwRIPoNNclPihfJhaq2mKkNijwYLY6feqohktukmI3KDvOpN7ItCqHHhNuKlxMfBAEO5LjW2RKh6lE5Hd1dtAOopac/Z4FdsNsjMhXz/ug8JGmbVJTA+VOBJXdrYyJcIn5+OEeoK8kWEWF+wdG8ZtZHKSquWDtDVyhFPkRVqguKFkLkKCz46hcU1SUY9oJ2Sk+dmq0kglqk4kqKT1CV9JDELPjK1WsWGkEXF87g9P98e5ff0mIupm/w6vc3kCeq04X5bgJQlcMFRjlFWmSk+kssXCAVikfeAlMuzpUvCSdXiG+dc6KrIiLxxhbEVuKf7vW7KmDQI95bZe3H9mN3/77F6fZ2Yx/F9yClllj8gXpLWLpd5+v90iOaFa9sd7Pvx0lNa1o1+bkiZ69wCiC2x9UIb6/boBCuNMB/HYR0RC6+FD9Oe5qrgQl6JbXtkaYn0wkdNhROLqyhv6cKvyMj1Fvs2o3OOKoMYTubGENLfY5F6H9d8wX1cnINsvz+wZFQu3zhWVlwJvwBEp69Dqu/ZnkBf3nIfbx4TK7zOVJH5sGJX+IMwkn1vVBn38GbpTg9bJnMcTOb5F6Ci5gOn9Fcy6Qzcu+FL6mYJJ+f2ZZJGda1VqruZ0JRXItp8X0aTjIcJgzdaXlha7q7kV4ebrMsunfsRyRa9qYuryBHA0hc1KVsKdE+oI0ljLmSAyMze8lWmc5/lQ18slyTVC/vADTc+SNM5++gztTBLz4m0aVUKcfgOEExuKVomJ7XQDZuziMDjG6JP9tgR7JXZTeo9RGetW/Xm9/TgPJpTgHACPOGvmy2mDm9fl09WeMm9sQUAXP3Su2uApeCwJVT5iWCXDgmcuTsFgU9Nm6/PusJzSbDQIMfl6INY/OAEvZRN54BSSXUClM51im6Wn9VhVamKJmzOaFJErgJcs0etFZ40LIF3EPkjFTjGmAhsd174NnOwJW8TdJ1Dja+E6Wa6FVS22Haj1DDA474EesoMP5nbspAPJLWJ8rYcP1DwCslhnn+gTFm+sS9wY+U6SogAa9tiwpoxuaFeqm2OK+uozR6SfiLCOPz36LiDlzXr6UWd7BpY6mlrNANkTOeme5EgnnAkQRTGo9T6iYxbUKfGJcI9B+ub2PcyUOgpwXbOf3bHFWtygD7FYbRhb+vkzi87dB0JeXl/vBpBUz93VtqZi7AL7C1VowTF+tGmyurw7DBcktc+UMY0E10Jw4URojf8NdaNpN6E1q4+Oz+4YePtMLy8FPRP"), C = new b(k), p = function() {
@@ -8604,12 +8860,12 @@ var wijmo;
             }(), e.localExports = p
           }).call(this)
         }, {
-          "./classes": 187,
-          "./pairs": 189,
-          "base64-js": 23,
-          "unicode-trie": 211
+          "./classes": 190,
+          "./pairs": 192,
+          "base64-js": 26,
+          "unicode-trie": 214
         }],
-        189: [function(t, e, n) {
+        192: [function(t, e, n) {
           (function() {
             n.DI_BRK = 0, n.IN_BRK = 1, n.CI_BRK = 2, n.CP_BRK = 3, n.PR_BRK = 4, n.pairTable = [
               [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 4, 4, 4],
@@ -8644,7 +8900,7 @@ var wijmo;
             ]
           }).call(this)
         }, {}],
-        190: [function(t, e, n) {
+        193: [function(t, e, n) {
           "use strict";
           var r = "undefined" != typeof Uint8Array && "undefined" != typeof Uint16Array && "undefined" != typeof Int32Array;
           n.assign = function(t) {
@@ -8684,7 +8940,7 @@ var wijmo;
             t ? (n.Buf8 = Uint8Array, n.Buf16 = Uint16Array, n.Buf32 = Int32Array, n.assign(n, i)) : (n.Buf8 = Array, n.Buf16 = Array, n.Buf32 = Array, n.assign(n, o))
           }, n.setTyped(r)
         }, {}],
-        191: [function(t, e, n) {
+        194: [function(t, e, n) {
           "use strict";
           e.localExports = function(t, e, n, r) {
             for (var i = 65535 & t | 0, o = t >>> 16 & 65535 | 0, a = 0; 0 !== n;) {
@@ -8697,7 +8953,7 @@ var wijmo;
             return i | o << 16 | 0
           }
         }, {}],
-        192: [function(t, e, n) {
+        195: [function(t, e, n) {
           "use strict";
           e.localExports = {
             Z_NO_FLUSH: 0,
@@ -8729,7 +8985,7 @@ var wijmo;
             Z_DEFLATED: 8
           }
         }, {}],
-        193: [function(t, e, n) {
+        196: [function(t, e, n) {
           "use strict";
           var r = function() {
             for (var t, e = [], n = 0; n < 256; n++) {
@@ -8747,7 +9003,7 @@ var wijmo;
             return -1 ^ t
           }
         }, {}],
-        194: [function(t, e, n) {
+        197: [function(t, e, n) {
           "use strict";
 
           function r(t, e) {
@@ -9057,13 +9313,13 @@ var wijmo;
             return n.strstart += n.lookahead, n.block_start = n.strstart, n.insert = n.lookahead, n.lookahead = 0, n.match_length = n.prev_length = et - 1, n.match_available = 0, t.next_in = u, t.input = c, t.avail_in = s, n.wrap = a, B
           }, n.deflateInfo = "pako deflate (from Nodeca project)"
         }, {
-          "../utils/common": 190,
-          "./adler32": 191,
-          "./crc32": 193,
-          "./messages": 198,
-          "./trees": 199
+          "../utils/common": 193,
+          "./adler32": 194,
+          "./crc32": 196,
+          "./messages": 201,
+          "./trees": 202
         }],
-        195: [function(t, e, n) {
+        198: [function(t, e, n) {
           "use strict";
           e.localExports = function(t, e) {
             var n, r, i, o, a, s, u, c, l, h, f, d, p, g, _, m, v, y, b, w, x, S, C, k, E;
@@ -9151,7 +9407,7 @@ var wijmo;
             r -= w = p >> 3, d &= (1 << (p -= w << 3)) - 1, t.next_in = r, t.next_out = o, t.avail_in = r < i ? i - r + 5 : 5 - (r - i), t.avail_out = o < s ? s - o + 257 : 257 - (o - s), n.hold = d, n.bits = p
           }
         }, {}],
-        196: [function(t, e, n) {
+        199: [function(t, e, n) {
           "use strict";
 
           function r(t) {
@@ -9647,13 +9903,13 @@ var wijmo;
             return t && t.state ? 0 !== (n = t.state).wrap && n.mode !== H ? A : n.mode === H && (r = 1, (r = p(r, e, i, 0)) !== n.check) ? P : l(t, e, i, i) ? (n.mode = ut, j) : (n.havedict = 1, C) : A
           }, n.inflateInfo = "pako inflate (from Nodeca project)"
         }, {
-          "../utils/common": 190,
-          "./adler32": 191,
-          "./crc32": 193,
-          "./inffast": 195,
-          "./inftrees": 197
+          "../utils/common": 193,
+          "./adler32": 194,
+          "./crc32": 196,
+          "./inffast": 198,
+          "./inftrees": 200
         }],
-        197: [function(t, e, n) {
+        200: [function(t, e, n) {
           "use strict";
           var r = t("../utils/common"),
             i = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0],
@@ -9708,9 +9964,9 @@ var wijmo;
             return 0 !== O && (c[m + O] = S - j << 24 | 64 << 16 | 0), f.bits = A, 0
           }
         }, {
-          "../utils/common": 190
+          "../utils/common": 193
         }],
-        198: [function(t, e, n) {
+        201: [function(t, e, n) {
           "use strict";
           e.localExports = {
             2: "need dictionary",
@@ -9724,7 +9980,7 @@ var wijmo;
             "-6": "incompatible version"
           }
         }, {}],
-        199: [function(t, e, n) {
+        202: [function(t, e, n) {
           "use strict";
 
           function r(t) {
@@ -9967,15 +10223,15 @@ var wijmo;
             u(t, B << 1, 3), c(t, Z, $), h(t)
           }
         }, {
-          "../utils/common": 190
+          "../utils/common": 193
         }],
-        200: [function(t, e, n) {
+        203: [function(t, e, n) {
           "use strict";
           e.localExports = function() {
             this.input = null, this.next_in = 0, this.avail_in = 0, this.total_in = 0, this.output = null, this.next_out = 0, this.avail_out = 0, this.total_out = 0, this.msg = "", this.state = null, this.data_type = 2, this.adler = 0
           }
         }, {}],
-        201: [function(t, e, n) {
+        204: [function(t, e, n) {
           (function(n) {
             (function() {
               var r, i;
@@ -10106,11 +10362,11 @@ var wijmo;
             }).call(this)
           }).call(this, t("buffer").Buffer)
         }, {
-          buffer: 28,
-          fs: 26,
-          zlib: 25
+          buffer: 31,
+          fs: 29,
+          zlib: 28
         }],
-        202: [function(t, e, n) {
+        205: [function(t, e, n) {
           function r() {}
           var i = e.localExports = {};
           i.nextTick = function() {
@@ -10140,7 +10396,7 @@ var wijmo;
             throw new Error("process.chdir is not supported")
           }
         }, {}],
-        203: [function(t, e, n) {
+        206: [function(t, e, n) {
           function r(t) {
             if (!(this instanceof r)) return new r(t);
             s.call(this, t), u.call(this, t), t && !1 === t.readable && (this.readable = !1), t && !1 === t.writable && (this.writable = !1), this.allowHalfOpen = !0, t && !1 === t.allowHalfOpen && (this.allowHalfOpen = !1), this.once("end", i)
@@ -10161,12 +10417,12 @@ var wijmo;
             u = t("./writable.js");
           o(r, s), r.prototype.write = u.prototype.write, r.prototype.end = u.prototype.end, r.prototype._write = u.prototype._write
         }, {
-          "./readable.js": 207,
-          "./writable.js": 209,
-          inherits: 186,
-          "process/browser.js": 205
+          "./readable.js": 210,
+          "./writable.js": 212,
+          inherits: 189,
+          "process/browser.js": 208
         }],
-        204: [function(t, e, n) {
+        207: [function(t, e, n) {
           function r() {
             i.call(this)
           }
@@ -10202,15 +10458,15 @@ var wijmo;
             return c.on("error", s), t.on("error", s), c.on("end", u), c.on("close", u), t.on("close", u), t.emit("pipe", c), t
           }
         }, {
-          "./duplex.js": 203,
-          "./passthrough.js": 206,
-          "./readable.js": 207,
-          "./transform.js": 208,
-          "./writable.js": 209,
-          events: 29,
-          inherits: 186
+          "./duplex.js": 206,
+          "./passthrough.js": 209,
+          "./readable.js": 210,
+          "./transform.js": 211,
+          "./writable.js": 212,
+          events: 32,
+          inherits: 189
         }],
-        205: [function(t, e, n) {
+        208: [function(t, e, n) {
           var r = e.localExports = {};
           r.nextTick = function() {
             var t = "undefined" != typeof window && window.setImmediate,
@@ -10239,7 +10495,7 @@ var wijmo;
             throw new Error("process.chdir is not supported")
           }
         }, {}],
-        206: [function(t, e, n) {
+        209: [function(t, e, n) {
           function r(t) {
             if (!(this instanceof r)) return new r(t);
             i.call(this, t)
@@ -10250,10 +10506,10 @@ var wijmo;
             n(null, t)
           }
         }, {
-          "./transform.js": 208,
-          inherits: 186
+          "./transform.js": 211,
+          inherits: 189
         }],
-        207: [function(t, e, n) {
+        210: [function(t, e, n) {
           (function(n) {
             function r(e, n) {
               var r = (e = e || {}).highWaterMark;
@@ -10538,15 +10794,15 @@ var wijmo;
             }, i._fromList = y
           }).call(this, t("v3go1D"))
         }, {
-          "./index.js": 204,
-          buffer: 28,
-          events: 29,
-          inherits: 186,
-          "process/browser.js": 205,
-          string_decoder: 27,
-          v3go1D: 202
+          "./index.js": 207,
+          buffer: 31,
+          events: 32,
+          inherits: 189,
+          "process/browser.js": 208,
+          string_decoder: 30,
+          v3go1D: 205
         }],
-        208: [function(t, e, n) {
+        211: [function(t, e, n) {
           function r(t, e) {
             this.afterTransform = function(t, n) {
               return i(e, t, n)
@@ -10600,10 +10856,10 @@ var wijmo;
             e.writechunk && e.writecb && !e.transforming ? (e.transforming = !0, this._transform(e.writechunk, e.writeencoding, e.afterTransform)) : e.needTransform = !0
           }
         }, {
-          "./duplex.js": 203,
-          inherits: 186
+          "./duplex.js": 206,
+          inherits: 189
         }],
-        209: [function(t, e, n) {
+        212: [function(t, e, n) {
           function r(t, e, n) {
             this.chunk = t, this.encoding = e, this.callback = n
           }
@@ -10742,280 +10998,28 @@ var wijmo;
             "function" == typeof t ? (n = t, t = null, e = null) : "function" == typeof e && (n = e, e = null), void 0 !== t && null !== t && this.write(t, e), r.ending || r.finished || y(this, r, n)
           }
         }, {
-          "./index.js": 204,
-          buffer: 28,
-          inherits: 186,
-          "process/browser.js": 205
+          "./index.js": 207,
+          buffer: 31,
+          inherits: 189,
+          "process/browser.js": 208
         }],
-        210: [function(t, e, n) {
-          e.localExports = t(181)
-        }, {}],
-        211: [function(t, e, n) {
-          e.localExports = t(184)
-        }, {
-          "tiny-inflate": 210
-        }],
-        212: [function(t, e, n) {
-          e.localExports = t(186)
-        }, {}],
         213: [function(t, e, n) {
-          e.localExports = function(t) {
-            return t && "object" == typeof t && "function" == typeof t.copy && "function" == typeof t.fill && "function" == typeof t.readUInt8
-          }
+          e.localExports = t(184)
         }, {}],
         214: [function(t, e, n) {
-          (function(e, r) {
-            function i(t, e) {
-              var r = {
-                seen: [],
-                stylize: a
-              };
-              return arguments.length >= 3 && (r.depth = arguments[2]), arguments.length >= 4 && (r.colors = arguments[3]), g(e) ? r.showHidden = e : e && n._extend(r, e), y(r.showHidden) && (r.showHidden = !1), y(r.depth) && (r.depth = 2), y(r.colors) && (r.colors = !1), y(r.customInspect) && (r.customInspect = !0), r.colors && (r.stylize = o), u(r, t, r.depth)
-            }
-
-            function o(t, e) {
-              var n = i.styles[e];
-              return n ? "[" + i.colors[n][0] + "m" + t + "[" + i.colors[n][1] + "m" : t
-            }
-
-            function a(t, e) {
-              return t
-            }
-
-            function s(t) {
-              var e = {};
-              return t.forEach(function(t, n) {
-                e[t] = !0
-              }), e
-            }
-
-            function u(t, e, r) {
-              if (t.customInspect && e && C(e.inspect) && e.inspect !== n.inspect && (!e.constructor || e.constructor.prototype !== e)) {
-                var i = e.inspect(r, t);
-                return v(i) || (i = u(t, i, r)), i
-              }
-              var o = c(t, e);
-              if (o) return o;
-              var a = Object.keys(e),
-                g = s(a);
-              if (t.showHidden && (a = Object.getOwnPropertyNames(e)), S(e) && (a.indexOf("message") >= 0 || a.indexOf("description") >= 0)) return l(e);
-              if (0 === a.length) {
-                if (C(e)) {
-                  var _ = e.name ? ": " + e.name : "";
-                  return t.stylize("[Function" + _ + "]", "special")
-                }
-                if (b(e)) return t.stylize(RegExp.prototype.toString.call(e), "regexp");
-                if (x(e)) return t.stylize(Date.prototype.toString.call(e), "date");
-                if (S(e)) return l(e)
-              }
-              var m = "",
-                y = !1,
-                w = ["{", "}"];
-              if (p(e) && (y = !0, w = ["[", "]"]), C(e) && (m = " [Function" + (e.name ? ": " + e.name : "") + "]"), b(e) && (m = " " + RegExp.prototype.toString.call(e)), x(e) && (m = " " + Date.prototype.toUTCString.call(e)), S(e) && (m = " " + l(e)), 0 === a.length && (!y || 0 == e.length)) return w[0] + m + w[1];
-              if (r < 0) return b(e) ? t.stylize(RegExp.prototype.toString.call(e), "regexp") : t.stylize("[Object]", "special");
-              t.seen.push(e);
-              var k;
-              return k = y ? h(t, e, r, g, a) : a.map(function(n) {
-                return f(t, e, r, g, n, y)
-              }), t.seen.pop(), d(k, m, w)
-            }
-
-            function c(t, e) {
-              if (y(e)) return t.stylize("undefined", "undefined");
-              if (v(e)) {
-                var n = "'" + JSON.stringify(e).replace(/^"|"$/g, "").replace(/'/g, "\\'").replace(/\\"/g, '"') + "'";
-                return t.stylize(n, "string")
-              }
-              return m(e) ? t.stylize("" + e, "number") : g(e) ? t.stylize("" + e, "boolean") : _(e) ? t.stylize("null", "null") : void 0
-            }
-
-            function l(t) {
-              return "[" + Error.prototype.toString.call(t) + "]"
-            }
-
-            function h(t, e, n, r, i) {
-              for (var o = [], a = 0, s = e.length; a < s; ++a) P(e, String(a)) ? o.push(f(t, e, n, r, String(a), !0)) : o.push("");
-              return i.forEach(function(i) {
-                i.match(/^\d+$/) || o.push(f(t, e, n, r, i, !0))
-              }), o
-            }
-
-            function f(t, e, n, r, i, o) {
-              var a, s, c;
-              if ((c = Object.getOwnPropertyDescriptor(e, i) || {
-                value: e[i]
-              }).get ? s = c.set ? t.stylize("[Getter/Setter]", "special") : t.stylize("[Getter]", "special") : c.set && (s = t.stylize("[Setter]", "special")), P(r, i) || (a = "[" + i + "]"), s || (t.seen.indexOf(c.value) < 0 ? (s = _(n) ? u(t, c.value, null) : u(t, c.value, n - 1)).indexOf("\n") > -1 && (s = o ? s.split("\n").map(function(t) {
-                return "  " + t
-              }).join("\n").substr(2) : "\n" + s.split("\n").map(function(t) {
-                return "   " + t
-              }).join("\n")) : s = t.stylize("[Circular]", "special")), y(a)) {
-                if (o && i.match(/^\d+$/)) return s;
-                (a = JSON.stringify("" + i)).match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/) ? (a = a.substr(1, a.length - 2), a = t.stylize(a, "name")) : (a = a.replace(/'/g, "\\'").replace(/\\"/g, '"').replace(/(^"|"$)/g, "'"), a = t.stylize(a, "string"))
-              }
-              return a + ": " + s
-            }
-
-            function d(t, e, n) {
-              var r = 0;
-              return t.reduce(function(t, e) {
-                return r++, e.indexOf("\n") >= 0 && r++, t + e.replace(/\u001b\[\d\d?m/g, "").length + 1
-              }, 0) > 60 ? n[0] + ("" === e ? "" : e + "\n ") + " " + t.join(",\n  ") + " " + n[1] : n[0] + e + " " + t.join(", ") + " " + n[1]
-            }
-
-            function p(t) {
-              return Array.isArray(t)
-            }
-
-            function g(t) {
-              return "boolean" == typeof t
-            }
-
-            function _(t) {
-              return null === t
-            }
-
-            function m(t) {
-              return "number" == typeof t
-            }
-
-            function v(t) {
-              return "string" == typeof t
-            }
-
-            function y(t) {
-              return void 0 === t
-            }
-
-            function b(t) {
-              return w(t) && "[object RegExp]" === k(t)
-            }
-
-            function w(t) {
-              return "object" == typeof t && null !== t
-            }
-
-            function x(t) {
-              return w(t) && "[object Date]" === k(t)
-            }
-
-            function S(t) {
-              return w(t) && ("[object Error]" === k(t) || t instanceof Error)
-            }
-
-            function C(t) {
-              return "function" == typeof t
-            }
-
-            function k(t) {
-              return Object.prototype.toString.call(t)
-            }
-
-            function E(t) {
-              return t < 10 ? "0" + t.toString(10) : t.toString(10)
-            }
-
-            function A() {
-              var t = new Date,
-                e = [E(t.getHours()), E(t.getMinutes()), E(t.getSeconds())].join(":");
-              return [t.getDate(), O[t.getMonth()], e].join(" ")
-            }
-
-            function P(t, e) {
-              return Object.prototype.hasOwnProperty.call(t, e)
-            }
-            var j = /%[sdj%]/g;
-            n.format = function(t) {
-              if (!v(t)) {
-                for (var e = [], n = 0; n < arguments.length; n++) e.push(i(arguments[n]));
-                return e.join(" ")
-              }
-              for (var n = 1, r = arguments, o = r.length, a = String(t).replace(j, function(t) {
-                if ("%%" === t) return "%";
-                if (n >= o) return t;
-                switch (t) {
-                  case "%s":
-                    return String(r[n++]);
-                  case "%d":
-                    return Number(r[n++]);
-                  case "%j":
-                    try {
-                      return JSON.stringify(r[n++])
-                    } catch (t) {
-                      return "[Circular]"
-                    }
-                  default:
-                    return t
-                }
-              }), s = r[n]; n < o; s = r[++n]) _(s) || !w(s) ? a += " " + s : a += " " + i(s);
-              return a
-            }, n.deprecate = function(t, i) {
-              if (y(r.process)) return function() {
-                return n.deprecate(t, i).apply(this, arguments)
-              };
-              if (!0 === e.noDeprecation) return t;
-              var o = !1;
-              return function() {
-                if (!o) {
-                  if (e.throwDeprecation) throw new Error(i);
-                  e.traceDeprecation ? console.trace(i) : console.error(i), o = !0
-                }
-                return t.apply(this, arguments)
-              }
-            };
-            var I, L = {};
-            n.debuglog = function(t) {
-              if (y(I) && (I = e.env.NODE_DEBUG || ""), t = t.toUpperCase(), !L[t])
-                if (new RegExp("\\b" + t + "\\b", "i").test(I)) {
-                  var r = e.pid;
-                  L[t] = function() {
-                    var e = n.format.apply(n, arguments);
-                    console.error("%s %d: %s", t, r, e)
-                  }
-                } else L[t] = function() {};
-              return L[t]
-            }, n.inspect = i, i.colors = {
-              bold: [1, 22],
-              italic: [3, 23],
-              underline: [4, 24],
-              inverse: [7, 27],
-              white: [37, 39],
-              grey: [90, 39],
-              black: [30, 39],
-              blue: [34, 39],
-              cyan: [36, 39],
-              green: [32, 39],
-              magenta: [35, 39],
-              red: [31, 39],
-              yellow: [33, 39]
-            }, i.styles = {
-              special: "cyan",
-              number: "yellow",
-              boolean: "yellow",
-              undefined: "grey",
-              null: "bold",
-              string: "green",
-              date: "magenta",
-              regexp: "red"
-            }, n.isArray = p, n.isBoolean = g, n.isNull = _, n.isNullOrUndefined = function(t) {
-              return null == t
-            }, n.isNumber = m, n.isString = v, n.isSymbol = function(t) {
-              return "symbol" == typeof t
-            }, n.isUndefined = y, n.isRegExp = b, n.isObject = w, n.isDate = x, n.isError = S, n.isFunction = C, n.isPrimitive = function(t) {
-              return null === t || "boolean" == typeof t || "number" == typeof t || "string" == typeof t || "symbol" == typeof t || void 0 === t
-            }, n.isBuffer = t("./support/isBuffer");
-            var O = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            n.log = function() {
-              console.log("%s - %s", A(), n.format.apply(n, arguments))
-            }, n.inherits = t("inherits"), n._extend = function(t, e) {
-              if (!e || !w(e)) return t;
-              for (var n = Object.keys(e), r = n.length; r--;) t[n[r]] = e[n[r]];
-              return t
-            }
-          }).call(this, t("v3go1D"), "undefined" != typeof self ? self : "undefined" != typeof window ? window : {})
+          e.localExports = t(187)
         }, {
-          "./support/isBuffer": 213,
-          inherits: 212,
-          v3go1D: 202
+          "tiny-inflate": 213
+        }],
+        215: [function(t, e, n) {
+          e.localExports = t(24)
+        }, {}],
+        216: [function(t, e, n) {
+          e.localExports = t(25)
+        }, {
+          "./support/isBuffer": 215,
+          inherits: 189,
+          v3go1D: 205
         }]
       }, {}, [2])(2)
     })
@@ -11081,6 +11085,189 @@ var wijmo;
     }
   }(t.pdf || (t.pdf = {}))
 }(wijmo || (wijmo = {}));
+var __extends = this && this.__extends || function() {
+    var t = Object.setPrototypeOf || {
+        __proto__: []
+      }
+      instanceof Array && function(t, e) {
+        t.__proto__ = e
+      } || function(t, e) {
+        for (var n in e) e.hasOwnProperty(n) && (t[n] = e[n])
+      };
+    return function(e, n) {
+      function r() {
+        this.constructor = e
+      }
+      t(e, n), e.prototype = null === n ? Object.create(n) : (r.prototype = n.prototype, new r)
+    }
+  }(),
+  wijmo;
+! function(t) {
+  ! function(e) {
+    "use strict";
+    var n = {
+        aliceblue: "#f0f8ff",
+        antiquewhite: "#faebd7",
+        aqua: "#00ffff",
+        aquamarine: "#7fffd4",
+        azure: "#f0ffff",
+        beige: "#f5f5dc",
+        bisque: "#ffe4c4",
+        black: "#000000",
+        blanchedalmond: "#ffebcd",
+        blue: "#0000ff",
+        blueviolet: "#8a2be2",
+        brown: "#a52a2a",
+        burlywood: "#deb887",
+        cadetblue: "#5f9ea0",
+        chartreuse: "#7fff00",
+        chocolate: "#d2691e",
+        coral: "#ff7f50",
+        cornflowerblue: "#6495ed",
+        cornsilk: "#fff8dc",
+        crimson: "#dc143c",
+        cyan: "#00ffff",
+        darkblue: "#00008b",
+        darkcyan: "#008b8b",
+        darkgoldenrod: "#b8860b",
+        darkgray: "#a9a9a9",
+        darkgreen: "#006400",
+        darkgrey: "#a9a9a9",
+        darkkhaki: "#bdb76b",
+        darkmagenta: "#8b008b",
+        darkolivegreen: "#556b2f",
+        darkorange: "#ff8c00",
+        darkorchid: "#9932cc",
+        darkred: "#8b0000",
+        darksalmon: "#e9967a",
+        darkseagreen: "#8fbc8f",
+        darkslateblue: "#483d8b",
+        darkslategray: "#2f4f4f",
+        darkslategrey: "#2f4f4f",
+        darkturquoise: "#00ced1",
+        darkviolet: "#9400d3",
+        deeppink: "#ff1493",
+        deepskyblue: "#00bfff",
+        dimgray: "#696969",
+        dimgrey: "#696969",
+        dodgerblue: "#1e90ff",
+        firebrick: "#b22222",
+        floralwhite: "#fffaf0",
+        forestgreen: "#228b22",
+        fuchsia: "#ff00ff",
+        gainsboro: "#dcdcdc",
+        ghostwhite: "#f8f8ff",
+        gold: "#ffd700",
+        goldenrod: "#daa520",
+        gray: "#808080",
+        green: "#008000",
+        greenyellow: "#adff2f",
+        grey: "#808080",
+        honeydew: "#f0fff0",
+        hotpink: "#ff69b4",
+        indianred: "#cd5c5c",
+        indigo: "#4b0082",
+        ivory: "#fffff0",
+        khaki: "#f0e68c",
+        lavender: "#e6e6fa",
+        lavenderblush: "#fff0f5",
+        lawngreen: "#7cfc00",
+        lemonchiffon: "#fffacd",
+        lightblue: "#add8e6",
+        lightcoral: "#f08080",
+        lightcyan: "#e0ffff",
+        lightgoldenrodyellow: "#fafad2",
+        lightgray: "#d3d3d3",
+        lightgreen: "#90ee90",
+        lightgrey: "#d3d3d3",
+        lightpink: "#ffb6c1",
+        lightsalmon: "#ffa07a",
+        lightseagreen: "#20b2aa",
+        lightskyblue: "#87cefa",
+        lightslategray: "#778899",
+        lightslategrey: "#778899",
+        lightsteelblue: "#b0c4de",
+        lightyellow: "#ffffe0",
+        lime: "#00ff00",
+        limegreen: "#32cd32",
+        linen: "#faf0e6",
+        magenta: "#ff00ff",
+        maroon: "#800000",
+        mediumaquamarine: "#66cdaa",
+        mediumblue: "#0000cd",
+        mediumorchid: "#ba55d3",
+        mediumpurple: "#9370db",
+        mediumseagreen: "#3cb371",
+        mediumslateblue: "#7b68ee",
+        mediumspringgreen: "#00fa9a",
+        mediumturquoise: "#48d1cc",
+        mediumvioletred: "#c71585",
+        midnightblue: "#191970",
+        mintcream: "#f5fffa",
+        mistyrose: "#ffe4e1",
+        moccasin: "#ffe4b5",
+        navajowhite: "#ffdead",
+        navy: "#000080",
+        oldlace: "#fdf5e6",
+        olive: "#808000",
+        olivedrab: "#6b8e23",
+        orange: "#ffa500",
+        orangered: "#ff4500",
+        orchid: "#da70d6",
+        palegoldenrod: "#eee8aa",
+        palegreen: "#98fb98",
+        paleturquoise: "#afeeee",
+        palevioletred: "#db7093",
+        papayawhip: "#ffefd5",
+        peachpuff: "#ffdab9",
+        peru: "#cd853f",
+        pink: "#ffc0cb",
+        plum: "#dda0dd",
+        powderblue: "#b0e0e6",
+        purple: "#800080",
+        red: "#ff0000",
+        rosybrown: "#bc8f8f",
+        royalblue: "#4169e1",
+        saddlebrown: "#8b4513",
+        salmon: "#fa8072",
+        sandybrown: "#f4a460",
+        seagreen: "#2e8b57",
+        seashell: "#fff5ee",
+        sienna: "#a0522d",
+        silver: "#c0c0c0",
+        skyblue: "#87ceeb",
+        slateblue: "#6a5acd",
+        slategray: "#708090",
+        slategrey: "#708090",
+        snow: "#fffafa",
+        springgreen: "#00ff7f",
+        steelblue: "#4682b4",
+        tan: "#d2b48c",
+        teal: "#008080",
+        thistle: "#d8bfd8",
+        tomato: "#ff6347",
+        turquoise: "#40e0d0",
+        violet: "#ee82ee",
+        wheat: "#f5deb3",
+        white: "#ffffff",
+        whitesmoke: "#f5f5f5",
+        yellow: "#ffff00",
+        yellowgreen: "#9acd32"
+      },
+      r = function(e) {
+        function r(t) {
+          return e.call(this, t) || this
+        }
+        return __extends(r, e), r.prototype._parse = function(t) {
+          return e.prototype._parse.call(this, n[t.toLowerCase()] || t)
+        }, r.fromString = function(e) {
+          var n = new r(null);
+          return n._parse(t.asString(e)) ? n : null
+        }, r
+      }(t.Color);
+    e._SafeColor = r
+  }(t.pdf || (t.pdf = {}))
+}(wijmo || (wijmo = {}));
 var wijmo;
 ! function(t) {
   ! function(e) {
@@ -11144,7 +11331,7 @@ var wijmo;
     }, e.pxToPt = n, e._asColor = function(n, r) {
       void 0 === r && (r = !0);
       var i;
-      return i = n ? n instanceof t.Color ? r ? t.Color.fromRgba(n.r, n.g, n.b, n.a) : n : t.Color.fromString(n) : t.Color.fromRgba(0, 0, 0), t.assert(i instanceof t.Color, e._Errors.InvalidArg("colorOrString")), i
+      return i = n ? n instanceof t.Color ? r ? t.Color.fromRgba(n.r, n.g, n.b, n.a) : n : e._SafeColor.fromString(n) : t.Color.fromRgba(0, 0, 0), t.assert(i instanceof t.Color, e._Errors.InvalidArg("colorOrString")), i
     }, e._asPdfPen = function(n, r) {
       return void 0 === r && (r = !0), (t.isString(n) || n instanceof t.Color) && (n = new e.PdfPen(n)), t.assert(null == n && r || n instanceof e.PdfPen, e._Errors.InvalidArg("penOrColor")), n
     }, e._asPdfBrush = function(n, r) {
@@ -13351,53 +13538,53 @@ var __extends = this && this.__extends || function() {
     }();
     e._SvgScaleAttributes = v;
     var y = function() {
-      function i(t) {
+      function t(t) {
         this._owner = t, this.color = new u(this._owner, "stroke", "none"), this.dashArray = new c(this._owner), this.dashOffset = new a(this._owner, "stroke-dashoffset", 0, n.Default, r.Other, !0), this.lineCap = new s(this._owner, "stroke-linecap", "butt", !0), this.lineJoin = new s(this._owner, "stroke-linejoin", "miter", !0), this.miterLimit = new a(this._owner, "stroke-miterlimit", 4, n.None, r.Other, !0), this.opacity = new a(this._owner, "stroke-opacity", 1, n.None, r.Other, !0), this.width = new a(this._owner, "stroke-width", 1, n.Default, r.Other, !0)
       }
-      return i.prototype.toPen = function(n) {
-        var r = new t.Color(this.color.val);
-        this.opacity.hasVal && (r.a = this.opacity.val);
-        var i = new e.PdfPen(r, this.width.val);
+      return t.prototype.toPen = function(t) {
+        var n = new e._SafeColor(this.color.val);
+        this.opacity.hasVal && (n.a = this.opacity.val);
+        var r = new e.PdfPen(n, this.width.val);
         if (this.dashArray.hasVal) {
-          var o = this.dashArray.val;
-          o.length && (i.dashPattern = new e.PdfDashPattern(o[0], o.length > 1 ? o[1] : void 0, this.dashOffset.val))
+          var i = this.dashArray.val;
+          i.length && (r.dashPattern = new e.PdfDashPattern(i[0], i.length > 1 ? i[1] : void 0, this.dashOffset.val))
         }
         switch (this.lineCap.val) {
           case "butt":
-            i.cap = e.PdfLineCapStyle.Butt;
+            r.cap = e.PdfLineCapStyle.Butt;
             break;
           case "round":
-            i.cap = e.PdfLineCapStyle.Round;
+            r.cap = e.PdfLineCapStyle.Round;
             break;
           case "square":
-            i.cap = e.PdfLineCapStyle.Square
+            r.cap = e.PdfLineCapStyle.Square
         }
         switch (this.lineJoin.val) {
           case "miter":
-            i.join = e.PdfLineJoinStyle.Miter;
+            r.join = e.PdfLineJoinStyle.Miter;
             break;
           case "round":
-            i.join = e.PdfLineJoinStyle.Round;
+            r.join = e.PdfLineJoinStyle.Round;
             break;
           case "bevel":
-            i.join = e.PdfLineJoinStyle.Bevel
+            r.join = e.PdfLineJoinStyle.Bevel
         }
-        return i.miterLimit = this.miterLimit.val, i
-      }, i
+        return r.miterLimit = this.miterLimit.val, r
+      }, t
     }();
     e._SvgStrokeAttributes = y;
     var b = function() {
-      function r(t) {
+      function t(t) {
         this._owner = t, this.color = new u(this._owner, "fill", "black"), this.opacity = new a(this._owner, "fill-opacity", 1, n.None, void 0, !0), this.rule = new l(this._owner, "fill-rule")
       }
-      return r.prototype.toBrush = function(n) {
-        var r, i = this.color.asHref();
-        if (i && n) {
-          var o = n.ctx.getElement(i);
-          if (o instanceof e._SvgLinearGradientElementImpl) return o.toBrush(n)
+      return t.prototype.toBrush = function(t) {
+        var n, r = this.color.asHref();
+        if (r && t) {
+          var i = t.ctx.getElement(r);
+          if (i instanceof e._SvgLinearGradientElementImpl) return i.toBrush(t)
         }
-        return r = new t.Color(this.color.val), this.opacity.hasVal && (r.a = this.opacity.val), new e.PdfSolidBrush(r)
-      }, r
+        return n = new e._SafeColor(this.color.val), this.opacity.hasVal && (n.a = this.opacity.val), new e.PdfSolidBrush(n)
+      }, t
     }();
     e._SvgFillAttributes = b;
     var w = function() {

@@ -1,6 +1,6 @@
 ﻿/*
  *
- * Wijmo Library 5.20182.500
+ * Wijmo Library 5.20183.550
  * http://wijmo.com/
  *
  * Copyright(c) GrapeCity, Inc.  All rights reserved.
@@ -82,7 +82,7 @@ var __extends = this && this.__extends || function() {
             var i = t.clamp(-e.deltaY, -1, 1);
             o.value = t.clamp(o.value + (o.step || 1) * i, o.min, o.max), e.preventDefault()
           }
-        }), o.initialize(a), o.invalidate(), o
+        }), o.isReadOnly = !0, o.initialize(a), o.invalidate(), o
       }
       return __extends(s, n), Object.defineProperty(s.prototype, "value", {
         get: function() {
@@ -379,11 +379,11 @@ var __extends = this && this.__extends || function() {
           switch (this._getKey(e.keyCode)) {
             case t.Key.Left:
             case t.Key.Down:
-              this.value = t.clamp(this.value - this.step, this.min, this.max);
+              this.value = t.clamp(this.value - this._step, this.min, this.max);
               break;
             case t.Key.Right:
             case t.Key.Up:
-              this.value = t.clamp(this.value + this.step, this.min, this.max);
+              this.value = t.clamp(this.value + this._step, this.min, this.max);
               break;
             case t.Key.Home:
               this.value = this.min;
@@ -400,11 +400,10 @@ var __extends = this && this.__extends || function() {
         return t
       }, s.prototype._applyMouseValue = function(e, i) {
         if (!this.isReadOnly && this.containsFocus()) {
-          var n = this.hitTest(e);
-          if (null != n) {
-            var s = this._animated;
-            return i && (this._animated = !1), null != this._step && (n = Math.round(n / this._step) * this._step), this.value = t.clamp(n, this.min, this.max), this._animated = s, !0
-          }
+          var n = this.hitTest(e),
+            s = this._animated,
+            r = this._step;
+          if (null != n) return i && (this._animated = !1), r && (n = Math.round(n / r) * r), this.value = t.clamp(n, this.min, this.max), this._animated = s, !0
         }
         return !1
       }, s.prototype._updateRangeElement = function(e, i, n) {

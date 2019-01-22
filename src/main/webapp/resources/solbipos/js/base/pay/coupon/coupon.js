@@ -301,6 +301,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
           });
+
         }
       }
     });
@@ -402,9 +403,13 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.element(document).ready(function () {
     // 적용 상품 팝업 핸들러 추가
     $scope.couponProdLayer.shown.addHandler(function (s) {
+      $("#couponProdTitle").text('[' + selectedCouponClass.payClassCd + '] '
+        + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
     });
     // 적용 매장 팝업 핸들러 추가
     $scope.couponStoreLayer.shown.addHandler(function (s) {
+      $("#couponStoreTitle").text('[' + selectedCouponClass.payClassCd + '] '
+        + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
     });
   });
 }]);
