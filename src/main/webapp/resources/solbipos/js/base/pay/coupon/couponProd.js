@@ -40,9 +40,10 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     if(selectedCoupon != null && selectedCoupon != ""){
       var params = {};
 
-      // params.listScale = "10";
-      params.prodCd = $("#srchProdCd").val();
-      params.prodNm = $("#srchProdNm").val();
+      // params.prodCd = $("#srchProdCd").val();
+      // params.prodNm = $("#srchProdNm").val();
+      params.prodCd = '';
+      params.prodNm = '';
 
       params.payClassCd = selectedCouponClass.payClassCd;
       params.coupnCd = selectedCoupon.coupnCd;
@@ -111,6 +112,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
       params.coupnEnvstVal = coupnEnvstVal;
       params.prodRegFg = "N";
 
+      // console.log(params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
       $scope._inquirySub(baseUrl + "prod/getProdList.sb", params, function() {}, false);
     }

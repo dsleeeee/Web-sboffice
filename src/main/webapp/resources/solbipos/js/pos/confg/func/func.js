@@ -106,10 +106,8 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     {header:messages["func.chk"] ,  binding:"gChk", width:40, align:"center"},
     {header:messages["func.fnkeyNo"], binding:"fnkeyNo",width:80, align:"center", isReadOnly:"true"},
     {header:messages["func.fnkeyNm"],  binding:"fnkeyNm", width:120, align:"left"},
-    {header:messages["func.storeFg"],  binding:"storeFg", width:100, dataMap:storeKindData, align:"center"}, //todo 아 이거 왜 안먹냐고 comboData
-    // {header:messages["func.storeFg"],  binding:"storeFg", width:100, align:"center"}, //todo 아 이거 왜 안먹냐고 comboData
+    {header:messages["func.storeFg"],  binding:"storeFg", width:100, dataMap:storeKindData, align:"center"},
     {header:messages["func.posFg"],  binding:"posFg", width:90, dataMap:posFgData, align:"center"},
-    // {header:messages["func.posFg"],  binding:"posFg", width:90, align:"center"},
     {header:messages["func.posiAdjYn"],  binding:"posiAdjYn", width:100, align:"center"},
     {header:messages["func.colPosi"],  binding:"colPosi", width:75, align:"center", visible:false},
     {header:messages["func.rowPosi"],  binding:"rowPosi", width:5, visible:false},
@@ -133,8 +131,6 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    // $scope.storeKindDataMap = new wijmo.grid.DataMap(storeKind, 'value', 'name');
-    // $scope.posFgDataMap = new wijmo.grid.DataMap(posFg, 'value', 'name');
 
     // bindColumnGroup 생성
     bindColumnGroups(s, dataHeader);
@@ -188,19 +184,13 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     // center-align headers vertically and horizontally
     flex.formatItem.addHandler(function (s, e) {
       if (e.panel == flex.columnHeaders) {
-        e.cell.innerHTML = '<div>' + e.cell.innerHTML + '</div>';
-        wijmo.setCss(e.cell, {
-          display: 'table',
-          tableLayout: 'fixed'
-          //class="wj-header merged-custom"
-        });
         wijmo.setCss(e.cell.children[0], {
-          display: 'table-cell',
           verticalAlign: 'middle',
           textAlign: 'center'
-          //class="wj-header merged-custom"
         });
-        // wijmo.addClass(e.cell, 'wj-header merged-custom');
+        console.log(e.cell.children[0])
+
+
       }
     });
 
@@ -217,6 +207,7 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   }
 
+  // 컬럼 그룹 생성
   function createColumnGroups(flex, columnGroups, level) {
 
     // prepare to generate columns
@@ -263,6 +254,7 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
     }
   }
 
+  // 컬럼 그룹 머지
   function mergeColumnGroups(flex) {
     // merge headers
     var colHdrs = flex.columnHeaders;
@@ -307,6 +299,8 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = {};
     params.fnkeyFg = $scope.getSelectedFuncFg().nmcodeCd;
+
+    $scope.$broadcast('loadingPopupActive');
 
     // ajax 통신 설정
     $http({

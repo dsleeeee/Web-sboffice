@@ -27,12 +27,24 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
 
+  // 조회조건
+  $scope._setComboData("hqOffice", hqList);
+
   // 조회 버튼 클릭
   $scope.$on("regStoreCtrl", function(event, data) {
     $scope.addStoreSearch();
 
     event.preventDefault();
   });
+
+  // 선택 본사
+  $scope.selectedHqOffice;
+  $scope.setSelectedHqOffice = function(s) {
+    $scope.selectedHqOffice = s.selectedValue;
+  };
+  $scope.getSelectedHqOffice = function(){
+    return $scope.selectedHqOffice;
+  };
 
   // 적용매장 목록 조회
   $scope.addStoreSearch = function(){
@@ -110,14 +122,17 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = {};
     var scope  = agrid.getScope('funcCtrl');
+    var regStoreScope  = agrid.getScope('regStoreCtrl');
 
     params.fnkeyFg = scope.getSelectedFunc().fnkeyFg;
     params.fnkeyNo = scope.getSelectedFunc().fnkeyNo;
-    params.hqOfficeCd = $("#srchHqOfficeCd").val();
-    params.hqOfficeNm = $("#srchHqOfficeNm").val();
+    params.hqOfficeCd = regStoreScope.getSelectedHqOffice();
+    // params.hqOfficeNm = $("#srchHqOfficeNm").val();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
     params.regYn = 'N';
+
+    // console.log('params' , params);
 
     $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
     }, false);

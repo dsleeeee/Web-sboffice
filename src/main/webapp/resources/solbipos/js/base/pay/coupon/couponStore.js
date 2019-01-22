@@ -16,6 +16,7 @@
 app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정 : checkbox disabled
@@ -64,23 +65,16 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록된 매장 조회
   $scope.searchRegStore = function(){
-    // var couponClassGrid = agrid.getScope("couponClassCtrl");
-    // var couponGrid = agrid.getScope("couponCtrl");
-    // if(couponGrid.flex.selectedItems.length > 0 ){
-      var params = {};
-      // params.listScale = "10";
-      params.hqOfficeCd = $("#srchHqOfficeCd").val();
-      params.hqOfficeNm = $("#srchHqOfficeNm").val();
-      params.storeCd = $("#srchStoreCd").val();
-      params.storeNm = $("#srchStoreNm").val();
+    var params = {};
+    params.srchStoreCd = '';
+    params.srchStoreNm = '';
 
-      params.payClassCd = selectedCouponClass.payClassCd;
-      params.coupnCd = selectedCoupon.coupnCd;
-      params.coupnEnvstVal = coupnEnvstVal;
-      params.storeRegFg = "Y";
+    params.payClassCd = selectedCouponClass.payClassCd;
+    params.coupnCd = selectedCoupon.coupnCd;
+    params.coupnEnvstVal = coupnEnvstVal;
+    params.storeRegFg = "Y";
 
-      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
-    // }
+    $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
   };
 
   // 등록 매장 삭제
@@ -160,22 +154,16 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 미등록 매장 조회
   $scope.searchNoRegStore = function(){
-    // var couponClassGrid = agrid.getScope("couponClassCtrl");
-    // var couponGrid = agrid.getScope("couponCtrl");
-    // if(couponGrid.flex.selectedItems.length > 0) {
-      var params = {};
-      // params.listScale = "10";
-      params.hqOfficeCd = $("#srchHqOfficeCd").val();
-      params.hqOfficeNm = $("#srchHqOfficeNm").val();
-      params.storeCd = $("#srchStoreCd").val();
-      params.storeNm = $("#srchStoreNm").val();
+    var regStoreScope  = agrid.getScope('regStoreCtrl');
+    var params = {};
+    params.srchStoreCd = $("#srchStoreCd").val();
+    params.srchStoreNm = $("#srchStoreNm").val();
 
-      params.payClassCd = selectedCouponClass.payClassCd;
-      params.coupnCd = selectedCoupon.coupnCd;
-      params.storeRegFg = "N";
+    params.payClassCd = selectedCouponClass.payClassCd;
+    params.coupnCd = selectedCoupon.coupnCd;
+    params.storeRegFg = "N";
 
-      $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
-    // }
+    $scope._inquirySub(baseUrl + "store/getStoreList.sb", params, function() {}, false);
   };
 
   // 매장 등록

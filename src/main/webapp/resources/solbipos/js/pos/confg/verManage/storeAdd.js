@@ -30,7 +30,7 @@ function search(){
  **********************************************************************/
 app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('addStoreCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('addStoreCtrl', $scope, $http, false));
 
   // 조회조건
   $scope._setComboData("hqOffice", hqList);
@@ -48,6 +48,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
+  // 선택본사
   $scope.selectedHqOffice;
   $scope.setSelectedHqOffice = function(s) {
     $scope.selectedHqOffice = s.selectedValue;
@@ -119,7 +120,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
  **********************************************************************/
 app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('allStoreCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('allStoreCtrl', $scope, $http, false));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {

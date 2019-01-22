@@ -16,38 +16,52 @@
     <%-- body --%>
     <div class="wj-dialog-body">
 
+      <div ng-controller="regStoreCtrl">
 
-      <%-- 검색조건--%>
-      <table class="tblType01">
-        <colgroup>
-          <col class="w15" />
-          <col class="w35" />
-          <col class="w15" />
-          <col class="w35" />
-        </colgroup>
-        <tbody>
-          <tr>
-            <th><s:message code="func.hqOfficeCd" /></th>
-            <td><input type="text" id="srchHqOfficeCd" maxlength="5"/></td>
-            <th><s:message code="func.hqOfficeNm" /></th>
-            <td><input type="text" id="srchHqOfficeNm" maxlength="20"/></td>
-          </tr>
-          <tr>
-            <th><s:message code="func.storeCd" /></th>
-            <td><input type="text" id="srchStoreCd" maxlength="7"/></td>
-            <th><s:message code="func.storeNm" /></th>
-            <td><input type="text" id="srchStoreNm" maxlength="20"/></td>
-          </tr>
-        </tbody>
-      </table>
-      <%-- 조회버튼 --%>
-      <div class="mt10 tr">
-        <button class="btn_skyblue" id="btnStoreSearch" onclick="search()"><s:message code="cmm.search" /></button>
-      </div>
+        <%-- 검색조건--%>
+        <table class="tblType01">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+            <tr>
+              <th><s:message code="func.hqOffice"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchHqOffice"
+                          ng-model="hqOfficeCd"
+                          control="hqOfficeCombo"
+                          items-source="_getComboData('hqOffice')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          selected-index-changed="setSelectedHqOffice(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th><s:message code="func.storeCd" /></th>
+              <td><input type="text" id="srchStoreCd" maxlength="7"/></td>
+              <th><s:message code="func.storeNm" /></th>
+              <td><input type="text" id="srchStoreNm" maxlength="20"/></td>
+            </tr>
+          </tbody>
+        </table>
+        <%-- 조회버튼 --%>
+        <div class="mt10 tr">
+          <button class="btn_skyblue" id="btnStoreSearch" onclick="search()"><s:message code="cmm.search" /></button>
+        </div>
 
-      <%-- 등록 매장 그리드 --%>
-      <div class="oh mt40">
-        <div class="w50 fl"  ng-controller="regStoreCtrl">
+        <%-- 등록 매장 그리드 --%>
+        <div class="oh mt40 w50 fl"  >
           <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden; overflow-x: hidden" >
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.regStore" /></span>
@@ -73,9 +87,11 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <%-- 미등록매장 그리드 --%>
-        <div class="w50 fr"  ng-controller="noRegStoreCtrl" >
+      <%-- 미등록매장 그리드 --%>
+      <div class="oh mt40 w50">
+        <div class=" "  ng-controller="noRegStoreCtrl" >
           <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden; overflow-x: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.noRegStore" /></span>
@@ -105,6 +121,8 @@
     </div>
   </div>
 </wj-popup>
-
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190116.01" charset="utf-8"></script>
+<script>
+  var hqList = ${ccu.getHqOfficeList()};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.01" charset="utf-8"></script>
 

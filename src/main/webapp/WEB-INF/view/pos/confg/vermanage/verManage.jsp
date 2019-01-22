@@ -104,8 +104,6 @@
   var clsFg       = ${ccu.getCommCodeExcpAll("059")};
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
   var hqList = ${ccu.getHqOfficeList()};
-
-  console.log('hqList', hqList);
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20190110.01" charset="utf-8"></script>
 

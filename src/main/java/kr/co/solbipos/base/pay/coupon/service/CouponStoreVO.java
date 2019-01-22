@@ -22,6 +22,10 @@ import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
  */
 public class CouponStoreVO extends PageVO {
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 매장코드 */
+    private String storeCd;
     /** 쿠폰분류코드 */
     private String payClassCd;
     /** 쿠폰코드 */
@@ -36,16 +40,41 @@ public class CouponStoreVO extends PageVO {
     private String result;
 
     /** /////////////////////////////조회조건/////////////////// */
-    /** 본사코드 */
-    private String hqOfficeCd;
-    /** 본사명 */
-    private String hqOfficeNm;
-    /** 매장코드 */
-    private String storeCd;
+     /** 매장코드 */
+    private String srchStoreCd;
     /** 매장명 */
-    private String storeNm;
+    private String srchStoreNm;
     /** /////////////////////////////조회조건/////////////////// */
 
+    /**
+     * @return the hqOfficeCd
+     */
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    /**
+     * @return the storeCd
+     */
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    /**
+     * @param storeCd the storeCd to set
+     */
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
 
     /**
      * @return the payClassCd
@@ -91,63 +120,33 @@ public class CouponStoreVO extends PageVO {
     }
 
     /**
-     * @return the hqOfficeCd
+     * @return the srchStoreCd
      */
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
+    public String getSrchStoreCd() {
+        return srchStoreCd;
     }
 
     /**
-     * @param hqOfficeCd the hqOfficeCd to set
+     * @param srchStoreCd the srchStoreCd to set
      */
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
+    public void setSrchStoreCd(String srchStoreCd) {
+        this.srchStoreCd = srchStoreCd;
     }
 
     /**
-     * @return the hqOfficeNm
+     * @return the srchStoreNm
      */
 
-    public String getHqOfficeNm() {
-        return hqOfficeNm;
+    public String getSrchStoreNm() {
+        return srchStoreNm;
     }
 
     /**
-     * @param hqOfficeNm the hqOfficeNm to set
+     * @param srchStoreNm the srchStoreNm to set
      */
-    public void setHqOfficeNm(String hqOfficeNm) {
-        this.hqOfficeNm = hqOfficeNm;
-    }
-
-    /**
-     * @return the storeCd
-     */
-
-    public String getStoreCd() {
-        return storeCd;
-    }
-
-    /**
-     * @param storeCd the storeCd to set
-     */
-    public void setStoreCd(String storeCd) {
-        this.storeCd = storeCd;
-    }
-
-    /**
-     * @return the storeNm
-     */
-
-    public String getStoreNm() {
-        return storeNm;
-    }
-
-    /**
-     * @param storeNm the storeNm to set
-     */
-    public void setStoreNm(String storeNm) {
-        this.storeNm = storeNm;
+    public void setSrchStoreNm(String srchStoreNm) {
+        this.srchStoreNm = srchStoreNm;
     }
 
     /**
