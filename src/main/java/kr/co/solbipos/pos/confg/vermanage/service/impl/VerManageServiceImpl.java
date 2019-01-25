@@ -116,6 +116,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModDt(insertDt);
             verInfo.setModId(sessionInfo.getUserId());
 
+            // 버전등록
             if(verManageMapper.verRegist(verInfo) > 0) {
                 isSuccess = true;
             } else {
@@ -181,11 +182,11 @@ public class VerManageServiceImpl implements VerManageService {
         VerInfoVO verInfo = new VerInfoVO();
 
         // 저장 경로 설정 (개발시 로컬)
-//        String root = multi.getSession().getServletContext().getRealPath("/");
-//        String path = root+"resources/upload/";
+        String root = multi.getSession().getServletContext().getRealPath("/");
+        String path = root+"resources/upload/";
 
         // 파일서버 대응 경로 지정 (운영)
-        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
+//        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
         // 업로드 되는 파일명
         String newFileName = "";
 
@@ -259,11 +260,6 @@ public class VerManageServiceImpl implements VerManageService {
             procCnt++;
         }
 
-//        if(procCnt == applcStores.length) {
-//            return procCnt;
-//        } else {
-//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//        }
         return procCnt;
     }
 

@@ -27,8 +27,9 @@
                TO_CHAR(TO_DATE(tcpv.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS MOD_DT,
                tcpv.MOD_ID,
                NVL(tcpvs.REG_CNT, 0) AS REG_CNT,
-               NVL(tcpvs.RECV_CNT, 0) AS RECV_CNT
-               <include refid="CmmSQL.PagingTemplateCount"/>
+               NVL(tcpvs.RECV_CNT, 0) AS RECV_CNT,
+               tcpv.FILE_DESC
+        <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN tcpv,
               (
          SELECT VER_SER_NO,
@@ -110,13 +111,13 @@
            AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-           AND tho.HQ_OFFICE_NM = #{hqOfficeNm}
+           AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} || '%'
         </if>
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-           AND tms.STORE_NM = #{storeNm}
+           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
          ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
     </select>
@@ -136,7 +137,8 @@
              tcpvs.VER_RECV_FG,
              TO_CHAR(TO_DATE(tcpvs.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS REG_DT,
              TO_CHAR(TO_DATE(tcpvs.VER_RECV_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS VER_RECV_DT,
-             tcpvs.POS_IP
+             tcpvs.POS_IP,
+             tcpv.FILE_DESC
         FROM TB_MS_STORE tms,
              TB_CM_POS_VERSN_STORE tcpvs,
              TB_CM_POS_VERSN tcpv
@@ -158,8 +160,9 @@
         SELECT tcpv.VER_SER_NO,
                tcpv.VER_SER_NM,
                tcpv.PROG_FG,
-               NVL(tcpvs.STORE_CNT, 0) AS STORE_CNT
-               <include refid="CmmSQL.PagingTemplateCount"/>
+               NVL(tcpvs.STORE_CNT, 0) AS STORE_CNT,
+               tcpv.FILE_DESC
+        <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_CM_POS_VERSN tcpv,
                (
                 SELECT VER_SER_NO, COUNT(STORE_CD) AS STORE_CNT
