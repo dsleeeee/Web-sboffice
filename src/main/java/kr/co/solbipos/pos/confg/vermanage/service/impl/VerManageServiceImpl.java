@@ -1,5 +1,6 @@
 package kr.co.solbipos.pos.confg.vermanage.service.impl;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -96,6 +97,7 @@ public class VerManageServiceImpl implements VerManageService {
             String imgYn = (String)multi.getParameter("imgYn")== "true" ? "Y": "N";
             String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";
 
+
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
             verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
@@ -141,9 +143,19 @@ public class VerManageServiceImpl implements VerManageService {
 
             String insertDt = currentDateTimeString();
 
-            String pgmYn = (String)multi.getParameter("pgmYn") == "true" ? "Y": "N";
-            String imgYn = (String)multi.getParameter("imgYn")== "true" ? "Y": "N";
-            String dbYn = (String)multi.getParameter("dbYn")== "true" ? "Y": "N";
+            String pgmYn = "N";
+            String imgYn = "N";
+            String dbYn = "N";
+
+            if(Boolean.valueOf(multi.getParameter("pgmYn"))  == true) {
+                pgmYn = "Y";
+            }
+            if(Boolean.valueOf(multi.getParameter("imgYn")) == true) {
+                imgYn = "Y";
+            }
+            if(Boolean.valueOf(multi.getParameter("dbYn")) == true) {
+                dbYn = "Y";
+            }
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
