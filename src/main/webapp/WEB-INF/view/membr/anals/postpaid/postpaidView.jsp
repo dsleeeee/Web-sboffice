@@ -16,7 +16,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_broadcast('postpaidCtrl')">
+      <button class="btn_blue fr" ng-click="_pageView('postpaidCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -85,7 +85,7 @@
 
   <%-- 그리드 --%>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
       <div class="row">
         <wj-flex-grid
                 autoGenerateColumns="false"
