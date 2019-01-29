@@ -103,9 +103,9 @@
           <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" data-map="postpaidPayFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="140" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="140" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
