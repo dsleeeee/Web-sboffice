@@ -80,6 +80,7 @@ public class PosPostpaidServiceImpl implements PosPostpaidService {
         posPostpaidStoreVO.setModId(sessionInfoVO.getUserId());
 
 
+
         int result = 0;
 
         // 세금계산서 발행요청건 등록
