@@ -80,8 +80,6 @@ public class TaxBillController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        LOGGER.info("taxBillVO.getProperties() >>>>>>>>>>>>>>>>>>>> "+taxBillVO.getProperties());
-
         List<DefaultMap<Object>> result = taxBillService.getTaxBillRequestList(taxBillVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, taxBillVO);

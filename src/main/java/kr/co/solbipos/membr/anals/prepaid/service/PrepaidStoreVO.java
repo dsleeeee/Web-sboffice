@@ -25,10 +25,12 @@ public class PrepaidStoreVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장명 */
+    private String storeNm;
     /** 회원번호 */
-    private String memberNo;
+    private String membrNo;
     /** 회원명 */
-    private String memberNm;
+    private String membrNm;
     /** 후불회원 등록 매장 코드 */
     private String prepaidStoreCd;
     /** 후불회원 등록 매장 명 */
@@ -88,33 +90,48 @@ public class PrepaidStoreVO extends PageVO {
     }
 
     /**
-     * @return the memberNo
+     * @return the storeNm
      */
 
-    public String getMemberNo() {
-        return memberNo;
+    public String getStoreNm() {
+        return storeNm;
     }
 
     /**
-     * @param memberNo the memberNo to set
+     * @param storeNm the storeNm to set
      */
-    public void setMemberNo(String memberNo) {
-        this.memberNo = memberNo;
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 
     /**
-     * @return the memberNm
+     * @return the membrNo
      */
 
-    public String getMemberNm() {
-        return memberNm;
+    public String getMembrNo() {
+        return membrNo;
     }
 
     /**
-     * @param memberNm the memberNm to set
+     * @param membrNo the membrNo to set
      */
-    public void setMemberNm(String memberNm) {
-        this.memberNm = memberNm;
+    public void setMembrNo(String membrNo) {
+        this.membrNo = membrNo;
+    }
+
+    /**
+     * @return the membrNm
+     */
+
+    public String getMembrNm() {
+        return membrNm;
+    }
+
+    /**
+     * @param membrNm the membrNm to set
+     */
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
     }
 
     /**
