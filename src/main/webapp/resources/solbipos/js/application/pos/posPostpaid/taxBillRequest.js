@@ -31,7 +31,7 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
   $scope.$on("requestTaxBillCtrl", function(event, data) {
 
     $scope.$apply(function() {
-      $scope.requestMember     = data;
+      $scope.requestMember = data;
       $scope.memberInfo = '[' + $scope.requestMember.membrNo + '] '+$scope.requestMember.membrNm;
       $scope.balance    = addComma($scope.requestMember.postpaidBalAmt) + ' 원';
       $scope.requestAmt = "";
@@ -44,20 +44,22 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
   // 세금계산서 발행 요청
   $scope.request = function(){
 
+    var requestAmt = removeComma($scope.requestAmt);
+    var posPaidBalAmt = removeComma($scope.requestMember.postpaidBalAmt);
+
     if(isEmptyObject($scope.requestAmt) ) {
       $scope._popMsg(messages["postpaid.require.input.taxBillAmt"]);
       return false;
     }
 
-    if( $scope.requestAmt >  $scope.requestMember.postpaidBalAmt) {
+    if( Number(requestAmt) > Number(posPaidBalAmt) ) {
       $scope._popMsg(messages["postpaid.taxBillAmt.not.overTot"]);
       return false;
     }
 
     var params = $scope.requestMember;
-    params.requestAmt = $scope.requestAmt;
+    params.requestAmt = requestAmt;
     params.remark = $scope.remark;
-    // console.log('remark : '+ $scope.remark)
 
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._postJSONSave.withPopUp( "/application/pos/posPostpaid/posPostpaid/saveTaxBillRequet.sb", params, function(response){
