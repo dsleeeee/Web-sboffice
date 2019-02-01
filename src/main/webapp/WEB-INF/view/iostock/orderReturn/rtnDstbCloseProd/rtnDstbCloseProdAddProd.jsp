@@ -29,7 +29,7 @@
           <th><s:message code="rtnDstbCloseProd.add.store"/></th>
           <td>
             <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
               <jsp:param name="targetId" value="rtnDstbCloseProdAddProdSelectStore"/>
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>

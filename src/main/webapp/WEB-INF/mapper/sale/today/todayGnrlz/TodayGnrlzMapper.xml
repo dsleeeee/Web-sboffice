@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.today.todayGnrlz.service.impl.TodayGnrlzMapper">
+
+    <!-- 당일매출종합현황 - 매출종합 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : todayGnrlzVO
+        COMMENTS : 당일매출종합현황 - 매출종합 리스트를 조회한다.
+    -->
+    <select id="getTodayGnrlzList" parameterType="todayGnrlzVO" resultType="DefaultMap">
+        /* USE : TodayGnrlzMapper.getTodayGnrlzList */
+        SELECT  NVL(SUM(tssh.TOT_SALE_AMT), 0) AS TOT_SALE_AMT
+        ,		NVL(SUM(tssh.TOT_DC_AMT), 0) AS TOT_DC_AMT
+        ,		NVL(SUM(tssh.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
+        ,		NVL(SUM(DECODE(tssh.SALE_YN, 'N', tssh.TOT_SALE_AMT, 0)), 0) AS CANCEL_AMT
+        FROM    TB_SL_SALE_HDR tssh
+        WHERE   tssh.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND	    tssh.SALE_DATE      =   #{startDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+              #{item}
+            </foreach>
+        </if>
+    </select>
+
+
+    <!-- 당일매출종합현황 - 결제수단별 매출 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_PAY, TB_CM_NMCODE
+        PARAM    : todayGnrlzVO
+        COMMENTS : 당일매출종합현황 - 결제수단별 매출 리스트를 조회한다.
+    -->
+    <select id="getTodayGnrlzPayList" parameterType="todayGnrlzVO" resultType="DefaultMap">
+        /* USE : TodayGnrlzMapper.getTodayGnrlzPayList */
+        SELECT  tsshp.PAY_CD
+        ,       tcn.NMCODE_NM AS PAY_NM
+        ,       SUM(tsshp.PAY_AMT) AS PAY_AMT
+        ,       DECODE(tsshptot.TOT_PAY_AMT, 0, 0, ((SUM(tsshp.PAY_AMT)/tsshptot.TOT_PAY_AMT)*100)) AS PAY_RATE
+        FROM    TB_SL_SALE_HDR_PAY tsshp
+        ,       (   SELECT  NVL(SUM(PAY_AMT),0) AS TOT_PAY_AMT
+                    FROM    TB_SL_SALE_HDR_PAY
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     SALE_DATE       =   #{startDate}
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                ) tsshptot
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsshp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tsshp.SALE_DATE     =   #{startDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsshp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        AND     tcn.NMCODE_GRP_CD   =   '024'
+        AND     tcn.NMCODE_CD       =   tsshp.PAY_CD
+        GROUP
+        BY      tsshp.PAY_CD, tcn.NMCODE_NM, tsshptot.TOT_PAY_AMT
+        ORDER
+        BY      tsshp.PAY_CD
+    </select>
+
+
+    <!-- 당일매출종합현황 - 회원 Point 적립/사용 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_PAY_POINT, TB_MB_MEMBER
+        PARAM    : todayGnrlzVO
+        COMMENTS : 당일매출종합현황 - 회원 Point 적립/사용 리스트를 조회한다.
+    -->
+    <select id="getTodayGnrlzMemberList" parameterType="todayGnrlzVO" resultType="DefaultMap">
+        /* USE : TodayGnrlzMapper.getTodayGnrlzMemberList */
+        SELECT  MEMBR_NO, MEMBR_NM
+        ,       SAVE_POINT
+        ,       USE_POINT
+        FROM    (
+                    SELECT  tsshm.MEMBR_NO, tsshm.MEMBR_NM
+                    ,       SUM(tsshm.SAVE_POINT) AS SAVE_POINT
+                    ,       0 AS USE_POINT
+                    FROM    TB_SL_SALE_HDR_MEMBR tsshm
+                    WHERE   tsshm.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     tsshm.SALE_DATE     =   #{startDate}
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND tsshm.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    GROUP
+                    BY      tsshm.MEMBR_NO, tsshm.MEMBR_NM
+                    UNION ALL
+                    SELECT  tsspp.MEMBR_NO, tmm.MEMBR_NM
+                    ,       0 AS SAVE_POINT
+                    ,       SUM(tsspp.SALE_AMT) AS USE_POINT
+                    FROM    TB_SL_SALE_PAY_POINT tsspp
+                    ,       TB_MB_MEMBER tmm
+                    WHERE   tsspp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     tsspp.SALE_DATE     =   #{startDate}
+                    AND     tmm.MEMBR_ORGN_CD   =   #{orgnCd}
+                    AND     tmm.MEMBR_NO        =   tsspp.MEMBR_NO
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND tsspp.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+                    GROUP
+                    BY      tsspp.MEMBR_NO, tmm.MEMBR_NM
+                )
+        ORDER
+        BY      MEMBR_NO
+    </select>
+
+
+    <!-- 당일매출종합현황 - 상품별 매출현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_PAY, TB_CM_NMCODE
+        PARAM    : todayGnrlzVO
+        COMMENTS : 당일매출종합현황 - 상품별 매출현황 리스트를 조회한다.
+    -->
+    <select id="getTodayGnrlzProdList" parameterType="todayGnrlzVO" resultType="DefaultMap">
+        /* USE : TodayGnrlzMapper.getTodayGnrlzProdList */
+        SELECT	tssd.PROD_CD, tmp.PROD_NM
+        ,		SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,		SUM(tssd.SALE_QTY) AS SALE_QTY
+        FROM	TB_SL_SALE_DTL tssd
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
+        AND		tssd.SALE_DATE		=	#{startDate}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        AND     tmp.STORE_CD        =   tssd.STORE_CD
+        AND     tmp.PROD_CD         =   tssd.PROD_CD
+        GROUP
+        BY		tssd.PROD_CD, tmp.PROD_NM
+        ORDER
+        BY		SUM(tssd.REAL_SALE_AMT) DESC
+    </select>
+</mapper>

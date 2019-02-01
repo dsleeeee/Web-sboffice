@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.billInfo.service.impl.BillInfoMapper">
+
+    <!-- 매출공통팝업 - 영수증상세 종합내역 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : billInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 종합내역을 조회한다.
+    -->
+    <select id="getBillInfo" parameterType="billInfoVO" resultType="DefaultMap">
+        /* USE : BillInfoMapper.getBillInfo */
+        SELECT  tssh.STORE_CD, tms.STORE_NM
+        ,       tssh.TOT_SALE_AMT, tssh.TOT_DC_AMT, tssh.REAL_SALE_AMT
+        ,       tssh.NET_SALE_AMT, tssh.NO_TAX_SALE_AMT, tssh.TAX_SALE_AMT
+        ,       tssh.VAT_AMT, tssh.TOT_TIP_AMT
+        ,       tssh.ORG_BILL_NO
+        FROM    TB_SL_SALE_HDR tssh
+        ,       TB_MS_STORE tms
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.STORE_CD     = #{storeCd}
+        AND     tssh.SALE_DATE    = #{saleDate}
+        AND     tssh.POS_NO       = #{posNo}
+        AND     tssh.BILL_NO      = #{billNo}
+        AND     tms.STORE_CD  (+) = tssh.STORE_CD
+    </select>
+
+
+    <!-- 매출공통팝업 - 영수증상세 결제내역 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_PAY
+        PARAM    : billInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 결제내역을 조회한다.
+    -->
+    <select id="getBillPayInfo" parameterType="billInfoVO" resultType="DefaultMap">
+        /* USE : BillInfoMapper.getBillPayInfo */
+        SELECT  <foreach collection="arrPayCol" item="item" separator=",">
+                    DECODE(tsshp.PAY_CD, ${item}, tsshp.PAY_AMT, 0) AS PAY${item}
+                </foreach>
+        FROM    (   SELECT  tsshp.PAY_CD
+                    ,       SUM(tsshp.PAY_AMT) AS PAY_AMT
+                    FROM    TB_SL_SALE_HDR_PAY tsshp
+                    WHERE   tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tsshp.STORE_CD     = #{storeCd}
+                    AND     tsshp.SALE_DATE    = #{saleDate}
+                    AND     tsshp.POS_NO       = #{posNo}
+                    AND     tsshp.BILL_NO      = #{billNo}
+                    GROUP
+                    BY      tsshp.PAY_CD
+                ) tsshp
+    </select>
+
+
+    <!-- 매출공통팝업 - 영수증상세 방문인원 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_GUEST
+        PARAM    : billInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 방문인원을 조회한다.
+    -->
+    <select id="getBillGuestInfo" parameterType="billInfoVO" resultType="DefaultMap">
+        /* USE : BillInfoMapper.getBillGuestInfo */
+        SELECT  tsshg.GUEST_CNT_1 AS GUEST01
+        ,       tsshg.GUEST_CNT_2 AS GUEST02
+        ,       tsshg.GUEST_CNT_3 AS GUEST03
+        ,       tsshg.GUEST_CNT_4 AS GUEST04
+        FROM    TB_SL_SALE_HDR_GUEST tsshg
+        WHERE   tsshg.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsshg.STORE_CD     = #{storeCd}
+        AND     tsshg.SALE_DATE    = #{saleDate}
+        AND     tsshg.POS_NO       = #{posNo}
+        AND     tsshg.BILL_NO      = #{billNo}
+    </select>
+
+
+    <!-- 매출공통팝업 - 영수증상세 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_DTL
+        PARAM    : billInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 상품 리스트를 조회한다.
+    -->
+    <select id="getBillProdList" parameterType="billInfoVO" resultType="DefaultMap">
+        /* USE : BillInfoMapper.getBillProdList */
+        SELECT  tssd.PROD_CD, tmp.PROD_NM
+        ,       tssd.SALE_QTY, tssd.SALE_UPRC
+        ,       tssd.SALE_AMT, tssd.DC_AMT, tssd.REAL_SALE_AMT
+        ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
+        ,       tssd.VAT_AMT
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tssdd.DC${item} AS DC${item}
+                </foreach>
+        FROM    TB_SL_SALE_DTL tssd
+        ,       (   SELECT  PROD_CD
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                DC${item} AS DC${item}
+                            </foreach>
+                    FROM    (   SELECT  tssdd.PROD_CD, tssdd.DC_CD, tssdd.DC_AMT
+                                FROM    TB_SL_SALE_DTL_DC tssdd
+                                WHERE   tssdd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tssdd.STORE_CD      = #{storeCd}
+                                AND     tssdd.SALE_DATE     = #{saleDate}
+                                AND     tssdd.POS_NO        = #{posNo}
+                                AND     tssdd.BILL_NO       = #{billNo}
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                ) tssdd
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssd.STORE_CD     = #{storeCd}
+        AND     tssd.SALE_DATE    = #{saleDate}
+        AND     tssd.POS_NO       = #{posNo}
+        AND     tssd.BILL_NO      = #{billNo}
+        AND     tssdd.PROD_CD (+) = tssd.PROD_CD
+        AND     tmp.STORE_CD  (+) = tssd.STORE_CD
+        AND     tmp.PROD_CD   (+) = tssd.PROD_CD
+    </select>
+
+</mapper>

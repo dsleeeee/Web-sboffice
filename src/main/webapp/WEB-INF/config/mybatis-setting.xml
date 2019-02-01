@@ -449,7 +449,9 @@
     <typeAlias alias="orderListVO" type="kr.co.solbipos.si.edi.orderlist.service.OrderListVO"/>
 -->
 
+    <!-- POS 화면 웹사용 - 간편 회원 가입 -->
     <typeAlias alias="memberVO" type="kr.co.solbipos.application.pos.service.MemberVO"/>
+    <!-- 수불 -->
     <typeAlias alias="storeLoanManageVO" type="kr.co.solbipos.iostock.loan.storeLoanManage.service.StoreLoanManageVO"/>
     <typeAlias alias="storeLoanInfoVO" type="kr.co.solbipos.iostock.loan.storeLoanInfo.service.StoreLoanInfoVO"/>
     <typeAlias alias="deliveryChargerManageVO" type="kr.co.solbipos.iostock.deliveryCharger.deliveryChargerManage.service.DeliveryChargerManageVO"/>
@@ -477,6 +479,7 @@
     <typeAlias alias="volmErrVO" type="kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO"/>
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
     <typeAlias alias="storeMoveVO" type="kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO"/>
+    <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>
     <typeAlias alias="storeCurrVO" type="kr.co.solbipos.stock.curr.storeCurr.service.StoreCurrVO"/>
     <typeAlias alias="acinsVO" type="kr.co.solbipos.stock.acins.acins.service.AcinsVO"/>
@@ -491,6 +494,12 @@
     <typeAlias alias="prodStockInfoVO" type="kr.co.solbipos.iostock.vendr.prodStockInfo.service.ProdStockInfoVO"/>
     <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
     <typeAlias alias="iostockCmmVO" type="kr.co.solbipos.iostock.cmm.service.IostockCmmVO"/>
+
+    <!-- 매출 -->
+    <typeAlias alias="todayGnrlzVO" type="kr.co.solbipos.sale.today.todayGnrlz.service.TodayGnrlzVO"/>
+    <typeAlias alias="todayDtlVO" type="kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO"/>
+    <!-- 매출 공통팝업-->
+    <typeAlias alias="billInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.billInfo.service.BillInfoVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

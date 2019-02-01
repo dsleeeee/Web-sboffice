@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.today.todayDtl.service.impl.TodayDtlMapper">
+
+    <!-- 당일매출상세현황 - 결제수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 결제수단 컬럼 리스트를 조회한다.
+    -->
+    <select id="getPayColList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getPayColList */
+        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '024'
+        ORDER
+        BY      tcn.NMCODE_CD
+    </select>
+
+
+    <!-- 당일매출상세현황 - 할인 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 할인 컬럼 리스트를 조회한다.
+    -->
+    <select id="getDcColList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getDcColList */
+        SELECT  tcn.NMCODE_CD AS DC_CD, tcn.NMCODE_NM AS DC_NM
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '041'
+        ORDER
+        BY      tcn.NMCODE_CD
+    </select>
+
+
+    <!-- 당일매출상세현황 - 객수 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 할인 컬럼 리스트를 조회한다.
+    -->
+    <select id="getGuestColList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getGuestColList */
+        SELECT  thn.NMCODE_CD AS GUEST_CD, thn.NMCODE_NM AS GUEST_NM
+        FROM    TB_HQ_NMCODE thn
+        WHERE   thn.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     thn.NMCODE_GRP_CD   =   '102'
+        ORDER
+        BY      thn.NMCODE_CD
+    </select>
+
+
+    <!-- 당일매출상세현황 - 매출종합 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC, TB_SL_SALE_HDR_GUEST
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 매출종합 리스트를 조회한다.
+    -->
+    <select id="getTodayDtlList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getTodayDtlList */
+        SELECT  tssh.SALE_YN
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       tssh.GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       DECODE(tssh.SALE_YN, 'Y', tssh.BILL_CNT, -(tssh.BILL_CNT)) AS BILL_CNT
+        ,       tssh.BILL_UPRC
+        ,       tssh.TOT_GUEST_CNT
+        ,       DECODE(tssh.SALE_YN, 'Y', tssh.GUEST_UPRC, -(tssh.GUEST_UPRC)) AS GUEST_UPRC
+        ,       tsshg.GUEST01
+        ,       tsshg.GUEST02
+        ,       tsshg.GUEST03
+        ,       tsshg.GUEST04
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        FROM    (   SELECT  tssh.SALE_YN
+                    ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
+                    ,       SUM(tssh.VAT_AMT) AS VAT_AMT
+                    ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
+                    ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       COUNT(tssh.BILL_NO) AS BILL_CNT
+                    ,       DECODE(COUNT(tssh.BILL_NO), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / COUNT(tssh.BILL_NO))) AS BILL_UPRC
+                    ,       SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+                    ,       DECODE(NVL(SUM(tssh.TOT_GUEST_CNT),0), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.TOT_GUEST_CNT))) AS GUEST_UPRC
+                    FROM    TB_SL_SALE_HDR tssh
+                    WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tssh.STORE_CD     = #{storeCd}
+                    AND     tssh.SALE_DATE    = #{startDate}
+                    GROUP
+                    BY      tssh.SALE_YN
+                ) tssh
+        ,       (   SELECT  SALE_YN
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(PAY${item}) AS PAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshp.SALE_YN, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshp.STORE_CD      = #{storeCd}
+                                AND     tsshp.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                    GROUP BY SALE_YN
+                ) tsshp
+        ,       (   SELECT  SALE_YN
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                SUM(DC${item}) AS DC${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshd.SALE_YN, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshd.STORE_CD      = #{storeCd}
+                                AND     tsshd.SALE_DATE     = #{startDate}
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                    GROUP BY SALE_YN
+                ) tsshd
+        ,       (   SELECT  tsshg.SALE_YN
+                    ,       SUM(tsshg.GUEST_CNT_1 * tsshg.SALE_FG) AS GUEST01
+                    ,       SUM(tsshg.GUEST_CNT_2 * tsshg.SALE_FG) AS GUEST02
+                    ,       SUM(tsshg.GUEST_CNT_3 * tsshg.SALE_FG) AS GUEST03
+                    ,       SUM(tsshg.GUEST_CNT_4 * tsshg.SALE_FG) AS GUEST04
+                    FROM    TB_SL_SALE_HDR_GUEST tsshg
+                    WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tsshg.STORE_CD      = #{storeCd}
+                    AND     tsshg.SALE_DATE     = #{startDate}
+                    GROUP
+                    BY      tsshg.SALE_YN
+                ) tsshg
+        WHERE   tsshp.SALE_YN (+) = tssh.SALE_YN
+        AND     tsshd.SALE_YN (+) = tssh.SALE_YN
+        AND     tsshg.SALE_YN (+) = tssh.SALE_YN
+    </select>
+
+
+    <!-- 당일매출상세현황 - 매출상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC, TB_SL_SALE_HDR_GUEST
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 매출상세 리스트를 조회한다.
+    -->
+    <select id="getTodayDtlDetailList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getTodayDtlDetailList */
+        SELECT  tssh.POS_NO
+        ,       tssh.BILL_NO
+        ,       SUBSTR(BILL_DT, 9, 6) AS BILL_DT
+        ,       tssh.SALE_YN
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       (tssh.REAL_SALE_AMT - tssh.VAT_AMT) AS GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       DECODE(tssh.MEMBR_YN, 'Y', tsshm.MEMBR_NO, NULL) AS MEMBR_NO
+        ,       DECODE(tssh.MEMBR_YN, 'Y', tsshm.MEMBR_NM, NULL) AS MEMBR_NM
+        ,       tmt.TBL_NM AS TBL_NM
+        ,       tssh.TOT_GUEST_CNT
+        ,       DECODE(NVL(tssh.TOT_GUEST_CNT,0), 0, 0, DECODE(tssh.SALE_YN, 'Y', ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT), -(ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)))) AS GUEST_UPRC
+        ,       tssh.REG_DT AS FIRST_ORDER_DT
+        ,       tsshg.GUEST01
+        ,       tsshg.GUEST02
+        ,       tsshg.GUEST03
+        ,       tsshg.GUEST04
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        FROM    TB_SL_SALE_HDR tssh
+        ,       (   SELECT  POS_NO, BILL_NO
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                PAY${item} AS PAY${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshp.STORE_CD      = #{storeCd}
+                                AND     tsshp.SALE_DATE     = #{startDate}
+                                <if test='saleYn != null and saleYn != ""'>
+                                    AND   tsshp.SALE_YN    = #{saleYn}
+                                </if>
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                ) tsshp
+        ,       (   SELECT  POS_NO, BILL_NO
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                DC${item} AS DC${item}
+                            </foreach>
+                    FROM    (   SELECT  tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshd.STORE_CD      = #{storeCd}
+                                AND     tsshd.SALE_DATE     = #{startDate}
+                                <if test='saleYn != null and saleYn != ""'>
+                                    AND   tsshd.SALE_YN    = #{saleYn}
+                                </if>
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                ) tsshd
+        ,       (   SELECT  tsshg.POS_NO, tsshg.BILL_NO
+                    ,       tsshg.GUEST_CNT_1 * tsshg.SALE_FG AS GUEST01
+                    ,       tsshg.GUEST_CNT_2 * tsshg.SALE_FG AS GUEST02
+                    ,       tsshg.GUEST_CNT_3 * tsshg.SALE_FG AS GUEST03
+                    ,       tsshg.GUEST_CNT_4 * tsshg.SALE_FG AS GUEST04
+                    FROM    TB_SL_SALE_HDR_GUEST tsshg
+                    WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     tsshg.STORE_CD      = #{storeCd}
+                    AND     tsshg.SALE_DATE     = #{startDate}
+                    <if test='saleYn != null and saleYn != ""'>
+                        AND   tsshg.SALE_YN    = #{saleYn}
+                    </if>
+                ) tsshg
+        ,       TB_SL_SALE_HDR_MEMBR tsshm
+        ,       TB_MS_TABLE tmt
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.STORE_CD     = #{storeCd}
+        AND     tssh.SALE_DATE    = #{startDate}
+        <if test='saleYn != null and saleYn != ""'>
+          AND   tssh.SALE_YN    = #{saleYn}
+        </if>
+        AND     tsshp.POS_NO      (+) = tssh.POS_NO
+        AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshd.POS_NO      (+) = tssh.POS_NO
+        AND     tsshd.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshg.POS_NO      (+) = tssh.POS_NO
+        AND     tsshg.BILL_NO     (+) = tssh.BILL_NO
+        AND     tsshm.HQ_OFFICE_CD(+) = tssh.HQ_OFFICE_CD
+        AND     tsshm.HQ_BRAND_CD (+) = tssh.HQ_BRAND_CD
+        AND     tsshm.STORE_CD    (+) = tssh.STORE_CD
+        AND     tsshm.SALE_DATE   (+) = tssh.SALE_DATE
+        AND     tsshm.POS_NO      (+) = tssh.POS_NO
+        AND     tsshm.BILL_NO     (+) = tssh.BILL_NO
+        AND     tmt.STORE_CD      (+) = tssh.STORE_CD
+        AND     tmt.TBL_CD        (+) = tssh.TBL_CD
+        ORDER
+        BY      tssh.POS_NO, tssh.BILL_NO DESC
+    </select>
+
+</mapper>

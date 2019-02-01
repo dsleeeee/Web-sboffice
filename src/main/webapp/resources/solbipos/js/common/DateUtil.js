@@ -71,6 +71,42 @@ function getFormatDate(date, seperator)
     }
 }
 
+/***
+ * 시간 포맷
+ * @param time
+ * @param displayFg h:시간 m:분 s:초
+ * @param seperator
+ * @returns {*}
+ */
+function getFormatTime(time, displayFg, seperator)
+{
+  try
+  {
+    if(time.length < 6) return time;
+    var seperator = ((seperator === undefined || seperator === '') ? ':' : seperator);
+    var returnValue = '';
+    var hour = time.substr(0,2);
+    var min  = time.substr(2,2);
+    var sec  = time.substr(4,2);
+
+    if(displayFg.indexOf('h') >= 0) {
+      returnValue += hour;
+    }
+    if(displayFg.indexOf('m') >= 0) {
+      returnValue += (returnValue === '' ? '' : seperator)+min;
+    }
+    if(displayFg.indexOf('s') >= 0) {
+      returnValue += (returnValue === '' ? '' : seperator)+sec;
+    }
+
+    return returnValue;
+  }
+  catch(e)
+  {
+    //alert('udfMainFrm.js : '+e);
+  }
+}
+
 /**
  * 날짜+시간 포맷
  * @param date

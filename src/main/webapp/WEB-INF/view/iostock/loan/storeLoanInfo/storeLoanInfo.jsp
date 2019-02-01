@@ -35,7 +35,7 @@
       <th><s:message code="storeLoanInfo.store"/></th>
       <td colspan="3">
         <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/iostock/cmm/selectShopM.jsp" flush="true">
+        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
           <jsp:param name="targetId" value="storeLoanInfoSelectStore"/>
         </jsp:include>
         <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
