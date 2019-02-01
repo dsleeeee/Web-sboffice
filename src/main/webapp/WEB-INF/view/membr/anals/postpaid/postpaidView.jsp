@@ -16,7 +16,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" ng-click="_broadcast('postpaidCtrl')">
+      <button class="btn_blue fr" ng-click="_pageView('postpaidCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -85,7 +85,7 @@
 
   <%-- 그리드 --%>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
+    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
       <div class="row">
         <wj-flex-grid
                 autoGenerateColumns="false"
@@ -101,15 +101,12 @@
           <wj-flex-grid-column header="<s:message code="postpaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidNo"/>" binding="postpaidNo" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaid.membrNm"/>" binding="membrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidFg"/>" binding="postpaidFg" data-map="postpaidFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidPayFg"/>" binding="postpaidPayFg" data-map="postpaidPayFgDataMap" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="140" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.depositAmt"/>" binding="depositAmt" width="140" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.regDt"/>" binding="regDt" is-read-only="true" width="170" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="postpaid.regId"/>" binding="regId" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidAmt"/>" binding="postpaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidInAmt"/>" binding="postpaidInAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaid.postpaidBalAmt"/>" binding="postpaidBalAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
+
         </wj-flex-grid>
       </div>
     </div>

@@ -103,8 +103,9 @@
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
   var clsFg       = ${ccu.getCommCodeExcpAll("059")};
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
+  var hqList = ${ccu.getHqOfficeList()};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=2019011001" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20190110.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">

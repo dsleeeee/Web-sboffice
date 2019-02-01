@@ -28,9 +28,9 @@
         </tr>
         <tr>
           <th><s:message code="prepaid.membrNo"/></th>
-          <td><input type="text" ng-model="memberNo" id="searchChargeMemberNo"/></td>
+          <td><input type="text" ng-model="membrNo" id="searchChargeMemberNo"/></td>
           <th><s:message code="prepaid.membrNm"/></th>
-          <td><input type="text" ng-model="memberNm" id="searchChargeMemberNm" /></td>
+          <td><input type="text" ng-model="membrNm" id="searchChargeMemberNm" /></td>
         </tr>
         </tbody>
       </table>

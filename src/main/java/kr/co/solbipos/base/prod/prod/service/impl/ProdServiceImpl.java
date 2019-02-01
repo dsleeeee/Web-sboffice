@@ -251,7 +251,7 @@ public class ProdServiceImpl implements ProdService {
             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
             // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
-            String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
+            String storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
 
             // 판매가가 기존 판매가와 다른 경우
             if(!prodVO.getSaleUprc().equals(prodVO.getSaleUprcB())) {

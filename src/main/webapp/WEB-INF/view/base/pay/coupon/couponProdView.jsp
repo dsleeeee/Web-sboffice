@@ -63,9 +63,9 @@
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -74,7 +74,7 @@
 
         <%--- 미등록상품 그리드 --%>
         <div class="w50 fr">
-          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="noRegProdCtrl">
+          <div class="wj-TblWrap ml10" style="height:400px; overflow-y: hidden;" ng-controller="noRegProdCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.noRegProd" /></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist" /></a></span>
@@ -95,9 +95,9 @@
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodClassCd"/>" binding="prodClassCd" width="*" is-read-only="true"  visible="false" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodClassNm"/>" binding="prodClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.prodCd"/>" binding="prodCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.prodNm"/>" binding="prodNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.costUprc"/>" binding="costUprc" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -112,4 +112,4 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=2018122801" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20190122.01" charset="utf-8"></script>

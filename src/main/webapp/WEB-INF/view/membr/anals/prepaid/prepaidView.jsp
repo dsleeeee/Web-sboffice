@@ -40,34 +40,17 @@
       <%-- 회원번호 --%>
       <th><s:message code="prepaid.membrNo" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="memberNo" />
+        <input type="text" class="sb-input w100" id="srcgMembrNo" ng-model="membrNo" />
       </td>
     </tr>
     <tr>
       <%-- 회원명 --%>
       <th><s:message code="prepaid.membrNm" /></th>
       <td>
-        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="memberNm" />
+        <input type="text" class="sb-input w100" id="srchMembrNm" ng-model="membrNm" />
       </td>
       <th></th>
       <td></td>
-      <%-- 정렬 --%>
-      <%--
-      <th><s:message code="prepaid.array" /></th>
-      <td>
-        <div class="sb-select w100">
-          <wj-combo-box
-                  id="srchArrayCombo"
-                  ng-model="array"
-                  items-source="_getComboData('srchArrayCombo')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  initialized="_initComboBox(s)">
-          </wj-combo-box>
-        </div>
-      </td>
-      --%>
     </tr>
     </tbody>
   </table>
@@ -108,7 +91,7 @@
                 is-read-only="true">
 
           <!-- define columns -->
-          <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>--%>
+          <%--
           <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -124,6 +107,16 @@
           <wj-flex-grid-column header="<s:message code="prepaid.orgPrepaidNo"/>" binding="orgPrepaidNo" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.sendYn"/>" binding="sendYn" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaid.sendDt"/>" binding="sendDt" visible="false"></wj-flex-grid-column>
+          --%>
+          <wj-flex-grid-column header="<s:message code="prepaid.hqOfficeCd"/>" binding="hqOfficeCd" width="70" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.storeNm"/>" binding="storeNm" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.membrNo"/>" binding="membrNo" width="140" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.membrNm"/>" binding="membrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidAmt"/>" binding="prepaidAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidUseAmt"/>" binding="prepaidUseAmt" width="*" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaid.prepaidBalAmt"/>" binding="prepaidBalAmt" width="*" is-read-only="true" ></wj-flex-grid-column>
+
         </wj-flex-grid>
       </div>
     </div>

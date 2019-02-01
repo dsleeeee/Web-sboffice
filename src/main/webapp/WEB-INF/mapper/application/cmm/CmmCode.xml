@@ -105,7 +105,7 @@
         /* USE : CmmCodeMapper.getHqOfficeList */
         SELECT
             HQ_OFFICE_CD,
-            HQ_OFFICE_NM
+            '['||HQ_OFFICE_CD||'] '||HQ_OFFICE_NM AS HQ_OFFICE_NM
         FROM
             TB_HQ_OFFICE
         ORDER BY HQ_OFFICE_CD NULLS FIRST

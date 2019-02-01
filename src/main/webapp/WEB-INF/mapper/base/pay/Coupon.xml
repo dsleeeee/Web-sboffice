@@ -674,11 +674,11 @@
             AND thcp.PAY_CLASS_CD (+)=  #{payClassCd}
             AND thcp.COUPN_CD (+)= #{coupnCd}
             AND thcp.PROD_CD (+)= thp.PROD_CD
-        <if test='prodCd != null and prodCd.toString() != ""'>
+        <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD = #{prodCd}
         </if>
-        <if test='prodNm != null and prodNm.toString() != ""'>
-            AND thp.PROD_NM LIKE '%'||#{prodCd}||'%'
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
             AND thcp.PROD_CD IS NOT NULL
@@ -882,17 +882,11 @@
             AND thcs.STORE_CD (+)= tms.STORE_CD
             AND thcs.PAY_CLASS_CD (+)= #{payClassCd}
             AND thcs.COUPN_CD (+)= #{coupnCd}
-        <if test='hqOfficeCd != null and hqOfficeCd.toString() != ""'>
-            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='srchStoreCd != null and srchStoreCd.toString() != ""'>
+            AND tms.STORE_CD = #{srchStoreCd}
         </if>
-        <if test='hqOfficeNm != null and hqOfficeNm.toString() != ""'>
-            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
-        </if>
-        <if test='storeCd != null and storeCd.toString() != ""'>
-            AND tms.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeNm != null and storeNm.toString() != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        <if test='srchStoreNm != null and srchStoreNm.toString() != ""'>
+            AND tms.STORE_NM LIKE '%'||#{srchStoreNm}||'%'
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
             AND thcs.STORE_CD IS NOT NULL

@@ -70,9 +70,9 @@
                 <%-- 포함내역 --%>
                 <th><s:message code="verManage.incldDtls" /></th>
                 <td>
-                  <input type="checkbox" id="pgm" name="incldDtls" ng-model="version.pgm" value="pgm"><label for="pgm"><s:message code='verManage.pgm' /></label>
-                  <input type="checkbox" id="db"  name="incldDtls" ng-model="version.db"  value="db" ><label for="db"><s:message code='verManage.db' /></label>
-                  <input type="checkbox" id="img" name="incldDtls" ng-model="version.img" value="img"><label for="img"><s:message code='verManage.img' /></label>
+                  <input type="checkbox" id="pgm" name="incldDtls" ng-model="version.pgm" ><label for="pgm"><s:message code='verManage.pgm' /></label>
+                  <input type="checkbox" id="db"  name="incldDtls" ng-model="version.db"  ><label for="db"><s:message code='verManage.db' /></label>
+                  <input type="checkbox" id="img" name="incldDtls" ng-model="version.img" ><label for="img"><s:message code='verManage.img' /></label>
                 </td>
                   <%-- 사용여부 --%>
                 <th><s:message code="verManage.useYn" /></th>

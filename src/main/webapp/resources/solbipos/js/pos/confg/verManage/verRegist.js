@@ -81,8 +81,6 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       url = '/pos/confg/verManage/verInfo/modify.sb';
     }
 
-    // console.log('url', url);
-
     $scope.$broadcast('loadingPopupActive');
 
     $.ajax({

@@ -56,8 +56,8 @@ app.controller('chargeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     params.prepaidStoreCd = $("#searchChargeStoreCd").val();
     params.prepaidStoreNm = $("#searchChargeStoreNm").val();
-    params.memberNo = $("#searchChargeMemberNo").val();
-    params.memberNm = $("#searchChargeMemberNm").val();
+    params.membrNo = $("#searchChargeMemberNo").val();
+    params.membrNm = $("#searchChargeMemberNm").val();
 
     $scope._inquirySub(baseUrl + "charge/getChargeMemberList.sb", params, function() {}, false);
   };
@@ -66,14 +66,14 @@ app.controller('chargeCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function(data){
 
     if( $("#prepaidAmt").val() === null || $("#prepaidAmt").val() === "" || $("#prepaidAmt").val() === "0") {
-      s_alert.pop(messages["prepaid.request.prepaidAmt"]);
+      $scope._popMsg(messages["prepaid.request.prepaidAmt"]);
       return false;
     }
 
     var params = {};
 
     params.prepaidStoreCd = data.storeCd;
-    params.memberNo = data.membrNo;
+    params.membrNo = data.membrNo;
     params.prepaidAmt = $("#prepaidAmt").val();
 
     $scope._save(baseUrl + "charge/saveChargeAmt.sb", params, function(){ $scope.saveResult() });
@@ -81,8 +81,6 @@ app.controller('chargeCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 선불금 충전 후처리
   $scope.saveResult = function (){
-
-
     var prepaidGrid = agrid.getScope('prepaidCtrl');
     prepaidGrid.searchPostpaid();
   };

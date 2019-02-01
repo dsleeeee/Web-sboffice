@@ -32,7 +32,7 @@
               <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="verSerNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" width="*" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verRecvFg"/>" binding="verRecvFg" data-map="verRecvFgDatMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt" width="120" aling="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>

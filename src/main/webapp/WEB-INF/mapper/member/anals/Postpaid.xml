@@ -19,42 +19,37 @@
     <select id="getPostpaidMemberList"  parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getPostpaidMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmmp.HQ_OFFICE_CD,
-               tmmp.SALE_DATE,
-               tmmp.STORE_CD,
+        SELECT tmmpb.HQ_OFFICE_CD,
+               tmmpb.STORE_CD,
                tms.STORE_NM,
-               tmmp.POSTPAID_NO,
-               tmmp.MEMBR_NO,
+               tmmpb.MEMBR_NO,
                tmm.MEMBR_NM,
-               tmmp.POSTPAID_FG,
-               tmmp.POSTPAID_PAY_FG,
-               tmmp.POSTPAID_AMT,
-               tmmp.DEPOSIT_AMT,
-               TO_CHAR(to_date(tmmp.REG_DT, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi:ss') AS REG_DT,
-               tmmp.REG_ID
+               tmmpb.POSTPAID_AMT,
+               tmmpb.POSTPAID_IN_AMT,
+               tmmpb.POSTPAID_BAL_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_MB_MEMBER_POSTPAID tmmp,
+          FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
                TB_MB_MEMBER tmm,
                TB_MS_STORE tms
          WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-           AND tmm.MEMBR_ORGN_CD = tmmp.HQ_OFFICE_CD
-           AND tmm.MEMBR_NO = tmmp.MEMBR_NO
-           AND tms.HQ_OFFICE_CD = tmmp.HQ_OFFICE_CD
-           AND tms.STORE_CD = tmmp.STORE_CD
+           AND tmm.MEMBR_ORGN_CD = tmmpb.HQ_OFFICE_CD
+           AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+           AND tms.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+           AND tms.STORE_CD = tmmpb.STORE_CD
       <if test='storeCds != null and storeCds != ""'>
-           AND tmmp.STORE_CD IN
+           AND tmmpb.STORE_CD IN
           <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
              #{item}
           </foreach>
         </if>
         <if test='membrNo != null and membrNo != ""'>
           <![CDATA[
-           AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+           AND tmmpb.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
            ]]>
         </if>
         <if test='storeCd != null and storeCd != ""'>
           <![CDATA[
-             AND tmmp.STORE_CD = #{storeCd}
+             AND tmmpb.STORE_CD = #{storeCd}
              ]]>
         </if>
         <if test='membrNm != null and membrNm != ""'>
@@ -62,7 +57,7 @@
            AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
            ]]>
         </if>
-         ORDER BY tmmp.MOD_DT DESC, tmmp.STORE_CD, tmmp.MEMBR_NO
+         ORDER BY tmmpb.MOD_DT DESC, tmmpb.STORE_CD, tmmpb.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

@@ -50,10 +50,10 @@ app.controller('prepaidCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCds = $("#storeCd").val();
     // params.array = srchArrayCombo.selectedValue;
 
-    if($scope.orgnFg === 'H' && params.storeCds  === '') {
-      $scope._popMsg(messages["prepaid.require.selectStore"]);
-      return false;
-    }
+    // if($scope.orgnFg === 'H' && params.storeCds  === '') {
+    //   $scope._popMsg(messages["prepaid.require.selectStore"]);
+    //   return false;
+    // }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain(baseUrl + "prepaid/getPrepaidMemberList.sb", params, function() {}, false);

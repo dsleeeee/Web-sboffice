@@ -13,40 +13,38 @@
 
     <%-- body --%>
     <div class="wj-dialog-body">
-      <table class="tblType01">
-        <colgroup>
-          <col class="w15" />
-          <col class="w35" />
-          <col class="w15" />
-          <col class="w35" />
-        </colgroup>
-        <tbody>
-        <tr>
-          <th>적용대상쿠폰</th>
-          <td colspan="3" id="couponStoreTitle"></td>
-        </tr>
-        <tr>
-          <th><s:message code="coupon.hqOfficeCd"/></th>
-          <td><input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" /></td>
-          <th><s:message code="coupon.hqOfficeNm"/></th>
-          <td><input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" /></td>
-        </tr>
-        <tr>
-          <th><s:message code="coupon.storeCd"/></th>
-          <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
-          <th><s:message code="coupon.storeNm"/></th>
-          <td><input type="text" id="srchStoreNm" ng-model="storeNm" /></td>
-        </tr>
-        </tbody>
-      </table>
-      <%-- 조회 --%>
-      <div class="mt10 tr">
-        <button class="btn_skyblue" id="btnSearch" ng-click="_pageView('regStoreCtrl', 1)" ><s:message code="cmm.search" /></button>
-      </div>
-      <div class="oh mt40">
+
+      <div ng-controller="regStoreCtrl">
+
+        <table class="tblType01">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <th>적용대상쿠폰</th>
+            <td colspan="3" id="couponStoreTitle"></td>
+          </tr>
+          <tr>
+            <th><s:message code="coupon.storeCd"/></th>
+            <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
+            <th><s:message code="coupon.storeNm"/></th>
+            <td><input type="text" id="srchStoreNm" ng-model="storeNm" /></td>
+          </tr>
+          </tbody>
+        </table>
+        <%-- 조회 --%>
+        <div class="mt10 tr">
+          <button class="btn_skyblue" id="btnSearch" ng-click="_pageView('regStoreCtrl', 1)" ><s:message code="cmm.search" /></button>
+        </div>
+
+
         <%--- 적용매장 그리드 --%>
-        <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;" ng-controller="regStoreCtrl">
+        <div class="oh mt40 w50 fl">
+          <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;" >
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -68,21 +66,11 @@
               </wj-flex-grid>
             </div>
           </div>
-
-          <%-- 페이지 리스트 --%>
-          <%--
-          <div class="pageNum2 mt20">
-            &lt;%&ndash; id &ndash;%&gt;
-            <ul id="regStoreCtrlPager" data-size="10">
-            </ul>
-          </div>
-          --%>
-          <%--//페이지 리스트--%>
-
         </div>
-
-        <%--- 미적용매장 그리드 --%>
-        <div class="w50 fr">
+      </div>
+      <%--- 미적용매장 그리드 --%>
+      <div class="oh mt40 w50">
+        <div class=" ">
           <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="noRegStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="coupon.noRegStore"/></span>
@@ -105,21 +93,9 @@
               </wj-flex-grid>
             </div>
           </div>
-
-          <%-- 페이지 리스트 --%>
-          <%--
-          <div class="pageNum2 mt20">
-            &lt;%&ndash; id &ndash;%&gt;
-            <ul id="noRegStoreCtrlPager" data-size="10">
-            </ul>
-          </div>
-          --%>
-          <%--//페이지 리스트--%>
-
         </div>
       </div>
     </div>
   </div>
 </wj-popup>
-
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=2019012101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20190122.01" charset="utf-8"></script>
