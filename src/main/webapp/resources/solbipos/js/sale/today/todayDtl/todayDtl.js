@@ -16,6 +16,17 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     {id: "N", name: messages["todayDtl.saleN"]}
   ], 'id', 'name');
 
+
+
+
+  // TODO 테스트용 코드!!! 나중에 꼭 지워야함.
+  $("#todayDtlSelectStoreCd").val('A000005');
+  $("#todayDtlSelectStoreNm").val('[A000005] 아티제 타워팰리스점');
+  // 테스트용 코드!!! 나중에 꼭 지워야함.
+
+
+
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -87,12 +98,10 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.totPayAmt   = messages["todayDtl.payMethod"];
 
     // 결제수단 헤더머지 컬럼 생성
-    var arrPayCol = payCol.split(',');
     for (var i = 0; i < arrPayCol.length; i++) {
       dataItem['pay' + arrPayCol[i]] = messages["todayDtl.payMethod"];
     }
     // 할인구분 헤더머지 컬럼 생성
-    var arrDcCol = dcCol.split(',');
     for (var i = 0; i < arrDcCol.length; i++) {
       dataItem['dc' + arrDcCol[i]] = messages["todayDtl.dcInfo"];
     }
@@ -100,7 +109,6 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     dataItem.totGuestCnt = messages["todayDtl.totGuestCnt"];
 
     // 객수 헤더머지 컬럼 생성
-    var arrGuestCol = guestCol.split(',');
     for (var i = 0; i < arrGuestCol.length; i++) {
       dataItem['guest' + arrGuestCol[i]] = messages["todayDtl.guestCnt"];
     }
@@ -305,12 +313,12 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
         // }
 
         // 결제수단
-        for (var i = 0; i < arrPayCol.length; i++) {
-          if (col.binding === ("pay" + arrPayCol[i])) {
+        for (var i = 0; i < payColList.length; i++) {
+          if (col.binding === ("pay" + payColList[i].payCd)) {
             var item = s.rows[e.row].dataItem;
 
             // 값이 있으면 링크 효과
-            if (nvl(item[("pay" + arrPayCol[i])], '') !== '') {
+            if (nvl(item[("pay" + payColList[i].payCd)], '') !== '') {
               wijmo.addClass(e.cell, 'wijLink');
               wijmo.addClass(e.cell, 'wj-custom-readonly');
             }
@@ -318,14 +326,17 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
         }
 
         // 할인
-        for (var i = 0; i < arrDcCol.length; i++) {
-          if (col.binding === ("dc" + arrDcCol[i])) {
+        for (var i = 0; i < dcColList.length; i++) {
+          if (col.binding === ("dc" + dcColList[i].dcCd)) {
             var item = s.rows[e.row].dataItem;
 
-            // 값이 있으면 링크 효과
-            if (nvl(item[("dc" + arrDcCol[i])], '') !== '') {
-              wijmo.addClass(e.cell, 'wijLink');
-              wijmo.addClass(e.cell, 'wj-custom-readonly');
+            // 07:포장할인, 08:현장할인 이 아닌 경우 링크효과
+            if(dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
+              // 값이 있으면 링크 효과
+              if (nvl(item[("dc" + dcColList[i].dcCd)], '') !== '') {
+                wijmo.addClass(e.cell, 'wijLink');
+                wijmo.addClass(e.cell, 'wj-custom-readonly');
+              }
             }
           }
         }
@@ -352,29 +363,34 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
         params.posNo    = selectedRow.posNo;
         params.billNo   = selectedRow.billNo;
         params.saleYn   = selectedRow.saleYn;
+
         if (col.binding === "billNo") { // 영수증번호 클릭
           $scope._broadcast('billInfoCtrl', params);
         }
         // 결제수단
-        for (var i = 0; i < arrPayCol.length; i++) {
-          if (col.binding === ("pay" + arrPayCol[i])) {
-            var item = s.rows[e.row].dataItem;
+        for (var i = 0; i < payColList.length; i++) {
+          if (col.binding === ("pay" + payColList[i].payCd)) {
+            // var item = s.rows[e.row].dataItem;
 
             // 값이 있으면 링크
-            if (nvl(item[("pay" + arrPayCol[i])], '') !== '') {
-              $scope._broadcast('pay' + arrPayCol[i] + 'DtlCtrl', params);
+            if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '') {
+              $scope._broadcast(payColList[i].payMethod.toLowerCase() + 'Ctrl', params);
             }
           }
         }
 
         // 할인
-        for (var i = 0; i < arrDcCol.length; i++) {
-          if (col.binding === ("dc" + arrDcCol[i])) {
-            var item = s.rows[e.row].dataItem;
+        for (var i = 0; i < dcColList.length; i++) {
+          if (col.binding === ("dc" + dcColList[i].dcCd)) {
+            // var item = s.rows[e.row].dataItem;
 
-            // 값이 있으면 링크
-            if (nvl(item[("dc" + arrDcCol[i])], '') !== '') {
-              $scope._broadcast('dc' + arrDcCol[i] + 'DtlCtrl', params);
+            // 07:포장할인, 08:현장할인이 아닌 경우
+            if(dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
+              // 값이 있으면 링크
+              if (nvl(selectedRow[("dc" + dcColList[i].dcCd)], '') !== '') {
+                params.dcCd = dcColList[i].dcCd;
+                $scope._broadcast(dcColList[i].dcMethod.toLowerCase() + 'DcCtrl', params);
+              }
             }
           }
         }

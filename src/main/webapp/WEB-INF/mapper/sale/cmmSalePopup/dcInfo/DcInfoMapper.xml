@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.impl.DcInfoMapper">
+
+    <!-- 매출공통팝업 - 일반할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 일반할인 상세 리스트를 조회한다.
+    -->
+    <select id="getGeneralDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getGeneralDcList */
+        /* 현재 일반할인에 대한 정보 테이블이나 명칭이 없어 TB_SL_SALE_DTL_DC 테이블의 할인사유 보여주도록만 해둠. */
+        <![CDATA[
+        SELECT  tssdd.DC_REASON_NM
+        ,       tssdd.DC_AMT
+        FROM    TB_SL_SALE_DTL_DC tssdd
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.STORE_CD            =   #{storeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        AND     tssdd.POS_NO              =   #{posNo}
+        AND     tssdd.BILL_NO             =   #{billNo}
+        AND     tssdd.DC_CD               =   #{dcCd}
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 쿠폰할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 쿠폰할인 상세 리스트를 조회한다.
+    -->
+    <select id="getCoupnDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getCoupnDcList */
+        <![CDATA[
+        SELECT  tmc.COUPN_NM
+        ,       tssd.PROD_CD, tmp.PROD_NM
+        ,       tssd.SALE_UPRC
+        ,       tssd.SALE_QTY
+        ,       tssdd.DC_AMT
+        FROM    TB_SL_SALE_DTL_DC tssdd
+        ,       TB_SL_SALE_DTL tssd
+        ,       (   SELECT  PAY_CLASS_CD||COUPN_CD AS COUPN_CD
+                    ,       COUPN_NM
+                    FROM    TB_MS_COUPON
+                    WHERE   STORE_CD = #{storeCd}
+                ) tmc
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.STORE_CD            =   #{storeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        AND     tssdd.POS_NO              =   #{posNo}
+        AND     tssdd.BILL_NO             =   #{billNo}
+        AND     tssdd.DC_CD               =   #{dcCd}
+        AND     tssd.HQ_OFFICE_CD     (+) =   tssdd.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         (+) =   tssdd.STORE_CD
+        AND     tssd.SALE_DATE        (+) =   tssdd.SALE_DATE
+        AND     tssd.POS_NO           (+) =   tssdd.POS_NO
+        AND     tssd.BILL_NO          (+) =   tssdd.BILL_NO
+        AND     tssd.BILL_DTL_NO      (+) =   tssdd.BILL_DTL_NO
+        AND     tmc.COUPN_CD              =   tssdd.DC_REASON_CD
+        AND     tmp.STORE_CD              =   tssd.STORE_CD
+        AND     tmp.PROD_CD               =   tssd.PROD_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 회원할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 회원할인 상세 리스트를 조회한다.
+    -->
+    <select id="getMembrDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getMembrDcList */
+        <![CDATA[
+        SELECT  tmm.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       tssdd.DC_AMT
+        FROM    TB_SL_SALE_DTL_DC tssdd
+        ,       TB_SL_SALE_HDR_MEMBR tsshm
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.STORE_CD            =   #{storeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        AND     tssdd.POS_NO              =   #{posNo}
+        AND     tssdd.BILL_NO             =   #{billNo}
+        AND     tssdd.DC_CD               =   #{dcCd}
+        AND     tsshm.HQ_OFFICE_CD        =   tssdd.HQ_OFFICE_CD
+        AND     tsshm.STORE_CD            =   tssdd.STORE_CD
+        AND     tsshm.SALE_DATE           =   tssdd.SALE_DATE
+        AND     tsshm.POS_NO              =   tssdd.POS_NO
+        AND     tsshm.BILL_NO             =   tssdd.BILL_NO
+        AND     tmm.MEMBR_ORGN_CD         =   #{orgnGrpCd}
+        AND     tmm.MEMBR_NO              =   tsshm.MEMBR_NO
+        AND     tmmc.MEMBR_ORGN_CD        =   tmm.MEMBR_ORGN_CD
+        AND     tmmc.MEMBR_CLASS_CD       =   tmm.MEMBR_CLASS_CD
+        AND     tcn.NMCODE_GRP_CD         =   '054'
+        AND     tcn.NMCODE_CD             =   tmmc.POINT_SAVE_FG
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 제휴할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 제휴할인 상세 리스트를 조회한다.
+    -->
+    <select id="getPartnerDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getPartnerDcList */
+        <![CDATA[
+        SELECT  tsspp.PARTN_CD, tmp.PARTN_NM
+        ,       tsspp.PARTN_CARD_NO
+        ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspp.APPR_NO
+        ,       tsspp.DC_AMT
+        FROM    TB_SL_SALE_HDR_DC tsshd
+        ,       TB_SL_SALE_PAY_PARTNER tsspp
+        ,       TB_MS_PARTNER tmp /* 운영서버에는 테이블이 있지만 개발서버에는 현재 없어서 오류남. 주석 달아달라고하여 주석처리만 해둠. */
+        ,       TB_CM_VAN_CMPNY tcvc
+        WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsshd.STORE_CD            =   #{storeCd}
+        AND     tsshd.SALE_DATE           =   #{saleDate}
+        AND     tsshd.POS_NO              =   #{posNo}
+        AND     tsshd.BILL_NO             =   #{billNo}
+        AND     tsshd.DC_CD               =   #{dcCd}
+        AND     tsspp.HQ_OFFICE_CD        =   tsshd.HQ_OFFICE_CD
+        AND     tsspp.STORE_CD            =   tsshd.STORE_CD
+        AND     tsspp.SALE_DATE           =   tsshd.SALE_DATE
+        AND     tsspp.POS_NO              =   tsshd.POS_NO
+        AND     tsspp.BILL_NO             =   tsshd.BILL_NO
+        AND     tmp.STORE_CD              =   tsspp.STORE_CD
+        AND     tmp.PARTN_CD              =   tsspp.PARTN_CD
+        AND     tcvc.VAN_FG               =   '01'
+        AND     tcvc.VAN_CD               =   tsspp.VAN_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 서비스할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 서비스할인 상세 리스트를 조회한다.
+    -->
+    <select id="getServiceDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getServiceDcList */
+        /* 현재 서비스에 대한 정보 테이블이나 명칭이 없어 TB_SL_SALE_DTL_DC 테이블의 할인사유 보여주도록만 해둠. */
+        <![CDATA[
+        SELECT  tssdd.DC_REASON_NM
+        ,       tssdd.DC_AMT
+        FROM    TB_SL_SALE_DTL_DC tssdd
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.STORE_CD            =   #{storeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        AND     tssdd.POS_NO              =   #{posNo}
+        AND     tssdd.BILL_NO             =   #{billNo}
+        AND     tssdd.DC_CD               =   #{dcCd}
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 프로모션할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 프로모션할인 상세 리스트를 조회한다.
+    -->
+    <select id="getPromtnDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getPromtnDcList */
+        <![CDATA[
+        SELECT  tssd.PROMTN_NO, tcn.NMCODE_NM AS PROMTN_PROD_FG_NM
+        ,       tssdd.PROD_CD, tmp.PROD_NM
+        ,       tssdd.DC_AMT
+        FROM    TB_SL_SALE_DTL_DC tssdd
+        ,       TB_SL_SALE_DTL tssd
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_CM_NMCODE tcn
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.STORE_CD            =   #{storeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        AND     tssdd.POS_NO              =   #{posNo}
+        AND     tssdd.BILL_NO             =   #{billNo}
+        AND     tssdd.DC_CD               =   #{dcCd}
+        AND     tssd.HQ_OFFICE_CD     (+) =   tssdd.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         (+) =   tssdd.STORE_CD
+        AND     tssd.SALE_DATE        (+) =   tssdd.SALE_DATE
+        AND     tssd.POS_NO           (+) =   tssdd.POS_NO
+        AND     tssd.BILL_NO          (+) =   tssdd.BILL_NO
+        AND     tssd.BILL_DTL_NO      (+) =   tssdd.BILL_DTL_NO
+        AND     tmp.STORE_CD              =   tssdd.STORE_CD
+        AND     tmp.PROD_CD               =   tssdd.PROD_CD
+        AND     tcn.NMCODE_GRP_CD         =   '052'
+        AND     tcn.NMCODE_CD             =   tssd.PROMTN_PROD_FG
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 포장할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 포장할인 상세 리스트를 조회한다.
+    -->
+    <select id="getPackDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getPackDcList */
+        <![CDATA[
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 현장할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 현장할인 상세 리스트를 조회한다.
+    -->
+    <select id="getSiteDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getSiteDcList */
+        <![CDATA[
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - VMEM 쿠폰할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 쿠폰할인 상세 리스트를 조회한다.
+    -->
+    <select id="getVcoupnDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getVcoupnDcList */
+        <![CDATA[
+        SELECT  tsspv.VCOUPN_NO
+        ,       tsspv.VCOUPN_NM
+        ,       tsspv.VCOUPN_TYPE
+        ,       tsspv.VCOUPN_APPR_NO
+        ,       tsspv.VCOUPN_DC_AMT
+        ,       tsspv.VCOUPN_SAVE_POINT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM    TB_SL_SALE_HDR_DC tsshd
+        ,       TB_SL_SALE_PAY_VCOUPN tsspv
+        WHERE   tsshd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsshd.STORE_CD            =   #{storeCd}
+        AND     tsshd.SALE_DATE           =   #{saleDate}
+        AND     tsshd.POS_NO              =   #{posNo}
+        AND     tsshd.BILL_NO             =   #{billNo}
+        AND     tsshd.DC_CD               =   #{dcCd}
+        AND     tsspv.HQ_OFFICE_CD        =   tsshd.HQ_OFFICE_CD
+        AND     tsspv.STORE_CD            =   tsshd.STORE_CD
+        AND     tsspv.SALE_DATE           =   tsshd.SALE_DATE
+        AND     tsspv.POS_NO              =   tsshd.POS_NO
+        AND     tsspv.BILL_NO             =   tsshd.BILL_NO
+        ]]>
+    </select>
+
+</mapper>

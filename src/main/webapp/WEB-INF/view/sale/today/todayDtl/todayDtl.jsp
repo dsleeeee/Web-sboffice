@@ -10,10 +10,10 @@
   <div ng-controller="todayDtlCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
-        <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayDtlCtrl')">
-          <s:message code="cmm.search" />
-        </button>
+      <%-- 조회 --%>
+      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayDtlCtrl')">
+        <s:message code="cmm.search"/>
+      </button>
     </div>
     <table class="searchTbl">
       <colgroup>
@@ -81,14 +81,14 @@
               <wj-flex-grid-column header="<s:message code="todayDtl.totEtcAmt"/>" binding="totEtcAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="todayDtl.billCnt"/>" binding="billCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="todayDtl.billUprc"/>" binding="billUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.totPayAmt"/>" binding="totPayAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
-                <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
               <%-- 할인 컬럼 생성--%>
               <c:forEach var="dcCol" items="${dcColList}">
-                <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
 
               <wj-flex-grid-column header="<s:message code="todayDtl.totGuestCnt"/>" binding="totGuestCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -141,14 +141,14 @@
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNo"/>" binding="membrNo" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.membrNm"/>" binding="membrNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="todayDtl.dtl.tblNm"/>" binding="tblNm" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totPayAmt"/>" binding="totPayAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="todayDtl.dtl.totPayAmt"/>" binding="totPayAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
-                <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
               <%-- 할인 컬럼 생성--%>
               <c:forEach var="dcCol" items="${dcColList}">
-                <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="${dcCol.dcNm}" binding="dc${dcCol.dcCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               </c:forEach>
 
               <%--<wj-flex-grid-column header="<s:message code="todayDtl.dtl.firstOrderDt"/>" binding="firstOrderDt" width="100" align="center" is-read-only="true" format="time"></wj-flex-grid-column>--%>
@@ -176,6 +176,24 @@
 </div>
 
 <script type="text/javascript">
+  var payColList = [];
+  var dcColList  = [];
+  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+  <c:forEach var="payCol" items="${payColList}">
+  var payParam       = {};
+  payParam.payCd     = "${payCol.payCd}";
+  payParam.payMethod = "${payCol.payMethod}";
+  payColList.push(payParam);
+  </c:forEach>
+
+  <%--javascript에서 사용할 할인 json 데이터 생성--%>
+  <c:forEach var="dcCol" items="${dcColList}">
+  var dcParam       = {};
+  dcParam.dcCd     = "${dcCol.dcCd}";
+  dcParam.dcMethod = "${dcCol.dcMethod}";
+  dcColList.push(dcParam);
+  </c:forEach>
+
   var payCol      = '${payCol}';
   var dcCol       = '${dcCol}';
   var guestCol    = '${guestCol}';
@@ -192,3 +210,143 @@
   <c:param name="payColList" value="${payColList}"/>
   <c:param name="guestColList" value="${guestColList}"/>
 </c:import>
+
+<%-- 결제수단 팝업 레이어 시작 --%>
+<%-- 신용카드 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/card.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 현금 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/cash.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- PAYCO 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/payco.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- VMEM 포인트 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/vpoint.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- VMEM 전자상품권 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/vcharge.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 모바일페이 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/mpay.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 모바일쿠폰 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/mcoupn.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 포인트 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/point.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원선불 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/prepaid.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원후불 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/postpaid.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품권 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/gift.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 식권 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/fstmp.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 제휴카드 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/partner.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 제휴카드 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/empCard.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 가승인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/temporary.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- //결제수단 팝업 레이어 --%>
+
+
+<%-- 할인 팝업 레이어 시작 --%>
+<%-- 일반할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/generalDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 쿠폰할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/coupnDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 회원할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/membrDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 제휴할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/partnerDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 서비스 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/serviceDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 프로모션할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/promtnDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- VMEM 쿠폰할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vcoupnDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- //할인 팝업 레이어 시작 --%>
+
+
+

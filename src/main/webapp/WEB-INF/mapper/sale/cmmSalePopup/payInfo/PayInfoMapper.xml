@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.payInfo.service.impl.PayInfoMapper">
+
+    <!-- 매출공통팝업 - 신용카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD, TB_MS_CORNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 신용카드 상세 리스트를 조회한다.
+    -->
+    <select id="getCardList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getCardList */
+        <![CDATA[
+        SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
+        ,       tsspc.APPR_PROC_FG, tsspc.CARD_TYPE_FG, tsspc.CARD_NO
+        ,       tsspc.INST_CNT, tsspc.APPR_AMT
+        ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspc.APPR_NO
+        ,       tsspc.VAN_CD, tcvc.VAN_NM
+        ,       tsspc.ISSUE_CD, tsspc.ISSUE_NM
+        ,       tsspc.ACQUIRE_CD, tsspc.ACQUIRE_NM
+        ,       tsspcorg.APPR_DT AS ORG_APPR_DT
+        ,       SUBSTR(tsspcorg.APPR_DT, 0, 8) AS ORG_APPR_DATE
+        ,       SUBSTR(tsspcorg.APPR_DT, 8, 14) AS ORG_APPR_TIME
+        ,       tsspcorg.APPR_NO AS ORG_APPR_NO
+        FROM    TB_SL_SALE_PAY_CARD tsspc
+        ,       TB_SL_SALE_PAY_CARD tsspcorg
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_VAN_CMPNY tcvc
+        WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspc.STORE_CD            =   #{storeCd}
+        AND     tsspc.SALE_DATE           =   #{saleDate}
+        AND     tsspc.POS_NO              =   #{posNo}
+        AND     tsspc.BILL_NO             =   #{billNo}
+        AND     tsspcorg.HQ_OFFICE_CD (+) =   tsspc.HQ_OFFICE_CD
+        AND     tsspcorg.STORE_CD     (+) =   SUBSTR(tsspc.ORG_BILL_NO, 0, 7)
+        AND     tsspcorg.SALE_DATE    (+) =   SUBSTR(tsspc.ORG_BILL_NO, 8, 16)
+        AND     tsspcorg.POS_NO       (+) =   SUBSTR(tsspc.ORG_BILL_NO, 16, 2)
+        AND     tsspcorg.BILL_NO      (+) =   SUBSTR(tsspc.ORG_BILL_NO, 18, 4)
+        AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_FG               =   '01'
+        AND     tcvc.VAN_CD               =   tsspc.VAN_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 현금 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CASH, TB_MS_CORNER, TB_CM_VAN_CMPNY, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 현금 상세 리스트를 조회한다.
+    -->
+    <select id="getCashList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getCashList */
+        <![CDATA[
+        SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
+        ,       tsspc.APPR_PROC_FG, tcn.NMCODE_NM AS APPR_PROC_NM
+        ,       tsspc.CASH_BILL_CARD_NO
+        ,       tsspc.APPR_NO
+        ,       tsspc.SALE_AMT AS APPR_AMT
+        ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspc.VAN_CD, tcvc.VAN_NM
+        FROM    TB_SL_SALE_PAY_CASH tsspc
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_VAN_CMPNY tcvc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspc.STORE_CD            =   #{storeCd}
+        AND     tsspc.SALE_DATE           =   #{saleDate}
+        AND     tsspc.POS_NO              =   #{posNo}
+        AND     tsspc.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_FG           (+) =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_CD           (+) =   tsspc.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD         =   '018'
+        AND     tcn.NMCODE_CD             =   tsspc.APPR_PROC_FG
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - PAYCO 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PAYCO, TB_MS_CORNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - PAYCO 상세 리스트를 조회한다.
+    -->
+    <select id="getPaycoList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getPaycoList */
+        <![CDATA[
+        SELECT  tsspp.CORNR_CD, tmc.CORNR_NM
+        ,       tsspp.APPR_PROC_FG, tsspp.PAYCO_BARCD_TYPE_FG, tsspp.PAYCO_BARCD_NO
+        ,       tsspp.INST_CNT, tsspp.APPR_AMT
+        ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspp.APPR_NO
+        ,       tsspp.APPR_COMPANY_NM
+        ,       tsspp.VAN_CD, tcvc.VAN_NM
+        ,       tsspp.ACQUIRE_NM
+        FROM    TB_SL_SALE_PAY_PAYCO tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_VAN_CMPNY tcvc
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.STORE_CD            =   #{storeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        AND     tsspp.POS_NO              =   #{posNo}
+        AND     tsspp.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_FG           (+)    =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_CD           (+)    =   tsspp.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - VMEM 포인트 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VPOINT, TB_MS_CORNER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 포인트 상세 리스트를 조회한다.
+    -->
+    <select id="getVpointList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getVpointList */
+        <![CDATA[
+        SELECT 	tsspv.CORNR_CD, tmc.CORNR_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       tsspv.VPOINT_CARD_NO
+        ,       tsspv.VPOINT_APPR_NO
+        ,       tsspv.SALE_AMT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM 	TB_SL_SALE_PAY_VPOINT tsspv
+        ,       TB_MS_CORNER tmc
+        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspv.STORE_CD            =   #{storeCd}
+        AND     tsspv.SALE_DATE           =   #{saleDate}
+        AND     tsspv.POS_NO              =   #{posNo}
+        AND     tsspv.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspv.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 쿠폰은 나중에 할인으로 빼야함. -->
+    <!-- 매출공통팝업 - VMEM 쿠폰 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VCOUPN
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 쿠폰 상세 리스트를 조회한다.
+    -->
+    <select id="getVcoupnList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getVcoupnList */
+        <![CDATA[
+        SELECT 	tsspv.VCOUPN_NO
+        ,       tsspv.VCOUPN_NM
+        ,       tsspv.VCOUPN_TYPE
+        ,       tsspv.VCOUPN_APPR_NO
+        ,       tsspv.VCOUPN_DC_AMT
+        ,       tsspv.VCOUPN_SAVE_POINT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM 	TB_SL_SALE_PAY_VCOUPN tsspv
+        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspv.STORE_CD            =   #{storeCd}
+        AND     tsspv.SALE_DATE           =   #{saleDate}
+        AND     tsspv.POS_NO              =   #{posNo}
+        AND     tsspv.BILL_NO             =   #{billNo}
+        ]]>
+    </select>
+    <!-- //쿠폰은 나중에 할인으로 빼야함. -->
+
+
+    <!-- 매출공통팝업 - VMEM 전자상품권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VCHARGE, TB_MS_CORNER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 전자상품권 상세 리스트를 조회한다.
+    -->
+    <select id="getVchargeList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getVchargeList */
+        <![CDATA[
+        SELECT 	tsspv.CORNR_CD, tmc.CORNR_NM
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       tsspv.VCHARGE_CARD_NO
+        ,       tsspv.VCHARGE_APPR_NO
+        ,       tsspv.SALE_AMT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM 	TB_SL_SALE_PAY_VCHARGE tsspv
+        ,       TB_MS_CORNER tmc
+        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspv.STORE_CD            =   #{storeCd}
+        AND     tsspv.SALE_DATE           =   #{saleDate}
+        AND     tsspv.POS_NO              =   #{posNo}
+        AND     tsspv.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspv.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 모바일페이 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MPAY, TB_MS_CORNER, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 모바일페이 상세 리스트를 조회한다.
+    -->
+    <select id="getMpayList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getMpayList */
+        <![CDATA[
+        SELECT  tsspm.CORNR_CD, tmc.CORNR_NM
+        ,       tsspm.MPAY_CD, tcn.NMCODE_NM AS MPAY_NM
+        ,       tsspm.APPR_PROC_FG
+        ,       tsspm.MPAY_BARCD_TYPE_FG
+        ,       tsspm.MPAY_BARCD_NO
+        ,       tsspm.APPR_NO
+        ,       tsspm.APPR_AMT
+        ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        FROM    TB_SL_SALE_PAY_MPAY tsspm
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspm.STORE_CD            =   #{storeCd}
+        AND     tsspm.SALE_DATE           =   #{saleDate}
+        AND     tsspm.POS_NO              =   #{posNo}
+        AND     tsspm.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspm.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspm.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD         =   '081'
+        AND     tcn.NMCODE_CD             =   tsspm.MPAY_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 모바일쿠폰 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MCOUPN, TB_MS_CORNER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 모바일쿠폰 상세 리스트를 조회한다.
+    -->
+    <select id="getMcoupnList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getMcoupnList */
+        <![CDATA[
+        SELECT 	tsspm.CORNR_CD, tmc.CORNR_NM
+        ,       tsspm.MCOUPN_TYPE_FG
+        ,       tsspm.MCOUPN_BARCD_NO
+        ,       tsspm.APPR_NO
+        ,       tsspm.SALE_AMT
+        ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspm.MCOUPN_UPRC
+        ,       tsspm.MCOUPN_REMAIN_AMT
+        FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
+        ,       TB_MS_CORNER tmc
+        WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspm.STORE_CD            =   #{storeCd}
+        AND     tsspm.SALE_DATE           =   #{saleDate}
+        AND     tsspm.POS_NO              =   #{posNo}
+        AND     tsspm.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspm.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspm.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 포인트 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_POINT, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 포인트 상세 리스트를 조회한다.
+    -->
+    <select id="getPointList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getPointList */
+        <![CDATA[
+        SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
+        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       tsspp.SALE_AMT
+        FROM 	TB_SL_SALE_PAY_POINT tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.STORE_CD            =   #{storeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        AND     tsspp.POS_NO              =   #{posNo}
+        AND     tsspp.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 회원선불 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PREPAID, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 회원선불 상세 리스트를 조회한다.
+    -->
+    <select id="getPrepaidList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getPrepaidList */
+        <![CDATA[
+        SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
+        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       tsspp.SALE_AMT
+        FROM 	TB_SL_SALE_PAY_PREPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.STORE_CD            =   #{storeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        AND     tsspp.POS_NO              =   #{posNo}
+        AND     tsspp.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 회원후불 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_POSTPAID, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 회원후불 상세 리스트를 조회한다.
+    -->
+    <select id="getPostpaidList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getPostpaidList */
+        <![CDATA[
+        SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
+        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       tsspp.SALE_AMT
+        FROM 	TB_SL_SALE_PAY_POSTPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.STORE_CD            =   #{storeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        AND     tsspp.POS_NO              =   #{posNo}
+        AND     tsspp.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 상품권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_SL_SALE_PAY_GIFT_RTN, TB_MS_GIFT, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 상품권 상세 리스트를 조회한다.
+    -->
+    <select id="getGiftList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getGiftList */
+        <![CDATA[
+        SELECT  tsspgd.GIFT_SEQ
+        ,       tsspgd.GIFT_CD, tmg.GIFT_NM
+        ,       tsspgd.GIFT_PROC_FG, tcn.NMCODE_NM AS GIFT_PROC_FG_NM
+        ,       tsspgd.GIFT_SER_NO
+        ,       tsspgd.GIFT_UPRC
+        ,       tsspgd.GIFT_QTY
+        ,       tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY AS GIFT_TOT_AMT
+        ,       tsspgr.RTN_PAY_AMT
+        FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
+        ,       TB_SL_SALE_PAY_GIFT_RTN tsspgr
+        ,       TB_MS_GIFT tmg
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspgd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspgd.STORE_CD            =   #{storeCd}
+        AND     tsspgd.SALE_DATE           =   #{saleDate}
+        AND     tsspgd.POS_NO              =   #{posNo}
+        AND     tsspgd.BILL_NO             =   #{billNo}
+        AND     tsspgr.HQ_OFFICE_CD    (+) =   tsspgd.HQ_OFFICE_CD
+        AND     tsspgr.STORE_CD        (+) =   tsspgd.STORE_CD
+        AND     tsspgr.SALE_DATE       (+) =   tsspgd.SALE_DATE
+        AND     tsspgr.POS_NO          (+) =   tsspgd.POS_NO
+        AND     tsspgr.BILL_NO         (+) =   tsspgd.BILL_NO
+        AND     tsspgr.LINE_NO         (+) =   tsspgd.LINE_NO
+        AND     tmg.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmg.GIFT_CD            (+) =   tsspgd.GIFT_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD          =   '048'
+        AND     tcn.NMCODE_CD              =   tsspgd.GIFT_PROC_FG
+        ORDER
+        BY      tsspgd.GIFT_SEQ
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 식권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_FSTMP_DTL, TB_MS_FOOD_STAMP
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 식권 상세 리스트를 조회한다.
+    -->
+    <select id="getFstmpList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getFstmpList */
+        <![CDATA[
+        SELECT 	tsspfd.FSTMP_SEQ
+        ,       tsspfd.FSTMP_CD, tmfs.FSTMP_NM
+        ,       tsspfd.FSTMP_UPRC
+        ,       tsspfd.FSTMP_QTY
+        ,       tsspgd.FSTMP_UPRC * tsspgd.FSTMP_QTY AS FSTMP_TOT_AMT
+        ,       tsspfd.FSTMP_SER_NO
+        FROM 	TB_SL_SALE_PAY_FSTMP_DTL tsspfd
+        ,       TB_MS_FOOD_STAMP tmfs
+        WHERE   tsspfd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspfd.STORE_CD            =   #{storeCd}
+        AND     tsspfd.SALE_DATE           =   #{saleDate}
+        AND     tsspfd.POS_NO              =   #{posNo}
+        AND     tsspfd.BILL_NO             =   #{billNo}
+        AND     tmfs.STORE_CD          (+) =   tsspfd.STORE_CD
+        AND     tmfs.FSTMP_CD          (+) =   tsspfd.FSTMP_CD
+        ORDER
+        BY      tsspfd.FSTMP_SEQ
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 제휴카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PARTNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 제휴카드 상세 리스트를 조회한다.
+    -->
+    <select id="getPartnerList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getPartnerList */
+        <![CDATA[
+        SELECT  tsspp.PARTN_CD, tmp.PARTN_NM
+        ,       tsspp.PARTN_CARD_NO
+        ,       tsspp.VAN_CD, tcvc.VAN_NM
+        ,       SUBSTR(tsspp.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspp.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspp.APPR_NO
+        ,       tsspp.SALE_AMT
+        ,       tsspp.DC_AMT
+        FROM    TB_SL_SALE_PAY_PARTNER tsspp
+        ,       TB_MS_PARTNER tmp
+        ,       TB_CM_VAN_CMPNY tcvc
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.STORE_CD            =   #{storeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        AND     tsspp.POS_NO              =   #{posNo}
+        AND     tsspp.BILL_NO             =   #{billNo}
+        AND     tmp.STORE_CD              =   tsspp.STORE_CD
+        AND     tmp.PARTN_CD              =   tsspp.PARTN_CD
+        AND     tcvc.VAN_FG               =   '01'
+        AND     tcvc.VAN_CD               =   tsspp.VAN_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 사원카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_EMP_CARD
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 사원카드 상세 리스트를 조회한다.
+    -->
+    <select id="getEmpCardList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getEmpCardList */
+        <![CDATA[
+        SELECT  tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.OFFICE_EMP_CARD_NO
+        ,       tsspec.ACCOUNT_FG
+        ,       tsspec.SALE_AMT
+        ,       tsspec.REMAIN_AMT
+        FROM    TB_SL_SALE_PAY_EMP_CARD tsspec
+        WHERE   tsspec.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspec.STORE_CD            =   #{storeCd}
+        AND     tsspec.SALE_DATE           =   #{saleDate}
+        AND     tsspec.POS_NO              =   #{posNo}
+        AND     tsspec.BILL_NO             =   #{billNo}
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 가승인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_EMP_CARD
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 가승인 상세 리스트를 조회한다.
+    -->
+    <select id="getTemporaryList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getTemporaryList */
+        <![CDATA[
+        SELECT 	tsspt.CORNR_CD, tmc.CORNR_NM
+        ,       tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM AS TEMPORARY_PAY_NM
+        ,       tsspt.SALE_AMT
+        FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspt.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspt.STORE_CD            =   #{storeCd}
+        AND     tsspt.SALE_DATE           =   #{saleDate}
+        AND     tsspt.POS_NO              =   #{posNo}
+        AND     tsspt.BILL_NO             =   #{billNo}
+        AND     tmc.STORE_CD          (+) =   tsspt.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspt.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD         =   '024'
+        AND     tcn.NMCODE_CD             =   tsspt.TEMPORARY_PAY_CD
+        ]]>
+    </select>
+</mapper>

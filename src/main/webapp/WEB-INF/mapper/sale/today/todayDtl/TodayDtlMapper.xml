@@ -12,11 +12,14 @@
     -->
     <select id="getPayColList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getPayColList */
-        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD   =   '024'
+        AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
         ORDER
         BY      tcn.NMCODE_CD
+        ]]>
     </select>
 
 
@@ -28,11 +31,13 @@
     -->
     <select id="getDcColList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getDcColList */
-        SELECT  tcn.NMCODE_CD AS DC_CD, tcn.NMCODE_NM AS DC_NM
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS DC_CD, tcn.NMCODE_NM AS DC_NM, tcn.NMCODE_ITEM_1 AS DC_METHOD
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD   =   '041'
         ORDER
         BY      tcn.NMCODE_CD
+        ]]>
     </select>
 
 
@@ -44,12 +49,14 @@
     -->
     <select id="getGuestColList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getGuestColList */
+        <![CDATA[
         SELECT  thn.NMCODE_CD AS GUEST_CD, thn.NMCODE_NM AS GUEST_NM
         FROM    TB_HQ_NMCODE thn
         WHERE   thn.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     thn.NMCODE_GRP_CD   =   '102'
         ORDER
         BY      thn.NMCODE_CD
+        ]]>
     </select>
 
 
@@ -61,6 +68,7 @@
     -->
     <select id="getTodayDtlList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getTodayDtlList */
+        <![CDATA[
         SELECT  tssh.SALE_YN
         ,       tssh.TOT_SALE_AMT
         ,       tssh.TOT_DC_AMT
@@ -77,6 +85,7 @@
         ,       tsshg.GUEST02
         ,       tsshg.GUEST03
         ,       tsshg.GUEST04
+        ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
                 </foreach> AS TOT_PAY_AMT
@@ -86,6 +95,7 @@
         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tsshd.DC${item} AS DC${item}
                 </foreach>
+        <![CDATA[
         FROM    (   SELECT  tssh.SALE_YN
                     ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
                     ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
@@ -106,9 +116,11 @@
                     BY      tssh.SALE_YN
                 ) tssh
         ,       (   SELECT  SALE_YN
+        ]]>
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 SUM(PAY${item}) AS PAY${item}
                             </foreach>
+        <![CDATA[
                     FROM    (   SELECT  tsshp.SALE_YN, tsshp.PAY_CD, tsshp.PAY_AMT
                                 FROM    TB_SL_SALE_HDR_PAY tsshp
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -123,9 +135,11 @@
                     GROUP BY SALE_YN
                 ) tsshp
         ,       (   SELECT  SALE_YN
+        ]]>
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
                                 SUM(DC${item}) AS DC${item}
                             </foreach>
+        <![CDATA[
                     FROM    (   SELECT  tsshd.SALE_YN, tsshd.DC_CD, tsshd.DC_AMT
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -154,6 +168,7 @@
         WHERE   tsshp.SALE_YN (+) = tssh.SALE_YN
         AND     tsshd.SALE_YN (+) = tssh.SALE_YN
         AND     tsshg.SALE_YN (+) = tssh.SALE_YN
+        ]]>
     </select>
 
 
@@ -165,6 +180,7 @@
     -->
     <select id="getTodayDtlDetailList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getTodayDtlDetailList */
+        <![CDATA[
         SELECT  tssh.POS_NO
         ,       tssh.BILL_NO
         ,       SUBSTR(BILL_DT, 9, 6) AS BILL_DT
@@ -186,6 +202,7 @@
         ,       tsshg.GUEST02
         ,       tsshg.GUEST03
         ,       tsshg.GUEST04
+        ]]>
         ,       <foreach collection="arrPayCol" item="item" separator="+">
                     NVL(tsshp.PAY${item}, 0)
                 </foreach> AS TOT_PAY_AMT
@@ -195,19 +212,24 @@
         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tsshd.DC${item} AS DC${item}
                 </foreach>
+        <![CDATA[
         FROM    TB_SL_SALE_HDR tssh
         ,       (   SELECT  POS_NO, BILL_NO
+        ]]>
                     ,       <foreach collection="arrPayCol" item="item" separator=",">
                                 PAY${item} AS PAY${item}
                             </foreach>
+        <![CDATA[
                     FROM    (   SELECT  tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
                                 FROM    TB_SL_SALE_HDR_PAY tsshp
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshp.STORE_CD      = #{storeCd}
                                 AND     tsshp.SALE_DATE     = #{startDate}
+        ]]>
                                 <if test='saleYn != null and saleYn != ""'>
                                     AND   tsshp.SALE_YN    = #{saleYn}
                                 </if>
+        <![CDATA[
                             )
                     PIVOT   (
                                 SUM(PAY_AMT)
@@ -216,17 +238,21 @@
                             )
                 ) tsshp
         ,       (   SELECT  POS_NO, BILL_NO
+        ]]>
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
                                 DC${item} AS DC${item}
                             </foreach>
+        <![CDATA[
                     FROM    (   SELECT  tsshd.POS_NO, tsshd.BILL_NO, tsshd.DC_CD, tsshd.DC_AMT
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshd.STORE_CD      = #{storeCd}
                                 AND     tsshd.SALE_DATE     = #{startDate}
+        ]]>
                                 <if test='saleYn != null and saleYn != ""'>
                                     AND   tsshd.SALE_YN    = #{saleYn}
                                 </if>
+        <![CDATA[
                             )
                     PIVOT   (
                                 SUM(DC_AMT)
@@ -243,18 +269,22 @@
                     WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND     tsshg.STORE_CD      = #{storeCd}
                     AND     tsshg.SALE_DATE     = #{startDate}
+        ]]>
                     <if test='saleYn != null and saleYn != ""'>
                         AND   tsshg.SALE_YN    = #{saleYn}
                     </if>
+        <![CDATA[
                 ) tsshg
         ,       TB_SL_SALE_HDR_MEMBR tsshm
         ,       TB_MS_TABLE tmt
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tssh.STORE_CD     = #{storeCd}
         AND     tssh.SALE_DATE    = #{startDate}
+        ]]>
         <if test='saleYn != null and saleYn != ""'>
           AND   tssh.SALE_YN    = #{saleYn}
         </if>
+        <![CDATA[
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
         AND     tsshp.BILL_NO     (+) = tssh.BILL_NO
         AND     tsshd.POS_NO      (+) = tssh.POS_NO
@@ -271,6 +301,7 @@
         AND     tmt.TBL_CD        (+) = tssh.TBL_CD
         ORDER
         BY      tssh.POS_NO, tssh.BILL_NO DESC
+        ]]>
     </select>
 
 </mapper>

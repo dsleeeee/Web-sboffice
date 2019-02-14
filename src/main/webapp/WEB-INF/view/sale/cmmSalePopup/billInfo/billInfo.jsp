@@ -155,7 +155,7 @@
       </div>
       <%-- //영수증 내역 --%>
 
-      <%-- 원개러영수증 내역 --%>
+      <%-- 원거래영수증 내역 --%>
       <div class="w100 mt20" ng-if="saleYn == 'N'" ng-controller="orgBillInfoCtrl">
         <p class="s16 bk mb5" id="orgBillSubTitle"></p>
         <%-- 종합내역 --%>

@@ -122,7 +122,6 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("billInfoCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
-    $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
     $scope.posNo    = data.posNo;
     $scope.billNo   = data.billNo;
