@@ -56,7 +56,7 @@ public class TodayDtlController {
      * @param   model
      * @return  String
      * @author  안동관
-     * @since   2019. 01. 25.
+     * @since   2019. 02. 15.
      */
     @RequestMapping(value = "/todayDtl/view.sb", method = RequestMethod.GET)
     public String todayDtlView(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -98,6 +98,29 @@ public class TodayDtlController {
         model.addAttribute("guestCol", guestCol);
 
         return "sale/today/todayDtl/todayDtl";
+    }
+
+
+    /**
+     * 당일매출상세현황 - 매출상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   todayDtlVO
+     * @return  String
+     * @author  안동관
+     * @since   2019. 01. 29.
+     */
+    @RequestMapping(value = "/todayDtl/storePosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStorePosList(HttpServletRequest request, HttpServletResponse response,
+        Model model, TodayDtlVO todayDtlVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = todayDtlService.getStorePosList(todayDtlVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, todayDtlVO);
     }
 
 

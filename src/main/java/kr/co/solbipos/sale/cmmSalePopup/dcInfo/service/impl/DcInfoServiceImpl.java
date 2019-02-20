@@ -53,7 +53,7 @@ public class DcInfoServiceImpl implements DcInfoService {
     }
 
 
-    /** 매출공통팝업 - 제휴할인 상세 리스트 조회 */
+    /** 매출공통팝업 - 서비스 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getServiceDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

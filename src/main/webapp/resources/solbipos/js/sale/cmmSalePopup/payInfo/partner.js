@@ -37,8 +37,8 @@ app.controller('partnerCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.$on("partnerCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
 
     $scope.wjPartnerLayer.show(true);
 
@@ -59,7 +59,7 @@ app.controller('partnerCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.billNo    = $scope.billNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/partner/partner.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/partner/list.sb", params);
   };
 
 }]);

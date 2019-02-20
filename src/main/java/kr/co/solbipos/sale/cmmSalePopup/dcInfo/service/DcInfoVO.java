@@ -121,4 +121,5 @@ public class DcInfoVO extends PageVO {
     public void setOrgnGrpCd(String orgnGrpCd) {
         this.orgnGrpCd = orgnGrpCd;
     }
+
 }

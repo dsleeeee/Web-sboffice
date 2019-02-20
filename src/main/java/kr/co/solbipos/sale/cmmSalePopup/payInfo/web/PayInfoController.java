@@ -59,7 +59,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 07.
      */
-    @RequestMapping(value = "/card/card.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/card/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCardList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -82,7 +82,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 08.
      */
-    @RequestMapping(value = "/cash/cash.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/cash/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCashList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -105,7 +105,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 08.
      */
-    @RequestMapping(value = "/payco/payco.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/payco/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPaycoList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -128,7 +128,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 08.
      */
-    @RequestMapping(value = "/vpoint/vpoint.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vpoint/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVpointList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -151,7 +151,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 08.
      */
-    @RequestMapping(value = "/vcoupn/vcoupn.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vcoupn/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVcoupnList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -174,7 +174,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 08.
      */
-    @RequestMapping(value = "/vcharge/vcharge.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vcharge/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVchargeList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -197,7 +197,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/mpay/mpay.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/mpay/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMpayList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -220,7 +220,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/mcoupn/mcoupn.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/mcoupn/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMcoupnList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -243,7 +243,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/point/point.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/point/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPointList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -266,7 +266,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/prepaid/prepaid.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prepaid/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPrepaidList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -289,7 +289,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/postpaid/postpaid.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/postpaid/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPostpaidList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -312,7 +312,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/gift/gift", method = RequestMethod.POST)
+    @RequestMapping(value = "/gift/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getGiftList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -335,7 +335,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 11.
      */
-    @RequestMapping(value = "/fstmp/fstmp", method = RequestMethod.POST)
+    @RequestMapping(value = "/fstmp/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getFstmpList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -358,7 +358,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 12.
      */
-    @RequestMapping(value = "/partner/partner", method = RequestMethod.POST)
+    @RequestMapping(value = "/partner/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPartnerList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -381,7 +381,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 12.
      */
-    @RequestMapping(value = "/empCard/empCard", method = RequestMethod.POST)
+    @RequestMapping(value = "/empCard/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpCardList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {
@@ -404,7 +404,7 @@ public class PayInfoController {
      * @author  안동관
      * @since   2019. 02. 12.
      */
-    @RequestMapping(value = "/temporary/temporary", method = RequestMethod.POST)
+    @RequestMapping(value = "/temporary/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getTemporaryList(HttpServletRequest request, HttpServletResponse response,
         Model model, PayInfoVO payInfoVO) {

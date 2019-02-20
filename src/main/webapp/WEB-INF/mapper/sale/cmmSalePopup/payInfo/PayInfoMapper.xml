@@ -31,10 +31,18 @@
         ,       TB_MS_CORNER tmc
         ,       TB_CM_VAN_CMPNY tcvc
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspc.STORE_CD            =   #{storeCd}
         AND     tsspc.SALE_DATE           =   #{saleDate}
-        AND     tsspc.POS_NO              =   #{posNo}
-        AND     tsspc.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspc.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspc.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspc.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tsspcorg.HQ_OFFICE_CD (+) =   tsspc.HQ_OFFICE_CD
         AND     tsspcorg.STORE_CD     (+) =   SUBSTR(tsspc.ORG_BILL_NO, 0, 7)
         AND     tsspcorg.SALE_DATE    (+) =   SUBSTR(tsspc.ORG_BILL_NO, 8, 16)
@@ -70,10 +78,18 @@
         ,       TB_CM_VAN_CMPNY tcvc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspc.STORE_CD            =   #{storeCd}
         AND     tsspc.SALE_DATE           =   #{saleDate}
-        AND     tsspc.POS_NO              =   #{posNo}
-        AND     tsspc.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspc.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspc.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspc.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcvc.VAN_FG           (+) =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
@@ -106,10 +122,18 @@
         ,       TB_MS_CORNER tmc
         ,       TB_CM_VAN_CMPNY tcvc
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.STORE_CD            =   #{storeCd}
         AND     tsspp.SALE_DATE           =   #{saleDate}
-        AND     tsspp.POS_NO              =   #{posNo}
-        AND     tsspp.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspp.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspp.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspp.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcvc.VAN_FG           (+)    =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
@@ -136,42 +160,22 @@
         FROM 	TB_SL_SALE_PAY_VPOINT tsspv
         ,       TB_MS_CORNER tmc
         WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspv.STORE_CD            =   #{storeCd}
         AND     tsspv.SALE_DATE           =   #{saleDate}
-        AND     tsspv.POS_NO              =   #{posNo}
-        AND     tsspv.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspv.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspv.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspv.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspv.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         ]]>
     </select>
-
-
-    <!-- 쿠폰은 나중에 할인으로 빼야함. -->
-    <!-- 매출공통팝업 - VMEM 쿠폰 상세 리스트 조회 -->
-    <!--
-        TABLE    : TB_SL_SALE_PAY_VCOUPN
-        PARAM    : payInfoVO
-        COMMENTS : 매출공통팝업 - VMEM 쿠폰 상세 리스트를 조회한다.
-    -->
-    <select id="getVcoupnList" parameterType="payInfoVO" resultType="DefaultMap">
-        /* USE : PayInfoMapper.getVcoupnList */
-        <![CDATA[
-        SELECT 	tsspv.VCOUPN_NO
-        ,       tsspv.VCOUPN_NM
-        ,       tsspv.VCOUPN_TYPE
-        ,       tsspv.VCOUPN_APPR_NO
-        ,       tsspv.VCOUPN_DC_AMT
-        ,       tsspv.VCOUPN_SAVE_POINT
-        ,       tsspv.MEMBR_ORDER_NO
-        FROM 	TB_SL_SALE_PAY_VCOUPN tsspv
-        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspv.STORE_CD            =   #{storeCd}
-        AND     tsspv.SALE_DATE           =   #{saleDate}
-        AND     tsspv.POS_NO              =   #{posNo}
-        AND     tsspv.BILL_NO             =   #{billNo}
-        ]]>
-    </select>
-    <!-- //쿠폰은 나중에 할인으로 빼야함. -->
 
 
     <!-- 매출공통팝업 - VMEM 전자상품권 상세 리스트 조회 -->
@@ -192,10 +196,18 @@
         FROM 	TB_SL_SALE_PAY_VCHARGE tsspv
         ,       TB_MS_CORNER tmc
         WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspv.STORE_CD            =   #{storeCd}
         AND     tsspv.SALE_DATE           =   #{saleDate}
-        AND     tsspv.POS_NO              =   #{posNo}
-        AND     tsspv.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspv.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspv.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspv.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspv.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         ]]>
@@ -224,10 +236,18 @@
         ,       TB_MS_CORNER tmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspm.STORE_CD            =   #{storeCd}
         AND     tsspm.SALE_DATE           =   #{saleDate}
-        AND     tsspm.POS_NO              =   #{posNo}
-        AND     tsspm.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspm.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspm.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspm.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspm.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspm.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD         =   '081'
@@ -257,10 +277,18 @@
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
         ,       TB_MS_CORNER tmc
         WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspm.STORE_CD            =   #{storeCd}
         AND     tsspm.SALE_DATE           =   #{saleDate}
-        AND     tsspm.POS_NO              =   #{posNo}
-        AND     tsspm.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspm.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspm.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspm.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspm.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspm.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         ]]>
@@ -288,10 +316,18 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.STORE_CD            =   #{storeCd}
         AND     tsspp.SALE_DATE           =   #{saleDate}
-        AND     tsspp.POS_NO              =   #{posNo}
-        AND     tsspp.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspp.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspp.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspp.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
@@ -325,10 +361,18 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.STORE_CD            =   #{storeCd}
         AND     tsspp.SALE_DATE           =   #{saleDate}
-        AND     tsspp.POS_NO              =   #{posNo}
-        AND     tsspp.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspp.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspp.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspp.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
@@ -362,10 +406,18 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.STORE_CD            =   #{storeCd}
         AND     tsspp.SALE_DATE           =   #{saleDate}
-        AND     tsspp.POS_NO              =   #{posNo}
-        AND     tsspp.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspp.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspp.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspp.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
@@ -400,10 +452,18 @@
         ,       TB_MS_GIFT tmg
         ,       TB_CM_NMCODE tcn
         WHERE   tsspgd.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspgd.STORE_CD            =   #{storeCd}
         AND     tsspgd.SALE_DATE           =   #{saleDate}
-        AND     tsspgd.POS_NO              =   #{posNo}
-        AND     tsspgd.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspgd.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspgd.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspgd.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tsspgr.HQ_OFFICE_CD    (+) =   tsspgd.HQ_OFFICE_CD
         AND     tsspgr.STORE_CD        (+) =   tsspgd.STORE_CD
         AND     tsspgr.SALE_DATE       (+) =   tsspgd.SALE_DATE
@@ -433,15 +493,24 @@
         ,       tsspfd.FSTMP_CD, tmfs.FSTMP_NM
         ,       tsspfd.FSTMP_UPRC
         ,       tsspfd.FSTMP_QTY
-        ,       tsspgd.FSTMP_UPRC * tsspgd.FSTMP_QTY AS FSTMP_TOT_AMT
+        ,       tsspfd.FSTMP_UPRC * tsspfd.FSTMP_QTY AS FSTMP_TOT_AMT
         ,       tsspfd.FSTMP_SER_NO
         FROM 	TB_SL_SALE_PAY_FSTMP_DTL tsspfd
         ,       TB_MS_FOOD_STAMP tmfs
         WHERE   tsspfd.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tsspfd.STORE_CD            =   #{storeCd}
         AND     tsspfd.SALE_DATE           =   #{saleDate}
-        AND     tsspfd.POS_NO              =   #{posNo}
-        AND     tsspfd.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspfd.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspfd.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspfd.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmfs.STORE_CD          (+) =   tsspfd.STORE_CD
         AND     tmfs.FSTMP_CD          (+) =   tsspfd.FSTMP_CD
         ORDER
@@ -471,10 +540,18 @@
         ,       TB_MS_PARTNER tmp
         ,       TB_CM_VAN_CMPNY tcvc
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.STORE_CD            =   #{storeCd}
         AND     tsspp.SALE_DATE           =   #{saleDate}
-        AND     tsspp.POS_NO              =   #{posNo}
-        AND     tsspp.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspp.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspp.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspp.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmp.STORE_CD              =   tsspp.STORE_CD
         AND     tmp.PARTN_CD              =   tsspp.PARTN_CD
         AND     tcvc.VAN_FG               =   '01'
@@ -502,11 +579,17 @@
         ,       tsspec.REMAIN_AMT
         FROM    TB_SL_SALE_PAY_EMP_CARD tsspec
         WHERE   tsspec.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspec.STORE_CD            =   #{storeCd}
         AND     tsspec.SALE_DATE           =   #{saleDate}
-        AND     tsspec.POS_NO              =   #{posNo}
-        AND     tsspec.BILL_NO             =   #{billNo}
         ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspec.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspec.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspec.BILL_NO = #{billNo}
+        </if>
     </select>
 
 
@@ -526,10 +609,18 @@
         ,       TB_MS_CORNER tmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspt.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspt.STORE_CD            =   #{storeCd}
         AND     tsspt.SALE_DATE           =   #{saleDate}
-        AND     tsspt.POS_NO              =   #{posNo}
-        AND     tsspt.BILL_NO             =   #{billNo}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tsspt.STORE_CD = #{storeCd}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tsspt.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tsspt.BILL_NO = #{billNo}
+        </if>
+        <![CDATA[
         AND     tmc.STORE_CD          (+) =   tsspt.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmc.CORNR_CD          (+) =   tsspt.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD         =   '024'

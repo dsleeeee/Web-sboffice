@@ -42,8 +42,8 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.$on("empCardCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
 
     $scope.wjEmpCardLayer.show(true);
 
@@ -64,7 +64,7 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.billNo    = $scope.billNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/empCard/empCard.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/empCard/list.sb", params);
   };
 
 }]);

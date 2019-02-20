@@ -37,8 +37,8 @@ app.controller('giftCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.$on("giftCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
 
     $scope.wjGiftLayer.show(true);
 
@@ -59,7 +59,7 @@ app.controller('giftCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.billNo    = $scope.billNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/gift/gift.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/gift/list.sb", params);
   };
 
 }]);

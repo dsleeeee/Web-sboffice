@@ -29,6 +29,13 @@ public class TodayDtlServiceImpl implements TodayDtlService {
     }
 
 
+    /** 당일매출상세현황 - 매장 포스 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getStorePosList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO) {
+        return todayDtlMapper.getStorePosList(todayDtlVO);
+    }
+
+
     /** 당일매출상세현황 - 할인 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcColList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO) {

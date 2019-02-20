@@ -10,25 +10,16 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
 
-  // 그리드 전표구분
+  // 그리드 매출구분
   $scope.saleYnMap = new wijmo.grid.DataMap([
     {id: "Y", name: messages["todayDtl.saleY"]},
     {id: "N", name: messages["todayDtl.saleN"]}
   ], 'id', 'name');
 
-
-
-
-  // TODO 테스트용 코드!!! 나중에 꼭 지워야함.
-  $("#todayDtlSelectStoreCd").val('A000005');
-  $("#todayDtlSelectStoreNm").val('[A000005] 아티제 타워팰리스점');
-  // 테스트용 코드!!! 나중에 꼭 지워야함.
-
-
-
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    $scope.getStorePosList();
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("todayDtlCtrl");
@@ -69,6 +60,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
           params.saleYn    = selectedRow.saleYn;
           params.startDate = $scope.searchedStartDate;
           params.storeCd   = $scope.searchedStoreCd;
+          params.posNo     = $scope.searchedPosNo;
           $scope._broadcast('todayDtlDetailCtrl', params);
         }
       }
@@ -172,11 +164,13 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     }
     $scope.searchedStartDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     $scope.searchedStoreCd   = $("#todayDtlSelectStoreCd").val();
+    $scope.searchedPosNo     = $scope.posNo;
 
     // 파라미터
     var params       = {};
     params.startDate = $scope.searchedStartDate;
     params.storeCd   = $scope.searchedStoreCd;
+    params.posNo     = $scope.posNo;
     params.payCol    = payCol;
     params.dcCol     = dcCol;
 
@@ -186,6 +180,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
       params.saleYn    = '';
       params.startDate = $scope.searchedStartDate;
       params.storeCd   = $scope.searchedStoreCd;
+      params.posNo     = $scope.searchedPosNo;
       $scope._broadcast('todayDtlDetailCtrl', params);
     });
   };
@@ -196,6 +191,16 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.todayDtlSelectStoreShow = function () {
     $scope._broadcast('todayDtlSelectStoreCtrl');
+  };
+
+
+  // 매장의 POS 리스트 조회
+  $scope.getStorePosList = function () {
+    var url             = '/sale/today/todayDtl/todayDtl/storePosList.sb';
+    var comboParams     = {};
+    comboParams.storeCd = $("#todayDtlSelectStoreCd").val();
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "srchPosNo", null, url, comboParams, "A", null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
   };
 
 
@@ -331,7 +336,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
             var item = s.rows[e.row].dataItem;
 
             // 07:포장할인, 08:현장할인 이 아닌 경우 링크효과
-            if(dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
+            if (dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
               // 값이 있으면 링크 효과
               if (nvl(item[("dc" + dcColList[i].dcCd)], '') !== '') {
                 wijmo.addClass(e.cell, 'wijLink');
@@ -385,7 +390,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
             // var item = s.rows[e.row].dataItem;
 
             // 07:포장할인, 08:현장할인이 아닌 경우
-            if(dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
+            if (dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
               // 값이 있으면 링크
               if (nvl(selectedRow[("dc" + dcColList[i].dcCd)], '') !== '') {
                 params.dcCd = dcColList[i].dcCd;
@@ -488,6 +493,7 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.$on("todayDtlDetailCtrl", function (event, data) {
     $scope.startDate = data.startDate;
     $scope.storeCd   = data.storeCd;
+    $scope.posNo     = data.posNo;
     $scope.saleYn    = nvl(data.saleYn, '');
 
     $scope.searchTodayDtlDetailList();
@@ -503,12 +509,12 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
     params.startDate = $scope.startDate;
     params.storeCd   = $scope.storeCd;
     params.saleYn    = $scope.saleYn;
+    params.posNo     = $scope.posNo;
     params.payCol    = payCol;
     params.dcCol     = dcCol;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/today/todayDtl/todayDtlDetail/list.sb", params);
   };
-
 
 }]);

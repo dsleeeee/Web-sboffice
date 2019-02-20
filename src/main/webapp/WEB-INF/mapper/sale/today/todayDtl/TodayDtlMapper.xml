@@ -60,6 +60,24 @@
     </select>
 
 
+    <!-- 당일매출상세현황 - 매장 포스 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : todayDtlVO
+        COMMENTS : 당일매출상세현황 - 매장 포스 리스트를 조회한다.
+    -->
+    <select id="getStorePosList" parameterType="todayDtlVO" resultType="DefaultMap">
+        /* USE : TodayDtlMapper.getStorePosList */
+        <![CDATA[
+        SELECT  tmp.POS_NO AS NMCODE_CD, tmp.POS_NM AS NMCODE_NM
+        FROM    TB_MS_POS tmp
+        WHERE   tmp.STORE_CD  = #{storeCd}
+        ORDER
+        BY      tmp.POS_NO
+        ]]>
+    </select>
+
+
     <!-- 당일매출상세현황 - 매출종합 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC, TB_SL_SALE_HDR_GUEST
@@ -112,6 +130,11 @@
                     WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND     tssh.STORE_CD     = #{storeCd}
                     AND     tssh.SALE_DATE    = #{startDate}
+        ]]>
+                    <if test='posNo != null and posNo != ""'>
+                        AND   tssh.POS_NO = #{posNo}
+                    </if>
+        <![CDATA[
                     GROUP
                     BY      tssh.SALE_YN
                 ) tssh
@@ -126,6 +149,11 @@
                                 WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshp.STORE_CD      = #{storeCd}
                                 AND     tsshp.SALE_DATE     = #{startDate}
+        ]]>
+                                <if test='posNo != null and posNo != ""'>
+                                    AND   tsshp.POS_NO  = #{posNo}
+                                </if>
+        <![CDATA[
                             )
                     PIVOT   (
                                 SUM(PAY_AMT)
@@ -145,6 +173,11 @@
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshd.STORE_CD      = #{storeCd}
                                 AND     tsshd.SALE_DATE     = #{startDate}
+        ]]>
+                                <if test='posNo != null and posNo != ""'>
+                                    AND   tsshd.POS_NO  = #{posNo}
+                                </if>
+        <![CDATA[
                             )
                     PIVOT   (
                                 SUM(DC_AMT)
@@ -162,6 +195,11 @@
                     WHERE   tsshg.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND     tsshg.STORE_CD      = #{storeCd}
                     AND     tsshg.SALE_DATE     = #{startDate}
+        ]]>
+                    <if test='posNo != null and posNo != ""'>
+                        AND   tsshg.POS_NO  = #{posNo}
+                    </if>
+        <![CDATA[
                     GROUP
                     BY      tsshg.SALE_YN
                 ) tsshg
@@ -183,7 +221,7 @@
         <![CDATA[
         SELECT  tssh.POS_NO
         ,       tssh.BILL_NO
-        ,       SUBSTR(BILL_DT, 9, 6) AS BILL_DT
+        ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
         ,       tssh.SALE_YN
         ,       tssh.TOT_SALE_AMT
         ,       tssh.TOT_DC_AMT
@@ -229,6 +267,9 @@
                                 <if test='saleYn != null and saleYn != ""'>
                                     AND   tsshp.SALE_YN    = #{saleYn}
                                 </if>
+                                <if test='posNo != null and posNo != ""'>
+                                    AND   tsshp.POS_NO       = #{posNo}
+                                </if>
         <![CDATA[
                             )
                     PIVOT   (
@@ -252,6 +293,9 @@
                                 <if test='saleYn != null and saleYn != ""'>
                                     AND   tsshd.SALE_YN    = #{saleYn}
                                 </if>
+                                <if test='posNo != null and posNo != ""'>
+                                    AND   tsshd.POS_NO       = #{posNo}
+                                </if>
         <![CDATA[
                             )
                     PIVOT   (
@@ -273,6 +317,9 @@
                     <if test='saleYn != null and saleYn != ""'>
                         AND   tsshg.SALE_YN    = #{saleYn}
                     </if>
+                    <if test='posNo != null and posNo != ""'>
+                        AND   tsshg.POS_NO       = #{posNo}
+                    </if>
         <![CDATA[
                 ) tsshg
         ,       TB_SL_SALE_HDR_MEMBR tsshm
@@ -282,7 +329,10 @@
         AND     tssh.SALE_DATE    = #{startDate}
         ]]>
         <if test='saleYn != null and saleYn != ""'>
-          AND   tssh.SALE_YN    = #{saleYn}
+            AND   tssh.SALE_YN    = #{saleYn}
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND   tssh.POS_NO       = #{posNo}
         </if>
         <![CDATA[
         AND     tsshp.POS_NO      (+) = tssh.POS_NO

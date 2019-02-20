@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.today.todayBillSaleDtl.service.impl.TodayBillSaleDtlMapper">
+
+    <!-- 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : todayBillSaleDtlVO
+        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+    -->
+    <select id="getTodayBillSaleDtlList" parameterType="todayBillSaleDtlVO" resultType="DefaultMap">
+        /* USE : TodayBillSaleDtlMapper.getTodayBillSaleDtlList */
+        <![CDATA[
+        SELECT  tssh.POS_NO
+        ,       tssh.BILL_NO
+        ,       tssh.SALE_YN
+        ,       tmt.TBL_NM AS TBL_NM
+        ,       SUBSTR(tssh.BILL_DT, 9, 6) AS BILL_DT
+        ,       tssd.PROD_CD
+        ,       tmpb.BARCD_CD
+        ,       tmp.PROD_NM
+        ,       tssd.SALE_QTY
+        ,       tssd.SALE_AMT
+        ,       tssd.DC_AMT
+        ,       tssd.REAL_SALE_AMT
+        ,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
+        ,       tssd.VAT_AMT
+        FROM    TB_SL_SALE_HDR tssh
+        ,       TB_SL_SALE_DTL tssd
+        ,       TB_MS_TABLE tmt
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tssh.STORE_CD     = #{storeCd}
+        AND     tssh.SALE_DATE    = #{startDate}
+        ]]>
+        <if test='posNo != null and posNo != ""'>
+            AND   tssh.POS_NO       = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND   tssh.BILL_NO    = #{billNo}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND   tssd.PROD_CD    = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <![CDATA[
+        AND     tssd.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         = tssh.STORE_CD
+        AND     tssd.SALE_DATE        = tssh.SALE_DATE
+        AND     tssd.POS_NO           = tssh.POS_NO
+        AND     tssd.BILL_NO          = tssh.BILL_NO
+        AND     tmt.STORE_CD      (+) = tssh.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmt.TBL_CD        (+) = tssh.TBL_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.STORE_CD      (+) = tssd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.PROD_CD       (+) = tssd.PROD_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmpb.STORE_CD     (+) = tmp.STORE_CD
+        AND     tmpb.PROD_CD      (+) = tmp.PROD_CD
+        ORDER
+        BY      tssh.POS_NO, tssh.BILL_NO, tssd.BILL_DTL_NO
+        ]]>
+    </select>
+
+</mapper>

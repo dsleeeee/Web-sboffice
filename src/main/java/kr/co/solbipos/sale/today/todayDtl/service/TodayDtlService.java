@@ -9,6 +9,9 @@ public interface TodayDtlService {
     /** 당일매출상세현황 - 결제수단 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPayColList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO);
 
+    /** 당일매출상세현황 - 매장 포스 리스트 조회 */
+    List<DefaultMap<String>> getStorePosList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO);
+
     /** 당일매출상세현황 - 할인 컬럼 리스트 조회 */
     List<DefaultMap<String>> getDcColList(TodayDtlVO todayDtlVO, SessionInfoVO sessionInfoVO);
 

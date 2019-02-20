@@ -50,7 +50,7 @@ public class DcInfoController {
 
 
     /**
-     * 당일매출상세현황 - 쿠폰할인 상세 리스트 조회
+     * 당일매출상세현황 - 일반할인 상세 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -59,7 +59,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/generalDc/generalDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/generalDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getGeneralDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -82,7 +82,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/coupnDc/coupnDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/coupnDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCoupnDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -105,7 +105,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/membrDc/membrDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/membrDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMembrDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -128,7 +128,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/partnerDc/partnerDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/partnerDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPartnerDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -150,7 +150,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/serviceDc/serviceDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/serviceDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getServiceDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -173,7 +173,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/promtnDc/promtnDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/promtnDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPromtnDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -196,7 +196,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/packDc/packDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/packDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getPackDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -219,7 +219,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/siteDc/siteDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/siteDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSiteDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {
@@ -242,7 +242,7 @@ public class DcInfoController {
      * @author  안동관
      * @since   2019. 02. 13.
      */
-    @RequestMapping(value = "/vcoupnDc/vcoupnDc.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/vcoupnDc/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVcoupnDcList(HttpServletRequest request, HttpServletResponse response,
         Model model, DcInfoVO dcInfoVO) {

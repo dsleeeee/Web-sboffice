@@ -37,8 +37,8 @@ app.controller('coupnDcCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.$on("coupnDcCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
     $scope.dcCd     = data.dcCd;
 
     $scope.wjCoupnDcLayer.show(true);
@@ -61,7 +61,7 @@ app.controller('coupnDcCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.dcCd     = $scope.dcCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/dcInfo/coupnDc/coupnDc.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/dcInfo/coupnDc/list.sb", params);
   };
 
 }]);

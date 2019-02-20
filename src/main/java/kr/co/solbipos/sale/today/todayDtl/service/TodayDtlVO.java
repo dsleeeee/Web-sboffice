@@ -24,6 +24,8 @@ public class TodayDtlVO extends PageVO {
     private String pivotDcCol;
     /** 판매여부 */
     private String saleYn;
+    /** POS번호 */
+    private String posNo;
 
     /**
      * @return the hqOfficeCd
@@ -149,5 +151,19 @@ public class TodayDtlVO extends PageVO {
      */
     public void setSaleYn(String saleYn) {
         this.saleYn = saleYn;
+    }
+
+    /**
+     * @return the posNo
+     */
+    public String getPosNo() {
+        return posNo;
+    }
+
+    /**
+     * @param posNo the posNo to set
+     */
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
     }
 }

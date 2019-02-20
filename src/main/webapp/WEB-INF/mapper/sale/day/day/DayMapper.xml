@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.day.day.service.impl.DayMapper">
+
+    <!-- 일자별 - 결제수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayVO
+        COMMENTS : 일자별 - 결제수단 컬럼 리스트를 조회한다.
+    -->
+    <select id="getPayColList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getPayColList */
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS PAY_CD, tcn.NMCODE_NM AS PAY_NM, tcn.NMCODE_ITEM_1 AS PAY_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '024'
+        AND     tcn.NMCODE_CD       NOT IN ('05', '12') /* 쿠폰은 결제수단이 아닌 할인내역으로 들어가므로 하드코딩으로 결제수단에 나오지 않도록 함. */
+        ORDER
+        BY      tcn.NMCODE_CD
+        ]]>
+    </select>
+
+
+    <!-- 일자별 - 할인 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayVO
+        COMMENTS : 일자별 - 할인 컬럼 리스트를 조회한다.
+    -->
+    <select id="getDcColList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDcColList */
+        <![CDATA[
+        SELECT  tcn.NMCODE_CD AS DC_CD, tcn.NMCODE_NM AS DC_NM, tcn.NMCODE_ITEM_1 AS DC_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '041'
+        ORDER
+        BY      tcn.NMCODE_CD
+        ]]>
+    </select>
+
+
+    <!-- 일자별(일별종합 탭) - 일별종합 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_DC
+        PARAM    : dayVO
+        COMMENTS : 일자별(일별종합 탭) - 일별종합 리스트를 조회한다.
+    -->
+    <select id="getDayTotalList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayTotalList */
+        <![CDATA[
+        SELECT  tssh.SALE_DATE
+        ,       tssh.YOIL
+        ,       tssh.STORE_CNT
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       tssh.GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.TOT_TIP_AMT
+        ,       tssh.TOT_ETC_AMT
+        ,       tssh.BILL_CNT
+        ,       tssh.BILL_UPRC
+        ,       tssddp.GEN_REAL_SALE_AMT
+        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.GEN_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
+        ,       tssddp.DLVR_REAL_SALE_AMT
+        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.DLVR_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
+        ,       tssddp.PACK_REAL_SALE_AMT
+        ,       DECODE(tssh.REAL_SALE_AMT, 0, 0, (tssddp.PACK_REAL_SALE_AMT / tssh.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ]]>
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        <![CDATA[
+        FROM    (   SELECT  tssh.SALE_DATE
+                    ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                    ,       COUNT(tssh.STORE_CD) AS STORE_CNT
+                    ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
+                    ,       SUM(tssh.VAT_AMT) AS VAT_AMT
+                    ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
+                    ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(tssh.BILL_CNT) AS BILL_CNT
+                    ,       DECODE(SUM(tssh.BILL_CNT), 0, 0, ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.BILL_CNT))) AS BILL_UPRC
+                    FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
+                                ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                                ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                ,       SUM(tssh.REAL_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
+                                ,       SUM(tssh.VAT_AMT) AS VAT_AMT
+                                ,       SUM(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
+                                ,       SUM(tssh.TOT_ETC_AMT) AS TOT_ETC_AMT
+                                ,       COUNT(tssh.BILL_NO) AS BILL_CNT
+                                FROM    TB_SL_SALE_HDR tssh
+                                WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+                                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                    AND tssh.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </if>
+        <![CDATA[
+                                AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                                GROUP
+                                BY      tssh.SALE_DATE, tssh.STORE_CD
+                            ) tssh
+                    GROUP
+                    BY      tssh.SALE_DATE
+                ) tssh
+        ,       (   SELECT  SALE_DATE
+        ]]>
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(PAY${item}) AS PAY${item}
+                            </foreach>
+        <![CDATA[
+                    FROM    (   SELECT  tsshp.SALE_DATE, tsshp.PAY_CD, tsshp.PAY_AMT
+                                FROM    TB_SL_SALE_HDR_PAY tsshp
+                                WHERE   tsshp.HQ_OFFICE_CD  = #{hqOfficeCd}
+        ]]>
+                                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                    AND tsshp.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </if>
+        <![CDATA[
+                                AND     tsshp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                    GROUP BY SALE_DATE
+                ) tsshp
+        ,       (   SELECT	tssd.SALE_DATE
+                    ,       DECODE(tssd.DLVR_PACK_FG, '1', SUM(tssd.REAL_SALE_AMT), 0) AS GEN_REAL_SALE_AMT
+                    ,       DECODE(tssd.DLVR_PACK_FG, '2', SUM(tssd.REAL_SALE_AMT), 0) AS DLVR_REAL_SALE_AMT
+                    ,       DECODE(tssd.DLVR_PACK_FG, '3', SUM(tssd.REAL_SALE_AMT), 0) AS PACK_REAL_SALE_AMT
+                    FROM	TB_SL_SALE_DTL tssd
+                    WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
+        ]]>
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                        AND tssd.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                            #{item}
+                        </foreach>
+                    </if>
+        <![CDATA[
+                    AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY      tssd.SALE_DATE, tssd.DLVR_PACK_FG
+                ) tssddp
+        WHERE   tsshp.SALE_DATE  (+) = tssh.SALE_DATE
+        AND     tssddp.SALE_DATE (+) = tssh.SALE_DATE
+        ORDER
+        BY      tssh.SALE_DATE DESC
+        ]]>
+    </select>
+
+
+    <!-- 일자별(일별종합 탭) - 일자 팝업 매장별 매출현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayVO
+        COMMENTS : 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트를 조회한다.
+    -->
+    <select id="getDayStoreDtlList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayStoreDtlList */
+        <![CDATA[
+        SELECT  tssh.STORE_CD, tms.STORE_NM
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       tssh.BILL_CNT
+        ,       DECODE(tssh.BILL_CNT, 0, 0, ROUND(tssh.REAL_SALE_AMT / tssh.BILL_CNT)) AS BILL_UPRC
+        FROM    (   SELECT  tssh.STORE_CD
+                    ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       COUNT(tssh.BILL_NO) AS BILL_CNT
+                    FROM    TB_SL_SALE_HDR tssh
+                    WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     tssh.SALE_DATE    = #{saleDate}
+                    GROUP
+                    BY      tssh.STORE_CD
+                ) tssh
+        ,       TB_MS_STORE tms
+        WHERE   tms.STORE_CD  = tssh.STORE_CD
+        ORDER
+        BY      tssh.STORE_CD
+        ]]>
+    </select>
+
+
+    <!-- 일자별(할인구분별 탭) - 할인구분 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_DC
+        PARAM    : dayVO
+        COMMENTS : 일자별(할인구분별 탭) - 할인구분 리스트를 조회한다.
+    -->
+    <select id="getDayStoreDcList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayStoreDcList */
+        <![CDATA[
+        SELECT  tsshd.STORE_CD
+        ,       tms.STORE_NM
+        ]]>
+        ,       <foreach collection="arrDcCol" item="item" separator="+">
+                    NVL(tsshd.DC${item}, 0)
+                </foreach> AS TOT_DC_AMT
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        <![CDATA[
+        FROM    (   SELECT  STORE_CD
+        ]]>
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    SUM(DC${item}) AS DC${item}
+                </foreach>
+        <![CDATA[
+                    FROM    (   SELECT  tsshd.STORE_CD, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshd.SALE_DATE     = #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsshd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                    GROUP BY STORE_CD
+                ) tsshd
+        ,       TB_MS_STORE tms
+        WHERE   tms.STORE_CD (+)= tsshd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tsshd.STORE_CD
+        ]]>
+    </select>
+
+
+    <!-- 일자별(할인구분별 탭) - 할인구분 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_DC
+        PARAM    : dayVO
+        COMMENTS : 일자별(할인구분별 탭) - 할인구분 리스트를 조회한다.
+    -->
+    <select id="getDayDcList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayDcList */
+        <![CDATA[
+        SELECT  tsshd.SALE_DATE
+        ,       TO_CHAR(TO_DATE(tsshd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       tsshd.STORE_CNT
+        ]]>
+        ,       <foreach collection="arrDcCol" item="item" separator="+">
+                    NVL(tsshd.DC${item}, 0)
+                </foreach> AS TOT_DC_AMT
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        <![CDATA[
+        FROM    (   SELECT  SALE_DATE
+                    ,       COUNT(STORE_CD) AS STORE_CNT
+        ]]>
+                    ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                SUM(DC${item}) AS DC${item}
+                            </foreach>
+        <![CDATA[
+                    FROM    (   SELECT  tsshd.SALE_DATE, tsshd.STORE_CD, tsshd.DC_CD, tsshd.DC_AMT
+                                FROM    TB_SL_SALE_HDR_DC tsshd
+                                WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     tsshd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ]]>
+                                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                    AND tsshd.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </if>
+        <![CDATA[
+                            )
+                    PIVOT   (
+                                SUM(DC_AMT)
+                                FOR DC_CD
+                                IN (${pivotDcCol})
+                            )
+                    GROUP BY SALE_DATE
+                ) tsshd
+        ORDER
+        BY      tsshd.SALE_DATE DESC
+        ]]>
+    </select>
+</mapper>

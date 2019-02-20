@@ -35,9 +35,15 @@
             <%-- 매장코드 --%>
           <th><s:message code="todayDtl.store"/></th>
           <td>
-              <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+              <%-- 매장선택 모듈 싱글 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                closeFunc - 팝업 닫기시 호출할 함수
+              --%>
             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
               <jsp:param name="targetId" value="todayDtlSelectStore"/>
+              <jsp:param name="closeFunc" value="getStorePosList"/>
             </jsp:include>
               <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
           </td>
@@ -50,6 +56,17 @@
         <%-- 포스번호 --%>
         <th><s:message code="todayDtl.dtl.posNo"/></th>
         <td>
+          <span class="txtIn w150px sb-select fl mr5">
+            <wj-combo-box
+              id="srchPosNo"
+              ng-model="posNo"
+              items-source="_getComboData('srchPosNo')"
+              display-member-path="name"
+              selected-value-path="value"
+              is-editable="false"
+              initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </span>
         </td>
       </tr>
       </tbody>
@@ -188,7 +205,7 @@
 
   <%--javascript에서 사용할 할인 json 데이터 생성--%>
   <c:forEach var="dcCol" items="${dcColList}">
-  var dcParam       = {};
+  var dcParam      = {};
   dcParam.dcCd     = "${dcCol.dcCd}";
   dcParam.dcMethod = "${dcCol.dcMethod}";
   dcColList.push(dcParam);
@@ -290,7 +307,7 @@
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 제휴카드 상세 레이어 --%>
+<%-- 사원카드 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/payInfo/empCard.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

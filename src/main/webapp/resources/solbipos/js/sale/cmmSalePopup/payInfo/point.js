@@ -37,8 +37,8 @@ app.controller('pointCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   $scope.$on("pointCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
 
     $scope.wjPointLayer.show(true);
 
@@ -59,7 +59,7 @@ app.controller('pointCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     params.billNo    = $scope.billNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/point/point.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/point/list.sb", params);
   };
 
 }]);

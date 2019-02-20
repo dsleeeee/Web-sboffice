@@ -51,8 +51,8 @@ app.controller('cardCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.$on("cardCtrl", function (event, data) {
     $scope.storeCd  = data.storeCd;
     $scope.saleDate = data.saleDate;
-    $scope.posNo    = data.posNo;
-    $scope.billNo   = data.billNo;
+    $scope.posNo    = nvl(data.posNo, '');
+    $scope.billNo   = nvl(data.billNo, '');
 
     $scope.wjCardLayer.show(true);
 
@@ -66,14 +66,14 @@ app.controller('cardCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   // 신용카드 승인내역 리스트 조회
   $scope.searchCardList = function () {
     // 파라미터
-    var params       = {};
-    params.storeCd   = $scope.storeCd;
-    params.saleDate  = $scope.saleDate;
-    params.posNo     = $scope.posNo;
-    params.billNo    = $scope.billNo;
+    var params      = {};
+    params.storeCd  = $scope.storeCd;
+    params.saleDate = $scope.saleDate;
+    params.posNo    = $scope.posNo;
+    params.billNo   = $scope.billNo;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/card/card.sb", params);
+    $scope._inquiryMain("/sale/cmmSalePopup/payInfo/card/list.sb", params);
   };
 
 }]);

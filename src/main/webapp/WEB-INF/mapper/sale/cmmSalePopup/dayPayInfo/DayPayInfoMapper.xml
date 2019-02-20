@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.dayPayInfo.service.impl.DayPayInfoMapper">
+
+    <!-- 매출공통팝업 - 신용카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD, TB_MS_CORNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 신용카드 상세 리스트를 조회한다.
+    -->
+    <select id="getDayCardList" parameterType="dayPayInfoVO" resultType="DefaultMap">
+        /* USE : DayPayInfoMapper.getDayCardList */
+        <![CDATA[
+        SELECT  NVL(tsspc.ACQUIRE_CD, '9999') AS CARD_CD, NVL(tsspc.ACQUIRE_NM, '기타') AS CARD_NM
+        ,       SUM(DECODE(tsspc.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
+        ,       SUM(DECODE(tsspc.SALE_YN, 'Y', tsspc.APPR_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspc.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.APPR_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_CARD tsspc
+        WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspc.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspc.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        GROUP
+        BY      NVL(tsspc.ACQUIRE_CD, '9999'), NVL(tsspc.ACQUIRE_NM, '기타')
+        ORDER
+        BY      NVL(tsspc.ACQUIRE_CD, '9999')
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 현금 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CASH, TB_MS_CORNER, TB_CM_VAN_CMPNY, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 현금 상세 리스트를 조회한다.
+    -->
+    <select id="getDayCashList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayCashList */
+        <![CDATA[
+        SELECT  tsspc.CORNR_CD, tmc.CORNR_NM
+        ,       tsspc.APPR_PROC_FG, tcn.NMCODE_NM AS APPR_PROC_NM
+        ,       tsspc.CASH_BILL_CARD_NO
+        ,       tsspc.APPR_NO
+        ,       tsspc.SALE_AMT AS APPR_AMT
+        ,       SUBSTR(tsspc.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspc.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspc.VAN_CD, tcvc.VAN_NM
+        FROM    TB_SL_SALE_PAY_CASH tsspc
+        ,       TB_MS_CORNER tmc
+        ,       TB_CM_VAN_CMPNY tcvc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspc.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspc.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmc.STORE_CD          (+) =   tsspc.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspc.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_FG           (+) =   '01' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcvc.VAN_CD           (+) =   tsspc.VAN_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD         =   '018'
+        AND     tcn.NMCODE_CD             =   tsspc.APPR_PROC_FG
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - PAYCO 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PAYCO, TB_MS_CORNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - PAYCO 상세 리스트를 조회한다.
+    -->
+    <select id="getDayPaycoList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayPaycoList */
+        <![CDATA[
+        SELECT  tsspp.APPR_COMPANY_NM AS PAYCO_NM
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_PAYCO tsspp
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        GROUP
+        BY      tsspp.APPR_COMPANY_NM
+        ORDER
+        BY      tsspp.APPR_COMPANY_NM
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - VMEM 포인트 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VPOINT, TB_MS_CORNER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 포인트 상세 리스트를 조회한다.
+    -->
+    <select id="getDayVpointList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayVpointList */
+        <![CDATA[
+        SELECT  tsspv.SALE_DATE
+        ,       tsspv.STORE_CD, tms.STORE_NM
+        ,       tsspv.POS_NO, tsspv.BILL_NO
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       tsspv.VPOINT_CARD_NO
+        ,       tsspv.VPOINT_APPR_NO
+        ,       tsspv.SALE_AMT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM 	TB_SL_SALE_PAY_VPOINT tsspv
+        ,       TB_MS_STORE tms
+        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspv.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspv.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tms.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tsspv.SALE_DATE, tsspv.STORE_CD
+        ,       tsspv.POS_NO, tsspv.BILL_NO
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - VMEM 전자상품권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_VCHARGE, TB_MS_CORNER
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - VMEM 전자상품권 상세 리스트를 조회한다.
+    -->
+    <select id="getDayVchargeList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayVchargeList */
+        <![CDATA[
+        SELECT  tsspv.SALE_DATE
+        ,       tsspv.STORE_CD, tms.STORE_NM
+        ,       tsspv.POS_NO, tsspv.BILL_NO
+        ,       tsspv.CASH_BILL_APPR_PROC_FG
+        ,       tsspv.VCHARGE_CARD_NO
+        ,       tsspv.VCHARGE_APPR_NO
+        ,       tsspv.SALE_AMT
+        ,       tsspv.MEMBR_ORDER_NO
+        FROM 	TB_SL_SALE_PAY_VCHARGE tsspv
+        ,       TB_MS_STORE tms
+        WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspv.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspv.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tms.STORE_CD          (+) =   tsspv.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tsspv.SALE_DATE, tsspv.STORE_CD
+        ,       tsspv.POS_NO, tsspv.BILL_NO
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 모바일페이 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MPAY, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 모바일페이 상세 리스트를 조회한다.
+    -->
+    <select id="getDayMpayList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayMpayList */
+        <![CDATA[
+        SELECT  tsspm.MPAY_CD, tcn.NMCODE_NM AS MPAY_NM
+        ,       SUM(DECODE(tsspm.SALE_YN, 'Y', 1, 0)) AS APPR_CNT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'Y', tsspm.APPR_AMT, 0)) AS APPR_AMT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspm.SALE_YN, 'N', tsspm.APPR_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_MPAY tsspm
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspm.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tcn.NMCODE_GRP_CD         =   '081'
+        AND     tcn.NMCODE_CD             =   tsspm.MPAY_CD
+        GROUP
+        BY      tsspm.MPAY_CD, tcn.NMCODE_NM
+        ORDER
+        BY      tsspm.MPAY_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 모바일쿠폰 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MCOUPN, TB_MS_STORE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 모바일쿠폰 상세 리스트를 조회한다.
+    -->
+    <select id="getDayMcoupnList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayMcoupnList */
+        <![CDATA[
+        SELECT  tsspm.SALE_DATE
+        ,       tsspm.STORE_CD, tms.STORE_NM
+        ,       tsspm.POS_NO, tsspm.BILL_NO
+        ,       tsspm.SALE_YN
+        ,       tsspm.MCOUPN_TYPE_FG
+        ,       tsspm.MCOUPN_BARCD_NO
+        ,       tsspm.APPR_NO
+        ,       tsspm.SALE_AMT
+        ,       SUBSTR(tsspm.APPR_DT, 0, 8) AS APPR_DATE
+        ,       SUBSTR(tsspm.APPR_DT, 8, 14) AS APPR_TIME
+        ,       tsspm.MCOUPN_UPRC
+        ,       tsspm.MCOUPN_REMAIN_AMT
+        FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
+        ,       TB_MS_STORE tms
+        WHERE   tsspm.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     tsspm.SALE_DATE     =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspm.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tms.STORE_CD        =   tsspm.STORE_CD
+        ORDER
+        BY      tsspm.SALE_DATE
+        ,       tsspm.STORE_CD
+        ,       tsspm.POS_NO, tsspm.BILL_NO
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 포인트 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_POINT, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 포인트 상세 리스트를 조회한다.
+    -->
+    <select id="getDayPointList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayPointList */
+        <![CDATA[
+        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM 	TB_SL_SALE_PAY_POINT tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        GROUP
+        BY      tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 회원선불 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PREPAID, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 회원선불 상세 리스트를 조회한다.
+    -->
+    <select id="getDayPrepaidList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayPrepaidList */
+        <![CDATA[
+        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM 	TB_SL_SALE_PAY_PREPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        GROUP
+        BY      tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 회원후불 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_POSTPAID, TB_MS_CORNER, TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 회원후불 상세 리스트를 조회한다.
+    -->
+    <select id="getDayPostpaidList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayPostpaidList */
+        <![CDATA[
+        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
+        ,       tmmc.DC_RATE
+        ,       SUM(tsspp.SALE_AMT) AS SALE_AMT
+        FROM 	TB_SL_SALE_PAY_POSTPAID tsspp
+        ,       TB_MS_CORNER tmc
+        ,       TB_MB_MEMBER tmm
+        ,       TB_MB_MEMBER_CLASS tmmc
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmc.STORE_CD          (+) =   tsspp.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmc.CORNR_CD          (+) =   tsspp.CORNR_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_ORGN_CD     (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmm.MEMBR_NO          (+) =   tsspp.MEMBR_NO /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_ORGN_CD    (+) =   #{orgnGrpCd} /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        GROUP
+        BY      tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
+        ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM
+        ,       tmmc.DC_RATE
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 상품권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_SL_SALE_PAY_GIFT_RTN, TB_MS_GIFT, TB_CM_NMCODE
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 상품권 상세 리스트를 조회한다.
+    -->
+    <select id="getDayGiftList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayGiftList */
+        <![CDATA[
+        SELECT  tsspgd.SALE_DATE
+        ,       tsspgd.STORE_CD, tms.STORE_NM
+        ,       tsspgd.POS_NO, tsspgd.BILL_NO
+        ,       tsspgd.SALE_YN
+        ,       tsspgd.GIFT_CD, tmg.GIFT_NM
+        ,       tsspgd.GIFT_PROC_FG, tcn.NMCODE_NM AS GIFT_PROC_FG_NM
+        ,       tsspgd.GIFT_SER_NO
+        ,       tsspgd.GIFT_UPRC
+        ,       tsspgd.GIFT_QTY
+        ,       tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY AS GIFT_TOT_AMT
+        ,       tsspgr.RTN_PAY_AMT
+        FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
+        ,       TB_SL_SALE_PAY_GIFT_RTN tsspgr
+        ,       TB_MS_GIFT tmg
+        ,       TB_CM_NMCODE tcn
+        ,       TB_MS_STORE tms
+        WHERE   tsspgd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspgd.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspgd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tsspgr.HQ_OFFICE_CD    (+) =   tsspgd.HQ_OFFICE_CD
+        AND     tsspgr.STORE_CD        (+) =   tsspgd.STORE_CD
+        AND     tsspgr.SALE_DATE       (+) =   tsspgd.SALE_DATE
+        AND     tsspgr.POS_NO          (+) =   tsspgd.POS_NO
+        AND     tsspgr.BILL_NO         (+) =   tsspgd.BILL_NO
+        AND     tsspgr.LINE_NO         (+) =   tsspgd.LINE_NO
+        AND     tmg.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmg.GIFT_CD            (+) =   tsspgd.GIFT_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tcn.NMCODE_GRP_CD          =   '048'
+        AND     tcn.NMCODE_CD              =   tsspgd.GIFT_PROC_FG
+        AND     tms.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tsspgd.SALE_DATE, tsspgd.STORE_CD
+        ,       tsspgd.POS_NO, tsspgd.BILL_NO
+        ,       tsspgd.GIFT_SEQ
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 식권 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_FSTMP_DTL, TB_MS_FOOD_STAMP
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 식권 상세 리스트를 조회한다.
+    -->
+    <select id="getDayFstmpList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayFstmpList */
+        <![CDATA[
+        SELECT  tsspfd.SALE_DATE
+        ,       tsspfd.STORE_CD, tms.STORE_NM
+        ,       tsspfd.POS_NO, tsspfd.BILL_NO
+        ,       tsspfd.SALE_YN
+        ,    	tsspfd.FSTMP_SEQ
+        ,       tsspfd.FSTMP_CD, tmfs.FSTMP_NM
+        ,       tsspfd.FSTMP_UPRC
+        ,       tsspfd.FSTMP_QTY
+        ,       tsspfd.FSTMP_UPRC * tsspfd.FSTMP_QTY AS FSTMP_TOT_AMT
+        ,       tsspfd.FSTMP_SER_NO
+        FROM 	TB_SL_SALE_PAY_FSTMP_DTL tsspfd
+        ,       TB_MS_FOOD_STAMP tmfs
+        ,       TB_MS_STORE tms
+        WHERE   tsspfd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspfd.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspfd.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmfs.STORE_CD          (+) =   tsspfd.STORE_CD
+        AND     tmfs.FSTMP_CD          (+) =   tsspfd.FSTMP_CD
+        AND     tms.STORE_CD           (+) =   tsspfd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        ORDER
+        BY      tsspfd.SALE_DATE, tsspfd.STORE_CD
+        ,       tsspfd.POS_NO, tsspfd.BILL_NO
+        ,       tsspfd.FSTMP_SEQ
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 제휴카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PARTNER, TB_CM_VAN_CMPNY
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 제휴카드 상세 리스트를 조회한다.
+    -->
+    <select id="getDayPartnerList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayPartnerList */
+        <![CDATA[
+        SELECT  tsspp.PARTN_CD, tmp.PARTN_NM
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', 1, 0)) AS SALE_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.SALE_AMT, 0)) AS SALE_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'Y', tsspp.DC_AMT, 0)) AS DC_AMT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', 1, 0)) AS CANCEL_CNT
+        ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.SALE_AMT, 0)) AS CANCEL_AMT
+        FROM    TB_SL_SALE_PAY_PARTNER tsspp
+        ,       TB_MS_PARTNER tmp
+        WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspp.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspp.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tmp.STORE_CD              =   tsspp.STORE_CD
+        AND     tmp.PARTN_CD              =   tsspp.PARTN_CD
+        GROUP
+        BY      tsspp.PARTN_CD, tmp.PARTN_NM
+        ORDER
+        BY      tsspp.PARTN_CD
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 사원카드 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_EMP_CARD
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 사원카드 상세 리스트를 조회한다.
+    -->
+    <select id="getDayEmpCardList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayEmpCardList */
+        <![CDATA[
+        SELECT  tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.ACCOUNT_FG
+        ,       SUM(tsspec.SALE_AMT) AS SALE_AMT
+        ,       SUM(tsspec.REMAIN_AMT) AS REMAIN_AMT
+        FROM    TB_SL_SALE_PAY_EMP_CARD tsspec
+        WHERE   tsspec.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspec.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspec.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        GROUP
+        BY      tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ,       tsspec.ACCOUNT_FG
+        ORDER
+        BY      tsspec.OFFICE_NM
+        ,       tsspec.OFFICE_DEPT_NM
+        ,       tsspec.OFFICE_EMP_NO
+        ,       tsspec.OFFICE_EMP_NM
+        ]]>
+    </select>
+
+
+    <!-- 매출공통팝업 - 가승인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_EMP_CARD
+        PARAM    : payInfoVO
+        COMMENTS : 매출공통팝업 - 가승인 상세 리스트를 조회한다.
+    -->
+    <select id="getDayTemporaryList" parameterType="payInfoVO" resultType="DefaultMap">
+        /* USE : PayInfoMapper.getDayTemporaryList */
+        <![CDATA[
+        SELECT 	tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM AS TEMPORARY_PAY_NM
+        ,       SUM(tsspt.SALE_AMT) AS SALE_AMT
+        FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
+        ,       TB_CM_NMCODE tcn
+        WHERE   tsspt.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tsspt.SALE_DATE           =   #{saleDate}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tsspt.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <![CDATA[
+        AND     tcn.NMCODE_GRP_CD         =   '024'
+        AND     tcn.NMCODE_CD             =   tsspt.TEMPORARY_PAY_CD
+        GROUP
+        BY      tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
+        ORDER
+        BY      tsspt.TEMPORARY_PAY_CD, tcn.NMCODE_NM
+        ]]>
+    </select>
+</mapper>
