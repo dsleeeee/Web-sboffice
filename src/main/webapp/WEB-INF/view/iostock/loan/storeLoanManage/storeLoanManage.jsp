@@ -83,7 +83,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 200px;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"

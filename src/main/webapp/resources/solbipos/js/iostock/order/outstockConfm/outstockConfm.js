@@ -55,6 +55,8 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
           params.slipNo = selectedRow.slipNo;
+          params.slipFg = $scope.slipFg;
+
           $scope._broadcast('outstockConfmDtlCtrl', params);
         }
       }

@@ -184,3 +184,9 @@
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 거래명세표 레이어 --%>
+<c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

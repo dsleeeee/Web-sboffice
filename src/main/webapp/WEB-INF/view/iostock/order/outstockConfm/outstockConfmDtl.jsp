@@ -91,8 +91,8 @@
                 initialized="_initComboBox(s)">
               </wj-combo-box>
             </span>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="outstockConfm.dtl.stmtAcctPrint"/></a>
-            <a href="#" class="btn_grayS" ng-click=""><s:message code="outstockConfm.dtl.stmtAcctExcel"/></a>
+            <a href="#" class="btn_grayS" ng-click="reportTrans()"><s:message code="outstockConfm.dtl.stmtAcctPrint"/></a>
+            <%--<a href="#" class="btn_grayS" ng-click=""><s:message code="outstockConfm.dtl.stmtAcctExcel"/></a>--%>
           </td>
         </tr>
         </tbody>

@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
-<wj-popup id="wjVendrExactRegistLayer" control="wjVendrExactRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjVendrExactRegistLayer" control="wjVendrExactRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
   <div id="vendrExactRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="vendrExactRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="vendrExact.reg.title"/>
@@ -13,16 +13,16 @@
         <table class="tblType01">
           <colgroup>
             <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <col class="w25"/>
+            <col class="w10"/>
+            <col class="w50"/>
           </colgroup>
           <tbody>
           <tr>
             <th><s:message code="vendrExact.reg.excclcDate"/></th>
             <td>
               <div class="sb-select">
-                <span class="txtIn"><input id="excclcDate" class="w200px" ng-model="vendrExact.excclcDate"></span>
+                <span class="txtIn"><input id="excclcDate" class="w120px" ng-model="vendrExact.excclcDate"></span>
               </div>
             </td>
             <th><s:message code="vendrExact.reg.vendr"/></th>
@@ -42,7 +42,7 @@
           <tr>
             <th><s:message code="vendrExact.reg.excclcTot"/></th>
             <td>
-              <input type="text" id="excclcTot" name="excclcTot" ng-model="vendrExact.excclcTot" class="sb-input w100" maxlength="8"
+              <input type="text" id="excclcTot" name="excclcTot" ng-model="vendrExact.excclcTot" class="sb-input w150px" maxlength="8"
                      data-check="1,10,number" ng-required="true" ng-blur="excclcTotOnBlur($event)" ng-focus="excclcTotOnFocus($event)"/>
             </td>
           </tr>
