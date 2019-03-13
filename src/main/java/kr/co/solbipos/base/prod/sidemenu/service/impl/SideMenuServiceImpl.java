@@ -6,6 +6,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -189,11 +190,17 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 수정
             } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuGrpList(sideMenuSelGroupVO);
-                procResult = sideMenuMapper.updateHqMenuGrpListToStore(sideMenuSelGroupVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.updateHqMenuGrpListToStore(sideMenuSelGroupVO);
+                }
             // 삭제
             } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteMenuGrpList(sideMenuSelGroupVO);
-                procResult = sideMenuMapper.deleteHqMenuGrpListToStore(sideMenuSelGroupVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.deleteHqMenuGrpListToStore(sideMenuSelGroupVO);
+                }
             }
 
         }
@@ -241,15 +248,24 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 추가
             if ( sideMenuSelClassVO.getStatus() == GridDataFg.INSERT ) {
                 result += sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
-                procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+                }
             // 수정
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuClassList(sideMenuSelClassVO);
-                procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+                }
             // 삭제
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteMenuClassList(sideMenuSelClassVO);
-                procResult = sideMenuMapper.deleteHqMenuClassListToStore(sideMenuSelClassVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.deleteHqMenuClassListToStore(sideMenuSelClassVO);
+                }
             }
         }
 
@@ -328,15 +344,24 @@ public class SideMenuServiceImpl implements SideMenuService {
             // 추가
             if ( sideMenuSelProdVO.getStatus() == GridDataFg.INSERT ) {
                 result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
-                procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                }
             // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuProdList(sideMenuSelProdVO);
-                procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                }
             // 삭제
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteMenuProdList(sideMenuSelProdVO);
-                procResult = sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
+                }
             }
         }
 

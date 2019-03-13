@@ -8,7 +8,7 @@
   <!--  MAIN Properties--> 
   <!-- =====================================-->
   <entry key="profile">local</entry>
-  <entry key="domain">http://office.solbipos.co.kr</entry>
+  <entry key="domain">http://neo.solbipos.com</entry>
   <entry key="encoding">UTF-8</entry>
   <entry key="welcome.url">/auth/login.sb</entry>
   
