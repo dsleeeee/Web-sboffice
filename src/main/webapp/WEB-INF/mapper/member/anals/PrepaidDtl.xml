@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PrepaidDtl.xml
+    선불금 충전/ 사용내역 상세
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2019.05.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.prepaidDtl.service.impl.PrepaidDtlMapper">
+
+    <!-- 선불 회원 충전, 사용 내역 상세 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PREPAID, TB_MB_MEMBER_PREPAID
+        COMMENTS : 선불 충전내역과 사용내역의 상세를 조회
+    -->
+    <select id="getPrepaidDtlMemberList"  parameterType="prepaidDtlVO" resultType="DefaultMap">
+        /* PrepaidDtlMapper.getPrepaidDtlMemberList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmmp.HQ_OFFICE_CD,
+        tmmp.STORE_CD,
+        tms.STORE_NM,
+        tmmp.MEMBR_NO,
+        tmm.MEMBR_NM,
+        (SUBSTR(tmmp.SALE_DATE, 1,4) || '/' || SUBSTR(tmmp.SALE_DATE, 5,2) || '/' || SUBSTR(tmmp.SALE_DATE, 7)) AS SALE_DATE,
+        tmmp.PREPAID_FG,
+        tmmp.PREPAID_AMT,
+        tmmp.PREPAID_PAY_FG,
+        tcn.NMCODE_NM AS PREPAID_PAY_FG_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER_PREPAID tmmp,
+        TB_MB_MEMBER tmm,
+        TB_MS_STORE tms,
+        TB_CM_NMCODE tcn
+        WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_ORGN_CD = tmmp.HQ_OFFICE_CD
+        AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+        AND tms.HQ_OFFICE_CD = tmmp.HQ_OFFICE_CD
+        AND tms.STORE_CD = tmmp.STORE_CD
+        AND tcn.NMCODE_GRP_CD (+) = '099'
+        AND tcn.NMCODE_CD (+) = tmmp.PREPAID_PAY_FG
+        <if test='storeCds != null and storeCds != ""'>
+            AND tmmp.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+           AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+           ]]>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+             AND tmmp.STORE_CD = #{storeCd}
+             ]]>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+           ]]>
+        </if>
+        AND tmmp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

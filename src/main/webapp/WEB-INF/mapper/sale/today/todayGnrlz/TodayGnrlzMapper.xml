@@ -83,7 +83,7 @@
         ,       USE_POINT
         FROM    (
                     SELECT  tsshm.MEMBR_NO, tsshm.MEMBR_NM
-                    ,       SUM(tsshm.SAVE_POINT) AS SAVE_POINT
+                    ,       SUM(tsshm.SALE_SAVE_POINT) AS SAVE_POINT
                     ,       0 AS USE_POINT
                     FROM    TB_SL_SALE_HDR_MEMBR tsshm
                     WHERE   tsshm.HQ_OFFICE_CD  =   #{hqOfficeCd}
