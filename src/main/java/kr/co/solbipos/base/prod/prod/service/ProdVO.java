@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.prod.service;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 
 /**
  * @Class Name : ProdVO.java
@@ -13,6 +14,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.06  장혁수       최초생성
  * @ 2018.10.19  노현수       소속구분 타입 변경
+ * @ 2019.06.03  이다솜       workMode 추가 (PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I 호출 시 조회 조건 구분을 위함)
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -130,6 +132,14 @@ public class ProdVO extends PageVO {
 
     /** 상품 등록 주체 구분 */
     private OrgnFg regOrgnFg;
+
+    /**
+     * workMode<br>
+     * 1 : 상품정보수정<br>
+     * 2 : 신규상품등록<br>
+     * 3 : 매장등록<br>
+     */
+    private WorkModeFg workMode;
 
     /**
      * @return the hqOfficeCd
@@ -785,5 +795,13 @@ public class ProdVO extends PageVO {
      */
     public void setRegOrgnFg(OrgnFg regOrgnFg) {
         this.regOrgnFg = regOrgnFg;
+    }
+
+    public WorkModeFg getWorkMode() {
+        return workMode;
+    }
+
+    public void setWorkMode(WorkModeFg workMode) {
+        this.workMode = workMode;
     }
 }

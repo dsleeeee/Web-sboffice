@@ -1241,6 +1241,8 @@
           (
             #{hqOfficeCd},
             #{prodCd},
+            #{storeCd},
+            #{workMode},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
         }

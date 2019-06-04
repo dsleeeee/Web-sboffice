@@ -12,6 +12,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.06  장혁수       최초생성
  * @ 2018.10.19  노현수       생성자 주입, 상품조회 관련 변경
+ * @ 2019.06.03  이다솜       saveProductInfo 수정 (WorkMode 추가)
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -153,6 +155,9 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setRegId(sessionInfoVO.getUserId());
         prodVO.setModId(sessionInfoVO.getUserId());
 
+        // WorkMode Flag 상품정보수정으로 기본 셋팅_2019.06.06
+        prodVO.setWorkMode(WorkModeFg.MOD_PROD);
+
         // 상품등록 본사 통제여부
         ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
         // 판매가 본사 통제여부
@@ -169,6 +174,8 @@ public class ProdServiceImpl implements ProdService {
         if( StringUtil.isEmpties( prodVO.getProdCd())) {
             String prodCd = prodMapper.getProdCd(prodVO);
             prodVO.setProdCd(prodCd);
+            // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
+            prodVO.setWorkMode(WorkModeFg.REG_PROD);
         }
 
         // 매장에서 매장상품 등록시에 가격관리 구분 등록
@@ -237,6 +244,8 @@ public class ProdServiceImpl implements ProdService {
             prodVO.setRegId(sessionInfoVO.getUserId());
             prodVO.setModDt(currentDate);
             prodVO.setModId(sessionInfoVO.getUserId());
+            // WorkMode Flag 매장등록으로 셋팅_2019.06.06
+            prodVO.setWorkMode(WorkModeFg.REG_STORE);
 
             // 적용 매장 등록
             int result = prodMapper.insertProdStore(prodVO);
