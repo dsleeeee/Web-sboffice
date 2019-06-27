@@ -304,4 +304,128 @@
         BY      tsshd.SALE_DATE DESC
         ]]>
     </select>
+
+
+    <!-- 일자별(과면세별 탭) - 과면세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : dayVO
+        COMMENTS : 일자별(과면세별 탭) - 과면세 리스트 조회한다.
+    -->
+    <select id="getDayTaxList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayTaxList */
+        <![CDATA[
+        SELECT  tssh.SALE_DATE
+        ,       tssh.YOIL
+        ,       tssh.STORE_CNT
+        ,       tssh.TOT_SALE_AMT
+        ,       tssh.TOT_DC_AMT
+        ,       tssh.REAL_SALE_AMT
+        ,       tssh.TAX_SALE_AMT
+        ,       tssh.GA_AMT
+        ,       tssh.VAT_AMT
+        ,       tssh.NO_TAX_SALE_AMT
+        ,       tssh.NET_SALE_AMT
+        FROM    (   SELECT  tssh.SALE_DATE
+                    ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                    ,       COUNT(tssh.STORE_CD) AS STORE_CNT
+                    ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(tssh.TAX_SALE_AMT) AS TAX_SALE_AMT
+                    ,       SUM(tssh.TAX_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
+                    ,       SUM(tssh.VAT_AMT) AS VAT_AMT
+                    ,       SUM(tssh.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                    ,       SUM(tssh.NET_SALE_AMT) AS NET_SALE_AMT
+                    FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
+                                ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                                ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+                                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                ,       SUM(tssh.TAX_SALE_AMT) AS TAX_SALE_AMT
+                                ,       SUM(tssh.TAX_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
+                                ,       SUM(tssh.VAT_AMT) AS VAT_AMT
+                                ,       SUM(tssh.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                                ,       SUM(tssh.NET_SALE_AMT) AS NET_SALE_AMT
+                                FROM    TB_SL_SALE_HDR tssh
+                                WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+                            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                  AND tssh.STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                      #{item}
+                                </foreach>
+                            </if>
+        <![CDATA[
+                                AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                                GROUP
+                                BY      tssh.SALE_DATE, tssh.STORE_CD
+                            ) tssh
+                    GROUP
+                    BY      tssh.SALE_DATE
+                ) tssh
+        ORDER
+        BY      tssh.SALE_DATE DESC
+        ]]>
+    </select>
+
+
+    <!-- 일자별(시간대별 탭) - 시간대별 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : dayVO
+        COMMENTS : 일자별(시간대별 탭) - 시간대별 리스트 조회한다.
+    -->
+    <select id="getDayTimeList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayTimeList */
+        <![CDATA[
+        SELECT tssh.SALE_DATE
+      	,      tssh.YOIL
+      	,      tssh.STORE_CNT
+      	,      tssh.REAL_SALE_AMT
+      	,      tssh.SALE_CNT
+      	,      tssh.TOT_GUEST_CNT
+		       ${sQuery1}
+        FROM
+      	        (
+      				SELECT tssh.SALE_DATE
+      				,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+      				,       COUNT(tssh.STORE_CD) AS STORE_CNT
+      				,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+				    ,       SUM(tssh.SALE_CNT) AS SALE_CNT
+				    ,       SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+                            ${sQuery2}
+      				FROM
+      				   	   (
+
+		      					SELECT SALE_DATE
+			                    ,       STORE_CD
+                                        ${sQuery3}
+                                        ${sQuery4}
+			                    FROM   TB_SL_SALE_HDR
+				                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+		]]>
+
+                    <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                AND STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                    </if>
+
+        <![CDATA[
+                                 AND   SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+				                 GROUP
+				                 BY      SALE_DATE, STORE_CD
+
+		                   )tssh
+		            GROUP
+		            BY tssh.SALE_DATE
+	            )tssh
+        ORDER
+        BY tssh.SALE_DATE
+
+
+        ]]>
+    </select>
+
 </mapper>

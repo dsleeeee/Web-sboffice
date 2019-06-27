@@ -507,6 +507,7 @@
     <typeAlias alias="payInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.payInfo.service.PayInfoVO"/>
     <typeAlias alias="dcInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.dcInfo.service.DcInfoVO"/>
     <typeAlias alias="dayPayInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.dayPayInfo.service.DayPayInfoVO"/>
+    <typeAlias alias="prodInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.prodInfo.service.ProdInfoVO"/>
 
     <typeAlias alias="excpForwardProductVO" type="kr.co.solbipos.application.pos.exceptForward.service.ExcpForwardProductVO"/>
     <typeAlias alias="productionVO" type="kr.co.solbipos.application.pos.production.service.ProductionVO"/>

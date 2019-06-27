@@ -52,7 +52,7 @@
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
             --%>
-            <div id="storeGrid" style="height: 270px;">
+            <div id="storeGrid" style="height: 300px;">
               <wj-flex-grid
                       autoGenerateColumns="false"
                       control="flex"

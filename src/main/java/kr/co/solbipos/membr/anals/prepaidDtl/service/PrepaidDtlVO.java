@@ -19,6 +19,8 @@ import kr.co.solbipos.application.common.service.PageVO;
  */
 public class PrepaidDtlVO extends PageVO {
 
+    private static final long serialVersionUID = -3292539878217761575L;
+
     /** 회원소속코드 */
     private String membrOrgnCd;
     /** 회원번호 */

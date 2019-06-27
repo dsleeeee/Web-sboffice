@@ -181,4 +181,47 @@ public class DayController {
     }
 
 
+    /**
+     * 일자별(과면세별 탭) - 과면세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 06. 13.
+     */
+    @RequestMapping(value = "/dayTax/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayTaxList(HttpServletRequest request, HttpServletResponse response,
+                               Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayTaxList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
+     * 일자별(시간대별 탭) - 시간대별 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 06. 21.
+     */
+    @RequestMapping(value = "/dayTime/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayTimeList(HttpServletRequest request, HttpServletResponse response,
+                                Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayTimeList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
 }

@@ -86,7 +86,7 @@
           <wj-flex-grid-column header="<s:message code="touchKey.grid.touchKeyUsed"/>"
                                binding="touchKeyUsed" width="50"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodCd"/>" binding="prodCd"
-                               width="*" visible="false"></wj-flex-grid-column>
+                               width="100" visible="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodNm"/>" binding="prodNm"
                                width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="touchKey.grid.prodClass"/>"

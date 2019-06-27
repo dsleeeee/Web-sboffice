@@ -28,4 +28,10 @@ public interface DayMapper {
     /** 일자별(할인구분별 탭) - 할인구분 리스트 조회 */
     List<DefaultMap<String>> getDayDcList(DayVO dayVO);
 
+    /** 일자별(과면세별 탭) - 과면세 리스트 조회 */
+    List<DefaultMap<String>> getDayTaxList(DayVO dayVO);
+
+    /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
+    List<DefaultMap<String>> getDayTimeList(DayVO dayVO);
+
 }

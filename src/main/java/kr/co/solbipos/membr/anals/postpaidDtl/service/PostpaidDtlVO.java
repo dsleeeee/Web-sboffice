@@ -19,6 +19,8 @@ import kr.co.solbipos.application.common.service.PageVO;
  */
 public class PostpaidDtlVO extends PageVO {
 
+    private static final long serialVersionUID = 4567094904301269212L;
+
     /** 회원소속코드 */
     private String membrOrgnCd;
     /** 회원번호 */

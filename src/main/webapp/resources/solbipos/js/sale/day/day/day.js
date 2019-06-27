@@ -6,6 +6,9 @@ var app = agrid.getApp();
 app.controller('dayCtrl', ['$scope', function ($scope) {
   $scope.init = function () {
     $("#dayTotalView").show();
+    $("#dayDcView").hide();
+    $("#dayTaxView").hide();
+    $("#dayTimeView").hide();
   };
 
 
@@ -76,7 +79,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("taxCtrl");
+    var scope = agrid.getScope("dayTaxCtrl");
     scope.flex.refresh();
   };
 
@@ -100,7 +103,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("timeCtrl");
+    var scope = agrid.getScope("dayTimeCtrl");
     scope.flex.refresh();
   };
 
