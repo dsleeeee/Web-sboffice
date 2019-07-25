@@ -72,7 +72,7 @@ public class MyInfoServiceImpl implements MyInfoService{
     public WijmoGridVO< HqNmcodeVO > getGridInfo( NmcodeGrpCd nmcodeGrpCd ){
         String id = "";
         String name = getSessionInfo().getCurrentMenu().getResrceCd();
-        
+
         Long index = -1L;
         List< WijmoGridColumnVO > columns = null;
         WijmoGridColumnVO checkColumn =

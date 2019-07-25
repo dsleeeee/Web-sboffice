@@ -70,6 +70,9 @@ public class SalePriceVO extends PageVO {
     /** 판매가 적용 마지막일 */
     private String endDate;
 
+    /** 상품분류코드 */
+    private String prodClassCd;
+
 
     /**
      * @return the hqOfficeCd
@@ -324,5 +327,13 @@ public class SalePriceVO extends PageVO {
      */
     @Override public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 }

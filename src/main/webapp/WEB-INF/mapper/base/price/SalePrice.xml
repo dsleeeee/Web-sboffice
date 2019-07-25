@@ -218,10 +218,11 @@
         COMMENTS : 판매가 관리 대상 목록을 조회한다.
     -->
     <select id="getStoreSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
-        /* SalePriceMapper.getStoreSalePriceList */
+        /* SalePriceMapper.getStoreSale PriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmp.PROD_CD,
                tmp.PROD_NM,
+               thp.PROD_CLASS_CD,  -- 상품분류코드
                tmp.PO_UNIT_QTY, -- 입수
                thp.COST_UPRC AS HQ_COST_UPRC,   -- 본사원가
                thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
@@ -259,6 +260,9 @@
              ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+          AND thp.PROD_CLASS_CD = #{prodClassCd}
+        </if>
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD

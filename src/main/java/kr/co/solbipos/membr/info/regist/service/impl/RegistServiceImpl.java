@@ -10,6 +10,7 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.MemberMappingVO;
@@ -198,13 +199,26 @@ public class RegistServiceImpl implements RegistService {
 
     /** 회원 삭제 */
     @Override
-    public int deleteMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO  ) {
+    public int deleteMemberInfo(RegistVO[] registVOs, SessionInfoVO sessionInfoVO  ) {
 
+        String currentDate = currentDateTimeString();
 
-        registVO.setModId(sessionInfoVO.getUserId());
-        registVO.setModDt(DateUtil.currentDateTimeString());
+        int registCnt = 0;
 
-        return mapper.deleteMemberInfo(registVO);
+        for(RegistVO registVO : registVOs) {
+            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setModId(sessionInfoVO.getUserId());
+            registVO.setModDt(DateUtil.currentDateTimeString());
+
+            int result = mapper.deleteMemberInfo(registVO);
+            if(result <= 0){
+                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else {
+                registCnt += result;
+            }
+        }
+
+        return registCnt;
     }
 
     /***

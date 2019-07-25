@@ -38,9 +38,11 @@ public class CdVO extends CmmVO {
     /** 명칭코드항목1 */
     private String nmcodeItem1;
     /** 명칭코드항목2 */
-    private Date nmcodeItem2;
+    private String nmcodeItem2;
     /** 사용여부 */
     private String useYn;
+    /** 세부명칭갯수 */
+    private String cnt;
 
 
     /**
@@ -144,14 +146,14 @@ public class CdVO extends CmmVO {
     /**
      * @return the nmcodeItem2
      */
-    public Date getNmcodeItem2() {
+    public String getNmcodeItem2() {
         return nmcodeItem2;
     }
 
     /**
      * @param nmcodeItem2 the nmcodeItem2 to set
      */
-    public void setNmcodeItem2(Date nmcodeItem2) {
+    public void setNmcodeItem2(String nmcodeItem2) {
         this.nmcodeItem2 = nmcodeItem2;
     }
 
@@ -167,5 +169,13 @@ public class CdVO extends CmmVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(String cnt) {
+        this.cnt = cnt;
     }
 }

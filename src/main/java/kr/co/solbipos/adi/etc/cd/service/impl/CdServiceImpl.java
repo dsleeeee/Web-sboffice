@@ -86,7 +86,7 @@ public class CdServiceImpl implements CdService {
                 result += cdMapper.updateNmcodeCdList(cdVO);
                 // 삭제
             } else if ( cdVO.getStatus() == GridDataFg.DELETE ) {
-
+                result += cdMapper.deleteNmcodeCdList(cdVO);
             }
 
         }

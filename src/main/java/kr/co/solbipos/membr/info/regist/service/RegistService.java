@@ -74,10 +74,10 @@ public interface RegistService {
     /**
      * 회원정보 삭제
      *
-     * @param registVO
+     * @param registVOs
      * @return
      */
-    int deleteMemberInfo(RegistVO registVO , SessionInfoVO sessionInfoVO );
+    int deleteMemberInfo(RegistVO[] registVOs , SessionInfoVO sessionInfoVO );
 
 
     /**

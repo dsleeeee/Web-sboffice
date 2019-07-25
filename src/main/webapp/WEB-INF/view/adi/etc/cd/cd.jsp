@@ -68,7 +68,7 @@
         <button class="btn_skyblue" id="btnAddRepresent" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelRepresent" style="display: none;">
+        <button class="btn_skyblue" id="btnDelRepresent" style="display: none;" ng-click="deleteRow()">
           <s:message code="cmm.delete" />
         </button>
         <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
@@ -118,7 +118,7 @@
         <button class="btn_skyblue" id="btnAddDetail" style="display: none;" ng-click="addRow()">
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" id="btnDelDetail" style="display: none;">
+        <button class="btn_skyblue" id="btnDelDetail" style="display: none;" ng-click="deleteRow()">
           <s:message code="cmm.delete" />
         </button>
         <button class="btn_skyblue" id="btnSaveDetail" style="display: none;" ng-click="save()">
@@ -159,4 +159,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20180913.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20180914" charset="utf-8"></script>

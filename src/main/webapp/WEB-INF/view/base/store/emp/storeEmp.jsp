@@ -201,7 +201,7 @@
   var smsRecvYn  = ${ccu.getCommCode("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=2018082901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=2018082901.01" charset="utf-8"></script>
 
 <%-- 매장사원 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpDetail.jsp">

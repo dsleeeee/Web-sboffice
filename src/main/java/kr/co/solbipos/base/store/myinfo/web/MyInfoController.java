@@ -29,6 +29,7 @@ import static org.springframework.http.HttpStatus.OK;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.07.27  이호원      최초생성
+ * @ 2019.07.24  이다솜      코드 값 가져오는 부분 POST 방식으로 수정(가상로그인의 session을 사용하기 위함)
  *
  * @author NHN한국사이버결제 이호원
  * @since 2018.07.27
@@ -61,7 +62,7 @@ public class MyInfoController{
         return new ResponseEntity<>( new Result(myInfoService.modifyMyInfo(myInfo)), OK );
     }
 
-    @GetMapping( "/storeType/list.sb" )
+    @PostMapping( "/storeType/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > storeTypeList(){
         return new ResponseEntity<>( myInfoService.getGridInfo(STORE_TYPE), OK );
     }
@@ -76,7 +77,7 @@ public class MyInfoController{
         return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, STORE_TYPE)), OK );
     }
 
-    @GetMapping( "/grp/list.sb" )
+    @PostMapping( "/grp/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > grpList(){
         return new ResponseEntity<>( myInfoService.getGridInfo(GRP), OK );
     }
@@ -91,7 +92,7 @@ public class MyInfoController{
         return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, GRP)), OK );
     }
 
-    @GetMapping( "/hour/list.sb" )
+    @PostMapping( "/hour/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > hourList(){
         return new ResponseEntity<>( myInfoService.getGridInfo(HOUR), OK );
     }
@@ -106,7 +107,7 @@ public class MyInfoController{
         return new ResponseEntity<>( new Result(myInfoService.saveMultipleNmcode(addList, modList, delList, HOUR)), OK );
     }
 
-    @GetMapping( "/guest/list.sb" )
+    @PostMapping( "/guest/list.sb" )
     public ResponseEntity< WijmoGridVO<HqNmcodeVO> > guestList(){
         return new ResponseEntity<>( myInfoService.getGridInfo(GUEST), OK );
     }

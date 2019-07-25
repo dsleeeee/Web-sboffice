@@ -81,6 +81,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     params.nmcodeGrpCd = "000";
+    params.useYn = $scope.useYnFg;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/adi/etc/cd/cd/list.sb", params, function() {
       // 대표명칭 그리드 버튼 show
@@ -113,8 +114,25 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+      $scope.flex.collectionView.itemsRemoved[i].status = "D";
+      params.push($scope.flex.collectionView.itemsRemoved[i]);
+    }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/adi/etc/cd/cd/save.sb", params);
+  }
+  // 대표명칭 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        if(item.cnt > 0){
+          $scope._popMsg("세부명칭이 등록된 대표명칭은 삭제할 수 없습니다. ");
+          return false;
+        }
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
   }
 }]);
 
@@ -197,8 +215,21 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
+    for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+      $scope.flex.collectionView.itemsRemoved[i].status = "D";
+      params.push($scope.flex.collectionView.itemsRemoved[i]);
+    }
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/adi/etc/cd/cd/save.sb", params);
+  }
+  // 세부명칭 그리드 행 삭제
+  $scope.deleteRow = function() {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){
+        $scope.flex.collectionView.removeAt(i);
+      }
+    }
   }
 
 }]);

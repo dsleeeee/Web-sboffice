@@ -275,7 +275,7 @@ gridIds.forEach(function( gridId ){
       listURL = "/base/store/myInfo/" + gridId + "/list.sb",
       saveURL = "/base/store/myInfo/" + gridId + "/save.sb";
 
-  $.getJSON( listURL ).then(function( gridInfo ){
+  $.postJSON( listURL ).then(function( gridInfo ){
     var grid = wgrid.genGrid( gridSelector, gridInfo.columns),
         view = new wijmo.collections.CollectionView( gridInfo.rows ),
         rowsCount = gridInfo.rows.length;

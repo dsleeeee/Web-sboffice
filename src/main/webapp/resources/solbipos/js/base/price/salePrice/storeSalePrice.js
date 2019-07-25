@@ -104,7 +104,7 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
 
     var params = {};
     params.storeCd = $("#searchStoreCd").val();
-    params.prodClassCd = $("#prodClassCd").val();
+    params.prodClassCd = $("#searchProdClassCd").val();
 
 console.log('params', params);
 
@@ -136,7 +136,7 @@ console.log('params', params);
   $scope.changeAmt = function() {
 
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
-
+    
     if( isEmptyObject( $("#prodCd").val()) ) {
       $scope._popMsg("상품을 선택해주세요.");
       return false;
@@ -234,7 +234,7 @@ console.log('params', params);
         $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
             function(response){
               $scope.prodClassCd = prodClassCd;
-              $scope.prodClassCdNm = response.data.data;
+              $scope.prodClassNm = response.data.data;
               $("#searchProdClassCd").val(prodClassCd);
               $("#searchProdClassNm").val(response.data.data);
             }
@@ -242,6 +242,14 @@ console.log('params', params);
       }
     });
   };
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassNm = "";
+    $("#searchProdClassCd").val("");
+    $("#searchProdClassNm").val("");
+  }
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {

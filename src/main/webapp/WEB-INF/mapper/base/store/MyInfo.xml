@@ -146,7 +146,7 @@
           HQ_OFFICE_CD,
           NMCODE_GRP_CD,
           NMCODE_CD,
-          PARENT_CD
+          PARENT_CD,
           NMCODE_NM,
           NMCODE_ITEM_1,
           NMCODE_ITEM_2,

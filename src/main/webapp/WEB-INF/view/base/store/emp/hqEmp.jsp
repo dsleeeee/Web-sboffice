@@ -11,7 +11,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqEmpCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqEmpCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -31,6 +31,7 @@
           <div class="sb-select">
             <span class="txtIn w110px">
               <wj-input-date
+                      id="srchTimeStartDate"
                       value="startDate"
                       ng-model="startDate"
                       control="startDateCombo"
@@ -42,6 +43,7 @@
             <span class="rg">~</span>
             <span class="txtIn w110px">
               <wj-input-date
+                      id="srchTimeEndDate"
                       value="endDate"
                       ng-model="endDate"
                       control="endDateCombo"
@@ -201,7 +203,7 @@
   var smsRecvYn  = ${ccu.getCommCode("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112102" charset="utf-8"></script>
 
 <%-- 사원상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">

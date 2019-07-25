@@ -49,7 +49,7 @@
             AND tme.STORE_CD = #{storeCd}
             </if>
             <if test="empNo != null and empNo != ''">
-            AND tme.EMP_NO = #{empNo}
+            AND tme.EMP_NO LIKE '%'||#{empNo}||'%'
             </if>
             <if test="empNm != null and empNm != ''">
             AND tme.EMP_NM LIKE '%'||#{empNm}||'%'
@@ -57,13 +57,13 @@
             <if test="userId != null and userId != ''">
             AND tme.USER_ID LIKE '%'||#{userId}||'%'
             </if>
-            <if test='serviceFg != null and serviceFg != ""'>
+            <if test='serviceFg != null and serviceFg.toString() != ""'>
             AND tme.SERVICE_FG = #{serviceFg}
             </if>
             <if test="mpNo != null and mpNo != ''">
             AND tme.MP_NO LIKE '%'||#{mpNo}||'%'
             </if>
-            <if test='webUseYn != null and webUseYn != ""'>
+            <if test='webUseYn != null and webUseYn.toString() != ""'>
             AND tme.WEB_USE_YN = #{webUseYn}
             </if>
             <if test='smsRecvYn != null and smsRecvYn != ""'>

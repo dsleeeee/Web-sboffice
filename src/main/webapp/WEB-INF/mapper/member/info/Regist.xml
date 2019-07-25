@@ -89,12 +89,11 @@
            AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = tmm.REG_STORE_CD
-           AND tmm.USE_YN = 'Y'
         <if test='storeCd != null and storeCd != ""'>
            AND tmm.REG_STORE_CD = #{storeCd}
         </if>
         <if test='membrCardNo != null and membrCardNo != ""'>
-           AND tmm.MEMBR_CARD_NO = #{membrCardNo}
+           AND tmm.MEMBR_CARD_NO LIKE '%'||#{membrCardNo}||'%'
         </if>
         <if test='membrNo != null and membrNo != ""'>
            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
@@ -135,8 +134,14 @@
         </if>
         <if test='anvType != null and anvType.toString() != ""'>
             <if test='anvType.getCode() == "1"'>
-          AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+           AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
             </if>
+            <if test='anvType.getCode() == "2"'>
+           AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+            </if>
+        </if>
+        <if test='useYn != null and useYn != ""'>
+          AND tmm.USE_YN = #{useYn}
         </if>
          ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>

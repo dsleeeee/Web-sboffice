@@ -122,6 +122,12 @@ console.log('storeParams',storeParams);
 
   // 팝업 닫기
   $scope.close = function(){
+    // 초기화
+    $("#originalStoreCd").val("");
+    $("#originalStoreNm").val("선택");
+    $("#targetStoreCd").val("");
+    $("#targetStoreNm").val("선택");
+
     $scope.copyStoreEnvLayer.hide();
   };
 }]);

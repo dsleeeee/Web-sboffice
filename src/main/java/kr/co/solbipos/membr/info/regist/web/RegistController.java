@@ -233,7 +233,7 @@ public class RegistController {
     /**
      * 회원정보 삭제
      *
-     * @param registVO
+     * @param registVOs
      * @param request
      * @param response
      * @param model
@@ -241,7 +241,7 @@ public class RegistController {
      */
     @RequestMapping(value = "base/remove.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result baseRemove(@Validated(RegistDelete.class) RegistVO registVO, BindingResult bindingResult,
+    public Result baseRemove(@Validated(RegistDelete.class) @RequestBody RegistVO[] registVOs, BindingResult bindingResult,
         HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -251,7 +251,7 @@ public class RegistController {
             return returnJsonBindingFieldError(bindingResult);
         }
 
-        int result = registService.deleteMemberInfo(registVO, sessionInfoVO);
+        int result = registService.deleteMemberInfo(registVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

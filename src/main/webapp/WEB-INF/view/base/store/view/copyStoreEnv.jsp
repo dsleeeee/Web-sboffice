@@ -9,7 +9,7 @@
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="storeView.copy.store" />
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="" class="wj-hide btn_close" ng-click="close()"></a>
     </div>
 
     <%-- body --%>
@@ -75,4 +75,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181228.05" charset="utf-8"></script>

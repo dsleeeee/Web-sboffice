@@ -83,6 +83,9 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 봉사료포함여부 콤보박스
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
 
+  // 등록일자 셋팅
+  $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
+  $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", gvEndDate);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -113,8 +116,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
-    $scope.startDateCombo.isReadOnly = $scope.isChecked;
-    $scope.endDateCombo.isReadOnly = $scope.isChecked;
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
 
   };
   // 상품정보관리 그리드 조회
@@ -130,6 +133,13 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchProdList = function(){
     // 파라미터
     var params = {};
+
+    // 등록일자 '전체기간' 선택에 따른 params
+    if(!$scope.isChecked){
+      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){
     });
@@ -138,8 +148,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
-    $scope.startDateCombo.isReadOnly = $scope.isChecked;
-    $scope.endDateCombo.isReadOnly = $scope.isChecked;
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
   // 상세정보 팝업
@@ -225,6 +235,12 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassCdNm = "";
+  }
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {

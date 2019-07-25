@@ -13,7 +13,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch"  ng-click="_broadcast('gridCtrl');">
+      <button class="btn_blue fr" id="btnSearch"  ng-click="_pageView('gridCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -73,7 +73,7 @@
           <div class="sb-select">
             <wj-combo-box
               id="srchStatFg"
-              ng-model="statFg"
+              ng-model="sysStatFg"
               control="statFgCombo"
               items-source="_getComboData('srchStatFg')"
               display-member-path="name"

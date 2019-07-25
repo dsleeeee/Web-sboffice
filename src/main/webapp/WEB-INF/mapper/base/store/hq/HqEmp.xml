@@ -38,21 +38,21 @@
            </if>
          </if>
          <if test="empNo != null and empNo != ''">
-           AND the.EMP_NO = #{empNo}
+           AND the.EMP_NO LIKE '%'|| #{empNo} ||'%'
          </if>
          <if test="empNm != null and empNm != ''">
-           AND the.EMP_NM = #{empNm}
+           AND the.EMP_NM LIKE '%'|| #{empNm} ||'%'
          </if>
          <if test="userId != null and userId != ''">
-           AND the.USER_ID = #{userId}
+           AND the.USER_ID LIKE '%'|| #{userId} ||'%'
          </if>
          <if test="serviceFg != null and serviceFg != ''">
            AND the.SERVICE_FG = #{serviceFg}
          </if>
          <if test="mpNo != null and mpNo != ''">
-           AND the.MP_NO = #{mpNo}
+           AND the.MP_NO LIKE '%'|| #{mpNo} ||'%'
          </if>
-         <if test="webUseYn != null and webUseYn != ''">
+         <if test="webUseYn != null and webUseYn.toString() != ''">
            AND the.WEB_USE_YN = #{webUseYn}
          </if>
          <if test="smsRecvYn != null and smsRecvYn != ''">
@@ -210,6 +210,7 @@
           TABLE    : TB_HQ_EMPLOYEE
           PARAM    : hqEmpVO
           COMMENTS : 본사 사원정보를 수정한다.
+          MEMO     : USE_YN 은 UPDATE 하지 않는다.(현재 리스트에 USE_YN 이 'Y' 인 데이터만 가져오기 때문
     -->
     <update id="updateHqEmpInfo" parameterType="hqEmpVO">
         /* USE : HqEmpMapper.updateHqEmpInfo */

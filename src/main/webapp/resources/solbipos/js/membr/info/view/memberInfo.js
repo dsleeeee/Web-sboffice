@@ -28,6 +28,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('032', 'anvType', 'A');
   $scope._getComboDataQuery('077', 'periodType', 'A');
   $scope._getComboDataQuery('055', 'gendrFg', 'A');
+  $scope._getComboDataQuery('067', 'useYn', 'A');
 
   // 선택 회원
   $scope.selectedMember;
@@ -89,11 +90,10 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.$on("memberCtrl", function(event, data) {
 
     // 이출, 이입매장 초기화
-    $("#regStoreCd").val("");
-    $("#regStoreNm").val(messages["cmm.select"]);
+    /*$("#regStoreCd").val("");
+    $("#regStoreNm").val(messages["cmm.select"]);*/
 
     $scope.getMemberList();
-
     event.preventDefault();
   });
 
@@ -117,6 +117,7 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     params.emailRecvYn = $scope.emailRecvYn;
     params.smsRecvYn = $scope.smsRecvYn;
     params.gendrFg = $scope.gendrFg;
+    params.useYn = $scope.useYn;
 
     // console.log('params ', params);
 
@@ -160,6 +161,21 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.registMember = function(){
     $scope.setSelectedMember(null);
     $scope.memberRegistLayer.show(true);
+  };
+
+  // 회원 삭제
+  $scope.deleteMember = function(){
+
+    var params = new Array();
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        params.push($scope.flex.collectionView.items[i]);
+      }
+    }
+
+    // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/membr/info/view/base/remove.sb", params, function(){ $scope.getMemberList() });
+
   };
 }]);
 

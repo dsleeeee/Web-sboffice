@@ -38,6 +38,8 @@ public interface CdMapper {
     
     /** 코드목록 저장 */
     int updateNmcodeCdList(CdVO cdVO);
-    
+
+    /** 코드목록 삭제 */
+    int deleteNmcodeCdList(CdVO cdVO);
     
 }

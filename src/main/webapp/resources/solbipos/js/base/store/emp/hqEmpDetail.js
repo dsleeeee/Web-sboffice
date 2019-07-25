@@ -43,7 +43,12 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 수정버튼 클릭
   $scope.modify = function(){
-    $scope.hqEmpRegistLayer.show(true);
+
+    $scope.hqEmpRegistLayer.show(true, function(){
+      var scope = agrid.getScope('hqEmpRegistCtrl');
+      $scope.getHqEmpList($scope.selectedHqEmp);
+    });
+
   };
 
   // 닫기버튼 클릭

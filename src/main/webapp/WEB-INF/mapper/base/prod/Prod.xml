@@ -79,7 +79,7 @@
                     </if>
                 </if>
                 <if test="prodCd != null and prodCd != ''">
-                    AND thp.PROD_CD = #{prodCd} --상품코드
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
@@ -117,6 +117,7 @@
                 <if test="hqBrandNm != null and hqBrandNm != ''">
                     AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
                 </if>
+                    ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
@@ -178,7 +179,7 @@
                     </if>
                 </if>
                 <if test="prodCd != null and prodCd != ''">
-                    AND tmp.PROD_CD = #{prodCd} --상품코드
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
                 </if>
                 <if test="prodNm != null and prodNm != ''">
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
@@ -213,6 +214,7 @@
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
                 </if>
+                  ORDER BY tmp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>

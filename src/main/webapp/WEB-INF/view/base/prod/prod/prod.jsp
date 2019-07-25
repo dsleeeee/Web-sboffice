@@ -15,7 +15,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -35,6 +35,7 @@
           <div class="sb-select">
             <span class="txtIn w110px">
               <wj-input-date
+                id="srchTimeStartDate"
                 value="startDate"
                 ng-model="startDate"
                 control="startDateCombo"
@@ -46,6 +47,7 @@
             <span class="rg">~</span>
             <span class="txtIn w110px">
               <wj-input-date
+                id="srchTimeEndDate"
                 value="endDate"
                 ng-model="endDate"
                 control="endDateCombo"
@@ -79,9 +81,10 @@
         <%-- 분류조회 --%>
         <th><s:message code="prod.prodClass" /></th>
         <td>
-          <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+          <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
                  placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
           <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+          <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         </td>
         <%-- 바코드 --%>
         <th><s:message code="prod.barCd" /></th>
@@ -203,7 +206,7 @@
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122902.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

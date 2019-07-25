@@ -13,7 +13,7 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('pwdManageCtrl');">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('pwdManageCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -47,7 +47,7 @@
         <th></th>
         <td></td>
       </tr>
-      <tr>
+      <!--<tr>
         <%-- 본사코드 --%>
         <th><s:message code="pwdManage.hqOfficeCd" /></th>
         <td>
@@ -58,8 +58,8 @@
         <td>
           <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" maxlength="50"/>
         </td>
-      </tr>
-      <tr>
+      </tr>-->
+      <tr ng-show="userOrgnFg != 'S'">
         <%-- 매장코드 --%>
         <th><s:message code="pwdManage.storeCd" /></th>
         <td>

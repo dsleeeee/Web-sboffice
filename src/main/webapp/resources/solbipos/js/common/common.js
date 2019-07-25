@@ -115,7 +115,7 @@
           }
           else {
             var msg = result.status + " : " + result.message;
-            alert(msg);
+            //alert(msg);
           }
         },
         cache: false,

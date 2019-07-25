@@ -39,9 +39,10 @@
       </td>
       <th><s:message code="salePrice.select.prodClass" /></th>
       <td>
-        <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w100" ng-click="popUpProdClass()"
+        <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w80" ng-click="popUpProdClass()" style="float: left;"
                placeholder="선택" readonly />
-        <input type="hidden" id="searchProdClassCd" ng-model="prodClassNm" disabled/>
+        <input type="hidden" id="searchProdClassCd" ng-model="prodClassCd" disabled/>
+        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
       </td>
     </tr>
     <%-- 판매가 적용 옵션 (//todo 엑셀업로드 기능 추가시, 해당 기능 추가) --%>
@@ -122,7 +123,7 @@
   </table>
 
 
-  <table class="searchTbl mt10">
+  <%--<table class="searchTbl mt10">
     <colgroup>
       <col class="w100" />
     </colgroup>
@@ -147,7 +148,7 @@
       </th>
     </tr>
     </tbody>
-  </table>
+  </table>--%>
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
@@ -225,7 +226,7 @@
 <script>
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=2018122601" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=2018122602" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

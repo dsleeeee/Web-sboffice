@@ -228,8 +228,22 @@
             </wj-combo-box>
           </div>
         </td>
-        <th></th>
-        <td></td>
+        <%-- 사용여부 --%>
+        <th><s:message code="regist.useYn"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="useYn"
+                    ng-model="useYn"
+                    control="useYnCombo"
+                    items-source="_getComboData('useYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -310,7 +324,7 @@ var regstrStoreList = ${regstrStoreList};
 var memberClassList = ${memberClassList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=2018110901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=2018110902" charset="utf-8"></script>
 
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">
