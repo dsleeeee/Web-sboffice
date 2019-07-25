@@ -73,8 +73,7 @@
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND thp.REG_DT >= #{startDate}
-                        AND thp.REG_DT <= #{endDate} --조회일자
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
@@ -173,8 +172,7 @@
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
-                        AND tmp.REG_DT >= #{startDate}
-                        AND tmp.REG_DT <= #{endDate} --조회일자
+                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
                         ]]>
                     </if>
                 </if>
