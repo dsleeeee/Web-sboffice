@@ -62,6 +62,7 @@ public class SideMenuServiceImpl implements SideMenuService {
     public int saveAttrClassList(SideMenuAttrClassVO[] sideMenuAttrClassVOs,
         SessionInfoVO sessionInfoVO) {
         int result = 0;
+        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuAttrClassVO sideMenuAttrClassVO : sideMenuAttrClassVOs ) {
@@ -78,18 +79,31 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuAttrClassVO.getStatus() == GridDataFg.INSERT ) {
+                // 분류코드 생성
+                sideMenuAttrClassVO.setSdattrClassCd(sideMenuMapper.getAttrClassCode(sideMenuAttrClassVO));
+
                 result += sideMenuMapper.insertAttrClassList(sideMenuAttrClassVO);
-//                String procResult = sideMenuMapper.insertHqAttrClassListToStore(sideMenuAttrClassVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.insertHqAttrClassListToStore(sideMenuAttrClassVO);
+                }
                 // 수정
             } else if ( sideMenuAttrClassVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateAttrClassList(sideMenuAttrClassVO);
-//                String procResult = sideMenuMapper.updateHqAttrClassListToStore(sideMenuAttrClassVO);
+
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.updateHqAttrClassListToStore(sideMenuAttrClassVO);
+                }
                 // 삭제
             } else if ( sideMenuAttrClassVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteAttrClassList(sideMenuAttrClassVO);
-//                String procResult = sideMenuMapper.deleteHqAttrClassListToStore(sideMenuAttrClassVO);
-            }
 
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.deleteHqAttrClassListToStore(sideMenuAttrClassVO);
+                }
+            }
         }
 
         if ( result == sideMenuAttrClassVOs.length) {
@@ -116,6 +130,7 @@ public class SideMenuServiceImpl implements SideMenuService {
     @Override
     public int saveAttrCdList(SideMenuAttrCdVO[] sideMenuAttrCdVOS, SessionInfoVO sessionInfoVO) {
         int result = 0;
+        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( SideMenuAttrCdVO sideMenuAttrCdVO : sideMenuAttrCdVOS) {
@@ -132,13 +147,30 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuAttrCdVO.getStatus() == GridDataFg.INSERT ) {
+                // 속성코드 생성
+                sideMenuAttrCdVO.setSdattrCd(sideMenuMapper.getAttrCode(sideMenuAttrCdVO));
+
                 result += sideMenuMapper.insertAttrCdList(sideMenuAttrCdVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.insertHqAttrCdListToStore(sideMenuAttrCdVO);
+                }
                 // 수정
             } else if ( sideMenuAttrCdVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateAttrCdList(sideMenuAttrCdVO);
+
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.updateHqAttrCdListToStore(sideMenuAttrCdVO);
+                }
                 // 삭제
             } else if ( sideMenuAttrCdVO.getStatus() == GridDataFg.DELETE ) {
                 result += sideMenuMapper.deleteAttrCdList(sideMenuAttrCdVO);
+
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.deleteHqAttrCdListToStore(sideMenuAttrCdVO);
+                }
             }
 
         }
@@ -185,8 +217,15 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelGroupVO.getStatus() == GridDataFg.INSERT ) {
+                // 그룹코드 생성
+                sideMenuSelGroupVO.setSdselGrpCd(sideMenuMapper.getMenuGrpCode(sideMenuSelGroupVO));
+
                 result += sideMenuMapper.insertMenuGrpList(sideMenuSelGroupVO);
                 // TODO :: 그룹추가시 매장에 자동으로 내려줄것인가? : 20181231 노현수
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = sideMenuMapper.insertHqMenuGrpListToStore(sideMenuSelGroupVO);
+                }
             // 수정
             } else if ( sideMenuSelGroupVO.getStatus() == GridDataFg.UPDATE ) {
                 result += sideMenuMapper.updateMenuGrpList(sideMenuSelGroupVO);
@@ -247,10 +286,13 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             // 추가
             if ( sideMenuSelClassVO.getStatus() == GridDataFg.INSERT ) {
+                // 분류코드 생성
+                sideMenuSelClassVO.setSdselClassCd(sideMenuMapper.getMenuClassCode(sideMenuSelClassVO));
+
                 result += sideMenuMapper.insertMenuClassList(sideMenuSelClassVO);
                 // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    procResult = sideMenuMapper.saveHqMenuClassListToStore(sideMenuSelClassVO);
+                    procResult = sideMenuMapper.insertHqMenuClassListToStore(sideMenuSelClassVO);
                 }
             // 수정
             } else if ( sideMenuSelClassVO.getStatus() == GridDataFg.UPDATE ) {
@@ -346,7 +388,7 @@ public class SideMenuServiceImpl implements SideMenuService {
                 result += sideMenuMapper.insertMenuProdList(sideMenuSelProdVO);
                 // 본사에서 접속시
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    procResult = sideMenuMapper.saveHqMenuProdListToStore(sideMenuSelProdVO);
+                    procResult = sideMenuMapper.insertHqMenuProdListToStore(sideMenuSelProdVO);
                 }
             // 수정
             } else if ( sideMenuSelProdVO.getStatus() == GridDataFg.UPDATE ) {

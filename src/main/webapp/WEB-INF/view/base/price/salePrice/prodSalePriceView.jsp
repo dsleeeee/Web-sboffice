@@ -84,8 +84,8 @@
     </tbody>
   </table>
 
-
-  <table class="searchTbl mt10">
+  <%--추후에 수불 화면 개발 시 재 오픈 : 2019-08-07 이다솜 --%>
+  <%--<table class="searchTbl mt10">
     <colgroup>
       <col class="w100" />
     </colgroup>
@@ -110,7 +110,7 @@
       </th>
     </tr>
     </tbody>
-  </table>
+  </table>--%>
 
   <div class="mt40 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
@@ -149,6 +149,7 @@
               items-source="data"
               item-formatter="_itemFormatter">
 
+        <%--본사마진금액, 본사마진율, 매장마진금액, 매장마진율 visible false 처리 / 추후에 수불 화면 개발 시 재 오픈 : 2019-08-07 이다솜 --%>
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -157,11 +158,11 @@
         <wj-flex-grid-column header="<s:message code="salePrice.saleUprcP"/>" binding="saleUprcP" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.saleUprc"/>" binding="saleUprc" width="*" align="right" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.storeSplyUprc"/>" binding="storeSplyUprc" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.hqMarginAmt"/>" binding="hqMarginAmt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.hqMarginRate"/>" binding="hqMarginRate" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.saleUprcAmt"/>" binding="saleUprcAmt" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginAmt"/>" binding="storeMarginAmt" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginRate"/>" binding="storeMarginRate" width="*" is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginAmt"/>" binding="storeMarginAmt" width="*" is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="salePrice.storeMarginRate"/>" binding="storeMarginRate" width="*" is-read-only="true" align="right"visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.poUnitQty"/>" binding="poUnitQty" width="*" visible="false" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="salePrice.prcCtrlFg"/>" binding="prcCtrlFg" width="*" visible="false" ></wj-flex-grid-column>
 
@@ -187,4 +188,4 @@
   var priceEnvstVal = "${priceEnvstVal}";
   // console.log('priceEnvstVal >> ', priceEnvstVal);
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20181226.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/prodSalePrice.js?ver=20181226.02" charset="utf-8"></script>

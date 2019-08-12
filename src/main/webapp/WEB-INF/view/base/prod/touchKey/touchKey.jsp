@@ -5,6 +5,8 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl">
@@ -107,10 +109,10 @@
         <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
         <div class="txtIn">
           <div class="sb-select dkbr fl w120px">
-            <div id="selectStyle"></div>
+            <div id="selectStyle" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>></div>
           </div>
-          <button class="btn_skyblue fl ml5" id="btnApplyStyle"><s:message code="touchKey.applyStyle"/></button>
-          <button class="btn_skyblue fl ml20" id="btnSave"><s:message code="cmm.save"/></button>
+          <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>><s:message code="touchKey.applyStyle"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSave" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>><s:message code="cmm.save"/></button>
         </div>
       </div>
       <div id="touchArea" class="prev2 fl">

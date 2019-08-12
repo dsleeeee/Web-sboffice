@@ -291,7 +291,8 @@
                                 popover-enable="myForm.sideProdYn.$invalid"
                                 popover-placement="bottom-left"
                                 popover-trigger="'mouseenter'"
-                                uib-popover="<s:message code="prod.sideProdYn" />은(는) 필수 입력항목 입니다.">
+                                uib-popover="<s:message code="prod.sideProdYn" />은(는) 필수 입력항목 입니다."
+                                selected-index="1">
                   </wj-combo-box>
                 </div>
               </td>

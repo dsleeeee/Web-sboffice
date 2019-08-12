@@ -7,6 +7,7 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnRegFg;
@@ -182,7 +183,7 @@ public class CouponServiceImpl implements CouponService {
 
         List<DefaultMap<String>> returnList = null;
 
-        // 본사 통제
+        /*// 본사 통제
         if(couponVO.getCoupnEnvstVal() == CoupnEnvFg.HQ) {
             couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             returnList = couponMapper.getHqCouponList(couponVO);
@@ -194,6 +195,19 @@ public class CouponServiceImpl implements CouponService {
         }
         // 권한 확인 필요
         else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
+        }*/
+
+        // 본사/매장 권한으로 로그인 시 각각 HQ/MS 테이블의 데이터를 가져오도록 수정 : 2019-08-06 이다솜
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            returnList = couponMapper.getHqCouponList(couponVO);
+
+        }else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            couponVO.setStoreCd(sessionInfoVO.getStoreCd());
+            returnList = couponMapper.getStoreCouponList(couponVO);
+
+        }else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.access.denied"));
         }
         return returnList;

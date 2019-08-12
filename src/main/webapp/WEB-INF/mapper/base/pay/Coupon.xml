@@ -345,6 +345,7 @@
             thc.COUPN_APPLY_FG,
             thc.USE_YN,
             thc.REG_ID,
+            thc.COUPN_TARGET_FG,
             (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
             (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT
         <include refid="CmmSQL.PagingTemplateCount"/>
@@ -431,6 +432,7 @@
             COUPN_DC_RATE,
             COUPN_DC_AMT,
             COUPN_APPLY_FG,
+            COUPN_TARGET_FG,
             USE_YN,
             REG_DT,
             REG_ID,
@@ -445,6 +447,7 @@
             #{coupnDcRate},
             #{coupnDcAmt},
             #{coupnApplyFg},
+            #{coupnTargetFg},
             #{useYn},
             #{regDt},
             #{regId},
@@ -468,6 +471,7 @@
             COUPN_DC_RATE = #{coupnDcRate},
             COUPN_DC_AMT = #{coupnDcAmt},
             COUPN_APPLY_FG = #{coupnApplyFg},
+            COUPN_TARGET_FG = #{coupnTargetFg},
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}

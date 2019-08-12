@@ -9,6 +9,7 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyService;
@@ -105,6 +106,11 @@ public class TouchKeyController {
         } else {
             model.addAttribute("maxClassRow", cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1041"));
         }
+
+        // 터치키 관련 권한정보 가져오기 : 2019-08-08 이다솜
+        String envstCd = "0017";
+        String touchKeyEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
+        model.addAttribute("touchKeyEnvstVal", touchKeyEnvstVal);
 
         return "base/prod/touchKey/touchKey";
     }

@@ -111,6 +111,17 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      var item = $scope.flex.collectionView.itemsAdded[i];
+      if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
+        $scope._popMsg(messages["cd.represent.require.nmcodeCd"]); // 대표명칭의 코드를 입력해주세요
+        return false;
+      }
+
+      if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
+        $scope._popMsg(messages["cd.represent.require.nmcodeNm"]); // 대표명칭의 코드명을 입력해주세요
+        return false;
+      }
+
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
@@ -212,6 +223,17 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      var item = $scope.flex.collectionView.itemsAdded[i];
+      if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
+        $scope._popMsg(messages["cd.detail.require.nmcodeCd"]); // 세부명칭의 코드를 입력해주세요
+        return false;
+      }
+
+      if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
+        $scope._popMsg(messages["cd.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
+        return false;
+      }
+
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }

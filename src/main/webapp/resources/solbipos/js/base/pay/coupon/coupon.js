@@ -15,6 +15,13 @@ var app = agrid.getApp();
 var selectedCouponClass;
 var selectedCoupon;
 
+// 쿠폰대상구분 코드
+var coupnTargetFg = [
+  {"name":"전체","value":"A"},
+  {"name":"제외","value":"E"},
+  {"name":"포함","value":"I"}
+];
+
 /**
  *  쿠폰분류등록 그리드 생성
  */
@@ -27,6 +34,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
     $scope.coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
+    $scope.coupnTargetFgDataMap = new wijmo.grid.DataMap(coupnTargetFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -193,6 +201,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.coupnDcFgDataMap = new wijmo.grid.DataMap(coupnDcFg, 'value', 'name');
     $scope.coupnApplyFgDataMap = new wijmo.grid.DataMap(coupnApplyFg, 'value', 'name');
+    $scope.coupnTargetFgDataMap = new wijmo.grid.DataMap(coupnTargetFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -225,7 +234,8 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       // 할인구분 => 금액 관련이면, 할인율은 입력못함
       if(e.col === 6) {
-        if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
+        //if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
+        if(dataItem.coupnDcFg === "1" || dataItem.coupnDcFg === "3") {
           e.cancel = true;
         } else {
           e.cancel = false;
@@ -248,7 +258,8 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
       if(col.binding === "coupnDcFg") {
         // 할인구분 => 금액 관련이면, 할인율은 입력못함
-        if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
+        //if(dataItem.coupnDcFg === "3" || dataItem.coupnDcFg === "4" || dataItem.coupnDcFg === "6") {
+        if(dataItem.coupnDcFg === "1" || dataItem.coupnDcFg === "3") {
           dataItem.coupnDcRate = "";
         }
         // 할인구분 => % 관련이면, 할인금액 입력못함
@@ -337,6 +348,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     params.coupnCd="자동채번"
     params.coupnDcFg = "1";
     params.coupnApplyFg = "1";
+    params.coupnTargetFg = "A";
     params.useYn = "Y";
     params.prodCnt = "0";
     params.storeCnt = "0";

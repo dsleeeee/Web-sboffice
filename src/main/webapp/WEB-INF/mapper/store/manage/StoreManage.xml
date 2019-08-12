@@ -2051,6 +2051,7 @@
                                       WHERE STORE_CD = #{storeCd}
                                         AND PRTER_NO = #{prterNo})
                  AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                 AND tmp.USE_YN = 'Y'
                GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
       </if>
       <if test='printYn != null and printYn.toString() != "Y"'>
@@ -2059,6 +2060,7 @@
                                           WHERE STORE_CD = #{storeCd}
                                             AND PRTER_NO = #{prterNo})
                  AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+                 AND tmp.USE_YN = 'Y'
                GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
       </if>
                    ) tmp
@@ -2089,6 +2091,7 @@
                #{prterNo} AS PRTER_NO
           FROM TB_MS_PRODUCT
          WHERE STORE_CD = #{storeCd}
+           AND USE_YN = 'Y'
          <if test='printYn != null and printYn.toString() == "Y"'>
            AND PROD_CD IN (SELECT PROD_CD
                              FROM TB_MS_PRINTER_PROD

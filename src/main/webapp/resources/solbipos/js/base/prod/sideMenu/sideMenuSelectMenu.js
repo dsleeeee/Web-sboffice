@@ -279,6 +279,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     for (var s = 0; s < editItems.length; s++) {
       editItems[s].dispSeq = (s + 1);
       $scope.flex.collectionView.editItem(editItems[s]);
+      editItems[s].status = "U";
       $scope.flex.collectionView.commitEdit();
     }
 
@@ -383,7 +384,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === 'prodCd' || col.binding === 'prodNm') {
+        if (col.binding === 'prodCd') {
           var item = s.rows[e.row].dataItem;
           if (item.status !== 'I') {
             wijmo.addClass(e.cell, 'wijLink');
@@ -405,7 +406,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         // 상품코드/상품명 클릭시
-        if (col.binding === 'prodCd' || col.binding === 'prodNm') {
+        if (col.binding === 'prodCd') {
           $scope.selectProdView(false);
         }
       }
@@ -468,6 +469,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     for (var s = 0; s < editItems.length; s++) {
       editItems[s].dispSeq = (s + 1);
       $scope.flex.collectionView.editItem(editItems[s]);
+      editItems[s].status = "U";
       $scope.flex.collectionView.commitEdit();
     }
 
@@ -482,7 +484,8 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
     for (var m = 0; m < params.length; m++) {
       if(params[m].status !== 'D') {
-        if(  params[m].addProdQty === null  || params[m].addProdQty === '' || params[m].addProdQty === 0 ) {
+        //if(  params[m].addProdQty === null  || params[m].addProdQty === '' || params[m].addProdQty === 0 ) {
+        if(  params[m].addProdQty === null  || params[m].addProdQty === '') {
           $scope._popMsg("상품 수량을 한 개 이상 입력해주세요.");
           return false;
         }

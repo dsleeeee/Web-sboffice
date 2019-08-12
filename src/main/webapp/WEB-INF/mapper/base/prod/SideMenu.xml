@@ -54,6 +54,27 @@
         </choose>
     </select>
 
+    <!-- 속성분류 생성시 분류코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 속성분류 생성시 분류코드 생성한다. ( 본사/매장 )
+    -->
+    <select id="getAttrClassCode" parameterType="sideMenuAttrClassVO" resultType="String">
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                FROM TB_HQ_PRODUCT_SDATTR_CLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
+                FROM TB_MS_PRODUCT_SDATTR_CLASS
+                WHERE STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 속성분류 생성 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS
@@ -79,14 +100,7 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd, jdbcType=VARCHAR},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
-                        FROM
-                            TB_HQ_PRODUCT_SDATTR_CLASS
-                        WHERE
-                            HQ_OFFICE_CD = #{hqOfficeCd}
-                    ),
+                    #{sdattrClassCd},
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -111,14 +125,7 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd, jdbcType=VARCHAR},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDATTR_CLASS_CD), '0') + 1, 5, '0')
-                        FROM
-                            TB_MS_PRODUCT_SDATTR_CLASS
-                        WHERE
-                            STORE_CD = #{storeCd}
-                    ),
+                    #{sdattrClassCd},
                     #{sdattrClassNm},
                     'Y',
                     #{regDt},
@@ -153,7 +160,7 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                UPDATE TB_HQ_PRODUCT_SDATTR_CLASS
+                UPDATE TB_MS_PRODUCT_SDATTR_CLASS
                 SET
                     MS_BRAND_CD = #{msBrandCd, jdbcType=VARCHAR},
                     SDATTR_CLASS_NM = #{sdattrClassNm},
@@ -200,6 +207,63 @@
         </choose>
     </update>
 
+    <!--  사이드메뉴-속성탭-속성분류 생성시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 본사 사이드메뉴 속성의 속성분류를 매장에 생성한다.
+    -->
+    <select id="insertHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+        /* USE : SideMenuMapper.insertHqAttrClassListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_I
+          (
+            #{hqOfficeCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!--  사이드메뉴-속성탭-속성분류 수정시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 본사 사이드메뉴  속성의 속성분류를 매장에 적용시킨다.
+    -->
+    <select id="updateHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+        /* USE : SideMenuMapper.updateHqAttrClassListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_U
+          (
+            #{hqOfficeCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!--  사이드메뉴-속성탭-속성분류 삭제시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR_CLASS
+        PARAM    : sideMenuAttrClassVO
+        COMMENTS : 본사 사이드메뉴  속성의 속성분류를 매장에서 제외시킨다.
+    -->
+    <select id="deleteHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+        /* USE : SideMenuMapper.deleteHqAttrClassListToStore   */
+        {
+             CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_D
+          (
+            #{hqOfficeCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
     <!-- 속성 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
@@ -244,6 +308,27 @@
         </choose>
     </select>
 
+    <!-- 속성생성 시 속성코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
+        PARAM    : sideMenuAttrCdVO
+        COMMENTS : 속성생성 시 속성코드를 생성한다. ( 본사/매장 )
+    -->
+    <select id="getAttrCode" parameterType="sideMenuAttrCdVO" resultType="String">
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                FROM TB_HQ_PRODUCT_SDATTR
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
+                FROM TB_MS_PRODUCT_SDATTR
+                WHERE STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 속성 생성 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDATTR, TB_MS_PRODUCT_SDATTR
@@ -269,14 +354,7 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
-                        FROM
-                            TB_HQ_PRODUCT_SDATTR
-                        WHERE
-                        HQ_OFFICE_CD = #{hqOfficeCd}
-                    ),
+                    #{sdattrCd} ,
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -303,14 +381,7 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDATTR_CD), '0') + 1, 10, '0')
-                        FROM
-                            TB_MS_PRODUCT_SDATTR
-                        WHERE
-                            STORE_CD = #{storeCd}
-                    ),
+                    #{sdattrCd} ,
                     #{sdattrNm},
                     #{sdattrClassCd},
                     #{dispSeq},
@@ -394,6 +465,66 @@
         </choose>
     </update>
 
+    <!--  사이드메뉴-속성탭-속성 생성시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR
+        PARAM    : SideMenuAttrCdVO
+        COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에 생성한다.
+    -->
+    <select id="insertHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+        /* USE : SideMenuMapper.insertHqAttrCdListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_I
+          (
+            #{hqOfficeCd},
+            #{sdattrCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!--  사이드메뉴-속성탭-속성 수정시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR
+        PARAM    : SideMenuAttrCdVO
+        COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에 적용시킨다.
+    -->
+    <select id="updateHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+        /* USE : SideMenuMapper.updateHqAttrCdListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_U
+          (
+            #{hqOfficeCd},
+            #{sdattrCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!--  사이드메뉴-속성탭-속성 삭제시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDATTR
+        PARAM    : SideMenuAttrCdVO
+        COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에서 제외시킨다.
+    -->
+    <select id="deleteHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+        /* USE : SideMenuMapper.deleteHqAttrCdListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_D
+          (
+            #{hqOfficeCd},
+            #{sdattrCd},
+            #{sdattrClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
     <!-- 선택그룹 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
@@ -436,6 +567,27 @@
         </choose>
     </select>
 
+    <!-- 선택그룹 생성 시 그룹코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 선택그룹 생성 시 그룹코드를 생성한다. ( 본사/매장 )
+    -->
+    <select id="getMenuGrpCode" parameterType="sideMenuSelGroupVO" resultType="String">
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                FROM TB_HQ_PRODUCT_SDSEL_GROUP
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+                FROM TB_MS_PRODUCT_SDSEL_GROUP
+                WHERE STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 선택그룹 생성 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP, TB_MS_PRODUCT_SDSEL_GROUP
@@ -461,14 +613,7 @@
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
-                        FROM
-                            TB_HQ_PRODUCT_SDSEL_GROUP
-                        WHERE
-                            HQ_OFFICE_CD = #{hqOfficeCd}
-                    ),
+                    #{sdselGrpCd},
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -493,14 +638,7 @@
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
-                        FROM
-                            TB_MS_PRODUCT_SDSEL_GROUP
-                        WHERE
-                            STORE_CD = #{storeCd}
-                    ),
+                    #{sdselGrpCd},
                     #{sdselGrpNm},
                     'Y',
                     #{regDt},
@@ -581,6 +719,25 @@
             </when>
         </choose>
     </update>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택그룹 생성시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : sideMenuSelGroupVO
+        COMMENTS : 본사 사이드메뉴 선택그룹을 매장에 적용시킨다.
+    -->
+    <select id="insertHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+        /* USE : SideMenuMapper.insertHqMenuGrpListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_I
+          (
+            #{hqOfficeCd},
+            #{sdselGrpCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
 
     <!-- 사이드메뉴-선택메뉴탭-선택그룹 수정시 매장적용 -->
     <!--
@@ -668,6 +825,27 @@
         </choose>
     </select>
 
+    <!-- 선택분류 생성 시 분류코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 선택분류 생성 시 분류코드를 생성한다. ( 본사/매장 )
+    -->
+    <select id="getMenuClassCode" parameterType="sideMenuSelClassVO" resultType="String">
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                FROM TB_HQ_PRODUCT_SDSEL_CLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+                FROM TB_MS_PRODUCT_SDSEL_CLASS
+                WHERE STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
     <!-- 선택분류 생성 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
@@ -694,14 +872,7 @@
                     MOD_ID
                 ) VALUES (
                     #{hqOfficeCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
-                        FROM
-                            TB_HQ_PRODUCT_SDSEL_CLASS
-                        WHERE
-                            HQ_OFFICE_CD = #{hqOfficeCd}
-                    ),
+                    #{sdselClassCd},
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -730,14 +901,7 @@
                     MOD_ID
                 ) VALUES (
                     #{storeCd},
-                    (
-                        SELECT
-                            LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
-                        FROM
-                            TB_MS_PRODUCT_SDSEL_CLASS
-                        WHERE
-                            STORE_CD = #{storeCd}
-                    ),
+                    #{sdselClassCd},
                     #{sdselClassNm},
                     #{sdselGrpCd},
                     #{dispSeq},
@@ -828,6 +992,26 @@
         </choose>
     </update>
 
+    <!-- 사이드메뉴-선택메뉴탭-선택분류 생성시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : sideMenuSelClassVO
+        COMMENTS : 본사 사이드메뉴 속성분류를 매장에 생성한다.
+    -->
+    <select id="insertHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+        /* USE : SideMenuMapper.insertHqMenuClassListToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_I
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{sdselGrpCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
     <!-- 사이드메뉴-선택메뉴탭-선택분류 수정시 매장적용 -->
     <!--
         TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
@@ -836,12 +1020,12 @@
     -->
     <select id="saveHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
         /* USE : SideMenuMapper.saveHqMenuClassListToStore   */
-
         {
             CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
           (
             #{hqOfficeCd},
             #{sdselClassCd},
+            #{sdselGrpCd},
             #{regId},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
@@ -861,6 +1045,7 @@
           (
             #{hqOfficeCd},
             #{sdselClassCd},
+            #{sdselGrpCd},
             #{regId},
             #{result, mode=OUT, jdbcType=VARCHAR}
           )
@@ -898,6 +1083,7 @@
                     <if test="prodNm != null and prodNm != ''">
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
                     </if>
+                    AND thp.USE_YN = 'Y'
                 ORDER BY
                     thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -924,9 +1110,10 @@
                     </if>
                     <if test="prodNm != null and prodNm != ''">
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                    </if>
+                    AND tmp.USE_YN = 'Y'
                 ORDER BY
                     tmp.PROD_CD
-                    </if>
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -1165,6 +1352,26 @@
             </when>
         </choose>
     </update>
+
+    <!-- 사이드메뉴-선택메뉴탭-선택상품 생성시 매장적용 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : sideMenuSelProdVO
+        COMMENTS : 본사 사이드메뉴 선택상품을 매장에 생성한다.
+    -->
+    <select id="insertHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+        /* USE : SideMenuMapper.insertHqMenuProdListToStore */
+        {
+          CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_I
+          (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{prodCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
 
     <!-- 사이드메뉴-선택메뉴탭-선택상품 수정시 매장적용 -->
     <!--

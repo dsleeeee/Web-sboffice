@@ -43,7 +43,7 @@
           </wj-combo-box>
           <%-- 엑셀 다운로드 //TODO --%>
           <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
-          <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('sideMenuProdCtrl')" ><s:message code="cmm.search" /></button>
+          <button class="btn_skyblue fr" id="btnSearch" ng-click="_pageView('sideMenuProdCtrl',1)" ><s:message code="cmm.search" /></button>
         </div>
       </div>
       <div class="oh mt10">

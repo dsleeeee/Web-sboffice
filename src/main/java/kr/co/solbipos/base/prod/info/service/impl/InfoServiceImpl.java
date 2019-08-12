@@ -9,6 +9,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
+import kr.co.solbipos.iostock.cmm.service.impl.IostockCmmMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +46,14 @@ public class InfoServiceImpl implements InfoService {
 
 
     private final InfoMapper mapper;
+    private final IostockCmmMapper iostockCmmMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public InfoServiceImpl(InfoMapper mapper, MessageService messageService) {
+    public InfoServiceImpl(InfoMapper mapper, IostockCmmMapper iostockCmmMapper, MessageService messageService) {
         this.mapper = mapper;
+        this.iostockCmmMapper = iostockCmmMapper;
         this.messageService = messageService;
     }
 
@@ -190,4 +194,69 @@ public class InfoServiceImpl implements InfoService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 분류 저장 (본사에 속한 모든 매장에 분류등록) */
+    @Override
+    public int productClassSaveAllStore(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO){
+
+        int procCnt = 0;
+        int storeCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(ProductClassVO productClassVO : productClassVOs){
+
+            // 본사에 해당하는 매장코드 조회
+            IostockCmmVO iostockCmmVO = new IostockCmmVO();
+            iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            List<DefaultMap<String>> storeList = iostockCmmMapper.selectStoreList(iostockCmmVO);
+            storeCnt = storeList.size();
+
+            for(DefaultMap<String> list : storeList) {
+
+                productClassVO.setStoreCd(list.getStr("storeCd"));
+                productClassVO.setRegDt(dt);
+                productClassVO.setRegId(sessionInfoVO.getUserId());
+                productClassVO.setModDt(dt);
+                productClassVO.setModId(sessionInfoVO.getUserId());
+                productClassVO.setOrgnFg(OrgnFg.STORE);
+
+                // 새 분류코드 생성시, 분류코드 조회부터
+                if ("".equals(productClassVO.getProdClassCd()) || productClassVO.getProdClassCd() == null) {
+                    String prodClassCd = "";
+                    prodClassCd = mapper.getClsCd(productClassVO);
+                    productClassVO.setProdClassCd(prodClassCd);
+                }
+
+                // 상위 분류까지 신규로 만들 경우, 상위 분류코드 조회 (0레벨 제외)
+                if (("".equals(productClassVO.getpProdClassCd()) || productClassVO.getpProdClassCd() == null) && productClassVO.getLevel() != 0) {
+                    String pprodClassCd = "";
+                    pprodClassCd = mapper.getPProdClsCd(productClassVO);
+                    productClassVO.setpProdClassCd(pprodClassCd);
+                }
+
+                if (productClassVO.getStatus() == GridDataFg.INSERT) {
+                    procCnt += mapper.insertCls(productClassVO);
+                } else if (productClassVO.getStatus() == GridDataFg.UPDATE) {
+                    procCnt += mapper.updateStoreCls(productClassVO);
+                } else if (productClassVO.getStatus() == GridDataFg.DELETE) {
+                    // 해당 분류로 상품이 등록되어있으면 삭제 불가능
+                    int chkProdCnt = mapper.chkProdCnt(productClassVO);
+
+                    if (chkProdCnt > 0) {
+                        throw new JsonException(Status.FAIL, messageService.get("info.delete.fail"));
+                    } else {
+                        procCnt += mapper.deleteCls(productClassVO);
+                    }
+                }
+            }
+        }
+
+        if(procCnt == (productClassVOs.length * storeCnt)) {
+            return procCnt;
+        }
+        else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
 }

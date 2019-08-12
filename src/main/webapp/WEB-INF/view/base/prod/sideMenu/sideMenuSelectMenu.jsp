@@ -80,6 +80,7 @@
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassNm"/>" binding="sdselClassNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="sdselQty" width="50"></wj-flex-grid-column>
+            <%--<wj-flex-grid-column header="순서" binding="dispSeq" width="50"></wj-flex-grid-column>--%>
 
           </wj-flex-grid>
 
@@ -127,6 +128,7 @@
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdUprc"/>" binding="addProdUprc" width="50"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdQty"/>" binding="addProdQty" width="50"></wj-flex-grid-column>
+            <%--<wj-flex-grid-column header="순서" binding="dispSeq" width="50"></wj-flex-grid-column>--%>
 
           </wj-flex-grid>
 
@@ -136,7 +138,7 @@
     </div>
   </div>
 
-  <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20181221.02" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20181225.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 : 상품선택 --%>
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

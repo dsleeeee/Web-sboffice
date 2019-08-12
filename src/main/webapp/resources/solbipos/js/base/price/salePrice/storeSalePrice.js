@@ -135,58 +135,55 @@ console.log('params', params);
   // 본사판매가 일괄적용시, 조회된 본사판매가를 적용시킴.
   $scope.changeAmt = function() {
 
-    var saleAmtOption = $scope.prodInfo.saleAmtOption;
-    
-    if( isEmptyObject( $("#prodCd").val()) ) {
-      $scope._popMsg("상품을 선택해주세요.");
+    if( isEmptyObject( $("#searchStoreCd").val()) ) {
+      $scope._popMsg("매장을 선택해주세요.");
       return false;
     }
 
-    if( $scope.prodInfo.saleUprc === undefined) {
+    if( $scope.flex.collectionView === undefined){
       $scope._popMsg("판매가를 일괄적용할 상품을 조회해주세요.");
       return false;
     }
 
-    if(saleAmtOption === 'S') {
-      if($scope.prodInfo.inputSaleAmt === undefined || $scope.prodInfo.inputSaleAmt === '') {
-        $scope._popMsg("매장판매가 일괄 적용시, 매장판매가를 입력해주세요.");
-        return false;
-      }
+    var saleAmtOption = $scope.prodInfo.saleAmtOption;
+
+    var selectCnt = 0;
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      var item = $scope.flex.collectionView.items[i];
+      if(item.gChk){ selectCnt ++; }
+    }
+
+    if(selectCnt < 1) {
+      $scope._popMsg("상품을 선택해주세요.");
+      return false;
+    }
+
+    if($("#inputSaleRate").val() === ""){
+      $scope._popMsg("변경비율을 입력해 주세요.");
+      return false;
     }
 
     var newSaleAmt = 0;
 
-    if(saleAmtOption === 'S') newSaleAmt = Number($scope.prodInfo.inputSaleAmt);
-    else                      newSaleAmt = $scope.prodInfo.saleUprc;
-
-    // console.log('saleAmtOption',saleAmtOption);
-    // console.log('newSaleAmt',newSaleAmt);
-    // console.log('$scope.prodInfo.inputSaleAmt',$scope.prodInfo.inputSaleAmt);
-
-    var chkCount = 0;
-
     // 변경 판매가 적용
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
       if($scope.flex.collectionView.items[i].gChk) {
-        $scope.flex.collectionView.items[i].saleUprc = newSaleAmt;
-        chkCount++;
-      }
-    }
 
-    // 변경 판매가로 마진율, 마진금액 적용
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      if($scope.flex.collectionView.items[i].gChk) {
+        newSaleAmt = 0;
+        if(saleAmtOption === "S"){ // 매장
+          newSaleAmt = Number($scope.flex.collectionView.items[i].storeSaleUprc) * (Number($("#inputSaleRate").val())/100);
+        }else{ // 본사
+          newSaleAmt = Number($scope.flex.collectionView.items[i].hqSaleUprc) * (Number($("#inputSaleRate").val())/100);
+        }
+
+        $scope.flex.collectionView.items[i].saleUprc = $scope.calChangeAmt(newSaleAmt);
         $scope.calcAmt($scope.flex.collectionView.items[i]);
       }
     }
 
-    if(chkCount == 0){
-      $scope._popMsg("선택된 매장이 없습니다. 적용 매장을 선택해주세요.");
-      return false;
-    }
-
     $scope.flex.collectionView.commitEdit();
     $scope.flex.collectionView.refresh();
+
   };
 
   // 저장
@@ -201,17 +198,19 @@ console.log('params', params);
     var params = new Array();
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
 
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      if($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) {
-        $scope.flex.collectionView.items.saleAmtOption = saleAmtOption;
-        params.push($scope.flex.collectionView.items[i]);
+    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+      if($scope.flex.collectionView.items[i].gChk) {
+          $scope.flex.collectionView.items[i].storeCd = $("#searchStoreCd").val();
+          params.push($scope.flex.collectionView.items[i]);
       }
     }
 
     // console.log('params',params)
 
-    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    $scope._save('/base/price/salePrice/storeSalePrice/saveStoreSalePrice.sb', params);
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params, function(){
+          $scope.searchSalePriceList();
+      });
   };
 
   // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
@@ -257,5 +256,23 @@ console.log('params', params);
     $scope.prodClassPopUpLayer.shown.addHandler(function (s) {
     });
   });
+
+  // 변경판매가 계산
+  $scope.calChangeAmt = function(amt){
+
+    var ChangeAmt = 0;
+    var unit = $scope.prodInfo.changeUnit;
+    var mode = $scope.prodInfo.changeMode;
+
+    if(mode === "0"){ // 반올림
+      ChangeAmt = Math.round(amt/(unit*10))*(unit*10);
+    }else if(mode === "1"){ //절상
+      ChangeAmt = Math.ceil(amt/(unit*10))*(unit*10);
+    }else if(mode === "2"){ //절하
+      ChangeAmt = Math.floor(amt/(unit*10))*(unit*10);
+    }
+
+    return ChangeAmt;
+  }
 
 }]);

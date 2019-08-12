@@ -242,6 +242,7 @@ app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', func
       editItems[s].dispSeq = (s + 1);
       console.log(editItems);
       $scope.flex.collectionView.editItem(editItems[s]);
+      editItems[s].status = "U";
       $scope.flex.collectionView.commitEdit();
     }
 

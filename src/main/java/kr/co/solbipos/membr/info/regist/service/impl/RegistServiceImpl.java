@@ -35,6 +35,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.05.01  정용길      최초생성
+ * @ 2018.08.02  이다솜      회원등록 시 회원단축번호 추가
  *
  * @author NHN한국사이버결제 KCP 정용길
  * @since 2018.05.01
@@ -137,6 +138,10 @@ public class RegistServiceImpl implements RegistService {
 
         registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
+
+        // 회원단축번호 추가_2019.08.02 추가 이다솜
+        registVO.setShortNo(registVO.getTelNo().substring(registVO.getTelNo().length()-4, registVO.getTelNo().length()));
+
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);

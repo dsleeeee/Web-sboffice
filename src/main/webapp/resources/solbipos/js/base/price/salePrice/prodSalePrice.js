@@ -204,9 +204,11 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     var saleAmtOption = $scope.prodInfo.saleAmtOption;
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      if($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) {
-        $scope.flex.collectionView.items.saleAmtOption = saleAmtOption;
-        params.push($scope.flex.collectionView.items[i]);
+      if($scope.flex.collectionView.items[i].gChk) {
+        if ($scope.flex.collectionView.items[i].saleUprcP !== $scope.flex.collectionView.items[i].saleUprc) {
+          $scope.flex.collectionView.items.saleAmtOption = saleAmtOption;
+          params.push($scope.flex.collectionView.items[i]);
+        }
       }
     }
 

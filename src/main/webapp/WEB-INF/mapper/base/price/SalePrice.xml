@@ -32,8 +32,8 @@
            AND thp.PROD_CD = #{prodCd}
            AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
            AND thpsp.PROD_CD = thp.PROD_CD
-           AND thpsp.START_DATE <= SYSDATE
-           AND thpsp.END_DATE >= SYSDATE
+           AND thpsp.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+           AND thpsp.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ]]>
     </select>
 
