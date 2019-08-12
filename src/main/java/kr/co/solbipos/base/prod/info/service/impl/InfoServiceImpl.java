@@ -133,6 +133,7 @@ public class InfoServiceImpl implements InfoService {
     public int productClassSave(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
+        String procResult;
         String dt = currentDateTimeString();
 
         for(ProductClassVO productClassVO : productClassVOs){
@@ -166,10 +167,16 @@ public class InfoServiceImpl implements InfoService {
 
             if(productClassVO.getStatus() == GridDataFg.INSERT) {
                 procCnt += mapper.insertCls(productClassVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = mapper.insertClsToStore(productClassVO);
+                }
             }
             else if(productClassVO.getStatus() == GridDataFg.UPDATE) {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     procCnt += mapper.updateHqCls(productClassVO);
+                    procResult = mapper.updateClsToStore(productClassVO);
+
                 } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                     procCnt += mapper.updateStoreCls(productClassVO);
                 }
@@ -178,80 +185,26 @@ public class InfoServiceImpl implements InfoService {
                 // 해당 분류로 상품이 등록되어있으면 삭제 불가능
                 int chkProdCnt = mapper.chkProdCnt(productClassVO);
 
+                //본사권한인 경우, 매장에서도 해당 분류로 상품이 등록되어 있는지 확인 추가 : 2019.08.12_이다솜
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    chkProdCnt += mapper.chkProdCntinStore(productClassVO);
+                }
+
                 if(chkProdCnt > 0) {
                     throw new JsonException(Status.FAIL, messageService.get("info.delete.fail"));
                 }
                 else {
                     procCnt += mapper.deleteCls(productClassVO);
-                }
-            }
-        }
 
-        if(procCnt == productClassVOs.length) {
-            return procCnt;
-        }
-        else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-    }
-
-    /** 분류 저장 (본사에 속한 모든 매장에 분류등록) */
-    @Override
-    public int productClassSaveAllStore(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO){
-
-        int procCnt = 0;
-        int storeCnt = 0;
-        String dt = currentDateTimeString();
-
-        for(ProductClassVO productClassVO : productClassVOs){
-
-            // 본사에 해당하는 매장코드 조회
-            IostockCmmVO iostockCmmVO = new IostockCmmVO();
-            iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            List<DefaultMap<String>> storeList = iostockCmmMapper.selectStoreList(iostockCmmVO);
-            storeCnt = storeList.size();
-
-            for(DefaultMap<String> list : storeList) {
-
-                productClassVO.setStoreCd(list.getStr("storeCd"));
-                productClassVO.setRegDt(dt);
-                productClassVO.setRegId(sessionInfoVO.getUserId());
-                productClassVO.setModDt(dt);
-                productClassVO.setModId(sessionInfoVO.getUserId());
-                productClassVO.setOrgnFg(OrgnFg.STORE);
-
-                // 새 분류코드 생성시, 분류코드 조회부터
-                if ("".equals(productClassVO.getProdClassCd()) || productClassVO.getProdClassCd() == null) {
-                    String prodClassCd = "";
-                    prodClassCd = mapper.getClsCd(productClassVO);
-                    productClassVO.setProdClassCd(prodClassCd);
-                }
-
-                // 상위 분류까지 신규로 만들 경우, 상위 분류코드 조회 (0레벨 제외)
-                if (("".equals(productClassVO.getpProdClassCd()) || productClassVO.getpProdClassCd() == null) && productClassVO.getLevel() != 0) {
-                    String pprodClassCd = "";
-                    pprodClassCd = mapper.getPProdClsCd(productClassVO);
-                    productClassVO.setpProdClassCd(pprodClassCd);
-                }
-
-                if (productClassVO.getStatus() == GridDataFg.INSERT) {
-                    procCnt += mapper.insertCls(productClassVO);
-                } else if (productClassVO.getStatus() == GridDataFg.UPDATE) {
-                    procCnt += mapper.updateStoreCls(productClassVO);
-                } else if (productClassVO.getStatus() == GridDataFg.DELETE) {
-                    // 해당 분류로 상품이 등록되어있으면 삭제 불가능
-                    int chkProdCnt = mapper.chkProdCnt(productClassVO);
-
-                    if (chkProdCnt > 0) {
-                        throw new JsonException(Status.FAIL, messageService.get("info.delete.fail"));
-                    } else {
-                        procCnt += mapper.deleteCls(productClassVO);
+                    // 본사에서 접속시
+                    if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                        procResult = mapper.deleteClsToStore(productClassVO);
                     }
                 }
             }
         }
 
-        if(procCnt == (productClassVOs.length * storeCnt)) {
+        if(procCnt == productClassVOs.length) {
             return procCnt;
         }
         else {

@@ -26,7 +26,4 @@ public interface InfoService {
 
     /** 분류 저장 */
     int productClassSave(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO);
-
-    /** 분류 저장 (본사에 속한 모든 매장에 분류등록) */
-    int productClassSaveAllStore(ProductClassVO[] productClassVOs, SessionInfoVO sessionInfoVO);
 }

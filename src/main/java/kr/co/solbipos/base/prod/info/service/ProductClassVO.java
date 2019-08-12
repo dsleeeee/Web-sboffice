@@ -41,6 +41,9 @@ public class ProductClassVO extends CmmVO {
     /** Child Items */
     private List<ProductClassVO> items;
 
+    /** 프로시져 결과 */
+    private String result;
+
     /**
      * @return the orgnFg
      */
@@ -125,4 +128,12 @@ public class ProductClassVO extends CmmVO {
      * @param items the items to set
      */
     public void setItems(List<ProductClassVO> items) { this.items = items; }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

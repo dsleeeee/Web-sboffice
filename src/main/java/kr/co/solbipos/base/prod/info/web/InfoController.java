@@ -5,7 +5,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.03  김지은      최초생성
- * @ 2019.07.30  이다솜      분류등록 >> 본사에 속한 모든 매장에 분류 등록되도록 추가
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.08.03
@@ -135,13 +133,6 @@ public class InfoController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.productClassSave(productClassVOs, sessionInfoVO);
-
-        // 본사에 속한 모든 매장에 분류 등록되도록 추가
-        if(result == productClassVOs.length) {
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                result = service.productClassSaveAllStore(productClassVOs, sessionInfoVO);
-            }
-        }
 
         return returnJson(Status.OK, result);
     }

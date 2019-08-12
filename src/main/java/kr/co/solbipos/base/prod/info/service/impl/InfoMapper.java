@@ -15,6 +15,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.08.03  김지은      최초생성
+ * @ 2019.08.12  이다솜      상품분류관리 본사 > 매장으로 데이터 등록/수정/삭제
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.08.03
@@ -52,4 +53,16 @@ public interface InfoMapper {
 
     /** 분류 삭제 */
     int deleteCls(ProductClassVO productClassVO);
+
+    /** 분류 생성시 매장적용 */
+    String insertClsToStore(ProductClassVO productClassVO);
+
+    /** 분류 수정시 매장적용 */
+    String updateClsToStore(ProductClassVO productClassVO);
+
+    /** 분류 삭제시 매장적용 */
+    String deleteClsToStore(ProductClassVO productClassVO);
+
+    /** 해당 분류로 등록된 상품 조회(매장전체조회) */
+    int chkProdCntinStore(ProductClassVO productClassVO);
 }

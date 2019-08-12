@@ -8,6 +8,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       김지은     2018.08.06     최초작성
+    2       이다솜     2019.08.12     상품분류관리 본사 > 매장으로 데이터 등록/수정/삭제
 -->
 
 <mapper namespace="kr.co.solbipos.base.prod.info.service.impl.InfoMapper">
@@ -280,6 +281,76 @@
     </if>
        AND PROD_CLASS_CD = #{prodClassCd}
   </delete>
+
+    <!-- 분류 생성시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : productClassVO
+        COMMENTS : 본사 상품분류정보를 매장에 생성한다.
+    -->
+    <select id="insertClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+        /* USE : InfoMapper.insertClsToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_I
+          (
+            #{hqOfficeCd},
+            #{prodClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 분류 수정시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : productClassVO
+        COMMENTS : 본사 상품분류정보를 매장에 수정한다.
+    -->
+    <select id="updateClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+        /* USE : InfoMapper.updateClsToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_U
+          (
+            #{hqOfficeCd},
+            #{prodClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 분류 삭제시 매장적용  -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : productClassVO
+        COMMENTS : 본사 상품분류정보를 매장에 삭제한다.
+    -->
+    <select id="deleteClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+        /* USE : InfoMapper.deleteClsToStore   */
+        {
+            CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_D
+          (
+            #{hqOfficeCd},
+            #{prodClassCd},
+            #{regId},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+          )
+        }
+    </select>
+
+    <!-- 해당 분류로 등록된 상품 조회(매장전체조회) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        COMMENTS : 해당 분류로 등록된 매장 상품을 조회한다.
+    -->
+    <select id="chkProdCntinStore" parameterType="DefaultMap" resultType="Integer">
+        /* USE : InfoMapper.chkProdCntinStore */
+        SELECT COUNT(1) AS CNT
+          FROM TB_MS_PRODUCT
+         WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+           AND PROD_CLASS_CD = #{prodClassCd}
+    </select>
 
 </mapper>
 
