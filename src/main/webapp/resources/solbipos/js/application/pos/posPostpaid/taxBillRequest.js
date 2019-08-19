@@ -35,6 +35,7 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
       $scope.memberInfo = '[' + $scope.requestMember.membrNo + '] '+$scope.requestMember.membrNm;
       $scope.balance    = addComma($scope.requestMember.postpaidBalAmt) + ' 원';
       $scope.requestAmt = "";
+      $("#hdBalance").val($scope.requestMember.postpaidBalAmt);
 
     });
 
@@ -45,7 +46,7 @@ app.controller('requestTaxBillCtrl', ['$scope', '$http', function ($scope, $http
   $scope.request = function(){
 
     var requestAmt = removeComma($scope.requestAmt);
-    var posPaidBalAmt = removeComma($scope.requestMember.postpaidBalAmt);
+    var posPaidBalAmt = removeComma( $("#hdBalance").val());
 
     if(isEmptyObject($scope.requestAmt) ) {
       $scope._popMsg(messages["postpaid.require.input.taxBillAmt"]);

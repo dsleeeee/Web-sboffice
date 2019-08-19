@@ -1,6 +1,9 @@
 package kr.co.solbipos.adi.mony.accntManage.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.adi.mony.accntManage.service.DepositService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -23,6 +26,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.10.12  김지은      최초생성
+ * @ 2019.08.14  이다솜      본사에서 계정 등록 시 매장에도 적용되도록 추가
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018. 10.12
@@ -36,11 +40,13 @@ public class DepositServiceImpl implements DepositService{
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final DepositMapper depositMapper;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public DepositServiceImpl(DepositMapper depositMapper) {
+    public DepositServiceImpl(DepositMapper depositMapper, MessageService messageService) {
         this.depositMapper = depositMapper;
+        this.messageService = messageService;
     }
 
     /** 계정 조회 */
@@ -65,6 +71,7 @@ public class DepositServiceImpl implements DepositService{
     public int saveDepositAccntList(AccntVO[] accntVOs, SessionInfoVO sessionInfoVO) {
 
         int resultCnt = 0;
+        String procResult;
         String dt = currentDateTimeString();
 
         for(AccntVO accntVO : accntVOs) {
@@ -85,14 +92,33 @@ public class DepositServiceImpl implements DepositService{
             accntVO.setModId(sessionInfoVO.getUserId());
 
             if(accntVO.getStatus() == GridDataFg.INSERT) {
+                // 계정코드 생성
+                accntVO.setAccntCd(depositMapper.getAccntCode(accntVO));
+
                 resultCnt += depositMapper.insertDepositAccntList(accntVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = depositMapper.insertAccntToStore(accntVO);
+                }
             } else if (accntVO.getStatus() == GridDataFg.UPDATE) {
                 resultCnt += depositMapper.updateDepositAccntList(accntVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = depositMapper.updateAccntToStore(accntVO);
+                }
             } else if (accntVO.getStatus() == GridDataFg.DELETE) {
                 resultCnt += depositMapper.deleteDepositAccntList(accntVO);
+                // 본사에서 접속시
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    procResult = depositMapper.deleteAccntToStore(accntVO);
+                }
             }
         }
 
-        return resultCnt;
+        if ( resultCnt == accntVOs.length) {
+            return resultCnt;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
     }
 }

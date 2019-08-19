@@ -24,7 +24,7 @@
         <tr>
           <%-- 미수잔액 --%>
           <th><s:message code="postpaid.balAmt"/></th>
-          <td>{{balance}}</td>
+          <td>{{balance}}<input type="hidden" id="hdBalance"></td>
         </tr>
         <tr>
           <%-- 세금계산서 발행요청 금액 --%>
@@ -49,4 +49,4 @@
 </wj-popup>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/taxBillRequest.js?ver=2019020101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/pos/posPostpaid/taxBillRequest.js?ver=2019020103" charset="utf-8"></script>

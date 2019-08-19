@@ -6,6 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/adi/mony/accntManage/" />
 
 <div class="subCon">
@@ -19,13 +20,13 @@
     <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="depositBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.deposit' /></span>
-        <button class="btn_skyblue"  ng-click="addRow()">
+        <button class="btn_skyblue"  ng-click="addRow()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" ng-click="delete()">
+        <button class="btn_skyblue" ng-click="delete()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" ng-click="save()">
+        <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.save" />
         </button>
       </div>
@@ -60,13 +61,13 @@
     <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
       <div class="updownSet oh mb10" id="withdrawBtnArea" style="display: none;">
         <span class="fl bk lh30"><s:message code='accntManage.withdraw' /></span>
-        <button class="btn_skyblue" ng-click="addRow()">
+        <button class="btn_skyblue" ng-click="addRow()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.add" />
         </button>
-        <button class="btn_skyblue" ng-click="delete()">
+        <button class="btn_skyblue" ng-click="delete()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.delete" />
         </button>
-        <button class="btn_skyblue" ng-click="save()">
+        <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.save" />
         </button>
       </div>

@@ -34,6 +34,8 @@ public class AccntVO extends CmmVO {
     private String accntFg;
     /** 사용여부 */
     private String useYn;
+    /** 프로시져 결과 */
+    private String result;
 
     /**
      * @return the hqOfficeCd
@@ -138,5 +140,13 @@ public class AccntVO extends CmmVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }
