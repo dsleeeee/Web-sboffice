@@ -29,6 +29,7 @@
             FROM TB_HQ_ACCOUNT
            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
              AND ACCNT_FG = #{accntFg, jdbcType=VARCHAR}
+       ORDER BY ACCNT_CD ASC
       </if>
       <if test="orgnFg != null and orgnFg.toString() == 'STORE'">
           SELECT (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE STORE_CD = #{storeCd}) AS HQ_OFFICE_CD,
@@ -40,6 +41,7 @@
             FROM TB_MS_ACCOUNT
            WHERE STORE_CD = #{storeCd}
              AND ACCNT_FG = #{accntFg, jdbcType=VARCHAR}
+       ORDER BY ACCNT_CD ASC
       </if>
 
     </select>
