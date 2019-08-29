@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayMember.xml
+    일자별회원 구매내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.08.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.dayMembr.service.impl.DayMembrMapper">
+
+    <!-- 일자별회원 구매내역-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_MEMBR
+        COMMENTS : [매출]헤더 와 [매출]헤더_회원 조회
+    -->
+    <select id="getDayMembrPurchaseList"  parameterType="dayMembrVO" resultType="DefaultMap">
+        /* DayMembrMapper.getDayMembrPurchaseList */
+        SELECT tsshm.SALE_DATE,
+        tsshm.SALE_FG,
+        tsshm.MEMBR_NM,
+        tsshm.MEMBR_NO,
+        tsshm.MEMBR_CARD_NO,
+        SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tssh.VAT_AMT) AS VAT_AMT,
+        SUM(tssh.PAY02) AS PAY_CASH,
+        SUM(tssh.PAY01) AS PAY_CARD,
+        SUM(tssh.PAY13) AS PAY_GIFT,
+        SUM(tssh.PAYOTHER) AS PAY_OTHER,
+        SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+        FROM
+        TB_SL_SALE_HDR_MEMBR tsshm,
+        (
+            SELECT HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            STORE_CD,
+            SALE_DATE,
+            POS_NO,
+            BILL_NO,
+            SALE_FG,
+            TOT_SALE_AMT,
+            TOT_DC_AMT,
+            VAT_AMT,
+            NVL(SUM(PAY01), 0) AS PAY01,
+            NVL(SUM(PAY02), 0) AS PAY02,
+            NVL(SUM(PAY13), 0) AS PAY13,
+            (NVL(SUM(PAY03), 0) +
+            NVL(SUM(PAY04), 0) +
+--             NVL(SUM(PAY05), 0) +
+            NVL(SUM(PAY06), 0) +
+            NVL(SUM(PAY07), 0) +
+            NVL(SUM(PAY08), 0) +
+            NVL(SUM(PAY09), 0) +
+            NVL(SUM(PAY10), 0) +
+            NVL(SUM(PAY11), 0) +
+--             NVL(SUM(PAY12), 0) +
+            NVL(SUM(PAY14), 0) +
+            NVL(SUM(PAY15), 0) +
+            NVL(SUM(PAY16), 0) +
+            NVL(SUM(PAY17), 0) +
+            NVL(SUM(PAY18), 0)) AS PAYOTHER
+            FROM
+            (
+                SELECT tsshp.HQ_OFFICE_CD,
+                tsshp.HQ_BRAND_CD,
+                tsshp.STORE_CD,
+                tsshp.SALE_DATE,
+                tsshp.POS_NO,
+                tsshp.BILL_NO,
+                tsshp.PAY_CD,
+                tsshp.SALE_FG,
+                tsshp.PAY_AMT,
+                tssh.TOT_SALE_AMT,
+                tssh.TOT_DC_AMT,
+                tssh.VAT_AMT
+                FROM TB_SL_SALE_HDR_PAY tsshp,
+                TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tsshp.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tsshp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCd != null and storeCd != ""'>
+                    <![CDATA[
+                        AND tsshp.STORE_CD = #{storeCd}
+                    ]]>
+                </if>
+                AND tsshp.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+                AND tsshp.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+                AND tsshp.STORE_CD = tssh.STORE_CD
+                AND tsshp.SALE_DATE = tssh.SALE_DATE
+                AND tsshp.POS_NO = tssh.POS_NO
+                AND tsshp.BILL_NO = tssh.BILL_NO
+            )
+            PIVOT
+            (
+                SUM(PAY_AMT)
+                FOR PAY_CD
+                IN (${pivotPayCol})
+                /*  IN ('01' AS PAY01,
+                '02' AS PAY02,
+                '03' AS PAY03,
+                '04' AS PAY04,
+                '05' AS PAY05,
+                '06' AS PAY06,
+                '07' AS PAY07,
+                '08' AS PAY08,
+                '09' AS PAY09,
+                '10' AS PAY10,
+                '11' AS PAY11,
+                '12' AS PAY12,
+                '13' AS PAY13,
+                '14' AS PAY14,
+                '15' AS PAY15,
+                '16' AS PAY16,
+                '17' AS PAY17,
+                '18' AS PAY18)*/
+            )
+            GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO, SALE_FG, TOT_SALE_AMT, TOT_DC_AMT, VAT_AMT
+        ) tssh
+        WHERE 1=1
+        AND tsshm.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND tsshm.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+        AND tsshm.STORE_CD = tssh.STORE_CD
+        AND tsshm.SALE_DATE = tssh.SALE_DATE
+        AND tsshm.POS_NO = tssh.POS_NO
+        AND tsshm.BILL_NO = tssh.BILL_NO
+        GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO, tsshm.SALE_FG, tsshm.SALE_DATE
+        ORDER BY tsshm.SALE_DATE, tsshm.MEMBR_NM, tsshm.SALE_FG
+
+
+
+
+       <!-- SELECT
+        (SUBSTR(tssh.SALE_DATE, 1,4) || '/' || SUBSTR(tssh.SALE_DATE, 5,2) || '/' || SUBSTR(tssh.SALE_DATE, 7)) AS SALE_DATE,
+        tssh.SALE_FG,
+        tsshm.MEMBR_NM,
+        tsshm.MEMBR_CARD_NO,
+        SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tssh.VAT_AMT) AS VAT_AMT,
+        SUM(CASE WHEN tsshp.PAY_CD = '02' THEN PAY_AMT END) AS CASH,
+        SUM(CASE WHEN tsshp.PAY_CD = '01' THEN PAY_AMT END) AS CARD,
+        SUM(CASE WHEN tsshp.PAY_CD = '13' THEN PAY_AMT END) AS GIFT,
+        SUM(CASE WHEN tsshp.PAY_CD NOT IN ('01', '02', '13') THEN PAY_AMT END) AS EXTRA,
+        SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_SALE_HDR tssh,
+        TB_SL_SALE_HDR_MEMBR tsshm,
+        TB_SL_SALE_HDR_PAY tsshp
+        WHERE tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            AND tssh.STORE_CD = #{storeCd}
+        </if>
+        AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tssh.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
+        AND tsshm.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
+        AND tsshm.HQ_BRAND_CD = tsshp.HQ_BRAND_CD
+        AND tssh.STORE_CD = tsshm.STORE_CD
+        AND tsshm.STORE_CD = tsshp.STORE_CD
+        AND tssh.SALE_DATE = tsshm.SALE_DATE
+        AND tsshm.SALE_DATE = tsshp.SALE_DATE
+        AND tssh.POS_NO = tsshm.POS_NO
+        AND tsshm.POS_NO = tsshp.POS_NO
+        AND tssh.BILL_NO = tsshm.BILL_NO
+        AND tsshm.BILL_NO = tsshp.BILL_NO
+        GROUP BY tssh.SALE_DATE, tssh.SALE_FG, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO
+        ORDER BY tssh.SALE_DATE, tsshm.MEMBR_NM, tssh.SALE_FG ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>-->
+    </select>
+</mapper>

@@ -304,6 +304,7 @@
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
     <typeAlias alias="postpaidDtlVO" type="kr.co.solbipos.membr.anals.postpaidDtl.service.PostpaidDtlVO"/>
     <typeAlias alias="prepaidDtlVO" type="kr.co.solbipos.membr.anals.prepaidDtl.service.PrepaidDtlVO"/>
+    <typeAlias alias="dayMembrVO" type="kr.co.solbipos.membr.anals.dayMembr.service.DayMembrVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
