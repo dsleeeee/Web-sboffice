@@ -15,6 +15,19 @@
 app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuAttrClassCtrl', $scope, $http, false));
+
+    // 상품 본사통제구분 (H : 본사, S: 매장)
+    $scope.prodEnvstVal = prodEnvstVal;
+
+    // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+    $scope.userStoreCd = gvStoreCd;
+    $scope.btnShowFg = false;
+
+    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+        $scope.btnShowFg = true;
+    }
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -143,6 +156,19 @@ app.controller('sideMenuAttrClassCtrl', ['$scope', '$http', function ($scope, $h
 app.controller('sideMenuAttrAttrCtrl', ['$scope', '$http', 'sdattrClassCd', function ($scope, $http, sdattrClassCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuAttrAttrCtrl', $scope, $http, false));
+
+    // 상품 본사통제구분 (H : 본사, S: 매장)
+    $scope.prodEnvstVal = prodEnvstVal;
+
+    // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+    $scope.userStoreCd = gvStoreCd;
+    $scope.btnShowFg = false;
+
+    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+        $scope.btnShowFg = true;
+    }
+
   // sdattrClassCd Data Setter
   $scope.setSdattrClassCd = function (value) {
     sdattrClassCd.set(value);

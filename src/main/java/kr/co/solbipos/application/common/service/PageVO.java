@@ -43,7 +43,7 @@ public class PageVO extends CmmVO {
     private String endDate;
     /** 검색 날짜 전체 체크 여부 */
     private Boolean isChkDate;
-    
+
 
     public Integer getTotCnt() {
         return totCnt;
@@ -126,7 +126,7 @@ public class PageVO extends CmmVO {
     public void setIsChkDate(Boolean isChkDate) {
         this.isChkDate = isChkDate;
     }
-    
+
     public void prevNext() {
         offset = ((curr - 1) * listScale) + 1;
         limit = curr * listScale;
@@ -143,5 +143,5 @@ public class PageVO extends CmmVO {
         limit = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));
     }
-    
+
 }

@@ -5,7 +5,9 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.11.14  노현수      최초생성
+ * @ 2019.08.23  이다솜      사이드메뉴관리 화면 호출 시 상품관리권한 가져와 본사인지 매장인지 판단하여 등록/수정/삭제 버튼 막기
  *
  * @author 솔비포스 차세대개발실 노현수
  * @since 2018. 05.01
@@ -43,12 +46,14 @@ public class SideMenuController {
 
     private final SideMenuService sideMenuService;
     private final SessionService sessionService;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuController(SideMenuService sideMenuService, SessionService sessionService) {
+    public SideMenuController(SideMenuService sideMenuService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
         this.sideMenuService = sideMenuService;
         this.sessionService = sessionService;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -63,6 +68,14 @@ public class SideMenuController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String templateView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 상품등록 본사 통제여부
+        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+
+        model.addAttribute("prodEnvstVal", prodEnvstVal);
+
         return "base/prod/sideMenu/sideMenu";
     }
 

@@ -9,13 +9,13 @@
       <div id="gridAttrClass" class="wj-TblWrapBr mr10 pd20" style="height: 480px;" ng-controller="sideMenuAttrClassCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.tab.attr.class' /></span>
-          <button class="btn_skyblue" id="btnAddClass" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddClass" style="display: none;" ng-click="addRow()" ng-show="btnShowFg">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelClass" style="display: none;" ng-click="deleteRow()">
+          <button class="btn_skyblue" id="btnDelClass" style="display: none;" ng-click="deleteRow()" ng-show="btnShowFg">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveClass" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveClass" style="display: none;" ng-click="save()" ng-show="btnShowFg">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -47,19 +47,19 @@
       <div id="gridAttrCd" class="wj-TblWrapBr ml10 pd20" style="height: 480px;" ng-controller="sideMenuAttrAttrCtrl">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='sideMenu.tab.attr.attr' /></span>
-          <button class="btn_up" id="btnUpAttr" style="display: none;" ng-click="rowMoveUp()">
+          <button class="btn_up" id="btnUpAttr" style="display: none;" ng-click="rowMoveUp()" ng-show="btnShowFg">
             <s:message code="cmm.up" />
           </button>
-          <button class="btn_down" id="btnDownAttr" style="display: none;" ng-click="rowMoveDown()">
+          <button class="btn_down" id="btnDownAttr" style="display: none;" ng-click="rowMoveDown()" ng-show="btnShowFg">
             <s:message code="cmm.down" />
           </button>
-          <button class="btn_skyblue" id="btnAddAttr" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddAttr" style="display: none;" ng-click="addRow()" ng-show="btnShowFg">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelAttr" style="display: none;" ng-click="deleteRow()">
+          <button class="btn_skyblue" id="btnDelAttr" style="display: none;" ng-click="deleteRow()" ng-show="btnShowFg">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveAttr" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveAttr" style="display: none;" ng-click="save()" ng-show="btnShowFg">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -88,6 +88,6 @@
     </div>
   </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=2018122001.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuAttr.js?ver=2018122003.01" charset="utf-8"></script>
 
 

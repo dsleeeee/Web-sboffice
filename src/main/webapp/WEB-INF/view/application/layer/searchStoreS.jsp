@@ -8,7 +8,7 @@
   <s:message code="outstockReqDate.selectCancel"/></button>
 </c:if>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerS" control="wj<c:out value="${param.targetId}"/>LayerS" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="cmm.store.select"/>

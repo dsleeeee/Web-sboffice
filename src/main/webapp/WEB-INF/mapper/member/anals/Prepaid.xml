@@ -151,4 +151,50 @@
       #{modId}
     )
   </insert>
+
+    <!-- 충전입금 집계 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 선불금을 회원별로 집계 반영한다.
+    -->
+    <insert id="savePaidBalancePrePaid" parameterType="DefaultMap">
+      /* PostpaidMapper.savePaidBalancePrePaid */
+      MERGE INTO TB_MB_MEMBER_PAID_BALANCE tmmpb
+        USING DUAL ON
+            (
+                tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmmpb.STORE_CD = #{prepaidStoreCd}
+                AND tmmpb.MEMBR_NO = #{membrNo}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmmpb.PREPAID_AMT = tmmpb.PREPAID_AMT + #{prepaidAmt},
+                tmmpb.PREPAID_BAL_AMT = tmmpb.PREPAID_BAL_AMT + #{prepaidAmt},
+                tmmpb.MOD_DT = #{modDt},
+                tmmpb.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmmpb.HQ_OFFICE_CD,
+                tmmpb.STORE_CD,
+                tmmpb.MEMBR_NO,
+                tmmpb.PREPAID_AMT,
+                tmmpb.PREPAID_BAL_AMT,
+                tmmpb.REG_DT,
+                tmmpb.REG_ID,
+                tmmpb.MOD_DT,
+                tmmpb.MOD_ID
+            ) VALUES (
+                #{hqOfficeCd},
+                #{prepaidStoreCd},
+                #{membrNo},
+                #{prepaidAmt},
+                #{prepaidAmt},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
 </mapper>

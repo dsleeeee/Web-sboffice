@@ -32,6 +32,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.09.20  김지은      최초생성
+ * @ 2019.08.28  이다솜      외상입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.09.20
@@ -106,7 +107,18 @@ public class PostpaidServiceImpl implements PostpaidService {
         postpaidStoreVO.setModId(sessionInfoVO.getUserId());
         postpaidStoreVO.setModDt(dt);
 
+        // 외상입금하려는 회원의 StoreCd를 가져온다.
+        if(postpaidStoreVO.getStoreCd() == null || postpaidStoreVO.getStoreCd() == ""){
+            postpaidStoreVO.setStoreCd(mapper.getDepositStoreCd(postpaidStoreVO));
+        }
+
         int result = mapper.saveDeposit(postpaidStoreVO);
+
+        // 외상입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+        if(result > 0){
+            result = mapper.savePaidBalancePostPaid(postpaidStoreVO);
+        }
+
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
@@ -156,7 +168,18 @@ public class PostpaidServiceImpl implements PostpaidService {
         postpaidStoreVO.setModId(sessionInfoVO.getUserId());
         postpaidStoreVO.setModDt(dt);
 
+        // 외상입금하려는 회원의 StoreCd를 가져온다.
+        if(postpaidStoreVO.getStoreCd() == null || postpaidStoreVO.getStoreCd() == ""){
+            postpaidStoreVO.setStoreCd(mapper.getDepositStoreCd(postpaidStoreVO));
+        }
+
         result = mapper.saveDeposit(postpaidStoreVO);
+
+        // 외상입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+        if(result > 0){
+            result = mapper.savePaidBalancePostPaid(postpaidStoreVO);
+        }
+
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;

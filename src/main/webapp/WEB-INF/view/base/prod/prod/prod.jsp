@@ -144,7 +144,7 @@
       <s:message code="cmm.excel.down" />
     </button>
     --%>
-    <button class="btn_skyblue fr" id="btnAddProd" ng-click="addProd()">
+    <button class="btn_skyblue fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
       <s:message code="prod.title.addProd" />
     </button>
   </div>
@@ -206,7 +206,7 @@
   var priceEnvstVal = "${priceEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122902.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122902.03" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

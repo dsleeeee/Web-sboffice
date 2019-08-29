@@ -31,6 +31,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.10.01  김지은      최초생성
+ * @ 2019.08.28  이다솜      선불입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
  *
  * @author 솔비포스 차세대개발실 김지은
  * @since 2018.10.01
@@ -98,7 +99,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         prepaidStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         prepaidStoreVO.setSaleDate(currentDateString());
         prepaidStoreVO.setPrepaidDt(dt);
-        prepaidStoreVO.setPrepaidFg(PrepaidFg.CHARGE); // 입금
+        prepaidStoreVO.setPrepaidFg(PrepaidFg.CHARGE); // 충전
         prepaidStoreVO.setPrepaidPayFg(PrepaidPayFg.CASH); // 현금
         prepaidStoreVO.setNonsaleTypeApprNo(" ");// 비매출 영수증번호
 
@@ -108,6 +109,12 @@ public class PrepaidServiceImpl implements PrepaidService {
         prepaidStoreVO.setModDt(dt);
 
         int result = mapper.saveChargeAmt(prepaidStoreVO);
+
+        //선불입금 시 집계 테이블(TB_MB_MEMBER_PAID_BALANCE)에 금액반영
+        if(result > 0){
+            result = mapper.savePaidBalancePrePaid(prepaidStoreVO);
+        }
+
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;

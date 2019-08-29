@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
@@ -36,6 +37,10 @@
   </c:import>
 
 </div>
+<script>
+  var prodEnvstVal = "${prodEnvstVal}";
+</script>
+
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=2018112001" charset="utf-8"></script>
 

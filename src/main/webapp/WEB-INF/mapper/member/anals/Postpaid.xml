@@ -105,6 +105,24 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 외상입금 StoreCd -->
+    <!--
+        TABLE    :
+        COMMENTS : 외상입금하려는 회원의 StoreCd를 가져온다.
+    -->
+    <select id="getDepositStoreCd" resultType="String">
+        <if test='storeCd != null and storeCd != ""'>
+            SELECT #{storeCd} AS STORE_CD
+            FROM DUAL
+        </if>
+        <if test='storeCd == null or storeCd == ""'>
+            SELECT REG_STORE_CD AS STORE_CD
+            FROM TB_MB_MEMBER
+            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND MEMBR_NO = #{membrNo}
+        </if>
+    </select>
+
     <!-- 외상입금 -->
     <!--
         TABLE    :
@@ -112,7 +130,7 @@
     -->
     <insert id="saveDeposit" parameterType="postpaidStoreVO">
         /* PostpaidMapper.saveDeposit */
-        <selectKey resultType="String" keyProperty="storeCd" order="BEFORE">
+        <!--<selectKey resultType="String" keyProperty="storeCd" order="BEFORE">
           <if test='storeCd != null and storeCd != ""'>
             SELECT #{storeCd} AS STORE_CD
               FROM DUAL
@@ -123,7 +141,7 @@
              WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
                AND MEMBR_NO = #{membrNo}
           </if>
-        </selectKey>
+        </selectKey>-->
 
         INSERT INTO TB_MB_MEMBER_POSTPAID
         (
@@ -169,6 +187,51 @@
         )
     </insert>
 
+    <!-- 외상입금 집계 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : 외상금액을 회원별로 집계 반영한다.
+    -->
+    <insert id="savePaidBalancePostPaid" parameterType="DefaultMap">
+      /* PostpaidMapper.savePaidBalancePostPaid */
+      MERGE INTO TB_MB_MEMBER_PAID_BALANCE tmmpb
+        USING DUAL ON
+            (
+                tmmpb.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tmmpb.STORE_CD = #{storeCd}
+                AND tmmpb.MEMBR_NO = #{membrNo}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmmpb.POSTPAID_IN_AMT = tmmpb.POSTPAID_IN_AMT + #{postpaidAmt},
+                tmmpb.POSTPAID_BAL_AMT = tmmpb.POSTPAID_BAL_AMT - #{postpaidAmt},
+                tmmpb.MOD_DT = #{modDt},
+                tmmpb.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmmpb.HQ_OFFICE_CD,
+                tmmpb.STORE_CD,
+                tmmpb.MEMBR_NO,
+                tmmpb.POSTPAID_IN_AMT,
+                tmmpb.POSTPAID_BAL_AMT,
+                tmmpb.REG_DT,
+                tmmpb.REG_ID,
+                tmmpb.MOD_DT,
+                tmmpb.MOD_ID
+            ) VALUES (
+                #{membrOrgnCd},
+                #{storeCd},
+                #{membrNo},
+                #{postpaidAmt},
+                0 - #{postpaidAmt},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
 
     <!-- 세금계산서 요청목록 조회 -->
     <!--

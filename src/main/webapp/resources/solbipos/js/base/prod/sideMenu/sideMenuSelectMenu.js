@@ -15,6 +15,20 @@
 app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectGroupCtrl', $scope, $http, false));
+
+  // 상품 본사통제구분 (H : 본사, S: 매장)
+  $scope.prodEnvstVal = prodEnvstVal;
+
+  // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+  $scope.userStoreCd = gvStoreCd;
+  $scope.btnShowFg = false;
+
+  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    $scope.btnShowFg = true;
+  }
+
+
   // 그리드 Refresh
   $scope.$on('selectMenuRefresh', function (event, data) {
     $scope.flex.refresh();
@@ -161,6 +175,19 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
 app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', function ($scope, $http, sdselGrpCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectClassCtrl', $scope, $http, false));
+
+  // 상품 본사통제구분 (H : 본사, S: 매장)
+  $scope.prodEnvstVal = prodEnvstVal;
+
+  // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+  $scope.userStoreCd = gvStoreCd;
+  $scope.btnShowFg = false;
+
+  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    $scope.btnShowFg = true;
+  }
+
   // 그리드 Refresh
   $scope.$on('selectMenuRefresh', function (event, data) {
     $scope.flex.refresh();
@@ -366,6 +393,19 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
 app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', function ($scope, $http, sdselClassCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectProdCtrl', $scope, $http, false));
+
+  // 상품 본사통제구분 (H : 본사, S: 매장)
+  $scope.prodEnvstVal = prodEnvstVal;
+
+  // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+  $scope.userStoreCd = gvStoreCd;
+  $scope.btnShowFg = false;
+
+  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+      || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    $scope.btnShowFg = true;
+  }
+
   // 그리드 Refresh
   $scope.$on('selectMenuRefresh', function (event, data) {
     $scope.flex.refresh();
