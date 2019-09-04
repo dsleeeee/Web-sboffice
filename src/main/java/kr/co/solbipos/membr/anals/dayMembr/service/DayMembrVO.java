@@ -30,9 +30,16 @@ public class DayMembrVO extends PageVO {
     /** PIVOT PAY_CD */
     private String pivotPayCol;
 
-    public void setMembrOrgnCd(String membrOrgnCd) {
-        this.membrOrgnCd = membrOrgnCd;
-    }
+    /** 영업일자 */
+    private String saleDate;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 영수증번호 */
+    private String billNo;
+
+    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
@@ -42,4 +49,9 @@ public class DayMembrVO extends PageVO {
         this.pivotPayCol = pivotPayCol;
     }
 
+    public void setSaleDate(String saleDate) { this.saleDate = saleDate; }
+
+    public void setPosNo(String posNo) { this.posNo = posNo; }
+
+    public void setBillNo(String billNo) { this.billNo = billNo; }
 }

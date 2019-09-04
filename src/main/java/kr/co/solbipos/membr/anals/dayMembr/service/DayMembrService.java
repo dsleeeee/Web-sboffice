@@ -24,5 +24,8 @@ import java.util.List;
 public interface DayMembrService {
 
     /** 일자별회원 구매내역*/
-    List<DefaultMap<Object>> getDayMembrPurchaseList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getDayMembrList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
+
+    /** 매출정보 상세조회 - 팝업 */
+    List <DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
 }

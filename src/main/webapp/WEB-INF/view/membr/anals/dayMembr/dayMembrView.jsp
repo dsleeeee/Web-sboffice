@@ -47,32 +47,35 @@
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-            <div class="row">
-                <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    sticky-headers="true"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter"
-                    is-read-only="true">
+            <wj-flex-grid
+                autoGenerateColumns="false"
+                control="flex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                is-read-only="true">
 
-                    <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.totSaleAmt"/>" binding="totSaleAmt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.vatAmt"/>" binding="vatAmt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paycash"/>" binding="payCash" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paycard"/>" binding="payCard" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.paygift"/>" binding="payGift" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.payother"/>" binding="payOther" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayMembr.totDcAmt"/>" binding="totDcAmt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.totSaleAmt"/>" binding="totSaleAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.vatAmt"/>" binding="vatAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.paycash"/>" binding="payCash" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.paycard"/>" binding="payCard" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.paygift"/>" binding="payGift" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.payother"/>" binding="payOther" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.totDcAmt"/>" binding="totDcAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
-                </wj-flex-grid>
-            </div>
+                <%--팝업 조회시 필요--%>
+                <wj-flex-grid-column header="<s:message code="dayMembr.membrNo"/>" binding="membrNo" width="150" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.posNo"/>" binding="posNo" width="150" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.billNo"/>" binding="billNo" width="150" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
+            </wj-flex-grid>
         </div>
     </div>
 
@@ -83,4 +86,8 @@
     var saleFgData = ${ccu.getCommCodeExcpAll("047")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=2019052901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=2019052801.15" charset="utf-8"></script>
+
+<%-- 매출 상세정보 --%>
+<c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">
+</c:import>

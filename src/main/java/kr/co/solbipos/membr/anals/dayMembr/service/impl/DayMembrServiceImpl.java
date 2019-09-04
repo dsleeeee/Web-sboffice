@@ -44,7 +44,7 @@ public class DayMembrServiceImpl implements DayMembrService {
 
     /** 일자별회원 구매내역*/
     @Override
-    public List<DefaultMap<Object>> getDayMembrPurchaseList(DayMembrVO dayMembrVO,
+    public List<DefaultMap<Object>> getDayMembrList(DayMembrVO dayMembrVO,
                                                              SessionInfoVO sessionInfoVO) {
         // <-- PIVOT -->
         DayVO dayVO = new DayVO();
@@ -69,6 +69,19 @@ public class DayMembrServiceImpl implements DayMembrService {
         }
         dayMembrVO.setPivotPayCol(pivotPayCol);
 
-        return mapper.getDayMembrPurchaseList(dayMembrVO);
+        return mapper.getDayMembrList(dayMembrVO);
+    }
+
+    /** 매출정보 상세조회 - 팝업 */
+    @Override
+    public List<DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO,
+                                                    SessionInfoVO sessionInfoVO) {
+
+        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getDayMembrPurchsList(dayMembrVO);
     }
 }

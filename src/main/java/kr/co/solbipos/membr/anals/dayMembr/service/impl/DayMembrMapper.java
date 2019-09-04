@@ -27,5 +27,8 @@ import java.util.List;
 public interface DayMembrMapper {
 
     /** 일자별회원 구매내역*/
-    List<DefaultMap<Object>> getDayMembrPurchaseList(DayMembrVO dayMembrVO);
+    List<DefaultMap<Object>> getDayMembrList(DayMembrVO dayMembrVO);
+
+    /** 매출정보 상세조회 - 팝업 */
+    List <DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO);
 }
