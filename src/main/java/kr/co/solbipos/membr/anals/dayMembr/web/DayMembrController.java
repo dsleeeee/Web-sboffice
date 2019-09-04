@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+
 /**
  * @Class Name : DayMembrController.java
  * @Description : 회원관리 > 회원분석 > 일자별회원 구매내역
@@ -70,7 +73,7 @@ public class DayMembrController {
     }
 
     /**
-     * 일자별회원 구매내역
+     * 일자별회원 구매내역 조회
      *
      * @param dayMembrVO
      * @param request
@@ -78,15 +81,36 @@ public class DayMembrController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "dayMembr/getDayMembrPurchaseList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "dayMembr/getDayMembrList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDayMembrPurchaseList(DayMembrVO dayMembrVO, HttpServletRequest request,
+    public Result getDayMembrList(DayMembrVO dayMembrVO, HttpServletRequest request,
                                            HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        //System.out.println("test : " + dayMembrVO.getEndDate());
+//        System.out.println("test : " + dayMembrVO.getEndDate());
 
-        List<DefaultMap<Object>> result = service.getDayMembrPurchaseList(dayMembrVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = service.getDayMembrList(dayMembrVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayMembrVO);
+    }
+
+    /**
+     * 매출정보 상세조회 - 팝업
+     *
+     * @param dayMembrVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "dayMembr/getDayMembrPurchsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayMembrPurchsList(DayMembrVO dayMembrVO, HttpServletRequest request,
+                                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getDayMembrPurchsList(dayMembrVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, dayMembrVO);
     }
