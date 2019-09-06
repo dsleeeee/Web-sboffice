@@ -49,7 +49,7 @@ app.controller('dayMembrCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "totSaleAmt" ) {
+                if (col.binding === "totSaleAmt" ||  col.binding === "membrNm") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }
@@ -65,6 +65,13 @@ app.controller('dayMembrCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( col.binding === "totSaleAmt") {
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
                     $scope.dayMembrPurchsViewLayer.show(true);
+                    event.preventDefault();
+                }
+
+                // 회원명 클릭시 상세정보 조회
+                if ( col.binding === "membrNm") {
+                    $scope.setSelectedStore(s.rows[ht.row].dataItem);
+                    $scope.dayMembrDetailViewLayer.show(true);
                     event.preventDefault();
                 }
             }
@@ -100,10 +107,17 @@ app.controller('dayMembrCtrl', ['$scope', '$http', function ($scope, $http) {
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
-        // 매출액상세정보 팝업 핸들러 추가
+        // 매출액 상세정보 팝업 핸들러 추가
         $scope.dayMembrPurchsViewLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('dayMembrPurchsCtrl', $scope.getSelectedStore());
+            }, 50)
+        });
+
+        // 회원명 상세정보 팝업 핸들러 추가
+        $scope.dayMembrDetailViewLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('dayMembrDetailCtrl', $scope.getSelectedStore());
             }, 50)
         });
     });

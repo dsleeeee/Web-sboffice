@@ -82,12 +82,16 @@
 </div>
 
 <script type="text/javascript">
-    //판매구분
+    <%-- 판매구분 --%>
     var saleFgData = ${ccu.getCommCodeExcpAll("047")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=2019052801.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=2019052801.16" charset="utf-8"></script>
 
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">
+</c:import>
+
+<%-- 회원 상세정보 --%>
+<c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrDetailView.jsp">
 </c:import>

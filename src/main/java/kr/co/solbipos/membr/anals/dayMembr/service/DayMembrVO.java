@@ -39,6 +39,9 @@ public class DayMembrVO extends PageVO {
     /** 영수증번호 */
     private String billNo;
 
+    /** 회원번호 */
+    private String membrNo;
+
     public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     public void setStoreCd(String storeCd) {
@@ -54,4 +57,6 @@ public class DayMembrVO extends PageVO {
     public void setPosNo(String posNo) { this.posNo = posNo; }
 
     public void setBillNo(String billNo) { this.billNo = billNo; }
+
+    public void setMembrNo(String membrNo) { this.membrNo = membrNo; }
 }

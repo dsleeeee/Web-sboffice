@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : DayMembrController.java
@@ -111,6 +110,51 @@ public class DayMembrController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = service.getDayMembrPurchsList(dayMembrVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayMembrVO);
+    }
+
+    /**
+     * 회원정보 상세조회 - 팝업
+     *
+     * @param dayMembrVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "dayMembr/getDayMembrDetail.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayMembrDetail(DayMembrVO dayMembrVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> membrInfo = service.getDayMembrDetail(dayMembrVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("membrInfo", membrInfo);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 회원정보 매출 상세조회 - 팝업
+     *
+     * @param dayMembrVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "dayMembr/getDayMembrDetailPurchsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayMembrDetailPurchsList(DayMembrVO dayMembrVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getDayMembrDetailPurchsList(dayMembrVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, dayMembrVO);
     }

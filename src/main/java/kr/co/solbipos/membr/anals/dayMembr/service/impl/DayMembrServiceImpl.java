@@ -84,4 +84,27 @@ public class DayMembrServiceImpl implements DayMembrService {
 
         return mapper.getDayMembrPurchsList(dayMembrVO);
     }
+
+    /** 회원정보 상세조회 - 팝업 */
+    @Override
+    public DefaultMap<String> getDayMembrDetail(DayMembrVO dayMembrVO,
+                                                SessionInfoVO sessionInfoVO) {
+
+        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+        return mapper.getDayMembrDetail(dayMembrVO);
+    }
+
+    /** 회원정보 매출 상세조회 - 팝업 */
+    @Override
+    public List<DefaultMap<Object>> getDayMembrDetailPurchsList(DayMembrVO dayMembrVO,
+                                                          SessionInfoVO sessionInfoVO) {
+
+        dayMembrVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mapper.getDayMembrDetailPurchsList(dayMembrVO);
+    }
 }

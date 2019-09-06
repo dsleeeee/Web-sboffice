@@ -28,4 +28,10 @@ public interface DayMembrService {
 
     /** 매출정보 상세조회 - 팝업 */
     List <DefaultMap<Object>> getDayMembrPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원정보 상세조회 - 팝업 */
+    DefaultMap<String> getDayMembrDetail(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
+
+    /** 회원정보 매출 상세조회 - 팝업 */
+    List <DefaultMap<Object>> getDayMembrDetailPurchsList(DayMembrVO dayMembrVO, SessionInfoVO sessionInfoVO);
 }

@@ -102,7 +102,7 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
         event.preventDefault();
     });
 
-    // 매출정보 상세 조회
+    // 매출정보 상세조회
     $scope.searchDayMembrPurchsList = function(){
 
         $("#dayMembrInfoTitle").text("/" + $scope.selectedStore.membrNm);
@@ -111,6 +111,7 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
         params.saleDate = $scope.selectedStore.saleDate;
         params.posNo = $scope.selectedStore.posNo;
         params.billNo = $scope.selectedStore.billNo;
+        params.membrNo = $scope.selectedStore.membrNo;
 
         $scope._inquirySub("/membr/anals/dayMembr/dayMembr/getDayMembrPurchsList.sb", params, function() {}, false);
     };

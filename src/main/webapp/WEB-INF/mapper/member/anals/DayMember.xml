@@ -99,24 +99,6 @@
                 SUM(PAY_AMT)
                 FOR PAY_CD
                 IN (${pivotPayCol})
-                /*  IN ('01' AS PAY01,
-                '02' AS PAY02,
-                '03' AS PAY03,
-                '04' AS PAY04,
-                '05' AS PAY05,
-                '06' AS PAY06,
-                '07' AS PAY07,
-                '08' AS PAY08,
-                '09' AS PAY09,
-                '10' AS PAY10,
-                '11' AS PAY11,
-                '12' AS PAY12,
-                '13' AS PAY13,
-                '14' AS PAY14,
-                '15' AS PAY15,
-                '16' AS PAY16,
-                '17' AS PAY17,
-                '18' AS PAY18)*/
             )
             GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO, SALE_FG, TOT_SALE_AMT, TOT_DC_AMT, VAT_AMT
         ) tssh
@@ -134,21 +116,21 @@
 
     <!-- 매출정보 상세조회 - 팝업-->
     <!--
-        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
-        COMMENTS : [매출]상세 와 [매장] 상품
+        TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR
+        COMMENTS : [매출]상세 와 [매출]헤더_회원
     -->
     <select id="getDayMembrPurchsList"  parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrPurchsList */
         SELECT tssd.SALE_DATE,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD AND HQ_OFFICE_CD = tssd.HQ_OFFICE_CD) AS STORE_NM,
-        tmp.PROD_NM,
+        (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE HQ_BRAND_CD = tssd.HQ_BRAND_CD AND STORE_CD = tssd.STORE_CD AND PROD_CD = tssd.PROD_CD) AS PROD_NM,
         tssd.SALE_QTY,
         tssd.SALE_AMT,
         tssd.MEMBR_SAVE_POINT,
         tssd.MEMBR_USE_POINT
         FROM
         TB_SL_SALE_DTL tssd,
-        TB_MS_PRODUCT tmp
+        TB_SL_SALE_HDR_MEMBR tsshm
         WHERE 1=1
         AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCd != null and storeCd != ""'>
@@ -159,9 +141,82 @@
         AND tssd.SALE_DATE = #{saleDate}
         AND tssd.POS_NO = #{posNo}
         AND tssd.BILL_NO = #{billNo}
-        AND tssd.HQ_BRAND_CD = tmp.HQ_BRAND_CD
-        AND tssd.STORE_CD = tmp.STORE_CD
-        AND tssd.PROD_CD = tmp.PROD_CD
+        AND tsshm.MEMBR_NO = #{membrNo}
+        AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
+        AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
+        AND tssd.STORE_CD = tsshm.STORE_CD
+        AND tssd.SALE_DATE = tsshm.SALE_DATE
+        AND tssd.POS_NO = tsshm.POS_NO
+        AND tssd.BILL_NO = tsshm.BILL_NO
+        ORDER BY tssd.SALE_DATE, tssd.STORE_CD, tssd.PROD_CD
+    </select>
+
+
+    <!-- 회원정보 상세조회 - 팝업-->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : [회원]회원
+    -->
+    <select id="getDayMembrDetail"  parameterType="dayMembrVO" resultType="DefaultMap">
+        /* DayMembrMapper.getDayMembrDetail */
+        SELECT
+        tmm.MEMBR_NO,
+        tmm.MEMBR_NM,
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmm.REG_STORE_CD AND HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD) AS STORE_NM,
+        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.REG_STORE_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_CD,
+        tmm.MEMBR_CARD_NO,
+        --카드사용구분
+        --카드발급횟수
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD ='055' AND NMCODE_CD = tmm.GENDR_FG) AS GENDR_FG,
+        tmm.WEDDING_YN,
+        (SUBSTR(tmm.BIRTHDAY, 1,4) || '-' || SUBSTR(tmm.BIRTHDAY, 5,2) || '-' || SUBSTR(tmm.BIRTHDAY, 7)) AS BIRTHDAY,
+        (SUBSTR(tmm.TEL_NO, 1,3) || '-' || SUBSTR(tmm.TEL_NO, 4,4) || '-' || SUBSTR(tmm.TEL_NO, 8)) AS TEL_NO,
+        tmm.EMAIL_ADDR,
+        (tmm.ADDR || tmm.ADDR_DTL)  AS ADDR,
+        tmm.EMAIL_RECV_YN,
+        tmm.SMS_RECV_YN,
+        tmm.REMARK
+        FROM TB_MB_MEMBER tmm
+        WHERE 1=1
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_NO = #{membrNo}
+    </select>
+
+
+    <!-- 회원정보 매출 상세조회 - 팝업-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR
+        COMMENTS : [매출]상세 와 [매출]헤더_회원
+    -->
+    <select id="getDayMembrDetailPurchsList"  parameterType="dayMembrVO" resultType="DefaultMap">
+        /* DayMembrMapper.getDayMembrDetailPurchsList */
+        SELECT tssd.SALE_DATE,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD AND HQ_OFFICE_CD = tssd.HQ_OFFICE_CD) AS STORE_NM,
+        (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE HQ_BRAND_CD = tssd.HQ_BRAND_CD AND STORE_CD = tssd.STORE_CD AND PROD_CD = tssd.PROD_CD) AS PROD_NM,
+        tssd.SALE_QTY,
+        tssd.SALE_AMT,
+        tssd.MEMBR_SAVE_POINT,
+        tssd.MEMBR_USE_POINT
+        FROM
+        TB_SL_SALE_DTL tssd,
+        TB_SL_SALE_HDR_MEMBR tsshm
+        WHERE 1=1
+        AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tssd.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tsshm.MEMBR_NO = #{membrNo}
+        AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
+        AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
+        AND tssd.STORE_CD = tsshm.STORE_CD
+        AND tssd.SALE_DATE = tsshm.SALE_DATE
+        AND tssd.POS_NO = tsshm.POS_NO
+        AND tssd.BILL_NO = tsshm.BILL_NO
+        ORDER BY tssd.SALE_DATE, tssd.STORE_CD, tssd.PROD_CD
     </select>
 
 </mapper>
