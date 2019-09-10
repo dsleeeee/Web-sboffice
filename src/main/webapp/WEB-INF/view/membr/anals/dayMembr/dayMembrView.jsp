@@ -29,7 +29,7 @@
         </colgroup>
         <tbody>
             <tr>
-                <%-- 조회 일자 --%>
+                <%-- 조회기간 --%>
                 <th>
                     <s:message code="dayMembr.srchDate" />
                 </th>
@@ -60,7 +60,7 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayMembr.totSaleAmt"/>" binding="totSaleAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayMembr.vatAmt"/>" binding="vatAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>

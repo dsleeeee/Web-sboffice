@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PeriodMember.xml
+    기간회원 구매내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.09.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.periodMembr.service.impl.PeriodMembrMapper">
+
+    <!-- 기간회원 구매내역-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_DTL
+        COMMENTS : [매출]헤더_회원 과 [매출]상세
+    -->
+    <select id="getPeriodMembrList"  parameterType="periodMembrVO" resultType="DefaultMap">
+        /* PeriodMembrMapper.getPeriodMembrList */
+        SELECT
+        tsshm.MEMBR_NO,
+        tsshm.MEMBR_NM,
+        tsshm.MEMBR_CARD_NO,
+        COUNT(MEMBR_NO) AS SALE_COUNT,
+        SUM(tssd.SALE_AMT) AS SALE_AMT,
+        SUM(tssd.DC_AMT) AS DC_AMT,
+        SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,
+        SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT,
+        TO_CHAR(TO_DATE(MIN(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MIN_REG_DT,
+        TO_CHAR(TO_DATE(MAX(tsshm.REG_DT), 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MAX_REG_DT,
+        tsshm.SALE_DATE,
+        tsshm.POS_NO,
+        tsshm.BILL_NO
+        FROM TB_SL_SALE_HDR_MEMBR tsshm,
+        TB_SL_SALE_DTL tssd
+        WHERE 1=1
+        AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tsshm.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tsshm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsshm.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+        AND tsshm.HQ_BRAND_CD = tssd.HQ_BRAND_CD
+        AND tsshm.STORE_CD = tssd.STORE_CD
+        AND tsshm.SALE_DATE = tssd.SALE_DATE
+        AND tsshm.POS_NO = tssd.POS_NO
+        AND tsshm.BILL_NO = tssd.BILL_NO
+        GROUP BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO, tsshm.SALE_DATE, tsshm.POS_NO, tsshm.BILL_NO
+        ORDER BY tsshm.MEMBR_NO, tsshm.MEMBR_NM, tsshm.MEMBR_CARD_NO
+    </select>
+
+</mapper>

@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-//import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrStoreVO;
 import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrService;
 import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrVO;
 import org.slf4j.Logger;

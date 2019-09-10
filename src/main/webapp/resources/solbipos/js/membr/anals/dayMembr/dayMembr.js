@@ -84,7 +84,7 @@ app.controller('dayMembrCtrl', ['$scope', '$http', function ($scope, $http) {
         event.preventDefault();
     });
 
-    // 후불회원상세 그리드 조회
+    // 일자별회원 구매내역 그리드 조회
     $scope.searchDayMembr = function(){
 
         var params = {};

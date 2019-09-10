@@ -104,7 +104,7 @@ app.controller('dayMembrDetailCtrl', ['$scope', '$http', function ($scope, $http
     $scope.$on("dayMembrDetailCtrl", function(event, data) {
         $scope.setSelectedStore(data);
         $scope.searchDayMembrDetail();
-        $scope.searchDayMembrDetailPurchsList();
+        $scope.searchDayMembrDetailPurchs();
         event.preventDefault();
     });
 
@@ -121,7 +121,7 @@ app.controller('dayMembrDetailCtrl', ['$scope', '$http', function ($scope, $http
     };
 
     // 회원정보 매출 상세조회
-    $scope.searchDayMembrDetailPurchsList = function(){
+    $scope.searchDayMembrDetailPurchs = function(){
 
         var params = {};
         params.membrNo = $scope.selectedStore.membrNo;
