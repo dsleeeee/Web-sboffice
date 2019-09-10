@@ -85,7 +85,7 @@
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">
 </c:import>
-dayMembrDetailView
+
 <%-- 회원 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrDetailView.jsp">
 </c:import>
