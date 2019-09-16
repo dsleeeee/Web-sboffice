@@ -306,6 +306,7 @@
     <typeAlias alias="prepaidDtlVO" type="kr.co.solbipos.membr.anals.prepaidDtl.service.PrepaidDtlVO"/>
     <typeAlias alias="dayMembrVO" type="kr.co.solbipos.membr.anals.dayMembr.service.DayMembrVO"/>
     <typeAlias alias="PeriodMembrVO" type="kr.co.solbipos.membr.anals.periodMembr.service.PeriodMembrVO"/>
+    <typeAlias alias="MembrProdVO" type="kr.co.solbipos.membr.anals.membrProd.service.MembrProdVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>

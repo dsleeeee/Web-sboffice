@@ -28,19 +28,19 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <tr>
-            <%-- 조회기간 --%>
-            <th>
-                <s:message code="periodMembr.srchDate" />
-            </th>
-            <td colspan="3">
-                <div class="sb-select">
-                    <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
-                </div>
-            </td>
-        </tr>
+            <tr>
+                <%-- 조회기간 --%>
+                <th>
+                    <s:message code="periodMembr.srchDate" />
+                </th>
+                <td colspan="3">
+                    <div class="sb-select">
+                        <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"> <input id="endDate" name="endDate" class="w200px" /></span>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 

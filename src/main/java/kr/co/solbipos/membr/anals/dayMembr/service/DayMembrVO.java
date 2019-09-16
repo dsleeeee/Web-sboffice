@@ -42,21 +42,59 @@ public class DayMembrVO extends PageVO {
     /** 회원번호 */
     private String membrNo;
 
-    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
+    public String getMembrOrgnCd() {
+        return membrOrgnCd;
+    }
+
+    public void setMembrOrgnCd(String membrOrgnCd) {
+        this.membrOrgnCd = membrOrgnCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getPivotPayCol() {
+        return pivotPayCol;
     }
 
     public void setPivotPayCol(String pivotPayCol) {
         this.pivotPayCol = pivotPayCol;
     }
 
-    public void setSaleDate(String saleDate) { this.saleDate = saleDate; }
+    public String getSaleDate() {
+        return saleDate;
+    }
 
-    public void setPosNo(String posNo) { this.posNo = posNo; }
+    public void setSaleDate(String saleDate) {
+        this.saleDate = saleDate;
+    }
 
-    public void setBillNo(String billNo) { this.billNo = billNo; }
+    public String getPosNo() {
+        return posNo;
+    }
 
-    public void setMembrNo(String membrNo) { this.membrNo = membrNo; }
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
+
+    public String getMembrNo() {
+        return membrNo;
+    }
+
+    public void setMembrNo(String membrNo) {
+        this.membrNo = membrNo;
+    }
 }
