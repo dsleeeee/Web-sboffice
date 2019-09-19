@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MemberPossesn.xml
+    회원매출점유
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.09.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.membrPossesn.service.impl.MembrPossesnMapper">
+
+    <!-- 회원매출점유-->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMembrPossesnList"  parameterType="membrPossesnVO" resultType="DefaultMap">
+        /* MembrProdMapper.getMembrPossesnList */
+        SELECT
+        HQ_OFFICE_CD,
+        STORE_CD,
+        STORE_NM,
+        TOT_CNT,
+        TOT_AMT,
+        TOT_MEM_CNT,
+        TOT_MEM_AMT,
+        TOT_MEM_CNT / TOT_CNT *100 AS PER_CNT,
+        TOT_MEM_AMT / TOT_AMT *100 AS PER_AMT,
+        TOT_MEM_CNT / SUM(TOT_MEM_CNT)OVER(PARTITION BY HQ_OFFICE_CD) *100 AS PER_MEM_CNT,
+        TOT_MEM_AMT / SUM(TOT_MEM_AMT)OVER(PARTITION BY HQ_OFFICE_CD) *100 AS PER_MEM_AMT
+        FROM (
+              SELECT
+              HQ_OFFICE_CD,
+              STORE_CD,
+              STORE_NM,
+              COUNT(*) AS TOT_CNT,
+              SUM(TOT_SALE_AMT) AS TOT_AMT,
+              SUM(CASE WHEN MEMBR_NO IS NOT NULL THEN 1 ELSE 0 END) AS TOT_MEM_CNT,
+              SUM(CASE WHEN MEMBR_NO IS NOT NULL THEN TOT_SALE_AMT ELSE 0 END) AS TOT_MEM_AMT
+              FROM (
+                    SELECT
+                    tssh.HQ_OFFICE_CD,
+                    tssh.STORE_CD,
+                    (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssh.STORE_CD AND HQ_OFFICE_CD = tssh.HQ_OFFICE_CD) AS STORE_NM,
+                    tssh.TOT_SALE_AMT,
+                    tsshm.MEMBR_NO
+                    FROM TB_SL_SALE_HDR tssh,
+                    TB_SL_SALE_HDR_MEMBR tsshm
+                    WHERE 1=1
+                    AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        <![CDATA[
+                            AND tssh.STORE_CD = #{storeCd}
+                        ]]>
+                    </if>
+                    AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tsshm.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+                    AND tsshm.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+                    AND tsshm.STORE_CD (+)= tssh.STORE_CD
+                    AND tsshm.SALE_DATE (+)= tssh.SALE_DATE
+                    AND tsshm.POS_NO (+)= tssh.POS_NO
+                    AND tsshm.BILL_NO (+)= tssh.BILL_NO
+              )
+              GROUP BY HQ_OFFICE_CD, STORE_CD, STORE_NM
+              )
+        GROUP BY HQ_OFFICE_CD, STORE_CD, STORE_NM, TOT_CNT, TOT_AMT, TOT_MEM_CNT, TOT_MEM_AMT
+        ORDER BY STORE_CD
+    </select>
+
+</mapper>

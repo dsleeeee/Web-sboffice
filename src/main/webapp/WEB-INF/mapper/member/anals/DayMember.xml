@@ -14,7 +14,7 @@
     <!-- 일자별회원 구매내역-->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_HDR_PAY
-        COMMENTS : [매출]헤더 와 [매출]헤더_회원 조회, [매출]헤더_결제
+        COMMENTS : [매출]헤더 와 [매출]헤더_회원, [매출]헤더_결제
     -->
     <select id="getDayMembrList"  parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrList */
