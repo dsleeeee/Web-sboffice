@@ -49,7 +49,6 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
   // 비밀번호 변경여부
   $scope.pwdChgFg = false;
 
-
   // 사원정보
   $scope.systemEmpRegistInfo;
   $scope.setSystemEmpRegistInfo = function(emp){
@@ -74,10 +73,25 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.systemEmpRegistInfo.adminFg    = 'A';
       $scope.newEmpYn                       = true;
 
+      // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
+      // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
+      if(orgnFg === "AGENCY"){
+        $("#_agencyCd").val(orgnCd);
+        $("#_agencyNm").val(orgnNm);
+        if(pAgencyCd !== "00000"){
+          $scope.adminFgCombo.selectedValue = "P";
+          $scope.adminFgCombo.isReadOnly= true;
+        }
+      }
+
     } else {
 
       $scope.getSystemEmpList();
       $scope.newEmpYn = false;
+
+      if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
+        $scope.adminFgCombo.isReadOnly= true;
+      }
     }
 
     // $scope.adminFgCombo.isReadOnly= !$scope.newEmpYn;
@@ -143,19 +157,20 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
   // 대리점 조회
   $scope.searchAgency = function(){
+    if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+      // $scope.agencyLayer.show();
+      $scope.agencyLayer.show(true, function (s) {
+        var agencyScope = agrid.getScope('searchAgencyCtrl');
+        // console.log('agencyResult ', agencyScope.getAgency())
 
-    // $scope.agencyLayer.show();
-    $scope.agencyLayer.show(true, function(s){
-      var agencyScope = agrid.getScope('searchAgencyCtrl');
-      // console.log('agencyResult ', agencyScope.getAgency())
-
-      $scope.$apply(function() {
-        if( !$.isEmptyObject(agencyScope.getAgency())  ){
-          $scope.systemEmpRegistInfo.agencyCd = agencyScope.getAgency().agencyCd;
-          $scope.systemEmpRegistInfo.agencyNm = agencyScope.getAgency().agencyNm;
-        }
+        $scope.$apply(function () {
+          if (!$.isEmptyObject(agencyScope.getAgency())) {
+            $scope.systemEmpRegistInfo.agencyCd = agencyScope.getAgency().agencyCd;
+            $scope.systemEmpRegistInfo.agencyNm = agencyScope.getAgency().agencyNm;
+          }
+        });
       });
-    });
+    }
   };
 
   // 신규등록

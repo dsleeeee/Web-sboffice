@@ -52,6 +52,11 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
             virtualLoginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
 
+        if("A".equals(virtualLoginVO.getOrgnFg())) { //총판권한으로 해당 총판코드로만 조회
+            virtualLoginVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+            virtualLoginVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+        }
+
         return virtualLoginMapper.getVirtualLoginList(virtualLoginVO);
     }
 

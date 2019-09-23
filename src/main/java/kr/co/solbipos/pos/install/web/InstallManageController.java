@@ -83,7 +83,9 @@ public class InstallManageController {
     public Result getInstallRequestList(InstallVO installVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = installManageService.getInstallRequestList(installVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = installManageService.getInstallRequestList(installVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, installVO);
     }

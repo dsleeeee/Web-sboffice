@@ -127,6 +127,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.sysStatFgCombo.isReadOnly    = false;
     $scope.clsFgCombo.isReadOnly        = false;
     $scope.readOnlyStatus               = false;
+
+    // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
+    // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
+    if(orgnFg === "AGENCY"){
+      $("#agencyCd").val(orgnCd);
+      $("#agencyNm").val(orgnNm);
+    }
   };
 
   /*********************************************************
@@ -448,20 +455,22 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
    * 대리점 조회
    * *******************************************************/
   $scope.searchAgency = function(){
-    var popup = $scope.agencyLayer;
+    if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+      var popup = $scope.agencyLayer;
 
-    // 팝업 닫을때
-    popup.show(true, function (s) {
-      var agencyScope = agrid.getScope('searchAgencyCtrl');
-      agencyScope.$apply(function(){
-        agencyScope._gridDataInit();
+      // 팝업 닫을때
+      popup.show(true, function (s) {
+        var agencyScope = agrid.getScope('searchAgencyCtrl');
+        agencyScope.$apply(function () {
+          agencyScope._gridDataInit();
 
-        if( !$.isEmptyObject(agencyScope.getAgency())  ){
-          $scope.store.agencyCd = agencyScope.getAgency().agencyCd;
-          $scope.store.agencyNm = agencyScope.getAgency().agencyNm;
-        }
+          if (!$.isEmptyObject(agencyScope.getAgency())) {
+            $scope.store.agencyCd = agencyScope.getAgency().agencyCd;
+            $scope.store.agencyNm = agencyScope.getAgency().agencyNm;
+          }
+        });
       });
-    });
+    }
   };
 
   /*********************************************************

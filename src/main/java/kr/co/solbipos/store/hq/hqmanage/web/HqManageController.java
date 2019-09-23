@@ -89,7 +89,9 @@ public class HqManageController {
     public Result list(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.list(hqManage);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.list(hqManage, sessionInfoVO);
 
         return returnListJson(Status.OK, list, hqManage);
     }

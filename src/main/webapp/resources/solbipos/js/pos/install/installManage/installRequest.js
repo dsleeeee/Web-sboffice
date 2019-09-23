@@ -22,10 +22,19 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("srchUseYnFg", instFgData);
+  $scope._setComboData("srchInstFg", instFgData);
   $scope._setComboData("reasonCombo", reasonData);
 
   $scope.request;
+
+  // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
+  // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
+  if(orgnFg === "AGENCY"){
+      $("#pSrchAgencyCd").val(orgnCd);
+      $("#pSrchAgencyNm").val(orgnNm);
+      $("#agencyCd").val(orgnCd);
+      $("#agencyNm").val(orgnNm);
+  }
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -42,6 +51,10 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
   // 포스목록 조회
   $scope.getPosList = function(){
     var params = {};
+
+    params.agencyNm = $("#pSrchAgencyNm").val();
+    params.agencyCd = $("#pSrchAgencyCd").val();
+
     // console.log('$scope._currentPageIndex : '+ $scope._currentPageIndex);
     $scope._inquiryMain("/pos/install/installManage/installManage/getPosList.sb", params, function() {
       console.log('search complete');
@@ -114,27 +127,29 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 대리점 조회
   $scope.searchAgency = function(val){
-    $scope.agencyLayer.show(true, function(s){
-      var agencyScope = agrid.getScope('searchAgencyCtrl');
-      console.log('agencyResult ', agencyScope.getAgency());
+      if(orgnFg === "MASTER" || pAgencyCd === "00000"){
+          $scope.agencyLayer.show(true, function(s){
+              var agencyScope = agrid.getScope('searchAgencyCtrl');
+              console.log('agencyResult ', agencyScope.getAgency());
 
-      $scope.$apply(function() {
-        if( !$.isEmptyObject(agencyScope.getAgency())  ){
-          if(val === '1') {
-            $("#pSrchAgencyCd").val(agencyScope.getAgency().agencyCd);
-            $("#pSrchAgencyNm").val(agencyScope.getAgency().agencyNm);
-          } else {
-            $("#agencyCd").val(agencyScope.getAgency().agencyCd);
-            $("#agencyNm").val(agencyScope.getAgency().agencyNm);
-          }
+              $scope.$apply(function() {
+                  if( !$.isEmptyObject(agencyScope.getAgency())  ){
+                      if(val === '1') {
+                          $("#pSrchAgencyCd").val(agencyScope.getAgency().agencyCd);
+                          $("#pSrchAgencyNm").val(agencyScope.getAgency().agencyNm);
+                      } else {
+                          $("#agencyCd").val(agencyScope.getAgency().agencyCd);
+                          $("#agencyNm").val(agencyScope.getAgency().agencyNm);
+                      }
 
-          // $scope.request.agencyCd = agencyScope.getAgency().agencyCd;
-          // $scope.request.agencyNm = agencyScope.getAgency().agencyNm;
-          // $("#agencyCd").val(agencyScope.getAgency().agencyCd);
-          // $("#agencyNm").val(agencyScope.getAgency().agencyNm);
-        }
-      });
-    });
+                      // $scope.request.agencyCd = agencyScope.getAgency().agencyCd;
+                      // $scope.request.agencyNm = agencyScope.getAgency().agencyNm;
+                      // $("#agencyCd").val(agencyScope.getAgency().agencyCd);
+                      // $("#agencyNm").val(agencyScope.getAgency().agencyNm);
+                  }
+              });
+          });
+      }
   };
 
   // 화면 ready 된 후 설정

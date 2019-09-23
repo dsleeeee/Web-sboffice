@@ -131,4 +131,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmpDetail.js?ver=20181121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmpDetail.js?ver=20181121.02" charset="utf-8"></script>

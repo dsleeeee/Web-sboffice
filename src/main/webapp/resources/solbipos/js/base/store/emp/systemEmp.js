@@ -35,6 +35,10 @@ app.controller('systemEmpCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.selectedSystemEmp;
 
+  // 등록일자 셋팅
+  $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
+  $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", gvEndDate);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -60,13 +64,17 @@ app.controller('systemEmpCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         if( col.binding === "empNo" || col.binding === "empNm") {
           // 상세정보 팝업
-          $scope.systemEmpDetailLayer.show(true);
+          //$scope.systemEmpDetailLayer.show(true);
+            $scope.systemEmpDetailLayer.show(true, function(){
+            var scope = agrid.getScope('hqSystemDetailCtrl');
+            $scope.getSystemEmpList();
+          });
         }
       }
     });
     // 전체기간 체크박스 선택에 따른 날짜선택 초기화
-    $scope.startDateCombo.isReadOnly = $scope.isChecked;
-    $scope.endDateCombo.isReadOnly   = $scope.isChecked;
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
   // _broadcast
@@ -78,6 +86,16 @@ app.controller('systemEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   // 본사사원정보관리 그리드 조회
   $scope.getSystemEmpList = function(){
     var params = {};
+
+    // 등록일자 '전체기간' 선택에 따른 params
+    if(!$scope.isChecked){
+        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
+
+    params.agencyCd = $("#srchAgencyCd").val();
+    params.agencyNm = $("#srchAgencyNm").val();
+
     $scope._inquiryMain("/base/store/emp/system/list.sb", params, function() {});
   };
 
@@ -91,8 +109,8 @@ app.controller('systemEmpCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
-    $scope.startDateCombo.isReadOnly = $scope.isChecked;
-    $scope.endDateCombo.isReadOnly = $scope.isChecked;
+     $scope.srchStartDate.isReadOnly = $scope.isChecked;
+     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
   // 화면 ready 된 후 설정

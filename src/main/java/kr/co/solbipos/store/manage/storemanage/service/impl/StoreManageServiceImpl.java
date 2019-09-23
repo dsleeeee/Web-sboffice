@@ -8,6 +8,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
@@ -76,7 +77,17 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO) {
+    public List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.getStoreList(storeManageVO);
     }
 

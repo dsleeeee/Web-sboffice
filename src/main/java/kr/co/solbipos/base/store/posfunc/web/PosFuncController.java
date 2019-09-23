@@ -112,7 +112,7 @@ public class PosFuncController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         // 매장 목록 조회
-        List<DefaultMap<String>> list = storeService.getStoreList(storeManageVO);
+        List<DefaultMap<String>> list = storeService.getStoreList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, storeManageVO);
     }

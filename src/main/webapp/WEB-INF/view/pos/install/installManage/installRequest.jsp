@@ -21,34 +21,34 @@
           <tr>
             <%-- 본사코드 --%>
             <th><s:message code="instl.hqOfficeCd"/></th>
-            <td><input type="text" id="hqOfficeCd" class="sb-input w100" ng-model="request.hqOfficeCd"/></td>
+            <td><input type="text" id="hqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd"/></td>
             <%-- 본사명 --%>
             <th><s:message code="instl.hqOfficeNm"/></th>
-            <td><input type="text" id="hqOfficeNm" class="sb-input w100" ng-model="request.hqOfficeNm"/></td>
+            <td><input type="text" id="hqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/></td>
           </tr>
           <tr>
             <%-- 매장코드 --%>
             <th><s:message code="instl.storeCd"/></th>
-            <td><input type="text" id="storeCd" class="sb-input w100" ng-model="request.storeCd"/></td>
+            <td><input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd"/></td>
             <%-- 매장명 --%>
             <th><s:message code="instl.storeNm"/></th>
-            <td><input type="text" id="storeNm" class="sb-input w100" ng-model="request.storeNm"/></td>
+            <td><input type="text" id="storeNm" class="sb-input w100" ng-model="storeNm"/></td>
           </tr>
           <tr>
             <%-- 대리점 --%>
             <th><s:message code="instl.agency"/></th>
             <td>
-              <input type="text" id="pSrchAgencyNm" value="선택" class="sb-input w100" ng-model="request.agencyNm" ng-readonly="true" ng-click="searchAgency('1')"/>
-              <input type="text" id="pSrchAgencyCd" class="sb-input w100" ng-model="request.agencyCd" ng-hide="true"/>
+              <input type="text" id="pSrchAgencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency('1')"/>
+              <input type="text" id="pSrchAgencyCd" ng-hide="true"/>
             </td>
             <%-- 설치구분 --%>
             <th><s:message code="instl.instFg"/></th>
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchUseYnFg"
-                        ng-model="request.useYnFg"
-                        items-source="_getComboData('srchUseYnFg')"
+                        id="srchInstFg"
+                        ng-model="instFg"
+                        items-source="_getComboData('srchInstFg')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
@@ -169,5 +169,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302" charset="utf-8"></script>
 

@@ -24,9 +24,9 @@
         <tbody>
         <tr>
           <th><s:message code="application.agency.search.agencyCd"/></th>
-          <td><input type="text" ng-model="agencyCd" maxlength="5" /></td>
-          <th><s:message code="application.agency.search.agencyCd"/></th>
-          <td><input type="text" ng-model="agencyNm" maxlength="16" /></td>
+          <td><input type="text" id="SsrchAgencyCd" ng-model="agencyCd" maxlength="5" /></td>
+          <th><s:message code="application.agency.search.agencyNm"/></th>
+          <td><input type="text" id="SsrchAgencyNm" ng-model="agencyNm" maxlength="16" /></td>
         </tr>
         </tbody>
       </table>
@@ -63,4 +63,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchAgency.js?ver=2018102301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchAgency.js?ver=2018102301.03" charset="utf-8"></script>

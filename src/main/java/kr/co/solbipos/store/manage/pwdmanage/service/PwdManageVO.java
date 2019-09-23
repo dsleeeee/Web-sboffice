@@ -26,6 +26,8 @@ public class PwdManageVO extends PageVO {
     private static final long serialVersionUID = 6990091657881306739L;
     /** 대리점코드 */
     private String agencyCd;
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 본사명 */
@@ -81,6 +83,14 @@ public class PwdManageVO extends PageVO {
      */
     public void setAgencyCd(String agencyCd) {
         this.agencyCd = agencyCd;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
     }
 
     /**

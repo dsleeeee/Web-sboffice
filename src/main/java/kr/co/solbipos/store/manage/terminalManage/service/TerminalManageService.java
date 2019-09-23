@@ -30,7 +30,7 @@ public interface TerminalManageService {
     List<DefaultMap<String>> getVendorList();
 
     /** 매장 조회 */
-    List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 포스/터미널 설정 환경변수 조회 */
     String getTerminalEnv(StoreEnvVO storeEnvVO);

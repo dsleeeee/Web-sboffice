@@ -448,7 +448,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorTermnlNo.length > 20) {
+      if(params[i].vendorTermnlNo.length > 50) {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
         return false;
       }
@@ -655,7 +655,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if(params[i].vendorTermnlNo.length > 20) {
+      if(params[i].vendorTermnlNo.length > 50) {
         $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
         return false;
       }

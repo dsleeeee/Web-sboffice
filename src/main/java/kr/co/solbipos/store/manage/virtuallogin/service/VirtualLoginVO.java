@@ -61,6 +61,8 @@ public class VirtualLoginVO extends PageVO {
     private String vUserId;
     /** 세션구분 */
     private String orgnFg;
+    /** 총판의 부모 총판 코드 */
+    private String pAgencyCd;
 
 
     /**
@@ -302,5 +304,13 @@ public class VirtualLoginVO extends PageVO {
      */
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
     }
 }

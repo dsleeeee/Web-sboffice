@@ -5,13 +5,17 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div class="subCon" ng-controller="systemEmpCtrl">
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="getSystemEmpList()">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('systemEmpCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -31,6 +35,7 @@
           <div class="sb-select">
             <span class="txtIn w110px">
               <wj-input-date
+                      id="srchTimeStartDate"
                       value="startDate"
                       ng-model="startDate"
                       control="startDateCombo"
@@ -42,6 +47,7 @@
             <span class="rg">~</span>
             <span class="txtIn w110px">
               <wj-input-date
+                      id="srchTimeEndDate"
                       value="endDate"
                       ng-model="endDate"
                       control="endDateCombo"
@@ -131,6 +137,22 @@
             </wj-combo-box>
           </div>
         </td>
+        <th></th>
+        <td></td>
+      </tr>
+      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+        <%-- 관리업체 코드 --%>
+        <th><s:message code="systemEmp.agencyCd" /></th>
+        <td>
+          <input type="text" id="srchAgencyCd" name="srchAgencyCd" ng-model="agencyCd" class="sb-input w100" maxlength="5" />
+        </td>
+        <%-- 관리업체 명 --%>
+        <th><s:message code="systemEmp.agencyNm" /></th>
+        <td>
+          <input type="text" id="srchAgencyNm" name="srchAgencyNm" ng-model="agencyNm" class="sb-input w100" maxlength="15" />
+        </td>
+      </tr>
+      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
         <%-- 관리자 구분 --%>
         <th><s:message code="systemEmp.adminFg" /></th>
         <td>
@@ -145,19 +167,9 @@
                     initialized="_initComboBox(s)">
             </wj-combo-box>
           </div>
-       </td>
-      </tr>
-      <tr>
-        <%-- 관리업체 코드 --%>
-        <th><s:message code="systemEmp.agencyCd" /></th>
-        <td>
-          <input type="text" id="srchAgencyCd" name="srchAgencyCd" ng-model="agencyCd" class="sb-input w100" maxlength="5" />
         </td>
-        <%-- 관리업체 명 --%>
-        <th><s:message code="systemEmp.agencyNm" /></th>
-        <td>
-          <input type="text" id="srchAgencyNm" name="srchAgencyNm" ng-model="agencyNm" class="sb-input w100" maxlength="15" />
-        </td>
+        <th></th>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -203,6 +215,7 @@
         <wj-flex-grid-column header="<s:message code="systemEmp.empNo"/>" binding="empNo" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.empNm"/>" binding="empNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.userId"/>" binding="userId" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.useYn"/>" binding="useYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -228,9 +241,13 @@
   var webUseYn     = ${ccu.getCommCode("067")};
   var smsRecvYn    = ${ccu.getCommCode("072")};
   var adminFgData  = ${ccu.getCommCode("097")};
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var orgnNm = "${orgnNm}";
+  var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmp.js?ver=20181121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmp.js?ver=20181121.08" charset="utf-8"></script>
 
 <%-- 사원상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/systemEmpDetail.jsp">

@@ -6,6 +6,9 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div class="subCon" ng-controller="installReqListCtrl">
   <div class="searchBar flddUnfld">
@@ -34,13 +37,13 @@
         <th><s:message code="instl.storeNm" /></th>
         <td><input type="text" id="srchStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/></td>
       </tr>
-      <tr>
-        <%-- 대리점코드 --%>
-        <th><s:message code="instl.agencyCd" /></th>
-        <td><input type="text" id="srchAgencyCd" class="sb-input w100" maxlength="7" ng-model="agencyCd"/></td>
-        <%-- 대리점명 --%>
-        <th><s:message code="instl.agencyNm" /></th>
-        <td><input type="text" id="srchAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/></td>
+      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+          <%-- 대리점코드 --%>
+          <th><s:message code="instl.agencyCd" /></th>
+          <td><input type="text" id="srchAgencyCd" class="sb-input w100" maxlength="7" ng-model="agencyCd"/></td>
+          <%-- 대리점명 --%>
+          <th><s:message code="instl.agencyNm" /></th>
+          <td><input type="text" id="srchAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/></td>
       </tr>
       <tr>
         <%-- 설치구분 --%>
@@ -50,7 +53,7 @@
             <wj-combo-box
                     id="srchInstFg"
                     ng-model="instFg"
-                    items-source="_getComboData('instFg')"
+                    items-source="_getComboData('srchInstFg')"
                     display-member-path="name"
                     selected-value-path="value"
                     is-editable="false"
@@ -129,8 +132,12 @@
   ];
   var sysStatFg = ${ccu.getCommCodeExcpAll("005")};
   var reasonData = ${ccu.getCommCodeExcpAll("102")};
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var orgnNm = "${orgnNm}";
+  var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequestList.js?ver=2019010201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequestList.js?ver=2019010201.02" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/pos/install/installManage/installRequest.jsp">

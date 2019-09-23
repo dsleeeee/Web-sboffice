@@ -3,6 +3,7 @@ package kr.co.solbipos.pos.install.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.pos.install.enums.InstallFg;
 import kr.co.solbipos.pos.install.service.InstallManageService;
 import kr.co.solbipos.pos.install.service.InstallVO;
@@ -44,7 +45,17 @@ public class InstallManageServiceImpl implements InstallManageService {
 
     /** 설치요청 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getInstallRequestList(InstallVO installVO) {
+    public List<DefaultMap<String>> getInstallRequestList(InstallVO installVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        installVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        installVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            installVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return installManageMapper.getInstallRequestList(installVO);
     }
 

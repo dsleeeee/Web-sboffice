@@ -150,6 +150,9 @@ public class SessionInfoVO extends CmmVO {
     /** POS 로그인을 위한 하드웨어인증키 */
     private String hwAuthKey;
 
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
+
 
 
     /**
@@ -603,4 +606,11 @@ public class SessionInfoVO extends CmmVO {
      */
     public void setHwAuthKey(String hwAuthKey) { this.hwAuthKey = hwAuthKey; }
 
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
+    }
 }

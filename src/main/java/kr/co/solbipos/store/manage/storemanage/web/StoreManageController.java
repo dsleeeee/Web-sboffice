@@ -92,7 +92,9 @@ public class StoreManageController {
     public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getStoreList(storeManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, storeManageVO);
     }

@@ -114,6 +114,7 @@
     <typeAlias alias="confgXmlVO" type="kr.co.solbipos.store.manage.storemanage.service.ConfgXmlVO"/>
     <typeAlias alias="storeFnkeyVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreFnkeyVO"/>
     <typeAlias alias="posFnkeyVO" type="kr.co.solbipos.store.manage.storemanage.service.PosFnkeyVO"/>
+    <typeAlias alias="storeStatusVO" type="kr.co.solbipos.store.manage.status.service.StoreStatusVO"/>
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>

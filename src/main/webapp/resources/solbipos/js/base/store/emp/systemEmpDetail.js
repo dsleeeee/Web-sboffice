@@ -45,7 +45,11 @@ app.controller('systemEmpDetailCtrl', ['$scope', '$http', function ($scope, $htt
 
   // 수정버튼 클릭
   $scope.modify = function(){
-    $scope.systemEmpRegistLayer.show(true);
+      //$scope.systemEmpRegistLayer.show(true);
+      $scope.systemEmpRegistLayer.show(true, function(){
+          var scope = agrid.getScope('systemEmpRegistCtrl');
+          $scope.getSystemEmpList($scope.selectedSystemEmp);
+      });
   };
 
   // 닫기버튼 클릭

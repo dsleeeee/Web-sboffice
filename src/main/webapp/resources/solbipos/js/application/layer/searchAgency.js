@@ -66,8 +66,8 @@ app.controller('searchAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
   $scope.searchAgency = function(){
 
     var params = {};
-    params.agencyCd = $("#srchAgencyCd").val();
-    params.agencyNm = $("#srchAgencyNm").val();
+    params.agencyCd = $("#SsrchAgencyCd").val();
+    params.agencyNm = $("#SsrchAgencyNm").val();
 
     console.log(">> searchAgency");
 

@@ -1,6 +1,11 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <%--
 * id 규칙
@@ -316,6 +321,10 @@
   var rAgency       = wcombo.genCommonBox("#rAgency", agencyList);
   var rClsFg        = wcombo.genCommonBox("#rClsFg", clsFg);
 
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var pAgencyCd = "${pAgencyCd}";
+
 <%-- ============================================= 신규등록, 수정 폼 관련 =========================================== --%>
 
   <%-- 본사신규등록 팝업 열기 --%>
@@ -335,6 +344,13 @@
 
     $("#rHqOfficeTxt").hide();
     $("#rHqOfficeRadio").show();
+
+    if(orgnFg === "AGENCY"){
+      rAgency.selectedValue = orgnCd;
+      if(pAgencyCd !== "00000"){
+        rAgency.isReadOnly = true;
+      }
+    }
   }
 
   <%-- 상세정보 팝업 열기 --%>
@@ -353,6 +369,10 @@
     $("#btnReg").hide();
     $("#btnSave").hide();
     $("#btnEdit").show();
+
+    if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
+      rAgency.isReadOnly= true;
+    }
   }
 
   function getDtlData(items) {

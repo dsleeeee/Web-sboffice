@@ -23,6 +23,9 @@ import kr.co.solbipos.base.store.emp.system.service.enums.AdminFg;
  */
 public class SystemEmpVO extends PageVO {
 
+    /** 소속구분 */
+    private String orgnFg;
+
     /** 본사사업장코드 */
     private String hqOfficeCd;
 
@@ -94,6 +97,19 @@ public class SystemEmpVO extends PageVO {
 
     /** 전체기간 체크 */
     private boolean chkDt;
+
+    /** 총판의 부모 총판 코드 */
+    private String pAgencyCd;
+
+
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     /**
      * @return the hqOfficeCd
@@ -454,5 +470,13 @@ public class SystemEmpVO extends PageVO {
      */
     public void setChkDt(boolean chkDt) {
         this.chkDt = chkDt;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
     }
 }

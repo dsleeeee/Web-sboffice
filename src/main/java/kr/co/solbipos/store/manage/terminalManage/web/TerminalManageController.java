@@ -119,7 +119,9 @@ public class TerminalManageController {
     public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> storeList = service.getStoreList(storeManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> storeList = service.getStoreList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, storeList, storeManageVO);
     }

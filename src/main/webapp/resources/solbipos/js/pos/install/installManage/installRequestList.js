@@ -26,6 +26,7 @@ app.controller('installReqListCtrl', ['$scope', '$http', function ($scope, $http
   // 조회조건 콤보박스 데이터 Set
   // $scope._setComboData("clsFg", clsFg);
   // $scope._setComboData("sysStatFg", sysStatFg);
+  $scope._setComboData("srchInstFg", instFgData);
 
   // 선택 포스
   $scope.selectedPos;

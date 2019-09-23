@@ -9,6 +9,8 @@ import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.store.emp.system.service.enums.AdminFg;
 import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 import kr.co.solbipos.store.hq.brand.enums.TargtFg;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -56,7 +58,17 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 본사 목록 조회 */
     @Override
-    public List<DefaultMap<String>> list(HqManageVO hqManage) {
+    public List<DefaultMap<String>> list(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        hqManage.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        hqManage.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.getHqOfficeList(hqManage);
     }
 

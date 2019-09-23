@@ -25,7 +25,7 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 public interface HqManageService {
 
     /** 본사 목록 조회 */
-    List<DefaultMap<String>> list(HqManageVO hqManave);
+    List<DefaultMap<String>> list(HqManageVO hqManave, SessionInfoVO sessionInfoVO);
 
     /** 본사 상세정보 조회 */
     DefaultMap<String> dtlInfo(HqManageVO hqManage);

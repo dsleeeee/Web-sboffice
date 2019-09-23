@@ -22,6 +22,16 @@ public class StoreManageVO extends PageVO {
 
     private static final long serialVersionUID = 74163511582334938L;
 
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
     /** 매장코드 */
     private String storeCd;
     /** 매장명 */
@@ -108,6 +118,22 @@ public class StoreManageVO extends PageVO {
     /** 여러 포스값 */
     private String[] arrPosNo;
 
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
+    }
 
     /**
      * @return the storeCd

@@ -6,6 +6,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpService;
 import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
@@ -58,6 +59,17 @@ public class SystemEmpServiceImpl implements SystemEmpService {
 
     /** 사원 리스트 조회 */
     public List<DefaultMap<String>> getSystemEmpList(SystemEmpVO systemEmpVO, SessionInfoVO sessionInfoVO){
+
+        // 소속구분, 총판의 부모총판 코드
+        systemEmpVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        systemEmpVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 대리점인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            systemEmpVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+            systemEmpVO.setAdminFg(AdminFg.DISTRIBUTORS);
+        }
+
         return systemEmpMapper.getSystemEmpList(systemEmpVO);
     }
 

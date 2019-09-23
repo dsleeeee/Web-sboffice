@@ -61,9 +61,10 @@ public class PwdManageServiceImpl implements PwdManageService {
         // 접속한 사용자의 소속구분
         OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
         pwdManageVO.setOrgnFg(orgnFg);
+        pwdManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
         // 소속 코드
-        if(orgnFg == OrgnFg.AGENCY) {
+        if(orgnFg == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
             pwdManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         } else if(orgnFg == OrgnFg.HQ) {
             pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

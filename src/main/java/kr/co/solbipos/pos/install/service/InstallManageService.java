@@ -23,7 +23,7 @@ import java.util.List;
 public interface InstallManageService {
 
     /** 설치요청 목록 조회 */
-    List<DefaultMap<String>> getInstallRequestList(InstallVO installVO);
+    List<DefaultMap<String>> getInstallRequestList(InstallVO installVO, SessionInfoVO sessionInfoVO);
 
     /** 포스 목록 조회 */
     List<DefaultMap<String>> getPosList(InstallVO installVO);

@@ -37,7 +37,8 @@
                     the.WEB_USE_YN,
                     the.MP_NO,
                     '' AS EMAIL_ADDR,
-                    '' AS ADDR
+                    '' AS ADDR,
+                    tho.AGENCY_CD
                 FROM
                     TB_HQ_EMPLOYEE the
                 INNER JOIN TB_HQ_OFFICE tho ON
@@ -47,6 +48,9 @@
                     the.SERVICE_FG = tcn.NMCODE_CD
                 AND tcn.NMCODE_GRP_CD = '008'
                 <where>
+                    <if test='orgnFg != null and orgnFg.toString() == "AGENCY" and pAgencyCd != "00000"'>
+                        AND tho.AGENCY_CD = #{agencyCd}
+                    </if>
                     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                         AND the.HQ_OFFICE_CD = #{hqOfficeCd}
                     </if>
@@ -77,7 +81,8 @@
                     tme.WEB_USE_YN,
                     tme.MP_NO,
                     tme.EMAIL_ADDR,
-                    tme.ADDR || tme.ADDR_DTL AS ADDR
+                    tme.ADDR || tme.ADDR_DTL AS ADDR,
+                    tms.AGENCY_CD
                 FROM
                   TB_MS_EMPLOYEE tme
                 INNER JOIN TB_MS_STORE tms ON
@@ -89,6 +94,9 @@
                     AND tcn.NMCODE_GRP_CD = '008'
                 WHERE
                   1=1
+                <if test='orgnFg != null and orgnFg.toString() == "AGENCY" and pAgencyCd != "00000"'>
+                    AND tms.AGENCY_CD = #{agencyCd}
+                </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     AND tho.HQ_OFFICE_CD = #{hqOfficeCd}
                 </if>

@@ -51,7 +51,7 @@
         FROM TB_CM_AGENCY
        WHERE P_AGENCY_CD IS NOT NULL
         <if test='agencyCd != null and agencyCd != ""'>
-         AND AGENCY_CD = #{agencyCd}
+         AND AGENCY_CD LIKE '%'||#{agencyCd}||'%'
         </if>
         <if test='agencyNm != null and agencyNm != ""'>
          AND AGENCY_NM LIKE '%'||#{agencyNm}||'%'

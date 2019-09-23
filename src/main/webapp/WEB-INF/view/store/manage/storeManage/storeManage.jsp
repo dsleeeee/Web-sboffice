@@ -8,6 +8,9 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div class="subCon" ng-controller="storeManageCtrl">
   <div class="searchBar flddUnfld">
@@ -146,6 +149,10 @@
 var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
+var orgnFg = "${orgnFg}";
+var orgnCd = "${orgnCd}";
+var orgnNm = "${orgnNm}";
+var pAgencyCd = "${pAgencyCd}";
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=2018102301" charset="utf-8"></script>
