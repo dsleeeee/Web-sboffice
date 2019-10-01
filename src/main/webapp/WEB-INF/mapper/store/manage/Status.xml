@@ -1,6 +1,338 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    Status.xml
+    매장현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.08.13     최초작성
+-->
 <mapper namespace="kr.co.solbipos.store.manage.status.service.impl.StoreStatusMapper">
+
+    <!-- 매장탭 - 매장정보조회-->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_STORE_ENVST
+        COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]환경설정
+    -->
+    <select id="getStatusStoreList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO,
+        tms.OWNER_NM,
+        tms.SYS_STAT_FG,
+        tms.CLS_FG,
+        (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tms.STORE_CD) AS POS_CNT,
+        tms.AGENCY_CD,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
+        (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tms.VAN_CD AND VAN_FG = '01') AS VAN_NM,
+        (SELECT ENVST_VAL_NM FROM TB_CM_ENVST_DTL WHERE ENVST_VAL_CD = NVL(tmse.ENVST_VAL,'0') AND ENVST_CD = tmse.ENVST_CD AND USE_YN = tmse.USE_YN) AS ENVST_VAL_NM,
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE,
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms,
+        TB_HQ_OFFICE tho,
+        TB_MS_STORE_ENVST tmse
+        WHERE 1=1
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            <![CDATA[
+                AND tms.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+            ]]>
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            <![CDATA[
+                AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+            ]]>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                 AND tms.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+            ]]>
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            <![CDATA[
+                AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+            ]]>
+        </if>
+        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND tms.CLS_FG = #{clsFg}
+        AND tms.SYS_STAT_FG = #{sysStatFg}
+        <if test='agencyCd != null and agencyCd != ""'>
+            <![CDATA[
+                AND tms.AGENCY_CD = #{agencyCd}
+            ]]>
+        </if>
+        <if test='vanCd != null and vanCd != ""'>
+            <![CDATA[
+                AND tms.VAN_CD = #{vanCd}
+            ]]>
+        </if>
+        <if test='storeFg == 1'>
+            <![CDATA[
+                AND tho. HQ_OFFICE_CD = '00000'
+            ]]>
+        </if>
+        <if test='storeFg == 2'>
+            <![CDATA[
+                AND tho. HQ_OFFICE_CD != '00000'
+            ]]>
+        </if>
+        AND tms.STORE_CD = tmse.STORE_CD
+        AND tmse.ENVST_CD = '2028'
+        AND tmse.USE_YN = 'Y'
+        ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 메장탭 - 코너 상세조회-->
+    <!--
+        TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_CORNER_TERMNL
+        COMMENTS : [매장]코너 와 [매장]매장 정보, [매장]코너별_터미널관리
+    -->
+    <select id="getStatusStoreCornerList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusStoreCornerList */
+        SELECT
+        tmc.CORNR_NM,
+        tmct.VENDOR_TERMNL_NO,
+        --현금수수료율
+        --카드수수료율
+        --기타수수료율
+        tms.OWNER_NM,
+        (SUBSTR(tms.BIZ_NO, 1,3) || '-' || SUBSTR(tms.BIZ_NO, 4,2) || '-' || SUBSTR(tms.BIZ_NO, 6)) AS BIZ_NO,
+        --업태
+        --종목
+        tms.TEL_NO,
+        tmc.USE_YN
+        FROM TB_MS_CORNER tmc,
+        TB_MS_STORE tms,
+        TB_MS_CORNER_TERMNL tmct
+        WHERE 1=1
+        AND tms.STORE_CD = #{storeCd}
+        and tmc.STORE_CD (+)= tms.STORE_CD
+        AND tmct.STORE_CD (+)= tmc.STORE_CD
+        ORDER BY tmc.CORNR_CD
+    </select>
+
+    <!-- 관리업체탭 - 관리업체 조회-->
+    <!--
+        TABLE    : TB_CM_AGENCY, TB_MS_STORE
+        COMMENTS : [공통]대리점 정보 와 [매장]매장 정보
+    -->
+    <select id="getStatusAgencyList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusAgencyList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        AGENCY_CD,
+        AGENCY_NM,
+        COUNT(STORE_CD) AS STORE_CNT,
+        SUM(POS_CNT) AS TOT_POS_CNT,
+        CLS_FG,
+        SYS_STAT_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM (
+                SELECT
+                tca.AGENCY_CD,
+                tca.AGENCY_NM,
+                tms.STORE_CD,
+                (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tms.STORE_CD) AS POS_CNT,
+                tms.CLS_FG,
+                tms.SYS_STAT_FG
+                FROM TB_CM_AGENCY tca,
+                TB_MS_STORE tms
+                WHERE 1=1
+                <if test='agencyCd != null and agencyCd != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                    ]]>
+                </if>
+                <if test='agencyNm != null and agencyNm != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                     ]]>
+                </if>
+                AND tca.AGENCY_CD = tms.AGENCY_CD
+                <if test='agencyFg == 1'>
+                    <![CDATA[
+                         AND tca.P_AGENCY_CD = '00000'
+                     ]]>
+                </if>
+                <if test='agencyFg == 2'>
+                    <![CDATA[
+                          AND tca.P_AGENCY_CD != '00000'
+                     ]]>
+                </if>
+                AND tms.CLS_FG = #{clsFg}
+                AND tms.SYS_STAT_FG = #{sysStatFg}
+                )
+        GROUP BY AGENCY_CD, AGENCY_NM, CLS_FG, SYS_STAT_FG
+        ORDER BY AGENCY_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 관리업체탭 - 관리업체 상세조회-->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getStatusAgencyDetailList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusAgencyDetailList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.HQ_OFFICE_CD,
+        (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD) AS HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG,
+        tms.CLS_FG,
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tms.STORE_CD) AS POS_CNT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.AGENCY_CD =  #{agencyCd}
+        AND tms.CLS_FG = #{clsFg}
+        AND tms.SYS_STAT_FG = #{sysStatFg}
+        ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- VAN사탭 - VAN사 조회-->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY, TB_MS_STORE
+        COMMENTS : [공통]밴사 정보 와 [매장]매장 정보
+    -->
+    <select id="getStatusVanList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusVanList */
+        SELECT
+        VAN_CD,
+        VAN_NM,
+        COUNT(STORE_CD) AS STORE_CNT,
+        SYS_STAT_FG,
+        CLS_FG
+        FROM (
+              SELECT
+              tcvc.VAN_CD,
+              tcvc.VAN_NM,
+              tms.STORE_CD,
+              tms.SYS_STAT_FG,
+              tms.CLS_FG
+              FROM TB_CM_VAN_CMPNY tcvc,
+              TB_MS_STORE tms
+              WHERE 1=1
+              <if test='vanCd != null and vanCd != ""'>
+                  <![CDATA[
+                      AND tcvc.VAN_CD LIKE '%'|| #{vanCd} ||'%'
+                  ]]>
+              </if>
+              <if test='vanNm != null and vanNm != ""'>
+                  <![CDATA[
+                       AND tcvc.VAN_NM LIKE '%'|| #{vanNm} ||'%'
+                  ]]>
+              </if>
+              AND tcvc.VAN_CD = tms.VAN_CD
+              AND tms.CLS_FG = #{clsFg}
+              AND tms.SYS_STAT_FG = #{sysStatFg}
+              )
+        GROUP BY VAN_CD, VAN_NM, SYS_STAT_FG, CLS_FG
+        ORDER BY VAN_CD
+    </select>
+
+    <!-- VAN사탭 - VAN사 상세조회-->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getStatusVanDetailList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusVanDetailList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.HQ_OFFICE_CD,
+        (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD) AS HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG,
+        tms.CLS_FG,
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR WHERE HQ_OFFICE_CD = tms.HQ_OFFICE_CD AND STORE_CD = tms.STORE_CD), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tms.STORE_CD) AS POS_CNT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.VAN_CD = #{vanCd}
+        AND tms.CLS_FG = #{clsFg}
+        AND tms.SYS_STAT_FG = #{sysStatFg}
+        ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- POS설치현황탭 - POS설치현황 조회-->
+    <!--
+        TABLE    : TB_CM_INSTLL, TB_MS_STORE, TB_HQ_OFFICE
+        COMMENTS : 설치요청 와 [매장]매장 정보, [본사]본사 정보
+    -->
+    <select id="getStatusPosInstallList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+        /* StoreStatusMapper.getStatusPosInstallList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tci.STORE_CD,
+        tms.STORE_NM,
+        (SELECT COUNT(POS_NO) FROM TB_MS_POS WHERE STORE_CD = tci.STORE_CD) AS POS_CNT,
+        tci.INST_INS_DT,
+        tci.INST_FG,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tci.AGENCY_CD) AS INST_AGENCY_NM,
+        tci.INST_INS_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_CM_INSTLL tci,
+        TB_MS_STORE tms,
+        TB_HQ_OFFICE tho
+        WHERE 1=1
+        <if test='chkDt != true'>
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND tci.INST_INS_DT BETWEEN #{startDate} AND #{endDate}
+                ]]>
+            </if>
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            <![CDATA[
+                AND tho.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+            ]]>
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            <![CDATA[
+                AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+            ]]>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tms.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+            ]]>
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            <![CDATA[
+                AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+            ]]>
+        </if>
+        <if test='instFg != null and instFg != ""'>
+            <![CDATA[
+                AND tci.INST_FG = #{instFg}
+            ]]>
+        </if>
+        AND tci.STORE_CD = tms.STORE_CD
+        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        ORDER BY tms.HQ_OFFICE_CD, tci.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
 </mapper>
