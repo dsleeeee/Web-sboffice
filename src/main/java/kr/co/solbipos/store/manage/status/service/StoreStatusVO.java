@@ -122,4 +122,140 @@ public class StoreStatusVO extends PageVO {
     public String getChkDt() { return chkDt; }
 
     public void setChkDt(String chkDt) { this.chkDt = chkDt; }
+import kr.co.solbipos.application.common.service.PageVO;
+
+public class StoreStatusVO extends PageVO {
+
+    //private static final long serialVersionUID =
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
+    /** 관리업체 */
+    private String agencyNm;
+    /** 매장코드 */
+    private String storeCd;
+    /** 매장명 */
+    private String storeNm;
+    /** 사업자번호 */
+    private String bizNo;
+    /** 결제승인방식 */
+    private String payApprType;
+    /** 결제수단컬럼 */
+    private String payCol;
+    /** 결제수단 array */
+    private String arrPayCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+    /** 매출날짜 */
+    private String saleDate;
+    /** 포스번호 */
+    private String posNo;
+    /** 영수증번호 */
+    private String billNo;
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
+    }
+
+    public String getAgencyNm() {
+        return agencyNm;
+    }
+
+    public void setAgencyNm(String agencyNm) {
+        this.agencyNm = agencyNm;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getBizNo() {
+        return bizNo;
+    }
+
+    public void setBizNo(String bizNo) {
+        this.bizNo = bizNo;
+    }
+
+    public String getPayApprType() {
+        return payApprType;
+    }
+
+    public void setPayApprType(String payApprType) {
+        this.payApprType = payApprType;
+    }
+
+    public String getPayCol() {
+        return payCol;
+    }
+
+    public void setPayCol(String payCol) {
+        this.payCol = payCol;
+    }
+
+    public String[] getArrPayCol() {
+        return arrPayCol;
+    }
+
+    public void setArrPayCol(String[] arrPayCol) {
+        this.arrPayCol = arrPayCol;
+    }
+
+    public String getPivotPayCol() {
+        return pivotPayCol;
+    }
+
+    public void setPivotPayCol(String pivotPayCol) {
+        this.pivotPayCol = pivotPayCol;
+    }
+
+    public String getSaleDate() {
+        return saleDate;
+    }
+
+    public void setSaleDate(String saleDate) {
+        this.saleDate = saleDate;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
 }

@@ -1,27 +1,8 @@
 package kr.co.solbipos.store.manage.status.service.impl;
 
-import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.store.manage.status.service.StoreStatusVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-/**
- * @Class Name : StoreStatusMapper.java
- * @Description : 기초관리 > 매장정보관리 > 매장현황
- * @Modification Information
- * @
- * @  수정일      수정자              수정내용
- * @ ----------  ---------   -------------------------------
- * @ 2019.09.23  김설아      최초생성
- *
- * @author 솔비포스 개발본부 백엔드PT 김설아
- * @since 2019.09.23
- * @version 1.0
- *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
- */
 @Mapper
 @Repository
 public interface StoreStatusMapper {
@@ -46,4 +27,25 @@ public interface StoreStatusMapper {
 
     /** POS설치현황탭 - POS설치현황 조회*/
     List<DefaultMap<Object>> getStatusPosInstallList(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */
+    List<DefaultMap<String>> getStatusApprList(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 카드승인현황 조회 */
+    List<DefaultMap<String>> getCardAppr(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 현금승인현황 조회 */
+    List<DefaultMap<String>> getCashAppr(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 매출상세내역 */
+    DefaultMap<String> getSaleDtlInfo(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 매출정보_신용카드결제내역 */
+    List<DefaultMap<String>> getCardPayInfo(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 매출정보_현금결제내역 */
+    List<DefaultMap<String>> getCashPayInfo(StoreStatusVO storeStatusVO);
+
+    /** 매장현황 탭 - 관리매장 매출정보_상품내역 */
+    List<DefaultMap<String>> getSaleProductInfo(StoreStatusVO storeStatusVO);
 }

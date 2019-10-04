@@ -42,4 +42,19 @@ public interface StoreStatusService {
 
     /** POS설치현황탭 - POS설치현황 조회*/
     List<DefaultMap<Object>> getStatusPosInstallList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */
+    List<DefaultMap<String>> getStatusApprList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 >> 카드/현금승인현황 */
+    List<DefaultMap<String>> getCardOrCashApprList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 >> 매출상세내역 */
+    DefaultMap<String> getSaleDtlInfo(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 >> 매출정보_신용카드결제내역 */
+    List<DefaultMap<String>> getCardPayInfo(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장현황 탭 - 관리매장 승인내역 >> 매출정보_상품내역 */
+    List<DefaultMap<String>> getSaleProductInfo(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO);
 }

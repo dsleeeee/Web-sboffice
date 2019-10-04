@@ -3,17 +3,18 @@
  */
 var app = agrid.getApp();
 
-app.controller('storeStatusCtrl', ['$scope', function ($scope) {
+app.controller('statusCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
-        $("#statusStoreView").show();
+        $("#statusApprListView").show();
+        $("#statusStoreView").hide();
         $("#statusAgencyView").hide();
         $("#statusVanView").hide();
         $("#statusPosInstallView").hide();
-        $("#statusApprListView").hide();
+
     };
 
-
-    // 일별종합별 탭 보이기
+/*
+    // 매장 탭 보이기
     $scope.statusStoreShow = function () {
         $("#statusStoreTab").addClass("on");
         $("#statusAgencyTab").removeClass("on");
@@ -33,7 +34,7 @@ app.controller('storeStatusCtrl', ['$scope', function ($scope) {
     };
 
 
-    // 할인구분별 탭 보이기
+    // 관리업체 탭 보이기
     $scope.statusAgencyShow = function () {
         $("#statusStoreTab").removeClass("on");
         $("#statusAgencyTab").addClass("on");
@@ -53,7 +54,7 @@ app.controller('storeStatusCtrl', ['$scope', function ($scope) {
     };
 
 
-    // 과면세별 탭 보이기
+    // VAN사 탭 보이기
     $scope.statusVanShow = function () {
         $("#statusStoreTab").removeClass("on");
         $("#statusAgencyTab").removeClass("on");
@@ -73,7 +74,7 @@ app.controller('storeStatusCtrl', ['$scope', function ($scope) {
     };
 
 
-    // 시간대별 탭 보이기
+    // POS설치현황 탭 보이기
     $scope.statusPosInstallShow = function () {
         $("#statusStoreTab").removeClass("on");
         $("#statusAgencyTab").removeClass("on");
@@ -93,7 +94,7 @@ app.controller('storeStatusCtrl', ['$scope', function ($scope) {
     };
 
 
-    // 상품분류별 탭 보이기
+    // 관리매장 승인내역 탭 보이기
     $scope.statusApprListShow = function () {
         $("#statusStoreTab").removeClass("on");
         $("#statusAgencyTab").removeClass("on");
@@ -112,4 +113,5 @@ app.controller('storeStatusCtrl', ['$scope', function ($scope) {
         scope.flex.refresh();
     };
 
+*/
 }]);

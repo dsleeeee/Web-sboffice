@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
@@ -335,4 +335,348 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 관리매장 승인내역 목록 조회 -->
+    <!--
+        TABLE    : TB_LG_CARD_APPR, TB_LG_CASH_APPR, TB_MS_STORE
+        PARAM    : storeStatusVO
+        COMMENTS : 관리매장 승인내역 목록을 조회한다.
+    -->
+    <select id="getStatusApprList" parameterType="storeStatusVO" resultType="DefaultMap">
+      /* USE : StoreStatusMapper.getStatusApprList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+                tms.AGENCY_CD,
+                tca.AGENCY_NM,
+                tms.HQ_OFFICE_CD,
+                tho.HQ_OFFICE_NM,
+                tms.STORE_CD,
+                tms.STORE_NM,
+                SUBSTR(tms.BIZ_NO,0,3)||'-'||SUBSTR(tms.BIZ_NO,4,2)||'-'||SUBSTR(tms.BIZ_NO,6,5) AS BIZ_NO,
+                tms.OWNER_NM,
+                TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+                TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
+                tlcra.CARD_APPR_CNT,
+                tlcra.CARD_APPR_AMT,
+                tlcsa.CASH_APPR_CNT,
+                tlcsa.CASH_APPR_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_MS_STORE tms,
+                TB_CM_AGENCY tca,
+                TB_HQ_OFFICE tho,
+                (
+                    SELECT
+                        HQ_OFFICE_CD,
+                        HQ_BRAND_CD,
+                        STORE_CD,
+                        --VAN_TERMNL_NO,
+                        COUNT(APPR_NO) AS CARD_APPR_CNT,
+                        SUM(APPR_AMT) AS CARD_APPR_AMT
+                      FROM TB_LG_CARD_APPR
+                     WHERE 1=1
+                       AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                 GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD--, VAN_TERMNL_NO
+                ) tlcra,
+                (
+                    SELECT
+                        HQ_OFFICE_CD,
+                        HQ_BRAND_CD,
+                        STORE_CD,
+                        COUNT(APPR_NO) AS CASH_APPR_CNT,
+                        SUM(APPR_AMT) AS CASH_APPR_AMT
+                      FROM TB_LG_CASH_APPR
+                      WHERE 1=1
+                        AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                  GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD
+                ) tlcsa
+        WHERE 1=1
+          AND tca.AGENCY_CD = tms.AGENCY_CD
+          AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+          AND tlcra.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+          --AND tlcra.HQ_BRAND_CD = tms.HQ_BRAND_CD
+          AND tlcra.STORE_CD = tms.STORE_CD
+          AND tlcsa.STORE_CD = tms.STORE_CD
+          --AND tlcsa.HQ_BRAND_CD = tms.HQ_BRAND_CD
+          AND tlcsa.STORE_CD = tms.STORE_CD
+        <if test='agencyNm != null and agencyNm != ""'>
+            AND tca.AGENCY_NM LIKE '%'||#{agencyNm}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='bizNo != null and bizNo != ""'>
+            AND tms.BIZ_NO LIKE '%'||#{bizNo}||'%'
+        </if>
+    ORDER BY tms.AGENCY_CD, tms.HQ_OFFICE_CD, tms.STORE_CD
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 카드승인현황 -->
+    <!--
+        TABLE    : TB_LG_CARD_APPR, TB_SL_SALE_PAY_CARD
+        PARAM    : storeStatusVO
+        COMMENTS : 카드승인현황
+    -->
+    <select id="getCardAppr" parameterType="storeStatusVO" resultType="DefaultMap">
+        /* USE : StoreStatusMapper.getCardAppr */
+        SELECT
+                tlca.HQ_OFFICE_CD,
+                tlca.STORE_CD,
+                tlca.HQ_BRAND_CD,
+                tlca.SALE_DATE,
+                tlca.POS_NO,
+                tsspc.BILL_NO,
+                tlca.APPR_FG,
+                tlca.APPR_PROC_FG,
+                tlca.ACQUIRE_NM,
+                --tlca.CARD_NO,
+                SUBSTR(tlca.CARD_NO,0,4)||'-'||SUBSTR(tlca.CARD_NO,5,4)||'-'||SUBSTR(tlca.CARD_NO,9,4) ||'-'||SUBSTR(tlca.CARD_NO,13,4)AS CARD_NO,
+                tlca.REQ_AMT,
+                tlca.TIP_AMT,
+                tlca.VAT_AMT,
+                tlca.INST_CNT,
+                tlca.APPR_DT,
+                tlca.APPR_NO,
+                tlca.APPR_AMT,
+                'CARD' AS payApprType
+        FROM   TB_LG_CARD_APPR tlca,
+                TB_SL_SALE_PAY_CARD tsspc
+        WHERE  1=1
+          AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
+          AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
+          AND  tsspc.STORE_CD (+)= tlca.STORE_CD
+          AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
+          AND  tsspc.POS_NO (+)= tlca.POS_NO
+          AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND  tlca.STORE_CD = #{storeCd}
+          AND  tlca.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+     ORDER BY  tlca.HQ_OFFICE_CD, tlca.HQ_BRAND_CD, tlca.STORE_CD, tlca.SALE_DATE, tlca.POS_NO, tlca.APPR_LOG_NO
+    </select>
+
+    <!-- 현금승인현황 -->
+    <!--
+        TABLE    : TB_LG_CASH_APPR, TB_SL_SALE_PAY_CASH
+        PARAM    : storeStatusVO
+        COMMENTS : 현금승인현황
+    -->
+    <select id="getCashAppr" parameterType="storeStatusVO" resultType="DefaultMap">
+      /* USE : StoreStatusMapper.getCashAppr */
+        SELECT
+                tlca.HQ_OFFICE_CD,
+                tlca.HQ_BRAND_CD,
+                tlca.STORE_CD,
+                tlca.SALE_DATE,
+                tlca.POS_NO,
+                tsspc.BILL_NO,
+                tlca.APPR_FG,
+                tlca.APPR_PROC_FG,
+                tlca.REQ_AMT,
+                tlca.TIP_AMT,
+                tlca.VAT_AMT,
+                tlca.APPR_DT,
+                tlca.APPR_NO,
+                tlca.APPR_AMT,
+                'CASH' AS payApprType
+        FROM   TB_LG_CASH_APPR tlca,
+                TB_SL_SALE_PAY_CASH tsspc
+        WHERE  1=1
+          AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
+          AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
+          AND  tsspc.STORE_CD (+)= tlca.STORE_CD
+          AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
+          AND  tsspc.POS_NO (+)= tlca.POS_NO
+          AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND  tlca.STORE_CD = #{storeCd}
+          AND  tlca.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+     ORDER BY  tlca.HQ_OFFICE_CD, tlca.HQ_BRAND_CD, tlca.STORE_CD, tlca.SALE_DATE, tlca.POS_NO, tlca.APPR_LOG_NO
+    </select>
+
+    <!-- 매출정보_매출상세내역 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
+        PARAM    : storeStatusVO
+        COMMENTS : 매출정보_매출상세내역
+    -->
+    <select id="getSaleDtlInfo" parameterType="storeStatusVO" resultType="DefaultMap">
+      /* USE : DayMapper.getStoreSalePayInfo */
+        SELECT   tssh.STORE_CD,
+                  (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND STORE_CD = tssh.STORE_CD) AS STORE_NM,
+                  TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                  tssh.POS_NO,
+                  tssh.BILL_NO,
+                  NVL(tssh.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+                  NVL(tssh.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+                  NVL(tssh.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+                  NVL(tssh.NET_SALE_AMT, 0) AS NET_SALE_AMT,
+                  NVL(tssh.NO_TAX_SALE_AMT, 0) AS NO_TAX_SALE_AMT,
+                  NVL(tssh.TAX_SALE_AMT, 0) AS TAX_SALE_AMT,
+                  NVL(tssh.VAT_AMT, 0) AS VAT_AMT,
+                  NVL(tssh.TOT_TIP_AMT, 0) AS TOT_TIP_AMT,
+                <foreach collection="arrPayCol" item="item" separator=",">
+                    NVL(tsshp.PAY${item}, 0) AS PAY${item}
+                </foreach>
+        FROM    (
+                   SELECT  tssh.HQ_OFFICE_CD,
+                   			tssh.HQ_BRAND_CD,
+                   			tssh.STORE_CD,
+                    	    tssh.SALE_DATE,
+                    	    tssh.POS_NO,
+                    		tssh.BILL_NO,
+                    		tssh.TOT_SALE_AMT,
+                    		tssh.TOT_DC_AMT,
+							tssh.REAL_SALE_AMT,
+							tssh.NET_SALE_AMT,
+							tssh.NO_TAX_SALE_AMT,
+							tssh.TAX_SALE_AMT,
+							tssh.VAT_AMT,
+							tssh.TOT_TIP_AMT
+                    FROM    TB_SL_SALE_HDR tssh
+                    WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND   tssh.HQ_BRAND_CD = #{hqBrandCd}
+                      AND   tssh.STORE_CD = #{storeCd}
+                      AND   tssh.SALE_DATE = #{saleDate}
+                      AND   tssh.POS_NO = #{posNo}
+     				  AND   tssh.BILL_NO = #{billNo}
+
+                ) tssh
+        ,       (   SELECT  HQ_OFFICE_CD
+        			, HQ_BRAND_CD
+        			, STORE_CD
+        			, SALE_DATE
+        			, POS_NO
+        			, BILL_NO,
+                    <foreach collection="arrPayCol" item="item" separator=",">
+                        PAY${item}
+                    </foreach>
+                    FROM    (  SELECT  tsshp.HQ_OFFICE_CD, tsshp.HQ_BRAND_CD, tsshp.STORE_CD,  tsshp.SALE_DATE, tsshp.POS_NO, tsshp.BILL_NO, tsshp.PAY_CD, tsshp.PAY_AMT
+                                  FROM  TB_SL_SALE_HDR_PAY tsshp
+                                 WHERE  tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                   AND  tsshp.HQ_BRAND_CD = #{hqBrandCd}
+                                   AND  tsshp.STORE_CD = #{storeCd}
+                                   AND  tsshp.SALE_DATE = #{saleDate}
+                                   AND  tsshp.POS_NO = #{posNo}
+     							   AND  tsshp.BILL_NO = #{billNo}
+                            )
+                    PIVOT   (
+                                SUM(PAY_AMT)
+                                FOR PAY_CD
+                                IN (${pivotPayCol})
+                            )
+                ) tsshp
+        WHERE   1=1
+        AND tsshp.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND tsshp.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+        AND tsshp.STORE_CD = tssh.STORE_CD
+        AND tsshp.SALE_DATE = tssh.SALE_DATE
+        AND tsshp.POS_NO = tssh.POS_NO
+        --AND tsshp.BILL_NO = tssh.BILL_NO
+    </select>
+
+    <!-- 매출정보_신용카드결제내역 -->
+    <!--
+        TABLE    : TB_LG_CARD_APPR, TB_SL_SALE_PAY_CARD
+        PARAM    : storeStatusVO
+        COMMENTS : 매출정보_신용카드결제내역
+    -->
+    <select id="getCardPayInfo" parameterType="storeStatusVO" resultType="DefaultMap">
+       SELECT
+				tsspc.CORNR_CD,
+                tlca.APPR_FG,
+                tlca.APPR_PROC_FG,
+                SUBSTR(tlca.CARD_NO,0,4)||'-'||SUBSTR(tlca.CARD_NO,5,4)||'-'||SUBSTR(tlca.CARD_NO,9,4) ||'-'||SUBSTR(tlca.CARD_NO,13,4)AS CARD_NO,
+                -- 유효기간
+                tlca.INST_CNT,
+                tlca.APPR_NO,
+                TO_CHAR(TO_DATE(tlca.APPR_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPR_DT,
+                tlca.APPR_AMT,
+                tlca.VAN_CD,
+                --tcva.VAN_NM,
+                tlca.ISSUE_NM,
+                tlca.ACQUIRE_NM,
+                tlca.ORG_APPR_DT,
+                tlca.ORG_APPR_NO
+        FROM   TB_LG_CARD_APPR tlca,
+                TB_SL_SALE_PAY_CARD tsspc
+                --TB_CM_VAN_CMPNY tcva
+        WHERE  1=1
+          AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
+          AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
+          AND  tsspc.STORE_CD (+)= tlca.STORE_CD
+          AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
+          AND  tsspc.POS_NO (+)= tlca.POS_NO
+          AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          --AND  tcva.VAN_CD (+)= tlca.VAN_CD
+          AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND  tlca.HQ_BRAND_CD = #{hqBrandCd}
+          AND  tlca.STORE_CD = #{storeCd}
+          AND  tlca.SALE_DATE = #{saleDate}
+          AND  tlca.POS_NO = #{posNo}
+     	  AND  tsspc.BILL_NO = #{billNo}
+    </select>
+
+    <!-- 매출정보_현금결제내역 -->
+    <!--
+        TABLE    : TB_LG_CASH_APPR, TB_SL_SALE_PAY_CASH
+        PARAM    : storeStatusVO
+        COMMENTS : 매출정보_현금결제내역
+    -->
+    <select id="getCashPayInfo" parameterType="storeStatusVO" resultType="DefaultMap">
+       SELECT
+				tsspc.CORNR_CD,
+                tlca.APPR_FG,
+                tlca.APPR_PROC_FG,
+                -- 유효기간
+                tlca.APPR_NO,
+                TO_CHAR(TO_DATE(tlca.APPR_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPR_DT,
+                tlca.APPR_AMT,
+                tlca.VAN_CD,
+                tlca.ORG_APPR_DT,
+                tlca.ORG_APPR_NO
+        FROM   TB_LG_CASH_APPR tlca,
+                TB_SL_SALE_PAY_CASH tsspc
+        WHERE  1=1
+          AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
+          AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
+          AND  tsspc.STORE_CD (+)= tlca.STORE_CD
+          AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
+          AND  tsspc.POS_NO (+)= tlca.POS_NO
+          AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND  tlca.HQ_BRAND_CD = #{hqBrandCd}
+          AND  tlca.STORE_CD = #{storeCd}
+          AND  tlca.SALE_DATE = #{saleDate}
+          AND  tlca.POS_NO = #{posNo}
+     	  AND  tsspc.BILL_NO = #{billNo}
+    </select>
+
+    <!-- 매출정보_상품내역 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
+        PARAM    : storeStatusVO
+        COMMENTS : 매출정보_상품내역
+    -->
+    <select id="getSaleProductInfo" parameterType="storeStatusVO" resultType="DefaultMap">
+        SELECT tssd.PROD_CD,
+                 (SELECT PROD_NM FROM TB_MS_PRODUCT
+                  WHERE 1=1
+                    /*AND HQ_BRAND_CD = tssd.HQ_BRAND_CD */
+                    AND STORE_CD = tssd.STORE_CD
+                    AND PROD_CD = tssd.PROD_CD) AS PROD_NM,
+                 tssd.SALE_QTY,
+                 tssd.SALE_UPRC,
+                 tssd.SALE_AMT,
+                 tssd.DC_AMT,
+                 tssd.REAL_SALE_AMT,
+                 (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS TAX_SALE_AMT,
+                 tssd.VAT_AMT
+          FROM  TB_SL_SALE_DTL tssd
+          WHERE 1=1
+           AND   tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND   tssd.HQ_BRAND_CD = #{hqBrandCd}
+           AND   tssd.STORE_CD = #{storeCd}
+           AND   tssd.SALE_DATE = #{saleDate}
+           AND   tssd.POS_NO = #{posNo}
+     	   AND   tssd.BILL_NO = #{billNo}
+    </select>
 </mapper>
