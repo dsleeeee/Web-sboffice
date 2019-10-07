@@ -74,7 +74,7 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', function ($scope, $ht
         }
         params.listScale = $scope.listScalePosInstall;
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusPosInstallList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 

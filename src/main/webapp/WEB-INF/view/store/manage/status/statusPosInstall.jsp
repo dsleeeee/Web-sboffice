@@ -176,4 +176,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=2019052801.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=2019052801.17" charset="utf-8"></script>

@@ -2,10 +2,6 @@ package kr.co.solbipos.store.manage.status.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.common.data.structure.DefaultMap;
-
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.status.service.StoreStatusService;
 import kr.co.solbipos.store.manage.status.service.StoreStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +25,9 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-import java.util.List;
 
 @Service("storeStatusService")
+@Transactional
 public class StoreStatusServiceImpl implements StoreStatusService {
     private final StoreStatusMapper storeStatusMapper;
 
@@ -91,6 +87,7 @@ public class StoreStatusServiceImpl implements StoreStatusService {
 
         return storeStatusMapper.getStatusPosInstallList(storeStatusVO);
     }
+
     /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getStatusApprList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
@@ -126,7 +123,7 @@ public class StoreStatusServiceImpl implements StoreStatusService {
         return storeStatusMapper.getSaleDtlInfo(storeStatusVO);
     }
 
-    /** 매장현황 탭 - 관리매장 승인내역 >> 매출정보_신용카드결제내역 */
+    /** 매장현황 탭 - 관리매장 승인내역 >> 매출정보_신용카드/현금 결제내역 */
     @Override
     public List<DefaultMap<String>> getCardPayInfo(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO){
 

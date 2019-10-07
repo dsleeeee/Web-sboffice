@@ -65,7 +65,7 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchStatusVan = function() {
         var params = {};
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusVanList.sb", params, function() {
+        $scope._inquiryMain("/store/manage/status/van/getStatusVanList.sb", params, function() {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('statusVanDetailCtrl');
                 storeScope._gridDataInit();
@@ -117,7 +117,7 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
         params.sysStatFg = $scope.selectedStoreDetail.sysStatFg;
         params.listScale = 30;
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusVanDetailList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/van/getStatusVanDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 

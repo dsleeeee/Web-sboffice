@@ -74,7 +74,7 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
         var params = {};
         params.listScale = 10;
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusAgencyList.sb", params, function() {
+        $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyList.sb", params, function() {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('statusAgencyDetailCtrl');
                 storeScope._gridDataInit();
@@ -126,7 +126,7 @@ app.controller('statusAgencyDetailCtrl', ['$scope', '$http', function ($scope, $
         params.sysStatFg = $scope.selectedStoreDetail.sysStatFg;
         params.listScale = 30;
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusAgencyDetailList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 

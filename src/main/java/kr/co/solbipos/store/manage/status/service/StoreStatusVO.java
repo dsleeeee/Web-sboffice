@@ -27,6 +27,9 @@ public class StoreStatusVO extends PageVO {
     /** 본사명 */
     private String hqOfficeNm;
 
+    /** 브랜드코드 */
+    private String hqBrandCd;
+
     /** 매장코드 */
     private String storeCd;
 
@@ -63,97 +66,18 @@ public class StoreStatusVO extends PageVO {
     /** 전체기간체크 */
     private String chkDt;
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
-    }
-
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
-
-    public String getHqOfficeNm() { return hqOfficeNm; }
-
-    public void setHqOfficeNm(String hqOfficeNm) { this.hqOfficeNm = hqOfficeNm; }
-
-    public String getStoreCd() { return storeCd; }
-
-    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
-
-    public String getStoreNm() { return storeNm; }
-
-    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
-
-    public String getClsFg() { return clsFg; }
-
-    public void setClsFg(String clsFg) { this.clsFg = clsFg; }
-
-    public String getSysStatFg() { return sysStatFg; }
-
-    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
-
-    public String getAgencyCd() { return agencyCd; }
-
-    public void setAgencyCd(String agencyCd) { this.agencyCd = agencyCd; }
-
-    public String getAgencyNm() { return agencyNm; }
-
-    public void setAgencyNm(String agencyNm) { this.agencyNm = agencyNm; }
-
-    public String getVanCd() { return vanCd; }
-
-    public void setVanCd(String vanCd) { this.vanCd = vanCd; }
-
-    public String getVanNm() { return vanNm; }
-
-    public void setVanNm(String vanNm) { this.vanNm = vanNm; }
-
-    public String getStoreFg() { return storeFg; }
-
-    public void setStoreFg(String storeFg) { this.storeFg = storeFg; }
-
-    public String getAgencyFg() { return agencyFg; }
-
-    public void setAgencyFg(String agencyFg) { this.agencyFg = agencyFg; }
-
-    public String getInstFg() { return instFg; }
-
-    public void setInstFg(String instFg) { this.instFg = instFg; }
-
-    public String getChkDt() { return chkDt; }
-
-    public void setChkDt(String chkDt) { this.chkDt = chkDt; }
-import kr.co.solbipos.application.common.service.PageVO;
-
-public class StoreStatusVO extends PageVO {
-
-    //private static final long serialVersionUID =
-
-    /** 본사코드 */
-    private String hqOfficeCd;
-    /** 브랜드코드 */
-    private String hqBrandCd;
-    /** 관리업체 */
-    private String agencyNm;
-    /** 매장코드 */
-    private String storeCd;
-    /** 매장명 */
-    private String storeNm;
     /** 사업자번호 */
     private String bizNo;
+
     /** 결제승인방식 */
     private String payApprType;
+
     /** 결제수단컬럼 */
     private String payCol;
-    /** 결제수단 array */
-    private String arrPayCol[];
-    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
-    private String pivotPayCol;
-    /** 매출날짜 */
-    private String saleDate;
-    /** 포스번호 */
-    private String posNo;
-    /** 영수증번호 */
-    private String billNo;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -161,6 +85,14 @@ public class StoreStatusVO extends PageVO {
 
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
     }
 
     public String getHqBrandCd() {
@@ -171,18 +103,6 @@ public class StoreStatusVO extends PageVO {
         this.hqBrandCd = hqBrandCd;
     }
 
-    public String getAgencyNm() {
-        return agencyNm;
-    }
-
-    public void setAgencyNm(String agencyNm) {
-        this.agencyNm = agencyNm;
-    }
-
-    public String getStoreNm() {
-        return storeNm;
-    }
-
     public String getStoreCd() {
         return storeCd;
     }
@@ -191,8 +111,92 @@ public class StoreStatusVO extends PageVO {
         this.storeCd = storeCd;
     }
 
+    public String getStoreNm() {
+        return storeNm;
+    }
+
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+
+    public String getClsFg() {
+        return clsFg;
+    }
+
+    public void setClsFg(String clsFg) {
+        this.clsFg = clsFg;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    public String getAgencyCd() {
+        return agencyCd;
+    }
+
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
+
+    public String getAgencyNm() {
+        return agencyNm;
+    }
+
+    public void setAgencyNm(String agencyNm) {
+        this.agencyNm = agencyNm;
+    }
+
+    public String getVanCd() {
+        return vanCd;
+    }
+
+    public void setVanCd(String vanCd) {
+        this.vanCd = vanCd;
+    }
+
+    public String getVanNm() {
+        return vanNm;
+    }
+
+    public void setVanNm(String vanNm) {
+        this.vanNm = vanNm;
+    }
+
+    public String getStoreFg() {
+        return storeFg;
+    }
+
+    public void setStoreFg(String storeFg) {
+        this.storeFg = storeFg;
+    }
+
+    public String getAgencyFg() {
+        return agencyFg;
+    }
+
+    public void setAgencyFg(String agencyFg) {
+        this.agencyFg = agencyFg;
+    }
+
+    public String getInstFg() {
+        return instFg;
+    }
+
+    public void setInstFg(String instFg) {
+        this.instFg = instFg;
+    }
+
+    public String getChkDt() {
+        return chkDt;
+    }
+
+    public void setChkDt(String chkDt) {
+        this.chkDt = chkDt;
     }
 
     public String getBizNo() {
@@ -258,4 +262,23 @@ public class StoreStatusVO extends PageVO {
     public void setBillNo(String billNo) {
         this.billNo = billNo;
     }
+
+    /** 결제수단 array */
+    private String arrPayCol[];
+
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+
+    /** 매출날짜 */
+    private String saleDate;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 영수증번호 */
+    private String billNo;
+
+
+
+
 }

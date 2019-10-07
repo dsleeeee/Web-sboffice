@@ -60,4 +60,4 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStoreCorner.js?ver=2019052801.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStoreCorner.js?ver=2019052801.19" charset="utf-8"></script>

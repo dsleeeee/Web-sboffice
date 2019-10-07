@@ -187,4 +187,4 @@
     var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.07" charset="utf-8"></script>

@@ -50,7 +50,7 @@ app.controller('statusStoreCornerCtrl', ['$scope', '$http', function ($scope, $h
         var params = {};
         params.storeCd = $scope.selectedStore.storeCd;
 
-        $scope._inquiryMain("/store/manage/status/store/getStatusStoreCornerList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/cornerdtl/getStatusStoreCornerList.sb", params, function() {}, false);
     };
 
 }]);

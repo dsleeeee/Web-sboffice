@@ -130,7 +130,7 @@
     var payCol    = '${payCol}';
     var arrPayCol = payCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprList.js?ver=20190924.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprList.js?ver=20190924.04" charset="utf-8"></script>
 
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/store/manage/status/statusApprDtl.jsp">

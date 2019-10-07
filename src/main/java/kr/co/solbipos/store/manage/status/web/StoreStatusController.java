@@ -7,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.day.day.service.DayService;
+import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.store.manage.status.service.StoreStatusService;
 import kr.co.solbipos.store.manage.status.service.StoreStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 @Controller
-@RequestMapping("/store/manage/status/store")
+@RequestMapping("/store/manage/status")
 public class StoreStatusController {
 
     private final SessionService sessionService;
     private final StoreStatusService storeStatusService;
+    private final DayService dayService;
 
     /** Constructor Injection */
     @Autowired
-    public StoreStatusController(SessionService sessionService, StoreStatusService storeStatusService) {
+    public StoreStatusController(SessionService sessionService, StoreStatusService storeStatusService, DayService dayService) {
         this.sessionService = sessionService;
         this.storeStatusService = storeStatusService;
+        this.dayService = dayService;
     }
 
     /**
@@ -43,6 +48,7 @@ public class StoreStatusController {
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String statusView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+        DayVO dayVO = new DayVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 결제수단 조회
@@ -68,7 +74,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusStoreList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/store/getStatusStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusStoreList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                   HttpServletResponse response, Model model) {
@@ -91,7 +97,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusStoreCornerList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/cornerdtl/getStatusStoreCornerList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusStoreCornerList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                       HttpServletResponse response, Model model) {
@@ -112,7 +118,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusAgencyList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/agency/getStatusAgencyList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusAgencyList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
@@ -133,7 +139,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusAgencyDetailList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/agency/getStatusAgencyDetailList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusAgencyDetailList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                       HttpServletResponse response, Model model) {
@@ -144,122 +150,6 @@ public class StoreStatusController {
 
         return ReturnUtil.returnListJson(Status.OK, result, storeStatusVO);
     }
-    /**
-     * 매장현황 탭 - 관리매장 승인내역 리스트 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   storeStatusVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 09. 23.
-     */
-    @RequestMapping(value = "/appr/list.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getStatusApprList(HttpServletRequest request, HttpServletResponse response,
-                                  Model model, StoreStatusVO storeStatusVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = storeStatusService.getStatusApprList(storeStatusVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
-    }
-
-    /**
-     * 매장현황 탭 - 관리매장 승인내역 >> 카드/현금승인현황
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   storeStatusVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 09. 27.
-     */
-    @RequestMapping(value = "/appr/cardOrCashApprList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getCardOrCashApprList(HttpServletRequest request, HttpServletResponse response,
-                                  Model model, StoreStatusVO storeStatusVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = storeStatusService.getCardOrCashApprList(storeStatusVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
-    }
-
-    /**
-     * 매장현황 탭 - 관리매장 승인내역 >> 매출상세내역
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   storeStatusVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 09. 27.
-     */
-    @RequestMapping(value = "/appr/getSaleDtlInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSaleDtlInfo(HttpServletRequest request, HttpServletResponse response,
-                                        Model model, StoreStatusVO storeStatusVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        /*DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
-
-        return returnJson(Status.OK, result);*/
-
-        // 매출상세내역
-        DefaultMap<String> result = storeStatusService.getSaleDtlInfo(storeStatusVO, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 매장현황 탭 - 관리매장 승인내역 >> 신용카드 결제내역
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   storeStatusVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 09. 27.
-     */
-    @RequestMapping(value = "/appr/getCardPayInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getCardPayInfo(HttpServletRequest request, HttpServletResponse response,
-                                        Model model, StoreStatusVO storeStatusVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = storeStatusService.getCardPayInfo(storeStatusVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
-    }
-
-    /**
-     * 매장현황 탭 - 관리매장 승인내역 >> 상품내역
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   storeStatusVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 09. 27.
-     */
-    @RequestMapping(value = "/appr/getSaleProductInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSaleProductInfo(HttpServletRequest request, HttpServletResponse response,
-                                     Model model, StoreStatusVO storeStatusVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = storeStatusService.getSaleProductInfo(storeStatusVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
-    }
-
-}
 
     /**
      * VAN사탭 - VAN사 조회
@@ -270,7 +160,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusVanList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/van/getStatusVanList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusVanList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
@@ -291,7 +181,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusVanDetailList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/van/getStatusVanDetailList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusVanDetailList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
@@ -312,7 +202,7 @@ public class StoreStatusController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "getStatusPosInstallList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/posInstl/getStatusPosInstallList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStatusPosInstallList(StoreStatusVO storeStatusVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
@@ -322,5 +212,120 @@ public class StoreStatusController {
         List<DefaultMap<Object>> result = storeStatusService.getStatusPosInstallList(storeStatusVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, storeStatusVO);
+    }
+
+    /**
+     * 매장현황 탭 - 관리매장 승인내역 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeStatusVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 09. 23.
+     */
+    @RequestMapping(value = "/storeAppr/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStatusApprList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, StoreStatusVO storeStatusVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeStatusService.getStatusApprList(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
+    }
+
+    /**
+     * 매장현황 탭 - 관리매장 승인내역 >> 카드/현금승인현황
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeStatusVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 09. 27.
+     */
+    @RequestMapping(value = "/storeAppr/cardOrCashApprList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardOrCashApprList(HttpServletRequest request, HttpServletResponse response,
+                                        Model model, StoreStatusVO storeStatusVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeStatusService.getCardOrCashApprList(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
+    }
+
+    /**
+     * 매장현황 탭 - 관리매장 승인내역 >> 매출상세내역
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeStatusVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 09. 27.
+     */
+    @RequestMapping(value = "/storeAppr/getSaleDtlInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleDtlInfo(HttpServletRequest request, HttpServletResponse response,
+                                 Model model, StoreStatusVO storeStatusVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        /*DefaultMap<String> result = hqEmpService.getHqEmpDtlInfo(hqEmpVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);*/
+
+        // 매출상세내역
+        DefaultMap<String> result = storeStatusService.getSaleDtlInfo(storeStatusVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장현황 탭 - 관리매장 승인내역 >> 신용카드/현금 결제내역
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeStatusVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 09. 27.
+     */
+    @RequestMapping(value = "/storeAppr/getCardPayInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardPayInfo(HttpServletRequest request, HttpServletResponse response,
+                                 Model model, StoreStatusVO storeStatusVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeStatusService.getCardPayInfo(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
+    }
+
+    /**
+     * 매장현황 탭 - 관리매장 승인내역 >> 상품내역
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeStatusVO
+     * @return  String
+     * @author  이다솜
+     * @since   2019. 09. 27.
+     */
+    @RequestMapping(value = "/storeAppr/getSaleProductInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleProductInfo(HttpServletRequest request, HttpServletResponse response,
+                                     Model model, StoreStatusVO storeStatusVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeStatusService.getSaleProductInfo(storeStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeStatusVO);
     }
 }

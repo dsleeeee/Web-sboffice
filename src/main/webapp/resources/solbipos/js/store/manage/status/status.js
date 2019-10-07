@@ -5,15 +5,14 @@ var app = agrid.getApp();
 
 app.controller('statusCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
-        $("#statusApprListView").show();
-        $("#statusStoreView").hide();
+        $("#statusStoreView").show();
         $("#statusAgencyView").hide();
         $("#statusVanView").hide();
         $("#statusPosInstallView").hide();
+        $("#statusApprListView").hide();
 
     };
 
-/*
     // 매장 탭 보이기
     $scope.statusStoreShow = function () {
         $("#statusStoreTab").addClass("on");
@@ -113,5 +112,4 @@ app.controller('statusCtrl', ['$scope', function ($scope) {
         scope.flex.refresh();
     };
 
-*/
 }]);
