@@ -39,7 +39,7 @@
                         <wj-flex-grid-column header="<s:message code="storeStatus.tipAmt"/>" binding="tipAmt" width="80" align="center" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeStatus.vatAmt"/>" binding="vatAmt" width="80" align="center" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeStatus.instCnt"/>" binding="instCnt" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeStatus.validDt"/>" binding="validDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <%--<wj-flex-grid-column header="<s:message code="storeStatus.validDt"/>" binding="validDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                         <wj-flex-grid-column header="<s:message code="storeStatus.apprDt"/>" binding="apprDt" width="80" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeStatus.apprNo"/>" binding="apprNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeStatus.apprAmt"/>" binding="apprAmt" width="80" align="center" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

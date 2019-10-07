@@ -286,16 +286,16 @@
                     id="wjApprCardList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="storeStatus.cornrNm"/>" binding="cornrCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.cornrNm"/>" binding="cornrCd" data-map="cornrCdMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprProcFg"/>" binding="apprFg" data-map="apprProcFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.cardNo"/>" binding="cardNo" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.validDt"/>" binding="" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.validDt"/>" binding="" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.instCnt"/>" binding="instCnt" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprAmt"/>" binding="apprAmt" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprDt"/>" binding="apprDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprNo"/>" binding="apprNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.van"/>" binding="vanCd" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.van"/>" binding="vanNm" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.issueNm"/>" binding="issueNm" width="80" align="center" is-read-only="true"visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.acquireNm"/>" binding="acquireNm" width="80" align="center" is-read-only="true"visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.orgApprDt"/>" binding="orgApprDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -347,4 +347,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprInfo.js?ver=20191002.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprInfo.js?ver=20191002.02" charset="utf-8"></script>

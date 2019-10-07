@@ -91,9 +91,9 @@
                 <wj-flex-grid-column header="<s:message code="storeStatus.sysClosureDate"/>" binding="sysClosureDate" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                 <%--<wj-flex-grid-column header="<s:message code="storeStatus.vanContract"/>" binding="venTerminllNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="storeStatus.cardApprCnt"/>" binding="cardApprCnt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.cardApprAmt"/>" binding="cardApprAmt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.cardApprAmt"/>" binding="cardReqAmt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.cashApprCnt"/>" binding="cashApprCnt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.cashApprAmt"/>" binding="cashApprAmt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.cashApprAmt"/>" binding="cashReqAmt" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
 
             </wj-flex-grid>
 

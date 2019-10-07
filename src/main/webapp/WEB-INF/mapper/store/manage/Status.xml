@@ -356,9 +356,9 @@
                 TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
                 TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
                 tlcra.CARD_APPR_CNT,
-                tlcra.CARD_APPR_AMT,
+                tlcra.CARD_REQ_AMT,
                 tlcsa.CASH_APPR_CNT,
-                tlcsa.CASH_APPR_AMT
+                tlcsa.CASH_REQ_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MS_STORE tms,
                 TB_CM_AGENCY tca,
@@ -370,7 +370,8 @@
                         STORE_CD,
                         --VAN_TERMNL_NO,
                         COUNT(APPR_NO) AS CARD_APPR_CNT,
-                        SUM(APPR_AMT) AS CARD_APPR_AMT
+                        SUM(APPR_AMT) AS CARD_APPR_AMT,
+                        SUM(REQ_AMT) AS CARD_REQ_AMT
                       FROM TB_LG_CARD_APPR
                      WHERE 1=1
                        AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -382,7 +383,8 @@
                         HQ_BRAND_CD,
                         STORE_CD,
                         COUNT(APPR_NO) AS CASH_APPR_CNT,
-                        SUM(APPR_AMT) AS CASH_APPR_AMT
+                        SUM(APPR_AMT) AS CASH_APPR_AMT,
+                        SUM(REQ_AMT) AS CASH_REQ_AMT
                       FROM TB_LG_CASH_APPR
                       WHERE 1=1
                         AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -585,20 +587,19 @@
                 tlca.APPR_FG,
                 tlca.APPR_PROC_FG,
                 SUBSTR(tlca.CARD_NO,0,4)||'-'||SUBSTR(tlca.CARD_NO,5,4)||'-'||SUBSTR(tlca.CARD_NO,9,4) ||'-'||SUBSTR(tlca.CARD_NO,13,4)AS CARD_NO,
-                -- 유효기간
                 tlca.INST_CNT,
                 tlca.APPR_NO,
                 TO_CHAR(TO_DATE(tlca.APPR_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS APPR_DT,
                 tlca.APPR_AMT,
                 tlca.VAN_CD,
-                --tcva.VAN_NM,
+                tcva.VAN_NM,
                 tlca.ISSUE_NM,
                 tlca.ACQUIRE_NM,
                 tlca.ORG_APPR_DT,
                 tlca.ORG_APPR_NO
         FROM   TB_LG_CARD_APPR tlca,
-                TB_SL_SALE_PAY_CARD tsspc
-                --TB_CM_VAN_CMPNY tcva
+                TB_SL_SALE_PAY_CARD tsspc,
+                TB_CM_VAN_CMPNY tcva
         WHERE  1=1
           AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
           AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
@@ -606,7 +607,8 @@
           AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
           AND  tsspc.POS_NO (+)= tlca.POS_NO
           AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
-          --AND  tcva.VAN_CD (+)= tlca.VAN_CD
+          AND  tcva.VAN_CD (+)= tlca.VAN_CD
+          AND  tcva.VAN_FG = '01' -- 현금
           AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
           AND  tlca.HQ_BRAND_CD = #{hqBrandCd}
           AND  tlca.STORE_CD = #{storeCd}

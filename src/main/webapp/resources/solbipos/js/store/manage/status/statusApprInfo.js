@@ -9,6 +9,11 @@
  *
  * **************************************************************/
 
+// 승인구분
+var vCornrCd = [
+    {"name":"기본코너","value":"00"}
+];
+
 app.controller('statusApprInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -68,6 +73,7 @@ app.controller('statusCardPayInfoCtrl', ['$scope', '$http', '$timeout', function
         // 그리드 DataMap 설정
         $scope.apprFgDataMap = new wijmo.grid.DataMap(vApprFg, 'value', 'name');
         $scope.apprProcFgDataMap = new wijmo.grid.DataMap(vApprProcFg, 'value', 'name');
+        $scope.cornrCdMap = new wijmo.grid.DataMap(vCornrCd, 'value', 'name');
 
 
         // 그리드 링크 효과
