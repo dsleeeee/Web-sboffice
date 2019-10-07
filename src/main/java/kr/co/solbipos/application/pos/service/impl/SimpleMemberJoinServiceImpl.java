@@ -66,8 +66,19 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         // 회원등록
         result = mapper.insertMember(memberVO);
 
-        // 선불회원 등록 (자점회원)
-        result = mapper.registMemberPrepaid(memberVO);
+        if(memberVO.getMembrFg().equals("prepaid") || memberVO.getMembrFg().equals("prepostpaid")){
+
+            // 선불회원 등록 (자점회원)
+            result = mapper.registMemberPrepaid(memberVO);
+
+        }
+
+        if(memberVO.getMembrFg().equals("postpaid")|| memberVO.getMembrFg().equals("prepostpaid")){
+
+            // 후불회원 등록
+            result = mapper.registMemberPostpaid(memberVO);
+        }
+
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;

@@ -33,4 +33,8 @@ public interface SimpleMemberJoinMapper {
     /** 선불회원 등록 */
     int registMemberPrepaid(MemberVO memberVO);
 
+    /** 후불회원 등록*/
+    int registMemberPostpaid(MemberVO memberVO);
+
+
 }

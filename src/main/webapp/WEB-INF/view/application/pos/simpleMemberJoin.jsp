@@ -48,6 +48,15 @@
                         <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 회원구분 --%>
+                    <th><s:message code="application.pos.simpleMemberJoin.membrFg"/></th>
+                    <td>
+                        <span class="sb-radio"><input type="radio" id="membrFgPr" name="membrFg" value="prepaid" checked /><label for="membrFgPr">선불</label></span>
+                        <span class="sb-radio"><input type="radio" id="membrFgPo" name="membrFg" value="postpaid" /><label for="membrFgPo">후불</label></span>
+                        <span class="sb-radio"><input type="radio" id="membrFgPrPo" name="membrFg" value="prepostpaid" /><label for="membrFgPrPo">선후불</label></span>
+                    </td>
+                </tr>
                 <%--<tr>--%>
                 <%--&lt;%&ndash; 회원분류 &ndash;%&gt;--%>
                 <%--<th><s:message code="application.pos.simpleMemberJoin.membrClass"/></th>--%>
@@ -145,6 +154,7 @@ function save(sendUrl) {
     param.membrNm  = $("#membrNm").val();
     param.birthday = $("#birthday").val();
     param.gendrFg  = $(':radio[name="gendrFg"]:checked').val();
+    param.membrFg  = $(':radio[name="membrFg"]:checked').val();
     param.remark   = $("#remark").val();
 
     $.postJSONSave(sendUrl, param, function (result) {

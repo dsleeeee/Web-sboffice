@@ -89,6 +89,9 @@ public class MemberVO extends PageVO {
     /** 회원 거래처 매핑코드 (거래처코드)*/
     private String cdPartner;
 
+    /** 회원구분 */
+    private String  membrFg;
+
 
     /**
      * @return the membrOrgnCd
@@ -519,5 +522,13 @@ public class MemberVO extends PageVO {
      */
     public void setCdPartner(String cdPartner) {
         this.cdPartner = cdPartner;
+    }
+
+    public String getMembrFg() {
+        return membrFg;
+    }
+
+    public void setMembrFg(String membrFg) {
+        this.membrFg = membrFg;
     }
 }
