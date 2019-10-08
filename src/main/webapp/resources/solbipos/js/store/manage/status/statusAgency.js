@@ -72,6 +72,11 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
     // 관리업체 그리드 조회
     $scope.searchStatusAgency = function() {
         var params = {};
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
+        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+            params.agencyCd = orgnCd;
+        }
         params.listScale = 10;
 
         $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyList.sb", params, function() {

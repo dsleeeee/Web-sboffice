@@ -64,6 +64,11 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
     // VAN사 그리드 조회
     $scope.searchStatusVan = function() {
         var params = {};
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
+        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+            params.agencyCd = orgnCd;
+        }
 
         $scope._inquiryMain("/store/manage/status/van/getStatusVanList.sb", params, function() {
             $scope.$apply(function() {
@@ -115,6 +120,11 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
         params.vanCd = $scope.selectedStoreDetail.vanCd;
         params.clsFg = $scope.selectedStoreDetail.clsFg;
         params.sysStatFg = $scope.selectedStoreDetail.sysStatFg;
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
+        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+            params.agencyCd = orgnCd;
+        }
         params.listScale = 30;
 
         $scope._inquiryMain("/store/manage/status/van/getStatusVanDetailList.sb", params, function() {}, false);

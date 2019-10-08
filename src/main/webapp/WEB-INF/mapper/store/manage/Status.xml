@@ -147,16 +147,27 @@
                 FROM TB_CM_AGENCY tca,
                 TB_MS_STORE tms
                 WHERE 1=1
-                <if test='agencyCd != null and agencyCd != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-                    ]]>
-                </if>
-                <if test='agencyNm != null and agencyNm != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                     ]]>
-                </if>
+                <choose>
+                    <!-- 시스템 -->
+                    <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+                        <if test='agencyCd != null and agencyCd != ""'>
+                            <![CDATA[
+                                AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                            ]]>
+                        </if>
+                        <if test='agencyNm != null and agencyNm != ""'>
+                            <![CDATA[
+                                AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                            ]]>
+                        </if>
+                    </when>
+                    <!-- 총판 -->
+                    <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                        <![CDATA[
+                            AND tca.AGENCY_CD = #{agencyCd}
+                        ]]>
+                    </when>
+                </choose>
                 AND tca.AGENCY_CD = tms.AGENCY_CD
                 <if test='agencyFg == 1'>
                     <![CDATA[
@@ -240,6 +251,14 @@
               AND tcvc.VAN_CD = tms.VAN_CD
               AND tms.CLS_FG = #{clsFg}
               AND tms.SYS_STAT_FG = #{sysStatFg}
+              <choose>
+                  <!-- 총판 -->
+                  <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                      <![CDATA[
+                          AND tms.AGENCY_CD = #{agencyCd}
+                      ]]>
+                   </when>
+              </choose>
               )
         GROUP BY VAN_CD, VAN_NM, SYS_STAT_FG, CLS_FG
         ORDER BY VAN_CD
@@ -269,6 +288,14 @@
         AND tms.VAN_CD = #{vanCd}
         AND tms.CLS_FG = #{clsFg}
         AND tms.SYS_STAT_FG = #{sysStatFg}
+        <choose>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tms.AGENCY_CD = #{agencyCd}
+                ]]>
+            </when>
+        </choose>
         ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -331,6 +358,14 @@
         </if>
         AND tci.STORE_CD = tms.STORE_CD
         AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        <choose>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tms.AGENCY_CD = #{agencyCd}
+                ]]>
+            </when>
+        </choose>
         ORDER BY tms.HQ_OFFICE_CD, tci.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
