@@ -4,6 +4,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div id="statusStoreView" class="subCon" style="display: none;" ng-controller="statusStoreCtrl">
 
@@ -99,8 +103,8 @@
                     <s:message code="statusStore.srchAgencyNm" />
                 </th>
                 <td>
-                    <input type="text" name="agencyNm" id="agencyNm" ng-model="agencyNm" class="sb-input w100" readonly="readonly" ng-click="searchAgency()">
-                    <input type="hidden" name="agencyCd" id="agencyCd" ng-model="agencyCd">
+                    <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
+                    <input type="hidden" id="agencyCd" ng-hide="true">
                 </td>
                 <%-- 밴사 --%>
                 <th>
@@ -204,9 +208,14 @@
     var clsFgData = ${ccu.getCommCodeExcpAll("001")};
     <%-- 상태구분 --%>
     var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
+
+    var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
+    var orgnNm = "${orgnNm}";
+    var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.08" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

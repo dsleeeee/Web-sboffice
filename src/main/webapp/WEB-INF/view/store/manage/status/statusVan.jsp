@@ -4,6 +4,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div id="statusVanView" class="subCon" style="display: none;">
 
@@ -156,6 +159,10 @@
     var clsFgData = ${ccu.getCommCodeExcpAll("001")};
     <%-- 상태구분 --%>
     var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
+
+    var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
+    var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusVan.js?ver=2019052801.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusVan.js?ver=2019052801.10" charset="utf-8"></script>

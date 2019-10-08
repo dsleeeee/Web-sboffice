@@ -72,6 +72,11 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', function ($scope, $ht
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
+        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+            params.agencyCd = orgnCd;
+        }
         params.listScale = $scope.listScalePosInstall;
 
         $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallList.sb", params, function() {}, false);

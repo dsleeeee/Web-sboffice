@@ -28,6 +28,12 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('statusStoreCtrl', $scope, $http, true));
 
+    // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
+    if(orgnFg === "AGENCY"){
+        $("#agencyCd").val(orgnCd);
+        $("#agencyNm").val(orgnNm);
+    }
+
     // comboBox 초기화
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
@@ -57,7 +63,7 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
-        // 그리드 선택 이벤트wijLink
+        // 그리드 선택 이벤트 wijLink
         s.addEventListener(s.hostElement, 'mousedown', function(e) {
             var ht = s.hitTest(e);
             if( ht.cellType === wijmo.grid.CellType.Cell) {
@@ -84,6 +90,8 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장정보 그리드 조회
     $scope.searchStatusStore = function() {
         var params = {};
+        params.agencyCd = $("#agencyCd").val();
+        params.agencyNm = $("#agencyNm").val();
         params.listScale = $scope.listScaleStore;
 
         $scope._inquiryMain("/store/manage/status/store/getStatusStoreList.sb", params, function() {}, false);
@@ -91,26 +99,28 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // <-- //검색 호출 -->
 
     /*********************************************************
-     * 대리점 조회
+     * 관리업체 조회
      * *******************************************************/
     $scope.searchAgency = function(){
-        var popup = $scope.agencyLayer;
+        if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+            var popup = $scope.agencyLayer;
 
-        // 팝업 닫을때
-        popup.show(true, function (s) {
-            var agencyScope = agrid.getScope('searchAgencyCtrl');
-            agencyScope.$apply(function () {
-                agencyScope._gridDataInit();
-                if (!$.isEmptyObject(agencyScope.getAgency())) {
-                    $scope.agencyCd = agencyScope.getAgency().agencyCd;
-                    $scope.agencyNm = agencyScope.getAgency().agencyNm;
-                }
+            // 팝업 닫을때
+            popup.show(true, function (s) {
+                var agencyScope = agrid.getScope('searchAgencyCtrl');
+                agencyScope.$apply(function () {
+                    agencyScope._gridDataInit();
+                    if (!$.isEmptyObject(agencyScope.getAgency())) {
+                        $("#agencyCd").val(agencyScope.getAgency().agencyCd);
+                        $("#agencyNm").val(agencyScope.getAgency().agencyNm);
+                    }
+                });
             });
-        });
+        }
     };
 
     /*********************************************************
-     * 관리업체 조회
+     * 밴사 조회
      * *******************************************************/
     $scope.searchManageVan = function(){
         var popup = $scope.vanLayer;

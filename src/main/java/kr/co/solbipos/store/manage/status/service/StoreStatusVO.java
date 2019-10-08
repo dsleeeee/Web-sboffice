@@ -75,6 +75,27 @@ public class StoreStatusVO extends PageVO {
     /** 결제수단컬럼 */
     private String payCol;
 
+    /** 결제수단 array */
+    private String arrPayCol[];
+
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
+
+    /** 매출날짜 */
+    private String saleDate;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 영수증번호 */
+    private String billNo;
+
+    /** 소속구분 */
+    private String orgnFg;
+
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -263,22 +284,19 @@ public class StoreStatusVO extends PageVO {
         this.billNo = billNo;
     }
 
-    /** 결제수단 array */
-    private String arrPayCol[];
+    public String getOrgnFg() {
+        return orgnFg;
+    }
 
-    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
-    private String pivotPayCol;
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
-    /** 매출날짜 */
-    private String saleDate;
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
 
-    /** 포스번호 */
-    private String posNo;
-
-    /** 영수증번호 */
-    private String billNo;
-
-
-
-
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
+    }
 }

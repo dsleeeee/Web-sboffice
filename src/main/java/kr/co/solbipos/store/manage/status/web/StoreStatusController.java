@@ -81,7 +81,7 @@ public class StoreStatusController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        System.out.println("LISTSCALE : " + storeStatusVO.getListScale());
+//        System.out.println("LISTSCALE : " + storeStatusVO.getListScale());
 
         List<DefaultMap<Object>> result = storeStatusService.getStatusStoreList(storeStatusVO, sessionInfoVO);
 
