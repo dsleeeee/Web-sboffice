@@ -104,82 +104,66 @@
         </tbody>
     </table>
 
-    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="statusAgencyCtrl">
-        <%-- 그리드 --%>
-        <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-                <div class="row">
-                    <wj-flex-grid
-                        autoGenerateColumns="false"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        sticky-headers="true"
-                        selection-mode="Row"
-                        items-source="data"
-                        item-formatter="_itemFormatter"
-                        is-read-only="true">
+        <%--left--%>
+            <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="statusAgencyCtrl">
+                <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+                    <div class="w100 mt10 mb20">
+                        <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                            <wj-flex-grid
+                                    control="flex"
+                                    autoGenerateColumns="false"
+                                    selection-mode="Row"
+                                    initialized="initGrid(s,e)"
+                                    items-source="data"
+                                    item-formatter="_itemFormatter">
 
-                        <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="statusAgency.agencyCd"/>" binding="agencyCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.agencyNm"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.storeCnt"/>" binding="storeCnt" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.totPosCnt"/>" binding="totPosCnt" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <!-- define columns -->
+                                <wj-flex-grid-column header="<s:message code="statusAgency.agencyCd"/>" binding="agencyCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.agencyNm"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.storeCnt"/>" binding="storeCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.totPosCnt"/>" binding="totPosCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
-                        <%--상세 조회시 필요--%>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.clsFg"/>" binding="clsFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.sysStatFg"/>" binding="sysStatFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                                <%--상세 조회시 필요--%>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.clsFg"/>" binding="clsFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.sysStatFg"/>" binding="sysStatFg" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
-                    </wj-flex-grid>
+                            </wj-flex-grid>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
-                <%-- id --%>
-                <ul id="statusAgencyCtrlPager" data-size="10">
-                </ul>
-            </div>
-            <%--//페이지 리스트--%>
-        </div>
-    </div>
+        <%--left--%>
 
-    <div class="wj-TblWrap mt20 mb20 w65 fr" ng-controller="statusAgencyDetailCtrl">
-        <%-- 그리드 --%>
-        <div class="w100 mt10 mb20">
-            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-                <div class="row">
-                    <wj-flex-grid
-                        autoGenerateColumns="false"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        sticky-headers="true"
-                        selection-mode="Row"
-                        items-source="data"
-                        item-formatter="_itemFormatter"
-                        is-read-only="true">
+        <%--right--%>
+            <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="statusAgencyDetailCtrl">
+                <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+                    <div class="w100 mt10 mb20">
+                        <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                            <wj-flex-grid
+                                    autoGenerateColumns="false"
+                                    control="flex"
+                                    initialized="initGrid(s,e)"
+                                    selection-mode="Row"
+                                    items-source="data"
+                                    item-formatter="_itemFormatter">
 
-                        <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="statusAgency.hqOfficeCd"/>" binding="hqOfficeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" idth="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.minSaleDate"/>" binding="minSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="statusAgency.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <!-- define columns -->
+                                <wj-flex-grid-column header="<s:message code="statusAgency.hqOfficeCd"/>" binding="hqOfficeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" idth="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.minSaleDate"/>" binding="minSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="statusAgency.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
 
-                    </wj-flex-grid>
+                            </wj-flex-grid>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
-                <%-- id --%>
-                <ul id="statusAgencyDetailCtrlPager" data-size="10">
-                </ul>
-            </div>
-            <%--//페이지 리스트--%>
-        </div>
-    </div>
+        <%--right--%>
 
 </div>
 

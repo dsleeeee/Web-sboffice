@@ -4,6 +4,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div id="statusApprListView" class="subCon" style="display: none;" ng-controller="statusApprListCtrl">
     <div class="searchBar flddUnfld">
@@ -33,17 +35,17 @@
                 </td>
             </tr>
             <tr>
-                <%-- 관리업체명 --%>
-                <th><s:message code="storeStatus.agencyNm"/></th>
-                <td><input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/></td>
+                <%-- 사업자번호 --%>
+                <th><s:message code="storeStatus.bizNo"/></th>
+                <td><input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo"/></td>
                 <%-- 매장명 --%>
                 <th><s:message code="storeStatus.storeNm"/></th>
                 <td><input type="text" id="srchApprStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/></td>
             </tr>
-            <tr>
-                <%-- 사업자번호 --%>
-                <th><s:message code="storeStatus.bizNo"/></th>
-                <td><input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo"/></td>
+            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+                <%-- 관리업체명 --%>
+                <th><s:message code="storeStatus.agencyNm"/></th>
+                <td><input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/></td>
                 <th></th>
                 <td></td>
             </tr>
@@ -130,7 +132,7 @@
     var payCol    = '${payCol}';
     var arrPayCol = payCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprList.js?ver=20190924.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusApprList.js?ver=20190924.05" charset="utf-8"></script>
 
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/store/manage/status/statusApprDtl.jsp">

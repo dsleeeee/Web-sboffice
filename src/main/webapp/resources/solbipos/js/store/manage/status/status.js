@@ -50,6 +50,8 @@ app.controller('statusCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("statusAgencyCtrl");
         scope.flex.refresh();
+        var scope2 = agrid.getScope("statusAgencyDetailCtrl");
+        scope2.flex.refresh();
     };
 
 
@@ -70,6 +72,8 @@ app.controller('statusCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("statusVanCtrl");
         scope.flex.refresh();
+        var scope2 = agrid.getScope("statusVanDetailCtrl");
+        scope2.flex.refresh();
     };
 
 

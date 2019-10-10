@@ -36,7 +36,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/status.js?ver=20190920.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/status.js?ver=20190920.12" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 매장 레이어 --%>

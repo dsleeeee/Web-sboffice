@@ -429,11 +429,23 @@
           AND tca.AGENCY_CD = tms.AGENCY_CD
           AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
           AND tlcra.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-          --AND tlcra.HQ_BRAND_CD = tms.HQ_BRAND_CD
+          AND tlcra.HQ_BRAND_CD = tms.HQ_BRAND_CD
           AND tlcra.STORE_CD = tms.STORE_CD
           AND tlcsa.STORE_CD = tms.STORE_CD
-          --AND tlcsa.HQ_BRAND_CD = tms.HQ_BRAND_CD
+          AND tlcsa.HQ_BRAND_CD = tms.HQ_BRAND_CD
           AND tlcsa.STORE_CD = tms.STORE_CD
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'><!-- Agency Master Code -->
+                <if test='agencyNm != null and agencyNm.toString() != ""'>
+                    AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+                AND tms.AGENCY_CD = #{agencyCd}
+            </when>
+        </choose>
         <if test='agencyNm != null and agencyNm != ""'>
             AND tca.AGENCY_NM LIKE '%'||#{agencyNm}||'%'
         </if>
@@ -457,6 +469,7 @@
         /* USE : StoreStatusMapper.getCardAppr */
         SELECT
                 tlca.HQ_OFFICE_CD,
+                tms.AGENCY_CD,
                 tlca.STORE_CD,
                 tlca.HQ_BRAND_CD,
                 tlca.SALE_DATE,
@@ -476,7 +489,8 @@
                 tlca.APPR_AMT,
                 'CARD' AS payApprType
         FROM   TB_LG_CARD_APPR tlca,
-                TB_SL_SALE_PAY_CARD tsspc
+                TB_SL_SALE_PAY_CARD tsspc,
+                TB_MS_STORE tms
         WHERE  1=1
           AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
           AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
@@ -484,6 +498,12 @@
           AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
           AND  tsspc.POS_NO (+)= tlca.POS_NO
           AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          AND  tms.HQ_OFFICE_CD = tlca.HQ_OFFICE_CD
+          AND  tms.HQ_BRAND_CD = tlca.HQ_BRAND_CD
+          AND  tms.STORE_CD = tlca.STORE_CD
+        <if test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
           AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
           AND  tlca.STORE_CD = #{storeCd}
           AND  tlca.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -500,6 +520,7 @@
       /* USE : StoreStatusMapper.getCashAppr */
         SELECT
                 tlca.HQ_OFFICE_CD,
+                tms.AGENCY_CD,
                 tlca.HQ_BRAND_CD,
                 tlca.STORE_CD,
                 tlca.SALE_DATE,
@@ -515,7 +536,8 @@
                 tlca.APPR_AMT,
                 'CASH' AS payApprType
         FROM   TB_LG_CASH_APPR tlca,
-                TB_SL_SALE_PAY_CASH tsspc
+                TB_SL_SALE_PAY_CASH tsspc,
+                TB_MS_STORE tms
         WHERE  1=1
           AND  tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
           AND  tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
@@ -523,6 +545,12 @@
           AND  tsspc.SALE_DATE (+)= tlca.SALE_DATE
           AND  tsspc.POS_NO (+)= tlca.POS_NO
           AND  tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+          AND  tms.HQ_OFFICE_CD = tlca.HQ_OFFICE_CD
+          AND  tms.HQ_BRAND_CD = tlca.HQ_BRAND_CD
+          AND  tms.STORE_CD = tlca.STORE_CD
+        <if test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
           AND  tlca.HQ_OFFICE_CD = #{hqOfficeCd}
           AND  tlca.STORE_CD = #{storeCd}
           AND  tlca.SALE_DATE BETWEEN #{startDate} AND #{endDate}

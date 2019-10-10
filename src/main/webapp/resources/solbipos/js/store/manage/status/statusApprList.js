@@ -78,7 +78,7 @@ app.controller('statusApprListCtrl', ['$scope', '$http', function ($scope, $http
         params.listScale = $scope.listScaleAppr;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/store/manage/status/storeAppr/list.sb", params);
+        $scope._inquiryMain("/store/manage/status/storeAppr/list.sb", params, function() {}, false);
     }
 
 

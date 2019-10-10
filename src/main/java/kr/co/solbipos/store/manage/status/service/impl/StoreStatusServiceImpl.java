@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.status.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.status.service.StoreStatusService;
 import kr.co.solbipos.store.manage.status.service.StoreStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,12 +92,31 @@ public class StoreStatusServiceImpl implements StoreStatusService {
     /** 매장현황 탭 - 관리매장 승인내역 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getStatusApprList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        storeStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeStatusVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            storeStatusVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return storeStatusMapper.getStatusApprList(storeStatusVO);
     }
 
     /** 매장현황 탭 - 관리매장 승인내역 >> 카드/현금승인현황 */
     @Override
     public List<DefaultMap<String>> getCardOrCashApprList(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        storeStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeStatusVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+            storeStatusVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
 
         if(storeStatusVO.getPayApprType().equals("CARD")){
             return storeStatusMapper.getCardAppr(storeStatusVO);
