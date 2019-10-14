@@ -1,22 +1,19 @@
-/**
- * get application
- */
 var app = agrid.getApp();
 
-app.controller('instalManageCtrl', ['$scope', function ($scope) {
+app.controller('instlManageCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#agencyListView").show();
-        $("#instalListView").hide();
+        $("#instlListView").hide();
     };
 
     // 업체현황 탭 보이기
     $scope.agencyListShow = function () {
         $("#agencyListTab").addClass("on");
-        $("#instalListTab").removeClass("on");
+        $("#instlListTab").removeClass("on");
 
         $("#agencyListView").show();
-        $("#instalListView").hide();
+        $("#instlListView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("agencyListCtrl");
@@ -24,15 +21,15 @@ app.controller('instalManageCtrl', ['$scope', function ($scope) {
     };
 
     // 설치현황 탭 보이기
-    $scope.instalListShow = function () {
+    $scope.instlListShow = function () {
         $("#agencyListTab").removeClass("on");
-        $("#instalListTab").addClass("on");
+        $("#instlListTab").addClass("on");
 
         $("#agencyListView").hide();
-        $("#instalListView").show();
+        $("#instlListView").show();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("instalListCtrl");
+        var scope = agrid.getScope("instlListCtrl");
         scope.flex.refresh();
     };
 

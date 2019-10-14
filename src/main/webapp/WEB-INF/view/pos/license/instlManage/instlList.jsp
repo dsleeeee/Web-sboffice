@@ -5,6 +5,6 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="instalListView" class="subCon" style="display: none;" ng-controller="instalListCtrl">
+<div id="instlListView" class="subCon" style="display: none;" ng-controller="instlListCtrl">
     설치현황
 </div>

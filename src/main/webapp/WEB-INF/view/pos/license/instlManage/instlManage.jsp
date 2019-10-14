@@ -4,10 +4,10 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/pos/license/instalManage"/>
+<c:set var="baseUrl" value="/pos/license/instlManage"/>
 
 <div class="con">
-    <div class="tabType1" ng-controller="instalManageCtrl" ng-init="init()">
+    <div class="tabType1" ng-controller="instlManageCtrl" ng-init="init()">
         <ul>
             <%-- 업체현황 탭 --%>
             <li>
@@ -15,7 +15,7 @@
             </li>
             <%-- 설치현황 탭 --%>
             <li>
-                <a id="instalListTab" href="#" ng-click="instalListShow()"><s:message code="instl.instalList"/></a>
+                <a id="instlListTab" href="#" ng-click="instlListShow()"><s:message code="instl.instalList"/></a>
             </li>
         </ul>
     </div>
@@ -24,17 +24,17 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instalManage/instalManage.js?ver=20191014.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlManage.js?ver=20191014.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 업체현황 레이어 --%>
-<c:import url="/WEB-INF/view/pos/license/instalManage/agencyList.jsp">
+<c:import url="/WEB-INF/view/pos/license/instlManage/agencyList.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 설치현황 레이어 --%>
-<c:import url="/WEB-INF/view/pos/license/instalManage/instalList.jsp">
+<c:import url="/WEB-INF/view/pos/license/instlManage/instlList.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

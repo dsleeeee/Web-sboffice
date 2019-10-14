@@ -1,7 +1,7 @@
 package kr.co.solbipos.pos.license.oper.web;
 
 import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.pos.license.instalManage.service.InstalManageService;
+import kr.co.solbipos.pos.license.instlManage.service.InstlManageService;
 import kr.co.solbipos.pos.license.oper.service.OperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

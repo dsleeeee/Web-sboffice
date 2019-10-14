@@ -1,7 +1,7 @@
-package kr.co.solbipos.pos.license.instalAgency.web;
+package kr.co.solbipos.pos.license.instlAgency.web;
 
 import kr.co.common.service.session.SessionService;
-import kr.co.solbipos.pos.license.instalAgency.service.InstalAgencyService;
+import kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/pos/license/instalAgency")
-public class InstalAgencyController {
+@RequestMapping("/pos/license/instlAgency")
+public class InstlAgencyController {
 
     private final SessionService sessionService;
-    private final InstalAgencyService instalAgencyService;
+    private final InstlAgencyService instlAgencyService;
 
     /** Constructor Injection */
     @Autowired
-    public InstalAgencyController(SessionService sessionService, InstalAgencyService instalAgencyService){
+    public InstlAgencyController(SessionService sessionService, InstlAgencyService instlAgencyService){
         this.sessionService = sessionService;
-        this.instalAgencyService = instalAgencyService;
+        this.instlAgencyService = instlAgencyService;
     }
 
     /**
@@ -33,7 +33,7 @@ public class InstalAgencyController {
      * @param model
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String instalAgencyView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "pos/license/instalAgency/instalAgency";
+    public String instlAgencyView(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return "pos/license/instlAgency/instlAgency";
     }
 }
