@@ -1,5 +1,188 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    Oper.xml
+    운영현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.10.28     최초작성
+-->
 <mapper namespace="kr.co.solbipos.pos.license.oper.service.impl.OperMapper">
+
+    <!-- 매출매장현황탭 - 매출매장현황조회-->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_POS, TB_CM_INSTLL, TB_SL_SALE_HDR
+        COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]포스 정보, 설치의뢰, [매출]헤더
+    -->
+    <select id="getSaleStoreList"  parameterType="OperVO" resultType="DefaultMap">
+        /* OperMapper.getSaleStoreList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tho.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.AGENCY_CD,
+        NVL(tmp.POS_CNT,0) AS POS_CNT,
+        NVL(tssh.SALE_FG,0) AS SALE_FG,
+        NVL(tssh.SALE_FG_N,0) AS SALE_FG_N,
+        NVL(tssh.SALE_FG_Y,0) AS SALE_FG_Y,
+        NVL(tsspc.CARD_CNT,0) AS CARD_CNT,
+        NVL(tssph.CASH_CNT,0) AS CASH_CNT,
+        NVL(tssph.CASH_REC_CNT,0) AS CASH_REC_CNT,
+        TO_CHAR(TO_DATE(tci.MAX_INST_INS_DT, 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_INST_INS_DT,
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE,
+        TO_CHAR(TO_DATE(tssh.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        tms.SYS_STAT_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms,
+        TB_HQ_OFFICE tho,
+        (
+            SELECT
+            STORE_CD,
+            COUNT(POS_NO) AS POS_CNT
+            FROM TB_MS_POS
+            WHERE 1=1
+            GROUP BY STORE_CD
+        ) tmp,
+        (
+            SELECT
+            STORE_CD,
+            MAX(INST_INS_DT) AS MAX_INST_INS_DT
+            FROM TB_CM_INSTLL
+            GROUP BY STORE_CD
+        ) tci,
+        (
+            SELECT
+            STORE_CD,
+            SUM(CASE WHEN SALE_YN in ('Y','N') THEN 1 ELSE 0 END) AS SALE_FG,
+            SUM(CASE WHEN SALE_YN = 'Y' THEN 1 ELSE 0 END) AS SALE_FG_Y,
+            SUM(CASE WHEN SALE_YN = 'N' THEN 1 ELSE 0 END) AS SALE_FG_N,
+            MAX(SALE_DATE) AS MAX_SALE_DATE
+            FROM TB_SL_SALE_HDR
+            GROUP BY STORE_CD
+        ) tssh,
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            STORE_CD,
+            COUNT(STORE_CD) AS CARD_CNT
+            FROM TB_SL_SALE_PAY_CARD
+            GROUP BY HQ_OFFICE_CD, STORE_CD
+        ) tsspc,
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            STORE_CD,
+            COUNT(STORE_CD) AS CASH_CNT,
+            SUM(CASE WHEN APPR_DT IS NOT NULL THEN 1 ELSE 0 END) AS CASH_REC_CNT
+            FROM TB_SL_SALE_PAY_CASH
+            GROUP BY HQ_OFFICE_CD, STORE_CD
+        ) tssph
+        WHERE 1=1
+        AND tms.REG_DT BETWEEN #{startDate} AND #{endDate}
+        <if test='agencyCd != null and agencyCd != ""'>
+            <![CDATA[
+                 AND tca.tms.AGENCY_CD = #{agencyCd}
+            ]]>
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            <![CDATA[
+                 AND tho.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+            ]]>
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            <![CDATA[
+                 AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+            ]]>
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                 AND tms.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+            ]]>
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            <![CDATA[
+                 AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+            ]]>
+        </if>
+        <if test='chkDt != true'>
+            <![CDATA[
+                 AND tssh.MAX_SALE_DATE IS NOT NULL
+            ]]>
+        </if>
+        AND tho.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND tmp.STORE_CD (+)= tms.STORE_CD
+        AND tci.STORE_CD (+)= tms.STORE_CD
+        AND tssh.STORE_CD (+)= tms.STORE_CD
+        AND tsspc.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND tsspc.STORE_CD (+)= tms.STORE_CD
+        AND tssph.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND tssph.STORE_CD (+)= tms.STORE_CD
+        ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 대리점인증현황탭 - 대리점인증현황조회-->
+    <!--
+        TABLE    : TB_CM_AGENCY, TB_CM_INSTLL
+        COMMENTS : [공통]대리점 정보 와 설치의뢰
+    -->
+    <select id="getAgencyAuthList"  parameterType="OperVO" resultType="DefaultMap">
+        /* OperMapper.getAgencyAuthList */
+        SELECT
+        tca.AGENCY_CD,
+        tca.AGENCY_NM,
+        (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+        tca.OWNER_NM,
+        0 AS BUY_CNT,
+        0 AS SALE_CNT,
+        NVL(tci.INST_CNT,0) AS INST_CNT,
+        0 AS REST_CNT,
+        tca.USE_YN,
+        TO_CHAR(TO_DATE(tca.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
+        tca.REG_ID
+        FROM TB_CM_AGENCY tca,
+        (
+            SELECT
+            AGENCY_CD,
+            COUNT(STORE_CD) AS INST_CNT
+            FROM TB_CM_INSTLL
+            WHERE 1=1
+            AND SEQ_NO = '1'
+            AND INST_FG = '1'
+            GROUP BY AGENCY_CD
+        ) tci
+        WHERE 1=1
+        AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+        <if test='agencyCd != null and agencyCd != ""'>
+            <![CDATA[
+                 AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+            ]]>
+        </if>
+        <if test='agencyNm != null and agencyNm != ""'>
+            <![CDATA[
+                 AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+            ]]>
+        </if>
+        <if test='agencyFg != null and agencyFg != ""'>
+            <if test='agencyFg == "1"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{orgnCd}
+                ]]>
+            </if>
+            <if test='agencyFg == "2"'>
+                <![CDATA[
+                    AND tca.P_AGENCY_CD = #{orgnCd}
+                ]]>
+            </if>
+        </if>
+        AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
+        AND tci.AGENCY_CD (+)= tca.AGENCY_CD
+        ORDER BY tca.AGENCY_CD
+    </select>
+
 </mapper>

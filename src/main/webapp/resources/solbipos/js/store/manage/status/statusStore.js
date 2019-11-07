@@ -72,7 +72,7 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
                 // 코너사용구분 클릭시 상세정보 조회
                 if ( col.binding === "envstValNm") {
                     $scope.setSelectedStore(s.rows[ht.row].dataItem);
-                    if ( $scope.selectedStore === "코너개별승인") {
+                    if ( $scope.selectedStore.envstValNm === "코너개별승인") {
                         $scope.statusStoreCornerViewLayer.show(true);
                     }
                     event.preventDefault();

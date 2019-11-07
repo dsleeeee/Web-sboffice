@@ -215,7 +215,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.10" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

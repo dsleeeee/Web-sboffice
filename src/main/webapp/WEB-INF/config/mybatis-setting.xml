@@ -86,10 +86,11 @@
     <typeAlias alias="verRecvVO" type="kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO"/>
     <typeAlias alias="loginStatusVO" type="kr.co.solbipos.pos.loginstatus.service.LoginStatusVO"/>
     <typeAlias alias="installVO" type="kr.co.solbipos.pos.install.service.InstallVO"/>
+    <typeAlias alias="instlManageVO" type="kr.co.solbipos.pos.license.instlManage.service.InstlManageVO"/>
+    <typeAlias alias="operVO" type="kr.co.solbipos.pos.license.oper.service.OperVO"/>
 <!--
     <typeAlias alias="instlAgencyVO" type="kr.co.solbipos.pos.license.instlagency.service.InstlAgencyVO"/>
     <typeAlias alias="instlVO" type="kr.co.solbipos.pos.license.instl.service.InstlVO"/>
-    <typeAlias alias="operVO" type="kr.co.solbipos.pos.license.oper.service.OperVO"/>
     <typeAlias alias="swFeeVO" type="kr.co.solbipos.pos.license.swfee.service.SwFeeVO"/>
     <typeAlias alias="trnsfrVO" type="kr.co.solbipos.pos.license.trnsfr.service.TrnsfrVO"/>
     <typeAlias alias="unuseVO" type="kr.co.solbipos.pos.license.unuse.service.UnuseVO"/>

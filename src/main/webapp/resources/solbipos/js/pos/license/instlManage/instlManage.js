@@ -31,6 +31,8 @@ app.controller('instlManageCtrl', ['$scope', function ($scope) {
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("instlListCtrl");
         scope.flex.refresh();
+        var scope2 = agrid.getScope("instlListDetailCtrl");
+        scope2.flex.refresh();
     };
 
 }]);
