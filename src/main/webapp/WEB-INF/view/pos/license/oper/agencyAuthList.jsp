@@ -4,7 +4,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div id="agencyAuthListView" class="subCon" style="display: none;" ng-controller="agencyAuthListCtrl">
 
@@ -39,7 +41,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="oper.agencyCd" />
@@ -117,7 +119,9 @@
     <%-- 사용여부 --%>
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 
+    var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
+    var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=2019052801.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=2019052801.09" charset="utf-8"></script>

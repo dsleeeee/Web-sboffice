@@ -4,7 +4,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div id="agencyListView" class="subCon" style="display: none;" ng-controller="agencyListCtrl">
 
@@ -39,7 +41,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="instl.agency.agencyCd" />
@@ -155,10 +157,12 @@
 </div>
 
 <script type="text/javascript">
+    var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
+    var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.46" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.48" charset="utf-8"></script>
 
 <%-- 업체현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/agencyDtl.jsp">

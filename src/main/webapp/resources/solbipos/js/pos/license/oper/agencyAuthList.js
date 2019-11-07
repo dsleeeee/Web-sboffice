@@ -60,6 +60,8 @@ app.controller('agencyAuthListCtrl', ['$scope', '$http', function ($scope, $http
         params.agencyCd = $("#agencyCdAuth").val();
         params.agencyNm = $("#agencyNmAuth").val();
         params.orgnCd = orgnCd;
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
 
         $scope._inquiryMain("/pos/license/oper/oper/getAgencyAuthList.sb", params, function() {}, false);
     };

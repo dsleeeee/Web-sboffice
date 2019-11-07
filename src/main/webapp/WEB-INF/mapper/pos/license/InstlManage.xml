@@ -79,16 +79,27 @@
         ) tsms
         WHERE 1=1
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
-        <if test='agencyCd != null and agencyCd != ""'>
-            <![CDATA[
-                 AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-            ]]>
-        </if>
-        <if test='agencyNm != null and agencyNm != ""'>
-            <![CDATA[
-                 AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-            ]]>
-        </if>
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+                <if test='agencyCd != null and agencyCd != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                    ]]>
+                </if>
+                <if test='agencyNm != null and agencyNm != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                    ]]>
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{orgnCd}
+                ]]>
+            </when>
+        </choose>
         <if test='agencyFg != null and agencyFg != ""'>
             <if test='agencyFg == "1"'>
                 <![CDATA[
@@ -101,7 +112,11 @@
                 ]]>
             </if>
         </if>
-        AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
+        <if test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <![CDATA[
+                AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
+            ]]>
+        </if>
         <if test='useYn != null and useYn != ""'>
             <![CDATA[
                 AND tca.USE_YN = #{useYn}
@@ -236,16 +251,27 @@
                 ]]>
             </if>
         </if>
-        <if test='agencyCd != null and agencyCd != ""'>
-            <![CDATA[
-                 AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-            ]]>
-        </if>
-        <if test='agencyNm != null and agencyNm != ""'>
-            <![CDATA[
-                 AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-            ]]>
-        </if>
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+                <if test='agencyCd != null and agencyCd != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                    ]]>
+                </if>
+                <if test='agencyNm != null and agencyNm != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                    ]]>
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{agencyCd}
+                ]]>
+            </when>
+        </choose>
         AND tms.AGENCY_CD (+)= tca.AGENCY_CD
         AND tmps.AGENCY_CD (+)= tca.AGENCY_CD
         AND tci.AGENCY_CD (+)= tca.AGENCY_CD

@@ -48,6 +48,12 @@ public class OperVO extends PageVO {
     /** 소속코드 */
     private String orgnCd;
 
+    /** 소속구분 */
+    private String orgnFg;
+
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
+
     public boolean getChkDt() { return chkDt; }
 
     public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
@@ -113,4 +119,20 @@ public class OperVO extends PageVO {
     }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
+    }
 }

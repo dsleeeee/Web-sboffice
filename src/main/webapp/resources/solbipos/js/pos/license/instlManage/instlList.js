@@ -84,6 +84,11 @@ app.controller('instlListCtrl', ['$scope', '$http', function ($scope, $http) {
         params.chkDt = $scope.isChecked;
         params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+        params.orgnFg = orgnFg;
+        params.pAgencyCd = pAgencyCd;
+        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+            params.agencyCd = orgnCd;
+        }
 
         $scope._inquiryMain("/pos/license/instlManage/instlManage/getInstlList.sb", params, function() {
             $scope.$apply(function() {
