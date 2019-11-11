@@ -1,7 +1,354 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    InstlManage.xml
+    설치관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.10.15     최초작성
+-->
 <mapper namespace="kr.co.solbipos.pos.license.instlManage.service.impl.InstlManageMapper">
+
+    <!-- 업체현황탭 - 업체현황조회-->
+    <!--
+        TABLE    : TB_CM_AGENCY, TB_CM_INSTLL, TB_MS_STORE, TB_SL_SALE_HDR
+        COMMENTS : [공통]대리점 정보 와 설치의뢰, [매장]매장 정보, [매출]헤더
+    -->
+    <select id="getAgencyList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getAgencyList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tca.AGENCY_CD,
+        tca.AGENCY_NM,
+        (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+        tca.OWNER_NM,
+        0 AS BUY_CNT,
+        0 AS SALE_CNT,
+        NVL(tci.INST_CNT,0) AS INST_CNT,
+        0 AS REST_CNT,
+        NVL(tms.TOT_STORE_CNT, 0) AS TOT_STORE_CNT,
+        NVL(tsms.SALE_STORE_CNT, 0) AS SALE_STORE_CNT,
+        NVL(tms.SYS_STAT_FG_2, 0) AS CLOSE_STORE_CNT,
+        tca.USE_YN,
+        TO_CHAR(TO_DATE(tca.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
+        tca.REG_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_CM_AGENCY tca,
+        (
+        SELECT
+        AGENCY_CD,
+        COUNT(STORE_CD) AS INST_CNT
+        FROM TB_CM_INSTLL
+        WHERE 1=1
+        AND SEQ_NO = '1'
+        AND INST_FG = '1'
+        GROUP BY AGENCY_CD
+        ) tci,
+        (
+        SELECT
+        tms.AGENCY_CD,
+        COUNT(tms.AGENCY_CD) AS TOT_STORE_CNT,
+        SUM(CASE WHEN tms.SYS_STAT_FG = 2 THEN 1 ELSE 0 END) AS SYS_STAT_FG_2
+        FROM TB_MS_STORE tms
+        GROUP BY tms.AGENCY_CD
+        ) tms,
+        (
+        SELECT A.AGENCY_CD, COUNT(A.STORE_CD) AS SALE_STORE_CNT
+        FROM
+        (
+        SELECT
+        tms.AGENCY_CD,
+        tms.STORE_CD
+        FROM
+        TB_MS_STORE tms,
+        TB_CM_AGENCY tca
+        WHERE 1=1
+        AND tca.AGENCY_CD = tms.AGENCY_CD
+        ORDER BY tms.AGENCY_CD, tms.STORE_CD
+        ) A,
+        (
+        SELECT STORE_CD
+        FROM TB_SL_SALE_HDR
+        GROUP BY STORE_CD
+        ORDER BY STORE_CD
+        ) B
+        WHERE A.STORE_CD = B.STORE_CD
+        GROUP BY A.AGENCY_CD
+        ) tsms
+        WHERE 1=1
+        AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+                <if test='agencyCd != null and agencyCd != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                    ]]>
+                </if>
+                <if test='agencyNm != null and agencyNm != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                    ]]>
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{orgnCd}
+                ]]>
+            </when>
+        </choose>
+        <if test='agencyFg != null and agencyFg != ""'>
+            <if test='agencyFg == "1"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{orgnCd}
+                ]]>
+            </if>
+            <if test='agencyFg == "2"'>
+                <![CDATA[
+                    AND tca.P_AGENCY_CD = #{orgnCd}
+                ]]>
+            </if>
+        </if>
+        <if test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <![CDATA[
+                AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
+            ]]>
+        </if>
+        <if test='useYn != null and useYn != ""'>
+            <![CDATA[
+                AND tca.USE_YN = #{useYn}
+            ]]>
+        </if>
+        AND tci.AGENCY_CD (+)= tca.AGENCY_CD
+        AND tms.AGENCY_CD (+)= tca.AGENCY_CD
+        AND tsms.AGENCY_CD (+)= tca.AGENCY_CD
+        ORDER BY tca.AGENCY_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 업체현황탭 - 업체현황 상세조회-->
+    <!--
+        TABLE    : TB_CM_INSTLL, TB_CM_AGENCY
+        COMMENTS : 설치의뢰 와 [공통]대리점 정보
+    -->
+    <select id="getAgencyDtlList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getAgencyDtlList */
+        SELECT
+        tci.DT,
+        0 AS BUY_CNT,
+        0 AS BUY_AMT,
+        0 AS BUY_STORE,
+        tci.INST_CNT AS INST_CNT,
+        tci.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tci.STORE_CD) AS STORE_NM,
+        tci.POS_NO,
+        0 AS REST_CNT,
+        tci.INST_FG AS MEMO
+        FROM TB_CM_AGENCY tca,
+        (
+            SELECT
+            TO_CHAR(TO_DATE(REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS DT,
+            AGENCY_CD,
+            COUNT(STORE_CD) AS INST_CNT,
+            STORE_CD,
+            POS_NO,
+            INST_FG
+            FROM TB_CM_INSTLL
+            WHERE 1=1
+            AND SEQ_NO = '1'
+            AND INST_FG = '1'
+            GROUP BY REG_DT, AGENCY_CD, STORE_CD, POS_NO, INST_FG
+        ) tci
+        WHERE 1=1
+        AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+        AND tca.AGENCY_CD = #{agencyCd}
+        AND tci.AGENCY_CD (+)= tca.AGENCY_CD
+        ORDER BY tci.DT, tci.STORE_CD, tci.POS_NO
+    </select>
+
+    <!-- 업체현황탭 - 매장별매출 상세조회-->
+    <!--
+        TABLE    : TB_MS_STORE, TB_CM_AGENCY, TB_MS_POS, TB_SL_SALE_HDR
+        COMMENTS : [매장]매장 정보 와 [공통]대리점 정보, [매장]포스 정보, [매출]헤더
+    -->
+    <select id="getAgencyPurchsList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getAgencyPurchsList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tssh.SALE_DATE AS MAX_SALE_DATE,
+        COUNT(tmp.POS_NO) AS POS_CNT,
+        tms.AGENCY_CD
+        FROM
+        TB_MS_STORE tms,
+        TB_CM_AGENCY tca,
+        TB_MS_POS tmp,
+        (
+          SELECT
+          tssh.STORE_CD,
+          MAX(tssh.SALE_DATE) AS SALE_DATE
+          FROM TB_SL_SALE_HDR tssh
+          GROUP BY tssh.STORE_CD
+        ) tssh
+        WHERE 1=1
+        AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+        AND tms.AGENCY_CD = #{agencyCd}
+        AND tca.AGENCY_CD = tms.AGENCY_CD
+        AND tmp.STORE_CD (+)= tms.STORE_CD
+        AND tssh.STORE_CD = tms.STORE_CD
+        GROUP BY tms.AGENCY_CD, tms.STORE_CD, tms.STORE_NM, tssh.SALE_DATE
+        ORDER BY tms.AGENCY_CD, tms.STORE_CD
+    </select>
+
+    <!-- 설치현황탭 - 설치현황조회-->
+    <!--
+        TABLE    : TB_CM_AGENCY, TB_MS_STORE, TB_MS_POS
+        COMMENTS : [공통]대리점 정보 와 [매장]매장 정보, [매장]포스 정보
+    -->
+    <select id="getInstlList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getInstlList */
+        SELECT
+        tca.AGENCY_CD,
+        tca.AGENCY_NM,
+        NVL(tms.TOT_STORE_CNT, 0) AS TOT_STORE_CNT,
+        NVL(tms.SYS_STAT_FG_2, 0) AS CLOSE_STORE_CNT,
+        NVL(tmps.POS_CNT, 0) AS POS_CNT,
+        NVL(tci.INST_0, 0) AS REST_CNT
+        FROM TB_CM_AGENCY tca,
+        (
+        SELECT
+        tms.AGENCY_CD,
+        COUNT(tms.AGENCY_CD) AS TOT_STORE_CNT,
+        SUM(CASE WHEN tms.SYS_STAT_FG = 2 THEN 1 ELSE 0 END) AS SYS_STAT_FG_2
+        FROM TB_MS_STORE tms
+        GROUP BY tms.AGENCY_CD
+        ) tms,
+        (
+        SELECT
+        tms.AGENCY_CD,
+        COUNT(tmp.POS_NO) AS POS_CNT
+        FROM TB_MS_POS tmp,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tmp.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tms.AGENCY_CD
+        ) tmps,
+        (
+        SELECT
+        AGENCY_CD,
+        SUM(CASE WHEN INST_FG = 0 THEN 1 ELSE 0 END) AS INST_0
+        FROM TB_CM_INSTLL
+        GROUP BY AGENCY_CD
+        ) tci
+        WHERE 1=1
+        <if test='chkDt != true'>
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+                ]]>
+            </if>
+        </if>
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+                <if test='agencyCd != null and agencyCd != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                    ]]>
+                </if>
+                <if test='agencyNm != null and agencyNm != ""'>
+                    <![CDATA[
+                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                    ]]>
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+                <![CDATA[
+                    AND tca.AGENCY_CD = #{agencyCd}
+                ]]>
+            </when>
+        </choose>
+        AND tms.AGENCY_CD (+)= tca.AGENCY_CD
+        AND tmps.AGENCY_CD (+)= tca.AGENCY_CD
+        AND tci.AGENCY_CD (+)= tca.AGENCY_CD
+        ORDER BY tca.AGENCY_CD
+    </select>
+
+    <!-- 설치현황탭 - 설치현황 상세조회-->
+    <!--
+        TABLE    : TB_MS_STORE, TB_CM_AGENCY, TB_CM_INSTLL
+        COMMENTS : [매장]매장 정보 와 [공통]대리점 정보, 설치의뢰
+    -->
+    <select id="getInstlDetailList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getInstlDetailList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tci.STORE_CD,
+        tms.STORE_NM,
+        tci.POS_NO,
+        tca.AGENCY_NM AS AGENCY_NM,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tci.INSTL_AGENCY_CD) AS INSTL_AGENCY_NM,
+        tci.INST_INS_ID,
+        tci.MIN_INST_INS_DT,
+        tci.MAX_INST_INS_DT,
+        tci.INST_CNT,
+        tms.SYS_STAT_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORE tms,
+        TB_CM_AGENCY tca,
+        (
+        SELECT
+        STORE_CD,
+        POS_NO,
+        AGENCY_CD AS INSTL_AGENCY_CD,
+        INST_INS_ID,
+        MIN(TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')) AS MIN_INST_INS_DT,
+        MAX(TO_CHAR(TO_DATE(INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')) AS MAX_INST_INS_DT,
+        COUNT(STORE_CD) AS INST_CNT
+        FROM TB_CM_INSTLL
+        WHERE 1=1
+        GROUP BY STORE_CD, POS_NO, AGENCY_CD, INST_INS_ID
+        ORDER BY STORE_CD, POS_NO
+        ) tci
+        WHERE 1=1
+        AND tca.AGENCY_CD = #{agencyCd}
+        <if test='chkDt != true'>
+            <![CDATA[
+                AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
+            ]]>
+        </if>
+        AND tca.AGENCY_CD (+)= tms.AGENCY_CD
+        AND tms.STORE_CD (+)= tci.STORE_CD
+        ORDER BY tci.STORE_CD, tci.POS_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 설치현황탭 - 설치현황 설치정보 상세조회-->
+    <!--
+        TABLE    : TB_MS_STORE, TB_CM_AGENCY, TB_CM_INSTLL
+        COMMENTS : [매장]매장 정보 와 [공통]대리점 정보, 설치의뢰
+    -->
+    <select id="getInstlDtlList"  parameterType="InstlManageVO" resultType="DefaultMap">
+        /* InstlManageMapper.getInstlDtlList */
+        SELECT
+        tci.INST_FG,
+        TO_CHAR(TO_DATE(tci.INST_REQ_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS INST_REQ_DT,
+        TO_CHAR(TO_DATE(tci.INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH:mm:ss') AS INST_INS_DT,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tci.AGENCY_CD) AS INSTL_AGENCY_NM,
+        tci.INST_INS_ID
+        FROM TB_CM_INSTLL tci,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tci.STORE_CD = #{storeCd}
+        AND tci.POS_NO = #{posNo}
+        AND tms.STORE_CD (+)= tci.STORE_CD
+        ORDER BY tci.INST_REQ_DT, tci.INST_INS_DT
+    </select>
 
     <!-- 설치요청 목록 조회 -->
     <!--
@@ -9,43 +356,43 @@
         COMMENTS : 설치요청 목록 조회
     -->
     <select id="getInstlRequestList"  parameterType="instlManageVO" resultType="DefaultMap">
-      /* InstlManageMapper.getInstlRequestList */
+        /* InstlManageMapper.getInstlRequestList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tms.HQ_OFFICE_CD,
-                tho.HQ_OFFICE_NM,
-                tms.STORE_NM,
-                tmp.STORE_CD,
-                tmp.POS_NO,
-                tci.SEQ_NO,
-                tci.AGENCY_CD,
-                tca.AGENCY_NM,
-                tms.SYS_STAT_FG,
-                TO_CHAR(TO_DATE(tci.INST_REQ_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_REQ_DT,
-                tci.INST_REQ_ID,
-                TO_CHAR(TO_DATE(tci.INST_INS_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_INS_DT,
-                tci.INST_INS_ID,
-                tci.INST_FG,
-                tci.INST_REASON,
-                tci.REMARK
+        tho.HQ_OFFICE_NM,
+        tms.STORE_NM,
+        tmp.STORE_CD,
+        tmp.POS_NO,
+        tci.SEQ_NO,
+        tci.AGENCY_CD,
+        tca.AGENCY_NM,
+        tms.SYS_STAT_FG,
+        TO_CHAR(TO_DATE(tci.INST_REQ_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_REQ_DT,
+        tci.INST_REQ_ID,
+        TO_CHAR(TO_DATE(tci.INST_INS_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_INS_DT,
+        tci.INST_INS_ID,
+        tci.INST_FG,
+        tci.INST_REASON,
+        tci.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
-         FROM  TB_MS_POS tmp,
-                TB_MS_STORE tms,
-                TB_HQ_OFFICE tho,
-                (
-                    SELECT STORE_CD, POS_NO,
-                    MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
-                    MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
-                    MAX(INST_REQ_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_DT,
-                    MAX(INST_REQ_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_ID,
-                    MAX(INST_INS_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_DT,
-                    MAX(INST_INS_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_ID,
-                    MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
-                    MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
-                    MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
-                    FROM TB_CM_INSTLL
-                    GROUP BY STORE_CD , POS_NO
-                ) tci,
-                TB_CM_AGENCY tca
+        FROM  TB_MS_POS tmp,
+        TB_MS_STORE tms,
+        TB_HQ_OFFICE tho,
+        (
+        SELECT STORE_CD, POS_NO,
+        MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
+        MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
+        MAX(INST_REQ_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_DT,
+        MAX(INST_REQ_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_ID,
+        MAX(INST_INS_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_DT,
+        MAX(INST_INS_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_ID,
+        MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
+        MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
+        MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
+        FROM TB_CM_INSTLL
+        GROUP BY STORE_CD , POS_NO
+        ) tci,
+        TB_CM_AGENCY tca
         WHERE tms.STORE_CD = tmp.STORE_CD
         AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
         AND tci.STORE_CD (+)= tmp.STORE_CD
