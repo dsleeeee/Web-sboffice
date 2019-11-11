@@ -459,7 +459,8 @@
             tme.EMP_NO,
             tme.EMP_NM,
             tmf.EMP_NO,
-            DECODE(tmf.EMP_NO, NULL, 0, 1) AS USE_YN
+            (CASE WHEN tmf.USE_YN = 'Y' THEN 1 ELSE 0 END) AS USE_YN
+ --           DECODE(tmf.EMP_NO, NULL, 0, 1) AS USE_YN
         FROM
             TB_MS_EMPLOYEE tme
         LEFT OUTER JOIN TB_MS_EMPLOYEE_FNKEY tmf ON

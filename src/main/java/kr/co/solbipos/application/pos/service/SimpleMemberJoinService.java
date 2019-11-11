@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.pos.service;
 
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 
 /**
  * @Class Name : SimpleMemberJoinService.java
@@ -18,6 +19,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public interface SimpleMemberJoinService {
+
+    /** 환경변수 값 체크 */
+    String getEnvstVal(StoreEnvVO storeEnvVO);
 
     /** 회원 저장 */
     int save(MemberVO memberVO, SessionInfoVO sessionInfoVO);

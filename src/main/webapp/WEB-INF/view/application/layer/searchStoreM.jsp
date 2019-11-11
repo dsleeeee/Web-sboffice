@@ -5,7 +5,7 @@
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text" id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:100%;" value="전체" ng-click="<c:out value="${param.targetId}"/>Show()" readonly/>
 
-<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wj<c:out value="${param.targetId}"/>LayerM" control="wj<c:out value="${param.targetId}"/>LayerM" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div class="wj-dialog wj-dialog-columns">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="cmm.store.select"/>
@@ -13,24 +13,46 @@
     </div>
     <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
       <div class="w100">
+        <%-- 조회 조건 --%>
+        <table class="tblType01 mt5">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="cmm.storeCd"/></th>
+            <td><input type="text" id="srchStoreCd" ng-model="storeCd" maxlength="5" /></td>
+            <th><s:message code="cmm.storeNm"/></th>
+            <td><input type="text" id="srchStoreNm" ng-model="storeNm" maxlength="16" /></td>
+          </tr>
+          </tbody>
+        </table>
+        <%-- 조회 --%>
+        <%--<div class="mt10 tr">
+          <button class="btn_skyblue" id="btnSearch" ng-click="getStoreList();" ><s:message code="cmm.search" /></button>
+        </div>--%>
+
         <div class="mt20 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
-          <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
-          </wj-combo-box>
+            <wj-combo-box
+                    class="w100px fl"
+                    id="listScaleBoxM"
+                    ng-model="listScale"
+                    items-source="_getComboData('listScaleBoxM')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="initComboBox(s)">
+            </wj-combo-box>
           <%--// 페이지 스케일  --%>
           <%-- 선택 --%>
-          <button class="btn_skyblue fr" ng-click="storeSelected()">
-            <s:message code="cmm.chk"/></button>
+          &nbsp;
+          <button class="btn_skyblue" ng-click="storeSelected()"><s:message code="cmm.chk"/></button>
+          <button class="btn_skyblue fr" id="btnSearch" ng-click="getStoreList()" ><s:message code="cmm.search" /></button>
         </div>
-
         <%--위즈모 테이블--%>
         <div class="theGrid mt10" style="height: 400px;">
           <wj-flex-grid
@@ -78,7 +100,7 @@
     angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
 
     //페이지 스케일 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("listScaleBoxM", gvListScaleBoxData2);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -97,6 +119,9 @@
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
+      params.storeCd = $scope.storeCd;
+      params.storeNm = $scope.storeNm;
+      params.listScale  = $scope.listScale;
       $scope._inquirySub("/popup/getStoreList.sb", params, function () {
       });
     };
@@ -133,5 +158,11 @@
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };
+
+    // 조회버튼 클릭 시 매장목록 조회
+    $scope.getStoreList= function () {
+      $scope.searchStore();
+    };
+
   }]);
 </script>

@@ -1,6 +1,7 @@
 package kr.co.solbipos.pos.license.instlManage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.pos.install.enums.InstallFg;
 
 /**
  * @Class Name : InstlManageVO.java
@@ -50,6 +51,39 @@ public class InstlManageVO extends PageVO {
 
     /** 대리점의 부모 대리점 코드 */
     private String pAgencyCd;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 본사명 */
+    private String hqOfficeNm;
+
+    /** 매장명 */
+    private String storeNm;
+
+    /** 순번 */
+    private String seqNo;
+
+    /** 설치구분 */
+    private InstallFg instFg;
+
+    /** 설치요청일 */
+    private String instReqDt;
+
+    /** 설치요청ID */
+    private String instReqId;
+
+    /** 설치일 */
+    private String instInsDt;
+
+    /** 설치ID */
+    private String instInsId;
+
+    /** 설치사유 */
+    private String instReason;
+
+    /** 비고 */
+    private String remark;
 
     public String getAgencyCd() {
         return agencyCd;
@@ -123,5 +157,97 @@ public class InstlManageVO extends PageVO {
 
     public void setpAgencyCd(String pAgencyCd) {
         this.pAgencyCd = pAgencyCd;
+    }
+
+    public boolean isChkDt() {
+        return chkDt;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getSeqNo() {
+        return seqNo;
+    }
+
+    public void setSeqNo(String seqNo) {
+        this.seqNo = seqNo;
+    }
+
+    public InstallFg getInstFg() {
+        return instFg;
+    }
+
+    public void setInstFg(InstallFg instFg) {
+        this.instFg = instFg;
+    }
+
+    public String getInstReqDt() {
+        return instReqDt;
+    }
+
+    public void setInstReqDt(String instReqDt) {
+        this.instReqDt = instReqDt;
+    }
+
+    public String getInstReqId() {
+        return instReqId;
+    }
+
+    public void setInstReqId(String instReqId) {
+        this.instReqId = instReqId;
+    }
+
+    public String getInstInsDt() {
+        return instInsDt;
+    }
+
+    public void setInstInsDt(String instInsDt) {
+        this.instInsDt = instInsDt;
+    }
+
+    public String getInstInsId() {
+        return instInsId;
+    }
+
+    public void setInstInsId(String instInsId) {
+        this.instInsId = instInsId;
+    }
+
+    public String getInstReason() {
+        return instReason;
+    }
+
+    public void setInstReason(String instReason) {
+        this.instReason = instReason;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

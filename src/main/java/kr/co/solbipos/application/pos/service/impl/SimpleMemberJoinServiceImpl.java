@@ -6,6 +6,8 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.pos.service.MemberVO;
 import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.store.view.service.VanConfigVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,12 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
 
     @Autowired
     MessageService messageService;
+
+    /** 환경변수 값 체크 */
+    @Override
+    public String getEnvstVal(StoreEnvVO storeEnvVO) {
+        return mapper.getEnvstVal(storeEnvVO);
+    }
 
     /** 회원 저장 */
     @Override

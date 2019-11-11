@@ -97,4 +97,7 @@ public interface StoreManageService {
     /** 터치키 복사할 매장 목록 조회 */
     List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO);
 
+    /** 설치포스 수 추가 */
+    int savePosCnt(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
 }

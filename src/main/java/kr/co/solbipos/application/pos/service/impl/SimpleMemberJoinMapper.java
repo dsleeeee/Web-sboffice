@@ -2,6 +2,7 @@ package kr.co.solbipos.application.pos.service.impl;
 
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.pos.service.MemberVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,9 @@ public interface SimpleMemberJoinMapper {
 
     /** 후불회원 등록*/
     int registMemberPostpaid(MemberVO memberVO);
+
+    /** 환경변수 값 체크 */
+    String getEnvstVal(StoreEnvVO storeEnvVO);
 
 
 }

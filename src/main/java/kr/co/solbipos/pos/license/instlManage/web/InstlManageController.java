@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+
 @Controller
 @RequestMapping("/pos/license/instlManage")
 public class InstlManageController {
@@ -169,5 +171,47 @@ public class InstlManageController {
         List<DefaultMap<Object>> result = instlManageService.getInstlDtlList(instlManageVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, instlManageVO);
+    }
+
+    /**
+     * 설치관리 - 설치요청 목록 조회
+     *
+     * @param instlManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getInstlRequestList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getInstallRequestList(InstlManageVO instlManageVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = instlManageService.getInstlRequestList(instlManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, instlManageVO);
+    }
+
+    /**
+     * 설치관리 - 설치요청 목록 상세
+     *
+     * @param instlManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/getInstlRequestDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getInstlRequestDtl(InstlManageVO instlManageVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = instlManageService.getInstlRequestDtl(instlManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, instlManageVO);
     }
 }

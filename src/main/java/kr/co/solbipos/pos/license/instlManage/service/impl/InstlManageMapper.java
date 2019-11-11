@@ -28,4 +28,10 @@ public interface InstlManageMapper {
 
     /** 설치현황탭 - 설치현황 설치정보 상세조회 */
     List<DefaultMap<Object>> getInstlDtlList(InstlManageVO instlManageVO);
+
+    /** 설치요청 목록 조회 */
+    List<DefaultMap<String>> getInstlRequestList(InstlManageVO instlManageVO);
+
+    /** 설치요청 목록 상세 */
+    List<DefaultMap<String>> getInstlRequestDtl(InstlManageVO instlManageVO);
 }

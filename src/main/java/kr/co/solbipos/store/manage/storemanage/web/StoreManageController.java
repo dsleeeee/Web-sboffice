@@ -572,4 +572,26 @@ public class StoreManageController {
 
        return returnListJson(Status.OK, hqList);
    }
+
+    /**
+     * 설치포스 수 추가
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2019.11.06
+     */
+    @RequestMapping(value = "storeManage/savePosCnt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result savePosCnt(@RequestBody StoreManageVO storeManageVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.savePosCnt(storeManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

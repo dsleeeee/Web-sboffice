@@ -16,20 +16,29 @@
     </div>
     <div class="wj-dialog-body">
       <div class="w100">
-        <div class="mt20 oh sb-select dkbr">
-          <%-- 페이지 스케일  --%>
-          <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
-          </wj-combo-box>
-          <%--// 페이지 스케일  --%>
+
+        <%-- 조회 조건 --%>
+        <table class="tblType01 mt5">
+          <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+          </colgroup>
+          <tbody>
+          <tr>
+            <th><s:message code="cmm.storeCd"/></th>
+            <td><input type="text" id="srchStoreCd" ng-model="storeCd" maxlength="5" /></td>
+            <th><s:message code="cmm.storeNm"/></th>
+            <td><input type="text" id="srchStoreNm" ng-model="storeNm" maxlength="16" /></td>
+          </tr>
+          </tbody>
+        </table>
+        <%-- 조회 --%>
+        <div class="mt10 tr">
+          <button class="btn_skyblue" id="btnSearch" ng-click="getStoreList();" ><s:message code="cmm.search" /></button>
         </div>
+
 
         <%--위즈모 테이블--%>
         <div class="theGrid mt10" style="height: 400px;">
@@ -130,9 +139,16 @@
       event.preventDefault();
     });
 
+    // 조회버튼 클릭 시 매장목록 조회
+    $scope.getStoreList= function () {
+        $scope.searchStore();
+    };
+
     $scope.searchStore = function () {
       // 파라미터
       var params = {};
+      params.storeCd = $scope.storeCd;
+      params.storeNm = $scope.storeNm;
       $scope._inquirySub("/popup/getStoreList.sb", params, function () {
         $scope.searchFg = "Y";
       });
