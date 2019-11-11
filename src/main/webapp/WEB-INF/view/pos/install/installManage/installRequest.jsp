@@ -5,7 +5,7 @@
 <wj-popup id="installRegistPopupLayer" control="installRegistPopupLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="outstockConfmDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="installRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="instl.install.request"/>
+      <s:message code="instl.req"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
@@ -169,5 +169,8 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302" charset="utf-8"></script>
+<script>
+  var reasonData = ${ccu.getCommCodeExcpAll("102")};
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302.01" charset="utf-8"></script>
 

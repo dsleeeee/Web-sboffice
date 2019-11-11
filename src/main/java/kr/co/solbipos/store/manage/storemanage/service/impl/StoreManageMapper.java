@@ -256,5 +256,8 @@ public interface StoreManageMapper {
     //    /** 벤사, 코너 정보 조회 */
 //    List<DefaultMap<String>> getVanCornrList(StoreManageVO storeManageVO);
 
+    /** 설치포스 MAX Pos No값 조회 */
+    int getInstPosCntMax(StoreManageVO storeManageVO);
+
 }
 

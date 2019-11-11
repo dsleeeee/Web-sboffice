@@ -115,8 +115,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#viewForm")[0].reset();
     $("#storeInfoTitle").text("");
 
+    $scope.store.hqOfficeCd = '';
+    $scope.store.hqOfficeNm = '';
     $scope.store.storeCd                = '자동채번';
     $scope.store.beforeBizNo            = '';
+    $scope.store.installPosCnt          = '';
     $scope.areaCdCombo.selectedIndex    = 0;
     $scope.clsFgCombo.selectedIndex     = 0;
     $scope.sysStatFgCombo.selectedIndex = 0;
@@ -127,6 +130,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.sysStatFgCombo.isReadOnly    = false;
     $scope.clsFgCombo.isReadOnly        = false;
     $scope.readOnlyStatus               = false;
+    $scope.store.installPosCnt.isReadOnly = false;
+    $("#installPosCnt").css('background-color', '#ffffff');
 
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
@@ -171,6 +176,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.readOnlyStatus                  = true;
       $scope.sysOpenDateCombo.isReadOnly     = true;
+      $scope.store.installPosCnt.isReadOnly = true;
+      $("#installPosCnt").css('background-color', '#F0F0F0');
 
       if(storeDetailInfo.sysStatFg === '9'){
         $scope.sysStatFgCombo.isReadOnly = true;
@@ -450,7 +457,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-
   /*********************************************************
    * 대리점 조회
    * *******************************************************/
@@ -535,6 +541,45 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 팝업 닫을때
     envPopup.show(true, function (s) {
     });
+  };
+
+  /*********************************************************
+   * 설치포스수 추가
+   * *******************************************************/
+  $scope.addPos = function(){
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    if(isEmptyObject(storeScope.getSelectedStore()) ) {  // 수정모드시에만 포스추가 팝업 호출
+      return false;
+    }
+
+    // 관리자와 총판권한만 수정 가능
+    if(orgnFg !== "MASTER" && orgnFg !== "AGENCY"){
+      return false;
+    }
+
+    var popup = $scope.storePosAddLayer;
+
+    // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+    popup.shown.addHandler(function (s) {
+      setTimeout(function() {
+
+        var params      = {};
+        params.storeCd = $scope.store.storeCd;
+        params.storeNm = $scope.store.storeNm;
+        params.posCnt = $scope.store.installPosCnt;
+
+        $scope._broadcast('storePosAddCtrl', params);
+      }, 50)
+    });
+
+    // 팝업 닫을때
+    popup.show(true, function (s) {
+    });
+
+    event.preventDefault();
+
   };
 
 }]);

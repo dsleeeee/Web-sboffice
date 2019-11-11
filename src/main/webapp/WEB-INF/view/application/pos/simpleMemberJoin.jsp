@@ -48,7 +48,7 @@
                         <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
                     </td>
                 </tr>
-                <tr>
+                <tr id="tr_membrFg">
                     <%-- 회원구분 --%>
                     <th><s:message code="application.pos.simpleMemberJoin.membrFg"/></th>
                     <td>
@@ -82,100 +82,120 @@
 </div>
 
 <script>
+    $(document).ready(function(){
 
-<%-- 조회 버튼 클릭 --%>
-$("#btnSave").click(function(){
-    valueCheck("/application/pos/simpleMemberJoin/save.sb");
-});
+        var posMemberFgEnvstVal  = ${posMemberFgEnvstVal};
 
-function valueCheck(sendUrl) {
-    <%-- 연락처를 입력해주세요. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='cmm.require.text'/>";
-    if($("#telNo").val() === "") {
-        s_alert.popOk(msg, function(){ $("#telNo").focus(); });
-        return false;
-    }
-
-    <%-- 연락처는 숫자만 입력할 수 있습니다. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='cmm.require.number'/>";
-    var numChkregexp = /[^0-9]/g;
-    if(numChkregexp.test($("#telNo").val())) {
-        s_alert.popOk(msg, function(){ $("#telNo").select(); });
-        return false;
-    }
-
-    <%-- 연락처를 정확히 입력해주세요. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
-    if($("#telNo").val().length < 10) {
-        s_alert.popOk(msg, function(){ $("#telNo").select(); });
-        return false;
-    }
-
-    <%-- 회원명을 입력해주세요. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='cmm.require.text'/>";
-    if($("#membrNm").val() === "") {
-        s_alert.popOk(msg, function(){ $("#membrNm").focus(); });
-        return false;
-    }
-
-    <%-- 회원명의 길이가 너무 깁니다. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='application.pos.simpleMemberJoin.textOver'/>";
-    if($("#membrNm").val().getByteLengthForOracle() > 50) {
-        s_alert.popOk(msg, function(){ $("#membrNm").select(); });
-        return false;
-    }
-
-    <%-- 생년월일을 입력해주세요. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.text'/>";
-    if($("#birthday").val() === "") {
-        s_alert.popOk(msg, function(){ $("#birthday").focus(); });
-        return false;
-    }
-
-    <%-- 생년월일은 숫자만 입력할 수 있습니다. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.number'/>";
-    if(numChkregexp.test($("#birthday").val())) {
-        s_alert.popOk(msg, function(){ $("#birthday").select(); });
-        return false;
-    }
-
-    <%-- 생년월일을 정확히 입력해주세요. --%>
-    var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
-    if($("#birthday").val().length < 8) {
-        s_alert.popOk(msg, function(){ $("#birthday").select(); });
-        return false;
-    }
-    save(sendUrl);
-}
-
-function save(sendUrl) {
-    var param = {};
-    param.telNo    = $("#telNo").val();
-    param.membrNm  = $("#membrNm").val();
-    param.birthday = $("#birthday").val();
-    param.gendrFg  = $(':radio[name="gendrFg"]:checked').val();
-    param.membrFg  = $(':radio[name="membrFg"]:checked').val();
-    param.remark   = $("#remark").val();
-
-    $.postJSONSave(sendUrl, param, function (result) {
-        if (result.status === "FAIL") {
-            s_alert.pop(result.message);
-            return false;
+        // 환경변수값(1059)을 가져와 회원구분항목 display
+        if(posMemberFgEnvstVal === 0){
+            $("#tr_membrFg").css("display", "none");
+        } else if(posMemberFgEnvstVal === 1){
+            $("#tr_membrFg").css("display", "");
         }
-        s_alert.pop("<s:message code='cmm.saveSucc'/>");
-        resetVal();
-    }
-    , function (result) {
-        s_alert.pop(result.message);
-    });
-}
 
-//변수초기화
-function resetVal() {
-    $("#telNo").val("");
-    $("#membrNm").val("");
-    $("#birthday").val("");
-    $("#gendrFgM").prop("checked", true);
-    $("#remark").val("");
-}
+        <%-- 조회 버튼 클릭 --%>
+        $("#btnSave").click(function(){
+            valueCheck("/application/pos/simpleMemberJoin/save.sb");
+        });
+
+        function valueCheck(sendUrl) {
+            <%-- 연락처를 입력해주세요. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='cmm.require.text'/>";
+            if($("#telNo").val() === "") {
+                s_alert.popOk(msg, function(){ $("#telNo").focus(); });
+                return false;
+            }
+
+            <%-- 연락처는 숫자만 입력할 수 있습니다. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='cmm.require.number'/>";
+            var numChkregexp = /[^0-9]/g;
+            if(numChkregexp.test($("#telNo").val())) {
+                s_alert.popOk(msg, function(){ $("#telNo").select(); });
+                return false;
+            }
+
+            <%-- 연락처를 정확히 입력해주세요. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.telNo'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
+            if($("#telNo").val().length < 10) {
+                s_alert.popOk(msg, function(){ $("#telNo").select(); });
+                return false;
+            }
+
+            <%-- 회원명을 입력해주세요. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='cmm.require.text'/>";
+            if($("#membrNm").val() === "") {
+                s_alert.popOk(msg, function(){ $("#membrNm").focus(); });
+                return false;
+            }
+
+            <%-- 회원명의 길이가 너무 깁니다. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.membrNm'/> <s:message code='application.pos.simpleMemberJoin.textOver'/>";
+            if($("#membrNm").val().getByteLengthForOracle() > 50) {
+                s_alert.popOk(msg, function(){ $("#membrNm").select(); });
+                return false;
+            }
+
+            <%-- 생년월일을 입력해주세요. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.text'/>";
+            if($("#birthday").val() === "") {
+                s_alert.popOk(msg, function(){ $("#birthday").focus(); });
+                return false;
+            }
+
+            <%-- 생년월일은 숫자만 입력할 수 있습니다. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='cmm.require.number'/>";
+            if(numChkregexp.test($("#birthday").val())) {
+                s_alert.popOk(msg, function(){ $("#birthday").select(); });
+                return false;
+            }
+
+            <%-- 생년월일을 정확히 입력해주세요. --%>
+            var msg = "<s:message code='application.pos.simpleMemberJoin.birthday'/> <s:message code='application.pos.simpleMemberJoin.validCheck'/>";
+            if($("#birthday").val().length < 8) {
+                s_alert.popOk(msg, function(){ $("#birthday").select(); });
+                return false;
+            }
+            save(sendUrl);
+        }
+
+        function save(sendUrl) {
+            var param = {};
+            param.telNo    = $("#telNo").val();
+            param.membrNm  = $("#membrNm").val();
+            param.birthday = $("#birthday").val();
+            param.gendrFg  = $(':radio[name="gendrFg"]:checked').val();
+
+            // 회원구분항목 미사용 시 무조건 기본 선불로 등록
+            if(posMemberFgEnvstVal === 0){
+                param.membrFg  = $(':radio[id="membrFgPr"]:checked').val();
+            } else if(posMemberFgEnvstVal === 1){
+                param.membrFg  = $(':radio[name="membrFg"]:checked').val();
+            }
+
+            param.remark   = $("#remark").val();
+
+            $.postJSONSave(sendUrl, param, function (result) {
+                if (result.status === "FAIL") {
+                    s_alert.pop(result.message);
+                    return false;
+                }
+                s_alert.pop("<s:message code='cmm.saveSucc'/>");
+                resetVal();
+            }
+            , function (result) {
+                s_alert.pop(result.message);
+            });
+        }
+
+        //변수초기화
+        function resetVal() {
+            $("#telNo").val("");
+            $("#membrNm").val("");
+            $("#birthday").val("");
+            $("#gendrFgM").prop("checked", true);
+            $("#remark").val("");
+        }
+
+    });
+
 </script>

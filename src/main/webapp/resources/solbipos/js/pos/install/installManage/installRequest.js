@@ -39,7 +39,7 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.instFgDataMap = new wijmo.grid.DataMap(instFgData, 'value', 'name');
-    $scope.reasonDatMap = new wijmo.grid.DataMap(reasonData, 'value', 'name');
+    $scope.reasonDataMap = new wijmo.grid.DataMap(reasonData, 'value', 'name');
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
   };
 

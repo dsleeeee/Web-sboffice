@@ -155,7 +155,7 @@
               <%-- 설치포스수 --%>
               <th><s:message code="storeManage.installPosCnt" /><em class="imp">*</em></th>
               <td>
-                <input type="text" id="installPosCnt" ng-model="store.installPosCnt" ng-readonly="readOnlyStatus" class="sb-input w100" />
+                <input type="text" id="installPosCnt" ng-model="store.installPosCnt" class="sb-input w100" ng-click="addPos()"/>
               </td>
             </tr>
             <tr>
@@ -356,7 +356,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110701.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110702.06" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">
@@ -372,4 +372,8 @@
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">
+</c:import>
+
+<%-- 설치포스수 추가 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storePosAdd.jsp">
 </c:import>

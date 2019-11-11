@@ -881,4 +881,33 @@ public class StoreManageServiceImpl implements StoreManageService{
     public List<DefaultMap<String>> getTouchKeyStoreList(HqManageVO hqManageVO) {
         return mapper.getTouchKeyStoreList(hqManageVO);
     }
+
+    /** 설치포스 수 추가 */
+    @Override
+    public int savePosCnt(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        storeManageVO.setRegDt(dt);
+        storeManageVO.setRegId(sessionInfoVO.getUserId());
+        storeManageVO.setModDt(dt);
+        storeManageVO.setModId(sessionInfoVO.getUserId());
+
+        // 설치포스 MAX Pos No값 조회
+        int maxPosNo = mapper.getInstPosCntMax(storeManageVO);
+
+        // 포스 마스터 생성 (설치포수 개수만큼 포스 마스터 생성)
+        if(!"".equals(storeManageVO.getInstallPosCnt())){
+            int installPosCnt =  Integer.parseInt(storeManageVO.getInstallPosCnt());
+
+            for(int i = maxPosNo+1; i <= maxPosNo + installPosCnt; i++){
+                storeManageVO.setPosNo((i));
+                procCnt += mapper.insertPosInfo(storeManageVO);
+            }
+        }
+
+        return procCnt;
+
+    }
 }

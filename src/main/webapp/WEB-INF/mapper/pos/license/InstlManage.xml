@@ -2,4 +2,105 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.pos.license.instlManage.service.impl.InstlManageMapper">
+
+    <!-- 설치요청 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE, TB_CM_INSTLL, TB_CM_AGENCY
+        COMMENTS : 설치요청 목록 조회
+    -->
+    <select id="getInstlRequestList"  parameterType="instlManageVO" resultType="DefaultMap">
+      /* InstlManageMapper.getInstlRequestList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tms.HQ_OFFICE_CD,
+                tho.HQ_OFFICE_NM,
+                tms.STORE_NM,
+                tmp.STORE_CD,
+                tmp.POS_NO,
+                tci.SEQ_NO,
+                tci.AGENCY_CD,
+                tca.AGENCY_NM,
+                tms.SYS_STAT_FG,
+                TO_CHAR(TO_DATE(tci.INST_REQ_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_REQ_DT,
+                tci.INST_REQ_ID,
+                TO_CHAR(TO_DATE(tci.INST_INS_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_INS_DT,
+                tci.INST_INS_ID,
+                tci.INST_FG,
+                tci.INST_REASON,
+                tci.REMARK
+        <include refid="CmmSQL.PagingTemplateCount"/>
+         FROM  TB_MS_POS tmp,
+                TB_MS_STORE tms,
+                TB_HQ_OFFICE tho,
+                (
+                    SELECT STORE_CD, POS_NO,
+                    MAX(SEQ_NO) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS SEQ_NO,
+                    MAX(AGENCY_CD) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS AGENCY_CD,
+                    MAX(INST_REQ_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_DT,
+                    MAX(INST_REQ_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REQ_ID,
+                    MAX(INST_INS_DT) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_DT,
+                    MAX(INST_INS_ID) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_INS_ID,
+                    MAX(INST_FG) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_FG,
+                    MAX(INST_REASON) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS INST_REASON,
+                    MAX(REMARK) KEEP( DENSE_RANK FIRST ORDER BY SEQ_NO DESC ) AS REMARK
+                    FROM TB_CM_INSTLL
+                    GROUP BY STORE_CD , POS_NO
+                ) tci,
+                TB_CM_AGENCY tca
+        WHERE tms.STORE_CD = tmp.STORE_CD
+        AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND tci.STORE_CD (+)= tmp.STORE_CD
+        AND tci.POS_NO (+)= tmp.POS_NO
+        AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+        <choose>
+            <!-- 시스템 -->
+            <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'><!-- Agency Master Code -->
+                <if test='agencyCd != null and agencyCd.toString() != ""'>
+                    AND tci.AGENCY_CD LIKE '%'|| #{agencyCd}||'%'
+                </if>
+                <if test='agencyNm != null and agencyNm.toString() != ""'>
+                    AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+                AND tci.AGENCY_CD = #{agencyCd}
+            </when>
+        </choose>
+        <if test='storeCd != null and storeCd.toString() != ""'>
+            AND tmp.STORE_CD LIKE '%' ||#{storeCd}|| '%'
+        </if>
+        <if test='storeNm != null and storeNm.toString() != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='instFg != null and instFg.toString() != ""'>
+            AND tci.INST_FG = #{instFg}
+        </if>
+        ORDER BY tms.HQ_OFFICE_CD, tmp.STORE_CD, tmp.POS_NO,tci.SEQ_NO DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 설치요청 목록 상세 -->
+    <!--
+        TABLE    : TB_CM_INSTLL, TB_CM_AGENCY
+        COMMENTS : 설치요청 목록 상세
+    -->
+    <select id="getInstlRequestDtl"  parameterType="instlManageVO" resultType="DefaultMap">
+        SELECT  tci.SEQ_NO
+               , tci.INST_FG
+               , tci.AGENCY_CD
+               , tca.AGENCY_NM
+               , tci.INST_REQ_ID
+               , tci.INST_INS_ID
+               , TO_CHAR(TO_DATE(tci.INST_REQ_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_REQ_DT
+               , TO_CHAR(TO_DATE(tci.INST_INS_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS INST_INS_DT
+               , tci.INST_REASON
+               , tci.REMARK
+          FROM  TB_CM_INSTLL tci,
+                 TB_CM_AGENCY tca
+          WHERE 1=1
+            AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+            AND STORE_CD = #{storeCd}
+            AND POS_NO = #{posNo}
+    </select>
+
 </mapper>

@@ -197,4 +197,18 @@
             )
     </insert>
 
+    <!-- 매장의 환경변수별 사용여부 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_ENVST
+        COMMENTS : 매장의 환경변수별 사용여부를 조회한다.
+    -->
+    <select id="getEnvstVal" parameterType="storeEnvVO" resultType="String">
+        /* SimpleMemberJoinMapper.getEnvstVal */
+        SELECT NVL(MAX(ENVST_VAL), '0') AS ENVST_VAL
+          FROM TB_MS_STORE_ENVST
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+           AND USE_YN = 'Y'
+    </select>
+
 </mapper>

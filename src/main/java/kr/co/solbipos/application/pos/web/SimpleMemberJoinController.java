@@ -11,6 +11,7 @@ import kr.co.solbipos.application.pos.service.MemberVO;
 import kr.co.solbipos.application.pos.service.SimpleMemberJoinService;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,8 @@ public class SimpleMemberJoinController {
     @Autowired
     MessageService messageService;
 
+    private final String POS_MEMBER_FG_ENVST_CD = "1059"; // 포스회원등록 구분
+
     /** 화면이동 테스트
      *
      * @param request
@@ -103,6 +106,15 @@ public class SimpleMemberJoinController {
     @RequestMapping(value = "simpleMemberJoin.sb", method = RequestMethod.GET)
     public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        StoreEnvVO storeEnvVO = new StoreEnvVO();
+        storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
+        storeEnvVO.setEnvstCd(POS_MEMBER_FG_ENVST_CD);
+
+        model.addAttribute("posMemberFgEnvstVal", service.getEnvstVal(storeEnvVO).toString());
+
         return "application/pos/simpleMemberJoin";
 
     }

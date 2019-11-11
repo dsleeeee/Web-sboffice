@@ -2248,6 +2248,19 @@
          WHERE STORE_CD = #{storeCd}
     </select>
 
+    <!-- 설치포스 MAX Pos No값 조회 -->
+    <!--
+      TABLE    : TB_MS_POS
+      PARAM    : storeManageVO
+      COMMENTS : 설치된 포스의 MAX Pos No값을 가져온다.
+    -->
+    <select id="getInstPosCntMax" parameterType="storeManageVO" resultType="Integer">
+        /* USE : StoreManageMapper.getInstPosCntMax */
+        SELECT DECODE(MAX(TO_NUMBER(POS_NO)), NULL, '0', MAX(TO_NUMBER(POS_NO))) AS MAX_POS_NO
+          FROM TB_MS_POS
+         WHERE STORE_CD = #{storeCd}
+    </select>
+
     <!-- 코너별 승인 목록 조회 -->
     <!--
       TABLE    : TB_MS_CORNER

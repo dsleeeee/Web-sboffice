@@ -105,7 +105,7 @@
           WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
           ]]>
       <if test='storeCd != null and storeCd != ""'>
-        AND tms.STORE_CD = #{storeCd}
+        AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
       </if>
       <if test='storeNm != null and storeNm != ""'>
         AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
