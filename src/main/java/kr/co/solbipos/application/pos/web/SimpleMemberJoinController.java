@@ -63,7 +63,7 @@ public class SimpleMemberJoinController {
     @Autowired
     MessageService messageService;
 
-    private final String POS_MEMBER_FG_ENVST_CD = "1059"; // 포스회원등록 구분
+    private final String POS_MEMBER_FG_ENVST_CD = "1067"; // 포스회원등록 구분
 
     /** 화면이동 테스트
      *

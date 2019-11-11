@@ -86,7 +86,7 @@
 
         var posMemberFgEnvstVal  = ${posMemberFgEnvstVal};
 
-        // 환경변수값(1059)을 가져와 회원구분항목 display
+        // 환경변수값(1067)을 가져와 회원구분항목 display
         if(posMemberFgEnvstVal === 0){
             $("#tr_membrFg").css("display", "none");
         } else if(posMemberFgEnvstVal === 1){
