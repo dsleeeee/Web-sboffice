@@ -162,7 +162,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.48" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.49" charset="utf-8"></script>
 
 <%-- 업체현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/agencyDtl.jsp">
