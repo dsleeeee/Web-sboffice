@@ -28,7 +28,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlManage.js?ver=20191014.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlManage.js?ver=20191014.05" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 설치요청 레이어 --%>
