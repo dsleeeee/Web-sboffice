@@ -53,10 +53,10 @@ app.controller('membrPossesnCtrl', ['$scope', '$http', function ($scope, $http) 
         dataItem.totAmt    = messages["membrPossesn.total"];
         dataItem.totMemCnt    = messages["membrPossesn.membr"];
         dataItem.totMemAmt    = messages["membrPossesn.membr"];
-        dataItem.perCnt   = messages["membrPossesn.perMem"];
-        dataItem.perAmt   = messages["membrPossesn.perMem"];
-        dataItem.perMemCnt   = messages["membrPossesn.perStore"];
-        dataItem.perMemAmt   = messages["membrPossesn.perStore"];
+        dataItem.perMemCnt   = messages["membrPossesn.perMem"];
+        dataItem.perMemAmt   = messages["membrPossesn.perMem"];
+        dataItem.perCnt   = messages["membrPossesn.perStore"];
+        dataItem.perAmt   = messages["membrPossesn.perStore"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
