@@ -63,10 +63,10 @@
                 <wj-flex-grid-column header="<s:message code="membrPossesn.totAmt"/>" binding="totAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="membrPossesn.totMemCnt"/>" binding="totMemCnt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="membrPossesn.totMemAmt"/>" binding="totMemAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt" width="115" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt" width="115" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -74,4 +74,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPossesn/membrPossesn.js?ver=2019052801.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPossesn/membrPossesn.js?ver=2019052801.06" charset="utf-8"></script>
