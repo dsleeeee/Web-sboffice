@@ -107,6 +107,7 @@
            AND tci.STORE_CD (+)= tmp.STORE_CD
            AND tci.POS_NO (+)= tmp.POS_NO
            AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+           AND (tci.INST_FG != 0 OR tci.INST_FG IS NULL) <!-- 설치의뢰는 목록에서 보이면 안됨 -->
       <if test='hqOfficeCd != null and hqOfficeCd != ""'>
            AND tms.HQ_OFFICE_CD LIKE '%' ||#{hqOfficeCd}|| '%'
       </if>

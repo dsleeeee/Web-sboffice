@@ -24,7 +24,7 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("srchInstReqFg", [
       {"name":"전체","value":""},
-      {"name":"설치의뢰","value":"0"},
+      /*{"name":"설치의뢰","value":"0"},*/
       {"name":"신규설치","value":"1"},
       {"name":"재설치","value":"2"}
   ]);

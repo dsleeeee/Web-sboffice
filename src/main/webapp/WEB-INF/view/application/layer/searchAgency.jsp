@@ -39,7 +39,7 @@
 
         <%--- 대리점 그리드 --%>
         <div class="w100">
-          <div class="wj-TblWrap mr10" style="height:150px; overflow-y: hidden;">
+          <div class="wj-TblWrap mr10" style="height:200px;">
             <div id="agencyGrid" style="height: 270px;">
               <wj-flex-grid
                       autoGenerateColumns="false"
