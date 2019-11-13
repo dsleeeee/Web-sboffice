@@ -26,7 +26,12 @@ app.controller('instlRequestListCtrl', ['$scope', '$http', function ($scope, $ht
     // 조회조건 콤보박스 데이터 Set
     // $scope._setComboData("clsFg", clsFg);
     // $scope._setComboData("sysStatFg", sysStatFg);
-    $scope._setComboData("srchInstFg", instFgData);
+    $scope._setComboData("srchInstReqListFg", [
+        {"name":"전체","value":""},
+        {"name":"설치의뢰","value":"0"},
+        {"name":"신규설치","value":"1"},
+        {"name":"재설치","value":"2"}
+    ]);
 
     // 선택 포스
     $scope.selectedPos;
