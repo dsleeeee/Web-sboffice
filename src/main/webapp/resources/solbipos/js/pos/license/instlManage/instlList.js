@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 설치구분 DropBoxDataMap
+var instFgData = [
+    {"name": "설치의뢰", "value": "0"},
+    {"name": "신규설치", "value": "1"},
+    {"name": "재설치", "value": "2"}
+];
+
 /**
  *  설치현황 조회 그리드 생성
  */
@@ -112,7 +119,9 @@ app.controller('instlListDetailCtrl', ['$scope', '$http', function ($scope, $htt
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
         $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFgData, 'value', 'name'); //상태구분
+        $scope.instFgDataMap = new wijmo.grid.DataMap(instFgData, 'value', 'name'); //설치구분
 
         //그리드 링크설정
         // ReadOnly 효과설정

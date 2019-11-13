@@ -136,6 +136,7 @@
                         <wj-flex-grid-column header="<s:message code="instl.posNo"/>" binding="posNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.operation.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.instlAgencyNm"/>" binding="instlAgencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="instl.instFg"/>" binding="instFg" data-map="instFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.instInsId"/>" binding="instInsId" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.minInstInsDt"/>" binding="minInstInsDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.maxInstInsDt"/>" binding="maxInstInsDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -169,7 +170,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.80" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.83" charset="utf-8"></script>
 
 <%-- 설치현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/instlDtl.jsp">
