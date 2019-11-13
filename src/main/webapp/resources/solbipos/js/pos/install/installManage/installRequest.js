@@ -22,7 +22,12 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-  $scope._setComboData("srchInstFg", instFgData);
+  $scope._setComboData("srchInstReqFg", [
+      {"name":"전체","value":""},
+      {"name":"설치의뢰","value":"0"},
+      {"name":"신규설치","value":"1"},
+      {"name":"재설치","value":"2"}
+  ]);
   $scope._setComboData("reasonCombo", reasonData);
 
   $scope.request;

@@ -46,9 +46,9 @@
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchInstFg"
+                        id="srchInstReqFg"
                         ng-model="instFg"
-                        items-source="_getComboData('srchInstFg')"
+                        items-source="_getComboData('srchInstReqFg')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
@@ -172,5 +172,5 @@
 <script>
   var reasonData = ${ccu.getCommCodeExcpAll("102")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/install/installManage/installRequest.js?ver=2019010302.02" charset="utf-8"></script>
 

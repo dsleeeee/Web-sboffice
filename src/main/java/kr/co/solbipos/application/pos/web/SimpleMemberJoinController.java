@@ -106,17 +106,7 @@ public class SimpleMemberJoinController {
     @RequestMapping(value = "simpleMemberJoin.sb", method = RequestMethod.GET)
     public String excpForwardView(HttpServletRequest request, HttpServletResponse response,
         Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        StoreEnvVO storeEnvVO = new StoreEnvVO();
-        storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
-        storeEnvVO.setEnvstCd(POS_MEMBER_FG_ENVST_CD);
-
-        model.addAttribute("posMemberFgEnvstVal", service.getEnvstVal(storeEnvVO).toString());
-
         return "application/pos/simpleMemberJoin";
-
     }
 
 
@@ -153,6 +143,13 @@ public class SimpleMemberJoinController {
             sessionService.setSessionInfo(request, response, posSi);
 
             returnUrl = "application/pos/"+request.getParameter("url");
+
+            // 포스회원등록 구분 환경변수값(1067) 조회
+            StoreEnvVO storeEnvVO = new StoreEnvVO();
+            storeEnvVO.setStoreCd(sessionInfoVO.getStoreCd());
+            storeEnvVO.setEnvstCd(POS_MEMBER_FG_ENVST_CD);
+
+            model.addAttribute("posMemberFgEnvstVal", service.getEnvstVal(storeEnvVO).toString());
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
