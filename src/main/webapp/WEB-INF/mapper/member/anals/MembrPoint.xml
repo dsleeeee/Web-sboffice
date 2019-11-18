@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Point.xml
+    회원 포인트실적
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.11.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.membrPoint.service.impl.MembrPointMapper">
+
+    <!-- 회원 포인트실적-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_DTL, TB_MB_MEMBER
+        COMMENTS : [매출]헤더_회원 와 [매출]상세, [회원]회원
+    -->
+    <select id="getMembrPointList"  parameterType="membrPointVO" resultType="DefaultMap">
+        /* MembrPointMapper.getMembrPointList */
+        SELECT
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD) AS STORE_NM,
+        TO_CHAR(TO_DATE(tssd.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
+        tsshm.MEMBR_NO,
+        tsshm.MEMBR_NM,
+        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.REG_STORE_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
+        SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,
+        SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT,
+        SUM(tssd.SALE_AMT) AS SALE_AMT,
+        SUM(tssd.DC_AMT) AS DC_AMT,
+        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_SALE_HDR_MEMBR tsshm,
+        TB_SL_SALE_DTL tssd,
+        TB_MB_MEMBER tmm
+        WHERE 1=1
+        AND tsshm.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tsshm.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tssd.REG_DT BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+                AND tsshm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+            ]]>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+                AND tsshm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            ]]>
+        </if>
+        AND tsshm.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+        AND tsshm.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+        AND tsshm.HQ_BRAND_CD = tssd.HQ_BRAND_CD
+        AND tsshm.STORE_CD = tssd.STORE_CD
+        AND tsshm.SALE_DATE = tssd.SALE_DATE
+        AND tsshm.POS_NO = tssd.POS_NO
+        AND tsshm.BILL_NO = tssd.BILL_NO
+        AND tsshm.STORE_CD = tmm.REG_STORE_CD
+        AND tsshm.MEMBR_NO = tmm.MEMBR_NO
+        AND tsshm.MEMBR_NM = tmm.MEMBR_NM
+        GROUP BY tssd.STORE_CD, tssd.REG_DT, tsshm.MEMBR_NO, tsshm.MEMBR_NM, tmm.REG_STORE_CD, tmm.MEMBR_CLASS_CD
+        <if test='array == "1"'>
+            <![CDATA[
+                ORDER BY tssd.STORE_CD, tssd.REG_DT, tsshm.MEMBR_NO
+            ]]>
+        </if>
+        <if test='array == "2"'>
+            <![CDATA[
+                ORDER BY tssd.STORE_CD, tsshm.MEMBR_NO, tssd.REG_DT
+            ]]>
+        </if>
+        <if test='array == "3"'>
+            <![CDATA[
+                ORDER BY tsshm.MEMBR_NO, tssd.REG_DT, tssd.STORE_CD
+            ]]>
+        </if>
+        <if test='array == "4"'>
+            <![CDATA[
+                ORDER BY tsshm.MEMBR_NO, tssd.STORE_CD, tssd.REG_DT
+            ]]>
+        </if>
+        <if test='array == "5"'>
+            <![CDATA[
+                ORDER BY tssd.REG_DT, tssd.STORE_CD, tsshm.MEMBR_NO
+            ]]>
+        </if>
+        <if test='array == "6"'>
+            <![CDATA[
+                ORDER BY tssd.REG_DT, tsshm.MEMBR_NO, tssd.STORE_CD
+            ]]>
+        </if>
+    </select>
+
+</mapper>

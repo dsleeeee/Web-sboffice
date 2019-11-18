@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MembrNonBilClct.xml
+    회원 미수금현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.11.15     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.membrNonBilClct.service.impl.MembrNonBilClctMapper">
+
+    <!-- 회원 미수금현황-->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE, TB_MB_MEMBER
+        COMMENTS : [회원]선/후불_잔액 와 [회원]회원
+    -->
+    <select id="getMembrNonBilClctList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
+        /* MembrNonBilClctMapper.getMembrNonBilClctList */
+        SELECT
+        tmmpb.MEMBR_NO,
+        tmm.MEMBR_NM,
+        SUM(tmmpb.POSTPAID_AMT) AS POSTPAID_AMT,
+        SUM(tmmpb.POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
+        SUM(tmmpb.POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT,
+        SUM(tmmpbdt.POSTPAID_AMT_DT) AS POSTPAID_AMT_DT,
+        SUM(tmmpbdt.POSTPAID_IN_AMT_DT) AS POSTPAID_IN_AMT_DT
+        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb,
+        TB_MB_MEMBER tmm,
+        (
+            SELECT
+            MEMBR_NO,
+            POSTPAID_AMT AS POSTPAID_AMT_DT,
+            POSTPAID_IN_AMT AS POSTPAID_IN_AMT_DT
+            FROM TB_MB_MEMBER_PAID_BALANCE
+            WHERE 1=1
+            AND REG_DT BETWEEN #{startDate} AND #{endDate}
+        ) tmmpbdt
+        WHERE 1=1
+        AND tmmpb.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tmmpb.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+                AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            ]]>
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+                AND tmmpb.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+            ]]>
+        </if>
+        AND tmmpb.MEMBR_NO = tmm.MEMBR_NO
+        AND tmmpb.MEMBR_NO = tmmpbdt.MEMBR_NO
+        AND tmmpb.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+        GROUP BY tmmpb.HQ_OFFICE_CD, tmmpb.STORE_CD, tmmpb.MEMBR_NO, tmm.MEMBR_NM
+        ORDER BY tmmpb.MEMBR_NO
+    </select>
+
+    <!-- 회원 미수금현황 상세조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_PAID_BALANCE
+        COMMENTS : [회원]선/후불_잔액
+    -->
+    <select id="getMembrNonBilClctDetailList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
+        /* MembrNonBilClctMapper.getMembrNonBilClctDetailList */
+        SELECT
+        TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+        tmmpb.POSTPAID_AMT,
+        tmmpb.POSTPAID_IN_AMT
+        FROM TB_MB_MEMBER_PAID_BALANCE tmmpb
+        WHERE 1=1
+        AND tmmpb.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tmmpb.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tmmpb.MEMBR_NO = #{membrNo}
+        AND tmmpb.REG_DT BETWEEN #{startDate} AND #{endDate}
+        ORDER BY tmmpb.REG_DT
+    </select>
+
+</mapper>
