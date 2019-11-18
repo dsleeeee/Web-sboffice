@@ -312,6 +312,8 @@
     <typeAlias alias="PeriodMembrVO" type="kr.co.solbipos.membr.anals.periodMembr.service.PeriodMembrVO"/>
     <typeAlias alias="MembrProdVO" type="kr.co.solbipos.membr.anals.membrProd.service.MembrProdVO"/>
     <typeAlias alias="MembrPossesnVO" type="kr.co.solbipos.membr.anals.membrPossesn.service.MembrPossesnVO"/>
+    <typeAlias alias="MembrPointVO" type="kr.co.solbipos.membr.anals.membrPoint.service.MembrPointVO"/>
+    <typeAlias alias="MembrNonBilClctVO" type="kr.co.solbipos.membr.anals.membrNonBilClct.service.MembrNonBilClctVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
