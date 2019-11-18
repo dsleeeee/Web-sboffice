@@ -400,6 +400,7 @@
         AND tci.STORE_CD (+)= tmp.STORE_CD
         AND tci.POS_NO (+)= tmp.POS_NO
         AND tca.AGENCY_CD (+)= tci.AGENCY_CD
+        AND tci.INST_FG IS NOT NULL <!-- 설치에 관련된 데이터가 있는 포스만 가져옴 -->
         <choose>
             <!-- 시스템 -->
             <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'><!-- Agency Master Code -->

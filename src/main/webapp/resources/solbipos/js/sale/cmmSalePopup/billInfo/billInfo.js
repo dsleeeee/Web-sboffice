@@ -142,6 +142,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.$broadcast('loadingPopupActive');
 
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -201,6 +202,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillPayInfo = function () {
 
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -248,6 +250,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillGuestInfo = function () {
 
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -297,6 +300,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchBillInfoProdList = function () {
     // 파라미터
     var params       = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd   = $scope.storeCd;
     params.saleDate  = $scope.saleDate;
     params.posNo     = $scope.posNo;
@@ -440,6 +444,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.$broadcast('loadingPopupActive');
 
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -490,6 +495,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.getOrgBillPayInfo = function () {
 
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -537,6 +543,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.searchOrgBillInfoProdList = function () {
     // 파라미터
     var params      = {};
+    params.hqOfficeCd = orgnCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;

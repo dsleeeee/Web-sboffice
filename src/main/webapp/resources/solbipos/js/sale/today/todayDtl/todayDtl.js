@@ -8,7 +8,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayDtlCtrl', $scope, $http, true));
 
-  $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+  $scope.srchTodayDtlStartDate = wcombo.genDateVal("#srchTodayDtlStartDate", gvStartDate);
 
   // 그리드 매출구분
   $scope.saleYnMap = new wijmo.grid.DataMap([
@@ -162,7 +162,7 @@ app.controller('todayDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
       $scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
       return false;
     }
-    $scope.searchedStartDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+    $scope.searchedStartDate = wijmo.Globalize.format($scope.srchTodayDtlStartDate.value, 'yyyyMMdd');
     $scope.searchedStoreCd   = $("#todayDtlSelectStoreCd").val();
     $scope.searchedPosNo     = $scope.posNo;
 

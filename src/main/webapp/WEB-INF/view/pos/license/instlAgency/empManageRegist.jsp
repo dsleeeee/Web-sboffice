@@ -70,11 +70,11 @@
                                 </span>
                             </td>
                         </tr>
-                        <tr id="trEmpPwd">
-                            <th><s:message code="instlAgency.empPwd" /></th>
+                        <tr id="trUserPwd">
+                            <th><s:message code="instlAgency.userPwd" /></th>
                             <td colspan="3">
-                                <input type="password" id="emr_empPwd" name="emr_empPwd" class="sb-input w30" style="width: 20%">
-                                <input type="password" id="emr_empPwdCfm" name="emr_empPwdCfm" class="sb-input ml10 w30" style="width: 20%"/>
+                                <input type="password" id="emr_userPwd" name="emr_userPwd" class="sb-input w30" style="width: 20%">
+                                <input type="password" id="emr_userPwdCfm" name="emr_userPwdCfm" class="sb-input ml10 w30" style="width: 20%"/>
                             </td>
                         </tr>
                         <tr>
@@ -116,6 +116,7 @@
                     <span><a href="#" class="btn_blue" id="btnCancel"><s:message code="cmm.cancel" /></a></span>
                     <input type="hidden" id="saveType"/>
                     <input type="hidden" id="agencyCd"/>
+                    <input type="hidden" id="emr_userPwdHd"/>
                 </div>
             </form>
         </div>
@@ -168,7 +169,7 @@
                     $("#emr_serviceFg").val(dtlData.serviceFg);
                     $("#emr_userId").val(dtlData.userId);
                     $("#duplicationChkFg").val(dtlData.userId);
-                    /*$("#emr_empPwd").val(dtlData.empPwd);*/
+                    $("#emr_userPwdHd").val(dtlData.empPwd);
                     $("#emr_webUseYn").val(dtlData.webUseYn);
                     $("#emr_mapEmpNo").val(dtlData.mapEmpNo);
                     $("#emr_adminFg").val(dtlData.adminFg);
@@ -189,7 +190,7 @@
             );
 
             // 수정 모드 시 웹 정보 입력 관련 숨기기 or 입력막기
-            $("#trEmpPwd").css("display", "none");
+            $("#trUserPwd").css("display", "none");
             $("#spanCheckDuplicate").css("display", "none");
             $("#emr_userId").attr("readonly",true);
             $("#trUserId").css("display", "");
@@ -202,7 +203,7 @@
             //등록모드 시 웹 정보 입력 관련 보이게 처리
             $("#trUserId").css("display", "")
             $("#spanCheckDuplicate").css("display", "");
-            $("#trEmpPwd").css("display", "");
+            $("#trUserPwd").css("display", "");
             $("#emr_userId").removeAttr("readonly");
             $("#emr_empNo").attr("placeholder", " 사원번호는 자동으로 생성됩니다.");
 
@@ -211,8 +212,9 @@
             $("#emr_empNo").val("");
             $("#emr_serviceFg").val("");
             $("#emr_userId").val("");
-            $("#emr_empPwd").val("");
-            $("#emr_empPwdCfm").val("");
+            $("#emr_userPwd").val("");
+            $("#emr_userPwdCfm").val("");
+            $("#emr_userPwdHd").val("");
             $("#emr_webUseYn").val("Y");
             $("#emr_mapEmpNo").val("");
             $("#emr_adminFg").val("");
@@ -277,11 +279,16 @@
             params.empNo = $("#emr_empNo").val();
             params.empNm = $("#emr_empNm").val();
             params.useYn = $("#emr_useYn").val();
-            params.empPwd = $("#emr_empPwd").val();
+
+            if($("#saveType").val() === "MOD"){
+                params.userPwd = $("#emr_userPwdHd").val();
+            }else{
+                params.userPwd = $("#emr_userPwd").val();
+            }
+
             params.serviceFg = $("#emr_serviceFg").val();
             params.webUseYn = $("#emr_webUseYn").val();
             params.userId = $("#emr_userId").val();
-            params.empPwd = $("#emr_empPwd").val();
             params.mapEmpNo = $("#emr_mapEmpNo").val();
             params.adminFg = $("#emr_adminFg").val();
             params.mpNo = $("#emr_mpNo").val();
@@ -306,10 +313,10 @@
                             getEmpManageDtl($("#agencyCd").val(),$("#emr_empNo").val());
                         }
 
-                    } else if(response.data.data === 'USER_ID_REGEXP') {
+                    } else if(response.data === 'USER_ID_REGEXP') {
                         s_alert.pop(messages["systemEmp.userIdRegexp.msg"]);
                         return false;
-                    } else if(response.data.data === 'PASSWORD_REGEXP') {
+                    } else if(response.data === 'PASSWORD_REGEXP') {
                         s_alert.pop(messages["login.pw.not.match.char"]);
                         return false;
                     } else {
@@ -364,20 +371,20 @@
             if ($("#saveType").val() === "REG") {
 
                 /*비밀번호 입력*/
-                if ($("#emr_empPwd").val() === "") {
-                    s_alert.pop("<s:message code='instlAgency.empPwd' /><s:message code='cmm.require.text' />");
+                if ($("#emr_userPwd").val() === "") {
+                    s_alert.pop("<s:message code='instlAgency.userPwd' /><s:message code='cmm.require.text' />");
                     return false;
                 }
 
                 /*비밀번호확인 입력*/
-                if ($("#emr_empPwdCfm").val() === "") {
-                    s_alert.pop("<s:message code='instlAgency.empPwdCfm' /><s:message code='cmm.require.text' />");
+                if ($("#emr_userPwdCfm").val() === "") {
+                    s_alert.pop("<s:message code='instlAgency.userPwdCfm' /><s:message code='cmm.require.text' />");
                     return false;
                 }
 
                 /*비밀번호 & 비밀번호 확인 동일여부 체크*/
-                if ($("#emr_empPwd").val() !== $("#emr_empPwdCfm").val()) {
-                    s_alert.pop("<s:message code='instlAgency.empPwd' /><s:message code='cmm.require.check' />");
+                if ($("#emr_userPwd").val() !== $("#emr_userPwdCfm").val()) {
+                    s_alert.pop("<s:message code='instlAgency.userPwd' /><s:message code='cmm.require.check' />");
                     return false;
                 }
             }
@@ -406,14 +413,14 @@
 
             // 비밀번호 입력은 등록 시에만 가능
             if($("#saveType").val() === "MOD"){
-                $("#trEmpPwd").css('display', 'none');
+                $("#trUserPwd").css('display', 'none');
             }else{
-                $("#trEmpPwd").css('display', '');
+                $("#trUserPwd").css('display', '');
             }
 
         }else{
             $("#trUserId").css('display', 'none');
-            $("#trEmpPwd").css('display', 'none');
+            $("#trUserPwd").css('display', 'none');
         }
     }
 

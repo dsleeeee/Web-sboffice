@@ -22,7 +22,7 @@ public class BillInfoServiceImpl implements BillInfoService {
     /** 매출공통팝업 - 영수증상세 종합내역 조회 */
     @Override
     public DefaultMap<String> getBillInfo(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
-        billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return billInfoMapper.getBillInfo(billInfoVO);
     }
 
@@ -30,7 +30,7 @@ public class BillInfoServiceImpl implements BillInfoService {
     /** 매출공통팝업 - 영수증상세 결제내역 조회 */
     @Override
     public DefaultMap<String> getBillPayInfo(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
-        billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+       // billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         // 결제수단 array 값 세팅
         billInfoVO.setArrPayCol(billInfoVO.getPayCol().split(","));
 
@@ -41,7 +41,7 @@ public class BillInfoServiceImpl implements BillInfoService {
     /** 매출공통팝업 - 영수증상세 방문인원 조회 */
     @Override
     public DefaultMap<String> getBillGuestInfo(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
-        billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return billInfoMapper.getBillGuestInfo(billInfoVO);
     }
 
@@ -49,7 +49,7 @@ public class BillInfoServiceImpl implements BillInfoService {
     /** 매출공통팝업 - 영수증상세 상품 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getBillProdList(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
-        billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 할인구분 array 값 세팅
         billInfoVO.setArrDcCol(billInfoVO.getDcCol().split(","));

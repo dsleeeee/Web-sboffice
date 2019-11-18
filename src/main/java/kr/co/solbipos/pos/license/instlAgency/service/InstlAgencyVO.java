@@ -70,7 +70,7 @@ public class InstlAgencyVO extends CmmVO {
     /** 웹사용자ID */
     private String userId;
     /** 비밀번호 */
-    private String empPwd;
+    private String userPwd;
     /** 휴대폰번호 */
     private String mpNo;
     /** SMS수신여부 */
@@ -81,6 +81,8 @@ public class InstlAgencyVO extends CmmVO {
     private String adminFg;
     /** 소속구분 */
     private String orgnFg;
+    /** 그룹 코드 */
+    private String authGrpCd;
 
 
     public String getAgencyCd() {
@@ -275,12 +277,12 @@ public class InstlAgencyVO extends CmmVO {
         this.userId = userId;
     }
 
-    public String getEmpPwd() {
-        return empPwd;
+    public String getUserPwd() {
+        return userPwd;
     }
 
-    public void setEmpPwd(String empPwd) {
-        this.empPwd = empPwd;
+    public void setUserPwd(String userPwd) {
+        this.userPwd = userPwd;
     }
 
     public String getMpNo() {
@@ -321,5 +323,13 @@ public class InstlAgencyVO extends CmmVO {
 
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    public String getAuthGrpCd() {
+        return authGrpCd;
+    }
+
+    public void setAuthGrpCd(String authGrpCd) {
+        this.authGrpCd = authGrpCd;
     }
 }

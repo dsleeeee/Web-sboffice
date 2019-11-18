@@ -6,10 +6,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
 
-<div class="subCon">
-  <div ng-controller="todayDtlCtrl">
+<div id="todayDtlView" class="subCon" style="display: none;" ng-controller="todayDtlCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl">${menuNm}</a>
+      <a href="#" class="open fl"><s:message code="todayDtl.todaySaleDtl"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayDtlCtrl')">
         <s:message code="cmm.search"/>
@@ -26,7 +25,7 @@
         <th><s:message code="cmm.search.date"/></th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchTodayDtlStartDate" class="w120px"></span>
           </div>
         </td>
       </tr>
@@ -189,7 +188,6 @@
         </div>
       </div>
     </div>
-  </div>
 </div>
 
 <script type="text/javascript">
@@ -218,7 +216,7 @@
   var arrDcCol    = dcCol.split(',');
   var arrGuestCol = guestCol.split(',');
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20190124.18" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

@@ -6,10 +6,10 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayBillSaleDtl/todayBillSaleDtl/"/>
 
-<div class="subCon">
+<div id="todayBillSaleDtlView" class="subCon" style="display: none;">
   <div ng-controller="todayBillSaleDtlCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl">${menuNm}</a>
+      <a href="#" class="open fl"><s:message code="todayBillSaleDtl.billSale"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('todayBillSaleDtlCtrl')">
         <s:message code="cmm.search"/>
@@ -28,7 +28,7 @@
         <th><s:message code="cmm.search.date"/></th>
         <td colspan="3">
           <div class="sb-select">
-            <span class="txtIn"><input id="srchStartDate" class="w120px"></span>
+            <span class="txtIn"><input id="srchTodayBillSaleDtlStartDate" class="w120px"></span>
           </div>
         </td>
       </tr>
@@ -142,5 +142,5 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayBillSaleDtl/todayBillSaleDtl.js?ver=20190125.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayBillSaleDtl/todayBillSaleDtl.js?ver=20190125.02" charset="utf-8"></script>
 

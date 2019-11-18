@@ -115,24 +115,13 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
         try {
 
-            SystemEmpVO systemEmpVO = new SystemEmpVO();
             String dt = currentDateTimeString();
 
+            instlAgencyVO.setAuthGrpCd(sessionInfoVO.getAuthGrpCd());
             instlAgencyVO.setRegDt(dt);                         //등록일시
             instlAgencyVO.setRegId(sessionInfoVO.getUserId());  //등록아이디
             instlAgencyVO.setModDt(dt);                         //수정일시
             instlAgencyVO.setModId(sessionInfoVO.getUserId());  //수정아이디
-
-            systemEmpVO.setAgencyCd(instlAgencyVO.getAgencyCd());
-            systemEmpVO.setEmpNo(instlAgencyVO.getEmpNo());
-            systemEmpVO.setUserId(instlAgencyVO.getUserId());
-            systemEmpVO.setUserPwd(instlAgencyVO.getEmpPwd());
-            systemEmpVO.setAuthGrpCd(sessionInfoVO.getAuthGrpCd());
-            if(instlAgencyVO.getWebUseYn().equals("Y")){systemEmpVO.setWebUseYn(UseYn.Y);}else{systemEmpVO.setWebUseYn(UseYn.N);}
-            systemEmpVO.setRegDt(dt);
-            systemEmpVO.setRegId(sessionInfoVO.getUserId());
-            systemEmpVO.setModDt(dt);
-            systemEmpVO.setModId(sessionInfoVO.getUserId());
 
             // 수정 시
             if (instlAgencyVO.getSaveType().equals("MOD")) {
@@ -140,7 +129,7 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
                     return EmpResult.FAIL;
                 }else{
                     if(instlAgencyVO.getUserId() != ""){
-                        if( systemEmpMapper.saveWbUserInfo(systemEmpVO) <= 0 ) {
+                        if( instlAgencyMapper.saveWbUserInfo(instlAgencyVO) <= 0 ) {
                             return EmpResult.FAIL;
                         }
                     }
@@ -149,15 +138,13 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
                 if (instlAgencyVO.getWebUseYn().equals("Y")) {
 
-                    instlAgencyVO.setEmpPwd(EncUtil.setEncSHA256(instlAgencyVO.getUserId() + instlAgencyVO.getEmpPwd())); // 비밀번호 암호화
-
                     // 비밀번호 정책 체크
                     EmpResult pwdChgResult = passwordPolicy(instlAgencyVO);
                     if (EmpResult.SUCCESS != pwdChgResult) {
                         return pwdChgResult;
                     }
                 }else{
-                    instlAgencyVO.setEmpPwd(EncUtil.setEncSHA256(instlAgencyVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
+                    instlAgencyVO.setUserPwd(EncUtil.setEncSHA256(instlAgencyVO.getEmpNo() + DEFAULT_POS_PASSWORD)); // 포스비밀번호 (초기 비밀번호)
                 }
 
                 if (instlAgencyMapper.insertEmployee(instlAgencyVO) != 1) {
@@ -165,7 +152,7 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
                 }
 
                 if (instlAgencyVO.getWebUseYn().equals("Y")) {
-                    if (systemEmpMapper.insertWbUserInfo(systemEmpVO) != 1) {
+                    if (instlAgencyMapper.insertWbUserInfo(instlAgencyVO) != 1) {
                         return EmpResult.FAIL;
                     }
                 }
@@ -180,13 +167,14 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
     /** 비밀번호 정책 */
     private EmpResult passwordPolicy(InstlAgencyVO instlAgencyVO) {
 
-        String newUserPassword = EncUtil.setEncSHA256(instlAgencyVO.getUserId() + instlAgencyVO.getEmpPwd());
+        String newUserPassword = EncUtil.setEncSHA256(instlAgencyVO.getUserId() + instlAgencyVO.getUserPwd());
 
-        if ( !CmmUtil.passwordPolicyCheck(instlAgencyVO.getEmpPwd()) ) {
+        // 비밀번호 정책과 맞지 않음
+        if ( !CmmUtil.passwordPolicyCheck(instlAgencyVO.getUserPwd()) ) {
             return EmpResult.PASSWORD_REGEXP;
         }
 
-        instlAgencyVO.setEmpPwd(newUserPassword);
+        instlAgencyVO.setUserPwd(newUserPassword);
 
         return EmpResult.SUCCESS;
     }

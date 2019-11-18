@@ -1068,6 +1068,7 @@
         USING ( SELECT
                     #{storeCd} AS STORE_CD,
                     thp.HQ_OFFICE_CD,
+                    thp.HQ_BRAND_CD,
                     thp.PROD_CD,
                     thp.PROD_NM,
                     thp.PROD_CLASS_CD,
@@ -1113,6 +1114,7 @@
         WHEN MATCHED THEN
         UPDATE
            SET tmp.PROD_NM             = thp.PROD_NM,
+               tmp.HQ_BRAND_CD         = thp.HQ_BRAND_CD,
                tmp.PROD_CLASS_CD       = thp.PROD_CLASS_CD,
                tmp.CORNR_CD            = thp.CORNR_CD,
                tmp.ORGPLCE_CD          = thp.ORGPLCE_CD,
@@ -1151,6 +1153,7 @@
             tmp.STORE_CD,
             tmp.PROD_CD,
             tmp.PROD_NM,
+            tmp.HQ_BRAND_CD,
             tmp.PROD_CLASS_CD,
             tmp.CORNR_CD,
             tmp.ORGPLCE_CD,
@@ -1191,6 +1194,7 @@
             thp.STORE_CD,
             thp.PROD_CD,
             thp.PROD_NM,
+            thp.HQ_BRAND_CD,
             thp.PROD_CLASS_CD,
             thp.CORNR_CD,
             thp.ORGPLCE_CD,

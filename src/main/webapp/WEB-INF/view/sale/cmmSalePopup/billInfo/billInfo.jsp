@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/cmmSalePopup/billInfo/billInfo/"/>
 
 <wj-popup id="wjBillInfoLayer" control="wjBillInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
@@ -279,5 +280,8 @@
   </div>
 
 </wj-popup>
+<script>
+    var orgnCd = "${orgnCd}";
+</script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.05" charset="utf-8"></script>

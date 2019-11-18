@@ -6,9 +6,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayGnrlz/todayGnrlz/"/>
 
-<div class="subCon" ng-controller="todayGnrlzCtrl">
+<div id="todayGnrlzView" class="subCon" ng-controller="todayGnrlzCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="todayGnrlz.todaySaleTotal"/></a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -187,5 +187,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.04" charset="utf-8"></script>
 

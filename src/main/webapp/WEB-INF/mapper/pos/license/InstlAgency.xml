@@ -253,7 +253,7 @@
          #{agencyCd}
         ,(SELECT LPAD(NVL(MAX(EMP_NO),0)+1, 4, 0) FROM TB_CM_EMPLOYEE)
         ,#{empNm}
-        ,#{empPwd}
+        ,#{userPwd}
         ,#{webUseYn}
         ,#{userId}
         ,#{mpNo}
@@ -270,6 +270,42 @@
         )
     </insert>
 
+    <!--  사원 웹 사용자 정보 등록 -->
+    <!--
+          TABLE    : TB_WB_USER_INFO
+          PARAM    : instlAgencyVO
+          COMMENTS :  사원이 웹 사용시, 웹 사용자 정보를 등록한다.
+    -->
+    <insert id="insertWbUserInfo" parameterType="instlAgencyVO">
+        /* USE : InstlAgencyMapper.insertWbUserInfo */
+        INSERT INTO TB_WB_USER_INFO
+        (
+            USER_ID,
+            USER_PWD,
+            AUTH_GRP_CD,
+            LOGIN_FAIL_CNT,
+            LAST_PWD_CHG_DT,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            LOWER(#{userId}),
+            #{userPwd},
+            #{authGrpCd},
+            0,
+            #{regDt},
+            #{webUseYn},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
     <!-- 설치업체 사원수정 -->
     <!--
           TABLE    : TB_CM_EMPLOYEE
@@ -280,7 +316,7 @@
         /* USE : InstlAgencyMapper.updateEmployee */
         UPDATE TB_CM_EMPLOYEE
             SET EMP_NM = #{empNm}
-                <!-- , EMP_PWD = #{empPwd} -->
+                <!-- , EMP_PWD = #{userPwd} -->
                 , WEB_USE_YN = #{webUseYn}
                 <!-- , USER_ID = #{userId} -->
                 , MP_NO = #{mpNo}
@@ -294,5 +330,52 @@
                 , MOD_ID = #{modId}
         WHERE AGENCY_CD = #{agencyCd}
           AND EMP_NO = #{empNo}
+    </update>
+
+    <!--  웹사용자 정보 수정 -->
+    <!--
+          TABLE    : TB_WB_USER_INFO
+          PARAM    : instlAgencyVO
+          COMMENTS :  웹 사용자 정보가 있으면 수정, 없으면 insert
+    -->
+    <update id="saveWbUserInfo" parameterType="instlAgencyVO">
+        /* USE : instlAgencyVO.saveWbUserInfo */
+        MERGE INTO TB_WB_USER_INFO twui
+        USING (SELECT tce.USER_ID
+                 FROM TB_CM_EMPLOYEE tce
+                WHERE tce.AGENCY_CD = #{agencyCd}
+                  AND tce.EMP_NO = #{empNo}
+              ) org
+           ON (twui.USER_ID = org.USER_ID)
+         WHEN MATCHED THEN
+       UPDATE
+          SET twui.USE_YN = #{webUseYn},
+              twui.MOD_DT = #{modDt},
+              twui.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+       INSERT
+       (
+           twui.USER_ID,
+           twui.USER_PWD,
+           twui.AUTH_GRP_CD,
+           twui.LOGIN_FAIL_CNT,
+           twui.USE_YN,
+           twui.REG_DT,
+           twui.REG_ID,
+           twui.MOD_DT,
+           twui.MOD_ID
+       )
+       VALUES
+       (
+           #{userId},
+           #{userPwd},
+           #{authGrpCd},
+           '0',
+           #{webUseYn},
+           #{regDt},
+           #{regId},
+           #{modDt},
+           #{modId}
+       )
     </update>
 </mapper>

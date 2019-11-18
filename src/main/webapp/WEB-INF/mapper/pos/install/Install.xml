@@ -83,7 +83,7 @@
                tms.SYS_STAT_FG,
                tci.SEQ_NO,
                tci.INST_FG,
-               tci.AGENCY_CD,
+               tms.AGENCY_CD,
                tca.AGENCY_NM,
                tci.INST_REASON,
                tci.REMARK
@@ -121,7 +121,7 @@
            AND tms.STORE_NM LIKE '%' ||#{storeNm}|| '%'
       </if>
       <if test='agencyCd != null and agencyCd != ""'>
-           AND tci.AGENCY_CD = #{agencyCd}
+           AND tms.AGENCY_CD = #{agencyCd}
       </if>
       <if test='instFg != null and instFg.toString() != ""'>
            AND tci.INST_FG = #{instFg}

@@ -8,7 +8,7 @@ app.controller('todayBillSaleDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('todayBillSaleDtlCtrl', $scope, $http, true));
 
-  $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+  $scope.srchTodayBillSaleDtlStartDate = wcombo.genDateVal("#srchTodayBillSaleDtlStartDate", gvStartDate);
 
   // 그리드 매출구분
   $scope.saleYnMap = new wijmo.grid.DataMap([
@@ -63,7 +63,7 @@ app.controller('todayBillSaleDtlCtrl', ['$scope', '$http', '$timeout', function 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#todayBillSaleDtlSelectStoreCd").val();
-    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+    params.startDate = wijmo.Globalize.format($scope.srchTodayBillSaleDtlStartDate.value, 'yyyyMMdd');
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/today/todayBillSaleDtl/todayBillSaleDtl/list.sb", params);
