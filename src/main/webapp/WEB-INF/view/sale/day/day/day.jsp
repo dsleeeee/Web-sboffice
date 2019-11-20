@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/day/day/day"/>
 
-<div class="con">
+<div class="con" id="dayView" name="dayView">
   <div class="tabType1" ng-controller="dayCtrl" ng-init="init()">
     <ul>
       <%-- 일별종합 탭 --%>

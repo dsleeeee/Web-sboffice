@@ -6,9 +6,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayDc/"/>
 
-<div id="dayDcView" class="subCon" style="display: none;" ng-controller="dayDcCtrl">
+<div id="dayDcView" name="dayView" class="subCon" style="display: none;" ng-controller="dayDcCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="day.dc"/></a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayDcCtrl')">
       <s:message code="cmm.search"/>

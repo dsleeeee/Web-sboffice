@@ -6,9 +6,9 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/day/day/dayTotal/"/>
 
-<div id="dayTotalView" class="subCon" ng-controller="dayTotalCtrl">
+<div id="dayTotalView" name="dayView" class="subCon" ng-controller="dayTotalCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="day.dayTotal"/></a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayTotalCtrl')">
       <s:message code="cmm.search"/>
