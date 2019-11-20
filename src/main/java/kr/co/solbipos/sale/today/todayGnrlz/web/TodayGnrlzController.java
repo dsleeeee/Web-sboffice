@@ -64,7 +64,6 @@ public class TodayGnrlzController {
      */
     @RequestMapping(value = "/todayGnrlz/view.sb", method = RequestMethod.GET)
     public String todayGnrlzView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        //return "sale/today/todayGnrlz/todayGnrlz";
 
         TodayDtlVO todayDtlVO = new TodayDtlVO();
 
@@ -103,6 +102,7 @@ public class TodayGnrlzController {
         model.addAttribute("guestColList", guestColList);
         model.addAttribute("guestCol", guestCol);
 
+        //return "sale/today/todayGnrlz/todayGnrlz";
         return "sale/today/todaySale";
     }
 
