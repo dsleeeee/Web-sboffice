@@ -93,11 +93,7 @@ public class InstlManageServiceImpl implements InstlManageService {
         // 소속구분, 총판의 부모총판 코드
         instlManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         instlManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
-
-        // 총판인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
-            instlManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
-        }
+        instlManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
 
         return instlManageMapper.getInstlRequestList(instlManageVO);
     }

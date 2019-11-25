@@ -93,7 +93,7 @@ app.controller('instlListCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+        if(orgnFg != null && orgnFg == 'AGENCY') {
             params.agencyCd = orgnCd;
         }
 

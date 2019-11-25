@@ -48,7 +48,9 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
         params.chkDt = $scope.isChecked;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        params.orgnCd = orgnCd;
+        if(orgnFg != null && orgnFg == 'AGENCY') {
+            params.agencyCd = orgnCd;
+        }
         params.listScale = $scope.listScaleSale;
 
         $scope._inquiryMain("/pos/license/oper/oper/getSaleStoreList.sb", params, function() {}, false);

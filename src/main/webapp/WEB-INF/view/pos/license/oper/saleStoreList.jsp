@@ -65,7 +65,7 @@
                     </div>
                 </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
+            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
                 <%-- 관리업체 --%>
                 <th>
                     <s:message code="oper.agency" />
@@ -183,7 +183,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=2019052801.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=2019052801.17" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

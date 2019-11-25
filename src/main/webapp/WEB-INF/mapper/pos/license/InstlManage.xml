@@ -81,7 +81,7 @@
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
                 <if test='agencyCd != null and agencyCd != ""'>
                     <![CDATA[
                          AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
@@ -94,7 +94,7 @@
                 </if>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
                     AND tca.AGENCY_CD = #{orgnCd}
                 ]]>
@@ -112,7 +112,7 @@
                 ]]>
             </if>
         </if>
-        <if test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+        <if test='orgnFg != null and orgnFg == "AGENCY"'>
             <![CDATA[
                 AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
             ]]>
@@ -253,7 +253,7 @@
         </if>
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
                 <if test='agencyCd != null and agencyCd != ""'>
                     <![CDATA[
                          AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
@@ -266,7 +266,7 @@
                 </if>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
                     AND tca.AGENCY_CD = #{agencyCd}
                 ]]>
@@ -403,7 +403,7 @@
         AND tci.INST_FG IS NOT NULL <!-- 설치에 관련된 데이터가 있는 포스만 가져옴 -->
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'><!-- Agency Master Code -->
+            <when test='orgnFg != null and orgnFg == "M"'><!-- Agency Master Code -->
                 <if test='agencyCd != null and agencyCd.toString() != ""'>
                     AND tci.AGENCY_CD LIKE '%'|| #{agencyCd}||'%'
                 </if>
@@ -412,7 +412,7 @@
                 </if>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "A"'>
                 AND tci.AGENCY_CD = #{agencyCd}
             </when>
         </choose>

@@ -85,7 +85,7 @@
         AND tms.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
                 <if test='agencyCd != null and agencyCd != ""'>
                     <![CDATA[
                          AND tms.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
@@ -93,9 +93,9 @@
                 </if>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tms.AGENCY_CD = #{orgnCd}
+                    AND tms.AGENCY_CD = #{agencyCd}
                 ]]>
             </when>
         </choose>
@@ -171,7 +171,7 @@
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
                 <if test='agencyCd != null and agencyCd != ""'>
                     <![CDATA[
                          AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
@@ -184,7 +184,7 @@
                 </if>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
                     AND tca.AGENCY_CD = #{orgnCd}
                 ]]>
@@ -202,7 +202,7 @@
                 ]]>
             </if>
         </if>
-        <if test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>
+        <if test='orgnFg != null and orgnFg == "AGENCY"'>
             <![CDATA[
                 AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
             ]]>
