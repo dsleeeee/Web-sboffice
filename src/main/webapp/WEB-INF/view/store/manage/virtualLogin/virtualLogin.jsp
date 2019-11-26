@@ -28,7 +28,8 @@
         <col class="w35" />
     </colgroup>
     <tbody>
-      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+      <%--<tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>--%>
+      <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
         <%-- 본사코드 --%>
         <th><s:message code="virtualLogin.hqOfficeCd" /></th>
         <td>
@@ -124,8 +125,10 @@
 
           <%--<wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" ng-if="userOrgnFg == 'M'"></wj-flex-grid-column>--%>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">visible="false"</c:if>></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">visible="false"</c:if>></wj-flex-grid-column>
+          <%--<wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">visible="false"</c:if>></wj-flex-grid-column>--%>
+          <%--<wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">visible="false"</c:if>></wj-flex-grid-column>--%>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeCd"/>" binding="hqOfficeCd" width="100" align="center" <c:if test="${orgnFg == 'AGENCY'}">visible="false"</c:if>></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.hqOfficeNm"/>" binding="hqOfficeNm" <c:if test="${orgnFg == 'AGENCY'}">visible="false"</c:if>></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.hqUserId"/>" binding="hqUserId" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.storeCd"/>" binding="storeCd" width="100" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.storeNm"/>" binding="storeNm" width="200"></wj-flex-grid-column>
@@ -166,4 +169,4 @@
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
   var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018120601.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018120601.03" charset="utf-8"></script>

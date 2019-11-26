@@ -48,16 +48,16 @@
                     the.SERVICE_FG = tcn.NMCODE_CD
                 AND tcn.NMCODE_GRP_CD = '008'
                 <where>
-                    <if test='orgnFg != null and orgnFg.toString() == "AGENCY" and pAgencyCd != "00000"'>
+                    <if test='orgnFg != null and orgnFg.toString() == "AGENCY"'>
                         AND tho.AGENCY_CD = #{agencyCd}
                     </if>
                     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                         AND the.HQ_OFFICE_CD = #{hqOfficeCd}
                     </if>
                     <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-                     <![CDATA[
-                        AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
-                     ]]>
+                        <![CDATA[
+                            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
+                        ]]>
                     </if>
                     <if test='userId != null and userId != ""'>
                         AND the.USER_ID LIKE '%'||#{userId}||'%'
@@ -94,7 +94,7 @@
                     AND tcn.NMCODE_GRP_CD = '008'
                 WHERE
                   1=1
-                <if test='orgnFg != null and orgnFg.toString() == "AGENCY" and pAgencyCd != "00000"'>
+                <if test='orgnFg != null and orgnFg.toString() == "AGENCY"'>
                     AND tms.AGENCY_CD = #{agencyCd}
                 </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
@@ -102,7 +102,7 @@
                 </if>
                 <if test='hqOfficeNm != null and hqOfficeNm != ""'>
                     <![CDATA[
-                    AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
+                        AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm} || '%'
                     ]]>
                 </if>
                 <if test='storeCd != null and storeCd != ""'>
@@ -110,7 +110,7 @@
                 </if>
                 <if test='storeNm != null and storeNm != ""'>
                     <![CDATA[
-                    AND tms.STORE_NM LIKE '%'||#{storeNm} || '%'
+                        AND tms.STORE_NM LIKE '%'||#{storeNm} || '%'
                     ]]>
                 </if>
                 <if test='userId != null and userId != ""'>
@@ -129,8 +129,8 @@
         </if>
         <if test='storeNm != null and storeNm != ""'>
             <![CDATA[
-                    AND emp.STORE_NM LIKE '%'||#{storeNm} || '%'
-                    ]]>
+                AND emp.STORE_NM LIKE '%'||#{storeNm} || '%'
+            ]]>
         </if>
         <if test='userId != null and userId != ""'>
             AND emp.USER_ID LIKE '%'||#{userId}||'%'
