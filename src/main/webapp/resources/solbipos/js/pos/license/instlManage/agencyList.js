@@ -113,7 +113,6 @@ app.controller('agencyListCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.orgnCd = orgnCd;
         params.orgnFg = orgnFg;
-        params.pAgencyCd = pAgencyCd;
         params.listScale = $scope.listScaleAgency;
 
         $scope._inquiryMain("/pos/license/instlManage/instlManage/getAgencyList.sb", params, function() {}, false);

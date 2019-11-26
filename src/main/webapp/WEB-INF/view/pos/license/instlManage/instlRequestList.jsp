@@ -139,7 +139,7 @@
     var orgnNm = "${orgnNm}";
     var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.07" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/pos/install/installManage/installRequest.jsp">
