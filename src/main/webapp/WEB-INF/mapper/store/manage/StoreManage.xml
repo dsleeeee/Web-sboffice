@@ -46,7 +46,7 @@
                AND tcvc.VAN_CD = tms.VAN_CD
                AND tcvc.VAN_FG = '01'
                AND tca.AGENCY_CD = tms.AGENCY_CD
-            <if test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+            <if test='orgnFg != null and orgnFg == "A"'>
                 AND tms.AGENCY_CD = #{agencyCd}
             </if>
             <if test='hqOfficeCd != null and hqOfficeCd != ""'>

@@ -36,16 +36,28 @@
             </tr>
             <tr>
                 <%-- 사업자번호 --%>
-                <th><s:message code="storeStatus.bizNo"/></th>
-                <td><input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo"/></td>
+                <th>
+                    <s:message code="storeStatus.bizNo"/>
+                </th>
+                <td>
+                    <input type="text" id="srchApprBizNo" class="sb-input w100" maxlength="15" ng-model="bizNo"/>
+                </td>
                 <%-- 매장명 --%>
-                <th><s:message code="storeStatus.storeNm"/></th>
-                <td><input type="text" id="srchApprStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/></td>
+                <th>
+                    <s:message code="storeStatus.storeNm"/>
+                </th>
+                <td>
+                    <input type="text" id="srchApprStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/>
+                </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
                 <%-- 관리업체명 --%>
-                <th><s:message code="storeStatus.agencyNm"/></th>
-                <td><input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/></td>
+                <th>
+                    <s:message code="storeStatus.agencyNm"/>
+                </th>
+                <td>
+                    <input type="text" id="srchApprAgencyNm" class="sb-input w100" maxlength="15" ng-model="agencyNm"/>
+                </td>
                 <th></th>
                 <td></td>
             </tr>

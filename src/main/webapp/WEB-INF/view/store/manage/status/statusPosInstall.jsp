@@ -185,4 +185,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=2019052801.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusPosInstall.js?ver=2019052801.20" charset="utf-8"></script>
