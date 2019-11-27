@@ -28,7 +28,8 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
+            <%--<tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >--%>
+            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="statusAgency.srchAgencyCd" />
@@ -178,4 +179,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.16" charset="utf-8"></script>

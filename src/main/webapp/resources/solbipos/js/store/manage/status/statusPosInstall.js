@@ -74,7 +74,7 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', function ($scope, $ht
         }
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+        if(orgnFg != null && orgnFg == 'AGENCY') {
             params.agencyCd = orgnCd;
         }
         params.listScale = $scope.listScalePosInstall;

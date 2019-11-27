@@ -41,7 +41,7 @@
                     </div>
                 </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
+            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="instl.agency.agencyCd" />

@@ -68,9 +68,9 @@
         </if>
         <if test='orgnFg != null and orgnFg != "H"'> -- 본사권한 접근 아님
           <choose>
-              <when test='orgnFg == "A" and pAgencyCd != "00000"'> -- 총판권한 접근시
-                  AND tca.AGENCY_CD = #{agencyCd}
-              </when>
+              <!--<when test='orgnFg == "A" and pAgencyCd != "00000"'> &#45;&#45; 총판권한 접근시-->
+                  <!--AND tca.AGENCY_CD = #{agencyCd}-->
+              <!--</when>-->
               <otherwise>
                   <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                       AND tho.HQ_OFFICE_CD = #{hqOfficeCd}

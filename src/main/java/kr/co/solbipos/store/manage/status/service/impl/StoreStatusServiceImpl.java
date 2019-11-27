@@ -98,7 +98,7 @@ public class StoreStatusServiceImpl implements StoreStatusService {
         storeStatusVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
         // 총판인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             storeStatusVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
@@ -114,7 +114,7 @@ public class StoreStatusServiceImpl implements StoreStatusService {
         storeStatusVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
         // 총판인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             storeStatusVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
@@ -160,7 +160,5 @@ public class StoreStatusServiceImpl implements StoreStatusService {
     public List<DefaultMap<String>> getSaleProductInfo(StoreStatusVO storeStatusVO, SessionInfoVO sessionInfoVO){
         return storeStatusMapper.getSaleProductInfo(storeStatusVO);
     }
-
-
 
 }

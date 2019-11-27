@@ -37,7 +37,7 @@
             <th><s:message code="instl.storeNm" /></th>
             <td><input type="text" id="srchStoreNm" class="sb-input w100"ng-model="storeNm"/></td>
         </tr>
-        <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+        <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
             <%-- 대리점코드 --%>
             <th><s:message code="instl.agencyCd" /></th>
             <td><input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="agencyCd"/></td>
@@ -139,7 +139,7 @@
     var orgnNm = "${orgnNm}";
     var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.07" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/pos/install/installManage/installRequest.jsp">

@@ -74,7 +74,8 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
         var params = {};
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+        // if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
+        if(orgnFg != null && orgnFg == 'AGENCY') {
             params.agencyCd = orgnCd;
         }
         params.listScale = 10;

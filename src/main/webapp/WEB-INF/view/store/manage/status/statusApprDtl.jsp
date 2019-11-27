@@ -5,15 +5,16 @@
 
 <wj-popup id="statusApprDtlLayer" control="statusApprDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="statusApprDtlCtrl">
+
         <div class="wj-dialog-header wj-dialog-header-font">
             <span id="spanDtlTitle"></span>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <div class="wj-dialog-body sc2" style="height: 500px;">
 
+        <div class="wj-dialog-body" style="height: 500px;">
             <div class="w100 mt10">
                 <%--위즈모 테이블--%>
-                <div class="wj-gridWrap" style="height: 440px;">
+                <div class="wj-gridWrap" style="height: 460px; overflow-y: hidden; overflow-x: hidden;" >
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"
@@ -50,10 +51,12 @@
                 <%--//위즈모 테이블--%>
             </div>
         </div>
+
         <div class="btnSet2">
             <%-- 닫기 --%>
             <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
         </div>
+
     </div>
 </wj-popup>
 
@@ -67,4 +70,3 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-

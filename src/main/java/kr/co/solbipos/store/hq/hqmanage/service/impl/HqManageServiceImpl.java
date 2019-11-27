@@ -65,7 +65,7 @@ public class HqManageServiceImpl implements HqManageService{
         hqManage.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
         // 총판인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 

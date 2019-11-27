@@ -85,6 +85,7 @@ app.controller('instlRequestListCtrl', ['$scope', '$http', function ($scope, $ht
     // 설치요청목록 조회
     $scope.getInstallList = function(){
         var params = {};
+
         $scope._inquiryMain("/pos/license/instlManage/getInstlRequestList.sb", params, function() {
         });
     };

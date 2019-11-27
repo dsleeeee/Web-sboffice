@@ -66,7 +66,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >
+                <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
                     <%-- 업체코드 --%>
                     <th>
                         <s:message code="instl.agency.agencyCd" />
@@ -170,7 +170,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.83" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.84" charset="utf-8"></script>
 
 <%-- 설치현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/instlDtl.jsp">
