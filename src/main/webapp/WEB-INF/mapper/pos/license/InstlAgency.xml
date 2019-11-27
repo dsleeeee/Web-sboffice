@@ -2,6 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.pos.license.instlAgency.service.impl.InstlAgencyMapper">
+
+    <!-- 설치업체 조회 -->
+    <!--
+        TABLE    : TB_CM_AGENCY
+        COMMENTS : 설치업체 조회
+    -->
+    <select id="getAgency" parameterType="instlAgencyVO" resultType="DefaultMap">
+        SELECT   AGENCY_CD
+                , AGENCY_NM
+          FROM TB_CM_AGENCY
+          WHERE 1=1
+            AND AGENCY_CD != '00000'
+        <!-- AND AGENCY_CD = #{agencyCd} -->
+         ORDER BY AGENCY_CD
+    </select>
+
     <!-- 설치업체관리 조회 -->
     <!--
         TABLE    : TB_CM_AGENCY
@@ -9,39 +25,55 @@
     -->
     <select id="getInstlAgency"  parameterType="instlAgencyVO" resultType="DefaultMap">
     /* USE : InstlAgencyMapper.getInstlAgency */
-      SELECT tca.AGENCY_CD
-              , tca.AGENCY_NM
-        FROM TB_CM_AGENCY tca
-       WHERE 1=1
-         AND tca.AGENCY_CD != '00000'
+        SELECT   tca.AGENCY_CD
+                , tca.AGENCY_NM
+                , tca.P_AGENCY_CD
+                , tca.BIZ_NO
+                , ('[' || tca.AGENCY_GRP || '] ' || (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tca.AGENCY_GRP)) AS AGENCY_GRP
+          FROM
+          (
+                 SELECT      tca.AGENCY_CD
+                            , tca.AGENCY_NM
+                            , tca.P_AGENCY_CD
+                            , tca.BIZ_NO
+                            , (CASE WHEN tca.P_AGENCY_CD = '00000' THEN tca.AGENCY_CD ELSE tca.P_AGENCY_CD END) AS AGENCY_GRP
+                    FROM TB_CM_AGENCY tca
+                   WHERE 1=1
+                     AND tca.AGENCY_CD != '00000'
+           ) tca
+           WHERE 1=1
         <choose>
             <!-- 시스템 -->
-            <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'>
-                <if test='agencyCd != null and agencyCd != ""'>
-                    <![CDATA[
-                    AND tca.AGENCY_CD LIKE '%'||#{agencyCd}||'%'
-                    ]]>
-                </if>
-                <if test='agencyNm != null and agencyNm != ""'>
-                    <![CDATA[
-                    AND tca.AGENCY_NM LIKE '%'||#{agencyNm}||'%'
-                    ]]>
-                </if>
+            <when test='(orgnFg != null and orgnFg == "M")'>
+                <![CDATA[
+                AND tca.P_AGENCY_CD = '00000'
+                ]]>
             </when>
             <!-- 총판 -->
-            <when test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+            <when test='orgnFg != null and orgnFg == "A"'>
                 <![CDATA[
-                AND tca.AGENCY_CD = #{agencyCd}
+                AND tca.P_AGENCY_CD = #{agencyCd}
                 ]]>
             </when>
         </choose>
+
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            <![CDATA[
+            AND tca.AGENCY_CD LIKE '%'||#{srchAgencyCd}||'%'
+            ]]>
+        </if>
+        <if test='srchAgencyNm != null and srchAgencyNm != ""'>
+            <![CDATA[
+            AND tca.AGENCY_NM LIKE '%'||#{srchAgencyNm}||'%'
+            ]]>
+        </if>
         <if test='bizTypeCd != null and bizTypeCd != ""'>
             AND tca.BIZ_TYPE_CD = #{bizTypeCd}
         </if>
         <if test='bizNo != null and bizNo != ""'>
             AND tca.BIZ_NO LIKE '%'||#{bizNo}||'%'
         </if>
-     ORDER BY tca.AGENCY_CD
+        ORDER BY tca.AGENCY_GRP, tca.P_AGENCY_CD, tca.AGENCY_CD
     </select>
 
     <!-- 설치업체관리 상세정보 조회 -->
@@ -90,7 +122,7 @@
               AGENCY_CD
             , AGENCY_NM
             , OWNER_NM
-            <!-- , P_AGENCY_CD -->
+            , P_AGENCY_CD
             , BIZ_NO
             , BIZ_TYPE_CD
             , BIZ_ITEM_CD
@@ -114,7 +146,7 @@
              (SELECT LPAD(NVL(MAX(AGENCY_CD),0)+1, 5, 0) FROM TB_CM_AGENCY)
             ,#{agencyNm}
             ,#{ownerNm}
-            <!-- ,#{pAgencyCd} -->
+            ,#{pAgencyCd}
             ,#{bizNo}
             ,#{bizTypeCd}
             ,#{bizItemCd}
@@ -146,6 +178,7 @@
     UPDATE TB_CM_AGENCY
        SET AGENCY_NM = #{agencyNm}
           , OWNER_NM = #{ownerNm}
+          , P_AGENCY_CD = #{pAgencyCd}
           , BIZ_NO = #{bizNo}
           <!--, BIZ_TYPE_CD = #{bizTypeCd}
           , BIZ_ITEM_CD = #{bizItemCd} -->

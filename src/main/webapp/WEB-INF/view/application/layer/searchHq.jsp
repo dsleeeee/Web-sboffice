@@ -30,15 +30,8 @@
         </tr>
         </tbody>
       </table>
-      <%-- 조회 --%>
-      <div class="mt10 tr">
-        <button class="btn_skyblue" id="btnSearch" ng-click="_broadcast('searchHqCtrl')" >
-          <s:message code="cmm.search" />
-        </button>
-      </div>
 
-      <div class="oh mt10">
-        <div style="display:none;">
+        <div class="mt40 oh sb-select dkbr">
           <%-- 페이지 스케일  --%>
           <wj-combo-box
                   class="w100px fl"
@@ -51,7 +44,13 @@
                   is-editable="false"
                   initialized="_initComboBox(s)">
           </wj-combo-box>
+          <%--// 페이지 스케일  --%>
+
+          <%-- 신규매장등록 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSearch" ng-click="_pageView('searchHqCtrl', 1)"><s:message code="cmm.search" /></button>
         </div>
+
+      <div class="oh mt10">
         <%--- 본사 그리드 --%>
         <div class="w100">
           <div class="wj-TblWrap mr10" style="height:210px; overflow-y: hidden;">
@@ -94,4 +93,4 @@
 var clsFg     = ${ccu.getCommCodeExcpAll("001")};
 var sysStatFg = ${ccu.getCommCode("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchHq.js?ver=2018102301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchHq.js?ver=2018102301.06" charset="utf-8"></script>

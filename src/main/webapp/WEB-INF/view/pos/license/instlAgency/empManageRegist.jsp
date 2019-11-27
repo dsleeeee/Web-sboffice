@@ -431,5 +431,3 @@
     });
 
 </script>
-
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlAgency/empManageRegist.js?ver=20191024.06" charset="utf-8"></script>

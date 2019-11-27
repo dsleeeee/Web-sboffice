@@ -174,4 +174,3 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlAgency/empManageDtl.js?ver=20191024.05" charset="utf-8"></script>

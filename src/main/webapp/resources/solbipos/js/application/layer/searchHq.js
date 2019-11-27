@@ -59,7 +59,7 @@ app.controller('searchHqCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   $scope.$on("searchHqCtrl", function(event, data) {
-    $scope._setPagingInfo('curr', '1')
+    //$scope._setPagingInfo('curr', '1')
     $scope.searchHq();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -69,8 +69,10 @@ app.controller('searchHqCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchHq = function(){
 
     var params = {};
-    params.curr = $scope._getPagingInfo('curr');
-    params.listScale = $scope.listScaleCombo.selectedValue;
+    //params.curr = $scope._getPagingInfo('curr');
+    params.listScale = $scope.listScale;
+    params.hqOfficeCd= $scope.hqOfficeCd;
+    params.hqOfficeNm = $scope.hqOfficeNm;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub("/popup/getHqList.sb", params, function() {

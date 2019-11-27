@@ -12,6 +12,10 @@ import java.util.List;
 @Mapper
 @Repository
 public interface InstlAgencyMapper {
+
+    /** 설치업체 조회 */
+    List<DefaultMap<String>> getAgency(InstlAgencyVO instlAgencyVO);
+
     /** 설치업체관리 조회 */
     List<DefaultMap<String>> getInstlAgency(InstlAgencyVO instlAgencyVO);
 

@@ -43,14 +43,22 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
     /** 설치업체관리 조회 */
     @Override
+    public List<DefaultMap<String>> getAgency(InstlAgencyVO instlAgencyVO, SessionInfoVO sessionInfoVO) {
+        instlAgencyVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+
+        return instlAgencyMapper.getAgency(instlAgencyVO);
+    };
+
+    /** 설치업체관리 조회 */
+    @Override
     public List<DefaultMap<String>> getInstlAgency(InstlAgencyVO instlAgencyVO, SessionInfoVO sessionInfoVO) {
 
-        // 소속구분, 총판의 부모총판 코드
+        // 소속구분, 총판
         instlAgencyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         instlAgencyVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
-        // 총판인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+        // 대리점권한만
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             instlAgencyVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
@@ -74,6 +82,11 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
         instlAgencyVO.setRegId(sessionInfoVO.getUserId());  //등록아이디
         instlAgencyVO.setModDt(dt);                         //수정일시
         instlAgencyVO.setModId(sessionInfoVO.getUserId());  //수정아이디
+
+        // 총판구분이 '총판'인 경우 pAgencyCd에 Master Code 입력(2019.11.22 이다솜)
+        if(instlAgencyVO.getAgencyType().equals("dist")){
+            instlAgencyVO.setpAgencyCd("00000");
+        }
 
         if(instlAgencyVO.getSaveType().equals("MOD")){
 

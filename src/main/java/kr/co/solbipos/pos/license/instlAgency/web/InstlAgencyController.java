@@ -45,7 +45,15 @@ public class InstlAgencyController {
      * @param model
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String instlAgencyView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String instlAgencyView(InstlAgencyVO instlAgencyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = instlAgencyService.getAgency(instlAgencyVO, sessionInfoVO);
+
+        // 총판구분 > 대리점 코드
+        model.addAttribute("agencyList", list);
+
         return "pos/license/instlAgency/instlAgency";
     }
 

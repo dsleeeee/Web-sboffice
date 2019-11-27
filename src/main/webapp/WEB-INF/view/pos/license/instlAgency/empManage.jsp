@@ -10,11 +10,11 @@
     <%--============================================= 탭 =============================================--%>
     <ul class="subTab">
         <%-- 설치업체관리 업체정보 --%>
-        <li><a id="agencyInfoTab" href="#" ng-click="changeTabInstlAgency('agency');"><s:message code="instlAgency.agencyInfo" /></a></li>
+        <li><a id="agencyInfoTab" href="#" onClick="changeTabInstlAgency('agency');"><s:message code="instlAgency.agencyInfo" /></a></li>
         <%-- 설치업체관리 사원관리 --%>
         <li><a id="empManageTab"  href="#" class="on"><s:message code="instlAgency.empManage" /></a></li>
         <%-- 설치업체관리 인증관리 --%>
-        <li><a id="authManageTab"  href="#" ng-click="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
+        <li><a id="authManageTab"  href="#" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
     </ul>
     <div style="padding:10px; height:50px;">
         <%-- 사원등록 --%>
@@ -104,8 +104,6 @@
         empManageRegist('REG', $("#agencyCd").val(), '');
     }
 </script>
-
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlAgency/empManage.js?ver=20191023.12" charset="utf-8"></script>
 
 
 

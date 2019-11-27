@@ -77,7 +77,7 @@
           FROM TB_HQ_OFFICE
         <where>
             <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-               HQ_OFFICE_CD = #{hqOfficeCd}
+           AND HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
             </if>
             <if test='hqOfficeNm != null and hqOfficeNm != ""'>
            AND HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'

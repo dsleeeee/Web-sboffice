@@ -8,6 +8,10 @@ import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
 import java.util.List;
 
 public interface InstlAgencyService {
+
+    /** 설치업체 조회 */
+    List<DefaultMap<String>> getAgency(InstlAgencyVO instlAgencyVO, SessionInfoVO sessionInfoVO);
+
     /** 설치업체관리 조회 */
     List<DefaultMap<String>> getInstlAgency(InstlAgencyVO instlAgencyVO, SessionInfoVO sessionInfoVO);
 

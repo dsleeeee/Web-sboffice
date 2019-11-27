@@ -83,6 +83,13 @@ public class InstlAgencyVO extends CmmVO {
     private String orgnFg;
     /** 그룹 코드 */
     private String authGrpCd;
+    /** 총판구분 */
+    private String agencyType;
+
+    /** 대리점코드(검색용) */
+    private String srchAgencyCd;
+    /** 대리점명(검색용) */
+    private String srchAgencyNm;
 
 
     public String getAgencyCd() {
@@ -331,5 +338,29 @@ public class InstlAgencyVO extends CmmVO {
 
     public void setAuthGrpCd(String authGrpCd) {
         this.authGrpCd = authGrpCd;
+    }
+
+    public String getAgencyType() {
+        return agencyType;
+    }
+
+    public void setAgencyType(String agencyType) {
+        this.agencyType = agencyType;
+    }
+
+    public String getSrchAgencyCd() {
+        return srchAgencyCd;
+    }
+
+    public void setSrchAgencyCd(String srchAgencyCd) {
+        this.srchAgencyCd = srchAgencyCd;
+    }
+
+    public String getSrchAgencyNm() {
+        return srchAgencyNm;
+    }
+
+    public void setSrchAgencyNm(String srchAgencyNm) {
+        this.srchAgencyNm = srchAgencyNm;
     }
 }
