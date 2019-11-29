@@ -13,7 +13,7 @@
     <div ng-controller="instlListCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
-            <a href="#" class="open fl"><s:message code="instl.operation.status" /></a>
+            <a href="#" class="open fl"><s:message code="instl.instalList" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <button class="btn_blue fr" ng-click="_broadcast('instlListCtrl')">
@@ -66,20 +66,20 @@
                         </div>
                     </td>
                 </tr>
-                <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+                <tr>
                     <%-- 업체코드 --%>
                     <th>
                         <s:message code="instl.agency.agencyCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" />
+                        <input type="text" class="sb-input w100" id="il_srchAgencyCd" ng-model="agencyCd" />
                     </td>
                     <%-- 업체명 --%>
                     <th>
                         <s:message code="instl.agency.agencyNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" />
+                        <input type="text" class="sb-input w100" id="il_srchAgencyNm" ng-model="agencyNm" />
                     </td>
                 </tr>
             </tbody>
@@ -170,7 +170,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.84" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlList.js?ver=2019052801.85" charset="utf-8"></script>
 
 <%-- 설치현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/instlDtl.jsp">

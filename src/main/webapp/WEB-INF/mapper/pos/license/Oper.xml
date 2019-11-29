@@ -25,6 +25,7 @@
         tms.STORE_CD,
         tms.STORE_NM,
         tms.AGENCY_CD,
+        (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = tms.AGENCY_CD) AS AGENCY_NM,
         NVL(tmp.POS_CNT,0) AS POS_CNT,
         NVL(tssh.SALE_FG,0) AS SALE_FG,
         NVL(tssh.SALE_FG_N,0) AS SALE_FG_N,
@@ -32,7 +33,7 @@
         NVL(tsspc.CARD_CNT,0) AS CARD_CNT,
         NVL(tssph.CASH_CNT,0) AS CASH_CNT,
         NVL(tssph.CASH_REC_CNT,0) AS CASH_REC_CNT,
-        TO_CHAR(TO_DATE(tci.MAX_INST_INS_DT, 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_INST_INS_DT,
+        CASE WHEN tci.MAX_INST_INS_DT !='' THEN TO_CHAR(TO_DATE(tci.MAX_INST_INS_DT, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS MAX_INST_INS_DT,
         TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE,
         TO_CHAR(TO_DATE(tssh.MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
         tms.SYS_STAT_FG
@@ -86,16 +87,16 @@
         <choose>
             <!-- 시스템 -->
             <when test='orgnFg != null and orgnFg == "MASTER"'>
-                <if test='agencyCd != null and agencyCd != ""'>
+                <if test='srchAgencyCd != null and srchAgencyCd != ""'>
                     <![CDATA[
-                         AND tms.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
+                         AND tms.AGENCY_CD = #{srchAgencyCd}
                     ]]>
                 </if>
             </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tms.AGENCY_CD = #{agencyCd}
+                    AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
                 ]]>
             </when>
         </choose>
@@ -147,7 +148,16 @@
         SELECT
         tca.AGENCY_CD,
         tca.AGENCY_NM,
-        (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+        <choose>
+            <!-- 시스템 -->
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
+                (CASE WHEN tca.P_AGENCY_CD = '00000' THEN '총판' WHEN tca.P_AGENCY_CD != '00000' THEN '대리점' ELSE '' END) AS AGENCY_FG,
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+                (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+            </when>
+        </choose>
         tca.OWNER_NM,
         0 AS BUY_CNT,
         0 AS SALE_CNT,
@@ -168,28 +178,26 @@
             GROUP BY AGENCY_CD
         ) tci
         WHERE 1=1
+        AND tca.AGENCY_CD != '00000'
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
-            <!-- 시스템 -->
-            <when test='orgnFg != null and orgnFg == "MASTER"'>
-                <if test='agencyCd != null and agencyCd != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-                    ]]>
-                </if>
-                <if test='agencyNm != null and agencyNm != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                    ]]>
-                </if>
-            </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tca.AGENCY_CD = #{orgnCd}
+                    AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
                 ]]>
             </when>
         </choose>
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            <![CDATA[
+            AND tca.AGENCY_CD LIKE '%'|| #{srchAgencyCd} ||'%'
+            ]]>
+        </if>
+        <if test='srchAgencyNm != null and srchAgencyNm != ""'>
+            <![CDATA[
+            AND tca.AGENCY_NM LIKE '%'|| #{srchAgencyNm} ||'%'
+            ]]>
+        </if>
         <if test='agencyFg != null and agencyFg != ""'>
             <if test='agencyFg == "1"'>
                 <![CDATA[
@@ -201,11 +209,6 @@
                     AND tca.P_AGENCY_CD = #{orgnCd}
                 ]]>
             </if>
-        </if>
-        <if test='orgnFg != null and orgnFg == "AGENCY"'>
-            <![CDATA[
-                AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
-            ]]>
         </if>
         AND tci.AGENCY_CD (+)= tca.AGENCY_CD
         ORDER BY tca.AGENCY_CD

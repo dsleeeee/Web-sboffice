@@ -9,7 +9,7 @@
 
 <div id="statusApprListView" class="subCon" style="display: none;" ng-controller="statusApprListCtrl">
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl">${menuNm}</a>
+        <a href="#" class="open fl"><s:message code="storeStatus.apprList"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('statusApprListCtrl', 1)">
             <s:message code="cmm.search"/>
@@ -99,6 +99,7 @@
                 <wj-flex-grid-column header="<s:message code="storeStatus.hqOfficeNm"/>" binding="hqOfficeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.storeNm"/>" binding="storeNm" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.agencyNm"/>" binding="agencyNm" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.bizNo"/>" binding="bizNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.ownerNm"/>" binding="ownerNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.sysOpenDate"/>" binding="sysOpenDate" width="85" align="center" is-read-only="true"></wj-flex-grid-column>

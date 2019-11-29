@@ -37,7 +37,7 @@
          WHERE tca.AGENCY_CD (+)= tce.AGENCY_CD
           <choose>
               <!-- 시스템 -->
-              <when test='(orgnFg != null and orgnFg == "M") or (orgnFg != null and orgnFg == "A" and pAgencyCd == "00000")'>
+              <when test='orgnFg != null and orgnFg == "M"'>
                   <if test="agencyCd != null and agencyCd != ''">
                       AND tce.AGENCY_CD LIKE '%'||#{agencyCd}||'%'
                   </if>
@@ -49,9 +49,8 @@
                   </if>
               </when>
               <!-- 총판 -->
-              <when test='orgnFg != null and orgnFg == "A" and pAgencyCd != "00000"'>
+              <when test='orgnFg != null and orgnFg == "A"'>
                 AND tce.AGENCY_CD = #{agencyCd}
-                AND tce.ADMIN_FG = #{adminFg}
               </when>
           </choose>
           <if test="chkDt == false">

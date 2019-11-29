@@ -107,8 +107,9 @@ app.controller('agencyListCtrl', ['$scope', '$http', function ($scope, $http) {
     // 업체현황 그리드 조회
     $scope.searchAgencyList = function() {
         var params = {};
-        params.agencyCd = $("#srchAgencyCd").val();
-        params.agencyNm = $("#srchAgencyNm").val();
+
+        params.srchAgencyCd = $("#al_srchAgencyCd").val();
+        params.srchAgencyNm = $("#al_srchAgencyNm").val();
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.orgnCd = orgnCd;

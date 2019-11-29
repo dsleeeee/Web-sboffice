@@ -140,7 +140,7 @@
         <th></th>
         <td></td>
       </tr>
-      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+      <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
         <%-- 관리업체 코드 --%>
         <th><s:message code="systemEmp.agencyCd" /></th>
         <td>
@@ -152,7 +152,7 @@
           <input type="text" id="srchAgencyNm" name="srchAgencyNm" ng-model="agencyNm" class="sb-input w100" maxlength="15" />
         </td>
       </tr>
-      <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
+      <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
         <%-- 관리자 구분 --%>
         <th><s:message code="systemEmp.adminFg" /></th>
         <td>

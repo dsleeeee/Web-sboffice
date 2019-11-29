@@ -65,9 +65,9 @@ public class SystemEmpServiceImpl implements SystemEmpService {
         systemEmpVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
 
         // 대리점인 경우, session의 AgencyCode 값 넣기
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY && !sessionInfoVO.getpAgencyCd().equals("00000")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
             systemEmpVO.setAgencyCd(sessionInfoVO.getOrgnCd());
-            systemEmpVO.setAdminFg(AdminFg.DISTRIBUTORS);
+            //systemEmpVO.setAdminFg(AdminFg.DISTRIBUTORS);
         }
 
         return systemEmpMapper.getSystemEmpList(systemEmpVO);

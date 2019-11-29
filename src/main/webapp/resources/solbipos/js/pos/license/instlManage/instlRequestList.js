@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 업체구분 DropBoxDataMap
+var agencyFgData = [
+    {"name":"전체","value":""},
+    {"name":"자사","value":"1"},
+    {"name":"대리점","value":"2"}
+];
+
 /**********************************************************************
  *  설치요청 목록 그리드
  **********************************************************************/
@@ -22,6 +29,7 @@ app.controller('instlRequestListCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("irl_srchAgencyFg", agencyFgData); //업체구분
 
     // 조회조건 콤보박스 데이터 Set
     // $scope._setComboData("clsFg", clsFg);
@@ -85,6 +93,8 @@ app.controller('instlRequestListCtrl', ['$scope', '$http', function ($scope, $ht
     // 설치요청목록 조회
     $scope.getInstallList = function(){
         var params = {};
+        params.srchAgencyCd = $("#srchAgencyCd").val();
+        params.srchAgencyNm = $("#srchAgencyNm").val();
 
         $scope._inquiryMain("/pos/license/instlManage/getInstlRequestList.sb", params, function() {
         });

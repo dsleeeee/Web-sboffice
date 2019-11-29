@@ -13,7 +13,7 @@
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl">${menuNm}</a>
+        <a href="#" class="open fl"><s:message code="storeStatus.store"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_pageView('statusStoreCtrl',1)">
@@ -205,9 +205,9 @@
 
 <script type="text/javascript">
     <%-- 용도구분 --%>
-    var clsFgData = ${ccu.getCommCodeExcpAll("001")};
+    var clsFgData = ${ccu.getCommCode("001")};
     <%-- 상태구분 --%>
-    var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
+    var sysStatFgData = ${ccu.getCommCode("005")};
 
     var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
@@ -215,7 +215,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=2019052802.12" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

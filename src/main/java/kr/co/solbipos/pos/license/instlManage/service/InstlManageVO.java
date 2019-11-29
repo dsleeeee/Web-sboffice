@@ -85,6 +85,12 @@ public class InstlManageVO extends PageVO {
     /** 비고 */
     private String remark;
 
+    /** 대리점코드(검색용) */
+    private String srchAgencyCd;
+
+    /** 대리점명(검색용) */
+    private String srchAgencyNm;
+
     public String getAgencyCd() {
         return agencyCd;
     }
@@ -249,5 +255,21 @@ public class InstlManageVO extends PageVO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getSrchAgencyCd() {
+        return srchAgencyCd;
+    }
+
+    public void setSrchAgencyCd(String srchAgencyCd) {
+        this.srchAgencyCd = srchAgencyCd;
+    }
+
+    public String getSrchAgencyNm() {
+        return srchAgencyNm;
+    }
+
+    public void setSrchAgencyNm(String srchAgencyNm) {
+        this.srchAgencyNm = srchAgencyNm;
     }
 }

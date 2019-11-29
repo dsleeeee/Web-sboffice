@@ -38,8 +38,8 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("clsFg", clsFgData); //용도
-    $scope._setComboData("sysStatFg", sysStatFgData); //상태
+    $scope._getComboDataQuery('001', 'clsFg', 'A');
+    $scope._getComboDataQuery('005', 'sysStatFg', 'A');
     $scope._setComboData("storeFg", storeFgData); //매장구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -102,7 +102,7 @@ app.controller('statusStoreCtrl', ['$scope', '$http', function ($scope, $http) {
      * 관리업체 조회
      * *******************************************************/
     $scope.searchAgency = function(){
-        if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+        if(orgnFg === "MASTER") {
             var popup = $scope.agencyLayer;
 
             // 팝업 닫을때

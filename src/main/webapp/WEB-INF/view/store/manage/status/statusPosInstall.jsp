@@ -12,7 +12,7 @@
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl"><s:message code="statusPosInstall.info" /></a>
+        <a href="#" class="open fl"><s:message code="storeStatus.posInstall"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_pageView('statusPosInstallCtrl',1)">

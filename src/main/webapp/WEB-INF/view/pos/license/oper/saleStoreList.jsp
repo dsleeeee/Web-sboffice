@@ -33,7 +33,7 @@
                 <th>
                     <s:message code="oper.date" />
                 </th>
-                <td>
+                <td colspan="3">
                     <div class="sb-select">
                         <span class="txtIn w110px">
                             <wj-input-date
@@ -72,7 +72,7 @@
                 </th>
                 <td>
                     <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
-                    <input type="hidden" id="agencyCd" ng-hide="true">
+                    <input type="hidden" id="ssl_srchAgencyCd" ng-hide="true">
                 </td>
                 <th></th>
                 <td></td>
@@ -146,7 +146,7 @@
                     <wj-flex-grid-column header="<s:message code="oper.hqOfficeNm"/>" binding="hqOfficeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="oper.agency"/>" binding="agency" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="oper.agency"/>" binding="agencyNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.saleFg"/>" binding="saleFg" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="oper.saleFgN"/>" binding="saleFgN" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -183,7 +183,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=2019052801.17" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/saleStoreList.js?ver=2019052801.20" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

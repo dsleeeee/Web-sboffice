@@ -41,29 +41,29 @@
                     </div>
                 </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+            <tr>
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="instl.agency.agencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" />
+                    <input type="text" class="sb-input w100" id="al_srchAgencyCd" ng-model="agencyCd" />
                 </td>
                 <%-- 업체명 --%>
                 <th>
                     <s:message code="instl.agency.agencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" />
+                    <input type="text" class="sb-input w100" id="al_srchAgencyNm" ng-model="agencyNm" />
                 </td>
             </tr>
-            <tr>
+            <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>
                 <%-- 업체구분 --%>
                 <th>
                     <s:message code="instl.agencyFg" />
                 </th>
                 <td>
-                    <div class="sb-select">
+                    <div class="sb-select" style="width:300px;">
                         <wj-combo-box
                             id="srchAgencyFg"
                             ng-model="agencyFg"
@@ -75,12 +75,16 @@
                         </wj-combo-box>
                     </div>
                 </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
                 <%-- 사용여부 --%>
                 <th>
                     <s:message code="instl.useYn" />
                 </th>
                 <td>
-                    <div class="sb-select">
+                    <div class="sb-select" style="width:300px;">
                         <wj-combo-box
                             id="srchUseYn"
                             ng-model="useYn"
@@ -92,6 +96,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
+                <td></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -162,7 +168,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.49" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/agencyList.js?ver=2019052801.54" charset="utf-8"></script>
 
 <%-- 업체현황 상세 조회 --%>
 <c:import url="/WEB-INF/view/pos/license/instlManage/agencyDtl.jsp">

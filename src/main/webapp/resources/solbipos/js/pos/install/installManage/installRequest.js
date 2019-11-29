@@ -86,8 +86,10 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
     }
 
     if( $scope.request.instReason === '005') {
-      $scope._popMsg("기타사유를 입력해주세요.");
-      return false;
+        if($scope.request.remark === ""){
+            $scope._popMsg("기타사유를 입력해주세요.");
+            return false;
+        }
     }
 
     console.log("$scope.request.instReason : "+ $scope.request.instReason);
@@ -132,7 +134,7 @@ app.controller('installRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 대리점 조회
   $scope.searchAgency = function(val){
-      if(orgnFg === "MASTER" || pAgencyCd === "00000"){
+      if(orgnFg === "MASTER"){
           $scope.agencyLayer.show(true, function(s){
               var agencyScope = agrid.getScope('searchAgencyCtrl');
               console.log('agencyResult ', agencyScope.getAgency());

@@ -22,7 +22,16 @@
         SELECT
         tca.AGENCY_CD,
         tca.AGENCY_NM,
-        (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+        <choose>
+            <!-- 시스템 -->
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
+                (CASE WHEN tca.P_AGENCY_CD = '00000' THEN '총판' WHEN tca.P_AGENCY_CD != '00000' THEN '대리점' ELSE '' END) AS AGENCY_FG,
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+                (CASE WHEN tca.AGENCY_CD = #{orgnCd} THEN '자사' WHEN tca.P_AGENCY_CD = #{orgnCd} THEN '대리점' ELSE '' END) AS AGENCY_FG,
+            </when>
+        </choose>
         tca.OWNER_NM,
         0 AS BUY_CNT,
         0 AS SALE_CNT,
@@ -78,28 +87,26 @@
             GROUP BY A.AGENCY_CD
         ) tsms
         WHERE 1=1
+        AND tca.AGENCY_CD != '00000'
         AND tca.REG_DT BETWEEN #{startDate} AND #{endDate}
         <choose>
-            <!-- 시스템 -->
-            <when test='orgnFg != null and orgnFg == "MASTER"'>
-                <if test='agencyCd != null and agencyCd != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-                    ]]>
-                </if>
-                <if test='agencyNm != null and agencyNm != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                    ]]>
-                </if>
-            </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tca.AGENCY_CD = #{orgnCd}
+                    AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
                 ]]>
             </when>
         </choose>
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            <![CDATA[
+            AND tca.AGENCY_CD LIKE '%'|| #{srchAgencyCd} ||'%'
+            ]]>
+        </if>
+        <if test='srchAgencyNm != null and srchAgencyNm != ""'>
+            <![CDATA[
+            AND tca.AGENCY_NM LIKE '%'|| #{srchAgencyNm} ||'%'
+             ]]>
+        </if>
         <if test='agencyFg != null and agencyFg != ""'>
             <if test='agencyFg == "1"'>
                 <![CDATA[
@@ -111,11 +118,6 @@
                     AND tca.P_AGENCY_CD = #{orgnCd}
                 ]]>
             </if>
-        </if>
-        <if test='orgnFg != null and orgnFg == "AGENCY"'>
-            <![CDATA[
-                AND (tca.AGENCY_CD = #{orgnCd} OR tca.P_AGENCY_CD = #{orgnCd})
-            ]]>
         </if>
         <if test='useYn != null and useYn != ""'>
             <![CDATA[
@@ -244,6 +246,7 @@
             GROUP BY AGENCY_CD
         ) tci
         WHERE 1=1
+        AND tca.AGENCY_CD != '00000'
         <if test='chkDt != true'>
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
@@ -252,26 +255,23 @@
             </if>
         </if>
         <choose>
-            <!-- 시스템 -->
-            <when test='orgnFg != null and orgnFg == "MASTER"'>
-                <if test='agencyCd != null and agencyCd != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-                    ]]>
-                </if>
-                <if test='agencyNm != null and agencyNm != ""'>
-                    <![CDATA[
-                         AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                    ]]>
-                </if>
-            </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
                 <![CDATA[
-                    AND tca.AGENCY_CD = #{agencyCd}
+                    AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD =  #{agencyCd})
                 ]]>
             </when>
         </choose>
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            <![CDATA[
+            AND tca.AGENCY_CD LIKE '%'|| #{srchAgencyCd} ||'%'
+            ]]>
+        </if>
+        <if test='srchAgencyNm != null and srchAgencyNm != ""'>
+            <![CDATA[
+            AND tca.AGENCY_NM LIKE '%'|| #{srchAgencyNm} ||'%'
+            ]]>
+        </if>
         AND tms.AGENCY_CD (+)= tca.AGENCY_CD
         AND tmps.AGENCY_CD (+)= tca.AGENCY_CD
         AND tci.AGENCY_CD (+)= tca.AGENCY_CD
@@ -366,6 +366,7 @@
         tmp.STORE_CD,
         tmp.POS_NO,
         tci.SEQ_NO,
+        tca.P_AGENCY_CD,
         tci.AGENCY_CD,
         tca.AGENCY_NM,
         tms.SYS_STAT_FG,
@@ -402,26 +403,40 @@
         AND tca.AGENCY_CD (+)= tci.AGENCY_CD
         AND tci.INST_FG IS NOT NULL <!-- 설치에 관련된 데이터가 있는 포스만 가져옴 -->
         <choose>
-            <!-- 시스템 -->
-            <when test='orgnFg != null and orgnFg == "M"'><!-- Agency Master Code -->
-                <if test='agencyCd != null and agencyCd.toString() != ""'>
-                    AND tci.AGENCY_CD LIKE '%'|| #{agencyCd}||'%'
-                </if>
-                <if test='agencyNm != null and agencyNm.toString() != ""'>
-                    AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                </if>
-            </when>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "A"'>
-                AND tci.AGENCY_CD = #{agencyCd}
+                AND (tci.AGENCY_CD = #{agencyCd} OR tca.AGENCY_CD = #{agencyCd})
             </when>
         </choose>
+        <if test='srchAgencyCd != null and srchAgencyCd.toString() != ""'>
+            AND tci.AGENCY_CD LIKE '%'|| #{srchAgencyCd}||'%'
+        </if>
+        <if test='srchAgencyNm != null and srchAgencyNm.toString() != ""'>
+            AND tca.AGENCY_NM LIKE '%'|| #{srchAgencyNm} ||'%'
+        </if>
         <if test='storeCd != null and storeCd.toString() != ""'>
             AND tmp.STORE_CD LIKE '%' ||#{storeCd}|| '%'
         </if>
         <if test='storeNm != null and storeNm.toString() != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
+
+        <!-- 총판만 자사/대리점 검색 가능 -->
+        <if test='orgnFg != null and orgnFg == "A"'>
+            <if test='agencyFg != null and agencyFg != ""'>
+                <if test='agencyFg == "1"'>
+                    <![CDATA[
+                    AND tca.AGENCY_CD = #{agencyCd}
+                ]]>
+                </if>
+                <if test='agencyFg == "2"'>
+                    <![CDATA[
+                    AND tca.P_AGENCY_CD = #{agencyCd}
+                ]]>
+                </if>
+            </if>
+        </if>
+
         <if test='instFg != null and instFg.toString() != ""'>
             AND tci.INST_FG = #{instFg}
         </if>

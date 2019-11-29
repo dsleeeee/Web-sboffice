@@ -30,10 +30,40 @@
             <td><input type="text" id="srchStoreNm" ng-model="storeNm" /></td>
           </tr>
           <tr>
-            <th><s:message code="terminalManage.clsFg"/></th>
+            <%--<th><s:message code="terminalManage.clsFg"/></th>
             <td><input type="text" id="srchClsFg" ng-model="clsFg" /></td>
             <th><s:message code="terminalManage.sysStatFg"/></th>
-            <td><input type="text" id="srchStatFg" ng-model="sysStatFg" /></td>
+            <td><input type="text" id="srchStatFg" ng-model="sysStatFg" /></td>--%>
+              <%-- 용도 --%>
+              <th><s:message code="storeManage.clsFg" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchClsFg"
+                          ng-model="clsFg"
+                          items-source="_getComboData('clsFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
+              <%-- 상태 --%>
+              <th><s:message code="terminalManage.sysStatFg" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchSysStatFg"
+                          ng-model="sysStatFg"
+                          items-source="_getComboData('sysStatFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
           </tr>
         </tbody>
       </table>
@@ -69,8 +99,8 @@
                 <wj-flex-grid-column header="<s:message code="terminalManage.hqOfficeCd"/>" binding="hqOfficeNm" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="terminalManage.storeNm"/>" binding="storeNm" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="terminalManage.clsFg"/>" binding="clsFg" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="terminalManage.sysStatFg"/>" binding="sysStatFg"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="terminalManage.clsFg"/>" binding="clsFg" data-map="clsFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="terminalManage.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -82,7 +112,7 @@
 
 
 <script type="text/javascript">
-  var clsFg        = ${ccu.getCommCodeExcpAll("001")};
-  var sysStatFg    = ${ccu.getCommCodeExcpAll("005")};
+  var clsFg = ${ccu.getCommCodeSelect("001")};
+  var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018100601" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/store.js?ver=2018100601.11" charset="utf-8"></script>

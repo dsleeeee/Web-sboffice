@@ -13,11 +13,18 @@
  */
 var app = agrid.getApp();
 
+// 사용여부 DropBoxDataMap
+var useYnFgData = [
+    {"name":"전체","value":""},
+    {"name":"사용","value":"Y"},
+    {"name":"미사용","value":"N"}
+];
+
 // 업체구분 DropBoxDataMap
 var agencyFgData = [
     {"name": "전체", "value": "0"},
     {"name": "자사", "value": "1"},
-    {"name": "총판", "value": "2"}
+    {"name":"대리점","value":"2"}
 ];
 
 /**
@@ -29,9 +36,10 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
     angular.extend(this, new RootController('statusAgencyCtrl', $scope, $http, true));
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("clsFg", clsFgData); //용도
-    $scope._setComboData("sysStatFg", sysStatFgData); //상태
+    $scope._getComboDataQuery('001', 'clsFg', 'A');
+    $scope._getComboDataQuery('005', 'sysStatFg', 'A');
     $scope._setComboData("agencyFg", agencyFgData); //업체구분
+    $scope._setComboData("useYn", useYnFgData); //사용여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -74,11 +82,11 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
         var params = {};
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        // if(orgnFg != null && orgnFg == 'AGENCY' && pAgencyCd !='00000') {
-        if(orgnFg != null && orgnFg == 'AGENCY') {
-            params.agencyCd = orgnCd;
-        }
+        params.agencyCd = orgnCd;
         params.listScale = 10;
+        params.srchAgencyCd = $("#srchAgencyCd").val();
+        params.srchAgencyNm = $("#srchAgencyNm").val();
+
 
         $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyList.sb", params, function() {
             $scope.$apply(function() {

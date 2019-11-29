@@ -28,8 +28,7 @@
         <col class="w35" />
     </colgroup>
     <tbody>
-      <%--<tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>--%>
-      <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
+      <tr <c:if test="${orgnFg == 'HQ' or orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
         <%-- 본사코드 --%>
         <th><s:message code="virtualLogin.hqOfficeCd" /></th>
         <td>
@@ -168,5 +167,6 @@
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
   var pAgencyCd = "${pAgencyCd}";
+  var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018120601.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=2018120601.04" charset="utf-8"></script>

@@ -26,11 +26,15 @@ app.controller('storeCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectStore;
   };
 
-  $scope._setComboData("#srchClsFg", clsFg);
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+    $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -72,8 +76,8 @@ app.controller('storeCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeNm = $("#srchHqOfficeNm").val();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
-    params.clsFg = $("#srchClsFg").val();
-    params.sysStatFg = $("#srchSysStatFg").val();
+    params.clsFg = $scope.clsFg;
+    params.sysStatFg = $scope.sysStatFg;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "terminalManage/getStoreList.sb", params, function() {}, false);

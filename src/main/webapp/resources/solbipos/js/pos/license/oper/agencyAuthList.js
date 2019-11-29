@@ -57,8 +57,8 @@ app.controller('agencyAuthListCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.agencyCd = $("#agencyCdAuth").val();
-        params.agencyNm = $("#agencyNmAuth").val();
+        params.srchAgencyCd = $("#srchAgencyCd").val();
+        params.srchAgencyNm = $("#srchAgencyNm").val();
         params.orgnCd = orgnCd;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;

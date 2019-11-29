@@ -41,7 +41,7 @@
                     </div>
                 </td>
             </tr>
-            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+            <tr>
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="oper.agencyCd" />
@@ -57,7 +57,7 @@
                     <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNmAuth" />
                 </td>
             </tr>
-            <tr>
+            <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>
                 <%-- 업체구분 --%>
                 <th>
                     <s:message code="oper.agencyFg" />
@@ -124,4 +124,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=2019052801.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=2019052801.11" charset="utf-8"></script>

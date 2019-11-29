@@ -40,7 +40,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
-        params.agencyCd = $("#agencyCd").val();
+        params.srchAgencyCd = $("#ssl_srchAgencyCd").val();
         params.hqOfficeCd = $("#hqOfficeCd").val();
         params.hqOfficeNm = $("#hqOfficeNm").val();
         params.storeCd = $("#storeCd").val();
@@ -48,9 +48,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
         params.chkDt = $scope.isChecked;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
-        if(orgnFg != null && orgnFg == 'AGENCY') {
-            params.agencyCd = orgnCd;
-        }
+        params.agencyCd = orgnCd;
         params.listScale = $scope.listScaleSale;
 
         $scope._inquiryMain("/pos/license/oper/oper/getSaleStoreList.sb", params, function() {}, false);
@@ -61,7 +59,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
      * 관리업체 조회
      * *******************************************************/
     $scope.searchAgency = function(){
-        if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+        if(orgnFg === "MASTER") {
             var popup = $scope.agencyLayer;
 
             // 팝업 닫을때
@@ -70,7 +68,7 @@ app.controller('saleStoreListCtrl', ['$scope', '$http', function ($scope, $http)
                 agencyScope.$apply(function () {
                     agencyScope._gridDataInit();
                     if (!$.isEmptyObject(agencyScope.getAgency())) {
-                        $("#agencyCd").val(agencyScope.getAgency().agencyCd);
+                        $("#ssl_srchAgencyCd").val(agencyScope.getAgency().agencyCd);
                         $("#agencyNm").val(agencyScope.getAgency().agencyNm);
                     }
                 });

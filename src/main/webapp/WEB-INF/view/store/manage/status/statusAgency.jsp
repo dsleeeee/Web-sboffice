@@ -28,41 +28,23 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-            <%--<tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if> >--%>
-            <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+            <tr>
                 <%-- 업체코드 --%>
                 <th>
                     <s:message code="statusAgency.srchAgencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" />
+                    <input type="text" class="sb-input w100" id="srchAgencyCd" />
                 </td>
                 <%-- 업체명 --%>
                 <th>
                     <s:message code="statusAgency.srchAgencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" />
+                    <input type="text" class="sb-input w100" id="srchAgencyNm" />
                 </td>
             </tr>
             <tr>
-                <%-- 업체구분 --%>
-                <th>
-                    <s:message code="statusAgency.srchAgencyFg" />
-                </th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                            id="srchAgencyFg"
-                            ng-model="agencyFg"
-                            items-source="_getComboData('agencyFg')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                    </div>
-                </td>
                 <%-- 용도 --%>
                 <th>
                     <s:message code="statusAgency.srchClsFg" />
@@ -80,8 +62,6 @@
                         </wj-combo-box>
                     </div>
                 </td>
-            </tr>
-            <tr>
                 <%-- 상태 --%>
                 <th>
                     <s:message code="statusAgency.srchSysStatFg" />
@@ -89,18 +69,54 @@
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
-                            id="srchSysStatFg"
-                            ng-model="sysStatFg"
-                            items-source="_getComboData('sysStatFg')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
+                                id="srchSysStatFg"
+                                ng-model="sysStatFg"
+                                items-source="_getComboData('sysStatFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </div>
                 </td>
-                <th></th>
-                <td></td>
+            </tr>
+            <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>
+                <%-- 업체구분 --%>
+                <th>
+                    <s:message code="statusAgency.srchAgencyFg" />
+                </th>
+                <td colspan="3">
+                    <div class="sb-select" style="width:300px;">
+                        <wj-combo-box
+                                id="srchAgencyFg"
+                                ng-model="agencyFg"
+                                items-source="_getComboData('agencyFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 사용여부 --%>
+                <th>
+                    <s:message code="instl.useYn" />
+                </th>
+                <td colspan="3">
+                    <div class="sb-select" style="width:300px;">
+                        <wj-combo-box
+                                id="srchUseYn"
+                                ng-model="useYn"
+                                items-source="_getComboData('useYn')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -162,6 +178,13 @@
                             </wj-flex-grid>
                         </div>
                     </div>
+                    <%-- 페이지 리스트 --%>
+                    <div class="pageNum mt20">
+                        <%-- id --%>
+                        <ul id="statusAgencyDetailCtrlPager" data-size="10">
+                        </ul>
+                    </div>
+                    <%--//페이지 리스트--%>
                 </div>
             </div>
         <%--right--%>
@@ -170,13 +193,13 @@
 
 <script type="text/javascript">
     <%-- 용도구분 --%>
-    var clsFgData = ${ccu.getCommCodeExcpAll("001")};
+    var clsFgData = ${ccu.getCommCode("001")};
     <%-- 상태구분 --%>
-    var sysStatFgData = ${ccu.getCommCodeExcpAll("005")};
+    var sysStatFgData = ${ccu.getCommCode("005")};
 
     var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.23" charset="utf-8"></script>

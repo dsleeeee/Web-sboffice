@@ -94,6 +94,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
   $scope.$on("gridCtrl", function(event, data) {
     // 파라미터
     var params = {};
+    params.orgnFg = orgnFg;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/manage/virtualLogin/virtualLogin/list.sb", params, function() {
 

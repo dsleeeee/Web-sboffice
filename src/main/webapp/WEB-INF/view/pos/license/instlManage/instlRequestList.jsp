@@ -37,7 +37,7 @@
             <th><s:message code="instl.storeNm" /></th>
             <td><input type="text" id="srchStoreNm" class="sb-input w100"ng-model="storeNm"/></td>
         </tr>
-        <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
+        <tr>
             <%-- 대리점코드 --%>
             <th><s:message code="instl.agencyCd" /></th>
             <td><input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="agencyCd"/></td>
@@ -48,8 +48,8 @@
         <tr>
             <%-- 설치구분 --%>
             <th><s:message code="instl.instFg" /></th>
-            <td>
-                <div class="sb-select">
+            <td colspan="3">
+                <div class="sb-select" style="width:300px;">
                     <wj-combo-box
                             id="srchInstReqListFg"
                             ng-model="instFg"
@@ -61,8 +61,23 @@
                     </wj-combo-box>
                 </div>
             </td>
-            <td></td>
-            <td></td>
+        </tr>
+        <tr <c:if test="${orgnFg == 'MASTER'}">style="display: none;"</c:if>>
+            <%-- 업체구분 --%>
+            <th><s:message code="instl.agencyFg" /></th>
+            <td colspan="3">
+                <div class="sb-select" style="width:300px;">
+                    <wj-combo-box
+                            id="irl_srchAgencyFg"
+                            ng-model="agencyFg"
+                            items-source="_getComboData('agencyFg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -139,7 +154,7 @@
     var orgnNm = "${orgnNm}";
     var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/instlManage/instlRequestList.js?ver=20191015.10" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/pos/install/installManage/installRequest.jsp">

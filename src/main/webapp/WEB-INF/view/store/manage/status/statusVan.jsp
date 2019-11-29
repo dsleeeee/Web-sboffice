@@ -12,7 +12,7 @@
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl"><s:message code="statusVan.info" /></a>
+        <a href="#" class="open fl"><s:message code="storeStatus.van" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_pageView('statusVanCtrl',1)">
@@ -139,6 +139,13 @@
                             </wj-flex-grid>
                         </div>
                     </div>
+                    <%-- 페이지 리스트 --%>
+                    <div class="pageNum mt20">
+                        <%-- id --%>
+                        <ul id="statusVanDetailCtrlPager" data-size="10">
+                        </ul>
+                    </div>
+                    <%--//페이지 리스트--%>
                 </div>
             </div>
          <%--right--%>

@@ -138,9 +138,6 @@
         <if test='userNm != null and userNm != ""'>
             AND emp.USER_NM LIKE '%'||#{userNm}||'%'
         </if>
-        <if test='empOrgnFg != null and empOrgnFg.toString() != ""'>
-            WHERE emp.EMP_ORGN_FG = #{empOrgnFg}
-        </if>
         ORDER BY emp.EMP_ORGN_FG ASC, emp.HQ_OFFICE_CD ASC, emp.STORE_CD ASC, emp.USER_NM
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

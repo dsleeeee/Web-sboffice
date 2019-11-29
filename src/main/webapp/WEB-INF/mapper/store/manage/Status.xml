@@ -62,8 +62,12 @@
             ]]>
         </if>
         AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
-        AND tms.CLS_FG = #{clsFg}
-        AND tms.SYS_STAT_FG = #{sysStatFg}
+        <if test='clsFg != null and clsFg != ""'>
+            AND tms.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
         <if test='agencyCd != null and agencyCd != ""'>
             <![CDATA[
                 AND tms.AGENCY_CD = #{agencyCd}
@@ -132,9 +136,7 @@
         AGENCY_CD,
         AGENCY_NM,
         COUNT(STORE_CD) AS STORE_CNT,
-        SUM(POS_CNT) AS TOT_POS_CNT,
-        CLS_FG,
-        SYS_STAT_FG
+        SUM(POS_CNT) AS TOT_POS_CNT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
                 SELECT
@@ -147,44 +149,51 @@
                 FROM TB_CM_AGENCY tca,
                 TB_MS_STORE tms
                 WHERE 1=1
+                  AND tms.AGENCY_CD (+)= tca.AGENCY_CD
+                  AND tca.AGENCY_CD != '00000'
                 <choose>
-                    <!-- 시스템 -->
-                    <!--<when test='(orgnFg != null and orgnFg == "MASTER") or (orgnFg != null and orgnFg == "AGENCY" and pAgencyCd == "00000")'>-->
-                    <when test='orgnFg != null and orgnFg == "MASTER"'>
-                        <if test='agencyCd != null and agencyCd != ""'>
-                            <![CDATA[
-                                AND tca.AGENCY_CD LIKE '%'|| #{agencyCd} ||'%'
-                            ]]>
-                        </if>
-                        <if test='agencyNm != null and agencyNm != ""'>
-                            <![CDATA[
-                                AND tca.AGENCY_NM LIKE '%'|| #{agencyNm} ||'%'
-                            ]]>
-                        </if>
-                    </when>
                     <!-- 총판 -->
-                    <!--<when test='orgnFg != null and orgnFg == "AGENCY" and pAgencyCd != "00000"'>-->
                     <when test='orgnFg != null and orgnFg == "AGENCY"'>
                         <![CDATA[
-                            AND tca.AGENCY_CD = #{agencyCd}
+                            AND (tca.AGENCY_CD = #{agencyCd} OR tca.P_AGENCY_CD =  #{agencyCd})
                         ]]>
                     </when>
                 </choose>
-                AND tca.AGENCY_CD = tms.AGENCY_CD
-                <if test='agencyFg == 1'>
+                <if test='srchAgencyCd != null and srchAgencyCd != ""'>
                     <![CDATA[
-                         AND tca.P_AGENCY_CD = '00000'
-                     ]]>
+                    AND tca.AGENCY_CD LIKE '%'|| #{srchAgencyCd} ||'%'
+                    ]]>
                 </if>
-                <if test='agencyFg == 2'>
+                <if test='srchAgencyNm != null and srchAgencyNm != ""'>
                     <![CDATA[
-                          AND tca.P_AGENCY_CD != '00000'
-                     ]]>
+                    AND tca.AGENCY_NM LIKE '%'|| #{srchAgencyNm} ||'%'
+                    ]]>
                 </if>
-                AND tms.CLS_FG = #{clsFg}
-                AND tms.SYS_STAT_FG = #{sysStatFg}
+                <if test='agencyFg != null and agencyFg != ""'>
+                    <if test='agencyFg == 1'>
+                        <![CDATA[
+                        AND tca.AGENCY_CD = #{agencyCd}
+                        ]]>
+                    </if>
+                    <if test='agencyFg == 2'>
+                        <![CDATA[
+                        AND tca.P_AGENCY_CD =  #{agencyCd}
+                        ]]>
+                    </if>
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    <![CDATA[
+                        AND tca.USE_YN = #{useYn}
+                    ]]>
+                </if>
+                <if test='clsFg != null and clsFg != ""'>
+                    AND tms.CLS_FG = #{clsFg}
+                </if>
+                <if test='sysStatFg != null and sysStatFg != ""'>
+                    AND tms.SYS_STAT_FG = #{sysStatFg}
+                </if>
                 )
-        GROUP BY AGENCY_CD, AGENCY_NM, CLS_FG, SYS_STAT_FG
+        GROUP BY AGENCY_CD, AGENCY_NM
         ORDER BY AGENCY_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -211,8 +220,12 @@
         FROM TB_MS_STORE tms
         WHERE 1=1
         AND tms.AGENCY_CD =  #{agencyCd}
-        AND tms.CLS_FG = #{clsFg}
-        AND tms.SYS_STAT_FG = #{sysStatFg}
+        <if test='clsFg != null and clsFg != ""'>
+            AND tms.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
         ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -227,9 +240,7 @@
         SELECT
         VAN_CD,
         VAN_NM,
-        COUNT(STORE_CD) AS STORE_CNT,
-        SYS_STAT_FG,
-        CLS_FG
+        COUNT(STORE_CD) AS STORE_CNT
         FROM (
               SELECT
               tcvc.VAN_CD,
@@ -240,6 +251,8 @@
               FROM TB_CM_VAN_CMPNY tcvc,
               TB_MS_STORE tms
               WHERE 1=1
+                AND tcvc.VAN_CD = tms.VAN_CD
+                AND tcvc.VAN_FG = '01'
               <if test='vanCd != null and vanCd != ""'>
                   <![CDATA[
                       AND tcvc.VAN_CD LIKE '%'|| #{vanCd} ||'%'
@@ -250,9 +263,16 @@
                        AND tcvc.VAN_NM LIKE '%'|| #{vanNm} ||'%'
                   ]]>
               </if>
-              AND tcvc.VAN_CD = tms.VAN_CD
-              AND tms.CLS_FG = #{clsFg}
-              AND tms.SYS_STAT_FG = #{sysStatFg}
+              <if test='clsFg != null and clsFg != ""'>
+                  <![CDATA[
+                  AND tms.CLS_FG = #{clsFg}
+                  ]]>
+              </if>
+              <if test='sysStatFg != null and sysStatFg != ""'>
+                  <![CDATA[
+                  AND tms.SYS_STAT_FG = #{sysStatFg}
+                  ]]>
+              </if>
               <choose>
                   <!-- 총판 -->
                   <when test='orgnFg != null and orgnFg == "AGENCY"'>
@@ -262,7 +282,7 @@
                    </when>
               </choose>
               )
-        GROUP BY VAN_CD, VAN_NM, SYS_STAT_FG, CLS_FG
+        GROUP BY VAN_CD, VAN_NM
         ORDER BY VAN_CD
     </select>
 
@@ -288,8 +308,16 @@
         FROM TB_MS_STORE tms
         WHERE 1=1
         AND tms.VAN_CD = #{vanCd}
-        AND tms.CLS_FG = #{clsFg}
-        AND tms.SYS_STAT_FG = #{sysStatFg}
+        <if test='clsFg != null and clsFg != ""'>
+            <![CDATA[
+                  AND tms.CLS_FG = #{clsFg}
+                  ]]>
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            <![CDATA[
+                  AND tms.SYS_STAT_FG = #{sysStatFg}
+                  ]]>
+        </if>
         <choose>
             <!-- 총판 -->
             <when test='orgnFg != null and orgnFg == "AGENCY"'>
@@ -448,9 +476,6 @@
                 AND tms.AGENCY_CD = #{agencyCd}
             </when>
         </choose>
-        <if test='agencyNm != null and agencyNm != ""'>
-            AND tca.AGENCY_NM LIKE '%'||#{agencyNm}||'%'
-        </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
