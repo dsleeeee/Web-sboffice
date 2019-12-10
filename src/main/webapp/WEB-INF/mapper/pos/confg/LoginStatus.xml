@@ -22,8 +22,16 @@
       FROM TB_MS_POS_LOGIN_LOG tmpll,
            TB_MS_STORE tms,
            TB_HQ_OFFICE tho
-     WHERE tmpll.STORE_CD = tms.STORE_CD
+     WHERE tms.STORE_CD (+)= tmpll.STORE_CD
        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+      <choose>
+          <!-- 총판 -->
+          <when test='orgnFg != null and orgnFg == "AGENCY"'>
+              <![CDATA[
+                    AND (tms.AGENCY_CD = #{agencyCd})
+                ]]>
+          </when>
+      </choose>
      <if test="chkDt == false">
        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
        AND tmpll.LOGIN_DATE BETWEEN #{startDate} AND #{endDate} --조회(영업)일자

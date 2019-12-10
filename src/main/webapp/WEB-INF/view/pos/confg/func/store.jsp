@@ -1,6 +1,11 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <%-- 포스기능 적용 매장선택 레이어 팝업 --%>
 
@@ -122,7 +127,18 @@
   </div>
 </wj-popup>
 <script>
-  var hqList = ${ccu.getHqOfficeList()};
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var pAgencyCd = "${pAgencyCd}";
+
+  var hqList = null;
+  if(orgnFg === "MASTER"){
+    hqList = ${ccu.getHqOfficeList()};
+  }else{
+    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd)};
+   }
+
+
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.07" charset="utf-8"></script>
 

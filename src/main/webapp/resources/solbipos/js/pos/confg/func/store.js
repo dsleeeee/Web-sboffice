@@ -59,6 +59,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = '';
     params.storeNm = '';
     params.regYn = 'Y';
+    params.orgnFg = orgnFg;
+    params.pAgencyCd = pAgencyCd;
+    params.agencyCd = orgnCd;
 
     $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
@@ -131,6 +134,9 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
     params.regYn = 'N';
+    params.orgnFg = orgnFg;
+    params.pAgencyCd = pAgencyCd;
+    params.agencyCd = orgnCd;
 
     // console.log('params' , params);
 

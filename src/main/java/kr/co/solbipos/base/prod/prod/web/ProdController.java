@@ -6,10 +6,12 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,8 +78,17 @@ public class ProdController {
         // 판매가 본사 통제여부
         PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
+        // 상품코드 채번방식
+        ProdNoEnvFg prodNoEnvFg;
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0028"));
+        }else{
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
+        }
+
         model.addAttribute("prodEnvstVal", prodEnvstVal);
         model.addAttribute("priceEnvstVal", priceEnvstVal);
+        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
         return "base/prod/prod/prod";
     }
@@ -201,5 +212,21 @@ public class ProdController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품코드 중복체크
+     * @param prodVO
+     * @author 이다솜
+     * @since 2019.12.06
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getProdCdCnt.sb", method = RequestMethod.POST)
+    public Result getProdCdCnt(ProdVO prodVO) {
+
+        int prodCdCnt= prodService.getProdCdCnt(prodVO);
+
+        return returnJson(Status.OK, prodCdCnt);
+    }
+
 
 }

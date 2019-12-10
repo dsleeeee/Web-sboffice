@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 <c:set var="priceEnvstVal" value="${priceEnvstVal}" />
+<c:set var="prodNoEnvFg" value="${prodNoEnvFg}" />
 
 <div class="subCon" ng-controller="prodCtrl">
   <%--searchTbl--%>
@@ -204,14 +205,16 @@
 <script>
   var prodEnvstVal = "${prodEnvstVal}";
   var priceEnvstVal = "${priceEnvstVal}";
+  var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122902.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122903.07" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
 </c:import>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>

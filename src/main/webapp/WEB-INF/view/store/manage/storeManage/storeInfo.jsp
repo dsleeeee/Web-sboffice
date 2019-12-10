@@ -52,6 +52,9 @@
               <th><s:message code="storeManage.storeCd" /><em class="imp">*</em></th>
               <td>
                 <input type="text" id="storeCd" class="sb-input w100" ng-model="store.storeCd" readonly="readonly"/>
+                <input type="hidden" id="storeCdChkFg" ng-model="store.storeCdChkFg"/>
+                <input type="hidden" id="storeCdInputType" ng-model="store.storeCdInputType"/>
+                <a id="btnChkStoreCd" href="#" class="btn_grayS ml5" ng-click="chkStoreCd()" style="display: none;"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
               <%-- 매장명 --%>
               <th><s:message code="storeManage.storeNm" /><em class="imp">*</em></th>
@@ -356,7 +359,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110702.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110702.47" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

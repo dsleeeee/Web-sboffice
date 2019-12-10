@@ -3,7 +3,6 @@ package kr.co.solbipos.store.manage.storemanage.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
 import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
-import kr.co.solbipos.store.hq.brand.service.HqBrandVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
@@ -258,6 +257,9 @@ public interface StoreManageMapper {
 
     /** 설치포스 MAX Pos No값 조회 */
     int getInstPosCntMax(StoreManageVO storeManageVO);
+
+    /** 매장코드 중복체크*/
+    int getStoreCdCnt(StoreManageVO storeManageVO);
 
 }
 

@@ -203,7 +203,7 @@
       PARAM    : funcVO
       COMMENTS : 기능구분의 상세 목록을 조회한다.
   -->
-  <select id="getStoreList" parameterType="funcVO" resultMap="funcListMap">
+  <select id="getStoreList" parameterType="funcStoreVO" resultMap="funcListMap">
     <![CDATA[
     /* FuncMapper.getStoreList */
     SELECT tms.HQ_OFFICE_CD,
@@ -217,6 +217,7 @@
       FROM TB_CM_POS_FNKEY_STORE tcpfs,
            (
       SELECT tms.HQ_OFFICE_CD, tho.HQ_OFFICE_NM,
+           tms.AGENCY_CD,
            tms.STORE_CD, tms.STORE_NM,
            tms.CLS_FG, tms.SYS_STAT_FG
         FROM TB_MS_STORE tms,
@@ -227,6 +228,14 @@
        AND tcpfs.FNKEY_FG (+)= #{fnkeyFg}
        AND tcpfs.FNKEY_NO (+)= #{fnkeyNo}
     ]]>
+      <choose>
+          <!-- 총판 -->
+          <when test='orgnFg != null and orgnFg == "AGENCY"'>
+              <![CDATA[
+                    AND (tms.AGENCY_CD = #{agencyCd})
+                ]]>
+          </when>
+      </choose>
       <if test='hqOfficeCd != null and hqOfficeCd != ""'>
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
       </if>

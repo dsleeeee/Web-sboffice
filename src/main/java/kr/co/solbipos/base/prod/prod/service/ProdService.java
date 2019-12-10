@@ -50,4 +50,7 @@ public interface ProdService {
 
     /** 상품 등록매장 판매가 변경 */
     int updateStoreSaleUprc(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품코드 중복체크 */
+    int getProdCdCnt(ProdVO prodVO);
 }

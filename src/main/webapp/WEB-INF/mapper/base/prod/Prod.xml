@@ -1380,5 +1380,38 @@
         )
     </insert>
 
+    <!-- 상품코드 중복체크 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+          PARAM    : prodVO
+          COMMENTS : 상품코드 수동입력 시 중복되는 상품코드가 있는지 체크 (중복체크)
+    -->
+    <select id="getProdCdCnt" parameterType="prodVO" resultType="Integer">
+        /* USE : ProdMapper.getProdCdCnt */
+        <!--<choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT COUNT(1) AS CNT
+                  FROM TB_HQ_PRODUCT
+                  WHERE 1=1
+                    AND PROD_CD = #{prodCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT COUNT(1) AS CNT
+                  FROM TB_MS_PRODUCT
+                 WHERE 1=1
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+            </when>
+        </choose>-->
+        SELECT COUNT(1) AS CNT
+        FROM (
+                SELECT PROD_CD FROM TB_HQ_PRODUCT
+                UNION ALL
+                SELECT PROD_CD FROM TB_MS_PRODUCT
+              )
+        WHERE 1=1
+          AND PROD_CD = #{prodCd}
+    </select>
 
 </mapper>

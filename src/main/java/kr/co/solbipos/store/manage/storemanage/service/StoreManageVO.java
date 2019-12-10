@@ -118,6 +118,9 @@ public class StoreManageVO extends PageVO {
     /** 여러 포스값 */
     private String[] arrPosNo;
 
+    /** 매장코드 채번방식 */
+    private String storeCdInputType;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -666,5 +669,13 @@ public class StoreManageVO extends PageVO {
      */
     public void setArrPosNo(String[] arrPosNo) {
         this.arrPosNo = arrPosNo;
+    }
+
+    public String getStoreCdInputType() {
+        return storeCdInputType;
+    }
+
+    public void setStoreCdInputType(String storeCdInputType) {
+        this.storeCdInputType = storeCdInputType;
     }
 }

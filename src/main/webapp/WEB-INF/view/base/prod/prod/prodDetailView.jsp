@@ -463,4 +463,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20181212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=201812103" charset="utf-8"></script>

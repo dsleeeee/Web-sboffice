@@ -42,6 +42,9 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상품 본사통제구분 (H : 본사, S: 매장)
   $scope.prodEnvstVal = prodEnvstVal;
   $scope.userOrgnFg = gvOrgnFg;
+  
+  // 상품코드 채번방식
+  $scope.prodNoEnvFg = prodNoEnvFg;
 
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
   $scope.userStoreCd = gvStoreCd;
@@ -170,7 +173,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
         if (s.dialogResult === "wj-hide-apply") {
           // 상품정보 수정 팝업
           var modifyPopUp = $scope.prodModifyLayer;
-          modifyPopUp.show(true, function (s) {
+          modifyPopUp.show();
+          /*modifyPopUp.show(true, function (s) {
             // 상품정보 수정 팝업 - 저장
             if (s.dialogResult === "wj-hide-apply") {
               // 팝업 속성에서 상품정보 get
@@ -180,7 +184,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["cmm.saveSucc"]);
               });
             }
-          });
+          });*/
         }
       });
     }, 50);
@@ -208,20 +212,22 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 신규상품 등록
   $scope.addProd = function() {
     $scope.setProdInfo({});
-    var modifyPopUp = $scope.prodModifyLayer;
+    $scope.prodModifyLayer.show();
+
+    /*var modifyPopUp = $scope.prodModifyLayer;
     setTimeout(function() {
       modifyPopUp.show(true, function (s) {
         // 상품정보 등록 팝업 - 저장
         if (s.dialogResult === "wj-hide-apply") {
-          // 팝업 속성에서 상품정보 get
-          var params = s.data;
-          // 저장수행
-          $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
-            $scope._popMsg(messages["cmm.saveSucc"]);
-          });
+            // 팝업 속성에서 상품정보 get
+            var params = s.data;
+            // 저장수행
+            //$scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+            //});
         }
       });
-    }, 50);
+    }, 50);*/
   };
 
   // 상품분류정보 팝업

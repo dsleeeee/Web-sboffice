@@ -50,6 +50,13 @@ public class LoginStatusVO extends PageVO {
     private String loginSeq;
     /** 전체 기간 체크 */
     private boolean chkDt;
+    /** 대리점코드 */
+    private String agencyCd;
+    /** 대리점의 부모 대리점 코드 */
+    private String pAgencyCd;
+    /** 소속구분 */
+    private String orgnFg;
+
 
     /**
      * @return the hqOfficeCd
@@ -221,5 +228,29 @@ public class LoginStatusVO extends PageVO {
      */
     public void setChkDt(boolean chkDt) {
         this.chkDt = chkDt;
+    }
+
+    public String getAgencyCd() {
+        return agencyCd;
+    }
+
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
+
+    public String getpAgencyCd() {
+        return pAgencyCd;
+    }
+
+    public void setpAgencyCd(String pAgencyCd) {
+        this.pAgencyCd = pAgencyCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }

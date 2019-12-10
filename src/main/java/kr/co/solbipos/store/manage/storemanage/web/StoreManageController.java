@@ -594,4 +594,20 @@ public class StoreManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 매장코드 중복체크
+     * @param storeManageVO
+     * @author 이다솜
+     * @since 2019.12.03
+     */
+    @ResponseBody
+    @RequestMapping(value = "storeManage/getStoreCdCnt.sb", method = RequestMethod.POST)
+    public Result getStoreCdCnt(StoreManageVO storeManageVO) {
+
+        int storeCdCnt= service.getStoreCdCnt(storeManageVO);
+
+        return returnJson(Status.OK, storeCdCnt);
+    }
+
 }

@@ -117,7 +117,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.store.hqOfficeCd = '';
     $scope.store.hqOfficeNm = '';
-    $scope.store.storeCd                = '자동채번';
+    $scope.store.storeCd = '';
+    $scope.store.storeCdChkFg ="";
+    $scope.store.storeCdInputType ="";
     $scope.store.beforeBizNo            = '';
     $scope.store.installPosCnt          = '';
     $scope.areaCdCombo.selectedIndex    = 0;
@@ -132,6 +134,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.readOnlyStatus               = false;
     $scope.store.installPosCnt.isReadOnly = false;
     $("#installPosCnt").css('background-color', '#ffffff');
+    $("#storeCd").attr("readonly",true);
+    $("#storeCd").css("width", "100%");
+    $("#btnChkStoreCd").css("display", "none");
 
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
@@ -184,6 +189,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       } else {
         $scope.sysStatFgCombo.isReadOnly = false;
       }
+
+      $scope.store.storeCdInputType = "";
+      $scope.store.storeCdChkFg ="";
+      $("#storeCd").attr("readonly",true);
+      $("#storeCd").css("width", "100%");
+      $("#btnChkStoreCd").css("display", "none");
     });
   };
 
@@ -198,11 +209,37 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if($.isEmptyObject(storeScope.getSelectedStore()) ) {
 
       // 본사를 선택해주세요.
-      var msg = messages["storeManage.hqOffice"]+messages["cmm.require.select"];
-      if( isNull( $scope.store.hqOfficeCd ) || isNull( $scope.store.hqOfficeNm )) {
+      var msg = messages["storeManage.hqOffice"] + messages["cmm.require.select"];
+      if (isNull($scope.store.hqOfficeCd) || isNull($scope.store.hqOfficeNm) || isNull($scope.store.storeCdInputType)) {
         $scope._popMsg(msg);
         return false;
       }
+      
+      // 매장코드 수동입력 시
+      if ($scope.store.storeCdInputType === "1") {
+
+        // 매장코드를 입력해주세요.
+        var msg = messages["storeManage.storeCd"] + messages["cmm.require.text"];
+        if (isNull($scope.store.storeCd)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 매장코드 중복체크를 해주세요.
+        var msg = messages["storeManage.storeCdDuplicateChk.msg"];
+        if (isNull($scope.store.storeCdChkFg)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 매장코드 중복체크를 다시 해주세요.
+        var msg = messages["storeManage.storeCdDuplicateChkAgain.msg"];
+        if ($scope.store.storeCd !== $scope.store.storeCdChkFg) {
+          $scope._popMsg(msg);
+          return false;
+        }
+      }
+
     }
 
     // 매장명을 입력해주세요.
@@ -387,9 +424,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       params.copyChkVal = copyChkVal;
 
-      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function () {
-        $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.storeInfoLayer.hide();
+      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
+
+        var result = response.data.data;
+
+        if(result === ""){
+          $scope._popMsg(messages["cmm.registFail"]);
+        }else{
+          $scope._popMsg(messages["cmm.saveSucc"]);
+          $scope.storeInfoLayer.hide();
+        }
+
       });
     }
     // 수정
@@ -424,6 +469,26 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         if( !$.isEmptyObject(hqScope.getHq())  ){
           $scope.store.hqOfficeCd = hqScope.getHq().hqOfficeCd;
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
+          $scope.store.storeCdInputType = hqScope.getHq().envst0027; // 매장코드 채번방식(자동/수동)
+          $scope.store.storeCdChkFg ="";
+
+          // 매장코드 채번방식
+          if(hqScope.getHq().envst0027 === '1') { //수동
+            $scope.store.storeCd = ''
+            $("#storeCd").removeAttr("readonly");
+            $("#storeCd").css("width", "60%");
+            $("#btnChkStoreCd").css("display", "");
+
+          }else{
+            if(hqScope.getHq().envst0027 === '0') { //자동
+              $scope.store.storeCd = '자동채번'
+            }else{
+              $scope.store.storeCd = ''
+            }
+            $("#storeCd").attr("readonly",true);
+            $("#storeCd").css("width", "100%");
+            $("#btnChkStoreCd").css("display", "none");
+          }
 
           if(hqScope.getHq().sysStatFg === '9') {
             $scope.sysStatFgCombo.selectedValue = '9';
@@ -432,8 +497,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.sysStatFgCombo.selectedValue = '1';
             $scope.sysStatFgCombo.isReadOnly = false;
           }
+
         }
       });
+      
+      // 본사 정보 초기화(이전데이터 남아있는 현상 발생)
+      hqScope.setHq("");
     });
     event.preventDefault();
   };
@@ -579,6 +648,35 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     event.preventDefault();
+
+  };
+
+  /*********************************************************
+   * 매장코드 중복체크
+   * *******************************************************/
+  $scope.chkStoreCd = function(){
+
+    if(isNull($scope.store.storeCd)) {
+      $scope._popMsg(messages["storeManage.storeCd"]+messages["cmm.require.text"]);
+      return false;
+    }
+
+    var params    = {};
+    params.storeCd = $scope.store.storeCd;
+
+      $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/getStoreCdCnt.sb", params, function(response){
+
+          var result = response.data.data;
+
+          if(result === 0){ // 사용가능
+              $scope._popMsg(messages["storeManage.notStoreCdDuplicate.msg"]);
+              $scope.store.storeCdChkFg = $scope.store.storeCd;
+
+          }else{ // 중복
+              $scope._popMsg(messages["storeManage.storeCdDuplicate.msg"]);
+              $scope.store.storeCdChkFg ="";
+          }
+      });
 
   };
 

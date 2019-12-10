@@ -49,4 +49,10 @@ public interface CmmCodeMapper {
      * @return
      */
     <E> List<E> getHqOfficeList();
+
+    /**
+     * 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)
+     * @return
+     */
+    <E> List<E> getHqOfficeListChkAgency(String agencyCd);
 }

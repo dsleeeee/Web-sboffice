@@ -135,6 +135,12 @@ public class CmmCodeServiceImpl implements CmmCodeService {
         return cmmCodeMapper.getHqOfficeList();
     }
 
+    /** 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)*/
+    @Override
+    public <E> List<E> getHqOfficeListChkAgency(String agencyCd) {
+        return cmmCodeMapper.getHqOfficeListChkAgency(agencyCd);
+    }
+
     /** 커스텀 콤보박스 데이터 조회 */
     @Override
     public List<CustomComboVO> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO) {

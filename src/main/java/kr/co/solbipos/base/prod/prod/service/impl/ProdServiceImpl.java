@@ -12,6 +12,7 @@ import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,19 +164,34 @@ public class ProdServiceImpl implements ProdService {
         // 판매가 본사 통제여부
         PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
+        // 상품 신규등록일때 상품코드 조회
+        /*if( StringUtil.isEmpties( prodVO.getProdCd())) {
+            String prodCd = prodMapper.getProdCd(prodVO);
+            prodVO.setProdCd(prodCd);
+            // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
+            prodVO.setWorkMode(WorkModeFg.REG_PROD);
+        }*/
+
+        // 상품 신규등록이면서 자동채번인 경우 상품코드 조회
+        if(prodVO.getProdNoEnv() == ProdNoEnvFg.AUTO && prodVO.getSaveMode().equals("REG")){
+            String prodCd = prodMapper.getProdCd(prodVO);
+            prodVO.setProdCd(prodCd);
+        }
+        // 신규상품등록 인 경우 WorkMode Flag 변경
+        if(prodVO.getSaveMode().equals("REG")){
+            // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
+            prodVO.setWorkMode(WorkModeFg.REG_PROD);
+        }
+        // 상품코드 체크
+        if(prodVO.getProdCd() == "" || prodVO.getProdCd() == null){
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         int prodExist = 0;
 
         // 본사일경우, 상품정보 존재여부를 체크하여 프로시져 호출에 사용
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
             prodExist = prodMapper.getProdExistInfo(prodVO);
-        }
-
-        // 상품 신규등록일때 상품코드 조회
-        if( StringUtil.isEmpties( prodVO.getProdCd())) {
-            String prodCd = prodMapper.getProdCd(prodVO);
-            prodVO.setProdCd(prodCd);
-            // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
-            prodVO.setWorkMode(WorkModeFg.REG_PROD);
         }
 
         // 매장에서 매장상품 등록시에 가격관리 구분 등록
@@ -346,5 +362,10 @@ public class ProdServiceImpl implements ProdService {
         }
 
         return result;
+    }
+
+    /** 상품코드 중복체크 */
+    public int getProdCdCnt(ProdVO prodVO){
+        return prodMapper.getProdCdCnt(prodVO);
     }
 }

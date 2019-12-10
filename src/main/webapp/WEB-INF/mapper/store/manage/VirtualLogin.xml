@@ -69,10 +69,12 @@
         <if test='orgnFg != null and orgnFg == "A"'> -- 총판권한 접근시
             AND tca.AGENCY_CD = #{agencyCd}
         </if>
-        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-            <![CDATA[
-            AND tho.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
-            ]]>
+        <if test='orgnFg != null and orgnFg != "H"'>
+            <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                <![CDATA[
+                AND tho.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+                ]]>
+            </if>
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
             <![CDATA[

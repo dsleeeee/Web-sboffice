@@ -26,6 +26,7 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData2);
   $scope._setComboData("sysStatFg", sysStatFg);
+  //$scope._getComboDataQuery('005', 'sysStatFg', 'A');
 
   // 전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
@@ -58,6 +59,9 @@ app.controller('loginStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.listScale = $scope.listScale;
     params.curr = $scope._getPagingInfo('curr');
+    params.orgnFg = orgnFg;
+    params.pAgencyCd = pAgencyCd;
+    params.agencyCd = orgnCd;
 
     $scope._inquiryMain("/pos/confg/loginStatus/loginStatus/list.sb", params, function() {
     });

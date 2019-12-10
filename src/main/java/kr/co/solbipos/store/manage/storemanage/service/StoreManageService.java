@@ -100,4 +100,7 @@ public interface StoreManageService {
     /** 설치포스 수 추가 */
     int savePosCnt(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장코드 중복체크 */
+    int getStoreCdCnt(StoreManageVO storeManageVO);
+
 }

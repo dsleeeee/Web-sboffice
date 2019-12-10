@@ -6,6 +6,9 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 
 <div class="subCon" ng-controller="loginStatusCtrl">
   <%-- 조회조건 --%>
@@ -162,5 +165,9 @@
 
 <script>
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
+
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var pAgencyCd = "${pAgencyCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/loginStatus/loginStatus.js?ver=2019010501.03" charset="utf-8"></script>

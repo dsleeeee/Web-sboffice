@@ -56,7 +56,20 @@
               <%--상품코드--%>
               <th><s:message code="prod.prodCd"/></th>
               <td>
-                <input type="text" name="prodCd" class="sb-input w100" ng-model="prodModifyInfo.prodCd" placeholder="상품코드는 자동생성 됩니다." disabled />
+                <input type="text" id="prodCd" name="prodCd" class="sb-input w100"
+                       ng-model="prodModifyInfo.prodCd"
+                       readonly="readonly"
+                        <c:if test="${prodNoEnvFg == 'MANUAL'}">
+                         required
+                         popover-enable="myForm.prodCd.$invalid"
+                         popover-placement="bottom-left"
+                         popover-trigger="'mouseenter'"
+                         uib-popover="<s:message code="prod.prodCd" />은(는) 필수 입력항목 입니다."
+                        </c:if>
+                /><%--disabled--%>
+                <input type="hidden" id="prodCdChkFg" name="prodCdChkFg" ng-model="prodModifyInfo.prodCdChkFg"/>
+                <input type="hidden" id="prodCdInputType" name="prodCdInputType" ng-model="prodModifyInfo.prodCdInputType"/>
+                <a id="btnChkProdCd" href="#" class="btn_grayS ml5" ng-click="chkProdCd()" style="display: none;"><s:message code="prod.chk.duplicate" /></a><Br />
 
                 <%-- TODO 코너코드 어떻게 할것인가? --%>
                 <input type="hidden" name="cornrCd" ng-model="prodModifyInfo.cornrCd"   >
@@ -80,13 +93,14 @@
               <th><s:message code="prod.prodClass"/></th>
               <td>
                 <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input w100"
+                       style="background-color: #f0f0f0"
                        ng-model="prodModifyInfo.prodClassCdNm"
                        required
                        popover-enable="myForm.prodClassCdNm.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.prodClass" />은(는) 필수 입력항목 입니다."
-                       placeholder="<s:message code="prod.prodClass" /> 선택" readonly
+                       placeholder="<s:message code="prod.prodClass" /> 선택" <%--readonly--%>
                        ng-click="popUpProdClass()" />
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodModifyInfo.prodClassCd" disabled />
               </td>
@@ -568,13 +582,14 @@
       </div>
     </div>
     <div class="wj-dialog-footer">
-      <button class="btn btn_blue {{myForm.$valid ? 'wj-hide-apply' : ''}}" ng-click="myForm.$valid"><s:message code="cmm.save"/></button>
+       <button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>
       <button class="btn wj-hide btn_blue"><s:message code="cmm.close"/></button>
+      <input type="hidden" id="saveMode" name="saveMode"/>
     </div>
     </form>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20181120.62" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

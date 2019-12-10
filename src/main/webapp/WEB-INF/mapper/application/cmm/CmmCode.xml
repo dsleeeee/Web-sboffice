@@ -111,6 +111,23 @@
         ORDER BY HQ_OFFICE_CD NULLS FIRST
     </select>
 
+    <!-- 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다) -->
+    <!--
+      TABLE    : TB_HQ_OFFICE
+      COMMENTS : 벤사 목록을 조회한다.
+    -->
+    <select id="getHqOfficeListChkAgency" parameterType="String" resultType="DefaultMap">
+        /* USE : CmmCodeMapper.getHqOfficeListChkAgency */
+        SELECT
+            HQ_OFFICE_CD,
+            '['||HQ_OFFICE_CD||'] '||HQ_OFFICE_NM AS HQ_OFFICE_NM
+        FROM
+            TB_HQ_OFFICE
+        WHERE 1=1
+          AND AGENCY_CD = #{agencyCd}
+        ORDER BY HQ_OFFICE_CD NULLS FIRST
+    </select>
+
     <!-- 본사 환경변수 조회 -->
     <!--
       TABLE    : TB_HQ_ENVST

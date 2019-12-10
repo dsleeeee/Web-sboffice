@@ -541,6 +541,7 @@
             PRT_CLASS_CD,
             TEMPLT_REG_FG,
             TEMPLT_CD,
+            TEMPLT_NM,
             PRT_FORM,
             REG_DT,
             REG_ID,
@@ -551,6 +552,7 @@
                PRT_CLASS_CD,
                TEMPLT_REG_FG,
                TEMPLT_CD,
+               TEMPLT_NM,
                PRT_FORM,
                #{regDt},
                #{regId},
@@ -2258,6 +2260,19 @@
         /* USE : StoreManageMapper.getInstPosCntMax */
         SELECT DECODE(MAX(TO_NUMBER(POS_NO)), NULL, '0', MAX(TO_NUMBER(POS_NO))) AS MAX_POS_NO
           FROM TB_MS_POS
+         WHERE STORE_CD = #{storeCd}
+    </select>
+
+    <!-- 매장코드 중복체크 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : storeManageVO
+          COMMENTS : 매장코드 수동입력 시 중복되는 매장코드가 있는지 체크 (중복체크)
+    -->
+    <select id="getStoreCdCnt" parameterType="storeManageVO" resultType="Integer">
+        /* USE : PopupMapper.getStoreCdCnt */
+        SELECT COUNT(1) AS CNT
+          FROM TB_MS_STORE
          WHERE STORE_CD = #{storeCd}
     </select>
 

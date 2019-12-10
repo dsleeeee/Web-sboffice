@@ -96,5 +96,7 @@ public interface ProdMapper {
     /** 매장 상품 판매가 변경 */
     int updateStoreSaleUprc(ProdVO prodVO);
 
+    /** 상품코드 중복체크*/
+    int getProdCdCnt(ProdVO prodVO);
 
 }

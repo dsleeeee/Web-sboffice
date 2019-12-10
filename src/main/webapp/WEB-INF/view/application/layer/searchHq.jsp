@@ -72,6 +72,7 @@
                 <wj-flex-grid-column header="<s:message code="application.hq.search.ownerNm"/>" binding="ownerNm" width="*" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.clsFg"/>" binding="clsFg" width="70" align="center" data-map="clsFgDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="application.hq.search.sysStatFg"/>" binding="sysStatFg" width="70" align="center" data-map="sysStatFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="application.hq.search.0027"/>" binding="envst0027" width="70" align="center" visible="false"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -93,4 +94,4 @@
 var clsFg     = ${ccu.getCommCodeExcpAll("001")};
 var sysStatFg = ${ccu.getCommCode("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchHq.js?ver=2018102301.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchHq.js?ver=2018102301.10" charset="utf-8"></script>

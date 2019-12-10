@@ -387,4 +387,24 @@ public class CmmCodeUtil {
         return assmblObj(hqOfficeList, "hqOfficeNm", "hqOfficeCd", UseYn.ALL);
     }
 
+    /**
+     * 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)
+     *
+     * @return
+     */
+    public String getHqOfficeListChkAgency(String agencyCd) {
+        List<DefaultMap<String>> hqOfficeList = cmmCodeService.getHqOfficeListChkAgency(agencyCd);
+
+        // 데이터가 없는 경우, 빈값이라도 넣어 에러 방지
+        if(hqOfficeList.size() == 0){
+            DefaultMap<String> hqOffice = new DefaultMap<String>();
+            hqOffice.put("hqOfficeNm", "");
+            hqOffice.put("hqOfficeCd", "");
+            hqOfficeList.add(hqOffice);
+        }
+
+        // 결과 형태를 만들어서 json 으로 리턴
+        return assmblObj(hqOfficeList, "hqOfficeNm", "hqOfficeCd", UseYn.ALL);
+    }
+
 }

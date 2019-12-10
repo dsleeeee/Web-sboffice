@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.prod.service;
 import kr.co.common.data.enums.UseYn;
 import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 
 /**
@@ -140,6 +141,13 @@ public class ProdVO extends PageVO {
      * 3 : 매장등록<br>
      */
     private WorkModeFg workMode;
+
+    /** */
+    private ProdNoEnvFg prodNoEnv;
+
+    /** */
+    private String saveMode;
+
 
     /**
      * @return the hqOfficeCd
@@ -803,5 +811,21 @@ public class ProdVO extends PageVO {
 
     public void setWorkMode(WorkModeFg workMode) {
         this.workMode = workMode;
+    }
+
+    public ProdNoEnvFg getProdNoEnv() {
+        return prodNoEnv;
+    }
+
+    public void setProdNoEnv(ProdNoEnvFg prodNoEnv) {
+        this.prodNoEnv = prodNoEnv;
+    }
+
+    public String getSaveMode() {
+        return saveMode;
+    }
+
+    public void setSaveMode(String saveMode) {
+        this.saveMode = saveMode;
     }
 }

@@ -42,8 +42,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         // 본사
         //if ((col.binding === "hqOfficeCd" && gvOrgnFg === "M") || (pAgencyCd === "00000" && gvOrgnFg === "A")) {
         if(col.binding === "hqOfficeCd"){
-          // if(gvOrgnFg === "M" || (gvOrgnFg === "A" && pAgencyCd === "00000")) {
-          if(gvOrgnFg === "M") {
+          if(gvOrgnFg === "M" || gvOrgnFg === "A" ) {
             if (item.hqOfficeCd !== "00000") {
               wijmo.addClass(e.cell, 'wijLink wj-custom-readonly');
             } else {
@@ -74,8 +73,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "hqOfficeCd" && selectedRow.hqOfficeCd !== "00000") {
-          // if ( selectedRow.orgnFg === "M" || (selectedRow.orgnFg === "A" && pAgencyCd === "00000")) {
-          if ( selectedRow.orgnFg === "M") {
+          if ( selectedRow.orgnFg === "M" || selectedRow.orgnFg === "A") {
             $scope.vLoginProcess(selectedRow.hqUserId);
           }
         } else if (col.binding === "storeCd" && selectedRow.storeCd !== "00000") {
