@@ -51,6 +51,7 @@ app.controller('dayTaxCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 var params      = {};
                 params.storeCd  = $scope.searchedStoreCd;
                 params.saleDate = selectedRow.saleDate;
+                params.gubun = "dayTax";
 
                 if (col.binding === "saleDate") { // 일자 클릭
                     $scope._broadcast('dayStoreDtlCtrl', params);

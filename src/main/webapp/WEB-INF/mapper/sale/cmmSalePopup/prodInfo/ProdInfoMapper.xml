@@ -1,99 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdInfoMapper.xml
+    매출공통팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1                                 최초작성
+    2       김설아     2019.12.11     수정
+-->
 <mapper namespace="kr.co.solbipos.sale.cmmSalePopup.prodInfo.service.impl.ProdInfoMapper">
+
     <!-- 매출공통팝업 - 상품매출 상세내역 조회 -->
     <!--
         TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
         PARAM    : prodInfoVO
         COMMENTS : 매출공통팝업 - 상품매출 상세내역을 조회한다.
     -->
-    <select id="getProdSaleDtlList" parameterType="prodInfoVO" resultType="DefaultMap">
-      /* USE : ProdInfoMapper.getProdSaleDtlList */
-      <![CDATA[
-      SELECT  PROD_CLASS_NM
-      ,        PROD_CD
-      ,        PROD_NM
-      ,  	   SALE_QTY
-      , 	   SALE_AMT
-      ,        DC_AMT
-      ,        REAL_SALE_AMT
-      ,        TAX_SALE_AMT
-      ,        (TAX_SALE_AMT - VAT_AMT) AS GA_AMT
-      ,        VAT_AMT
-      ,        NO_TAX_SALE_AMT
-      ,        (REAL_SALE_AMT - VAT_AMT) AS NET_SALE_AMT
-      FROM (
-                SELECT	tmpc.PROD_CLASS_NM
-                ,       tssd.PROD_CD
-                ,       tmp.PROD_NM
-                ,		NVL(SUM(tssd.SALE_QTY), 0) AS SALE_QTY
-                ,       NVL(SUM(tssd.SALE_AMT), 0) AS SALE_AMT
-                ,       NVL(SUM(tssd.DC_AMT), 0) AS DC_AMT
-                ,		NVL(SUM(tssd.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
-                ,       NVL(tssd2.TAX_SALE_AMT, 0) AS TAX_SALE_AMT
-                ,       NVL(SUM(tssd.VAT_AMT),0) AS VAT_AMT
-                ,       NVL(tssd2.NO_TAX_SALE_AMT, 0) AS NO_TAX_SALE_AMT
-                FROM	TB_SL_SALE_DTL tssd
-                ,       TB_MS_PRODUCT tmp
-                ,       TB_MS_PRODUCT_CLASS tmpc
-                , (
-                            SELECT  STORE_CD
-                            ,        PROD_CD
-                            ,        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT
-                            ,        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
-                            FROM  (
-                                     SELECT  tssd2.STORE_CD
-                                     ,        tssd2.PROD_CD
-                                     ,        tssd2.VAT_FG
-                                     ,        tssd2.REAL_SALE_AMT
-                                     FROM    TB_SL_SALE_DTL tssd2
-                                     WHERE   tssd2.HQ_OFFICE_CD  = #{hqOfficeCd}
-                                     AND     tssd2.SALE_DATE     = #{saleDate}
-
-       ]]>
-                            <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                AND tssd2.STORE_CD IN
-                                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                    #{item}
-                                </foreach>
-                            </if>
-        <![CDATA[
-
-                                   )
-                             PIVOT (
-                                        SUM(REAL_SALE_AMT)
-                                        FOR VAT_FG
-                                        IN ('1' AS TAX_SALE_AMT, '2' AS NO_TAX_SALE_AMT)
-                                   )
-                             GROUP BY STORE_CD, PROD_CD
-
-                   )tssd2
-
-                WHERE   tssd.HQ_OFFICE_CD	=	 #{hqOfficeCd}
-                AND		 tssd.SALE_DATE		=	#{saleDate}
-
-        ]]>
-            <if test='arrStoreCd != null and arrStoreCd != ""'>
-                AND tssd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+    <select id="getProdSaleDtlList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.ProdInfoMapper */
+        SELECT
+        STORE_CD,
+        PROD_CLASS_NM,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+        SUM(VAT_AMT) AS VAT_AMT,
+        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
+        SUM(REAL_SALE_AMT) - SUM(VAT_AMT) AS NET_SALE_AMT
+        FROM
+        (
+            SELECT
+            tssd.STORE_CD,
+            tmpc.PROD_CLASS_NM,
+            tssd.PROD_CD,
+            tmp.PROD_NM,
+            tssd.SALE_QTY,
+            tssd.SALE_AMT,
+            tssd.DC_AMT,
+            tssd.REAL_SALE_AMT,
+            (CASE WHEN tssd.VAT_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS TAX_SALE_AMT,
+            tssd.VAT_AMT,
+            (CASE WHEN tssd.VAT_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS NO_TAX_SALE_AMT
+            FROM TB_SL_SALE_DTL tssd,
+            TB_MS_PRODUCT tmp,
+            TB_MS_PRODUCT_CLASS tmpc
+            WHERE 1=1
+            AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+            <choose>
+                <when test='gubun != null'>
+                    <!-- 기간별매출 > 일자별 탭 > 과면세별 탭 -->
+                    <if test='gubun == "dayTax"'>
+                        <![CDATA[
+                            AND tssd.SALE_DATE = #{saleDate}
+                        ]]>
+                    </if>
+                    <!-- 기간별매출 > 월별 탭 > 과면세별,포스별 탭 -->
+                    <if test='gubun == "monthTax" or gubun == "monthPos"'>
+                        <![CDATA[
+                            AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                        ]]>
+                    </if>
+                </when>
+            </choose>
+            <if test='storeCds != null and storeCds != ""'>
+                AND tssh.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                     #{item}
                 </foreach>
             </if>
-
-        <![CDATA[
-                AND     tmp.STORE_CD         =   tssd.STORE_CD
-                AND     tmp.PROD_CD          =   tssd.PROD_CD
-                AND     tmpc.STORE_CD        =   tssd.STORE_CD
-                AND     tmpc.PROD_CLASS_CD   =   tmp.PROD_CLASS_CD
-                AND     tssd2.STORE_CD       =   tssd.STORE_CD
-                AND     tssd2.PROD_CD        =   tssd.PROD_CD
-                GROUP
-                BY		tssd.PROD_CD, tmp.PROD_NM, tmpc.PROD_CLASS_NM, tssd2.TAX_SALE_AMT, tssd2.NO_TAX_SALE_AMT
-
+            AND tmp.STORE_CD (+)= tssd.STORE_CD
+            AND tmp.PROD_CD (+)= tssd.PROD_CD
+            AND tmpc.STORE_CD (+)= tssd.STORE_CD
+            AND tmpc.PROD_CLASS_CD (+)= tmp.PROD_CLASS_CD
         )
-        ORDER
-        BY		REAL_SALE_AMT DESC, PROD_NM ASC
-        ]]>
+        GROUP BY STORE_CD, PROD_CLASS_NM, PROD_CD, PROD_NM
+        ORDER BY STORE_CD, PROD_CD
     </select>
+
 </mapper>

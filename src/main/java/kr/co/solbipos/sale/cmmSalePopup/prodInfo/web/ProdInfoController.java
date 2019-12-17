@@ -27,6 +27,7 @@ import java.util.List;
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2019.06.17  이다솜      최초생성
+ * @ 2019.12.11  김설아      수정
  *
  * @author 솔비포스 개발본부 백엔드PT 이다솜
  * @since 2019.06.17
@@ -39,6 +40,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/sale/cmmSalePopup/prodInfo")
 public class ProdInfoController {
+
     private final SessionService sessionService;
     private final ProdInfoService prodInfoService;
 
@@ -46,28 +48,26 @@ public class ProdInfoController {
     public ProdInfoController(SessionService sessionService, ProdInfoService prodInfoService) {
         this.sessionService = sessionService;
         this.prodInfoService = prodInfoService;
-
     }
 
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   prodInfoVO
-     * @return  String
-     * @author  이다솜
-     * @since   2019. 06. 19.
+     *
+     * @param prodInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
      */
     @RequestMapping(value = "/prodSaleDtl/list.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdSaleDtlList(HttpServletRequest request, HttpServletResponse response,
-                                     Model model, ProdInfoVO prodInfoVO) {
+    public Result getProdSaleDtlList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = prodInfoService.getProdSaleDtlList(prodInfoVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlList(prodInfoVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, list, prodInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
     }
 }

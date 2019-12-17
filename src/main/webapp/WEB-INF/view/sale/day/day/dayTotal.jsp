@@ -107,9 +107,9 @@
   </div>
 </div>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
   var payColList = [];
-  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+  &lt;%&ndash;javascript에서 사용할 결제수단 json 데이터 생성&ndash;%&gt;
   <c:forEach var="payCol" items="${payColList}">
   var payParam       = {};
   payParam.payCd     = "${payCol.payCd}";
@@ -119,16 +119,16 @@
 
   var payCol    = '${payCol}';
   var arrPayCol = payCol.split(',');
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20190218.01" charset="utf-8"></script>
+</script>--%>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20191211.02" charset="utf-8"></script>
 
-<%-- 일별종합 일자별 매장매출 팝업 레이어 --%>
+<%-- 매장별 매출현황 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 일별종합 매장별 할인매출 팝업 레이어 --%>
+<%-- 매장별 할인내역 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDc.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

@@ -99,6 +99,24 @@
                 SUM(PAY_AMT)
                 FOR PAY_CD
                 IN (${pivotPayCol})
+                /*  IN ('01' AS PAY01,
+                '02' AS PAY02,
+                '03' AS PAY03,
+                '04' AS PAY04,
+                '05' AS PAY05,
+                '06' AS PAY06,
+                '07' AS PAY07,
+                '08' AS PAY08,
+                '09' AS PAY09,
+                '10' AS PAY10,
+                '11' AS PAY11,
+                '12' AS PAY12,
+                '13' AS PAY13,
+                '14' AS PAY14,
+                '15' AS PAY15,
+                '16' AS PAY16,
+                '17' AS PAY17,
+                '18' AS PAY18)*/
             )
             GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO, SALE_FG, TOT_SALE_AMT, TOT_DC_AMT, VAT_AMT
         ) tssh

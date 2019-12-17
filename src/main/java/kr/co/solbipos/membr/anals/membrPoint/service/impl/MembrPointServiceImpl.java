@@ -46,6 +46,9 @@ public class MembrPointServiceImpl implements MembrPointService {
             membrPointVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        String[] storeCds = membrPointVO.getStoreCds().split(",");
+        membrPointVO.setStoreCdList(storeCds);
+
         return membrPointMapper.getMembrPointList(membrPointVO);
     }
 }
