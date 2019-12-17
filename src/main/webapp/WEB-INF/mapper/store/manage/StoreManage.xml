@@ -951,6 +951,7 @@
         SELECT #{storeCd},
                PROD_CD,
                PROD_NM,
+               HQ_BRAND_CD,
                PROD_CLASS_CD,
                CORNR_CD,
                ORGPLCE_CD,

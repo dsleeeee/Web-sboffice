@@ -15,7 +15,7 @@
       <%-- 포스환경 --%>
       <li><a href="#" id="posEnvFg" envstFg="03" ng-click="changeEnvGroup('03')"><s:message code="storeManage.posEnv" /></a></li>
       <%-- 포스기능키 --%>
-      <li><a href="#" id="posFuncFg" envstFg="10" ng-click="changeEnvGroup('10')"><s:message code="storeManage.posFuncKey" /></a></li>
+      <%--<li><a href="#" id="posFuncFg" envstFg="10" ng-click="changeEnvGroup('10')"><s:message code="storeManage.posFuncKey" /></a></li>--%>
       <%-- 주방프린터 --%>
       <li><a href="#" id="printEnvFg" envstFg="98" ng-click="changeEnvGroup('98')"><s:message code="storeManage.kitchenPrint" /></a></li>
       <%-- 주방프린터 상품연결--%>
