@@ -92,9 +92,9 @@
   </div>
 </div>
 
-<script type="text/javascript">
+<%--<script type="text/javascript">
   var dcColList = [];
-  <%--javascript에서 사용할 할인 json 데이터 생성--%>
+  &lt;%&ndash;javascript에서 사용할 할인 json 데이터 생성&ndash;%&gt;
   <c:forEach var="dcCol" items="${dcColList}">
   var dcParam      = {};
   dcParam.dcCd     = "${dcCol.dcCd}";
@@ -104,6 +104,6 @@
 
   var dcCol    = '${dcCol}';
   var arrDcCol = dcCol.split(',');
-</script>
+</script>--%>
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayDc.js?ver=20190220.01" charset="utf-8"></script>
 

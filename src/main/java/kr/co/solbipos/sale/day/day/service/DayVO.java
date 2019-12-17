@@ -35,6 +35,18 @@ public class DayVO extends PageVO {
     /** 매출 발생 시간대 */
     private SaleTimeFg saleTime;
 
+    /** 포스컬럼 */
+    private String posCol;
+    /** 포스구분 array */
+    private String arrPosCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 포스구분 컬럼 문자열 */
+    private String pivotPosCol;
+
+    /** 팝업호출시 구분 */
+    private String gubun;
+
+    /** 년월 */
+    private String yearMonth;
 
     /**
      * @return the hqOfficeCd
@@ -215,4 +227,28 @@ public class DayVO extends PageVO {
     public void setSaleTime(SaleTimeFg saleTime) {
         this.saleTime = saleTime;
     }
+
+    public String getPosCol() { return posCol; }
+
+    public void setPosCol(String posCol) { this.posCol = posCol; }
+
+    public String[] getArrPosCol() {
+        return arrPosCol;
+    }
+
+    public void setArrPosCol(String[] arrPosCol) {
+        this.arrPosCol = arrPosCol;
+    }
+
+    public String getPivotPosCol() { return pivotPosCol; }
+
+    public void setPivotPosCol(String pivotPosCol) { this.pivotPosCol = pivotPosCol; }
+
+    public String getGubun() { return gubun; }
+
+    public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getYearMonth() { return yearMonth; }
+
+    public void setYearMonth(String yearMonth) { this.yearMonth = yearMonth; }
 }

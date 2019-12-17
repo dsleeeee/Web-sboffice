@@ -24,8 +24,12 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#monthView").hide();
         $("#dayPeriodView").hide();
         
-        // 맨 처음탭 셋팅
+        // 하위 두번째 탭에 첫번째탭으로 셋팅
         $scope.setTab("day");
+
+        // 하위 두번째 탭 셋팅
+        $('[name="dayOfWeekView"]').hide();
+        $('[name="monthView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayCtrl");
@@ -44,7 +48,12 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#monthView").hide();
         $("#dayPeriodView").hide();
 
+        // 하위 두번째 탭에 첫번째탭으로 셋팅
+        $scope.setTab("dayOfWeek");
+
+        // 하위 두번째 탭 셋팅
         $('[name="dayView"]').hide();
+        $('[name="monthView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayOfWeekCtrl");
@@ -63,7 +72,12 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#monthView").show();
         $("#dayPeriodView").hide();
 
+        // 하위 두번째 탭에 첫번째탭으로 셋팅
+        $scope.setTab("month");
+
+        // 하위 두번째 탭 셋팅
         $('[name="dayView"]').hide();
+        $('[name="dayOfWeekView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthCtrl");
@@ -82,7 +96,10 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#monthView").hide();
         $("#dayPeriodView").show();
 
+        // 하위 두번째 탭 셋팅
         $('[name="dayView"]').hide();
+        $('[name="dayOfWeekView"]').hide();
+        $('[name="monthView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayPeriodCtrl");
@@ -112,6 +129,5 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         var scope = agrid.getScope(pageName + "TotalCtrl");
         scope.flex.refresh();
     }
-
 
 }]);

@@ -98,17 +98,16 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20190617.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191211" charset="utf-8"></script>
 
-<%-- 일별종합 일자별 매장매출 팝업 레이어 --%>
+<%-- 매장별 매출현황 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 상품매출 상세 레이어 --%>
+<%-- 상품매출 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-

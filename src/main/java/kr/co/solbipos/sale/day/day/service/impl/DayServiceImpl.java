@@ -4,9 +4,11 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
+import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +39,15 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getDcColList(dayVO);
     }
 
+    /** 포스별 탭 - 포스 컬럼 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return dayMapper.getPosColList(dayVO);
+    }
 
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
     @Override
@@ -64,7 +75,16 @@ public class DayServiceImpl implements DayService {
     /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
         return dayMapper.getDayStoreDtlList(dayVO);
     }
 

@@ -49,44 +49,44 @@ public class DayController {
     }
 
 
-    /**
-     * 일자별 - 페이지 이동
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  String
-     * @author  안동관
-     * @since   2019. 02. 18.
-     */
-    @RequestMapping(value = "/day/view.sb", method = RequestMethod.GET)
-    public String dayView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        DayVO dayVO = new DayVO();
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        // 결제수단 조회
-        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
-
-        // 결제수단 코드를 , 로 연결하는 문자열 생성
-        String payCol = "";
-        for(int i=0; i < payColList.size(); i++) {
-            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
-        }
-        model.addAttribute("payColList", payColList);
-        model.addAttribute("payCol", payCol);
-
-        // 할인구분 조회
-        List<DefaultMap<String>> dcColList = dayService.getDcColList(dayVO, sessionInfoVO);
-
-        // 할인구분 코드를 , 로 연결하는 문자열 생성
-        String dcCol = "";
-        for(int i=0; i < dcColList.size(); i++) {
-            dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
-        }
-        model.addAttribute("dcColList", dcColList);
-        model.addAttribute("dcCol", dcCol);
-
-        return "sale/day/day/day";
-    }
+//    /**
+//     * 일자별 - 페이지 이동
+//     * @param   request
+//     * @param   response
+//     * @param   model
+//     * @return  String
+//     * @author  안동관
+//     * @since   2019. 02. 18.
+//     */
+//    @RequestMapping(value = "/day/view.sb", method = RequestMethod.GET)
+//    public String dayView(HttpServletRequest request, HttpServletResponse response, Model model) {
+//        DayVO dayVO = new DayVO();
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//
+//        // 결제수단 조회
+//        List<DefaultMap<String>> payColList = dayService.getPayColList(dayVO, sessionInfoVO);
+//
+//        // 결제수단 코드를 , 로 연결하는 문자열 생성
+//        String payCol = "";
+//        for(int i=0; i < payColList.size(); i++) {
+//            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+//        }
+//        model.addAttribute("payColList", payColList);
+//        model.addAttribute("payCol", payCol);
+//
+//        // 할인구분 조회
+//        List<DefaultMap<String>> dcColList = dayService.getDcColList(dayVO, sessionInfoVO);
+//
+//        // 할인구분 코드를 , 로 연결하는 문자열 생성
+//        String dcCol = "";
+//        for(int i=0; i < dcColList.size(); i++) {
+//            dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
+//        }
+//        model.addAttribute("dcColList", dcColList);
+//        model.addAttribute("dcCol", dcCol);
+//
+//        return "sale/day/day/day";
+//    }
 
 
     /**

@@ -67,6 +67,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var params      = {};
         params.storeCd  = $scope.searchedStoreCd;
         params.saleDate = selectedRow.saleDate;
+        params.gubun = "dayTotal";
 
         if (col.binding === "saleDate") { // 일자 클릭
           $scope._broadcast('dayStoreDtlCtrl', params);

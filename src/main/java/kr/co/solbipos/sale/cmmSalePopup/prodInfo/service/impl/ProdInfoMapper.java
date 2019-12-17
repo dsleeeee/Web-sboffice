@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ProdInfoMapper {
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
-    List<DefaultMap<String>> getProdSaleDtlList(ProdInfoVO prodInfoVO);
+    List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO);
 }
