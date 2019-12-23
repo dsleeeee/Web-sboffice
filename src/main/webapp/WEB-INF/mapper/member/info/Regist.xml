@@ -635,6 +635,12 @@
         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
         AND tnsp.CD_COMPANY (+)= tmmp.CD_COMPANY
         AND tnsp.CD_PARTNER (+)= tmmp.CD_PARTNER
+        <if test='membrNo != null and membrNo != ""'>
+            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+        </if>
         AND tmmp.CD_PARTNER IS NULL
         ORDER BY tmm.MEMBR_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>

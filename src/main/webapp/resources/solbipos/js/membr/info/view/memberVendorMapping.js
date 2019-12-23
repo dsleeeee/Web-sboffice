@@ -72,6 +72,8 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
 
     $scope.searchMemberVendorMappingList = function(){
         var params = {};
+        params.membrNo = $("#vendorMemberNo").val();
+        params.membrNm = $("#vendorMemberNm").val();
         params.listScale = 30;
 
         $scope._inquirySub("/membr/info/view/view/getMemberVendorMappingList.sb", params, function() {}, false);

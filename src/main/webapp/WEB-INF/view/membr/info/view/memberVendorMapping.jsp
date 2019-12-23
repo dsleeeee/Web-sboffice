@@ -15,9 +15,46 @@
 
         <%-- body --%>
         <div class="wj-dialog-body">
+            <%-- 조회조건 --%>
+            <div class="searchBar flddUnfld">
+                <a href="#" class="open fl"> <s:message code="regist.memberVendorMapping" /></a>
+                <%-- 조회 --%>
+                <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+                    <button class="btn_blue fr" ng-click="_pageView('memberVendorMappingCtrl',1)">
+                        <s:message code="cmm.search" />
+                    </button>
+                </div>
+            </div>
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15" />
+                    <col class="w35" />
+                    <col class="w15" />
+                    <col class="w35" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <%-- 회원번호 --%>
+                        <th>
+                            <s:message code="regist.membr.no" />
+                        </th>
+                        <td>
+                            <input type="text" class="sb-input w100" id="vendorMemberNo" ng-model="memberNo" />
+                        </td>
+                        <%-- 회원명 --%>
+                        <th>
+                            <s:message code="regist.membr.nm" />
+                        </th>
+                        <td>
+                            <input type="text" class="sb-input w100" id="vendorMemberNm" ng-model="memberNm" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:400px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:330px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -66,7 +103,7 @@
     var useDataMap = ${ccu.getCommCodeExcpAll("067")}; <%--사용, 미사용--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20191223.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20191223.20" charset="utf-8"></script>
 
 <%-- 매장 등록/수정 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
