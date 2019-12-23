@@ -177,5 +177,12 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._save("/membr/info/view/base/remove.sb", params, function(){ $scope.getMemberList() });
 
   };
-}]);
 
+  // 회원 거래처 매핑
+  $scope.memberVendorMapping = function(){
+    var params = {};
+
+    $scope._broadcast('memberVendorMappingCtrl', params);
+  };
+
+}]);

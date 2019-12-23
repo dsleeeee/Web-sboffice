@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : dayMembrPurchsCtrl.js
+ * 파일명 : dayMembrPurchs.js
  * 설  명 : 매출정보 상세 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명

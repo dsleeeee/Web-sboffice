@@ -299,5 +299,26 @@ public class RegistServiceImpl implements RegistService {
     public List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO) {
         return mapper.getMappingCompany(memberMappingVO);
     }
+
+    /**
+     * 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회
+     */
+    @Override
+    public List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        // 회원정보 조회시 해당 본사나 매장의 회원만 조회
+        registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if( !StringUtil.isEmpties(registVO.getRegStoreCd())) {
+            registVO.setRegStoreCds(registVO.getRegStoreCd().split(","));
+        }
+
+        return mapper.getMemberVendorMappingList(registVO);
+    }
 }
 
