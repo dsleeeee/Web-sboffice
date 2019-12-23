@@ -142,4 +142,6 @@ public interface RegistMapper {
     /** 회원 거래처 매핑코드 등록 및 저장 */
     int registMemberMappingCode(RegistVO registVO);
 
+    /** 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회 */
+    List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO);
 }

@@ -578,4 +578,66 @@
             )
     </insert>
 
+    <!-- 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_CLASS, TB_MS_STORE, TB_MB_MEMBER_PTN, TB_NEOE_SPOS_PTN
+        COMMENTS : [회원]회원, [회원]회원_분류, [매장]매장정보, [회원]회원-거래처 매핑, 회원 거래처 매핑코드
+    -->
+    <select id="getMemberVendorMappingList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMemberVendorMappingList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tmm.MEMBR_NO,
+        tmm.MEMBR_NM,
+        tmm.MEMBR_CLASS_CD,
+        tmmc.MEMBR_CLASS_NM,
+        tmm.MEMBR_CARD_NO,
+        tmm.SHORT_NO,
+        tmm.MEMBR_ORGN_CD,
+        tmm.REG_STORE_CD,
+        tms.STORE_NM AS REG_STORE_NM,
+        tmm.POST_NO,
+        tmm.ADDR,
+        tmm.ADDR_DTL,
+        tmm.TEL_NO,
+        tmm.EMAIL_ADDR,
+        tmm.EMAIL_RECV_YN,
+        tmm.BIRTHDAY,
+        tmm.GENDR_FG,
+        tmm.SMS_RECV_YN,
+        tmm.WEDDING_YN,
+        tmm.WEDDINGDAY,
+        tmm.LUNAR_YN,
+        tmm.USE_YN,
+        tmm.MEMBR_NICKNM,
+        tmm.MEMBER_ENG_NM,
+        tmm.REMARK,
+        '후불적용매장등록' AS POSTPAID_STORE,
+        tmmp.CD_PARTNER,
+        tnsp.LN_PARTNER
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_CLASS tmmc,
+        TB_MS_STORE tms,
+        TB_MB_MEMBER_PTN tmmp,
+        TB_NEOE_SPOS_PTN tnsp
+        WHERE 1=1
+        <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+            AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
+        </if>
+        AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD (+)= tmm.REG_STORE_CD
+        AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        AND tnsp.CD_COMPANY (+)= tmmp.CD_COMPANY
+        AND tnsp.CD_PARTNER (+)= tmmp.CD_PARTNER
+        AND tmmp.CD_PARTNER IS NULL
+        ORDER BY tmm.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
 </mapper>

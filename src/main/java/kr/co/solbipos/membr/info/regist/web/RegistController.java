@@ -336,4 +336,24 @@ public class RegistController {
         return ReturnUtil.returnListJson(Status.OK, list, memberMappingVO);
     }
 
+    /**
+     * 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getMemberVendorMappingList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberVendorMappingList(RegistVO registVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getMemberVendorMappingList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
 }

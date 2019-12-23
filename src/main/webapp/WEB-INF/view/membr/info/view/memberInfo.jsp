@@ -269,6 +269,10 @@
     <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="deleteMember()">
       <s:message code="cmm.delete" />
     </button>
+    <%-- 회원 거래처 매핑 --%>
+    <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+      <s:message code="regist.memberVendorMapping" />
+    </button>
   </div>
 
   <%-- 회원목록 그리드 --%>
@@ -324,7 +328,7 @@ var regstrStoreList = ${regstrStoreList};
 var memberClassList = ${memberClassList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=2018110902" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.07" charset="utf-8"></script>
 
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">
@@ -350,3 +354,8 @@ var memberClassList = ${memberClassList};
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
+<%-- 회원 거래처 매핑 조회 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberVendorMapping.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
