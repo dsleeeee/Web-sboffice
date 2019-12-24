@@ -47,7 +47,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -73,7 +73,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -99,7 +99,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -115,7 +115,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -202,7 +202,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+            monthVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅

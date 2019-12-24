@@ -97,7 +97,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTax.js?ver=20191211.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTax.js?ver=20191218" charset="utf-8"></script>
 
 <%-- 상품매출 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">

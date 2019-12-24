@@ -44,8 +44,8 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
         dataItem.storeCnt    = messages["dayofweek.storeCnt"];
         dataItem.totSaleAmt    = messages["dayofweek.pos.totSaleAmt"];
         dataItem.totDcAmt    = messages["dayofweek.pos.totDcAmt"];
-        dataItem.totRealSaleAmt    = messages["dayofweek.pos.totRealSaleAmt"];
-        dataItem.totSaleQty    = messages["dayofweek.pos.totSaleQty"];
+        dataItem.totRealSaleAmt    = messages["dayofweek.totRealSaleAmt"];
+        dataItem.totSaleQty    = messages["dayofweek.totSaleQty"];
 
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
@@ -56,6 +56,7 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
+
         s.itemFormatter = function (panel, r, c, cell) {
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
                 //align in center horizontally and vertically

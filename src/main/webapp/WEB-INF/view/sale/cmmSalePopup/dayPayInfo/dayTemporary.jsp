@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayPayInfo/dayTemporary/"/>
 
-<wj-popup id="wjDayTemporaryLayer" control="wjDayTemporaryLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;">
+<wj-popup id="wjDayTemporaryLayer" control="wjDayTemporaryLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:400px;">
   <div id="dayTemporaryLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayTemporaryCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="dayTemporary.dayTemporaryPay"/>
@@ -17,7 +17,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 340px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -39,4 +39,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayTemporary.js?ver=20190219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayTemporary.js?ver=20191219" charset="utf-8"></script>

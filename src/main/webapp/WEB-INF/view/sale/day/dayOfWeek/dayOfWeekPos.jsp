@@ -78,8 +78,8 @@
                     <wj-flex-grid-column header="<s:message code="dayofweek.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.pos.totSaleAmt"/>" binding="totSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.pos.totDcAmt"/>" binding="totDcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totRealSaleAmt"/>" binding="totRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totSaleQty"/>" binding="totSaleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 포스 컬럼 생성--%>
                     <c:forEach var="posCol" items="${posColList}">
                         <wj-flex-grid-column header="<s:message code="dayofweek.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -99,4 +99,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekPos.js?ver=20191119.25" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekPos.js?ver=20191220" charset="utf-8"></script>

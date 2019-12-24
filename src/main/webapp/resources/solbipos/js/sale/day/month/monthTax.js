@@ -123,7 +123,7 @@ app.controller('monthTaxCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
                     params.storeCd = $("#monthTaxStoreCd").val();
-                    params.gubun = "monthTax";
+                    params.gubun = "month";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
                 }

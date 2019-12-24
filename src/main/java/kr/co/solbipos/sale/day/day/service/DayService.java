@@ -34,4 +34,6 @@ public interface DayService {
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 포스별 - 포스별매출조회 */
+    List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 }

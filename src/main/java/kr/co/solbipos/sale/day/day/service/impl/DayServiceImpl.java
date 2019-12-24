@@ -247,4 +247,27 @@ public class DayServiceImpl implements DayService {
 
         return dayMapper.getDayTimeList(dayVO);
     }
+
+    /** 포스별 - 포스별매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+        }
+
+        // 포스구분 array 값 세팅
+        dayVO.setArrPosCol(dayVO.getPosCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPosCol = "";
+        String arrPosCol[] = dayVO.getPosCol().split(",");
+        for(int i=0; i < arrPosCol.length; i++) {
+            pivotPosCol += (pivotPosCol.equals("") ? "" : ",") + "'"+arrPosCol[i]+"'"+" AS POS"+arrPosCol[i];
+        }
+        dayVO.setPivotPosCol(pivotPosCol);
+
+        return dayMapper.getDayPosList(dayVO);
+    }
 }

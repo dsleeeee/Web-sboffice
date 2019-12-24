@@ -60,7 +60,7 @@
 
     <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px;">
+        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"
@@ -98,7 +98,7 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191211" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191218" charset="utf-8"></script>
 
 <%-- 매장별 매출현황 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">

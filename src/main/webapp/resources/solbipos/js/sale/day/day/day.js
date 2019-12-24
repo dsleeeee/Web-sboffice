@@ -9,6 +9,9 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayDcView").hide();
     $("#dayTaxView").hide();
     $("#dayTimeView").hide();
+    // $("#dayProdClassView").hide();
+    // $("#dayCornerView").hide();
+    $("#dayPosView").hide();
   };
 
 
@@ -175,7 +178,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").show();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("posCtrl");
+    var scope = agrid.getScope("dayPosCtrl");
     scope.flex.refresh();
   };
 

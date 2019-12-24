@@ -98,11 +98,11 @@ app.controller('dayStoreDcCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.searchDayStoreDcList = function(data){
         var params = {};
         // 기간별매출 > 일자별 탭 > 일별종합 탭
-        if(data.gubun == "dayTotal") {
+        if(data.gubun == "day") {
           params.saleDate = data.saleDate;
         }
         // 기간별매출 > 월별 탭 > 월별종합 탭
-        if(data.gubun == "monthTotal") {
+        if(data.gubun == "month") {
           params.yearMonth = data.yearMonth;
         }
         params.storeCd  = data.storeCd;

@@ -109,18 +109,18 @@
                         #{item}
                     </foreach>
                 </if>
-                AND tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tsshp.HQ_BRAND_CD
-                AND tssh.STORE_CD = tsshp.STORE_CD
-                AND tssh.SALE_DATE = tsshp.SALE_DATE
-                AND tssh.POS_NO = tsshp.POS_NO
-                AND tssh.BILL_NO = tsshp.BILL_NO
-                AND tssh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-                AND tssh.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-                AND tssh.STORE_CD = tssd.STORE_CD
-                AND tssh.SALE_DATE = tssd.SALE_DATE
-                AND tssh.POS_NO = tssd.POS_NO
-                AND tssh.BILL_NO = tssd.BILL_NO
+                AND tsshp.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+                AND tsshp.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+                AND tsshp.STORE_CD (+)= tssh.STORE_CD
+                AND tsshp.SALE_DATE (+)= tssh.SALE_DATE
+                AND tsshp.POS_NO (+)= tssh.POS_NO
+                AND tsshp.BILL_NO (+)= tssh.BILL_NO
+                AND tssd.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+                AND tssd.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+                AND tssd.STORE_CD (+)= tssh.STORE_CD
+                AND tssd.SALE_DATE (+)= tssh.SALE_DATE
+                AND tssd.POS_NO (+)= tssh.POS_NO
+                AND tssd.BILL_NO (+)= tssh.BILL_NO
             )
             PIVOT
             (

@@ -1,6 +1,7 @@
 package kr.co.solbipos.sale.day.dayOfWeek.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekService;
@@ -47,7 +48,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -73,7 +74,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -99,7 +100,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -115,7 +116,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅
@@ -202,7 +203,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
+            dayOfWeekVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅

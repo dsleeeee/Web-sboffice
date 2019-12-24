@@ -60,7 +60,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -120,7 +120,7 @@
   var payCol    = '${payCol}';
   var arrPayCol = payCol.split(',');
 </script>--%>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20191211.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20191219.02" charset="utf-8"></script>
 
 <%-- 매장별 매출현황 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">
@@ -130,6 +130,12 @@
 
 <%-- 매장별 할인내역 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 매장별 영수건수 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayBillInfo/dayStoreBill.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

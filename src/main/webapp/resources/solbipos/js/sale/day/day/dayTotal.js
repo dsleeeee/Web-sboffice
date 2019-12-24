@@ -26,10 +26,10 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
           wijmo.addClass(e.cell, 'wijLink');
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
-        // if (col.binding === "billCnt") { // 영수건수
-        //   wijmo.addClass(e.cell, 'wijLink');
-        //   wijmo.addClass(e.cell, 'wj-custom-readonly');
-        // }
+        if (col.binding === "billCnt") { // 영수건수
+          wijmo.addClass(e.cell, 'wijLink');
+          wijmo.addClass(e.cell, 'wj-custom-readonly');
+        }
         if (col.binding === "totDcAmt") { // 총할인
           wijmo.addClass(e.cell, 'wijLink');
           wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -67,17 +67,18 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var params      = {};
         params.storeCd  = $scope.searchedStoreCd;
         params.saleDate = selectedRow.saleDate;
-        params.gubun = "dayTotal";
+        params.gubun = "day";
 
         if (col.binding === "saleDate") { // 일자 클릭
           $scope._broadcast('dayStoreDtlCtrl', params);
         }
-        // if (col.binding === "billCnt") { // 영수건수 클릭
-        //   $scope._broadcast('billCntPopupCtrl', params);
-        // }
+        if (col.binding === "billCnt") { // 영수건수 클릭
+          $scope._broadcast('dayStoreBillCtrl', params);
+        }
         if (col.binding === "totDcAmt") { // 총할인 클릭
           $scope._broadcast('dayStoreDcCtrl', params);
         }
+
         // 결제수단
         for (var i = 0; i < payColList.length; i++) {
           if (col.binding === ("pay" + payColList[i].payCd)) {

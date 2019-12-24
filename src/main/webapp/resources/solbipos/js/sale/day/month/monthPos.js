@@ -61,6 +61,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
+
         s.itemFormatter = function (panel, r, c, cell) {
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
                 //align in center horizontally and vertically
@@ -124,7 +125,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
                     params.storeCd = $("#monthPosStoreCd").val();
-                    params.gubun = "monthPos";
+                    params.gubun = "month";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
                 }

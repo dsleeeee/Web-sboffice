@@ -20,6 +20,13 @@ public class DayPayInfoVO extends PageVO {
      */
     private String orgnGrpCd;
 
+    /** 팝업호출시 구분 */
+    private String gubun;
+
+    /** 년월 */
+    private String yearMonth;
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -89,4 +96,12 @@ public class DayPayInfoVO extends PageVO {
     public void setOrgnGrpCd(String orgnGrpCd) {
         this.orgnGrpCd = orgnGrpCd;
     }
+
+    public String getGubun() { return gubun; }
+
+    public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getYearMonth() { return yearMonth; }
+
+    public void setYearMonth(String yearMonth) { this.yearMonth = yearMonth; }
 }

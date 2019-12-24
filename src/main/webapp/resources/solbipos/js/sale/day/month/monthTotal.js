@@ -117,9 +117,22 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "yearMonth" || col.binding === "totDcAmt") {
+                if (col.binding === "yearMonth" || col.binding === "totDcAmt" || col.binding === "billCnt") {
                     var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
+                }
+
+                // 결제수단
+                for (var i = 0; i < payColList.length; i++) {
+                    if (col.binding === ("pay" + payColList[i].payCd)) {
+                        var item = s.rows[e.row].dataItem;
+
+                        // 값이 있으면 링크 효과
+                        if (nvl(item[("pay" + payColList[i].payCd)], '') !== '' && nvl(item[("pay" + payColList[i].payCd)], '') != "0") {
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }
                 }
             }
         });
@@ -130,26 +143,64 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
 
+                var selectedRow = s.rows[ht.row].dataItem;
+                var params      = {};
+                params.yearMonth = selectedRow.yearMonth.replace("-", "");
+                params.storeCd = $("#monthTotalStoreCd").val();
+                params.gubun = "month";
+
                 // 년월 클릭시 상세정보 조회
                 if ( col.binding === "yearMonth") {
-                    var selectedRow = s.rows[ht.row].dataItem;
-                    var params      = {};
-                    params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                    params.storeCd = $("#monthTotalStoreCd").val();
-                    params.gubun = "monthTotal";
-
                     $scope._broadcast('dayStoreDtlCtrl', params);
                 }
 
                 // 총할인 클릭시 상세정보 조회
                 if ( col.binding === "totDcAmt") {
-                    var selectedRow = s.rows[ht.row].dataItem;
-                    var params      = {};
-                    params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                    params.storeCd = $("#monthTotalStoreCd").val();
-                    params.gubun = "monthTotal";
-
                     $scope._broadcast('dayStoreDcCtrl', params);
+                }
+
+                // 영수건수 클릭시 상세정보 조회
+                if ( col.binding === "billCnt") {
+                    $scope._broadcast('dayStoreBillCtrl', params);
+                }
+
+                // 결제수단
+                for (var i = 0; i < payColList.length; i++) {
+                    if (col.binding === ("pay" + payColList[i].payCd)) {
+                        var callCtrl = '';
+
+                        // 값이 있으면 링크
+                        if (nvl(selectedRow[("pay" + payColList[i].payCd)], '') !== '' && nvl(selectedRow[("pay" + payColList[i].payCd)], '') != "0") {
+                            callCtrl = 'day'+payColList[i].payMethod.substr(0,1).toUpperCase() + payColList[i].payMethod.substr(1).toLowerCase() + 'Ctrl';
+                            // 포인트 이름이 안맞음(dayMembr->dayPoint)
+                            if(callCtrl == 'dayMembrCtrl') {
+                                callCtrl = 'dayPointCtrl';
+                            }
+                            // 사원카드 이름이 안맞음(dayEmp_Card->dayEmpCard)
+                            if(callCtrl == 'dayEmp_cardCtrl') {
+                                callCtrl = 'dayEmpCardCtrl';
+                            }
+                            $scope._broadcast(callCtrl, params);
+                            // alert(callCtrl);
+                            // sale/cmmSalePopup/dayPayInfo/
+                            // dayCard.jsp
+                            // dayCash.jsp
+                            // dayPayco.jsp
+                            // dayVpoint.jsp
+                            // dayVcharge.jsp
+                            // dayMpay.jsp
+                            // dayMcoupn.jsp
+                            // dayPoint.jsp
+                            // dayPrepaid.jsp
+                            // dayPostpaid.jsp
+                            // dayGift.jsp
+                            // dayFstmp.jsp
+                            // dayPartner.jsp
+                            // OK캐쉬백 -> 안만들어짐(dayOkcsb)
+                            // dayEmpCard.jsp
+                            // dayTemporary.jsp
+                        }
+                    }
                 }
             }
         });

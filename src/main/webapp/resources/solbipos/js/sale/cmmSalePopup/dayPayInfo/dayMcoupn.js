@@ -46,24 +46,27 @@ app.controller('dayMcoupnCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("dayMcoupnCtrl", function (event, data) {
-    $scope.storeCd  = data.storeCd;
-    $scope.saleDate = data.saleDate;
-
     $scope.wjDayMcoupnLayer.show(true);
-
-    $scope.searchDayMcoupnList();
-
+    $scope.searchDayMcoupnList(data);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
   // 모바일쿠폰 승인내역 리스트 조회
-  $scope.searchDayMcoupnList = function () {
+  $scope.searchDayMcoupnList = function (data) {
     // 파라미터
     var params       = {};
-    params.storeCd   = $scope.storeCd;
-    params.saleDate  = $scope.saleDate;
+    // 기간별매출 > 일자별 탭 > 일별종합 탭
+    if(data.gubun == "day") {
+      params.saleDate = data.saleDate;
+    }
+    // 기간별매출 > 월별 탭 > 월별종합 탭
+    if(data.gubun == "month") {
+      params.yearMonth = data.yearMonth;
+    }
+    params.storeCd  = data.storeCd;
+    params.gubun  = data.gubun;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/cmmSalePopup/dayPayInfo/dayMcoupn/list.sb", params);

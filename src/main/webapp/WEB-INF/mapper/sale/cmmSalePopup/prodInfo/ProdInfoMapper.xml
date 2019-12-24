@@ -55,14 +55,14 @@
             AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
             <choose>
                 <when test='gubun != null'>
-                    <!-- 기간별매출 > 일자별 탭 > 과면세별 탭 -->
-                    <if test='gubun == "dayTax"'>
+                    <!-- 기간별매출 > 일자별 탭 > 과면세별,포스별 탭 -->
+                    <if test='gubun == "day"'>
                         <![CDATA[
                             AND tssd.SALE_DATE = #{saleDate}
                         ]]>
                     </if>
                     <!-- 기간별매출 > 월별 탭 > 과면세별,포스별 탭 -->
-                    <if test='gubun == "monthTax" or gubun == "monthPos"'>
+                    <if test='gubun == "month"'>
                         <![CDATA[
                             AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
                         ]]>
@@ -70,7 +70,7 @@
                 </when>
             </choose>
             <if test='storeCds != null and storeCds != ""'>
-                AND tssh.STORE_CD IN
+                AND tssd.STORE_CD IN
                 <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
                     #{item}
                 </foreach>

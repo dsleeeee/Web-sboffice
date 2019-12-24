@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/dayPayInfo/dayMpay/"/>
 
-<wj-popup id="wjDayMpayLayer" control="wjDayMpayLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="wjDayMpayLayer" control="wjDayMpayLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div id="dayMpayLayer" class="wj-dialog wj-dialog-columns" ng-controller="dayMpayCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="dayMpay.dayMpayPay"/>
@@ -17,7 +17,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 340px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -28,8 +28,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="dayMpay.mpayNm"/>" binding="mpayNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayMpay.apprCnt"/>" binding="apprCnt" width="60" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayMpay.mpayNm"/>" binding="mpayNm" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayMpay.apprCnt"/>" binding="apprCnt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMpay.apprAmt"/>" binding="apprAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMpay.cancelCnt"/>" binding="cancelCnt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMpay.cancelAmt"/>" binding="cancelAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -42,4 +42,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMpay.js?ver=20190219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayMpay.js?ver=20191219" charset="utf-8"></script>

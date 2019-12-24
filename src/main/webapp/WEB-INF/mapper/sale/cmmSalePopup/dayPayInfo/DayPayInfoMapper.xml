@@ -20,8 +20,23 @@
         ,       SUM(DECODE(tsspc.SALE_YN, 'N', tsspc.APPR_AMT, 0)) AS CANCEL_AMT
         FROM    TB_SL_SALE_PAY_CARD tsspc
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspc.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspc.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspc.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -59,8 +74,23 @@
         ,       TB_CM_VAN_CMPNY tcvc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspc.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspc.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspc.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspc.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspc.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -94,8 +124,23 @@
         ,       SUM(DECODE(tsspp.SALE_YN, 'N', tsspp.APPR_AMT+tsspp.POINT_AMT, 0)) AS CANCEL_AMT
         FROM    TB_SL_SALE_PAY_PAYCO tsspp
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspp.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -131,8 +176,23 @@
         FROM 	TB_SL_SALE_PAY_VPOINT tsspv
         ,       TB_MS_STORE tms
         WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspv.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspv.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspv.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspv.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -168,8 +228,23 @@
         FROM 	TB_SL_SALE_PAY_VCHARGE tsspv
         ,       TB_MS_STORE tms
         WHERE   tsspv.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspv.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspv.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspv.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspv.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -202,8 +277,23 @@
         FROM    TB_SL_SALE_PAY_MPAY tsspm
         ,       TB_CM_NMCODE tcn
         WHERE   tsspm.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspm.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspm.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspm.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspm.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -245,8 +335,23 @@
         FROM 	TB_SL_SALE_PAY_MCOUPN tsspm
         ,       TB_MS_STORE tms
         WHERE   tsspm.HQ_OFFICE_CD  =   #{hqOfficeCd}
-        AND     tsspm.SALE_DATE     =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspm.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspm.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspm.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -283,8 +388,23 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspp.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -329,8 +449,23 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspp.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -375,8 +510,23 @@
         ,       TB_MB_MEMBER_CLASS tmmc
         ,       TB_CM_NMCODE tcn
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspp.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -427,8 +577,23 @@
         ,       TB_CM_NMCODE tcn
         ,       TB_MS_STORE tms
         WHERE   tsspgd.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspgd.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspgd.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspgd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspgd.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -478,8 +643,23 @@
         ,       TB_MS_FOOD_STAMP tmfs
         ,       TB_MS_STORE tms
         WHERE   tsspfd.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspfd.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspfd.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspfd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspfd.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -516,8 +696,23 @@
         FROM    TB_SL_SALE_PAY_PARTNER tsspp
         ,       TB_MS_PARTNER tmp
         WHERE   tsspp.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspp.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspp.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspp.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -553,8 +748,23 @@
         ,       SUM(tsspec.REMAIN_AMT) AS REMAIN_AMT
         FROM    TB_SL_SALE_PAY_EMP_CARD tsspec
         WHERE   tsspec.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspec.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspec.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspec.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspec.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -591,8 +801,23 @@
         FROM 	TB_SL_SALE_PAY_TEMPORARY tsspt
         ,       TB_CM_NMCODE tcn
         WHERE   tsspt.HQ_OFFICE_CD        =   #{hqOfficeCd}
-        AND     tsspt.SALE_DATE           =   #{saleDate}
         ]]>
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tsspt.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tsspt.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND tsspt.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

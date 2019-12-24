@@ -25,7 +25,7 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         prodInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            prodInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
         }
 
         // 매장 array 값 세팅

@@ -224,4 +224,27 @@ public class DayController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dayVO);
     }
+
+    /**
+     * 포스별 - 포스별매출조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김설아
+     * @since   2019. 12. 18.
+     */
+    @RequestMapping(value = "/day/getDayPosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayPosList(DayVO dayVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayPosList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
+    }
 }

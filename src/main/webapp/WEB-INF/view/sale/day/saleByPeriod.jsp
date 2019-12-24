@@ -59,7 +59,7 @@
 
     // 포스
     var posColList = [];
-    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <%--javascript에서 사용할 포스 json 데이터 생성--%>
     <c:forEach var="posCol" items="${posColList}">
         var posParam      = {};
         posParam.posNo     = "${posCol.posNo}";

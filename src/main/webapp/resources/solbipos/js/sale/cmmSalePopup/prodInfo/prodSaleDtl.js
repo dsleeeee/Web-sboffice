@@ -40,12 +40,12 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.searchProdSaleDtlList = function(data){
         var params = {};
-        // 기간별매출 > 일자별 탭 > 과면세별 탭
-        if(data.gubun == "dayTax") {
+        // 기간별매출 > 일자별 탭 > 과면세별,포스별 탭
+        if(data.gubun == "day") {
             params.saleDate = data.saleDate;
         }
         // 기간별매출 > 월별 탭 > 과면세별,포스별 탭
-        if(data.gubun == "monthTax"|| data.gubun == "monthPos") {
+        if(data.gubun == "month") {
             params.yearMonth = data.yearMonth;
         }
         params.storeCds  = data.storeCd;

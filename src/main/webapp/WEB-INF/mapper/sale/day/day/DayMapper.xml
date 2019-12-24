@@ -45,7 +45,7 @@
         TABLE    : TB_MS_POS
         COMMENTS : [매장]포스 정보
     -->
-    <select id="getPosColList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getPosColList"  parameterType="dayVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getPosColList */
         SELECT
         tmp.POS_NO,
@@ -218,13 +218,13 @@
             <choose>
                 <when test='gubun != null'>
                     <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
-                    <if test='gubun == "dayTotal"'>
+                    <if test='gubun == "day"'>
                         <![CDATA[
                             AND SALE_DATE = #{saleDate}
                         ]]>
                     </if>
                     <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
-                    <if test='gubun == "monthTotal"'>
+                    <if test='gubun == "month"'>
                         <![CDATA[
                             AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
                         ]]>
@@ -240,6 +240,7 @@
         ) tssh
         WHERE 1=1
         GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
+        ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
     </select>
 
 
@@ -282,13 +283,13 @@
                 <choose>
                     <when test='gubun != null'>
                         <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
-                        <if test='gubun == "dayTotal"'>
+                        <if test='gubun == "day"'>
                             <![CDATA[
                                 AND SALE_DATE = #{saleDate}
                             ]]>
                         </if>
                         <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
-                        <if test='gubun == "monthTotal"'>
+                        <if test='gubun == "month"'>
                             <![CDATA[
                                 AND SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
                             ]]>
@@ -311,6 +312,7 @@
             GROUP BY HQ_OFFICE_CD, STORE_CD
         ) tsshd
         WHERE 1=1
+        ORDER BY HQ_OFFICE_CD, STORE_CD
     </select>
 
 
@@ -487,6 +489,98 @@
 
 
         ]]>
+    </select>
+
+
+    <!-- 포스별 - 포스별매출조회-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL
+        COMMENTS : [매출]상세
+    -->
+    <select id="getDayPosList"  parameterType="DayVO" resultType="DefaultMap">
+        /* DayMapper.getDayPosList */
+        SELECT
+        TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        <foreach collection="arrPosCol" item="item" separator="+">
+            NVL(POS${item}_SALE_AMT, 0)
+        </foreach> AS TOT_SALE_AMT,
+        <foreach collection="arrPosCol" item="item" separator="+">
+            NVL(POS${item}_DC_AMT, 0)
+        </foreach> AS TOT_DC_AMT,
+        <foreach collection="arrPosCol" item="item" separator="+">
+            NVL(POS${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrPosCol" item="item" separator="+">
+            NVL(POS${item}_SALE_QTY, 0)
+        </foreach> AS TOT_SALE_QTY,
+        <foreach collection="arrPosCol" item="item" separator=",">
+            NVL(POS${item}_SALE_AMT,0) AS POS${item}_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrPosCol" item="item" separator=",">
+            NVL(POS${item}_DC_AMT,0) AS POS${item}_DC_AMT
+        </foreach> ,
+        <foreach collection="arrPosCol" item="item" separator=",">
+            NVL(POS${item}_REAL_SALE_AMT,0) AS POS${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrPosCol" item="item" separator=",">
+            NVL(POS${item}_SALE_QTY,0) AS POS${item}_SALE_QTY
+        </foreach>
+        --         SUM(POS01_SALE_AMT) AS POS01_SALE_AMT,
+        --         SUM(POS01_DC_AMT) AS POS01_DC_AMT,
+        --         SUM(POS01_REAL_SALE_AMT) AS POS01_REAL_SALE_AMT,
+        --         SUM(POS01_SALE_QTY) AS POS01_SALE_QTY
+        FROM
+        (
+            SELECT
+            SALE_DATE,
+            <foreach collection="arrPosCol" item="item" separator=",">
+                SUM(POS${item}_SALE_AMT) AS POS${item}_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrPosCol" item="item" separator=",">
+                SUM(POS${item}_DC_AMT) AS POS${item}_DC_AMT
+            </foreach> ,
+            <foreach collection="arrPosCol" item="item" separator=",">
+                SUM(POS${item}_REAL_SALE_AMT) AS POS${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrPosCol" item="item" separator=",">
+                SUM(POS${item}_SALE_QTY) AS POS${item}_SALE_QTY
+            </foreach>
+            FROM
+            (
+                SELECT
+                tssd.SALE_DATE,
+                tssd.SALE_AMT,
+                tssd.DC_AMT,
+                tssd.REAL_SALE_AMT,
+                tssd.SALE_QTY,
+                tssd.POS_NO
+                FROM TB_SL_SALE_DTL tssd
+                WHERE 1=1
+                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                    AND tssd.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+            )
+            PIVOT
+            (
+                SUM(SALE_AMT) AS SALE_AMT,
+                SUM(DC_AMT) AS DC_AMT,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(SALE_QTY) AS SALE_QTY
+                FOR POS_NO
+                IN (${pivotPosCol})
+                /*   IN ('01' AS POS01,
+                '02' AS POS02,
+                '03' AS POS03)*/
+            )
+            GROUP BY SALE_DATE
+        )
+        ORDER BY SALE_DATE
     </select>
 
 </mapper>

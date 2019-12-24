@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayBillInfoMapper.xml
+    매출 공통팝업 > 매장별 영수건수 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2019.12.18     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.dayBillInfo.service.impl.DayBillInfoMapper">
+
+    <!-- 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회-->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        COMMENTS : [매출]헤더
+    -->
+    <select id="getDayBillInfoList"  parameterType="DayBillInfoVO" resultType="DefaultMap">
+        /* DayBillInfoMapper.getDayBillInfoList */
+        SELECT
+        tssh.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssh.STORE_CD) AS STORE_NM,
+        SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
+        COUNT(tssh.BILL_NO) AS REAL_SALE_CNT,
+        SUM(CASE WHEN SALE_FG = '1' THEN 1 ELSE 0 END) AS SALE_CNT,
+        SUM(CASE WHEN SALE_FG = '-1' THEN -1 ELSE 0 END) AS RETURN_SALE_CNT,
+        ROUND(SUM(tssh.REAL_SALE_AMT) / COUNT(tssh.BILL_NO)) AS BILL_UPRC,
+        SUM(tssh.TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+        ROUND(SUM(tssh.REAL_SALE_AMT) / SUM(tssh.TOT_GUEST_CNT)) AS GUEST_UPRC
+        FROM TB_SL_SALE_HDR tssh
+        WHERE 1=1
+        AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+        <choose>
+            <when test='gubun != null'>
+                <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                <if test='gubun == "day"'>
+                    <![CDATA[
+                        AND tssh.SALE_DATE = #{saleDate}
+                    ]]>
+                </if>
+                <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                <if test='gubun == "month"'>
+                    <![CDATA[
+                        AND tssh.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssh.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
+        ORDER BY tssh.HQ_OFFICE_CD, tssh.STORE_CD
+    </select>
+
+</mapper>
