@@ -199,6 +199,8 @@
                     MOD_ID = #{modId}
                 WHERE
                     EMP_NO = #{empNo}
+                   AND
+                    USER_ID = #{userId}
             </otherwise>
         </choose>
 
