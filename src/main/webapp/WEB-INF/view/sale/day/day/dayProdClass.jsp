@@ -5,7 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/sale/day/day/dayTime/"/>
+<c:set var="baseUrl" value="/sale/day/day/dayProdclass/"/>
 
 <div id="dayProdClassView" name="dayView" class="subCon" style="display: none;" ng-controller="dayProdClassCtrl">
     <div class="searchBar flddUnfld">
