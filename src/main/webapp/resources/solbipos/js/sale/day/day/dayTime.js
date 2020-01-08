@@ -83,7 +83,7 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
         s.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {z
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
                 //align in center horizontally and vertically
                 panel.rows[r].allowMerging    = true;
                 panel.columns[c].allowMerging = true;
