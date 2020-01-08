@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/month/month"/>
 
 <div class="con" id="monthView" name="monthView">
@@ -34,7 +35,7 @@
                 <a id="monthCornerTab" href="#" ng-click="monthCornerShow()"><s:message code="month.corner"/></a>
             </li>
             <%-- 외식테이블 탭 --%>
-            <li>
+            <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>
                 <a id="monthTableTab" href="#" ng-click="monthTableShow()"><s:message code="month.table"/></a>
             </li>
             <%-- 포스별 탭 --%>
@@ -46,7 +47,7 @@
 </div>
 
 <script type="text/javascript">
-
+    var orgnFg = "${orgnFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/month/month.js?ver=20191209" charset="utf-8"></script>

@@ -58,6 +58,20 @@ public class SaleByPeriodController {
         model.addAttribute("dcCol", dcCol);
 
 
+        // 외식테이블 조회
+        List<DefaultMap<String>> tableColList = dayService.getTableColList(dayVO, sessionInfoVO);
+
+        // 외식테이블구분 코드를 , 로 연결하는 문자열 생성
+        String tableCol = "";
+        for(int i=0; i < tableColList.size(); i++) {
+            tableCol += (tableCol.equals("") ? "" : ",") + tableColList.get(i).getStr("tblCd");
+        }
+        model.addAttribute("tableColList", tableColList);
+        model.addAttribute("tableCol", tableCol);
+//        System.out.println("tableColList : "+tableColList);
+//        System.out.println("tableCol : "+tableCol);
+
+
         // 포스 조회
         List<DefaultMap<String>> posColList = dayService.getPosColList(dayVO, sessionInfoVO);
 

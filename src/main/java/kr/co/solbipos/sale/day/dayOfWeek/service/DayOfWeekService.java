@@ -34,6 +34,9 @@ public interface DayOfWeekService {
     /** 시간대별 - 시간대별매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTimeList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
+    /** 외식테이블별 - 외식테이블별매출조회 */
+    List<DefaultMap<Object>> getDayOfWeekTableList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
+
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getDayOfWeekPosList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 }

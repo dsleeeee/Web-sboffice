@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/day/day"/>
 
 <div class="con" id="dayView" name="dayView">
@@ -33,6 +34,10 @@
       <li>
         <a id="dayCornerTab" href="#" ng-click="cornerShow()"><s:message code="day.corner"/></a>
       </li>
+      <%-- 외식테이블 탭 --%>
+      <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>>
+        <a id="dayTableTab" href="#" ng-click="tableShow()"><s:message code="day.table"/></a>
+      </li>
       <%-- 포스별 탭 --%>
       <li>
         <a id="dayPosTab" href="#" ng-click="posShow()"><s:message code="day.pos"/></a>
@@ -45,7 +50,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/day.js?ver=20191218.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/day.js?ver=20200108" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일별종합 레이어 --%>
@@ -68,8 +73,26 @@
 
 <%-- 시간대별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayTime.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품분류별 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayProdClass.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 코너별 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayCorner.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 외식테이블 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayTable.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 포스별 레이어 --%>

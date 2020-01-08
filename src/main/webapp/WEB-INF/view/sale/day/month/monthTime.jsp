@@ -63,7 +63,7 @@
                     <div class="sb-select fl w200px">
                         <wj-combo-box
                             id="srchSaleTime"
-                            ng-model="saleTimeMonthTime"
+                            ng-model="monthSaleTime"
                             items-source="_getComboData('saleTimeCombo')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -134,4 +134,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20191209.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117" charset="utf-8"></script>

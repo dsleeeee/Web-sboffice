@@ -145,7 +145,7 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayofweekTimeStoreCd").val();
-        params.saleTime = $scope.saleTimeDayofweekTime;
+        params.saleTime = $scope.dayOfWeekSaleTime;
 
         $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekTimeList.sb", params, function() {}, false);
 
@@ -155,19 +155,19 @@ app.controller('dayOfWeekTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         var start = 0;
         var end = 0;
 
-        if($scope.saleTimeDayofweekTime === "0") { //심야
+        if($scope.dayOfWeekSaleTime === "0") { //심야
             start = 5;
             end = 25;
-        } else if($scope.saleTimeDayofweekTime  === "1") { //아침
+        } else if($scope.dayOfWeekSaleTime  === "1") { //아침
             start = 26;
             end = 37;
-        } else if($scope.saleTimeDayofweekTime  === "2") { //점심
+        } else if($scope.dayOfWeekSaleTime  === "2") { //점심
             start = 38;
             end = 52;
-        } else if($scope.saleTimeDayofweekTime  === "3") { //저녁
+        } else if($scope.dayOfWeekSaleTime  === "3") { //저녁
             start = 53;
             end = 76;
-        } else if($scope.saleTimeDayofweekTime === "") { //전체
+        } else if($scope.dayOfWeekSaleTime === "") { //전체
             start = 77;
             end = 88;
         }

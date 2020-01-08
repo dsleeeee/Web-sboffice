@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : monthTable.js
- * 설  명 : 기간별매출 > 월별탭 > 외식테이블 JavaScript
+ * 파일명 : dayProdClass.js
+ * 설  명 : 기간별매출 > 일자별탭 > 상품분류별 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2020.01.08     김설아      1.0
+ * 2019.12.09     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -14,8 +14,8 @@
 var app = agrid.getApp();
 
 /**
- *  외식테이블별 매출 조회 그리드 생성
+ *  상품분류별 매출 조회 그리드 생성
  */
-app.controller('monthTableCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
 }]);

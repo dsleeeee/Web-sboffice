@@ -1,6 +1,7 @@
 package kr.co.solbipos.sale.day.dayOfWeek.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 
 /**
@@ -51,6 +52,13 @@ public class DayOfWeekVO extends PageVO {
     /** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
     private String pivotDcCol;
 
+    /** 외식테이블컬럼 */
+    private String tableCol;
+    /** 외식테이블구분 array */
+    private String arrTableCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 외식테이블구분 컬럼 문자열 */
+    private String pivotTableCol;
+
     /** 포스컬럼 */
     private String posCol;
     /** 포스구분 array */
@@ -63,6 +71,9 @@ public class DayOfWeekVO extends PageVO {
     private String sQuery2;
     /** 매출 발생 시간대 */
     private SaleTimeFg saleTime;
+
+    /** 외식테이블 코드 */
+    private String tableCd;
 
     public String getMembrOrgnCd() {
         return membrOrgnCd;
@@ -126,6 +137,22 @@ public class DayOfWeekVO extends PageVO {
 
     public void setPivotDcCol(String pivotDcCol) { this.pivotDcCol = pivotDcCol; }
 
+    public String getTableCol() { return tableCol; }
+
+    public void setTableCol(String tableCol) { this.tableCol = tableCol; }
+
+    public String[] getArrTableCol() {
+        return arrTableCol;
+    }
+
+    public void setArrTableCol(String[] arrTableCol) {
+        this.arrTableCol = arrTableCol;
+    }
+
+    public String getPivotTableCol() { return pivotTableCol; }
+
+    public void setPivotTableCol(String pivotTableCol) { this.pivotTableCol = pivotTableCol; }
+
     public String getPosCol() { return posCol; }
 
     public void setPosCol(String posCol) { this.posCol = posCol; }
@@ -158,11 +185,17 @@ public class DayOfWeekVO extends PageVO {
         this.sQuery2 = sQuery2;
     }
 
-    public SaleTimeFg getSaleTime() {
-        return saleTime;
-    }
+    public SaleTimeFg getSaleTime() { return saleTime; }
 
     public void setSaleTime(SaleTimeFg saleTime) {
         this.saleTime = saleTime;
+    }
+
+    public String getTableCd() {
+        return tableCd;
+    }
+
+    public void setTableCd(String tableCd) {
+        this.tableCd = tableCd;
     }
 }

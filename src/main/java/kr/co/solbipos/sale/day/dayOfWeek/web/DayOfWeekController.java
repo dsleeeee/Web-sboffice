@@ -68,7 +68,7 @@ public class DayOfWeekController {
     }
 
     /**
-     * 할인구별별탭 - 할인구분별매출조회
+     * 할인구별별탭 - 할인구분별 매출조회
      *
      * @param dayOfWeekVO
      * @param request
@@ -89,7 +89,7 @@ public class DayOfWeekController {
     }
 
     /**
-     * 과면세별탭 - 과면세별매출조회
+     * 과면세별탭 - 과면세별 매출조회
      *
      * @param dayOfWeekVO
      * @param request
@@ -110,7 +110,7 @@ public class DayOfWeekController {
     }
 
     /**
-     * 시간대별 - 시간대별매출조회
+     * 시간대별 - 시간대별 매출조회
      *
      * @param dayOfWeekVO
      * @param request
@@ -131,7 +131,28 @@ public class DayOfWeekController {
     }
 
     /**
-     * 포스별 - 포스별매출조회
+     * 외식테이블 - 외식테이블별 매출조회
+     *
+     * @param dayOfWeekVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/dayOfWeek/getDayOfWeekTableList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayOfWeekTableList(DayOfWeekVO dayOfWeekVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayOfWeekService.getDayOfWeekTableList(dayOfWeekVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayOfWeekVO);
+    }
+
+    /**
+     * 포스별 - 포스별 매출조회
      *
      * @param dayOfWeekVO
      * @param request

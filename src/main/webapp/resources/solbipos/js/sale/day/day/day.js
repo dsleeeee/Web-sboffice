@@ -9,8 +9,9 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayDcView").hide();
     $("#dayTaxView").hide();
     $("#dayTimeView").hide();
-    // $("#dayProdClassView").hide();
-    // $("#dayCornerView").hide();
+    $("#dayProdClassView").hide();
+    $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
   };
 
@@ -23,6 +24,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").show();
@@ -31,6 +33,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").hide();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -47,6 +50,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").hide();
@@ -55,6 +59,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").hide();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -71,6 +76,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").hide();
@@ -79,6 +85,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").hide();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -95,6 +102,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").addClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").hide();
@@ -103,6 +111,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").show();
     $("#dayProdClassView").hide();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -119,6 +128,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").addClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").hide();
@@ -127,6 +137,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").show();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -143,6 +154,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").addClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").removeClass("on");
 
     $("#dayTotalView").hide();
@@ -151,6 +163,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").hide();
     $("#dayCornerView").show();
+    $("#dayTableView").hide();
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
@@ -158,6 +171,30 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     scope.flex.refresh();
   };
 
+  // 외식테이블 탭 보이기
+  $scope.tableShow = function () {
+     $("#dayTotalTab").removeClass("on");
+     $("#dayDcTab").removeClass("on");
+     $("#dayTaxTab").removeClass("on");
+     $("#dayTimeTab").removeClass("on");
+     $("#dayProdClassTab").removeClass("on");
+     $("#dayCornerTab").removeClass("on");
+     $("#dayTableTab").addClass("on");
+     $("#dayPosTab").removeClass("on");
+
+     $("#dayTotalView").hide();
+     $("#dayDcView").hide();
+     $("#dayTaxView").hide();
+     $("#dayTimeView").hide();
+     $("#dayProdClassView").hide();
+     $("#dayCornerView").hide();
+     $("#dayTableView").show();
+     $("#dayPosView").hide();
+
+     // angular 그리드 hide 시 깨지므로 refresh()
+     var scope = agrid.getScope("dayTableCtrl");
+     scope.flex.refresh();
+  };
 
   // 포스별 탭 보이기
   $scope.posShow = function () {
@@ -167,6 +204,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeTab").removeClass("on");
     $("#dayProdClassTab").removeClass("on");
     $("#dayCornerTab").removeClass("on");
+    $("#dayTableTab").removeClass("on");
     $("#dayPosTab").addClass("on");
 
     $("#dayTotalView").hide();
@@ -175,6 +213,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayTimeView").hide();
     $("#dayProdClassView").hide();
     $("#dayCornerView").hide();
+    $("#dayTableView").hide();
     $("#dayPosView").show();
 
     // angular 그리드 hide 시 깨지므로 refresh()

@@ -17,8 +17,12 @@ public interface DayMapper {
     /** 일자별 - 할인 컬럼 리스트 조회 */
     List<DefaultMap<String>> getDcColList(DayVO dayVO);
 
+    /** 외식테이블 탭 - 외식테이블 컬럼 리스트 조회 */
+    List<DefaultMap<String>> getTableColList(DayVO dayVO);
+
     /** 포스별 탭 - 포스 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPosColList(DayVO dayVO);
+
 
     /** 일자별 - 일별종합 리스트 조회 */
     List<DefaultMap<String>> getDayTotalList(DayVO dayVO);

@@ -57,12 +57,27 @@
     var arrDcCol = dcCol.split(',');
 
 
+    // 테이블
+    var tableColList = [];
+    <%--javascript에서 사용할 포스 json 데이터 생성--%>
+    <c:forEach var="tableCol" items="${tableColList}">
+        var tableParam      = {};
+        tableParam.tblCd     = "${tableCol.tblCd}";
+        tableParam.tblNm     = "${tableCol.tblNm}";
+        tableColList.push(tableParam);
+    </c:forEach>
+
+    var tableCol    = '${tableCol}';
+    var arrTableCol = tableCol.split(',');
+
+
     // 포스
     var posColList = [];
     <%--javascript에서 사용할 포스 json 데이터 생성--%>
     <c:forEach var="posCol" items="${posColList}">
         var posParam      = {};
         posParam.posNo     = "${posCol.posNo}";
+        posParam.posNm     = "${posCol.posNm}";
         posColList.push(posParam);
     </c:forEach>
 

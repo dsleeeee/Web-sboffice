@@ -39,6 +39,17 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getDcColList(dayVO);
     }
 
+    /** 외식테이블 탭 - 외식테이블 컬럼 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getTableColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return dayMapper.getTableColList(dayVO);
+    }
+
     /** 포스별 탭 - 포스 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPosColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
@@ -46,6 +57,7 @@ public class DayServiceImpl implements DayService {
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
+
         return dayMapper.getPosColList(dayVO);
     }
 

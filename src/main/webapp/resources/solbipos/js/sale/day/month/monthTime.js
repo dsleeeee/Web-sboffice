@@ -151,7 +151,7 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthTimeStoreCd").val();
-        params.saleTime = $scope.saleTimeMonthTime;
+        params.saleTime = $scope.monthSaleTime;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthTimeList.sb", params, function() {}, false);
 
@@ -161,19 +161,19 @@ app.controller('monthTimeCtrl', ['$scope', '$http', '$timeout', function ($scope
         var start = 0;
         var end = 0;
 
-        if($scope.saleTimeDayofweekTime === "0") { //심야
+        if($scope.monthSaleTime === "0") { //심야
             start = 5;
             end = 25;
-        } else if($scope.saleTimeDayofweekTime  === "1") { //아침
+        } else if($scope.monthSaleTime  === "1") { //아침
             start = 26;
             end = 37;
-        } else if($scope.saleTimeDayofweekTime  === "2") { //점심
+        } else if($scope.monthSaleTime  === "2") { //점심
             start = 38;
             end = 52;
-        } else if($scope.saleTimeDayofweekTime  === "3") { //저녁
+        } else if($scope.monthSaleTime  === "3") { //저녁
             start = 53;
             end = 76;
-        } else if($scope.saleTimeDayofweekTime === "") { //전체
+        } else if($scope.monthSaleTime === "") { //전체
             start = 77;
             end = 88;
         }

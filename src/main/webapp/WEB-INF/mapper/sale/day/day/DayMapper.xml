@@ -40,6 +40,27 @@
         ]]>
     </select>
 
+    <!-- 외식테이블 탭 - 외식테이블 컬럼 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_TABLE
+        COMMENTS : [매장]테이블
+    -->
+    <select id="getTableColList"  parameterType="dayVO" resultType="DefaultMap">
+        /* DayOfWeekMapper.getTableColList */
+        SELECT
+        tmt.STORE_CD,
+        tmt.TBL_CD,
+        tmt.TBL_NM
+        FROM TB_MS_TABLE tmt
+        WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tmt.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        ORDER BY tmt.STORE_CD, tmt.TBL_CD
+    </select>
+
     <!-- 포스별 탭 - 포스 컬럼 리스트 조회-->
     <!--
         TABLE    : TB_MS_POS

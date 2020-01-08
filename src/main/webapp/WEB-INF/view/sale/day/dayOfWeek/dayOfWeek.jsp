@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="baseUrl" value="/sale/day/dayOfWeek/dayOfWeek"/>
 
 <div class="con" id="dayOfWeekView" name="dayOfWeekView">
@@ -34,7 +35,7 @@
                 <a id="dayOfWeekCornerTab" href="#" ng-click="dayOfWeekCornerShow()"><s:message code="dayofweek.corner"/></a>
             </li>
             <%-- 외식테이블 탭 --%>
-            <li>
+            <li <c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if> >
                 <a id="dayOfWeekTableTab" href="#" ng-click="dayOfWeekTableShow()"><s:message code="dayofweek.table"/></a>
             </li>
             <%-- 포스별 탭 --%>
@@ -46,7 +47,7 @@
 </div>
 
 <script type="text/javascript">
-
+    var orgnFg = "${orgnFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeek.js?ver=20191119.09" charset="utf-8"></script>

@@ -292,6 +292,86 @@
         ORDER BY tssh.YOIL
     </select>
 
+    <!-- 외식테이블별 - 외식테이블별매출조회-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL
+        COMMENTS : [매출]상세
+    -->
+    <select id="getDayOfWeekTableList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+        /* DayOfWeekMapper.getDayOfWeekTableList */
+        SELECT
+        YOIL,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_TBL_CNT, 0)
+        </foreach> AS TOT_TBL_CNT,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_GUEST_CNT, 0)
+        </foreach> AS TOT_GUEST_CNT,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_REAL_SALE_AMT,0) AS TBL${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_TBL_CNT,0) AS TBL${item}_TBL_CNT
+        </foreach> ,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_GUEST_CNT,0) AS TBL${item}_GUEST_CNT
+        </foreach>
+--         NVL(TBL000_REAL_SALE_AMT,0) AS TBL000_REAL_SALE_AMT,
+--         NVL(TBL000_TBL_CNT,0) AS TBL000_TBL_CNT,
+--         NVL(TBL000_TOT_GUEST_CNT,0) AS TBL000_TOT_GUEST_CNT
+        FROM
+        (
+            SELECT
+            YOIL,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_REAL_SALE_AMT) AS TBL${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_TBL_CNT) AS TBL${item}_TBL_CNT
+            </foreach> ,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_GUEST_CNT) AS TBL${item}_GUEST_CNT
+            </foreach>
+--             SUM(TBL000_REAL_SALE_AMT) AS TBL000_REAL_SALE_AMT,
+--             SUM(TBL000_TBL_CNT) AS TBL000_TBL_CNT,
+--             SUM(TBL000_TOT_GUEST_CNT) AS TBL000_TOT_GUEST_CNT
+            FROM
+            (
+                SELECT
+                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+                tssh.REAL_SALE_AMT,
+                1 AS TBL_CNT,
+                tssh.TOT_GUEST_CNT,
+                tssh.TBL_CD
+                FROM TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tssh.STORE_CD = #{storeCd}
+                AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='tableCd != null and tableCd != ""'>
+                    <![CDATA[
+                        AND tssh.TBL_CD = #{tableCd}
+                    ]]>
+                </if>
+            )
+            PIVOT
+            (
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TBL_CNT) AS TBL_CNT,
+                SUM(TOT_GUEST_CNT) AS GUEST_CNT
+                FOR TBL_CD
+                IN (${pivotTableCol})
+                /*IN ('000' AS TBL000,
+                '001' AS TBL001)*/
+            )
+            GROUP BY YOIL
+        )
+        ORDER BY YOIL
+    </select>
+
     <!-- 포스별 - 포스별매출조회-->
     <!--
         TABLE    : TB_SL_SALE_DTL

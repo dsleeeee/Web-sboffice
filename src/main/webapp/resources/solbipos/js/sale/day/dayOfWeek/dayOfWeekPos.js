@@ -49,10 +49,10 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
-            dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = "POS" + arrPosCol[i];
-            dataItem['pos' + arrPosCol[i] + 'DcAmt'] = "POS" + arrPosCol[i];
-            dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = "POS" + arrPosCol[i];
-            dataItem['pos' + arrPosCol[i] + 'SaleQty'] = "POS" + arrPosCol[i];
+            dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].posNm;
+            dataItem['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].posNm;
+            dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].posNm;
+            dataItem['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].posNm;
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
