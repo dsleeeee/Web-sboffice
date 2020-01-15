@@ -41,7 +41,7 @@ public class DayBillInfoController {
      * @param model
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String dayBillInfoView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String DayBillInfoView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "sale/cmmSalePopup/dayBillInfo/dayBillInfo";
     }
 
@@ -56,14 +56,14 @@ public class DayBillInfoController {
      * @author  김설아
      * @since   2019. 12. 18.
      */
-    @RequestMapping(value = "/dayBillInfo/getDayBillInfoList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dayBillInfo/getDayStoreBillList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDayBillInfoList(DayBillInfoVO dayBillInfoVO, HttpServletRequest request,
+    public Result getDayStoreBillList(DayBillInfoVO dayBillInfoVO, HttpServletRequest request,
                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = dayBillInfoService.getDayBillInfoList(dayBillInfoVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = dayBillInfoService.getDayStoreBillList(dayBillInfoVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, dayBillInfoVO);
     }

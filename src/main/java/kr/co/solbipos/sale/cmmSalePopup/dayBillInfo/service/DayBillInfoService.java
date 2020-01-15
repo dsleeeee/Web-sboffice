@@ -23,5 +23,5 @@ import java.util.List;
 public interface DayBillInfoService {
 
     /** 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회 */
-    List<DefaultMap<Object>> getDayBillInfoList(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getDayStoreBillList(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO);
 }

@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : dayStoreBill.js
- * 설  명 : 매장별 영수건수 팝업 JavaScript
+ * 설  명 : 매출 공통팝업 > 매장별 영수건수 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -50,7 +50,7 @@ app.controller('dayStoreBillCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.storeCds  = data.storeCd;
         params.gubun  = data.gubun;
 
-        $scope._inquiryMain("/sale/cmmSalePopup/dayBillInfo/dayBillInfo/getDayBillInfoList.sb", params, function() {}, false);
+        $scope._inquiryMain("/sale/cmmSalePopup/dayBillInfo/dayBillInfo/getDayStoreBillList.sb", params, function() {}, false);
     };
 
 }]);

@@ -42,7 +42,7 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
 
     /** 매장별 영수건수 팝업 - 매장별 영수건수 리스트 조회 */
     @Override
-    public List<DefaultMap<Object>> getDayBillInfoList(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getDayStoreBillList(DayBillInfoVO dayBillInfoVO, SessionInfoVO sessionInfoVO) {
 
         dayBillInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
@@ -53,6 +53,6 @@ public class DayBillInfoServiceImpl implements DayBillInfoService {
         String[] storeCds = dayBillInfoVO.getStoreCds().split(",");
         dayBillInfoVO.setStoreCdList(storeCds);
 
-        return dayBillInfoMapper.getDayBillInfoList(dayBillInfoVO);
+        return dayBillInfoMapper.getDayStoreBillList(dayBillInfoVO);
     }
 }

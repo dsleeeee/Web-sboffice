@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleInfoMapper.xml
+    매출 공통팝업 > 매출 상세내역 (매출) 팝업
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.01.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.cmmSalePopup.saleInfo.service.impl.SaleInfoMapper">
+
+    <!-- 매장정보,매출종합내역,결제내역,회원정보 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
+        COMMENTS : [매출]헤더 와 [매출]헤더_결제
+    -->
+    <select id="getSaleDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+        /* SaleInfoMapper.getSaleDtlList */
+        SELECT
+        tssh.STORE_CD,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND STORE_CD = tssh.STORE_CD) AS STORE_NM,
+        TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tssh.POS_NO,
+        tssh.BILL_NO,
+        NVL(tssh.TOT_SALE_AMT, 0) AS TOT_SALE_AMT,
+        NVL(tssh.TOT_DC_AMT, 0) AS TOT_DC_AMT,
+        NVL(tssh.REAL_SALE_AMT, 0) AS REAL_SALE_AMT,
+        NVL(tssh.NET_SALE_AMT, 0) AS NET_SALE_AMT,
+        NVL(tssh.NO_TAX_SALE_AMT, 0) AS NO_TAX_SALE_AMT,
+        NVL(tssh.TAX_SALE_AMT, 0) AS TAX_SALE_AMT,
+        NVL(tssh.VAT_AMT, 0) AS VAT_AMT,
+        NVL(tssh.TOT_TIP_AMT, 0) AS TOT_TIP_AMT,
+        <foreach collection="arrPayCol" item="item" separator=",">
+            NVL(tsshp.PAY${item}, 0) AS PAY${item}
+        </foreach> ,
+        tsshm.MEMBR_NO,
+        tsshm.MEMBR_NM,
+        tsshm.MEMBR_CARD_NO,
+        NVL(tsshm.SALE_SAVE_POINT, 0) AS SALE_SAVE_POINT
+        FROM TB_SL_SALE_HDR tssh,
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            STORE_CD,
+            SALE_DATE,
+            POS_NO,
+            BILL_NO,
+            <foreach collection="arrPayCol" item="item" separator=",">
+                PAY${item} AS PAY${item}
+            </foreach>
+            FROM
+            (
+                SELECT
+                HQ_OFFICE_CD,
+                HQ_BRAND_CD,
+                STORE_CD,
+                SALE_DATE,
+                POS_NO,
+                BILL_NO,
+                PAY_CD,
+                PAY_AMT
+                FROM TB_SL_SALE_HDR_PAY
+            )
+            PIVOT
+            (
+                SUM(PAY_AMT)
+                FOR PAY_CD
+                IN (${pivotPayCol})
+            )
+        ) tsshp,
+        TB_SL_SALE_HDR_MEMBR tsshm
+        WHERE 1=1
+        AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tssh.HQ_BRAND_CD = #{hqBrandCd}
+        AND tssh.STORE_CD = #{storeCd}
+        AND tssh.SALE_DATE = #{saleDate}
+        AND tssh.POS_NO = #{posNo}
+        AND tssh.BILL_NO = #{billNo}
+        AND tsshp.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND tsshp.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND tsshp.STORE_CD (+)= tssh.STORE_CD
+        AND tsshp.SALE_DATE (+)= tssh.SALE_DATE
+        AND tsshp.POS_NO (+)= tssh.POS_NO
+        AND tsshp.BILL_NO (+)= tssh.BILL_NO
+        AND tsshm.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND tsshm.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND tsshm.STORE_CD (+)= tssh.STORE_CD
+        AND tsshm.SALE_DATE (+)= tssh.SALE_DATE
+        AND tsshm.POS_NO (+)= tssh.POS_NO
+        AND tsshm.BILL_NO (+)= tssh.BILL_NO
+        ORDER BY tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tssh.STORE_CD, tssh.SALE_DATE, tssh.POS_NO, tssh.BILL_NO
+    </select>
+
+    <!-- 신용카드 결재내역 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD, TB_LG_CARD_APPR
+        COMMENTS : [매출]결제_신용카드, [로그-POS]카드승인
+    -->
+    <select id="getSaleCardDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+        /* SaleInfoMapper.getSaleCardDtlList */
+        SELECT
+        (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = tsspc.STORE_CD AND CORNR_CD = tsspc.CORNR_CD) AS CORNR_NM,
+        tlca.APPR_FG,
+        tlca.APPR_PROC_FG,
+        SUBSTR(tlca.CARD_NO,0,4)||'-'||SUBSTR(tlca.CARD_NO,5,4)||'-'||SUBSTR(tlca.CARD_NO,9,4) ||'-'||SUBSTR(tlca.CARD_NO,13,4)AS CARD_NO,
+        --유효기간
+        tlca.INST_CNT,
+        tlca.APPR_AMT,
+        TO_CHAR(TO_DATE(tlca.APPR_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT,
+        tlca.APPR_NO,
+        (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tlca.VAN_CD AND VAN_FG = '01') AS VAN_NM,
+        tlca.ISSUE_NM,
+        tlca.ACQUIRE_NM,
+        tlca.ORG_APPR_DT,
+        tlca.ORG_APPR_NO
+        FROM TB_SL_SALE_PAY_CARD tsspc,
+        TB_LG_CARD_APPR tlca
+        WHERE 1=1
+        AND tlca.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tlca.HQ_BRAND_CD = #{hqBrandCd}
+        AND tlca.STORE_CD = #{storeCd}
+        AND tlca.SALE_DATE = #{saleDate}
+        AND tlca.POS_NO = #{posNo}
+        AND tsspc.BILL_NO = #{billNo}
+        AND tsspc.HQ_OFFICE_CD (+)= tlca.HQ_OFFICE_CD
+        AND tsspc.HQ_BRAND_CD (+)= tlca.HQ_BRAND_CD
+        AND tsspc.STORE_CD (+)= tlca.STORE_CD
+        AND tsspc.SALE_DATE (+)= tlca.SALE_DATE
+        AND tsspc.POS_NO (+)= tlca.POS_NO
+        AND tsspc.APPR_LOG_NO (+)= tlca.APPR_LOG_NO
+        ORDER BY tlca.APPR_DT
+    </select>
+
+    <!-- 현금영수증 결재내역 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CASH
+        COMMENTS : [매출]결제_현금영수증
+    -->
+    <select id="getSaleCashDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+        /* SaleInfoMapper.getSaleCashDtlList */
+        SELECT
+        (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = tsspc.STORE_CD AND CORNR_CD = tsspc.CORNR_CD) AS CORNR_NM,
+        tsspc.APPR_PROC_FG,
+        tsspc.CASH_BILL_CARD_NO,
+        tsspc.APPR_NO,
+        tsspc.SALE_AMT AS APPR_AMT,
+        TO_CHAR(TO_DATE(tsspc.APPR_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT,
+        (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_CD = tsspc.VAN_CD AND VAN_FG = '01') AS VAN_NM
+        FROM TB_SL_SALE_PAY_CASH tsspc
+        WHERE 1=1
+        AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsspc.HQ_BRAND_CD = #{hqBrandCd}
+        AND tsspc.STORE_CD = #{storeCd}
+        AND tsspc.SALE_DATE = #{saleDate}
+        AND tsspc.POS_NO = #{posNo}
+        AND tsspc.BILL_NO = #{billNo}
+        ORDER BY tsspc.APPR_DT
+    </select>
+
+    <!-- 상품내역 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
+        COMMENTS : [매출]상세, [매장]상품
+    -->
+    <select id="getSaleProdDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+        /* SaleInfoMapper.getSaleProdDtlList */
+         SELECT
+        (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = tssd.STORE_CD AND PROD_CD = tssd.PROD_CD) AS PROD_NM,
+        tssd.SALE_QTY,
+        tssd.SALE_UPRC,
+        tssd.SALE_AMT,
+        tssd.DC_AMT,
+        tssd.REAL_SALE_AMT,
+        (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS TAX_SALE_AMT,
+        tssd.VAT_AMT
+        FROM TB_SL_SALE_DTL tssd
+        WHERE 1=1
+        AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tssd.HQ_BRAND_CD = #{hqBrandCd}
+        AND tssd.STORE_CD = #{storeCd}
+        AND tssd.SALE_DATE = #{saleDate}
+        AND tssd.POS_NO = #{posNo}
+        AND tssd.BILL_NO = #{billNo}
+        ORDER BY tssd.PROD_CD
+    </select>
+
+</mapper>

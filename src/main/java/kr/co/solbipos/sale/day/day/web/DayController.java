@@ -113,7 +113,7 @@ public class DayController {
 
 
     /**
-     * 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회
+     * 매장별 매출현황 팝업 - 매장별 매출현황 조회
      * @param   request
      * @param   response
      * @param   model
@@ -136,7 +136,7 @@ public class DayController {
 
 
     /**
-     * 일자별(일별종합 탭) - 일자 매장별 할인현황 리스트 조회
+     * 매장별 할인내역 팝업 - 매장별 할인내역 조회
      * @param   request
      * @param   response
      * @param   model
@@ -223,6 +223,52 @@ public class DayController {
         List<DefaultMap<String>> list = dayService.getDayTimeList(dayVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
+     * 외식테이블별 - 외식테이블별매출조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김설아
+     * @since   2020. 01. 09.
+     */
+    @RequestMapping(value = "/day/getDayTableList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayTableList(DayVO dayVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayTableList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
+    }
+
+    /**
+     * 상품매출 상세내역 팝업 - 상품매출 상세내역 조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김설아
+     * @since   2020. 01. 08.
+     */
+    @RequestMapping(value = "/dayProdSaleDtl/getDayProdSaleDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayProdSaleDtlList(DayVO dayVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayProdSaleDtlList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
     }
 
     /**

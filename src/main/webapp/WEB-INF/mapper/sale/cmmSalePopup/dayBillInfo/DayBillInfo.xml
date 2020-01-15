@@ -16,8 +16,8 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getDayBillInfoList"  parameterType="DayBillInfoVO" resultType="DefaultMap">
-        /* DayBillInfoMapper.getDayBillInfoList */
+    <select id="getDayStoreBillList"  parameterType="DayBillInfoVO" resultType="DefaultMap">
+        /* DayBillInfoMapper.getDayStoreBillList */
         SELECT
         tssh.STORE_CD,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssh.STORE_CD) AS STORE_NM,

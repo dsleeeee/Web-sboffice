@@ -131,6 +131,27 @@ public class MonthController {
     }
 
     /**
+     * 외식테이블 - 외식테이블별 매출조회
+     *
+     * @param monthVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/month/getMonthTableList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMonthTableList(MonthVO monthVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = monthService.getMonthTableList(monthVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, monthVO);
+    }
+
+    /**
      * 포스별 - 포스별매출조회
      *
      * @param monthVO

@@ -20,13 +20,14 @@ public interface DayService {
     List<DefaultMap<String>> getPosColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
 
+
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
     List<DefaultMap<String>> getDayTotalList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
-    /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
-    /** 일자별(일별종합 탭) - 일자 매장별 할인현황 리스트 조회 */
+    /** 매장별 할인내역 팝업 - 매장별 할인내역 조회 */
     List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
     /** 일자별(할인구분별 탭) - 할인구분 리스트 조회 */
@@ -37,6 +38,12 @@ public interface DayService {
 
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 외식테이블별 - 외식테이블별매출조회 */
+    List<DefaultMap<Object>> getDayTableList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품매출 상세내역 팝업 - 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getDayProdSaleDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO);

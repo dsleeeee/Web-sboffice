@@ -207,7 +207,7 @@
     </select>
 
 
-    <!-- 일자별(일별종합 탭) - 일자 팝업 매장별 매출현황 리스트 조회 -->
+    <!-- 매장별 매출현황 팝업 - 매장별 매출현황 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR
         PARAM    : dayVO
@@ -265,7 +265,7 @@
     </select>
 
 
-    <!-- 일자별(할인구분별 탭) - 할인구분 리스트 조회 -->
+    <!-- 매장별 할인내역 팝업 - 매장별 할인내역 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR_DC
         PARAM    : dayVO
@@ -510,6 +510,202 @@
 
 
         ]]>
+    </select>
+
+
+    <!-- 외식테이블별 - 외식테이블별매출조회 -->
+    <!--
+       TABLE    : TB_SL_SALE_HDR
+       COMMENTS : [매출]헤더
+    -->
+    <select id="getDayTableList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayTableList */
+        SELECT
+        SALE_DATE,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_TBL_CNT, 0)
+        </foreach> AS TOT_TBL_CNT,
+        <foreach collection="arrTableCol" item="item" separator="+">
+            NVL(TBL${item}_GUEST_CNT, 0)
+        </foreach> AS TOT_GUEST_CNT,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_REAL_SALE_AMT,0) AS TBL${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_TBL_CNT,0) AS TBL${item}_TBL_CNT
+        </foreach> ,
+        <foreach collection="arrTableCol" item="item" separator=",">
+            NVL(TBL${item}_GUEST_CNT,0) AS TBL${item}_GUEST_CNT
+        </foreach>
+--         NVL(TBL000_REAL_SALE_AMT,0) AS TBL000_REAL_SALE_AMT,
+--         NVL(TBL000_TBL_CNT,0) AS TBL000_TBL_CNT,
+--         NVL(TBL000_TOT_GUEST_CNT,0) AS TBL000_TOT_GUEST_CNT
+        FROM
+        (
+            SELECT
+            SALE_DATE,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_REAL_SALE_AMT) AS TBL${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_TBL_CNT) AS TBL${item}_TBL_CNT
+            </foreach> ,
+            <foreach collection="arrTableCol" item="item" separator=",">
+                SUM(TBL${item}_GUEST_CNT) AS TBL${item}_GUEST_CNT
+            </foreach>
+--             SUM(TBL000_REAL_SALE_AMT) AS TBL000_REAL_SALE_AMT,
+--             SUM(TBL000_TBL_CNT) AS TBL000_TBL_CNT,
+--             SUM(TBL000_TOT_GUEST_CNT) AS TBL000_TOT_GUEST_CNT
+            FROM
+            (
+                SELECT
+                tssh.SALE_DATE,
+                tssh.REAL_SALE_AMT,
+                1 AS TBL_CNT,
+                tssh.TOT_GUEST_CNT,
+                tssh.TBL_CD
+                FROM TB_SL_SALE_HDR tssh
+                WHERE 1=1
+                AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tssh.STORE_CD = #{storeCd}
+                AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='tableCd != null and tableCd != ""'>
+                    <![CDATA[
+                        AND tssh.TBL_CD = #{tableCd}
+                    ]]>
+                </if>
+            )
+            PIVOT
+            (
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(TBL_CNT) AS TBL_CNT,
+                SUM(TOT_GUEST_CNT) AS GUEST_CNT
+                FOR TBL_CD
+                IN (${pivotTableCol})
+                /*IN ('000' AS TBL000,
+                '001' AS TBL001)*/
+            )
+            GROUP BY SALE_DATE
+        )
+        ORDER BY SALE_DATE
+    </select>
+
+
+    <!-- 상품매출 상세내역 팝업 - 상품매출 상세내역 조회 -->
+    <!--
+       TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
+       COMMENTS : [매출]헤더 와 [매출]헤더_결제
+    -->
+    <select id="getDayProdSaleDtlList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayProdSaleDtlList */
+        SELECT
+        HQ_OFFICE_CD,
+        HQ_BRAND_CD,
+        STORE_CD,
+        SALE_DATE,
+        POS_NO,
+        BILL_NO,
+        REG_DT,
+        SALE_FG,
+        TOT_SALE_AMT,
+        REAL_SALE_AMT,
+        GA_AMT,
+        VAT_AMT,
+        <foreach collection="arrPayCol" item="item" separator="+">
+            NVL(PAY${item}, 0)
+        </foreach> AS TOT_PAY_AMT,
+        <foreach collection="arrPayCol" item="item" separator=",">
+            NVL(PAY${item}, 0) AS PAY${item}
+        </foreach> ,
+        null AS ORDER_DT,
+        TOT_GUEST_CNT,
+        GUEST_UPRC
+        FROM
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            STORE_CD,
+            SALE_DATE,
+            POS_NO,
+            BILL_NO,
+            REG_DT,
+            SALE_FG,
+            SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+            SUM(TOT_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
+            SUM(VAT_AMT) AS VAT_AMT,
+            <foreach collection="arrPayCol" item="item" separator=",">
+                SUM(PAY${item}) AS PAY${item}
+            </foreach> ,
+            SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+            ROUND(SUM(REAL_SALE_AMT) / SUM(TOT_GUEST_CNT)) AS GUEST_UPRC
+            FROM
+            (
+                SELECT
+                tssh.HQ_OFFICE_CD,
+                tssh.HQ_BRAND_CD,
+                tssh.STORE_CD,
+                TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tssh.POS_NO,
+                tssh.BILL_NO,
+                TO_CHAR(TO_DATE(tssh.REG_DT, 'YYYYMMDDHH24MISS'), 'HH:mm:ss') AS REG_DT,
+                tssh.SALE_FG,
+                tssh.TOT_SALE_AMT,
+                tssh.REAL_SALE_AMT,
+                tssh.VAT_AMT,
+                tsshp.PAY_CD,
+                tsshp.PAY_AMT,
+                tssh.TOT_GUEST_CNT
+                FROM TB_SL_SALE_HDR tssh,
+                TB_SL_SALE_HDR_PAY tsshp
+                WHERE 1=1
+                AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCd != null and storeCd != ""'>
+                    <![CDATA[
+                        AND tssh.STORE_CD = #{storeCd}
+                    ]]>
+                </if>
+                <choose>
+                    <when test='gubun != null'>
+                        <!-- 기간별매출 > 일자별 탭 > 일별종합 탭 -->
+                        <if test='gubun == "day"'>
+                            <![CDATA[
+                                AND tssh.SALE_DATE = #{saleDate}
+                            ]]>
+                        </if>
+                        <!-- 기간별매출 > 월별 탭 > 월별종합 탭 -->
+                        <if test='gubun == "month"'>
+                            <![CDATA[
+                                AND tssh.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            ]]>
+                        </if>
+                    </when>
+                </choose>
+                <if test='tableCd != null and tableCd != ""'>
+                    <![CDATA[
+                        AND tssh.TBL_CD = #{tableCd}
+                    ]]>
+                </if>
+                AND tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
+                AND tssh.HQ_BRAND_CD = tsshp.HQ_BRAND_CD
+                AND tssh.STORE_CD = tsshp.STORE_CD
+                AND tssh.SALE_DATE = tsshp.SALE_DATE
+                AND tssh.POS_NO = tsshp.POS_NO
+                AND tssh.BILL_NO = tsshp.BILL_NO
+            )
+            PIVOT
+            (
+                SUM(PAY_AMT)
+                FOR PAY_CD
+                IN (${pivotPayCol})
+            )
+            GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_DATE, POS_NO, BILL_NO, REG_DT, SALE_FG
+        )
+        ORDER BY SALE_DATE, POS_NO, BILL_NO
     </select>
 
 
