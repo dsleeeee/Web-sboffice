@@ -2,7 +2,6 @@ package kr.co.solbipos.sale.day.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sale.day.day.service.DayVO;
-import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -41,6 +40,12 @@ public interface DayMapper {
 
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO);
+
+    /** 외식테이블별 - 외식테이블별매출조회 */
+    List<DefaultMap<Object>> getDayTableList(DayVO dayVO);
+
+    /** 상품매출 상세내역 팝업 - 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getDayProdSaleDtlList(DayVO dayVO);
 
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getDayPosList(DayVO dayVO);

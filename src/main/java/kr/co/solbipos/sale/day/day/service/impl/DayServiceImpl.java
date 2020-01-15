@@ -8,7 +8,6 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
-import kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +83,7 @@ public class DayServiceImpl implements DayService {
     }
 
 
-    /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
+    /** 매장별 매출현황 팝업 - 매장별 매출현황 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
@@ -101,7 +100,7 @@ public class DayServiceImpl implements DayService {
     }
 
 
-    /** 일자별(일별종합 탭) - 일자 매장별 매출현황 리스트 조회 */
+    /** 매장별 할인내역 팝업 - 매장별 할인내역 조회 */
     @Override
     public List<DefaultMap<String>> getDayStoreDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -258,6 +257,62 @@ public class DayServiceImpl implements DayService {
         dayVO.setsQuery4(sQuery4);
 
         return dayMapper.getDayTimeList(dayVO);
+    }
+
+    /** 외식테이블별 - 외식테이블별매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayTableList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 외식테이블 콤보박스
+        if(dayVO.getTableCd() == null)
+        {
+            // 외식테이블구분 array 값 세팅
+            dayVO.setArrTableCol(dayVO.getTableCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotTableCol = "";
+            String arrTableCol[] = dayVO.getTableCol().split(",");
+            for(int i=0; i < arrTableCol.length; i++) {
+                pivotTableCol += (pivotTableCol.equals("") ? "" : ",") + "'"+arrTableCol[i]+"'"+" AS TBL"+arrTableCol[i];
+            }
+            dayVO.setPivotTableCol(pivotTableCol);
+        }
+        else
+        {
+            // 외식테이블구분 array 값 세팅
+            dayVO.setArrTableCol(dayVO.getTableCd().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotTableCol = "'"+dayVO.getTableCd()+"'"+" AS TBL"+dayVO.getTableCd();
+            dayVO.setPivotTableCol(pivotTableCol);
+        }
+
+        return dayMapper.getDayTableList(dayVO);
+    }
+
+    /** 상품매출 상세내역 팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayProdSaleDtlList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 결제수단 array 값 세팅
+        dayVO.setArrPayCol(dayVO.getPayCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = dayVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+        }
+        dayVO.setPivotPayCol(pivotPayCol);
+
+        return dayMapper.getDayProdSaleDtlList(dayVO);
     }
 
     /** 포스별 - 포스별매출조회 */

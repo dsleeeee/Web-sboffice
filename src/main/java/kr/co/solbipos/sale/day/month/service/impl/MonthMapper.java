@@ -23,6 +23,9 @@ public interface MonthMapper {
     /** 시간대별 - 시간대별매출조회 */
     List<DefaultMap<Object>> getMonthTimeList(MonthVO monthVO);
 
+    /** 외식테이블별 - 외식테이블별매출조회 */
+    List<DefaultMap<Object>> getMonthTableList(MonthVO monthVO);
+
     /** 포스별 - 포스별매출조회 */
     List<DefaultMap<Object>> getMonthPosList(MonthVO monthVO);
 }

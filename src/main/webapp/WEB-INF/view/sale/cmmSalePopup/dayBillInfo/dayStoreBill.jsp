@@ -49,4 +49,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayBillInfo/dayStoreBill.js?ver=20191219.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayBillInfo/dayStoreBill.js?ver=20191219.04" charset="utf-8"></script>

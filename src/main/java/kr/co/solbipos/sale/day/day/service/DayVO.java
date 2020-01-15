@@ -9,6 +9,8 @@ public class DayVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;
+    /** 브랜드코드 */
+    private String hqBrandCd;
     /** 매장코드 */
     private String storeCd;
     /** 매장코드 array */
@@ -48,6 +50,22 @@ public class DayVO extends PageVO {
     /** 년월 */
     private String yearMonth;
 
+    /** 외식테이블컬럼 */
+    private String tableCol;
+    /** 외식테이블구분 array */
+    private String arrTableCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 외식테이블구분 컬럼 문자열 */
+    private String pivotTableCol;
+
+    /** 외식테이블 코드 */
+    private String tableCd;
+
+    /** POS번호 */
+    private String posNo;
+
+    /** 영수증번호 */
+    private String billNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -60,6 +78,14 @@ public class DayVO extends PageVO {
      */
     public void setHqOfficeCd(String hqOfficeCd) {
         this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqBrandCd() {
+        return hqBrandCd;
+    }
+
+    public void setHqBrandCd(String hqBrandCd) {
+        this.hqBrandCd = hqBrandCd;
     }
 
     /**
@@ -251,4 +277,38 @@ public class DayVO extends PageVO {
     public String getYearMonth() { return yearMonth; }
 
     public void setYearMonth(String yearMonth) { this.yearMonth = yearMonth; }
+
+    public String getTableCol() { return tableCol; }
+
+    public void setTableCol(String tableCol) { this.tableCol = tableCol; }
+
+    public String[] getArrTableCol() { return arrTableCol; }
+
+    public void setArrTableCol(String[] arrTableCol) { this.arrTableCol = arrTableCol; }
+
+    public String getPivotTableCol() { return pivotTableCol; }
+
+    public void setPivotTableCol(String pivotTableCol) { this.pivotTableCol = pivotTableCol; }
+
+    public String getTableCd() {
+        return tableCd;
+    }
+
+    public void setTableCd(String tableCd) {
+        this.tableCd = tableCd;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) { this.posNo = posNo; }
+
+    public String getBillNo() {
+        return billNo;
+    }
+
+    public void setBillNo(String billNo) {
+        this.billNo = billNo;
+    }
 }

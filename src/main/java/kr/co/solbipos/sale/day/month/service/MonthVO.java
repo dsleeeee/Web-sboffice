@@ -70,6 +70,16 @@ public class MonthVO extends PageVO {
     /** 팝업호출시 구분 */
     private String gubun;
 
+    /** 외식테이블컬럼 */
+    private String tableCol;
+    /** 외식테이블구분 array */
+    private String arrTableCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 외식테이블구분 컬럼 문자열 */
+    private String pivotTableCol;
+
+    /** 외식테이블 코드 */
+    private String tableCd;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -179,4 +189,24 @@ public class MonthVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getTableCol() { return tableCol; }
+
+    public void setTableCol(String tableCol) { this.tableCol = tableCol; }
+
+    public String[] getArrTableCol() { return arrTableCol; }
+
+    public void setArrTableCol(String[] arrTableCol) { this.arrTableCol = arrTableCol; }
+
+    public String getPivotTableCol() { return pivotTableCol; }
+
+    public void setPivotTableCol(String pivotTableCol) { this.pivotTableCol = pivotTableCol; }
+
+    public String getTableCd() {
+        return tableCd;
+    }
+
+    public void setTableCd(String tableCd) {
+        this.tableCd = tableCd;
+    }
 }
