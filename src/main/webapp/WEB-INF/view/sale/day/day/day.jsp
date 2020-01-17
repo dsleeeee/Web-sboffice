@@ -50,7 +50,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/day.js?ver=20200108" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/day.js?ver=20200108.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일별종합 레이어 --%>

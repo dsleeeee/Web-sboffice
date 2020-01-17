@@ -141,7 +141,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("prodClassCtrl");
+    var scope = agrid.getScope("dayProdClassCtrl");
     scope.flex.refresh();
   };
 
