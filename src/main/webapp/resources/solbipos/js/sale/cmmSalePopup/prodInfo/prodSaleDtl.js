@@ -40,13 +40,23 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.searchProdSaleDtlList = function(data){
         var params = {};
-        // 기간별매출 > 일자별 탭 > 과면세별,포스별 탭
-        if(data.gubun == "day") {
+        // 기간별매출 > 일자별 탭 > 과면세별,포스별,코너별 탭
+        if(data.gubun == "day" ||  data.gubun == "dayCorner") {
             params.saleDate = data.saleDate;
         }
-        // 기간별매출 > 월별 탭 > 과면세별,포스별 탭
-        if(data.gubun == "month") {
+        // 기간별매출 > 월별 탭 > 과면세별,포스별,코너별 탭
+        if(data.gubun == "month" ||  data.gubun == "monthCorner") {
             params.yearMonth = data.yearMonth;
+        }
+        // 기간별매출 > 일자별 탭 > 포스별 탭
+        if(data.gubun == "dayPos") {
+            params.saleDate = data.saleDate;
+            params.posNo  = data.posNo;
+        }
+        // 기간별매출 > 월별 탭 > 포스별 탭
+        if(data.gubun == "monthPos") {
+            params.yearMonth = data.yearMonth;
+            params.posNo  = data.posNo;
         }
         params.storeCds  = data.storeCd;
         params.gubun  = data.gubun;

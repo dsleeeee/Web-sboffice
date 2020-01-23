@@ -80,6 +80,19 @@ public class MonthVO extends PageVO {
     /** 외식테이블 코드 */
     private String tableCd;
 
+    /** 코너컬럼 */
+    private String cornerCol;
+    /** 코너구분 array */
+    private String arrCornerCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 외식테이블구분 컬럼 문자열 */
+    private String pivotCornerCol;
+
+    /** 매장코너 코드 */
+    private String storeCornerCd;
+
+    /** POS 번호 */
+    private String posNo;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -209,4 +222,28 @@ public class MonthVO extends PageVO {
     public void setTableCd(String tableCd) {
         this.tableCd = tableCd;
     }
+
+    public String getCornerCol() { return cornerCol; }
+
+    public void setCornerCol(String cornerCol) { this.cornerCol = cornerCol; }
+
+    public String[] getArrCornerCol() {
+        return arrCornerCol;
+    }
+
+    public void setArrCornerCol(String[] arrCornerCol) {
+        this.arrCornerCol = arrCornerCol;
+    }
+
+    public String getPivotCornerCol() { return pivotCornerCol; }
+
+    public void setPivotCornerCol(String pivotCornerCol) { this.pivotCornerCol = pivotCornerCol; }
+
+    public String getStoreCornerCd() { return storeCornerCd; }
+
+    public void setStoreCornerCd(String storeCornerCd) { this.storeCornerCd = storeCornerCd; }
+
+    public String getPosNo() { return posNo; }
+
+    public void setPosNo(String posNo) { this.posNo = posNo; }
 }

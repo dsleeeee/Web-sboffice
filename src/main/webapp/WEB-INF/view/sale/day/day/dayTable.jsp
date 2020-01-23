@@ -40,6 +40,7 @@
                     </div>
                 </td>
             </tr>
+            <tr>
                 <%-- 테이블표시 --%>
                 <th>
                     <s:message code="day.dayTable.tableList" />
@@ -77,7 +78,7 @@
                     id="wjGridDayTableList">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="day.dayTable.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayTable.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.dayTable.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.dayTable.totTblCnt"/>" binding="totTblCnt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.dayTable.totGuestCnt"/>" binding="totGuestCnt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
@@ -99,7 +100,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200109.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200121.01" charset="utf-8"></script>
 
 <%-- 상품매출 상세내역 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayProdSaleDtl.jsp">

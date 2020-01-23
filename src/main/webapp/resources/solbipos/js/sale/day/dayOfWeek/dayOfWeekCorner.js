@@ -33,7 +33,7 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
-        // <-- 그리드 헤더2줄 -->
+        // <-- 그리드 헤더3줄 -->
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -45,21 +45,30 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
         dataItem.totRealSaleAmt    = messages["dayofweek.totRealSaleAmt"];
         dataItem.totSaleQty    = messages["dayofweek.totSaleQty"];
 
-        // // 매장별코너구분 헤더머지 컬럼 생성
-        // for (var i = 0; i < arrStoreCornerCol.length; i++) {
-        //     dataItem['cornr_' + arrStoreCornerCol[i] + '_RealSaleAmt'] = arrStoreCornerCol[i];
-        //     dataItem['cornr_' + arrStoreCornerCol[i] + '_SaleQty'] = arrStoreCornerCol[i];
-        // }
-
-        // 포스구분 헤더머지 컬럼 생성
-        // for (var i = 0; i < arrPosCol.length; i++) {
-        //     dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = "POS" + arrPosCol[i];
-        //     dataItem['pos' + arrPosCol[i] + 'DcAmt'] = "POS" + arrPosCol[i];
-        //     dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = "POS" + arrPosCol[i];
-        //     dataItem['pos' + arrPosCol[i] + 'SaleQty'] = "POS" + arrPosCol[i];
-        // }
+        // 코너구분 헤더머지 컬럼 생성
+        for (var i = 0; i < arrCornerCol.length; i++) {
+            dataItem['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].storeNm;
+            dataItem['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].storeNm;
+        }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
+
+        // 둘째줄 헤더 생성
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        var dataItem1         = {};
+        dataItem1.yoil    = messages["dayofweek.yoil"];
+        dataItem1.storeCnt    = messages["dayofweek.storeCnt"];
+        dataItem1.totRealSaleAmt    = messages["dayofweek.totRealSaleAmt"];
+        dataItem1.totSaleQty    = messages["dayofweek.totSaleQty"];
+
+        // 코너구분 헤더머지 컬럼 생성
+        for (var i = 0; i < arrCornerCol.length; i++) {
+            dataItem1['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].cornrNm;
+            dataItem1['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].cornrNm;
+        }
+
+        s.columnHeaders.rows[1].dataItem = dataItem1;
 
         s.itemFormatter = function (panel, r, c, cell) {
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -98,7 +107,7 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
                 }
             }
         }
-        // <-- //그리드 헤더2줄 -->
+        // <-- //그리드 헤더3줄 -->
     };
 
     // <-- 검색 호출 -->
@@ -111,9 +120,70 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.storeCds = $("#dayofweekCornerStoreCd").val();
+        params.cornerCol = cornerCol;
+        // 전체매장
+        if ($("#dayofweekCornerStoreCd").val() == "") {
+            params.storeCd = null;
+        //매장 선택시
+        } else {
+            params.storeCd = $("#dayofweekCornerStoreCd").val();
 
-        // $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekCornerList.sb", params, function() {}, false);
+            // 선택시 매장의 storeCornrCd 가져오기
+            var storeCornerCd = "";
+            for (var i = 0; i < cornerColList.length; i++) {
+                if (cornerColList[i].storeCd === $("#dayofweekCornerStoreCd").val()) {
+                    storeCornerCd = arrCornerCol[i];
+                }
+            }
+            params.storeCornerCd = storeCornerCd;
+        }
+
+        $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekCornerList.sb", params, function() {}, false);
+
+        // <-- 그리드 visible -->
+        // 선택한 테이블에 따른 리스트 항목 visible
+        var grid = wijmo.Control.getControl("#wjGridDayofweekCornerList");
+        var columns = grid.columns;
+        var start = 0;
+        var end = 3;
+
+        // cornerColList 에 storeCd 배열로 담기
+        var cornerColArray = [];
+        for (var i = 0; i < cornerColList.length; i++) {
+            comboData = {};
+            comboData.value = cornerColList[i].storeCd;
+            cornerColArray.push(comboData);
+        }
+
+        // 컬럼 총갯수
+        var columnsCnt = 4 + (cornerColArray.length * 2);
+
+        // 전체선택시 전부 visible
+        if($("#dayofweekCornerStoreCd").val() === "")
+        {
+            for (var i = 4; i <= columnsCnt; i++) {
+                columns[i].visible = true;
+            }
+        }
+        // 선택한 테이블만 visible
+        else
+        {
+            for (var i = 0; i < cornerColArray.length; i++) {
+                if (cornerColArray[i].value === $("#dayofweekCornerStoreCd").val()) {
+                    start = (i * 2) + 4;
+                    end = (i * 2) + 5;
+                }
+            }
+
+            for (var i = 4; i < columnsCnt; i++) {
+                if (i >= start && i <= end) {
+                    columns[i].visible = true;
+                } else {
+                    columns[i].visible = false;
+                }
+            }
+        }
+        // <-- //그리드 visible -->
     };
     // <-- //검색 호출 -->
 

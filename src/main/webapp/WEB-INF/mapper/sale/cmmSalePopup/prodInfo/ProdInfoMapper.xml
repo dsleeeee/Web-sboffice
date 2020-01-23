@@ -67,6 +67,34 @@
                             AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
                         ]]>
                     </if>
+                    <!-- 기간별매출 > 일자별 탭 > 코너별 탭 -->
+                    <if test='gubun == "dayCorner"'>
+                        <![CDATA[
+                             AND tssd.SALE_DATE = #{saleDate}
+                            AND tssd.CORNR_CD != '00'
+                        ]]>
+                    </if>
+                    <!-- 기간별매출 > 월별 탭 > 코너별 탭 -->
+                    <if test='gubun == "monthCorner"'>
+                        <![CDATA[
+                            AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            AND tssd.CORNR_CD != '00'
+                        ]]>
+                    </if>
+                    <!-- 기간별매출 > 일자별 탭 > 포스별 탭 -->
+                    <if test='gubun == "dayPos"'>
+                        <![CDATA[
+                            AND tssd.SALE_DATE = #{saleDate}
+                            AND tssd.POS_NO = #{posNo}
+                        ]]>
+                    </if>
+                    <!-- 기간별매출 > 월별 탭 > 포스별 탭 -->
+                    <if test='gubun == "monthPos"'>
+                        <![CDATA[
+                            AND tssd.SALE_DATE BETWEEN #{yearMonth}||'01' AND #{yearMonth} ||'31'
+                            AND tssd.POS_NO = #{posNo}
+                        ]]>
+                    </if>
                 </when>
             </choose>
             <if test='storeCds != null and storeCds != ""'>

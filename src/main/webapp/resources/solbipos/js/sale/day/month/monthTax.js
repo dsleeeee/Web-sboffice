@@ -105,7 +105,6 @@ app.controller('monthTaxCtrl', ['$scope', '$http', '$timeout', function ($scope,
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "realSaleAmt") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }

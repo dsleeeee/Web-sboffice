@@ -52,7 +52,9 @@ public class DayOfWeekController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 11. 29.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekTotalList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -74,7 +76,9 @@ public class DayOfWeekController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 03.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekDcList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -95,7 +99,9 @@ public class DayOfWeekController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 04.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekTaxList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -116,7 +122,9 @@ public class DayOfWeekController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 04.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekTimeList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -131,13 +139,38 @@ public class DayOfWeekController {
     }
 
     /**
+     * 코너별 - 코너별 매출조회
+     *
+     * @param dayOfWeekVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 20.
+     */
+    @RequestMapping(value = "/dayOfWeek/getDayOfWeekCornerList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayOfWeekCornerList(DayOfWeekVO dayOfWeekVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayOfWeekService.getDayOfWeekCornerList(dayOfWeekVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayOfWeekVO);
+    }
+
+    /**
      * 외식테이블 - 외식테이블별 매출조회
      *
      * @param dayOfWeekVO
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 26.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekTableList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -158,7 +191,9 @@ public class DayOfWeekController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 06.
      */
     @RequestMapping(value = "/dayOfWeek/getDayOfWeekPosList.sb", method = RequestMethod.POST)
     @ResponseBody

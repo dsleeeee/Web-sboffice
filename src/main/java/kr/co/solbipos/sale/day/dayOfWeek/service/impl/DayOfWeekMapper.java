@@ -23,6 +23,9 @@ public interface DayOfWeekMapper {
     /** 시간대별 - 시간대별매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTimeList(DayOfWeekVO dayOfWeekVO);
 
+    /** 코너별 - 코너별 매출조회 */
+    List<DefaultMap<Object>> getDayOfWeekCornerList(DayOfWeekVO dayOfWeekVO);
+
     /** 외식테이블별 - 외식테이블별매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTableList(DayOfWeekVO dayOfWeekVO);
 

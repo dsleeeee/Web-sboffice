@@ -42,6 +42,9 @@ public class ProdInfoVO extends PageVO {
     /** 팝업호출시 구분 */
     private String gubun;
 
+    /** POS 번호 */
+    private String posNo;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -77,4 +80,8 @@ public class ProdInfoVO extends PageVO {
     public String getGubun() { return gubun; }
 
     public void setGubun(String gubun) { this.gubun = gubun; }
+
+    public String getPosNo() { return posNo; }
+
+    public void setPosNo(String posNo) { this.posNo = posNo; }
 }

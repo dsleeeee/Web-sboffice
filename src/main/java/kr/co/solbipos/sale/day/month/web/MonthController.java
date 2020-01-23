@@ -52,7 +52,9 @@ public class MonthController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 09.
      */
     @RequestMapping(value = "/month/getMonthTotalList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -74,7 +76,9 @@ public class MonthController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 10.
      */
     @RequestMapping(value = "/month/getMonthDcList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -95,7 +99,9 @@ public class MonthController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 10.
      */
     @RequestMapping(value = "/month/getMonthTaxList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -116,7 +122,9 @@ public class MonthController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 12.
      */
     @RequestMapping(value = "/month/getMonthTimeList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -131,13 +139,38 @@ public class MonthController {
     }
 
     /**
+     * 코너별 - 코너별 매출조회
+     *
+     * @param monthVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 01. 20.
+     */
+    @RequestMapping(value = "/month/getMonthCornerList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMonthCornerList(MonthVO monthVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = monthService.getMonthCornerList(monthVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, monthVO);
+    }
+
+    /**
      * 외식테이블 - 외식테이블별 매출조회
      *
      * @param monthVO
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 01. 08.
      */
     @RequestMapping(value = "/month/getMonthTableList.sb", method = RequestMethod.POST)
     @ResponseBody
@@ -158,7 +191,9 @@ public class MonthController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 17.
      */
     @RequestMapping(value = "/month/getMonthPosList.sb", method = RequestMethod.POST)
     @ResponseBody

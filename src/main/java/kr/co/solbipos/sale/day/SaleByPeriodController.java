@@ -58,6 +58,20 @@ public class SaleByPeriodController {
         model.addAttribute("dcCol", dcCol);
 
 
+        // 코너 조회
+        List<DefaultMap<String>> cornerColList = dayService.getCornerColList(dayVO, sessionInfoVO);
+
+        // 코너구분 코드를 , 로 연결하는 문자열 생성
+        String cornerCol = "";
+        for(int i=0; i < cornerColList.size(); i++) {
+            cornerCol += (cornerCol.equals("") ? "" : ",") + cornerColList.get(i).getStr("storeCornrCd");
+        }
+        model.addAttribute("cornerColList", cornerColList);
+        model.addAttribute("cornerCol", cornerCol);
+//        System.out.println("cornerColList : "+cornerColList);
+//        System.out.println("cornerCol : "+cornerCol);
+
+
         // 외식테이블 조회
         List<DefaultMap<String>> tableColList = dayService.getTableColList(dayVO, sessionInfoVO);
 

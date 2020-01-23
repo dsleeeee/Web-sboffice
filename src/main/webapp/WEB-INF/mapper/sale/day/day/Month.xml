@@ -296,6 +296,78 @@
         ORDER BY tssh.YEAR_MONTH
     </select>
 
+    <!-- 코너별 - 코너별매출조회-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL
+        COMMENTS : [매출]상세
+    -->
+    <select id="getMonthCornerList"  parameterType="MonthVO" resultType="DefaultMap">
+        /* DayOfWeekMapper.getMonthCornerList */
+        SELECT
+        YEAR_MONTH,
+        STORE_CNT,
+        <foreach collection="arrCornerCol" item="item" separator="+">
+            NVL(CORNR_${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrCornerCol" item="item" separator="+">
+            NVL(CORNR_${item}_SALE_QTY, 0)
+        </foreach> AS TOT_SALE_QTY,
+        <foreach collection="arrCornerCol" item="item" separator=",">
+            NVL(CORNR_${item}_REAL_SALE_AMT,0) AS CORNR_${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrCornerCol" item="item" separator=",">
+            NVL(CORNR_${item}_SALE_QTY,0) AS CORNR_${item}_SALE_QTY
+        </foreach>
+--         NVL(CORNR_A00000101_REAL_SALE_AMT,0) AS CORNR_A00000101_REAL_SALE_AMT,
+--         NVL(CORNR_A00000101_SALE_QTY,0) AS CORNR_A00000101_SALE_QTY,
+        FROM
+        (
+            SELECT
+            YEAR_MONTH,
+            COUNT(STORE_CD) AS STORE_CNT,
+            <foreach collection="arrCornerCol" item="item" separator=",">
+                SUM(CORNR_${item}_REAL_SALE_AMT) AS CORNR_${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrCornerCol" item="item" separator=",">
+                SUM(CORNR_${item}_SALE_QTY) AS CORNR_${item}_SALE_QTY
+            </foreach>
+--             SUM(CORNR_A00000101_REAL_SALE_AMT) AS CORNR_A00000101_REAL_SALE_AMT,
+--             SUM(CORNR_A00000101_SALE_QTY) AS CORNR_A00000101_SALE_QTY,
+            FROM
+            (
+                SELECT
+                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
+                tssd.STORE_CD,
+                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tssd.SALE_QTY) AS SALE_QTY,
+                (tssd.STORE_CD || tssd.CORNR_CD) AS STORE_CORNR_CD
+                FROM TB_SL_SALE_DTL tssd
+                WHERE 1=1
+                AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tssd.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                <if test='storeCd != null and storeCd != ""'>
+                    <![CDATA[
+                        AND tssd.STORE_CD = #{storeCd}
+                    ]]>
+                </if>
+                AND tssd.CORNR_CD != '00'
+                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
+            )
+            PIVOT
+            (
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(SALE_QTY) AS SALE_QTY
+                FOR STORE_CORNR_CD
+                IN (${pivotCornerCol})
+                /*IN ('A00000101' AS CORNR_A00000101,
+                'DS0000201' AS CORNR_DS0000201,
+                'DS0000601' AS CORNR_DS0000601)*/
+            )
+            GROUP BY YEAR_MONTH
+        )
+        ORDER BY YEAR_MONTH
+    </select>
+
     <!-- 외식테이블별 - 외식테이블별매출조회-->
     <!--
         TABLE    : TB_SL_SALE_HDR

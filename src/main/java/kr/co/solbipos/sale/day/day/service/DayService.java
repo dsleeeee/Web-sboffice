@@ -13,6 +13,9 @@ public interface DayService {
     /** 일자별 - 할인 컬럼 리스트 조회 */
     List<DefaultMap<String>> getDcColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 코너별 탭 - 코너 컬럼 리스트 조회 */
+    List<DefaultMap<String>> getCornerColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
     /** 외식테이블 탭 - 외식테이블 컬럼 리스트 조회 */
     List<DefaultMap<String>> getTableColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
@@ -38,6 +41,9 @@ public interface DayService {
 
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /**  코너별 - 코너별 매출조회 */
+    List<DefaultMap<Object>> getDayCornerList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
     /** 외식테이블별 - 외식테이블별매출조회 */
     List<DefaultMap<Object>> getDayTableList(DayVO dayVO, SessionInfoVO sessionInfoVO);

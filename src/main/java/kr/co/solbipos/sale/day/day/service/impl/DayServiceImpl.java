@@ -8,6 +8,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
+import kr.co.solbipos.sale.day.month.service.MonthVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,17 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getDcColList(dayVO);
     }
 
+    /** 코너별 탭 - 코너 컬럼 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return dayMapper.getCornerColList(dayVO);
+    }
+
     /** 외식테이블 탭 - 외식테이블 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getTableColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
@@ -59,6 +71,9 @@ public class DayServiceImpl implements DayService {
 
         return dayMapper.getPosColList(dayVO);
     }
+
+
+
 
     /** 일자별(일별종합 탭) - 일별종합 리스트 조회 */
     @Override
@@ -257,6 +272,40 @@ public class DayServiceImpl implements DayService {
         dayVO.setsQuery4(sQuery4);
 
         return dayMapper.getDayTimeList(dayVO);
+    }
+
+    /** 코너별 - 코너별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayCornerList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 코너구분
+        if(dayVO.getStoreCd() == null)
+        {
+            // 코너구분 array 값 세팅
+            dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "";
+            String arrCornerCol[] = dayVO.getCornerCol().split(",");
+            for(int i=0; i < arrCornerCol.length; i++) {
+                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
+            }
+            dayVO.setPivotCornerCol(pivotCornerCol);
+        }
+        else
+        {
+            // 외식테이블구분 array 값 세팅
+            dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "'"+dayVO.getStoreCornerCd()+"'"+" AS CORNR_"+dayVO.getStoreCornerCd();
+            dayVO.setPivotCornerCol(pivotCornerCol);
+        }
+
+        return dayMapper.getDayCornerList(dayVO);
     }
 
     /** 외식테이블별 - 외식테이블별매출조회 */

@@ -196,6 +196,40 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthTimeList(monthVO);
     }
 
+    /** 코너별 - 코너별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getMonthCornerList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
+
+        monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            monthVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 코너구분
+        if(monthVO.getStoreCd() == null)
+        {
+            // 코너구분 array 값 세팅
+            monthVO.setArrCornerCol(monthVO.getCornerCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "";
+            String arrCornerCol[] = monthVO.getCornerCol().split(",");
+            for(int i=0; i < arrCornerCol.length; i++) {
+                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
+            }
+            monthVO.setPivotCornerCol(pivotCornerCol);
+        }
+        else
+        {
+            // 외식테이블구분 array 값 세팅
+            monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "'"+monthVO.getStoreCornerCd()+"'"+" AS CORNR_"+monthVO.getStoreCornerCd();
+            monthVO.setPivotCornerCol(pivotCornerCol);
+        }
+
+        return monthMapper.getMonthCornerList(monthVO);
+    }
+
     /** 외식테이블별 - 외식테이블별매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTableList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
@@ -229,6 +263,7 @@ public class MonthServiceImpl implements MonthService {
 
         return monthMapper.getMonthTableList(monthVO);
     }
+
     /** 포스별 - 포스별매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthPosList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {

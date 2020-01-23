@@ -33,7 +33,6 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "membrNo" || col.binding === "membrNm") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }
