@@ -74,18 +74,18 @@
                     is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="day.dayPos.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayPos.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="day.dayPos.yoil"/>" binding="yoil" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.dayPos.totSaleAmt"/>" binding="totSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.dayPos.totDcAmt"/>" binding="totDcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.dayPos.totRealSaleAmt"/>" binding="totRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="day.dayPos.totSaleQty"/>" binding="totSaleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayPos.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayPos.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayPos.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.dayPos.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 포스 컬럼 생성--%>
                     <c:forEach var="posCol" items="${posColList}">
-                        <wj-flex-grid-column header="<s:message code="day.dayPos.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayPos.dcAmt"/>" binding="pos${posCol.posNo}DcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayPos.realSaleAmt"/>" binding="pos${posCol.posNo}RealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="day.dayPos.saleQty"/>" binding="pos${posCol.posNo}SaleQty" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayPos.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayPos.dcAmt"/>" binding="pos${posCol.posNo}DcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayPos.realSaleAmt"/>" binding="pos${posCol.posNo}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="day.dayPos.saleQty"/>" binding="pos${posCol.posNo}SaleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
 
                 </wj-flex-grid>
@@ -99,7 +99,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayPos.js?ver=20200103" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayPos.js?ver=20200121.01" charset="utf-8"></script>
 
 <%-- 상품매출 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">

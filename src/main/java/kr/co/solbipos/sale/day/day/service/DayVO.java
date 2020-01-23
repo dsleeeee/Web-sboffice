@@ -66,6 +66,16 @@ public class DayVO extends PageVO {
     /** 영수증번호 */
     private String billNo;
 
+    /** 코너컬럼 */
+    private String cornerCol;
+    /** 코너구분 array */
+    private String arrCornerCol[];
+    /** 쿼리문의 PIVOT IN에 사용할 외식테이블구분 컬럼 문자열 */
+    private String pivotCornerCol;
+
+    /** 매장코너 코드 */
+    private String storeCornerCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -311,4 +321,24 @@ public class DayVO extends PageVO {
     public void setBillNo(String billNo) {
         this.billNo = billNo;
     }
+
+    public String getCornerCol() { return cornerCol; }
+
+    public void setCornerCol(String cornerCol) { this.cornerCol = cornerCol; }
+
+    public String[] getArrCornerCol() {
+        return arrCornerCol;
+    }
+
+    public void setArrCornerCol(String[] arrCornerCol) {
+        this.arrCornerCol = arrCornerCol;
+    }
+
+    public String getPivotCornerCol() { return pivotCornerCol; }
+
+    public void setPivotCornerCol(String pivotCornerCol) { this.pivotCornerCol = pivotCornerCol; }
+
+    public String getStoreCornerCd() { return storeCornerCd; }
+
+    public void setStoreCornerCd(String storeCornerCd) { this.storeCornerCd = storeCornerCd; }
 }

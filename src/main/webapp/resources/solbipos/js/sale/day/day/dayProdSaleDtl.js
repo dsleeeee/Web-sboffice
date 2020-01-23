@@ -105,7 +105,6 @@ app.controller('dayProdSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "billNo") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }

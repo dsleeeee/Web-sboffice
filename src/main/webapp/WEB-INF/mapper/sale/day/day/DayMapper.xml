@@ -40,6 +40,33 @@
         ]]>
     </select>
 
+    <!-- 코너별 탭 - 코너 컬럼 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_CORNER
+        COMMENTS : [매장]코너
+    -->
+    <select id="getCornerColList"  parameterType="dayVO" resultType="DefaultMap">
+        /* DayOfWeekMapper.getCornerColList */
+        SELECT
+        tmc.STORE_CD,
+        (CASE WHEN tmc.STORE_CD = '0000000' THEN '단독매장' ELSE tms.STORE_NM END) AS STORE_NM,
+        tmc.CORNR_CD,
+        tmc.CORNR_NM,
+        (tmc.STORE_CD || tmc.CORNR_CD) AS STORE_CORNR_CD -- 매장코드 7자리
+        FROM TB_MS_CORNER tmc,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = 'A0001'
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND tmc.STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND tms.STORE_CD (+)= tmc.STORE_CD
+        GROUP BY tmc.STORE_CD, tmc.CORNR_CD, tmc.CORNR_NM, tms.STORE_NM
+        ORDER BY tmc.STORE_CD, tmc.CORNR_CD
+    </select>
+
     <!-- 외식테이블 탭 - 외식테이블 컬럼 리스트 조회-->
     <!--
         TABLE    : TB_MS_TABLE
@@ -70,7 +97,7 @@
         /* DayOfWeekMapper.getPosColList */
         SELECT
         tmp.POS_NO,
-        ('POS' || tmp.POS_NM) AS POS_NM
+        tmp.POS_NM
         FROM TB_MS_POS tmp
         WHERE 1=1
         <if test='storeCd != null and storeCd != ""'>
@@ -513,6 +540,79 @@
     </select>
 
 
+    <!-- 코너별 - 코너별매출조회-->
+    <!--
+        TABLE    : TB_SL_SALE_DTL
+        COMMENTS : [매출]상세
+    -->
+    <select id="getDayCornerList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayCornerList */
+        SELECT
+        SALE_DATE,
+        STORE_CNT,
+        <foreach collection="arrCornerCol" item="item" separator="+">
+            NVL(CORNR_${item}_REAL_SALE_AMT, 0)
+        </foreach> AS TOT_REAL_SALE_AMT,
+        <foreach collection="arrCornerCol" item="item" separator="+">
+            NVL(CORNR_${item}_SALE_QTY, 0)
+        </foreach> AS TOT_SALE_QTY,
+        <foreach collection="arrCornerCol" item="item" separator=",">
+            NVL(CORNR_${item}_REAL_SALE_AMT,0) AS CORNR_${item}_REAL_SALE_AMT
+        </foreach> ,
+        <foreach collection="arrCornerCol" item="item" separator=",">
+            NVL(CORNR_${item}_SALE_QTY,0) AS CORNR_${item}_SALE_QTY
+        </foreach>
+--         NVL(CORNR_A00000101_REAL_SALE_AMT,0) AS CORNR_A00000101_REAL_SALE_AMT,
+--         NVL(CORNR_A00000101_SALE_QTY,0) AS CORNR_A00000101_SALE_QTY,
+        FROM
+        (
+            SELECT
+            SALE_DATE,
+            COUNT(STORE_CD) AS STORE_CNT,
+            <foreach collection="arrCornerCol" item="item" separator=",">
+                SUM(CORNR_${item}_REAL_SALE_AMT) AS CORNR_${item}_REAL_SALE_AMT
+            </foreach> ,
+            <foreach collection="arrCornerCol" item="item" separator=",">
+                SUM(CORNR_${item}_SALE_QTY) AS CORNR_${item}_SALE_QTY
+            </foreach>
+--             SUM(CORNR_A00000101_REAL_SALE_AMT) AS CORNR_A00000101_REAL_SALE_AMT,
+--             SUM(CORNR_A00000101_SALE_QTY) AS CORNR_A00000101_SALE_QTY,
+            FROM
+            (
+                SELECT
+                tssd.SALE_DATE,
+                tssd.STORE_CD,
+                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tssd.SALE_QTY) AS SALE_QTY,
+                (tssd.STORE_CD || tssd.CORNR_CD) AS STORE_CORNR_CD
+                FROM TB_SL_SALE_DTL tssd
+                WHERE 1=1
+                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCd != null and storeCd != ""'>
+                    <![CDATA[
+                        AND tssd.STORE_CD = #{storeCd}
+                    ]]>
+                </if>
+                AND tssd.CORNR_CD != '00'
+                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
+            )
+            PIVOT
+            (
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(SALE_QTY) AS SALE_QTY
+                FOR STORE_CORNR_CD
+                IN (${pivotCornerCol})
+                /*IN ('A00000101' AS CORNR_A00000101,
+                'DS0000201' AS CORNR_DS0000201,
+                'DS0000601' AS CORNR_DS0000601)*/
+            )
+            GROUP BY SALE_DATE
+        )
+        ORDER BY SALE_DATE
+    </select>
+
+
     <!-- 외식테이블별 - 외식테이블별매출조회 -->
     <!--
        TABLE    : TB_SL_SALE_HDR
@@ -717,7 +817,7 @@
     <select id="getDayPosList"  parameterType="DayVO" resultType="DefaultMap">
         /* DayMapper.getDayPosList */
         SELECT
-        TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        SALE_DATE,
         TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
         <foreach collection="arrPosCol" item="item" separator="+">
             NVL(POS${item}_SALE_AMT, 0)

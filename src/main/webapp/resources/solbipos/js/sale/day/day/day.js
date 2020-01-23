@@ -141,7 +141,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("prodClassCtrl");
+    var scope = agrid.getScope("dayProdClassCtrl");
     scope.flex.refresh();
   };
 
@@ -167,7 +167,7 @@ app.controller('dayCtrl', ['$scope', function ($scope) {
     $("#dayPosView").hide();
 
     // angular 그리드 hide 시 깨지므로 refresh()
-    var scope = agrid.getScope("cornerCtrl");
+    var scope = agrid.getScope("dayCornerCtrl");
     scope.flex.refresh();
   };
 

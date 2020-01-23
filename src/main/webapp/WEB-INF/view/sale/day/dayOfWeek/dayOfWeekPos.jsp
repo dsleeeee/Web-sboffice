@@ -76,16 +76,16 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="dayofweek.yoil"/>" binding="yoil" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayofweek.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totSaleAmt"/>" binding="totSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totDcAmt"/>" binding="totDcAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.pos.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 포스 컬럼 생성--%>
                     <c:forEach var="posCol" items="${posColList}">
-                        <wj-flex-grid-column header="<s:message code="dayofweek.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayofweek.dcAmt"/>" binding="pos${posCol.posNo}DcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pos${posCol.posNo}RealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayofweek.saleQty"/>" binding="pos${posCol.posNo}SaleQty" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayofweek.saleAmt"/>" binding="pos${posCol.posNo}SaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayofweek.dcAmt"/>" binding="pos${posCol.posNo}DcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pos${posCol.posNo}RealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayofweek.saleQty"/>" binding="pos${posCol.posNo}SaleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
 
                 </wj-flex-grid>

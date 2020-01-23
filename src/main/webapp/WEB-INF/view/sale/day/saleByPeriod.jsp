@@ -57,6 +57,22 @@
     var arrDcCol = dcCol.split(',');
 
 
+    // 코너
+    var cornerColList = [];
+    <%--javascript에서 사용할 코너 json 데이터 생성--%>
+    <c:forEach var="cornerCol" items="${cornerColList}">
+    var cornerParam      = {};
+    cornerParam.storeCornrCd     = "${cornerCol.storeCornrCd}";
+    cornerParam.storeNm     = "${cornerCol.storeNm}";
+    cornerParam.storeCd     = "${cornerCol.storeCd}";
+    cornerParam.cornrNm     = "${cornerCol.cornrNm}";
+    cornerColList.push(cornerParam);
+    </c:forEach>
+
+    var cornerCol    = '${cornerCol}';
+    var arrCornerCol = cornerCol.split(',');
+
+
     // 테이블
     var tableColList = [];
     <%--javascript에서 사용할 포스 json 데이터 생성--%>

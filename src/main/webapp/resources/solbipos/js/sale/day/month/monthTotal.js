@@ -118,7 +118,6 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "yearMonth" || col.binding === "totDcAmt" || col.binding === "billCnt") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
 

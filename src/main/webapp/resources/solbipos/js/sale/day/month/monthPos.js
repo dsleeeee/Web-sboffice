@@ -106,9 +106,22 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+                // 수량합계
                 if (col.binding === "totSaleQty") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
+                }
+
+                // 수량
+                for (var i = 0; i < posColList.length; i++) {
+                    if (col.binding === ("pos" + posColList[i].posNo + "SaleQty")) {
+                        var item = s.rows[e.row].dataItem;
+
+                        // 값이 있으면 링크 효과
+                        if (nvl(item[("pos" + posColList[i].posNo + "SaleQty")], '') !== '') {
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }
                 }
             }
         });
@@ -128,6 +141,24 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     params.gubun = "month";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
+                }
+
+                // 수량 클릭시 상세정보 조회
+                for (var i = 0; i < posColList.length; i++) {
+                    if (col.binding === ("pos" + posColList[i].posNo + "SaleQty")) {
+
+                        var selectedRow = s.rows[ht.row].dataItem;
+                        var params      = {};
+                        params.yearMonth = selectedRow.yearMonth.replace("-", "");
+                        params.storeCd = $("#monthPosStoreCd").val();
+                        params.posNo = posColList[i].posNo;
+                        params.gubun = "monthPos";
+
+                        // 값이 있으면 링크
+                        if (nvl(selectedRow[("pos" + posColList[i].posNo + "SaleQty")], '') !== '') {
+                            $scope._broadcast('prodSaleDtlCtrl', params);
+                        }
+                    }
                 }
             }
         });

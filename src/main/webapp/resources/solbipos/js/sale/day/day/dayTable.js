@@ -122,11 +122,16 @@ app.controller('dayTableCtrl', ['$scope', '$http', '$timeout', function ($scope,
                         var item = s.rows[e.row].dataItem;
 
                         // 값이 있으면 링크 효과
-                        if (nvl(item[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') !== '' && nvl(item[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') != "0") {
+                        if (nvl(item[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') !== '') {
                             wijmo.addClass(e.cell, 'wijLink');
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                         }
                     }
+                }
+
+                // 날짜 형식
+                if (col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
                 }
             }
         });
@@ -149,7 +154,7 @@ app.controller('dayTableCtrl', ['$scope', '$http', '$timeout', function ($scope,
                         params.tableCd = tableColList[i].tblCd;
 
                         // 값이 있으면 링크
-                        if (nvl(selectedRow[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') !== '' && nvl(selectedRow[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') != "0") {
+                        if (nvl(selectedRow[("tbl" + tableColList[i].tblCd + "RealSaleAmt")], '') !== '') {
                             $scope._broadcast('dayProdSaleDtlCtrl', params);
                         }
                     }

@@ -226,13 +226,36 @@ public class DayController {
     }
 
     /**
+     * 코너별 - 코너별 매출조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return Object
+     * @author  김설아
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/day/getDayCornerList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayCornerList(DayVO dayVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayCornerList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
+    }
+
+    /**
      * 외식테이블별 - 외식테이블별매출조회
      *
      * @param dayVO
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return Object
      * @author  김설아
      * @since   2020. 01. 09.
      */
@@ -255,7 +278,7 @@ public class DayController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return Object
      * @author  김설아
      * @since   2020. 01. 08.
      */
@@ -278,7 +301,7 @@ public class DayController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return Object
      * @author  김설아
      * @since   2019. 12. 18.
      */

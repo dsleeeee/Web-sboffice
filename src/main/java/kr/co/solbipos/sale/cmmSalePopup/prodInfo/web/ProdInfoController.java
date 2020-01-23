@@ -57,7 +57,9 @@ public class ProdInfoController {
      * @param request
      * @param response
      * @param model
-     * @return
+     * @return  Object
+     * @author  김설아
+     * @since   2019. 12. 11.
      */
     @RequestMapping(value = "/prodSaleDtl/list.sb", method = RequestMethod.POST)
     @ResponseBody
