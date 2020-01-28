@@ -150,7 +150,9 @@ public class RegistController {
     public Result baseListPost(RegistVO registVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        DefaultMap<String> result = registService.getMemberInfo(registVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = registService.getMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -331,7 +333,9 @@ public class RegistController {
     public Result getMappingCompany(MemberMappingVO memberMappingVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = registService.getMappingCompany(memberMappingVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = registService.getMappingCompany(memberMappingVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, memberMappingVO);
     }
