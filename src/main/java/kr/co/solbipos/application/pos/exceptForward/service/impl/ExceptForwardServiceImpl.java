@@ -78,7 +78,13 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
         productVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         productVO.setStoreCd(sessionInfoVO.getStoreCd());
         productVO.setSaleDate(currentDateString());
-        productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
+
+        if(sessionInfoVO.getHqOfficeCd() == "A0007"){
+            productVO.setCdCompany(BaseEnv.VITIS_CD_COMPANY); // 회사코드 (비티스)
+        }else{
+            productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
+        }
+
         productVO.setCdPlant(BaseEnv.NEOE_CD_PLANT); //공장코드
         productVO.setNoEgr(sessionInfoVO.getStoreCd() + productVO.getProdCd()); // 출고항번 (STORE_CD + PROD_CD)
         productVO.setDtIo(currentDateString()); // 출고일자
@@ -98,7 +104,13 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
         String dt = currentDateTimeString();
 
         productVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
+
+        if(sessionInfoVO.getHqOfficeCd() == "A0007"){
+            productVO.setCdCompany(BaseEnv.VITIS_CD_COMPANY); // 회사코드 (비티스)
+        }else{
+            productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
+        }
+
         productVO.setCdPlant(BaseEnv.NEOE_CD_PLANT); //공장코드
         productVO.setNoEgr(sessionInfoVO.getStoreCd() + productVO.getProdCd()); // 출고항번 (STORE_CD + PROD_CD)
         productVO.setDtIo(currentDateString()); // 출고일자

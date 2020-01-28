@@ -74,6 +74,8 @@ public class BaseEnv {
      */
     public static String NEOE_CD_COMPANY;
 
+    public static String VITIS_CD_COMPANY;
+
     public static String NEOE_CD_PLANT;
 
     public static String NEOE_CD_QTIOTP;
@@ -185,6 +187,11 @@ public class BaseEnv {
     @Value("#{config['neoe.cdCompany']}")
     public void setNeoeCdCompany(String neoeCdCompany) {
         NEOE_CD_COMPANY = neoeCdCompany;
+    }
+
+    @Value("#{config['vitis.cdCompany']}")
+    public void setVitisCdCompany(String vitisCdCompany) {
+        VITIS_CD_COMPANY = vitisCdCompany;
     }
 
     @Value("#{config['neoe.cdPlant']}")
