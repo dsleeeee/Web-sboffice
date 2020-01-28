@@ -105,11 +105,15 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
 
         productVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(sessionInfoVO.getHqOfficeCd() == "A0007"){
+        System.out.println("본사코드 : " + sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getHqOfficeCd().equals("A0007")){
+            System.out.println("11111");
             productVO.setCdCompany(BaseEnv.VITIS_CD_COMPANY); // 회사코드 (비티스)
         }else{
+            System.out.println("22222");
             productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
         }
+        System.out.println("cdCompany : " + productVO.getCdCompany());
 
         productVO.setCdPlant(BaseEnv.NEOE_CD_PLANT); //공장코드
         productVO.setNoEgr(sessionInfoVO.getStoreCd() + productVO.getProdCd()); // 출고항번 (STORE_CD + PROD_CD)
