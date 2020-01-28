@@ -90,7 +90,8 @@
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리  // todo height 조정--%>
-        <div id="treeResrce" style="height:430px; "></div>
+        <%--<div id="treeResrce" style="height:430px; "></div>--%>
+        <div id="treeResrce" style="height:auto;overflow: hidden; "></div>
         <%--//위즈모 트리--%>
       </div>
     </div>

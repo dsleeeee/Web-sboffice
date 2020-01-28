@@ -107,7 +107,10 @@ public class RegistServiceImpl implements RegistService {
 
     /** 선택한 회원 정보 조회 */
     @Override
-    public DefaultMap<String> getMemberInfo(RegistVO registVO) {
+    public DefaultMap<String> getMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        // ERP 연동과 관련, 본사코드에 의해 조회하는 DB가 다름 (이다솜_2020.01.28)
+        registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getMemberInfo(registVO);
     }
 
@@ -294,9 +297,13 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
-    /** 회원 거래처 매핑코드 (보나비 전용) */
+    /** 회원 거래처 매핑코드 (보나비 전용 >> 비티스 추가 2020.01.28) */
     @Override
-    public List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO) {
+    public List<DefaultMap<String>> getMappingCompany(MemberMappingVO memberMappingVO, SessionInfoVO sessionInfoVO) {
+
+        // ERP 연동과 관련, 본사코드에 의해 조회하는 DB가 다름 (이다솜_2020.01.28)
+        memberMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return mapper.getMappingCompany(memberMappingVO);
     }
 

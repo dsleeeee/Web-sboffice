@@ -29,6 +29,8 @@ public class MemberMappingVO extends PageVO {
 
     private static final long serialVersionUID = 1L;
 
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 회사코드 */
     private String cdCompany;
     /** 거래처코드 */
@@ -77,6 +79,16 @@ public class MemberMappingVO extends PageVO {
     private String dtsUpdate;
     /** 수정자 */
     private String idUpdate;
+
+
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the cdCompany

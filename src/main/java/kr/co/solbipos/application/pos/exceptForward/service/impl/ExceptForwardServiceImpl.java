@@ -75,6 +75,7 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
     public List<DefaultMap<String>> getExcpForwardProduct(ExcpForwardProductVO productVO,
         SessionInfoVO sessionInfoVO) {
 
+        productVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         productVO.setStoreCd(sessionInfoVO.getStoreCd());
         productVO.setSaleDate(currentDateString());
         productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
@@ -96,6 +97,7 @@ public class ExceptForwardServiceImpl implements ExceptForwardService{
 
         String dt = currentDateTimeString();
 
+        productVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         productVO.setCdCompany(BaseEnv.NEOE_CD_COMPANY); // 회사코드
         productVO.setCdPlant(BaseEnv.NEOE_CD_PLANT); //공장코드
         productVO.setNoEgr(sessionInfoVO.getStoreCd() + productVO.getProdCd()); // 출고항번 (STORE_CD + PROD_CD)
