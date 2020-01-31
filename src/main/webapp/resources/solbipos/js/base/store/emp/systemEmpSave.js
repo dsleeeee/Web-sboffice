@@ -73,15 +73,25 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.systemEmpRegistInfo.adminFg    = 'A';
       $scope.newEmpYn                       = true;
 
-      // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
+      // 총판/대리점 계정으로 접속한 경우, 관리업체는 본인업체로 고정
       // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
       if(orgnFg === "AGENCY"){
         $("#_agencyCd").val(orgnCd);
         $("#_agencyNm").val(orgnNm);
-        if(pAgencyCd !== "00000"){
-          $scope.adminFgCombo.selectedValue = "P";
-          $scope.adminFgCombo.isReadOnly= true;
+        $("#_agencyNm").css('background-color', '#F0F0F0');
+        $("#_agencyNm").attr("disabled", true);
+        
+        if(pAgencyCd === "00000"){
+          $scope.adminFgCombo.selectedValue = "P"; // 관리자구분 : 총판 권한
+          //$scope.adminFgCombo.isReadOnly= true;
         }
+        else if(pAgencyCd !== "00000"){
+          $scope.adminFgCombo.selectedValue = "C"; // 관리자구분 : 대리점 권한
+          //$scope.adminFgCombo.isReadOnly= true;
+        }
+        // 관리자구분 고정
+        $("#_adminFg").css('background-color', '#F0F0F0');
+        $("#_adminFg").attr("disabled", true);
       }
 
     } else {
@@ -89,8 +99,15 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.getSystemEmpList();
       $scope.newEmpYn = false;
 
-      if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
-        $scope.adminFgCombo.isReadOnly= true;
+      // 총판/대리점 계정으로 접속한 경우, 관리업체는 본인업체로 고정
+      if(orgnFg === "AGENCY"){
+        $("#_agencyNm").css('background-color', '#F0F0F0');
+        $("#_agencyNm").attr("disabled", true);
+
+        //$scope.adminFgCombo.isReadOnly= true;
+        // 관리자구분 고정
+        $("#_adminFg").css('background-color', '#F0F0F0');
+        $("#_adminFg").attr("disabled", true);
       }
     }
 
@@ -109,6 +126,8 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.systemEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
       $scope.pwdChgFg                               = false;
       $scope.systemEmpRegistInfo.originalWebUserId  = response.data.data.userId;
+      $("#_agencyNm").val(response.data.data.agencyNm);
+      $("#_agencyCd").val(response.data.data.agencyCd);
     });
   };
 
@@ -155,9 +174,9 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
   //   $scope.changePwdLayer.show(true);
   // };
 
-  // 대리점 조회
+  // 관리업체 조회
   $scope.searchAgency = function(){
-    if(orgnFg === "MASTER" || pAgencyCd === "00000") {
+    if(orgnFg === "MASTER") {
       // $scope.agencyLayer.show();
       $scope.agencyLayer.show(true, function (s) {
         var agencyScope = agrid.getScope('searchAgencyCtrl');
@@ -165,8 +184,10 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope.$apply(function () {
           if (!$.isEmptyObject(agencyScope.getAgency())) {
-            $scope.systemEmpRegistInfo.agencyCd = agencyScope.getAgency().agencyCd;
-            $scope.systemEmpRegistInfo.agencyNm = agencyScope.getAgency().agencyNm;
+            //$scope.systemEmpRegistInfo.agencyCd = agencyScope.getAgency().agencyCd;
+            //$scope.systemEmpRegistInfo.agencyNm = agencyScope.getAgency().agencyNm;
+              $("#_agencyCd").val(agencyScope.getAgency().agencyCd);
+              $("#_agencyNm").val(agencyScope.getAgency().agencyNm);
           }
         });
       });
@@ -190,13 +211,16 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     // 대리점(관리업체) 선택 필수
-    if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
+    //if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
+    if(isEmptyObject($("#_agencyCd").val()) || isEmptyObject($("#_agencyNm").val())){
       $scope._popMsg(messages["systemEmp.require.agencyCd"] );
       return false;
     }
 
     var params = $scope.systemEmpRegistInfo;
     params.pwdChgFg = false;
+    params.agencyCd = $("#_agencyCd").val();
+    params.agencyNm = $("#_agencyNm").val();
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/system/regist.sb", params, function(response){
 
@@ -242,13 +266,16 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     // 대리점(관리업체) 선택 필수
-    if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
+    //if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
+    if(isEmptyObject($("#_agencyCd").val()) || isEmptyObject($("#_agencyNm").val())){
       $scope._popMsg(messages["systemEmp.require.agencyCd"] );
       return false;
     }
 
     var params      = $scope.systemEmpRegistInfo;
     params.pwdChgFg = $scope.pwdChgFg;
+    params.agencyCd = $("#_agencyCd").val();
+    params.agencyNm = $("#_agencyNm").val();
 
     // console.log('save params' , params);
 

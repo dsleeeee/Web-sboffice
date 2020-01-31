@@ -118,7 +118,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <input type="hidden" id="emd_agencyCd" namae="agencyCd"/>
+                    <input type="hidden" id="emd_agencyCd" name="emd_agencyCd"/>
+                <input type="hidden" id="emd_pAgencyCd" name="emd_pAgencyCd"/>
                     <div class="btnSet">
                         <span><a href="#" class="btn_blue" id="emd_btnEdit"><s:message code="cmm.edit" /></a></span>
                         <span><a href="#" class="btn_blue" id="emd_btnCancel"><s:message code="cmm.cancel" /></a></span>
@@ -128,12 +129,13 @@
     </div>
 
 <script>
-    function getEmpManageDtl(agencyCd, empNo){
+    function getEmpManageDtl(agencyCd, empNo, pAgencyCd){
         $("#empManageDtlLayerDim").show();
         $("#empManageDtlLayer").show();
 
         // 수정화면 호출 시 사용
         $("#emd_agencyCd").val(agencyCd);
+        $("#emd_pAgencyCd").val(pAgencyCd);
 
         var params = {};
         params.agencyCd = agencyCd;
@@ -163,7 +165,7 @@
 
     <%-- 수정 --%>
     $("#empManageDtlLayer #emd_btnEdit").click(function(){
-        empManageRegist("MOD", $("#emd_agencyCd").val(), $("#emd_empNo").text());
+        empManageRegist("MOD", $("#emd_agencyCd").val(), $("#emd_empNo").text(), $("#emd_pAgencyCd").val());
     });
 
     <%-- 레이어팝업 닫기 --%>

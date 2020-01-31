@@ -92,6 +92,7 @@
         </div>
         <%-- 저장타입 지정 --%>
         <input type="hidden" id="rowAgencyCd" name="rowAgencyCd">
+        <input type="hidden" id="rowPAgencyCd" name="rowPAgencyCd">
     </div>
 </div>
 
@@ -193,6 +194,7 @@
 
                                     // 선택한 업체 코드 값 hidden 으로 갖고 있기(사원관리, 인증관리 호출 시 사용)
                                     $("#rowAgencyCd").val(selectedRow.agencyCd);
+                                    $("#rowPAgencyCd").val(selectedRow.pAgencyCd);
 
                                     // 업체정보 탭 활성화
                                     $("#agencyInfoView").show();
@@ -225,7 +227,7 @@
             //$("#authManageView").hide();
 
             // 사원관리 조회
-            getEmpManageList($("#rowAgencyCd").val());
+            getEmpManageList($("#rowAgencyCd").val(), $("#rowPAgencyCd").val());
 
         }else if(data === "auth"){
             $("#agencyInfoView").hide();

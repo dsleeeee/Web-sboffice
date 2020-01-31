@@ -130,7 +130,7 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
             String dt = currentDateTimeString();
 
-            instlAgencyVO.setAuthGrpCd(sessionInfoVO.getAuthGrpCd());
+            instlAgencyVO.setAuthGrpCd("000002"); // 관리자> 총판사원/ 총판 > 대리점사원을 등록하므로 총판/대리점 권한인 '000002'로 셋팅
             instlAgencyVO.setRegDt(dt);                         //등록일시
             instlAgencyVO.setRegId(sessionInfoVO.getUserId());  //등록아이디
             instlAgencyVO.setModDt(dt);                         //수정일시

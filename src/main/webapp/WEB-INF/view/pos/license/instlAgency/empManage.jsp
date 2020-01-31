@@ -21,6 +21,7 @@
         <button class="btn_skyblue ml5 fr" id="btnNewRegEmp" onclick="callEmpManageRegist();">
             <s:message code="instlAgency.empReg"/>
             <input type="hidden" id="agencyCd"/>
+            <input type="hidden" id="pAgencyCd"/>
         </button>
     </div>
     <div class="w100 mt10 mb20">
@@ -72,18 +73,19 @@
                 var selectedRow  = empManageGrid.rows[ht.row].dataItem;
 
                  // 사원 상세화면 호출
-                 getEmpManageDtl(selectedRow.agencyCd, selectedRow.empNo);
+                 getEmpManageDtl(selectedRow.agencyCd, selectedRow.empNo, $("#pAgencyCd").val());
             }
         }
     });
 
-    <%-- 포스기능 인증 목록 조회 --%>
-    function getEmpManageList(data) {
+    <%-- 사원목록 조회 --%>
+    function getEmpManageList(agCd, pagCd) {
 
-        $("#agencyCd").val(data);
+        $("#agencyCd").val(agCd);
+        $("#pAgencyCd").val(pagCd);
 
         var param = {};
-        param.agencyCd = data;
+        param.agencyCd = agCd;
 
         $.postJSON("/pos/license/instlAgency/getAgencyEmp.sb", param,
             function(result) {
@@ -101,7 +103,7 @@
     }
 
     function callEmpManageRegist(){
-        empManageRegist('REG', $("#agencyCd").val(), '');
+        empManageRegist('REG', $("#agencyCd").val(), '', $("#pAgencyCd").val());
     }
 </script>
 
