@@ -646,4 +646,37 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 회원정보 등록,수정시 본사코드 A0007만 -->
+    <!--
+    TABLE    : TB_SL_SALE_HDR_MEMBR, TB_MB_MEMBER_PTN
+    COMMENTS : [매출]헤더_회원, [회원]회원-거래처 매핑
+    -->
+    <select id="registPoslinkPtn" statementType="CALLABLE"  parameterType="registVO" resultType="DefaultMap">
+    {
+        CALL VITIS.SP_NEOE_POSLINK_RTN
+        (
+            #{membrOrgnCd},
+            #{storeCd},
+            #{membrNo},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+        )
+    }
+    </select>
+
+    <!-- 회원정보 등록,수정시 본사코드 A0007만 -->
+    <!--
+    TABLE    : TB_NS_NONSALE_HDR, TB_MB_MEMBER_PTN
+    COMMENTS : [비매출]HEADER, [회원]회원-거래처 매핑
+    -->
+    <select id="registSposBillPtn" statementType="CALLABLE"  parameterType="registVO" resultType="DefaultMap">
+    {
+        CALL VITIS.SP_NEOE_SPOS_BILL_PTN
+        (
+            #{membrOrgnCd},
+            #{regStoreCd},
+            #{membrNo},
+            #{result, mode=OUT, jdbcType=VARCHAR}
+        )
+    }
+    </select>
 </mapper>
