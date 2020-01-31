@@ -144,4 +144,10 @@ public interface RegistMapper {
 
     /** 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회 */
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO);
+
+    /** 회원정보 등록,수정시 본사코드 A0007만 */
+    int registPoslinkPtn(RegistVO registVO);
+
+    /** 회원정보 등록,수정시 본사코드 A0007만 */
+    int registSposBillPtn(RegistVO registVO);
 }

@@ -169,6 +169,17 @@ public class RegistServiceImpl implements RegistService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
+//        System.out.println("test1111");
+        // 회원정보 등록,수정시 본사코드 A0007만
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registPoslinkPtn(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registSposBillPtn(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         return result;
     }
 
@@ -199,6 +210,17 @@ public class RegistServiceImpl implements RegistService {
         // 회원-거래처 매핑코드 등록 (보나비)
         if( registVO.getCdCompany() != null && registVO.getCdPartner() != null ){
             result = mapper.registMemberMappingCode(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+//        System.out.println("test1111");
+        // 회원정보 등록,수정시 본사코드 A0007만
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registPoslinkPtn(registVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        if (registVO.getMembrOrgnCd() == "A0007") {
+            result = mapper.registSposBillPtn(registVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
