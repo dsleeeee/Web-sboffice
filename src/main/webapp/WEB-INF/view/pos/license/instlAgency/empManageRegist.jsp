@@ -115,7 +115,8 @@
                     <span><a href="#" class="btn_blue" id="btnSave" onClick="saveEmp()"><s:message code="cmm.save" /></a></span>
                     <span><a href="#" class="btn_blue" id="btnCancel"><s:message code="cmm.cancel" /></a></span>
                     <input type="hidden" id="saveType"/>
-                    <input type="hidden" id="agencyCd"/>
+                    <input type="hidden" id="emr_agencyCd"/>
+                    <input type="hidden" id="emr_pAgencyCd"/>
                     <input type="hidden" id="emr_userPwdHd"/>
                 </div>
             </form>
@@ -140,15 +141,16 @@
     }
 
     // 기존 정보 조회
-    function empManageRegist(saveType, agencyCd, empNo){
+    function empManageRegist(saveType, agencyCd, empNo, pAgencyCd){
 
         // 사원정보 등록/수정 화면 레이어 보이기
         $("#empManageRegistLayerDim").show();
         $("#empManageRegistLayer").show();
 
-        // 현재 등록/수정 모드 값과 agencyCd 값 갖고있기
+        // 현재 등록/수정 모드 값과 agencyCd, pAgencyCd 값 갖고있기
         $("#saveType").val(saveType);
-        $("#agencyCd").val(agencyCd);
+        $("#emr_agencyCd").val(agencyCd);
+        $("#emr_pAgencyCd").val(pAgencyCd);
 
         // 수정모드 시
         if(saveType === "MOD"){
@@ -195,6 +197,12 @@
             $("#emr_userId").attr("readonly",true);
             $("#trUserId").css("display", "");
 
+            // 총판/대리점 권한인 경우 관리자 구분 고정
+            if(orgnFg === "AGENCY") {
+                $("#emr_adminFg").css('background-color', '#F0F0F0');
+                $("#emr_adminFg").attr("disabled", true);
+            }
+
         }else{ // 등록 모드 시
 
             // 화면명
@@ -222,6 +230,18 @@
             $("#erm_useYn").val("N");
             $("#emr_smsRecvYn").val("N");
             $("#emr_remark").val("");
+
+            // 총판/대리점 권한인 경우 관리자 구분 고정
+            if(orgnFg === "AGENCY") {
+                if($("#emr_pAgencyCd").val() === "00000"){
+                    $("#emr_adminFg").val("P"); // 관리자 구분 : 총판 권한
+                }else if($("#emr_pAgencyCd").val() !== "00000"){
+                    $("#emr_adminFg").val("C"); // 관리자 구분 : 대리점 권한
+                }
+
+                $("#emr_adminFg").css('background-color', '#F0F0F0');
+                $("#emr_adminFg").attr("disabled", true);
+            }
         }
 
     }
@@ -275,7 +295,7 @@
 
             var params = {};
             params.saveType = $("#saveType").val();
-            params.agencyCd = $("#agencyCd").val();
+            params.agencyCd = $("#emr_agencyCd").val();
             params.empNo = $("#emr_empNo").val();
             params.empNm = $("#emr_empNm").val();
             params.useYn = $("#emr_useYn").val();
@@ -306,11 +326,11 @@
                         $("#empManageRegistLayer").hide();
 
                         // 부모창 리스트 Refresh
-                        getEmpManageList($("#agencyCd").val());
+                        getEmpManageList($("#emr_agencyCd").val(), $("#emr_pAgencyCd").val());
 
                         // 수정 모드 시 상세 화면 Refresh
                         if($("#saveType").val() === "MOD"){
-                            getEmpManageDtl($("#agencyCd").val(),$("#emr_empNo").val());
+                            getEmpManageDtl($("#emr_agencyCd").val(),$("#emr_empNo").val(), $("#emr_pAgencyCd").val());
                         }
 
                     } else if(response.data === 'USER_ID_REGEXP') {
