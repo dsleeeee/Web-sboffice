@@ -85,7 +85,9 @@ public class KitchenMemoController {
         // 매장통제, 본사통제 둘다 메뉴 사용 가능하지만 null인 경우는 사용 불가능.
         // 해당 환경설정값이 없는 경우, 본사환경설정에서 환경설정 필요.
         // 본사통제인데 매장에서 접속시, 권한 오류
-        if("".equals(envstVal) || ("1".equals(envstVal) && sessionInfoVO.getOrgnFg() == OrgnFg.STORE )) {
+        // 본사통제/매장통제 모두 화면 보이도록 수정(본사통제인데 매장에서 접속해도 화면은 보임, 등록/수정은 불가) 2020.02.03_이다솜
+        /*if("".equals(envstVal) || ("1".equals(envstVal) && sessionInfoVO.getOrgnFg() == OrgnFg.STORE )) {*/
+        if("".equals(envstVal)) {
             throw new CodeException(CodeType.HQ_ENV, envstCd, "/error/envError.sb");
         } else{
             model.addAttribute("envstVal", envstVal);
