@@ -138,6 +138,7 @@
         </if>
            AND tsdp.STORE_CD (+)= tnsp.STORE_CD
            AND tsdp.PROD_CD (+)= tnsp.PROD_CD
+           AND tsdp.SALE_DATE (+) = tnsp.SALE_DATE
            AND tnse.CD_COMPANY (+)= tnsp.CD_COMPANY
            AND tnse.DT_IO (+)= tnsp.SALE_DATE
            AND tnse.CD_PJT (+)= tnsp.CD_PARTNER

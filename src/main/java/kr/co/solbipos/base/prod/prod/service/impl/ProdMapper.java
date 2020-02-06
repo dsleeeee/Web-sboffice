@@ -111,4 +111,13 @@ public interface ProdMapper {
     /** 매장 상품의 바코드 등록 프로시저 */
     String saveProdBarcdStore(ProdVO prodVO);
 
+    /** 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 그룹 추가 */
+    String insertSdselGrpToStore (ProdVO prodVO);
+
+    /** 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 분류 추가 */
+    String insertSdselClassToStore (ProdVO prodVO);
+
+    /** 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 선택상품 추가 */
+    String insertSdselProdToStore (ProdVO prodVO);
+
 }
