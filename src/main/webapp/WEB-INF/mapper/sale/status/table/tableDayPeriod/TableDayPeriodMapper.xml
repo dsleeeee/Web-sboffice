@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.table.dayPeriod.service.impl.TableDayPeriodMapper">
+
+	<select id="getTableDayPeriodList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
+		<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT TSDT.SALE_DATE,
+			   TMT.TBL_CD,
+			   TMT.TBL_NM,
+			   <!-- TMTG.TBL_GRP_NM, -->
+			   SUM(TSDT.REAL_SALE_CNT) AS REAL_SALE_CNT,
+			   SUM((TSDT.GUEST_CNT_1+GUEST_CNT_2)) AS GUEST_CNT,
+			   SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT,
+			   SUM(TSDT.TOT_DC_AMT) AS TOT_DC_AMT,
+			   SUM(TSDT.TOT_TIP_AMT) AS TOT_TIP_AMT,
+			   SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
+			   <include refid="CmmSQL.PagingTemplateCount"/>
+		FROM TB_MS_TABLE_GROUP TMTG
+     	   , TB_MS_TABLE TMT
+     	   , TB_SL_DAILY_TABLE TSDT
+     	WHERE TMTG.TBL_GRP_CD = TMT.TBL_GRP_CD
+   			  AND TMT.TBL_CD = TSDT.TBL_CD
+   			  <if test='arrStoreCd != null and arrStoreCd != ""'>
+			  	AND TMTG.STORE_CD IN
+			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+			  		#{item}
+			  	</foreach>
+			  </if>
+   			  <![CDATA[
+   			  AND TSDT.SALE_DATE >= #{startDate}
+   			  AND TSDT.SALE_DATE <= #{endDate}
+   			  ]]>
+        GROUP BY TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
+        ORDER BY TSDT.SALE_DATE DESC, TMT.TBL_CD, TMT.TBL_NM
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+
+	</select>
+
+</mapper>

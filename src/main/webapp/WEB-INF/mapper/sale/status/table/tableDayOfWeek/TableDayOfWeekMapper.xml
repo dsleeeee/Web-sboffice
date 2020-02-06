@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="kr.co.solbipos.sale.status.table.dayOfWeek.service.impl.TableDayOfWeekMapper">
+
+	<select id="getTableDayOfWeekList"
+		parameterType="tableDayOfWeekVO" resultType="DefaultMap">
+		<include refid="CmmSQL.PagingTemplateHeader" />
+		SELECT TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
+		, SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
+		, SUM(REAL_SALE_CNT) TOT_REAL_SALE_CNT
+		, SUM(GUEST_CNT_1) TOT_GUEST_CNT
+		${sQuery1}
+		<include refid="CmmSQL.PagingTemplateCount" />
+		FROM TB_SL_DAILY_TABLE TSDT
+		WHERE 1 = 1
+		<!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
+		<if test='arrStoreCd != null and arrStoreCd != ""'>
+			AND STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="("
+				close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND TBL_CD in (${sQuery2})
+			  <![CDATA[
+   			  AND TSDT.SALE_DATE >= #{startDate}
+   			  AND TSDT.SALE_DATE <= #{endDate}
+   			  ]]>
+		GROUP
+		BY SALE_DATE
+		ORDER
+		BY SALE_DATE DESC
+		<include refid="CmmSQL.PagingTemplateBottom" />
+	</select>
+
+	<select id="getStoreTableList" parameterType="tableDayOfWeekVO"
+		resultType="DefaultMap">
+
+		SELECT tmp.TBL_CD AS NMCODE_CD
+		, tmp.TBL_NM AS NMCODE_NM
+		${sQuery1}
+		FROM TB_MS_TABLE tmp
+		WHERE 1=1
+		<if test='arrStoreCd != null and arrStoreCd != ""'>
+			AND tmp.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		<if test='tblCd != null and tblCd != ""'>
+			AND tmp.TBL_CD = #{tblCd}
+		</if>
+		ORDER
+		BY tmp.TBL_NM
+
+	</select>
+
+</mapper>

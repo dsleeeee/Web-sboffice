@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.anals.store.rank.service.impl.StoreRankMapper">
+    <!-- 매장별매출분석 - 매장순위 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL, TB_SL_DAILY_PAY, TB_MS_STORE
+        PARAM    : storeRankVO
+        COMMENTS : 매장별매출분석 - 매장순위 리스트를 조회한다.
+    -->
+    <select id="getStoreRankList" parameterType="storeRankVO" resultType="DefaultMap">
+        /* USE : storeRankMapper.getStoreRankList */
+		SELECT M.STORE_CD
+		      , M.STORE_NM
+		      , M.TOT_SALE_AMT
+		      , M.TOT_DC_AMT
+		      , M.REAL_SALE_AMT
+		      , M.BILL_CNT
+		      , M.TOT_GUEST_CNT
+		      , ROUND(M.TOT_SALE_AMT/M.BILL_CNT,0) AS TOT_BILL_AMT
+		      , ROUND(RATIO_TO_REPORT(M.REAL_SALE_AMT) OVER() *100, 1) AS STORE_RAT
+	 		  ${sQuery1}
+		FROM (
+			SELECT TSDT.STORE_CD
+			     , TMS.STORE_NM
+			     , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
+			     , SUM(TSDT.TOT_DC_AMT) AS TOT_DC_AMT
+			     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
+			     , SUM(TSDT.BILL_CNT) AS BILL_CNT
+			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+		 		 ${sQuery2}
+			  FROM TB_SL_DAILY_TOTAL TSDT
+			     , TB_SL_DAILY_PAY TSDP
+			     , TB_MS_STORE TMS
+			 WHERE TSDT.STORE_CD = TSDP.STORE_CD
+			   AND TSDT.SALE_DATE = TSDP.SALE_DATE
+			   AND TSDT.STORE_CD = TMS.STORE_CD
+			   AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+			<if test='startDate != null and startDate != ""'>
+			   AND TSDT.SALE_DATE >= #{startDate}
+			</if>
+			<if test='endDate != null and endDate != ""'>
+			   AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			</if>
+			 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
+			<if test='chkSort == "1"'>
+			 ORDER BY SUM(TSDT.TOT_SALE_AMT) DESC
+			</if>
+			<if test='chkSort == "2"'>
+			 ORDER BY SUM(TSDT.TOT_SALE_AMT) ASC
+			</if>
+		 ) M
+		 WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}   
+	 
+    </select>
+	
+	<!-- 매장별매출분석 - 결제수단 컬럼 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : storeRankVO
+        COMMENTS : 결제수단 컬럼 리스트 조회한다.
+    -->
+    <select id="getPayColList" parameterType="storeRankVO" resultType="DefaultMap">
+        /* USE : storeRankMapper.getPayColList */
+        <![CDATA[
+        SELECT  TCN.NMCODE_CD AS PAY_CD, TCN.NMCODE_NM AS PAY_NM, TCN.NMCODE_ITEM_1 AS PAY_METHOD
+        FROM    TB_CM_NMCODE TCN
+        WHERE   TCN.NMCODE_GRP_CD   =   '024'
+        ORDER
+        BY      TCN.NMCODE_CD
+        ]]>
+    </select>
+</mapper>

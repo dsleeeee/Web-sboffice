@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.corner.dayOfWeek.service.impl.CornerDayOfWeekMapper">
+
+    <!-- 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : todayBillSaleDtlVO
+        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+    -->
+    <select id="getCornerDayOfWeekList" parameterType="cornerDayOfWeekVO" resultType="DefaultMap">
+       /* USE : CornerDayOfWeekMapper.getCornerDayOfWeekList */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT TSDCP.SALE_DATE
+              ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
+              ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT
+              ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
+              ${sQuery1}
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+       <![CDATA[
+        FROM TB_SL_DAILY_CORNR_PROD TSDCP
+        WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
+       ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND TSDCP.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='arrCornrCd != null and arrCornrCd != ""'>
+            AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        ORDER BY TSDCP.SALE_DATE DESC
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+</mapper>

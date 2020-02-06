@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaletrnsitnMapper.xml
+	매출추이분석 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       조현수     2020.01.14     쿼리수정
+-->
+<mapper namespace="kr.co.solbipos.sale.anals.saletrnsitn.service.impl.SaleTrnsitnMapper">
+
+    <!-- 특정일 기준 이전일자들 조회 (매출관리 > 매출분석 > 매출추이분석)
+    
+	        TABLE    : N/A (DUAL)
+	        PARAM    : saleTrnsitnVO
+	        COMMENTS : 특정일 기준 이전일자들을 조회한다.
+    -->
+    <select id="getPreviouseDatesInfo" parameterType="saleTrnsitnVO" resultType="saleTrnsitnDatesVO">
+    	<!--
+		SELECT  TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD'),	  'YYYYMMDD' )	AS DATE_BEFORE_ZERO,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 1, 'YYYYMMDD' ) 	AS DATE_BEFORE_ONE,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 2, 'YYYYMMDD' ) 	AS DATE_BEFORE_TWO,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 3, 'YYYYMMDD' ) 	AS DATE_BEFORE_THREE,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 4, 'YYYYMMDD' ) 	AS DATE_BEFORE_FOUR,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 5, 'YYYYMMDD' ) 	AS DATE_BEFORE_FIVE,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 6, 'YYYYMMDD' ) 	AS DATE_BEFORE_SIX,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 7, 'YYYYMMDD' ) 	AS DATE_BEFORE_SEVEN,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 8, 'YYYYMMDD' ) 	AS DATE_BEFORE_EIGHT,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 9, 'YYYYMMDD' ) 	AS DATE_BEFORE_NINE,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -10, 'YYYYMMDD' ) 	AS DATE_BEFORE_TEN,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -11, 'YYYYMMDD' ) 	AS DATE_BEFORE_ELEVEN,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -12, 'YYYYMMDD' ) 	AS DATE_BEFORE_TWELVE,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -13, 'YYYYMMDD' ) 	AS DATE_BEFORE_THIRTEEN
+		FROM    DUAL
+		-->
+		SELECT  TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD'),	  'YYYYMMDD' )	AS DATE_BEFORE_0,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 1, 'YYYYMMDD' ) 	AS DATE_BEFORE_1,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 2, 'YYYYMMDD' ) 	AS DATE_BEFORE_2,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 3, 'YYYYMMDD' ) 	AS DATE_BEFORE_3,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 4, 'YYYYMMDD' ) 	AS DATE_BEFORE_4,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 5, 'YYYYMMDD' ) 	AS DATE_BEFORE_5,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 6, 'YYYYMMDD' ) 	AS DATE_BEFORE_6,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 7, 'YYYYMMDD' ) 	AS DATE_BEFORE_7,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 8, 'YYYYMMDD' ) 	AS DATE_BEFORE_8,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') - 9, 'YYYYMMDD' ) 	AS DATE_BEFORE_9,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -10, 'YYYYMMDD' ) 	AS DATE_BEFORE_10,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -11, 'YYYYMMDD' ) 	AS DATE_BEFORE_11,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -12, 'YYYYMMDD' ) 	AS DATE_BEFORE_12,
+		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -13, 'YYYYMMDD' ) 	AS DATE_BEFORE_13
+		FROM    DUAL		
+    </select>
+
+
+
+    <!-- 매출추이분석 목록조회 (매출관리 > 매출분석 > 매출추이분석)
+    
+	        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD,
+	                   TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+	        PARAM    : saleTrnsitnVO
+	        COMMENTS : 매출추이분석 목록을 조회한다.
+    -->
+    <select id="getSaletrnsitnList" parameterType="saleTrnsitnVO" resultType="DefaultMap">
+        SELECT  PROD_CD,
+                PROD_NM,
+                SPLY_UPRC,
+
+                TO_CHAR(TO_DATE(#{dateBefore0}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_0,
+                TO_CHAR(TO_DATE(#{dateBefore1}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_1,
+                TO_CHAR(TO_DATE(#{dateBefore2}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_2,
+                TO_CHAR(TO_DATE(#{dateBefore3}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_3,
+                TO_CHAR(TO_DATE(#{dateBefore4}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_4,
+                TO_CHAR(TO_DATE(#{dateBefore5}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_5,
+                TO_CHAR(TO_DATE(#{dateBefore6}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_6,
+                TO_CHAR(TO_DATE(#{dateBefore7}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_7,
+                TO_CHAR(TO_DATE(#{dateBefore8}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_8,
+                TO_CHAR(TO_DATE(#{dateBefore9}, 'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_9,
+                TO_CHAR(TO_DATE(#{dateBefore10},'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_10,
+                TO_CHAR(TO_DATE(#{dateBefore11},'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_11,
+                TO_CHAR(TO_DATE(#{dateBefore12},'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_12,
+                TO_CHAR(TO_DATE(#{dateBefore13},'YYYYMMDD'), 'YYYY.MM.DD')      AS  DATE_BEFORE_13,
+
+                SUM(  DECODE(SALE_DATE, #{dateBefore0}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_0_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore1}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_1_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore2}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_2_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore3}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_3_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore4}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_4_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore5}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_5_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore6}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_6_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore7}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_7_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore8}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_8_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore9}, TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_9_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore10},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_10_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore11},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_11_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore12},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_12_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore13},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_13_QTY,
+
+                SUM(TOT_SALE_QTY)                                               AS  TWO_WEEK_TOT,
+                TRUNC(SUM(TOT_SALE_QTY)/14,2)                                   AS  TWO_WEEK_AVR
+        FROM    (
+                    SELECT  A.PROD_CD,
+                            A.PROD_NM,
+                            A.SPLY_UPRC,
+                            B.SALE_DATE,
+                            B.TOT_SALE_QTY
+            <choose>
+                <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+                    FROM    TB_HQ_PRODUCT       A,
+                            TB_SL_DAILY_PROD    B
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+                    AND     A.PROD_CD       = B.PROD_CD
+                    <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND     A.PROD_CLASS_CD IN  (
+                                                    SELECT              PROD_CLASS_CD
+                                                    FROM                TB_HQ_PRODUCT_CLASS
+                                                    WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                    START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                                    AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                    CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                                    AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                )
+                    </if>
+                </when>
+                  <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+                    FROM    TB_MS_PRODUCT       A,
+                            TB_SL_DAILY_PROD    B
+                    WHERE   A.STORE_CD      = #{storeCd}
+                    AND     A.STORE_CD      = B.STORE_CD
+                    AND     A.PROD_CD       = B.PROD_CD
+                    <if test='prodClassCd != null and prodClassCd != ""'>
+                    AND     A.PROD_CLASS_CD IN  (
+                                                    SELECT              PROD_CLASS_CD
+                                                    FROM                TB_MS_PRODUCT_CLASS
+                                                    WHERE               STORE_CD        = #{storeCd}
+                                                    START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                                    AND                 STORE_CD        = #{storeCd}
+                                                    CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                                    AND                 STORE_CD        = #{storeCd}
+                                                )
+                    </if>                    
+                  </when>
+            </choose>
+                    AND     B.SALE_DATE     BETWEEN #{dateBefore13}
+                                            AND     #{dateBefore0}
+                <if test="prodCd != null and prodCd != ''">
+                    AND     A.PROD_CD       LIKE '%' || #{prodCd} || '%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND     A.PROD_NM       LIKE '%' || #{prodNm} || '%'
+                </if>
+                )
+        GROUP BY PROD_CD, PROD_NM, SPLY_UPRC
+        ORDER BY PROD_CD
+    </select>
+	<select id="getSaletrnsitnList_OLD" parameterType="saleTrnsitnVO" resultType="DefaultMap">
+        SELECT	PROD_CD,
+                PROD_NM,
+                SPLY_UPRC,
+
+                TO_CHAR(TO_DATE(#{dateBefore0},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_0,
+                TO_CHAR(TO_DATE(#{dateBefore1},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_1,
+                TO_CHAR(TO_DATE(#{dateBefore2},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_2,
+                TO_CHAR(TO_DATE(#{dateBefore3},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_3,
+                TO_CHAR(TO_DATE(#{dateBefore4},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_4,
+                TO_CHAR(TO_DATE(#{dateBefore5},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_5,
+                TO_CHAR(TO_DATE(#{dateBefore6},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_6,
+                TO_CHAR(TO_DATE(#{dateBefore7},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_7,
+                TO_CHAR(TO_DATE(#{dateBefore8},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_8,
+                TO_CHAR(TO_DATE(#{dateBefore9},		'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_9,
+                TO_CHAR(TO_DATE(#{dateBefore10},	'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_10,
+                TO_CHAR(TO_DATE(#{dateBefore11},	'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_11,
+                TO_CHAR(TO_DATE(#{dateBefore12},	'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_12,
+                TO_CHAR(TO_DATE(#{dateBefore13},	'YYYYMMDD'), 'YYYY.MM.DD')	AS	DATE_BEFORE_13,
+                
+                SUM(  DECODE(SALE_DATE, #{dateBefore0},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_0_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore1},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_1_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore2},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_2_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore3}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_3_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore4}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_4_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore5}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_5_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore6}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_6_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore7}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_7_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore8}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_8_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore9}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_9_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore10}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_10_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore11}, 	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_11_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore12},	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_12_QTY,
+                SUM(  DECODE(SALE_DATE, #{dateBefore13},	TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_13_QTY,
+
+                SUM(TOT_SALE_QTY)                                   			AS  TWO_WEEK_TOT,
+                TRUNC(SUM(TOT_SALE_QTY)/14,2)                       			AS  TWO_WEEK_AVR
+        FROM    (
+                    SELECT  A.PROD_CD,
+                            A.PROD_NM,
+                            A.SPLY_UPRC,
+                            B.SALE_DATE,
+                            B.TOT_SALE_QTY
+                    FROM    TB_MS_PRODUCT       A,
+                            TB_SL_DAILY_PROD    B
+                    WHERE   A.STORE_CD  = B.STORE_CD
+                    AND     A.PROD_CD   = B.PROD_CD
+                    AND     B.SALE_DATE BETWEEN #{dateBefore13}
+                                        AND     #{dateBefore0}
+	                <if test="prodCd != null and prodCd != ''">
+	                AND 	A.PROD_CD LIKE '%' || #{prodCd} || '%'
+	                </if>
+	                <if test="prodNm != null and prodNm != ''">
+	                AND 	A.PROD_NM LIKE '%' || #{prodNm} || '%'
+	                </if>
+                )
+        GROUP BY PROD_CD, PROD_NM, SPLY_UPRC
+        ORDER BY PROD_CD        
+	</select>
+	
+	
+</mapper>

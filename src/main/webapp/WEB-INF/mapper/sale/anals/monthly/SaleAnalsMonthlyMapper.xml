@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.anals.monthly.service.impl.SaleAnalsMonthlyMapper">
+
+    <!-- 월력판매분석 - 월력판매분석 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD
+        PARAM    : saleAnalsMonthlyVO
+        COMMENTS : 월력판매분석 - 월력판매분석 리스트를 조회한다.
+    -->
+	<select id="getStSaleAnalsMonthlyList" parameterType="saleAnalsMonthlyVO" resultType="DefaultMap">
+		/* USE : SaleAnalsMonthlyMapper.getStSaleAnalsMonthlyList */
+        <![CDATA[
+        SELECT	SUN, MON, TUE, WED, THU, FRI, SAT
+		FROM	(
+					SELECT	A.DT ||'||'|| NVL(B.TOT_SALE_AMT,0)||'||'||NVL(C.HOLIDAYYN,'N') AS DT, A.DW, A.WEEK
+					FROM	(
+								SELECT	TRUNC(DT + LEVEL-1, 'D') AS WEEK
+										, TO_CHAR(DT + LEVEL-1, 'D') AS DW
+										, TO_CHAR(DT + LEVEL-1,'yyyymmdd') AS DT
+								FROM    (
+
+											SELECT  TO_DATE(#{reqYearMonth}, 'yyyymm') DT
+											FROM    DUAL
+										)
+								CONNECT BY LEVEL < = TO_CHAR(LAST_DAY(DT), 'dd')
+							) A
+							LEFT OUTER JOIN (
+								SELECT	SALE_DATE AS DT
+										, SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+								FROM	TB_SL_DAILY_PROD
+								WHERE	1=1
+		]]>
+		<if test='hqOfficeCd != null and hqOfficeCd != ""'>
+		                        		AND HQ_OFFICE_CD = #{hqOfficeCd}
+		</if>
+		<if test='hqBrandCd != null and hqBrandCd != ""'>
+										AND HQ_BRAND_CD = #{hqBrandCd}
+		</if>
+		<if test='storeCd != null and storeCd != ""'>
+										AND STORE_CD = #{storeCd}
+		</if>
+		<if test='reqYearMonth != null and reqYearMonth != ""'>
+										AND SUBSTR(SALE_DATE,1,6) = #{reqYearMonth}
+		</if>
+		<![CDATA[
+								GROUP BY SALE_DATE
+							) B
+							ON A.DT = B.DT
+                            LEFT OUTER JOIN (
+								SELECT	HOLIDAY_DT AS DT
+                                        , 'Y' AS HOLIDAYYN
+								FROM	TB_MS_HOLIDAY
+								WHERE	1=1
+		]]>
+		<if test='storeCd != null and storeCd != ""'>
+										AND STORE_CD = #{storeCd}
+		</if>
+		<if test='reqYearMonth != null and reqYearMonth != ""'>
+										AND SUBSTR(HOLIDAY_DT,1,6) = #{reqYearMonth}
+		</if>
+		<![CDATA[
+							) C
+							ON A.DT = C.DT
+				)
+		PIVOT   (
+					MAX(DT) FOR DW IN ('1' AS SUN, '2' AS MON, '3' AS TUE, '4' AS WED, '5' AS THU, '6' AS FRI, '7' AS SAT)
+				)
+		ORDER BY WEEK
+		]]>
+	</select>
+
+</mapper>

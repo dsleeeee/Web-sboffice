@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.pos.dayPeriod.service.impl.PosDayPeriodMapper">
+
+	<!-- 포스별설정가간별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_STORE
+        PARAM    : posDayPeriodVO
+        COMMENTS : 포스별설정기간별 - 리스트를 조회한다.
+    -->
+    <select id="getPosDayPeriodList" parameterType="posDayPeriodVO" resultType="DefaultMap">
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO) STORE_NM_POS_NO
+    	       , TSDP.POS_NO
+    	       , TSDP.STORE_CD
+    	       , SUM(TSDP.SALE_CNT) AS SALE_CNT
+    	       , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+    	<include refid="CmmSQL.PagingTemplateCount"/>
+    	FROM TB_SL_DAILY_POS TSDP
+    	     , TB_MS_STORE TMS
+    	WHERE  1=1
+    	        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+                AND TSDP.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+           	<if test='startDate != null and startDate != ""'>
+           		AND TSDP.SALE_DATE >= #{startDate}
+           	</if>
+           	<if test='endDate != null and endDate != ""'>
+           		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+           	</if>
+           	    AND TSDP.STORE_CD = TMS.STORE_CD
+        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
+        ORDER BY STORE_NM_POS_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <!-- 포스별설정가간별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_POS
+        PARAM    : posDayPeriodVO
+        COMMENTS : 포스별설정가간별 - 리스트를 조회한다.
+    -->
+    <select id="getPosDayPeriodDtlList" parameterType="posDayPeriodVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TSDPP.PROD_CD
+		       , TMP.PROD_NM
+		       , SUM(TSDPP.TOT_SALE_QTY) AS TOT_SALE_QTY
+		       , SUM(TSDPP.REAL_SALE_AMT) AS REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT TMP
+             , TB_SL_DAILY_POS_PROD TSDPP
+        WHERE  TSDPP.HQ_OFFICE_CD = #{hqOfficeCd}
+               AND TMP.STORE_CD = TSDPP.STORE_CD
+               AND TMP.PROD_CD = TSDPP.PROD_CD
+           <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+               AND TSDPP.STORE_CD IN
+               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   #{item}
+               </foreach>
+           </if>
+           <if test='startDate != null and startDate != ""'>
+               AND TSDPP.SALE_DATE >= #{startDate}
+           </if>
+           <if test='endDate != null and endDate != ""'>
+               AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+           </if>
+           <if test='posNo != null and posNo != ""'>
+               AND TSDPP.POS_NO = ${posNo}
+           </if>
+        GROUP BY TSDPP.PROD_CD, TMP.PROD_NM
+        ORDER BY TSDPP.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

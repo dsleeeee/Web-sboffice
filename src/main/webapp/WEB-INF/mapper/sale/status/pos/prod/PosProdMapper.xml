@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.pos.prod.service.impl.PosProdMapper">
+
+	<!-- 포스별매출요일별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_POS
+        PARAM    : posProdVO
+        COMMENTS : 포스별매출요일별 - 리스트를 조회한다.
+    -->
+    <select id="getPosProdList" parameterType="posProdVO" resultType="DefaultMap">
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT	A.PROD_CD
+    			, A.PROD_NM
+    			, A.SALE_STORE_CNT
+    			, A.TOT_SALE_AMT
+    			, A.TOT_DC_AMT
+    			, A.TOT_REAL_SALE_AMT
+    			, A.TOT_SALE_CNT
+    			, B.*
+    	<include refid="CmmSQL.PagingTemplateCount"/>
+    	FROM	(
+		            SELECT	TSDPP.PROD_CD AS PROD_CD
+		            		, TMP.PROD_NM AS PROD_NM
+    						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
+    						, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
+    						, SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
+    						, SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+    						, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+    				FROM    TB_SL_DAILY_POS TSDP
+    						, TB_SL_DAILY_POS_PROD TSDPP
+    						, TB_MS_PRODUCT TMP
+    				WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
+    						AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
+							AND TSDP.STORE_CD = TSDPP.STORE_CD
+							AND TSDP.SALE_DATE = TSDPP.SALE_DATE
+							AND TSDP.POS_NO = TSDPP.POS_NO
+							AND TSDPP.HQ_BRAND_CD = TMP.HQ_BRAND_CD
+							AND TSDPP.STORE_CD = TMP.STORE_CD
+							AND TSDPP.PROD_CD = TMP.PROD_CD
+		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
+                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            	#{item}
+                        	</foreach>
+                    	</if>
+		            	<if test='startDate != null and startDate != ""'>
+		            		AND TSDP.SALE_DATE >= #{startDate}
+		            	</if>
+		            	<if test='endDate != null and endDate != ""'>
+		            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		            	</if>
+		            GROUP BY TSDPP.PROD_CD
+		            		 , TMP.PROD_NM
+				) A,
+				(
+					WITH T AS
+					(
+						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
+								, TSDPP.PROD_CD AS PROD_CD_TEMP
+		                        , TSDP.TOT_SALE_AMT AS SALE_AMT
+		                        , TSDP.TOT_DC_AMT AS DC_AMT
+		                        , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
+		                        , TSDP.SALE_CNT AS SALE_CNT
+		                FROM    TB_SL_DAILY_POS TSDP
+		                        , TB_SL_DAILY_POS_PROD TSDPP
+		                WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
+		                        AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
+		                        AND TSDP.STORE_CD = TSDPP.STORE_CD
+		                        AND TSDP.SALE_DATE = TSDPP.SALE_DATE
+		                        AND TSDP.POS_NO = TSDPP.POS_NO
+							<if test='arrStorePos != null and arrStorePos.length >= 0'>
+	                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+	                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+	                            	#{item}
+	                        	</foreach>
+	                    	</if>
+							<if test='startDate != null and startDate != ""'>
+								AND TSDP.SALE_DATE >= #{startDate}
+							</if>
+							<if test='endDate != null and endDate != ""'>
+								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+							</if>
+		            )
+		            SELECT  *
+		            FROM    T
+		            PIVOT	(
+		                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+		                        FOR STORE_CD IN (
+		                        	<foreach collection="arrStorePos" item="item" separator=",">
+										'${item}'
+									</foreach>
+	                        	)
+		            		)
+		        ) B
+		        WHERE   A.PROD_CD = B.PROD_CD_TEMP
+		        ORDER BY A.PROD_CD
+		        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <select id="getStorePosList" parameterType="posProdVO" resultType="DefaultMap">
+    	SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
+    	FROM	TB_SL_DAILY_POS TSDP
+    			, TB_SL_DAILY_POS_PROD TSDPP
+    	WHERE	TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
+    			AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
+    			AND TSDP.STORE_CD = TSDPP.STORE_CD
+    			AND TSDP.SALE_DATE = TSDPP.SALE_DATE
+    			AND TSDP.POS_NO = TSDPP.POS_NO
+    		<if test='arrStoreCd != null and arrStoreCd != ""'>
+               	AND TSDP.STORE_CD IN
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+           	</if>
+           	<if test='arrPosNo != null and arrPosNo != ""'>
+               	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+               	<foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+           	</if>
+			<if test='startDate != null and startDate != ""'>
+				AND TSDP.SALE_DATE >= #{startDate}
+			</if>
+			<if test='endDate != null and endDate != ""'>
+				AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			</if>
+		ORDER BY TSDP.STORE_CD||'||'||TSDP.POS_NO
+    </select>
+
+	<select id="getPosNmList" parameterType="posProdVO" resultType="DefaultMap">
+		SELECT	TMP.STORE_CD||'||'||TMP.POS_NO AS POS_CD
+				, TMP.POS_NM AS POS_NM
+				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
+		FROM    TB_MS_POS TMP
+		WHERE	1=1
+			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+               	AND TMP.STORE_CD IN
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+           	</if>
+        ORDER BY TMP.STORE_CD||'||'||TMP.POS_NO
+    </select>
+
+</mapper>

@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DailyReportMapper.xml
+	영업일보 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       조현수     2020.01.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.anals.dailyreport.service.impl.DailyReportMapper">
+    <!-- 매출종합 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_HDR
+	        PARAM    : dailyReportVO
+	        COMMENTS : 매출종합 목록을 조회한다.
+    -->
+    <select id="getSaleList" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  DECODE(SALE_FG,'1','매출','-1','반품')                   AS SL_SALE_FG		,	/* 판매구분 (1:판매 -1:반품) */
+		        SUM(TOT_SALE_AMT )                                      AS SL_TOT_SALE_AMT  ,   /* 총매출 	*/
+		        SUM(TOT_DC_AMT   )                                      AS SL_TOT_DC_AMT    ,   /* 할인 		*/
+		        SUM(REAL_SALE_AMT)                                      AS SL_REAL_SALE_AMT ,   /* 실매출 	*/
+		        SUM(REAL_SALE_AMT) - SUM(VAT_AMT)                       AS SL_GA_AMT        ,   /* 가액 		*/
+		        SUM(VAT_AMT      )                                      AS SL_VAT_AMT       ,   /* 부가세 	*/
+		        SUM(TOT_TIP_AMT  )                                      AS SL_TOT_TIP_AMT   ,   /* 봉사료 	*/
+		        SUM(TOT_ETC_AMT  )                                      AS SL_TOT_ETC_AMT   ,   /* 에누리 	*/
+		        SUM(TOT_SALE_AMT ) - SUM(TOT_DC_AMT)                    AS SL_XXX           ,   /* 총결제액 	*/
+		        DECODE(SALE_FG, '1', COUNT(*), COUNT(*) * -1)           AS SL_TOT_BILL_CNT  ,   /* 영수건수 	*/
+		        SUM(TOT_GUEST_CNT)										AS SL_TOT_GUEST_CNT ,	/* 객수 		*/
+		        TRUNC( SUM(REAL_SALE_AMT) / COUNT(*)          , 2 )     AS SL_BILL_UNPRC	,	/* 영수단가 	*/
+		        TRUNC( SUM(REAL_SALE_AMT) / SUM(TOT_GUEST_CNT), 2 )     AS SL_GUEST_UNPRC		/* 객단가   	*/
+		FROM    TB_SL_SALE_HDR
+		WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+		AND     STORE_CD    = #{searchStoreCd}
+		AND     SALE_DATE   BETWEEN #{startDate}
+		                    AND     #{endDate}
+	<!--GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_FG-->
+		GROUP BY SALE_FG
+		ORDER BY SALE_FG DESC
+    </select>
+
+
+
+    <!-- 결제수단 조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_HDR_PAY, TB_SL_DAILY_TOTAL
+	        PARAM    : dailyReportVO
+	        COMMENTS : 결제수단을 조회한다.
+    -->
+    <select id="getPayList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  B.REAL_SALE_AMT                 AS PAY_REAL_SALE_AMT,
+	            B.TOT_TIP_AMT                   AS PAY_TOT_TIP_AMT,
+	            B.TOT_ETC_AMT                   AS PAY_TOT_ETC_AMT,
+	            A.*
+	    FROM    (
+	                SELECT  *
+	                FROM    (
+	                            SELECT  PAY_CD          AS PAY_CD,
+	                                    SUM(PAY_AMT)    AS PAY_AMT
+	                            FROM    TB_SL_SALE_HDR_PAY
+	                            WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+	                            AND     STORE_CD    = #{searchStoreCd}
+	                            AND     SALE_DATE   BETWEEN #{startDate}
+	                                                AND     #{endDate}
+	                            GROUP BY PAY_CD
+	                        )
+	                PIVOT   (   SUM(PAY_AMT) AS AMT
+	                            FOR(PAY_CD)  IN (
+	                                                '01'    AS  PAY_CARD        ,
+	                                                '02'    AS  PAY_CASH        ,
+	                                                '03'    AS  PAY_PAYCO       ,
+	                                                '04'    AS  PAY_VPOINT      ,
+	                                                '05'    AS  PAY_VCOUPN      ,
+	                                                '06'    AS  PAY_VCHARGE     ,
+	                                                '07'    AS  PAY_MPAY        ,
+	                                                '08'    AS  PAY_MCOUPN      ,
+	                                                '09'    AS  PAY_MEMBR       ,
+	                                                '10'    AS  PAY_PREPAID     ,
+	                                                '11'    AS  PAY_POSTPAID    ,
+	                                                '12'    AS  PAY_COUPN       ,
+	                                                '13'    AS  PAY_GIFT        ,
+	                                                '14'    AS  PAY_FSTMP       ,
+	                                                '15'    AS  PAY_PARTNER     ,
+	                                                '16'    AS  PAY_OKCSB       ,
+	                                                '17'    AS  PAY_EMP_CARD    ,
+	                                                '18'    AS  PAY_TEMPORARY	,
+	                                                '19'    AS  PAY_SMART_ORDER
+	                                            )
+	                        )
+	            ) A,
+	            (
+	                SELECT  SUM(REAL_SALE_AMT)  AS REAL_SALE_AMT,
+	                        SUM(TOT_SALE_AMT) - SUM(TOT_DC_AMT) AS REAL_SALE_AMT2,
+	                        SUM(TOT_TIP_AMT)    AS TOT_TIP_AMT,
+	                        SUM(TOT_ETC_AMT)    AS TOT_ETC_AMT
+	                FROM    TB_SL_DAILY_TOTAL
+	                WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+	                AND     STORE_CD    = #{searchStoreCd}
+	                AND     SALE_DATE   BETWEEN #{startDate}
+	                                    AND     #{endDate}
+	            )   B
+    </select>
+
+
+
+    <!-- 포스정산 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_PS_EXACTCALC_xxx
+	        PARAM    : dailyReportVO
+	        COMMENTS : 포스정산 목록을 조회한다.
+    -->
+    <select id="getPosList" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  NVL(FUND.AMT        ,0)     AS POS_FUND_AMT,        /* 준비금 */
+		        NVL(CASH.AMT        ,0)     AS POS_CASH_EXACT_AMT,  /* 현금매출 ?? */
+		        NVL(IOMONEY_IN.AMT  ,0)     AS POS_IOMONEY_IN_AMT,  /* 시재입금 */
+		        NVL(IOMONEY_OUT.AMT ,0)     AS POS_IOMONEY_OUT_AMT, /* 시재출금 */
+		                                                            /* 외상입금 */
+		        NVL(GIFT.AMT        ,0)     AS POS_GIFT_AMT,        /* 상품권환불액 */
+		                                                            /* 현금시재 */  --TB_PS_EXACTCALC?? 현재 금액있는 데이터가 없다
+		                                                            /* 마감시재 */  --TB_PS_EXACTCALC?? 현재 금액있는 데이터가 없다
+		        NVL(LOST.AMT        ,0)     AS POS_LOST_AMT,        /* 과부족 */
+		        NVL(NONSALE.AMT     ,0)     AS POS_NONSALE_AMT      /* 기타매출 ?? */
+		FROM    (   SELECT  SUM(FUND_AMT        ) AS AMT FROM TB_PS_EXACTCALC_FUND      WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate}                                   ) FUND,
+		        (   SELECT  SUM(CASH_EXACT_AMT  ) AS AMT FROM TB_PS_EXACTCALC_CASH      WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00'                  ) CASH,
+		        (   SELECT  SUM(ACCNT_AMT       ) AS AMT FROM TB_PS_EXACTCALC_IOMONEY   WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00' AND ACCNT_FG='1' ) IOMONEY_IN,   /* 시재구분 (1:입금 2:출금) */
+		        (   SELECT  SUM(ACCNT_AMT       ) AS AMT FROM TB_PS_EXACTCALC_IOMONEY   WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00' AND ACCNT_FG='2' ) IOMONEY_OUT,  /* 시재구분 (1:입금 2:출금) */
+
+		        (   SELECT  SUM(GIFT_AMT        ) AS AMT FROM TB_PS_EXACTCALC_GIFT      WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00' AND GIFT_FG='1'  ) GIFT,         /* 상품권거래구분 (1:회수 2:발행) */
+
+		        (   SELECT  SUM(LOST_AMT        ) AS AMT FROM TB_PS_EXACTCALC_LOST      WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00'                  ) LOST,
+		        (   SELECT  SUM(NONSALE_AMT     ) AS AMT FROM TB_PS_EXACTCALC_NONSALE   WHERE HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND REG_SEQ='00'                  ) NONSALE
+    </select>
+
+
+
+    <!-- 비매출종합 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_NS_NONSALE_HDR
+	        PARAM    : dailyReportVO
+	        COMMENTS : 비매출종합 목록을 조회한다.
+    -->
+    <select id="getNsaleList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  DECODE(SALE_YN,'Y','매출','N','반품')                    AS NSL_SALE_FG			,	/* 판매구분 (Y:판매 N:반품) */
+	            SUM(TOT_SALE_AMT )                                      AS NSL_TOT_SALE_AMT     ,   /* 총매출 	*/
+	            SUM(TOT_DC_AMT   )                                      AS NSL_TOT_DC_AMT       ,   /* 할인 		*/
+	            SUM(REAL_SALE_AMT)                                      AS NSL_REAL_SALE_AMT    ,   /* 실매출 	*/
+	            SUM(REAL_SALE_AMT) - SUM(VAT_AMT)                       AS NSL_GA_AMT           ,   /* 가액 		*/
+	            SUM(VAT_AMT      )                                      AS NSL_VAT_AMT          ,   /* 부가세 	*/
+	        <!--SUM(TOT_TIP_AMT  )                                      AS NSL_TOT_TIP_AMT      ,   /* 봉사료 	*/-->
+	        <!--SUM(TOT_ETC_AMT  )                                      AS NSL_TOT_ETC_AMT      ,   /* 에누리 	*/-->
+	            SUM(TOT_SALE_AMT ) - SUM(TOT_DC_AMT)                    AS NSL_XXX              ,   /* 총결제액	*/
+	            DECODE(SALE_YN, 'Y', COUNT(*), COUNT(*) * -1)           AS NSL_TOT_BILL_CNT     ,   /* 영수건수 	*/
+	            TRUNC( SUM(REAL_SALE_AMT) / COUNT(*)          , 2 )     AS NSL_BILL_UNPRC       ,   /* 영수단가 	*/
+	            COUNT(*)                                                AS NSL_TOT_BILL_CNT2
+	    FROM    TB_NS_NONSALE_HDR
+	    WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+	    AND     STORE_CD    = #{searchStoreCd}
+	    AND     SALE_DATE   BETWEEN #{startDate}
+	                        AND     #{endDate}
+	<!--GROUP BY HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD, SALE_YN-->
+	    GROUP BY SALE_YN
+	    ORDER BY SALE_YN DESC
+    </select>
+
+
+
+    <!-- 비매출 결제수단 조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_NS_NONSALE_HDR_PAY, TB_NS_NONSALE_HDR
+	        PARAM    : dailyReportVO
+	        COMMENTS : 비매출  결제수단을 조회한다.
+    -->
+    <select id="getNpayList" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  B.REAL_SALE_AMT	AS NPAY_REAL_SALE_AMT,
+		        B.TOT_TIP_AMT   AS NPAY_TOT_TIP_AMT,
+		        B.TOT_ETC_AMT	AS NPAY_TOT_ETC_AMT,
+		        A.PAY_CARD_AMT  AS NPAY_CARD_AMT,
+		        A.PAY_CASH_AMT  AS NPAY_CASH_AMT
+		FROM    (
+		            SELECT  *
+		            FROM    (
+		                            SELECT  PAY_CD          AS PAY_CD,
+		                                    SUM(PAY_AMT)    AS PAY_AMT
+		                            FROM    TB_NS_NONSALE_HDR_PAY
+		                            WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+		                            AND     STORE_CD    = #{searchStoreCd}
+		                            AND     SALE_DATE   BETWEEN #{startDate}
+		                                                AND     #{endDate}
+		                            GROUP BY PAY_CD
+		                    )
+		                    PIVOT   (   SUM(PAY_AMT) AS AMT
+		                                FOR(PAY_CD)  IN (
+		                                                    '01'    AS  PAY_CARD,
+		                                                    '02'    AS  PAY_CASH
+		                                                )
+		                            )
+		        )   A,
+		        (
+		            SELECT  SUM(REAL_SALE_AMT)  AS REAL_SALE_AMT,
+		                    SUM(TOT_TIP_AMT)    AS TOT_TIP_AMT,
+		                    SUM(TOT_ETC_AMT)    AS TOT_ETC_AMT
+		            FROM    TB_NS_NONSALE_HDR
+		            WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+		            AND     STORE_CD    = #{searchStoreCd}
+		            AND     SALE_DATE   BETWEEN #{startDate}
+		                                AND     #{endDate}
+		        )   B
+    </select>
+
+
+
+    <!-- 판매원별 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
+	        PARAM    : dailyReportVO
+	        COMMENTS : 판매원별 목록을 조회한다.
+    -->
+    <select id="getEmpList" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  A.EMP_NO                                AS EMP_NO,
+		        A.CNT                                   AS EMP_SAL_CNT,
+		        A.TOTAL_CARD                            AS EMP_SAL_TOTAL_CARD,
+		        A.TOTAL_CASH                            AS EMP_SAL_TOTAL_CASH,
+		        A.TOTAL_ETC                             AS EMP_SAL_TOTAL_ETC,
+		        NVL(B.CNT       ,0)                     AS EMP_RTN_CNT,
+		        NVL(B.TOTAL_CARD,0)                     AS EMP_RTN_TOTAL_CARD,
+		        NVL(B.TOTAL_CASH,0)                     AS EMP_RTN_TOTAL_CASH,
+		        NVL(B.TOTAL_ETC, 0)                     AS EMP_RTN_TOTAL_ETC,
+		        (   SELECT  EMP_NM
+		            FROM    TB_MS_EMPLOYEE
+		            WHERE   STORE_CD    = #{searchStoreCd}
+		            AND     EMP_NO      = A.EMP_NO)     AS EMP_NM,
+		        0										AS EMP_CANCEL_CNT		<!-- 주문취소건수: 현재 데이터 없기에 '0'으로 보여줌 -->
+		FROM    (
+		            SELECT  A.EMP_NO,
+		                    COUNT(*)                                        AS CNT,
+		                    SUM( DECODE(B.PAY_CD,'01',B.PAY_AMT,0) )        AS TOTAL_CARD,  /* 결제수단구분(01:신용카드, 02:현금, ....) - 공통코드 NMCODE_GRP_CD='024' */
+		                    SUM( DECODE(B.PAY_CD,'02',B.PAY_AMT,0) )        AS TOTAL_CASH,
+		                    SUM( DECODE(B.PAY_CD,'01',0,'02',0,B.PAY_AMT) ) AS TOTAL_ETC
+		            FROM    TB_SL_SALE_HDR      A,
+		                    TB_SL_SALE_HDR_PAY  B
+		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+		            AND     A.STORE_CD      = #{searchStoreCd}
+		            AND     A.SALE_DATE     BETWEEN #{startDate}
+		                                    AND     #{endDate}
+		            AND     A.SALE_FG       = '1'
+		            AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+		            AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
+		            AND     A.STORE_CD      = B.STORE_CD
+		            AND     A.SALE_DATE     = B.SALE_DATE
+		            AND     A.POS_NO        = B.POS_NO
+		            AND     A.BILL_NO       = B.BILL_NO
+		            AND     A.REG_SEQ       = B.REG_SEQ
+		            AND     A.SALE_FG       = B.SALE_FG
+		            GROUP BY A.EMP_NO
+		        ) A
+		        LEFT OUTER JOIN
+		        (
+		            SELECT  A.EMP_NO,
+		                    COUNT(*)                                        AS CNT,
+		                    SUM( DECODE(B.PAY_CD,'01',B.PAY_AMT,0) )        AS TOTAL_CARD,  /* 결제수단구분(01:신용카드, 02:현금, ....) - 공통코드 NMCODE_GRP_CD='024' */
+		                    SUM( DECODE(B.PAY_CD,'02',B.PAY_AMT,0) )        AS TOTAL_CASH,
+		                    SUM( DECODE(B.PAY_CD,'01',0,'02',0,B.PAY_AMT) ) AS TOTAL_ETC
+		            FROM    TB_SL_SALE_HDR      A,
+		                    TB_SL_SALE_HDR_PAY  B
+		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+		            AND     A.STORE_CD      = #{searchStoreCd}
+		            AND     A.SALE_DATE     BETWEEN #{startDate}
+		                                    AND     #{endDate}
+		            AND     A.SALE_FG       = '-1'
+		            AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+		            AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
+		            AND     A.STORE_CD      = B.STORE_CD
+		            AND     A.SALE_DATE     = B.SALE_DATE
+		            AND     A.POS_NO        = B.POS_NO
+		            AND     A.BILL_NO       = B.BILL_NO
+		            AND     A.REG_SEQ       = B.REG_SEQ
+		            AND     A.SALE_FG       = B.SALE_FG
+		            GROUP BY A.EMP_NO
+		        ) B
+		        ON A.EMP_NO = B.EMP_NO
+		ORDER BY EMP_NO
+    </select>
+
+
+
+    <!-- 할인내역 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_HDR_DC, TB_SL_DAILY_TOTAL
+	        PARAM    : dailyReportVO
+	        COMMENTS : 할인내역 목록을 조회한다.
+    -->
+    <select id="getDcList" parameterType="dailyReportVO" resultType="DefaultMap">
+        SELECT  '(' || DC_CD || ')' || B.NMCODE_NM  AS DC_NM,
+                C.TOT_DC_AMT                        AS DC_TOT_DC_AMT,
+                A.*
+	    FROM    (
+                    SELECT  DC_CD               AS DC_CD,
+                            COUNT(*)            AS DC_CNT,
+                            SUM(TOT_SALE_QTY)   AS DC_SALE_QTY,
+                            SUM(TOT_SALE_AMT)   AS DC_SALE_AMT,
+                            SUM(TOT_DC_AMT)     AS DC_AMT,
+                            SUM(TOT_TIP_AMT)    AS DC_TIP_AMT,
+                            SUM(TOT_ETC_AMT)    AS DC_ETC_AMT,
+                            SUM(REAL_SALE_AMT)  AS DC_REAL_SALE_AMT
+	                FROM    TB_SL_DAILY_DC
+	                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                AND     STORE_CD        = #{searchStoreCd}
+	                AND     SALE_DATE       BETWEEN #{startDate}
+	                                        AND     #{endDate}
+	                GROUP BY DC_CD
+	            )               A,
+                TB_CM_NMCODE	B,
+                (
+                    SELECT  SUM(TOT_DC_AMT)		AS TOT_DC_AMT
+                    FROM    TB_SL_DAILY_TOTAL
+	                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                AND     STORE_CD        = #{searchStoreCd}
+	                AND     SALE_DATE       BETWEEN #{startDate}
+	                                        AND     #{endDate}
+                )				C
+	    WHERE   B.NMCODE_GRP_CD   = '041'	<!-- TB_CM_NMCODE (041: 할인코드) -->
+	    AND     B.NMCODE_CD       = A.DC_CD
+	    ORDER BY DC_NM
+	    <!--
+		SELECT  A.DC_CD,
+		        A.DC_CNT,
+		        A.TOT_SALE_AMT  AS DC_TOT_SALE_AMT,
+		        A.DC_AMT,
+		        A.TOT_DC_AMT    AS DC_TOT_DC_AMT,
+		        A.REAL_SALE_AMT AS DC_REAL_SALE_AMT
+		FROM    (
+		            SELECT  B.TOT_SALE_AMT,
+		                    B.TOT_DC_AMT,
+		                    B.REAL_SALE_AMT,
+		                    A.DC_CD,
+		                    COUNT(*)            AS DC_CNT,
+		                    SUM(A.DC_AMT)       AS DC_AMT
+		            FROM    TB_SL_SALE_HDR_DC   A,
+		                    TB_SL_DAILY_TOTAL   B
+		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+		            AND     A.STORE_CD      = #{searchStoreCd}
+		            AND     A.SALE_DATE     BETWEEN #{startDate}
+		                                    AND     #{endDate}
+		            AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+		            AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
+		            AND     A.STORE_CD      = B.STORE_CD
+		            AND     A.SALE_DATE     = B.SALE_DATE
+		            GROUP BY B.TOT_SALE_AMT,
+		                     B.TOT_DC_AMT,
+		                     B.REAL_SALE_AMT,
+		                     A.DC_CD
+		            ORDER BY A.DC_CD
+		        ) A
+		-->
+    </select>
+
+
+
+    <!-- 할인내역상세 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    :
+	        PARAM    : dailyReportVO
+	        COMMENTS : 할인내역상세 목록을 조회한다.
+    -->
+    <select id="getDcdtlList" parameterType="dailyReportVO" resultType="DefaultMap">
+        SELECT  A.DC_CD,
+                A.DC_REASON_CD,
+                (
+                	SELECT  '(' || A.DC_CD || ')' || NMCODE_NM
+                    FROM    TB_CM_NMCODE
+                    WHERE   NMCODE_GRP_CD   = '041'					<!-- TB_CM_NMCODE (041: 할인코드) -->
+                    AND     NMCODE_CD       = A.DC_CD)              AS DCDTL_DC_CD,
+                NVL(A.MS_COUPN_NM, A.HQ_COUPN_NM)                   AS DCDTL_DC_NM,
+                A.TOT_SALE_QTY                                      AS DCDTL_CNT,
+                A.TOT_SALE_AMT                                      AS DCDTL_TOT_SALE_AMT,
+                A.TOT_DC_AMT                                        AS DCDTL_DC_AMT,
+                (
+                	SELECT  SUM(TOT_DC_AMT)
+                    FROM    TB_SL_DAILY_DC
+                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     STORE_CD        = #{searchStoreCd}
+                    AND     SALE_DATE       BETWEEN #{startDate}
+                                            AND     #{endDate}
+                    AND     DC_CD           = A.DC_CD
+                )                                                   AS DCDTL_TOT_DC_AMT,
+                A.REAL_SALE_AMT                                     AS DCDTL_REAL_SALE_AMT
+    	FROM	(
+                    SELECT  A.*,
+                            (
+                                SELECT  COUPN_NM
+                                FROM    TB_HQ_COUPON
+                                WHERE   HQ_OFFICE_CD                = #{hqOfficeCd}
+                                AND     PAY_CLASS_CD || COUPN_CD    = A.DC_REASON_CD
+                            )   AS HQ_COUPN_NM,
+                            (
+                                SELECT  MAX(COUPN_NM)               AS COUPN_NM	<!-- COUPN_REG_FG [쿠폰등록구분] H:본사 S:매장 - 2곳 모두 있을수 있기에 MAX 사용함 -->
+                                FROM    TB_MS_COUPON
+                                WHERE   STORE_CD                    = #{searchStoreCd}
+                                AND     PAY_CLASS_CD || COUPN_CD    = A.DC_REASON_CD
+                            )   AS MS_COUPN_NM
+                    FROM    (
+                                SELECT  DC_CD,
+                                        DC_REASON_CD,
+                                        COUNT(*)            AS CNT,
+                                        SUM(TOT_SALE_QTY)   AS TOT_SALE_QTY,
+                                        SUM(TOT_SALE_AMT)   AS TOT_SALE_AMT,
+                                        SUM(TOT_DC_AMT)     AS TOT_DC_AMT,
+                                        SUM(TOT_TIP_AMT)    AS TOT_TIP_AMT,
+                                        SUM(TOT_ETC_AMT)    AS TOT_ETC_AMT,
+                                        SUM(REAL_SALE_AMT)  AS REAL_SALE_AMT
+                                FROM    TB_SL_DAILY_DC_DTL
+                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                AND     STORE_CD        = #{searchStoreCd}
+                                AND     SALE_DATE       BETWEEN #{startDate}
+                                                        AND     #{endDate}
+                                GROUP BY DC_CD, DC_REASON_CD
+                            ) A
+                )   A,
+                (
+                    SELECT  SUM(TOT_DC_AMT)     AS TOT_DC_AMT
+                    FROM    TB_SL_DAILY_TOTAL
+	                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                AND     STORE_CD        = #{searchStoreCd}
+	                AND     SALE_DATE       BETWEEN #{startDate}
+	                                        AND     #{endDate}
+                )   B
+    	ORDER BY DCDTL_DC_CD, DCDTL_DC_NM
+    	<!--
+		SELECT  A.DC_CD,
+		        A.DC_CNT,
+		        A.TOT_SALE_AMT  AS DC_TOT_SALE_AMT,
+		        A.DC_AMT,
+		        A.TOT_DC_AMT    AS DC_TOT_DC_AMT,
+		        A.REAL_SALE_AMT AS DC_REAL_SALE_AMT
+		FROM    (
+		            SELECT  B.TOT_SALE_AMT,
+		                    B.TOT_DC_AMT,
+		                    B.REAL_SALE_AMT,
+		                    A.DC_CD,
+		                    COUNT(*)            AS DC_CNT,
+		                    SUM(A.DC_AMT)       AS DC_AMT
+		            FROM    TB_SL_SALE_HDR_DC   A,
+		                    TB_SL_DAILY_TOTAL   B
+		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+		            AND     A.STORE_CD      = #{searchStoreCd}
+		            AND     A.SALE_DATE     BETWEEN #{startDate}
+		                                    AND     #{endDate}
+		            AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+		            AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
+		            AND     A.STORE_CD      = B.STORE_CD
+		            AND     A.SALE_DATE     = B.SALE_DATE
+		            GROUP BY B.TOT_SALE_AMT,
+		                     B.TOT_DC_AMT,
+		                     B.REAL_SALE_AMT,
+		                     A.DC_CD
+		            ORDER BY A.DC_CD
+		        ) A
+		-->
+    </select>
+
+
+
+    <!-- 상품권판매 및 회수내역 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL
+	        PARAM    : dailyReportVO
+	        COMMENTS : 상품권판매 및 회수내역 목록을 조회한다.
+    -->
+    <select id="getGiftList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  A.GIFT_CD,
+	            A.GIFT_UPRC,
+	            A.GIFT_PROC_FG,
+	            SUM( DECODE(A.SALE_FG, '1',  A.GIFT_QTY, 0) )   AS  GIFT_SAL_QTY,
+	            SUM( DECODE(A.SALE_FG, '1',  B.SALE_AMT, 0) )   AS  GIFT_SAL_AMT,
+	            SUM( DECODE(A.SALE_FG, '-1', A.GIFT_QTY, 0) )   AS  GIFT_RTN_QTY,
+	            SUM( DECODE(A.SALE_FG, '-1', B.SALE_AMT, 0) )   AS  GIFT_RTN_AMT,
+	            (	SELECT 	GIFT_NM
+	            	FROM 	TB_MS_GIFT
+	            	WHERE 	STORE_CD	= #{searchStoreCd}
+	            	AND 	GIFT_CD		= A.GIFT_CD) 			AS GIFT_NM
+	    FROM    TB_SL_SALE_PAY_GIFT_DTL A,
+	            TB_SL_SALE_PAY_GIFT     B
+	    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+	    AND     A.STORE_CD      = #{searchStoreCd}
+	    AND     A.SALE_DATE     BETWEEN #{startDate}
+	                            AND     #{endDate}
+	    AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+	    AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
+	    AND     A.STORE_CD      = B.STORE_CD
+	    AND     A.SALE_DATE     = B.SALE_DATE
+	    AND     A.POS_NO        = B.POS_NO
+	    AND     A.BILL_NO       = B.BILL_NO
+	    AND     A.LINE_NO       = B.LINE_NO
+	    AND     A.REG_SEQ       = B.REG_SEQ
+	    AND     A.SALE_YN       = B.SALE_YN
+	    AND     A.SALE_FG       = B.SALE_FG
+	    GROUP BY A.GIFT_CD,
+	             A.GIFT_UPRC,
+	             A.GIFT_PROC_FG
+	    ORDER BY A.GIFT_CD
+    </select>
+
+
+
+    <!-- 수발주내역 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    :
+	        PARAM    : dailyReportVO
+	        COMMENTS : 수발주내역 목록을 조회한다.
+
+    <select id="getOrderList" parameterType="dailyReportVO" resultType="DefaultMap">
+
+    </select>
+    -->
+
+
+
+    <!--
+	        TABLE    : TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT, TB_SL_DAILY_PROD
+	        PARAM    : dailyReportVO
+	        COMMENTS : 대,중,소 분류별매출 목록 조회시 Include 함
+    -->
+    <sql id="includeGetLevelList">
+	    SELECT  A.LV1_CD,
+	            A.LV1_NM,
+	            A.LV2_CD,
+	            A.LV2_NM,
+	            A.LV2_NM_FULL,
+	            A.LV2_CD_,
+	            A.LV3_CD,
+	            A.LV3_NM,
+	            A.LV3_NM_FULL,
+	            C.PROD_CD,
+	            B.PROD_NM,
+	            SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,
+	            SUM(C.TOT_SALE_AMT)     AS TOT_SALE_AMT,
+	            SUM(C.TOT_DC_AMT)       AS TOT_DC_AMT,
+	            SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
+	    FROM    (
+	                SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+	                        A.PROD_CLASS_CD     AS LV2_CD,
+	                        A.PROD_CLASS_NM     AS LV2_NM,
+	                        B.P_PROD_CLASS_CD   AS LV2_CD_,
+	                        B.PROD_CLASS_CD     AS LV3_CD,
+	                        B.PROD_CLASS_NM     AS LV3_NM,
+	                        (SELECT  SF_GET_PROD_CLASSES('S', #{searchStoreCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
+	                        (SELECT  SF_GET_PROD_CLASSES('S', #{searchStoreCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
+	                        (SELECT  SF_GET_PROD_CLASSES('S', #{searchStoreCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+	                FROM    (
+	                            SELECT  STORE_CD,
+	                            		P_PROD_CLASS_CD,
+	                            		PROD_CLASS_CD,
+	                            		PROD_CLASS_NM
+	                            FROM    TB_MS_PRODUCT_CLASS
+	                            WHERE   STORE_CD        = #{searchStoreCd}
+	                            AND     P_PROD_CLASS_CD IN (
+		                                                     /* SELECT  PROD_CLASS_CD, PROD_CLASS_NM */
+		                                                        SELECT  PROD_CLASS_CD
+		                                                        FROM    TB_MS_PRODUCT_CLASS
+		                                                        WHERE   STORE_CD        = #{searchStoreCd}
+		                                                        AND     P_PROD_CLASS_CD = '00000'
+	                                                        )
+	                        )                   	A,
+	                        TB_MS_PRODUCT_CLASS 	B
+	                WHERE   B.P_PROD_CLASS_CD IN    (
+	                                                    SELECT  PROD_CLASS_CD
+	                                                 /* SELECT  P_PROD_CLASS_CD, PROD_CLASS_CD, PROD_CLASS_NM */
+	                                                    FROM    TB_MS_PRODUCT_CLASS
+	                                                    WHERE   STORE_CD        = #{searchStoreCd}
+	                                                    AND     P_PROD_CLASS_CD IN (
+								                                                     /* SELECT  PROD_CLASS_CD, PROD_CLASS_NM */
+								                                                        SELECT  PROD_CLASS_CD
+		                                                                                FROM    TB_MS_PRODUCT_CLASS
+		                                                                                WHERE   STORE_CD        = #{searchStoreCd}
+		                                                                                AND     P_PROD_CLASS_CD = '00000'
+	                                                                                )
+	                                                )
+	                AND     A.STORE_CD      = B.STORE_CD
+	                AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+	            )                   A,
+	            TB_MS_PRODUCT       B,
+	            TB_SL_DAILY_PROD    C
+	    WHERE   B.STORE_CD      = #{searchStoreCd}
+	    AND     B.PROD_CLASS_CD = A.LV3_CD
+	    AND     B.PROD_CD       = C.PROD_CD
+	    AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+	    AND     C.STORE_CD      = #{searchStoreCd}
+	    AND     C.SALE_DATE     BETWEEN #{startDate}
+	                            AND     #{endDate}
+	    GROUP BY    A.LV1_CD,
+	                A.LV2_CD,
+	                A.LV2_NM,
+	                A.LV2_CD_,
+	                A.LV3_CD,
+	                A.LV3_NM,
+	                A.LV1_NM,
+	                A.LV2_NM_FULL,
+	                A.LV3_NM_FULL,
+	                C.PROD_CD,
+	                B.PROD_NM
+	    ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
+    </sql>
+
+
+
+    <!-- 대분류별매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : includeGetLevelList 참조 (TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT, TB_SL_DAILY_PROD)
+	        PARAM    : dailyReportVO
+	        COMMENTS : 대분류별매출 목록을 조회한다.
+    -->
+    <select id="getLv1List" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  LV1_CD,
+		        LV1_NM,
+		        SUM(TOT_SALE_QTY)     AS LV1_TOT_SALE_QTY,
+		        SUM(TOT_SALE_AMT)     AS LV1_TOT_SALE_AMT,
+		        SUM(TOT_DC_AMT)       AS LV1_TOT_DC_AMT,
+		        SUM(REAL_SALE_AMT)    AS LV1_REAL_SALE_AMT
+		FROM    (
+					<include refid="includeGetLevelList"/>	<!-- <include refid="kr.co.solbipos.sale.anals.dailyreport.service.impl.DailyReportMapper.includeGetLevelList"/>-->
+		        )
+		GROUP BY LV1_CD, LV1_NM
+		ORDER BY LV1_CD
+    </select>
+
+
+
+    <!-- 중분류별매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : includeGetLevelList 참조 (TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT, TB_SL_DAILY_PROD)
+	        PARAM    : dailyReportVO
+	        COMMENTS : 중분류별매출 목록을 조회한다.
+    -->
+    <select id="getLv2List" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  LV2_CD,
+		        LV2_NM,
+		        SUM(TOT_SALE_QTY)     AS LV2_TOT_SALE_QTY,
+		        SUM(TOT_SALE_AMT)     AS LV2_TOT_SALE_AMT,
+		        SUM(TOT_DC_AMT)       AS LV2_TOT_DC_AMT,
+		        SUM(REAL_SALE_AMT)    AS LV2_REAL_SALE_AMT
+		FROM    (
+					<include refid="includeGetLevelList"/>
+		        )
+		GROUP BY LV2_CD, LV2_NM
+		ORDER BY LV2_CD
+    </select>
+
+
+    <!-- 소분류별매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : includeGetLevelList 참조 (TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT, TB_SL_DAILY_PROD)
+	        PARAM    : dailyReportVO
+	        COMMENTS : 소분류별매출 목록을 조회한다.
+    -->
+    <select id="getLv3List" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  LV1_CD || LV2_CD || LV3_CD  AS LV3_CD,
+		        LV3_NM_FULL                 AS LV3_NM,
+		        SUM(TOT_SALE_QTY)           AS LV3_TOT_SALE_QTY,
+		        SUM(TOT_SALE_AMT)           AS LV3_TOT_SALE_AMT,
+		        SUM(TOT_DC_AMT)             AS LV3_TOT_DC_AMT,
+		        SUM(REAL_SALE_AMT)          AS LV3_REAL_SALE_AMT
+		FROM    (
+					<include refid="includeGetLevelList"/>
+				)
+		GROUP BY LV1_CD || LV2_CD || LV3_CD, LV3_NM_FULL
+		ORDER BY 1
+    </select>
+
+
+
+    <!-- 상품별매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_DAILY_PROD
+	        PARAM    : dailyReportVO
+	        COMMENTS : 상품별매출 목록을 조회한다.
+    -->
+    <select id="getProdList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  A.PROD_CD,
+	            A.TOT_SALE_QTY                      AS PROD_TOT_SALE_QTY,
+	            A.REAL_SALE_AMT                     AS PROD_REAL_SALE_AMT,
+	            (
+	                SELECT  PROD_NM
+	                FROM    TB_MS_PRODUCT
+	                WHERE   STORE_CD  = #{searchStoreCd}
+	                AND     PROD_CD   = A.PROD_CD
+	            )                                   AS PROD_NM
+	    FROM    (
+	                SELECT  PROD_CD,
+	                        SUM(TOT_SALE_QTY )  	AS TOT_SALE_QTY,
+	                        SUM(REAL_SALE_AMT)  	AS REAL_SALE_AMT
+	                FROM    TB_SL_DAILY_PROD
+	                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                AND     STORE_CD        = #{searchStoreCd}
+	                AND     SALE_DATE       BETWEEN #{startDate}
+	                                        AND     #{endDate}
+	                GROUP BY PROD_CD
+	            ) A
+	    ORDER BY PROD_NM
+    </select>
+
+
+
+    <!-- 경쟁사매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    :
+	        PARAM    : dailyReportVO
+	        COMMENTS : 경쟁사매출 목록을 조회한다.
+
+    <select id="getComptList" parameterType="dailyReportVO" resultType="DefaultMap">
+
+    </select>
+    -->
+
+
+
+    <!-- 승인현황 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_xxx
+	        PARAM    : dailyReportVO
+	        COMMENTS : 승인현황 목록을 조회한다.
+    -->
+    <select id="getApprList" parameterType="dailyReportVO" resultType="DefaultMap">
+    	<![CDATA[
+		SELECT  '승인'                AS APPR_NM,
+		         SUM(APPR.AP_CARD   ) AS APPR_AP_CARD,   SUM(APPR.DC_CARD   ) AS APPR_DC_CARD,   SUM(APPR.CNT_CARD   ) AS APPR_CNT_CARD,
+		         SUM(APPR.AP_CASH   ) AS APPR_AP_CASH,   SUM(APPR.DC_CASH   ) AS APPR_DC_CASH,   SUM(APPR.CNT_CASH   ) AS APPR_CNT_CASH,
+		         SUM(APPR.AP_PAYCO  ) AS APPR_AP_PAYCO,  SUM(APPR.DC_PAYCO  ) AS APPR_DC_PAYCO,  SUM(APPR.CNT_PAYCO  ) AS APPR_CNT_PAYCO,
+		         SUM(APPR.AP_MPAY   ) AS APPR_AP_MPAY,   SUM(APPR.DC_MPAY   ) AS APPR_DC_MPAY,   SUM(APPR.CNT_MPAY   ) AS APPR_CNT_MPAY,
+		         SUM(APPR.AP_MCOUPN ) AS APPR_AP_MCOUPN, SUM(APPR.DC_MCOUPN ) AS APPR_DC_MCOUPN, SUM(APPR.CNT_MCOUPN ) AS APPR_CNT_MCOUPN,
+		         SUM(APPR.AP_PARTNER) AS APPR_AP_PARTNER,SUM(APPR.DC_PARTNER) AS APPR_DC_PARTNER,SUM(APPR.CNT_PARTNER) AS APPR_CNT_PARTNER,
+		         SUM(APPR.AP_NCARD  ) AS APPR_AP_NCARD,  SUM(APPR.DC_NCARD  ) AS APPR_DC_NCARD,  SUM(APPR.CNT_NCARD  ) AS APPR_CNT_NCARD,
+		         SUM(APPR.AP_NCASH  ) AS APPR_AP_NCASH,  SUM(APPR.DC_NCASH  ) AS APPR_DC_NCASH,  SUM(APPR.CNT_NCASH  ) AS APPR_CNT_NCASH
+		 FROM    (
+		             SELECT  SUM(APPR_AMT)   AS AP_CARD,     SUM(DC_AMT) AS DC_CARD,     COUNT(*)    AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_CARD
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='1'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     SUM(SALE_AMT)   AS AP_CASH,     0           AS DC_CASH,     COUNT(*)    AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_CASH
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='1'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND APPR_PROC_FG IN ('1','2') GROUP BY SALE_FG     /* 승인처리구분 (1:POS 2:CAT) */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     SUM(APPR_AMT)   AS AP_PAYCO,    0           AS DC_PAYCO,    COUNT(*)    AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_PAYCO
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd}                  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND SALE_AMT>0     /* SALE_FG(판매구분) 없음 */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     SUM(APPR_AMT)   AS AP_MPAY,     0           AS DC_MPAY,     COUNT(*)    AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_MPAY
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd}                  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND SALE_AMT>0     /* SALE_FG(판매구분) 없음 */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     SUM(SALE_AMT)   AS AP_MCOUPN,   0           AS DC_MCOUPN,   COUNT(*)    AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_MCOUPN
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='1'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     SUM(SALE_AMT)   AS AP_PARTNER,  SUM(DC_AMT) AS DC_PARTNER,  COUNT(*)    AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_PARTNER
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='1'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     SUM(APPR_AMT)   AS AP_NCARD,    SUM(DC_AMT) AS DC_NCARD,    COUNT(*)    AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_NS_NONSALE_PAY_CARD
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_YN='Y'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     SUM(SALE_AMT)   AS AP_NCASH,    0           AS DC_NCASH,    COUNT(*)    AS CNT_NCASH
+		             FROM    TB_NS_NONSALE_PAY_CASH
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_YN='Y'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND APPR_PROC_FG IN ('1','2')  /* 승인처리구분 (1:POS 2:CAT) */
+		         )   APPR
+
+		 UNION ALL
+
+		 SELECT  '취소'               AS APPR_NM,
+		         SUM(CANC.AP_CARD   ) AS APPR_AP_CARD,   SUM(CANC.DC_CARD   ) AS APPR_DC_CARD,   SUM(CANC.CNT_CARD   ) AS APPR_CNT_CARD,
+		         SUM(CANC.AP_CASH   ) AS APPR_AP_CASH,   SUM(CANC.DC_CASH   ) AS APPR_DC_CASH,   SUM(CANC.CNT_CASH   ) AS APPR_CNT_CASH,
+		         SUM(CANC.AP_PAYCO  ) AS APPR_AP_PAYCO,  SUM(CANC.DC_PAYCO  ) AS APPR_DC_PAYCO,  SUM(CANC.CNT_PAYCO  ) AS APPR_CNT_PAYCO,
+		         SUM(CANC.AP_MPAY   ) AS APPR_AP_MPAY,   SUM(CANC.DC_MPAY   ) AS APPR_DC_MPAY,   SUM(CANC.CNT_MPAY   ) AS APPR_CNT_MPAY,
+		         SUM(CANC.AP_MCOUPN ) AS APPR_AP_MCOUPN, SUM(CANC.DC_MCOUPN ) AS APPR_DC_MCOUPN, SUM(CANC.CNT_MCOUPN ) AS APPR_CNT_MCOUPN,
+		         SUM(CANC.AP_PARTNER) AS APPR_AP_PARTNER,SUM(CANC.DC_PARTNER) AS APPR_DC_PARTNER,SUM(CANC.CNT_PARTNER) AS APPR_CNT_PARTNER,
+		         SUM(CANC.AP_NCARD  ) AS APPR_AP_NCARD,  SUM(CANC.DC_NCARD  ) AS APPR_DC_NCARD,  SUM(CANC.CNT_NCARD  ) AS APPR_CNT_NCARD,
+		         SUM(CANC.AP_NCASH  ) AS APPR_AP_NCASH,  SUM(CANC.DC_NCASH  ) AS APPR_DC_NCASH,  SUM(CANC.CNT_NCASH  ) AS APPR_CNT_NCASH
+		 FROM    (
+		             SELECT  SUM(APPR_AMT)   AS AP_CARD,     SUM(DC_AMT) AS DC_CARD,     COUNT(*)    AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_CARD
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='-1' AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     SUM(SALE_AMT)   AS AP_CASH,     0           AS DC_CASH,     COUNT(*)    AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_CASH
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='-1' AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND APPR_PROC_FG IN ('1','2') GROUP BY SALE_FG     /* 승인처리구분 (1:POS 2:CAT) */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     SUM(APPR_AMT)   AS AP_PAYCO,    0           AS DC_PAYCO,    COUNT(*)    AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_PAYCO
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd}                  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND SALE_AMT<0     /* SALE_FG(판매구분) 없음 */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     SUM(APPR_AMT)   AS AP_MPAY,     0           AS DC_MPAY,     COUNT(*)    AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_MPAY
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd}                  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND SALE_AMT<0     /* SALE_FG(판매구분) 없음 */
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     SUM(SALE_AMT)   AS AP_MCOUPN,   0           AS DC_MCOUPN,   COUNT(*)    AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_MCOUPN
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='-1' AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     SUM(SALE_AMT)   AS AP_PARTNER,  SUM(DC_AMT) AS DC_PARTNER,  COUNT(*)    AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_SL_SALE_PAY_PARTNER
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_FG='-1' AND SALE_DATE BETWEEN #{startDate} AND #{endDate} GROUP BY SALE_FG
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     SUM(APPR_AMT)   AS AP_NCARD,    SUM(DC_AMT) AS DC_NCARD,    COUNT(*)    AS CNT_NCARD,
+		                     0               AS AP_NCASH,    0           AS DC_NCASH,    0           AS CNT_NCASH
+		             FROM    TB_NS_NONSALE_PAY_CARD
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_YN='N'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate}
+
+		             UNION ALL
+		             SELECT  0               AS AP_CARD,     0           AS DC_CARD,     0           AS CNT_CARD,
+		                     0               AS AP_CASH,     0           AS DC_CASH,     0           AS CNT_CASH,
+		                     0               AS AP_PAYCO,    0           AS DC_PAYCO,    0           AS CNT_PAYCO,
+		                     0               AS AP_MPAY,     0           AS DC_MPAY,     0           AS CNT_MPAY,
+		                     0               AS AP_MCOUPN,   0           AS DC_MCOUPN,   0           AS CNT_MCOUPN,
+		                     0               AS AP_PARTNER,  0           AS DC_PARTNER,  0           AS CNT_PARTNER,
+		                     0               AS AP_NCARD,    0           AS DC_NCARD,    0           AS CNT_NCARD,
+		                     SUM(SALE_AMT)   AS AP_NCASH,    0           AS DC_NCASH,    COUNT(*)    AS CNT_NCASH
+		             FROM    TB_NS_NONSALE_PAY_CASH
+		             WHERE   HQ_OFFICE_CD=#{hqOfficeCd} AND STORE_CD=#{searchStoreCd} AND SALE_YN='N'  AND SALE_DATE BETWEEN #{startDate} AND #{endDate} AND APPR_PROC_FG IN ('1','2')  /* 승인처리구분 (1:POS 2:CAT) */
+		         )   CANC
+		]]>
+    </select>
+
+
+
+    <!-- 회원별매출 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    :
+	        PARAM    : dailyReportVO
+	        COMMENTS : 회원별매출 목록을 조회한다.
+	-->
+    <select id="getMembrList" parameterType="dailyReportVO" resultType="DefaultMap">
+		SELECT  A.CNT                                       								AS MEMBR_TOTAL,
+		        B.CNT                                       								AS MEMBR_NEW,
+		        ''																			AS MEMBR_NO_INFO,
+		        C.REAL_SALE_AMT                             								AS MEMBR_REAL_SALE_AMT,
+		        D.REAL_SALE_AMT                             								AS MEMBR_SALE_AMT,
+		    <!--TRUNC(D.REAL_SALE_AMT / C.REAL_SALE_AMT,5)  								AS MEMBR_SALE_PRCTG,	나누는 수가 0인경우 오류 > ORA-01476: divisor is equal to zero	-->
+                DECODE(C.REAL_SALE_AMT, 0, 	0,
+                                     		TRUNC(D.REAL_SALE_AMT / C.REAL_SALE_AMT,5))		AS MEMBR_SALE_PRCTG,
+		        E.TOT_SAVE_POINT                            								AS MEMBR_POINT_ACCUM,
+		        E.TOT_USE_POINT                             								AS MEMBR_POINT_USE
+		FROM    (
+		            SELECT  COUNT(*)    					AS CNT
+		            FROM    TB_MB_MEMBER
+		            WHERE   REG_STORE_CD	= #{searchStoreCd}
+		        ) A,
+		        (
+		            SELECT  COUNT(*)    					AS CNT
+		            FROM    TB_MB_MEMBER
+		            WHERE   REG_STORE_CD    = #{searchStoreCd}
+		            AND     REG_DT          BETWEEN #{startDate} || '000000'
+		                                    AND     #{endDate  } || '235959'
+		        ) B,
+		        (
+		            SELECT  NVL(SUM(REAL_SALE_AMT), 0)  	AS REAL_SALE_AMT
+		            FROM    TB_SL_DAILY_TOTAL
+		            WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
+		            AND     STORE_CD    	= #{searchStoreCd}
+		            AND     SALE_DATE   	BETWEEN #{startDate}
+		                                	AND     #{endDate}
+		        ) C,
+		        (
+		            SELECT  NVL(SUM(REAL_SALE_AMT), 0)  	AS REAL_SALE_AMT
+		            FROM    TB_SL_DAILY_MEMBR
+		            WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
+		            AND     STORE_CD    	= #{searchStoreCd}
+		            AND     SALE_DATE   	BETWEEN #{startDate}
+		                                	AND     #{endDate}
+		        ) D,
+		        (
+		            SELECT  NVL(SUM(TOT_SAVE_POINT), 0)  	AS TOT_SAVE_POINT,	<!-- 데이터 없는 경우 대비해서 SUM 사용 -->
+		                    NVL(SUM(TOT_USE_POINT) , 0)  	AS TOT_USE_POINT
+		            FROM    TB_MB_MEMBER_POINT
+		            WHERE   (MEMBR_ORGN_CD, MEMBR_NO) IN (  SELECT  MEMBR_ORGN_CD, MEMBR_NO
+		                                                    FROM    TB_MB_MEMBER
+		                                                    WHERE   REG_STORE_CD = #{searchStoreCd})
+		        ) E
+    </select>
+
+
+
+    <!-- 근태관리 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_MS_EMPLOYEE, TB_PS_EMPLOYEE_COMMTE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 근태관리 목록을 조회한다.
+    -->
+    <select id="getWorkList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  A.EMP_NO									AS WORK_EMP_NO,
+	            A.WORK_TIME                        	 		AS WORK_TIME,
+	            A.CNT                               		AS WORK_CNT,
+	            (   SELECT  EMP_NM
+	                FROM    TB_MS_EMPLOYEE
+	                WHERE   STORE_CD	= #{searchStoreCd}
+	                AND     EMP_NO  	= A.EMP_NO)			AS WORK_EMP_NM
+	    FROM    (
+		            SELECT  EMP_NO,
+		                    SUM(WORK_TIME)  				AS WORK_TIME,
+		                    COUNT(*)        				AS CNT
+		            FROM    TB_PS_EMPLOYEE_COMMTE
+		            WHERE   STORE_CD	= #{searchStoreCd}
+		            GROUP BY EMP_NO
+	            ) A
+	    ORDER BY WORK_EMP_NM
+    </select>
+
+
+
+
+
+
+    <!-- 결재라인 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_LINE, TB_MS_STORE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 결재라인 목록을 조회한다.
+    -->
+    <select id="getPayLineList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  HQ_OFFICE_CD    AS CFG_HQ_OFFICE_CD,
+	            HQ_BRAND_CD     AS CFG_HQ_BRAND_CD,
+	            STORE_CD        AS CFG_STORE_CD,
+	            PAY_LINE_NO     AS CFG_PAY_LINE_NO,
+	            PAY_LINE_SEQ    AS CFG_PAY_LINE_SEQ,
+	            PAY_LINE_NM     AS CFG_PAY_LINE_NM,
+	            USE_YN          AS CFG_USE_YN
+	    FROM    TB_SL_SALE_PAY_LINE
+	    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	    AND     STORE_CD        = #{searchStoreCd}
+	    AND     HQ_BRAND_CD     = (
+		    						SELECT  HQ_BRAND_CD
+		                          	FROM    TB_MS_STORE
+		                           	WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+		                          	AND     STORE_CD	= #{searchStoreCd}
+								  )
+		AND		USE_YN			= 'Y'
+	    ORDER BY CFG_PAY_LINE_SEQ
+	    <!--
+	    SELECT  NVL(B.HQ_OFFICE_CD, A.HQ_OFFICE_CD) AS CFG_HQ_OFFICE_CD,
+	            NVL(B.HQ_BRAND_CD,  A.HQ_BRAND_CD)  AS CFG_HQ_BRAND_CD,
+	            NVL(B.STORE_CD,     A.STORE_CD)     AS CFG_STORE_CD,
+	            B.PAY_LINE_NO                       AS CFG_PAY_LINE_NO,
+	            B.PAY_LINE_SEQ                      AS CFG_PAY_LINE_SEQ,
+	            B.PAY_LINE_NM                       AS CFG_PAY_LINE_NM,
+	            B.USE_YN                            AS CFG_USE_YN
+	    FROM	(
+					SELECT  HQ_OFFICE_CD, HQ_BRAND_CD, STORE_CD
+					FROM    TB_MS_STORE
+					WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
+					AND     STORE_CD    	= #{searchStoreCd}
+	    		)                   			A
+	    LEFT OUTER JOIN TB_SL_SALE_PAY_LINE		B
+	    ON              	A.HQ_OFFICE_CD	= B.HQ_OFFICE_CD
+	    AND             	A.HQ_BRAND_CD	= B.HQ_BRAND_CD
+	    AND             	A.STORE_CD		= B.STORE_CD
+	    ORDER BY CFG_PAY_LINE_SEQ
+	    -->
+    </select>
+
+
+
+    <!-- 영업일보 구성 목록조회 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_DAILY_REPORT_MNG, TB_CM_NMCODE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 영업일보 구성 목록을 조회한다.
+    -->
+    <select id="getCfgList" parameterType="dailyReportVO" resultType="DefaultMap">
+	    SELECT  NVL(B.HQ_OFFICE_CD, #{hqOfficeCd}	)                           AS CFG_HQ_OFFICE_CD,
+	            NVL(B.HQ_BRAND_CD,  C.HQ_BRAND_CD   )                           AS CFG_HQ_BRAND_CD,
+	            NVL(B.STORE_CD,     #{searchStoreCd})                           AS CFG_STORE_CD,
+	            DECODE(B.SALE_DAILY_REPORT_CD, NULL, A.NMCODE_CD,
+	                                                 B.SALE_DAILY_REPORT_CD)    AS CFG_SALE_DAILY_REPORT_CD,
+	            A.NMCODE_NM                                                     AS CFG_SALE_DAILY_REPORT_NM,
+	            NVL(B.SEL_YN, 'N')                                              AS CFG_SEL_YN,
+	            A.NMCODE_ITEM_1                                                 AS CFG_CD
+	    FROM                    TB_CM_NMCODE                A
+	            LEFT OUTER JOIN TB_SL_SALE_DAILY_REPORT_MNG B
+	            ON              A.NMCODE_CD     = B.SALE_DAILY_REPORT_CD
+	            AND             B.HQ_OFFICE_CD  = #{hqOfficeCd}
+	            AND             B.STORE_CD      = #{searchStoreCd}
+	            AND             B.HQ_BRAND_CD   = (
+	            									SELECT  HQ_BRAND_CD
+	                                                FROM    TB_MS_STORE
+	                                                WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
+	                                                AND     STORE_CD    	= #{searchStoreCd}
+	                                              )
+	            INNER JOIN      TB_MS_STORE                 C
+	            ON              C.HQ_OFFICE_CD	= #{hqOfficeCd}
+	            AND             C.STORE_CD    	= #{searchStoreCd}
+	    WHERE   A.NMCODE_GRP_CD = '200'											<!-- TB_CM_NMCODE 영업일보 구성 코드 -->
+	    ORDER BY CFG_SALE_DAILY_REPORT_CD
+    	<!--
+	    SELECT  B.HQ_OFFICE_CD                                                  AS CFG_HQ_OFFICE_CD,
+	            B.HQ_BRAND_CD                                                   AS CFG_HQ_BRAND_CD,
+	            B.STORE_CD                                                      AS CFG_STORE_CD,
+	            DECODE(B.SALE_DAILY_REPORT_CD, NULL, A.NMCODE_CD,
+	                                                 B.SALE_DAILY_REPORT_CD)    AS CFG_SALE_DAILY_REPORT_CD,
+	            A.NMCODE_NM                                                     AS CFG_SALE_DAILY_REPORT_NM,
+	            NVL(B.SEL_YN, 'N')                                              AS CFG_SEL_YN,
+	            A.NMCODE_ITEM_1                                                 AS CFG_CD
+	    FROM                    TB_CM_NMCODE                A
+	            LEFT OUTER JOIN TB_SL_SALE_DAILY_REPORT_MNG B
+	            ON              A.NMCODE_CD     = B.SALE_DAILY_REPORT_CD
+	            AND             B.HQ_OFFICE_CD  = #{hqOfficeCd}
+	            AND             B.STORE_CD      = #{searchStoreCd}
+	            AND             B.HQ_BRAND_CD   = ( SELECT  HQ_BRAND_CD
+	                                                FROM    TB_MS_STORE
+	                                                WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+	                                                AND     STORE_CD    = #{searchStoreCd} )
+	    WHERE   A.NMCODE_GRP_CD = '200'
+	    ORDER BY CFG_SALE_DAILY_REPORT_CD
+	    -->
+    </select>
+
+
+
+    <!-- 영업일보 구성 저장 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_DAILY_REPORT_MNG
+	        PARAM    : dailyReportVO
+	        COMMENTS : 영업일보 구성을 생성한다.
+    -->
+	<update id="mergeConfig" parameterType="dailyReportVO">
+	    MERGE INTO TB_SL_SALE_DAILY_REPORT_MNG  A
+	    USING DUAL ON           (
+	                                        A.HQ_OFFICE_CD          = #{cfgHqOfficeCd}
+	                                    AND A.HQ_BRAND_CD           = #{cfgHqBrandCd}
+	                                    AND A.STORE_CD              = #{cfgStoreCd}
+	                                    AND A.SALE_DAILY_REPORT_CD  = #{cfgSaleDailyReportCd}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE SET  A.SEL_YN    			= #{cfgSelYn},
+	                                        A.MOD_DT    			= #{modDt},
+	                                        A.MOD_ID    			= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+	                                        A.HQ_OFFICE_CD,
+	                                        A.HQ_BRAND_CD,
+	                                        A.STORE_CD,
+	                                        A.SALE_DAILY_REPORT_CD,
+	                                        A.SEL_YN,
+	                                        A.REG_DT,
+	                                        A.REG_ID,
+	                                        A.MOD_DT,
+	                                        A.MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{cfgHqOfficeCd},
+	            							(
+           										SELECT  HQ_BRAND_CD
+												FROM    TB_MS_STORE
+                                               	WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
+                                               	AND     STORE_CD	= #{searchStoreCd}
+	                                      	),
+	                                        #{cfgStoreCd},
+	                                        #{cfgSaleDailyReportCd},
+	                                        #{cfgSelYn},
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</update>
+
+
+
+    <!-- 결재라인 생성 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_LINE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 결재라인을 생성한다.
+    -->
+	<insert id="insertPayLine" parameterType="dailyReportVO">
+		INSERT INTO TB_SL_SALE_PAY_LINE	(
+	                                        HQ_OFFICE_CD,
+	                                        HQ_BRAND_CD,
+	                                        STORE_CD,
+											PAY_LINE_NO,
+											PAY_LINE_SEQ,
+											PAY_LINE_NM,
+											USE_YN,
+	                                        REG_DT,
+	                                        REG_ID,
+	                                        MOD_DT,
+	                                        MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{cfgHqOfficeCd},
+	                                        #{cfgHqBrandCd},
+	                                        #{cfgStoreCd},
+											(
+											    SELECT  NVL(MAX(PAY_LINE_NO),0) + 1
+											    FROM    TB_SL_SALE_PAY_LINE
+											    WHERE   HQ_OFFICE_CD    = #{cfgHqOfficeCd}
+											    AND     HQ_BRAND_CD     = #{cfgHqBrandCd}
+											    AND     STORE_CD        = #{cfgStoreCd}
+										    ),
+	                            			#{cfgPayLineSeq},
+	                            			#{cfgPayLineNm},
+	                                        #{cfgUseYn},
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</insert>
+
+
+    <!-- 결재라인 수정 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_LINE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 결재라인을 수정한다.
+    -->
+	<update id="updatePayLine" parameterType="dailyReportVO">
+		UPDATE	TB_SL_SALE_PAY_LINE
+		SET		PAY_LINE_SEQ	= #{cfgPayLineSeq},
+				PAY_LINE_NM		= #{cfgPayLineNm},
+				USE_YN			= #{cfgUseYn},
+                MOD_DT    		= #{modDt},
+                MOD_ID    		= #{modId}
+		WHERE	HQ_OFFICE_CD	= #{cfgHqOfficeCd}
+		AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
+		AND 	STORE_CD        = #{cfgStoreCd}
+		AND 	PAY_LINE_NO  	= #{cfgPayLineNo}
+	</update>
+
+
+    <!-- 결재라인 삭제 (매출관리 > 매출분석 > 영업일보)
+
+	        TABLE    : TB_SL_SALE_PAY_LINE
+	        PARAM    : dailyReportVO
+	        COMMENTS : 결재라인을 삭제한다. (사용여부 'N'으로 Update)
+    -->
+	<update id="deletePayLine" parameterType="dailyReportVO">
+		UPDATE	TB_SL_SALE_PAY_LINE
+		SET		USE_YN			= 'N',
+                MOD_DT    		= #{modDt},
+                MOD_ID    		= #{modId}
+		WHERE	HQ_OFFICE_CD	= #{cfgHqOfficeCd}
+		AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
+		AND 	STORE_CD        = #{cfgStoreCd}
+		AND 	PAY_LINE_NO  	= #{cfgPayLineNo}
+	</update>
+
+	<!-- 사용하지 않음 -->
+	<update id="mergePayLine" parameterType="dailyReportVO">
+	    MERGE INTO TB_SL_SALE_PAY_LINE	A
+	    USING DUAL ON           (
+	                                        A.HQ_OFFICE_CD          = #{cfgHqOfficeCd}
+	                                    AND A.HQ_BRAND_CD           = #{cfgHqBrandCd}
+	                                    AND A.STORE_CD              = #{cfgStoreCd}
+	                                    AND A.PAY_LINE_NO  			= #{cfgPayLineNo}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE SET  A.PAY_LINE_SEQ			= #{cfgPayLineSeq},
+											A.PAY_LINE_NM			= #{cfgPayLineNm},
+											A.USE_YN				= #{cfgUseYn},
+	                                        A.MOD_DT    			= #{modDt},
+	                                        A.MOD_ID    			= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+	                                        A.HQ_OFFICE_CD,
+	                                        A.HQ_BRAND_CD,
+	                                        A.STORE_CD,
+											A.PAY_LINE_NO,
+											A.PAY_LINE_SEQ,
+											A.PAY_LINE_NM,
+											A.USE_YN,
+	                                        A.REG_DT,
+	                                        A.REG_ID,
+	                                        A.MOD_DT,
+	                                        A.MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{cfgHqOfficeCd},
+	                                        #{cfgHqBrandCd},
+	                                        #{cfgStoreCd},
+	                                        #{cfgSaleDailyReportCd},
+											(
+											    SELECT  NVL(MAX(PAY_LINE_NO),0) + 1
+											    FROM    TB_SL_SALE_PAY_LINE
+											    WHERE   HQ_OFFICE_CD    = #{cfgHqOfficeCd}
+											    AND     HQ_BRAND_CD     = #{cfgHqBrandCd})
+											    AND     STORE_CD        = #{cfgStoreCd}
+										    ),
+	                            			#{cfgPayLineSeq},
+	                            			#{cfgPayLineNm},
+	                                        #{cfgUseYn},
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</update>
+
+
+
+</mapper>

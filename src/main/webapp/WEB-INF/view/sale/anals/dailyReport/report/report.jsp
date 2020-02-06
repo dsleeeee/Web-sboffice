@@ -1,0 +1,751 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+
+<%--
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/dailyReport.css?ver=20200203.01"	/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/sale/dailyReport.css?ver=20200203.01"	/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/js/sale/anals/dailyReport/dailyReport.css"	/>
+	searchBar_report
+--%>
+
+
+<div id="reportView" class="subCon" ng-controller="reportCtrl">
+
+    <div class="searchBar flddUnfld">
+        <a href="#" class="open fl">${menuNm}</a>
+        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;"><%-- [조회] --%>
+        	<button class="btn_blue fr" ng-click="_broadcast('reportCtrl')"><s:message code="cmm.search" /></button>
+        </div>
+    </div>
+
+    <table class="searchTbl">
+        <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+        </colgroup>
+        <tbody>
+            <tr>
+                <th>
+					<s:message code="cmm.search.date" />
+                </th>
+                <td colspan="3">
+                    <div class="sb-select">
+                        <span class="txtIn"> <input id="startDate" name="startDate" class="w200px" /></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"> <input id="endDate"   name="endDate"   class="w200px" /></span>
+                    </div>
+                </td>
+            </tr>
+
+            <c:if test="${orgnFg == 'HQ'}">
+            <tr>
+                <th><s:message code="dailyReport.store"/></th>	<%-- 매장코드 --%>
+                <td>
+                    <%-- 매장선택 모듈 멀티 선택 사용 시 include
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="reportSelectStore"/>
+                    </jsp:include>
+                    --%>
+                    <%-- 매장선택 모듈 싱글 선택 사용 시 include
+                            param 정의 : targetId	- angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                        displayNm 	- 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                        modiFg 		- 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                        closeFunc 	- 팝업 닫기시 호출할 함수
+
+		            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+		                <jsp:param name="targetId" value="reportSelectStore"/>
+		            </jsp:include>
+
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+                        <jsp:param name="targetId" 	value="reportSelectStore"/>
+                        <jsp:param name="displayNm" value="${selectStoreDisplayNmAll}"/>
+                    </jsp:include>
+
+                    --%>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+                        <jsp:param name="targetId" value="reportSelectStore"/>
+                    </jsp:include>
+                </td>
+            </tr>
+            </c:if>
+		    <c:if test="${orgnFg == 'STORE'}">
+		      <input type="hidden" id="reportSelectStoreCd" value="${sessionInfo.storeCd}"/>
+		    </c:if>
+        </tbody>
+    </table>
+
+
+    <div class="mt20 oh sb-select dkbr">
+    	<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>		<%--<s:message code="cmm.excel.down" />--%>
+	</div>
+
+
+
+<%--<div class="w100 mt10 flddUnfld_sl searchBar_report">--%>
+    <div class="w100 mt10 flddUnfld_sl">
+		<div class="oh sb-select mb10">
+		<%--<span class="fl bk lh30"><s:message code='dailyReport.sl'/></span> <%-- 매출종합 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.sl'/></a>
+		</div>
+		<div class="div_sl">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_sl
+	            				autoGenerateColumns	="false"
+				                control				="sl"
+				                initialized			="initGrid_sl(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+				<%--<wj-flex-grid-column header="<s:message code="dailyReport.slSaleFg"     	/>"     binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>--%>
+					<wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"		/>"		binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotSaleAmt" 	/>"		binding="slTotSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotDcAmt"   	/>"		binding="slTotDcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slRealSaleAmt"	/>"		binding="slRealSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slGaAmt"      	/>"		binding="slGaAmt"	    	width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slVatAmt"     	/>"		binding="slVatAmt"	    	width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotTipAmt"  	/>"		binding="slTotTipAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotEtcAmt"  	/>"		binding="slTotEtcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotBillCnt"		/>"		binding="slTotBillCnt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slTotGuestCnt"	/>"		binding="slTotGuestCnt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slBillUnprc"  	/>"		binding="slBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.slGuestUnprc" 	/>"		binding="slGuestUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>	<%--<div class="div_pay">--%>
+    </div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_pay">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.pay'/></span>	<%-- 결제수단 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.pay'/></a>
+		</div>
+		<div class="div_pay">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_pay
+	            				autoGenerateColumns	="false"
+				                control				="pay"
+				                initialized			="initGrid_pay(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+					<wj-flex-grid-column header="<s:message code="dailyReport.payRealSaleAmt"   />"     binding="payRealSaleAmt"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payTotTipAmt"     />"     binding="payTotTipAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payTotEtcAmt"     />"     binding="payTotEtcAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payCardAmt"       />"     binding="payCardAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payCashAmt"       />"     binding="payCashAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payPaycoAmt"      />"     binding="payPaycoAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payVpointAmt"     />"     binding="payVpointAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payVcoupnAmt"     />"     binding="payVcoupnAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payVchargeAmt"    />"     binding="payVchargeAmt"     width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payMpayAmt"       />"     binding="payMpayAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payMcoupnAmt"     />"     binding="payMcoupnAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payMembrAmt"      />"     binding="payMembrAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payPrepaidAmt"    />"     binding="payPrepaidAmt"     width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payPostpaidAmt"   />"     binding="payPostpaidAmt"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payCoupnAmt"      />"     binding="payCoupnAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payGiftAmt"       />"     binding="payGiftAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payFstmpAmt"      />"     binding="payFstmpAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payPartnerAmt"    />"     binding="payPartnerAmt"     width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payOkcsbAmt"      />"     binding="payOkcsbAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payEmpCardAmt"    />"     binding="payEmpCardAmt"     width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.payTemporaryAmt"  />"     binding="payTemporaryAmt"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.paySmartOrderAmt"	/>"     binding="paySmartOrderAmt"	width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_nsl">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.nsl'/></span>	<%-- 비매출종합 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.nsl'/></a>
+		</div>
+		<div class="div_nsl">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_nsl
+	            				autoGenerateColumns	="false"
+				                control				="nsl"
+				                initialized			="initGrid_nsl(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+					<wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"     	/>"     binding="nslSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslTotSaleAmt"	/>"		binding="nslTotSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslTotDcAmt"		/>"		binding="nslTotDcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslRealSaleAmt"	/>"		binding="nslRealSaleAmt"    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslGaAmt"		    />"		binding="nslGaAmt"			width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslVatAmt"		/>"		binding="nslVatAmt"			width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+				<%--<wj-flex-grid-column header="<s:message code="dailyReport.nslTotTipAmt"	    />"		binding="nslTotTipAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>--%>
+				<%--<wj-flex-grid-column header="<s:message code="dailyReport.nslTotEtcAmt"	    />"		binding="nslTotEtcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>--%>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslTotBillCnt"	/>"		binding="nslTotBillCnt"    	width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.nslBillUnprc"	    />"		binding="nslBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_npay">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.npay'/></span>	<%-- 비매출 결제수단 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.npay'/></a>
+		</div>
+		<div class="div_npay">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_npay
+	            				autoGenerateColumns	="false"
+				                control				="npay"
+				                initialized			="initGrid_npay(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+					<wj-flex-grid-column header="<s:message code="dailyReport.npayRealSaleAmt" 	/>"		binding="npayRealSaleAmt"   width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.npayTotTipAmt" 	/>"		binding="npayTotTipAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.npayTotEtcAmt" 	/>"		binding="npayTotEtcAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.npayCardAmt" 	    />"		binding="npayCardAmt"	    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.npayCashAmt" 	    />"		binding="npayCashAmt"	    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_pos">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.pos'/></span>	<%-- 포스정산 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.pos'/></a>
+		</div>
+		<div class="div_pos">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_pos
+	            				autoGenerateColumns	="false"
+				                control				="pos"
+				                initialized			="initGrid_pos(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posFundAmt"       />"     binding="posFundAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posCashExactAmt"  />"     binding="posCashExactAmt"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posIomoneyInAmt"  />"     binding="posIomoneyInAmt"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posIomoneyOutAmt" />"     binding="posIomoneyOutAmt"  width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posGiftAmt"       />"     binding="posGiftAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posLostAmt"       />"     binding="posLostAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.posNonsaleAmt" 	/>"     binding="posNonsaleAmt"    	width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_emp">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.emp'/></span>	<%-- 판매원별 매출  --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.emp'/></a>
+		</div>
+		<div class="div_emp">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_emp
+	            				autoGenerateColumns	="false"
+				                control				="emp"
+				                initialized			="initGrid_emp(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                <%--<wj-flex-grid-column header="<s:message code="dailyReport.empNo"            />"     binding="empNo"             width="100" is-read-only="true" align="left"	                ></wj-flex-grid-column>--%>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empNm"            />"     binding="empNm"             width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empSalCnt"        />"     binding="empSalCnt"         width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empSalTotalCard"  />"     binding="empSalTotalCard"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empSalTotalCash"  />"     binding="empSalTotalCash"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empSalTotalEtc"   />"     binding="empSalTotalEtc"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empRtnCnt"        />"     binding="empRtnCnt"         width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empRtnTotalCard"  />"     binding="empRtnTotalCard"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empRtnTotalCash"  />"     binding="empRtnTotalCash"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empRtnTotalEtc"   />"     binding="empRtnTotalEtc"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.empCancelCnt"     />"     binding="empCancelCnt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_dc">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.dc'/></span>	<%-- 할인내역 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.dc'/></a>
+		</div>
+		<div class="div_dc">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_dc
+	            				autoGenerateColumns	="false"
+				                control				="dc"
+				                initialized			="initGrid_dc(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+				<%--<wj-flex-grid-column header="<s:message code="dailyReport.dcCd"             />"     binding="dcCd"              width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>--%>
+					<wj-flex-grid-column header="<s:message code="dailyReport.dcNm"             />"     binding="dcNm"              width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcSaleQty"     	/>"     binding="dcSaleQty"			width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcSaleAmt"     	/>"     binding="dcSaleAmt"      	width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                	<wj-flex-grid-column header="<s:message code="dailyReport.dcAmt"            />"     binding="dcAmt"             width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcTotDcAmt"       />"     binding="dcTotDcAmt"        width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcRealSaleAmt"    />"     binding="dcRealSaleAmt"     width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_dcdtl">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.dcdtl'/></span>	<%-- 할인상세내역 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.dcdtl'/></a>
+		</div>
+		<div class="div_dcdtl">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
+	            <wj-flex-grid	#grid_dcdtl
+	            				autoGenerateColumns	="false"
+				                control				="dcdtl"
+				                initialized			="initGrid_dcdtl(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlDcCd"        />"     binding="dcdtlDcCd"         width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlDcNm"        />"     binding="dcdtlDcNm"         width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlCnt"         />"     binding="dcdtlCnt"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlTotSaleAmt"  />"     binding="dcdtlTotSaleAmt"   width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlDcAmt"       />"     binding="dcdtlDcAmt"        width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlTotDcAmt"    />"     binding="dcdtlTotDcAmt"     width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlRealSaleAmt" />"     binding="dcdtlRealSaleAmt"  width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_gift">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.gift'/></span>	<%-- 상품권 판매 및 회수내역 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.gift'/></a>
+		</div>
+		<div class="div_gift">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
+	            <wj-flex-grid	#grid_gift
+	            				autoGenerateColumns	="false"
+				                control				="gift"
+				                initialized			="initGrid_gift(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftCd"           />"     binding="giftCd"            width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftNm"           />"     binding="giftNm"            width="100" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"         />"     binding="giftUprc"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftOutQty"       />"     binding="giftOutQty"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftOutAmt"       />"     binding="giftOutAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftSaleQty"      />"     binding="giftSaleQty"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftSaleAmt"      />"     binding="giftSaleAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnQty"       />"     binding="giftRtnQty"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnAmt"       />"     binding="giftRtnAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInQty"/>"     binding="giftRtnCarryInQty" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInAmt"/>"     binding="giftRtnCarryInAmt" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_order">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.order'/></span>	<%-- 수발주내역 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.order'/></a>
+		</div>
+		<div class="div_order">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_lv1
+	            				autoGenerateColumns	="false"
+				                control				="order"
+				                initialized			="initGrid_order(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderOutHqOut"	/>"		binding="orderOutHqOut"     width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderOutStoreCfm"	/>"		binding="orderOutStoreCfm"  width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderOutError"    />"		binding="orderOutError"     width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnHqOut"    />"		binding="orderRtnHqOut"   	width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnStoreCfm"	/>"		binding="orderRtnStoreCfm"  width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnError"	/>"		binding="orderRtnError"     width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnPenalty"	/>"		binding="orderRtnPenalty"   width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_lv1">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.lv1'/></span>	<%-- 대분류별 매출 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.lv1'/></a>
+		</div>
+		<div class="div_lv1">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_lv1
+	            				autoGenerateColumns	="false"
+				                control				="lv1"
+				                initialized			="initGrid_lv1(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv1Nm"            />"		binding="lv1Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotSaleAmt"    />"		binding="lv1TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotDcAmt"      />"		binding="lv1TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv1RealSaleAmt"   />"		binding="lv1RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotSaleQty"    />"		binding="lv1TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_lv2">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.lv2'/></span>	<%-- 중분류별 매출 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.lv2'/></a>
+		</div>
+		<div class="div_lv2">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
+	            <wj-flex-grid	#grid_lv2
+	            				autoGenerateColumns	="false"
+				                control				="lv2"
+				                initialized			="initGrid_lv2(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv2Nm"            />"		binding="lv2Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotSaleAmt"    />"		binding="lv2TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotDcAmt"      />"		binding="lv2TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv2RealSaleAmt"   />"		binding="lv2RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotSaleQty"    />"		binding="lv2TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_lv3">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.lv3'/></span>	<%-- 소분류별 매출 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.lv3'/></a>
+		</div>
+		<div class="div_lv3">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
+	            <wj-flex-grid	#grid_lv3
+	            				autoGenerateColumns	="false"
+				                control				="lv3"
+				                initialized			="initGrid_lv3(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv3Nm"            />"		binding="lv3Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotSaleAmt"    />"		binding="lv3TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotDcAmt"      />"		binding="lv3TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv3RealSaleAmt"   />"		binding="lv3RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotSaleQty"    />"		binding="lv3TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_prod">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.prod'/></span>	<%-- 상품별 매출 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.prod'/></a>
+		</div>
+		<div class="div_prod">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
+	            <wj-flex-grid	#grid_prod
+	            				autoGenerateColumns	="false"
+				                control				="prod"
+				                initialized			="initGrid_prod(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.prodNm"           />"		binding="prodNm"            width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.prodTotSaleQty"   />"		binding="prodTotSaleQty"    width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.prodRealSaleAmt"  />"		binding="prodRealSaleAmt"   width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+    <div class="w100 mt10 flddUnfld_compt">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.compt'/></span>	<%-- 경쟁사 매출 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.compt'/></a>
+		</div>
+		<div class="div_compt">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_prod
+	            				autoGenerateColumns	="false"
+				                control				="compt"
+				                initialized			="initGrid_compt(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.comptProd"        />"		binding="comptProd"      	width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.comptRealSaleAmt" />"		binding="comptRealSaleAmt"  width="300" is-read-only="true" align="right"					></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+    <div class="w100 mt10 flddUnfld_appr">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.appr'/></span>	<%-- 승인현황 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.appr'/></a>
+		</div>
+		<div class="div_appr">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_appr
+	            				autoGenerateColumns	="false"
+				                control				="appr"
+				                initialized			="initGrid_appr(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"      	/>"		binding="apprNm"            width="100" is-read-only="true" align="center" 					></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"		binding="apprCntCard"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApCard"       />"		binding="apprApCard"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcCard"       />"		binding="apprDcCard"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCash"      />"		binding="apprCntCash"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApCash"       />"		binding="apprApCash"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcCash"       />"		binding="apprDcCash"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntPayco"     />"		binding="apprCntPayco"      width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApPayco"      />"		binding="apprApPayco"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcPayco"      />"		binding="apprDcPayco"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntMpay"      />"		binding="apprCntMpay"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApMpay"       />"		binding="apprApMpay"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcMpay"       />"		binding="apprDcMpay"        width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntMcoupn"    />"		binding="apprCntMcoupn"     width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApMcoupn"     />"		binding="apprApMcoupn"      width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcMcoupn"     />"		binding="apprDcMcoupn"      width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntPartner"   />"		binding="apprCntPartner"    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApPartner"    />"		binding="apprApPartner"     width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcPartner"    />"		binding="apprDcPartner"     width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"     />"		binding="apprCntNcard"      width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"      />"		binding="apprApNcard"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"      />"		binding="apprDcNcard"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcash"     />"		binding="apprCntNcash"      width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcash"      />"		binding="apprApNcash"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcash"      />"		binding="apprDcNcash"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+    <div class="w100 mt10 flddUnfld_membr">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.membr'/></span>	<%-- 회원 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.membr'/></a>
+		</div>
+		<div class="div_membr">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_prod
+	            				autoGenerateColumns	="false"
+				                control				="membr"
+				                initialized			="initGrid_membr(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                <%--<wj-flex-grid-column header="<s:message code="dailyReport.membr"            />"     binding="membr"             width="150" is-read-only="true" align="left"	                ></wj-flex-grid-column>--%>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrTotal"       />"     binding="membrTotal"        width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrNew"         />"     binding="membrNew"          width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrNoInfo"      />"     binding="membrNoInfo"       width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrRealSaleAmt" />"     binding="membrRealSaleAmt"  width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrSaleAmt"     />"     binding="membrSaleAmt"      width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrSalePrctg"   />"     binding="membrSalePrctg"    width="150" is-read-only="true" align="right" format="n5"       ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrPointAccum"  />"     binding="membrPointAccum"   width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+		            <wj-flex-grid-column header="<s:message code="dailyReport.membrPointUse"    />"     binding="membrPointUse"     width="150" is-read-only="true" align="right" 	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+    <div class="w100 mt10 flddUnfld_work">
+		<div class="oh sb-select mb10">
+        <%--<span class="fl bk lh30"><s:message code='dailyReport.work'/></span>	<%-- 근태관리 --%>
+        	<a href="#" class="open fl"><s:message code='dailyReport.work'/></a>
+		</div>
+		<div class="div_work">
+	    <div class="w100 mt10 mb20">
+	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
+	            <wj-flex-grid	#grid_work
+	            				autoGenerateColumns	="false"
+				                control				="work"
+				                initialized			="initGrid_work(s,e)"
+				                sticky-headers		="true"
+				                selection-mode		="Row"
+				                items-source		="data"
+				                item-formatter		="_itemFormatter"
+				                is-read-only		="true">
+                    <wj-flex-grid-column header="<s:message code="dailyReport.workEmpNm"        />"     binding="workEmpNm"         width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.workCnt"          />"     binding="workCnt"           width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.workTime"         />"     binding="workTime"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
+	    </div>
+	    </div>
+	</div>
+
+
+
+
+
+</div>
+
+
+<%--
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js?ver=20200129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js" charset="utf-8"></script>
+--%>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js?ver=202001205.02" charset="utf-8"></script>

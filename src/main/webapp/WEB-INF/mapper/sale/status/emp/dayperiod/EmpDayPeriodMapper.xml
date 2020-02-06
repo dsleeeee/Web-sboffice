@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.emp.dayPeriod.service.impl.EmpDayPeriodMapper">
+
+    <select id="getEmpDayPeriodList" parameterType="empDayPeriodVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TSDE.STORE_CD
+             , TSDE.EMP_NO
+	         , TSDE.EMP_NM
+		     , NVL(SUM(TSDE.BILL_CNT),'0') BILL_CNT
+             , NVL(SUM(TSDE.REAL_SALE_AMT),'0') REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+		FROM TB_SL_DAILY_EMPLOYEE TSDE
+		WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+		 <if test='arrStoreCd != null and arrStoreCd != ""'>
+			AND TSDE.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+            	#{item}
+            </foreach>
+        </if>
+		<if test='startDate != null and startDate != ""'>
+	    AND TSDE.SALE_DATE >= #{startDate}
+	    </if>
+	    <if test='endDate != null and endDate != ""'>
+	    AND TSDE.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+	    </if>
+	    GROUP BY TSDE.STORE_CD, TSDE.EMP_NO, TSDE.EMP_NM
+	    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getEmpDayPeriodDtlList" parameterType="empDayPeriodVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TSSH.SALE_DATE
+		     , TSSH.POS_NO
+		     , TSSH.BILL_NO
+		     , DECODE(TSSH.SALE_YN,'Y','매출','반품') AS SALE_YN
+		     , NVL(TSSH.TOT_SALE_AMT,'0') TOT_SALE_AMT
+		     , NVL(TSSH.TOT_DC_AMT,'0') TOT_DC_AMT
+		     , NVL(TSSH.REAL_SALE_AMT,'0') REAL_SALE_AMT
+	   <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM TB_SL_SALE_HDR TSSH
+		 WHERE 1=1
+		 <if test='arrStoreCd != null and arrStoreCd != ""'>
+		 	TSSH.STORE_CD IN
+		 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+		 		#{item}
+		 	</foreach>
+		 </if>
+		 <if test='startDate != null and startDate != ""'>
+		 AND TSSH.SALE_DATE >= #{startDate}
+		 </if>
+		 <if test='endDate != null and endDate != ""'>
+         AND TSSH.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+         </if>
+		 AND TSSH.EMP_NO = #{empNo}
+		 ORDER BY TSSH.SALE_DATE DESC, TSSH.POS_NO, TSSH.BILL_NO
+	   <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getEmpMebList" parameterType="empDayPeriodVO" resultType="DefaultMap">
+    	/* USE : EmpDayMapper.getEmpMebList */
+    	SELECT EMP_NO AS  NMCODE_CD
+    		  ,(EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
+    	FROM
+    		   TB_MS_EMPLOYEE TME
+    	WHERE STORE_CD = #{storeCd}
+    	<if test='empChk != null and empChk != ""'>
+    	  AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
+    				WHERE Z.store_cd = TME.STORE_CD 
+	                  AND Z.EMP_NO = TME.EMP_NO
+	                  AND Z.STORE_CD = #{storeCd}        
+	                  <if test='startDate != null and startDate != ""'>
+	                  AND Z.SALE_DATE >= #{startDate}
+	                  </if>
+	                  <if test='endDate != null and endDate != ""'>
+	                  AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+	                  </if>
+	                )
+	    </if>
+    </select>
+    
+</mapper>
