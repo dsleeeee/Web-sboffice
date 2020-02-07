@@ -14,17 +14,24 @@
 		FROM TB_SL_MONTHLY_TABLE TSDT
 		WHERE 1 = 1
 			  <!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
-			  <if test='arrStoreCd != null and arrStoreCd != ""'>
-			  	AND STORE_CD IN
-			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			  		#{item}
-			  	</foreach>
+			  <if test='arrTableCd != null and arrTableCd.length >= 0'>
+			  	AND STORE_CD||'||'||TBL_CD IN
+			  	<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
 			  </if>
-			  AND TBL_CD in (${sQuery2})
+			  <if test='startDate != null and startDate != ""'>
+			  	AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
+			  </if>
+			  <if test='endDate != null and endDate != ""'>
+			  	AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			  </if>
+
+			<!--   AND TBL_CD in (${sQuery2})
 			  <![CDATA[
    			  AND TSDT.SALE_YM >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
    			  AND TSDT.SALE_YM <= TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
-   			  ]]>
+   			  ]]> -->
 		GROUP
 		BY 	  SALE_YM
 		ORDER
@@ -34,22 +41,24 @@
 
 	<select id="getStoreTableList" parameterType="tableMonthVO" resultType="DefaultMap">
 
-        SELECT  tmp.TBL_CD AS NMCODE_CD
-        		, tmp.TBL_NM AS NMCODE_NM
-        		${sQuery1}
-        FROM    TB_MS_TABLE tmp
-        WHERE   1=1
-        		<if test='arrStoreCd != null and arrStoreCd != ""'>
-			  		AND tmp.STORE_CD IN
-			  		<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			  			#{item}
-				  	</foreach>
-			  	</if>
-        		<if test='tblCd != null and tblCd != ""'>
-        		AND tmp.TBL_CD = #{tblCd}
-        		</if>
-        ORDER
-        BY      tmp.TBL_NM
+        SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD
+				, TMP.TBL_NM AS TABLE_NM
+				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
+		FROM    TB_MS_TABLE TMP
+		WHERE	1=1
+			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+               	AND TMP.STORE_CD IN
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+           	</if>
+           	<if test='arrTableCd != null and arrTableCd.length >= 0'>
+               	AND TMP.STORE_CD||'||'||TMP.TBL_CD IN
+               	<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+           	</if>
+        ORDER BY TMP.STORE_CD||'||'||TMP.TBL_CD
 
     </select>
 

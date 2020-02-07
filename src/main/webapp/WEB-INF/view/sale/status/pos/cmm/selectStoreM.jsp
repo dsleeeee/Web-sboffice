@@ -122,12 +122,15 @@
 
       if (cnt == 0) {
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetId +"StoreNum").val("");
       }
       else if (cnt == 1) {
         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
+        $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+        $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };

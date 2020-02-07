@@ -117,7 +117,18 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayCtrl", function (event, data) {
 
-		$scope.searchPosDayList();
+		$scope.searchPosDayList(true);
+
+		var storeCd = $("#posDaySelectStoreCd").val();
+		var posCd = $("#posDaySelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayCtrlSrch", function (event, data) {
+
+		$scope.searchPosDayList(false);
 
 		var storeCd = $("#posDaySelectStoreCd").val();
 		var posCd = $("#posDaySelectPosCd").val();
@@ -126,7 +137,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	});
 
 	// 포스별매출일자별 리스트 조회
-	$scope.searchPosDayList = function () {
+	$scope.searchPosDayList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -134,6 +145,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		params.posNo = $("#posDaySelectPosCd").val();
 		params.listScale = $scope.posDayListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -333,5 +345,46 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
+	  }
+
+	  $scope.loadedRows = function (s, e) {
+
+		  var rowLength = s.rows.length;
+		  var arrPosCd = storePosCd.split(',');
+		  var arrPosNm = storePosNm.split(',');
+
+		  if (arrPosCd != null) {
+
+			  for(var i = 1; i < arrPosCd.length + 1; i++) {
+
+				  var colValue = arrPosCd[i-1];
+				  var colName = arrPosNm[i-1];
+				  var colSplit = colName.split('||');
+
+				  for(var j = 0; j < rowLength; j++) {
+
+					  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
+					  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
+					  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
+					  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+
+					  if (saleAmt == null || saleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
+					  }
+
+					  if (dcAmt == null || dcAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
+					  }
+
+					  if (realSaleAmt == null || realSaleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
+					  }
+
+					  if (saleCnt == null || saleCnt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
+					  }
+				  }
+			  }
+		  }
 	  }
 }]);

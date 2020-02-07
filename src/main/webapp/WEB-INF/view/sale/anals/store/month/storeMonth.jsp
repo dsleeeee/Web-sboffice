@@ -22,9 +22,9 @@
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
-        	<col class="w14"/>
-	        <col class="w13"/>
-	        <col class="w73"/>
+        	<col class="w13"/>
+	        <col class="w37"/>
+	        <col class="w50"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>

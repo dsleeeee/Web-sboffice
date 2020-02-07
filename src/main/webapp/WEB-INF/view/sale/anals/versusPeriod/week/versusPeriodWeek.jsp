@@ -111,13 +111,13 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="realSaleAmtA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="saleCntA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="totRealSaleAmtA" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntA" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" 		binding="ratA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="totRealSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" binding="ratB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>

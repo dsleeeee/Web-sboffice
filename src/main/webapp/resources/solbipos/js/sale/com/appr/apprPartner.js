@@ -4,14 +4,14 @@
 var app = agrid.getApp();
 
 /** 매장현황 controller */
-app.controller('saleApprPaycoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('saleApprPartnerCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('saleApprPaycoCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('saleApprPartnerCtrl', $scope, $http, true));
 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	 
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
@@ -23,19 +23,19 @@ app.controller('saleApprPaycoCtrl', ['$scope', '$http', '$timeout', function ($s
     
     // 첫째줄 헤더 생성
     var dataItem         	= {};
-    dataItem.saleDate      	= messages["saleComPopup.payco.saleDate"];
-    dataItem.posNo  		= messages["saleComPopup.payco.posNo"];
-    dataItem.apprGubun    	= messages["saleComPopup.card.appr"];
-    dataItem.apprProcFg 	= messages["saleComPopup.card.appr"]; 
-    dataItem.apprCompanyNm  = messages["saleComPopup.payco.apprCompanyNm"];
-    dataItem.saleAmt   		= messages["saleComPopup.payco.apprSaleAmt"];
-    dataItem.tipAmt   		= messages["saleComPopup.payco.apprSaleAmt"];
-    dataItem.vatAmt   		= messages["saleComPopup.payco.apprSaleAmt"];    
-    dataItem.instCntNm   	= messages["saleComPopup.payco.inst"];
-    dataItem.instCnt     	= messages["saleComPopup.payco.inst"];  
-    dataItem.apprDt     	= messages["saleComPopup.card.apprDt"];
-    dataItem.apprNo     	= messages["saleComPopup.card.apprNo"];
-    dataItem.apprAmt    	= messages["saleComPopup.card.apprAmt"];
+    dataItem.saleDate      	= messages["saleComPopup.partner.saleDate"];
+    dataItem.posNo  		= messages["saleComPopup.partner.posNo"];
+    dataItem.saleFg    		= messages["saleComPopup.partner.appr"];
+    dataItem.apprProcFg 	= messages["saleComPopup.partner.appr"];  
+    dataItem.saleAmt   		= messages["saleComPopup.partner.apprSaleAmt"];
+    dataItem.tipAmt   		= messages["saleComPopup.partner.apprSaleAmt"];
+    dataItem.vatAmt   		= messages["saleComPopup.partner.apprSaleAmt"];    
+    dataItem.partnCardno   	= messages["saleComPopup.partner.partnCardno"]; 
+    dataItem.savePoint   	= messages["saleComPopup.partner.point"];
+    dataItem.usePoint     	= messages["saleComPopup.partner.point"];  
+    dataItem.apprDt     	= messages["saleComPopup.partner.apprDt"];
+    dataItem.apprNo     	= messages["saleComPopup.partner.apprNo"];
+    dataItem.apprAmt    	= messages["saleComPopup.partner.apprAmt"];
     s.columnHeaders.rows[0].dataItem = dataItem;
     
     s.itemFormatter = function (panel, r, c, cell) {
@@ -79,16 +79,16 @@ app.controller('saleApprPaycoCtrl', ['$scope', '$http', '$timeout', function ($s
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("saleApprPaycoCtrl", function (event, data) {
+  $scope.$on("saleApprPartnerCtrl", function (event, data) {
 
     $scope.storeCd  	= data.storeCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
     $scope.chkPop 		= data.chkPop;
 
-    $scope.apprPaycoLayer.show(true);
+    $scope.apprPartnerLayer.show(true);
 
-    $scope.searchSaleComPaycoList();
+    $scope.searchSaleComPartnerList();
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -96,7 +96,7 @@ app.controller('saleApprPaycoCtrl', ['$scope', '$http', '$timeout', function ($s
 
 
   // 테이블별 리스트 조회
-  $scope.searchSaleComPaycoList = function () {
+  $scope.searchSaleComPartnerList = function () {
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;

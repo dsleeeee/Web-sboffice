@@ -9,23 +9,30 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <%--
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/dailyReport.css?ver=20200203.01"	/>
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/sale/dailyReport.css?ver=20200203.01"	/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/dailyReport.css"	/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/sale/dailyReport.css"	/>
 <link rel="stylesheet" type="text/css" href="/resource/solbipos/js/sale/anals/dailyReport/dailyReport.css"	/>
 	searchBar_report
 --%>
 
-
+<%--
 <div id="reportView" class="subCon" ng-controller="reportCtrl">
 
     <div class="searchBar flddUnfld">
+
+
+<div id="reportView" class="subCon">
+    <div class="searchBar flddUnfld" ng-controller="reportCtrl">
+--%>
+<div id="reportView" class="subCon">
+    <div class="searchBar flddUnfld" ng-controller="reportCtrl">
         <a href="#" class="open fl">${menuNm}</a>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;"><%-- [조회] --%>
         	<button class="btn_blue fr" ng-click="_broadcast('reportCtrl')"><s:message code="cmm.search" /></button>
         </div>
     </div>
 
-    <table class="searchTbl">
+    <table class="searchTbl" ng-controller="reportCtrl_store">
         <colgroup>
             <col class="w15" />
             <col class="w35" />
@@ -60,16 +67,6 @@
                                         displayNm 	- 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
                                         modiFg 		- 수정여부(변수 없을 경우 기본값으로 수정가능)
                                         closeFunc 	- 팝업 닫기시 호출할 함수
-
-		            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-		                <jsp:param name="targetId" value="reportSelectStore"/>
-		            </jsp:include>
-
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-                        <jsp:param name="targetId" 	value="reportSelectStore"/>
-                        <jsp:param name="displayNm" value="${selectStoreDisplayNmAll}"/>
-                    </jsp:include>
-
                     --%>
                     <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
                         <jsp:param name="targetId" value="reportSelectStore"/>
@@ -84,14 +81,16 @@
     </table>
 
 
-    <div class="mt20 oh sb-select dkbr">
+    <div class="mt20 oh sb-select dkbr" ng-controller="reportCtrl_excel">
     	<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>		<%--<s:message code="cmm.excel.down" />--%>
 	</div>
-
-
+<%--
+</div>
+<div id="reportView" class="subCon">
+--%>
 
 <%--<div class="w100 mt10 flddUnfld_sl searchBar_report">--%>
-    <div class="w100 mt10 flddUnfld_sl">
+    <div class="w100 mt10 flddUnfld_sl" ng-controller="reportCtrl_sl">
 		<div class="oh sb-select mb10">
 		<%--<span class="fl bk lh30"><s:message code='dailyReport.sl'/></span> <%-- 매출종합 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.sl'/></a>
@@ -101,13 +100,13 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_sl
 	            				autoGenerateColumns	="false"
-				                control				="sl"
-				                initialized			="initGrid_sl(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				            	is-read-only		="true">
 				<%--<wj-flex-grid-column header="<s:message code="dailyReport.slSaleFg"     	/>"     binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>--%>
 					<wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"		/>"		binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.slTotSaleAmt" 	/>"		binding="slTotSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
@@ -122,16 +121,20 @@
 					<wj-flex-grid-column header="<s:message code="dailyReport.slBillUnprc"  	/>"		binding="slBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.slGuestUnprc" 	/>"		binding="slGuestUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_sl"/>
+		        </jsp:include>
 	        </div>
 	    </div>
-	    </div>	<%--<div class="div_pay">--%>
+	    </div>
     </div>
 
 
 
 
-
-    <div class="w100 mt10 flddUnfld_pay">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_pay" ng-controller="reportCtrl_pay">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.pay'/></span>	<%-- 결제수단 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.pay'/></a>
@@ -141,8 +144,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_pay
 	            				autoGenerateColumns	="false"
-				                control				="pay"
-				                initialized			="initGrid_pay(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -171,6 +174,10 @@
 					<wj-flex-grid-column header="<s:message code="dailyReport.payTemporaryAmt"  />"     binding="payTemporaryAmt"   width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.paySmartOrderAmt"	/>"     binding="paySmartOrderAmt"	width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_pay"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -179,8 +186,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_nsl">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_nsl" ng-controller="reportCtrl_nsl">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.nsl'/></span>	<%-- 비매출종합 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.nsl'/></a>
@@ -190,8 +197,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_nsl
 	            				autoGenerateColumns	="false"
-				                control				="nsl"
-				                initialized			="initGrid_nsl(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -208,6 +215,10 @@
 					<wj-flex-grid-column header="<s:message code="dailyReport.nslTotBillCnt"	/>"		binding="nslTotBillCnt"    	width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.nslBillUnprc"	    />"		binding="nslBillUnprc"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_nsl"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -216,8 +227,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_npay">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_npay" ng-controller="reportCtrl_npay">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.npay'/></span>	<%-- 비매출 결제수단 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.npay'/></a>
@@ -227,8 +238,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_npay
 	            				autoGenerateColumns	="false"
-				                control				="npay"
-				                initialized			="initGrid_npay(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -240,6 +251,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.npayCardAmt" 	    />"		binding="npayCardAmt"	    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.npayCashAmt" 	    />"		binding="npayCashAmt"	    width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_npay"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -248,8 +263,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_pos">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_pos" ng-controller="reportCtrl_pos">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.pos'/></span>	<%-- 포스정산 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.pos'/></a>
@@ -259,8 +274,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_pos
 	            				autoGenerateColumns	="false"
-				                control				="pos"
-				                initialized			="initGrid_pos(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -274,6 +289,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.posLostAmt"       />"     binding="posLostAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.posNonsaleAmt" 	/>"     binding="posNonsaleAmt"    	width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_pos"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -282,8 +301,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_emp">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_emp" ng-controller="reportCtrl_emp">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.emp'/></span>	<%-- 판매원별 매출  --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.emp'/></a>
@@ -293,8 +312,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_emp
 	            				autoGenerateColumns	="false"
-				                control				="emp"
-				                initialized			="initGrid_emp(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -312,6 +331,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.empRtnTotalEtc"   />"     binding="empRtnTotalEtc"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.empCancelCnt"     />"     binding="empCancelCnt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_emp"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -320,8 +343,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_dc">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_dc" ng-controller="reportCtrl_dc">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.dc'/></span>	<%-- 할인내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.dc'/></a>
@@ -331,8 +354,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_dc
 	            				autoGenerateColumns	="false"
-				                control				="dc"
-				                initialized			="initGrid_dc(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -346,6 +369,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcTotDcAmt"       />"     binding="dcTotDcAmt"        width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcRealSaleAmt"    />"     binding="dcRealSaleAmt"     width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_dc"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -354,8 +381,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_dcdtl">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_dcdtl" ng-controller="reportCtrl_dcdtl">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.dcdtl'/></span>	<%-- 할인상세내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.dcdtl'/></a>
@@ -365,8 +392,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_dcdtl
 	            				autoGenerateColumns	="false"
-				                control				="dcdtl"
-				                initialized			="initGrid_dcdtl(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -380,6 +407,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlTotDcAmt"    />"     binding="dcdtlTotDcAmt"     width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlRealSaleAmt" />"     binding="dcdtlRealSaleAmt"  width="200" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_dcdtl"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -388,8 +419,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_gift">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_gift" ng-controller="reportCtrl_gift">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.gift'/></span>	<%-- 상품권 판매 및 회수내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.gift'/></a>
@@ -399,15 +430,15 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_gift
 	            				autoGenerateColumns	="false"
-				                control				="gift"
-				                initialized			="initGrid_gift(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
 				                is-read-only		="true">
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftCd"           />"     binding="giftCd"            width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dailyReport.giftNm"           />"     binding="giftNm"            width="100" is-read-only="true" align="left"	                ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dailyReport.giftNm"           />"     binding="giftNm"            width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"         />"     binding="giftUprc"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftOutQty"       />"     binding="giftOutQty"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -422,6 +453,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInQty"/>"     binding="giftRtnCarryInQty" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInAmt"/>"     binding="giftRtnCarryInAmt" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_gift"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -430,8 +465,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_order">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_order" ng-controller="reportCtrl_order">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.order'/></span>	<%-- 수발주내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.order'/></a>
@@ -441,8 +476,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_lv1
 	            				autoGenerateColumns	="false"
-				                control				="order"
-				                initialized			="initGrid_order(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -457,6 +492,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnError"	/>"		binding="orderRtnError"     width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.orderRtnPenalty"	/>"		binding="orderRtnPenalty"   width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_order"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -465,8 +504,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_lv1">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_lv1" ng-controller="reportCtrl_lv1">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv1'/></span>	<%-- 대분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv1'/></a>
@@ -476,8 +515,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_lv1
 	            				autoGenerateColumns	="false"
-				                control				="lv1"
-				                initialized			="initGrid_lv1(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -489,6 +528,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv1RealSaleAmt"   />"		binding="lv1RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotSaleQty"    />"		binding="lv1TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_lv1"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -497,8 +540,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_lv2">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_lv2" ng-controller="reportCtrl_lv2">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv2'/></span>	<%-- 중분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv2'/></a>
@@ -508,8 +551,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_lv2
 	            				autoGenerateColumns	="false"
-				                control				="lv2"
-				                initialized			="initGrid_lv2(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -521,6 +564,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv2RealSaleAmt"   />"		binding="lv2RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotSaleQty"    />"		binding="lv2TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_lv2"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -529,8 +576,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_lv3">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_lv3" ng-controller="reportCtrl_lv3">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv3'/></span>	<%-- 소분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv3'/></a>
@@ -540,8 +587,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_lv3
 	            				autoGenerateColumns	="false"
-				                control				="lv3"
-				                initialized			="initGrid_lv3(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -553,6 +600,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv3RealSaleAmt"   />"		binding="lv3RealSaleAmt"    width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotSaleQty"    />"		binding="lv3TotSaleQty"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_lv3"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -561,8 +612,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_prod">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_prod" ng-controller="reportCtrl_prod">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.prod'/></span>	<%-- 상품별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.prod'/></a>
@@ -572,8 +623,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_prod
 	            				autoGenerateColumns	="false"
-				                control				="prod"
-				                initialized			="initGrid_prod(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -583,6 +634,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.prodTotSaleQty"   />"		binding="prodTotSaleQty"    width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.prodRealSaleAmt"  />"		binding="prodRealSaleAmt"   width="150" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_prod"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -591,8 +646,8 @@
 
 
 
-
-    <div class="w100 mt10 flddUnfld_compt">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_compt" ng-controller="reportCtrl_compt">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.compt'/></span>	<%-- 경쟁사 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.compt'/></a>
@@ -602,8 +657,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_prod
 	            				autoGenerateColumns	="false"
-				                control				="compt"
-				                initialized			="initGrid_compt(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -612,14 +667,18 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.comptProd"        />"		binding="comptProd"      	width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.comptRealSaleAmt" />"		binding="comptRealSaleAmt"  width="300" is-read-only="true" align="right"					></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_compt"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
 	</div>
 
 
-
-    <div class="w100 mt10 flddUnfld_appr">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_appr" ng-controller="reportCtrl_appr">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.appr'/></span>	<%-- 승인현황 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.appr'/></a>
@@ -629,8 +688,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_appr
 	            				autoGenerateColumns	="false"
-				                control				="appr"
-				                initialized			="initGrid_appr(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -670,14 +729,18 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcash"      />"		binding="apprApNcash"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcash"      />"		binding="apprDcNcash"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_appr"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
 	</div>
 
 
-
-    <div class="w100 mt10 flddUnfld_membr">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_membr" ng-controller="reportCtrl_membr">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.membr'/></span>	<%-- 회원 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.membr'/></a>
@@ -687,8 +750,8 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_prod
 	            				autoGenerateColumns	="false"
-				                control				="membr"
-				                initialized			="initGrid_membr(s,e)"
+				                control				="flex"
+				                initialized			="initGrid(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
 				                items-source		="data"
@@ -704,14 +767,18 @@
 		            <wj-flex-grid-column header="<s:message code="dailyReport.membrPointAccum"  />"     binding="membrPointAccum"   width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 		            <wj-flex-grid-column header="<s:message code="dailyReport.membrPointUse"    />"     binding="membrPointUse"     width="150" is-read-only="true" align="right" 	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_membr"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
 	</div>
 
 
-
-    <div class="w100 mt10 flddUnfld_work">
+	<div><br></div>
+    <div class="w100 mt10 flddUnfld_work" ng-controller="reportCtrl_work">
 		<div class="oh sb-select mb10">
         <%--<span class="fl bk lh30"><s:message code='dailyReport.work'/></span>	<%-- 근태관리 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.work'/></a>
@@ -721,7 +788,7 @@
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_work
 	            				autoGenerateColumns	="false"
-				                control				="work"
+				                control				="flex"
 				                initialized			="initGrid_work(s,e)"
 				                sticky-headers		="true"
 				                selection-mode		="Row"
@@ -732,6 +799,10 @@
                     <wj-flex-grid-column header="<s:message code="dailyReport.workCnt"          />"     binding="workCnt"           width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.workTime"         />"     binding="workTime"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 	            </wj-flex-grid>
+
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		        	<jsp:param name="pickerTarget" value="reportCtrl_work"/>
+		        </jsp:include>
 	        </div>
 	    </div>
 	    </div>
@@ -744,8 +815,4 @@
 </div>
 
 
-<%--
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js?ver=20200129.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js" charset="utf-8"></script>
---%>
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReport/report/report.js?ver=202001205.02" charset="utf-8"></script>

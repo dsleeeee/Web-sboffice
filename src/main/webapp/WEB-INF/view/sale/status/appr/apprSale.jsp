@@ -15,9 +15,9 @@
                 <a id="payMethodTab" href="#" class="on" ng-click="payMethodTabShow()"><s:message code="dailyReport.appr"/></a>
             </li>
             <%-- 카드매입사별 --%>
-            <li>
-                <a id="apprAcquireTab" href="#" ng-click="apprAcquireTabShow()"><s:message code="appr.cardAcquire"/></a>
-            </li>
+<!--             <li> -->
+<%--                 <a id="apprAcquireTab" href="#" ng-click="apprAcquireTabShow()"><s:message code="appr.cardAcquire"/></a> --%>
+<!--             </li> -->
             <%-- 제휴카드 --%>
        <!--     <li>
                 <a id="apprCoprtnTab" href="#" ng-click="apprCoprtnTabShow()"><s:message code="corner.month"/></a>
@@ -44,10 +44,10 @@
 </c:import>
 
 <%-- 카드매입사별 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/acquire/acquire.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%-- <c:import url="/WEB-INF/view/sale/status/appr/acquire/acquire.jsp"> --%>
+<%--     <c:param name="menuCd" value="${menuCd}"/> --%>
+<%--     <c:param name="menuNm" value="${menuNm}"/> --%>
+<%-- </c:import> --%>
 
 <%-- 제휴카드별 --%>
 <%-- <c:import url="/WEB-INF/view/sale/status/appr/coprtn/coprtn.jsp"> --%>

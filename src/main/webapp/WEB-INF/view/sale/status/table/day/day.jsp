@@ -8,7 +8,7 @@
 
 <div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="pos.day"/></a>
+		<a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrl')">
 			<s:message code="cmm.search"/>
@@ -44,10 +44,9 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectStoreM.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDaySelectStore"/>
 								<jsp:param name="targetTableId" value="tableDaySelectTable"/>
-								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -133,8 +132,6 @@
 	<%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript">
-</script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/day/day.js?ver=20190125.02" charset="utf-8"></script>
 <%-- 상품매출내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/table.jsp">

@@ -117,8 +117,9 @@
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="prodday.prodClassNm"/>" binding="prodClassNm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.saleDate"/>" 	binding="saleDate" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodday.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodday.totSaleQty"/>" 	binding="totSaleQty" 	width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totDcAmt"/>" 	binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.realSaleAmt"/>" binding="realSaleAmt" 	width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

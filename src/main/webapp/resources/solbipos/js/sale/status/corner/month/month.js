@@ -8,9 +8,6 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cornerMonthCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchCornerMonthStartDate = wcombo.genDateVal("#srchCornerMonthStartDate", gvStartDate);
-  $scope.srchCornerMonthEndDate   = wcombo.genDateVal("#srchCornerMonthEndDate", gvEndDate);
-
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("cornerMonthListScaleBox", gvListScaleBoxData);
 
@@ -29,7 +26,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
 
-        if (col.binding === "totSaleQty") { // 수량합계
+        if (col.binding.substring(0, 10) === "totSaleQty" || col.binding.substring(0, 7) === "saleQty") { // 수량합계
         	var item = s.rows[e.row].dataItem;
           	wijmo.addClass(e.cell, 'wijLink');
           	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -45,13 +42,30 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	params.chkPop   = "tablePop";
-//        	params.cornrCd   = selectedRow.cornrCd;
-        	params.storeCd   = $("#cornerMonthSelectStoreCd").val();
-        	params.startDate = selectedRow.saleDate;
-        	params.endDate   = selectedRow.saleDate;
-        if (col.binding === "totSaleQty") { // 수량
-            $scope._broadcast('saleComProdCtrl', params);
+        	params.startDate = selectedRow.saleYm;
+        	params.endDate   = (selectedRow.saleYm).split("-");
+        	var endDay 		 = ( new Date(params.endDate[0],params.endDate[1], 0) ).getDate();
+        	params.endDate 	 = selectedRow.saleYm + "-" + endDay;
+        	
+        	var storeCornr   = $("#cornerMonthSelectCornerCd").val().split(",");
+        	var arrStore     = [];
+    		var arrCornr     = [];
+    		for(var i=0; i < storeCornr.length; i++) {
+    			var temp = storeCornr[i].split("||");
+    			arrStore.push(temp[0]);
+    			arrCornr.push(temp[1]);
+    		}
+    		
+        if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
+        	params.storeCd	 = arrStore;
+        	params.cornrCd	 = arrCornr;
+        	$scope._broadcast('saleComProdCtrl', params);
+        }else if(col.binding.substring(0, 7) === "saleQty") {
+    		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];
+    		params.cornrCd   = arrCornr[Math.floor(ht.col/2) - 2];
+    		$scope._broadcast('saleComProdCtrl', params);
         }
+        
       }
     });
 
@@ -134,8 +148,8 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
-	  params.startDate = wijmo.Globalize.format($scope.srchCornerMonthStartDate.value, 'yyyyMMdd');
-	  params.endDate = wijmo.Globalize.format($scope.srchCornerMonthEndDate.value, 'yyyyMMdd');
+	  params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
+	  params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
 	}
 	if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -259,9 +273,9 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
-				  if(colSplit[1] == null || colSplit[1] == ""){
-					  colSplit[1] = "기본코너"+i;
-				  }
+//				  if(colSplit[0] == null || colSplit[0] == "" || colSplit[0] == "null"){
+//					  colSplit[0] = "테스트 매장"+i;
+//				  }
 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
@@ -312,7 +326,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 			  }
 
 		  }
-
+		    
 		  $scope.flex.refresh();
 
 		  // 기능수행 종료 : 반드시 추가

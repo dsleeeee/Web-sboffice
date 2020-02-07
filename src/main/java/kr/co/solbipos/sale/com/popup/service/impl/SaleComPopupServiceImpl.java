@@ -43,6 +43,9 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
         }
+        if(!StringUtil.getOrBlank(saleComPopupVO.getCornrCd()).equals("")) {
+        	saleComPopupVO.setArrCornrCd(saleComPopupVO.getCornrCd().split(","));
+        }
 
     	if(saleComPopupVO.getChkPop().equals("tablePop")) {
     		return saleComPopupMapper.getProdPopList(saleComPopupVO);

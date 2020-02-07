@@ -235,8 +235,8 @@
 											  , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 										   FROM TB_SL_DAILY_PROD C
 										  WHERE 1=1
-										  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-									   	 	AND C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+										  <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+									   	 	AND C.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
 										  </if>
 										  <if test='arrStoreCd != null and arrStoreCd != ""'>
 									   	   	  AND C.STORE_CD IN
@@ -367,8 +367,8 @@
 														#{item}
 										      	   </foreach>
 									   	  	 </if>
-											 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-											   	AND C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+											 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+											   	AND C.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
 										 	 </if>
 											 GROUP BY C.PROD_CD
 									       ) C

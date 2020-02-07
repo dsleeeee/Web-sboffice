@@ -53,7 +53,26 @@
 	    SELECT  B.REAL_SALE_AMT                 AS PAY_REAL_SALE_AMT,
 	            B.TOT_TIP_AMT                   AS PAY_TOT_TIP_AMT,
 	            B.TOT_ETC_AMT                   AS PAY_TOT_ETC_AMT,
-	            A.*
+	        <!--A.*-->	<!-- PIVOT을 사용하면 값이 없는 경우 NULL로 조회됨. 명시적으로 값을 주기 위해 변경함 -->
+	            NVL(PAY_CARD_AMT,       0)  	AS PAY_CARD_AMT,
+	            NVL(PAY_CASH_AMT,       0)  	AS PAY_CASH_AMT,
+	            NVL(PAY_PAYCO_AMT,      0)  	AS PAY_PAYCO_AMT,
+	            NVL(PAY_VPOINT_AMT,     0)  	AS PAY_VPOINT_AMT,
+	            NVL(PAY_VCOUPN_AMT,     0)  	AS PAY_VCOUPN_AMT,
+	            NVL(PAY_VCHARGE_AMT,    0)  	AS PAY_VCHARGE_AMT,
+	            NVL(PAY_MPAY_AMT,       0)  	AS PAY_MPAY_AMT,
+	            NVL(PAY_MCOUPN_AMT,     0)  	AS PAY_MCOUPN_AMT,
+	            NVL(PAY_MEMBR_AMT,      0)  	AS PAY_MEMBR_AMT,
+	            NVL(PAY_PREPAID_AMT,    0)  	AS PAY_PREPAID_AMT,
+	            NVL(PAY_POSTPAID_AMT,   0)  	AS PAY_POSTPAID_AMT,
+	            NVL(PAY_COUPN_AMT,      0)  	AS PAY_COUPN_AMT,
+	            NVL(PAY_GIFT_AMT,       0)  	AS PAY_GIFT_AMT,
+	            NVL(PAY_FSTMP_AMT,      0)  	AS PAY_FSTMP_AMT,
+	            NVL(PAY_PARTNER_AMT,    0)  	AS PAY_PARTNER_AMT,
+	            NVL(PAY_OKCSB_AMT,      0)  	AS PAY_OKCSB_AMT,
+	            NVL(PAY_EMP_CARD_AMT,   0)  	AS PAY_EMP_CARD_AMT,
+	            NVL(PAY_TEMPORARY_AMT,  0)  	AS PAY_TEMPORARY_AMT,
+	            NVL(PAY_SMART_ORDER_AMT,0)  	AS PAY_SMART_ORDER_AMT
 	    FROM    (
 	                SELECT  *
 	                FROM    (
@@ -472,10 +491,14 @@
 	    SELECT  A.GIFT_CD,
 	            A.GIFT_UPRC,
 	            A.GIFT_PROC_FG,
-	            SUM( DECODE(A.SALE_FG, '1',  A.GIFT_QTY, 0) )   AS  GIFT_SAL_QTY,
-	            SUM( DECODE(A.SALE_FG, '1',  B.SALE_AMT, 0) )   AS  GIFT_SAL_AMT,
+	            SUM( DECODE(A.SALE_FG, '1',  A.GIFT_QTY, 0) )   AS  GIFT_SALE_QTY,
+	            SUM( DECODE(A.SALE_FG, '1',  B.SALE_AMT, 0) )   AS  GIFT_SALE_AMT,
 	            SUM( DECODE(A.SALE_FG, '-1', A.GIFT_QTY, 0) )   AS  GIFT_RTN_QTY,
 	            SUM( DECODE(A.SALE_FG, '-1', B.SALE_AMT, 0) )   AS  GIFT_RTN_AMT,
+				0                                               AS  GIFT_OUT_QTY,			<!-- '출고/회수반입' 보여주기 위해 집계TB 사용 예정 -->
+				0                                               AS  GIFT_OUT_AMT,
+				0                                               AS  GIFT_RTN_CARRY_IN_QTY,
+				0                                               AS  GIFT_RTN_CARRY_IN_AMT,
 	            (	SELECT 	GIFT_NM
 	            	FROM 	TB_MS_GIFT
 	            	WHERE 	STORE_CD	= #{searchStoreCd}
@@ -950,7 +973,7 @@
     <select id="getMembrList" parameterType="dailyReportVO" resultType="DefaultMap">
 		SELECT  A.CNT                                       								AS MEMBR_TOTAL,
 		        B.CNT                                       								AS MEMBR_NEW,
-		        ''																			AS MEMBR_NO_INFO,
+		        0																			AS MEMBR_NO_INFO,		<!-- 정보미입력 회원 -->
 		        C.REAL_SALE_AMT                             								AS MEMBR_REAL_SALE_AMT,
 		        D.REAL_SALE_AMT                             								AS MEMBR_SALE_AMT,
 		    <!--TRUNC(D.REAL_SALE_AMT / C.REAL_SALE_AMT,5)  								AS MEMBR_SALE_PRCTG,	나누는 수가 0인경우 오류 > ORA-01476: divisor is equal to zero	-->
@@ -1166,8 +1189,8 @@
 	            							(
            										SELECT  HQ_BRAND_CD
 												FROM    TB_MS_STORE
-                                               	WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
-                                               	AND     STORE_CD	= #{searchStoreCd}
+                                               	WHERE   HQ_OFFICE_CD= #{cfgHqOfficeCd}
+                                               	AND     STORE_CD	= #{cfgStoreCd}
 	                                      	),
 	                                        #{cfgStoreCd},
 	                                        #{cfgSaleDailyReportCd},

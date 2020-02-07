@@ -27,14 +27,32 @@
         <th><s:message code="cmm.search.date"/></th>
         <td>
         <div class="sb-select">
-            <span class="txtIn"><input id="srchCornerMonthStartDate" class="w120px"></span>
-                <span class="rg">~</span>
-            <span class="txtIn"><input id="srchCornerMonthEndDate" class="w120px"></span>
-            <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-                <label for="chkDt">
-                    <s:message code="cmm.all.day" />
-                </label>
+          <span class="txtIn w110px">
+              <wj-input-date
+                      id="srchCornerMonthStartDate"
+                      value="srchCornerMonthStartDate"
+                      ng-model="startDate"
+                      control="srchCornerMonthStartDateCombo"
+                      min="2000-01-01"
+                      max="2099-12-31"
+                      initialized="_initDateBox(s)"
+                      selection-mode="Month" 
+                      format="y">
+              </wj-input-date>
+            </span>
+            <span class="rg">~</span>
+            <span class="txtIn w110px">
+              <wj-input-date
+                      id="srchCornerMonthEndDate"
+                      value="srchCornerMonthEndDate"
+                      ng-model="endDate"
+                      control="srchCornerMonthEndDateCombo"
+                      min="2000-01-01"
+                      max="2099-12-31"
+                      initialized="_initDateBox(s)"
+                      selection-mode="Month" 
+                      format="y">
+              </wj-input-date>
             </span>
         </div>
         </td>

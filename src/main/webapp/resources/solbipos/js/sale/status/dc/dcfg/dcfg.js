@@ -19,10 +19,10 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope.initGrid = function (s, e) {
     // 조회조건 '코너 표시'
 	$scope.getDcNmList();
-	
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("dcDcfgCtrl");
-    
+
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -55,11 +55,11 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
   }
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("dcDcfgCtrl", function (event, data) {
     $scope.searchDcDcfgList();
-    
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -77,7 +77,7 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.storeCd   = $("#dcDcfgSelectStoreCd").val();
     params.dcCd = $scope.dcCd;
     params.listScale = $scope.dcDcfgListScale; //-페이지 스케일 갯수
-    
+
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchDcDcfgStartDate.value, 'yyyyMMdd');
@@ -92,21 +92,29 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
       params.dcCd = $scope.dcCd;
       console.log($scope.dcCd);
     }
-	  
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/status/dc/dcfg/list.sb", params);
-    
+
     //메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
+
 		var rows = sender.rows;
 		var params		 = {};
-	    params.storeCd   = $("#dcDcfgSelectStoreCd").val();
-	    params.dcCd   = rows[0].dataItem.dcCd;
-	    params.startDate   = rows[0].dataItem.saleDate;
-	    params.endDate   = rows[0].dataItem.saleDate;
-	    
-	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("dcDcfgDtlCtrl", params);
+
+		if(rows.length != 0) {
+			 params.startDate   = rows[0].dataItem.saleDate;
+		     params.endDate   = rows[0].dataItem.saleDate;
+			 params.dcCd   = rows[0].dataItem.dcCd;
+			 params.storeCd   = $("#dcDcfgSelectStoreCd").val();
+	    }
+		else {
+			params.dcCd   = -1;
+		}
+
+    	// 코너별 매출현황 상세조회.
+    	$scope._broadcast("dcDcfgDtlCtrl", params);
+
 	}
   };
 
@@ -120,7 +128,7 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	  var grid = wijmo.Control.getControl("#srchDcDcfgDisplay");
 	  grid.isReadOnly = $scope.isAll;;
   };
-  
+
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -150,7 +158,7 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
       });
     }, 10);
   };
-  
+
 //조회조건 코너표시(corner) 리스트 조회
   $scope.getDcNmList = function () {
     var url             = '/sale/status/dc/dcfg/dcNmList.sb';
@@ -251,14 +259,14 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	  }
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("dcDcfgDtlCtrl", function (event, data) {
 		$scope.startDate = data.startDate;
 		$scope.endDate   = data.endDate;
 		$scope.storeCd   = data.storeCd;
 		$scope.dcCd   = data.dcCd;
-		
+
 	    $scope.searchDcfgDtlList();
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
@@ -279,12 +287,12 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	    params.storeCd   = $scope.storeCd;
 	    params.dcCd   = $scope.dcCd;
 	    params.listScale = $scope.dcDcfgDtlListScale;
-		  
+
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/dc/dcfg/dtl.sb", params);
 	    $scope.flex.refresh();
 	  };
-	  
+
 	//엑셀 다운로드
 	  $scope.excelDownloadDcDcfgDtl = function () {
 	    if ($scope.flex.rows.length <= 0) {

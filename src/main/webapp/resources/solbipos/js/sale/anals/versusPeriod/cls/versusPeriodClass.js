@@ -247,12 +247,19 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     //메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
     	var rows = sender.rows;
-	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-	    params.compStartDate = wijmo.Globalize.format($scope.compStartDate.value, 'yyyyMMdd');
-	    params.compEndDate = wijmo.Globalize.format($scope.compEndDate.value, 'yyyyMMdd');
-	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
-	    params.brandCd = rows[0].dataItem.lv3Cd;
+    	var params		 = {};
+
+    	if(rows.length != 0) {
+    		params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+    	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    	    params.compStartDate = wijmo.Globalize.format($scope.compStartDate.value, 'yyyyMMdd');
+    	    params.compEndDate = wijmo.Globalize.format($scope.compEndDate.value, 'yyyyMMdd');
+    	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
+    	    params.brandCd = rows[0].dataItem.lv3Cd;
+	    }
+		else {
+			params.storeCd   = -1;
+		}
 
 	    // 코너별 매출현황 상세조회.
 	    $scope._broadcast("versusPeriodClassDtlCtrl", params);
@@ -480,7 +487,8 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	  $scope.compEndDate   = data.compEndDate;
 	  $scope.storeCd   = data.storeCd;
 	  $scope.brandCd   = data.brandCd;
-	  $scope.prodCd   = data.prodCd;
+	  $scope.prodClassCd   = data.prodClassCd;
+
 	  //params = data;
 	  $scope.srchStartDate = [data.startDate.slice(0, 4), "-", data.startDate.slice(4, 6), "-", data.startDate.slice(6, 8)].join('');
 	  $scope.srchEndDate = [data.endDate.slice(0, 4), "-", data.endDate.slice(4, 6), "-", data.endDate.slice(6, 8)].join('');
@@ -502,10 +510,11 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	  params.compEndDate = $scope.compEndDate;
 	  params.storeCd   = $scope.storeCd;
 	  params.brandCd = $scope.brandCd;
-	  params.brodClassCd = $scope.prodCd;
+	  params.prodClassCd = $scope.prodClassCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
+    $scope.flex.refresh();
 
     var days = "(" + $scope.dateDiff(params.startDate, params.endDate) + "일)\n";
     var srchStartToEnd = "(" + $scope.srchStartDate + " ~ " + $scope.srchEndDate + ")";
@@ -516,7 +525,6 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
     grid.saleCntA = messages["versusPeriod.period"]+ (days + srchStartToEnd);
     grid.realSaleAmtB       = messages["versusPeriod.comp"] + (days + compStartToEnd);
     grid.saleCntB      = messages["versusPeriod.comp"] + (days + compStartToEnd);
-
   };
 
   // 엑셀 다운로드

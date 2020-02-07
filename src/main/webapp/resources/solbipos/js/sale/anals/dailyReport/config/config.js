@@ -36,12 +36,12 @@ app.controller('configCtrl_1', ['$scope', '$http', function ($scope, $http) {
 
     //가맹점인 경우, [결재라인] [영업일보 구성] 조회	START	----------------------------------------------------------------------------------------------
     var scope_reportCtrl = agrid.getScope('reportCtrl');
-    console.log("configCtrl_1 > scope_reportCtrl.orgnFg: " + scope_reportCtrl.orgnFg);
+    //DEBUG	console.log("configCtrl_1 > scope_reportCtrl.orgnFg: " + scope_reportCtrl.orgnFg);
 
 	if(scope_reportCtrl.orgnFg != "H") {	//H:본사, S:가맹점, M:?? -> 매장이 'M'으로 보이는 경우도 있음
         ///*
 	    var params = {};
-        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
+        	params.searchStoreCd   	= $("#reportSelectStoreCd").val();
 
         //$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
 	    $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReport/config/list.sb",	//영업일보 구성 조회
@@ -225,12 +225,11 @@ app.controller('configCtrl_1', ['$scope', '$http', function ($scope, $http) {
     	/*
     		'cfgStatus'칼럼을 추가하여 이 값으로 처리구분을 한다 -> I:삽입 & D:삭제 ('I' or 'D' 가 아닌 경우에는 Update)
 
-				[추가]후 저장없이 [삭제]한 row는
-				   status: I 이고    (Grid에서 기본 제공하는 status)
-				cfgStatus: D 이기에 기존 타소스에서 사용하는 방식을 이용하면, 화면에 보이지 않는 데이터임에도 Insert 로직이 호출됨. 문제 발생함.
+				[추가]후 저장없이 [삭제]한 row는 -> (Grid에서 기본 제공하는 status)인 status: I 이기에
+				                                                        기존 타소스에서 사용하는 방식을 이용하면, 화면에 보이지 않는 데이터임에도 Insert 로직이 호출됨. 문제 발생함.
 
 				여기서 이용하는 방식은 cfgStatus로 구분해서 처리하고
-				[추가]후 저장없이 [삭제]한 row는 'cfgStatus=D' & 'cfgPayLineNo'값이 없는것 이기에 parameter 에서 제외한 후 [save.sb] 호출하면 됨.
+				[추가]후 저장없이 [삭제]한 row는 'cfgStatus=D' & 'cfgPayLineNo'값은 없기에, 해당건은 제외한 후 [save.sb] 호출하면 됨.
     	*/
         var params = new Array();
         for(var i=0; i<$scope.flex.collectionView.items.length; i++){
@@ -241,12 +240,11 @@ app.controller('configCtrl_1', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["dailyReport.alert.require.cfgPayLineNm"]); 	//dailyReport.alert.require.cfgPayLineNm	=결재라인 [명칭]을 입력해 주십시오.
                 return false;
             }
-//            console.log('[' + (i+1) + ']: ' + item.cfgStatus);
+            //DEBUG	console.log('[' + (i+1) + ']: ' + item.cfgStatus);
             if( item.cfgStatus == 'D'   &&   (item.cfgPayLineNo === undefined || item.cfgPayLineNo.length === 0) )	{}	//[추가]후 저장없이 [삭제]한 row는 제외
             else																									{	params.push(item);	}
         }
-        console.log("params: " + JSON.stringify(params));
-        //return;
+        //DEBUG	console.log("params: " + JSON.stringify(params));
 
       //$scope._save("/sale/anals/dailyReport/report/save.sb", params);	//저장(URL, parameter, callback function)
         $scope._save("/sale/anals/dailyReport/report/save.sb", params, function(){$scope.getConfigList()});	//저장(URL, parameter, callback function)
@@ -313,7 +311,7 @@ app.controller('configCtrl_1', ['$scope', '$http', function ($scope, $http) {
 
             	//$scope.flex.collectionView.remove(item);
 
-            	//console.log("deleteRow: " + item.cfgPayLineSeq);
+            	//DEBUG	console.log("deleteRow: " + item.cfgPayLineSeq);
             	item.cfgUseYn 			= 'N';
             	item.cfgStatus			= "D";	//상태 (I:삽입, U:수정, D:삭제)
             	grid.rows[i].visible 	= false;
@@ -367,7 +365,7 @@ app.controller('configCtrl_2', ['$scope', '$http', function ($scope, $http) {
 
     //[버튼] 보이기
     var scope_reportCtrl = agrid.getScope('reportCtrl');
-    console.log("configCtrl_2 > scope_reportCtrl.orgnFg: " + scope_reportCtrl.orgnFg);
+    //DEBUG	console.log("configCtrl_2 > scope_reportCtrl.orgnFg: " + scope_reportCtrl.orgnFg);
 	if(scope_reportCtrl.orgnFg != "H") {	//H:본사, S:가맹점, M:?? -> 매장이 'M'으로 보이는 경우도 있음
 		$("#btnSave2").show();
 	}
@@ -452,8 +450,8 @@ app.controller('configCtrl_2', ['$scope', '$http', function ($scope, $http) {
 
         	params.push( $scope.flex.collectionView.items[i] );
         }
-        console.log("params: " + JSON.stringify(params));
 
+      //DEBUG	console.log("params: " + JSON.stringify(params));
         $scope._save("/sale/anals/dailyReport/config/save.sb", params);	//저장(URL, parameter, callback function)
     }
     //Grid 저장   END     --------------------------------------------------------------------------------------------------------------------------

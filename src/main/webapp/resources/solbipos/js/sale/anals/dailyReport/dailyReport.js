@@ -27,6 +27,7 @@ app.controller('dailyReportCtrl', ['$scope', function ($scope) {
         $("#configView"	).hide();
 
         //'angular grid' hide시 문제생기므로(깨짐) refresh()
+        /*
         var scope = agrid.getScope("reportCtrl");
 	        scope.sl    .refresh();
 	        scope.pay   .refresh();
@@ -46,6 +47,26 @@ app.controller('dailyReportCtrl', ['$scope', function ($scope) {
 	        scope.appr  .refresh();
 	        scope.membr .refresh();
 	        scope.work  .refresh();
+	    */
+        var scope;
+        scope = agrid.getScope("reportCtrl_sl");       	scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_pay");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_nsl");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_npay");      scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_pos");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_emp");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_dc");        scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_dcdtl");     scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_gift");      scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_order");     scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_lv1");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_lv2");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_lv3");       scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_prod");      scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_compt");     scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_appr");      scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_membr");     scope.flex.refresh();
+        scope = agrid.getScope("reportCtrl_work");      scope.flex.refresh();
     };
 
 
@@ -58,11 +79,9 @@ app.controller('dailyReportCtrl', ['$scope', function ($scope) {
         $("#configView"	).show();
 
         //'angular grid' hide시 문제생기므로(깨짐) refresh()
-        var scope = agrid.getScope("configCtrl_1");
-        scope.flex.refresh();
-
-        scope = agrid.getScope("configCtrl_2");
-        scope.flex.refresh();
+        var scope;
+        scope = agrid.getScope("configCtrl_1");	scope.flex.refresh();
+        scope = agrid.getScope("configCtrl_2");	scope.flex.refresh();
     };
 
 }]);

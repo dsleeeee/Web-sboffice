@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.day"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerDaySearch" ng-click="_broadcast('cornerDayCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerDaySearch" ng-click="_broadcast('cornerDayCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -40,6 +40,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <input type="hidden" id="cornerDaySelectStoreCd" valaue=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -79,16 +80,16 @@
     
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <wj-combo-box
-            class="w100px fl"
-            id="cornerDayListScaleBox"
-            ng-model="cornerDayListScale"
-            items-source="_getComboData('cornerDayListScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-    </wj-combo-box>
+<!--     <wj-combo-box -->
+<!--             class="w100px fl" -->
+<!--             id="cornerDayListScaleBox" -->
+<!--             ng-model="cornerDayListScale" -->
+<!--             items-source="_getComboData('cornerDayListScaleBox')" -->
+<!--             display-member-path="name" -->
+<!--             selected-value-path="value" -->
+<!--             is-editable="false" -->
+<!--             initialized="initComboBox(s)"> -->
+<!--     </wj-combo-box> -->
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="cornerDaySelectStoreStoreNum" ng-model="storeNum">
     </c:if>
@@ -125,11 +126,10 @@
     </div>
     
   <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-   <%-- id --%>
-    <ul id="cornerDayCtrlPager" data-size="10">
-    </ul>
-  </div>
+<!--   <div class="pageNum mt20"> -->
+<!--     <ul id="cornerDayCtrlPager" data-size="10"> -->
+<!--     </ul> -->
+<!--   </div> -->
   <%--//페이지 리스트--%>
 </div>
 

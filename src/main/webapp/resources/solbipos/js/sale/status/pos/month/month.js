@@ -332,4 +332,45 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
 	  }
+
+	  $scope.loadedRows = function (s, e) {
+
+		  var rowLength = s.rows.length;
+		  var arrPosCd = storePosCd.split(',');
+		  var arrPosNm = storePosNm.split(',');
+
+		  if (arrPosCd != null) {
+
+			  for(var i = 1; i < arrPosCd.length + 1; i++) {
+
+				  var colValue = arrPosCd[i-1];
+				  var colName = arrPosNm[i-1];
+				  var colSplit = colName.split('||');
+
+				  for(var j = 0; j < rowLength; j++) {
+
+					  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
+					  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
+					  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
+					  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+
+					  if (saleAmt == null || saleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
+					  }
+
+					  if (dcAmt == null || dcAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
+					  }
+
+					  if (realSaleAmt == null || realSaleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
+					  }
+
+					  if (saleCnt == null || saleCnt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
+					  }
+				  }
+			  }
+		  }
+	  }
 }]);

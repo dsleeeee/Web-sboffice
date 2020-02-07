@@ -90,7 +90,9 @@
 			is-editable="false"
 			initialized="initComboBox(s)">
 		</wj-combo-box>
-
+		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+			<input type="text" id="posProdSelectStoreStoreNum" ng-model="storeNum">
+		</c:if>
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
 			<s:message code="cmm.excel.down" />

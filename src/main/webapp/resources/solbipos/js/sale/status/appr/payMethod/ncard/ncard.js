@@ -41,13 +41,15 @@ app.controller('apprNcardCtrl', ['$scope', '$http', '$timeout', function ($scope
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-//        	params.cornrCd   = selectedRow.cornrCd;
-        	params.storeCd   = $("#apprNcardSelectStoreCd").val();
-        	params.startDate = selectedRow.saleDate;
-        	params.endDate   = selectedRow.saleDate;
-        if (col.binding === "storeNm") { // 매장명
-//            $scope._broadcast('saleComProdCtrl', params);
-        }
+	    	params.storeCd   = selectedRow.storeCd;
+	    	if(!$scope.isChecked){
+	    		  params.startDate = wijmo.Globalize.format($scope.srchApprNcardStartDate.value, 'yyyyMMdd');
+	    		  params.endDate = wijmo.Globalize.format($scope.srchApprNcardEndDate.value, 'yyyyMMdd');
+	    	}
+	    	params.chkPop    = "ncardApprPop";
+	    if (col.binding === "storeNm") { // 매장명
+	        $scope._broadcast('saleApprNcardCtrl', params);
+	    }
       }
     });
 

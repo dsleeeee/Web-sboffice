@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.day"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('posProdCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('posProdCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -107,6 +107,7 @@
 				items-source="data"
 				control="flex"
 				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->

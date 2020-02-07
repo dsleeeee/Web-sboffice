@@ -28,8 +28,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-
-        if (col.binding === "totSaleQty") { // 수량합계
+        if (col.binding.substring(0, 10) === "totSaleQty" || col.binding.substring(0, 7) === "saleQty") { // 수량합계
         	var item = s.rows[e.row].dataItem;
           	wijmo.addClass(e.cell, 'wijLink');
           	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -45,13 +44,25 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	params.chkPop   = "tablePop";
-//        	params.cornrCd   = selectedRow.cornrCd;
-        	params.storeCd   = $("#cornerDaySelectStoreCd").val();
+        	var storeCornr   = $("#cornerDaySelectCornerCd").val().split(",");
+        	var arrStore     = [];
+    		var arrCornr     = [];
+    		for(var i=0; i < storeCornr.length; i++) {
+    			var temp = storeCornr[i].split("||");
+    			arrStore.push(temp[0]);
+    			arrCornr.push(temp[1]);
+    		}
         	params.startDate = selectedRow.saleDate;
         	params.endDate   = selectedRow.saleDate;
-        if (col.binding === "totSaleQty") { // 수량
-            $scope._broadcast('saleComProdCtrl', params);
-        }
+        	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
+            	params.storeCd	 = arrStore;
+            	params.cornrCd	 = arrCornr;
+            	$scope._broadcast('saleComProdCtrl', params);
+            }else if(col.binding.substring(0, 7) === "saleQty") {
+        		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];
+        		params.cornrCd   = arrCornr[Math.floor(ht.col/2) - 2];
+        		$scope._broadcast('saleComProdCtrl', params);
+            }
       }
     });
 
@@ -67,17 +78,11 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-//	    var dataItem         = {};
-//	    dataItem.saleDate      	= messages["corner.saleDate"];
-//	    dataItem.yoil  			= messages["corner.yoil"];
-//	    dataItem.totRealSaleAmt = messages["corner.totRealSaleAmt"];
-//	    dataItem.totSaleQty 	= messages["corner.totSaleQty"];
     	s.columnHeaders.setCellData(i, "saleDate", messages["corner.saleDate"]);
     	s.columnHeaders.setCellData(i, "yoil", messages["corner.yoil"]);
     	s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["corner.totRealSaleAmt"]);
     	s.columnHeaders.setCellData(i, "totSaleQty", messages["corner.totSaleQty"]);
     }
-//    s.columnHeaders.rows[0].dataItem = dataItem;
 
     s.itemFormatter = function (panel, r, c, cell) {
         if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -122,7 +127,17 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerDayCtrl", function (event, data) {
-    $scope.searchCornerDayList();
+    $scope.searchCornerDayList(true);
+    
+    var storeCd = $("#cornerDaySelectStoreCd").val();
+	var cornrCd = $("#cornerDaySelectCornerCd").val();
+
+	$scope.getReCornerNmList(storeCd, cornrCd);
+  });
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("cornerDayCtrlSrch", function (event, data) {
+    $scope.searchCornerDayList(false);
     
     var storeCd = $("#cornerDaySelectStoreCd").val();
 	var cornrCd = $("#cornerDaySelectCornerCd").val();
@@ -132,12 +147,13 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 
   // 코너별매출일자별 리스트 조회
-  $scope.searchCornerDayList = function () {
+  $scope.searchCornerDayList = function (isPageChk) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#cornerDaySelectStoreCd").val();
     params.cornrCd   = $("#cornerDaySelectCornerCd").val();
-    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
+//    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -260,15 +276,15 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 		  var arrCornrCd = storeCornrCd.split(',');
 		  var arrCornrNm = storeCornrNm.split(',');
 
-		  if (arrCornrCd != null) {
+		  if (arrCornrCd != "") {
 			  for(var i = 1; i < arrCornrCd.length + 1; i++) {
-
+				  
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
-				  if(colSplit[1] == null || colSplit[1] == ""){
-					  colSplit[1] = "기본코너"+i;
-				  }
+//				  if(colSplit[0] == null || colSplit[0] == "" || colSplit[0] == "null"){
+//					  colSplit[0] = "테스트 매장"+i;
+//				  }
 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));

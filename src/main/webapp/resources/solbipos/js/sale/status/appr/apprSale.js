@@ -31,18 +31,18 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
     };
 
     // 카드매입사별 탭 보이기
-    $scope.apprAcquireTabShow = function () {
-    	$("#apprAcquireTab").addClass("on");
-    	$("#payMethodTab").removeClass("on");
-    	$("#apprAcquireView").show();
-        $("#payMethodView").hide();
-        $("#apprCoprtnView").hide();
-        $("#apprCashBillView").hide();
-
-        // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("apprAcquireCtrl");
-        scope.flex.refresh();
-    };
+//    $scope.apprAcquireTabShow = function () {
+//    	$("#apprAcquireTab").addClass("on");
+//    	$("#payMethodTab").removeClass("on");
+//    	$("#apprAcquireView").show();
+//        $("#payMethodView").hide();
+//        $("#apprCoprtnView").hide();
+//        $("#apprCashBillView").hide();
+//
+//        // angular 그리드 hide 시 깨지므로 refresh()
+//        var scope = agrid.getScope("apprAcquireCtrl");
+//        scope.flex.refresh();
+//    };
 
 /*
     // 제휴카드별 탭 보이기

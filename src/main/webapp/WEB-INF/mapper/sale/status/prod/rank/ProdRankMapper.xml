@@ -17,10 +17,10 @@
 		    , TMPCD.PROD_CLASS_NM 
 		    , TMP.PROD_CD
 		    , TMP.PROD_NM
-		    , TSDP.TOT_SALE_QTY
-		    , TSDP.TOT_SALE_AMT
-		    , TSDP.TOT_DC_AMT
-		    , TSDP.REAL_SALE_AMT
+		    , NVL(SUM(TSDP.TOT_SALE_QTY), 0) AS TOT_SALE_QTY
+		    , NVL(SUM(TSDP.TOT_SALE_AMT), 0) AS TOT_SALE_AMT
+		    , NVL(SUM(TSDP.TOT_DC_AMT), 0) AS TOT_DC_AMT
+		    , NVL(SUM(TSDP.REAL_SALE_AMT), 0) AS REAL_SALE_AMT
    		  <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_SL_DAILY_PROD TSDP
 		     , TB_MS_PRODUCT TMP
@@ -61,7 +61,8 @@
 		<if test='endDate != null and endDate != ""'>
 		   AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 		</if>
-		 ORDER BY TSDP.REAL_SALE_AMT DESC,  TMP.PROD_CD
+		 GROUP BY TMP.PROD_CLASS_CD, TMPC.T_PROD_CLASS_CD, TMPCD.PROD_CLASS_NM , TMP.PROD_CD, TMP.PROD_NM
+		 ORDER BY SUM(TSDP.REAL_SALE_AMT) DESC
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

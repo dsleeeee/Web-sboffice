@@ -90,6 +90,32 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			}
 		}
 		// <-- //그리드 헤더2줄 -->
+		// 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
+	    		var col         = ht.panel.columns[ht.col];
+	    		var selectedRow = s.rows[ht.row].dataItem;
+	    		var params       = {};
+	    		params.startDate = selectedRow.saleDate;
+	    		params.endDate = selectedRow.saleDate;
+	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
+	    		var storeTable   = $("#tableDaySelectTableCd").val().split(",");
+	    		var arrStore= [];
+	    		var arrTbl= [];
+	    		for(var i=0; i < storeTable.length; i++) {
+	    			var temp = storeTable[i].split("||");
+	    			arrStore.push(temp[0]);
+	    			arrTbl.push(temp[1]);
+	    		}
+	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
+	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+
+	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
+	    			$scope._broadcast('saleComTableCtrl', params);
+	    		}
+	    	}
+	    });
 	};
 
 	// 다른 컨트롤러의 broadcast 받기
@@ -121,7 +147,6 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		params.storeCd = $("#tableDaySelectStoreCd").val();
 		params.tableCd = $("#tableDaySelectTableCd").val();
 		params.listScale = $scope.tableDayListScale; //-페이지 스케일 갯수
-		params.arrTableCd = $scope.comboArray; //-테이블정보
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -180,13 +205,6 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				}, 10);
 			});
 		}, 10);
-	};
-
-
-	//매장의 테이블 리스트 조회
-	$scope.getTableNmList = function () {
-		var storeCd = $("#tableDaySelectStoreCd").val();
-		$scope.getReTableNmList(storeCd);
 	};
 
 	//매장의 테이블 리스트 재생성
@@ -320,32 +338,6 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			  }
 
 		  }
-
-	  	// 그리드 클릭 이벤트
-    	grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
-	    	var ht = grid.hitTest(e);
-	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
-	    		var col         = ht.panel.columns[ht.col];
-	    		var selectedRow = grid.rows[ht.row].dataItem;
-	    		var params       = {};
-	    		params.saleDate = selectedRow.saleDate;
-	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
-	    		var storeTableOri   = $("#tableDaySelectTableCd").val().split(",");
-	    		var arrStore= [];
-	    		var arrTbl= [];
-	    		for(var i=0; i < storeTableOri.length; i++) {
-	    			var temp = storeTableOri[i].split("||");
-	    			arrStore.push(temp[0]);
-	    			arrTbl.push(temp[1]);
-	    		}
-	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
-	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
-
-	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
-	    			$scope._broadcast('saleComTableCtrl', params);
-	    		}
-	    	}
-	    });
 
 		  $scope.flex.refresh();
 

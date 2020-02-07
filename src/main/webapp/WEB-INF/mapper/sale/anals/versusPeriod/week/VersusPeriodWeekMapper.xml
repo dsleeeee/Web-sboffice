@@ -114,8 +114,8 @@
 										     , SUM(SALE_CNT) AS SALE_CNT
 										  FROM TB_SL_DAILY_TOTAL TSDT
 										 WHERE 1=1
-										 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-										 	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+										 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+										 	AND TSDT.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
 										 	AND TSDT.STORE_CD IN

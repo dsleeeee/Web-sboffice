@@ -16,7 +16,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.table.dayOfWeek.service.TableDayOfWeekService;
 import kr.co.solbipos.sale.status.table.dayOfWeek.service.TableDayOfWeekVO;
@@ -46,22 +45,20 @@ public class TableDayOfWeekController {
 
         // 테이블 목록을 , 로 연결하는 문자열 생성
         String tblCol = "";
-        if(tableDayOfWeekVO.getTblCd() == "" ) {
+        if(tableDayOfWeekVO.getTableCd() == "" ) {
         	for(int i=0; i < tblColList.size(); i++) {
         		tblCol += (tblCol.equals("") ? "" : ",") + tblColList.get(i).getStr("nmcodeCd");
         	}
         }
         else {
-        	tblCol += tableDayOfWeekVO.getTblCd() + ",";
+        	tblCol += tableDayOfWeekVO.getTableCd() + ",";
         }
         tableDayOfWeekVO.setTblCol(tblCol);
 
 		// 테이블 목록 컬럼 쿼리 추가
-		//System.out.println("출력 확인확인 : " + tableDayOfWeekVO.getTblCol());
 		tableDayOfWeekVO = setCol(tableDayOfWeekVO);
 		List<DefaultMap<String>> list = tableDayOfWeekService.getTableDayOfWeekList(tableDayOfWeekVO, sessionInfoVO);
-		//for(DefaultMap<String> item : list)
-			//System.out.println(item);
+
 		return ReturnUtil.returnListJson(Status.OK, list, tableDayOfWeekVO);
 	}
 
@@ -72,6 +69,22 @@ public class TableDayOfWeekController {
 
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+		if (tableDayOfWeekVO.getTableCd() != null && !"".equals(tableDayOfWeekVO.getTableCd())) {
+    		String[] arrTableCd = tableDayOfWeekVO.getTableCd().split(",");
+
+    		if (arrTableCd.length > 0) {
+    			if (arrTableCd[0] != null && !"".equals(arrTableCd[0])) {
+    				tableDayOfWeekVO.setArrTableCd(arrTableCd);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = tableDayOfWeekVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				tableDayOfWeekVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
 		// 테이블 목록 조회
 		List<DefaultMap<String>> list = tableDayOfWeekService.getStoreTableList(tableDayOfWeekVO, sessionInfoVO);
 
@@ -82,25 +95,22 @@ public class TableDayOfWeekController {
 	public TableDayOfWeekVO setCol(TableDayOfWeekVO tableDayOfWeekVO) {
 
 		// 테이블 컬럼 array 값 세팅
-		tableDayOfWeekVO.setArrTblCol(tableDayOfWeekVO.getTblCol().split(","));
+		tableDayOfWeekVO.setArrTableCd(tableDayOfWeekVO.getTblCol().split(","));
 
 		// 테이블 번호 기준, 동적 컬럼 생성을 위한 쿼리 변수
 		String sQuery1 = "";
-		String sQuery2 = "";
 
 		// 테이블 '전체' 선택 시
-		for (int i = 0; i < tableDayOfWeekVO.getArrTblCol().length; i++) {
-			sQuery1 += " ,SUM(CASE TBL_CD WHEN '" + tableDayOfWeekVO.getArrTblCol()[i]
+		for (int i = 0; i < tableDayOfWeekVO.getArrTableCd().length; i++) {
+			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayOfWeekVO.getArrTableCd()[i]
 					+ "' THEN REAL_SALE_AMT END) AS REAL_SALE_AMT_T" + i + "\n";
-			sQuery1 += " ,SUM(CASE TBL_CD WHEN '" + tableDayOfWeekVO.getArrTblCol()[i]
+			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayOfWeekVO.getArrTableCd()[i]
 					+ "' THEN REAL_SALE_CNT END) AS REAL_SALE_CNT_T" + i + "\n";
-			sQuery1 += " ,SUM(CASE TBL_CD WHEN '" + tableDayOfWeekVO.getArrTblCol()[i]
+			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayOfWeekVO.getArrTableCd()[i]
 					+ "' THEN GUEST_CNT_1 END) AS GUEST_CNT_1_T" + i + "\n";
-			sQuery2 += (sQuery2.equals("") ? "" : ",") + "'" +tableDayOfWeekVO.getArrTblCol()[i] + "'";
 		}
 
 		tableDayOfWeekVO.setsQuery1(sQuery1);
-		tableDayOfWeekVO.setsQuery2(sQuery2);
 
 		return tableDayOfWeekVO;
 	}

@@ -79,16 +79,16 @@
     
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <wj-combo-box
-            class="w100px fl"
-            id="cornerDayOfWeekListScaleBox"
-            ng-model="cornerDayOfWeekListScale"
-            items-source="_getComboData('cornerDayOfWeekListScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-    </wj-combo-box>
+<!--     <wj-combo-box -->
+<!--             class="w100px fl" -->
+<!--             id="cornerDayOfWeekListScaleBox" -->
+<!--             ng-model="cornerDayOfWeekListScale" -->
+<!--             items-source="_getComboData('cornerDayOfWeekListScaleBox')" -->
+<!--             display-member-path="name" -->
+<!--             selected-value-path="value" -->
+<!--             is-editable="false" -->
+<!--             initialized="initComboBox(s)"> -->
+<!--     </wj-combo-box> -->
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="cornerDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
     </c:if>
@@ -124,11 +124,10 @@
     </div>
     
   <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-   <%-- id --%>
-    <ul id="cornerDayOfWeekCtrlPager" data-size="10">
-    </ul>
-  </div>
+<!--   <div class="pageNum mt20"> -->
+<!--     <ul id="cornerDayOfWeekCtrlPager" data-size="10"> -->
+<!--     </ul> -->
+<!--   </div> -->
   <%--//페이지 리스트--%>
 </div>
 

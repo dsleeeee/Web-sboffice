@@ -227,7 +227,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/ncash/ncash.js" charset="utf-8"></script>
 
 <%-- 매장현황 팝업 상세 레이어 --%>
-<%-- <c:import url="/WEB-INF/view/sale/com/popup/prod.jsp"> --%>
-<%--   <c:param name="menuCd" value="${menuCd}"/> --%>
-<%--   <c:param name="menuNm" value="${menuNm}"/> --%>
-<%-- </c:import> --%>
+<c:import url="/WEB-INF/view/sale/com/popup/appr/apprNcash.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

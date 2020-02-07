@@ -28,8 +28,12 @@ public class SaleComPopupVO extends PageVO {
     private String yoil;
     /** 포스번호 */
     private String posNo;
+    /** 영수증번호 */
+    private String billNo;
     /** 매장코드 array */
     private String arrStoreCd[];
+    /** 코너코드 array */
+    private String arrCornrCd[];
        
     /**
      * @return the hqOfficeCd
@@ -148,7 +152,14 @@ public class SaleComPopupVO extends PageVO {
 	public void setPosNo(String posNo) {
 		this.posNo = posNo;
 	}
+	
+	public String getBillNo() {
+		return billNo;
+	}
 
+	public void setBillNo(String billNo) {
+		this.billNo = billNo;
+	}
 	/**
      * @return the arrStoreCd
      */
@@ -162,4 +173,15 @@ public class SaleComPopupVO extends PageVO {
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
     }
+
+    /**
+     * @param arrCornrCd the arrCornrCd to set
+     */
+	public String[] getArrCornrCd() {
+		return arrCornrCd;
+	}
+
+	public void setArrCornrCd(String arrCornrCd[]) {
+		this.arrCornrCd = arrCornrCd;
+	}
 }

@@ -40,13 +40,13 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
-    dataItem.realSaleAmtA      = messages["versusPeriod.period"];
-    dataItem.saleCntA  = messages["versusPeriod.period"];
-    dataItem.totRealSaleAmtA    = messages["versusPeriod.period"];
+    dataItem.saleDateCntA      = messages["versusPeriod.period"];
+    dataItem.realSaleAmtA  = messages["versusPeriod.period"];
+    dataItem.saleCntA    = messages["versusPeriod.period"];
     dataItem.ratA = messages["versusPeriod.period"];
-    dataItem.realSaleAmtB       = messages["versusPeriod.comp"];
-    dataItem.saleCntB      = messages["versusPeriod.comp"];
-    dataItem.totRealSaleAmtB   = messages["versusPeriod.comp"];
+    dataItem.saleDateCntB       = messages["versusPeriod.comp"];
+    dataItem.realSaleAmtB      = messages["versusPeriod.comp"];
+    dataItem.saleCntB   = messages["versusPeriod.comp"];
     dataItem.ratB   = messages["versusPeriod.comp"];
     dataItem.sinAmt     = messages["versusPeriod.sin"];
     dataItem.sinCnt    = messages["versusPeriod.sin"];
@@ -149,13 +149,13 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
     var compStartToEnd = "(" + $scope.compStartDate.text + " ~ " + $scope.compEndDate.text + ")";
 
     var grid = wijmo.Control.getControl("#versusPeriodWeekGrid").columnHeaders.rows[0].dataItem;
-    grid.realSaleAmtA      = messages["versusPeriod.period"]+ (days + srchStartToEnd);
-    grid.saleCntA  = messages["versusPeriod.period"]+ (days + srchStartToEnd);
-    grid.totRealSaleAmtA    = messages["versusPeriod.period"]+ (days + srchStartToEnd);
+    grid.saleDateCntA      = messages["versusPeriod.period"]+ (days + srchStartToEnd);
+    grid.realSaleAmtA  = messages["versusPeriod.period"]+ (days + srchStartToEnd);
+    grid.saleCntA    = messages["versusPeriod.period"]+ (days + srchStartToEnd);
     grid.ratA = messages["versusPeriod.period"]+ (days + srchStartToEnd);
-    grid.realSaleAmtB       = messages["versusPeriod.comp"] + (days + compStartToEnd);
-    grid.saleCntB      = messages["versusPeriod.comp"] + (days + compStartToEnd);
-    grid.totRealSaleAmtB   = messages["versusPeriod.comp"] + (days + compStartToEnd);
+    grid.saleDateCntB       = messages["versusPeriod.comp"] + (days + compStartToEnd);
+    grid.realSaleAmtB      = messages["versusPeriod.comp"] + (days + compStartToEnd);
+    grid.saleCntB   = messages["versusPeriod.comp"] + (days + compStartToEnd);
     grid.ratB   = messages["versusPeriod.comp"] + (days + compStartToEnd);
 
   };

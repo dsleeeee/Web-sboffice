@@ -10,7 +10,7 @@ public class VersusPeriodWeekVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
-    /** 매장코드 array */
+    /** 매장코드  Array */
     private String arrStoreCd[];
     /** 상품코드 */
     private String prodCd;
@@ -18,7 +18,11 @@ public class VersusPeriodWeekVO extends PageVO {
     private String prodNm;
     /** 상품분류코드 */
     private String prodDayCd;
-    
+    /** 대비기간 시작일자 */
+    private String compStartDate;
+    /** 대비기간 마감일자 */
+    private String compEndDate;
+
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
 	}
@@ -30,12 +34,6 @@ public class VersusPeriodWeekVO extends PageVO {
 	}
 	public void setStoreCd(String storeCd) {
 		this.storeCd = storeCd;
-	}
-	public String[] getArrStoreCd() {
-		return arrStoreCd;
-	}
-	public void setArrStoreCd(String[] arrStoreCd) {
-		this.arrStoreCd = arrStoreCd;
 	}
 	public String getProdCd() {
 		return prodCd;
@@ -55,8 +53,25 @@ public class VersusPeriodWeekVO extends PageVO {
 	public void setProdDayCd(String prodDayCd) {
 		this.prodDayCd = prodDayCd;
 	}
+	public String getCompStartDate() {
+		return compStartDate;
+	}
+	public void setCompStartDate(String compStartDate) {
+		this.compStartDate = compStartDate;
+	}
+	public String getCompEndDate() {
+		return compEndDate;
+	}
+	public void setCompEndDate(String compEndDate) {
+		this.compEndDate = compEndDate;
+	}
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+	public void setArrStoreCd(String[] arrStoreCd) {
+		this.arrStoreCd = arrStoreCd;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 }

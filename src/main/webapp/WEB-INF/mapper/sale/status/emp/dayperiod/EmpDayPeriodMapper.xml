@@ -32,7 +32,8 @@
     
     <select id="getEmpDayPeriodDtlList" parameterType="empDayPeriodVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT TSSH.SALE_DATE
+        SELECT TSSH.STORE_CD
+             , TSSH.SALE_DATE
 		     , TSSH.POS_NO
 		     , TSSH.BILL_NO
 		     , DECODE(TSSH.SALE_YN,'Y','매출','반품') AS SALE_YN
@@ -42,11 +43,8 @@
 	   <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_SL_SALE_HDR TSSH
 		 WHERE 1=1
-		 <if test='arrStoreCd != null and arrStoreCd != ""'>
-		 	TSSH.STORE_CD IN
-		 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-		 		#{item}
-		 	</foreach>
+		 <if test='storeCd != null and storeCd != ""'>
+		 AND TSSH.STORE_CD = #{storeCd}
 		 </if>
 		 <if test='startDate != null and startDate != ""'>
 		 AND TSSH.SALE_DATE >= #{startDate}

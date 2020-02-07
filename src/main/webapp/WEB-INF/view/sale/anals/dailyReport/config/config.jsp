@@ -54,9 +54,6 @@
 						<wj-flex-grid-column header=""														binding="cfgPayLineNo"			width="50"	is-read-only="true" 	align="center"	visible="false"	></wj-flex-grid-column>
 						<wj-flex-grid-column header=""														binding="cfgUseYn"          	width="50"	is-read-only="true" 	align="center"	visible="false"	></wj-flex-grid-column>
 						<wj-flex-grid-column header=""														binding="cfgStatus"          	width="50"	is-read-only="true" 	align="center"	visible="false"	></wj-flex-grid-column>
-
-					<%--visible="false"--%>
-					<%--<wj-flex-grid-column header="<s:message code="cd.useYnFg"					/>" 	binding="useYn" 			width="100"	data-map="useYnFgDataMap"							></wj-flex-grid-column>--%>
 			        </wj-flex-grid>
 
 			        <%-- ColumnPicker 사용시 include --%>

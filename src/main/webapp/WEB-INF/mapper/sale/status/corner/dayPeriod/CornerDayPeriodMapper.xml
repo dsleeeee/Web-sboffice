@@ -8,7 +8,8 @@
         /* USE : CornerDayPeriodMapper.getCornerDayPeriodList */
        <include refid="CmmSQL.PagingTemplateHeader"/>
              SELECT TSDCP.CORNR_CD
-			        , TMC.CORNR_NM
+                    , TSDCP.STORE_CD
+			        , CONCAT(CONCAT(TMS.STORE_NM,'- '), TMC.CORNR_NM) CORNR_NM 
 <!--                     , (CASE TSDCP.CORNR_CD WHEN '00' THEN '기본코너' -->
 <!-- 	                                       WHEN '01' THEN '한식코너' -->
 <!-- 	                                       WHEN '02' THEN '중식코너' END) CORNR_NM -->
@@ -18,8 +19,10 @@
        <include refid="CmmSQL.PagingTemplateCount"/>
          FROM TB_MS_CORNER TMC
               , TB_SL_DAILY_CORNR_PROD TSDCP 
+              , TB_MS_STORE TMS
          WHERE TMC.CORNR_CD(+) = TSDCP.CORNR_CD
           AND TSDCP.HQ_OFFICE_CD = #{hqOfficeCd} 
+          AND TSDCP.STORE_CD = TMS.STORE_CD
 	    <if test='arrStoreCd != null and arrStoreCd != ""'>
            AND TSDCP.STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -38,7 +41,7 @@
         <if test='endDate != null and endDate != ""'>
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
- 		GROUP BY TSDCP.CORNR_CD, TMC.CORNR_NM
+ 		GROUP BY TSDCP.CORNR_CD, TSDCP.STORE_CD, TMC.CORNR_NM, CONCAT(CONCAT(TMS.STORE_NM,'- '), TMC.CORNR_NM)
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     

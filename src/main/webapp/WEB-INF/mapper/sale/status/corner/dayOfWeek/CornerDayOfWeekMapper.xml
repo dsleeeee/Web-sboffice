@@ -12,7 +12,6 @@
     -->
     <select id="getCornerDayOfWeekList" parameterType="cornerDayOfWeekVO" resultType="DefaultMap">
        /* USE : CornerDayOfWeekMapper.getCornerDayOfWeekList */
-       <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
        SELECT TSDCP.SALE_DATE
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
@@ -20,7 +19,6 @@
               ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
               ${sQuery1}
        ]]>
-       <include refid="CmmSQL.PagingTemplateCount"/>
        <![CDATA[
         FROM TB_SL_DAILY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -47,7 +45,6 @@
         GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
         ]]>
-       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
 </mapper>

@@ -41,13 +41,15 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-//        	params.cornrCd   = selectedRow.cornrCd;
-        	params.storeCd   = $("#apprMcouponSelectStoreCd").val();
-        	params.startDate = selectedRow.saleDate;
-        	params.endDate   = selectedRow.saleDate;
-        if (col.binding === "storeNm") { // 매장명
-//            $scope._broadcast('saleComProdCtrl', params);
-        }
+	    	params.storeCd   = selectedRow.storeCd;
+	    	if(!$scope.isChecked){
+	    		  params.startDate = wijmo.Globalize.format($scope.srchApprMcouponStartDate.value, 'yyyyMMdd');
+	    		  params.endDate = wijmo.Globalize.format($scope.srchApprMcouponEndDate.value, 'yyyyMMdd');
+	    	}
+	    	params.chkPop    = "mcouponApprPop";
+	    if (col.binding === "storeNm") { // 매장명
+	        $scope._broadcast('saleApprMcouponCtrl', params);
+	    }
       }
     });
 

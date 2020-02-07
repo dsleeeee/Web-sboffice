@@ -13,11 +13,11 @@ public class TableDayOfWeekVO extends PageVO {
     /** 매장코드 array */
     private String arrStoreCd[];
     /** 테이블 코드 */
-    private String tblCd;
+    private String tableCd;
     /** 테이블 컬럼 */
     private String tblCol;
     /** 테이블 array */
-    private String arrTblCol[];
+    private String arrTableCd[];
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
@@ -40,11 +40,11 @@ public class TableDayOfWeekVO extends PageVO {
 	public void setArrStoreCd(String[] arrStoreCd) {
 		this.arrStoreCd = arrStoreCd;
 	}
-	public String getTblCd() {
-		return tblCd;
+	public String getTableCd() {
+		return tableCd;
 	}
-	public void setTblCd(String tblCd) {
-		this.tblCd = tblCd;
+	public void setTableCd(String tableCd) {
+		this.tableCd = tableCd;
 	}
 	public String getTblCol() {
 		return tblCol;
@@ -52,11 +52,11 @@ public class TableDayOfWeekVO extends PageVO {
 	public void setTblCol(String tblCol) {
 		this.tblCol = tblCol;
 	}
-	public String[] getArrTblCol() {
-		return arrTblCol;
+	public String[] getArrTableCd() {
+		return arrTableCd;
 	}
-	public void setArrTblCol(String[] arrTblCol) {
-		this.arrTblCol = arrTblCol;
+	public void setArrTableCd(String[] arrTableCd) {
+		this.arrTableCd = arrTableCd;
 	}
 	public String getsQuery1() {
 		return sQuery1;
@@ -73,6 +73,5 @@ public class TableDayOfWeekVO extends PageVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 
 }

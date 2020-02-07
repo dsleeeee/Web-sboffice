@@ -46,7 +46,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
           var params       = {};
           	  params.chkPop   = "tablePop";
               params.cornrCd   = selectedRow.cornrCd;
-              params.storeCd   = $("#cornerDayPeriodSelectStoreCd").val();
+              params.storeCd   = selectedRow.storeCd;
               params.startDate = $scope.startDateForDt;
               params.endDate   = $scope.endDateForDt;
           if (col.binding === "realSaleAmt") { // 실매출
@@ -98,7 +98,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
         
         var params       = {};
         if(rows.length > 0){
-        	params.storeCd   = $("#cornerDayPeriodSelectStoreCd").val();
+        	params.storeCd   = rows[0].dataItem.storeCd;
         	params.cornrCd   = rows[0].dataItem.cornrCd;
                 
         

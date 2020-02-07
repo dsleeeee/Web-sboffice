@@ -92,7 +92,7 @@
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
-      $scope._inquirySub("/sale/status/corner/corner/cornerNmList.sb", params, function () {
+      $scope._inquiryMain("/sale/status/corner/corner/cornerNmList.sb", params, function () {
         $scope.searchFg = "Y";
       });
     };

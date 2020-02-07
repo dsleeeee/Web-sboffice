@@ -90,14 +90,14 @@
                         				#{item}
                     			   </foreach>
         						 </if>
-								 <if test='startDate != null and startDate != ""'>
+								 <if test='compStartDate != null and compStartDate != ""'>
 								   <![CDATA[
-								   AND TSDT.SALE_DATE >= #{startDate}
+								   AND TSDT.SALE_DATE >= #{compStartDate}
 								   ]]>
 								 </if>
-								 <if test='endDate != null and endDate != ""'>
+								 <if test='compEndDate != null and compEndDate != ""'>
 								 	<![CDATA[
-								   AND TSDT.SALE_DATE <= #{endDate}
+								   AND TSDT.SALE_DATE <= #{compEndDate}
 								   ]]>
 								 </if>
 								 GROUP BY TSDT.SALE_HOUR

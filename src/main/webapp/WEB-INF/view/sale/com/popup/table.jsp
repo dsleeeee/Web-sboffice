@@ -36,10 +36,10 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.netSaleAmt"/>" 	binding="netSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.taxSaleAmt"/>" 	binding="taxSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.payTot"/>" 		binding="payTot"		width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.pay01"/>" 		binding="pay01" 		width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.pay02"/>" 		binding="pay02" 		width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.pay03"/>" 		binding="pay03" 		width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.payTot"/>" 		binding="payTot"		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.pay01"/>" 		binding="pay01" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.pay02"/>" 		binding="pay02" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.pay03"/>" 		binding="pay03" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.guestTot"/>" 	binding="guestTot" 		width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.guestCnt1"/>" 	binding="guestCnt1" 	width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.guestCnt2"/>" 	binding="guestCnt2" 	width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

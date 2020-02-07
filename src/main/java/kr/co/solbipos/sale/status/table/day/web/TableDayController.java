@@ -78,7 +78,7 @@ public class TableDayController {
 	public Result getStoreTableList(HttpServletRequest request, HttpServletResponse response, Model model, TableDayVO tableDayVO) {
 
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-		
+
 		if (tableDayVO.getTableCd() != null && !"".equals(tableDayVO.getTableCd())) {
     		String[] arrTableCd = tableDayVO.getTableCd().split(",");
 
@@ -107,11 +107,10 @@ public class TableDayController {
 
 		// 테이블 컬럼 array 값 세팅
 		tableDayVO.setArrTableCd(tableDayVO.getTableCd().split(","));
-		
+
 
 		// 테이블 번호 기준, 동적 컬럼 생성을 위한 쿼리 변수
 		String sQuery1 = "";
-		String sQuery2 = "";
 
 		// 테이블 '전체' 선택 시
 		for (int i = 0; i < tableDayVO.getArrTableCd().length; i++) {
@@ -121,11 +120,9 @@ public class TableDayController {
 					+ "' THEN REAL_SALE_CNT END) AS REAL_SALE_CNT_T" + i + "\n";
 			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
 					+ "' THEN GUEST_CNT_1 END) AS GUEST_CNT_1_T" + i + "\n";
-			sQuery2 += (sQuery2.equals("") ? "" : ",") + "'" +tableDayVO.getArrTableCd()[i] + "'";
 		}
 
 		tableDayVO.setsQuery1(sQuery1);
-		tableDayVO.setsQuery2(sQuery2);
 
 		return tableDayVO;
 	}
