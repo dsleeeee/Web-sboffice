@@ -187,7 +187,14 @@
 			         tnsp.NM_CEO
           FROM TB_MB_MEMBER tmm,
                TB_MB_MEMBER_PTN tmmp,
-               TB_NEOE_SPOS_PTN tnsp
+         <choose>
+             <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                 VITIS.TB_NEOE_SPOS_PTN tnsp
+             </when>
+             <otherwise>
+                 TB_NEOE_SPOS_PTN tnsp
+             </otherwise>
+         </choose>
          WHERE tmm.MEMBR_NO = #{membrNo}
            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
            AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
@@ -202,7 +209,7 @@
         COMMENTS : 회원정보 조회
     -->
     <select id="getNewMemberNo" parameterType="registVO" resultType="String">
-        /* RegistMapper.getMemberInfo */
+        /* RegistMapper.getNewMemberNo */
         SELECT LPAD( NVL(MAX(MEMBR_NO), 0) + 1, 10, '0') AS MEMBR_NO
           FROM TB_MB_MEMBER
          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
@@ -517,7 +524,14 @@
                LN_PARTNER,
                NO_COMPANY,
                NM_CEO
-          FROM TB_NEOE_SPOS_PTN tnsp
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                FROM VITIS.TB_NEOE_SPOS_PTN tnsp
+            </when>
+            <otherwise>
+                FROM TB_NEOE_SPOS_PTN tnsp
+            </otherwise>
+        </choose>
          WHERE USE_YN = 'Y'
       <if test='cdCompany != null and cdCompany.toString() != ""'>
         AND tnsp.CD_COMPANY = #{cdCompany}
@@ -620,7 +634,14 @@
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,
         TB_MB_MEMBER_PTN tmmp,
-        TB_NEOE_SPOS_PTN tnsp
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                VITIS.TB_NEOE_SPOS_PTN tnsp
+            </when>
+            <otherwise>
+                TB_NEOE_SPOS_PTN tnsp
+            </otherwise>
+        </choose>
         WHERE 1=1
         <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
             AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}

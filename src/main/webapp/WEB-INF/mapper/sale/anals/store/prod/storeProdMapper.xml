@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.anals.store.prod.service.impl.StoreProdMapper">
+    <!-- 매장별매출분석 - 매장상품순위 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT 
+        PARAM    : storeProdVO
+        COMMENTS : 매장별매출분석 - 매장상품순위 리스트를 조회한다.
+    -->
+    <select id="getStoreProdList" parameterType="storeProdVO" resultType="DefaultMap">
+        /* USE : StoreProdMapper.getStoreProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>	
+ 		SELECT B.STORE_CD
+ 		      , C.STORE_NM
+		      , C.RN
+		      , B.PROD_CLASS_CD
+		      , B.PROD_CD
+		      , B.PROD_NM
+		      , NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+		      , NVL(C.TOT_SALE_AMT,0) AS TOT_SALE_AMT
+		      , NVL(C.TOT_DC_AMT,0) AS TOT_DC_AMT
+		      , NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT
+		      , (SELECT PROD_CLASS_NM
+	                FROM TB_HQ_PRODUCT_CLASS THPC
+	                WHERE THPC.HQ_OFFICE_CD = #{hqOfficeCd}
+	                AND THPC.PROD_CLASS_CD = (
+	                							SELECT P_PROD_CLASS_CD
+			                       				FROM TB_MS_PRODUCT_CLASS Z
+			                      				WHERE Z.STORE_CD = C.STORE_CD
+			                        			AND Z.PROD_CLASS_CD =  B.PROD_CLASS_CD
+			                        		  )
+	                START WITH
+	                    THPC.P_PROD_CLASS_CD = '00000'
+	                    AND THPC.HQ_OFFICE_CD = #{hqOfficeCd}
+	                CONNECT BY
+	                    THPC.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+	                    AND THPC.HQ_OFFICE_CD = #{hqOfficeCd}
+	             ) AS PROD_CLASS_NM
+		      <include refid="CmmSQL.PagingTemplateCount"/>
+		 FROM (
+		        SELECT B.STORE_CD
+		        	, B.PROD_CD
+		        	, B.PROD_NM
+		        	, B.PROD_CLASS_CD
+		        FROM TB_MS_PRODUCT       B
+		       ) B
+	        , (
+	             SELECT M.STORE_CD
+		             , M.STORE_NM
+		             , M.PROD_CD
+		             , M.RN
+		             , M.TOT_SALE_QTY
+		             , M.TOT_SALE_AMT
+		             , M.TOT_DC_AMT
+		             , M.REAL_SALE_AMT
+	              FROM (
+	                        SELECT TSDP.STORE_CD
+	                        	 , TMS.STORE_NM
+	                             , TSDP.PROD_CD
+	                             , RANK() OVER (PARTITION BY TSDP.STORE_CD ORDER BY SUM(TSDP.REAL_SALE_AMT) DESC) rn
+	                             , SUM(TSDP.TOT_SALE_QTY)  AS TOT_SALE_QTY
+	                             , SUM(TSDP.TOT_SALE_AMT)  AS TOT_SALE_AMT
+	                             , SUM(TSDP.TOT_DC_AMT)    AS TOT_DC_AMT
+	                             , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+	                          FROM TB_SL_DAILY_PROD TSDP
+	                           		, TB_MS_STORE TMS
+	                         WHERE TSDP.STORE_CD = TMS.STORE_CD 
+	                           AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+	                           AND TSDP.SALE_DATE >= #{startDate}
+					  		   AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+	                         GROUP BY TSDP.STORE_CD, TSDP.PROD_CD, TMS.STORE_NM
+	                  ) M
+				    <if test='chkProdAll != "Y"'>
+					  WHERE M.RN = 1          
+					</if>
+           ) C
+		WHERE B.STORE_CD = C.STORE_CD
+		AND B.PROD_CD = C.PROD_CD
+		ORDER BY C.REAL_SALE_AMT DESC
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+	
+</mapper>

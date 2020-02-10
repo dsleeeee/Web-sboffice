@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.rtnStatus.day.service.impl.RtnStatusDayMapper">
+
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getRtnStatusDayList" parameterType="rtnStatusDayVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT M.STORE_CD
+             , M.STORE_NM
+		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
+		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
+		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
+		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
+		     , SUM(M.CNT) AS CNT
+		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM (
+             SELECT TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN, SUM(TSSH.REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
+               FROM TB_SL_SALE_HDR TSSH, TB_MS_STORE TMS
+              WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TSSH.STORE_CD = TMS.STORE_CD
+        ]]>
+        <if test='startDate != null and startDate != ""'>
+           AND TSSH.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSSH.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+	         GROUP BY TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN
+	            ) M
+        GROUP BY M.STORE_CD, M.STORE_NM
+        ORDER BY M.STORE_CD
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getRtnStatusDayDtlList" parameterType="rtnStatusDayVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT M.STORE_CD
+		     , M.SALE_DATE
+		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
+		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
+		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
+		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
+		     , SUM(M.CNT) AS CNT
+		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM (
+	        SELECT STORE_CD, SALE_YN, SALE_DATE, SUM(REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
+	          FROM TB_SL_SALE_HDR TSSH 
+	         WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='startDate != null and startDate != ""'>
+           AND TSSH.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSSH.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSSH.STORE_CD = #{storeCd}
+        </if>
+        <![CDATA[
+             GROUP BY STORE_CD, SALE_YN, SALE_DATE
+		       ) M
+		 GROUP BY M.STORE_CD, M.SALE_DATE
+		 ORDER BY M.STORE_CD, M.SALE_DATE DESC
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getRtnStatusPosDtlList" parameterType="rtnStatusDayVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT STORE_CD
+             , SALE_DATE
+             , POS_NO, BILL_NO
+             , DECODE(SALE_YN,'Y','매출','반품') AS SALE_YN
+             , TOT_SALE_AMT
+             , TOT_DC_AMT
+             , REAL_SALE_AMT
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM TB_SL_SALE_HDR TSSH
+             WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='saleDate != null and saleDate != ""'>
+           AND TSSH.SALE_DATE = #{saleDate}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSSH.STORE_CD = #{storeCd}
+        </if>
+        <if test='saleYn != null and saleYn != ""'>
+           AND TSSH.SALE_YN = #{saleYn}
+        </if>
+        <![CDATA[
+             ORDER BY TSSH.POS_NO, TSSH.BILL_NO
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getRtnStatusProdList" parameterType="rtnStatusDayVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       SELECT  TMPCD_1.PROD_CLASS_NM
+              , TMPCD_2.PROD_CLASS_NM1
+              , TMPCD_3.PROD_CLASS_NM2
+              , M.P_PROD_CLASS_CD_1
+              , M.P_PROD_CLASS_CD_2
+              , M.P_PROD_CLASS_CD_3
+              , M.PROD_CD
+              , M.PROD_NM
+              , M.CNT
+              , M.REAL_SALE_AMT
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM (
+        SELECT SUBSTR(TMPC.P_PROD_CLASS_CD, INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 1) + 1, INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 2) - INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 1) - 1) P_PROD_CLASS_CD_1
+             , SUBSTR(TMPC.P_PROD_CLASS_CD, INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 2) + 1, INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 3) - INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 2) - 1) P_PROD_CLASS_CD_2
+             , SUBSTR(TMPC.P_PROD_CLASS_CD, INSTR(TMPC.P_PROD_CLASS_CD, '|', 1, 3) + 1) P_PROD_CLASS_CD_3
+             , TMPC.P_PROD_CLASS_CD, TMP.PROD_CLASS_CD, TSSH.PROD_CD, TMP.PROD_NM, TSSH.REAL_SALE_AMT, TSSH.CNT
+          FROM (SELECT PROD_CLASS_CD, SYS_CONNECT_BY_PATH(PROD_CLASS_CD,'|') AS P_PROD_CLASS_CD, LEVEL LV
+                  FROM (SELECT PROD_CLASS_CD, P_PROD_CLASS_CD FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} )
+                 START WITH P_PROD_CLASS_CD ='00000'
+                 CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+               ) TMPC
+             , TB_MS_PRODUCT TMP
+             , (SELECT TSSH.STORE_CD, TSSH.PROD_CD, SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT, COUNT(*) AS CNT
+                  FROM TB_SL_SALE_DTL TSSH
+                WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+                  AND TSSH.SALE_YN = 'N'
+                  AND TSSH.STORE_CD = #{storeCd}
+        <if test='startDate != null and startDate != ""'>
+           AND TSSH.SALE_DATE >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSSH.SALE_DATE <![CDATA[<= ]]> TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
+        </if>
+		             GROUP BY TSSH.STORE_CD, TSSH.PROD_CD
+		                ) TSSH
+		         WHERE TMP.PROD_CLASS_CD = TMPC.PROD_CLASS_CD
+		           AND TMP.STORE_CD = TSSH.STORE_CD
+		           AND TMP.PROD_CD = TSSH.PROD_CD
+		        ) M
+		     , ( SELECT PROD_CLASS_CD, PROD_CLASS_NM PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}  ) TMPCD_1
+		     , ( SELECT PROD_CLASS_CD, PROD_CLASS_NM PROD_CLASS_NM1 FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}  ) TMPCD_2
+		     , ( SELECT PROD_CLASS_CD, PROD_CLASS_NM PROD_CLASS_NM2 FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}  ) TMPCD_3
+		 WHERE TMPCD_1.PROD_CLASS_CD = M.P_PROD_CLASS_CD_1
+		   AND TMPCD_2.PROD_CLASS_CD = M.P_PROD_CLASS_CD_2
+		   AND TMPCD_3.PROD_CLASS_CD = M.P_PROD_CLASS_CD_3
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

@@ -67,9 +67,17 @@
 
     $scope.searchFg = "N";
     // 다른 컨트롤러의 broadcast 받기
+
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
+
+      // 팝업 닫힐시 이벤트
+      eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
+        if ('${param.closeFunc}' !== '') {
+          eval('$scope.${param.closeFunc}()');
+        }
+      });
 
       if ($scope.searchFg == "N") {
         $scope.searchStore();
@@ -109,12 +117,15 @@
       $("#" + targetId + "Cd").val(arrStoreCd.join());
       if (cnt == 0) {
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetId +"StoreNum").val("");
       }
       else if (cnt == 1) {
         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
+        $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+        $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };

@@ -1994,3 +1994,104 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 /* 세금계산서 */
 .taxReport table.brRed td {border: 1px solid red;}
 .taxReport table.brBlue td {border: 1px solid blue;}
+
+
+/* **************************************** *
+ * 차세대 POS 솔루션 고도화 프로젝트
+ * 작성자 : m2mglobal
+ * **************************************** */
+
+/* 공통 clear */
+.clearfix{display:block; clear:both; content:''}
+.clear {clear:both !important}
+
+/* 공통 table */
+.tbl-d {margin-top:30px; padding:20px; border:1px solid #e8e8e8}
+.tbl-d.type2 {padding:0; border:0}
+.tbl-tit-btn {}
+.tbl-tit-btn:after {display:block; clear:both; content:''}
+
+/* 검색조건 radio */
+.searchTbl .rdo {position:relative; top:2px}
+.searchTbl .rdo input[type=radio] {width:18px;height:18px;}
+.searchTbl .rdo label {position:relative; top:-4px; font-size:12px}
+
+/* 월력판매분석 table */
+.tbl-d .tbl-cal {width:100%; margin-top:10px}
+.tbl-d .tbl-cal thead th,
+.tbl-d .tbl-cal tbody td {height:30px; padding:5px; font-size:0.75em; text-align:center; border:1px solid #ddd; color:#222}
+.tbl-d .tbl-cal thead th {background-color:#ebf5ff}
+.tbl-d .tbl-cal tbody td {text-align:right}
+.tbl-d .tbl-cal tbody .cal-date td {text-align:left; background-color:#f6f6f6}
+.tbl-d .tbl-cal tbody .cal-txt td {height:50px; font-size:0.875em;}
+.tbl-d .tbl-cal tbody .bg-total {text-align:center !important; background-color:#fdd69d !important}
+.tbl-d .tbl-cal tbody .bg-total td {text-align:center}
+.tbl-d .tbl-cal tbody .s20 {font-size:1.25em !important}
+
+/* 그리드 영역 4col 가변 설정 */
+@media all and (min-width:768px) and (max-width:1024px) {
+    .wj-TblWrap .w-r {float:left; width:50%}
+    .wj-TblWrap .w-r .wj-TblWrapBr {padding:20px;}
+    .wj-TblWrap .w-r:nth-child(1) .wj-TblWrapBr,.wj-TblWrap .w-r:nth-child(2) .wj-TblWrapBr {margin-bottom:20px}
+    .wj-TblWrap .w-r:nth-child(2n) .wj-TblWrapBr {margin-left:10px}
+}
+@media all and (min-width:1025px){
+    .wj-TblWrap .w-r {float:left; width:25%}
+    .wj-TblWrap .w-r .wj-TblWrapBr {padding:20px; margin-right:10px}
+    .wj-TblWrap .w-r:nth-child(4) .wj-TblWrapBr {margin-right:0}
+}
+
+/* paging type 3 >> 2 col */
+.pageNum3 {position:relative; width:100%; text-align:center;}
+.pageNum3 ul {height:24px; text-align:center; display:inline-block; overflow:hidden;}
+.pageNum3 ul li {display:inline-block; width:24px; height:24px; float:left; margin:0 1px; font-size:0.875em;}
+.pageNum3 ul li a {font-size:0.875em; display:block; line-height:24px; border-radius:4px;}
+.pageNum3 ul li a:hover {background:#dedede;}
+.pageNum3 ul li a.on {background:#bfbfbf; color:#fff;}
+
+.pageNum3 ul li.btn_previous, .pageNum3 ul li.btn_next {width:24px; height:24px; position:relative; margin:0 4px;}
+.pageNum3 ul li.btn_previous a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; background-size:8px 12px; width:24px; height:24px; display:inline-block; position:absolute; left:0px; top:0px}
+.pageNum3 ul li.btn_previous a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
+.pageNum3 ul li.btn_next a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; background-size:8px 12px; width:24px; height:24px; display:inline-block; position:absolute; left:0px; top:0px; transform:rotate(180deg);}
+.pageNum3 ul li.btn_next a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
+.pageNum3 ul li.btn_previous a span, .pageNum3 ul li.btn_next a span {font-size:0px;}
+
+/* grid headers/footer >> total text align */
+.wj-colheaders .wj-header {font-weight:bold !important}
+.wj-colfooters .wj-align-left {text-align:left !important}
+.wj-colfooters .wj-align-center {text-align:center !important}
+.wj-colfooters .wj-align-right {text-align:right !important}
+
+/* grid group bg */
+.grp-lv-1.wj-state-selected,.grp-lv-2.wj-state-selected,.grp-lv-3.wj-state-selected,
+.grp-lv-4.wj-state-selected,.grp-lv-5.wj-state-selected {color:#222 !important}
+.grp-lv-1 {background-color:#ffecb2 !important}
+.grp-lv-2 {background-color:#b3e5fc !important}
+.grp-lv-3 {background-color:#ffcdd2 !important}
+.grp-lv-4 {background-color:#dceec8 !important}
+.grp-lv-5 {background-color:#f5f5f5 !important}
+
+/* bg 추가 */
+.bg-orange-lite {background-color:#ffecb2 !important}
+.bg-blue-lite {background-color:#b3e5fc !important}
+
+/* pos 정산내역 추가 */
+.tbl-pos-sh {table-layout:fixed}
+.tbl-pos-sh th {padding:2px 5px;}
+.tbl-pos-sh th .impWrap{text-align:center}
+.tbl-pos-sh td {text-align:right; overflow:hidden;word-wrap:break-word}
+.w12 {width:12%;}
+.w13 {width:13%;}
+
+/* wijmo grid box scroll custom
+.wj-gridWrap {height:auto !important; overflow-y:hidden}
+.wj-gridWrap .wj-flexgrid {min-height:320px; max-height:393px}
+.wj-gridWrap .wj-flexgrid > div > div:last-child {min-height:320px}
+.wj-TblWrap {overflow:hidden}
+.wj-TblWrap .wj-TblWrapBr,.wj-TblWrapBr #theGrid {height:auto !important}
+.wj-TblWrap .wj-flexgrid {min-height:393px; max-height:393px}
+.wj-TblWrap .wj-flexgrid > div > div:last-child {min-height:393px}
+.wj-TblWrapBr #theGrid .wj-flexgrid {min-height:320px; max-height:393px}
+.wj-TblWrapBr #theGrid .wj-flexgrid > div > div:last-child {min-height:320px}
+.wj-TblWrap .wj-TblWrapBr:after,.wj-TblWrapBr #theGrid:after {display:block; clear:both; content:''}
+*/

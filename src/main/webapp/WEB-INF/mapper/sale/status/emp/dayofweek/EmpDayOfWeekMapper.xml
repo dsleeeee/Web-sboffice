@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.emp.dayOfWeek.service.impl.EmpDayOfWeekMapper">
+    <!-- 상품별매출 - 판매자요일별 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_MS_EMPLOYEE
+        PARAM    : empDayOfWeekVO
+        COMMENTS : 판매자요일별상세현황 - 판매자요일별 리스트를 조회한다.
+    -->
+    <select id="getEmpDayOfWeekList" parameterType="empDayOfWeekVO" resultType="DefaultMap">
+        /* USE : EmpDayOfWeekMapper.getEmpDayOfWeekList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+			SELECT A.YOIL
+				, A.YOIL_NUM
+				, COUNT(DISTINCT A.STORE_CD) STORE_CNT
+				, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+				, SUM(A.BILL_CNT_TOT) AS TOT_BILL_CNT
+				${sQuery1}
+				<include refid="CmmSQL.PagingTemplateCount"/>
+			FROM
+			(
+				SELECT TSDE.SALE_DATE      
+				        , TSDE.STORE_CD
+						, TO_CHAR(TO_DATE(TSDE.SALE_DATE, 'YYYYMMDD'),'DY') AS YOIL   
+						, TO_CHAR(TO_DATE(TSDE.SALE_DATE, 'YYYYMMDD'),'D') AS YOIL_NUM   
+						, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT    
+						, SUM(TSDE.BILL_CNT) AS BILL_CNT_TOT       					
+						${sQuery2}                                          
+				FROM TB_SL_DAILY_EMPLOYEE TSDE 
+				WHERE 1 = 1          	
+				<if test='storeCd != null and storeCd != ""'>
+				   AND TSDE.STORE_CD	IN
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+				</if>
+				<if test='startDate != null and startDate != ""'>
+				   AND TSDE.SALE_DATE >= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+				   AND TSDE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+				</if>
+				GROUP BY TSDE.SALE_DATE, TSDE.EMP_NO, TSDE.STORE_CD       
+			) A 
+		WHERE 1 = 1
+		GROUP BY A.YOIL, A.YOIL_NUM, A.STORE_CD
+		ORDER BY YOIL_NUM ASC
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+	
+	<!-- 상품별매출 - 분류별 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE
+        PARAM    : empDayOfWeekVO
+        COMMENTS : 판매자별상세현황 - 판매자 리스트를 조회한다.
+    -->
+    <select id="getEmpMebList" parameterType="empDayOfWeekVO" resultType="DefaultMap">
+        /* USE : EmpDayMapper.getEmpMebList */
+ 		SELECT TMS.STORE_CD
+		    , TMS.STORE_NM||'('||TMS.STORE_CD||')' AS STORE_NM 
+		    , EMP_NO AS  NMCODE_CD
+		  	, (TMS.STORE_NM||'-'||EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
+		FROM TB_MS_EMPLOYEE TME
+		  		, TB_MS_STORE TMS
+		WHERE TME.STORE_CD = TMS.STORE_CD
+		AND TME.STORE_CD IN
+		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                      #{item}
+            </foreach>
+		  <if test='empChk != "Y"'>
+	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
+	                  WHERE Z.store_cd = TME.STORE_CD 
+	                  AND Z.EMP_NO = TME.EMP_NO
+	                  AND Z.STORE_CD IN
+	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        	#{item}
+                    	</foreach> 
+	                  AND Z.SALE_DATE >= #{startDate}          
+	                  AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate} 
+	                )
+          </if>
+    </select>
+</mapper>

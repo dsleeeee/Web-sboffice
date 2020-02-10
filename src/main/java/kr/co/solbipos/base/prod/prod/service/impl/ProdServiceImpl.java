@@ -203,6 +203,12 @@ public class ProdServiceImpl implements ProdService {
         int result = prodMapper.saveProductInfo(prodVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+        //상품 바코드 저장(바코드정보가 있을 경우만)
+        if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
+            int barCdResult = prodMapper.saveProdBarcd(prodVO);
+            if(barCdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
         // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
 
@@ -212,6 +218,22 @@ public class ProdServiceImpl implements ProdService {
                 procResult = prodMapper.insertHqProdToStoreProd(prodVO);
             } else {
                 procResult = prodMapper.updateHqProdToStoreProd(prodVO);
+            }
+
+            //매장 상품 바코드 저장(바코드정보가 있을 경우만)
+            if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
+                prodMapper.saveProdBarcdStore(prodVO);
+            }
+
+            // 매장 사이드 선택메뉴 그룹/분류/상품 저장(사이드 선택메뉴를 사용하는 경우만)
+            if("Y".equals(prodVO.getSideProdYn()) && prodVO.getSdselGrpCd().length() > 0){
+
+                //그룹(sdselGrp)
+                prodMapper.insertSdselGrpToStore(prodVO);
+                //분류(sdselClass)
+                prodMapper.insertSdselClassToStore(prodVO);
+                //상품(sdselProd)
+                prodMapper.insertSdselProdToStore(prodVO);
             }
         }
 
@@ -254,7 +276,16 @@ public class ProdServiceImpl implements ProdService {
 
         int procCnt = 0;
 
-        for(ProdVO prodVO : prodVOs) {
+        // 해당 상품이 바코드를 사용하는지 파악
+        int prodBarCdYn = prodMapper.getProdBarCdCnt(prodVOs[0]);
+
+        // 해당 상품이 사이드 선택메뉴를 사용하는지 파악
+        String sideSelYn = "N";
+        if("Y".equals(prodVOs[0].getSideProdYn()) && prodVOs[0].getSdselGrpCd().length() > 0){
+            sideSelYn = "Y";
+        }
+
+       for(ProdVO prodVO : prodVOs) {
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             prodVO.setRegDt(currentDate);
             prodVO.setRegId(sessionInfoVO.getUserId());
@@ -273,7 +304,14 @@ public class ProdServiceImpl implements ProdService {
 
             // 해당 매장에 본사 상품 등록
             int hqProdResult = prodMapper.insertProdStoreDetail(prodVO);
-            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if (hqProdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 해당 매장에 본사 상품 바코드 등록
+            // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
+            if(prodBarCdYn > 0){
+                int hqProdBarcdResult = prodMapper.insertProdBarcdStoreDetail(prodVO);
+                if (hqProdBarcdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
 
             // [판매가 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
             String storeSalePriceReulst = prodMapper.saveStoreSalePrice(prodVO);
@@ -299,7 +337,32 @@ public class ProdServiceImpl implements ProdService {
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
+       }
+
+        // 선택한 매장에 본사 사이드 선택메뉴 등록
+        // 본사상품이 사이드 선택메뉴를 사용하는 경우, 매장에도 사이드 선택메뉴를 넣어준다.
+        if("Y".equals(sideSelYn)){
+
+            // 값 셋팅
+            ProdVO prodVO = new ProdVO();
+
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodVO.setSdselGrpCd(prodVOs[0].getSdselGrpCd());
+            prodVO.setProdCd(prodVOs[0].getProdCd());
+            prodVO.setRegDt(currentDate);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModDt(currentDate);
+            prodVO.setModId(sessionInfoVO.getUserId());
+
+            // 매장 사이드 선택메뉴 그룹/분류/상품 저장
+            //그룹(sdselGrp)
+            prodMapper.insertSdselGrpToStore(prodVO);
+            //분류(sdselClass)
+            prodMapper.insertSdselClassToStore(prodVO);
+            //상품(sdselProd)
+            prodMapper.insertSdselProdToStore(prodVO);
         }
+
         return procCnt;
     }
 

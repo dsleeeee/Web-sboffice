@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.barcd.service.impl.BarcdMapper">
+
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getBarcdList" parameterType="barcdVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT M.BARCD_CD
+              , M.PROD_CD
+              , M.PROD_NM
+              , SUM(TSDP.TOT_SALE_QTY) TOT_SALE_QTY
+              , SUM(TSDP.REAL_SALE_AMT) REAL_SALE_AMT
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM (
+	        SELECT TMPB.STORE_CD, TMP.PROD_CD, TMP.PROD_NM, TMPB.BARCD_CD, TMPB.BARCD_NM
+	          FROM TB_MS_PRODUCT_BARCD TMPB
+	             , TB_MS_PRODUCT TMP
+	         WHERE TMPB.STORE_CD = TMP.STORE_CD
+	           AND TMPB.PROD_CD = TMP.PROD_CD
+	           AND TMPB.STORE_CD = 'A000005'
+	                ) M
+	        , TB_SL_DAILY_PROD TSDP
+	    WHERE M.STORE_CD(+) = TSDP.STORE_CD
+          AND M.PROD_CD(+) = TSDP.PROD_CD
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSDP.STORE_CD = #{storeCd}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+	    GROUP BY M.BARCD_CD, M.PROD_CD, M.PROD_NM
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getBarcdDtlList" parameterType="barcdVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT TSDP.SALE_DATE
+              , TSDP.STORE_CD
+              , M.STORE_NM
+              , M.PROD_NM
+              , SUM(TSDP.TOT_SALE_QTY) TOT_SALE_QTY
+              , SUM(TSDP.TOT_SALE_AMT) TOT_SALE_AMT
+              , SUM(TSDP.TOT_DC_AMT) TOT_DC_AMT
+              , SUM(TSDP.REAL_SALE_AMT) REAL_SALE_AMT
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM (
+	        SELECT TMPB.STORE_CD, TMS.STORE_NM, TMP.PROD_CD, TMP.PROD_NM, TMPB.BARCD_CD, TMPB.BARCD_NM
+	          FROM TB_MS_PRODUCT_BARCD TMPB
+	             , TB_MS_PRODUCT TMP
+	             , TB_MS_STORE TMS
+	         WHERE TMPB.STORE_CD = TMP.STORE_CD
+	           AND TMPB.PROD_CD = TMP.PROD_CD
+	           AND TMPB.STORE_CD = 'A000005'
+	            ) M
+	        , TB_SL_DAILY_PROD TSDP
+	    WHERE M.STORE_CD(+) = TSDP.STORE_CD
+        AND M.PROD_CD(+) = TSDP.PROD_CD
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSDP.STORE_CD = #{storeCd}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+        GROUP BY TSDP.SALE_DATE, TSDP.STORE_CD, M.STORE_NM, M.PROD_NM
+        ORDER BY TSDP.SALE_DATE DESC
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

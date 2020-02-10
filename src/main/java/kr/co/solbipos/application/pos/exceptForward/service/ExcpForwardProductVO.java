@@ -22,6 +22,9 @@ import kr.co.solbipos.application.pos.exceptForward.service.enums.TpioFg;
  */
 public class ExcpForwardProductVO extends PageVO {
 
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /** 영업일자 */
     private String saleDate;
 
@@ -136,6 +139,14 @@ public class ExcpForwardProductVO extends PageVO {
     /** 수정자 */
     private String idUpdate;
 
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the saleDate

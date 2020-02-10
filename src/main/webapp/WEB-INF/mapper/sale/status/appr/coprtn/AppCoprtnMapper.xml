@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.appr.coprtn.service.impl.ApprCorptnMapper">
+
+    <!-- 신용카드 승인현왕 - 리스트 조회 -->
+    <!--
+        TABLE    : 
+        PARAM    : apprCoprtnVO
+        COMMENTS : 신용카드 승인현왕 - 리스트를 조회한다.
+    -->
+    <select id="getApprCorptnList" parameterType="apprCoprtnVO" resultType="DefaultMap">
+      <include refid="CmmSQL.PagingTemplateHeader"/>
+       <![CDATA[
+       SELECT TSDCP.SALE_DATE
+              ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
+              ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
+              ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
+              ${sQuery1}
+       ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM TB_SL_DAILY_CORNR_PROD TSDCP
+        WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSDCP.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrCornrCol != null and arrCornrCol != ""'>
+            AND TSDCP.CORNR_CD IN
+            <foreach collection="arrCornrCol" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        ORDER BY TSDCP.SALE_DATE DESC
+        ]]>
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

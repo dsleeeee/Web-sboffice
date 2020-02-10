@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.corner.dayPeriod.service.impl.CornerDayPeriodMapper">
+
+    <select id="getCornerDayPeriodList" parameterType="cornerDayPeriodVO" resultType="DefaultMap">
+        /* USE : CornerDayPeriodMapper.getCornerDayPeriodList */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+             SELECT TSDCP.CORNR_CD
+                    , TSDCP.STORE_CD
+			        , CONCAT(CONCAT(TMS.STORE_NM,'- '), TMC.CORNR_NM) CORNR_NM 
+<!--                     , (CASE TSDCP.CORNR_CD WHEN '00' THEN '기본코너' -->
+<!-- 	                                       WHEN '01' THEN '한식코너' -->
+<!-- 	                                       WHEN '02' THEN '중식코너' END) CORNR_NM -->
+			        , SUM(TSDCP.TOT_SALE_QTY) AS TOT_SALE_QTY
+			        , SUM(TSDCP.REAL_SALE_AMT) AS REAL_SALE_AMT
+       
+       <include refid="CmmSQL.PagingTemplateCount"/>
+         FROM TB_MS_CORNER TMC
+              , TB_SL_DAILY_CORNR_PROD TSDCP 
+              , TB_MS_STORE TMS
+         WHERE TMC.CORNR_CD(+) = TSDCP.CORNR_CD
+          AND TSDCP.HQ_OFFICE_CD = #{hqOfficeCd} 
+          AND TSDCP.STORE_CD = TMS.STORE_CD
+	    <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND TSDCP.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='arrCornrCd != null and arrCornrCd != ""'>
+            AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+ 		GROUP BY TSDCP.CORNR_CD, TSDCP.STORE_CD, TMC.CORNR_NM, CONCAT(CONCAT(TMS.STORE_NM,'- '), TMC.CORNR_NM)
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <select id="getCornerDayPeriodDtlList" parameterType="cornerDayPeriodVO" resultType="DefaultMap">
+        /* USE : CornerDayPeriodMapper.getCornerDayPeriodDtlList */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+              SELECT TSDCP.PROD_CD
+				     , TMP.PROD_NM
+				     , SUM(TSDCP.TOT_SALE_QTY) AS TOT_SALE_QTY
+				     , SUM(TSDCP.REAL_SALE_AMT) AS REAL_SALE_AMT
+       
+       <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT TMP
+             , TB_SL_DAILY_CORNR_PROD TSDCP
+        WHERE TMP.STORE_CD = TSDCP.STORE_CD
+            AND TMP.PROD_CD = TSDCP.PROD_CD
+        <if test='storeCd != null and storeCd != ""'>
+           AND TSDCP.STORE_CD    = #{storeCd}
+        </if>
+        <if test='cornrCd != null and cornrCd != ""'>
+           AND TSDCP.CORNR_CD    = #{cornrCd}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        GROUP BY TSDCP.PROD_CD, TMP.PROD_NM
+        ORDER BY TSDCP.PROD_CD
+       <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+</mapper>

@@ -76,6 +76,8 @@
   <!-- ====================================-->
   <!-- 회사정보 -->
   <entry key="neoe.cdCompany">15</entry>
+  <!-- 회사정보 (비티스)-->
+  <entry key="vitis.cdCompany">88</entry>
   <!-- 공장코드 -->
   <entry key="neoe.cdPlant">1100</entry>
   <!-- 수불유형 -->

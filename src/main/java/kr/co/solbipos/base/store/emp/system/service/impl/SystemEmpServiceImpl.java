@@ -114,11 +114,11 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             } else {
                 if(systemEmpVO.getWebUseYn() == UseYn.Y ) {
 
-                    // todo 현재는 보나비용으로 시스템, 대리점 권한을 넣음 (추후 변경 필요)
+                    // 관리자 or 총판 권한 부여
                     if(systemEmpVO.getAdminFg() == AdminFg.ADMIN) {
-                        systemEmpVO.setAuthGrpCd("000005");
+                        systemEmpVO.setAuthGrpCd("000001");
                     } else {
-                        systemEmpVO.setAuthGrpCd("000006");
+                        systemEmpVO.setAuthGrpCd("000002");
                     }
 
                     if( systemEmpMapper.insertWbUserInfo(systemEmpVO) != 1 ) {
@@ -151,7 +151,14 @@ public class SystemEmpServiceImpl implements SystemEmpService {
             systemEmpVO.setRegIp(sessionInfoVO.getLoginIp());
 
             if( systemEmpVO.getWebUseYn() == UseYn.Y) {
-                systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
+                //systemEmpVO.setAuthGrpCd(AUTH_GRP_CD);
+
+                // 관리자 or 총판 권한 부여
+                if(systemEmpVO.getAdminFg() == AdminFg.ADMIN) {
+                    systemEmpVO.setAuthGrpCd("000001");
+                } else {
+                    systemEmpVO.setAuthGrpCd("000002");
+                }
             }
 
             if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) <= 0 ) {

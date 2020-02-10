@@ -281,6 +281,8 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상품적용매장 등록 팝업 핸들러 추가
     $scope.prodStoreRegistLayer.shown.addHandler(function (s) {
       $("#prodTitle").text('['+$scope.getProdInfo().prodCd +'] '+$scope.getProdInfo().prodNm);
+      $("#hdSideProdYn").val($scope.getProdInfo().sideProdYn);
+      $("#hdSdselGrpCd").val($scope.getProdInfo().sdselGrpCd);
     });
   });
 }]);

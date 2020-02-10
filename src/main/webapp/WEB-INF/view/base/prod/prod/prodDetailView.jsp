@@ -160,6 +160,17 @@
               {{_useYn}}
             </td>
           </tr>
+          <tr>
+            <th>
+              <s:message code="prod.barCd"/>
+            </th>
+            <td>
+              {{prodDetail.barCd}}
+            </td>
+            <th>
+            </th>
+            <td></td>
+          </tr>
           </tbody>
         </table>
       </div>

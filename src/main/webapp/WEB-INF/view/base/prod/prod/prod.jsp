@@ -183,6 +183,9 @@
         <wj-flex-grid-column header="<s:message code="prod.orgplceCd"/>" binding="orgplceCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column><!--// todo 원산지명 조회 필요-->
         <wj-flex-grid-column header="<s:message code="prod.poUnitFg"/>" binding="poUnitFg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" data-map="useYnComboDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sideProdYn"/>" binding="sideProdYn" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sdattrClassCd"/>" binding="sdattrClassCd" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sdselGrpCd"/>" binding="sdselGrpCd" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -208,7 +211,7 @@
   var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122903.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122903.11" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

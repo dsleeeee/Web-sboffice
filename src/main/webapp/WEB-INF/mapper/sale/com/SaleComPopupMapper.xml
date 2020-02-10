@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.com.popup.service.impl.SaleComPopupMapper">
+
+    <!-- 매출공통팝업 - 테이블별 매출현황 팝업 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE, TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_HDR_GUEST
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 테이블별 매출현황 팝업
+    -->
+    <select id="getTablePopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getTablePopList */
+		SELECT TSSH.POS_NO
+			, TSSH.BILL_NO
+		    , TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+		    , DECODE(TSSH.SALE_FG, '1', '판매', '-1', '반품') AS SALE_FG
+		    , SUM(TSSH.TOT_SALE_AMT) AS TOT_SALE_AMT
+		    , SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
+		    , SUM(TSSH.NET_SALE_AMT) AS NET_SALE_AMT
+		    , SUM(TSSH.TAX_SALE_AMT) AS TAX_SALE_AMT
+		    , SUM(A.PAY_AMT) AS PAY_TOT
+		    , CASE WHEN A.PAY_CD = '01' THEN SUM(A.PAY_AMT) ELSE 0 END AS PAY01
+		    , CASE WHEN A.PAY_CD = '02' THEN SUM(A.PAY_AMT) ELSE 0 END AS PAY02
+		    , CASE WHEN A.PAY_CD != '01' AND A.PAY_CD != '02' THEN SUM(A.PAY_AMT) ELSE 0 END AS PAY03
+		    , SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4) GUEST_TOT
+		    , SUM(A.GUEST_CNT_1) AS GUEST_CNT_1
+		    , SUM(A.GUEST_CNT_2) AS GUEST_CNT_2
+		    , SUM(A.GUEST_CNT_3) AS GUEST_CNT_3
+		    , SUM(A.GUEST_CNT_4) AS GUEST_CNT_4
+		    , (SUM(TSSH.TOT_SALE_AMT) / SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4)) GUEST_AMT
+		FROM TB_SL_SALE_HDR TSSH
+          	, (SELECT TSSHP.STORE_CD
+                ,TSSHP.BILL_NO
+                ,TSSHP.POS_NO
+                ,TSSHP.PAY_AMT
+                ,TSSHP.PAY_CD
+                ,TSSHG.GUEST_CNT_1
+                ,TSSHG.GUEST_CNT_2
+                ,TSSHG.GUEST_CNT_3
+                ,TSSHG.GUEST_CNT_4
+                ,TSSHG.TBL_CD
+              FROM TB_SL_SALE_HDR_PAY TSSHP
+               , TB_SL_SALE_HDR_GUEST TSSHG
+              WHERE TSSHP.STORE_CD = TSSHG.STORE_CD(+)
+              AND TSSHP.BILL_NO = TSSHG.BILL_NO(+)
+              AND TSSHP.POS_NO = TSSHG.POS_NO(+)
+              <if test='storeCd != null and storeCd != ""'>
+              	AND TSSHP.STORE_CD = #{storeCd}
+              </if>
+              <if test='startDate != null and startDate != ""'>
+              	AND TSSHP.SALE_DATE 	>= #{startDate}
+              </if>
+              <if test='endDate != null and endDate != ""'>
+			  	AND TSSHP.SALE_DATE 	 <![CDATA[<=]]>   #{endDate}
+			  </if>
+			  <if test='startDate != null and startDate != ""'>
+              	AND TSSHG.SALE_DATE 	>= #{startDate}
+              </if>
+              <if test='endDate != null and endDate != ""'>
+			  	AND TSSHG.SALE_DATE 	 <![CDATA[<=]]>   #{endDate}
+			  </if>
+			  <if test='saleDate != null and saleDate != ""'>
+			  	AND TSSHP.SALE_DATE =   #{saleDate}
+			  </if>
+			  <if test='saleDate != null and saleDate != ""'>
+			  	AND TSSHG.SALE_DATE =   #{saleDate}
+			  </if>
+            ) A
+		WHERE TSSH.STORE_CD = A.STORE_CD
+      	AND TSSH.BILL_NO = A.BILL_NO
+		AND TSSH.POS_NO = A.POS_NO
+		<if test='storeCd != null and storeCd != ""'>
+			AND TSSH.STORE_CD = #{storeCd}
+		</if>
+		<if test='startDate != null and startDate != ""'>
+			AND TSSH.SALE_DATE 	>= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSH.SALE_DATE 	 <![CDATA[<=]]>  #{endDate}
+		</if>
+	  	<if test='saleDate != null and saleDate != ""'>
+	  		AND TSSH.SALE_DATE =   #{saleDate}
+	  	</if>
+		<if test='tblCd != null and tblCd != ""'>
+			AND A.TBL_CD = #{tblCd}
+		</if>
+		GROUP BY TSSH.POS_NO,TSSH.BILL_NO,TSSH.BILL_DT, TSSH.SALE_FG, A.PAY_CD
+		ORDER BY TSSH.POS_NO, TSSH.BILL_NO ASC
+    </select>
+
+	<!-- 매출공통팝업 - 상품매출내역 팝업 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_CORNR_PROD
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 테이블별 매출현황 팝업
+    -->
+    <select id="getProdPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getProdPopList */
+			SELECT M.PROD_CLASS_CD
+	             , M.T_PROD_CLASS_CD
+	             , M.PROD_CLASS_NM
+	             , M.PROD_CD
+	             , M.PROD_NM
+	             , TSDCP.CORNR_CD
+	             , SUM(TSDCP.TOT_SALE_QTY) AS TOT_SALE_QTY
+	             , SUM(TSDCP.REAL_SALE_AMT) AS REAL_SALE_AMT
+			FROM (
+	               SELECT TMP.PROD_CLASS_CD
+	                    , TMPC.T_PROD_CLASS_CD
+	                    , TMPCD.PROD_CLASS_NM
+	                    , TMP.PROD_CD
+	                    , TMP.PROD_NM
+	                    , TMP.STORE_CD
+	                 FROM TB_MS_PRODUCT TMP
+	                    , (SELECT DISTINCT PROD_CLASS_CD, CONNECT_BY_ROOT PROD_CLASS_CD AS T_PROD_CLASS_CD
+	                         FROM (SELECT PROD_CLASS_CD
+	                         			, P_PROD_CLASS_CD
+	                         		FROM TB_MS_PRODUCT_CLASS
+	                         		WHERE STORE_CD IN
+	                         			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        					#{item}
+                    					</foreach>
+	                         		)
+	                        START WITH P_PROD_CLASS_CD ='00000'
+	                      CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+	                      ) TMPC
+	                    , ( SELECT DISTINCT PROD_CLASS_CD
+	                    		, PROD_CLASS_NM
+	                    	FROM TB_MS_PRODUCT_CLASS
+	                    	WHERE STORE_CD IN
+	                    		        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        					#{item}
+                    					</foreach>
+	                    	) TMPCD
+	                WHERE TMP.PROD_CLASS_CD = TMPC.PROD_CLASS_CD
+	                  AND TMPC.T_PROD_CLASS_CD = TMPCD.PROD_CLASS_CD
+	              ) M
+	            , TB_SL_DAILY_CORNR_PROD TSDCP
+			WHERE TSDCP.STORE_CD = M.STORE_CD(+)
+	        AND TSDCP.PROD_CD = M.PROD_CD(+)
+			<if test='storeCd != null and storeCd != ""'>
+				AND TSDCP.STORE_CD	IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   					#{item}
+               		</foreach>
+			</if>
+			<if test='startDate != null and startDate != ""'>
+				AND TSDCP.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
+			</if>
+			<if test='endDate != null and endDate != ""'>
+				AND TSDCP.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
+			</if>
+			<if test='saleDate != null and saleDate != ""'>
+				AND TSDCP.SALE_DATE	=  REPLACE(#{saleDate}, '-', '')
+			</if>
+<!-- 			<if test='cornrCd != null and cornrCd != ""'> -->
+<!-- 				AND TSDCP.CORNR_CD = #{cornrCd} -->
+<!-- 			</if> -->
+			<if test='cornrCd != null and cornrCd != ""'>
+                AND TSDCP.CORNR_CD  IN
+                    <foreach collection="arrCornrCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                    </foreach>
+            </if>
+			<if test='prodCd != null and prodCd != ""'>
+				AND M.PROD_CD = #{prodCd}
+			</if>
+			<if test='saleMonth != null and saleMonth != ""'>
+				AND TO_CHAR(TO_DATE(TSDCP.SALE_DATE), 'YYYYMM') = REPLACE(#{saleMonth}, '-', '')
+			</if>
+			<if test='yoil != null and yoil != ""'>
+				AND TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
+			</if>
+	       GROUP BY M.PROD_CLASS_CD, M.T_PROD_CLASS_CD, M.PROD_CLASS_NM, M.PROD_CD, M.PROD_NM, TSDCP.CORNR_CD
+	       ORDER BY TSDCP.CORNR_CD, M.PROD_CLASS_CD ASC
+    </select>
+
+	<!-- 매출공통팝업 - 상품매출내역 팝업(판매자별) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_CORNR_PROD
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 판매자별 매출현황 팝업
+    -->
+    <select id="getEmpPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getProdPopList */
+		SELECT TMP.PROD_CLASS_CD
+				, TMPC.T_PROD_CLASS_CD
+				, TMPCD.PROD_CLASS_NM
+				, TMP.PROD_CD
+				, TMP.PROD_NM
+				, M.*
+  		FROM ( SELECT DISTINCT PROD_CLASS_CD
+  					, PROD_CLASS_NM
+  				FROM TB_MS_PRODUCT_CLASS
+  				WHERE STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+               					#{item}
+           			</foreach>
+  				) TMPCD
+     		, (SELECT PROD_CLASS_CD, CONNECT_BY_ROOT PROD_CLASS_CD AS T_PROD_CLASS_CD
+          		FROM (SELECT DISTINCT PROD_CLASS_CD
+          					, P_PROD_CLASS_CD
+          			  FROM TB_MS_PRODUCT_CLASS
+          			  WHERE STORE_CD IN
+          				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        	#{item}
+                    	</foreach>
+          				)
+		         START WITH P_PROD_CLASS_CD ='00000'
+		         CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+		       ) TMPC
+		     , TB_MS_PRODUCT TMP
+		     , (
+		      SELECT TSSD.STORE_CD
+		           , TSSD.PROD_CD
+		           , SUM(TSSD.SALE_QTY) AS TOT_SALE_QTY
+		           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
+		        FROM TB_SL_SALE_DTL TSSD
+		        WHERE TSSD.STORE_CD IN
+		        	    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        	#{item}
+                    	</foreach>
+				<if test='startDate != null and startDate != ""'>
+					AND TSSD.SALE_DATE	>=   REPLACE(#{startDate}, '-', '')
+				</if>
+				<if test='endDate != null and endDate != ""'>
+					AND TSSD.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
+			    </if>
+			    <if test='saleDate != null and saleDate != ""'>
+					AND TSSD.SALE_DATE	=  REPLACE(#{saleDate}, '-', '')
+				</if>
+				<if test='saleMonth != null and saleMonth != ""'>
+					AND TO_CHAR(TO_DATE(TSSD.SALE_DATE), 'YYYYMM') = REPLACE(#{saleMonth}, '-', '')
+				</if>
+				<if test='yoil != null and yoil != ""'>
+					AND TO_CHAR(TO_DATE(TSSD.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
+				</if>
+		         AND EXISTS (SELECT *
+		                      FROM TB_SL_SALE_HDR Z
+		                     WHERE Z.HQ_OFFICE_CD = TSSD.HQ_OFFICE_CD
+		                       	AND Z.HQ_BRAND_CD = TSSD.HQ_BRAND_CD
+		                       	AND Z.STORE_CD = TSSD.STORE_CD
+		                       	AND Z.SALE_DATE = TSSD.SALE_DATE
+		                       	AND Z.POS_NO = TSSD.POS_NO
+		                       	AND Z.BILL_NO = TSSD.BILL_NO
+		                       	AND Z.STORE_CD IN
+		                       		<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        				#{item}
+                    				</foreach>
+						        <if test='startDate != null and startDate != ""'>
+									AND Z.SALE_DATE	>=  REPLACE(#{startDate}, '-', '')
+								</if>
+								<if test='endDate != null and endDate != ""'>
+									AND Z.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
+							    </if>
+							    <if test='saleDate != null and saleDate != ""'>
+									AND Z.SALE_DATE	=  REPLACE(#{saleDate}, '-', '')
+								</if>
+								<if test='saleMonth != null and saleMonth != ""'>
+									AND TO_CHAR(TO_DATE(Z.SALE_DATE), 'YYYYMM') = REPLACE(#{saleMonth}, '-', '')
+								</if>
+								<if test='empNo != null and empNo != ""'>
+									AND Z.EMP_NO = #{empNo}
+								</if>
+								<if test='yoil != null and yoil != ""'>
+									AND TO_CHAR(TO_DATE(Z.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
+								</if>
+								<if test='posNo != null and posNo != ""'>
+									AND Z.POS_NO = #{posNo}
+								</if>
+								<if test='billNo != null and billNo != ""'>
+                                    AND Z.BILL_NO = #{billNo}
+                                </if>
+		                 )
+		       GROUP BY TSSD.STORE_CD, TSSD.PROD_CD
+		       ) M
+	 	WHERE M.STORE_CD = TMP.STORE_CD
+	   	AND M.PROD_CD = TMP.PROD_CD
+	  	AND TMP.PROD_CLASS_CD = TMPC.PROD_CLASS_CD
+	   	AND TMPC.T_PROD_CLASS_CD = TMPCD.PROD_CLASS_CD
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(카드) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(카드)
+    -->
+    <select id="getCardApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getCardApprPopList */
+		SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+			, TSSPC.POS_NO
+			, DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS APPR_GUBUN
+			, DECODE(TSSPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			, TSSPC.ACQUIRE_NM
+			, TSSPC.CARD_NO
+			, TSSPC.SALE_AMT
+			, TSSPC.TIP_AMT
+			, TSSPC.VAT_AMT
+			, DECODE(TSSPC.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+			, TSSPC.INST_CNT
+			, TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			, TSSPC.APPR_NO
+			, TSSPC.APPR_AMT
+		FROM TB_SL_SALE_PAY_CARD TSSPC
+		WHERE TSSPC.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPC.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(현금) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CASH
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(현금)
+    -->
+    <select id="getCashApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getCashApprPopList */
+		SELECT TO_CHAR(TO_DATE(TSSPC.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+			,TSSPC.POS_NO
+			,TSSPC.REG_SEQ
+			,DECODE(TSSPC.SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
+			,TSSPC.SALE_AMT
+			,TSSPC.TIP_AMT
+			,TSSPC.VAT_AMT
+			,CASH_BILL_CARD_NO
+			,DECODE(TSSPC.CASH_BILL_CARD_TYPE_FG, 1, '소득공제', 2, '지출증빙', 3, '자진발급') AS CASH_BILL_CARD_TYPE_FG
+			,TO_CHAR(TO_DATE(TSSPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,TSSPC.APPR_NO
+			,TSSPC.SALE_AMT AS APPR_AMT
+		FROM TB_SL_SALE_PAY_CASH TSSPC
+		WHERE TSSPC.STORE_CD = #{storeCd}
+		AND APPR_PROC_FG IN ('1','2')
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPC.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(PAYCO) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PAYCO
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(PAYCO)
+    -->
+    <select id="getPaycoApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getPaycoApprPopList */
+        SELECT TO_CHAR(TO_DATE(TSSPP.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+			,TSSPP.POS_NO
+			,DECODE(TSSPP.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
+			,DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			,TSSPP.APPR_COMPANY_NM
+			,TSSPP.APPR_AMT AS SALE_AMT
+			,TSSPP.TIP_AMT
+			,TSSPP.VAT_AMT
+			,DECODE(TSSPP.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+			,TSSPP.INST_CNT
+			,TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,TSSPP.APPR_NO
+			,TSSPP.APPR_AMT
+		FROM TB_SL_SALE_PAY_PAYCO TSSPP
+		WHERE TSSPP.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPP.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPP.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(MPAY) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_MPAY
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(MPAY)
+    -->
+    <select id="getMpayApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getMpayApprPopList */
+		SELECT TO_CHAR(TO_DATE(TSSPM.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+			,TSSPM.POS_NO
+			,DECODE(TSSPM.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_GUBUN
+			,DECODE(TSSPM.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+			,TSSPM.MPAY_CD
+			,TSSPM.COUPN_NM
+			,TSSPM.COUPN_AMT
+			,TSSPM.POINT_NM
+			,TSSPM.POINT_AMT
+			,TO_CHAR(TO_DATE(TSSPM.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,TSSPM.APPR_NO
+			,TSSPM.SALE_AMT AS APPR_AMT
+		FROM TB_SL_SALE_PAY_MPAY TSSPM
+		WHERE TSSPM.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPM.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPM.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(MCOUPON) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_COUPN
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(MCOUPON)
+    -->
+    <select id="getMcouponApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getMcouponApprPopList */
+		SELECT TO_CHAR(TO_DATE(TSSPM.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+			,TSSPM.POS_NO
+			,DECODE(TSSPM.SALE_FG, 1, '승인', -1, '취소') AS SALE_FG
+			,TSSPM.SALE_AMT
+			,TSSPM.TIP_AMT
+			,TSSPM.VAT_AMT
+			,DECODE(TSSPM.MCOUPN_TYPE_FG, 1 , '교환권', 2, '금액권') AS MCOUPN_TYPE_FG
+			,TSSPM.MCOUPN_UPRC
+			,TSSPM.MCOUPN_REMAIN_AMT
+			,DECODE(TSSPM.CASH_BILL_APPR_PROC_FG, 1 , '포스승인', 2, '단말기승인', 3, '일반') AS CASH_BILL_APPR_PROC_FG
+			,TSSPM.CASH_BILL_CARD_NO
+			,TO_CHAR(TO_DATE(TSSPM.CASH_BILL_APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS CASH_BILL_APPR_DT
+			,TO_CHAR(TO_DATE(TSSPM.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+			,TSSPM.APPR_NO
+			,TSSPM.SALE_AMT AS APPR_AMT
+		FROM TB_SL_SALE_PAY_MCOUPN TSSPM
+		WHERE TSSPM.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPM.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPM.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(PARTNER) -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_PARTNER
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(PARTNER)
+    -->
+    <select id="getPartnerApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getPartnerApprPopList */
+		SELECT TO_CHAR(TO_DATE(TSSPP.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+				,TSSPP.POS_NO
+				,DECODE(TSSPP.SALE_FG, 1, '승인 ', -1, '취소') AS SALE_FG
+				,DECODE(TSSPP.APPR_PROC_FG,'', '미승인', '승인') AS APPR_PROC
+				,DECODE(TSSPP.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+				,TSSPP.SALE_AMT
+				,TSSPP.TIP_AMT
+				,TSSPP.VAT_AMT
+				,TSSPP.PARTN_CARD_NO
+				,TSSPP.SAVE_POINT
+				,TSSPP.USE_POINT
+				,TO_CHAR(TO_DATE(TSSPP.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+				,TSSPP.APPR_NO
+				,TSSPP.SALE_AMT AS APPR_AMT
+		FROM TB_SL_SALE_PAY_PARTNER TSSPP
+		WHERE TSSPP.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TSSPP.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TSSPP.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(NCARD) -->
+    <!--
+        TABLE    : TB_NS_NONSALE_PAY_CARD
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(NCARD)
+    -->
+    <select id="getNcardApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getNcardApprPopList */
+		SELECT TO_CHAR(TO_DATE(TNNPC.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+				,TNNPC.POS_NO
+				,DECODE(TNNPC.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_PROC
+				,DECODE(TNNPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
+				,TNNPC.ACQUIRE_NM
+				,DECODE(TNNPC.CARD_TYPE_FG, 1, '일반', 2, 'PAYON', 3, 'APP', 4, 'UNION', 5, 'PAYCO') AS CARD_TYPE_FG
+				,TNNPC.CARD_NO
+				,TNNPC.SALE_AMT
+				,TNNPC.TIP_AMT
+				,TNNPC.VAT_AMT
+				,DECODE(TNNPC.INST_CNT, 0 , '일시불', '할부') AS INST_CNT_NM
+				,TNNPC.INST_CNT
+				,TO_CHAR(TO_DATE(TNNPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+				,TNNPC.APPR_NO
+				,TNNPC.APPR_AMT
+		FROM TB_NS_NONSALE_PAY_CARD TNNPC
+		WHERE TNNPC.STORE_CD = #{storeCd}
+		<if test='startDate != null and startDate != ""'>
+			AND TNNPC.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TNNPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+
+    <!-- 매출공통팝업 - 승인현황(매장현황) 팝업(NCASH) -->
+    <!--
+        TABLE    : TB_NS_NONSALE_PAY_CASH
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 승인현황(매장현황) 팝업(NCASH)
+    -->
+    <select id="getNcashApprPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getNcashApprPopList */
+		SELECT TO_CHAR(TO_DATE(TNNPC.SALE_DATE), 'YYYY-MM-YY') AS SALE_DATE
+				,TNNPC.POS_NO
+				,DECODE(TNNPC.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_PROC
+				,TNNPC.SALE_AMT
+				,TNNPC.TIP_AMT
+				,TNNPC.VAT_AMT
+				,TNNPC.CASH_BILL_CARD_NO
+				,DECODE(TNNPC.CASH_BILL_CARD_TYPE_FG, 1, '카드', 2, '주민', 3, '휴대폰', 4, '사업자') AS CASH_BILL_CARD_TYPE_FG
+				,TO_CHAR(TO_DATE(TNNPC.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
+				,TNNPC.APPR_NO
+				,TNNPC.SALE_AMT AS APPR_AMT
+		FROM TB_NS_NONSALE_PAY_CASH TNNPC
+		WHERE TNNPC.STORE_CD = #{storeCd}
+		AND APPR_PROC_FG IN ('1','2')
+		<if test='startDate != null and startDate != ""'>
+			AND TNNPC.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND TNNPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
+		</if>
+    </select>
+</mapper>

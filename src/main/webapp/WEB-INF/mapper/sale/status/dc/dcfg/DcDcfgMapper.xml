@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.dc.dcfg.service.impl.DcDcfgMapper">
+
+    <select id="getDcDcfgList" parameterType="dcDcfgVO" resultType="DefaultMap">
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT STORE.STORE_NM
+     		 , TSDT.SALE_DATE
+     		 , NMCODE.NMCODE_CD AS DC_CD
+     		 , NMCODE.NMCODE_NM AS DC_NM
+     		 , TSDD.TOT_SALE_QTY
+     		 , TSDD.TOT_SALE_AMT
+     		 , TSDD.TOT_DC_AMT AS DC_AMT
+     		 , TSDT.TOT_DC_AMT
+     		 , TSDD.REAL_SALE_AMT
+     	<include refid="CmmSQL.PagingTemplateCount"/>
+  		FROM TB_SL_DAILY_TOTAL TSDT
+  		   , TB_SL_DAILY_DC TSDD
+     	   , TB_MS_STORE STORE
+     	   ,(SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE 
+       		 WHERE PARENT_CD = '041') NMCODE
+ 		WHERE TSDT.STORE_CD = TSDD.STORE_CD
+   		  AND TSDT.SALE_DATE = TSDD.SALE_DATE
+   	 	  AND TSDT.STORE_CD = STORE.STORE_CD
+   		  AND TSDD.DC_CD = NMCODE.NMCODE_CD
+   		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+   		  	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+   		  </if>
+		  <if test='arrStoreCd != null and arrStoreCd != ""'>
+		  	AND TSDT.STORE_CD IN
+		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+		  		#{item}
+		  	</foreach>
+		  </if>
+		  <if test='dcCd != null and dcCd != ""'>
+          	AND TSDD.DC_CD = #{dcCd}
+      	  </if>
+    	<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getDcDcfgDtlList" parameterType="dcDcfgVO" resultType="DefaultMap">
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT TMP.PROD_NM
+     		 , SUM(TSSD.SALE_QTY) AS SALE_QTY
+     		 , SUM(TSSD.SALE_AMT) AS SALE_AMT
+     		 , SUM(TSSDD.DC_AMT) AS DC_AMT
+     		 , SUM(TSSD.DC_AMT) AS TOT_DC_AMT
+     		 , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
+     	<include refid="CmmSQL.PagingTemplateCount"/>
+  		FROM TB_SL_SALE_DTL TSSD
+     	   , TB_SL_SALE_DTL_DC TSSDD
+     	   , TB_MS_PRODUCT TMP
+ 		WHERE 1=1
+ 		  AND TSSD.HQ_OFFICE_CD = TSSDD.HQ_OFFICE_CD
+   		  AND TSSD.HQ_BRAND_CD  = TSSDD.HQ_BRAND_CD
+   		  AND TSSD.STORE_CD     = TSSDD.STORE_CD
+   		  AND TSSD.SALE_DATE	 = TSSDD.SALE_DATE
+   		  AND TSSD.POS_NO		 = TSSDD.POS_NO
+   		  AND TSSD.BILL_NO		 = TSSDD.BILL_NO
+   		  AND TSSD.BILL_DTL_NO	 = TSSDD.BILL_DTL_NO
+   		  AND TSSD.PROD_CD = TMP.PROD_CD
+   		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+   		  	AND TSSD.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+   		  </if>
+		  <if test='arrStoreCd != null and arrStoreCd != ""'>
+		  	AND TSSD.STORE_CD IN
+		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+		  		#{item}
+		  	</foreach>
+          </if>
+		  <if test='dcCd != null and dcCd != ""'>
+          	AND TSSDD.DC_CD = #{dcCd}
+      	  </if>
+   		GROUP BY TMP.PROD_NM
+		ORDER BY TMP.PROD_NM
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getDcNmList" parameterType="dcDcfgVO" resultType="DefaultMap">
+    	SELECT DISTINCT DC.DC_CD NMCODE_CD, NMCODE.NMCODE_NM
+		FROM TB_SL_SALE_DTL_DC DC, TB_CM_NMCODE NMCODE
+		WHERE 1=1
+			  AND DC.DC_CD = NMCODE.NMCODE_CD
+			  AND NMCODE.PARENT_CD = '041'
+			  <!-- AND DC.HQ_OFFICE_CD = #{hqOfficeCd} -->
+			  <if test='arrStoreCd != null and arrStoreCd != ""'>
+			  	AND DC.STORE_CD IN
+			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+			  		#{item}
+			  	</foreach>
+			  </if>
+		ORDER BY NMCODE.NMCODE_NM
+    </select>
+    
+</mapper>

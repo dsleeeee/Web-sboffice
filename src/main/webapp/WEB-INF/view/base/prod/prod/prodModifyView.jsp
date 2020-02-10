@@ -210,6 +210,18 @@
                   </div>
                 </td>
             </tr>
+            <tr>
+              <%--바코드--%>
+              <th>
+                <s:message code="prod.barCd"/>
+              </th>
+              <td>
+                <input type="text" id="_barCd" name="barCd" class="sb-input w100" ng-model="prodModifyInfo.barCd" />
+              </td>
+              <th>
+              </th>
+              <td></td>
+            </tr>
           </table>
         </div>
       <%-- 상품부가정보 --%>

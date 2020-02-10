@@ -120,8 +120,8 @@ public class ExceptForwardController {
 
         String returnUrl = "";
 
-        if(!isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
-            LOGGER.info("posLogin store : {} , hwAuthKey : {} , url : {}", request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
+        if(!isEmpty(request.getParameter("hqOfficeCd")) && !isEmpty(request.getParameter("storeCd")) && !isEmpty(request.getParameter("hwAuthKey")) && !isEmpty(request.getParameter("url"))) {
+            LOGGER.info("posLogin hqOfficeCd : {} , store : {} , hwAuthKey : {} , url : {}", request.getParameter("hqOfficeCd"), request.getParameter("storeCd"), request.getParameter("hwAuthKey"), request.getParameter("url"));
 
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));

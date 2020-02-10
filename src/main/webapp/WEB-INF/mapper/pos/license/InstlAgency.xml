@@ -288,7 +288,7 @@
         ,#{empNm}
         ,#{userPwd}
         ,#{webUseYn}
-        ,#{userId}
+        ,LOWER(#{userId})
         ,#{mpNo}
         ,#{serviceFg}
         ,#{smsRecvYn}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.anals.versusPeriod.hour.service.impl.VersusPeriodHourMapper">
+
+	<!--
+		화면 ID : 대비기간매출분석-시간대비탭
+		화면 PAGE : 89P
+		PARAM : STORE_CD, SALE_DATE(FR,TO)
+	-->
+    <select id="getVersusPeriodHourList" parameterType="versusPeriodHourVO" resultType="DefaultMap">
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+       SELECT  M.LV
+     , SUM(M.REAL_SALE_AMT_A)    AS REAL_SALE_AMT_A
+     , SUM(M.SALE_CNT_A)         AS SALE_CNT_A
+     , SUM(M.REAL_SALE_AMT_B)    AS REAL_SALE_AMT_B
+     , SUM(M.SALE_CNT_B)         AS SALE_CNT_B
+     , CASE WHEN (SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B)) != 0   THEN ROUND((SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B))/ SUM(M.REAL_SALE_AMT_B)*100,1) ELSE 0 END AS SIN_AMT
+     , CASE WHEN (SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B)) != 0   THEN ROUND((SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B))/ SUM(M.SALE_CNT_B)*100,1) ELSE 0 END AS SIN_CNT
+     <include refid="CmmSQL.PagingTemplateCount"/>
+  FROM (
+		SELECT M.LV
+		     , DECODE(M.GBN,'A',M.SALE_HOUR,'')  SALE_HOUR_A
+		     , DECODE(M.GBN,'A',M.REAL_SALE_AMT,'')  REAL_SALE_AMT_A
+		     , DECODE(M.GBN,'A',M.SALE_CNT,'')      SALE_CNT_A
+		     , DECODE(M.GBN,'B',M.SALE_HOUR,'')     SALE_HOUR_B
+		     , DECODE(M.GBN,'B',M.REAL_SALE_AMT,'') REAL_SALE_AMT_B
+		     , DECODE(M.GBN,'B',M.SALE_CNT,'')      SALE_CNT_B
+		  FROM  (
+				SELECT M.LV, M.GBN, M.SALE_HOUR, M.REAL_SALE_AMT, M.SALE_CNT
+				  FROM (
+						SELECT LV.LV, NVL(A.GBN,'A') AS GBN, NVL(A.SALE_HOUR,LV.LV) AS SALE_HOUR, NVL(A.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(A.SALE_CNT, 0) AS SALE_CNT
+						  FROM
+								(
+							    SELECT LPAD(LEVEL-1, 2, '0') LV
+							    <![CDATA[
+								  FROM DUAL CONNECT BY LEVEL <= 24
+								]]>
+								) LV
+							 , (
+								SELECT 'A' AS GBN
+									 , TSDT.SALE_HOUR
+								     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
+								     , SUM(TSDT.SALE_CNT) AS SALE_CNT
+								  FROM TB_SL_DAILY_TIME TSDT
+								 WHERE 1=1
+								 <if test='arrStoreCd != null and arrStoreCd != ""'>
+                   				   AND TSDT.STORE_CD IN
+                    			   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        				#{item}
+                    			   </foreach>
+        						 </if>
+								 <if test='startDate != null and startDate != ""'>
+								   <![CDATA[
+								   AND TSDT.SALE_DATE >= #{startDate}
+								   ]]>
+								 </if>
+								 <if test='endDate != null and endDate != ""'>
+								   <![CDATA[
+								   AND TSDT.SALE_DATE <= #{endDate}
+								   ]]>
+								 </if>
+								 GROUP BY TSDT.SALE_HOUR
+								) A
+						 WHERE LV.LV = A.SALE_HOUR(+)
+						 ORDER BY LV
+						) M
+				UNION ALL
+				SELECT M.LV, M.GBN, M.SALE_HOUR, M.REAL_SALE_AMT, M.SALE_CNT
+				  FROM (
+						SELECT LV.LV, NVL(A.GBN,'B') AS GBN, NVL(A.SALE_HOUR,LV.LV) AS SALE_HOUR, NVL(A.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(A.SALE_CNT, 0) AS SALE_CNT
+						  FROM
+								(
+							    SELECT LPAD(LEVEL-1, 2, '0') LV
+							    <![CDATA[
+								  FROM DUAL CONNECT BY LEVEL <= 24
+								 ]]>
+								) LV
+							 , (
+								SELECT 'B' AS GBN
+									 , TSDT.SALE_HOUR
+								     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
+								     , SUM(TSDT.SALE_CNT) AS SALE_CNT
+								  FROM TB_SL_DAILY_TIME TSDT
+								 WHERE 1=1
+								 <if test='arrStoreCd != null and arrStoreCd != ""'>
+                   				   AND TSDT.STORE_CD IN
+                    			   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        				#{item}
+                    			   </foreach>
+        						 </if>
+								 <if test='compStartDate != null and compStartDate != ""'>
+								   <![CDATA[
+								   AND TSDT.SALE_DATE >= #{compStartDate}
+								   ]]>
+								 </if>
+								 <if test='compEndDate != null and compEndDate != ""'>
+								 	<![CDATA[
+								   AND TSDT.SALE_DATE <= #{compEndDate}
+								   ]]>
+								 </if>
+								 GROUP BY TSDT.SALE_HOUR
+								) A
+						 WHERE LV.LV = A.SALE_HOUR(+)
+						 ORDER BY LV
+						) M
+			   ) M
+		) M
+GROUP BY M.LV
+ORDER BY M.LV
+ <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>

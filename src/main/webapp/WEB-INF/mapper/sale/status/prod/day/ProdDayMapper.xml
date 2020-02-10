@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.status.prod.day.service.impl.ProdDayMapper">
+    <!-- 상품별매출 - 일자별 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : todayBillSaleDtlVO
+        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+    -->
+    <select id="getProdDayList" parameterType="prodDayVO" resultType="DefaultMap">
+        /* USE : ProdDayMapper.getProdDayList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT TMP.PROD_CLASS_CD
+		    , TMPC.T_PROD_CLASS_CD
+		    , TMPCD.PROD_CLASS_NM 
+		    , TMP.PROD_CD
+		    , TMP.PROD_NM
+            , TO_CHAR(TO_DATE(TSDP.SALE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD')  AS SALE_DATE
+		    , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
+		    , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
+		    , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
+		    , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+		  <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM TB_SL_DAILY_PROD TSDP
+		     , TB_MS_PRODUCT TMP
+		     , (SELECT DISTINCT PROD_CLASS_CD
+		     			, CONNECT_BY_ROOT PROD_CLASS_CD AS T_PROD_CLASS_CD
+		          FROM (SELECT PROD_CLASS_CD
+		          				, P_PROD_CLASS_CD 
+		          		FROM TB_MS_PRODUCT_CLASS 
+		          		WHERE STORE_CD IN
+          						<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                       				#{item}
+                   				</foreach> 
+		          )
+		         START WITH P_PROD_CLASS_CD ='00000'
+		         CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+		       ) TMPC
+		     , ( SELECT DISTINCT PROD_CLASS_CD
+		     			, PROD_CLASS_NM 
+		     		FROM TB_MS_PRODUCT_CLASS 
+		     		WHERE STORE_CD IN
+		     					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+										#{item}
+								</foreach>  
+		     	) TMPCD
+		 WHERE TSDP.STORE_CD = TMP.STORE_CD
+		   AND TSDP.PROD_CD = TMP.PROD_CD
+		   AND TMP.PROD_CLASS_CD = TMPC.PROD_CLASS_CD
+		   AND TMPC.T_PROD_CLASS_CD = TMPCD.PROD_CLASS_CD
+		<if test='storeCd != null and storeCd != ""'>
+		   AND TSDP.STORE_CD IN
+			     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+							#{item}
+					</foreach>  
+		</if>
+		<if test='startDate != null and startDate != ""'>
+		   AND TSDP.SALE_DATE >= #{startDate}
+		</if>
+		<if test='endDate != null and endDate != ""'>
+		   AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		</if>
+		<if test='prodDayCd != null and prodDayCd != ""'>
+           AND TMP.PROD_CLASS_CD	IN (
+                                          SELECT
+                                              PROD_CLASS_CD
+                                          FROM
+                                              TB_HQ_PRODUCT_CLASS
+                                          WHERE
+                                              HQ_OFFICE_CD = #{hqOfficeCd}
+                                          START WITH
+                                              PROD_CLASS_CD = #{prodDayCd}
+                                              AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                          CONNECT BY
+                                              PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                              AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
+        </if>
+	    <if test='prodCd != null and prodCd != ""'>
+           AND TMP.PROD_CD	= #{prodCd}
+        </if>
+    	<if test='prodNm != null and prodNm != ""'>
+           AND TMP.PROD_NM	LIKE '%'||#{prodNm}||'%'
+        </if>
+		 GROUP BY TMP.PROD_CLASS_CD, TMPC.T_PROD_CLASS_CD, TMPCD.PROD_CLASS_NM , TMP.PROD_CD, TMP.PROD_NM, TSDP.SALE_DATE 
+ 		 ORDER BY TMP.PROD_CLASS_CD, TSDP.SALE_DATE ASC
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>

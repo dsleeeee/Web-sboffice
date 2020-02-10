@@ -28,7 +28,14 @@
                SELECT tmpc.STORE_CD,
                       tmpc.PROD_CLASS_CD
                  FROM TB_MS_PRODUCT_CLASS tmpc,
-                      TB_NEOE_SPOS_CLS tnsc
+                <choose>
+                    <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                        VITIS.TB_NEOE_SPOS_CLS tnsc
+                    </when>
+                    <otherwise>
+                        TB_NEOE_SPOS_CLS tnsc
+                    </otherwise>
+                </choose>
                 WHERE tnsc.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                   AND tnsc.CD_FLAG2 = 'Y'
                   AND tmpc.STORE_CD = #{storeCd}
@@ -74,7 +81,14 @@
                tnsg.NO_IOLINE,        -- 입고항번
                '예외출고'AS REGIST
       <include refid="CmmSQL.PagingTemplateCount"/>
-          FROM TB_NEOE_STOCK_PROD tnsp,    -- POS 현재수량 테이블
+            <choose>
+                <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                    FROM VITIS.TB_NEOE_STOCK_PROD tnsp, -- POS 현재수량 테이블
+                </when>
+                <otherwise>
+                    FROM TB_NEOE_STOCK_PROD tnsp, -- POS 현재수량 테이블
+                </otherwise>
+            </choose>
                TB_SL_DAILY_PROD tsdp,      -- 일별, 상품별 판매수량 테이블
                (SELECT tnse.CD_COMPANY,
                        tnse.NO_EGR,
@@ -82,10 +96,24 @@
                        tnse.CD_PJT,
                        tnse.CD_ITEM ,
                        max(tnse.QT_IO) keep(DENSE_RANK LAST ORDER BY tnse.NO_EGRLINE) AS QT_IO
-                  FROM TB_NEOE_SPOS_EGR tnse
+                <choose>
+                    <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                        FROM VITIS.TB_NEOE_SPOS_EGR tnse
+                    </when>
+                    <otherwise>
+                        FROM TB_NEOE_SPOS_EGR tnse
+                    </otherwise>
+                </choose>
                  GROUP BY tnse.CD_COMPANY, tnse.NO_EGR, tnse.DT_IO, tnse.CD_PJT, tnse.CD_ITEM
                ) tnse,                      -- 기타출고(예외출고)테이블
-               TB_NEOE_SPOS_GR tnsg,        -- 입고정보 테이블
+                <choose>
+                    <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                        VITIS.TB_NEOE_SPOS_GR tnsg,        -- 입고정보 테이블
+                    </when>
+                    <otherwise>
+                        TB_NEOE_SPOS_GR tnsg,        -- 입고정보 테이블
+                    </otherwise>
+                </choose>
                TB_MS_PRODUCT tmp             -- 상품 테이블(분류정보)
          WHERE 1=1
            AND tnsp.STORE_CD = #{storeCd}
@@ -110,6 +138,7 @@
         </if>
            AND tsdp.STORE_CD (+)= tnsp.STORE_CD
            AND tsdp.PROD_CD (+)= tnsp.PROD_CD
+           AND tsdp.SALE_DATE (+) = tnsp.SALE_DATE
            AND tnse.CD_COMPANY (+)= tnsp.CD_COMPANY
            AND tnse.DT_IO (+)= tnsp.SALE_DATE
            AND tnse.CD_PJT (+)= tnsp.CD_PARTNER
@@ -132,7 +161,14 @@
     -->
     <insert id="deleteExcpForwardProduct" parameterType="excpForwardProductVO" >
         /* USE : ExceptForwardMapper.deleteExcpForwardProduct */
-        INSERT INTO TB_NEOE_SPOS_EGR
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                INSERT INTO VITIS.TB_NEOE_SPOS_EGR
+            </when>
+            <otherwise>
+                INSERT INTO TB_NEOE_SPOS_EGR
+            </otherwise>
+        </choose>
         (
             CD_COMPANY,
             CD_PLANT,
@@ -160,7 +196,14 @@
             #{noEgr},
             (
             SELECT NVL(MAX(NO_EGRLINE ), 0) + 1 AS NO_EGRLINE
-              FROM TB_NEOE_SPOS_EGR tnse
+            <choose>
+                <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                    FROM VITIS.TB_NEOE_SPOS_EGR tnse
+                </when>
+                <otherwise>
+                    FROM TB_NEOE_SPOS_EGR tnse
+                </otherwise>
+            </choose>
              WHERE tnse.CD_COMPANY = #{cdCompany}
                AND tnse.CD_PLANT = #{cdPlant}
                AND tnse.NO_EGR = #{noEgr}
@@ -193,7 +236,14 @@
     -->
     <insert id="saveExcpForwardProduct" parameterType="excpForwardProductVO" >
         /* USE : ExceptForwardMapper.saveExcpForwardProduct */
-        INSERT INTO TB_NEOE_SPOS_EGR
+        <choose>
+            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                INSERT INTO VITIS.TB_NEOE_SPOS_EGR
+            </when>
+            <otherwise>
+                INSERT INTO TB_NEOE_SPOS_EGR
+            </otherwise>
+        </choose>
         (
             CD_COMPANY,
             CD_PLANT,
@@ -221,7 +271,14 @@
             #{noEgr},
             (
             SELECT NVL(MAX(NO_EGRLINE ), 0) + 1 AS NO_EGRLINE
-              FROM TB_NEOE_SPOS_EGR tnse
+            <choose>
+                <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                    FROM VITIS.TB_NEOE_SPOS_EGR tnse
+                </when>
+                <otherwise>
+                    FROM TB_NEOE_SPOS_EGR tnse
+                </otherwise>
+            </choose>
              WHERE tnse.CD_COMPANY = #{cdCompany}
                AND tnse.CD_PLANT = #{cdPlant}
                AND tnse.NO_EGR = #{noEgr}

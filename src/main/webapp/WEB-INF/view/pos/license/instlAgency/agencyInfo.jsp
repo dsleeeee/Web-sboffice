@@ -90,7 +90,7 @@
                     <td><input type="text" id="ai_emailAddr" name="ai_emailAddr" ng-model="ai_emailAddr" class="sb-input w100" maxlength="100"/></td>
                     <%-- 홈페이지주소 --%>
                     <th><s:message code="instlAgency.hmpgAddr" /></th>
-                    <td><input type="text" id="ai_hmpgAddr" name="ai_emailAddr" ng-model="ai_emailAddr" class="sb-input w100" maxlength="100"/></td>
+                    <td><input type="text" id="ai_hmpgAddr" name="ai_hmpgAddr" ng-model="ai_hmpgAddr" class="sb-input w100" maxlength="100"/></td>
                 </tr>
                 <tr>
                     <%-- 주소 --%>
