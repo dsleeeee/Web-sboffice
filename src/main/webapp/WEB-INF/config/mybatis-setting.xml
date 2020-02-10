@@ -510,9 +510,11 @@
     <typeAlias alias="todayGnrlzVO" type="kr.co.solbipos.sale.today.todayGnrlz.service.TodayGnrlzVO"/>
     <typeAlias alias="todayDtlVO" type="kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO"/>
     <typeAlias alias="todayBillSaleDtlVO" type="kr.co.solbipos.sale.today.todayBillSaleDtl.service.TodayBillSaleDtlVO"/>
+
     <typeAlias alias="dayVO" type="kr.co.solbipos.sale.day.day.service.DayVO"/>
     <typeAlias alias="dayOfWeekVO" type="kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO"/>
     <typeAlias alias="monthVO" type="kr.co.solbipos.sale.day.month.service.MonthVO"/>
+    <typeAlias alias="dayPeriodVO" type="kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodVO"/>
 
     <!-- 할인구분별 -->
     <typeAlias alias="dcDcfgVO" type="kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO"/>
@@ -588,8 +590,6 @@
     <typeAlias alias="apprCashBillVO" type="kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO"/>
     <typeAlias alias="apprCoprtnVO" type="kr.co.solbipos.sale.status.appr.coprtn.service.ApprCoprtnVO"/>
 
-    <typeAlias alias="dayPeriodVO" type="kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodVO"/>
-    <typeAlias alias="dayPeriodVO" type="kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodVO"/>
     <!-- 매출 공통팝업-->
     <typeAlias alias="billInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.billInfo.service.BillInfoVO"/>
     <typeAlias alias="payInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.payInfo.service.PayInfoVO"/>
