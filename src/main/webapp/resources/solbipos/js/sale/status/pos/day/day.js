@@ -15,6 +15,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -245,7 +247,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    			storePosCd = $("#posDaySelectPosCd").val();
 	    			storePosNm = $("#posDaySelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

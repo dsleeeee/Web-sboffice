@@ -9,41 +9,46 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="empsale.dayPeriod"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnEmpDayPeriodSearch" ng-click="_broadcast('empDayPeriodCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnEmpDayPeriodSearch" ng-click="_broadcast('empDayPeriodCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
     <table class="searchTbl">
       <colgroup>
-        <col class="w15"/>
-        <col class="w35"/>
-        <col class="w15"/>
-        <col class="w35"/>
-      </colgroup>
+        	<col class="w13"/>
+	        <col class="w37"/>
+	        <col class="w13"/>
+	        <col class="w37"/>
+      	</colgroup>
       <tbody>
       <tr>
-        <%-- 조회일자 --%>
-        <th><s:message code="cmm.search.date"/></th>
-        <td>
-        <div class="sb-select">
-	        <span class="txtIn"><input id="srchEmpDayPeriodStartDate" class="w120px"></span>
-	          <span class="rg">~</span>
-	        <span class="txtIn"><input id="srchEmpDayPeriodEndDate" class="w120px"></span>
-	        <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-                <label for="chkDt">
-                    <s:message code="cmm.all.day" />
-                </label>
-            </span>
-        </div>
-        </td>
-      </tr>
-      
-      <tr>
+	    	<th><s:message code="cmm.search.date" /></th>
+        	<td>
+          	<div class="sb-select">
+       		    <span class="txtIn"><input id="srchEmpDayPeriodStartDate" class="w120px"></span>
+                <span class="rg">~</span>
+                <span class="txtIn"><input id="srchEmpDayPeriodEndDate" class="w120px"></span>
+            	<span class="chk ml10">
+					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	              	<label for="chkDt">
+                		<s:message code="cmm.all.day" />
+              		</label>
+            	</span>
+          	</div>
+        	</td>
+        	<td>
+        		<%-- 판매자 전체보기 --%>
+            	<span class="chk ml10">
+                	<input type="checkbox"  ng-model="isCheckedEmpAll" ng-change="totalEmpDay()" />
+                	<label for="totalEmpDay()">판매자 전체보기</label>
+            	</span>
+        	</td>
+        </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
-        <td>
+        <td colspan="3">
             <%-- 매장선택 모듈 싱글 선택 사용시 include
                param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                             displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -56,7 +61,7 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="empDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
@@ -69,7 +74,7 @@
      <div class="w100 mt10">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='empsale.empsale'/></span>
-         
+
          <%-- 페이지 스케일  --%>
 <!--         <wj-combo-box -->
 <!--                 class="w100px fl" -->
@@ -88,6 +93,7 @@
       <%--위즈모 테이블--%>
       <div class="wj-gridWrap" style="height: 350px;">
         <wj-flex-grid
+          id="empDayPeriodGrid"
           loaded-rows="loadedRows(s,e)"
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -98,10 +104,10 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNm"           width="250" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNo"           width="*"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.billCnt"/>"           binding="billCnt"         width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"     width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"              binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.billCnt"/>"           binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -110,7 +116,7 @@
         <%--// ColumnPicker 사용시 include --%>
       </div>
       <%--//위즈모 테이블--%>
-      
+
       <%--페이지 리스트--%>
       <div class="pageNum mt20">
       	<%-- id --%>
@@ -119,14 +125,14 @@
       <%--//페이지 리스트--%>
      </div>
     </div>
-    
-    
+
+
     <div id="gridDetail" class="w50 fr" style="width:49%;">
      <%-- 코너별 --%>
      <div class="w100 mt10" ng-controller="empDayPeriodDtlCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span>
-         
+
          <%-- 페이지 스케일  --%>
 <!--         <wj-combo-box -->
 <!--                 class="w100px fl" -->
@@ -169,7 +175,7 @@
         <%--// ColumnPicker 사용시 include --%>
       </div>
       <%--//위즈모 테이블--%>
-      
+
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
       	<%-- id --%>

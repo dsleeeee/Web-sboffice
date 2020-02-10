@@ -328,7 +328,14 @@
 									       ) C
 									 WHERE  B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
-									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z WHERE Z.STORE_CD = #{storeCd} AND Z.PROD_CLASS_CD = #{prodClassCd})
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z 
+									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									  	  WHERE Z.STORE_CD IN 
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+									  	  		#{item}
+									  	  	</foreach>
+	                                     </if>   
+									   AND Z.PROD_CLASS_CD = #{prodClassCd})
 									 </if>
 						         ) B
 						  GROUP BY B.PROD_CD
@@ -374,7 +381,14 @@
 									       ) C
 									 WHERE  B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
-									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z WHERE Z.STORE_CD = #{storeCd} AND Z.PROD_CLASS_CD = #{prodClassCd})
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z 
+							             <if test='arrStoreCd != null and arrStoreCd != ""'>
+									  	  WHERE Z.STORE_CD IN 
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+									  	  		#{item}
+									  	  	</foreach>
+	                                     </if>   
+									   		AND Z.PROD_CLASS_CD = #{prodClassCd})
 									 </if>
 						         ) B
 						  GROUP BY B.PROD_CD

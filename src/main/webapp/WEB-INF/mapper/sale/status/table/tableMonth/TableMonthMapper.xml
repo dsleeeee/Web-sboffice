@@ -21,10 +21,10 @@
 				</foreach>
 			  </if>
 			  <if test='startDate != null and startDate != ""'>
-			  	AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
+			  	AND TSDT.SALE_YM <![CDATA[>= ]]> #{startDate}
 			  </if>
 			  <if test='endDate != null and endDate != ""'>
-			  	AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			  	AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
 			  </if>
 
 			<!--   AND TBL_CD in (${sQuery2})

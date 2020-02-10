@@ -29,6 +29,7 @@
     						, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
 		            FROM	TB_SL_DAILY_POS TSDP
 		            WHERE	1 = 1
+		            		AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
                         	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
                         	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
@@ -59,6 +60,7 @@
 		                        AND TSDP.STORE_CD = TSDPP.STORE_CD
 		                        AND TSDP.SALE_DATE = TSDPP.SALE_DATE
 		                        AND TSDP.POS_NO = TSDPP.POS_NO
+		                        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='arrStorePos != null and arrStorePos.length >= 0'>
 	                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
 	                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
@@ -97,6 +99,7 @@
     			AND TSDP.STORE_CD = TSDPP.STORE_CD
     			AND TSDP.SALE_DATE = TSDPP.SALE_DATE
     			AND TSDP.POS_NO = TSDPP.POS_NO
+    			AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
     		<if test='arrStoreCd != null and arrStoreCd != ""'>
                	AND TSDP.STORE_CD IN
                	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -123,7 +126,9 @@
 				, TMP.POS_NM AS POS_NM
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
 		FROM    TB_MS_POS TMP
-		WHERE	1=1
+				, TB_MS_STORE TMS
+		WHERE	TMP.STORE_CD = TMS.STORE_CD
+				AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
                	AND TMP.STORE_CD IN
                	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

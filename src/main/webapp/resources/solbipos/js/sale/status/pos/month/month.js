@@ -12,6 +12,8 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posMonthListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -113,7 +115,18 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posMonthCtrl", function (event, data) {
 
-		$scope.searchPosMonthList();
+		$scope.searchPosMonthList(true);
+
+		var storeCd = $("#posMonthSelectStoreCd").val();
+		var posCd = $("#posMonthSelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posMonthCtrlSrch", function (event, data) {
+
+		$scope.searchPosMonthList(false);
 
 		var storeCd = $("#posMonthSelectStoreCd").val();
 		var posCd = $("#posMonthSelectPosCd").val();
@@ -122,7 +135,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	});
 
 	// 포스별매출월별 리스트 조회
-	$scope.searchPosMonthList = function () {
+	$scope.searchPosMonthList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -130,6 +143,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		params.posNo = $("#posMonthSelectPosCd").val();
 		params.listScale = $scope.posMonthListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -231,7 +245,11 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    			storePosCd = $("#posMonthSelectPosCd").val();
 	    			storePosNm = $("#posMonthSelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

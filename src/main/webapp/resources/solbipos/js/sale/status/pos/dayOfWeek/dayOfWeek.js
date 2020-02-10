@@ -15,6 +15,8 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayOfWeekListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -101,7 +103,18 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayOfWeekCtrl", function (event, data) {
 
-		$scope.searchPosDayOfWeekList();
+		$scope.searchPosDayOfWeekList(true);
+
+		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
+		var posCd = $("#posDayOfWeekSelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayOfWeekCtrlSrch", function (event, data) {
+
+		$scope.searchPosDayOfWeekList(false);
 
 		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
 		var posCd = $("#posDayOfWeekSelectPosCd").val();
@@ -110,7 +123,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	});
 
 	// 포스별매출요일별 리스트 조회
-	$scope.searchPosDayOfWeekList = function () {
+	$scope.searchPosDayOfWeekList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -118,6 +131,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		params.posNo = $("#posDayOfWeekSelectPosCd").val();
 		params.listScale = $scope.posDayOfWeekListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -218,7 +232,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			storePosCd = $("#posDayOfWeekSelectPosCd").val();
 	    			storePosNm = $("#posDayOfWeekSelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

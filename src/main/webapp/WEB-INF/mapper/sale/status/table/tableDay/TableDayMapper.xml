@@ -52,6 +52,7 @@
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
 		FROM    TB_MS_TABLE TMP
 		WHERE	1=1
+		  AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMP.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
 			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
                	AND TMP.STORE_CD IN
                	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

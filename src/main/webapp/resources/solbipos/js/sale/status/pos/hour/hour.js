@@ -15,6 +15,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posHourListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -86,7 +88,18 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posHourCtrl", function (event, data) {
 
-		$scope.searchPosHourList();
+		$scope.searchPosHourList(true);
+
+		var storeCd = $("#posHourSelectStoreCd").val();
+		var posCd = $("#posHourSelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posHourCtrlSrch", function (event, data) {
+
+		$scope.searchPosHourList(false);
 
 		var storeCd = $("#posHourSelectStoreCd").val();
 		var posCd = $("#posHourSelectPosCd").val();
@@ -95,7 +108,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	});
 
 	// 포스별매출일자별 리스트 조회
-	$scope.searchPosHourList = function () {
+	$scope.searchPosHourList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -103,6 +116,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.posNo = $("#posHourSelectPosCd").val();
 		params.listScale = $scope.posHourListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -202,7 +216,11 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posHourSelectPosCd").val();
 	    			storePosNm = $("#posHourSelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

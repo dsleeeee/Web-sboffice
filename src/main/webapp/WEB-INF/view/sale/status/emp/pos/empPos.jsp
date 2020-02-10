@@ -11,12 +11,12 @@
 
 <div id="empPosView" class="subCon" ng-controller="empPosCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="empsale.month"/></a>		
+		<a href="#" class="open fl"><s:message code="empsale.month"/></a>
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empPosCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empPosCtrlSrch')">
     		<s:message code="cmm.search"/>
-    	</button>		
-	</div> 
+    	</button>
+	</div>
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
@@ -51,7 +51,7 @@
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-      	<tr>  
+      	<tr>
            <%-- 매장코드 --%>
          	<th><s:message code="todayBillSaleDtl.store"/></th>
          	<td colspan="3">
@@ -59,10 +59,10 @@
            		<jsp:param name="targetId" value="empPosSelectStore"/>
            	</jsp:include>
              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-         	</td>        	
+         	</td>
       </tr>
       </c:if>
-      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
         	<input type="hidden" id="empPosSelectStoreCd" value="${sessionInfo.storeCd}"/>
       	</c:if>
 		</tbody>
@@ -88,9 +88,9 @@
 	    <button class="btn_skyblue fr" ng-click="excelDownloadEmpPos()"><s:message code="cmm.excel.down" />
 	    </button>
 	</div>
-  
+
 	<%--위즈모 테이블--%>
-    <div class="w100 mt10">   
+    <div class="w100 mt10">
       <div class="wj-gridWrap" style="height: 350px;">
         <wj-flex-grid
           id="empPosGrid"
@@ -107,9 +107,9 @@
           <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>   
+          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
-        
+
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
           <jsp:param name="pickerTarget" value="empPosCtrl"/>
@@ -118,7 +118,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -126,7 +126,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20190125.02" charset="utf-8"></script>

@@ -28,6 +28,23 @@ public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
     @Override
     public List<DefaultMap<String>> getCornerDayPeriodList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO) {
     	cornerDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if (cornerDayPeriodVO.getCornrCd() != null && !"".equals(cornerDayPeriodVO.getCornrCd())) {
+    		String[] arrCornrCd = cornerDayPeriodVO.getCornrCd().split(",");
+
+    		if (arrCornrCd.length > 0) {
+    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+    				cornerDayPeriodVO.setArrCornrCd(arrCornrCd);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = cornerDayPeriodVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				cornerDayPeriodVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
         return cornerDayPeriodMapper.getCornerDayPeriodList(cornerDayPeriodVO);
     }
 

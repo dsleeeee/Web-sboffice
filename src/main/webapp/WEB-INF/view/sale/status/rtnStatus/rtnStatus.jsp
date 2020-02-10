@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnRtnStatusDaySearch" ng-click="_broadcast('rtnStatusDayCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnRtnStatusDaySearch" ng-click="_broadcast('rtnStatusDayCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -38,6 +38,27 @@
             </span>
         </div>
         </td>
+        
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="rtnStatusDaySelectStoreCd" value=""/>
+        <%-- 매장코드 --%>
+        <th><s:message code="todayBillSaleDtl.store"/></th>
+        <td>
+            <%-- 매장선택 모듈 싱글 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                            closeFunc - 팝업 닫기시 호출할 함수
+            --%>
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="rtnStatusDaySelectStore"/>
+            </jsp:include>
+            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+        </td>
+      </c:if>
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+            <input type="hidden" id="rtnStatusDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
+      </c:if>
       </tr>
       </tbody>
     </table>
@@ -58,6 +79,9 @@
                 is-editable="false"
                 initialized="initComboBox(s)">
         </wj-combo-box>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <input type="text" id="rtnStatusDaySelectStoreStoreNum" ng-model="storeNum">
+        </c:if>
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
         </button>

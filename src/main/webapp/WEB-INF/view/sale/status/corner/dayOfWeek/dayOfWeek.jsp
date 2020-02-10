@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.dayOfWeek"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerDayOfWeekSearch" ng-click="_broadcast('cornerDayOfWeekCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerDayOfWeekSearch" ng-click="_broadcast('cornerDayOfWeekCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -25,7 +25,7 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td>
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
             <span class="txtIn"><input id="srchCornerDayOfWeekStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -40,6 +40,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="cornerDayOfWeekSelectCornerCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -79,16 +80,16 @@
     
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-<!--     <wj-combo-box -->
-<!--             class="w100px fl" -->
-<!--             id="cornerDayOfWeekListScaleBox" -->
-<!--             ng-model="cornerDayOfWeekListScale" -->
-<!--             items-source="_getComboData('cornerDayOfWeekListScaleBox')" -->
-<!--             display-member-path="name" -->
-<!--             selected-value-path="value" -->
-<!--             is-editable="false" -->
-<!--             initialized="initComboBox(s)"> -->
-<!--     </wj-combo-box> -->
+    <wj-combo-box
+            class="w100px fl"
+            id="cornerDayOfWeekListScaleBox"
+            ng-model="cornerDayOfWeekListScale"
+            items-source="_getComboData('cornerDayOfWeekListScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="cornerDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
     </c:if>
@@ -124,10 +125,10 @@
     </div>
     
   <%-- 페이지 리스트 --%>
-<!--   <div class="pageNum mt20"> -->
-<!--     <ul id="cornerDayOfWeekCtrlPager" data-size="10"> -->
-<!--     </ul> -->
-<!--   </div> -->
+  <div class="pageNum mt20">
+    <ul id="cornerDayOfWeekCtrlPager" data-size="10">
+    </ul>
+  </div>
   <%--//페이지 리스트--%>
 </div>
 

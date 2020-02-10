@@ -46,8 +46,8 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
 	    dataItem.totSaleAmt 	= messages["store.totSaleAmt"];
 	    dataItem.totDcAmt 		= messages["store.totDcAmt"];
 	    dataItem.realSaleAmt 	= messages["store.realSaleAmt"];
-	    dataItem.openDay  		= messages["store.openDay"];
-	    dataItem.openDayAmt 	= messages["store.openDayAmt"];
+	    dataItem.saleDateCnt  	= messages["store.openDay"];
+	    dataItem.realSaleAmtAvg = messages["store.openDayAmt"];
 	    dataItem.billCnt 		= messages["store.billCnt"];
 	    dataItem.totBillAmt 	= messages["store.totBillAmt"];
 	    dataItem.totGuestCnt 	= messages["store.totGuestCnt"];

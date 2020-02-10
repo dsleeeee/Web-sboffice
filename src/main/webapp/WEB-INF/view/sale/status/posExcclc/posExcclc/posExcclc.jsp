@@ -116,8 +116,8 @@
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header=""        									 binding="hqOfficeCd"       width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="posExcclc.storeCd"/>"        binding="storeCd"          width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="posExcclc.storeNm"/>"        binding="storeNm"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header=""        									 binding="storeCd"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header=""        									 binding="storeNm"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.saleDate"/>"       binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.posNo"/>"          binding="posNo"            width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.closeFg"/>"        binding="closeFgNm"        width="80"  align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>

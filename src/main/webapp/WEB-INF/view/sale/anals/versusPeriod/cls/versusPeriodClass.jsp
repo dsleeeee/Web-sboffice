@@ -74,10 +74,10 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            <%-- 매장코드 --%>
 	          	<th><s:message code="todayBillSaleDtl.store"/></th>
 	          	<td>
-	          	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 	             		<jsp:param name="targetId" value="versusPeriodClassSelectStore"/>
 	            	</jsp:include>
@@ -187,10 +187,10 @@
 
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="realSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	        </wj-flex-grid>

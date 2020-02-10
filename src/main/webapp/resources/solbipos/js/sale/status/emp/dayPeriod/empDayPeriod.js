@@ -40,12 +40,12 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-        	params.storeCd   = $("#empDayPeriodSelectStoreCd").val();
+        	params.storeCd   = selectedRow.storeCd;
         	params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
         	params.empNo     = selectedRow.empNo;
         if (col.binding === "realSaleAmt") { // 영수증번호
-            $scope._broadcast('empDayPeriodDtlCtrl', params);
+            $scope._broadcast('empDayPeriodDtlCtrlSrch', params);
         }
       }
     });
@@ -58,15 +58,33 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayPeriodCtrl", function (event, data) {
-    $scope.searchCornerDayPeriodList();
+
+	if ($("#empDayPeriodSelectStoreCd").val() === '') {
+        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+        return false;
+     }
+	$scope.searchEmpDayPeriodList(true);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기(페이징 초기화)
+  $scope.$on("empDayPeriodCtrlSrch", function (event, data) {
+
+	if ($("#empDayPeriodSelectStoreCd").val() === '') {
+        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+        return false;
+     }
+	$scope.searchEmpDayPeriodList(false);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
-  // 코너별매출일자별 리스트 조회
-  $scope.searchCornerDayPeriodList = function () {
+  // 판매자별 설정기간 리스트 조회
+  $scope.searchEmpDayPeriodList = function (isPageChk) {
   if ($("#empDayPeriodSelectStoreCd").val() === '') {
       $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
       return false;
@@ -76,6 +94,7 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
     var params       = {};
     params.storeCd   = $("#empDayPeriodSelectStoreCd").val();
 //    params.listScale = $scope.empDayPeriodListScale;
+    params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       $scope.startDateForDt = wijmo.Globalize.format($scope.srchEmpDayPeriodStartDate.value, 'yyyyMMdd');
@@ -88,11 +107,11 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
-    // 코너 표시'코너 전체보기' 선택에 따른 params
-    if(!$scope.isAll){
-      params.cornrCd = $scope.cornrCd;
+    if($scope.isCheckedEmpAll){
+    	params.empChk = "Y";
+    }else{
+    	params.empChk = "N";
     }
-
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/status/emp/dayperiod/list.sb", params);
 
@@ -103,6 +122,9 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 		var params		 = {};
 
 		if(rows.length != 0) {
+			console.log()
+			params.startDate = $scope.startDateForDt;
+        	params.endDate   = $scope.endDateForDt;
 			params.storeCd   = rows[0].dataItem.storeCd;
 		    params.empNo     = rows[0].dataItem.empNo;
 	    }
@@ -110,16 +132,8 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 			params.storeCd   = -1;
 		}
 
-	    // 등록일자 '전체기간' 선택에 따른 params
-	    if(!$scope.isChecked){
-	      params.startDate = wijmo.Globalize.format($scope.srchEmpDayPeriodStartDate.value, 'yyyyMMdd');
-	      params.endDate = wijmo.Globalize.format($scope.srchEmpDayPeriodEndDate.value, 'yyyyMMdd');
-	    }else{
-	    	$scope.startDateForDt = "";
-	    	$scope.endDateForDt = "";
-	    }
 	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("empDayPeriodDtlCtrl", params);
+	    $scope._broadcast("empDayPeriodDtlCtrlSrch", params);
 	}
   };
 
@@ -127,11 +141,6 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.isChkDt = function() {
     $scope.srchEmpDayPeriodStartDate.isReadOnly = $scope.isChecked;
     $scope.srchEmpDayPeriodEndDate.isReadOnly = $scope.isChecked;
-  };
-  //전체코너 체크박스 클릭이벤트
-  $scope.totalCornerDayPeriod = function() {
-	  var grid = wijmo.Control.getControl("#srchEmpDayPeriodDisplay");
-	  grid.isReadOnly = $scope.isAll;;
   };
 
   //매장선택 모듈 팝업 사용시 정의
@@ -190,7 +199,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
 	        var col = s.columns[e.col];
-	        if(col.binding === "billNo") { // 실매출
+	        if(col.binding === "billNo") { // 영수증번호
 	        	wijmo.addClass(e.cell, 'wijLink');
 	        	wijmo.addClass(e.cell, 'wj-custom-readonly');
 	        }
@@ -210,7 +219,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	        	params.storeCd   = selectedRow.storeCd;
 	        	params.startDate = selectedRow.saleDate;
 	        	params.endDate   = selectedRow.saleDate;
-	        if (col.binding === "billNo") { // 수량
+	        if (col.binding === "billNo") { // 영수증번호
 	            $scope._broadcast('saleComProdCtrl', params);
 	        }
 	      }
@@ -227,15 +236,29 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 			$scope.empNo     = data.empNo;
 		  }
 
-	    $scope.searchEmpDayPeriodDtlList();
+	    $scope.searchEmpDayPeriodDtlList(true);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+	  
+	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
+	  $scope.$on("empDayPeriodDtlCtrlSrch", function (event, data) {
+		  if(data != undefined){
+			$scope.startDate = data.startDate;
+			$scope.endDate   = data.endDate;
+			$scope.storeCd   = data.storeCd;
+			$scope.empNo     = data.empNo;
+		  }
+
+	    $scope.searchEmpDayPeriodDtlList(false);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
 
 
 	  // 코너별매출일자별 리스트 조회
-	  $scope.searchEmpDayPeriodDtlList = function () {
-	  if ($("#empDayPeriodSelectStoreCd").val() === '') {
+	  $scope.searchEmpDayPeriodDtlList = function (isPageChk) {
+		if ($("#empDayPeriodSelectStoreCd").val() === '') {
 	      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
 	      return false;
 	    }
@@ -247,6 +270,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd   = $scope.storeCd;
 	    params.empNo     = $scope.empNo;
 //	    params.listScale = $scope.empDayPeriodDtlListScale;
+	    params.isPageChk = isPageChk;
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/emp/dayperiod/dtl.sb", params);

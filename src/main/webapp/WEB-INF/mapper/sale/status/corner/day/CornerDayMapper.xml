@@ -52,8 +52,9 @@
       SELECT  TMC.STORE_CD||'||'||TMC.CORNR_CD AS CORNR_CD
             , TMC.CORNR_NM
             , NVL((SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMC.STORE_CD), TMC.STORE_CD) AS STORE_NM
-        FROM    TB_MS_CORNER TMC
-        WHERE   1=1
+        FROM  TB_MS_CORNER TMC
+        WHERE 1 = 1
+          AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMC.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
     ]]>
         <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
             AND TMC.STORE_CD IN
@@ -61,7 +62,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test='arrCornrCd != null and arrCornrCd.length >= 0'>
+         <if test='arrCornrCd != null and arrCornrCd.length >= 0'>
             AND TMC.STORE_CD||'||'||TMC.CORNR_CD IN
             <foreach collection="arrCornrCd" item="item" open="(" close=")" separator=",">
                 #{item}

@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -40,7 +40,7 @@
             </span>
         </div>
         </td>
-        
+
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
@@ -62,15 +62,15 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="posDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
-      
+
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <!-- contents start -->
     <%-- wj grid start --%>
     <div class="subCon wj-TblWrap">
@@ -114,7 +114,7 @@
                       <jsp:param name="pickerTarget" value="posDayPeriodCtrl"/>
                     </jsp:include>
                     <%--// ColumnPicker 사용시 include --%>
-                </div>                  
+                </div>
             </div>
             <%-- 페이지 리스트 --%>
             <div class="pageNum mt20">
@@ -123,7 +123,7 @@
             </div>
             <%--//페이지 리스트--%>
         </div>
-            
+
         <%-- right --%>
         <div class="w50 fr">
         <div class="mt20 oh sb-select dkbr pd10">
@@ -165,7 +165,7 @@
                           <jsp:param name="pickerTarget" value="posDayPeriodDtlCtrl"/>
                         </jsp:include>
                         <%--// ColumnPicker 사용시 include --%>
-                    </div>              
+                    </div>
                    </div>
                 </div>
               <%-- 페이지 리스트 --%>
@@ -174,9 +174,9 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
-        </div>  
+        </div>
     </div>
-    <%-- //wj grid end --%> 
+    <%-- //wj grid end --%>
 <!-- //contents end -->
 </div>
 

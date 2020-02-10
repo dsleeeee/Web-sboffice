@@ -30,6 +30,12 @@
               WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND TSSH.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test='startDate != null and startDate != ""'>
            AND TSSH.SALE_DATE >= #{startDate}
         </if>

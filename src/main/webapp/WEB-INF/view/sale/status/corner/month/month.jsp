@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.month"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerMonthSearch" ng-click="_broadcast('cornerMonthCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerMonthSearch" ng-click="_broadcast('cornerMonthCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -24,8 +24,8 @@
       <tbody>
       <tr>
         <%-- 조회일자 --%>
-        <th><s:message code="cmm.search.date"/></th>
-        <td>
+        <th><s:message code="cmm.search.month"/></th>
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
           <span class="txtIn w110px">
               <wj-input-date
@@ -58,6 +58,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="cornerMonthSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>

@@ -28,10 +28,12 @@
 			  		#{item}
 			  	</foreach>
 			  </if>
+			  <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
    			  <![CDATA[
    			  AND TSDT.SALE_DATE >= #{startDate}
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]>
+   			  </if>
         GROUP BY TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
         ORDER BY TSDT.SALE_DATE DESC, TMT.TBL_CD, TMT.TBL_NM
         <include refid="CmmSQL.PagingTemplateBottom"/>

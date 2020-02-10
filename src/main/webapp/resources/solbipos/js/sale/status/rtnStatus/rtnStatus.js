@@ -45,7 +45,7 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
         	params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
         if (col.binding === "storeNm") { // 매장명
-            $scope._broadcast('rtnStatusDayDtlCtrl', params);
+            $scope._broadcast('rtnStatusDayDtlCtrlSrch', params);
         }
       }
     });
@@ -115,14 +115,21 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStatusDayCtrl", function (event, data) {
-    $scope.searchRtnStatusDayList();
+    $scope.searchRtnStatusDayList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기(페이징 초기화)
+  $scope.$on("rtnStatusDayCtrlSrch", function (event, data) {
+    $scope.searchRtnStatusDayList(false);
+    // 기능수행 종료 : 반드시 추가
+	event.preventDefault();
   });
 
 
   // 코너별매출일자별 리스트 조회
-  $scope.searchRtnStatusDayList = function () {
+  $scope.searchRtnStatusDayList = function (isPageChk) {
 
 	if ($("#rtnStatusDaySelectStoreCd").val() === '') {
       $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
@@ -131,7 +138,9 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
     // 파라미터
     var params       = {};
+    params.storeCd   = $("#rtnStatusDaySelectStoreCd").val();
     params.listScale = $scope.rtnStatusDayListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -156,19 +165,31 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 		var rows = sender.rows;
 		
 		var params		 = {};
-	    params.storeCd   = rows[0].dataItem.storeCd;
-	    params.storeNm   = rows[0].dataItem.storeNm;
-	    
-	    // 등록일자 '전체기간' 선택에 따른 params
-	    if(!$scope.isChecked){
-	      params.startDate = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
-	      params.endDate = wijmo.Globalize.format($scope.srchRtnStatusDayEndDate.value, 'yyyyMMdd');
-	    }
-	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("rtnStatusDayDtlCtrl", params);
+		if(rows.length > 0){
+		    params.storeCd   = rows[0].dataItem.storeCd;
+		    params.storeNm   = rows[0].dataItem.storeNm;
+		    
+		    // 등록일자 '전체기간' 선택에 따른 params
+		    if(!$scope.isChecked){
+		      params.startDate = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
+		      params.endDate = wijmo.Globalize.format($scope.srchRtnStatusDayEndDate.value, 'yyyyMMdd');
+		    }
+		}else{
+			params.storeCd   = -1;
+			params.storeNm	 = "";
+		}
+		// 코너별 매출현황 상세조회.
+	    $scope._broadcast("rtnStatusDayDtlCtrlSrch", params);
 	}
   };
 
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.rtnStatusDaySelectStoreShow = function () {
+    $scope._broadcast('rtnStatusDaySelectStoreCtrl');
+  };
+  
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchRtnStatusDayStartDate.isReadOnly = $scope.isChecked;
@@ -238,14 +259,15 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	        var params       = {};
 	        	params.storeCd   = $scope.storeCd;
 	        	params.saleDate  = selectedRow.saleDate;
+	        	params.isPageChk = false;
 	        if (col.binding === "saleDate") { // 일자
-	            $scope._broadcast('rtnStatusPosDtlCtrl', params);
+	            $scope._broadcast('rtnStatusPosDtlCtrlSrch', params);
 	        }else if(col.binding === "cntY"){
 	        	params.saleYn = "Y";
-	        	$scope._broadcast('rtnStatusPosDtlCtrl', params);
+	        	$scope._broadcast('rtnStatusPosDtlCtrlSrch', params);
 	        }else if(col.binding === "cntN"){
 	        	params.saleYn = "N";
-	        	$scope._broadcast('rtnStatusPosDtlCtrl', params);
+	        	$scope._broadcast('rtnStatusPosDtlCtrlSrch', params);
 	        }
 	      }
 	    });
@@ -322,14 +344,27 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 			$scope.storeCd   = data.storeCd;
 			$scope.storeNm   = data.storeNm;
 		  }
-	    $scope.searchRtnStatusDayDtlList();
+	    $scope.searchRtnStatusDayDtlList(true);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+	  
+	// 다른 컨트롤러의 broadcast 받기
+	  $scope.$on("rtnStatusDayDtlCtrlSrch", function (event, data) {
+		  if(data != undefined){
+			$scope.startDate = data.startDate;
+			$scope.endDate   = data.endDate;
+			$scope.storeCd   = data.storeCd;
+			$scope.storeNm   = data.storeNm;
+		  }
+	    $scope.searchRtnStatusDayDtlList(false);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
 
 
 	  // 코너별매출일자별 리스트 조회
-	  $scope.searchRtnStatusDayDtlList = function () {
+	  $scope.searchRtnStatusDayDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
 //	    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
@@ -337,6 +372,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.endDate   = $scope.endDate;
 	    params.storeCd   = $scope.storeCd;
 	    params.storeNm   = $scope.storeNm;
+	    params.isPageChk	= isPageChk;
 	    $("#strNm").text($scope.storeNm);
 		  
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -347,12 +383,16 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 			var rows = sender.rows;
 			
 			var params		 = {};
-		    params.storeCd   = $scope.storeCd;
-		    params.saleDate  = rows[0].dataItem.saleDate;
-		    
-		    // 반품현황 포스별 상세조회.
+			if(rows.length > 0){
+			    params.storeCd   = $scope.storeCd;
+			    params.saleDate  = rows[0].dataItem.saleDate;
+			}else{
+				params.storeCd   = -1;
+				params.saleDate  = "";
+			}
+			// 반품현황 포스별 상세조회.
 		    if(params.saleDate != "" || params.saleDate != null){
-		    	$scope._broadcast("rtnStatusPosDtlCtrl", params);
+		    	$scope._broadcast("rtnStatusPosDtlCtrlSrch", params);
 		    }
 		}
 	  };
@@ -410,21 +450,36 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 			$scope.saleYn	  = data.saleYn;
 		  }
 		
-	    $scope.searchRtnStatusPosDtlList();
+	    $scope.searchRtnStatusPosDtlList(true);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+	  
+	  
+	  // 다른 컨트롤러의 broadcast 받기
+	  $scope.$on("rtnStatusPosDtlCtrlSrch", function (event, data) {
+		  if(data != undefined){
+			$scope.saleDate   = data.saleDate;
+			$scope.storeCd    = data.storeCd;
+			$scope.saleYn	  = data.saleYn;
+		  }
+		
+	    $scope.searchRtnStatusPosDtlList(false);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
 
 
 	  // 코너별매출일자별 리스트 조회
-	  $scope.searchRtnStatusPosDtlList = function () {
+	  $scope.searchRtnStatusPosDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params          = {};
 //	    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
 	    params.saleDate     = $scope.saleDate;
 	    params.storeCd      = $scope.storeCd;
 	    params.saleYn		= $scope.saleYn;
-	    if($scope.saleDate != "" || $scope.saleDate != null){
+	    params.isPageChk	= isPageChk;
+	    if(params.saleDate != null){
 		    var saleDate	=(""+$scope.saleDate).substring(0,4);
 		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(4,6);
 		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(6,8);

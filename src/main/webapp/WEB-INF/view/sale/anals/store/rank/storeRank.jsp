@@ -102,8 +102,8 @@
           <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
- 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="openDay" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="openDayAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+ 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="realSaleAmtAvg" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
    		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
    		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
    		  <wj-flex-grid-column header="<s:message code="store.totGuestCnt"/>" 	binding="totGuestCnt" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

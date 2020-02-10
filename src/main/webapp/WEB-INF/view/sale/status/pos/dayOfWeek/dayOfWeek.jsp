@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.day"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosDayOfWeekSearch" ng-click="_broadcast('posDayOfWeekCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosDayOfWeekSearch" ng-click="_broadcast('posDayOfWeekCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>

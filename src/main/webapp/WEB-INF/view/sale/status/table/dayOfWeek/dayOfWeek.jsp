@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDayOfWeek.tableDayOfWeekSale"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnTableDayOfWeekSearch" ng-click="_broadcast('tableDayOfWeekCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnTableDayOfWeekSearch" ng-click="_broadcast('tableDayOfWeekCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -47,6 +47,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDayOfWeekSelectStore"/>
 								<jsp:param name="targetTableId" value="tableDayOfWeekSelectTable"/>
+								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>

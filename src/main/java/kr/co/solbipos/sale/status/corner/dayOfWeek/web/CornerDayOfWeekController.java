@@ -21,16 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : TodayBillSaleDtlController.java
- * @Description : 매출관리 > 매출현황 > 영수증별매출상세현황
+ * @Class Name : CornerDayOfWeekController.java
+ * @Description : 매출관리 > 매출현황 > 코너별매출 > 요일별 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2019.02.15  안동관      최초생성
+ * @ 2020.01.13  조동훤      최초생성
  *
- * @author 솔비포스 차세대개발실 안동관
- * @since 2019.02.15
+ * @author 조동훤
+ * @since 2020.01.13
  * @version 1.0
  * @see
  *
@@ -51,26 +51,11 @@ public class CornerDayOfWeekController {
 
 
     /**
-     * 코너별매출 일자별 - 페이지 이동
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  String
-     * @author  조동훤
-     * @since   2020. 01. 13.
-     */
-    @RequestMapping(value = "/dayOfWeek/view.sb", method = RequestMethod.GET)
-    public String cornerDayOfWeekView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "sale/corner/dayOfWeek/dayOfWeek";
-    }
-
-
-    /**
      * 코너별매출 일자별 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDayOfWeeklVO
+     * @param   cornerDayOfWeekVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -81,23 +66,6 @@ public class CornerDayOfWeekController {
         Model model, CornerDayOfWeekVO cornerDayOfWeekVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
-        if (cornerDayOfWeekVO.getCornrCd() != null && !"".equals(cornerDayOfWeekVO.getCornrCd())) {
-    		String[] arrCornrCd = cornerDayOfWeekVO.getCornrCd().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				cornerDayOfWeekVO.setArrCornrCd(arrCornrCd);
-    				cornerDayOfWeekVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = cornerDayOfWeekVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayOfWeekVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
 
         List<DefaultMap<String>> list = cornerDayOfWeekService.getCornerDayOfWeekList(cornerDayOfWeekVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerDayOfWeekVO);

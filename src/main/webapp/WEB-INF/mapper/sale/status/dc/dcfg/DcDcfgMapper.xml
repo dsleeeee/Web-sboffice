@@ -7,6 +7,7 @@
     <select id="getDcDcfgList" parameterType="dcDcfgVO" resultType="DefaultMap">
     	<include refid="CmmSQL.PagingTemplateHeader"/>
     	SELECT STORE.STORE_NM
+    		 , TSDT.STORE_CD
      		 , TSDT.SALE_DATE
      		 , NMCODE.NMCODE_CD AS DC_CD
      		 , NMCODE.NMCODE_NM AS DC_NM
@@ -19,7 +20,7 @@
   		FROM TB_SL_DAILY_TOTAL TSDT
   		   , TB_SL_DAILY_DC TSDD
      	   , TB_MS_STORE STORE
-     	   ,(SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE 
+     	   ,(SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE
        		 WHERE PARENT_CD = '041') NMCODE
  		WHERE TSDT.STORE_CD = TSDD.STORE_CD
    		  AND TSDT.SALE_DATE = TSDD.SALE_DATE
@@ -28,7 +29,13 @@
    		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
    		  	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
    		  </if>
-		  <if test='arrStoreCd != null and arrStoreCd != ""'>
+   		  <if test='arrDcCd != null and arrDcCd.length >= 0'>
+           	AND TSDT.STORE_CD||'||'||TSDD.DC_NM IN
+            <foreach collection="arrDcCd" item="item" open="(" close=")" separator=",">
+               	#{item}
+            </foreach>
+      	  </if>
+		  <!-- <if test='arrStoreCd != null and arrStoreCd != ""'>
 		  	AND TSDT.STORE_CD IN
 		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 		  		#{item}
@@ -36,10 +43,10 @@
 		  </if>
 		  <if test='dcCd != null and dcCd != ""'>
           	AND TSDD.DC_CD = #{dcCd}
-      	  </if>
+      	  </if> -->
     	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getDcDcfgDtlList" parameterType="dcDcfgVO" resultType="DefaultMap">
     	<include refid="CmmSQL.PagingTemplateHeader"/>
     	SELECT TMP.PROD_NM
@@ -64,11 +71,8 @@
    		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
    		  	AND TSSD.SALE_DATE BETWEEN #{startDate} AND #{endDate}
    		  </if>
-		  <if test='arrStoreCd != null and arrStoreCd != ""'>
-		  	AND TSSD.STORE_CD IN
-		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-		  		#{item}
-		  	</foreach>
+		  <if test='storeCd != null and storeCd != ""'>
+		  	AND TSSD.STORE_CD = #{storeCd}
           </if>
 		  <if test='dcCd != null and dcCd != ""'>
           	AND TSSDD.DC_CD = #{dcCd}
@@ -77,9 +81,11 @@
 		ORDER BY TMP.PROD_NM
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getDcNmList" parameterType="dcDcfgVO" resultType="DefaultMap">
-    	SELECT DISTINCT DC.DC_CD NMCODE_CD, NMCODE.NMCODE_NM
+    	SELECT DISTINCT DC.DC_CD DC_CD
+    		 , NMCODE.NMCODE_NM DC_NM
+    		 , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = DC.STORE_CD) AS STORE_NM
 		FROM TB_SL_SALE_DTL_DC DC, TB_CM_NMCODE NMCODE
 		WHERE 1=1
 			  AND DC.DC_CD = NMCODE.NMCODE_CD
@@ -93,5 +99,5 @@
 			  </if>
 		ORDER BY NMCODE.NMCODE_NM
     </select>
-    
+
 </mapper>

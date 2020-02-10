@@ -21,16 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : TodayBillSaleDtlController.java
- * @Description : 매출관리 > 매출현황 > 영수증별매출상세현황
+ * @Class Name : CornerMonthController.java
+ * @Description : 매출관리 > 매출현황 > 코너별매출 > 월별 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2019.02.15  안동관      최초생성
+ * @ 2020.01.13  조동훤      최초생성
  *
- * @author 솔비포스 차세대개발실 안동관
- * @since 2019.02.15
+ * @author 조동훤
+ * @since 2020.01.13
  * @version 1.0
  * @see
  *
@@ -51,26 +51,11 @@ public class CornerMonthController {
 
 
     /**
-     * 코너별매출 일자별 - 페이지 이동
-     * @param   request
-     * @param   response
-     * @param   model
-     * @return  String
-     * @author  조동훤
-     * @since   2020. 01. 13.
-     */
-    @RequestMapping(value = "/month/view.sb", method = RequestMethod.GET)
-    public String cornerMonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return "sale/status/corner/month/month";
-    }
-
-
-    /**
      * 코너별매출 일자별 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDayOfWeeklVO
+     * @param   cornerMonthVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -81,23 +66,6 @@ public class CornerMonthController {
         Model model, CornerMonthVO cornerMonthVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
-        if (cornerMonthVO.getCornrCd() != null && !"".equals(cornerMonthVO.getCornrCd())) {
-    		String[] arrCornrCd = cornerMonthVO.getCornrCd().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				cornerMonthVO.setArrCornrCd(arrCornrCd);
-    				cornerMonthVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = cornerMonthVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerMonthVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
 
         List<DefaultMap<String>> list = cornerMonthService.getCornerMonthList(cornerMonthVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerMonthVO);

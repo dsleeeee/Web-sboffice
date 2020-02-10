@@ -60,10 +60,10 @@
 					(
 						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
 								, TSDPP.PROD_CD AS PROD_CD_TEMP
-		                        , TSDP.TOT_SALE_AMT AS SALE_AMT
-		                        , TSDP.TOT_DC_AMT AS DC_AMT
-		                        , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-		                        , TSDP.SALE_CNT AS SALE_CNT
+		                        , NVL(TSDP.TOT_SALE_AMT, 0) AS SALE_AMT
+		                        , NVL(TSDP.TOT_DC_AMT, 0) AS DC_AMT
+		                        , NVL(TSDP.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+		                        , NVL(TSDP.SALE_CNT, 0) AS SALE_CNT
 		                FROM    TB_SL_DAILY_POS TSDP
 		                        , TB_SL_DAILY_POS_PROD TSDPP
 		                WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD

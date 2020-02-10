@@ -19,7 +19,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	$scope.initGrid = function (s, e) {
 
 		var storeCd = "";
-		$scope.getReTableNmList(storeCd);
+		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("tableDayOfWeekCtrl");
@@ -126,27 +126,45 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 			return false;
 		}
 
-		if ($("#tableDayOfWeekSelectTableCd").val() === '') {
-			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
-			return false;
-		}
+//		if ($("#tableDayOfWeekSelectTableCd").val() === '') {
+//			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
+//			return false;
+//		}
 
-		$scope.searchTableDayOfWeekList();
+		$scope.searchTableDayOfWeekList(true);
 
 		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
 
-		$scope.getReTableNmList(storeCd, tableCd);
+		$scope.getReTableNmList(storeCd, tableCd, true);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("tableDayOfWeekCtrlSrch", function (event, data) {
+
+		if ($("#tableDayOfWeekSelectStoreCd").val() === "") {
+			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
+			return false;
+		}
+
+		$scope.searchTableDayOfWeekList(false);
+
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
+		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
+
+		$scope.getReTableNmList(storeCd, tableCd, true);
 	});
 
 	// 테이블별매출일자별 리스트 조회
-	$scope.searchTableDayOfWeekList = function () {
+	$scope.searchTableDayOfWeekList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
 		params.storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		params.tableCd = $("#tableDayOfWeekSelectTableCd").val();
+		params.hqOfficeCd = $("#hqOfficeCd").val();
 		params.listScale = $scope.tableDayOfWeekListScale; //-페이지 스케일 갯수
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -207,12 +225,19 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		}, 10);
 	};
 
+	//매장의 테이블 리스트 조회
+	$scope.getTableNmList = function () {
+		var storeCd = $("#tableDaySelectStoreCd").val();
+		$scope.getReTableNmList(storeCd, "",  false);
+	};
+
 	//매장의 테이블 리스트 재생성
-	$scope.getReTableNmList = function (storeCd, tableCd) {
+	$scope.getReTableNmList = function (storeCd, tableCd, grindSet) {
 		var url = "/sale/status/table/day/tableNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.tableCd = tableCd;
+	    params.hqOfficeCd = $("#HqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({
@@ -238,7 +263,9 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    			storeTableCd = $("#tableDayOfWeekSelectTableCd").val();
 	    			storeTableNm = $("#tableDayOfWeekSelectTableName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (grindSet) {
+	                    $scope.makeDataGrid();
+	                 }
 	    		}
 	    	}
 	    }, function errorCallback(response) {

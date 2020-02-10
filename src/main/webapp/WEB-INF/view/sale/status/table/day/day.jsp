@@ -5,12 +5,14 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl">
+	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -47,6 +49,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDaySelectStore"/>
 								<jsp:param name="targetTableId" value="tableDaySelectTable"/>
+								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -55,7 +58,6 @@
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 					<input type="hidden" id="tableDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</c:if>
-
 				<input type="hidden" id="tableDaySelectTableCd" value=""/>
 				<input type="hidden" id="tableDaySelectTableName" value=""/>
 				<tr>
@@ -76,7 +78,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="tableDayListScaleBox"
 			ng-model="tableDayListScale"
@@ -85,7 +87,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableDaySelectStoreStoreNum" ng-model="storeNum">
 		</c:if>

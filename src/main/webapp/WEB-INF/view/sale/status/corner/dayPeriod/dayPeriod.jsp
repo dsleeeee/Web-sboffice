@@ -9,7 +9,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.dayPeriod"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerDayPeriodSearch" ng-click="_broadcast('cornerDayPeriodCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerDayPeriodSearch" ng-click="_broadcast('cornerDayPeriodCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -24,7 +24,7 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td>
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
 	        <span class="txtIn"><input id="srchCornerDayPeriodStartDate" class="w120px"></span>
 	          <span class="rg">~</span>
@@ -39,6 +39,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="cornerDayPeriodSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -178,7 +179,7 @@
           <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"            binding="prodCd"           width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"            binding="prodNm"           width="250" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.saleQty"/>"           binding="totSaleQty"       width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>"       binding="realSaleAmt"      width="200" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>"       binding="realSaleAmt"      width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

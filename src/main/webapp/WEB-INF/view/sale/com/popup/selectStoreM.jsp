@@ -59,6 +59,7 @@
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
     var targetId = '${param.targetId}';
     var targetCornerId = '${param.targetCornerId}';
+    var targetTableId = '${param.targetTableId}';
     var targetPosId = '${param.targetPosId}';
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, true));
@@ -130,19 +131,25 @@
       $("#" + targetCornerId + "Cd").val("");
       $("#" + targetCornerId + "Name").val(messages["cmm.all"]);
 
+      $("#" + targetTableId + "Cd").val("");
+      $("#" + targetTableId + "Name").val(messages["cmm.all"]);
+      
       if (cnt == 0) {
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val("");
       }
       else if (cnt == 1) {
         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');

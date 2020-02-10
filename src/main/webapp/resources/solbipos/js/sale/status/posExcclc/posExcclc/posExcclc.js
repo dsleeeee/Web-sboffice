@@ -157,6 +157,11 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // POS 정산내역 리스트 조회
   $scope.searchPosExcclcList = function () {
 
+	if ($("#posExcclcSelectStoreCd").val() === '') {
+		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+		return false;
+	}
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#posExcclcSelectStoreCd").val();

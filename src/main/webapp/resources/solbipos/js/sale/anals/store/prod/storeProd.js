@@ -73,21 +73,21 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
    
   // 상품분류정보 팝업
   $scope.popUpProdDay = function() {
-    var popUp = $scope.prodClassPopUpLayer.show(true, function (s) {
+    var popUp = $scope.prodSLayer.show(true, function (s) {
       // 선택 버튼 눌렀을때만
-      if (s.dialogResult === "wj-hide-apply") {
-        var scope = agrid.getScope('prodClassPopUpCtrl');
-        var prodDayCd = scope.getSelectedClass();
-        var params = {};
-        params.prodClassCd = prodDayCd;
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-          function(response){
-            $scope.prodDayCd = prodDayCd;
-            $scope.prodDayCdNm = response.data.data;
-          }
-        );
-      }
+//      if (s.dialogResult === "wj-hide-apply") {
+//        var scope = agrid.getScope('prodClassPopUpCtrl');
+//        var prodDayCd = scope.getSelectedClass();
+//        var params = {};
+//        params.prodClassCd = prodDayCd;
+//        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+//        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+//          function(response){
+//            $scope.prodDayCd = prodDayCd;
+//            $scope.prodDayCdNm = response.data.data;
+//          }
+//        );
+//      }
     });
   };
   

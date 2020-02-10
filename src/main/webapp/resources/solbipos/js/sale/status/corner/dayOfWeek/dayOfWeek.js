@@ -17,8 +17,8 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 	  
-	  var storeCd = "";
-	  $scope.getReCornerNmList(storeCd);
+	  var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
+	  $scope.getReCornerNmList(storeCd, "", false);
 	  
 
     // picker 사용시 호출 : 미사용시 호출안함
@@ -127,22 +127,37 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerDayOfWeekCtrl", function (event, data) {
-    $scope.searchCornerDayOfWeekList();
+    $scope.searchCornerDayOfWeekList(true);
     
     var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
 	var cornrCd = $("#cornerDayOfWeekSelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd);
+	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
 
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("cornerDayOfWeekCtrlSrch", function (event, data) {
+    if ($("#cornerDayOfWeekSelectStoreCd").val() === '') {
+	  $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+	  return false;
+	}
+	  
+    $scope.searchCornerDayOfWeekList(false);
+    
+    var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
+	var cornrCd = $("#cornerDayOfWeekSelectCornerCd").val();
+
+	$scope.getReCornerNmList(storeCd, cornrCd, true);
+  });
 
   // 코너별매출일자별 리스트 조회
-  $scope.searchCornerDayOfWeekList = function () {
+  $scope.searchCornerDayOfWeekList = function (isPageChk) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#cornerDayOfWeekSelectStoreCd").val();
     params.cornrCd   = $("#cornerDayOfWeekSelectCornerCd").val();
     params.listScale = $scope.cornerDayOfWeekListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -207,16 +222,17 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   //매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
-		$scope.getReCornerNmList(storeCd);
+		$scope.getReCornerNmList(storeCd, "", false);
 	};
 	
 	//매장의 코너 리스트 재생성
-	$scope.getReCornerNmList = function (storeCd, cornrCd) {
+	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
 		var url = "/sale/status/corner/corner/cornerNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.cornrCd = cornrCd;
-
+	    params.hqOfficeCd = $("#HqOfficeCd").val();
+	    
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식
@@ -237,11 +253,14 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 
 	    			$("#cornerDayOfWeekSelectCornerCd").val(arrStoreCornr.join());
 	    			$("#cornerDayOfWeekSelectCornerName").val(arrStoreCornrNm.join());
-
+	    			
 	    			storeCornrCd = $("#cornerDayOfWeekSelectCornerCd").val();
 	    			storeCornrNm = $("#cornerDayOfWeekSelectCornerName").val();
+	    			
+	    			if(gridSet){
+	    				 $scope.makeDataGrid();
+	    			}
 
-	    			$scope.makeDataGrid();
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -261,7 +280,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 		  while(grid.columns.length > 3){
 	            grid.columns.removeAt(grid.columns.length-1);
 	        }
-
+		  
 		  var arrCornrCd = storeCornrCd.split(',');
 		  var arrCornrNm = storeCornrNm.split(',');
 

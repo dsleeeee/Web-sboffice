@@ -15,6 +15,8 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -229,7 +231,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
