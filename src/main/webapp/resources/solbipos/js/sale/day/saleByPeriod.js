@@ -30,6 +30,7 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         // 하위 두번째 탭 셋팅
         $('[name="dayOfWeekView"]').hide();
         $('[name="monthView"]').hide();
+        $('[name="dayPeriodView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayCtrl");
@@ -54,6 +55,7 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         // 하위 두번째 탭 셋팅
         $('[name="dayView"]').hide();
         $('[name="monthView"]').hide();
+        $('[name="dayPeriodView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayOfWeekCtrl");
@@ -78,6 +80,7 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         // 하위 두번째 탭 셋팅
         $('[name="dayView"]').hide();
         $('[name="dayOfWeekView"]').hide();
+        $('[name="dayPeriodView"]').hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("monthCtrl");
@@ -101,6 +104,9 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $('[name="dayOfWeekView"]').hide();
         $('[name="monthView"]').hide();
 
+        // 하위 두번째 탭에 첫번째탭으로 셋팅
+        $scope.setTab1("dayPeriod");
+
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("dayPeriodCtrl");
         scope.flex.refresh();
@@ -115,6 +121,7 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#" + pageName + "TimeTab").removeClass("on");
         $("#" + pageName + "ProdClassTab").removeClass("on");
         $("#" + pageName + "CornerTab").removeClass("on");
+        $("#" + pageName + "TableTab").removeClass("on");
         $("#" + pageName + "PosTab").removeClass("on");
 
         $("#" + pageName + "TotalView").show();
@@ -123,11 +130,34 @@ app.controller('saleByPeriodCtrl', ['$scope', function ($scope) {
         $("#" + pageName + "TimeView").hide();
         $("#" + pageName + "ProdClassView").hide();
         $("#" + pageName + "CornerView").hide();
+        $("#" + pageName + "TableView").hide();
         $("#" + pageName + "PosView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope(pageName + "TotalCtrl");
         scope.flex.refresh();
+    }
+
+    // 각각 상위 탭 클릭 시 하위 맨 처음 탭이 나오도록
+    $scope.setTab1 = function(pageName){
+
+        $("#" + pageName + "TimeTab").addClass("on");
+        $("#" + pageName + "ProdClassTab").removeClass("on");
+        $("#" + pageName + "TableTab").removeClass("on");
+        $("#" + pageName + "CornerTab").removeClass("on");
+        $("#" + pageName + "GiftTab").removeClass("on");
+
+        $("#" + pageName + "TimeView").show();
+        $("#" + pageName + "ProdClassView").hide();
+        $("#" + pageName + "TableView").hide();
+        $("#" + pageName + "CornerView").hide();
+        $("#" + pageName + "GiftView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope(pageName + "TimeCtrl");
+        scope.flex.refresh();
+        var scope2 = agrid.getScope(pageName + "TimeDetailCtrl");
+        scope2.flex.refresh();
     }
 
 }]);

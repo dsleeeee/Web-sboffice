@@ -428,6 +428,7 @@
                         AND tssh.TBL_CD = #{tableCd}
                     ]]>
                 </if>
+                AND tssh.TBL_CD != '000'
             )
             PIVOT
             (

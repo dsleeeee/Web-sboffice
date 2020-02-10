@@ -41,7 +41,7 @@ public class MonthController {
      * @param model
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String MonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String monthView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "sale/day/month/month";
     }
 
@@ -70,7 +70,7 @@ public class MonthController {
     }
 
     /**
-     * 할인구별별탭 - 할인구분별매출조회
+     * 할인구별별탭 - 할인구분별 매출조회
      *
      * @param monthVO
      * @param request
@@ -93,7 +93,7 @@ public class MonthController {
     }
 
     /**
-     * 과면세별탭 - 과면세별매출조회
+     * 과면세별탭 - 과면세별 매출조회
      *
      * @param monthVO
      * @param request
@@ -116,7 +116,7 @@ public class MonthController {
     }
 
     /**
-     * 시간대별 - 시간대별매출조회
+     * 시간대별 - 시간대별 매출조회
      *
      * @param monthVO
      * @param request
@@ -185,7 +185,7 @@ public class MonthController {
     }
 
     /**
-     * 포스별 - 포스별매출조회
+     * 포스별 - 포스별 매출조회
      *
      * @param monthVO
      * @param request

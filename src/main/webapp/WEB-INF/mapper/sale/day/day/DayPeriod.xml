@@ -1,6 +1,352 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.solbipos.sale.day.day.service.impl.DayPeriod">
+<!--
+    DayPeriod.xml
+    기간별매출 > 설정기간별탭
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.01.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.day.dayPeriod.service.impl.DayPeriodMapper">
+
+    <!-- 시간대별탭 - 시간대별 매출조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        COMMENTS : [매출]헤더
+    -->
+    <select id="getDayPeriodTimeList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodTimeList */
+        SELECT
+        SALE_TIME,
+        SUM(BILL_CNT) AS BILL_CNT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
+        SUM(BILL_UPRC) AS BILL_UPRC
+        FROM
+        (
+            SELECT
+            (CASE WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('00','01','02','03','04','05','06') THEN '심야[00~06]'
+                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('07','08','09','10') THEN '아침[07~10]'
+                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('11','12','13','14','15') THEN '점심[11~15]'
+                  WHEN SUBSTR(tssh.REG_DT, 9, 2) IN ('16','17','18','19','20','21','22','23') THEN '저녁[16~23]'
+                  ELSE null END
+            ) AS SALE_TIME,
+            COUNT(tssh.BILL_NO) AS BILL_CNT,
+            SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT,
+            ROUND(SUM(tssh.TOT_SALE_AMT) / COUNT(tssh.BILL_NO)) AS BILL_UPRC
+            FROM TB_SL_SALE_HDR tssh
+            WHERE 1=1
+            AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND tssh.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tssh.REG_DT
+            ORDER BY tssh.REG_DT
+        )
+        GROUP BY SALE_TIME
+    </select>
+
+    <!-- 시간대별탭 - 시간대별 매출상세조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
+        COMMENTS : [매출]상세, [매장]상품
+    -->
+    <select id="getDayPeriodTimeDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodTimeDetailList */
+        SELECT
+        tssd.PROD_CD,
+        tmp.PROD_NM,
+        SUM(tssd.SALE_QTY) AS SALE_QTY,
+        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_SALE_DTL tssd,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND SUBSTR(tssd.REG_DT, 9, 2) IN ( ${saleTime} )
+        AND tmp.STORE_CD (+)= tssd.STORE_CD
+        AND tmp.PROD_CD (+)= tssd.PROD_CD
+        GROUP BY tssd.PROD_CD, tmp.PROD_NM
+        ORDER BY tssd.PROD_CD
+    </select>
+
+    <!-- 상품분류별탭 - 상품분류별 매출조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        COMMENTS : [매출]상세, [매장]상품, [매장]상품_분류
+    -->
+    <select id="getDayPeriodProdClassList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodProdClassList */
+        SELECT
+        tssd1.PROD_CLASS_CD,
+        tssd1.PROD_CLASS_NM,
+        tssd1.SALE_QTY AS SALE_QTY,
+        tssd1.REAL_SALE_AMT AS REAL_SALE_AMT,
+        ROUND(tssd1.REAL_SALE_AMT / tssd2.TOT_REAL_SALE_AMT * 100, 2) AS REAL_SALE_AMT_PER
+        FROM
+        (
+            SELECT
+            tmp.PROD_CLASS_CD,
+            tmpc.PROD_CLASS_NM,
+            SUM(tssd.SALE_QTY) AS SALE_QTY,
+            SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+            FROM TB_SL_SALE_DTL tssd,
+            TB_MS_PRODUCT tmp,
+            TB_MS_PRODUCT_CLASS tmpc
+            WHERE 1=1
+            AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND tssd.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tmp.STORE_CD (+)= tssd.STORE_CD
+            AND tmp.PROD_CD (+)= tssd.PROD_CD
+            AND tmpc.P_PROD_CLASS_CD = '00000'
+            AND tmpc.STORE_CD (+)= tmp.STORE_CD
+            AND tmpc.PROD_CLASS_CD (+)= tmp.PROD_CLASS_CD
+            GROUP BY tmp.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+            ORDER BY tmp.PROD_CLASS_CD
+        ) tssd1,
+        (
+            SELECT
+            SUM(tssd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+            FROM TB_SL_SALE_DTL tssd,
+            TB_MS_PRODUCT tmp,
+            TB_MS_PRODUCT_CLASS tmpc
+            WHERE 1=1
+            AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCds != null and storeCds != ""'>
+                AND tssd.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tmp.STORE_CD (+)= tssd.STORE_CD
+            AND tmp.PROD_CD (+)= tssd.PROD_CD
+            AND tmpc.P_PROD_CLASS_CD = '00000'
+            AND tmpc.STORE_CD (+)= tmp.STORE_CD
+            AND tmpc.PROD_CLASS_CD (+)= tmp.PROD_CLASS_CD
+        ) tssd2
+        WHERE 1=1
+    </select>
+
+    <!-- 상품분류별탭 - 상품분류별 매출상세조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        COMMENTS : [매출]상세, [매장]상품, [매장]상품_분류
+    -->
+    <select id="getDayPeriodProdClassDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodProdClassDetailList */
+        SELECT
+        tssd.PROD_CD,
+        tmp.PROD_NM,
+        SUM(tssd.SALE_QTY) AS SALE_QTY,
+        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_SALE_DTL tssd,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT_CLASS tmpc
+        WHERE 1=1
+        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmp.PROD_CLASS_CD = #{prodClassCd}
+        AND tmp.STORE_CD (+)= tssd.STORE_CD
+        AND tmp.PROD_CD (+)= tssd.PROD_CD
+        AND tmpc.P_PROD_CLASS_CD = '00000'
+        AND tmpc.STORE_CD (+)= tmp.STORE_CD
+        AND tmpc.PROD_CLASS_CD (+)= tmp.PROD_CLASS_CD
+        GROUP BY tssd.PROD_CD, tmp.PROD_NM
+        ORDER BY tssd.PROD_CD
+    </select>
+
+    <!-- 외식테이블별탭 - 외식테이블별 매출조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_MS_TABLE
+        COMMENTS : [매출]헤더, [매장]테이블
+    -->
+    <select id="getDayPeriodTableList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodTableList */
+        SELECT
+        TBL_CD,
+        TBL_NM,
+        COUNT(TBL_CNT) AS TBL_CNT,
+        SUM(TOT_GUEST_CNT) AS TOT_GUEST_CNT,
+        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
+        SUM(TOT_TIP_AMT) AS TOT_TIP_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM
+        (
+            SELECT
+            tssh.TBL_CD,
+            tmt.TBL_NM,
+            --속성
+            --평균점유시간
+            1 AS TBL_CNT,
+            tssh.TOT_GUEST_CNT,
+            tssh.TOT_SALE_AMT,
+            tssh.TOT_DC_AMT,
+            tssh.TOT_TIP_AMT,
+            tssh.REAL_SALE_AMT
+            FROM TB_SL_SALE_HDR tssh,
+            TB_MS_TABLE tmt
+            WHERE 1=1
+            AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                    AND tssh.STORE_CD = #{storeCd}
+                ]]>
+            </if>
+            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tssh.TBL_CD != '000'
+            AND tmt.STORE_CD (+)= tssh.STORE_CD
+            AND tmt.TBL_CD (+)= tssh.TBL_CD
+        )
+        GROUP BY TBL_CD, TBL_NM
+        ORDER BY TBL_CD
+    </select>
+
+    <!-- 코너별탭 - 코너별 매출조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_STORE, TB_MS_CORNER
+        COMMENTS : [매출]상세, [매장]매장 정보, [매장]코너
+    -->
+    <select id="getDayPeriodCornerList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodCornerList */
+        SELECT
+        tssd.STORE_CD,
+        tssd.CORNR_CD,
+        (tms.STORE_NM || '-' || tmc.CORNR_NM) AS STORE_CORNR_NM,
+        SUM(tssd.SALE_QTY) AS SALE_QTY,
+        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_SALE_DTL tssd,
+        TB_MS_STORE tms,
+        TB_MS_CORNER tmc
+        WHERE 1=1
+        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tssd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tssd.CORNR_CD != '00'
+        AND tms.HQ_OFFICE_CD (+)= tssd.HQ_OFFICE_CD
+        AND tms.STORE_CD (+)= tssd.STORE_CD
+        AND tmc.STORE_CD (+)= tssd.STORE_CD
+        AND tmc.CORNR_CD (+)= tssd.CORNR_CD
+        GROUP BY tssd.STORE_CD, tssd.CORNR_CD, tms.STORE_NM, tmc.CORNR_NM
+        ORDER BY tssd.STORE_CD, tssd.CORNR_CD
+    </select>
+
+    <!-- 코너별탭 - 코너별 매출상세조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
+        COMMENTS : [매출]상세, [매장]상품
+    -->
+    <select id="getDayPeriodCornerDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodCornerDetailList */
+        SELECT
+        tssd.PROD_CD,
+        tmp.PROD_NM,
+        SUM(tssd.SALE_QTY) AS SALE_QTY,
+        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_SALE_DTL tssd,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tssd.STORE_CD = #{storeCd}
+        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tssd.CORNR_CD = #{cornrCd}
+        AND tmp.STORE_CD (+)= tssd.STORE_CD
+        AND tmp.PROD_CD (+)= tssd.PROD_CD
+        GROUP BY tssd.PROD_CD, tmp.PROD_NM
+        ORDER BY tssd.PROD_CD
+    </select>
+
+    <!-- 상품권별탭 - 상품권별 매출조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_MS_GIFT, TB_MS_PAY_METHOD_CLASS
+        COMMENTS : [매출]결제_상품권_상세, [매장]상품권, [매장]결제수단분류
+    -->
+    <select id="getDayPeriodGiftList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodGiftList */
+        SELECT
+        tsspgd.STORE_CD,
+        tmg.PAY_CLASS_CD,
+        tmpmc.PAY_CLASS_NM,
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '1' THEN tsspgd.GIFT_QTY ELSE 0 END) AS GIFT_QTY_USE,
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '1' THEN tsspgd.GIFT_UPRC ELSE 0 END) AS GIFT_UPRC_USE,
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '2' THEN tsspgd.GIFT_QTY ELSE 0 END) AS GIFT_QTY_REF,
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '2' THEN tsspgd.GIFT_UPRC ELSE 0 END) AS GIFT_UPRC_REF
+        FROM TB_SL_SALE_PAY_GIFT_DTL tsspgd,
+        TB_MS_GIFT tmg,
+        TB_MS_PAY_METHOD_CLASS tmpmc
+        WHERE 1=1
+        AND tsspgd.HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCds != null and storeCds != ""'>
+            AND tsspgd.STORE_CD IN
+            <foreach collection="storeCdList" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND tsspgd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmg.STORE_CD (+)= tsspgd.STORE_CD
+        AND tmg.GIFT_CD (+)= tsspgd.GIFT_CD
+        AND tmpmc.STORE_CD (+)= tmg.STORE_CD
+        AND tmpmc.PAY_CLASS_CD (+)= tmg.PAY_CLASS_CD
+        GROUP BY tsspgd.STORE_CD, tmg.PAY_CLASS_CD
+        ORDER BY tsspgd.STORE_CD, tmg.PAY_CLASS_CD
+    </select>
+
+    <!-- 상품권별탭 - 상품권별 매출상세조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_MS_GIFT
+        COMMENTS : [매출]결제_상품권_상세, [매장]상품권
+    -->
+    <select id="getDayPeriodGiftDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+        /* DayPeriodMapper.getDayPeriodGiftDetailList */
+        SELECT
+        tsspgd.SALE_DATE,
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tsspgd.STORE_CD) STORE_NM,
+        tsspgd.POS_NO,
+        tsspgd.BILL_NO,
+        tsspgd.SALE_FG,
+        tsspgd.GIFT_PROC_FG,
+        tsspgd.GIFT_CD,
+        tsspgd.GIFT_QTY,
+        tsspgd.GIFT_UPRC
+        FROM TB_SL_SALE_PAY_GIFT_DTL tsspgd,
+        TB_MS_GIFT tmg
+        WHERE 1=1
+        AND tsspgd.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tsspgd.STORE_CD = #{storeCd}
+        AND tsspgd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmg.PAY_CLASS_CD = #{payClassCd}
+        AND tmg.STORE_CD (+)= tsspgd.STORE_CD
+        AND tmg.GIFT_CD (+)= tsspgd.GIFT_CD
+        ORDER BY tsspgd.SALE_DATE, tsspgd.STORE_CD, tsspgd.POS_NO, tsspgd.BILL_NO
+    </select>
+
 </mapper>
