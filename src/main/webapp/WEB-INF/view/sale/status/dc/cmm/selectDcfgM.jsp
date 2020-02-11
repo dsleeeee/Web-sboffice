@@ -135,13 +135,8 @@
         $("#" + targetId + "Nm").val("[" + strDcCd + "] " + strDcNm);
       }
       else if (cnt > 1) {
-    	if(cnt > 10){
-      		alert("할인유형을 10개 이상 선택 할 수 없습니다.");
-      		return;
-      	}else{
-  	        $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
-  	        $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
-      	}
+    	  $("#" + targetId + "Nm").val(strDcNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["dcDcfgDtl.cntDcfg"]);
+	        //$("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };

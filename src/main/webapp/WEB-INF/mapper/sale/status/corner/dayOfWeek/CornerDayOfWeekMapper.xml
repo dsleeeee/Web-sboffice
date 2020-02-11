@@ -12,13 +12,23 @@
     -->
     <select id="getCornerDayOfWeekList" parameterType="cornerDayOfWeekVO" resultType="DefaultMap">
        /* USE : CornerDayOfWeekMapper.getCornerDayOfWeekList */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT TSDCP.SALE_DATE
-              ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
+              ,CASE TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+                                    WHEN '월' THEN 1
+                                    WHEN '화' THEN 2
+                                    WHEN '수' THEN 3
+                                    WHEN '목' THEN 4
+                                    WHEN '금' THEN 5
+                                    WHEN '토' THEN 6
+                                    ELSE 7
+                                END AS DAY_ORDER
               ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT
               ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
               ${sQuery1}
        ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
        <![CDATA[
         FROM TB_SL_DAILY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -42,9 +52,10 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
-        ORDER BY TSDCP.SALE_DATE DESC
+        GROUP BY TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+        ORDER BY DAY_ORDER 
         ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
 </mapper>

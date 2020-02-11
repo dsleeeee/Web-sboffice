@@ -40,7 +40,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="hidden" id="cornerDayOfWeekSelectCornerCd" value=""/>
+        <input type="hidden" id="cornerDayOfWeekSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -71,6 +71,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDayOfWeekSelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerDayOfWeekSelectStore"/>
+                <jsp:param name="closeFunc" value="getCornerNmList"/>
             </jsp:include>
         </td>
       </tr>
@@ -80,16 +81,16 @@
     
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
-    <wj-combo-box
-            class="w100px fl"
-            id="cornerDayOfWeekListScaleBox"
-            ng-model="cornerDayOfWeekListScale"
-            items-source="_getComboData('cornerDayOfWeekListScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-    </wj-combo-box>
+<!--     <wj-combo-box -->
+<!--             class="w100px fl" -->
+<!--             id="cornerDayOfWeekListScaleBox" -->
+<!--             ng-model="cornerDayOfWeekListScale" -->
+<!--             items-source="_getComboData('cornerDayOfWeekListScaleBox')" -->
+<!--             display-member-path="name" -->
+<!--             selected-value-path="value" -->
+<!--             is-editable="false" -->
+<!--             initialized="initComboBox(s)"> -->
+<!--     </wj-combo-box> -->
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="cornerDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
     </c:if>
@@ -125,10 +126,10 @@
     </div>
     
   <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <ul id="cornerDayOfWeekCtrlPager" data-size="10">
-    </ul>
-  </div>
+<!--   <div class="pageNum mt20"> -->
+<!--     <ul id="cornerDayOfWeekCtrlPager" data-size="10"> -->
+<!--     </ul> -->
+<!--   </div> -->
   <%--//페이지 리스트--%>
 </div>
 

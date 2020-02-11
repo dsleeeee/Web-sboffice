@@ -58,6 +58,7 @@
 				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 					<input type="hidden" id="tableDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</c:if>
+
 				<input type="hidden" id="tableDaySelectTableCd" value=""/>
 				<input type="hidden" id="tableDaySelectTableName" value=""/>
 				<tr>
@@ -68,6 +69,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableDaySelectTable"/>
 							<jsp:param name="targetStoreId" value="tableDaySelectStore"/>
+							<jsp:param name="closeFunc" value="getTableNmList"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>

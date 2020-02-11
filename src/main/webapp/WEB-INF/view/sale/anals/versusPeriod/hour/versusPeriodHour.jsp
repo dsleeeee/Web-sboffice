@@ -11,7 +11,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.hour"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodHourCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodHourCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>

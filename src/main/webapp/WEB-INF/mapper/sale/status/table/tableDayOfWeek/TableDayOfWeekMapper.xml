@@ -6,13 +6,20 @@
 
 	<select id="getTableDayOfWeekList"
 		parameterType="tableDayOfWeekVO" resultType="DefaultMap">
-		<include refid="CmmSQL.PagingTemplateHeader" />
-		SELECT TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
-				, SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
-				, SUM(REAL_SALE_CNT) TOT_REAL_SALE_CNT
-				, SUM(GUEST_CNT_1) TOT_GUEST_CNT
+		SELECT 	TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
+				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+    				WHEN '월' THEN 1
+    				WHEN '화' THEN 2
+    				WHEN '수' THEN 3
+    				WHEN '목' THEN 4
+    				WHEN '금' THEN 5
+    				WHEN '토' THEN 6
+    				ELSE 7
+    			END AS DAY_ORDER
+				, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+				, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+				, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
 				${sQuery1}
-				<include refid="CmmSQL.PagingTemplateCount" />
 		FROM TB_SL_DAILY_TABLE TSDT
 		WHERE 1 = 1
 		<!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
@@ -33,9 +40,16 @@
    			  AND TSDT.SALE_DATE >= #{startDate}
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]> -->
-		GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY')
-		ORDER BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') DESC
-		<include refid="CmmSQL.PagingTemplateBottom" />
+		GROUP BY TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+		ORDER BY CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+    				WHEN '월' THEN 1
+    				WHEN '화' THEN 2
+    				WHEN '수' THEN 3
+    				WHEN '목' THEN 4
+    				WHEN '금' THEN 5
+    				WHEN '토' THEN 6
+    				ELSE 7
+    			END
 	</select>
 
 	<select id="getStoreTableList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">

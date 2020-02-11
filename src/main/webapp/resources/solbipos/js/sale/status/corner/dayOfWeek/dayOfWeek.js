@@ -12,7 +12,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   $scope.srchCornerDayOfWeekEndDate   = wcombo.genDateVal("#srchCornerDayOfWeekEndDate", gvEndDate);
 
   //조회조건 콤보박스 데이터 Set
-  $scope._setComboData("cornerDayOfWeekListScaleBox", gvListScaleBoxData);
+//  $scope._setComboData("cornerDayOfWeekListScaleBox", gvListScaleBoxData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -53,8 +53,9 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
     			arrStore.push(temp[0]);
     			arrCornr.push(temp[1]);
     		}
-        	params.startDate = selectedRow.saleDate;
-        	params.endDate   = selectedRow.saleDate;
+        	params.startDate = $scope.startDateForDt;
+        	params.endDate   = $scope.endDateForDt;
+        	params.yoil	 	 = selectedRow.yoil;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
             	params.storeCd	 = arrStore;
             	params.cornrCd	 = arrCornr;
@@ -150,17 +151,20 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
 
-  // 코너별매출일자별 리스트 조회
+  // 코너별매출 요일별 리스트 조회
   $scope.searchCornerDayOfWeekList = function (isPageChk) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#cornerDayOfWeekSelectStoreCd").val();
     params.cornrCd   = $("#cornerDayOfWeekSelectCornerCd").val();
-    params.listScale = $scope.cornerDayOfWeekListScale; //-페이지 스케일 갯수
+//    params.listScale = $scope.cornerDayOfWeekListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
+      $scope.startDateForDt = wijmo.Globalize.format($scope.srchCornerDayOfWeekStartDate.value, 'yyyyMMdd');
+      $scope.endDateForDt = wijmo.Globalize.format($scope.srchCornerDayOfWeekEndDate.value, 'yyyyMMdd');	
+		
 	  params.startDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchCornerDayOfWeekEndDate.value, 'yyyyMMdd');
 	}
@@ -222,7 +226,8 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   //매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDayOfWeekSelectStoreCd").val();
-		$scope.getReCornerNmList(storeCd, "", false);
+		var cornrCd = $("#cornerDayOfWeekSelectCornerCd").val();
+		$scope.getReCornerNmList(storeCd, cornrCd, false);
 	};
 	
 	//매장의 코너 리스트 재생성

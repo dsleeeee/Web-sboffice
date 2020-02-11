@@ -96,9 +96,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.startDate = selectedRow.saleDate;
-	    		params.endDate = selectedRow.saleDate;
-	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
+	    		params.startDate = selectedRow.saleYm + '01';
+	    		params.endDate = selectedRow.saleYm + '31';
 	    		var storeTable   = $("#tableMonthSelectTableCd").val().split(",");
 	    		var arrStore= [];
 	    		var arrTbl= [];
@@ -124,11 +123,6 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
 			return false;
 		}
-
-//		if ($("#tableMonthSelectTableCd").val() === '') {
-//			$scope._popMsg(messages["tableMonth.selectTable"]); // 테이블을 선택해주세요.
-//			return false;
-//		}
 
 		$scope.searchTableMonthList(true);
 
@@ -167,8 +161,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchTableMonthStartDate.value, 'yyyyMMdd');
-			params.endDate = wijmo.Globalize.format($scope.srchTableMonthEndDate.value, 'yyyyMMdd');
+			params.startDate = wijmo.Globalize.format($scope.srchTableMonthStartDate, 'yyyyMM');
+	    	params.endDate = wijmo.Globalize.format($scope.srchTableMonthEndDate, 'yyyyMM');
 		}
 
 		if(params.startDate > params.endDate){
@@ -226,8 +220,11 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	//매장의 테이블 리스트 조회
 	$scope.getTableNmList = function () {
+
 		var storeCd = $("#tableDaySelectStoreCd").val();
-		$scope.getReTableNmList(storeCd, "",  false);
+		var tableCd = $("#tableDaySelectTableCd").val();
+
+		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};
 
 	//매장의 테이블 리스트 재생성

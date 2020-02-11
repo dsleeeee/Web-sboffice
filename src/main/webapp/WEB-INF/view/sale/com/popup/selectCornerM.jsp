@@ -107,7 +107,7 @@
       var strStoreNm = "";
       var strCornrNm = "";
       var cnt        = 0;
-
+      
       $("#" + targetId + "Cd").val("");
       $("#" + targetId + "Name").val("");
 
@@ -127,11 +127,12 @@
       $("#" + targetId + "Cd").val(arrCornrCd.join());
       $("#" + targetId + "Name").val(arrCornrNm.join());
       if (cnt == 0) {
-    	$("#" + targetId + "Cd").val(arrCornrCd.join());
+//     	$("#" + targetId + "Cd").val(arrCornrCd.join());
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }
       else if (cnt == 1) {
-        $("#" + targetId + "Nm").val("[" + strCornrCd + "] " + strCornrNm);
+    	var strCornrCd = strCornrCd.split("||");
+        $("#" + targetId + "Nm").val("[" + strCornrCd[0] + "] " + strCornrNm);
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strCornrNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["corner.cornerSelect"]);

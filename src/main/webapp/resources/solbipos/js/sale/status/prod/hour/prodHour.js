@@ -124,13 +124,20 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("prodHourCtrl", function (event, data) {
-        $scope.searchProdHourList();
+        $scope.searchProdHourList(true);
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-
+    
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prodHourCtrlSrch", function (event, data) {
+        $scope.searchProdHourList(false);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+    
     // 시간별 리스트 조회
-    $scope.searchProdHourList = function () {
+    $scope.searchProdHourList = function (isPageChk) {
         $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
        
         // 파라미터
@@ -145,6 +152,8 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
         params.storeCd = $scope.searchedStoreCd;
         params.saleTime = $scope.saleTime;
+        params.listScale = $scope.prodHourlistScale; //-페이지 스케일 갯수
+        params.isPageChk = isPageChk;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/prod/hour/list.sb", params, function() {});

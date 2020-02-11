@@ -68,13 +68,22 @@
 	                           		, TB_MS_STORE TMS
 	                         WHERE TSDP.STORE_CD = TMS.STORE_CD 
 	                           AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
-	                           AND TSDP.SALE_DATE >= #{startDate}
-					  		   AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+	                           <if test='startDate != null and startDate != ""'>
+	                           		AND TSDP.SALE_DATE >= #{startDate}
+	                           </if>
+	                           <if test='endDate != null and endDate != ""'>
+					  		   		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+					  		   </if>
+
 	                         GROUP BY TSDP.STORE_CD, TSDP.PROD_CD, TMS.STORE_NM
 	                  ) M
+	                  WHERE 1 = 1
 				    <if test='chkProdAll != "Y"'>
-					  WHERE M.RN = 1          
+					  AND M.RN = 1          				  
 					</if>
+					<if test='prodCd != null and prodCd != ""'>
+   					  AND M.PROD_CD = #{prodCd}
+   					</if>
            ) C
 		WHERE B.STORE_CD = C.STORE_CD
 		AND B.PROD_CD = C.PROD_CD

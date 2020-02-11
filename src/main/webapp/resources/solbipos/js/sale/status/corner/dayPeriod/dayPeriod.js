@@ -18,7 +18,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
   $scope.initGrid = function (s, e) {
 	  
 	  var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
-	  $scope.getReCornerNmList(storeCd, "", false);
+	  $scope.getReCornerNmList(storeCd);
 	  
 
     // picker 사용시 호출 : 미사용시 호출안함
@@ -47,10 +47,10 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
           	  params.chkPop   = "tablePop";
               params.cornrCd   = selectedRow.cornrCd;
               params.storeCd   = selectedRow.storeCd;
-              params.startDate = $scope.startDateForDt;
-              params.endDate   = $scope.endDateForDt;
+//              params.startDate = $scope.startDateForDt;
+//              params.endDate   = $scope.endDateForDt;
           if (col.binding === "realSaleAmt") { // 실매출
-            $scope._broadcast('cornerDayPeriodDtlCtrl', params);
+            $scope._broadcast('cornerDayPeriodDtlCtrlSrch', params);
           }
         }
     });
@@ -69,7 +69,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
 	var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd, true);
+//	$scope.getReCornerNmList(storeCd, cornrCd); // -------------------------------------??
   });
   
   // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
@@ -83,11 +83,11 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
 	var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd, true);
+//	$scope.getReCornerNmList(storeCd, cornrCd); // -------------------------------------??
   });
 
 
-  // 코너별매출일자별 리스트 조회
+  // 코너별매출 설정기간별 리스트 조회
   $scope.searchCornerDayPeriodList = function (isPageChk) {
     // 파라미터
     var params       = {};
@@ -135,7 +135,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
         	params.cornrCd = -1;
         }
         // 코너별 매출현황 상세조회.
-        $scope._broadcast("cornerDayPeriodDtlCtrl", params);
+        $scope._broadcast("cornerDayPeriodDtlCtrlSrch", params);
     }
   };
 
@@ -187,7 +187,8 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
   //매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
-		$scope.getReCornerNmList(storeCd, "", false);
+		var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
+		$scope.getReCornerNmList(storeCd, cornrCd);
 	};
 	
 	//매장의 코너 리스트 재생성
@@ -256,32 +257,34 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	  
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("cornerDayPeriodDtlCtrl", function (event, data) {
-		$scope.startDate = data.startDate;
-		$scope.endDate   = data.endDate;
-		$scope.storeCd   = data.storeCd;
-		$scope.cornrCd   = data.cornrCd;
-		$scope.clearYn   = data.clear;
-		
-	    $scope.searchCornerDayPeriodDtlList();
+		 		
+	    $scope.searchCornerDayPeriodDtlList(true);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
 
-
+	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
+	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {
+		$scope.storeCd   = data.storeCd;
+		$scope.cornrCd   = data.cornrCd;
+		
+	    $scope.searchCornerDayPeriodDtlList(false);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+	  
 	  // 코너별매출일자별 리스트 조회
-	  $scope.searchCornerDayPeriodDtlList = function () {
+	  $scope.searchCornerDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
-	    params.startDate = $scope.startDate;
-	    params.endDate   = $scope.endDate;
+	    params.startDate = $scope.startDateForDt;
+	    params.endDate   = $scope.endDateForDt;
 	    params.storeCd   = $scope.storeCd;
 	    params.cornrCd   = $scope.cornrCd;
-		if($scope.clearYn != "Y"){
-			// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		    $scope._inquirySub("/sale/status/corner/corner/dtl.sb", params);
-		}else{
-			$scope.flex.refresh();
-		}
+	    params.isPageChk = isPageChk;
+	    
+	    $scope._inquirySub("/sale/status/corner/corner/dtl.sb", params);
+		$scope.flex.refresh();
 	  };
 	  
 	//엑셀 다운로드

@@ -184,7 +184,7 @@
         COMMENTS : 매출공통팝업 - 판매자별 매출현황 팝업
     -->
     <select id="getEmpPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
-        /* USE : SaleComPopupMapper.getProdPopList */
+        /* USE : SaleComPopupMapper.getEmpPopList */
 		SELECT TMP.PROD_CLASS_CD
 				, TMPC.T_PROD_CLASS_CD
 				, TMPCD.PROD_CLASS_NM
@@ -276,8 +276,8 @@
 		                 )
 		       GROUP BY TSSD.STORE_CD, TSSD.PROD_CD
 		       ) M
-	 	WHERE M.STORE_CD = TMP.STORE_CD
-	   	AND M.PROD_CD = TMP.PROD_CD
+	 	WHERE M.STORE_CD = TMP.STORE_CD(+)
+	   	AND M.PROD_CD = TMP.PROD_CD(+)
 	  	AND TMP.PROD_CLASS_CD = TMPC.PROD_CLASS_CD
 	   	AND TMPC.T_PROD_CLASS_CD = TMPCD.PROD_CLASS_CD
     </select>
@@ -532,5 +532,49 @@
 		<if test='endDate != null and endDate != ""'>
 			AND TNNPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
+    </select>
+    
+    <!-- 매출공통팝업 - 상품선택(대분류) 팝업 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 상품선택(대분류) 팝업
+    -->
+    <select id="getClassProdList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getClassProdList */
+		SELECT DISTINCT PROD_CLASS_CD
+				, PROD_CLASS_NM
+  		FROM TB_HQ_PRODUCT_CLASS
+		WHERE P_PROD_CLASS_CD = '00000' 
+   		AND HQ_OFFICE_CD = #{hqOfficeCd}
+ 		ORDER BY PROD_CLASS_CD
+    </select>
+    
+    <!-- 매출공통팝업 - 상품선택(상품) 팝업 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
+        PARAM    : saleComPopupVO
+        COMMENTS : 매출공통팝업 - 상품선택(상품) 팝업
+    -->
+    <select id="getProdList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getProdList */
+		SELECT THP.PROD_CD
+				, THP.PROD_NM
+				, THPC.*
+  		FROM TB_HQ_PRODUCT THP
+     		, (SELECT PROD_CLASS_CD, CONNECT_BY_ROOT PROD_CLASS_CD AS T_PROD_CLASS_CD
+          		FROM (SELECT PROD_CLASS_CD, P_PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
+         		START WITH P_PROD_CLASS_CD ='00000'
+        		CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+       			) THPC
+ 		WHERE THP.PROD_CLASS_CD = THPC.PROD_CLASS_CD
+   		AND THPC.T_PROD_CLASS_CD = #{prodClassCd}
+   		<if test='srchProdCd != null and srchProdCd != ""'>
+   			AND THP.PROD_CD = #{srchProdCd}
+   		</if>
+   		<if test='srchProdNm != null and srchProdNm != ""'>
+   			AND THP.PROD_NM = #{srchProdNm}
+   		</if>
+ 		ORDER BY THP.PROD_CD
     </select>
 </mapper>

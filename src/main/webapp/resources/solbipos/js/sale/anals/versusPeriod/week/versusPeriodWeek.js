@@ -40,6 +40,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
+    dataItem.lvNm      = messages["versusPeriod.day"];
     dataItem.saleDateCntA      = messages["versusPeriod.period"];
     dataItem.realSaleAmtA  = messages["versusPeriod.period"];
     dataItem.saleCntA    = messages["versusPeriod.period"];
@@ -97,13 +98,20 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("versusPeriodWeekCtrl", function (event, data) {
-    $scope.searchVersusPeriodWeekList();
+    $scope.searchVersusPeriodWeekList(true);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("versusPeriodWeekCtrlSrch", function (event, data) {
+    $scope.searchVersusPeriodWeekList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 주간대비 리스트 조회
-  $scope.searchVersusPeriodWeekList = function () {
+  $scope.searchVersusPeriodWeekList = function (isPageChk) {
 
     if ($("#versusPeriodWeekSelectStoreCd").val() === '') {
       $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
@@ -117,6 +125,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
     params.compStartDate = wijmo.Globalize.format($scope.srchCompStartDate.value, 'yyyyMMdd');
     params.compEndDate = wijmo.Globalize.format($scope.srchCompEndDate.value, 'yyyyMMdd');
     params.storeCd   = $("#versusPeriodWeekSelectStoreCd").val();
+    params.isPageChk = isPageChk;
 
     /*// 조회일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -217,7 +226,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));
 
-	    return diff;
+	    return diff + 1;
 	}
 
 }]);

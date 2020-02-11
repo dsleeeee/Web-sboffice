@@ -60,6 +60,7 @@
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
             <input type="hidden" id="cornerDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
+      <input type="hidden" id="" value=" :: "/>
                 <input type="hidden" id="cornerDaySelectCornerCd" value=""/>
                 <input type="hidden" id="cornerDaySelectCornerName" value=""/>
       </tr>
@@ -71,6 +72,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDaySelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerDaySelectStore"/>
+                <jsp:param name="closeFunc" value="getCornerNmList"/>
             </jsp:include>
         </td>
       </tr>

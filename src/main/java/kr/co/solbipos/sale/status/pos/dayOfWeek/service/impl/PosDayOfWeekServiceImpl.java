@@ -43,7 +43,9 @@ public class PosDayOfWeekServiceImpl implements PosDayOfWeekService {
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPosNmList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO) {
-		posDayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		if (sessionInfoVO.getHqOfficeCd() != null && !"".equals(sessionInfoVO.getHqOfficeCd())) {
+			posDayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		}
 		return posDayOfWeekMapper.getPosNmList(posDayOfWeekVO);
 	}
 

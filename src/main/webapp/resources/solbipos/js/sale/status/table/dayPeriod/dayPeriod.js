@@ -43,9 +43,9 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        params.storeCd  = $scope.storeCd;
-        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+//        console.log(selectedRow);
+        params.storeCd  = selectedRow.storeCd;
+        params.saleDate = selectedRow.saleDate;
         params.tblCd   = selectedRow.tblCd;
 
         if (col.binding === "realSaleAmt") { //실매출 클릭
@@ -64,7 +64,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("tableDayPeriodCtrl", function (event, data) {
 
-	$scope.searchTableDayList(null, null, true);
+	$scope.searchTableDayPeriodList(null, null, true);
     event.preventDefault();
 
   });
@@ -72,13 +72,18 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("tableDayPeriodCtrlSrch", function (event, data) {
 
-	$scope.searchTableDayList(null, null, false);
+	if ($("#tableDayPeriodSelectStoreCd").val() === '') {
+		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+		return false;
+	}
+
+	$scope.searchTableDayPeriodList(null, null, false);
     event.preventDefault();
 
   });
 
   // 테이블별 설정기간 리스트 리스트 조회
-  $scope.searchTableDayList = function (s, e, isPageChk) {
+  $scope.searchTableDayPeriodList = function (s, e, isPageChk) {
 
 	if ($("#tableDayPeriodSelectStoreCd").val() === '') {
 	    $scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
@@ -98,12 +103,12 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
 
     //등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
-		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate.value, 'yyyyMMdd');
+		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
+	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
 	}
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params);
+    $scope._inquirySub("/sale/status/table/dayperiod/list.sb", params);
 
   };
 

@@ -11,7 +11,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>		
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodDayCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodDayCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>		
 		</div> 
@@ -86,7 +86,7 @@
 		    <wj-combo-box
 		      class="w100px fl"
 		      id="prodDaylistScaleBox"
-		      ng-model="listScale"
+		      ng-model="prodDaylistScale"
 		      control="listScaleCombo"
 		      items-source="_getComboData('prodDaylistScaleBox')"
 		      display-member-path="name"

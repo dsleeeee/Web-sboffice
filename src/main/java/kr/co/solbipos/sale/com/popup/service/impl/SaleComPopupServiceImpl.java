@@ -85,4 +85,22 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	
         return null;
     }
+    
+    /** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+    	
+    	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		return saleComPopupMapper.getClassProdList(saleComPopupVO);
+    }
+    
+    /** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+    	
+    	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		return saleComPopupMapper.getProdList(saleComPopupVO);
+    }
 }

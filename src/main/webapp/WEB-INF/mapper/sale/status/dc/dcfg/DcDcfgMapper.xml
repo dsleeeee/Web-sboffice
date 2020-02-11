@@ -29,8 +29,14 @@
    		  <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
    		  	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
    		  </if>
-   		  <if test='arrDcCd != null and arrDcCd.length >= 0'>
-           	AND TSDT.STORE_CD||'||'||TSDD.DC_NM IN
+   		  <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+           	AND TSDT.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+               	#{item}
+            </foreach>
+      	  </if>
+      	  <if test='arrDcCd != null and arrDcCd.length >= 0'>
+           	AND TSDD.DC_CD IN
             <foreach collection="arrDcCd" item="item" open="(" close=")" separator=",">
                	#{item}
             </foreach>

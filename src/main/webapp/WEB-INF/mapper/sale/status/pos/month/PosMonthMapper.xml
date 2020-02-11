@@ -128,7 +128,9 @@
 		FROM    TB_MS_POS TMP
 				, TB_MS_STORE TMS
 		WHERE	TMP.STORE_CD = TMS.STORE_CD
+			<if test='hqOfficeCd != null and hqOfficeCd != ""'>
 				AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+			</if>
 			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
                	AND TMP.STORE_CD IN
                	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

@@ -32,7 +32,9 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
         	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
         }
-
+    	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        }
         return dcDcfgMapper.getDcDcfgList(dcDcfgVO);
     }
 

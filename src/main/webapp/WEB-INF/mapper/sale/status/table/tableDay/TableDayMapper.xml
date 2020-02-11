@@ -7,9 +7,9 @@
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT SALE_DATE SALE_DATE
        		, TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
-       		, SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
-       		, SUM(REAL_SALE_CNT) TOT_REAL_SALE_CNT
-       		, SUM(GUEST_CNT_1) TOT_GUEST_CNT
+       		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+       		, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+       		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
        		${sQuery1}
      	<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_SL_DAILY_TABLE TSDT

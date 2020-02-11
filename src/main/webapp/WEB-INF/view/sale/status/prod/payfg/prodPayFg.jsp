@@ -11,7 +11,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.fayfg"/></a>		
     		<%-- 조회 --%>
-    		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodPayFgCtrl')">
+    		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodPayFgCtrlSrch')">
     			<s:message code="cmm.search"/>
     		</button>		
 		</div> 
@@ -72,7 +72,7 @@
 		    <wj-combo-box
 		      class="w100px fl"
 		      id="prodPayFglistScaleBox"
-		      ng-model="listScale"
+		      ng-model="prodPayFglistScale"
 		      control="listScaleCombo"
 		      items-source="_getComboData('prodPayFglistScaleBox')"
 		      display-member-path="name"

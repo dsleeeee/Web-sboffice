@@ -97,8 +97,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.startDate = selectedRow.saleDate;
-	    		params.endDate = selectedRow.saleDate;
+	    		params.saleDate = selectedRow.saleDate;
 	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
 	    		var storeTable   = $("#tableDaySelectTableCd").val().split(",");
 	    		var arrStore= [];
@@ -121,8 +120,8 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayCtrl", function (event, data) {
 
-		if ($("#tableDaySelectTableCd").val() === '') {
-			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
+		if ($("#tableDaySelectStoreCd").val() === '') {
+			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
 			return false;
 		}
 
@@ -137,8 +136,8 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayCtrlSrch", function (event, data) {
 
-		if ($("#tableDaySelectTableCd").val() === '') {
-			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
+		if ($("#tableDaySelectStoreCd").val() === '') {
+			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
 			return false;
 		}
 
@@ -223,7 +222,8 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	//매장의 테이블 리스트 조회
 	$scope.getTableNmList = function () {
 		var storeCd = $("#tableDaySelectStoreCd").val();
-		$scope.getReTableNmList(storeCd, "",  false);
+		var tableCd = $("#tableDaySelectTableCd").val();
+		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};
 
 	//매장의 테이블 리스트 재생성

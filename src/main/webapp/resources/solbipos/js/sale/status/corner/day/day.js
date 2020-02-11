@@ -223,7 +223,8 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDaySelectStoreCd").val();
-		$scope.getReCornerNmList(storeCd, "", false);
+		var cornrCd = $("#cornerDaySelectCornerCd").val();
+		$scope.getReCornerNmList(storeCd, cornrCd, false);
 	};
 	
 	//매장의 코너 리스트 재생성

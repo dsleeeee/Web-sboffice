@@ -10,7 +10,7 @@
         COMMENTS : 매장별매출분석 - 매장순위 리스트를 조회한다.
     -->
     <select id="getStoreBrandList" parameterType="storeBrandVO" resultType="DefaultMap">
-
+		<include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT TSDT.STORE_CD
      		 , TMS.STORE_NM
      		 , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
@@ -19,6 +19,7 @@
      		 , SUM(TSDT.SALE_CNT) AS SALE_CNT
      		 , ROUND(RATIO_TO_REPORT(SUM(TSDT.REAL_SALE_AMT)) OVER() *100, 1) AS RAT_REAL_SALE_AMT
      		 , ROUND(RATIO_TO_REPORT(SUM(TSDT.SALE_CNT)) OVER() *100, 1) AS RAT_CNT
+     		 <include refid="CmmSQL.PagingTemplateCount"/>
   		FROM TB_MS_STORE TMS
      	   , TB_SL_DAILY_TOTAL TSDT
  		WHERE TMS.STORE_CD = TSDT.STORE_CD
@@ -34,9 +35,10 @@
    		</if>
  	 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
  	 ORDER BY TMS.STORE_NM
- 	 
+ 	 <include refid="CmmSQL.PagingTemplateBottom"/>
+
     </select>
-	
+
 	<!-- 매장별매출분석 - 결제수단 컬럼 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE

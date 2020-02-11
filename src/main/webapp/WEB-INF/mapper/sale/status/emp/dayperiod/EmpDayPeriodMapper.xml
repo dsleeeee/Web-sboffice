@@ -12,6 +12,7 @@
 		     , M.EMP_NM
 		     , M.BILL_CNT
 		     , M.REAL_SALE_AMT
+	   <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_MS_STORE TMS
 		     , (
 		        SELECT TSDE.STORE_CD
@@ -19,7 +20,6 @@
 		             , TSDE.EMP_NM
 		             , SUM(TSDE.BILL_CNT) AS BILL_CNT
 		             , SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
 				FROM TB_SL_DAILY_EMPLOYEE TSDE
 				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
 				<if test='arrStoreCd != null and arrStoreCd != ""'>

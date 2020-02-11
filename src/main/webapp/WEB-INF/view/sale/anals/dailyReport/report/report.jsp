@@ -95,7 +95,7 @@
 		<%--<span class="fl bk lh30"><s:message code='dailyReport.sl'/></span> <%-- 매출종합 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.sl'/></a>
 		</div>
-		<div class="div_sl">
+		<div class="div_SL">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_sl
@@ -139,7 +139,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.pay'/></span>	<%-- 결제수단 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.pay'/></a>
 		</div>
-		<div class="div_pay">
+		<div class="div_PAY">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_pay
@@ -192,7 +192,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.nsl'/></span>	<%-- 비매출종합 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.nsl'/></a>
 		</div>
-		<div class="div_nsl">
+		<div class="div_NSL">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_nsl
@@ -233,7 +233,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.npay'/></span>	<%-- 비매출 결제수단 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.npay'/></a>
 		</div>
-		<div class="div_npay">
+		<div class="div_NPAY">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_npay
@@ -269,7 +269,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.pos'/></span>	<%-- 포스정산 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.pos'/></a>
 		</div>
-		<div class="div_pos">
+		<div class="div_POS">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_pos
@@ -307,7 +307,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.emp'/></span>	<%-- 판매원별 매출  --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.emp'/></a>
 		</div>
-		<div class="div_emp">
+		<div class="div_EMP">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_emp
@@ -349,7 +349,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.dc'/></span>	<%-- 할인내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.dc'/></a>
 		</div>
-		<div class="div_dc">
+		<div class="div_DC">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_dc
@@ -387,7 +387,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.dcdtl'/></span>	<%-- 할인상세내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.dcdtl'/></a>
 		</div>
-		<div class="div_dcdtl">
+		<div class="div_DCDTL">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_dcdtl
@@ -425,7 +425,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.gift'/></span>	<%-- 상품권 판매 및 회수내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.gift'/></a>
 		</div>
-		<div class="div_gift">
+		<div class="div_GIFT">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_gift
@@ -471,7 +471,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.order'/></span>	<%-- 수발주내역 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.order'/></a>
 		</div>
-		<div class="div_order">
+		<div class="div_ORDER">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_lv1
@@ -510,7 +510,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv1'/></span>	<%-- 대분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv1'/></a>
 		</div>
-		<div class="div_lv1">
+		<div class="div_LV1">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_lv1
@@ -546,7 +546,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv2'/></span>	<%-- 중분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv2'/></a>
 		</div>
-		<div class="div_lv2">
+		<div class="div_LV2">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_lv2
@@ -582,7 +582,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.lv3'/></span>	<%-- 소분류별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.lv3'/></a>
 		</div>
-		<div class="div_lv3">
+		<div class="div_LV3">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_lv3
@@ -618,7 +618,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.prod'/></span>	<%-- 상품별 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.prod'/></a>
 		</div>
-		<div class="div_prod">
+		<div class="div_PROD">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden; height:300px;">
 	            <wj-flex-grid	#grid_prod
@@ -652,7 +652,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.compt'/></span>	<%-- 경쟁사 매출 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.compt'/></a>
 		</div>
-		<div class="div_compt">
+		<div class="div_COMPT">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_prod
@@ -683,7 +683,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.appr'/></span>	<%-- 승인현황 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.appr'/></a>
 		</div>
-		<div class="div_appr">
+		<div class="div_APPR">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_appr
@@ -745,7 +745,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.membr'/></span>	<%-- 회원 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.membr'/></a>
 		</div>
-		<div class="div_membr">
+		<div class="div_MEMBR">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_prod
@@ -783,7 +783,7 @@
         <%--<span class="fl bk lh30"><s:message code='dailyReport.work'/></span>	<%-- 근태관리 --%>
         	<a href="#" class="open fl"><s:message code='dailyReport.work'/></a>
 		</div>
-		<div class="div_work">
+		<div class="div_WORK">
 	    <div class="w100 mt10 mb20">
 	        <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
 	            <wj-flex-grid	#grid_work

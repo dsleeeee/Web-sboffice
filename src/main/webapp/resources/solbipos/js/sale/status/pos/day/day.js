@@ -20,7 +20,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#posDaySelectStoreCd").val();
 		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -105,7 +105,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.chkPop	= "empPop";
+	    		params.chkPop	= "tablePop";
 	    		params.storeCd   = $("#posDaySelectStoreCd").val();
 	    		params.saleDate   = selectedRow.saleDate;
 	    		if (col.binding === "totSaleCnt") { // 수량합계
@@ -222,6 +222,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.PosNo = posCd;
+	    params.hqOfficeCd = $("#posDaySelectHqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({

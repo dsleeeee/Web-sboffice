@@ -96,10 +96,9 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		//params.saleDay    = selectedRow.saleDay;
 	    		params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
 				params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
-	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
+	    		params.saleDay    = selectedRow.saleDay;
 	    		var storeTable   = $("#tableDayOfWeekSelectTableCd").val().split(",");
 	    		var arrStore= [];
 	    		var arrTbl= [];
@@ -125,11 +124,6 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
 			return false;
 		}
-
-//		if ($("#tableDayOfWeekSelectTableCd").val() === '') {
-//			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
-//			return false;
-//		}
 
 		$scope.searchTableDayOfWeekList(true);
 
@@ -227,8 +221,11 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 
 	//매장의 테이블 리스트 조회
 	$scope.getTableNmList = function () {
+
 		var storeCd = $("#tableDaySelectStoreCd").val();
-		$scope.getReTableNmList(storeCd, "",  false);
+		var tableCd = $("#tableDaySelectTableCd").val();
+
+		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};
 
 	//매장의 테이블 리스트 재생성

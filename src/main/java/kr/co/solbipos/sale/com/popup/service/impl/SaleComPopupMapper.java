@@ -45,4 +45,10 @@ public interface SaleComPopupMapper {
     
 	/** 매출공통팝업 - 승인현황(매장현황) 팝업(비매출현금) */
     List<DefaultMap<String>> getNcashApprPopList(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
+    List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
+    List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO);
 }

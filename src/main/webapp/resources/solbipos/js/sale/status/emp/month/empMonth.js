@@ -114,15 +114,30 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
      }
 	  
-	 $scope.getEmpNmList();    
-	 $scope.searchEmpMonthList();
+	 $scope.getEmpNmList(true);    
+	 $scope.searchEmpMonthList(true);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("empMonthCtrlSrch", function (event, data) {
+	  
+     if ($("#empMonthSelectStoreCd").val() === '') {
+        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+        return false;
+     }
+	  
+	 $scope.getEmpNmList(false);    
+	 $scope.searchEmpMonthList(false);
 
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
   // 판매자월별 리스트 조회
-  $scope.searchEmpMonthList = function () {
+  $scope.searchEmpMonthList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -140,7 +155,8 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
     }else{
     	params.empChk = "N";
     }
-    
+	params.isPageChk = isPageChk;
+	params.listScale = $scope.empMonthlistScale; //-페이지 스케일 갯수
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/emp/month/list.sb", params, function() {});
 
@@ -159,8 +175,11 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 	  	// 파라미터
 	  	var params       = {};	  	  	
 	  	params.storeCd   = $("#empMonthSelectStoreCd").val();
-	  	params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
-	  	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+	  	
+	  	if(!$scope.isChecked){
+		  	params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
+		  	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+	  	}
 	  
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";

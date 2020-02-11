@@ -21,7 +21,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('storeFglistScaleBox', gvListScaleBoxData);
-	  
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeFgCtrl");
 
@@ -29,7 +29,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
     // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -84,21 +84,24 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       }
     }
   }
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeFgCtrl", function (event, data) {
-    $scope.searchStoreFgList();
+    $scope.searchStoreFgList(true);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("storeFgCtrlSrch", function (event, data) {
+    $scope.searchStoreFgList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
   // 매장형태별 매출 리스트 조회
-  $scope.searchStoreFgList = function () {
-  if ($("#storeFgSelectProdCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
+  $scope.searchStoreFgList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -106,13 +109,14 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   //  params.endDate = wijmo.Globalize.format($scope.srchStoreFgEndDate.value, 'yyyyMMdd');
     params.prodCd   = $("#storeFgSelectProdCd").val();
     params.listScale = $scope.listScale; //-페이지 스케일 갯수
-    
+    params.isPageChk = isPageChk;
+
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStoreFgStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchStoreFgEndDate.value, 'yyyyMMdd');
     }
-    
+
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
@@ -121,7 +125,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     if(!$scope.isAll){
       params.storeFg = $scope.storeFg;
     }
-	  
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/anals/store/fg/list.sb", params);
   };
@@ -131,19 +135,27 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.srchStoreFgStartDate.isReadOnly = $scope.isChecked;
     $scope.srchStoreFgEndDate.isReadOnly = $scope.isChecked;
   };
-  
+
   // 전체 매장구분 체크박스 클릭이벤트
   $scope.totalStoreFg = function() {
 	  var grid = wijmo.Control.getControl("#srchStoreFgDisplay");
 	  grid.isReadOnly = $scope.isAll;;
   };
-  
-  //상품선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.storeFgSelectProdShow = function () {
-    $scope._broadcast('storeFgSelectProdCtrl');
+
+  // 상품분류정보 팝업
+  $scope.popUpProd = function() {
+    var params = {};
+    params.gubun = "StoreFg";
+    //조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._broadcast('prodStrl', params);
   };
+  
+  // 상품분류정보 선택취소
+  $scope.delProd = function(){
+    $scope.prodCd = "";
+    $scope.prodCdNm = "";
+    $scope.prodCalssCd = "";
+  }
 
   //엑셀 다운로드
   $scope.excelDownloadStoreFg = function () {
@@ -167,7 +179,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       });
     }, 10);
   };
-  
+
   //조회조건 매장구분 리스트 조회
   $scope.getStoreFgComboList = function () {
     var url             = '/sale/anals/store/fg/storeFgComboList.sb';

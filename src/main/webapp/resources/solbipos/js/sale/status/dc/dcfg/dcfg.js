@@ -83,7 +83,15 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.startDate = wijmo.Globalize.format($scope.srchDcDcfgStartDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format($scope.srchDcDcfgEndDate.value, 'yyyyMMdd');
     params.storeCd   = $("#dcDcfgSelectStoreCd").val();
-    params.dcCd = $scope.dcCd;
+//    var storeDcfg   = $("#dcDcfgSelectStoreCd").val().split(",");
+//	var arrStore= [];
+//	var arrDcfg= [];
+//	for(var i=0; i < storeDcfg.length; i++) {
+//		var temp = storeDcfg[i].split("||");
+//		arrStore.push(temp[0]);
+//		arrDcfg.push(temp[1]);
+//	}
+    params.dcCd = $("#dcDcfgSelectDcfgCd").val();
     params.listScale = $scope.dcDcfgListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 

@@ -20,7 +20,8 @@
          FROM TB_MS_CORNER TMC
               , TB_SL_DAILY_CORNR_PROD TSDCP 
               , TB_MS_STORE TMS
-         WHERE TMC.CORNR_CD(+) = TSDCP.CORNR_CD
+         WHERE TMC.STORE_CD = TSDCP.STORE_CD
+          AND TMC.CORNR_CD = TSDCP.CORNR_CD
           AND TSDCP.HQ_OFFICE_CD = #{hqOfficeCd} 
           AND TSDCP.STORE_CD = TMS.STORE_CD
 	    <if test='arrStoreCd != null and arrStoreCd != ""'>

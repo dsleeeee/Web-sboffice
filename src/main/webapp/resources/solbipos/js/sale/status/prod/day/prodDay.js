@@ -30,13 +30,20 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodDayCtrl", function (event, data) {
-    $scope.searchProdDayList();
+    $scope.searchProdDayList(true);
     // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
+//    event.preventDefault();
   });
-
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodDayCtrlSrch", function (event, data) {
+    $scope.searchProdDayList(false);
+    // 기능수행 종료 : 반드시 추가
+//    event.preventDefault();
+  });
+  
   // 상품매출순위 리스트 조회
-  $scope.searchProdDayList = function () {
+  $scope.searchProdDayList = function (isPageChk) {
 
     if ($("#pordDaySelectStoreCd").val() === '') {
       $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
@@ -48,6 +55,8 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.storeCd   = $("#pordDaySelectStoreCd").val();
     params.prodCd    = $("#srchDayProdCd").val();
     params.prodNm    = $("#srchDayProdNm").val();
+    params.listScale = $scope.prodDaylistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){

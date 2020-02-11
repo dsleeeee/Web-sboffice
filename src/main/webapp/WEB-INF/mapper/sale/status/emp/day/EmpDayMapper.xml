@@ -45,6 +45,7 @@
 		    ) A
     	WHERE 1 = 1
     	GROUP BY A.SALE_DATE
+    	ORDER BY A.SALE_DATE
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
@@ -75,8 +76,12 @@
 	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         	#{item}
                     	</foreach> 
-	                  AND Z.SALE_DATE >= #{startDate}          
-	                  AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate} 
+                      <if test='startDate != null and startDate != ""'>
+                          AND Z.SALE_DATE >= #{startDate}          
+	                  </if>
+	                  <if test='endDate != null and endDate != ""'>
+	                      AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate} 
+	                  </if>
 	                )
           </if>
     </select>

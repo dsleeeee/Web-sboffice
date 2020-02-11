@@ -11,7 +11,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.week"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodWeekCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodWeekCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>
@@ -111,6 +111,7 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.day"/>" 	binding="lvNm" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntA" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>

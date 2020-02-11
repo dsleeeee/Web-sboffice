@@ -150,8 +150,11 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#empPosSelectStoreCd").val();
-    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    
+    if(!$scope.isChecked){
+	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    }
 
     params.isPageChk = isPageChk;
 
@@ -190,9 +193,12 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	  	// 파라미터
 	  	var params       = {};
 	  	params.storeCd   = $("#empPosSelectStoreCd").val();
-	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-
+	  	
+	  	if(!$scope.isChecked){
+		    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	  	}
+	    
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";
 	    }else{

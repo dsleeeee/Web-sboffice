@@ -20,7 +20,8 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#posProdSelectStoreCd").val();
+
 		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -88,16 +89,27 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosCtrl", function (event, data) {
 
-		$scope.searchPosProdList();
+		$scope.searchPosProdList(true);
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
 
 		$scope.getRePosNmList(storeCd, posCd);
 	});
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("prodPosCtrlSrch", function (event, data) {
 
+		$scope.searchPosProdList(false);
+
+		var storeCd = $("#posProdSelectStoreCd").val();
+		var posCd = $("#posProdSelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+	
 	// 포스별매출상품별 리스트 조회
-	$scope.searchPosProdList = function () {
+	$scope.searchPosProdList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -105,6 +117,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.posNo = $("#posProdSelectPosCd").val();
 		params.listScale = $scope.posProdListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){

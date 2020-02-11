@@ -74,8 +74,12 @@
 	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         	#{item}
                     	</foreach> 
-	                  AND TO_CHAR(TO_DATE(Z.SALE_DATE), 'YYYYMM') >= #{startDate}          
-	                  AND TO_CHAR(TO_DATE(Z.SALE_DATE), 'YYYYMM') <![CDATA[<= ]]>  #{endDate} 
+                      <if test='startDate != null and startDate != ""'>
+	                    AND TO_CHAR(TO_DATE(Z.SALE_DATE), 'YYYYMM') >= #{startDate}
+	                  </if>
+	                  <if test='endDate != null and endDate != ""'>
+	                    AND TO_CHAR(TO_DATE(Z.SALE_DATE), 'YYYYMM') <![CDATA[<= ]]>  #{endDate}
+	                  </if>
 	                )
           </if>
     </select>

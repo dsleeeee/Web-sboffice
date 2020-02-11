@@ -14,7 +14,10 @@ public class StoreProdVO extends PageVO {
     private String chkSort;
     /** 상품상세보기 */
     private String chkProdAll;
-    
+    /** 대분류상품코드 */
+    private String prodCalssCd;
+    /** 상품코드 */
+    private String prodCd;
     /**
      * @return the hqOfficeCd
      */
@@ -57,6 +60,22 @@ public class StoreProdVO extends PageVO {
 
 	public void setChkProdAll(String chkProdAll) {
 		this.chkProdAll = chkProdAll;
+	}
+
+	public String getProdCalssCd() {
+		return prodCalssCd;
+	}
+
+	public void setProdCalssCd(String prodCalssCd) {
+		this.prodCalssCd = prodCalssCd;
+	}
+
+	public String getProdCd() {
+		return prodCd;
+	}
+
+	public void setProdCd(String prodCd) {
+		this.prodCd = prodCd;
 	}
 	
 }

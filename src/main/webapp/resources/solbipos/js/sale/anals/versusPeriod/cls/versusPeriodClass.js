@@ -122,7 +122,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         	params.prodClassCd   = selectedRow.lv3Cd;
 
         if (col.binding === "lv3Nm") { // 3단계 분류
-          $scope._broadcast('versusPeriodClassDtlCtrl', params);
+          $scope._broadcast('versusPeriodClassDtlCtrlSrch', params);
         }
       }
     });
@@ -134,8 +134,8 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
          $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
          return false;
     }
-	  
-    $scope.searchProdDayList();
+
+    $scope.searchProdDayList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -267,7 +267,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 		}
 
 	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("versusPeriodClassDtlCtrl", params);
+	    $scope._broadcast("versusPeriodClassDtlCtrlSrch", params);
 	}
 
   };
@@ -403,7 +403,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));
 
-	    return diff;
+	    return diff + 1;
 	};
 }]);
 
@@ -486,7 +486,22 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("versusPeriodClassDtlCtrl", function (event, data) {
 
-	  if(data != undefined){
+	  $scope.searchVersusPeriodClassDtlList(true, data);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  $scope.$on("versusPeriodClassDtlCtrlSrch", function (event, data) {
+
+	  $scope.searchVersusPeriodClassDtlList(false, data);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 주간대비 리스트 조회
+  $scope.searchVersusPeriodClassDtlList = function (isPageChk, data) {
+
+	  if(data != undefined && data.storeCd != -1){
 		  $scope.startDate = data.startDate;
 		  $scope.endDate   = data.endDate;
 		  $scope.compStartDate = data.compStartDate;
@@ -501,14 +516,6 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 		  $scope.srchCompEndDate = [data.compEndDate.slice(0, 4), "-", data.compEndDate.slice(4, 6), "-", data.compEndDate.slice(6, 8)].join('');
 	  }
 
-	  $scope.searchVersusPeriodClassDtlList();
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
-  });
-
-  // 주간대비 리스트 조회
-  $scope.searchVersusPeriodClassDtlList = function () {
-
 	  var params       = {};
 	  params.startDate = $scope.startDate;
 	  params.endDate = $scope.endDate;
@@ -517,6 +524,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	  params.storeCd   = $scope.storeCd;
 	  params.brandCd = $scope.brandCd;
 	  params.prodClassCd = $scope.prodClassCd;
+      params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
@@ -558,7 +566,9 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 
   //두개의 날짜를 비교하여 차이를 알려준다.
   $scope.dateDiff = function(_date1, _date2) {
+	  var diff;
 
+	  if(_date1 != undefined && _date2 != undefined ){
 	    var date1 = [_date1.slice(0, 4), "-", _date1.slice(4, 6), "-", _date1.slice(6, 8)].join('');
 	    var date2 = [_date2.slice(0, 4), "-", _date2.slice(4, 6), "-", _date2.slice(6, 8)].join('');
 
@@ -568,10 +578,12 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	    diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
 	    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
 
-	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
+	    diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));
 
-	    return diff;
+
+	  }
+	  return diff + 1;
 	}
 
 }]);

@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.month"/></a>		
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empMonthCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empMonthCtrlSrch')">
     		<s:message code="cmm.search"/>
     	</button>		
 	</div> 
@@ -91,7 +91,7 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="empMonthlistScaleBox"
-	      ng-model="listScale"
+	      ng-model="empMonthlistScale"
 	      control="listScaleCombo"
 	      items-source="_getComboData('empMonthlistScaleBox')"
 	      display-member-path="name"

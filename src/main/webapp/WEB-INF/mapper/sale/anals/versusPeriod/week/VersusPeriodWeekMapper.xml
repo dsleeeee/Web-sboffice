@@ -11,9 +11,7 @@
 		화면 PAGE : 89P
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
-	<include refid="CmmSQL.PagingTemplateHeader"/>
 	SELECT LV_NM, M.*
-	<include refid="CmmSQL.PagingTemplateCount"/>
   FROM (
   	      SELECT LEVEL LV, DECODE(LEVEL,1,'일',2,'월',3,'화',4,'수',5,'목',6,'금',7,'토') LV_NM
 		    FROM DUAL CONNECT BY LEVEL <![CDATA[<= 7]]>
@@ -136,7 +134,6 @@
        ) M
 WHERE LV.LV = M.LV
 ORDER BY LV.LV
-<include refid="CmmSQL.PagingTemplateBottom"/>
 
     </select>
 

@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.dayofweek"/></a>		
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayOfWeekCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayOfWeekCtrlSrch')">
     		<s:message code="cmm.search"/>
     	</button>		
 	</div> 
@@ -72,7 +72,7 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="empDayOfWeeklistScaleBox"
-	      ng-model="listScale"
+	      ng-model="empDayOfWeeklistScale"
 	      control="listScaleCombo"
 	      items-source="_getComboData('empDayOfWeeklistScaleBox')"
 	      display-member-path="name"

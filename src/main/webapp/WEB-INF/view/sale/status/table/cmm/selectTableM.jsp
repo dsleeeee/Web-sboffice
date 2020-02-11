@@ -134,7 +134,8 @@
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }
       else if (cnt == 1) {
-        $("#" + targetId + "Nm").val("[" + strTableCd + "] " + strTableNm);
+		var storeTable = strTableCd.split("||");
+        $("#" + targetId + "Nm").val("[" + storeTable[1] + "] " + strTableNm);
       }
       else if (cnt > 1) {
 	    $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);

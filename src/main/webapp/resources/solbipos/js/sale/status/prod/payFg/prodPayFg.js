@@ -30,13 +30,20 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodPayFgCtrl", function (event, data) {
-    $scope.searchProdPayFgList();
+    $scope.searchProdPayFgList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodPayFgCtrlSrch", function (event, data) {
+    $scope.searchProdPayFgList(false);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  }); 
+  
   // 상품매출순위 리스트 조회
-  $scope.searchProdPayFgList = function () {
+  $scope.searchProdPayFgList = function (isPageChk) {
 
     if ($("#pordPayFgSelectStoreCd").val() === '') {
       $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
@@ -48,6 +55,8 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCd   = $("#pordPayFgSelectStoreCd").val();
     params.prodCd    = $("#srchPayFgProdCd").val();
     params.prodNm    = $("#srchPayFgProdNm").val();
+    params.listScale = $scope.prodPayFglistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');

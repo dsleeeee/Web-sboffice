@@ -21,7 +21,7 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('storeBrandlistScaleBox', gvListScaleBoxData);
-	  
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeBrandCtrl");
 
@@ -29,7 +29,7 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
     // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -84,17 +84,23 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
       }
     }
   }
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeBrandCtrl", function (event, data) {
-    $scope.searchStoreBrandList();
+    $scope.searchStoreBrandList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
+  $scope.$on("storeBrandCtrlSrch", function (event, data) {
+	    $scope.searchStoreBrandList(false);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+
 
   // 브랜드별 매출 리스트 조회
-  $scope.searchStoreBrandList = function () {
+  $scope.searchStoreBrandList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -102,13 +108,14 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
   //  params.endDate = wijmo.Globalize.format($scope.srchStoreBrandEndDate.value, 'yyyyMMdd');
     params.sortFg = $scope.sortFg;
     params.listScale = $scope.listScale; //-페이지 스케일 갯수
-    
+    params.isPageChk = isPageChk;
+
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStoreBrandStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchStoreBrandEndDate.value, 'yyyyMMdd');
     }
-    
+
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
@@ -146,7 +153,7 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
       });
     }, 10);
   };
-  
+
   //조회조건 정렬구분 리스트 조회
   $scope.getSortFgComboList = function () {
     var url             = '/sale/anals/store/brand/sortFgComboList.sb';

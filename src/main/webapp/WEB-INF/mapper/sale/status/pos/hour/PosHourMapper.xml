@@ -11,15 +11,13 @@
         COMMENTS : 포스별매출일자별 - 리스트를 조회한다.
     -->
     <select id="getPosDayList" parameterType="posHourVO" resultType="DefaultMap">
-    	<include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT	A.SALE_HOUR
+    	SELECT	TO_CHAR(TO_DATE(A.SALE_HOUR,'HH24'),'HH24') AS SALE_HOUR
     			, A.SALE_STORE_CNT
     			, A.TOT_SALE_AMT
     			, A.TOT_DC_AMT
     			, A.TOT_REAL_SALE_AMT
     			, A.TOT_SALE_CNT
     			, B.*
-    	<include refid="CmmSQL.PagingTemplateCount"/>
     	FROM	(
     				SELECT	TSDP.SALE_HOUR
     						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
@@ -87,7 +85,6 @@
 		        ) B
 		        WHERE   A.SALE_HOUR = B.SALE_HOUR_TEMP
 		        ORDER BY A.SALE_HOUR
-		        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <select id="getStorePosList" parameterType="posDayVO" resultType="DefaultMap">
@@ -128,7 +125,9 @@
 		FROM    TB_MS_POS TMP
 				, TB_MS_STORE TMS
 		WHERE	TMP.STORE_CD = TMS.STORE_CD
+			<if test='hqOfficeCd != null and hqOfficeCd != ""'>
 				AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+			</if>
 			<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
                	AND TMP.STORE_CD IN
                	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

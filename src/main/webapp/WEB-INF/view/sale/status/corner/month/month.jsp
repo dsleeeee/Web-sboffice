@@ -89,6 +89,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerMonthSelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerMonthSelectStore"/>
+                <jsp:param name="closeFunc" value="getCornerNmList"/>
             </jsp:include>
         </td>
       </tr>

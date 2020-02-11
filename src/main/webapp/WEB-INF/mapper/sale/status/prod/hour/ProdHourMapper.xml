@@ -12,30 +12,36 @@
     <select id="getProdHourList" parameterType="prodHourVO" resultType="DefaultMap">
         /* USE : ProdRankMapper.getProdRankList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT TMP.PROD_CD
-		    , TMP.PROD_NM
-			${sQuery1}
+		SELECT M.PROD_CD
+     			, TMP.PROD_NM
+				${sQuery1}
 			<include refid="CmmSQL.PagingTemplateCount"/>
-		  FROM TB_SL_DAILY_PROD TSDP
-         		, TB_SL_DAILY_TIME TSDT
-		     	, TB_MS_PRODUCT TMP
-		 WHERE TSDP.STORE_CD = TMP.STORE_CD
-		 AND TSDP.PROD_CD = TMP.PROD_CD
-         AND TSDP.STORE_CD = TSDT.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND TSDP.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-        </if>
-		<if test='startDate != null and startDate != ""'>
-		   AND TSDP.SALE_DATE >= #{startDate}
-		</if>
-		<if test='endDate != null and endDate != ""'>
-		   AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
-		</if>
-		GROUP BY TMP.PROD_CD, TMP.PROD_NM 
-		ORDER BY TMP.PROD_CD ASC
+		    FROM TB_MS_PRODUCT TMP
+		    	, (
+         		    SELECT TSDPT.STORE_CD
+		           			, TSDPT.PROD_CD
+		           			, TSDPT.SALE_HOUR
+							${sQuery2}
+        			FROM SBPORA.TB_SL_DAILY_PROD_TIME TSDPT
+		 			WHERE 1 = 1
+		 			<if test='arrStoreCd != null and arrStoreCd != ""'>
+                    	AND TSDPT.STORE_CD IN
+	                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+	                </if>
+                    <if test='startDate != null and startDate != ""'>
+					   AND TSDPT.SALE_DATE >= #{startDate}
+					</if>
+					<if test='endDate != null and endDate != ""'>
+					   AND TSDPT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+					</if>
+					GROUP BY TSDPT.STORE_CD, TSDPT.PROD_CD, TSDPT.SALE_HOUR
+       				) M
+		WHERE TMP.STORE_CD = M.STORE_CD
+		AND TMP.PROD_CD = M.PROD_CD
+		GROUP BY M.PROD_CD, TMP.PROD_NM
+		ORDER BY M.PROD_CD, TMP.PROD_NM
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

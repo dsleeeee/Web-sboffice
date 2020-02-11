@@ -11,6 +11,7 @@
         COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
     -->
     <select id="getCornerDayList" parameterType="cornerDayVO" resultType="DefaultMap">
+       <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
        SELECT TSDCP.SALE_DATE
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
@@ -18,6 +19,7 @@
               ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
               ${sQuery1}
        ]]>
+       <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM TB_SL_DAILY_CORNR_PROD TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -44,6 +46,7 @@
         GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
         ]]>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
     

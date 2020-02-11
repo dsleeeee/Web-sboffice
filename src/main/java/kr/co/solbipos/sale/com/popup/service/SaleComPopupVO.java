@@ -34,7 +34,13 @@ public class SaleComPopupVO extends PageVO {
     private String arrStoreCd[];
     /** 코너코드 array */
     private String arrCornrCd[];
-       
+    /** 대분류코드 */
+    private String prodClassCd;
+    /** 상품코드 */
+    private String srchProdCd;
+    /** 상품명 */
+    private String srchProdNm;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -184,4 +190,29 @@ public class SaleComPopupVO extends PageVO {
 	public void setArrCornrCd(String arrCornrCd[]) {
 		this.arrCornrCd = arrCornrCd;
 	}
+
+	public String getProdClassCd() {
+		return prodClassCd;
+	}
+
+	public void setProdClassCd(String prodClassCd) {
+		this.prodClassCd = prodClassCd;
+	}
+
+	public String getSrchProdCd() {
+		return srchProdCd;
+	}
+
+	public void setSrchProdCd(String srchProdCd) {
+		this.srchProdCd = srchProdCd;
+	}
+
+	public String getSrchProdNm() {
+		return srchProdNm;
+	}
+
+	public void setSrchProdNm(String srchProdNm) {
+		this.srchProdNm = srchProdNm;
+	}
+	
 }

@@ -31,7 +31,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="5">
+        	<td colspan="3">
           	<div class="sb-select">      
        		    <span class="txtIn"><input id="srchProdStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -45,21 +45,21 @@
           	</div>
         	</td>
         </tr>
-<!--       	<tr>   -->
-<%--       		<th><s:message code="store.prodCat" /></th> --%>
-<!-- 		    <td> -->
-<!-- 		        <input type="text" class="sb-input w70" id="srchProdDayCd" ng-model="prodDayCdNm" ng-click="popUpProdDay()" style="float: left;" -->
-<%-- 		                 placeholder="<s:message code="prod.prodClass" /> 선택" readonly/> --%>
-<!-- 		        <input type="hidden" id="_prodDayCd" name="prodDayCd" ng-model="prodDayCd" disabled /> -->
-<%-- 		        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdDayCd" style="margin-left: 5px;" ng-click="delProdDay()"><s:message code="cmm.selectCancel"/></button> --%>
-<!-- 		    </td> -->
-<!--          	<td colspan="2"> -->
-<%--             	<span class="chk ml10"> --%>
-<!--                 	<input type="checkbox"  ng-model="isCheckedProdAll" ng-change="totalProd()" /> -->
-<!--                 	<label for="totalProd()">상품상세보기</label> -->
-<%--             	</span> --%>
-<!--         	</td>    	 -->
-<!--       	</tr> -->
+      	<tr>  
+      		<th><s:message code="store.prodCat" /></th>
+		    <td>
+		        <input type="text" class="sb-input w50" id="srchStoreProdProdNm" ng-model="prodCdNm" ng-click="popUpProd()" style="float: left;" placeholder="선택" readonly/>
+		        <input type="hidden" id="srchStoreProdProdCd" name="srchStoreProdProdCd" ng-model="prodCd" disabled />
+		        <input type="hidden" id="srchStoreProdProdClassCd" name="srchStoreProdProdClassCd" ng-model="prodCalssCd" disabled />
+		        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
+		    </td>
+         	<td colspan="2">
+            	<span class="chk ml10">
+                	<input type="checkbox"  ng-model="isCheckedProdAll" ng-change="totalProd()" />
+                	<label for="totalProd()">상품상세보기</label>
+            	</span>
+        	</td>    	
+      	</tr>
 		</tbody>
 	</table>
 
@@ -125,9 +125,9 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/prod/storeProd.js?ver=20190125.02" charset="utf-8"></script>
 
-<%-- 레이어 팝업 : 상품정보 입력/수정 --%>
-<%-- <c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp"> --%>
-<%--   <c:param name="menuCd" value="${menuCd}"/> --%>
-<%--   <c:param name="menuNm" value="${menuNm}"/> --%>
-<%-- </c:import> --%>
+<%-- 레이어 팝업 : 상품정보 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 

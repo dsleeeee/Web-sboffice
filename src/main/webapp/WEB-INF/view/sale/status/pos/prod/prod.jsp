@@ -59,6 +59,7 @@
 
 				<input type="hidden" id="posProdSelectPosCd" value=""/>
 				<input type="hidden" id="posProdSelectPosName" value=""/>
+				<input type="hidden" id="posProdSelectHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>

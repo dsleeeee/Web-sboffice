@@ -78,11 +78,11 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         	params.startDate 		= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
-	        ///*
+	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
 			console.log("searchStoreCd :" + params.searchStoreCd	);
-			//*/
+			*/
         /*
         $scope._inquiryMain					(	"/sale/anals/dailyReport/report/list.sb",		function _inquiry(url, params, callback, isView, isMaster) {
         $scope._inquirySub					(	"/sale/anals/dailyReport/report/list.sb",
@@ -122,35 +122,11 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															                var item = configCtrl_2.flex.collectionView.items[i];
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
+															            		eval( '$(".div_' + item.cfgCd + '").show();' );
+															            	}else{
+															            		eval( '$(".div_' + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
 															            	}
 															            }
-
-															            /*
-															            //데이터 없으면 [접기]
-															            if(reportCtrl_sl    .flex.rows.length == 0)     $(".div_sl"     ).toggle();     //매출종합
-															            if(reportCtrl_pay   .flex.rows.length == 0)     $(".div_pay"    ).toggle();     //결제수단
-															            if(reportCtrl_nsl   .flex.rows.length == 0)     $(".div_nsl"    ).toggle();     //비매출종합
-															            if(reportCtrl_npay  .flex.rows.length == 0)     $(".div_npay"   ).toggle();     //비매출결제수단
-															            if(reportCtrl_pos   .flex.rows.length == 0)     $(".div_pos"    ).toggle();     //포스정산
-															            if(reportCtrl_emp   .flex.rows.length == 0)     $(".div_emp"    ).toggle();     //판매원별 매출
-															            if(reportCtrl_dc    .flex.rows.length == 0)     $(".div_dc"     ).toggle();     //할인내역
-															            if(reportCtrl_dcdtl .flex.rows.length == 0)     $(".div_dcdtl"  ).toggle();     //할인상세내역
-															            if(reportCtrl_gift  .flex.rows.length == 0)     $(".div_gift"   ).toggle();     //상품권 판매 및 회수내역
-															            if(reportCtrl_order .flex.rows.length == 0)     $(".div_order"  ).toggle();     //수발주내역
-															            if(reportCtrl_lv1   .flex.rows.length == 0)     $(".div_lv1"    ).toggle();     //대분류별 매출
-															            if(reportCtrl_lv2   .flex.rows.length == 0)     $(".div_lv2"    ).toggle();     //중분류별 매출
-															            if(reportCtrl_lv3   .flex.rows.length == 0)     $(".div_lv3"    ).toggle();     //소분류별 매출
-															            if(reportCtrl_prod  .flex.rows.length == 0)     $(".div_prod"   ).toggle();     //상품별 매출
-															            if(reportCtrl_compt .flex.rows.length == 0)     $(".div_compt"  ).toggle();     //경쟁사매출
-															            if(reportCtrl_appr  .flex.rows.length == 0)     $(".div_appr"   ).toggle();     //승인현황
-															            if(reportCtrl_membr .flex.rows.length == 0)     $(".div_membr"  ).toggle();     //회원
-															            if(reportCtrl_work  .flex.rows.length == 0)     $(".div_work"   ).toggle();     //근태관리
-																		*/
-
-															            //영업일보 구성에 없으면 [숨기기]
-															            //.....
-
-
 															            $scope.$broadcast('loadingPopupInactive');
 																	},	//callBack function
 												false);
@@ -163,24 +139,26 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 
 	//접기 & 펴기 - START			----------------------------------------------------------------------------------------------------------------------
-	$(".flddUnfld_sl"  	).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_sl"	   ).toggle();  });  //매출종합
-    $(".flddUnfld_pay"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_pay"   ).toggle();  });  //결제수단
-    $(".flddUnfld_nsl"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_nsl"   ).toggle();  });  //비매출종합
-    $(".flddUnfld_npay" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_npay"  ).toggle();  });  //비매출결제수단
-    $(".flddUnfld_pos"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_pos"   ).toggle();  });  //포스정산
-    $(".flddUnfld_emp"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_emp"   ).toggle();  });  //판매원별 매출
-    $(".flddUnfld_dc"   ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_dc"    ).toggle();  });  //할인내역
-    $(".flddUnfld_dcdtl").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_dcdtl" ).toggle();  });  //할인상세내역
-    $(".flddUnfld_gift" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_gift"  ).toggle();  });  //상품권 판매 및 회수내역
-    $(".flddUnfld_order").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_order" ).toggle();  });  //수발주내역
-    $(".flddUnfld_lv1"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv1"   ).toggle();  });  //대분류별 매출
-    $(".flddUnfld_lv2"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv2"   ).toggle();  });  //중분류별 매출
-    $(".flddUnfld_lv3"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv3"   ).toggle();  });  //소분류별 매출
-    $(".flddUnfld_prod" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_prod"  ).toggle();  });  //상품별 매출
-    $(".flddUnfld_compt").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_compt" ).toggle();  });  //경쟁사매출
-    $(".flddUnfld_appr" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_appr"  ).toggle();  });  //승인현황
-    $(".flddUnfld_membr").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_membr" ).toggle();  });  //회원
-    $(".flddUnfld_work" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_work"  ).toggle();  });  //근태관리
+    /*
+	$(".flddUnfld_sl"  	).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_SL"	   ).toggle();  });  //매출종합
+    $(".flddUnfld_pay"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_PAY"   ).toggle();  });  //결제수단
+    $(".flddUnfld_nsl"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_NSL"   ).toggle();  });  //비매출종합
+    $(".flddUnfld_npay" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_NPAY"  ).toggle();  });  //비매출결제수단
+    $(".flddUnfld_pos"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_POS"   ).toggle();  });  //포스정산
+    $(".flddUnfld_emp"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_EMP"   ).toggle();  });  //판매원별 매출
+    $(".flddUnfld_dc"   ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_DC"    ).toggle();  });  //할인내역
+    $(".flddUnfld_dcdtl").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_DCDTL" ).toggle();  });  //할인상세내역
+    $(".flddUnfld_gift" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_GIFT"  ).toggle();  });  //상품권 판매 및 회수내역
+    $(".flddUnfld_order").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_ORDER" ).toggle();  });  //수발주내역
+    $(".flddUnfld_lv1"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV1"   ).toggle();  });  //대분류별 매출
+    $(".flddUnfld_lv2"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV2"   ).toggle();  });  //중분류별 매출
+    $(".flddUnfld_lv3"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV3"   ).toggle();  });  //소분류별 매출
+    $(".flddUnfld_prod" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_PROD"  ).toggle();  });  //상품별 매출
+    $(".flddUnfld_compt").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_COMPT" ).toggle();  });  //경쟁사매출
+    $(".flddUnfld_appr" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_APPR"  ).toggle();  });  //승인현황
+    $(".flddUnfld_membr").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_MEMBR" ).toggle();  });  //회원
+    $(".flddUnfld_work" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_WORK"  ).toggle();  });  //근태관리
+    */
     //접기 & 펴기 - END				----------------------------------------------------------------------------------------------------------------------
 
 }]);
@@ -193,6 +171,8 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 //reportCtrl_sl    START   ############################################################################################################################################################################
 app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
+	angular.extend(this, new RootController('reportCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
+
 	$scope.initGrid = function (s, e) {
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
 	    s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
@@ -1278,7 +1258,6 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
 //reportCtrl_excel	START	############################################################################################################################################################################
 app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
-	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){
 		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
 		if (reportCtrl_sl.flex.rows.length <= 0) {
@@ -1334,6 +1313,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 							    var membr   = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(reportCtrl_membr.flex, {includeColumnHeaders: true, includeCellStyles: true, sheetIndex: 0, sheetName: messages["dailyReport.membr"	]}	);  //회원
 							    var work    = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(reportCtrl_work .flex, {includeColumnHeaders: true, includeCellStyles: true, sheetIndex: 0, sheetName: messages["dailyReport.work" 	]}	);  //근태관리
 
+							    /*
 								sl.sheets.push(pay	.sheets[0]);    //결제수단
 								sl.sheets.push(nsl	.sheets[0]);    //비매출종합
 							    sl.sheets.push(npay .sheets[0]);    //비매출결제수단
@@ -1351,6 +1331,17 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 							    sl.sheets.push(appr .sheets[0]);    //승인현황
 							    sl.sheets.push(membr.sheets[0]);    //회원
 							    sl.sheets.push(work .sheets[0]);    //근태관리
+								*/
+
+							    //[영업일보 구성]에서 선택된 부분만 엑셀 출력
+                                var configCtrl_2 = agrid.getScope('configCtrl_2');	//영업일보 구성
+					            for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+					                var item = configCtrl_2.flex.collectionView.items[i];
+					                if(item.cfgCd == 'SL')	continue;
+					            	if(item.cfgSelYn == "Y"){
+                                        eval( 'sl.sheets.push(' + item.cfgCd.toLowerCase() + '.sheets[0]);' );
+					            	}
+					            }
 
 								sl.saveAsync(excelFileName);
 
@@ -1358,7 +1349,6 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 								reportCtrl.$broadcast('loadingPopupInactive');
 							}, 1000);	//건수가 많아서 1000으로 했음 (현재 1년치 정도가 500ms 미만임)
 	};
-	//[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
 
 }]);
 //reportCtrl_excel	END		############################################################################################################################################################################

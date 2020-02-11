@@ -119,15 +119,30 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         return false;
      }
 	  
-	 $scope.getEmpNmList();    
-	 $scope.searchEmpDayList();
+	 $scope.getEmpNmList(true);    
+	 $scope.searchEmpDayList(true);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("empDayCtrlSrch", function (event, data) {
+	  
+     if ($("#empDaySelectStoreCd").val() === '') {
+        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+        return false;
+     }
+	  
+	 $scope.getEmpNmList(false);    
+	 $scope.searchEmpDayList(false);
 
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
   // 판매자일자별 리스트 조회
-  $scope.searchEmpDayList = function () {
+  $scope.searchEmpDayList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -146,6 +161,8 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     }else{
     	params.empChk = "N";
     }
+    params.listScale = $scope.empDaylistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/emp/day/list.sb", params, function() {});
 
@@ -176,8 +193,10 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    // 파라미터
 	    var params       = {};
 	    params.storeCd   = $("#empDaySelectStoreCd").val();
-	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    if(!$scope.isChecked){
+		    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    }
 	    
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";

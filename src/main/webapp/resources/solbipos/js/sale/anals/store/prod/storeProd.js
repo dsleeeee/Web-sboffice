@@ -66,35 +66,26 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
 		params.chkProdAll = "N";
 	}
 	params.hqOfficeCd = $("#hqOfficeCd").val();
+	params.prodCd	 =  $("#srchStoreProdProdCd").val();
+	params.prodCalssCd =  $("#srchStoreProdProdClassCd").val();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/store/prod/list.sb", params, function() {});
 
   }; 
    
   // 상품분류정보 팝업
-  $scope.popUpProdDay = function() {
-    var popUp = $scope.prodSLayer.show(true, function (s) {
-      // 선택 버튼 눌렀을때만
-//      if (s.dialogResult === "wj-hide-apply") {
-//        var scope = agrid.getScope('prodClassPopUpCtrl');
-//        var prodDayCd = scope.getSelectedClass();
-//        var params = {};
-//        params.prodClassCd = prodDayCd;
-//        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-//        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-//          function(response){
-//            $scope.prodDayCd = prodDayCd;
-//            $scope.prodDayCdNm = response.data.data;
-//          }
-//        );
-//      }
-    });
+  $scope.popUpProd = function() {
+    var params = {};
+    params.gubun = "StoreProd";
+    //조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._broadcast('prodStrl', params);
   };
   
   // 상품분류정보 선택취소
-  $scope.delProdDay = function(){
-    $scope.prodDayCd = "";
-    $scope.prodDayCdNm = "";
+  $scope.delProd = function(){
+    $scope.prodCd = "";
+    $scope.prodCdNm = "";
+    $scope.prodCalssCd = "";
   }
   
   // 엑셀 다운로드
