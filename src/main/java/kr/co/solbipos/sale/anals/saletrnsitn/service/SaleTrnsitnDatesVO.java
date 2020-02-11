@@ -16,73 +16,73 @@ import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
  * @ 2020.01.15  조현수       최초생성
  * @ 2020.
  *
- * @author NHN한국사이버결제 KCP 
+ * @author NHN한국사이버결제 KCP
  * @since 2020. 01.14
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class SaleTrnsitnDatesVO extends PageVO {
+public class SaleTrnsitnDatesVO {//extends PageVO {
 
 	private static final long serialVersionUID = -579466860086044760L;
 
-	
+
 //    /** 금일 날짜 */
-//    private String	dateBeforeZero;	
+//    private String	dateBeforeZero;
 //	/** 1일전 날짜 */
-//    private String	dateBeforeOne;	
+//    private String	dateBeforeOne;
 //	/** 2일전 날짜 */
-//    private String	dateBeforeTwo;	
+//    private String	dateBeforeTwo;
 //	/** 3일전 날짜 */
-//    private String	dateBeforeThree;	
+//    private String	dateBeforeThree;
 //	/** 4일전 날짜 */
-//    private String	dateBeforeFour;	
+//    private String	dateBeforeFour;
 //	/** 5일전 날짜 */
-//    private String	dateBeforeFive;	
+//    private String	dateBeforeFive;
 //	/** 6일전 날짜 */
-//    private String	dateBeforeSix;	
+//    private String	dateBeforeSix;
 //	/** 7일전 날짜 */
-//    private String	dateBeforeSeven;	
+//    private String	dateBeforeSeven;
 //	/** 8일전 날짜 */
-//    private String	dateBeforeEight;	
+//    private String	dateBeforeEight;
 //	/** 9일전 날짜 */
-//    private String	dateBeforeNine;	
+//    private String	dateBeforeNine;
 //	/** 10일전 날짜 */
-//    private String	dateBeforeTen;	
+//    private String	dateBeforeTen;
 //	/** 11일전 날짜 */
-//    private String	dateBeforeEleven;	
+//    private String	dateBeforeEleven;
 //	/** 12일전 날짜 */
-//    private String	dateBeforeTwelve;    
+//    private String	dateBeforeTwelve;
 //	/** 13일전 날짜 */
 //    private String	dateBeforeThirteen;
-    
-    
+
+
     /** 금일 날짜 */
-    private String	dateBefore0;	
+    private String	dateBefore0;
 	/** 1일전 날짜 */
-    private String	dateBefore1;	
+    private String	dateBefore1;
 	/** 2일전 날짜 */
-    private String	dateBefore2;	
+    private String	dateBefore2;
 	/** 3일전 날짜 */
-    private String	dateBefore3;	
+    private String	dateBefore3;
 	/** 4일전 날짜 */
-    private String	dateBefore4;	
+    private String	dateBefore4;
 	/** 5일전 날짜 */
-    private String	dateBefore5;	
+    private String	dateBefore5;
 	/** 6일전 날짜 */
-    private String	dateBefore6;	
+    private String	dateBefore6;
 	/** 7일전 날짜 */
-    private String	dateBefore7;	
+    private String	dateBefore7;
 	/** 8일전 날짜 */
-    private String	dateBefore8;	
+    private String	dateBefore8;
 	/** 9일전 날짜 */
-    private String	dateBefore9;	
+    private String	dateBefore9;
 	/** 10일전 날짜 */
-    private String	dateBefore10;	
+    private String	dateBefore10;
 	/** 11일전 날짜 */
-    private String	dateBefore11;	
+    private String	dateBefore11;
 	/** 12일전 날짜 */
-    private String	dateBefore12;    
+    private String	dateBefore12;
 	/** 13일전 날짜 */
     private String	dateBefore13;
     //----------------------------------------------------------------------------------------------
@@ -172,5 +172,5 @@ public class SaleTrnsitnDatesVO extends PageVO {
 	}
 
 
-    
+
 }

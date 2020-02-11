@@ -92,8 +92,10 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.endDate		= data.endDate;
     $scope.tblCd    	= data.tblCd;
     $scope.saleDate     = data.saleDate;
-    $scope.saleDay = data.saleDay;
-
+    $scope.saleDay 		= data.saleDay;
+    $scope.saleYm     	= data.saleYm;
+    $scope.gubun     	= data.gubun;
+    
     $scope.tableLayer.show(true);
 
     $scope.searchSaleComTableList();
@@ -106,14 +108,19 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 테이블별 리스트 조회
   $scope.searchSaleComTableList = function () {
     // 파라미터
-    var params      = {};
-    params.storeCd  = $scope.storeCd;
-    params.startDate = $scope.startDate;
-    params.endDate = $scope.endDate;
-    params.tblCd    = $scope.tblCd;
-    params.saleDate = $scope.saleDate;
-    params.saleDay     = $scope.saleDay;
-    params.saleYm     = $scope.saleYm;
+    var params      	= {};
+    if($scope.gubun == "month"){
+    	params.storeCd  	= $scope.storeCd;
+    	params.tblCd    	= $scope.tblCd;
+    	params.saleYm     	= $scope.saleYm;
+    }else{
+        params.storeCd  	= $scope.storeCd;
+        params.startDate 	= $scope.startDate;
+        params.endDate 		= $scope.endDate;
+        params.tblCd    	= $scope.tblCd;
+        params.saleDate 	= $scope.saleDate;
+        params.saleDay     	= $scope.saleDay;
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/table/view.sb", params);
   };

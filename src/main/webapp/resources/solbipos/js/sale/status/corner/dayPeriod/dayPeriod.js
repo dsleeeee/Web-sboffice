@@ -69,7 +69,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
 	var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
 
-//	$scope.getReCornerNmList(storeCd, cornrCd); // -------------------------------------??
+//	$scope.getReCornerNmList(storeCd, cornrCd);
   });
   
   // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
@@ -83,7 +83,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
 	var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
 
-//	$scope.getReCornerNmList(storeCd, cornrCd); // -------------------------------------??
+//	$scope.getReCornerNmList(storeCd, cornrCd);
   });
 
 

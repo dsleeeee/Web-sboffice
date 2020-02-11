@@ -109,6 +109,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    		}
 	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
 	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+	    		params.saleDay   = selectedRow.saleDay;
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			$scope._broadcast('saleComTableCtrl', params);
@@ -222,8 +223,8 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	//매장의 테이블 리스트 조회
 	$scope.getTableNmList = function () {
 
-		var storeCd = $("#tableDaySelectStoreCd").val();
-		var tableCd = $("#tableDaySelectTableCd").val();
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
+		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
 
 		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};

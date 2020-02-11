@@ -108,6 +108,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    		}
 	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
 	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+	    		params.saleYm  = selectedRow.saleYm;
+	    		params.gubun   = "month";
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			$scope._broadcast('saleComTableCtrl', params);
@@ -221,8 +223,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	//매장의 테이블 리스트 조회
 	$scope.getTableNmList = function () {
 
-		var storeCd = $("#tableDaySelectStoreCd").val();
-		var tableCd = $("#tableDaySelectTableCd").val();
+		var storeCd = $("#tableMonthSelectStoreCd").val();
+		var tableCd = $("#tableMonthSelectTableCd").val();
 
 		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};

@@ -13,7 +13,7 @@
     <select id="getCornerDayList" parameterType="cornerDayVO" resultType="DefaultMap">
        <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT TSDCP.SALE_DATE
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
               ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
               ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY

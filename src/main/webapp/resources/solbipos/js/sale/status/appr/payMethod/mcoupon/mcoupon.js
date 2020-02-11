@@ -13,6 +13,31 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprMcouponListScaleBox", gvListScaleBoxData);
+  
+  //조회조건 할인구분 데이터 Set
+  $scope._setComboData("srchMcouponProdDcFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["appr.dcFg.comm"], "value": "1"},
+    {"name": messages["appr.dcFg.coupon"], "value": "2"},
+    {"name": messages["appr.dcFg.member"], "value": "3"},
+    {"name": messages["appr.dcFg.partner"], "value": "4"},
+    {"name": messages["appr.dcFg.store"], "value": "5"}
+  ]);
+  
+  //조회조건 승인구분 데이터 Set
+  $scope._setComboData("srchMcouponApprFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["appr.approve"], "value": "1"},
+    {"name": messages["cmm.cancel"], "value": "2"}
+  ]);
+  
+  //조회조건 승인처리 데이터 Set
+  $scope._setComboData("srchMcouponApprProcFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["card.apprProcFg1"], "value": "1"},
+    {"name": messages["card.apprProcFg2"], "value": "2"},
+    {"name": messages["card.cardTypeFg1"], "value": "3"}
+  ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {

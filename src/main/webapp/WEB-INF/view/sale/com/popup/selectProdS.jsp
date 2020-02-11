@@ -35,10 +35,10 @@
  		<tr>
         <%-- 상품코드 --%>
         <th><s:message code="prodcalss.prodCd" /></th>
-        <td><input type="text" id="srchPopProdCd" class="sb-input w100" maxlength="13" ng-model="prodCd"/></td>
+        <td><input type="text" id="srchPopProdCd" name="srchPopProdCd" class="sb-input w100"  ng-model="srchPopProdCd"/></td>
         <%-- 상품명 --%>
         <th><s:message code="prodcalss.prodNm" /></th>
-        <td><input type="text" id="srchPopProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
+        <td><input type="text" id="srchPopProdNm" name="srchPopProdNm" class="sb-input w100"  ng-model="srchPopProdNm"/></td>
       	</tr>
       </tbody>
     </table>

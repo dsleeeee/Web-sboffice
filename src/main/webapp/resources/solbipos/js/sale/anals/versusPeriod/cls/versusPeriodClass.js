@@ -15,7 +15,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   // 1년 전 날짜 세팅
   var date = new Date();
   date.setFullYear(date.getFullYear()-1);
-  var result = date.getFullYear() + '' + date.getMonth() + 1 + '' + date.getDate();
+  var result = date.getFullYear() + '' + date.getMonth() + '' + date.getDate();
 
   // 대비일자 세팅
   $scope.srchCompStartDate = wcombo.genDateVal("#compClassStartDate", result);
@@ -135,13 +135,13 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
          return false;
     }
 
-    $scope.searchProdDayList(true);
+    $scope.searchVersusPeriodClassList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 상품매출순위 리스트 조회
-  $scope.searchProdDayList = function () {
+  $scope.searchVersusPeriodClassList = function () {
 
     // 파라미터
     var params       = {};
@@ -150,7 +150,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     params.compStartDate = wijmo.Globalize.format($scope.srchCompStartDate.value, 'yyyyMMdd');
     params.compEndDate = wijmo.Globalize.format($scope.srchCompEndDate.value, 'yyyyMMdd');
     params.storeCd   = $("#versusPeriodClassSelectStoreCd").val();
-    params.brandCd = $scope.brandCd;
+    //params.brandCd = $scope.brandCd;
 
     $scope.params = params;
 
@@ -254,13 +254,14 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     	var rows = sender.rows;
     	var params		 = {};
 
-    	if(rows.length != 0) {
+    	if(rows.length != 0 && rows[0].dataItem.lv3Cd != undefined) {
     		params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     	    params.compStartDate = wijmo.Globalize.format($scope.srchCompStartDate.value, 'yyyyMMdd');
     	    params.compEndDate = wijmo.Globalize.format($scope.srchCompEndDate.value, 'yyyyMMdd');
     	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
-    	    params.brandCd = rows[0].dataItem.lv3Cd;
+    	    //params.brandCd = '';
+    	    params.prodClassCd   = rows[0].dataItem.lv3Cd;
 	    }
 		else {
 			params.storeCd   = -1;
@@ -397,8 +398,8 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
 	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
 
-	    diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
-	    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
+	    /*diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
+	    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());*/
 
 	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));
@@ -507,7 +508,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 		  $scope.compStartDate = data.compStartDate;
 		  $scope.compEndDate   = data.compEndDate;
 		  $scope.storeCd   = data.storeCd;
-		  $scope.brandCd   = data.brandCd;
+		  //$scope.brandCd   = data.brandCd;
 		  $scope.prodClassCd   = data.prodClassCd;
 
 		  $scope.srchStartDate = [data.startDate.slice(0, 4), "-", data.startDate.slice(4, 6), "-", data.startDate.slice(6, 8)].join('');
@@ -522,7 +523,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	  params.compStartDate = $scope.compStartDate;
 	  params.compEndDate = $scope.compEndDate;
 	  params.storeCd   = $scope.storeCd;
-	  params.brandCd = $scope.brandCd;
+	  //params.brandCd = $scope.brandCd;
 	  params.prodClassCd = $scope.prodClassCd;
       params.isPageChk = isPageChk;
 
@@ -574,9 +575,6 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 
 	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
 	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
-
-	    diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
-	    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
 
 	    diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));

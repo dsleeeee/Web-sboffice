@@ -23,6 +23,8 @@
      	   , TB_SL_DAILY_TABLE TSDT
      	WHERE TMTG.TBL_GRP_CD = TMT.TBL_GRP_CD
    			  AND TMT.TBL_CD = TSDT.TBL_CD
+   			  AND TMT.STORE_CD = TSDT.STORE_CD
+          	  AND TMTG.STORE_CD = TSDT.STORE_CD
    			  <if test='arrStoreCd != null and arrStoreCd != ""'>
 			  	AND TMTG.STORE_CD IN
 			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

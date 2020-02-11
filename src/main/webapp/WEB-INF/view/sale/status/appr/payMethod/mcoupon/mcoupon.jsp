@@ -71,9 +71,9 @@
           <div class="sb-select">
               <span class="txtIn">
                     <wj-combo-box
-                      id="srchMcouponInstCntFgDisplay"
-                      ng-model="instCntFg"
-                      items-source="_getComboData('srchMcouponInstCntFgDisplay')"
+                      id="srchMcouponProdDcFgDisplay"
+                      ng-model="prodDcFg"
+                      items-source="_getComboData('srchMcouponProdDcFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
@@ -109,9 +109,9 @@
           <div class="sb-select">
               <span class="txtIn">
                     <wj-combo-box
-                      id="srchMcouponInstCntFgDisplay"
-                      ng-model="instCntFg"
-                      items-source="_getComboData('srchMcouponInstCntFgDisplay')"
+                      id="srchMcouponApprProcFgDisplay"
+                      ng-model="apprProcFg"
+                      items-source="_getComboData('srchMcouponApprProcFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"

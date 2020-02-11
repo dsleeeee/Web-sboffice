@@ -200,7 +200,7 @@
 <!--                    is-editable="false" -->
 <!--                    initialized="initComboBox(s)"> -->
 <!--            </wj-combo-box> -->
-           <span class="fl bk lh30" id="pNo"></span>
+           <span class="fl bk lh30" id="dateYMD"></span>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtl()"><s:message code="cmm.excel.down" />
            </button>

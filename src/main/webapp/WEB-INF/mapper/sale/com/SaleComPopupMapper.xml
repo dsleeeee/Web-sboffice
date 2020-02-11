@@ -36,6 +36,7 @@
                 ,TSSHP.POS_NO
                 ,TSSHP.PAY_AMT
                 ,TSSHP.PAY_CD
+                ,TSSHP.SALE_DATE
                 ,TSSHG.GUEST_CNT_1
                 ,TSSHG.GUEST_CNT_2
                 ,TSSHG.GUEST_CNT_3
@@ -43,34 +44,15 @@
                 ,TSSHG.TBL_CD
               FROM TB_SL_SALE_HDR_PAY TSSHP
                , TB_SL_SALE_HDR_GUEST TSSHG
-              WHERE TSSHP.STORE_CD = TSSHG.STORE_CD(+)
-              AND TSSHP.BILL_NO = TSSHG.BILL_NO(+)
-              AND TSSHP.POS_NO = TSSHG.POS_NO(+)
-              <if test='storeCd != null and storeCd != ""'>
-              	AND TSSHP.STORE_CD = #{storeCd}
-              </if>
-              <if test='startDate != null and startDate != ""'>
-              	AND TSSHP.SALE_DATE 	>= #{startDate}
-              </if>
-              <if test='endDate != null and endDate != ""'>
-			  	AND TSSHP.SALE_DATE 	 <![CDATA[<=]]>   #{endDate}
-			  </if>
-			  <if test='startDate != null and startDate != ""'>
-              	AND TSSHG.SALE_DATE 	>= #{startDate}
-              </if>
-              <if test='endDate != null and endDate != ""'>
-			  	AND TSSHG.SALE_DATE 	 <![CDATA[<=]]>   #{endDate}
-			  </if>
-			  <if test='saleDate != null and saleDate != ""'>
-			  	AND TSSHP.SALE_DATE =   #{saleDate}
-			  </if>
-			  <if test='saleDate != null and saleDate != ""'>
-			  	AND TSSHG.SALE_DATE =   #{saleDate}
-			  </if>
+              WHERE TSSHP.STORE_CD 	= TSSHG.STORE_CD
+              AND TSSHP.BILL_NO 	= TSSHG.BILL_NO
+              AND TSSHP.POS_NO		= TSSHG.POS_NO
+              AND TSSHP.SALE_DATE   = TSSHG.SALE_DATE
             ) A
-		WHERE TSSH.STORE_CD = A.STORE_CD
-      	AND TSSH.BILL_NO = A.BILL_NO
-		AND TSSH.POS_NO = A.POS_NO
+		WHERE TSSH.STORE_CD = A.STORE_CD(+)
+      	AND TSSH.BILL_NO 	= A.BILL_NO(+)
+		AND TSSH.POS_NO 	= A.POS_NO(+)
+		AND TSSH.SALE_DATE  = A.SALE_DATE(+)
 		<if test='storeCd != null and storeCd != ""'>
 			AND TSSH.STORE_CD = #{storeCd}
 		</if>
@@ -85,6 +67,12 @@
 	  	</if>
 		<if test='tblCd != null and tblCd != ""'>
 			AND A.TBL_CD = #{tblCd}
+		</if>
+		<if test='saleDay != null and saleDay != ""'>
+			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'YYYYMMDD'),'DY') =   #{saleDay}
+		</if>
+		<if test='saleYm != null and saleYm != ""'>
+			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE),'YYYYMM') =   #{saleYm}
 		</if>
 		GROUP BY TSSH.POS_NO,TSSH.BILL_NO,TSSH.BILL_DT, TSSH.SALE_FG, A.PAY_CD
 		ORDER BY TSSH.POS_NO, TSSH.BILL_NO ASC
@@ -569,11 +557,11 @@
        			) THPC
  		WHERE THP.PROD_CLASS_CD = THPC.PROD_CLASS_CD
    		AND THPC.T_PROD_CLASS_CD = #{prodClassCd}
-   		<if test='srchProdCd != null and srchProdCd != ""'>
-   			AND THP.PROD_CD = #{srchProdCd}
+   		<if test='srchPopProdCd != null and srchPopProdCd != ""'>
+   			AND THP.PROD_CD = #{srchPopProdCd}
    		</if>
-   		<if test='srchProdNm != null and srchProdNm != ""'>
-   			AND THP.PROD_NM = #{srchProdNm}
+   		<if test='srchPopProdNm != null and srchPopProdNm != ""'>
+   			AND THP.PROD_NM LIKE '%'||#{srchPopProdNm}||'%' 
    		</if>
  		ORDER BY THP.PROD_CD
     </select>

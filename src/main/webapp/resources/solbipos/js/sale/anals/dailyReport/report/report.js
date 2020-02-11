@@ -89,7 +89,9 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReport/report/list.sb",
 	    $scope._postJSONQuery.withPopUp		(	"/sale/anals/dailyReport/report/list.sb",
         */
+	    //'데이터 처리 중입니다.' 시작
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
+
 	    $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReport/report/list.sb",
 					        					params,
 					        					function(response)	{
@@ -127,6 +129,13 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															            		eval( '$(".div_' + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
 															            	}
 															            }
+
+															            //'영업일보(0000-00-00 ~ 0000-00-00)' 문구 setting
+															            var reportCtrl_excel = agrid.getScope('reportCtrl_excel');
+															            reportCtrl_excel.span_startDate	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
+															            reportCtrl_excel.span_endDate	= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
+
+															            //'데이터 처리 중입니다.' 중지
 															            $scope.$broadcast('loadingPopupInactive');
 																	},	//callBack function
 												false);
@@ -1257,6 +1266,10 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_excel	START	############################################################################################################################################################################
 app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	//'영업일보(0000-00-00 ~ 0000-00-00)' 문구
+	$scope.span_startDate 	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
+	$scope.span_endDate		= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
 
 	$scope.excelDownload = function(){
 		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합

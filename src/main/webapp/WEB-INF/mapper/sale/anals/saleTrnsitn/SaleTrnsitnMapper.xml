@@ -13,7 +13,7 @@
 <mapper namespace="kr.co.solbipos.sale.anals.saletrnsitn.service.impl.SaleTrnsitnMapper">
 
     <!-- 특정일 기준 이전일자들 조회 (매출관리 > 매출분석 > 매출추이분석)
-    
+
 	        TABLE    : N/A (DUAL)
 	        PARAM    : saleTrnsitnVO
 	        COMMENTS : 특정일 기준 이전일자들을 조회한다.
@@ -50,13 +50,13 @@
 		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -11, 'YYYYMMDD' ) 	AS DATE_BEFORE_11,
 		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -12, 'YYYYMMDD' ) 	AS DATE_BEFORE_12,
 		        TO_CHAR( TO_DATE(#{baseDate},'YYYYMMDD') -13, 'YYYYMMDD' ) 	AS DATE_BEFORE_13
-		FROM    DUAL		
+		FROM    DUAL
     </select>
 
 
 
     <!-- 매출추이분석 목록조회 (매출관리 > 매출분석 > 매출추이분석)
-    
+
 	        TABLE    : TB_MS_PRODUCT, TB_SL_DAILY_PROD,
 	                   TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
 	        PARAM    : saleTrnsitnVO
@@ -124,7 +124,7 @@
                                                 )
                     </if>
                 </when>
-                  <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+                <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
                     FROM    TB_MS_PRODUCT       A,
                             TB_SL_DAILY_PROD    B
                     WHERE   A.STORE_CD      = #{storeCd}
@@ -140,17 +140,17 @@
                                                     CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
                                                     AND                 STORE_CD        = #{storeCd}
                                                 )
-                    </if>                    
-                  </when>
+                    </if>
+                </when>
             </choose>
                     AND     B.SALE_DATE     BETWEEN #{dateBefore13}
                                             AND     #{dateBefore0}
-                <if test="prodCd != null and prodCd != ''">
+                	<if test="prodCd != null and prodCd != ''">
                     AND     A.PROD_CD       LIKE '%' || #{prodCd} || '%'
-                </if>
-                <if test="prodNm != null and prodNm != ''">
+                	</if>
+                	<if test="prodNm != null and prodNm != ''">
                     AND     A.PROD_NM       LIKE '%' || #{prodNm} || '%'
-                </if>
+                	</if>
                 )
         GROUP BY PROD_CD, PROD_NM, SPLY_UPRC
         ORDER BY PROD_CD
@@ -174,7 +174,7 @@
                 TO_CHAR(TO_DATE(#{dateBefore11},	'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_11,
                 TO_CHAR(TO_DATE(#{dateBefore12},	'YYYYMMDD'), 'YYYY.MM.DD')	AS 	DATE_BEFORE_12,
                 TO_CHAR(TO_DATE(#{dateBefore13},	'YYYYMMDD'), 'YYYY.MM.DD')	AS	DATE_BEFORE_13,
-                
+
                 SUM(  DECODE(SALE_DATE, #{dateBefore0},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_0_QTY,
                 SUM(  DECODE(SALE_DATE, #{dateBefore1},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_1_QTY,
                 SUM(  DECODE(SALE_DATE, #{dateBefore2},		TOT_SALE_QTY, 0)  )	AS  DATE_BEFORE_2_QTY,
@@ -212,8 +212,8 @@
 	                </if>
                 )
         GROUP BY PROD_CD, PROD_NM, SPLY_UPRC
-        ORDER BY PROD_CD        
+        ORDER BY PROD_CD
 	</select>
-	
-	
+
+
 </mapper>

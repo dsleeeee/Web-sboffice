@@ -57,8 +57,12 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
         	params.endDate   = $scope.endDateForDt;
         	params.yoil	 	 = selectedRow.yoil;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-            	params.storeCd	 = arrStore;
-            	params.cornrCd	 = arrCornr;
+        		if(arrStore != ""){
+        			params.storeCd	 = arrStore;
+        			params.cornrCd	 = arrCornr;
+        		}else{
+        			params.storeCd	 = $("#cornerDayOfWeekSelectStoreCd").val();
+        		}
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {
         		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];

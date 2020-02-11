@@ -55,8 +55,12 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.startDate = selectedRow.saleDate;
         	params.endDate   = selectedRow.saleDate;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-            	params.storeCd	 = arrStore;
-            	params.cornrCd	 = arrCornr;
+        		if(arrStore != ""){
+        			params.storeCd	 = arrStore;
+        			params.cornrCd	 = arrCornr;
+        		}else{
+        			params.storeCd	 = $("#cornerDaySelectStoreCd").val();
+        		}
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {
         		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];

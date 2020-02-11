@@ -105,10 +105,10 @@
 					<wj-flex-grid-column header="<s:message code="dcDcfg.dcCd"/>" binding="dcCd" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfg.dcNm"/>" binding="dcNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfg.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfg.totSaleAmt"/>" binding="totSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfg.dcAmt"/>" binding="dcAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfg.totDcAmt"/>" binding="totDcAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfg.realSaleAmt"/>" binding="realSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfg.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfg.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfg.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfg.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 				</wj-flex-grid>
 				<%-- ColumnPicker 사용시 include --%>
 				<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -152,10 +152,10 @@
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" binding="prodNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleAmt"/>" binding="saleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.dcAmt"/>" binding="dcAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.totDcAmt"/>" binding="totDcAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.realSaleAmt"/>" binding="realSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				</wj-flex-grid>
 				<%-- ColumnPicker 사용시 include --%>
 				<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

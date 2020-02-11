@@ -29,7 +29,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td>
+        	<td colspan="2">
           	<div class="sb-select">      
 	          <span class="txtIn w110px">
 	              <wj-input-date

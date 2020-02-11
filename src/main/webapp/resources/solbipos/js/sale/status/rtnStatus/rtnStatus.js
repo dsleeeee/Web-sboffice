@@ -480,10 +480,11 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.saleYn		= $scope.saleYn;
 	    params.isPageChk	= isPageChk;
 	    if(params.saleDate != null){
-		    var saleDate	=(""+$scope.saleDate).substring(0,4);
-		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(4,6);
-		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(6,8);
-		    $("#pNo").text(saleDate);
+	    	var saleDate	=$scope.saleDate;
+//		    var saleDate	=(""+$scope.saleDate).substring(0,4);
+//		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(4,6);
+//		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(6,8);
+		    $("#dateYMD").text(saleDate);
 	    }
 		  
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수

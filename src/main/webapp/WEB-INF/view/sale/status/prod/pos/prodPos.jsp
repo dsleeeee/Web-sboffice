@@ -109,6 +109,7 @@
 				items-source="data"
 				control="flex"
 				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->

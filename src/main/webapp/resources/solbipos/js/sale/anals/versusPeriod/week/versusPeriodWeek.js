@@ -220,9 +220,6 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
 	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
 
-	    diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
-	    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
-
 	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
 	    diff = Math.ceil(diff / (1000 * 3600 * 24));
 

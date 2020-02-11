@@ -16,12 +16,12 @@
        <![CDATA[
        SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
               ,CASE TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-                                    WHEN '월' THEN 1
-                                    WHEN '화' THEN 2
-                                    WHEN '수' THEN 3
-                                    WHEN '목' THEN 4
-                                    WHEN '금' THEN 5
-                                    WHEN '토' THEN 6
+                                    WHEN '일' THEN 1
+                                    WHEN '월' THEN 2
+                                    WHEN '화' THEN 3
+                                    WHEN '수' THEN 4
+                                    WHEN '목' THEN 5
+                                    WHEN '금' THEN 6
                                     ELSE 7
                                 END AS DAY_ORDER
               ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT

@@ -81,9 +81,23 @@
     </table>
 
 
+	<%-- '영업일보(0000-00-00 ~ 0000-00-00)' 문구 추가로 변경
     <div class="mt20 oh sb-select dkbr" ng-controller="reportCtrl_excel">
-    	<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>		<%--<s:message code="cmm.excel.down" />--%>
+    	<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>	<s:message code="cmm.excel.down" />
 	</div>
+	--%>
+	<div><br></div>
+	<div><br></div>
+	<div class="tbl-tit-btn" ng-controller="reportCtrl_excel">
+		<div class="txtIn bk lh30">
+			<s:message code="dailyReport.report"/> ({{span_startDate}} ~ {{span_endDate}})
+		</div>
+		<span class="fr">
+			<button class="btn_skyblue" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>
+		</span>
+	</div>
+
+
 <%--
 </div>
 <div id="reportView" class="subCon">

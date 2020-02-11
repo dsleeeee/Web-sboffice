@@ -43,7 +43,6 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodStrl", function (event, data) {
-	  
 	  //화면구분값
 	  $("#gubun").val(data.gubun);
 	  
@@ -56,7 +55,8 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   
   //상품선택 대분류 리스트 조회
   $scope.searchProdList = function (isPageChk) {
-
+	  $("#srchPopProdCd").val("");
+	  $("#srchPopProdNm").val("");
     // 파라미터
     var params       = {};
 
@@ -142,9 +142,10 @@ app.controller('prodDtlStrl', ['$scope', '$http','$timeout', function ($scope, $
 	    }else{
 		     params.prodClassCd   = $("#prodClassCd").val();
 	    }
-	    params.srchProdCd    = $("#srchPopProdCd").val();
-	    params.srchProdNm    = $("#srchPopProdNm").val();
 
+	    params.srchPopProdCd    = $("#srchPopProdCd").val();
+	    params.srchPopProdNm    = $("#srchPopProdNm").val();
+	    console.log(params);
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/com/popup/prodNm/view.sb", params);
 	  };

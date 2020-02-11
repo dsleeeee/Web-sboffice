@@ -23,7 +23,7 @@
       <tbody>
       <tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td>
+        	<td colspan="3">
           	<div class="sb-select">
        		    <span class="txtIn"><input id="srchEmpDayPeriodStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -35,13 +35,6 @@
               		</label>
             	</span>
           	</div>
-        	</td>
-        	<td>
-        		<%-- 판매자 전체보기 --%>
-            	<span class="chk ml10">
-                	<input type="checkbox"  ng-model="isCheckedEmpAll" ng-change="totalEmpDay()" />
-                	<label for="totalEmpDay()">판매자 전체보기</label>
-            	</span>
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">

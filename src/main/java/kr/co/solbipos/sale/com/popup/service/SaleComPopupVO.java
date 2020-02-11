@@ -37,9 +37,13 @@ public class SaleComPopupVO extends PageVO {
     /** 대분류코드 */
     private String prodClassCd;
     /** 상품코드 */
-    private String srchProdCd;
+    private String srchPopProdCd;
     /** 상품명 */
-    private String srchProdNm;
+    private String srchPopProdNm;
+    /** 요일 */
+    private String saleDay;
+    /** 년월 */
+    private String saleYm;
     
     /**
      * @return the hqOfficeCd
@@ -199,20 +203,36 @@ public class SaleComPopupVO extends PageVO {
 		this.prodClassCd = prodClassCd;
 	}
 
-	public String getSrchProdCd() {
-		return srchProdCd;
+	public String getSaleDay() {
+		return saleDay;
 	}
 
-	public void setSrchProdCd(String srchProdCd) {
-		this.srchProdCd = srchProdCd;
+	public void setSaleDay(String saleDay) {
+		this.saleDay = saleDay;
 	}
 
-	public String getSrchProdNm() {
-		return srchProdNm;
+	public String getSaleYm() {
+		return saleYm;
 	}
 
-	public void setSrchProdNm(String srchProdNm) {
-		this.srchProdNm = srchProdNm;
+	public void setSaleYm(String saleYm) {
+		this.saleYm = saleYm;
+	}
+
+	public String getSrchPopProdCd() {
+		return srchPopProdCd;
+	}
+
+	public void setSrchPopProdCd(String srchPopProdCd) {
+		this.srchPopProdCd = srchPopProdCd;
+	}
+
+	public String getSrchPopProdNm() {
+		return srchPopProdNm;
+	}
+
+	public void setSrchPopProdNm(String srchPopProdNm) {
+		this.srchPopProdNm = srchPopProdNm;
 	}
 	
 }

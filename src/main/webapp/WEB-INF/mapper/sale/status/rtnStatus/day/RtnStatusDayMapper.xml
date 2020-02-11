@@ -62,7 +62,7 @@
       <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
        SELECT M.STORE_CD
-		     , M.SALE_DATE
+		     , TO_CHAR(TO_DATE(M.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE
 		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
 		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
 		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
@@ -119,7 +119,7 @@
              WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='saleDate != null and saleDate != ""'>
-           AND TSSH.SALE_DATE = #{saleDate}
+           AND TSSH.SALE_DATE = REPLACE(#{saleDate},'-','')
         </if>
         <if test='storeCd != null and storeCd != ""'>
            AND TSSH.STORE_CD = #{storeCd}

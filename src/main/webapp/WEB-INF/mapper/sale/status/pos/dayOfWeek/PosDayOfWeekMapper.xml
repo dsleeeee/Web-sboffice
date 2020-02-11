@@ -30,7 +30,7 @@
 				    				WHEN '목' THEN 4
 				    				WHEN '금' THEN 5
 				    				WHEN '토' THEN 6
-				    				ELSE 7
+				    				ELSE 0
 				    			END AS DAY_ORDER
     						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
     						, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
