@@ -84,5 +84,6 @@
 	                  </if>
 	                )
           </if>
+          ORDER BY TMS.STORE_CD
     </select>
 </mapper>

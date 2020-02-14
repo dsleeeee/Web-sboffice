@@ -105,7 +105,13 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
+  };
+  
   // 매장순위 리스트 조회
   $scope.searchStoreRankList = function () {
 
@@ -191,11 +197,11 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

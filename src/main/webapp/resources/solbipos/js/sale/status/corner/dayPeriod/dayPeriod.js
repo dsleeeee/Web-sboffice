@@ -175,7 +175,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_코너별_설정기간별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -302,7 +302,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'dayPeriodDtl.xlsx', function () {
+	      }, '매출현황_코너별_설정기간별(상세)_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);

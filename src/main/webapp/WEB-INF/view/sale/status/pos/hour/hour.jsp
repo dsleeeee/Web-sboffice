@@ -81,7 +81,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="posHourListScaleBox"
 			ng-model="posHourListScale"
@@ -90,7 +90,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadHour()">
@@ -110,6 +110,7 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
+				frozen-columns="6"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
 				<wj-flex-grid-column header="<s:message code="pos.saleHour"/>"			binding="saleHour" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -129,11 +130,11 @@
 	</div>
 
 	<%-- 페이지 리스트 --%>
-	<div class="pageNum mt20">
-	<%-- id --%>
+	<%-- <div class="pageNum mt20">
+	id
 		<ul id="posHourCtrlPager" data-size="10">
 		</ul>
-	</div>
+	</div> --%>
 	<%--//페이지 리스트--%>
 </div>
 

@@ -172,7 +172,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'storeFg.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장형태별매출_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

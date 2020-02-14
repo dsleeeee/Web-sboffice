@@ -11,10 +11,7 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 조회일자 세팅
 	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", gvStartDate);
 	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", gvEndDate);
-  
-	// 콤보박스 데이터 Set
-	$scope._setComboData('empDayOfWeeklistScaleBox', gvListScaleBoxData);
-  
+   
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 				
@@ -280,11 +277,11 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_요일별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

@@ -11,7 +11,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.cls"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodClassCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodClassCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>
@@ -29,15 +29,34 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
-	            	<%-- <span class="chk ml10">
-						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-		              	<label for="chkDt">
-	                		<s:message code="cmm.all.day" />
-	              		</label>
-	            	</span> --%>
+<%-- 	          	    <span class="txtIn"><input id="srchClassStartDate" 	ng-model="startDate"	class="w120px" ng-change="changeDate()"></span>ng-model="startDate"  --%>
+<%--                     <span class="rg">~</span> --%>
+<%--                     <span class="txtIn"><input id="srchClassEndDate" 	ng-model="endDate"		class="w120px" ng-change="changeDate()"></span> --%>
+						          <span class="txtIn w110px">
+	              <wj-input-date
+	                      id="srchClassStartDate"
+	                      value="srchClassStartDate"
+	                      ng-model="srchStartDate"
+	                      control="startDateCombo"
+	                      min="2000-01-01"
+	                      max="2099-12-31"
+	                      initialized="_initDateBox(s)"
+	                      ng-change="changeDate()">
+	              </wj-input-date>
+	            </span>
+	            <span class="rg">~</span>
+	            <span class="txtIn w110px">
+	              <wj-input-date
+	                      id="srchClassEndDate"
+	                      value="srchClassEndDate"
+	                      ng-model="srchEndDate"
+	                      control="endDateCombo"
+	                      min="2000-01-01"
+	                      max="2099-12-31"
+	                      initialized="_initDateBox(s)"
+	                      ng-change="changeDate()">
+	              </wj-input-date>
+	            </span>
 	          	</div>
 	        	</td>
 			</tr>
@@ -108,7 +127,7 @@
 				<input type="text" id="versusPeriodClassSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClass()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
 
@@ -168,7 +187,7 @@
 		    </wj-combo-box>
 
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClassDtl()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
 
@@ -204,15 +223,15 @@
 	    </div>
 	    <%--//위즈모 테이블--%>
 
-	  <%-- 페이지 리스트 --%>
+
+	</div>
+	<%-- 페이지 리스트 --%>
 	  <div class="pageNum mt20">
 	    <%-- id --%>
 	    <ul id="versusPeriodClassDtlCtrlPager" data-size="10">
 	    </ul>
 	  </div>
 	  <%--//페이지 리스트--%>
-	</div>
-
 </div>
 
 

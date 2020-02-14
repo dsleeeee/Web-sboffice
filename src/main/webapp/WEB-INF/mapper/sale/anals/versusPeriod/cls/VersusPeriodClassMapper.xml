@@ -125,7 +125,7 @@
 									    FROM TB_SL_DAILY_PROD C
 									   WHERE 1=1
 									   	 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-									   	 	AND C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+									   	 	AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
 											AND C.STORE_CD IN
@@ -322,19 +322,19 @@
 										      	   </foreach>
 									   	  	</if>
 											<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-											   	  AND C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+											   	  AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 	 </if>
 											 GROUP BY C.PROD_CD
 									       ) C
 									 WHERE  B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
-									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z 
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN 
+									  	  WHERE Z.STORE_CD IN
 									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 									  	  		#{item}
 									  	  	</foreach>
-	                                     </if>   
+	                                     </if>
 									   AND Z.PROD_CLASS_CD = #{prodClassCd})
 									 </if>
 						         ) B
@@ -381,13 +381,13 @@
 									       ) C
 									 WHERE  B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
-									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z 
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
-									  	  WHERE Z.STORE_CD IN 
+									  	  WHERE Z.STORE_CD IN
 									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 									  	  		#{item}
 									  	  	</foreach>
-	                                     </if>   
+	                                     </if>
 									   		AND Z.PROD_CLASS_CD = #{prodClassCd})
 									 </if>
 						         ) B

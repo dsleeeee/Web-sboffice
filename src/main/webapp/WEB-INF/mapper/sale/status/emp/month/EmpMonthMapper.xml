@@ -43,7 +43,7 @@
 			) A 
 		WHERE 1 = 1
 		GROUP BY A.SALE_DATE, A.STORE_CD
-		ORDER BY SALE_DATE ASC
+		ORDER BY A.SALE_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
@@ -82,5 +82,6 @@
 	                  </if>
 	                )
           </if>
+          ORDER BY TMS.STORE_CD
     </select>
 </mapper>

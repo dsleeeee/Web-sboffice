@@ -54,6 +54,12 @@
                       format="y">
               </wj-input-date>
             </span>
+            <span class="chk ml10">
+				<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+				<label for="chkDt">
+					<s:message code="cmm.all.day" />
+				</label>
+			</span>  
         </div>
         </td>
         
@@ -128,6 +134,7 @@
           control="flex"
           initialized="initGrid(s,e)"
           is-read-only="true"
+          frozen-columns="3"
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="corner.saleYm"/>"            binding="saleYm"            width="100" align="center" is-read-only="true" format="yyyy/MM"></wj-flex-grid-column>

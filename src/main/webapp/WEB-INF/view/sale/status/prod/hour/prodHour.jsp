@@ -107,6 +107,7 @@
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter"
+                    frozen-columns="2"
                      id="wjGridList">
 
                 <!-- define columns -->

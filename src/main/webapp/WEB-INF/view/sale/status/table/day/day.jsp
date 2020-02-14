@@ -110,6 +110,7 @@
 				control="flex"
 				initialized="initGrid(s,e)"
 				is-read-only="true"
+				frozen-columns="5"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="130" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

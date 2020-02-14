@@ -155,7 +155,13 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
-
+  
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+	$scope.srchCornerMonthStartDateCombo.isReadOnly = $scope.isChecked;
+	$scope.srchCornerMonthEndDateCombo.isReadOnly = $scope.isChecked;
+  };
+  
   // 코너별매출일자별 리스트 조회
   $scope.searchCornerMonthList = function (isPageChk) {
     // 파라미터
@@ -219,7 +225,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_코너별_월별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

@@ -200,7 +200,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'excel.xlsx', function () {
+			}, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.day"]+'_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);

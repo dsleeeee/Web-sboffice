@@ -152,8 +152,6 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM') + "31";
 		}
 
-		console.log(params.startDate + " , " +params.endDate);
-
 		if(params.startDate > params.endDate){
 			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 			return false;
@@ -165,8 +163,8 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	//전체기간 체크박스 클릭이벤트
 	$scope.isChkDt = function() {
-		$scope.srchPosMonthStartDate.isReadOnly = $scope.isChecked;
-		$scope.srchPosMonthEndDate.isReadOnly = $scope.isChecked;
+		$scope.posMonthStartDateCombo.isReadOnly = $scope.isChecked;
+		$scope.posMonthEndDateCombo.isReadOnly = $scope.isChecked;
 	};
 
 	//매장선택 모듈 팝업 사용시 정의
@@ -199,7 +197,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'excel.xlsx', function () {
+			}, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.month"]+'_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);

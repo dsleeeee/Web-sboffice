@@ -145,7 +145,7 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_바코드별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -222,7 +222,7 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'posdtl.xlsx', function () {
+	      }, '매출현황_바코드별(상세)_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);

@@ -68,7 +68,7 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("empDayPeriodCtrlSrch", function (event, data) {
 
@@ -165,7 +165,7 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'dayPeriod.xlsx', function () {
+      }, '매출현황_판매자별_설정기간별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -240,7 +240,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	  $scope.$on("empDayPeriodDtlCtrlSrch", function (event, data) {
 		  if(data != undefined){
@@ -278,24 +278,25 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 
 	//엑셀 다운로드
 	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
+	    if ($scope.dtlFlex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.dtlFlex, {
 	        includeColumnHeaders: true,
 	        includeCellStyles   : false,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'dayPeriodDtl.xlsx', function () {
+	      }, '매출현황_판매자별_설정기간별(상세)_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);
 	      });
 	    }, 10);
 	  };
+
 }]);

@@ -28,7 +28,7 @@
       	<tbody>
        	<%-- 조회일자 --%>
 		<tr>
-	    	<th><s:message code="cmm.search.date" /></th>
+	    	<th><s:message code="cmm.search.month" /></th>
         	<td colspan="2">
           	<div class="sb-select">      
 	          <span class="txtIn w110px">
@@ -57,7 +57,13 @@
 	                      selection-mode="Month" 
 	                      format="y">
 	              </wj-input-date>
-	            </span>        
+	            </span>      
+                <span class="chk ml10">
+					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+					<label for="chkDt">
+						<s:message code="cmm.all.day" />
+					</label>
+				</span>  
           	</div>
         	</td>
         	<td>
@@ -96,7 +102,7 @@
 	      items-source="_getComboData('empMonthlistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
+	      is-editable="false"	      
 	      initialized="_initComboBox(s)">
 	    </wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -118,6 +124,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
+          frozen-columns="4"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->

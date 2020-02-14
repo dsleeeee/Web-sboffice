@@ -28,6 +28,7 @@
 			          <span class="txtIn w110px">
 			              <wj-input-date
 			                      ng-model="srchTableMonthStartDate"
+			                      control="tableMonthStartDateCombo"
 			                      min="2000-01-01"
 			                      max="2099-12-31"
 			                      selection-mode="Month"
@@ -38,18 +39,19 @@
 			            <span class="txtIn w110px">
 			              <wj-input-date
 			                      ng-model="srchTableMonthEndDate"
+			                      control="tableMonthEndDateCombo"
 			                      min="2000-01-01"
 			                      max="2099-12-31"
 			                      selection-mode="Month"
 			                      format="y">
 			              </wj-input-date>
 			            </span>
-<%-- 			            <span class="chk ml10">
+		                <span class="chk ml10">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
-							</label> --%>
-						</span>
+							</label>
+						</span>  
 					</div>
 				</td>
 			</tr>
@@ -124,6 +126,7 @@
 				control="flex"
 				initialized="initGrid(s,e)"
 				is-read-only="true"
+	            frozen-columns="4"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableMonth.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

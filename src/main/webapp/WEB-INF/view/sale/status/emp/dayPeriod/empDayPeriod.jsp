@@ -147,7 +147,7 @@
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"
-          control="flex"
+          control="dtlFlex"
           initialized="initGrid(s,e)"
           is-read-only="false"
           item-formatter="_itemFormatter">

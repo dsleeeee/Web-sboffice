@@ -110,6 +110,7 @@
           control="flex"
           initialized="initGrid(s,e)"
           is-read-only="true"
+          frozen-columns="3"
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
