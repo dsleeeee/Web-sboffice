@@ -21,8 +21,8 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.isCheckedSort = "1";
     
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
 	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {

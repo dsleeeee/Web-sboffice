@@ -8,8 +8,8 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('barcdCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchBarcdStartDate = wcombo.genDateVal("#srchBarcdStartDate", gvStartDate);
-  $scope.srchBarcdEndDate   = wcombo.genDateVal("#srchBarcdEndDate", gvEndDate);
+  $scope.srchBarcdStartDate = wcombo.genDateVal("#srchBarcdStartDate", getToday());
+  $scope.srchBarcdEndDate   = wcombo.genDateVal("#srchBarcdEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("barcdListScaleBox", gvListScaleBoxData);
@@ -67,11 +67,6 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
   // 코너별매출일자별 리스트 조회
   $scope.searchBarcdList = function () {
-
-	if ($("#barcdSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
 
     // 파라미터
     var params       = {};

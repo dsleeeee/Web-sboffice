@@ -9,8 +9,8 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('prodPayFgCtrl', $scope, $http, true));
      
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", getToday());
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodPayFglistScaleBox', gvListScaleBoxData);

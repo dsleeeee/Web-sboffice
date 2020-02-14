@@ -9,8 +9,8 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	angular.extend(this, new RootController('empDayCtrl', $scope, $http, true));
      
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", getToday());
   
 	// 콤보박스 데이터 Set
 	$scope._setComboData('empDaylistScaleBox', gvListScaleBoxData);
@@ -114,11 +114,6 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayCtrl", function (event, data) {
 	  
-     if ($("#empDaySelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpDayList(true);
 
@@ -128,11 +123,6 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayCtrlSrch", function (event, data) {
-	  
-     if ($("#empDaySelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
 	  
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpDayList(false);
@@ -217,7 +207,7 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				//첫째줄 헤더 생성
 		   	 	for(var i=0; i<length; i++){
 			
-			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" , isReadOnly: "true", aggregate: "Sum" }));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.billCnt"], binding: 'billCnt'+i, align: "center" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columnHeaders.setCellData(0, 5+(i*2), response.data.data.list[i].storeNm);
 			   		grid.columnHeaders.setCellData(0, 6+(i*2), response.data.data.list[i].storeNm);

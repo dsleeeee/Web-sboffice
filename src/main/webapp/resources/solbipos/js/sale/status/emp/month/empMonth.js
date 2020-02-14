@@ -108,12 +108,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empMonthCtrl", function (event, data) {
-	  
-     if ($("#empMonthSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
+	  	  
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpMonthList(true);
 
@@ -123,12 +118,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empMonthCtrlSrch", function (event, data) {
-	  
-     if ($("#empMonthSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
+	  	  
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpMonthList(false);
 

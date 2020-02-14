@@ -82,9 +82,8 @@
 		<%-- 할인구분별 --%>
 		<div class="w100 mt40">
 			<div class="oh sb-select mb10">
-				<span class="fl bk lh30"><s:message code='dcDcfg.dcfg' /></span>
 				<%-- 페이지 스케일  --%>
-				<!-- <wj-combo-box
+				<wj-combo-box
 					class="w100px fl"
 					id="dcDcfgListScaleBox"
 					ng-model="dcDcfgListScale"
@@ -93,7 +92,7 @@
 					selected-value-path="value"
 					is-editable="false"
 					initialized="initComboBox(s)">
-				</wj-combo-box> -->
+				</wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="text" id="dcDcfgSelectStoreStoreNum" ng-model="storeNum">
 				</c:if>
@@ -134,9 +133,8 @@
 		<%-- 상품상세 --%>
 		<div class="w100 mt40" ng-controller="dcDcfgDtlCtrl">
 			<div class="oh sb-select mb10">
-				<span class="fl bk lh30"><s:message code='dcDcfg.dcfgDtl' /></span>
 				<%-- 페이지 스케일  --%>
-				<!-- <wj-combo-box
+				<wj-combo-box
 					class="w100px fl"
 					id="dcDcfgDtlListScaleBox"
 					ng-model="dcDcfgDtlListScale"
@@ -145,7 +143,7 @@
 					selected-value-path="value"
 					is-editable="false"
 					initialized="initComboBox(s)">
-				</wj-combo-box> -->
+				</wj-combo-box>
 				<%-- 할인구분별 매출 상세 엑셀다운로드 --%>
 				<button class="btn_skyblue fr"
 					ng-click="excelDownloadDcDcfgDtl()">
@@ -154,7 +152,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="wj-gridWrap" style="height: 350px;">
-				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
+				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="dtlFlex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" binding="prodNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

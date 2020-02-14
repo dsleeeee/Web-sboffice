@@ -9,8 +9,8 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   angular.extend(this, new RootController('prodRankCtrl', $scope, $http, true));
     
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);

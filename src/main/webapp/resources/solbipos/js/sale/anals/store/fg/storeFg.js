@@ -8,8 +8,8 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeFgCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchStoreFgStartDate = wcombo.genDateVal("#srchStoreFgStartDate", gvStartDate);
-  $scope.srchStoreFgEndDate   = wcombo.genDateVal("#srchStoreFgEndDate", gvEndDate);
+  $scope.srchStoreFgStartDate = wcombo.genDateVal("#srchStoreFgStartDate", getToday());
+  $scope.srchStoreFgEndDate   = wcombo.genDateVal("#srchStoreFgEndDate", getToday());
 
   // 리스트 콤보박스 데이터 Set
   $scope._setComboData("storeFgListScaleBox", gvListScaleBoxData);

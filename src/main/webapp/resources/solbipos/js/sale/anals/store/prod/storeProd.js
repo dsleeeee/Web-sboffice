@@ -21,8 +21,8 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData('storeProdlistScaleBox', gvListScaleBoxData);
     
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", getToday());
 	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {

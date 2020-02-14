@@ -9,8 +9,8 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	angular.extend(this, new RootController('empDayOfWeekCtrl', $scope, $http, true));
      
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", getToday());
    
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -111,12 +111,7 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayOfWeekCtrl", function (event, data) {
-	  
-     if ($("#empDayOfWeekSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-  
+	    
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpDayOfWeekList(true);
 
@@ -126,12 +121,7 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayOfWeekCtrlSrch", function (event, data) {
-	  
-     if ($("#empDayOfWeekSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-  
+	    
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpDayOfWeekList(false);
 

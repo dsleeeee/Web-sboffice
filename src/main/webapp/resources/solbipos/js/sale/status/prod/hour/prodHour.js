@@ -40,8 +40,8 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchSaleTimeCombo", vSaleTime);
 
-    $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", gvStartDate);
-    $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", gvEndDate);
+    $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", getToday());
+    $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", getToday());
     $scope.orgnFg        = gvOrgnFg;
     
     // 콤보박스 데이터 Set

@@ -8,8 +8,29 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('empDayPeriodCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchEmpDayPeriodStartDate = wcombo.genDateVal("#srchEmpDayPeriodStartDate", gvStartDate);
-  $scope.srchEmpDayPeriodEndDate   = wcombo.genDateVal("#srchEmpDayPeriodEndDate", gvEndDate);
+  $scope.srchEmpDayPeriodStartDate = wcombo.genDateVal("#srchEmpDayPeriodStartDate", getToday());
+  $scope.srchEmpDayPeriodEndDate   = wcombo.genDateVal("#srchEmpDayPeriodEndDate", getToday());
+
+  //조회조건 콤보박스 데이터 Set
+//  $scope._setComboData("empDayPeriodListScaleBox", gvListScaleBoxData);
+
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchEmpDayPeriodStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEmpDayPeriodEndDate.isReadOnly = $scope.isChecked;
+  };
+
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.empDayPeriodSelectStoreShow = function () {
+    $scope._broadcast('empDayPeriodSelectStoreCtrl');
+  };
+}]);
+
+app.controller('empDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('empDayPeriodMainCtrl', $scope, $http, $timeout, true));
 
   //조회조건 콤보박스 데이터 Set
 //  $scope._setComboData("empDayPeriodListScaleBox", gvListScaleBoxData);
@@ -17,10 +38,10 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 조회조건 '코너 표시'
-//	$scope.getEmpNmList();
+//		$scope.getEmpNmList();
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("empDayPeriodCtrl");
+    $scope._makePickColumns("empDayPeriodMainCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -57,12 +78,8 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   }
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("empDayPeriodCtrl", function (event, data) {
+  $scope.$on("empDayPeriodMainCtrl", function (event, data) {
 
-	if ($("#empDayPeriodSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
 	$scope.searchEmpDayPeriodList(true);
 
     // 기능수행 종료 : 반드시 추가
@@ -70,12 +87,8 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   });
 
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
-  $scope.$on("empDayPeriodCtrlSrch", function (event, data) {
+  $scope.$on("empDayPeriodMainCtrlSrch", function (event, data) {
 
-	if ($("#empDayPeriodSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
 	$scope.searchEmpDayPeriodList(false);
 
     // 기능수행 종료 : 반드시 추가
@@ -85,15 +98,11 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 판매자별 설정기간 리스트 조회
   $scope.searchEmpDayPeriodList = function (isPageChk) {
-  if ($("#empDayPeriodSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#empDayPeriodSelectStoreCd").val();
-//    params.listScale = $scope.empDayPeriodListScale;
+//	    params.listScale = $scope.empDayPeriodListScale;
     params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -137,19 +146,6 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	}
   };
 
-  //전체기간 체크박스 클릭이벤트
-  $scope.isChkDt = function() {
-    $scope.srchEmpDayPeriodStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchEmpDayPeriodEndDate.isReadOnly = $scope.isChecked;
-  };
-
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.empDayPeriodSelectStoreShow = function () {
-    $scope._broadcast('empDayPeriodSelectStoreCtrl');
-  };
-
   //엑셀 다운로드
   $scope.excelDownloadDayPeriod = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -174,7 +170,6 @@ app.controller('empDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
   };
 
 }]);
-
 
 /** 설정기간별매출(매출상세) controller */
 app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
@@ -258,10 +253,6 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 
 	  // 코너별매출일자별 리스트 조회
 	  $scope.searchEmpDayPeriodDtlList = function (isPageChk) {
-		if ($("#empDayPeriodSelectStoreCd").val() === '') {
-	      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-	      return false;
-	    }
 
 	    // 파라미터
 	    var params       = {};
@@ -276,7 +267,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    $scope._inquirySub("/sale/status/emp/dayperiod/dtl.sb", params);
 	  };
 
-	//엑셀 다운로드
+	  //엑셀 다운로드
 	  $scope.excelDownloadDayPeriodDtl = function () {
 	    if ($scope.dtlFlex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.

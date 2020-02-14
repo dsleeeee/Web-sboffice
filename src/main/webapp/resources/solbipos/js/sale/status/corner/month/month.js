@@ -143,10 +143,6 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   
 //다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerMonthCtrlSrch", function (event, data) {
-	if ($("#cornerMonthSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }	  
 	
     $scope.searchCornerMonthList(false);
     
@@ -184,7 +180,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/month/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/month/list.sb", params);
 	
 	
   };

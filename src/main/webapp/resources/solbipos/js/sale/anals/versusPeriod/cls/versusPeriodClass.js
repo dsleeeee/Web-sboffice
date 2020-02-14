@@ -8,8 +8,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('versusPeriodClassCtrl', $scope, $http, true));
 
-//  $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", gvStartDate);
-//  $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", gvEndDate);
   var srchStartDateDash;
   var srchEndDateDash;
   var compStartDateDash;
@@ -23,9 +21,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
 		srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	    srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
-
-//		var startDate = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
-//		var endDate   = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 
 		var srchDate = new Date();
 		srchDate.setFullYear	(srchStartDateDash.substr(0, 4) - 1);
@@ -50,10 +45,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
 	};
 
-
-  // 조회일자 변경 시 대비일자 자동 세팅
-  //$("#srchClassStartDate").onChange($scope.setCompDate($scope.srchStartDate, $scope.srchCompStartDate));
-  //$("#srchClassEndDate").onChange($scope.setCompDate($scope.srchEndDate, $scope.srchCompEndDate));
 
   // 콤보박스 데이터 Set
   $scope._setComboData('versusPeriodClasslistScaleBox', gvListScaleBoxData);
@@ -132,17 +123,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     }
 
-/*    s.columnHeaders.allowMerging = true;
-    s.rowHeaders.allowMerging = true;
-
-    s.columnHeaders.setCellData(0,0,"Country");
-    s.columnHeaders.setCellData(0,1,"Country");
-    s.columnHeaders.setCellData(0,2,"Country");
-
-    s.columnHeaders.setCellData(1,0,"Country");
-    s.columnHeaders.setCellData(1,1,"Country");
-    s.columnHeaders.setCellData(1,2,"Country");*/
-
     s.refresh();
 
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
@@ -196,11 +176,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     $scope.params = params;
 
-//    params.startDate = params.startDate;
-//    params.endDate = srchEndDateDash;
-//    params.compStartDate = compStartDateDash;
-//    params.compEndDate = compEndDateDash;
-
     if(params.startDate.replace(/-/gi, "") > params.endDate.replace(/-/gi, "") || params.compStartDate.replace(/-/gi, "") > params.compEndDate.replace(/-/gi, "")){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
@@ -214,9 +189,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
-
-//    var srchStartDateText = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
-//    var srchEndDateText = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 
     var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
     var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";

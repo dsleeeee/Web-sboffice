@@ -98,7 +98,7 @@
 	          sticky-headers="true"
 	          selection-mode="Row"
 	          items-source="data"
-	          frozen-columns="12"
+	          frozen-columns="6"
 	          item-formatter="_itemFormatter">
 	
 	          <!-- define columns -->

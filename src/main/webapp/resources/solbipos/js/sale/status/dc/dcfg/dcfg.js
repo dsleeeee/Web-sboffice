@@ -55,13 +55,13 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
         }
       }
     });
-    
+
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
       $scope.srchDcDcfgStartDate.isReadOnly = $scope.isChecked;
       $scope.srchDcDcfgEndDate.isReadOnly = $scope.isChecked;
     };
-    
+
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
@@ -250,7 +250,7 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/dc/dcfg/dtl.sb", params);
-	    $scope.flex.refresh();
+	    $scope.dtlFlex.refresh();
 	  };
 
 	//엑셀 다운로드

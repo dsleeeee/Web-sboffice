@@ -9,8 +9,8 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('prodPosCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", gvStartDate);
-	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", gvEndDate);
+	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
+	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);

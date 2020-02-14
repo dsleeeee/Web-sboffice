@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnBarcdSearch" ng-click="_broadcast('barcdCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnBarcdSearch" ng-click="_broadcast('barcdCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>

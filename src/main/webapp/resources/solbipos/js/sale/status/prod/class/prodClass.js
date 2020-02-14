@@ -9,8 +9,8 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('prodClassCtrl', $scope, $http, true));
      
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodClasslistScaleBox', gvListScaleBoxData);

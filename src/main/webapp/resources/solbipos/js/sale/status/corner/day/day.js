@@ -8,8 +8,8 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cornerDayCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchCornerDayStartDate = wcombo.genDateVal("#srchCornerDayStartDate", gvStartDate);
-  $scope.srchCornerDayEndDate   = wcombo.genDateVal("#srchCornerDayEndDate", gvEndDate);
+  $scope.srchCornerDayStartDate = wcombo.genDateVal("#srchCornerDayStartDate", getToday());
+  $scope.srchCornerDayEndDate   = wcombo.genDateVal("#srchCornerDayEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("cornerDayListScaleBox", gvListScaleBoxData);
@@ -141,10 +141,6 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("cornerDayCtrlSrch", function (event, data) {
-	if ($("#cornerDaySelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
 	
     $scope.searchCornerDayList(false)
     
@@ -175,7 +171,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/day/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/day/list.sb", params);
 	
   };
 

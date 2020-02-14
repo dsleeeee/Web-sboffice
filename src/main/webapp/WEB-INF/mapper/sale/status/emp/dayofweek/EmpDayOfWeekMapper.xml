@@ -62,18 +62,22 @@
 		FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		WHERE TME.STORE_CD = TMS.STORE_CD
+		<if test='storeCd != null and storeCd != ""'>
 		AND TME.STORE_CD IN
 		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                       #{item}
             </foreach>
+        </if>
 		  <if test='empChk != "Y"'>
 	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
 	                  WHERE Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
+	                  <if test='storeCd != null and storeCd != ""'>
 	                  AND Z.STORE_CD IN
 	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         	#{item}
                     	</foreach> 
+                      </if>
                       <if test='startDate != null and startDate != ""'>
 		                   AND Z.SALE_DATE >= #{startDate}
 		              </if>
