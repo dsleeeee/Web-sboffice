@@ -83,6 +83,11 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStatusProdCtrl", function (event, data) {
+	if ($("#rtnStatusProdSelectStoreCd").val() === '') {
+	  $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+	  return false;
+	}
+
     $scope.searchRtnStatusProdList();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -92,24 +97,23 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
   // 코너별매출일자별 리스트 조회
   $scope.searchRtnStatusProdList = function () {
 
-	if ($("#rtnStatusProdSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
-
     // 파라미터
     var params       = {};
     params.storeCd   = $("#rtnStatusProdSelectStoreCd").val();
     params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
     params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+//    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyy-MM-dd');
+    params.endDate   = (params.endDate).split("-");
+    var endDay 		 = ( new Date(params.endDate[0],params.endDate[1], 0) ).getDate();
+    params.endDate 	 = params.endDate[0] + params.endDate[1] + endDay;
     
 	if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/rtnStatus/prod/list.sb", params);
+	$scope._inquiryMain("/sale/status/rtnStatus/prod/list.sb", params);
 	
 	
   };

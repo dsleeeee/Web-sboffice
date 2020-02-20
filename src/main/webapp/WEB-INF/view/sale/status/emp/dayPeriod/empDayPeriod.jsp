@@ -9,7 +9,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="empsale.dayPeriod"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnEmpDayPeriodSearch" ng-click="_broadcast('empDayPeriodCtrlSrch')">
+      <button class="btn_blue fr mt5 mr10" id="btnEmpDayPeriodSearch" ng-click="_broadcast('empDayPeriodMainCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -64,7 +64,7 @@
 
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
      <%-- 판매자별 --%>
-     <div class="w100 mt10">
+     <div class="w100 mt10" ng-controller="empDayPeriodMainCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='empsale.empsale'/></span>
 
@@ -104,7 +104,7 @@
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="empDayPeriodCtrl"/>
+          <jsp:param name="pickerTarget" value="empDayPeriodMainCtrl"/>
         </jsp:include>
         <%--// ColumnPicker 사용시 include --%>
       </div>
@@ -113,7 +113,7 @@
       <%--페이지 리스트--%>
       <div class="pageNum mt20">
       	<%-- id --%>
-      	<ul id="empDayPeriodCtrlPager" data-size="10"></ul>
+      	<ul id="empDayPeriodMainCtrlPager" data-size="10"></ul>
       </div>
       <%--//페이지 리스트--%>
      </div>
@@ -147,7 +147,7 @@
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"
-          control="flex"
+          control="dtlFlex"
           initialized="initGrid(s,e)"
           is-read-only="false"
           item-formatter="_itemFormatter">

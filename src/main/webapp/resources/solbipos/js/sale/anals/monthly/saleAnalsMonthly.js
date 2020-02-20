@@ -374,7 +374,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 						+ '  <td>' + thuSum.format() + '</td>'
 						+ '  <td>' + friSum.format() + '</td>'
 						+ '  <td>' + satSum.format() + '</td>'
-						+ '  <td rowspan="3" colspan="2" class="tr red s20">' + totalSaleSum.format() + '</td>'
+						+ '  <td rowspan="3" colspan="2" class="tr red s20" align="center" >' + totalSaleSum.format() + '</td>'
 						+ '</tr>'
 						+ '<tr class="bg-total">'
 						+ '  <td>비율</td>'

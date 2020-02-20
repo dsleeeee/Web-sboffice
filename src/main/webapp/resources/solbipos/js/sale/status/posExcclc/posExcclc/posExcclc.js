@@ -219,7 +219,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_POS정산내역_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

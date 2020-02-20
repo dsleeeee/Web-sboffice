@@ -9,8 +9,8 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   angular.extend(this, new RootController('prodRankCtrl', $scope, $http, true));
     
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
@@ -96,11 +96,11 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_상품별_상품매출순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

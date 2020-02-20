@@ -4,8 +4,7 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.table.dayOfWeek.service.impl.TableDayOfWeekMapper">
 
-	<select id="getTableDayOfWeekList"
-		parameterType="tableDayOfWeekVO" resultType="DefaultMap">
+	<select id="getTableDayOfWeekList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
 		SELECT 	TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
 				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
     				WHEN '월' THEN 1

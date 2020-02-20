@@ -120,7 +120,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				            	is-read-only		="true">
+				            	is-read-only		="true"
+				            	frozen-columns		="1">
 				<%--<wj-flex-grid-column header="<s:message code="dailyReport.slSaleFg"     	/>"     binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>--%>
 					<wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"		/>"		binding="slSaleFg"      	width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.slTotSaleAmt" 	/>"		binding="slTotSaleAmt"		width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
@@ -164,7 +165,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="3">
 					<wj-flex-grid-column header="<s:message code="dailyReport.payRealSaleAmt"   />"     binding="payRealSaleAmt"    width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.payTotTipAmt"     />"     binding="payTotTipAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.payTotEtcAmt"     />"     binding="payTotEtcAmt"      width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -332,7 +334,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                 <%--<wj-flex-grid-column header="<s:message code="dailyReport.empNo"            />"     binding="empNo"             width="100" is-read-only="true" align="left"	                ></wj-flex-grid-column>--%>
                     <wj-flex-grid-column header="<s:message code="dailyReport.empNm"            />"     binding="empNm"             width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.empSalCnt"        />"     binding="empSalCnt"         width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -374,7 +377,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
 				<%--<wj-flex-grid-column header="<s:message code="dailyReport.dcCd"             />"     binding="dcCd"              width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>--%>
 					<wj-flex-grid-column header="<s:message code="dailyReport.dcNm"             />"     binding="dcNm"              width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcSaleQty"     	/>"     binding="dcSaleQty"			width="150" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -412,7 +416,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlDcCd"        />"     binding="dcdtlDcCd"         width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlDcNm"        />"     binding="dcdtlDcNm"         width="200" is-read-only="true" align="left"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.dcdtlCnt"         />"     binding="dcdtlCnt"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -450,7 +455,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="3">
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftCd"           />"     binding="giftCd"            width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftNm"           />"     binding="giftNm"            width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"         />"     binding="giftUprc"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
@@ -535,7 +541,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv1Nm"            />"		binding="lv1Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotSaleAmt"    />"		binding="lv1TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv1TotDcAmt"      />"		binding="lv1TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
@@ -571,7 +578,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv2Nm"            />"		binding="lv2Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotSaleAmt"    />"		binding="lv2TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv2TotDcAmt"      />"		binding="lv2TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
@@ -607,7 +615,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv3Nm"            />"		binding="lv3Nm"             width="500" is-read-only="true" align="left" 					></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotSaleAmt"    />"		binding="lv3TotSaleAmt"     width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dailyReport.lv3TotDcAmt"      />"		binding="lv3TotDcAmt"       width="200" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>
@@ -708,7 +717,8 @@
 				                selection-mode		="Row"
 				                items-source		="data"
 				                item-formatter		="_itemFormatter"
-				                is-read-only		="true">
+				                is-read-only		="true"
+				                frozen-columns		="1">
                     <wj-flex-grid-column header="<s:message code="dailyReport.emptySpace"      	/>"		binding="apprNm"            width="100" is-read-only="true" align="center" 					></wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="dailyReport.apprCntCard"      />"		binding="apprCntCard"       width="100" is-read-only="true" align="right" 	aggregate="Sum" ></wj-flex-grid-column>

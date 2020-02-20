@@ -178,8 +178,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	//전체기간 체크박스 클릭이벤트
 	$scope.isChkDt = function() {
-		$scope.srchTableMonthStartDate.isReadOnly = $scope.isChecked;
-		$scope.srchTableMonthEndDate.isReadOnly = $scope.isChecked;
+		$scope.tableMonthStartDateCombo.isReadOnly = $scope.isChecked;
+		$scope.tableMonthEndDateCombo.isReadOnly = $scope.isChecked;
 	};
 
 	//매장선택 모듈 팝업 사용시 정의
@@ -212,7 +212,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'tableMonth.xlsx', function () {
+			}, '매출현황_테이블별_월별_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);

@@ -143,10 +143,6 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   
 //다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerMonthCtrlSrch", function (event, data) {
-	if ($("#cornerMonthSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }	  
 	
     $scope.searchCornerMonthList(false);
     
@@ -155,7 +151,13 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
-
+  
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+	$scope.srchCornerMonthStartDateCombo.isReadOnly = $scope.isChecked;
+	$scope.srchCornerMonthEndDateCombo.isReadOnly = $scope.isChecked;
+  };
+  
   // 코너별매출일자별 리스트 조회
   $scope.searchCornerMonthList = function (isPageChk) {
     // 파라미터
@@ -178,7 +180,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/month/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/month/list.sb", params);
 	
 	
   };
@@ -219,7 +221,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_코너별_월별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

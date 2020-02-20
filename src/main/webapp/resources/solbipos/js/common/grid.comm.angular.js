@@ -223,7 +223,7 @@ function RootController(ctrlName, $scope, $http, isPicker) {
   function _itemFormatter(panel, r, c, cell) {
     // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-      var mRange = $scope.flex.getMergedRange(panel, r, c);
+      var mRange = panel.grid.getMergedRange(panel, r, c);
       if (mRange) {
         cell.innerHTML = '<div class=\"wj-header merged-custom\">' + cell.innerHTML + '</div>';
       }

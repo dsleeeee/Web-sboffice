@@ -50,6 +50,7 @@
 		  <if test='dcCd != null and dcCd != ""'>
           	AND TSDD.DC_CD = #{dcCd}
       	  </if> -->
+      	  ORDER BY TSDT.SALE_DATE DESC, TSDT.STORE_CD, NMCODE.NMCODE_CD, TSDD.TOT_SALE_AMT DESC
     	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

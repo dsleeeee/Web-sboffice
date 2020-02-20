@@ -8,17 +8,37 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('rtnStatusDayCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchRtnStatusDayStartDate = wcombo.genDateVal("#srchRtnStatusDayStartDate", gvStartDate);
-  $scope.srchRtnStatusDayEndDate   = wcombo.genDateVal("#srchRtnStatusDayEndDate", gvEndDate);
+  $scope.srchRtnStatusDayStartDate = wcombo.genDateVal("#srchRtnStatusDayStartDate", getToday());
+  $scope.srchRtnStatusDayEndDate   = wcombo.genDateVal("#srchRtnStatusDayEndDate", getToday());
 
-//조회조건 콤보박스 데이터 Set
+  //조회조건 콤보박스 데이터 Set
   $scope._setComboData("rtnStatusDayListScaleBox", gvListScaleBoxData);
+
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.rtnStatusDaySelectStoreShow = function () {
+    $scope._broadcast('rtnStatusDaySelectStoreCtrl');
+  };
+
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchRtnStatusDayStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchRtnStatusDayEndDate.isReadOnly = $scope.isChecked;
+  };
+
+}]);
+
+
+app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('rtnStatusDayMainCtrl', $scope, $http, $timeout, true));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("rtnStatusDayCtrl");
+    $scope._makePickColumns("rtnStatusDayMainCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -32,7 +52,7 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
@@ -114,19 +134,18 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("rtnStatusDayCtrl", function (event, data) {
+  $scope.$on("rtnStatusDayMainCtrl", function (event, data) {
     $scope.searchRtnStatusDayList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
-  $scope.$on("rtnStatusDayCtrlSrch", function (event, data) {
+  $scope.$on("rtnStatusDayMainCtrlSrch", function (event, data) {
     $scope.searchRtnStatusDayList(false);
     // 기능수행 종료 : 반드시 추가
 	event.preventDefault();
   });
-
 
   // 코너별매출일자별 리스트 조회
   $scope.searchRtnStatusDayList = function (isPageChk) {
@@ -146,7 +165,7 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 	if(!$scope.isChecked){
 	  $scope.startDateForDt = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
       $scope.endDateForDt = wijmo.Globalize.format($scope.srchRtnStatusDayEndDate.value, 'yyyyMMdd');
-      
+
 	  params.startDate = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchRtnStatusDayEndDate.value, 'yyyyMMdd');
 	}else{
@@ -159,16 +178,16 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquirySub("/sale/status/rtnStatus/day/list.sb", params);
-	
+
 	//메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
 		var rows = sender.rows;
-		
+
 		var params		 = {};
 		if(rows.length > 0){
 		    params.storeCd   = rows[0].dataItem.storeCd;
 		    params.storeNm   = rows[0].dataItem.storeNm;
-		    
+
 		    // 등록일자 '전체기간' 선택에 따른 params
 		    if(!$scope.isChecked){
 		      params.startDate = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
@@ -183,20 +202,7 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 	}
   };
 
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.rtnStatusDaySelectStoreShow = function () {
-    $scope._broadcast('rtnStatusDaySelectStoreCtrl');
-  };
-  
-  //전체기간 체크박스 클릭이벤트
-  $scope.isChkDt = function() {
-    $scope.srchRtnStatusDayStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchRtnStatusDayEndDate.isReadOnly = $scope.isChecked;
-  };
-
-//엑셀 다운로드
+  //엑셀 다운로드
   $scope.excelDownloadDay = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -211,7 +217,7 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_반품현황_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -219,8 +225,6 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
     }, 10);
   };
 }]);
-
-
 
 /** 반품현황 상세(일자별 상세) controller */
 app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
@@ -237,7 +241,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 //	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 //	    // add a sigma to the header to show that this is a summary row
 //	    s.bottomLeftCells.setCellData(0, 0, '합계');
-	    
+
 	    // 그리드 링크 효과
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
@@ -271,8 +275,8 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	        }
 	      }
 	    });
-	    
-	    
+
+
 	 // add the new GroupRow to the grid's 'columnFooters' panel
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 	    // add a sigma to the header to show that this is a summary row
@@ -335,7 +339,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // <-- //그리드 헤더2줄 -->
 
 	  }
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("rtnStatusDayDtlCtrl", function (event, data) {
 		  if(data != undefined){
@@ -348,7 +352,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	// 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("rtnStatusDayDtlCtrlSrch", function (event, data) {
 		  if(data != undefined){
@@ -374,14 +378,14 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeNm   = $scope.storeNm;
 	    params.isPageChk	= isPageChk;
 	    $("#strNm").text($scope.storeNm);
-		  
+
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/rtnStatus/dayDtl/list.sb", params);
-	    
+
 	    //메인그리드 조회후 상세그리드 조회.
 		$scope.loadedRows2 = function(sender, args){
 			var rows = sender.rows;
-			
+
 			var params		 = {};
 			if(rows.length > 0){
 			    params.storeCd   = $scope.storeCd;
@@ -396,23 +400,23 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 		    }
 		}
 	  };
-	  
+
 	//엑셀 다운로드
-	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
+	  $scope.excelDownloadDayDtlCtrl = function () {
+	    if ($scope.dayDtlFlex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.dayDtlFlex, {
 	        includeColumnHeaders: true,
 	        includeCellStyles   : false,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'daydtl.xlsx', function () {
+	      }, '매출현황_반품현황_일자별상세_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);
@@ -420,8 +424,6 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    }, 10);
 	  };
 }]);
-
-
 
 
 /** 반품현황 상세(포스별 상세) controller */
@@ -441,7 +443,7 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	  }
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("rtnStatusPosDtlCtrl", function (event, data) {
 		  if(data != undefined){
@@ -449,13 +451,13 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 			$scope.storeCd    = data.storeCd;
 			$scope.saleYn	  = data.saleYn;
 		  }
-		
+
 	    $scope.searchRtnStatusPosDtlList(true);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
-	  
+
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("rtnStatusPosDtlCtrlSrch", function (event, data) {
 		  if(data != undefined){
@@ -463,7 +465,7 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 			$scope.storeCd    = data.storeCd;
 			$scope.saleYn	  = data.saleYn;
 		  }
-		
+
 	    $scope.searchRtnStatusPosDtlList(false);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
@@ -486,27 +488,27 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 //		    saleDate		= saleDate+"."+(""+$scope.saleDate).substring(6,8);
 		    $("#dateYMD").text(saleDate);
 	    }
-		  
+
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/rtnStatus/posDtl/list.sb", params);
 	  };
-	  
+
 	//엑셀 다운로드
-	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
+	  $scope.excelDownloadPosDtlCtrl = function () {
+	    if ($scope.posDtlFlex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.posDtlFlex, {
 	        includeColumnHeaders: true,
 	        includeCellStyles   : false,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'posdtl.xlsx', function () {
+	      }, '매출현황_반품현황_포스별상세_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);

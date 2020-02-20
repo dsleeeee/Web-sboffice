@@ -31,7 +31,15 @@
 			     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
 			     , SUM(TSDT.BILL_CNT) AS BILL_CNT
 			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z WHERE Z.STORE_CD = TSDT.STORE_CD AND Z.SALE_DATE >= #{startDate} AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}) AS SALE_DATE_CNT
+			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z 
+			     	WHERE Z.STORE_CD = TSDT.STORE_CD 
+			     	<if test='startDate != null and startDate != ""'>
+			     		AND Z.SALE_DATE >= #{startDate} 
+			     	</if>
+			     	<if test='endDate != null and endDate != ""'>
+			     		AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			     	</if>
+			     ) AS SALE_DATE_CNT
 		 		 ${sQuery2}
 			  FROM TB_SL_DAILY_TOTAL TSDT
 			     , TB_SL_DAILY_PAY TSDP

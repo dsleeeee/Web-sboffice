@@ -108,12 +108,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empMonthCtrl", function (event, data) {
-	  
-     if ($("#empMonthSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
+	  	  
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpMonthList(true);
 
@@ -123,12 +118,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empMonthCtrlSrch", function (event, data) {
-	  
-     if ($("#empMonthSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
+	  	  
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpMonthList(false);
 
@@ -142,9 +132,10 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#empMonthSelectStoreCd").val();
-    params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
-    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
-    
+    if(!$scope.isChecked){
+    	params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
+    	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+    }
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
@@ -167,6 +158,12 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.empMonthSelectStoreShow = function () {
     $scope._broadcast('empMonthSelectStoreCtrl');
+  };
+  
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+	$scope.empMonthStartDateCombo.isReadOnly = $scope.isChecked;
+	$scope.empMonthEndDateCombo.isReadOnly = $scope.isChecked;
   };
   
   //판매자 조회
@@ -262,11 +259,11 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_월별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

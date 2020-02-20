@@ -21,8 +21,8 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData('storeProdlistScaleBox', gvListScaleBoxData);
     
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", getToday());
 	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -45,7 +45,13 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
+  };
+  
   // 매장순위 리스트 조회
   $scope.searchStoreProdList = function () {
 
@@ -99,11 +105,11 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장상품순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

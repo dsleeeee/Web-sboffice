@@ -9,12 +9,9 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	angular.extend(this, new RootController('empDayOfWeekCtrl', $scope, $http, true));
      
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", gvEndDate);
-  
-	// 콤보박스 데이터 Set
-	$scope._setComboData('empDayOfWeeklistScaleBox', gvListScaleBoxData);
-  
+	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", getToday());
+   
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 				
@@ -114,12 +111,7 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayOfWeekCtrl", function (event, data) {
-	  
-     if ($("#empDayOfWeekSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-  
+	    
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpDayOfWeekList(true);
 
@@ -129,12 +121,7 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayOfWeekCtrlSrch", function (event, data) {
-	  
-     if ($("#empDayOfWeekSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-  
+	    
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpDayOfWeekList(false);
 
@@ -280,11 +267,11 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_요일별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

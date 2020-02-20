@@ -9,8 +9,8 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('prodPayFgCtrl', $scope, $http, true));
      
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", getToday());
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodPayFglistScaleBox', gvListScaleBoxData);
@@ -19,7 +19,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("prodClassCtrl");
+    $scope._makePickColumns("prodPayFgCtrl");
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -92,11 +92,11 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_상품별_결제수단별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

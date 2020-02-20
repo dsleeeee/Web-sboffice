@@ -8,8 +8,8 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cornerDayOfWeekCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchCornerDayOfWeekStartDate = wcombo.genDateVal("#srchCornerDayOfWeekStartDate", gvStartDate);
-  $scope.srchCornerDayOfWeekEndDate   = wcombo.genDateVal("#srchCornerDayOfWeekEndDate", gvEndDate);
+  $scope.srchCornerDayOfWeekStartDate = wcombo.genDateVal("#srchCornerDayOfWeekStartDate", getToday());
+  $scope.srchCornerDayOfWeekEndDate   = wcombo.genDateVal("#srchCornerDayOfWeekEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
 //  $scope._setComboData("cornerDayOfWeekListScaleBox", gvListScaleBoxData);
@@ -142,10 +142,6 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerDayOfWeekCtrlSrch", function (event, data) {
-    if ($("#cornerDayOfWeekSelectStoreCd").val() === '') {
-	  $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-	  return false;
-	}
 	  
     $scope.searchCornerDayOfWeekList(false);
     
@@ -177,7 +173,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/dayOfWeek/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/dayOfWeek/list.sb", params);
 	
 	
   };
@@ -218,7 +214,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_요일별_일자별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

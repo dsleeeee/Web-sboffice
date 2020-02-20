@@ -2,6 +2,14 @@
  * get application
  */
 var app = agrid.getApp();
+var Today = new Date();
+var Year = Today.getFullYear();
+var Month = Today.getMonth()+1;
+var Day	= Today.getDate();
+
+if(Month.length < 2) Month = "0" + Month;
+if(Day.length < 2) Day = "0" + Day;
+var Today = Year.toString() + Month + Day;
 
 /** 할인구분별(매출리스트) controller */
 app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -15,11 +23,28 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope._setComboData("dcDcfgListScaleBox", gvListScaleBoxData);
   $scope._setComboData("dcDcfgDtlListScaleBox", gvListScaleBoxData);
 
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.dcDcfgSelectStoreShow = function () {
+    $scope._broadcast('dcDcfgSelectStoreCtrl');
+  };
+
+}]);
+
+/** 할인구분별(매출리스트) controller */
+app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('dcDcfgMainCtrl', $scope, $http, $timeout, true));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("dcDcfgCtrl");
+	s.refresh();
+
+	// picker 사용시 호출 : 미사용시 호출안함
+	$scope._makePickColumns("dcDcfgMainCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -30,6 +55,12 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         }
       }
     });
+
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt = function() {
+      $scope.srchDcDcfgStartDate.isReadOnly = $scope.isChecked;
+      $scope.srchDcDcfgEndDate.isReadOnly = $scope.isChecked;
+    };
 
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -56,7 +87,7 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   }
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("dcDcfgCtrl", function (event, data) {
+  $scope.$on("dcDcfgMainCtrl", function (event, data) {
     $scope.searchDcDcfgList(true);
 
     // 기능수행 종료 : 반드시 추가
@@ -64,7 +95,7 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   });
 
 	//다른 컨트롤러의 broadcast 받기
-	$scope.$on("dcDcfgCtrlSrch", function (event, data) {
+	$scope.$on("dcDcfgMainCtrlSrch", function (event, data) {
 		$scope.searchDcDcfgList(false);
 
 	    // 기능수행 종료 : 반드시 추가
@@ -81,8 +112,10 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // 파라미터
     var params       = {};
-    params.startDate = wijmo.Globalize.format($scope.srchDcDcfgStartDate.value, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.srchDcDcfgEndDate.value, 'yyyyMMdd');
+    if(!$scope.isChecked){
+    	params.startDate = wijmo.Globalize.format($scope.srchDcDcfgStartDate.value, 'yyyyMMdd');
+    	params.endDate = wijmo.Globalize.format($scope.srchDcDcfgEndDate.value, 'yyyyMMdd');
+    }
     params.storeCd   = $("#dcDcfgSelectStoreCd").val();
 //    var storeDcfg   = $("#dcDcfgSelectStoreCd").val().split(",");
 //	var arrStore= [];
@@ -127,17 +160,6 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	}
   };
 
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.dcDcfgSelectStoreShow = function () {
-    $scope._broadcast('dcDcfgSelectStoreCtrl');
-  };
-
-  $scope.dcDcfgSelectDcfgShow = function () {
-    $scope._broadcast('dcDcfgSelectDcfgCtrl');
-  };
-
   //엑셀 다운로드
   $scope.excelDownloadDcDcfg = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -149,18 +171,17 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'dcDcfg.xlsx', function () {
+      }, '할인구분별-할인구분별-'+Today+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
       });
     }, 10);
   };
-
 
 }]);
 
@@ -229,29 +250,31 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/dc/dcfg/dtl.sb", params);
-	    $scope.flex.refresh();
+	    $scope.dtlFlex.refresh();
 	  };
 
 	//엑셀 다운로드
 	  $scope.excelDownloadDcDcfgDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
+	    if ($scope.dtlFlex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.dtlFlex, {
 	        includeColumnHeaders: true,
-	        includeCellStyles   : false,
+	        includeCellStyles   : true,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'dcDcfgDtl.xlsx', function () {
+	      }, '할인구분별-상품상세-'+Today+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);
 	      });
 	    }, 10);
 	  };
+
+
 }]);

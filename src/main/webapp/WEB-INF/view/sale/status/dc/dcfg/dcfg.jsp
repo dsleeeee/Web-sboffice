@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="dcDcfg.dcfg" /></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnDcDcfgSearch" ng-click="_broadcast('dcDcfgCtrlSrch')">
+		<button class="btn_blue fr mt5 mr10" id="btnDcDcfgSearch" ng-click="_broadcast('dcDcfgMainCtrlSrch')">
 			<s:message code="cmm.search" />
 		</button>
 	</div>
@@ -30,6 +30,12 @@
 						<span class="txtIn"><input id="srchDcDcfgStartDate" class="w120px"></span>
 						<span class="rg">~</span>
 						<span class="txtIn"><input id="srchDcDcfgEndDate" class="w120px"></span>
+						<span class="chk ml10">
+							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+			              	<label for="chkDt">
+		                		<s:message code="cmm.all.day" />
+              				</label>
+            			</span>
 					</div>
 				</td>
 			</tr>
@@ -72,11 +78,10 @@
 	</table>
 
 
-	<div id="gridRepresent" class="w50 fl" style="width: 49%;">
+	<div id="gridRepresent" ng-controller="dcDcfgMainCtrl" class="w50 fl" style="width: 49%;">
 		<%-- 할인구분별 --%>
 		<div class="w100 mt40">
 			<div class="oh sb-select mb10">
-				<span class="fl bk lh30"><s:message code='dcDcfg.dcfg' /></span>
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
 					class="w100px fl"
@@ -112,14 +117,14 @@
 				</wj-flex-grid>
 				<%-- ColumnPicker 사용시 include --%>
 				<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-					<jsp:param name="pickerTarget" value="dcDcfgCtrl" />
+					<jsp:param name="pickerTarget" value="dcDcfgMainCtrl" />
 				</jsp:include>
 				<%--// ColumnPicker 사용시 include --%>
 			</div>
 			<%--//위즈모 테이블--%>
 			<div class="pageNum mt20">
 			<%-- id --%>
-				<ul id="dcDcfgCtrlPager" data-size="10"></ul>
+				<ul id="dcDcfgMainCtrlPager" data-size="10"></ul>
 			</div>
 		</div>
 	</div>
@@ -128,9 +133,8 @@
 		<%-- 상품상세 --%>
 		<div class="w100 mt40" ng-controller="dcDcfgDtlCtrl">
 			<div class="oh sb-select mb10">
-				<span class="fl bk lh30"><s:message code='dcDcfg.dcfgDtl' /></span>
 				<%-- 페이지 스케일  --%>
-				<!-- <wj-combo-box
+				<wj-combo-box
 					class="w100px fl"
 					id="dcDcfgDtlListScaleBox"
 					ng-model="dcDcfgDtlListScale"
@@ -139,7 +143,7 @@
 					selected-value-path="value"
 					is-editable="false"
 					initialized="initComboBox(s)">
-				</wj-combo-box> -->
+				</wj-combo-box>
 				<%-- 할인구분별 매출 상세 엑셀다운로드 --%>
 				<button class="btn_skyblue fr"
 					ng-click="excelDownloadDcDcfgDtl()">
@@ -148,7 +152,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="wj-gridWrap" style="height: 350px;">
-				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
+				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="dtlFlex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" binding="prodNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

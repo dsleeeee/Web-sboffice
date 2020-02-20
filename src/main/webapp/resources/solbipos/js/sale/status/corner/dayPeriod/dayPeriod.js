@@ -8,8 +8,8 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('cornerDayPeriodCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchCornerDayPeriodStartDate = wcombo.genDateVal("#srchCornerDayPeriodStartDate", gvStartDate);
-  $scope.srchCornerDayPeriodEndDate   = wcombo.genDateVal("#srchCornerDayPeriodEndDate", gvEndDate);
+  $scope.srchCornerDayPeriodStartDate = wcombo.genDateVal("#srchCornerDayPeriodStartDate", getToday());
+  $scope.srchCornerDayPeriodEndDate   = wcombo.genDateVal("#srchCornerDayPeriodEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("cornerDayPeriodListScaleBox", gvListScaleBoxData);
@@ -74,10 +74,6 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
   
   // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("cornerDayPeriodCtrlSrch", function (event, data) {
-	if ($("#cornerDayPeriodSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
 	
     $scope.searchCornerDayPeriodList(false);
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
@@ -109,7 +105,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/corner/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/corner/list.sb", params);
 	
 	//메인그리드 조회후 상세그리드 조회.
     $scope.loadedRows = function(sender, args){
@@ -175,7 +171,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_코너별_설정기간별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -277,13 +273,14 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	  $scope.searchCornerDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
+	    params.listScale = $scope.cornerDayPeriodDtlListScale; //-페이지 스케일 갯수
 	    params.startDate = $scope.startDateForDt;
 	    params.endDate   = $scope.endDateForDt;
 	    params.storeCd   = $scope.storeCd;
 	    params.cornrCd   = $scope.cornrCd;
 	    params.isPageChk = isPageChk;
 	    
-	    $scope._inquirySub("/sale/status/corner/corner/dtl.sb", params);
+	    $scope._inquiryMain("/sale/status/corner/corner/dtl.sb", params);
 		$scope.flex.refresh();
 	  };
 	  
@@ -302,7 +299,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, 'dayPeriodDtl.xlsx', function () {
+	      }, '매출현황_코너별_설정기간별(상세)_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);

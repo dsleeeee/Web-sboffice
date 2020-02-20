@@ -40,8 +40,8 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchSaleTimeCombo", vSaleTime);
 
-    $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", gvStartDate);
-    $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", gvEndDate);
+    $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", getToday());
+    $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", getToday());
     $scope.orgnFg        = gvOrgnFg;
     
     // 콤보박스 데이터 Set
@@ -271,11 +271,11 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
       $timeout(function () {
         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
           includeColumnHeaders: true,
-          includeCellStyles   : false,
+          includeCellStyles   : true,
           includeColumns      : function (column) {
             return column.visible;
           }
-        }, 'excel.xlsx', function () {
+        }, '매출현황_상품별_시간대별_'+getToday()+'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);

@@ -9,8 +9,8 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('prodPosCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", gvStartDate);
-	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", gvEndDate);
+	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
+	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
@@ -166,11 +166,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'excel.xlsx', function () {
+			}, '매출현황_상품별_포스별_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);

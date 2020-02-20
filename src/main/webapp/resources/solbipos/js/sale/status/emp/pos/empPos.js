@@ -9,8 +9,8 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	angular.extend(this, new RootController('empPosCtrl', $scope, $http, true));
 
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchPosStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchPosEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchPosStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchPosEndDate", getToday());
 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('empPoslistScaleBox', gvListScaleBoxData);
@@ -116,11 +116,6 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empPosCtrl", function (event, data) {
 
-     if ($("#empPosSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-
 	 $scope.getEmpNmList();
 	 $scope.searchEmpPosList(true);
 
@@ -130,11 +125,6 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 
   	//다른 컨트롤러의 broadcast 받기
 	$scope.$on("empPosCtrlSrch", function (event, data) {
-
-		if ($("#empPosSelectStoreCd").val() === '') {
-	        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-	        return false;
-	     }
 
 		 $scope.getEmpNmList();
 		 $scope.searchEmpPosList(false);
@@ -282,11 +272,11 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_포스별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

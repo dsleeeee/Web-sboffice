@@ -8,23 +8,47 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('versusPeriodClassCtrl', $scope, $http, true));
 
-  // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", gvEndDate);
-
-  // 1년 전 날짜 세팅
-  var date = new Date();
-  date.setFullYear(date.getFullYear()-1);
-  var result = date.getFullYear() + '' + date.getMonth() + '' + date.getDate();
+  var srchStartDateDash;
+  var srchEndDateDash;
+  var compStartDateDash;
+  var compEndDateDash;
 
   // 대비일자 세팅
-  $scope.srchCompStartDate = wcombo.genDateVal("#compClassStartDate", result);
-  $scope.srchCompEndDate   = wcombo.genDateVal("#compClassEndDate", result);
+  $scope.srchCompStartDate = wcombo.genDateVal("#compClassStartDate", gvStartDate);
+  $scope.srchCompEndDate   = wcombo.genDateVal("#compClassEndDate", gvEndDate);
+
+	$scope.changeDate = function() {
+
+		srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
+	    srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
+
+		var srchDate = new Date();
+		srchDate.setFullYear	(srchStartDateDash.substr(0, 4) - 1);
+		srchDate.setMonth		(srchStartDateDash.substr(5, 2));
+		srchDate.setDate		(srchStartDateDash.substr(8, 2));
+
+		var result = srchDate.getFullYear() + ('0' + srchDate.getMonth()).slice(-2) + ('0' + srchDate.getDate()).slice(-2);
+		$scope.srchCompStartDate.text = result;
+
+
+		srchDate = new Date();
+		srchDate.setFullYear	(srchEndDateDash.substr(0, 4) - 1);
+		srchDate.setMonth		(srchEndDateDash.substr(5, 2));
+		srchDate.setDate		(srchEndDateDash.substr(8, 2));
+
+		result = srchDate.getFullYear() + ('0' + srchDate.getMonth()).slice(-2) + ('0' + srchDate.getDate()).slice(-2);
+		$scope.srchCompEndDate.text = result;
+
+		compStartDateDash = $scope.srchCompStartDate.text;
+	    compEndDateDash = $scope.srchCompEndDate.text;
+		//compEndDateDash = result;
+
+	};
+
 
   // 콤보박스 데이터 Set
   $scope._setComboData('versusPeriodClasslistScaleBox', gvListScaleBoxData);
 
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
 	//조회조건 콤보박스 데이터 Set
@@ -99,17 +123,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     }
 
-/*    s.columnHeaders.allowMerging = true;
-    s.rowHeaders.allowMerging = true;
-
-    s.columnHeaders.setCellData(0,0,"Country");
-    s.columnHeaders.setCellData(0,1,"Country");
-    s.columnHeaders.setCellData(0,2,"Country");
-
-    s.columnHeaders.setCellData(1,0,"Country");
-    s.columnHeaders.setCellData(1,1,"Country");
-    s.columnHeaders.setCellData(1,2,"Country");*/
-
     s.refresh();
 
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
@@ -130,37 +143,46 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("versusPeriodClassCtrl", function (event, data) {
-    if ($("#versusPeriodClassSelectStoreCd").val() === '') {
-         $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-         return false;
-    }
 
     $scope.searchVersusPeriodClassList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
-  // 상품매출순위 리스트 조회
-  $scope.searchVersusPeriodClassList = function () {
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("versusPeriodClassCtrlSrch", function (event, data) {
+    $scope.searchVersusPeriodClassList(false);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
 
+  // 상품매출순위 리스트 조회
+  $scope.searchVersusPeriodClassList = function (isPageChk) {
+
+	if ($("#versusPeriodClassSelectStoreCd").val() === '') {
+         $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+         return false;
+    }
     // 파라미터
     var params       = {};
-    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    params.compStartDate = wijmo.Globalize.format($scope.srchCompStartDate.value, 'yyyyMMdd');
-    params.compEndDate = wijmo.Globalize.format($scope.srchCompEndDate.value, 'yyyyMMdd');
+    //var params2       = {};
+    params.startDate = srchStartDateDash;
+    params.endDate = srchEndDateDash;
+    params.compStartDate = compStartDateDash;
+    params.compEndDate = compEndDateDash;
     params.storeCd   = $("#versusPeriodClassSelectStoreCd").val();
     //params.brandCd = $scope.brandCd;
+    params.isPageChk = isPageChk;
 
     $scope.params = params;
 
-    if(params.startDate > params.endDate || params.compStartDate > params.compEndDate){
+    if(params.startDate.replace(/-/gi, "") > params.endDate.replace(/-/gi, "") || params.compStartDate.replace(/-/gi, "") > params.compEndDate.replace(/-/gi, "")){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
 
     // 조회일자와 대비일자 설정기간이 동일한지 유효성 체크
-    if($scope.dateDiff(params.startDate, params.endDate) !== $scope.dateDiff(params.compStartDate, params.compEndDate)){
+    if($scope.dateDiff(srchStartDateDash, srchEndDateDash) !== $scope.dateDiff(compStartDateDash, compEndDateDash)){
    	 	$scope._popMsg(messages["versusPeriod.dateDiff"]);
    	 	return false;
     }
@@ -168,9 +190,9 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
 
-    var days = "(" + $scope.dateDiff(params.startDate, params.endDate) + "일)\n";
-    var srchStartToEnd = "(" + $scope.srchStartDate.text + " ~ " + $scope.srchEndDate.text + ")";
-    var compStartToEnd = "(" + $scope.srchCompStartDate.text + " ~ " + $scope.srchCompEndDate.text + ")";
+    var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
+    var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";
+    var compStartToEnd = "(" + compStartDateDash + " ~ " + compEndDateDash + ")";
 
     var grid = wijmo.Control.getControl("#versusPeriodClassGrid").columnHeaders.rows[0].dataItem;
     grid.realSaleAmtA = messages["versusPeriod.period"] + (days + srchStartToEnd);
@@ -249,29 +271,30 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     theGrid.collapseGroupsToLevel(1);
     theGrid.collectionView.refresh();
 
-    //메인그리드 조회후 상세그리드 조회.
-	$scope.loadedRows = function(sender, args){
-    	var rows = sender.rows;
-    	var params		 = {};
+  };
 
-    	if(rows.length != 0 && rows[0].dataItem.lv3Cd != undefined) {
-    		params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-    	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    	    params.compStartDate = wijmo.Globalize.format($scope.srchCompStartDate.value, 'yyyyMMdd');
-    	    params.compEndDate = wijmo.Globalize.format($scope.srchCompEndDate.value, 'yyyyMMdd');
-    	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
-    	    //params.brandCd = '';
-    	    params.prodClassCd   = rows[0].dataItem.lv3Cd;
-	    }
-		else {
-			params.storeCd   = -1;
-		}
+  //메인그리드 조회후 상세그리드 조회.
+  $scope.loadedRows = function(sender, args){
+  	var rows = sender.rows;
+  	var params		 = {};
 
-	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("versusPeriodClassDtlCtrlSrch", params);
+  	if(rows.length != 0 && rows[0].dataItem.lv3Cd != undefined) {
+  		params.startDate = srchStartDateDash;
+  	    params.endDate = srchEndDateDash;
+  	    params.compStartDate = compStartDateDash;
+  	    params.compEndDate = compEndDateDash;
+  	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
+  	    //params.brandCd = '';
+  	    params.prodClassCd   = rows[0].dataItem.lv3Cd;
+    }
+	else {
+		//params.storeCd   = -1;
+		params = null;
 	}
 
-  };
+	    // 대비기간매출분석 매출현황 상세조회.
+	    $scope._broadcast("versusPeriodClassDtlCtrlSrch", params);
+	}
 
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -367,7 +390,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
 
   // 엑셀 다운로드
-  $scope.excelDownloadDay = function () {
+  $scope.excelDownloadVersusPeriodClass = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -381,7 +404,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'versusPeriodClass.xlsx', function () {
+      }, '매출분석_대비기간매출분석_분류상품별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -390,10 +413,10 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   };
 
   //두개의 날짜를 비교하여 차이를 알려준다.
-  $scope.dateDiff = function(_date1, _date2) {
+  $scope.dateDiff = function(date1, date2) {
 
-	    var date1 = [_date1.slice(0, 4), "-", _date1.slice(4, 6), "-", _date1.slice(6, 8)].join('');
-	    var date2 = [_date2.slice(0, 4), "-", _date2.slice(4, 6), "-", _date2.slice(6, 8)].join('');
+//	    var date1 = [_date1.slice(0, 4), "-", _date1.slice(4, 6), "-", _date1.slice(6, 8)].join('');
+//	    var date2 = [_date2.slice(0, 4), "-", _date2.slice(4, 6), "-", _date2.slice(6, 8)].join('');
 
 	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
 	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
@@ -406,12 +429,18 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
 	    return diff + 1;
 	};
+
 }]);
 
 /** 일자별상품 상세현황 controller */
 app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('versusPeriodClassDtlCtrl', $scope, $http, true));
+
+  var srchStartDateDash;
+  var srchEndDateDash;
+  var compStartDateDash;
+  var compEndDateDash;
 
   // 콤보박스 데이터 Set
   $scope._setComboData('versusPeriodClassDtllistScaleBox', gvListScaleBoxData);
@@ -493,6 +522,14 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   });
 
   $scope.$on("versusPeriodClassDtlCtrlSrch", function (event, data) {
+	 if(data != undefined) {
+		 $scope.startDate = data.startDate;
+		 $scope.endDate   = data.endDate;
+		 $scope.compStartDate = data.startDate;
+		 $scope.compEndDate   = data.endDate;
+		 $scope.storeCd = $("#versusPeriodClassSelectStoreCd").val();
+		 $scope.prodClassCd = data.prodClassCd;
+	 }
 
 	  $scope.searchVersusPeriodClassDtlList(false, data);
     // 기능수행 종료 : 반드시 추가
@@ -502,38 +539,32 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   // 주간대비 리스트 조회
   $scope.searchVersusPeriodClassDtlList = function (isPageChk, data) {
 
-	  if(data != undefined && data.storeCd != -1){
-		  $scope.startDate = data.startDate;
-		  $scope.endDate   = data.endDate;
-		  $scope.compStartDate = data.compStartDate;
-		  $scope.compEndDate   = data.compEndDate;
-		  $scope.storeCd   = data.storeCd;
-		  //$scope.brandCd   = data.brandCd;
-		  $scope.prodClassCd   = data.prodClassCd;
+	 // 파라미터
+	    var params       = {};
+	    params.startDate = $scope.startDate;
+	    params.endDate = $scope.endDate;
+	    params.compStartDate = $scope.compStartDate;
+	    params.compEndDate = $scope.compEndDate;
+	    params.storeCd = $scope.storeCd;
+	    params.prodClassCd = $scope.prodClassCd;
+	    params.isPageChk = isPageChk;
 
-		  $scope.srchStartDate = [data.startDate.slice(0, 4), "-", data.startDate.slice(4, 6), "-", data.startDate.slice(6, 8)].join('');
-		  $scope.srchEndDate = [data.endDate.slice(0, 4), "-", data.endDate.slice(4, 6), "-", data.endDate.slice(6, 8)].join('');
-		  $scope.srchCompStartDate = [data.compStartDate.slice(0, 4), "-", data.compStartDate.slice(4, 6), "-", data.compStartDate.slice(6, 8)].join('');
-		  $scope.srchCompEndDate = [data.compEndDate.slice(0, 4), "-", data.compEndDate.slice(4, 6), "-", data.compEndDate.slice(6, 8)].join('');
-	  }
 
-	  var params       = {};
-	  params.startDate = $scope.startDate;
-	  params.endDate = $scope.endDate;
-	  params.compStartDate = $scope.compStartDate;
-	  params.compEndDate = $scope.compEndDate;
-	  params.storeCd   = $scope.storeCd;
-	  //params.brandCd = $scope.brandCd;
-	  params.prodClassCd = $scope.prodClassCd;
-      params.isPageChk = isPageChk;
+	  /*else {
+		  console.log("2222");
+		  //params.storeCd = -1;
+
+	  }*/
+
+
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
+	  $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
     $scope.flex.refresh();
 
-    var days = "(" + $scope.dateDiff(params.startDate, params.endDate) + "일)\n";
-    var srchStartToEnd = "(" + $scope.srchStartDate + " ~ " + $scope.srchEndDate + ")";
-    var compStartToEnd = "(" + $scope.srchCompStartDate + " ~ " + $scope.srchCompEndDate + ")";
+    var days = "(" + $scope.dateDiff($scope.startDate, $scope.endDate) + "일)\n";
+    var srchStartToEnd = "(" + $scope.startDate + " ~ " + $scope.endDate + ")";
+    var compStartToEnd = "(" + $scope.compStartDate + " ~ " + $scope.compEndDate + ")";
 
     var grid = wijmo.Control.getControl("#versusPeriodClassDtlGrid").columnHeaders.rows[0].dataItem;
     grid.realSaleAmtA    = messages["versusPeriod.period"]+ (days + srchStartToEnd);
@@ -543,7 +574,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   };
 
   // 엑셀 다운로드
-  $scope.excelDownloadDay = function () {
+  $scope.excelDownloadVersusPeriodClassDtl = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
@@ -557,7 +588,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'versusPeriodClassDtl.xlsx', function () {
+      }, '매출분석_대비기간매출분석_분류상품별(상세)_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -566,12 +597,12 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   };
 
   //두개의 날짜를 비교하여 차이를 알려준다.
-  $scope.dateDiff = function(_date1, _date2) {
+  $scope.dateDiff = function(date1, date2) {
 	  var diff;
 
-	  if(_date1 != undefined && _date2 != undefined ){
-	    var date1 = [_date1.slice(0, 4), "-", _date1.slice(4, 6), "-", _date1.slice(6, 8)].join('');
-	    var date2 = [_date2.slice(0, 4), "-", _date2.slice(4, 6), "-", _date2.slice(6, 8)].join('');
+	  if(date1 != undefined && date2 != undefined ){
+//	    var date1 = [_date1.slice(0, 4), "-", _date1.slice(4, 6), "-", _date1.slice(6, 8)].join('');
+//	    var date2 = [_date2.slice(0, 4), "-", _date2.slice(4, 6), "-", _date2.slice(6, 8)].join('');
 
 	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
 	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);

@@ -83,7 +83,7 @@
      <%-- 코너별 --%>
      <div class="w100 mt10">
        <div class="oh sb-select mb10">
-         <span class="fl bk lh30"><s:message code='corner.cornr'/></span>
+<%--          <span class="fl bk lh30"><s:message code='corner.cornr'/></span> --%>
          
         <%-- 페이지 스케일  --%>
 	    <wj-combo-box
@@ -144,7 +144,7 @@
      <%-- 코너별 --%>
      <div class="w100 mt10" ng-controller="cornerDayPeriodDtlCtrl">
        <div class="oh sb-select mb10">
-         <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span>
+<%--          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span> --%>
          
         <%-- 페이지 스케일  --%>
 	    <wj-combo-box

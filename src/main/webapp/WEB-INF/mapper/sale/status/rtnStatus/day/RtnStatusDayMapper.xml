@@ -171,10 +171,10 @@
                   AND TSSH.SALE_YN = 'N'
                   AND TSSH.STORE_CD = #{storeCd}
         <if test='startDate != null and startDate != ""'>
-           AND TSSH.SALE_DATE >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
+           AND TSSH.SALE_DATE >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMMDD')
         </if>
         <if test='endDate != null and endDate != ""'>
-           AND TSSH.SALE_DATE <![CDATA[<= ]]> TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
+           AND TSSH.SALE_DATE <![CDATA[<= ]]> TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMMDD')
         </if>
 		             GROUP BY TSSH.STORE_CD, TSSH.PROD_CD
 		                ) TSSH
