@@ -8,8 +8,8 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('posExcclcCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchPosExcclcStartDate = wcombo.genDateVal("#srchPosExcclcStartDate", gvStartDate);
-  $scope.srchPosExcclcEndDate   = wcombo.genDateVal("#srchPosExcclcEndDate", gvEndDate);
+  $scope.srchPosExcclcStartDate = wcombo.genDateVal("#srchPosExcclcStartDate", getToday());
+  $scope.srchPosExcclcEndDate   = wcombo.genDateVal("#srchPosExcclcEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("posExcclcListScaleBox", gvListScaleBoxData);

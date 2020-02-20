@@ -54,8 +54,11 @@
 							FROM	TB_PS_EXACTCALC TPE
 							WHERE	TPE.REG_SEQ = '00'
 									AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
-								<if test='storeCd != null and storeCd != ""'>
-						        	AND TPE.STORE_CD = #{storeCd}
+						        <if test='arrStoreCd != null and arrStoreCd != ""'>
+						            AND TPE.STORE_CD IN
+						            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+						                #{item}
+						            </foreach>
 						        </if>
 						        <if test='startDate != null and startDate != ""'>
 									AND TPE.SALE_DATE >= #{startDate}
@@ -79,9 +82,12 @@
 							FROM	TB_PS_EXACTCALC TPE
 							WHERE	TPE.REG_SEQ >= '01'
 									AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
-								<if test='storeCd != null and storeCd != ""'>
-						        	AND TPE.STORE_CD = #{storeCd}
-						        </if>
+						        <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                    AND TPE.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                        #{item}
+                                    </foreach>
+                                </if>
 						        <if test='startDate != null and startDate != ""'>
 									AND TPE.SALE_DATE >= #{startDate}
 								</if>
@@ -105,9 +111,12 @@
 							FROM	TB_PS_EXACTCALC TPE
 							WHERE	TPE.REG_SEQ = '00'
 									AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
-								<if test='storeCd != null and storeCd != ""'>
-						        	AND TPE.STORE_CD = #{storeCd}
-						        </if>
+						        <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                    AND TPE.STORE_CD IN
+                                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                        #{item}
+                                    </foreach>
+                                </if>
 						        <if test='startDate != null and startDate != ""'>
 									AND TPE.SALE_DATE >= #{startDate}
 								</if>

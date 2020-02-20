@@ -4,6 +4,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/payFg/prodPayFg/"/>
 
 <div id="prodPayFgView" class="subCon" style="display: none;">
@@ -98,14 +100,16 @@
 	          sticky-headers="true"
 	          selection-mode="Row"
 	          items-source="data"
-	          frozen-columns="6"
+	          frozen-columns="8"
 	          item-formatter="_itemFormatter">
 	
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodClassNm"/>" 	binding="prodClassNm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>	          
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>          

@@ -3,22 +3,43 @@
  */
 var app = agrid.getApp();
 
-/** 일자별(코너별 매출) controller */
 app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('posDayPeriodCtrl', $scope, $http, $timeout, true));
+	
+	  $scope.srchPosDayPeriodStartDate = wcombo.genDateVal("#srchPosDayPeriodStartDate", gvStartDate);
+	  $scope.srchPosDayPeriodEndDate   = wcombo.genDateVal("#srchPosDayPeriodEndDate", gvEndDate);
+
+	  //조회조건 콤보박스 데이터 Set
+	  $scope._setComboData("posDayPeriodListScaleBox", gvListScaleBoxData);
+	  $scope._setComboData("posDayPeriodDtlListScaleBox", gvListScaleBoxData);
+	  $scope.orgnFg = gvOrgnFg;
+	  
+	  //전체기간 체크박스 클릭이벤트
+	  $scope.isChkDt = function() {
+	    $scope.srchPosDayPeriodStartDate.isReadOnly = $scope.isChecked;
+	    $scope.srchPosDayPeriodEndDate.isReadOnly = $scope.isChecked;
+	  };
+
+	  //매장선택 모듈 팝업 사용시 정의
+	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+	  $scope.posDayPeriodSelectStoreShow = function () {
+	    $scope._broadcast('posDayPeriodSelectStoreCtrl');
+	  };
+	
+}]);
+
+/** 일자별(코너별 매출) controller */
+app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('posDayPeriodCtrl', $scope, $http, $timeout, true));
-
-  $scope.srchPosDayPeriodStartDate = wcombo.genDateVal("#srchPosDayPeriodStartDate", gvStartDate);
-  $scope.srchPosDayPeriodEndDate   = wcombo.genDateVal("#srchPosDayPeriodEndDate", gvEndDate);
-
-  //조회조건 콤보박스 데이터 Set
-  $scope._setComboData("posDayPeriodListScaleBox", gvListScaleBoxData);
+  angular.extend(this, new RootController('posDayPeriodMainCtrl', $scope, $http, $timeout, true));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("posDayPeriodCtrl");
+    $scope._makePickColumns("posDayPeriodMainCtrl");
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -61,14 +82,14 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("posDayPeriodCtrl", function (event, data) {
+  $scope.$on("posDayPeriodMainCtrl", function (event, data) {
     $scope.searchPosDayPeriodList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
-//다른 컨트롤러의 broadcast 받기
-  $scope.$on("posDayPeriodCtrlSrch", function (event, data) {
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("posDayPeriodMainCtrlSrch", function (event, data) {
     $scope.searchPosDayPeriodList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -77,11 +98,6 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 코너별매출일자별 리스트 조회
   $scope.searchPosDayPeriodList = function (isPageChk) {
-
-	if ($("#posDayPeriodSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
 
     // 파라미터
     var params       = {};
@@ -105,7 +121,7 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/pos/pos/list.sb", params);
+	$scope._inquiryMain("/sale/status/pos/pos/list.sb", params);
 
 	//메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
@@ -123,19 +139,6 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	}
   };
 
-  //전체기간 체크박스 클릭이벤트
-  $scope.isChkDt = function() {
-    $scope.srchPosDayPeriodStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchPosDayPeriodEndDate.isReadOnly = $scope.isChecked;
-  };
-
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.posDayPeriodSelectStoreShow = function () {
-    $scope._broadcast('posDayPeriodSelectStoreCtrl');
-  };
-
 //엑셀 다운로드
   $scope.excelDownloadDayPeriod = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -147,7 +150,7 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
@@ -164,9 +167,6 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
 	 // 상위 객체 상속 : T/F 는 picker
 	  angular.extend(this, new RootController('posDayPeriodDtlCtrl', $scope, $http, $timeout, true));
-
-	  //조회조건 콤보박스 데이터 Set
-	  $scope._setComboData("posDayPeriodDtlListScaleBox", gvListScaleBoxData);
 
 	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
 	  $scope.initGrid = function (s, e) {
@@ -209,6 +209,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd      = $scope.storeCd;
 	    params.startDate    = $scope.startDateForDt;
 	    params.endDate      = $scope.endDateForDt;
+	    params.orgnFg    	= $scope.orgnFg;
 	    if (isPageChk != null && isPageChk != undefined) {
 	    	params.isPageChk    = isPageChk;
 	    } else {
@@ -216,7 +217,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    }
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquirySub("/sale/status/pos/pos/dtl.sb", params);
+	    $scope._inquiryMain("/sale/status/pos/pos/dtl.sb", params);
 	  };
 
 	//엑셀 다운로드
@@ -230,7 +231,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    $timeout(function () {
 	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 	        includeColumnHeaders: true,
-	        includeCellStyles   : false,
+	        includeCellStyles   : true,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }

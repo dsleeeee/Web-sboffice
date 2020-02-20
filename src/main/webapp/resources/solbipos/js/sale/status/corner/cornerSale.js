@@ -64,8 +64,8 @@ app.controller('cornerSaleCtrl', ['$scope', function ($scope) {
         var scope = agrid.getScope("cornerMonthCtrl");
         scope.flex.refresh();
     };
-    
-    
+
+
  // 설정기간별 탭 보이기
     $scope.cornerDayPeriodTabShow = function () {
     	$("#cornerDayPeriodTab").addClass("on");
@@ -79,10 +79,10 @@ app.controller('cornerSaleCtrl', ['$scope', function ($scope) {
         $("#cornerMonthView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("cornerDayPeriodDtlCtrl");
-        scope.flex.refresh();
-        
-        scope = agrid.getScope("cornerDayPeriodCtrl");
-        scope.flex.refresh();
+        var scopeMain = agrid.getScope("cornerDayPeriodMainCtrl");
+        scopeMain.flex.refresh();
+
+        var scopeDtl = agrid.getScope("cornerDayPeriodDtlCtrl");
+        scopeDtl.flex.refresh();
     };
 }]);

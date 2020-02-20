@@ -11,7 +11,8 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", gvStartDate);
 	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", gvEndDate);
-
+	$scope.orgnFg = gvOrgnFg;
+	
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
 
@@ -56,6 +57,9 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		s.columnHeaders.rows.push(new wijmo.grid.Row());
 
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
+			s.columnHeaders.setCellData(i, "lv1Nm", messages["prodrank.prodClassLNm"]);
+			s.columnHeaders.setCellData(i, "lv2Nm", messages["prodrank.prodClassMNm"]);
+			s.columnHeaders.setCellData(i, "lv3Nm", messages["prodrank.prodClassSNm"]);
 			s.columnHeaders.setCellData(i, "prodNm", messages["pos.prodNm"]);
 			s.columnHeaders.setCellData(i, "saleStoreCnt", messages["pos.saleStore"]);
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
@@ -133,6 +137,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.listScale = $scope.posProdListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
+	    params.orgnFg    = $scope.orgnFg;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -254,8 +259,8 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		  var colLength = grid.columns.length;
 
-		  if (grid.columns.length > 6) {
-			  for(var i = 6; i < colLength; i++) {
+		  if (grid.columns.length > 9) {
+			  for(var i = 9; i < colLength; i++) {
 				  grid.columns.removeAt(grid.columns.length-1);
 			  }
 		  }

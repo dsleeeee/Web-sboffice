@@ -31,17 +31,22 @@
 				<th><s:message code="cmm.search.date" /></th>
 				<td>
 					<div class="sb-select">
-						<span class="txtIn w110px"> <wj-input-date id="srchTableDayPeriodStartDate"
-								ng-model='srchTableDayPeriodStartDate'> </wj-input-date>
+						<span class="txtIn w110px">
+						<wj-input-date id="srchTableDayPeriodStartDate"
+								ng-model='srchTableDayPeriodStartDate'
+								control="tableDayPeriodStartDate"> </wj-input-date>
 						</span> <span class="rg">~</span> <span class="txtIn w110px"> <wj-input-date
-								id="srchTableDayPeriodEndDate" ng-model="srchTableDayPeriodEndDate"> </wj-input-date>
+								id="srchTableDayPeriodEndDate"
+								ng-model="srchTableDayPeriodEndDate"
+								control="tableDayPeriodEndDate"> </wj-input-date>
+
 						</span>
-						<%-- <span class="chk ml10">
+						<span class="chk ml10">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
 							</label>
-						</span> --%>
+						</span>
 					</div>
 				</td>
 			</tr>

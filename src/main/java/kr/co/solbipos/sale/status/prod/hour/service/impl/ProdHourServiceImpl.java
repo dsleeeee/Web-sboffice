@@ -46,8 +46,8 @@ public class ProdHourServiceImpl implements ProdHourService {
         	for(int i = 1; i < 25; i++) {
         		sQuery1 +=", SUM(M.TOT_SALE_QTY"+ i +") AS TOT_SALE_QTY" + i + "\n";
         		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ i +") AS TOT_SALE_AMT" + i + "\n";
-        		sQuery2 +=", SUM(DECODE(TSDPT.SALE_HOUR,"+ i +",TSDPT.SALE_CNT,0)) AS TOT_SALE_QTY" + i + "\n";
-            	sQuery2 +=", SUM(DECODE(TSDPT.SALE_HOUR,"+ i +",TSDPT.TOT_SALE_AMT,0)) AS TOT_SALE_AMT" + i + "\n";
+        		sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ i +",C.SALE_CNT,0)) AS TOT_SALE_QTY" + i + "\n";
+            	sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ i +",C.TOT_SALE_AMT,0)) AS TOT_SALE_AMT" + i + "\n";
         	}
         }else {
         	// 매출 시간대 설정
@@ -102,8 +102,8 @@ public class ProdHourServiceImpl implements ProdHourService {
 		    }
         	sQuery1 +=", SUM(M.TOT_SALE_QTY"+ isSaleHour +") AS TOT_SALE_QTY"+ isSaleHour +"" + "\n";
     		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ isSaleHour +") AS TOT_SALE_AMT"+ isSaleHour +"" + "\n";
-    		sQuery2 +=", SUM(DECODE(TSDPT.SALE_HOUR,"+ isSaleHour +",TSDPT.SALE_CNT,0)) AS TOT_SALE_QTY"+ isSaleHour +"" + "\n";
-    		sQuery2 +=", SUM(DECODE(TSDPT.SALE_HOUR,"+ isSaleHour +",TSDPT.TOT_SALE_AMT,0)) AS TOT_SALE_AMT"+ isSaleHour +"" + "\n";
+    		sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ isSaleHour +",C.SALE_CNT,0)) AS TOT_SALE_QTY"+ isSaleHour +"" + "\n";
+    		sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ isSaleHour +",C.TOT_SALE_AMT,0)) AS TOT_SALE_AMT"+ isSaleHour +"" + "\n";
         }
         
         prodHourVO.setsQuery1(sQuery1);

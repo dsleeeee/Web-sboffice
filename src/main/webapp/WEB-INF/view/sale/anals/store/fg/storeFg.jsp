@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}" />
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/store/" />
 
 <div id="storeFgView" class="subCon" ng-controller="storeFgCtrl">
@@ -25,7 +26,7 @@
 			<tr>
 				<%-- 조회일자 --%>
 				<th><s:message code="cmm.search.date" /></th>
-				<td>
+				<td colspan="3">
 					<div class="sb-select">
 						<span class="txtIn"><input id="srchStoreFgStartDate" class="w120px"></span>
 						<span class="rg">~</span>
@@ -46,28 +47,36 @@
 			        <input type="hidden" id="srchStoreFgProdClassCd" ng-model="prodCalssCd" disabled />
 			        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
 			    </td>
+			    <%-- 매장유형선택 --%>
+                <th><s:message code="store.storeFg" /></th>
+                <td>
+                    <div class="sb-select">
+                        <span class="txtIn">
+                            <wj-combo-box id="srchStoreFgDisplay" ng-model="storeFg"
+                                items-source="_getComboData('srchStoreFgDisplay')"
+                                display-member-path="name" selected-value-path="value"
+                                is-editable="false" initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </span>
+                    </div>
+                </td>
 			</tr>
 
-<!-- 			<tr> -->
-<%-- 				매장구분표시 --%>
-<%-- 				<th><s:message code="store.storeFg" /></th> --%>
-<!-- 				<td colspan="3"> -->
-<!-- 					<div class="sb-select"> -->
-<%-- 						<span class="txtIn">  --%>
-<!-- 							<wj-combo-box id="srchStoreFgDisplay" ng-model="storeFg"  -->
-<!-- 								items-source="_getComboData('srchStoreFgDisplay')"  -->
-<!-- 								display-member-path="name" selected-value-path="value" -->
-<!-- 								is-editable="false" initialized="_initComboBox(s)"> -->
-<!-- 							</wj-combo-box> -->
-<%-- 						</span> --%>
-<%-- 						매장구분 전체보기 --%>
-<%-- 						<span class="chk ml10">  --%>
-<!-- 							<input type="checkbox" id="totalStoreFg" ng-model="isAll" ng-change="totalStoreFg()" />  -->
-<!-- 							<label for="totalStoreFg">전체선택</label> -->
-<%-- 						</span> --%>
-<!-- 					</div> -->
-<!-- 				</td> -->
-<!-- 			</tr> -->
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <tr>
+            <%-- 매장코드 --%>           
+	            <th><s:message code="todayBillSaleDtl.store"/></th>
+	            <td colspan="3">
+	                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+	                    <jsp:param name="targetId" value="storeFgSelectStore"/>
+	                </jsp:include>
+	                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	            </td>   
+	        </tr>
+	        </c:if> 
+	        <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+	            <input type="hidden" id="storeFgSelectStoreCd" value="${sessionInfo.storeCd}"/>
+	        </c:if>
 		</tbody>
 	</table>
 
@@ -104,7 +113,8 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="store.storeFg"/>" 	binding="storeNm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.storeFg"/>"  binding="clsFg"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 	binding="storeNm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" binding="totDcAmt" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
@@ -122,13 +132,6 @@
 	    </div>
 	    <%--//위즈모 테이블--%>
 
-	  <%-- 페이지 리스트 --%>
-	  <div class="pageNum mt20">
-	    <%-- id --%>
-	    <ul id="storeFgCtrlPager" data-size="10">
-	    </ul>
-	  </div>
-	  <%--//페이지 리스트--%>
 	</div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.02" charset="utf-8"></script>

@@ -8,8 +8,8 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprMcouponCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprMcouponStartDate = wcombo.genDateVal("#srchApprMcouponStartDate", gvStartDate);
-  $scope.srchApprMcouponEndDate   = wcombo.genDateVal("#srchApprMcouponEndDate", gvEndDate);
+  $scope.srchApprMcouponStartDate = wcombo.genDateVal("#srchApprMcouponStartDate", getToday());
+  $scope.srchApprMcouponEndDate   = wcombo.genDateVal("#srchApprMcouponEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprMcouponListScaleBox", gvListScaleBoxData);
@@ -148,7 +148,16 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprMcouponCtrl", function (event, data) {
-    $scope.searchApprMcouponList();
+    $scope.searchApprMcouponList(true);
+    
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprMcouponCtrlSrch", function (event, data) {
+    $scope.searchApprMcouponList(false);
     
     
     // 기능수행 종료 : 반드시 추가
@@ -157,7 +166,7 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprMcouponList = function () {
+  $scope.searchApprMcouponList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -165,6 +174,7 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.posNo  	 = $("#apprMcouponSelectPosCd").val();
     params.cornrNo   = $("#apprMcouponSelectCornerCd").val();
     params.listScale = $scope.apprMcouponListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -178,7 +188,7 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/mcoupon/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/mcoupon/list.sb", params);
 	
 	
   };

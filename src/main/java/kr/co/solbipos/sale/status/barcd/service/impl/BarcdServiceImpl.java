@@ -28,6 +28,16 @@ public class BarcdServiceImpl implements BarcdService {
     @Override
     public List<DefaultMap<String>> getBarcdList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
     	barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+    	
+    	if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
+    		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				barcdVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
         return barcdMapper.getBarcdList(barcdVO);
     }
 
@@ -35,10 +45,17 @@ public class BarcdServiceImpl implements BarcdService {
     /** 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getBarcdDtlList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
-		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		
+		if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
+    		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				barcdVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
         return barcdMapper.getBarcdDtlList(barcdVO);
 	}
-
-
-
 }

@@ -10,32 +10,35 @@
         COMMENTS : 매장별매출분석 - 매장순위 리스트를 조회한다.
     -->
     <select id="getStoreBrandList" parameterType="storeBrandVO" resultType="DefaultMap">
-		<include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT TSDT.STORE_CD
      		 , TMS.STORE_NM
+     		 , NVL(CASE TMS.HQ_BRAND_CD 
+                    WHEN '0000000' THEN '기본'
+                    ELSE (SELECT THB.HQ_BRAND_NM FROM TB_HQ_BRAND THB WHERE THB.HQ_BRAND_CD = TMS.HQ_BRAND_CD)
+               END, '기타') AS HQ_BRAND_NM
      		 , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
      		 , SUM(TSDT.TOT_DC_AMT) AS TOT_DC_AMT
      		 , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
      		 , SUM(TSDT.SALE_CNT) AS SALE_CNT
      		 , ROUND(RATIO_TO_REPORT(SUM(TSDT.REAL_SALE_AMT)) OVER() *100, 1) AS RAT_REAL_SALE_AMT
      		 , ROUND(RATIO_TO_REPORT(SUM(TSDT.SALE_CNT)) OVER() *100, 1) AS RAT_CNT
-     		 <include refid="CmmSQL.PagingTemplateCount"/>
   		FROM TB_MS_STORE TMS
      	   , TB_SL_DAILY_TOTAL TSDT
  		WHERE TMS.STORE_CD = TSDT.STORE_CD
- 		<if test='startDate != null and startDate != ""'>
-   		  <![CDATA[
-   		  AND TSDT.SALE_DATE >= #{startDate}
-   		  ]]>
+ 		<if test='hqOfficeCd != null and hqOfficeCd != ""'>
+ 		      AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+ 		</if>
+ 		<if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+   		  AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
    		</if>
-   		<if test='endDate != null and endDate != ""'>
-   		  <![CDATA[
-   		  AND TSDT.SALE_DATE <= #{endDate}
-   		  ]]>
-   		</if>
- 	 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
+   		<if test='arrStoreCd != null and arrStoreCd != ""'>
+             AND TSDT.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+ 	 GROUP BY TSDT.STORE_CD, TMS.STORE_NM, TMS.HQ_BRAND_CD
  	 ORDER BY TMS.STORE_NM
- 	 <include refid="CmmSQL.PagingTemplateBottom"/>
 
     </select>
 

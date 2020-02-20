@@ -83,29 +83,6 @@ public class ApprCardController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd()) && apprCardVO.getPosNo() != null && !"".equals(apprCardVO.getPosNo())) {
-    		String[] arrCornrCd = apprCardVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprCardVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprCardVO.setArrCornrCd(arrCornrCd);
-    				apprCardVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprCardVO.setArrPosNo(arrPosNo);
-    				apprCardVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprCardVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprCardVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         List<DefaultMap<String>> list = apprCardService.getApprCardList(apprCardVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprCardVO);
     }

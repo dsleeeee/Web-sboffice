@@ -8,8 +8,8 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprCashCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprCashStartDate = wcombo.genDateVal("#srchApprCashStartDate", gvStartDate);
-  $scope.srchApprCashEndDate   = wcombo.genDateVal("#srchApprCashEndDate", gvEndDate);
+  $scope.srchApprCashStartDate = wcombo.genDateVal("#srchApprCashStartDate", getToday());
+  $scope.srchApprCashEndDate   = wcombo.genDateVal("#srchApprCashEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprCashListScaleBox", gvListScaleBoxData);
@@ -148,7 +148,16 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprCashCtrl", function (event, data) {
-    $scope.searchApprCashList();
+    $scope.searchApprCashList(true);
+    
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprCashCtrlSrch", function (event, data) {
+    $scope.searchApprCashList(false);
     
     
     // 기능수행 종료 : 반드시 추가
@@ -157,7 +166,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprCashList = function () {
+  $scope.searchApprCashList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -165,6 +174,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.posNo  	 = $("#apprCashSelectPosCd").val();
     params.cornrNo   = $("#apprCashSelectCornerCd").val();
     params.listScale = $scope.apprCashListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -178,7 +188,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/cash/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/cash/list.sb", params);
 	
 	
   };
@@ -221,7 +231,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

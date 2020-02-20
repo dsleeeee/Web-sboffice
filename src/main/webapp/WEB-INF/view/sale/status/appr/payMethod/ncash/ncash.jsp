@@ -8,9 +8,9 @@
 
 <div id="apprNcashView" class="subCon"  ng-controller="apprNcashCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="dailyReport.appr"/></a>
+      <a href="#" class="open fl"><s:message code="dailyReport.apprNcash"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnApprNcashSearch" ng-click="_broadcast('apprNcashCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnApprNcashSearch" ng-click="_broadcast('apprNcashCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -171,7 +171,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <input type="text" id="apprNcashSelectStoreStoreNum" ng-model="storeNum">
+            <input type="hidden" id="apprNcashSelectStoreStoreNum" ng-model="storeNum">
         </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadNcash()"><s:message code="cmm.excel.down" />

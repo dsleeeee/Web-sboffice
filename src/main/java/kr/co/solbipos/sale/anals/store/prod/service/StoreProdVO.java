@@ -10,6 +10,8 @@ public class StoreProdVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 정렬순서 */
     private String chkSort;
     /** 상품상세보기 */
@@ -18,6 +20,9 @@ public class StoreProdVO extends PageVO {
     private String prodCalssCd;
     /** 상품코드 */
     private String prodCd;
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -76,6 +81,21 @@ public class StoreProdVO extends PageVO {
 
 	public void setProdCd(String prodCd) {
 		this.prodCd = prodCd;
+	}
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+
+	public void setArrStoreCd(String[] arrStoreCd) {
+		this.arrStoreCd = arrStoreCd;
 	}
 	
 }

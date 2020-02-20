@@ -30,9 +30,8 @@
           <span class="txtIn w110px">
               <wj-input-date
                       id="srchCornerMonthStartDate"
-                      value="srchCornerMonthStartDate"
                       ng-model="startDate"
-                      control="srchCornerMonthStartDateCombo"
+                      control="cornerMonthStartDateCombo"
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
@@ -44,9 +43,8 @@
             <span class="txtIn w110px">
               <wj-input-date
                       id="srchCornerMonthEndDate"
-                      value="srchCornerMonthEndDate"
                       ng-model="endDate"
-                      control="srchCornerMonthEndDateCombo"
+                      control="cornerMonthEndDateCombo"
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"

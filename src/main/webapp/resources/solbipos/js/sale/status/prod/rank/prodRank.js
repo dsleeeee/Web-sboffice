@@ -11,7 +11,8 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 조회일자 세팅
   $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
- 
+  $scope.orgnFg = gvOrgnFg;
+  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
   
@@ -45,11 +46,6 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상품매출순위 리스트 조회
   $scope.searchProdRankList = function (isPageChk) {
 
-    if ($("#prodRankSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
-
     // 파라미터
     var params       = {};
     params.storeCd   = $("#prodRankSelectStoreCd").val();
@@ -66,6 +62,7 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
     }
 	params.listScale = $scope.prodRanklistScale; //-페이지 스케일 갯수
 	params.isPageChk = isPageChk;
+	params.orgnFg    = $scope.orgnFg;
 	
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {}, false);

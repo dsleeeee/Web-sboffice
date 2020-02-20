@@ -62,9 +62,12 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
         // 첫째줄 헤더 생성
-        var dataItem         = {};
+        var dataItem       = {};
+        dataItem.lv1Nm     = messages["prodrank.prodClassLNm"];
+        dataItem.lv2Nm     = messages["prodrank.prodClassMNm"];
+        dataItem.lv3Nm     = messages["prodrank.prodClassSNm"];
         dataItem.prodCd    = messages["prodhour.prodCd"];
-        dataItem.prodNm         = messages["prodhour.prodNm"];
+        dataItem.prodNm    = messages["prodhour.prodNm"];
 
         // 시간대별 컬럼 생성
         for (var i = 1; i < 25; i++) {
@@ -136,14 +139,23 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         event.preventDefault();
     });
     
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt = function() {
+      $scope.srchStartDate.isReadOnly = $scope.isChecked;
+      $scope.srchEndDate.isReadOnly = $scope.isChecked;
+    };
+    
     // 시간별 리스트 조회
     $scope.searchProdHourList = function (isPageChk) {
         $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
        
         // 파라미터
         var params= {};
-        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        
+        if(!$scope.isChecked){
+        	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        	params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
         
         if(params.startDate > params.endDate){
        	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -154,6 +166,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.saleTime = $scope.saleTime;
         params.listScale = $scope.prodHourlistScale; //-페이지 스케일 갯수
         params.isPageChk = isPageChk;
+        params.orgnFg    = $scope.orgnFg;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/prod/hour/list.sb", params, function() {});
@@ -165,86 +178,86 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var end = 0;
 
         if($scope.saleTime === "1"){ 
-            start = 3;
-            end = 4;
+            start = 6;
+            end = 7;
         }else if($scope.saleTime  === "2"){ 
-            start = 5;
-            end = 6;
+            start = 8;
+            end = 9;
         }else if($scope.saleTime  === "3"){ 
-            start = 7;
-            end = 8;
+            start = 10;
+            end = 11;
         }else if($scope.saleTime  === "4"){ 
-            start = 9;
-            end = 10;
+            start = 12;
+            end = 13;
         }else if($scope.saleTime  === "5"){ 
-            start = 11;
-            end = 12;
+            start = 14;
+            end = 15;
         }else if($scope.saleTime  === "6"){ 
-            start = 13;
-            end = 14;
+            start = 16;
+            end = 17;
         }else if($scope.saleTime  === "7"){ 
-            start = 15;
-            end = 16;
+            start = 18;
+            end = 19;
         }else if($scope.saleTime  === "8"){ 
-            start = 17;
-            end = 18;
+            start = 20;
+            end = 21;
         }else if($scope.saleTime  === "9"){ 
-            start = 19;
-            end = 20;
+            start = 22;
+            end = 23;
         }else if($scope.saleTime  === "10"){ 
-            start = 21;
-            end = 22;
+            start = 24;
+            end = 25;
         }else if($scope.saleTime  === "11"){ 
-            start = 23;
-            end = 24;
+            start = 26;
+            end = 27;
         }else if($scope.saleTime  === "12"){ 
-            start = 25;
-            end = 26;
+            start = 28;
+            end = 29;
         }else if($scope.saleTime  === "13"){ 
-            start = 27;
-            end = 28;
+            start = 30;
+            end = 31;
         }else if($scope.saleTime  === "14"){
-            start = 29;
-            end = 30;    
+            start = 32;
+            end = 33;    
         }else if($scope.saleTime  === "15"){ 
-            start = 31;
-            end = 32;
+            start = 34;
+            end = 35;
         }else if($scope.saleTime  === "16"){ 
-            start = 33;
-            end = 34;
+            start = 36;
+            end = 37;
         }else if($scope.saleTime  === "17"){
-            start = 35;
-            end = 36;
+            start = 38;
+            end = 39;
         }else if($scope.saleTime  === "18"){ 
-            start = 37;
-            end = 38;
+            start = 40;
+            end = 41;
         }else if($scope.saleTime  === "19"){ 
-            start = 39;
-            end = 40;
+            start = 42;
+            end = 43;
         }else if($scope.saleTime  === "20"){ 
-            start = 41;
-            end = 42;
+            start = 44;
+            end = 45;
         }else if($scope.saleTime  === "21"){ 
-            start = 43;
-            end = 44;
+            start = 46;
+            end = 47;
         }else if($scope.saleTime  === "22"){
-            start = 45;
-            end = 46;
+            start = 48;
+            end = 49;
         }else if($scope.saleTime  === "23"){
-            start = 47;
-            end = 48;
+            start = 50;
+            end = 51;
         }else if($scope.saleTime  === "24"){
-            start = 49;
-            end = 50;
+            start = 52;
+            end = 53;
         }else if($scope.saleTime === ""){ //전체
-            start = 3;
-            end = 50;
+            start = 6;
+            end = 53;
         }
         
         start++;
         end++;
 
-        for(var i = 3; i <= 74; i++){
+        for(var i = 6; i <= 77; i++){
             if(i >= start && i <= end){
                 columns[i].visible = true;
             }else{

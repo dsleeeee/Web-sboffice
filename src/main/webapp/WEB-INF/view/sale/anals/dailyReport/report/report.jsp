@@ -93,7 +93,8 @@
 			<s:message code="dailyReport.report"/> ({{span_startDate}} ~ {{span_endDate}})
 		</div>
 		<span class="fr">
-			<button class="btn_skyblue" ng-click="excelDownload()"><s:message code="dailyReport.reportPrint" /></button>
+			<button class="btn_skyblue" ng-click="print()"			><s:message code="dailyReport.reportPrint"	/></button>
+			<button class="btn_skyblue" ng-click="excelDownload()"	><s:message code="cmm.excel.down" 			/></button>
 		</span>
 	</div>
 
@@ -831,8 +832,6 @@
 	    </div>
 	    </div>
 	</div>
-
-
 
 
 

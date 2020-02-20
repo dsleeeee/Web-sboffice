@@ -8,9 +8,9 @@
 
 <div id="apprMcouponView" class="subCon"  ng-controller="apprMcouponCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="dailyReport.appr"/></a>
+      <a href="#" class="open fl"><s:message code="dailyReport.apprMcoupn"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnApprMcouponSearch" ng-click="_broadcast('apprMcouponCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnApprMcouponSearch" ng-click="_broadcast('apprMcouponCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -171,7 +171,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="text" id="apprMcouponSelectStoreStoreNum" ng-model="storeNum">
+        <input type="hidden" id="apprMcouponSelectStoreStoreNum" ng-model="storeNum">
     </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadMcoupon()"><s:message code="cmm.excel.down" />
@@ -225,9 +225,3 @@
 <script type="text/javascript">
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/mcoupon/mcoupon.js" charset="utf-8"></script>
-
-<%-- 매장현황 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/appr/apprMcoupon.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

@@ -31,7 +31,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="5">
+        	<td colspan="3">
           	<div class="sb-select">      
        		    <span class="txtIn"><input id="srchRankStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -75,6 +75,21 @@
             	</span>
         	</td>    	
       	</tr>
+      	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
+            <%-- 매장코드 --%>           
+          	<th><s:message code="todayBillSaleDtl.store"/></th>
+          	<td colspan="3">
+            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+             		<jsp:param name="targetId" value="storeRankSelectStore"/>
+            	</jsp:include>
+              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+          	</td> 	
+        </tr>
+        </c:if>
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+        	<input type="hidden" id="storeRankSelectStoreCd" value="${sessionInfo.storeCd}"/>
+      	</c:if>
 		</tbody>
 	</table>
 
@@ -95,7 +110,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
-          frozen-columns="10"
+          frozen-columns="4"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->

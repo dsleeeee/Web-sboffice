@@ -25,7 +25,7 @@
 			<tr>
 				<%-- 조회일자 --%>
 				<th><s:message code="cmm.search.date" /></th>
-				<td>
+				<td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
 					<div class="sb-select">
 						<span class="txtIn"><input id="srchDcDcfgStartDate" class="w120px"></span>
 						<span class="rg">~</span>
@@ -152,7 +152,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="wj-gridWrap" style="height: 350px;">
-				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="dtlFlex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
+				<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" binding="prodNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleQty"/>" binding="saleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

@@ -12,6 +12,8 @@ public class ProdRankVO extends PageVO {
     private String storeCd;
     /** 매장코드 array */
     private String arrStoreCd[];
+    /** 본사,매장 구분 */
+    private String orgnFg;
     
     /**
      * @return the hqOfficeCd
@@ -54,4 +56,12 @@ public class ProdRankVO extends PageVO {
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
     }
+    
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

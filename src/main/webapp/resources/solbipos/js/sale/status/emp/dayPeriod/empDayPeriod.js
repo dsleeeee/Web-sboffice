@@ -122,7 +122,7 @@ app.controller('empDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
     	params.empChk = "N";
     }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/status/emp/dayperiod/list.sb", params);
+    $scope._inquiryMain("/sale/status/emp/dayperiod/list.sb", params);
 
     //메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
@@ -157,7 +157,7 @@ app.controller('empDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
@@ -264,21 +264,21 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.isPageChk = isPageChk;
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquirySub("/sale/status/emp/dayperiod/dtl.sb", params);
+	    $scope._inquiryMain("/sale/status/emp/dayperiod/dtl.sb", params);
 	  };
 
 	  //엑셀 다운로드
 	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.dtlFlex.rows.length <= 0) {
+	    if ($scope.flex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.dtlFlex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 	        includeColumnHeaders: true,
-	        includeCellStyles   : false,
+	        includeCellStyles   : true,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }

@@ -27,8 +27,10 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
     /** 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getPosDayPeriodList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO) {
+
     	posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+    	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
     	if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
     		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
 	        if (arrStoreCd.length > 0) {
@@ -37,7 +39,7 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 	    		}
 	    	}
     	}
-    	
+
         return posDayPeriodMapper.getPosDayPeriodList(posDayPeriodVO);
     }
 
@@ -45,8 +47,10 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
     /** 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPosDayPeriodDtlList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO) {
+
 		posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		
+    	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
 		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
     		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
 	        if (arrStoreCd.length > 0) {
@@ -55,7 +59,7 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
 	    		}
 	    	}
     	}
-		
+
         return posDayPeriodMapper.getPosDayPeriodDtlList(posDayPeriodVO);
 	}
 

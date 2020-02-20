@@ -7,12 +7,12 @@
 	<select id="getTableDayOfWeekList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
 		SELECT 	TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
 				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-    				WHEN '월' THEN 1
-    				WHEN '화' THEN 2
-    				WHEN '수' THEN 3
-    				WHEN '목' THEN 4
-    				WHEN '금' THEN 5
-    				WHEN '토' THEN 6
+    				WHEN '일' THEN 1
+    				WHEN '월' THEN 2
+    				WHEN '화' THEN 3
+    				WHEN '수' THEN 4
+    				WHEN '목' THEN 5
+    				WHEN '금' THEN 6
     				ELSE 7
     			END AS DAY_ORDER
 				, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
@@ -40,15 +40,7 @@
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]> -->
 		GROUP BY TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-		ORDER BY CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-    				WHEN '월' THEN 1
-    				WHEN '화' THEN 2
-    				WHEN '수' THEN 3
-    				WHEN '목' THEN 4
-    				WHEN '금' THEN 5
-    				WHEN '토' THEN 6
-    				ELSE 7
-    			END
+		ORDER BY DAY_ORDER
 	</select>
 
 	<select id="getStoreTableList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">

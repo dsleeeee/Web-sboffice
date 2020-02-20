@@ -32,6 +32,10 @@ public class SaleComPopupVO extends PageVO {
     private String billNo;
     /** 매장코드 array */
     private String arrStoreCd[];
+    /** 테이블코드 array */
+    private String arrTblCd[];
+    /** 매장테이블코드 array */
+    private String arrStoreTbl[];
     /** 코너코드 array */
     private String arrCornrCd[];
     /** 대분류코드 */
@@ -44,6 +48,10 @@ public class SaleComPopupVO extends PageVO {
     private String saleDay;
     /** 년월 */
     private String saleYm;
+    /** 시간 */
+    private String saleHour;
+    /** 본사,매장구분 */
+    private String orgnFg;
     
     /**
      * @return the hqOfficeCd
@@ -184,7 +192,25 @@ public class SaleComPopupVO extends PageVO {
         this.arrStoreCd = arrStoreCd;
     }
 
-    /**
+    
+    public String[] getArrTblCd() {
+		return arrTblCd;
+	}
+
+	public void setArrTblCd(String[] arrTblCd) {
+		this.arrTblCd = arrTblCd;
+	}
+	
+
+	public String[] getArrStoreTbl() {
+		return arrStoreTbl;
+	}
+
+	public void setArrStoreTbl(String[] arrStoreTbl) {
+		this.arrStoreTbl = arrStoreTbl;
+	}
+
+	/**
      * @param arrCornrCd the arrCornrCd to set
      */
 	public String[] getArrCornrCd() {
@@ -233,6 +259,22 @@ public class SaleComPopupVO extends PageVO {
 
 	public void setSrchPopProdNm(String srchPopProdNm) {
 		this.srchPopProdNm = srchPopProdNm;
+	}
+
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getSaleHour() {
+		return saleHour;
+	}
+
+	public void setSaleHour(String saleHour) {
+		this.saleHour = saleHour;
 	}
 	
 }

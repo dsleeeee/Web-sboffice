@@ -39,8 +39,11 @@ public class RtnStatusDayVO extends PageVO {
     private String posNo;
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
-    /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
+    /** 반품구분 */
     private String saleYn;
+    /** 접속권한(본사, 매장) */
+    private String orgnFg;
+    
     
     
     public String getStoreCd() {
@@ -153,5 +156,11 @@ public class RtnStatusDayVO extends PageVO {
 	}
 	public void setSaleYn(String saleYn) {
 		this.saleYn = saleYn;
+	}
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
 	}
 }

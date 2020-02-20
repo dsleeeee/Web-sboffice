@@ -116,10 +116,11 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchStoreRankList = function () {
 
     // 파라미터
-    var params       = {};
+    var params       = {};  
+    	params.storeCd   = $("#storeRankSelectStoreCd").val();
     if(!$scope.isChecked){
-    	 params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -184,6 +185,13 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
 		   	}
 	  }
 	  
+  };
+  
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeRankSelectStoreShow = function () {
+    $scope._broadcast('storeRankSelectStoreCtrl');
   };
   
   // 엑셀 다운로드

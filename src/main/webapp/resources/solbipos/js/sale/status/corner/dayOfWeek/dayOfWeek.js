@@ -53,6 +53,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
     			arrStore.push(temp[0]);
     			arrCornr.push(temp[1]);
     		}
+    		params.chkPop   = "tablePop";
         	params.startDate = $scope.startDateForDt;
         	params.endDate   = $scope.endDateForDt;
         	params.yoil	 	 = selectedRow.yoil;
@@ -210,7 +211,7 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

@@ -89,10 +89,8 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeMonthCtrl", function (event, data) {
-
-//	 $scope.getPayList();    
-//	  jsonArray1 = "";
-	 $scope.searchStoreMonthList();
+  
+	$scope.searchStoreMonthList();
 	 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -101,12 +99,18 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장월별순위 리스트 조회
   $scope.searchStoreMonthList = function () {
 	    
-	  var params       = {};
-	    if(!$scope.isChecked){
-	        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
-	        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
-	    }
+	var params       = {};
+  		params.storeCd   = $("#storeMonthSelectStoreCd").val();
+    if(!$scope.isChecked){
+        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
+        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+    }
 	 
+    if(params.startDate > params.endDate){
+   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+    
 	 $scope._postJSONQuery.withOutPopUp("/sale/anals/store/month/monthlist.sb", params, function(response) {
 		 var length = response.data.data.list.length;
 		 var grid = wijmo.Control.getControl("#storeMonthGrid");
@@ -153,6 +157,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 		    var params = {};
 		    params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
 	        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+	        params.storeCd   = $("#storeMonthSelectStoreCd").val();
 			params.chkSort = $scope.isCheckedSortMonth;
 			params.rowNum = $scope.rowNum;
 			params.hqOfficeCd = $("#hqOfficeCd").val();
@@ -204,6 +209,13 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 		   $scope.flex.refresh();
 	    });
 	  
+  };
+  
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeMonthSelectStoreShow = function () {
+    $scope._broadcast('storeMonthSelectStoreCtrl');
   };
   
   // 엑셀 다운로드

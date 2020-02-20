@@ -146,7 +146,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/pos/dayOfWeek/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/dayOfWeek/list.sb", params);
 		$scope._setPagingInfo('curr', 1);
 	};
 
@@ -182,7 +182,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}

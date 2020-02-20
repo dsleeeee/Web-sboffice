@@ -50,12 +50,13 @@ public class VersusPeriodClassController {
         this.versusPeriodClassService = versusPeriodClassService;
     }
 
-
+    
     @RequestMapping(value = "/class/list.sb", method = RequestMethod.GET)
     public String versusPeriodView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "sale/anals/versusPeriod/versusPeriodSale";
     }
-
+    
+    /** 대비기간매출분석 - 분류상품별 리스트 조회 */
     @RequestMapping(value = "/class/versusPeriodClassList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVersusPeriodClassList(HttpServletRequest request, HttpServletResponse response, Model model, VersusPeriodClassVO versusPeriodClassVO) {
@@ -67,6 +68,7 @@ public class VersusPeriodClassController {
         return ReturnUtil.returnListJson(Status.OK, list, versusPeriodClassVO);
     }
 
+    /** 대비기간매출분석 - 분류상품별 리스트 상세 조회 */
     @RequestMapping(value = "/class/versusPeriodClassDtlList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVersusPeriodClassDtlList(HttpServletRequest request, HttpServletResponse response, Model model, VersusPeriodClassVO versusPeriodClassVO) {
@@ -74,6 +76,18 @@ public class VersusPeriodClassController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = versusPeriodClassService.getVersusPeriodClassDtlList(versusPeriodClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, versusPeriodClassVO);
+    }
+    
+    /** 대비기간매출분석 - 브랜드 코드 조회조건 */
+    @RequestMapping(value = "/class/getBrandCdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBrandCdList(HttpServletRequest request, HttpServletResponse response, Model model, VersusPeriodClassVO versusPeriodClassVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = versusPeriodClassService.getBrandCdList(versusPeriodClassVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, versusPeriodClassVO);
     }

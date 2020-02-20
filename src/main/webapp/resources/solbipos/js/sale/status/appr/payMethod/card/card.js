@@ -8,8 +8,8 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprCardCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprCardStartDate = wcombo.genDateVal("#srchApprCardStartDate", gvStartDate);
-  $scope.srchApprCardEndDate   = wcombo.genDateVal("#srchApprCardEndDate", gvEndDate);
+  $scope.srchApprCardStartDate = wcombo.genDateVal("#srchApprCardStartDate", getToday());
+  $scope.srchApprCardEndDate   = wcombo.genDateVal("#srchApprCardEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprCardListScaleBox", gvListScaleBoxData);
@@ -152,7 +152,15 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprCardCtrl", function (event, data) {
-    $scope.searchApprCardList();
+    $scope.searchApprCardList(true);
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprCardCtrlSrch", function (event, data) {
+    $scope.searchApprCardList(false);
     
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -160,7 +168,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprCardList = function () {
+  $scope.searchApprCardList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -168,6 +176,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.posNo  	 = $("#apprCardSelectPosCd").val();
     params.cornrNo   = $("#apprCardSelectCornerCd").val();
     params.listScale = $scope.apprCardListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -180,7 +189,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/card/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/card/list.sb", params);
 	
 	
   };
@@ -195,22 +204,22 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.apprCardSelectStoreShow = function () {
-    $scope._broadcast('apprCardSelectStoreCtrl');
+	  $scope._broadcast('apprCardSelectStoreCtrl');
   };
   
-	//포스선택 모듈 팝업 사용시 정의
-	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.apprCardSelectPosShow = function () {
-		$scope._broadcast('apprCardSelectPosCtrl');
-	};
-
-	//코너선택 모듈 팝업 사용시 정의
-	//함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	//_broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.apprCardSelectCornerShow = function () {
-		$scope._broadcast('apprCardSelectCornerCtrl');
-	};
+  //포스선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.apprCardSelectPosShow = function () {
+	  $scope._broadcast('apprCardSelectPosCtrl');
+  };
+	
+  //코너선택 모듈 팝업 사용시 정의
+  //함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  //_broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.apprCardSelectCornerShow = function () {
+	  $scope._broadcast('apprCardSelectCornerCtrl');
+  };
 
 //엑셀 다운로드
   $scope.excelDownloadCard = function () {
@@ -223,7 +232,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

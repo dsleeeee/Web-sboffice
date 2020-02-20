@@ -11,6 +11,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 조회일자 세팅
   $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", getToday());
+  $scope.orgnFg = gvOrgnFg;
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodPayFglistScaleBox', gvListScaleBoxData);
@@ -45,16 +46,12 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상품매출순위 리스트 조회
   $scope.searchProdPayFgList = function (isPageChk) {
 
-    if ($("#pordPayFgSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
-
     // 파라미터
     var params       = {};
     params.storeCd   = $("#pordPayFgSelectStoreCd").val();
     params.prodCd    = $("#srchPayFgProdCd").val();
     params.prodNm    = $("#srchPayFgProdNm").val();
+    params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.prodPayFglistScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params

@@ -8,9 +8,9 @@
 
 <div id="apprMpayView" class="subCon"  ng-controller="apprMpayCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="dailyReport.appr"/></a>
+      <a href="#" class="open fl"><s:message code="dailyReport.apprMpay"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnApprMpaySearch" ng-click="_broadcast('apprMpayCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnApprMpaySearch" ng-click="_broadcast('apprMpayCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -171,7 +171,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="text" id="apprMpaySelectStoreStoreNum" ng-model="storeNum">
+        <input type="hidden" id="apprMpaySelectStoreStoreNum" ng-model="storeNum">
     </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadMpay()"><s:message code="cmm.excel.down" />
@@ -226,8 +226,3 @@
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/mpay/mpay.js" charset="utf-8"></script>
 
-<%-- 매장현황 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/appr/apprMpay.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

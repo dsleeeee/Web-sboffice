@@ -158,7 +158,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/pos/month/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/month/list.sb", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -193,7 +193,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}

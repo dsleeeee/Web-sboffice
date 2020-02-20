@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.fg.service.StoreFgService;
 import kr.co.solbipos.sale.anals.store.fg.service.StoreFgVO;
@@ -35,12 +36,12 @@ public class StoreFgServiceImpl implements StoreFgService {
     @Override
     public List<DefaultMap<String>> getStoreFgList(StoreFgVO storeFgVO, SessionInfoVO sessionInfoVO) {
     	storeFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	 if(!StringUtil.getOrBlank(storeFgVO.getStoreCd()).equals("")) {
+         	storeFgVO.setArrStoreCd(storeFgVO.getStoreCd().split(","));
+         }
+    	 
         return storeFgMapper.getStoreFgList(storeFgVO);
     }
     
-    /**매장형태별 매출 - 매장형태별 매장구분 콤보 리스트 조회 */
-    @Override
-    public List<DefaultMap<String>> getStoreFgComboList(StoreFgVO storeFgVO, SessionInfoVO sessionInfoVO) {
-        return storeFgMapper.getStoreFgComboList(storeFgVO);
-    }
 }

@@ -11,8 +11,8 @@
 
 var app 		= agrid.getApp();	//get application
 
-var startDate 	= wcombo.genDateVal("#startDate", gvStartDate	);
-var endDate 	= wcombo.genDateVal("#endDate",   gvEndDate		);
+var startDate 	= wcombo.genDateVal("#startDate", getToday()	);
+var endDate 	= wcombo.genDateVal("#endDate",   getToday()	);
 
 /* 전역으로 선언해도 인식못함.
 //매장선택 모듈 팝업 사용시 정의			----------------------------------------------------------------------------------------------------------------------
@@ -74,10 +74,10 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     	}
 
         var params = {};
-//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간
         	params.startDate 		= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
+//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간	        
 	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
@@ -122,6 +122,9 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															            //[영업일보 구성] check-box setting
 															            for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
 															                var item = configCtrl_2.flex.collectionView.items[i];
+
+															                if(item.cfgCd    == "SL")	item.cfgSelYn = "Y";	//[매출종합]은 무조건 'checked' (처음 접속 or '영업일보 구성'을 저장하지 않은 매장의 경우 '영업일보 구성'에서 선택된 것이 없기에, [매출종합]은 선택되어 보여지게 함)
+
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
 															            		eval( '$(".div_' + item.cfgCd + '").show();' );
@@ -1102,7 +1105,7 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
           dataItem.apprApMcoupn       = messages["dailyReport.apprMcoupn"];
           dataItem.apprDcMcoupn       = messages["dailyReport.apprMcoupn"];
 
-          dataItem.apprCntPartne      = messages["dailyReport.apprPartner"];
+          dataItem.apprCntPartner     = messages["dailyReport.apprPartner"];
           dataItem.apprApPartner      = messages["dailyReport.apprPartner"];
           dataItem.apprDcPartner      = messages["dailyReport.apprPartner"];
 
@@ -1271,6 +1274,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	$scope.span_startDate 	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
 	$scope.span_endDate		= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
 
+	//excelDownload		START	----------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){
 		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
 		if (reportCtrl_sl.flex.rows.length <= 0) {
@@ -1287,6 +1291,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	    //$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
 		var reportCtrl = agrid.getScope("reportCtrl");
 			reportCtrl.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
+
 		$timeout(function()	{
 						      //var reportCtrl_sl       = agrid.getScope("reportCtrl_sl");      //매출종합
 						    	var reportCtrl_pay      = agrid.getScope("reportCtrl_pay");     //결제수단
@@ -1362,6 +1367,352 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 								reportCtrl.$broadcast('loadingPopupInactive');
 							}, 1000);	//건수가 많아서 1000으로 했음 (현재 1년치 정도가 500ms 미만임)
 	};
+	//excelDownload		END		----------------------------------------------------------------------------------------------------------------------
+
+
+
+	//print				START	----------------------------------------------------------------------------------------------------------------------
+	$scope.print_OLD_XXX = function(){
+		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
+		if (reportCtrl_sl.flex.rows.length <= 0) {
+				s_alert.pop( messages["dailyReport.alert.noDataToPrint"] );	//출력할 자료가 없습니다.
+				return false;
+		}
+
+		var dateFrom	= wijmo.Globalize.format(startDate.value, 'yyyy.MM.dd');
+		var dateTo		= wijmo.Globalize.format(endDate  .value, 'yyyy.MM.dd');
+	  //var printTitle	= '영업일보(' + dateFrom + ' ~ ' + dateTo + ')';	//파일명의 '~'  -->  '_'로 자동 치환됨.
+		var printTitle	= '영업일보(' + dateFrom + ' - ' + dateTo + ')';
+
+	    var doc 	= new wijmo.PrintDocument( {title : printTitle} );
+
+	    var browser = navigator.userAgent.toLowerCase();	//브라우저 체크하여 크롬인 경우 위에 빈칸 9mm 를 둔다. ie와 비슷하게 맞추기 위함...
+	    if (-1 != browser.indexOf('chrome')) {
+	    	//doc.append('<div style="height: 9mm;"></div>');
+	    }
+	    /*
+	    cf> <div id="reportView" class="subCon">
+
+	    var view = document.querySelector('#reportView');
+	    doc.append(view);
+
+	    doc.append( document.querySelector('#reportView') );	OK
+
+	    doc.append( document.querySelector('#subCon') );		X
+
+	    doc.append( document.querySelector('#div_print') );		<div id="div_print"> 추가 -> 현재 지웠음
+		*/
+	    doc.append( document.querySelector('#div_print') );
+
+	    doc.print();
+	};
+	//print				END		----------------------------------------------------------------------------------------------------------------------
+
+
+	//print				STATT	----------------------------------------------------------------------------------------------------------------------
+	$scope.print = function(){
+		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
+		if (reportCtrl_sl.flex.rows.length <= 0) {
+				s_alert.pop( messages["dailyReport.alert.noDataToPrint"] );	//출력할 자료가 없습니다.
+				return false;
+		}
+
+		var dateFrom	= wijmo.Globalize.format(startDate.value, 'yyyy.MM.dd');
+		var dateTo		= wijmo.Globalize.format(endDate  .value, 'yyyy.MM.dd');
+		var printTitle	= '영업일보(' + dateFrom + ' - ' + dateTo + ')';	//파일명의 '~'  -->  '_'로 자동 치환됨.
+
+	  //let doc = new wjcCore.PrintDocument	({
+        let doc = new wijmo.PrintDocument	({
+								            	title	: printTitle,
+								            	copyCss	: true //false가 낫다 -> To prevent cross-origin issues
+        									});
+
+        //https://www.grapecity.com/wijmo/api/classes/wijmo.printdocument.html
+        //add CSS explicitly (since we can't use copyCss in jsfiddle)
+        //doc.append('<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">');
+        //doc.append('<link href="https://cdn.grapecity.com/wijmo/5.latest/styles/wijmo.min.css"         rel="stylesheet">');
+        /*
+        doc.addCSS("/resource/solbipos/css/cmm/style.css");
+
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/app.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
+		*/
+		doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
+
+        doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
+
+        //add a printer-friendly version of a FlexGrid to the document
+        //doc.append('<p>Here\'s a FlexGrid rendered as a table:</p>');
+        //let tbl = this._renderTable(reportCtrl_sl.flex);
+        //doc.append(tbl);
+        doc.append( this._renderTable(reportCtrl_sl.flex) );
+
+        var reportCtrl_pay      = agrid.getScope("reportCtrl_pay"   );
+        var reportCtrl_nsl      = agrid.getScope("reportCtrl_nsl"   );
+        var reportCtrl_npay     = agrid.getScope("reportCtrl_npay"  );
+        var reportCtrl_pos      = agrid.getScope("reportCtrl_pos"   );
+        var reportCtrl_emp      = agrid.getScope("reportCtrl_emp"   );
+        var reportCtrl_dc       = agrid.getScope("reportCtrl_dc"    );
+        var reportCtrl_dcdtl    = agrid.getScope("reportCtrl_dcdtl" );
+        var reportCtrl_gift     = agrid.getScope("reportCtrl_gift"  );
+        var reportCtrl_order    = agrid.getScope("reportCtrl_order" );
+        var reportCtrl_lv1      = agrid.getScope("reportCtrl_lv1"   );
+        var reportCtrl_lv2      = agrid.getScope("reportCtrl_lv2"   );
+        var reportCtrl_lv3      = agrid.getScope("reportCtrl_lv3"   );
+        var reportCtrl_prod     = agrid.getScope("reportCtrl_prod"  );
+        var reportCtrl_compt    = agrid.getScope("reportCtrl_compt" );
+        var reportCtrl_appr     = agrid.getScope("reportCtrl_appr"  );
+        var reportCtrl_membr    = agrid.getScope("reportCtrl_membr" );
+        var reportCtrl_work     = agrid.getScope("reportCtrl_work"  );
+
+	    //[영업일보 구성]에서 선택된 부분만 출력
+        var configCtrl_2 = agrid.getScope('configCtrl_2');	//영업일보 구성
+        for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+            var item = configCtrl_2.flex.collectionView.items[i];
+            if(item.cfgCd == 'SL')	continue;
+        	if(item.cfgSelYn == "Y"){
+        		doc.append("<br><br><br>");
+        		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
+                eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex) );'      	);
+        	}
+        }
+
+        doc.print();
+	};
+
+    //Grid를 Table로 rendering 처리
+	$scope._renderTable = function(flex){	//function(flex: wjcGrid.FlexGrid){
+		//Table - START
+			/*
+ 	        let tbl = '<table>';
+	        let tbl = '<table class="tblType01">';
+	        let tbl = '<table class="searchTbl">';
+			let tbl = '<table class="sam-tbl">';
+			let tbl = '<table class="reportPrint">';
+			*/
+			let tbl = '<table class="reportPrint">';
+
+        //Headers
+	      //if(flex.headersVisibility & wjcGrid.HeadersVisibility.Column){
+	        if(flex.headersVisibility & wijmo.grid.HeadersVisibility.Column){
+	            tbl += '<thead>';
+	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
+////////////////////tbl += this._renderRow       (flex.columnHeaders, r);
+	                tbl += this._renderRow_Header(flex.columnHeaders, r);
+	            }
+	            tbl += '</thead>';
+	        }
+
+        //Body
+	        tbl += '<tbody>';
+	        for(let r=0; r<flex.rows.length; r++){
+	            tbl += this._renderRow(flex.cells, r);
+	        }
+	        tbl += '</tbody>';
+
+        //Table - End
+	        tbl += '</table>';
+	        return tbl;
+    }
+
+
+	/*
+    for(let r=0; r<flex.columnHeaders.rows.length; r++){
+    	let columnHeaders =
+
+        //tbl += this._renderRow(flex.columnHeaders, r);
+          tbl += this._renderRow_Header(flex.columnHeaders, r);
+    }
+	*/
+
+	$scope._renderRow_Header = function(panel, r){
+        let tr 		= '',
+        row 		= panel.rows[r];
+      //row_next 	= panel.rows[r+1];
+
+        let header_rowspan 	= 1;
+        let header_colspan 	= 1;
+        let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col 			= panel.columns[c];
+                let col_next		= panel.columns[c+1];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+
+	                    let content 			= panel.getCellData(r, 	c,	true);
+	                    let content_prev_row	= "";																		//Previous 	row    값
+	                    let content_next_row	= "";																		//Next 		row    값
+	                    let content_next_col 	= "";																		//Next 		column 값
+
+	                    if(0                    <  r   )	content_prev_row 	= panel.getCellData(r-1,	c,  	true);	//Previous 	row    값
+	                    if(panel.rows   .length > (r+1))	content_next_row 	= panel.getCellData(r+1,	c,  	true);	//Next 		row    값
+	                    if(panel.columns.length > (c+1))	content_next_col 	= panel.getCellData(r,  	c+1,	true);	//Next 		column 값
+
+	                    if(header_colsize == 0)				header_colsize 		= col.renderSize;
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                    	/*
+                    	console.log('----------------------------------------------------------');
+                    	console.log('content_prev_row     : ' + content_prev_row				);
+                    	console.log('content              : ' + content							);
+                    	console.log('content_next_row     : ' + content_next_row				);
+                    	console.log('content_next_col     : ' + content_next_col				);
+                    	console.log('panel.columns.length : ' + panel.columns.length + ' & ' + c);
+						*/
+
+                    	/*
+                		if(panel.columns.length == (c+1)   &&   content == content_prev_row){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                		}
+                		*/
+                    	//[수발주내역] -> 특이한 CASE이기에 hard-coding으로 해결 - START
+                    	if(content_prev_row == ''   &&   content == '본사출고'){
+                    		if(content_next_row == '물량오류'){
+                    			tr += '<th rowspan="' + 1 + '" colspan="' + 3 + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    		}
+                    		continue;
+                    	}
+                    	if(content_prev_row == '본사출고'   &&   content == '본사출고'){
+                   				tr += '<th rowspan="' + 1 + '" colspan="' + 1 + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                   			continue;
+                    	}
+                    	//[수발주내역] -> 특이한 CASE이기에 hard-coding으로 해결 - END
+
+                    	if(content == content_prev_row)	continue;	//이전행 Header값과 같으면 skip
+
+                    	if(content == content_next_row){
+                    		header_rowspan++;
+                    	}
+
+                    	if(content == content_next_col){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                    		//console.log("content == content_next_col: " + content + " == " + content_next_col + " & " + header_colspan + " & " + header_colsize);
+                    	}
+                    	else{
+
+                    		//console.log('header_rowspan       : ' + header_rowspan + ' & header_colspan: ' + header_colspan);
+
+                    		if		(header_rowspan >  1    &&    header_colspan == 1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+
+                    		}else if(header_rowspan == 1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else if(header_rowspan >  1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else{
+                    			tr += '<th style="' + style + '">' + content + '</th>';
+                    		}
+                    	}
+                    	//header_prev = panel.getCellData(r, c, true);
+                }	//if(col.renderSize > 0){
+            }		//for(let c=0; c<panel.columns.length; c++){
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+                        let raw = panel.getCellData(r, c, false);
+                        if		(raw === true)	content = '&#9745;';
+                        else if	(raw === false)	content = '&#9744;';
+
+                        tr += '<td style="' + style + '">' + content + '</td>';
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow_OLD = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+	                  //if(panel.cellType == wjcGrid.CellType.ColumnHeader){
+	                    if(panel.cellType == wijmo.grid.CellType.ColumnHeader){
+	                        tr += '<th style="' + style + '">' + content + '</th>';
+
+	                    }else {
+	                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+	                        let raw = panel.getCellData(r, c, false);
+	                        if		(raw === true)	content = '&#9745;';
+	                        else if	(raw === false)	content = '&#9744;';
+
+	                        tr += '<td style="' + style + '">' + content + '</td>';
+	                    }
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+	//print				END		----------------------------------------------------------------------------------------------------------------------
+
+
 
 }]);
 //reportCtrl_excel	END		############################################################################################################################################################################

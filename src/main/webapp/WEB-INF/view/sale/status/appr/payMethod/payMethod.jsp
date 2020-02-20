@@ -7,8 +7,8 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="con" id=payMethodView name="payMethodView">
-    <div class="tabType1" ng-controller="payMethodCtrl" ng-init="init()">
+<div class="con" id="payMethodView" name="payMethodView" ng-controller="payMethodCtrl" ng-init="init()">
+    <div class="tabType1">
         <ul>
             <%-- 신용카드 --%>
             <li>
@@ -44,59 +44,86 @@
             </li>
         </ul>
     </div>
+        <%-- 탭페이지 레이어 시작 --%>
+        <%-- 신용카드 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/card/card.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- 현금 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/cash/cash.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Payco 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/payco/payco.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Mpay 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/mpay/mpay.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Mcoupn 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/mcoupon/mcoupon.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Partner 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/partner/partner.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Ncard 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/ncard/ncard.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        
+        <%-- Ncash 승인현황 --%>
+        <c:import url="/WEB-INF/view/sale/status/appr/payMethod/ncash/ncash.jsp">
+            <c:param name="menuCd" value="${menuCd}"/>
+            <c:param name="menuNm" value="${menuNm}"/>
+        </c:import>
+        <%-- /탭페이지 레이어 종료 --%>
+        
+        
+        <%-- 팝업 레이어 시작 --%>
+        <%-- 매장현황 팝업 상세 레이어 --%>
+		<c:import url="/WEB-INF/view/sale/com/popup/appr/apprCard.jsp">
+		  <c:param name="menuCd" value="${menuCd}"/>
+		  <c:param name="menuNm" value="${menuNm}"/>
+		</c:import>
+		
+		<%-- 매장현황 팝업 상세 레이어 --%>
+		<c:import url="/WEB-INF/view/sale/com/popup/appr/apprMcoupon.jsp">
+		  <c:param name="menuCd" value="${menuCd}"/>
+		  <c:param name="menuNm" value="${menuNm}"/>
+		</c:import>
+		
+		<%-- 매장현황 팝업 상세 레이어 --%>
+		<c:import url="/WEB-INF/view/sale/com/popup/appr/apprMpay.jsp">
+		  <c:param name="menuCd" value="${menuCd}"/>
+		  <c:param name="menuNm" value="${menuNm}"/>
+		</c:import>
+		
+		<%-- 매장현황 팝업 상세 레이어 --%>
+		<c:import url="/WEB-INF/view/sale/com/popup/appr/apprNcard.jsp">
+		  <c:param name="menuCd" value="${menuCd}"/>
+		  <c:param name="menuNm" value="${menuNm}"/>
+		</c:import>
+		<%-- /팝업 레이어 종료 --%>
 </div>
 
 <script type="text/javascript">
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/payMethod.js" charset="utf-8"></script>
-
-<%-- 탭페이지 레이어 시작 --%>
-<%-- 신용카드 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/card/card.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 현금 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/cash/cash.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Payco 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/payco/payco.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Mpay 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/mpay/mpay.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Mcoupn 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/mcoupon/mcoupon.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Partner 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/partner/partner.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Ncard 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/ncard/ncard.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- Ncash 승인현황 --%>
-<c:import url="/WEB-INF/view/sale/status/appr/payMethod/ncash/ncash.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
 

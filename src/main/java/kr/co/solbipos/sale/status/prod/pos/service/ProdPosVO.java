@@ -40,7 +40,10 @@ public class ProdPosVO extends PageVO {
 
     /** 조회매장포스수 */
     private int storePosCnt;
-
+    
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    
 	public String getStoreCd() {
 		return storeCd;
 	}
@@ -140,5 +143,10 @@ public class ProdPosVO extends PageVO {
 	public void setStorePosCnt(int storePosCnt) {
 		this.storePosCnt = storePosCnt;
 	}
-
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

@@ -187,8 +187,8 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
-    $scope.srchCornerMonthStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchCornerMonthEndDate.isReadOnly = $scope.isChecked;
+    $scope.cornerMonthStartDateCombo.isReadOnly = $scope.isChecked;
+    $scope.cornerMonthEndDateCombo.isReadOnly = $scope.isChecked;
   };
 
 
@@ -217,7 +217,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

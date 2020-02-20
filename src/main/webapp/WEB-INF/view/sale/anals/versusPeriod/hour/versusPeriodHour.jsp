@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/versusPeriod/hour/"/>
 
 <div id="versusPeriodHourView" class="subCon" style="display: none;">
@@ -29,9 +30,29 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="srchHourStartDate" class="w120px"></span>
+	          		<span class="txtIn w120px">
+	         	    	<wj-input-date
+	                     id="srchStartDate"
+	                     value="srchStartDate"
+	                     ng-model="srchStartDate"
+	                     control="startDateCombo"
+	                     min="2000-01-01"
+	                     max="2099-12-31"
+	                     initialized="_initDateBox(s)">
+	             		</wj-input-date>
+	             	</span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchHourEndDate" class="w120px"></span>
+	                <span class="txtIn w120px">
+	                    <wj-input-date
+	                      id="srchEndDate"
+	                      value="srchEndDate"
+	                      ng-model="srchEndDate"
+	                      control="endDateCombo"
+	                      min="2000-01-01"
+	                      max="2099-12-31"
+	                      initialized="_initDateBox(s)">
+	             	 	</wj-input-date>
+	             	</span>
 	            	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 		              	<label for="chkDt">
@@ -46,9 +67,29 @@
 		    	<th><s:message code="versusPeriod.compDate" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="compHourStartDate" class="w120px"></span>
+	          	    <span class="txtIn w120px">
+	          	        <wj-input-date
+	                         id="compHourStartDate"
+	                         value="compStartDate"
+	                         ng-model="compStartDate"
+	                         control="compStartDateCombo"
+	                         min="2000-01-01"
+	                         max="2099-12-31"
+	                         initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="compHourEndDate" class="w120px"></span>
+                    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compHourEndDate"
+                             value="compEndDate"
+                             ng-model="compEndDate"
+                             control="compEndDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
 	            	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isCheckedComp" ng-change="isChkDtComp()" />
 		              	<label for="chkDt">
@@ -128,14 +169,6 @@
 	      </div>
 	    </div>
 	    <%--//위즈모 테이블--%>
-
-	  <%-- 페이지 리스트 --%>
-	  <div class="pageNum mt20">
-	    <%-- id --%>
-	    <ul id="versusPeriodHourCtrlPager" data-size="10">
-	    </ul>
-	  </div>
-	  <%--//페이지 리스트--%>
 	</div>
 </div>
 <script type="text/javascript">

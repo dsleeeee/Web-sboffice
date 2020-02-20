@@ -133,16 +133,16 @@
 	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl">
 	        <div class="mt20 oh sb-select dkbr pd10" >
             <%-- 페이지 스케일  --%>
-<!--             <wj-combo-box -->
-<!--                     class="w100px fl" -->
-<!--                     id="rtnStatusDayDtlListScaleBox" -->
-<!--                     ng-model="rtnStatusDayDtlListScale" -->
-<!--                     items-source="_getComboData('rtnStatusDayDtlListScaleBox')" -->
-<!--                     display-member-path="name" -->
-<!--                     selected-value-path="value" -->
-<!--                     is-editable="false" -->
-<!--                     initialized="initComboBox(s)"> -->
-<!--             </wj-combo-box> -->
+            <wj-combo-box
+                    class="w100px fl"
+                    id="rtnStatusDayDtlListScaleBox"
+                    ng-model="rtnStatusDayDtlListScale"
+                    items-source="_getComboData('rtnStatusDayDtlListScaleBox')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="initComboBox(s)">
+            </wj-combo-box>
             <span class="fl bk lh30" id="strNm"></span>
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadDayDtlCtrl()"><s:message code="cmm.excel.down" />
@@ -156,7 +156,7 @@
 		                  autoGenerateColumns="false"
 		                  selection-mode="Row"
 		                  items-source="data"
-		                  control="dayDtlFlex"
+		                  control="flex"
 		                  initialized="initGrid(s,e)"
 		                  is-read-only="true"
 		                  item-formatter="_itemFormatter">
@@ -188,16 +188,16 @@
         <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl">
         <div class="mt20 oh sb-select dkbr pd10">
            <%-- 페이지 스케일  --%>
-<!--            <wj-combo-box -->
-<!--                    class="w100px fl" -->
-<!--                    id="rtnStatusPosDtlListScaleBox" -->
-<!--                    ng-model="rtnStatusPosDtlListScale" -->
-<!--                    items-source="_getComboData('rtnStatusPosDtlListScaleBox')" -->
-<!--                    display-member-path="name" -->
-<!--                    selected-value-path="value" -->
-<!--                    is-editable="false" -->
-<!--                    initialized="initComboBox(s)"> -->
-<!--            </wj-combo-box> -->
+           <wj-combo-box
+                   class="w100px fl"
+                   id="rtnStatusPosDtlListScaleBox"
+                   ng-model="rtnStatusPosDtlListScale"
+                   items-source="_getComboData('rtnStatusPosDtlListScaleBox')"
+                   display-member-path="name"
+                   selected-value-path="value"
+                   is-editable="false"
+                   initialized="initComboBox(s)">
+           </wj-combo-box>
            <span class="fl bk lh30" id="dateYMD"></span>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtlCtrl()"><s:message code="cmm.excel.down" />
@@ -210,7 +210,7 @@
 		                  autoGenerateColumns="false"
 		                  selection-mode="Row"
 		                  items-source="data"
-		                  control="posDtlFlex"
+		                  control="flex"
 		                  initialized="initGrid(s,e)"
 		                  is-read-only="true"
 		                  item-formatter="_itemFormatter">
@@ -239,12 +239,6 @@
     </div>
     <%-- //wj grid end --%>
 <!-- //contents end -->
-  <%-- 페이지 리스트 --%>
-<!--   <div class="pageNum mt20"> -->
-<!--     <ul id="rtnStatusDayCtrlPager" data-size="10"> -->
-<!--     </ul> -->
-<!--   </div> -->
-  <%--//페이지 리스트--%>
 </div>
 
 <script type="text/javascript">

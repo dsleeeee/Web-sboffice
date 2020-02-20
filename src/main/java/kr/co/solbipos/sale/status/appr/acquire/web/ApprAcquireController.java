@@ -60,7 +60,7 @@ public class ApprAcquireController {
      * @author  조동훤
      * @since   2020. 01. 13.
      */
-    @RequestMapping(value = "/acquire/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/acquireCard/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getApprAcquireList(HttpServletRequest request, HttpServletResponse response,
         Model model, ApprAcquireVO apprAcquireVO) {
@@ -91,6 +91,140 @@ public class ApprAcquireController {
     		}
     	}
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+    
+    
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 01. 13.
+     */
+    @RequestMapping(value = "/acquireMcoupon/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireMcouponList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    		if (arrCornrCd.length > 0) {
+    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+    				apprAcquireVO.setArrCornrCd(arrCornrCd);
+    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+    			}
+    		}
+    		if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				apprAcquireVO.setArrPosNo(arrPosNo);
+    				apprAcquireVO.setArrStorePos(arrPosNo);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMcouponList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+    
+    
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 01. 13.
+     */
+    @RequestMapping(value = "/acquireMpay/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireMpayList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    		if (arrCornrCd.length > 0) {
+    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+    				apprAcquireVO.setArrCornrCd(arrCornrCd);
+    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+    			}
+    		}
+    		if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				apprAcquireVO.setArrPosNo(arrPosNo);
+    				apprAcquireVO.setArrStorePos(arrPosNo);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMpayList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+    
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 01. 13.
+     */
+    @RequestMapping(value = "/acquireNcard/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireNcardList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    		if (arrCornrCd.length > 0) {
+    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+    				apprAcquireVO.setArrCornrCd(arrCornrCd);
+    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+    			}
+    		}
+    		if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				apprAcquireVO.setArrPosNo(arrPosNo);
+    				apprAcquireVO.setArrStorePos(arrPosNo);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireNcardList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
 }

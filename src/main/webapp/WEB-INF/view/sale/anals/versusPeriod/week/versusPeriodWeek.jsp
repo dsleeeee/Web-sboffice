@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/versusPeriod/week/"/>
 
 <div id="versusPeriodWeekView" class="subCon" style="display: none;">
@@ -29,10 +30,32 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="srchWeekStartDate" class="w120px"></span>
+		          	<span class="txtIn w120px">
+	          	    	<wj-input-date
+	                      id="srchWeekStartDate"
+	                      value="srchWeekStartDate"
+	                      ng-model="srchStartDate"
+	                      control="startDateCombo"
+	                      min="2000-01-01"
+	                      max="2099-12-31"
+	                      initialized="_initDateBox(s)"
+	                      ng-change="changeDate()">
+	              		</wj-input-date>
+	              	</span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchWeekEndDate" class="w120px"></span>
-	            	<%-- <span class="chk ml10">
+	                <span class="txtIn w120px">
+	                   	<wj-input-date
+	                      id="srchWeekEndDate"
+	                      value="srchWeekEndDate"
+	                      ng-model="srchEndDate"
+	                      control="endDateCombo"
+	                      min="2000-01-01"
+	                      max="2099-12-31"
+	                      initialized="_initDateBox(s)"
+	                      ng-change="changeDate()">
+	             	 	</wj-input-date>
+	             	</span>
+	             	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 		              	<label for="chkDt">
 	                		<s:message code="cmm.all.day" />
@@ -46,9 +69,29 @@
 		    	<th><s:message code="versusPeriod.compDate" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="compWeekStartDate" class="w120px"></span>
+	          	    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compWeekStartDate"
+                             value="compStartDate"
+                             ng-model="compStartDate"
+                             control="compStartDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="compWeekEndDate" class="w120px"></span>
+                    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compWeekEndDate"
+                             value="compEndDate"
+                             ng-model="compEndDate"
+                             control="compEndDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
 	            	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isCheckedComp" ng-change="isChkDtComp()" />
 		              	<label for="chkDt">
@@ -132,15 +175,6 @@
 	      </div>
 	    </div>
 	    <%--//위즈모 테이블--%>
-
-	  <%-- 페이지 리스트 --%>
-	  <div class="pageNum mt20">
-	    <%-- id --%>
-	    <ul id="versusPeriodWeekCtrlPager" data-size="10">
-	    </ul>
-	  </div>
-	  <%--//페이지 리스트--%>
-	</div>
 </div>
 <script type="text/javascript">
 </script>

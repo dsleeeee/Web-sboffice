@@ -9,7 +9,5 @@ public interface StoreFgService {
 	
 	/**매장형태별 매출 - 매장형태별 매출 리스트 조회   */
     List<DefaultMap<String>> getStoreFgList(StoreFgVO storeFgVO, SessionInfoVO sessionInfoVO);
-    
-    /**매장형태별 매출 - 매장형태별 매장구분 콤보 리스트 조회 */
-	List<DefaultMap<String>> getStoreFgComboList(StoreFgVO storeFgVO, SessionInfoVO sessionInfoVO);
+   
 }

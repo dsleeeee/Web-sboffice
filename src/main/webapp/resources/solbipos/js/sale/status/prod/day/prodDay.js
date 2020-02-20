@@ -11,6 +11,7 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 조회일자 세팅
   $scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", getToday());
+  $scope.orgnFg = gvOrgnFg;
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodDaylistScaleBox', gvListScaleBoxData);
@@ -45,16 +46,12 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 상품매출순위 리스트 조회
   $scope.searchProdDayList = function (isPageChk) {
 
-    if ($("#pordDaySelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
-
     // 파라미터
     var params       = {};
     params.storeCd   = $("#pordDaySelectStoreCd").val();
     params.prodCd    = $("#srchDayProdCd").val();
     params.prodNm    = $("#srchDayProdNm").val();
+    params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.prodDaylistScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     

@@ -54,6 +54,12 @@
 			<if test='endDate != null and endDate != ""'>
 			   AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
 			</if>
+			<if test='storeCd != null and storeCd != ""'>
+			   AND TSDT.STORE_CD IN
+			     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+							#{item}
+					</foreach>  
+			</if>
 			 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
 			<if test='chkSort == "1"'>
 			 ORDER BY SUM(TSDT.TOT_SALE_AMT) DESC

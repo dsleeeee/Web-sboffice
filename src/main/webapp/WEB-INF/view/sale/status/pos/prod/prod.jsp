@@ -5,6 +5,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="posProdView" class="subCon"  ng-controller="posProdCtrl">
 	<div class="searchBar flddUnfld">
@@ -110,9 +112,12 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
-				frozen-columns="6"
+				frozen-columns="9"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" binding="lv1Nm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" binding="lv2Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" binding="lv3Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

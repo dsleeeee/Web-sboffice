@@ -18,7 +18,9 @@ public class ProdDayVO extends PageVO {
     private String prodNm;
     /** 상품분류코드 */
     private String prodDayCd;
-
+    /** 본사,매장 구분 */
+    private String orgnFg;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -102,4 +104,12 @@ public class ProdDayVO extends PageVO {
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
     }
+    
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

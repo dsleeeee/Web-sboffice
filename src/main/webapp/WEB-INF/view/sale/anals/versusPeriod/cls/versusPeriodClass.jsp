@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/versusPeriod/cls/"/>
 
 <div id="versusPeriodClassView" class="subCon" style="display: none;">
@@ -29,35 +30,38 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-<%-- 	          	    <span class="txtIn"><input id="srchClassStartDate" 	ng-model="startDate"	class="w120px" ng-change="changeDate()"></span>ng-model="startDate"  --%>
-<%--                     <span class="rg">~</span> --%>
-<%--                     <span class="txtIn"><input id="srchClassEndDate" 	ng-model="endDate"		class="w120px" ng-change="changeDate()"></span> --%>
-						          <span class="txtIn w110px">
-	              <wj-input-date
-	                      id="srchClassStartDate"
-	                      value="srchClassStartDate"
-	                      ng-model="srchStartDate"
-	                      control="startDateCombo"
-	                      min="2000-01-01"
-	                      max="2099-12-31"
-	                      initialized="_initDateBox(s)"
-	                      ng-change="changeDate()">
-	              </wj-input-date>
-	            </span>
-	            <span class="rg">~</span>
-	            <span class="txtIn w110px">
-	              <wj-input-date
-	                      id="srchClassEndDate"
-	                      value="srchClassEndDate"
-	                      ng-model="srchEndDate"
-	                      control="endDateCombo"
-	                      min="2000-01-01"
-	                      max="2099-12-31"
-	                      initialized="_initDateBox(s)"
-	                      ng-change="changeDate()">
-	              </wj-input-date>
-	            </span>
-	          	</div>
+					<span class="txtIn w120px">
+		              <wj-input-date
+		                      id="srchClassStartDate"
+		                      value="srchClassStartDate"
+		                      ng-model="srchStartDate"
+		                      control="startDateCombo"
+		                      min="2000-01-01"
+		                      max="2099-12-31"
+		                      initialized="_initDateBox(s)"
+		                      ng-change="changeDate()">
+		              </wj-input-date>
+		            </span>
+		            <span class="rg">~</span>
+		            <span class="txtIn w120px">
+		              <wj-input-date
+		                      id="srchClassEndDate"
+		                      value="srchClassEndDate"
+		                      ng-model="srchEndDate"
+		                      control="endDateCombo"
+		                      min="2000-01-01"
+		                      max="2099-12-31"
+		                      initialized="_initDateBox(s)"
+		                      ng-change="changeDate()">
+		              </wj-input-date>
+		            </span>
+		            <%-- <span class="chk ml10">
+						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+		              	<label for="chkDt">
+	                		<s:message code="cmm.all.day" />
+	              		</label>
+	            	</span>
+	          	</div> --%>
 	        	</td>
 			</tr>
 			<%-- 대비일자 --%>
@@ -65,9 +69,29 @@
 		    	<th><s:message code="versusPeriod.compDate" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="compClassStartDate" class="w120px"></span>
+	          	    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compClassStartDate"
+                             value="compStartDate"
+                             ng-model="compStartDate"
+                             control="compStartDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="compClassEndDate" class="w120px"></span>
+                    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compClassEndDate"
+                             value="compEndDate"
+                             ng-model="compEndDate"
+                             control="compEndDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
 	            	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isCheckedComp" ng-change="isChkDtComp()" />
 		              	<label for="chkDt">
@@ -101,11 +125,12 @@
 	             		<jsp:param name="targetId" value="versusPeriodClassSelectStore"/>
 	            	</jsp:include>
 	              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	            </td>
 	          	</c:if>
 	          	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	        		<input type="hidden" id="versusPeriodClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
 	      		</c:if>
-	          	</td>
+	          	
 	        </tr>
 			</tbody>
 		</table>

@@ -45,7 +45,7 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.$on("prodStrl", function (event, data) {
 	  //화면구분값
 	  $("#gubun").val(data.gubun);
-	  
+	  $("#storeCd").val(data.storeCd);
 	  $scope.prodSLayer.show(true);
 	  $scope.searchProdList(true);
 
@@ -59,7 +59,7 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 	  $("#srchPopProdNm").val("");
     // 파라미터
     var params       = {};
-
+    params.storeCd   = $("#storeCd").val();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/com/popup/classProd/view.sb", params);
 
@@ -69,6 +69,7 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 		var rows = sender.rows;
 
 		var params		 = {};
+		params.storeCd   = $("#storeCd").val();
 		if(rows.length != 0) {
 			params.prodClassCd   = rows[0].dataItem.prodClassCd;
 	    }
@@ -124,6 +125,7 @@ app.controller('prodDtlStrl', ['$scope', '$http','$timeout', function ($scope, $
 	  $scope.$on("prodDtlStrl", function (event, data) {
 		  if(data != undefined){
 			  $scope.prodClassCd = data.prodClassCd;
+			  $scope.storeCd  = data.storeCd;
 			  $("#prodClassCd").val(data.prodClassCd);
 		  }
 
@@ -136,7 +138,7 @@ app.controller('prodDtlStrl', ['$scope', '$http','$timeout', function ($scope, $
 	  $scope.searchProdDtlList = function (isPageChk) {
 
 	    var params       = {};
-	    
+	    params.storeCd   = $("#storeCd").val();
 	    if($scope.prodClassCd != null){
 	    	 params.prodClassCd   = $scope.prodClassCd;
 	    }else{

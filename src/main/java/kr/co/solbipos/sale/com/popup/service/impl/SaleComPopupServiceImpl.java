@@ -30,7 +30,18 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getTablePopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
+    	
+        if (saleComPopupVO.getTblCd() != null && !"".equals(saleComPopupVO.getTblCd())) {
+    		String[] arrTblCd = saleComPopupVO.getTblCd().split(",");
+    		if (arrTblCd.length > 1) {
+    			if (arrTblCd[0] != null && !"".equals(arrTblCd[0])) {
+    				saleComPopupVO.setTblCd("");
+    				saleComPopupVO.setArrStoreTbl(arrTblCd);
+    			}
+    		}
+    	} 
+        
+        
 		return saleComPopupMapper.getTablePopList(saleComPopupVO);
     }
     
@@ -39,6 +50,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getProdPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
@@ -51,6 +63,8 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     		return saleComPopupMapper.getProdPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("empPop")) {
     		return saleComPopupMapper.getEmpPopList(saleComPopupVO);
+    	}else if(saleComPopupVO.getChkPop().equals("posPop")) {
+    		return saleComPopupMapper.getPosPopList(saleComPopupVO);
     	}
         return null;
     }
@@ -60,6 +74,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getApprPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
@@ -91,6 +106,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
 		return saleComPopupMapper.getClassProdList(saleComPopupVO);
     }
@@ -100,6 +116,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
 		return saleComPopupMapper.getProdList(saleComPopupVO);
     }

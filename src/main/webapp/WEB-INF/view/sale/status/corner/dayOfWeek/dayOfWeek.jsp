@@ -101,7 +101,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap" style="height: 370px;">
         <wj-flex-grid
           id="cornrDayOfWeekGrid"
           autoGenerateColumns="false"

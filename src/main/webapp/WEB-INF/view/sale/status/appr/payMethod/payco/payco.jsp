@@ -8,9 +8,9 @@
 
 <div id="apprPaycoView" class="subCon"  ng-controller="apprPaycoCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="dailyReport.appr"/></a>
+      <a href="#" class="open fl"><s:message code="dailyReport.apprPayco"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnApprPaycoSearch" ng-click="_broadcast('apprPaycoCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnApprPaycoSearch" ng-click="_broadcast('apprPaycoCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -171,7 +171,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="text" id="apprPaycoSelectStoreStoreNum" ng-model="storeNum">
+        <input type="hidden" id="apprPaycoSelectStoreStoreNum" ng-model="storeNum">
     </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadPayco()"><s:message code="cmm.excel.down" />

@@ -22,11 +22,11 @@ app.controller('rtnStatusSaleCtrl', ['$scope', function ($scope) {
         var scope = agrid.getScope("rtnStatusDayMainCtrl");
         scope.flex.refresh();
 
-        var scopeDayDtl = agrid.getScope("rtnStatusDayDtlCtrl");
-        scopeDayDtl.dayDtlFlex.refresh();
+        scope = agrid.getScope("rtnStatusDayDtlCtrl");
+        scope.flex.refresh();
 
-        var scopePosDtl = agrid.getScope("rtnStatusPosDtlCtrl");
-        scopePosDtl.posDtlFlex.refresh();
+        scope = agrid.getScope("rtnStatusPosDtlCtrl");
+        scope.flex.refresh();
     };
 
 

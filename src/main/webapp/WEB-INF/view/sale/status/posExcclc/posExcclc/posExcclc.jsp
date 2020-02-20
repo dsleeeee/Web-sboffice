@@ -38,6 +38,7 @@
         </td>
 
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="posExcclcSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -47,15 +48,14 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-                <jsp:param name="targetId" value="posExcclcSelectStore"/>
-            </jsp:include>
+<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
+<%--                 <jsp:param name="targetId" value="posExcclcSelectStore"/> --%>
+<%--             </jsp:include> --%>
             <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="posExcclcSelectStore"/> --%>
-<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
-<%--             </jsp:include> --%>
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="posExcclcSelectStore"/>
+            </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>

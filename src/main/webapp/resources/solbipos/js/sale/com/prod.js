@@ -35,6 +35,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.yoil 		= data.yoil;
     $scope.posNo 		= data.posNo;
     $scope.billNo 		= data.billNo;
+    $scope.saleHour 	= data.saleHour;
 
     $scope.prodLayer.show(true);
 
@@ -61,6 +62,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.yoil 	 = $scope.yoil;
     params.posNo 	 = $scope.posNo;
     params.billNo 	 = $scope.billNo;
+    params.saleHour  = $scope.saleHour;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/prod/view.sb", params);

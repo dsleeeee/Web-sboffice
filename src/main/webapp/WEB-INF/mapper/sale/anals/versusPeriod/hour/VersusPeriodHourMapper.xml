@@ -49,15 +49,8 @@
                         				#{item}
                     			   </foreach>
         						 </if>
-								 <if test='startDate != null and startDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE >= #{startDate}
-								   ]]>
-								 </if>
-								 <if test='endDate != null and endDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE <= #{endDate}
-								   ]]>
+								 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 								 </if>
 								 GROUP BY TSDT.SALE_HOUR
 								) A
@@ -88,15 +81,8 @@
                         				#{item}
                     			   </foreach>
         						 </if>
-								 <if test='compStartDate != null and compStartDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE >= #{compStartDate}
-								   ]]>
-								 </if>
-								 <if test='compEndDate != null and compEndDate != ""'>
-								 	<![CDATA[
-								   AND TSDT.SALE_DATE <= #{compEndDate}
-								   ]]>
+        						 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 								 </if>
 								 GROUP BY TSDT.SALE_HOUR
 								) A

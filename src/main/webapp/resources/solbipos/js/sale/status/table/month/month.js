@@ -30,7 +30,9 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 				var col = s.columns[e.col];
 				if (col.binding.substring(0, 11) === "realSaleAmt") { // 실매출
 		          	wijmo.addClass(e.cell, 'wijLink');
-		        }
+		        } else if (col.binding === "totRealSaleAmt"){ // 총실매출
+					wijmo.addClass(e.cell, 'wijLink');
+				}
 			}
 		});
 
@@ -98,20 +100,25 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    		var params       = {};
 	    		params.startDate = selectedRow.saleYm + '01';
 	    		params.endDate = selectedRow.saleYm + '31';
-	    		var storeTable   = $("#tableMonthSelectTableCd").val().split(",");
-	    		var arrStore= [];
-	    		var arrTbl= [];
-	    		for(var i=0; i < storeTable.length; i++) {
-	    			var temp = storeTable[i].split("||");
-	    			arrStore.push(temp[0]);
-	    			arrTbl.push(temp[1]);
-	    		}
-	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
-	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
 	    		params.saleYm  = selectedRow.saleYm;
+	    		params.chkPop   = "tablePop";
 	    		params.gubun   = "month";
+	    		var storeTable   = $("#tableMonthSelectTableCd").val().split(",");
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
+	    			var arrStore= [];
+		    		var arrTbl= [];
+		    		for(var i=0; i < storeTable.length; i++) {
+		    			var temp = storeTable[i].split("||");
+		    			arrStore.push(temp[0]);
+		    			arrTbl.push(temp[1]);
+		    		}
+		    		
+		    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
+		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+	    			$scope._broadcast('saleComTableCtrl', params);
+	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
+        			params.tblCd	 = storeTable;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}
@@ -120,11 +127,6 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableMonthCtrl", function (event, data) {
-
-		if ($("#tableMonthSelectStoreCd").val() === "") {
-			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-			return false;
-		}
 
 		$scope.searchTableMonthList(true);
 
@@ -136,11 +138,6 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableMonthCtrlSrch", function (event, data) {
-
-		if ($("#tableMonthSelectStoreCd").val() === "") {
-			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-			return false;
-		}
 
 		$scope.searchTableMonthList(false);
 
@@ -173,7 +170,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/table/month/list.sb", params);
+		$scope._inquiryMain("/sale/status/table/month/list.sb", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -208,7 +205,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}

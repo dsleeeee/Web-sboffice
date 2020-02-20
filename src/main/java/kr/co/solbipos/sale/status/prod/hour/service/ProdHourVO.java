@@ -20,6 +20,8 @@ public class ProdHourVO extends PageVO {
     private String sQuery4;
     /** 매출 발생 시간대 */
     private String saleTime;
+    /** 본사,매장 구분 */
+    private String orgnFg;
     
     /**
      * @return the hqOfficeCd
@@ -105,4 +107,12 @@ public class ProdHourVO extends PageVO {
     public void setsQuery4(String sQuery4) {
         this.sQuery4 = sQuery4;
     }
+    
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

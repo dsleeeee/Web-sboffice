@@ -91,7 +91,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         scopeMain.flex.refresh();
 
         var scopeDtl = agrid.getScope("empDayPeriodDtlCtrl");
-        scopeDtl.dtlFlex.refresh();
+        scopeDtl.flex.refresh();
     };
 
     // 포스별 탭 보이기

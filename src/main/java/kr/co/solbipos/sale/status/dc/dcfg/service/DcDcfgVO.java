@@ -16,6 +16,8 @@ public class DcDcfgVO extends PageVO {
     private String dcCd;
     /** 할인유형코드 */
     private String arrDcCd[];
+    /** 본사,매장 구분 */
+    private String orgnFg;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -50,5 +52,11 @@ public class DcDcfgVO extends PageVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+	
 }

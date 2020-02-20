@@ -20,7 +20,7 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 	angular.extend(this, new RootController('saleTrnsitnCtrl', $scope, $http, true));
 
     //검색조건에 조회기간
-    var startDate 	= wcombo.genDateVal("#startDate", gvStartDate);
+    var startDate 	= wcombo.genDateVal("#startDate", getToday());
   //var endDate 	= wcombo.genDateVal("#endDate",   gvEndDate  );
 
 	//추후 칼럼이 추가나 삭제되는 경우를 대비해 변수값으로 사용

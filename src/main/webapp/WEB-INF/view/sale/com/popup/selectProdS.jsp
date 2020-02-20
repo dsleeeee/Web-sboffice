@@ -7,6 +7,7 @@
 <c:set var="baseUrl" value="/sale/com/popup/"/>
 
 <wj-popup id="prodSLayer" control="prodSLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<input type="hidden" id="storeCd" name="storeCd" />
 <input type="hidden" id="prodClassCd" name="prodClassCd" />
 <input type="hidden" id="gubun" name="gubun" />
   <div class="wj-dialog wj-dialog-columns"  ng-controller="prodStrl">

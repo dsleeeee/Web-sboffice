@@ -60,7 +60,6 @@
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
             <input type="hidden" id="cornerDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
-      <input type="hidden" id="" value=" :: "/>
                 <input type="hidden" id="cornerDaySelectCornerCd" value=""/>
                 <input type="hidden" id="cornerDaySelectCornerName" value=""/>
       </tr>

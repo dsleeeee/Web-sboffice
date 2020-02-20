@@ -206,8 +206,8 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : false,
+    	includeColumnHeaders: true,
+	    includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

@@ -8,8 +8,8 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprPartnerCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprPartnerStartDate = wcombo.genDateVal("#srchApprPartnerStartDate", gvStartDate);
-  $scope.srchApprPartnerEndDate   = wcombo.genDateVal("#srchApprPartnerEndDate", gvEndDate);
+  $scope.srchApprPartnerStartDate = wcombo.genDateVal("#srchApprPartnerStartDate", getToday());
+  $scope.srchApprPartnerEndDate   = wcombo.genDateVal("#srchApprPartnerEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprPartnerListScaleBox", gvListScaleBoxData);
@@ -151,7 +151,16 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprPartnerCtrl", function (event, data) {
-    $scope.searchApprPartnerList();
+    $scope.searchApprPartnerList(true);
+    
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprPartnerCtrlSrch", function (event, data) {
+    $scope.searchApprPartnerList(false);
     
     
     // 기능수행 종료 : 반드시 추가
@@ -160,7 +169,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprPartnerList = function () {
+  $scope.searchApprPartnerList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -168,6 +177,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.posNo  	 = $("#apprPartnerSelectPosCd").val();
     params.cornrNo   = $("#apprPartnerSelectCornerCd").val();
     params.listScale = $scope.apprPartnerListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -181,7 +191,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/partner/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/partner/list.sb", params);
 	
 	
   };
@@ -224,7 +234,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

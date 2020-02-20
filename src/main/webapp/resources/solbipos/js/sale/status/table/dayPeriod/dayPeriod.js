@@ -44,6 +44,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
 //        console.log(selectedRow);
+        params.chkPop   = "tablePop";
         params.storeCd  = selectedRow.storeCd;
         params.saleDate = selectedRow.saleDate;
         params.tblCd   = selectedRow.tblCd;
@@ -72,11 +73,6 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("tableDayPeriodCtrlSrch", function (event, data) {
 
-	if ($("#tableDayPeriodSelectStoreCd").val() === '') {
-		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-		return false;
-	}
-
 	$scope.searchTableDayPeriodList(null, null, false);
     event.preventDefault();
 
@@ -85,10 +81,6 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   // 테이블별 설정기간 리스트 리스트 조회
   $scope.searchTableDayPeriodList = function (s, e, isPageChk) {
 
-	if ($("#tableDayPeriodSelectStoreCd").val() === '') {
-	    $scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-	    return false;
-	}
     // 파라미터
     var params       = {};
     params.hqOfficeCd = $("#hqOfficeCd").val();
@@ -108,14 +100,14 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
 	}
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/status/table/dayperiod/list.sb", params);
+    $scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params);
 
   };
 
   	//전체기간 체크박스 클릭이벤트
 	$scope.isChkDt = function() {
-		$scope.srchTableDayPeriodStartDate.isReadOnly = $scope.isChecked;
-		$scope.srchTableDayPeriodEndDate.isReadOnly = $scope.isChecked;
+		$scope.tableDayPeriodStartDate.isReadOnly = $scope.isChecked;
+		$scope.tableDayPeriodEndDate.isReadOnly = $scope.isChecked;
 	};
 
   //매장선택 모듈 팝업 사용시 정의
@@ -136,7 +128,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

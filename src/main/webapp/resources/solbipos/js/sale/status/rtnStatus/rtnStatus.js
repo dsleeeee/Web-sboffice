@@ -3,7 +3,7 @@
  */
 var app = agrid.getApp();
 
-/** 일자별(코너별 매출) controller */
+/** 반품현황(조회조건) controller */
 app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('rtnStatusDayCtrl', $scope, $http, $timeout, true));
@@ -13,6 +13,8 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("rtnStatusDayListScaleBox", gvListScaleBoxData);
+  $scope._setComboData("rtnStatusDayDtlListScaleBox", gvListScaleBoxData);
+  $scope._setComboData("rtnStatusPosDtlListScaleBox", gvListScaleBoxData);
 
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -29,14 +31,17 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 }]);
 
-
+/** 반품현황(메인리스트) controller */
 app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('rtnStatusDayMainCtrl', $scope, $http, $timeout, true));
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+	  
+	// picker 사용시 호출 : 미사용시 호출안함
+	s.refresh();
+	
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("rtnStatusDayMainCtrl");
 
@@ -150,11 +155,6 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
   // 코너별매출일자별 리스트 조회
   $scope.searchRtnStatusDayList = function (isPageChk) {
 
-	if ($("#rtnStatusDaySelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
-
     // 파라미터
     var params       = {};
     params.storeCd   = $("#rtnStatusDaySelectStoreCd").val();
@@ -177,7 +177,7 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/rtnStatus/day/list.sb", params);
+	$scope._inquiryMain("/sale/status/rtnStatus/day/list.sb", params);
 
 	//메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
@@ -213,7 +213,7 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
@@ -237,10 +237,10 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // picker 사용시 호출 : 미사용시 호출안함
 	    $scope._makePickColumns("rtnStatusDayDtlCtrl");
 
-//	    // add the new GroupRow to the grid's 'columnFooters' panel
-//	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
-//	    // add a sigma to the header to show that this is a summary row
-//	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	    // 그리드 링크 효과
 	    s.formatItem.addHandler(function (s, e) {
@@ -277,10 +277,6 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    });
 
 
-	 // add the new GroupRow to the grid's 'columnFooters' panel
-	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
-	    // add a sigma to the header to show that this is a summary row
-	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	    // <-- 그리드 헤더2줄 -->
 	    // 헤더머지
@@ -380,7 +376,8 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    $("#strNm").text($scope.storeNm);
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquirySub("/sale/status/rtnStatus/dayDtl/list.sb", params);
+	    $scope._inquiryMain("/sale/status/rtnStatus/dayDtl/list.sb", params);
+	    $scope.flex.refresh();
 
 	    //메인그리드 조회후 상세그리드 조회.
 		$scope.loadedRows2 = function(sender, args){
@@ -403,16 +400,16 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 
 	//엑셀 다운로드
 	  $scope.excelDownloadDayDtlCtrl = function () {
-	    if ($scope.dayDtlFlex.rows.length <= 0) {
+	    if ($scope.flex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.dayDtlFlex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 	        includeColumnHeaders: true,
-	        includeCellStyles   : false,
+	        includeCellStyles   : true,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
@@ -433,7 +430,7 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 
 	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
 	  $scope.initGrid = function (s, e) {
-
+		  
 	    // picker 사용시 호출 : 미사용시 호출안함
 	    $scope._makePickColumns("rtnStatusPosDtlCtrl");
 
@@ -490,21 +487,22 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    }
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquirySub("/sale/status/rtnStatus/posDtl/list.sb", params);
+	    $scope._inquiryMain("/sale/status/rtnStatus/posDtl/list.sb", params);
+	    $scope.flex.refresh();
 	  };
 
 	//엑셀 다운로드
 	  $scope.excelDownloadPosDtlCtrl = function () {
-	    if ($scope.posDtlFlex.rows.length <= 0) {
+	    if ($scope.flex.rows.length <= 0) {
 	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	      return false;
 	    }
 
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.posDtlFlex, {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 	        includeColumnHeaders: true,
-	        includeCellStyles   : false,
+	        includeCellStyles   : true,
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }

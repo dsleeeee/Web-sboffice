@@ -15,6 +15,7 @@ public class PosExcclcVO extends PageVO {
 	private String closeFgNm; //마감구분명
 
     private String storeCd; //매장코드
+    private String arrStoreCd[];
     private String storeNm; //매장명
     private String saleDate; //영업일자
     private String posNo; //POS번호
@@ -504,6 +505,12 @@ public class PosExcclcVO extends PageVO {
 	}
 	public void setCloseFgNm(String closeFgNm) {
 		this.closeFgNm = closeFgNm;
+	}
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+	public void setArrStoreCd(String arrStoreCd[]) {
+		this.arrStoreCd = arrStoreCd;
 	}
 
 }

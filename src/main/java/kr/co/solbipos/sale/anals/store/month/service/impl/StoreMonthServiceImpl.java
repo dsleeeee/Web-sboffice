@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.anals.store.month.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.month.service.StoreMonthService;
 import kr.co.solbipos.sale.anals.store.month.service.StoreMonthVO;
@@ -27,7 +28,18 @@ public class StoreMonthServiceImpl implements StoreMonthService {
     public List<DefaultMap<String>> getStoreMonthList(StoreMonthVO storeMonthVO, SessionInfoVO sessionInfoVO) {
   
     	storeMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+        
+        String arrayStoreCd = "";
+        String[] array = storeMonthVO.getStoreCd().split(",");
+        for(int i=0; i<array.length;i++) {
+        	if(i > 0) {
+        		arrayStoreCd += ",'"+array[i]+"'";
+        	}else {
+        		arrayStoreCd += "'"+array[i]+"'";
+        	}
+        }
+        
+        
     	List<DefaultMap<String>> date = storeMonthMapper.getMonthColList(storeMonthVO);
         // 판매자별 쿼리 변수
         String sQuery1 = "";
@@ -36,7 +48,8 @@ public class StoreMonthServiceImpl implements StoreMonthService {
         
         String k = storeMonthVO.getRowNum();
         String m = storeMonthVO.getHqOfficeCd();
-        
+        String storeCd = storeMonthVO.getStoreCd();
+
         if(date.size() > 1) {
 	        for(int i = 0; i < date.size(); i++) {
 	        	
@@ -64,6 +77,9 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	sQuery3 +=" FROM TB_SL_DAILY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
 		    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 		    	sQuery3 +=" AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM')     = " + j + "\n";
+		    	if(!storeCd.equals("")) {
+		    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
+		    	}
 		    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM ) M WHERE RN <= " + k + "\n";
 	        }        
 	        storeMonthVO.setsQuery1(sQuery1);
@@ -92,6 +108,9 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	sQuery3 +=" FROM TB_SL_DAILY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
 	    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
 	    	sQuery3 +=" AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM')     = " + j + "\n";
+	    	if(!storeCd.equals("")) {
+	    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
+	    	}
 	    	sQuery3 +=" GROUP BY TSDT.STORE_CD, TMS.STORE_NM ) M WHERE RN <= " + k + "\n";
 	    	
 	    	storeMonthVO.setSaleDate(j);

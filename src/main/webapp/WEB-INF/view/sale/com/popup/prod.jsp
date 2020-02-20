@@ -28,7 +28,9 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodClassNm"/>" 	binding="prodClassNm" 	width="200" 	align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.prodCd"/>" 		binding="prodCd"		width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="200" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleQty"/>" 	binding="totSaleQty" 	width="100" 	align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

@@ -37,21 +37,36 @@
 					</div>
 				</td>
 			</tr>
-<!-- 			<tr> -->
-<%-- 				정렬구분표시 --%>
-<%-- 				<th><s:message code="store.sortFg" /></th> --%>
-<!-- 				<td colspan="3"> -->
-<!-- 					<div class="sb-select"> -->
-<%-- 						<span class="txtIn">  --%>
-<!-- 							<wj-combo-box id="srchStoreBrandDisplay" ng-model="storeBrand"  -->
-<!-- 								items-source="_getComboData('srchStoreBrandDisplay')"  -->
-<!-- 								display-member-path="name" selected-value-path="value" -->
-<!-- 								is-editable="false" initialized="_initComboBox(s)"> -->
-<!-- 							</wj-combo-box> -->
-<%-- 						</span> --%>
-<!-- 					</div> -->
-<!-- 				</td> -->
-<!-- 			</tr> -->
+            
+            <tr>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	            <%-- 매장코드 --%>           
+	            <th><s:message code="todayBillSaleDtl.store"/></th>
+	            <td >
+	                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+	                    <jsp:param name="targetId" value="storeBrandSelectStore"/>
+	                </jsp:include>
+	                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	            </td>  
+            </c:if> 
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+                <input type="hidden" id="storeBrandSelectStoreCd" value="${sessionInfo.storeCd}"/>
+            </c:if> 
+            <%-- 정렬구분선택 --%>
+          <%--   <th><s:message code="store.sortFg" /></th>
+            <td>
+                <div class="sb-select">
+                    <span class="txtIn">
+                        <wj-combo-box id="srchStoreFgDisplay" ng-model="storeBrand"
+                            items-source="_getComboData('srchStoreFgDisplay')"
+                            display-member-path="name" selected-value-path="value"
+                            is-editable="false" initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                </div>
+            </td> --%>
+            </tr>
+           
 		</tbody>
 	</table>
 
@@ -88,6 +103,7 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="store.hqBrandNm"/>"  binding="hqBrandNm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 	binding="storeNm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" binding="totDcAmt" 	width="*" align="center" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
@@ -106,13 +122,6 @@
 	    </div>
 	    <%--//위즈모 테이블--%>
 
-	  <%-- 페이지 리스트 --%>
-	  <div class="pageNum mt20">
-	    <%-- id --%>
-	    <ul id="storeBrandCtrlPager" data-size="10">
-	    </ul>
-	  </div>
-	  <%--//페이지 리스트--%>
 	</div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/brand/storeBrand.js?ver=20190125.02" charset="utf-8"></script>
