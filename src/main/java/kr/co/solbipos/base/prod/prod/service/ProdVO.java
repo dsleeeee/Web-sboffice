@@ -148,6 +148,9 @@ public class ProdVO extends PageVO {
     /** */
     private String saveMode;
 
+    /** 상품적용여부 */
+    private UseYn prodRegFg;
+
 
     /**
      * @return the hqOfficeCd
@@ -827,5 +830,13 @@ public class ProdVO extends PageVO {
 
     public void setSaveMode(String saveMode) {
         this.saveMode = saveMode;
+    }
+
+    public UseYn getProdRegFg() {
+        return prodRegFg;
+    }
+
+    public void setProdRegFg(UseYn prodRegFg) {
+        this.prodRegFg = prodRegFg;
     }
 }

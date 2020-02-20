@@ -1653,4 +1653,193 @@
             )
         }
     </select>
+
+    <!-- 매장 적용 상품 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 매장 적용 대상인 상품을 조회한다.
+    -->
+    <select id="getStoreProdRegList" parameterType="prodVO" resultType="DefaultMap">
+    /* USE : ProdMapper.getStoreProdRegList */
+        SELECT  tmp.STORE_CD,
+                 tmp.PROD_CD,
+                 tmp.PROD_NM,
+                 NVL2(thps.PROD_CD, 'Y', 'N') AS REG_YN,
+                 thps.PROD_CD,
+                 thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+                 CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                 ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+                 CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                 ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
+           FROM TB_MS_PRODUCT tmp,
+                (
+                    SELECT STORE_CD, PROD_CD
+                      FROM TB_HQ_PRODUCT_STORE
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND STORE_CD = #{storeCd}
+                ) thps,
+                (
+                    SELECT thp.HQ_OFFICE_CD ,
+                            thp.PROD_CD,
+                            thpsp.SALE_UPRC
+                      FROM TB_HQ_PRODUCT thp,
+                            (
+                                 SELECT HQ_OFFICE_CD,
+                                         PROD_CD,
+                                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                   FROM TB_HQ_PRODUCT_SALE_PRICE
+                                  WHERE 1=1
+                                  <![CDATA[
+                                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                  ]]>
+                                    AND SALE_PRC_FG = '1'
+                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                              GROUP BY HQ_OFFICE_CD, PROD_CD
+                            ) thpsp
+                     WHERE 1=1
+                        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpsp.PROD_CD = thp.PROD_CD
+                ) thpsp,
+                (
+                    SELECT thp.HQ_OFFICE_CD ,
+                            tmpsp.STORE_CD,
+                            thp.PROD_CD,
+                            tmpsp.SALE_UPRC
+                      FROM TB_HQ_PRODUCT thp,
+                            (
+                                    SELECT STORE_CD,
+                                            PROD_CD,
+                                            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                      FROM TB_MS_PRODUCT_SALE_PRICE
+                                     WHERE 1=1
+                                     <![CDATA[
+                                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                     ]]>
+                                       AND SALE_PRC_FG = '1'
+                                       AND STORE_CD = #{storeCd}
+                                 GROUP BY STORE_CD, PROD_CD
+                            ) tmpsp
+                    WHERE 1=1
+                      AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND tmpsp.STORE_CD = #{storeCd}
+                      AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+                      AND tmpsp.PROD_CD = thp.PROD_CD
+                ) tmpsp
+          WHERE thps.STORE_CD (+)= tmp.STORE_CD
+            AND thps.PROD_CD (+)= tmp.PROD_CD
+            AND tmp.STORE_CD = #{storeCd}
+            --AND tmp.USE_YN = 'Y'
+            AND thpsp.PROD_CD (+)= tmp.PROD_CD
+            AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+            AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        <if test='prodCd != null and prodCd.toString() != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm.toString() != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+           AND thps.PROD_CD IS NOT NULL
+           ORDER BY tmp.PROD_CD ASC
+    </select>
+
+    <!-- 매장 미적용 상품 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_HQ_PRODUCT_STORE
+        PARAM    : prodVO
+        COMMENTS : 매장 미적용 대상인 상품을 조회한다.
+    -->
+    <select id="getStoreProdNoRegList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getStoreProdNoRegList */
+        SELECT thp.PROD_CD,
+                thp.PROD_NM,
+                thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+                tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+                CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+                CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+                ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
+          FROM TB_HQ_PRODUCT thp,
+                (
+                      SELECT thp.HQ_OFFICE_CD ,
+                              thp.PROD_CD,
+                              thpsp.SALE_UPRC
+                      FROM TB_HQ_PRODUCT thp,
+                            (
+                                    SELECT HQ_OFFICE_CD,
+                                            PROD_CD,
+                                            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                      FROM TB_HQ_PRODUCT_SALE_PRICE
+                                     WHERE 1=1
+                                     <![CDATA[
+                                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                     ]]>
+                                       AND SALE_PRC_FG = '1'
+                                       AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                 GROUP BY HQ_OFFICE_CD, PROD_CD
+                            ) thpsp
+                      WHERE 1=1
+                        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thpsp.PROD_CD = thp.PROD_CD
+                ) thpsp,
+                (
+                        SELECT thp.HQ_OFFICE_CD ,
+                                tmpsp.STORE_CD,
+                                thp.PROD_CD,
+                                tmpsp.SALE_UPRC
+                          FROM TB_HQ_PRODUCT thp,
+                                (
+                                SELECT STORE_CD,
+                                        PROD_CD,
+                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                  FROM TB_MS_PRODUCT_SALE_PRICE
+                                 WHERE 1=1
+                                <![CDATA[
+                                   AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                   AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                ]]>
+                                   AND SALE_PRC_FG = '1'
+                                   AND STORE_CD = #{storeCd}
+                             GROUP BY STORE_CD, PROD_CD
+                                ) tmpsp
+                        WHERE 1=1
+                          AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                          AND tmpsp.STORE_CD = #{storeCd}
+                          AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+                          AND tmpsp.PROD_CD = thp.PROD_CD
+                ) tmpsp
+         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+           --AND thp.USE_YN = 'Y'
+           AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+           AND thpsp.PROD_CD (+) = thp.PROD_CD
+           AND tmpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+           AND tmpsp.PROD_CD (+)= thp.PROD_CD
+           AND thp.PROD_CD NOT IN (
+                                       SELECT tmp.PROD_CD
+                                         FROM TB_MS_PRODUCT tmp,
+                                               (  SELECT STORE_CD,
+                                                           PROD_CD
+                                                     FROM TB_HQ_PRODUCT_STORE
+                                                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                      AND STORE_CD = #{storeCd} ) thps
+                                        WHERE thps.STORE_CD (+)= tmp.STORE_CD
+                                          AND thps.PROD_CD (+)= tmp.PROD_CD
+                                          AND tmp.STORE_CD = #{storeCd}
+                                          --AND tmp.USE_YN = 'Y'
+                                          AND thps.PROD_CD IS NOT NULL
+                                    )
+        <if test='prodCd != null and prodCd.toString() != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm.toString() != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        ORDER BY thp.PROD_CD ASC
+    </select>
 </mapper>

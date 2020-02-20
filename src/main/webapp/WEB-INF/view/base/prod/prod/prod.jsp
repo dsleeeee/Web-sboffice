@@ -145,9 +145,17 @@
       <s:message code="cmm.excel.down" />
     </button>
     --%>
-    <button class="btn_skyblue fr" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
-      <s:message code="prod.title.addProd" />
-    </button>
+
+      <div class="mt20 updownSet oh">
+        <div class="txtIn">
+          <button class="btn_skyblue" id="btnStoreProdBatchList" ng-click="storeProdBatchList()" <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+            <s:message code="prod.title.storeProdBatch" />
+          </button>
+          <button class="btn_skyblue" id="btnAddProd" ng-click="addProd()" ng-show="btnShowFg">
+            <s:message code="prod.title.addProd" />
+          </button>
+        </div>
+      </div>
   </div>
 
   <%--위즈모 테이블--%>
@@ -211,7 +219,7 @@
   var prodNoEnvFg = "${prodNoEnvFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122903.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=2018122903.17" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -231,3 +239,16 @@
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 레이어 팝업 : 매장 리스트 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchList.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 매장별 상품 일괄적용 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchRegist.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+

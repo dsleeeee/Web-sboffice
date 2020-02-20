@@ -228,5 +228,44 @@ public class ProdController {
         return returnJson(Status.OK, prodCdCnt);
     }
 
+    /***
+     * 매장 적용/미적용 상품 조회
+     * @param prodVO
+     * @param request
+     * @author 이다솜
+     * @since 2020.02.13
+     * @return
+     */
+    @RequestMapping(value = "/getStoreProdBatchList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdBatchList(ProdVO prodVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> storeList = prodService.getStoreProdBatchList(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, storeList, prodVO);
+    }
+
+    /***
+     * 매장 적용상품 등록
+     * @param prodVOs
+     * @param request
+     * @author 이다솜
+     * @since 2020.02.13
+     * @return
+     */
+    @RequestMapping(value = "/insertStoreProdBatch.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result insertStoreProdBatch(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.insertStoreProdBatch(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 
 }

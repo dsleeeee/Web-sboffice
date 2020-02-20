@@ -229,6 +229,12 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
       });
     }, 50);*/
   };
+  
+  // 매장 리스트 팝업(매장 상품 일괄적용을 위한)
+  $scope.storeProdBatchList = function() {
+    $scope.storeProdBatchListLayer.show(true);
+  };
+  
 
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
