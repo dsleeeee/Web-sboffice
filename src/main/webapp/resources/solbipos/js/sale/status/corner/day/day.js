@@ -44,7 +44,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
   	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
   	   */
-	  	if(ht.cellType == 2 && ht.row < 2 && ht.col > 4) {
+	  	if(ht.cellType == 2 && ht.row < 2 && ht.col > 3) {
 	  			s.allowSorting = false;
 			} else {
 				s.allowSorting = true;

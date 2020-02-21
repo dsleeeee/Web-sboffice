@@ -226,7 +226,9 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 			   		grid.columnHeaders.setCellData(0, 6+(i*2), response.data.data.list[i].storeNm);
 			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);
 			   		grid.columnHeaders.setCellData(1, 6+(i*2), response.data.data.list[i].nmcodeNm);
-
+			   		
+					grid.columnHeaders.rows[0].allowSorting = false;
+					grid.columnHeaders.rows[1].allowSorting = false;
 			   	}
 
 	   	 	}

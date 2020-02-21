@@ -216,6 +216,8 @@ app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 			   		grid.columnHeaders.setCellData(1, 4+(i*2), response.data.data.list[i].nmcodeNm);
 			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);		
 		    	    
+					grid.columnHeaders.rows[0].allowSorting = false;
+					grid.columnHeaders.rows[1].allowSorting = false;
 			   	}
 		   	
 	   	 	}

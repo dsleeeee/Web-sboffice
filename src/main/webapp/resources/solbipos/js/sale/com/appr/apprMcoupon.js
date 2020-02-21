@@ -84,6 +84,7 @@ app.controller('saleApprMcouponCtrl', ['$scope', '$http', '$timeout', function (
   $scope.$on("saleApprMcouponCtrl", function (event, data) {
 
     $scope.storeCd  	= data.storeCd;
+    $scope.mcoupnCd	    = data.mcoupnCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
     $scope.chkPop 		= data.chkPop;
@@ -102,6 +103,7 @@ app.controller('saleApprMcouponCtrl', ['$scope', '$http', '$timeout', function (
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;
+    params.mcoupnCd	 = $scope.mcoupnCd;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
     params.chkPop 	 = $scope.chkPop;

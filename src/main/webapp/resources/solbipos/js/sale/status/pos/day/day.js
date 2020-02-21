@@ -290,7 +290,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
+				  
 			  }
 		  }
 		  
@@ -318,6 +318,16 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		    			$scope._broadcast('saleComProdCtrl', params);
 		    		}
 		    	}
+		    	
+		    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+		    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+		    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+		    	 */
+		    	if(ht.cellType == 2 && ht.row < 2 && ht.col > 6) {
+		    		grid.allowSorting = false;
+	    		} else {
+	    			grid.allowSorting = true;
+	    		}
 		  });
 		  
 		  grid.itemFormatter = function (panel, r, c, cell) {

@@ -51,12 +51,15 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
     
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    	
       var ht = s.hitTest(e);
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	params.storeCd   = selectedRow.storeCd;
+        	params.acquireCd = selectedRow.acquireCd;
+        	params.acquireNm = selectedRow.acquireNm;
         	if(!$scope.isChecked){
       	  		params.startDate = wijmo.Globalize.format($scope.srchApprAcquireCardStartDate.value, 'yyyyMMdd');
       	  		params.endDate = wijmo.Globalize.format($scope.srchApprAcquireCardEndDate.value, 'yyyyMMdd');
@@ -66,7 +69,15 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
             $scope._broadcast('saleApprCardCtrl', params);
         }
       }
-    });
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+  		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+  		if (rng && rng.columnSpan > 1) {
+  			e.preventDefault();
+  		}
+      }
+      
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());

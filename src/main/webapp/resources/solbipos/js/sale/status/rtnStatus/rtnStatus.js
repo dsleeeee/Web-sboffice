@@ -268,6 +268,13 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	      var ht = s.hitTest(e);
+	      
+	      if(ht.cellType == 2 && ht.row < 1 && ht.col > 0) {
+	    	  s.allowSorting = false;
+	      } else {
+	    	  s.allowSorting = true;
+		  }
+	      
 	      if (ht.cellType === wijmo.grid.CellType.Cell) {
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;

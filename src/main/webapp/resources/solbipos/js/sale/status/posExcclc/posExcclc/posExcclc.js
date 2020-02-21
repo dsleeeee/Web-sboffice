@@ -49,25 +49,12 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
       
-      /* 머지된 헤더 셀 클릭시 정렬 비활성화
-  	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0
-  	   * 머지 생성된 column 인덱스
-  	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
-  	   */
-  	  if(ht.cellType == 2 && ht.row < 1) { 
-  		  switch(ht.col) {
-	  		  // 7,8,9 매출 컬럼
-  		  	  case 7: 
-	  	      case 8: 
-	  	      case 9: 
-	  	      // 12, 13 입출금 컬럼
-	  		  case 12: 
-	  		  case 13: s.allowSorting = false; break;
-	  		  default: s.allowSorting = true;
-  		  }
-  	  } else {
-  		  s.allowSorting = true;
-  	  }
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+		if (rng && rng.columnSpan > 1) {
+			e.preventDefault();
+		}
+	  }
   	
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
@@ -76,7 +63,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.openDtlLayer(selectedRow);
         }
       }
-    });
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());

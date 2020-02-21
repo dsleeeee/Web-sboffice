@@ -20,10 +20,10 @@
     	<%-- 조회조건 --%>
 		<table class="searchTbl">
       	<colgroup>
-        	<col class="w15"/>
-        	<col class="w35"/>
-        	<col class="w15"/>
-        	<col class="w35"/>
+        	<col class="w13"/>
+        	<col class="w37"/>
+        	<col class="w13"/>
+        	<col class="w37"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>

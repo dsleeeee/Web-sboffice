@@ -228,6 +228,18 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 	        }
 	    }	//s.itemFormatter = function (panel, r, c, cell) {
 
+	    // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+    	}, true);
+	    	
 	};
 }]);
 //reportCtrl_sl    	END		############################################################################################################################################################################
@@ -310,6 +322,19 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         }	//s.itemFormatter = function (panel, r, c, cell) {
+        
+        // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+    	}, true);
+    	
     }
 }]);
 //reportCtrl_pay    END		############################################################################################################################################################################
@@ -361,6 +386,19 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
+  	
   }
 }]);
 //reportCtrl_nsl    END		############################################################################################################################################################################
@@ -426,6 +464,19 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
+  	
   }
 }]);
 //reportCtrl_npay   END		############################################################################################################################################################################
@@ -478,6 +529,18 @@ app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_pos    END		############################################################################################################################################################################
@@ -554,6 +617,18 @@ app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_emp    END		############################################################################################################################################################################
@@ -606,6 +681,18 @@ app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_dc     END		############################################################################################################################################################################
@@ -658,6 +745,18 @@ app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_dcdtl  END		############################################################################################################################################################################
@@ -734,6 +833,18 @@ app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_gift   END		############################################################################################################################################################################
@@ -803,6 +914,18 @@ app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_order  END		############################################################################################################################################################################
@@ -855,6 +978,18 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv1    END		############################################################################################################################################################################
@@ -907,6 +1042,18 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv2    END		############################################################################################################################################################################
@@ -959,6 +1106,18 @@ app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv3    END		############################################################################################################################################################################
@@ -1011,6 +1170,18 @@ app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_prod   END		############################################################################################################################################################################
@@ -1063,6 +1234,18 @@ app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_compt  END		############################################################################################################################################################################
@@ -1157,6 +1340,18 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_appr   END		############################################################################################################################################################################
@@ -1209,6 +1404,18 @@ app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_membr  END		############################################################################################################################################################################
@@ -1261,6 +1468,18 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_work   END		############################################################################################################################################################################

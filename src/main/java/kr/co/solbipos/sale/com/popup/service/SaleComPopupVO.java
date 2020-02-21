@@ -52,7 +52,14 @@ public class SaleComPopupVO extends PageVO {
     private String saleHour;
     /** 본사,매장구분 */
     private String orgnFg;
-    
+    /** 매입사 코드 */
+    private String acquireCd;
+    /** 매입사 명 */
+    private String acquireNm;
+    /** 모바일페이사 코드 */
+    private String mpayCd;
+    /** 모바일쿠폰 코드 */
+    private String mcoupnCd;
     /**
      * @return the hqOfficeCd
      */
@@ -276,5 +283,38 @@ public class SaleComPopupVO extends PageVO {
 	public void setSaleHour(String saleHour) {
 		this.saleHour = saleHour;
 	}
+
+	public String getAcquireCd() {
+		return acquireCd;
+	}
+
+	public void setAcquireCd(String acquireCd) {
+		this.acquireCd = acquireCd;
+	}
+
+	public String getAcquireNm() {
+		return acquireNm;
+	}
+
+	public void setAcquireNm(String acquireNm) {
+		this.acquireNm = acquireNm;
+	}
+
+	public String getMpayCd() {
+		return mpayCd;
+	}
+
+	public void setMpayCd(String mpayCd) {
+		this.mpayCd = mpayCd;
+	}
+
+	public String getMcoupnCd() {
+		return mcoupnCd;
+	}
+
+	public void setMcoupnCd(String mcoupnCd) {
+		this.mcoupnCd = mcoupnCd;
+	}
+
 	
 }

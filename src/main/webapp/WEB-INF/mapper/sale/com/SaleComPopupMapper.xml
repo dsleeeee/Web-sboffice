@@ -767,6 +767,12 @@
 			, TSSPC.APPR_AMT
 		FROM TB_SL_SALE_PAY_CARD TSSPC
 		WHERE TSSPC.STORE_CD = #{storeCd}
+		<if test='acquireCd != null and acquireCd != ""'>
+            AND TSSPC.ACQUIRE_CD = #{acquireCd}
+        </if>
+        <if test='acquireNm != null and acquireNm != ""'>
+            AND TSSPC.ACQUIRE_NM = #{acquireNm}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPC.SALE_DATE >= #{startDate}
 		</if>
@@ -862,6 +868,9 @@
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPM.SALE_DATE >= #{startDate}
 		</if>
+		<if test='mpayCd != null and mpayCd != ""'>
+            AND TSSPM.MPAY_CD >= #{mpayCd}
+        </if>
 		<if test='endDate != null and endDate != ""'>
 			AND TSSPM.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
@@ -895,6 +904,9 @@
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPM.SALE_DATE >= #{startDate}
 		</if>
+		<if test='mcoupnCd != null and mcoupnCd != ""'>
+            AND TSSPM.MCOUPN_CD = #{mcoupnCd}
+        </if>
 		<if test='endDate != null and endDate != ""'>
 			AND TSSPM.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>
@@ -960,6 +972,9 @@
 		<if test='startDate != null and startDate != ""'>
 			AND TNNPC.SALE_DATE >= #{startDate}
 		</if>
+		<if test='acquireCd != null and acquireCd != ""'>
+            AND TNNPC.ACQUIRE_CD = #{acquireCd}
+        </if>
 		<if test='endDate != null and endDate != ""'>
 			AND TNNPC.SALE_DATE <![CDATA[ <= ]]> #{endDate}
 		</if>

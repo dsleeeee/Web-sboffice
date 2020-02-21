@@ -51,6 +51,14 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+		if (rng && rng.columnSpan > 1) {
+			e.preventDefault();
+		}
+	  }
+      
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -65,7 +73,7 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	        $scope._broadcast('saleApprMpayCtrl', params);
 	    }
       }
-    });
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -132,6 +140,7 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }
     }
     // <-- //그리드 헤더2줄 -->
+    
   };
 
 
