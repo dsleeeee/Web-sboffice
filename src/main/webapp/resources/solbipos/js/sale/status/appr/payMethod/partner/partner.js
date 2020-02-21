@@ -14,21 +14,11 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprPartnerListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchPartnerProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchPartnerApprFgDisplay", [
+  $scope._setComboData("srchPartnerSaleFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["cmm.cancel"], "value": "-1"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -175,7 +165,9 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params       = {};
     params.storeCd   = $("#apprPartnerSelectStoreCd").val();
     params.posNo  	 = $("#apprPartnerSelectPosCd").val();
-    params.cornrNo   = $("#apprPartnerSelectCornerCd").val();
+    params.cornrCd   = $("#apprPartnerSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprPartnerListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
@@ -193,7 +185,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/partner/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -263,6 +255,32 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprPartnerGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        	columns[10].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[5].visible = false;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }else{
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }
+	}
 	
 }]);

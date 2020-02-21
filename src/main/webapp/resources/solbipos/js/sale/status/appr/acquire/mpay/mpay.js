@@ -14,21 +14,11 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprAcquireMpayListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchAcquireMpayProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchAcquireMpayApprFgDisplay", [
+  $scope._setComboData("srchAcquireMpaySaleFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["cmm.cancel"], "value": "-1"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -36,7 +26,6 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["card.apprProcFg1"], "value": "1"},
     {"name": messages["card.apprProcFg2"], "value": "2"},
-    {"name": messages["card.cardTypeFg1"], "value": "3"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -175,7 +164,9 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
     var params       = {};
     params.storeCd   = $("#apprAcquireMpaySelectStoreCd").val();
     params.posNo  	 = $("#apprAcquireMpaySelectPosCd").val();
-    params.cornrNo   = $("#apprAcquireMpaySelectCornerCd").val();
+    params.cornrCd   = $("#apprAcquireMpaySelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprAcquireMpayListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
@@ -193,7 +184,7 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/acquireMpay/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -263,6 +254,26 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprAcquireMpayGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        }else{
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        }
+	}
 	
 }]);

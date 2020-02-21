@@ -85,6 +85,20 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 	    }
 	    // <-- //그리드 헤더2줄 -->
     
+	    // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0
+	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	    	 */
+	    	if(ht.cellType == 2 && ht.row < 1) {
+	    		s.allowSorting = false;
+    		} else {
+    			s.allowSorting = true;
+    		}
+    	});
   };
 
   // 다른 컨트롤러의 broadcast 받기

@@ -176,7 +176,7 @@
            ) C
 		WHERE B.STORE_CD = C.STORE_CD
 		AND B.PROD_CD = C.PROD_CD
-		ORDER BY B.STORE_CD, C.REAL_SALE_AMT DESC
+		ORDER BY C.REAL_SALE_AMT DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	

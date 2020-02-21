@@ -112,13 +112,14 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
-				frozen-columns="9"
+				frozen-columns="10"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
 				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" binding="lv1Nm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" binding="lv2Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" binding="lv3Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="day.prodClass.prodCd"/>"	binding="prodCd" width="100" align="center" visible="false" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

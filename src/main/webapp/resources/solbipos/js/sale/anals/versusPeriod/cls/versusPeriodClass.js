@@ -17,6 +17,8 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 //  $scope.srchCompStartDate = wcombo.genDateVal("#compClassStartDate", getToday());
 //  $scope.srchCompEndDate   = wcombo.genDateVal("#compClassEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
+  //groupRow 접고 펼치기 flag 변수
+  $scope.setCollapsed = false;
 //  $scope.changeDate = function() {
 //
 //	var srchStartDate = new Date($scope.srchStartDate);
@@ -138,9 +140,18 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         var params       = $scope.params;
         	params.prodClassCd   = selectedRow.lv3Cd;
 
+        // groupRow 펼치기
+        if (s.rows[ht.row].level == 2) { // 3단계 분류
+        	$scope.setCollapsed = true;
+        	var isCollapsed = s.rows[ht.row].isCollapsed;
+        	s.rows[ht.row].isCollapsed ? false : true;
+        }
+        
+        // 클릭시 상세 그리드 조회
         if (col.binding === "lv3Nm") { // 3단계 분류
           $scope._broadcast('versusPeriodClassDtlCtrlSrch', params);
         }
+        
       }
     });
   };
@@ -171,6 +182,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
   // 상품매출순위 리스트 조회
   $scope.searchVersusPeriodClassList = function (isPageChk) {
+	$scope.setCollapsed = false;
 
     // 파라미터
     var params       = {};
@@ -199,7 +211,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
-
+    
     var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
     var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일)\n";
     var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";
@@ -229,7 +241,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         	s.collectionView.groupDescriptions.push(grpLv2);
         	s.collectionView.groupDescriptions.push(grpLv3);
     	}
-
     	s.rows.forEach(function(row) {
     		if(row instanceof wijmo.grid.GroupRow){
     			var groupProp=row.dataItem.groupDescription.propertyName;
@@ -239,59 +250,73 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     				case "lv1Nm":className="grp-lv-2";break;
     				case "lv2Nm":className="grp-lv-3";break;
     			}
-
     			if(className){
     				row.cssClass=className;
-    				// 3단계 group row 접기
-    				if(row.level == 2) { 
-    					//row.ariaExpanded = false; 
-    				}
     			}
+    			// 3단계 group row 접기
+				if(row.level == 2) { 
+					if(!$scope.setCollapsed){
+						row.isCollapsed = true;
+					}
+				}
     		}
     	});
-
+    	
     	// 그리드 링크 효과, 정렬 효과
-        s.formatItem.addHandler(function (s, e) {
-          if (e.panel === s.cells) {
-            var col = s.columns[e.col];
-            if (col.binding === "lv3Nm") { // 3단계 분류
-              	wijmo.addClass(e.cell, 'wijLink');
-            }
-            else if (col.binding === "realSaleAmtA") { // 조회기간 실매출
-              	wijmo.addClass(e.cell, 'wj-align-right');
-            }
-            else if (col.binding === "saleCntA") { // 조회기간 판매수량
-              	wijmo.addClass(e.cell, 'wj-align-center');
-            }
-            else if (col.binding === "realSaleAmtB") { // 대비기간 실매출
-              	wijmo.addClass(e.cell, 'wj-align-right');
-            }
-            else if (col.binding === "saleCntB") { // 대비기간 판매수량
-              	wijmo.addClass(e.cell, 'wj-align-center');
-            }
-            else if (col.binding === "sinAmt") { // 신장률 실매출
-              	wijmo.addClass(e.cell, 'wj-align-center');
-            }
-            else if (col.binding === "sinCnt") { // 신장률 판매수량
-              	wijmo.addClass(e.cell, 'wj-align-center');
-            }
 
-          }
-        });
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "lv3Nm") { // 3단계 분류
+          	wijmo.addClass(e.cell, 'wijLink');
+        }
+        else if (col.binding === "realSaleAmtA") { // 조회기간 실매출
+          	wijmo.addClass(e.cell, 'wj-align-right');
+        }
+        else if (col.binding === "saleCntA") { // 조회기간 판매수량
+          	wijmo.addClass(e.cell, 'wj-align-center');
+        }
+        else if (col.binding === "realSaleAmtB") { // 대비기간 실매출
+          	wijmo.addClass(e.cell, 'wj-align-right');
+        }
+        else if (col.binding === "saleCntB") { // 대비기간 판매수량
+          	wijmo.addClass(e.cell, 'wj-align-center');
+        }
+        else if (col.binding === "sinAmt") { // 신장률 실매출
+          	wijmo.addClass(e.cell, 'wj-align-center');
+        }
+        else if (col.binding === "sinCnt") { // 신장률 판매수량
+          	wijmo.addClass(e.cell, 'wj-align-center');
+        }
+
+      }
 
 
     });
-
-    // start collapsed
     
-    theGrid.collapseGroupsToLevel(1);
-    theGrid.collectionView.refresh();
+    // start collapsed
+    theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
+    	var ht = theGrid.hitTest(e);
 
+	    /* 머지된 헤더 셀 클릭시 정렬 비활성화
+		 * 헤더 cellType: 2 && 머지된 row 인덱스: 0
+		 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+		 */
+		if(ht.cellType == 2 && ht.row < 1) {
+			theGrid.allowSorting = false;
+		} else {
+			theGrid.allowSorting = true;
+		}
+	    
+	    theGrid.collapseGroupsToLevel(1);
+	    theGrid.collectionView.refresh();
+    });
+   
   };
 
   //메인그리드 조회후 상세그리드 조회.
   $scope.loadedRows = function(sender, args){
-  	var rows = sender.rows;
+
+	var rows = sender.rows;
   	var params		 = {};
 
   	if(rows.length != 0 && rows[0].dataItem.lv3Cd != undefined) {
@@ -533,6 +558,20 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
         }
       }
     }
+    
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    	var ht = s.hitTest(e);
+
+    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0 && 동적 생성된 column 인덱스 0  초과
+    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+    	 */
+    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 0) {
+    		s.allowSorting = false;
+		} else {
+			s.allowSorting = true;
+		}
+    });
 
   };
 

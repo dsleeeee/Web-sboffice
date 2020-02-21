@@ -82,30 +82,6 @@ public class ApprNcardController {
         Model model, ApprNcardVO apprNcardVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        if (apprNcardVO.getCornrCd() != null && !"".equals(apprNcardVO.getCornrCd()) && apprNcardVO.getPosNo() != null && !"".equals(apprNcardVO.getPosNo())) {
-    		String[] arrCornrCd = apprNcardVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprNcardVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprNcardVO.setArrCornrCd(arrCornrCd);
-    				apprNcardVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprNcardVO.setArrPosNo(arrPosNo);
-    				apprNcardVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprNcardVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprNcardVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         
         List<DefaultMap<String>> list = apprNcardService.getApprNcardList(apprNcardVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprNcardVO);

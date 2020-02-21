@@ -49,6 +49,21 @@
                 #{item}
             </foreach>
         </if>
+         <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
+        </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
         </if>
@@ -72,6 +87,21 @@
                 #{item}
             </foreach>
         </if>
+         <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
+        </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
         </if>
@@ -81,6 +111,11 @@
         <![CDATA[
                 )  M
                  GROUP BY M.STORE_CD, M.SALE_YN
+        ]]>
+        <if test='saleYn != null and saleYn != ""'>
+           HAVING(M.SALE_YN = #{saleYn})
+        </if>
+        <![CDATA[
                 ) M
                 WHERE M.STORE_CD = TMS.STORE_CD
         GROUP BY M.STORE_CD, TMS.STORE_NM

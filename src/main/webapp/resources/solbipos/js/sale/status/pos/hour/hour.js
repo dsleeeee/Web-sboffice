@@ -26,7 +26,20 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posHourCtrl");
+		
+		// 그리드 링크 효과
+	    s.formatItem.addHandler(function (s, e) {
+	      if (e.panel === s.cells) {
+	        var col = s.columns[e.col];
 
+	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt") { // 수량합계
+	        	var item = s.rows[e.row].dataItem;
+	          	wijmo.addClass(e.cell, 'wijLink');
+	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
+	        }
+	      }
+	    });
+		    
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
@@ -255,16 +268,17 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  var colValue = arrPosCd[i-1];
 				  var colName = arrPosNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colSplit2 = colValue.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]);
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]+"("+colSplit2[0]+")");
 
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
@@ -278,7 +292,35 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 			  }
 		  }
-
+		  
+		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
+		    	var ht = grid.hitTest(e);
+		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
+	
+		    		var col         = ht.panel.columns[ht.col];
+		    		var selectedRow = grid.rows[ht.row].dataItem;
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
+			   		
+		    		var params       = {};
+		    		params.chkPop	= "posHourPop";    	
+					params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
+					params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+		    		params.saleHour   = selectedRow.saleHour;
+		    		
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+			    		params.storeCd   = storeCd;
+			    		params.posNo	 = posNo;			    			    	    
+		    			$scope._broadcast('saleComProdHourCtrl', params); // 수량
+		    		}else if (col.binding === "totSaleCnt") { // 수량합계
+		    			params.storeCd   = $("#posHourSelectStoreCd").val();		    		
+		    			$scope._broadcast('saleComProdHourCtrl', params);
+		    		}
+		    	}
+		  });
+		  
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {

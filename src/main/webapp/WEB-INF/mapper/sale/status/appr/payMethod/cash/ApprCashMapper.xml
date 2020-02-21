@@ -37,7 +37,7 @@
                      , SALE_AMT
                   FROM TB_SL_SALE_PAY_CASH
                  WHERE SALE_FG='1'
-                   AND APPR_PROC_FG IN ('1','2')
+                   --AND APPR_PROC_FG IN ('1','2')
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -45,6 +45,21 @@
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+         <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
         </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
@@ -60,7 +75,7 @@
                      , SALE_AMT
                   FROM TB_SL_SALE_PAY_CASH
                  WHERE SALE_FG='-1'
-                   AND APPR_PROC_FG IN ('1','2')
+                   --AND APPR_PROC_FG IN ('1','2')
                    AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -68,6 +83,21 @@
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+         <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
         </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
@@ -78,6 +108,11 @@
         <![CDATA[
                 )  M
                  GROUP BY M.STORE_CD, M.SALE_FG
+        ]]>
+        <if test='saleFg != null and saleFg != ""'>
+           HAVING(M.SALE_FG = #{saleFg})
+        </if>
+        <![CDATA[
                 ) M
                 WHERE M.STORE_CD = TMS.STORE_CD
         GROUP BY M.STORE_CD, TMS.STORE_NM

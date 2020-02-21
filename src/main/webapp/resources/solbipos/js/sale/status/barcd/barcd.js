@@ -65,7 +65,7 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.prodCd	 = selectedRow.prodCd;
         	params.storeCd	 = $("#barcdSelectStoreCd").val();
         if (col.binding === "barcdCd") { // 바코드
-            $scope._broadcast('barcdDtlCtrl', params);
+            $scope._broadcast('barcdDtlCtrlSrch', params);
         }
       }
     });

@@ -14,21 +14,11 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprNcashListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchNcashProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchNcashApprFgDisplay", [
+  $scope._setComboData("srchNcashSaleYnDisplay", [
     {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["appr.approve"], "value": "Y"},
+    {"name": messages["cmm.cancel"], "value": "N"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -173,6 +163,8 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCd   = $("#apprNcashSelectStoreCd").val();
     params.posNo  	 = $("#apprNcashSelectPosCd").val();
     params.cornrNo   = $("#apprNcashSelectCornerCd").val();
+    params.saleYn	 = $scope.saleYn;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprNcashListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
@@ -190,7 +182,7 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/ncash/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -260,6 +252,26 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprNcashGrid");
+        var columns = grid.columns;
+        if($scope.saleYn == 'Y'){
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        }else if($scope.saleYn == 'N'){
+        	columns[4].visible = false;
+        	columns[5].visible = false;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }else{
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }
+	}
 	
 }]);

@@ -138,18 +138,21 @@
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
         $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val("");
       }
       else if (cnt == 1) {
         $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
         $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
         $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
         $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+        $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
         $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');

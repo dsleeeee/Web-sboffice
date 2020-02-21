@@ -14,21 +14,11 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprAcquireMcouponListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchMcouponProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchAcquireMcouponApprFgDisplay", [
+  $scope._setComboData("srchAcquireMcouponSaleFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["cmm.cancel"], "value": "-1"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -175,7 +165,9 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
     var params       = {};
     params.storeCd   = $("#apprAcquireMcouponSelectStoreCd").val();
     params.posNo  	 = $("#apprAcquireMcouponSelectPosCd").val();
-    params.cornrNo   = $("#apprAcquireMcouponSelectCornerCd").val();
+    params.cornrCd   = $("#apprAcquireMcouponSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.cashBillApprProcFg = $scope.cashBillApprProcFg;
     params.listScale = $scope.apprAcquireMcouponListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
@@ -193,7 +185,7 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/acquireMcoupon/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -263,6 +255,26 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprAcquireMcouponGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        }else{
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        }
+	}
 	
 }]);

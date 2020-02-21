@@ -97,6 +97,17 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		// 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
+
+	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	    	 */
+	    	if(ht.cellType == 2 && ht.row < 2 && ht.col > 4) {
+	    		s.allowSorting = false;
+    		} else {
+    			s.allowSorting = true;
+    		}
+    	
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
@@ -313,9 +324,11 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				  grid.columnHeaders.setCellData(1, 'guestCnt1T'+(i-1), colSplit[1]);
 				  
 				  // 병합된 셀 정렬 안되게
-//				  grid.columnHeaders.rows[0].allowSorting = false;
+				  grid.columnHeaders.rows[0].allowSorting = false;
 //				  grid.columnHeaders.rows[1].allowSorting = false;
 //				  grid.columns[5].allowSorting = true;
+				//  grid.columnHeaders.hostElement.children[0].allowSorting = false;
+				//  console.log(grid.columnHeaders.hostElement.children[0]);
 
 			  }
 		  }

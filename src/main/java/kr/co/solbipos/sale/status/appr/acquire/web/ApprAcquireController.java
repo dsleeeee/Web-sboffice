@@ -67,29 +67,6 @@ public class ApprAcquireController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
-    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprAcquireVO.setArrCornrCd(arrCornrCd);
-    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprAcquireVO.setArrPosNo(arrPosNo);
-    				apprAcquireVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
@@ -112,29 +89,6 @@ public class ApprAcquireController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
-    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprAcquireVO.setArrCornrCd(arrCornrCd);
-    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprAcquireVO.setArrPosNo(arrPosNo);
-    				apprAcquireVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMcouponList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
@@ -157,29 +111,6 @@ public class ApprAcquireController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
-    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprAcquireVO.setArrCornrCd(arrCornrCd);
-    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprAcquireVO.setArrPosNo(arrPosNo);
-    				apprAcquireVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMpayList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
@@ -201,29 +132,6 @@ public class ApprAcquireController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) && apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
-    		String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprAcquireVO.setArrCornrCd(arrCornrCd);
-    				apprAcquireVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprAcquireVO.setArrPosNo(arrPosNo);
-    				apprAcquireVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprAcquireVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireNcardList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }

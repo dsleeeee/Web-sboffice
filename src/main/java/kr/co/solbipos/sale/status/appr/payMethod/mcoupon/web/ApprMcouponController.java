@@ -83,30 +83,6 @@ public class ApprMcouponController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd()) && apprMcouponVO.getPosNo() != null && !"".equals(apprMcouponVO.getPosNo())) {
-    		String[] arrCornrCd = apprMcouponVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprMcouponVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprMcouponVO.setArrCornrCd(arrCornrCd);
-    				apprMcouponVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprMcouponVO.setArrPosNo(arrPosNo);
-    				apprMcouponVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprMcouponVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprMcouponVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
-        
         List<DefaultMap<String>> list = apprMcouponService.getApprMcouponList(apprMcouponVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprMcouponVO);
     }

@@ -83,30 +83,6 @@ public class ApprCashController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd()) && apprCashVO.getPosNo() != null && !"".equals(apprCashVO.getPosNo())) {
-    		String[] arrCornrCd = apprCashVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprCashVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprCashVO.setArrCornrCd(arrCornrCd);
-    				apprCashVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprCashVO.setArrPosNo(arrPosNo);
-    				apprCashVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprCashVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprCashVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
-        
         List<DefaultMap<String>> list = apprCashService.getApprCashList(apprCashVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprCashVO);
     }

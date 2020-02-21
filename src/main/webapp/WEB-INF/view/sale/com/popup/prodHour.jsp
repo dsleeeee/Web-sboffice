@@ -6,8 +6,8 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/com/popup/"/>
 
-<wj-popup id="prodLayer" control="prodLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdCtrl">
+<wj-popup id="prodHourLayer" control="prodHourLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
+  <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdHourCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="saleComPopup.table"/>
       <span id="spanDtlTitle"></span>
@@ -29,11 +29,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodCd"/>" 		binding="prodCd"		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dcDcfg.storeNm"/>" 				binding="storeNm" 	width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleDate"/>" 	binding="saleDate" 	width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
@@ -45,4 +42,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/prod.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/prodHour.js?ver=20190207.01" charset="utf-8"></script>

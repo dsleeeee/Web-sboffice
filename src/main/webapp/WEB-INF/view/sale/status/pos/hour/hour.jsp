@@ -142,3 +142,8 @@
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>
 
+<%-- 상품매출내역 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

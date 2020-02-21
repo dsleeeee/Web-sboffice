@@ -14,21 +14,12 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprCashListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchCashProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
   
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchCashApprFgDisplay", [
+  $scope._setComboData("srchCashSaleFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["cmm.cancel"], "value": "-1"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -36,7 +27,6 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["card.apprProcFg1"], "value": "1"},
     {"name": messages["card.apprProcFg2"], "value": "2"},
-    {"name": messages["card.cardTypeFg1"], "value": "3"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -172,10 +162,13 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var params       = {};
     params.storeCd   = $("#apprCashSelectStoreCd").val();
     params.posNo  	 = $("#apprCashSelectPosCd").val();
-    params.cornrNo   = $("#apprCashSelectCornerCd").val();
+    params.cornrCd   = $("#apprCashSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprCashListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
+    
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -190,7 +183,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/cash/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -252,14 +245,35 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	};
 
 
- //매장의 코너(corner) 리스트 조회
+	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var url             = '/sale/status/corner/corner/cornerNmList.sb';
 		var comboParams     = {};
 		comboParams.storeCd = $("#apprCashSelectStoreCd").val();
 	};
-
-
+	
+	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprCashGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[4].visible = false;
+        	columns[5].visible = false;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }else{
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }
+	}
 	
 	
 }]);

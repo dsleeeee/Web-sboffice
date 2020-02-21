@@ -30,15 +30,14 @@
 		            		, A.LV1_NM
                 			, A.LV2_NM
                 			, A.LV3_NM
-    						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
-    						, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
-    						, SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
-    						, SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-    						, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+    						, COUNT(DISTINCT TSDPP.STORE_CD) AS SALE_STORE_CNT
+    						, SUM(TSDPP.TOT_SALE_AMT) AS TOT_SALE_AMT
+    						, SUM(TSDPP.TOT_DC_AMT) AS TOT_DC_AMT
+    						, SUM(TSDPP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+    						, SUM(TSDPP.TOT_SALE_QTY) AS TOT_SALE_CNT
     		<choose>
 				<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-		    				FROM    TB_SL_DAILY_POS TSDP
-		    						, TB_SL_DAILY_POS_PROD TSDPP
+		    				FROM    TB_SL_DAILY_POS_PROD TSDPP
 		    						, (
 		    						     SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
 				                                 A.PROD_CLASS_CD     AS LV2_CD,
@@ -78,19 +77,13 @@
 				                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
 				                     )                   A,
 				                     TB_HQ_PRODUCT       B
-		    				WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
-		    						AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
-									AND TSDP.STORE_CD = TSDPP.STORE_CD
-									AND TSDP.SALE_DATE = TSDPP.SALE_DATE
-									AND TSDP.POS_NO = TSDPP.POS_NO
-									AND B.HQ_OFFICE_CD   =  #{hqOfficeCd}
+		    				WHERE    B.HQ_OFFICE_CD   =  #{hqOfficeCd}
 						            AND B.PROD_CLASS_CD = A.LV3_CD
 						            AND B.PROD_CD       = TSDPP.PROD_CD
 						            AND TSDPP.HQ_OFFICE_CD  =  #{hqOfficeCd}
 						</when>
 		         		<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-							FROM    TB_SL_DAILY_POS TSDP
-		    						, TB_SL_DAILY_POS_PROD TSDPP
+							FROM    TB_SL_DAILY_POS_PROD TSDPP
 		    						, (
 				    					SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
 				                                 A.PROD_CLASS_CD     AS LV2_CD,
@@ -130,12 +123,7 @@
 				                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
 				                     )                   A,
 				                     TB_MS_PRODUCT       B
-							WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
-		  					AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
-							AND TSDP.STORE_CD = TSDPP.STORE_CD
-							AND TSDP.SALE_DATE = TSDPP.SALE_DATE
-							AND TSDP.POS_NO = TSDPP.POS_NO
-							AND B.STORE_CD      = #{storeCd}
+							WHERE B.STORE_CD      = #{storeCd}
 				            AND B.PROD_CLASS_CD = A.LV3_CD
 				            AND B.PROD_CD       = TSDPP.PROD_CD
 				            AND TSDPP.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -143,16 +131,16 @@
 		         		</when>
 		         	</choose>
 		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
-                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+                        	AND TSDPP.STORE_CD||'||'||TSDPP.POS_NO IN
                         	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
                             	#{item}
                         	</foreach>
                     	</if>
 		            	<if test='startDate != null and startDate != ""'>
-		            		AND TSDP.SALE_DATE >= #{startDate}
+		            		AND TSDPP.SALE_DATE >= #{startDate}
 		            	</if>
 		            	<if test='endDate != null and endDate != ""'>
-		            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		            		AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 		            	</if>
 		            GROUP BY TSDPP.PROD_CD
 		            		 , B.PROD_NM
@@ -163,31 +151,25 @@
 				(
 					WITH T AS
 					(
-						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
+						SELECT	DISTINCT TSDPP.STORE_CD || '||' || TSDPP.POS_NO AS STORE_CD
 								, TSDPP.PROD_CD AS PROD_CD_TEMP
-		                        , TSDP.TOT_SALE_AMT AS SALE_AMT
-		                        , TSDP.TOT_DC_AMT AS DC_AMT
-		                        , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-		                        , TSDP.SALE_CNT AS SALE_CNT
-		                FROM    TB_SL_DAILY_POS TSDP
-		                        , TB_SL_DAILY_POS_PROD TSDPP
-		                WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
-		                        AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
-		                        AND TSDP.STORE_CD = TSDPP.STORE_CD
-		                        AND TSDP.SALE_DATE = TSDPP.SALE_DATE
-		                        AND TSDP.POS_NO = TSDPP.POS_NO
-		                        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+		                        , TSDPP.TOT_SALE_AMT AS SALE_AMT
+		                        , TSDPP.TOT_DC_AMT AS DC_AMT
+		                        , TSDPP.REAL_SALE_AMT AS REAL_SALE_AMT
+		                        , TSDPP.TOT_SALE_QTY AS SALE_CNT
+		                FROM    TB_SL_DAILY_POS_PROD TSDPP
+		                WHERE   TSDPP.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='arrStorePos != null and arrStorePos.length >= 0'>
-	                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+	                        	AND TSDPP.STORE_CD||'||'||TSDPP.POS_NO IN
 	                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
 	                            	#{item}
 	                        	</foreach>
 	                    	</if>
 							<if test='startDate != null and startDate != ""'>
-								AND TSDP.SALE_DATE >= #{startDate}
+								AND TSDPP.SALE_DATE >= #{startDate}
 							</if>
 							<if test='endDate != null and endDate != ""'>
-								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+								AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 							</if>
 		            )
 		            SELECT  *

@@ -14,29 +14,18 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprCardListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchCardProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchCardApprFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+  $scope._setComboData("srchCardSaleFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""}, // 전체
+    {"name": messages["appr.approve"], "value": "1"}, // 승인(판매)
+    {"name": messages["cmm.cancel"], "value": "-1"} // 취소(반품)
   ]);
   
   //조회조건 승인처리 데이터 Set
   $scope._setComboData("srchCardApprProcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["card.apprProcFg1"], "value": "1"},
-    {"name": messages["card.apprProcFg2"], "value": "2"},
-    {"name": messages["card.cardTypeFg1"], "value": "3"}
+    {"name": messages["cmm.all"], "value": ""}, // 전체
+    {"name": messages["card.apprProcFg1"], "value": "1"}, // POS
+    {"name": messages["card.apprProcFg2"], "value": "2"}, // CAT
   ]);
   
 
@@ -174,7 +163,9 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var params       = {};
     params.storeCd   = $("#apprCardSelectStoreCd").val();
     params.posNo  	 = $("#apprCardSelectPosCd").val();
-    params.cornrNo   = $("#apprCardSelectCornerCd").val();
+    params.cornrCd   = $("#apprCardSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprCardListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
@@ -191,7 +182,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/card/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -245,7 +236,7 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
   };
   
   
-  //매장의 포스(pos) 리스트 조회
+  	//매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
 		var url             = '/sale/status/pos/pos/posNmList.sb';
 		var comboParams     = {};
@@ -253,14 +244,39 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		comboParams.storeCd = $("#apprCardSelectStoreCd").val();
 	};
   
-  //매장의 코너(corner) 리스트 조회
+	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var url             = '/sale/status/corner/corner/cornerNmList.sb';
 		var comboParams     = {};
 		comboParams.storeCd = $("#apprCardSelectStoreCd").val();
 	};
   
-  
-  
-  
+	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprCardGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        	columns[10].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[5].visible = false;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }else{
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }
+	}
 }]);

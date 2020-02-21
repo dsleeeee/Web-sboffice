@@ -83,30 +83,6 @@ public class ApprPartnerController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd()) && apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo())) {
-    		String[] arrCornrCd = apprPartnerVO.getCornrCd().split(",");
-    		String[] arrPosNo = apprPartnerVO.getPosNo().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				apprPartnerVO.setArrCornrCd(arrCornrCd);
-    				apprPartnerVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    		if (arrPosNo.length > 0) {
-    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-    				apprPartnerVO.setArrPosNo(arrPosNo);
-    				apprPartnerVO.setArrStorePos(arrPosNo);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = apprPartnerVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				apprPartnerVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
-        
         List<DefaultMap<String>> list = apprPartnerService.getApprPartnerList(apprPartnerVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprPartnerVO);
     }

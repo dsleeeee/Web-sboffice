@@ -23,6 +23,7 @@ public class ApprNcardVO extends PageVO {
     private String arrStorePos[];
     /** 승인구분 */
     private String apprFg;
+    private String saleYn;
     /** 승인처리 */
     private String apprProcFg;
     /** 코너 전체 선택 콤보박스 */
@@ -171,4 +172,13 @@ public class ApprNcardVO extends PageVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getSaleYn() {
+		return saleYn;
+	}
+
+	public void setSaleYn(String saleYn) {
+		this.saleYn = saleYn;
+	}
+
 }

@@ -82,8 +82,12 @@
 	             AND     B.PROD_CLASS_CD = A.LV3_CD
 	             AND     B.PROD_CD       = C.PROD_CD
 	             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-	             AND     C.SALE_DATE     BETWEEN #{startDate}
-	                                     AND     #{endDate}
+	              <if test='startDate != null and startDate != ""'>
+                     AND C.SALE_DATE >= #{startDate}
+                  </if>
+                  <if test='endDate != null and endDate != ""'>
+                     AND C.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                  </if>
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>    <!-- 매장 -->
             FROM TB_MS_PRODUCT_BARCD A
@@ -143,8 +147,12 @@
 		             AND     B.PROD_CLASS_CD = A.LV3_CD
 		             AND     B.PROD_CD       = C.PROD_CD
 		             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-		             AND     C.SALE_DATE     BETWEEN #{startDate}
-		                                     AND     #{endDate}
+		            <if test='startDate != null and startDate != ""'>
+			           AND C.SALE_DATE >= #{startDate}
+			        </if>
+			        <if test='endDate != null and endDate != ""'>
+			           AND C.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			        </if>
             </when>
         </choose>
                GROUP BY    A.LV1_CD,

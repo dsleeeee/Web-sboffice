@@ -28,6 +28,35 @@ public class ApprPaycoServiceImpl implements ApprPaycoService {
 	@Override
 	public List<DefaultMap<String>> getApprPaycoList(ApprPaycoVO apprPaycoVO, SessionInfoVO sessionInfoVO) {
 		apprPaycoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprPaycoVO.getCornrCd() != null && !"".equals(apprPaycoVO.getCornrCd()) || apprPaycoVO.getPosNo() != null || !"".equals(apprPaycoVO.getPosNo())) {
+    		if (apprPaycoVO.getCornrCd() != null && !"".equals(apprPaycoVO.getCornrCd())) {
+    			String[] arrCornrCd = apprPaycoVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprPaycoVO.setArrCornrCd(arrCornrCd);
+//        				apprPaycoVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprPaycoVO.getPosNo() != null && !"".equals(apprPaycoVO.getPosNo())) {
+    			String[] arrPosNo = apprPaycoVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprPaycoVO.setArrPosNo(arrPosNo);
+//        				apprPaycoVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprPaycoVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprPaycoVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		
 		return apprPaycoMapper.getApprPaycoList(apprPaycoVO);
 	}
 }

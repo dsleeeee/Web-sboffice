@@ -65,6 +65,8 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     		return saleComPopupMapper.getEmpPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("posPop")) {
     		return saleComPopupMapper.getPosPopList(saleComPopupVO);
+    	}else if(saleComPopupVO.getChkPop().equals("posHourPop")) {
+    		return saleComPopupMapper.getPosHourPopList(saleComPopupVO);
     	}
         return null;
     }

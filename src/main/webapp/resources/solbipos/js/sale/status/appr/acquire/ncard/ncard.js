@@ -14,21 +14,11 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprAcquireNcardListScaleBox", gvListScaleBoxData);
   
-  //조회조건 할인구분 데이터 Set
-  $scope._setComboData("srchNcardProdDcFgDisplay", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.dcFg.comm"], "value": "1"},
-    {"name": messages["appr.dcFg.coupon"], "value": "2"},
-    {"name": messages["appr.dcFg.member"], "value": "3"},
-    {"name": messages["appr.dcFg.partner"], "value": "4"},
-    {"name": messages["appr.dcFg.store"], "value": "5"}
-  ]);
-  
   //조회조건 승인구분 데이터 Set
-  $scope._setComboData("srchNcardApprFgDisplay", [
+  $scope._setComboData("srchNcardSaleYnDisplay", [
     {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["appr.approve"], "value": "1"},
-    {"name": messages["cmm.cancel"], "value": "2"}
+    {"name": messages["appr.approve"], "value": "Y"},
+    {"name": messages["cmm.cancel"], "value": "N"}
   ]);
   
   //조회조건 승인처리 데이터 Set
@@ -36,7 +26,6 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["card.apprProcFg1"], "value": "1"},
     {"name": messages["card.apprProcFg2"], "value": "2"},
-    {"name": messages["card.cardTypeFg1"], "value": "3"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -179,6 +168,8 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
     params.storeCd   = $("#apprAcquireNcardSelectStoreCd").val();
     params.posNo  	 = $("#apprAcquireNcardSelectPosCd").val();
     params.cornrNo   = $("#apprAcquireNcardSelectCornerCd").val();
+    params.saleYn	 = $scope.saleYn;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprAcquireNcardListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
@@ -196,7 +187,7 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/acquireNcard/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -266,6 +257,32 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprAcquireNcardGrid");
+        var columns = grid.columns;
+        if($scope.saleYn == 'Y'){
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = false;
+        	columns[11].visible = false;
+        	columns[12].visible = false;
+        }else if($scope.saleYn == 'N'){
+        	columns[7].visible = false;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        	columns[10].visible = true;
+        	columns[11].visible = true;
+        	columns[12].visible = true;
+        }else{
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        	columns[11].visible = true;
+        	columns[12].visible = true;
+        }
+	}
 	
 }]);

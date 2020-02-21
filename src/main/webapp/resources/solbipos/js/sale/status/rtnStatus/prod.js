@@ -78,6 +78,22 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
         }
     }
     // <-- //그리드 헤더2줄 -->
+    
+    // 그리드 클릭 이벤트
+	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    	var ht = s.hitTest(e);
+
+    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+    	 */
+    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 5) {
+    		s.allowSorting = false;
+		} else {
+			s.allowSorting = true;
+		}
+
+	});
   };
 
   

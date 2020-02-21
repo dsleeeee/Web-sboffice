@@ -25,6 +25,9 @@ public interface SaleComPopupMapper {
     /** 매출공통팝업 - 상품매출내역 팝업(포스별) */
     List<DefaultMap<String>> getPosPopList(SaleComPopupVO saleComPopupVO);
     
+    /** 매출공통팝업 - 상품매출내역 팝업(포스별-시간대별) */
+    List<DefaultMap<String>> getPosHourPopList(SaleComPopupVO saleComPopupVO);
+    
 	/** 매출공통팝업 - 승인현황(매장현황) 팝업(카드) */
     List<DefaultMap<String>> getCardApprPopList(SaleComPopupVO saleComPopupVO);
     

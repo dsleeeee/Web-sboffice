@@ -4,9 +4,9 @@
 var app = agrid.getApp();
 
 /** 테이블별 매출현황 controller */
-app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('saleComProdHourCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('saleComProdCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('saleComProdHourCtrl', $scope, $http, true));
 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -21,7 +21,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("saleComProdCtrl", function (event, data) {
+  $scope.$on("saleComProdHourCtrl", function (event, data) {
 
     $scope.storeCd  	= data.storeCd;
     $scope.prodCd  		= data.prodCd;
@@ -37,9 +37,9 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.billNo 		= data.billNo;
     $scope.saleHour 	= data.saleHour;
     
-    $scope.prodLayer.show(true);
+    $scope.prodHourLayer.show(true);
 
-    $scope.searchSaleComProdList();
+    $scope.searchSaleComProdHourList();
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -47,7 +47,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 
   // 테이블별 리스트 조회
-  $scope.searchSaleComProdList = function () {
+  $scope.searchSaleComProdHourList = function () {
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;

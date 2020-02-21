@@ -272,7 +272,7 @@
        ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
     </select>
 	
-		<!-- 매출공통팝업 - 상품매출내역 팝업 -->
+	<!-- 매출공통팝업 - 상품매출내역 팝업 -->
     <!--
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_POS_PROD
         PARAM    : saleComPopupVO
@@ -452,6 +452,43 @@
                    C.PROD_CD,
                    B.PROD_NM
        ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
+    </select>
+	
+    <!-- 매출공통팝업 - 상품매출내역 팝업 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_SL_DAILY_POS_PROD
+        PARAM    : getPosHourPopList
+        COMMENTS : 매출공통팝업 - 포스별(시간대별) 매출현황 팝업
+    -->
+    <select id="getPosHourPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+        /* USE : SaleComPopupMapper.getProdPopList */
+	     SELECT    B.STORE_NM
+	               ,TO_CHAR(TO_DATE(A.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE
+	               ,SUM(A.SALE_CNT)     AS TOT_SALE_QTY
+	               ,SUM(A.REAL_SALE_AMT)    AS REAL_SALE_AMT
+	     FROM    TB_SL_DAILY_POS_TIME A
+	               , TB_MS_STORE B
+         WHERE A.STORE_CD = B.STORE_CD
+         AND   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+		<if test='storeCd != null and storeCd != ""'>
+			AND A.STORE_CD	IN
+                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                  					#{item}
+              		</foreach>
+	 	</if>
+		<if test='startDate != null and startDate != ""'>
+			AND A.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
+		</if>
+		<if test='endDate != null and endDate != ""'>
+			AND A.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
+		</if>
+		<if test='saleHour != null and saleHour != ""'>
+			AND A.SALE_HOUR = #{saleHour}
+		</if>
+		<if test='posNo != null and posNo != ""'>
+			AND A.POS_NO = #{posNo}
+		</if>   
+		GROUP BY A.SALE_DATE, B.STORE_NM
     </select>
 	
 	<!-- 매출공통팝업 - 상품매출내역 팝업(판매자별) -->
