@@ -134,6 +134,14 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+  		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+  		if (rng && rng.columnSpan > 1) {
+  			e.preventDefault();
+  		}
+  	}
+      
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -153,7 +161,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         }
         
       }
-    });
+    }, true);
   };
 
   $scope.getFormatDate = function getFormatDate(date) {
@@ -183,7 +191,12 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   // 상품매출순위 리스트 조회
   $scope.searchVersusPeriodClassList = function (isPageChk) {
 	$scope.setCollapsed = false;
-
+	
+	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
+	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
+	compStartDateDash = $scope.compStartDateCombo.text;
+	compEndDateDash = $scope.compStartDateCombo.text;
+	
     // 파라미터
     var params       = {};
     //var params2       = {};
@@ -293,14 +306,14 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     });
     
-    // start collapsed
+    /*// start collapsed
     theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
     	var ht = theGrid.hitTest(e);
 
-	    /* 머지된 헤더 셀 클릭시 정렬 비활성화
+	     머지된 헤더 셀 클릭시 정렬 비활성화
 		 * 헤더 cellType: 2 && 머지된 row 인덱스: 0
 		 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
-		 */
+		 
 		if(ht.cellType == 2 && ht.row < 1) {
 			theGrid.allowSorting = false;
 		} else {
@@ -309,7 +322,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 	    
 	    theGrid.collapseGroupsToLevel(1);
 	    theGrid.collectionView.refresh();
-    });
+    });*/
    
   };
 

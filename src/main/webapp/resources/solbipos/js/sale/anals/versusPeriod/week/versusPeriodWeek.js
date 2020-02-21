@@ -170,6 +170,11 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 //      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
 //      return false;
 //    }
+	  
+	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
+	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
+	compStartDateDash = $scope.compStartDateCombo.text;
+	compEndDateDash = $scope.compStartDateCombo.text;
 
     // 파라미터
     var params       = {};

@@ -170,6 +170,11 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
 //      return false;
 //    }
 
+    srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
+	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
+	compStartDateDash = $scope.compStartDateCombo.text;
+	compEndDateDash = $scope.compStartDateCombo.text;
+		
     // 파라미터
     var params       = {};
     params.startDate = srchStartDateDash;
