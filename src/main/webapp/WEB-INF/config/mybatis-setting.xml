@@ -152,6 +152,9 @@
     <typeAlias alias="boardVO" type="kr.co.solbipos.sys.etc.board.service.BoardVO"/>
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
 -->
+    <!-- 게시판관리 -->
+    <typeAlias alias="boardMasterVO" type="kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO"/>
+
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
@@ -435,6 +438,8 @@
     <!-- 환율관리 -->
     <typeAlias alias="ehgtVO" type="kr.co.solbipos.adi.etc.ehgt.service.EhgtVO"/>
     <typeAlias alias="crncyCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO"/>
+    <!-- 게시판 -->
+    <typeAlias alias="boardVO" type="kr.co.solbipos.adi.board.board.service.BoardVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
@@ -511,6 +516,7 @@
     <typeAlias alias="todayDtlVO" type="kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO"/>
     <typeAlias alias="todayBillSaleDtlVO" type="kr.co.solbipos.sale.today.todayBillSaleDtl.service.TodayBillSaleDtlVO"/>
 
+    <!-- 기간별매출 -->
     <typeAlias alias="dayVO" type="kr.co.solbipos.sale.day.day.service.DayVO"/>
     <typeAlias alias="dayOfWeekVO" type="kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO"/>
     <typeAlias alias="monthVO" type="kr.co.solbipos.sale.day.month.service.MonthVO"/>

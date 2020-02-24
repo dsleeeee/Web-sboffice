@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BoardMaster.xml
+    게시판관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.02.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.board.boardMaster.service.impl.BoardMasterMapper">
+
+    <!-- 게시판관리 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_MASTER
+        COMMENTS : 게시판 마스터
+    -->
+    <select id="getBoardMasterList"  parameterType="BoardMasterVO" resultType="DefaultMap">
+        /* BoardMasterMapper.getBoardMasterList */
+        SELECT
+        twbm.BOARD_CD,
+        twbm.BOARD_NM,
+        twbm.BOARD_FG,
+        twbm.ANSWER_FG,
+        twbm.AUTO_APPR_FG
+        FROM TB_WB_BOARD_MASTER twbm
+        WHERE 1=1
+        AND USE_YN = 'Y'
+        ORDER BY twbm.BOARD_CD
+    </select>
+
+    <!-- 게시판관리 코드조회(자동채번) -->
+    <!--
+        TABLE    : TB_WB_BOARD_MASTER
+        COMMENTS : 게시판 마스터
+    -->
+    <select id="getBoardMasterBoardCd" parameterType="BoardMasterVO" resultType="String">
+        /* BoardMasterMapper.getBoardMasterBoardCd */
+        SELECT
+        LPAD(NVL(MAX(twbm.BOARD_CD), 0) + 1, 2, '0')
+        FROM TB_WB_BOARD_MASTER twbm
+        WHERE 1=1
+    </select>
+
+    <!-- 게시판관리 저장 insert -->
+    <!--
+        TABLE    : TB_WB_BOARD_MASTER
+        COMMENTS : 게시판 마스터
+    -->
+    <insert id="getBoardMasterSaveInsert" parameterType="BoardMasterVO">
+        /* BoardMasterMapper.getBoardMasterSaveInsert */
+        INSERT INTO TB_WB_BOARD_MASTER
+        (
+            BOARD_CD,
+            BOARD_NM,
+            BOARD_FG,
+            ANSWER_FG,
+            AUTO_APPR_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            USE_YN
+        ) VALUES (
+            #{boardCd},
+            #{boardNm},
+            #{boardFg},
+            #{answerFg},
+            #{autoApprFg},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            'Y'
+        )
+    </insert>
+
+    <!-- 게시판관리 저장 update -->
+    <!--
+        TABLE    : TB_WB_BOARD_MASTER
+        COMMENTS : 게시판 마스터
+    -->
+    <update id="getBoardMasterSaveUpdate" parameterType="BoardMasterVO">
+        /* BoardMasterMapper.getBoardMasterSaveUpdate */
+        UPDATE
+        TB_WB_BOARD_MASTER
+        SET
+        BOARD_NM = #{boardNm},
+        BOARD_FG = #{boardFg},
+        ANSWER_FG = #{answerFg},
+        AUTO_APPR_FG = #{autoApprFg},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+    </update>
+
+    <!-- 게시판관리 저장 delete -->
+    <!--
+        TABLE    : TB_WB_BOARD_MASTER
+        COMMENTS : 게시판 마스터
+    -->
+    <update id="getBoardMasterSaveDelete" parameterType="BoardMasterVO">
+        /* BoardMasterMapper.getBoardMasterSaveDelete */
+        UPDATE
+        TB_WB_BOARD_MASTER
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+    </update>
+
+</mapper>
