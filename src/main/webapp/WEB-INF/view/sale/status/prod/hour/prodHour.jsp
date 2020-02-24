@@ -5,22 +5,24 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/hour/prodHour/"/>
 
 <div id="prodHourView" name="dayView" class="subCon" style="display: none;" ng-controller="prodHourCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="day.time"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodHourCtrl')">
+        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodHourCtrlSrch')">
             <s:message code="cmm.search"/>
         </button>
     </div>
     <table class="searchTbl">
         <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
+            <col class="w13"/>
+            <col class="w37"/>
+            <col class="w13"/>
+            <col class="w37"/>
         </colgroup>
         <tbody>
         <tr>
@@ -31,6 +33,12 @@
                     <span class="txtIn"><input id="srchHourStartDate" class="w120px"></span>
                     <span class="rg">~</span>
                     <span class="txtIn"><input id="srchHourEndDate" class="w120px"></span>
+                    <span class="chk ml10">
+					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	              	<label for="chkDt">
+                		<s:message code="cmm.all.day" />
+              		</label>
+            	</span>
                 </div>
             </td>
         </tr>
@@ -80,7 +88,7 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="prodHourlistScaleBox"
-	      ng-model="listScale"
+	      ng-model="prodHourlistScale"
 	      control="listScaleCombo"
 	      items-source="_getComboData('prodHourlistScaleBox')"
 	      display-member-path="name"
@@ -107,11 +115,15 @@
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter"
+                    frozen-columns="5"
                      id="wjGridList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="prodhour.prodCd"/>" binding="prodCd" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" binding="prodNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.prodCd"/>" 			binding="prodCd" 		width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 			binding="prodNm"		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 <%-- 시간대 컬럼 생성--%>
                 <c:forEach var="i" begin="0" end="24" step="1">

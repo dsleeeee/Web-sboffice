@@ -39,12 +39,9 @@
     <select id="getMonthColList" parameterType="storeMonthVO" resultType="DefaultMap">
         /* USE : storeMonthMapper.getMonthColList */
         <![CDATA[
-        SELECT DISTINCT TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM') AS MONTH 
-        FROM TB_SL_DAILY_TOTAL TSDT
-        WHERE 1 = 1
-		AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM') >= #{startDate}
-        AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM') <= #{endDate}   
-        ORDER BY MONTH    
+        SELECT TO_CHAR(ADD_MONTHS(TO_DATE(#{startDate}, 'YYYYMM'), LEVEL - 1 ),'YYYYMM') AS MONTH
+  		FROM DUAL
+		CONNECT BY LEVEL <= MONTHS_BETWEEN( TO_DATE(#{endDate}, 'YYYYMM' ), TO_DATE(#{startDate} , 'YYYYMM' ) ) + 1
         ]]>
     </select>
 </mapper>

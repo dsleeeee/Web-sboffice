@@ -20,13 +20,13 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         $("#empMonthTab").removeClass("on");
         $("#empDayPeriodTab").removeClass("on");
         $("#empPosTab").removeClass("on");
-               
+
         $("#empDayView").show();
         $("#empDayOfWeekView").hide();
         $("#empMonthView").hide();
         $("#empDayPeriodView").hide();
         $("#empPosView").hide();
-        
+
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("empDayCtrl");
         scope.flex.refresh();
@@ -49,7 +49,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("empDayOfWeekCtrl");
-        scope.flex.refresh();       
+        scope.flex.refresh();
     };
 
 
@@ -60,7 +60,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         $("#empMonthTab").addClass("on");
         $("#empDayPeriodTab").removeClass("on");
         $("#empPosTab").removeClass("on");
-        
+
         $("#empDayView").hide();
         $("#empDayOfWeekView").hide();
         $("#empMonthView").show();
@@ -71,7 +71,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         var scope = agrid.getScope("empMonthCtrl");
         scope.flex.refresh();
     };
-    
+
     // 설정기간별 탭 보이기
     $scope.empDayPeriodShow = function () {
         $("#empDayTab").removeClass("on");
@@ -79,7 +79,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         $("#empMonthTab").removeClass("on");
         $("#empDayPeriodTab").addClass("on");
         $("#empPosTab").removeClass("on");
-        
+
         $("#empDayView").hide();
         $("#empDayOfWeekView").hide();
         $("#empMonthView").hide();
@@ -87,10 +87,13 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         $("#empPosView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("empDayPeriodCtrl");
-        scope.flex.refresh();
+        var scopeMain = agrid.getScope("empDayPeriodMainCtrl");
+        scopeMain.flex.refresh();
+
+        var scopeDtl = agrid.getScope("empDayPeriodDtlCtrl");
+        scopeDtl.flex.refresh();
     };
-    
+
     // 포스별 탭 보이기
     $scope.empPosShow = function () {
         $("#empDayTab").removeClass("on");
@@ -98,7 +101,7 @@ app.controller('empSaleCtrl', ['$scope', function ($scope) {
         $("#empMonthTab").removeClass("on");
         $("#empDayPeriodTab").removeClass("on");
         $("#empPosTab").addClass("on");
-        
+
         $("#empDayView").hide();
         $("#empDayOfWeekView").hide();
         $("#empMonthView").hide();

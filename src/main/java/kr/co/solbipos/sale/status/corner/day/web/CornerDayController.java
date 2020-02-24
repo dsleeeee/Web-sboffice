@@ -82,23 +82,6 @@ public class CornerDayController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         
-        if (cornerDayVO.getCornrCd() != null && !"".equals(cornerDayVO.getCornrCd())) {
-    		String[] arrCornrCd = cornerDayVO.getCornrCd().split(",");
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				cornerDayVO.setArrCornrCd(arrCornrCd);
-    				cornerDayVO.setArrStoreCornr(arrCornrCd);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = cornerDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
-
         List<DefaultMap<String>> list = cornerDayService.getCornerDayList(cornerDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerDayVO);
     }
@@ -121,23 +104,6 @@ public class CornerDayController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         
-        if (cornerDayVO.getCornrCd() != null && !"".equals(cornerDayVO.getCornrCd())) {
-    		String[] arrCornrCd = cornerDayVO.getCornrCd().split(",");
-
-    		if (arrCornrCd.length > 0) {
-    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-    				cornerDayVO.setArrCornrCd(arrCornrCd);
-    			}
-    		}
-    	} else {
-    		String[] arrStoreCd = cornerDayVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
-    	}
-
         List<DefaultMap<String>> list = cornerDayService.getCornerNmList(cornerDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerDayVO);
     }

@@ -8,11 +8,26 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprPartnerCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprPartnerStartDate = wcombo.genDateVal("#srchApprPartnerStartDate", gvStartDate);
-  $scope.srchApprPartnerEndDate   = wcombo.genDateVal("#srchApprPartnerEndDate", gvEndDate);
+  $scope.srchApprPartnerStartDate = wcombo.genDateVal("#srchApprPartnerStartDate", getToday());
+  $scope.srchApprPartnerEndDate   = wcombo.genDateVal("#srchApprPartnerEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprPartnerListScaleBox", gvListScaleBoxData);
+  
+  //조회조건 승인구분 데이터 Set
+  $scope._setComboData("srchPartnerSaleFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["appr.approve"], "value": "1"},
+    {"name": messages["cmm.cancel"], "value": "-1"}
+  ]);
+  
+  //조회조건 승인처리 데이터 Set
+  $scope._setComboData("srchPartnerApprProcFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["card.apprProcFg1"], "value": "1"},
+    {"name": messages["card.apprProcFg2"], "value": "2"},
+    {"name": messages["card.cardTypeFg1"], "value": "3"}
+  ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -37,6 +52,14 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+		if (rng && rng.columnSpan > 1) {
+			e.preventDefault();
+		}
+	  }
+      
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -51,7 +74,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        $scope._broadcast('saleApprPartnerCtrl', params);
 	    }
       }
-    });
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -126,7 +149,16 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprPartnerCtrl", function (event, data) {
-    $scope.searchApprPartnerList();
+    $scope.searchApprPartnerList(true);
+    
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprPartnerCtrlSrch", function (event, data) {
+    $scope.searchApprPartnerList(false);
     
     
     // 기능수행 종료 : 반드시 추가
@@ -135,14 +167,17 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprPartnerList = function () {
+  $scope.searchApprPartnerList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#apprPartnerSelectStoreCd").val();
     params.posNo  	 = $("#apprPartnerSelectPosCd").val();
-    params.cornrNo   = $("#apprPartnerSelectCornerCd").val();
+    params.cornrCd   = $("#apprPartnerSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprPartnerListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -156,9 +191,9 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/partner/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/partner/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -199,11 +234,11 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '승인현황_승인현황_제휴카드_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -228,6 +263,32 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprPartnerGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = false;
+        	columns[9].visible = false;
+        	columns[10].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[5].visible = false;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }else{
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        	columns[8].visible = true;
+        	columns[9].visible = true;
+        	columns[10].visible = true;
+        }
+	}
 	
 }]);

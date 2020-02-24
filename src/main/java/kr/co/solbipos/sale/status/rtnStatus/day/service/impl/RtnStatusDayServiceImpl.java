@@ -28,6 +28,17 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
     @Override
     public List<DefaultMap<String>> getRtnStatusDayList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
     	rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+        	
+        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+    	
         return rtnStatusDayMapper.getRtnStatusDayList(rtnStatusDayVO);
     }
 
@@ -52,6 +63,16 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
 	@Override
 	public List<DefaultMap<String>> getRtnStatusProdList(RtnStatusDayVO rtnStatusDayVO, SessionInfoVO sessionInfoVO) {
 		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		
+		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
         return rtnStatusDayMapper.getRtnStatusProdList(rtnStatusDayVO);
 	}
 

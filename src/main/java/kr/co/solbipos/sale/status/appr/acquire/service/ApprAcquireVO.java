@@ -23,8 +23,11 @@ public class ApprAcquireVO extends PageVO {
     
     /** 승인구분 */
     private String apprFg;
+    private String saleFg;
+    private String saleYn;
     /** 승인처리 */
     private String apprProcFg;
+    private String cashBillApprProcFg;
     /**매입사코드*/
     
     /**매입사명*/
@@ -174,5 +177,29 @@ public class ApprAcquireVO extends PageVO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getSaleFg() {
+		return saleFg;
+	}
+
+	public void setSaleFg(String saleFg) {
+		this.saleFg = saleFg;
+	}
+
+	public String getCashBillApprProcFg() {
+		return cashBillApprProcFg;
+	}
+
+	public void setCashBillApprProcFg(String cashBillApprProcFg) {
+		this.cashBillApprProcFg = cashBillApprProcFg;
+	}
+
+	public String getSaleYn() {
+		return saleYn;
+	}
+
+	public void setSaleYn(String saleYn) {
+		this.saleYn = saleYn;
 	}
 }

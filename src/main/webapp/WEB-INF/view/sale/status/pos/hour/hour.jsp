@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.hour"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosDaySearch" ng-click="_broadcast('posHourCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosDaySearch" ng-click="_broadcast('posHourCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -59,6 +59,7 @@
 
 				<input type="hidden" id="posHourSelectPosCd" value=""/>
 				<input type="hidden" id="posHourSelectPosName" value=""/>
+				<input type="hidden" id="posHourSelectHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>
@@ -80,7 +81,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="posHourListScaleBox"
 			ng-model="posHourListScale"
@@ -89,7 +90,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadHour()">
@@ -109,6 +110,7 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
+				frozen-columns="6"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
 				<wj-flex-grid-column header="<s:message code="pos.saleHour"/>"			binding="saleHour" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -128,11 +130,11 @@
 	</div>
 
 	<%-- 페이지 리스트 --%>
-	<div class="pageNum mt20">
-	<%-- id --%>
+	<%-- <div class="pageNum mt20">
+	id
 		<ul id="posHourCtrlPager" data-size="10">
 		</ul>
-	</div>
+	</div> --%>
 	<%--//페이지 리스트--%>
 </div>
 
@@ -140,3 +142,8 @@
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>
 
+<%-- 상품매출내역 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

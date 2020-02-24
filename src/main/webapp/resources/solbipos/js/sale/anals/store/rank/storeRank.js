@@ -21,8 +21,8 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.isCheckedSort = "1";
     
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
 	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -46,8 +46,8 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
 	    dataItem.totSaleAmt 	= messages["store.totSaleAmt"];
 	    dataItem.totDcAmt 		= messages["store.totDcAmt"];
 	    dataItem.realSaleAmt 	= messages["store.realSaleAmt"];
-	    dataItem.openDay  		= messages["store.openDay"];
-	    dataItem.openDayAmt 	= messages["store.openDayAmt"];
+	    dataItem.saleDateCnt  	= messages["store.openDay"];
+	    dataItem.realSaleAmtAvg = messages["store.openDayAmt"];
 	    dataItem.billCnt 		= messages["store.billCnt"];
 	    dataItem.totBillAmt 	= messages["store.totBillAmt"];
 	    dataItem.totGuestCnt 	= messages["store.totGuestCnt"];
@@ -93,6 +93,22 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
 	        }
 	    }
 	    // <-- //그리드 헤더2줄 -->
+	    
+	    // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0 && 동적 생성된 column 인덱스 9 초과
+	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	    	 */
+	    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 9) {
+	    		s.allowSorting = false;
+    		} else {
+    			s.allowSorting = true;
+    		}
+	    	
+    	});
     
   };
 
@@ -105,15 +121,22 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
+  };
+  
   // 매장순위 리스트 조회
   $scope.searchStoreRankList = function () {
 
     // 파라미터
-    var params       = {};
+    var params       = {};  
+    	params.storeCd   = $("#storeRankSelectStoreCd").val();
     if(!$scope.isChecked){
-    	 params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -180,6 +203,13 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
 	  
   };
   
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeRankSelectStoreShow = function () {
+    $scope._broadcast('storeRankSelectStoreCtrl');
+  };
+  
   // 엑셀 다운로드
   $scope.excelDownloadStoreRank = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -191,11 +221,11 @@ app.controller('storeRankCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

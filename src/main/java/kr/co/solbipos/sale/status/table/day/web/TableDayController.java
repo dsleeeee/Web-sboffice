@@ -114,12 +114,12 @@ public class TableDayController {
 
 		// 테이블 '전체' 선택 시
 		for (int i = 0; i < tableDayVO.getArrTableCd().length; i++) {
-			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
-					+ "' THEN REAL_SALE_AMT END) AS REAL_SALE_AMT_T" + i + "\n";
-			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
-					+ "' THEN REAL_SALE_CNT END) AS REAL_SALE_CNT_T" + i + "\n";
-			sQuery1 += " ,SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
-					+ "' THEN GUEST_CNT_1 END) AS GUEST_CNT_1_T" + i + "\n";
+			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
+					+ "' THEN REAL_SALE_AMT END), '0') AS REAL_SALE_AMT_T" + i + "\n";
+			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
+					+ "' THEN REAL_SALE_CNT END), '0') AS REAL_SALE_CNT_T" + i + "\n";
+			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
+					+ "' THEN GUEST_CNT_1 END), '0') AS GUEST_CNT_1_T" + i + "\n";
 		}
 
 		tableDayVO.setsQuery1(sQuery1);

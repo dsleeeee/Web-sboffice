@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDayOfWeek.tableDayOfWeekSale"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnTableDayOfWeekSearch" ng-click="_broadcast('tableDayOfWeekCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnTableDayOfWeekSearch" ng-click="_broadcast('tableDayOfWeekCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -22,7 +22,7 @@
        	</colgroup>
        	<tbody>
        		<tr>
-       			<th><s:message code="cmm.search.date"/></th>
+       			<th><s:message code="month.month"/></th>
        			<td>
 					<div class="sb-select">
 						<span class="txtIn"><input id="srchTableDayOfWeekStartDate" class="w120px"></span>
@@ -47,6 +47,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDayOfWeekSelectStore"/>
 								<jsp:param name="targetTableId" value="tableDayOfWeekSelectTable"/>
+								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -66,6 +67,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableDayOfWeekSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableDayOfWeekSelectStore"/>
+							<jsp:param name="closeFunc" value="getTableNmList"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -83,7 +85,7 @@
 			items-source="_getComboData('tableDayOfWeekListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
+			is-editable="false"			
 			initialized="initComboBox(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -106,6 +108,7 @@
 				control="flex"
 				initialized="initGrid(s,e)"
 				is-read-only="true"
+				frozen-columns="4"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -122,13 +125,6 @@
 		<%--//위즈모 테이블--%>
 	</div>
 
-	<%-- 페이지 리스트 --%>
-	<div class="pageNum mt20">
-	<%-- id --%>
-		<ul id="tableDayOfWeekCtrlPager" data-size="10">
-		</ul>
-	</div>
-	<%--//페이지 리스트--%>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20190125.02" charset="utf-8"></script>

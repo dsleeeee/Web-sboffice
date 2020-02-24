@@ -37,7 +37,8 @@ public class CornerDayPeriodVO extends PageVO {
     
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
-    
+    /** 본사,매장 구분 */
+    private String orgnFg;
     
 
 	public String getStoreCd() {
@@ -171,4 +172,13 @@ public class CornerDayPeriodVO extends PageVO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+	
 }

@@ -9,8 +9,9 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   angular.extend(this, new RootController('prodDayCtrl', $scope, $http, true));
      
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", getToday());
+  $scope.orgnFg = gvOrgnFg;
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodDaylistScaleBox', gvListScaleBoxData);
@@ -30,24 +31,29 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodDayCtrl", function (event, data) {
-    $scope.searchProdDayList();
+    $scope.searchProdDayList(true);
     // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
+//    event.preventDefault();
   });
-
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodDayCtrlSrch", function (event, data) {
+    $scope.searchProdDayList(false);
+    // 기능수행 종료 : 반드시 추가
+//    event.preventDefault();
+  });
+  
   // 상품매출순위 리스트 조회
-  $scope.searchProdDayList = function () {
-
-    if ($("#pordDaySelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
+  $scope.searchProdDayList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#pordDaySelectStoreCd").val();
     params.prodCd    = $("#srchDayProdCd").val();
     params.prodNm    = $("#srchDayProdNm").val();
+    params.orgnFg    = $scope.orgnFg;
+    params.listScale = $scope.prodDaylistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -115,11 +121,11 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_상품별_일자별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

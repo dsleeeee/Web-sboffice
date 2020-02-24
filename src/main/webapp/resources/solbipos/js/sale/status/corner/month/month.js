@@ -14,8 +14,8 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 	  
-	  var storeCd = "";
-	  $scope.getReCornerNmList(storeCd);
+	  var storeCd = $("#cornerMonthSelectStoreCd").val();
+	  $scope.getReCornerNmList(storeCd, "", false);
 	  
 
     // picker 사용시 호출 : 미사용시 호출안함
@@ -37,6 +37,17 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      /* 머지된 헤더 셀 클릭시 정렬 비활성화
+  	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+  	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+  	   */
+  	  if(ht.cellType == 2 && ht.row < 2 && ht.col > 2) {
+  		  s.allowSorting = false;
+	  } else {
+	      s.allowSorting = true;
+	  }
+  	
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -57,8 +68,12 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     		}
     		
         if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-        	params.storeCd	 = arrStore;
-        	params.cornrCd	 = arrCornr;
+        	if(arrStore != ""){
+    			params.storeCd	 = arrStore;
+    			params.cornrCd	 = arrCornr;
+    		}else{
+    			params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
+    		}
         	$scope._broadcast('saleComProdCtrl', params);
         }else if(col.binding.substring(0, 7) === "saleQty") {
     		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];
@@ -129,42 +144,62 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerMonthCtrl", function (event, data) {
-    $scope.searchCornerMonthList();
+    $scope.searchCornerMonthList(true);
     
     var storeCd = $("#cornerMonthSelectStoreCd").val();
 	var cornrCd = $("#cornerMonthSelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd);
+	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
+  
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("cornerMonthCtrlSrch", function (event, data) {
+	
+    $scope.searchCornerMonthList(false);
+    
+    var storeCd = $("#cornerMonthSelectStoreCd").val();
+	var cornrCd = $("#cornerMonthSelectCornerCd").val();
 
-
+	$scope.getReCornerNmList(storeCd, cornrCd, true);
+  });
+  
+  //전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+	$scope.srchCornerMonthStartDateCombo.isReadOnly = $scope.isChecked;
+	$scope.srchCornerMonthEndDateCombo.isReadOnly = $scope.isChecked;
+  };
+  
   // 코너별매출일자별 리스트 조회
-  $scope.searchCornerMonthList = function () {
+  $scope.searchCornerMonthList = function (isPageChk) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#cornerMonthSelectStoreCd").val();
     params.cornrCd   = $("#cornerMonthSelectCornerCd").val();
     params.listScale = $scope.cornerMonthListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
 	  params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-	  params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+	  params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyy-MM-dd');
+	  params.endDate   = (params.endDate).split("-");
+  	  var endDay 		 = ( new Date(params.endDate[0],params.endDate[1], 0) ).getDate();
+  	  params.endDate 	 = params.endDate[0] + params.endDate[1] + endDay;
 	}
 	if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/corner/month/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/month/list.sb", params);
 	
 	
   };
 
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
-    $scope.srchCornerMonthStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchCornerMonthEndDate.isReadOnly = $scope.isChecked;
+    $scope.cornerMonthStartDateCombo.isReadOnly = $scope.isChecked;
+    $scope.cornerMonthEndDateCombo.isReadOnly = $scope.isChecked;
   };
 
 
@@ -193,11 +228,11 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_코너별_월별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -209,15 +244,17 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   //매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerMonthSelectStoreCd").val();
-		$scope.getReCornerNmList(storeCd);
+		var cornrCd = $("#cornerMonthSelectCornerCd").val();
+		$scope.getReCornerNmList(storeCd, cornrCd, false);
 	};
 	
 	//매장의 코너 리스트 재생성
-	$scope.getReCornerNmList = function (storeCd, cornrCd) {
+	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
 		var url = "/sale/status/corner/corner/cornerNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.cornrCd = cornrCd;
+	    params.hqOfficeCd = $("#HqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({
@@ -239,11 +276,13 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	    			$("#cornerMonthSelectCornerCd").val(arrStoreCornr.join());
 	    			$("#cornerMonthSelectCornerName").val(arrStoreCornrNm.join());
-
+	    			
 	    			storeCornrCd = $("#cornerMonthSelectCornerCd").val();
 	    			storeCornrNm = $("#cornerMonthSelectCornerName").val();
 
-	    			$scope.makeDataGrid();
+	    			if(gridSet){
+	    				$scope.makeDataGrid();
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -267,7 +306,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		  var arrCornrCd = storeCornrCd.split(',');
 		  var arrCornrNm = storeCornrNm.split(',');
 
-		  if (arrCornrCd != null) {
+		  if (arrCornrCd != "") {
 			  for(var i = 1; i < arrCornrCd.length + 1; i++) {
 
 				  var colValue = arrCornrCd[i-1];

@@ -45,6 +45,21 @@
                 #{item}
             </foreach>
         </if>
+        <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+        </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
         </if>
@@ -67,6 +82,21 @@
                 #{item}
             </foreach>
         </if>
+        <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+            AND CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+        </if>
         <if test='startDate != null and startDate != ""'>
            AND SALE_DATE >= #{startDate}
         </if>
@@ -76,6 +106,11 @@
         <![CDATA[
 		        )  M
 		         GROUP BY M.STORE_CD, M.SALE_FG
+		]]>
+        <if test='saleFg != null and saleFg != ""'>
+           HAVING(M.SALE_FG = #{saleFg})
+        </if>
+        <![CDATA[
 		        ) M
 		        WHERE M.STORE_CD = TMS.STORE_CD
 		GROUP BY M.STORE_CD, TMS.STORE_NM

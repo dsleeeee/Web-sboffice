@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.brand.service.StoreBrandService;
 import kr.co.solbipos.sale.anals.store.brand.service.StoreBrandVO;
@@ -26,6 +27,11 @@ public class StoreBrandServiceImpl implements StoreBrandService {
     @Override
     public List<DefaultMap<String>> getStoreBrandList(StoreBrandVO storeBrandVO, SessionInfoVO sessionInfoVO) {
     	storeBrandVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if(!StringUtil.getOrBlank(storeBrandVO.getStoreCd()).equals("")) {
+         	storeBrandVO.setArrStoreCd(storeBrandVO.getStoreCd().split(","));
+         }
+    	
         return storeBrandMapper.getStoreBrandList(storeBrandVO);
     }
     

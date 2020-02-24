@@ -67,11 +67,11 @@
 
     $scope.searchFg = "N";
     // 다른 컨트롤러의 broadcast 받기
-
+    
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 매장선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
-
+      
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
         if ('${param.closeFunc}' !== '') {

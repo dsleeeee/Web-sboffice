@@ -11,9 +11,7 @@
 		화면 PAGE : 89P
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
-	<include refid="CmmSQL.PagingTemplateHeader"/>
 	SELECT LV_NM, M.*
-	<include refid="CmmSQL.PagingTemplateCount"/>
   FROM (
   	      SELECT LEVEL LV, DECODE(LEVEL,1,'일',2,'월',3,'화',4,'수',5,'목',6,'금',7,'토') LV_NM
 		    FROM DUAL CONNECT BY LEVEL <![CDATA[<= 7]]>
@@ -72,7 +70,7 @@
 										  FROM TB_SL_DAILY_TOTAL TSDT
 										 WHERE 1=1
 										 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-										 	AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
 										 	AND TSDT.STORE_CD IN
@@ -115,7 +113,7 @@
 										  FROM TB_SL_DAILY_TOTAL TSDT
 										 WHERE 1=1
 										 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
-										 	AND TSDT.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
+										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
 										 <if test='arrStoreCd != null and arrStoreCd != ""'>
 										 	AND TSDT.STORE_CD IN
@@ -136,7 +134,6 @@
        ) M
 WHERE LV.LV = M.LV
 ORDER BY LV.LV
-<include refid="CmmSQL.PagingTemplateBottom"/>
 
     </select>
 

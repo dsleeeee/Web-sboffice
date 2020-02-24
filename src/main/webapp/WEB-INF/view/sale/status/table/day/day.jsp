@@ -5,12 +5,14 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl">
+	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -47,6 +49,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDaySelectStore"/>
 								<jsp:param name="targetTableId" value="tableDaySelectTable"/>
+								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -66,6 +69,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableDaySelectTable"/>
 							<jsp:param name="targetStoreId" value="tableDaySelectStore"/>
+							<jsp:param name="closeFunc" value="getTableNmList"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -76,7 +80,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="tableDayListScaleBox"
 			ng-model="tableDayListScale"
@@ -85,7 +89,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableDaySelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
@@ -106,6 +110,7 @@
 				control="flex"
 				initialized="initGrid(s,e)"
 				is-read-only="true"
+				frozen-columns="5"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="130" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

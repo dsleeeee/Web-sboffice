@@ -44,7 +44,7 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
         for(int i = 0; i < payCd.size(); i++) {
         	String j = payCd.get(i).get("payCd");
         	sQuery1 +=", NVL(SUM(A.PAY" + j + "), 0 ) AS PAY" + j +  "\n";
-        	sQuery2 +=", CASE WHEN TSDPP.PAY_CD = "+ j + " THEN SUM(TSDPP.PAY_AMT) ELSE NULL END AS PAY" + j +  "\n";
+        	sQuery2 +=", CASE WHEN D.PAY_CD = "+ j + " THEN SUM(D.PAY_AMT) ELSE NULL END AS PAY" + j +  "\n";
         }
           
         prodPayFgVO.setsQuery1(sQuery1);

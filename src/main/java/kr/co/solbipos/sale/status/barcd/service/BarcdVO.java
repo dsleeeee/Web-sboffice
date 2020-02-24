@@ -8,6 +8,7 @@ public class BarcdVO extends PageVO {
 
     /** 매장코드 */
     private String storeCd;
+    private String arrStoreCd[];
     /** 영업일자 */
     private String saleDate;
     /** 코너 전체 선택 콤보박스 */
@@ -40,6 +41,11 @@ public class BarcdVO extends PageVO {
     private String barCd;
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
+    /** 접속 매장 권한(본사, 가맹점)*/
+    private String orgnFg;
+    /** 상품명*/
+    private String prodNm;
+    
     
     
     public String getStoreCd() {
@@ -47,6 +53,12 @@ public class BarcdVO extends PageVO {
 	}
 	public void setStoreCd(String storeCd) {
 		this.storeCd = storeCd;
+	}
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+	public void setArrStoreCd(String[] arrStoreCd) {
+		this.arrStoreCd = arrStoreCd;
 	}
 	public String getSaleDate() {
 		return saleDate;
@@ -146,5 +158,17 @@ public class BarcdVO extends PageVO {
 	}
 	public void setsQuery1(String sQuery1) {
 		this.sQuery1 = sQuery1;
+	}
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+	public String getProdNm() {
+		return prodNm;
+	}
+	public void setProdNm(String prodNm) {
+		this.prodNm = prodNm;
 	}
 }

@@ -83,8 +83,9 @@
       if ($scope.searchFg == "N") {
         $scope.searchPos();
       }
-
+		
       $scope.searchPos();
+      
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
@@ -132,7 +133,7 @@
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }
       else if (cnt == 1) {
-        $("#" + targetId + "Nm").val("[" + strPosCd + "] " + strPosNm);
+        $("#" + targetId + "Nm").val(strPosNm);
       }
       else if (cnt > 1) {
         $("#" + targetId + "Nm").val(strPosNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["pos.posSelect"]);

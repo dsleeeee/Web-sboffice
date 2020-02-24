@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.day"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosDayOfWeekSearch" ng-click="_broadcast('posDayOfWeekCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosDayOfWeekSearch" ng-click="_broadcast('posDayOfWeekCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -59,6 +59,7 @@
 
 				<input type="hidden" id="posDayOfWeekSelectPosCd" value=""/>
 				<input type="hidden" id="posDayOfWeekSelectPosName" value=""/>
+				<input type="hidden" id="posDayOfWeekSelectHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>
@@ -109,6 +110,7 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
+				frozen-columns="6"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
 				<wj-flex-grid-column header="<s:message code="pos.yoil"/>"				binding="dayName" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>

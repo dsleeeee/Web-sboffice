@@ -85,14 +85,26 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 	    }
 	    // <-- //그리드 헤더2줄 -->
     
+	    // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0
+	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	    	 */
+	    	if(ht.cellType == 2 && ht.row < 1) {
+	    		s.allowSorting = false;
+    		} else {
+    			s.allowSorting = true;
+    		}
+    	});
   };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeMonthCtrl", function (event, data) {
-
-//	 $scope.getPayList();    
-//	  jsonArray1 = "";
-	 $scope.searchStoreMonthList();
+  
+	$scope.searchStoreMonthList();
 	 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -101,12 +113,18 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
   // 매장월별순위 리스트 조회
   $scope.searchStoreMonthList = function () {
 	    
-	  var params       = {};
-	    if(!$scope.isChecked){
-	        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
-	        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
-	    }
+	var params       = {};
+  		params.storeCd   = $("#storeMonthSelectStoreCd").val();
+    if(!$scope.isChecked){
+        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
+        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+    }
 	 
+    if(params.startDate > params.endDate){
+   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+    
 	 $scope._postJSONQuery.withOutPopUp("/sale/anals/store/month/monthlist.sb", params, function(response) {
 		 var length = response.data.data.list.length;
 		 var grid = wijmo.Control.getControl("#storeMonthGrid");
@@ -153,6 +171,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 		    var params = {};
 		    params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
 	        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+	        params.storeCd   = $("#storeMonthSelectStoreCd").val();
 			params.chkSort = $scope.isCheckedSortMonth;
 			params.rowNum = $scope.rowNum;
 			params.hqOfficeCd = $("#hqOfficeCd").val();
@@ -206,6 +225,13 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
 	  
   };
   
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeMonthSelectStoreShow = function () {
+    $scope._broadcast('storeMonthSelectStoreCtrl');
+  };
+  
   // 엑셀 다운로드
   $scope.excelDownloadStoreMonth = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -217,11 +243,11 @@ app.controller('storeMonthCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장월별순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

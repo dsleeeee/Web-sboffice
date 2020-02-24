@@ -11,7 +11,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+	    
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
@@ -35,7 +35,8 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.yoil 		= data.yoil;
     $scope.posNo 		= data.posNo;
     $scope.billNo 		= data.billNo;
-
+    $scope.saleHour 	= data.saleHour;
+    
     $scope.prodLayer.show(true);
 
     $scope.searchSaleComProdList();
@@ -61,6 +62,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.yoil 	 = $scope.yoil;
     params.posNo 	 = $scope.posNo;
     params.billNo 	 = $scope.billNo;
+    params.saleHour  = $scope.saleHour;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/prod/view.sb", params);

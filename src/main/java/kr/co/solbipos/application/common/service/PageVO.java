@@ -44,8 +44,10 @@ public class PageVO extends CmmVO {
     /** 검색 날짜 전체 체크 여부 */
     private Boolean isChkDate;
 
+    /** 페이지 초기화 여부 */
+    private Boolean isPageChk;
 
-    public Integer getTotCnt() {
+	public Integer getTotCnt() {
         return totCnt;
     }
 
@@ -143,5 +145,16 @@ public class PageVO extends CmmVO {
         limit = Math.min(totalPage,
                 curr + 1 + (pageScale - (curr % pageScale > 0 ? curr % pageScale : pageScale)));
     }
+
+    public Boolean getIsPageChk() {
+		return isPageChk;
+	}
+
+	public void setIsPageChk(Boolean isPageChk) {
+		this.isPageChk = isPageChk;
+		if (!isPageChk) {
+    		this.setCurr(1);
+    	}
+	}
 
 }

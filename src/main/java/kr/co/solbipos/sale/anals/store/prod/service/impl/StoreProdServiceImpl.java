@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.anals.store.prod.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.prod.service.StoreProdService;
 import kr.co.solbipos.sale.anals.store.prod.service.StoreProdVO;
@@ -27,6 +28,10 @@ public class StoreProdServiceImpl implements StoreProdService {
     public List<DefaultMap<String>> getStoreProdList(StoreProdVO storeProdVO, SessionInfoVO sessionInfoVO) {
   
     	storeProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(storeProdVO.getStoreCd()).equals("")) {
+        	storeProdVO.setArrStoreCd(storeProdVO.getStoreCd().split(","));
+        }
     	      
         return storeProdMapper.getStoreProdList(storeProdVO);
     }

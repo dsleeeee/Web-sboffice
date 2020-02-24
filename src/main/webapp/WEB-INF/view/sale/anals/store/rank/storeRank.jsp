@@ -31,7 +31,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="5">
+        	<td colspan="3">
           	<div class="sb-select">      
        		    <span class="txtIn"><input id="srchRankStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -75,6 +75,21 @@
             	</span>
         	</td>    	
       	</tr>
+      	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
+            <%-- 매장코드 --%>           
+          	<th><s:message code="todayBillSaleDtl.store"/></th>
+          	<td colspan="3">
+            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+             		<jsp:param name="targetId" value="storeRankSelectStore"/>
+            	</jsp:include>
+              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+          	</td> 	
+        </tr>
+        </c:if>
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+        	<input type="hidden" id="storeRankSelectStoreCd" value="${sessionInfo.storeCd}"/>
+      	</c:if>
 		</tbody>
 	</table>
 
@@ -95,6 +110,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
+          frozen-columns="4"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
@@ -102,8 +118,8 @@
           <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
- 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="openDay" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="openDayAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+ 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+  		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="realSaleAmtAvg" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
    		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
    		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
    		  <wj-flex-grid-column header="<s:message code="store.totGuestCnt"/>" 	binding="totGuestCnt" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

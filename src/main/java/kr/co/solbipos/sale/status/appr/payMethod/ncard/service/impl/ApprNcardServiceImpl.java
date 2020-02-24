@@ -28,6 +28,36 @@ public class ApprNcardServiceImpl implements ApprNcardService {
 	@Override
 	public List<DefaultMap<String>> getApprNcardList(ApprNcardVO apprNcardVO, SessionInfoVO sessionInfoVO) {
 		apprNcardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprNcardVO.getCornrCd() != null && !"".equals(apprNcardVO.getCornrCd()) || apprNcardVO.getPosNo() != null || !"".equals(apprNcardVO.getPosNo())) {
+    		if (apprNcardVO.getCornrCd() != null && !"".equals(apprNcardVO.getCornrCd())) {
+    			String[] arrCornrCd = apprNcardVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprNcardVO.setArrCornrCd(arrCornrCd);
+//        				apprNcardVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprNcardVO.getPosNo() != null && !"".equals(apprNcardVO.getPosNo())) {
+    			String[] arrPosNo = apprNcardVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprNcardVO.setArrPosNo(arrPosNo);
+//        				apprNcardVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprNcardVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprNcardVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		System.out.println("vo arrpos :: "+apprNcardVO.getArrPosNo());
+		System.out.println("vo arrcornr:: "+apprNcardVO.getArrCornrCd());
 		return apprNcardMapper.getApprNcardList(apprNcardVO);
 	}
 }

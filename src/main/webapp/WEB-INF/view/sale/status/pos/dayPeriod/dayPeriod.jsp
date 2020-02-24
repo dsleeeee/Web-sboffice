@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodMainCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -40,7 +40,7 @@
             </span>
         </div>
         </td>
-        
+
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
@@ -62,20 +62,20 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="posDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
-      
+
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <!-- contents start -->
     <%-- wj grid start --%>
     <div class="subCon wj-TblWrap">
             <%-- left --%>
-            <div class="w50 fl">
+            <div class="w50 fl" ng-controller="posDayPeriodMainCtrl">
             <div class="mt20 oh sb-select dkbr pd10">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
@@ -111,21 +111,21 @@
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                      <jsp:param name="pickerTarget" value="posDayPeriodCtrl"/>
+                      <jsp:param name="pickerTarget" value="posDayPeriodMainCtrl"/>
                     </jsp:include>
                     <%--// ColumnPicker 사용시 include --%>
-                </div>                  
+                </div>
             </div>
             <%-- 페이지 리스트 --%>
             <div class="pageNum mt20">
-              <ul id="posDayPeriodCtrlPager" data-size="10">
+              <ul id="posDayPeriodMainCtrlPager" data-size="10">
               </ul>
             </div>
             <%--//페이지 리스트--%>
         </div>
-            
+
         <%-- right --%>
-        <div class="w50 fr">
+        <div class="w50 fr" ng-controller="posDayPeriodDtlCtrl">
         <div class="mt20 oh sb-select dkbr pd10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
@@ -143,7 +143,6 @@
            </button>
            </div>
                 <div class="wj-TblWrapBr ml10 pd10">
-                   <div ng-controller="posDayPeriodDtlCtrl">
                     <div style="height:300px">
                        <wj-flex-grid
                           id="posDayPeriodDtlGrid"
@@ -155,6 +154,9 @@
                           is-read-only="true"
                           item-formatter="_itemFormatter">
                           <!-- define columns -->
+                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -165,8 +167,7 @@
                           <jsp:param name="pickerTarget" value="posDayPeriodDtlCtrl"/>
                         </jsp:include>
                         <%--// ColumnPicker 사용시 include --%>
-                    </div>              
-                   </div>
+                    </div>
                 </div>
               <%-- 페이지 리스트 --%>
               <div class="pageNum mt20">
@@ -174,9 +175,9 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
-        </div>  
+        </div>
     </div>
-    <%-- //wj grid end --%> 
+    <%-- //wj grid end --%>
 <!-- //contents end -->
 </div>
 

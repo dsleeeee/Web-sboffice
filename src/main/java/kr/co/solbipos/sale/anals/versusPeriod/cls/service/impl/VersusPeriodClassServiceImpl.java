@@ -24,7 +24,7 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
     }
 
 
-    /** 상품별 매출 - 시간대별 리스트 조회 */
+    /** 대비기간매출분석 - 분류상품별 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVersusPeriodClassList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
@@ -37,7 +37,7 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
         return versusPeriodClassMapper.getVersusPeriodClassList(versusPeriodClassVO);
     }
 
-
+    /** 대비기간매출분석 - 분류상품별 리스트 상세 조회 */
 	@Override
 	public List<DefaultMap<String>> getVersusPeriodClassDtlList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
 
@@ -49,5 +49,14 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 
 		return versusPeriodClassMapper.getVersusPeriodClassDtlList(versusPeriodClassVO);
 	}
+
+	/** 대비기간매출분석 - 브랜드 코드 조회조건 */
+	@Override
+	public List<DefaultMap<String>> getBrandCdList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
+		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		return versusPeriodClassMapper.getBrandCdList(versusPeriodClassVO);
+	}
+	
 
 }

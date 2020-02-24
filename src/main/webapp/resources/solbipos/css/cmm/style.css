@@ -2030,15 +2030,15 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 
 /* 그리드 영역 4col 가변 설정 */
 @media all and (min-width:768px) and (max-width:1024px) {
-    .wj-TblWrap .w-r {float:left; width:50%}
-    .wj-TblWrap .w-r .wj-TblWrapBr {padding:20px;}
-    .wj-TblWrap .w-r:nth-child(1) .wj-TblWrapBr,.wj-TblWrap .w-r:nth-child(2) .wj-TblWrapBr {margin-bottom:20px}
-    .wj-TblWrap .w-r:nth-child(2n) .wj-TblWrapBr {margin-left:10px}
+	.wj-TblWrap .w-r {float:left; width:50%}
+	.wj-TblWrap .w-r .wj-TblWrapBr {padding:20px;}
+	.wj-TblWrap .w-r:nth-child(1) .wj-TblWrapBr,.wj-TblWrap .w-r:nth-child(2) .wj-TblWrapBr {margin-bottom:20px}
+	.wj-TblWrap .w-r:nth-child(2n) .wj-TblWrapBr {margin-left:10px}
 }
 @media all and (min-width:1025px){
-    .wj-TblWrap .w-r {float:left; width:25%}
-    .wj-TblWrap .w-r .wj-TblWrapBr {padding:20px; margin-right:10px}
-    .wj-TblWrap .w-r:nth-child(4) .wj-TblWrapBr {margin-right:0}
+	.wj-TblWrap .w-r {float:left; width:25%}
+	.wj-TblWrap .w-r .wj-TblWrapBr {padding:20px; margin-right:10px}
+	.wj-TblWrap .w-r:nth-child(4) .wj-TblWrapBr {margin-right:0}
 }
 
 /* paging type 3 >> 2 col */
@@ -2066,10 +2066,10 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 .grp-lv-1.wj-state-selected,.grp-lv-2.wj-state-selected,.grp-lv-3.wj-state-selected,
 .grp-lv-4.wj-state-selected,.grp-lv-5.wj-state-selected {color:#222 !important}
 .grp-lv-1 {background-color:#ffecb2 !important}
-.grp-lv-2 {background-color:#b3e5fc !important}
-.grp-lv-3 {background-color:#ffcdd2 !important}
-.grp-lv-4 {background-color:#dceec8 !important}
-.grp-lv-5 {background-color:#f5f5f5 !important}
+.grp-lv-2 {}
+.grp-lv-3 {}
+.grp-lv-4 {}
+.grp-lv-5 {}
 
 /* bg 추가 */
 .bg-orange-lite {background-color:#ffecb2 !important}
@@ -2083,7 +2083,23 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 .w12 {width:12%;}
 .w13 {width:13%;}
 
-/* wijmo grid box scroll custom
+/* 터치키 등록 관련 */
+.touch-box {}
+.touch-box:after {display:block; clear:both; content:''}
+.w125px {width:125px}
+.touchKeyWrap.t2 {height:650px; overflow:hidden; margin-top:10px}
+.touch-inner {width:100%; height:610px; border:1px solid #e8e8e8}
+.touchKeyWrap.t3 {width:250px; height:650px; padding:10px; border:1px solid #e8e8e8}
+.touch-box.t2 {width:223px}
+.touch-box.t3 {width:223px; padding:15px 10px; border:1px solid #ddd}
+label.rdo-po {font-size:14px; position:relative; top:-2px}
+.touch-box input[type=text] {font-size:12px}
+.prodNavWrap.t2 {width:100%}
+.prodNavWrap.t2 .keyStyleWrap {position:relative; width:100%; height:auto; overflow:hidden}
+.prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
+
+
+/* wijmo grid box scroll custom 
 .wj-gridWrap {height:auto !important; overflow-y:hidden}
 .wj-gridWrap .wj-flexgrid {min-height:320px; max-height:393px}
 .wj-gridWrap .wj-flexgrid > div > div:last-child {min-height:320px}
@@ -2095,3 +2111,36 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 .wj-TblWrapBr #theGrid .wj-flexgrid > div > div:last-child {min-height:320px}
 .wj-TblWrap .wj-TblWrapBr:after,.wj-TblWrapBr #theGrid:after {display:block; clear:both; content:''}
 */
+
+/* SCROLLBAR IE */
+/*
+html{
+ //overflow:auto;
+
+ scrollbar-arrow-color:#9D9992;
+ scrollbar-3dlight-color:#D4D0C8;
+ scrollbar-darkshadow-color:#D4D0C8;
+ scrollbar-face-color:#FFFFFF;
+ scrollbar-hightlight-color:#FFFFFF;
+ scrollbar-shadow-color:#FFFFFF;
+ scrollbar-track-color:#EAE7E1;
+}
+*/
+
+/* SCROLLBAR Chrome Safari 
+::-webkit-scrollbar {width: 17px; height: 17px}
+::-webkit-scrollbar-button {width: 17px;height: 17px; background:url(../img/ico_scroll_arrow.png) 0 0 no-repeat}
+::-webkit-scrollbar-button:horizontal:decrement {background-position:0 0}
+::-webkit-scrollbar-button:horizontal:increment {background-position:-17px 0}
+::-webkit-scrollbar-button:vertical:decrement {background-position:0 -34px}
+::-webkit-scrollbar-button:vertical:increment {background-position:-17px -34px}
+::-webkit-scrollbar-button:horizontal:decrement:hover {background-position:0 -17px}
+::-webkit-scrollbar-button:horizontal:increment:hover {background-position:-17px -17px}
+::-webkit-scrollbar-button:vertical:decrement:hover {background-position:0 -51px}
+::-webkit-scrollbar-button:vertical:increment:hover {background-position:-17px -51px}
+::-webkit-scrollbar-track {background: #f1f1f1}
+::-webkit-scrollbar-thumb {width:13px; height:13px; border:2px solid transparent; background-clip: content-box; background-color: #c1c1c1}
+::-webkit-scrollbar-thumb:hover {border:2px solid transparent; background-clip: content-box; background-color:#a8a8a8}
+::-webkit-scrollbar-thumb:active {border:2px solid transparent; background-clip: content-box; background-color:#787878}
+::-webkit-scrollbar-corner {background: #dcdcdc}
+*/ 

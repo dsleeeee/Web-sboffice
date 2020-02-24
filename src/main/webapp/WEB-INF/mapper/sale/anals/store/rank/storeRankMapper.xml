@@ -16,6 +16,8 @@
 		      , M.TOT_SALE_AMT
 		      , M.TOT_DC_AMT
 		      , M.REAL_SALE_AMT
+		      , M.SALE_DATE_CNT
+              , ROUND((M.REAL_SALE_AMT / M.SALE_DATE_CNT),0) AS REAL_SALE_AMT_AVG
 		      , M.BILL_CNT
 		      , M.TOT_GUEST_CNT
 		      , ROUND(M.TOT_SALE_AMT/M.BILL_CNT,0) AS TOT_BILL_AMT
@@ -29,6 +31,15 @@
 			     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
 			     , SUM(TSDT.BILL_CNT) AS BILL_CNT
 			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
+			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z 
+			     	WHERE Z.STORE_CD = TSDT.STORE_CD 
+			     	<if test='startDate != null and startDate != ""'>
+			     		AND Z.SALE_DATE >= #{startDate} 
+			     	</if>
+			     	<if test='endDate != null and endDate != ""'>
+			     		AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			     	</if>
+			     ) AS SALE_DATE_CNT
 		 		 ${sQuery2}
 			  FROM TB_SL_DAILY_TOTAL TSDT
 			     , TB_SL_DAILY_PAY TSDP
@@ -42,6 +53,12 @@
 			</if>
 			<if test='endDate != null and endDate != ""'>
 			   AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			</if>
+			<if test='storeCd != null and storeCd != ""'>
+			   AND TSDT.STORE_CD IN
+			     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+							#{item}
+					</foreach>  
 			</if>
 			 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
 			<if test='chkSort == "1"'>

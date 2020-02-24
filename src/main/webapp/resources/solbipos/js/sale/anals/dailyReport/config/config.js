@@ -445,6 +445,12 @@ app.controller('configCtrl_2', ['$scope', '$http', function ($scope, $http) {
         for(var i=0; i<$scope.flex.collectionView.items.length; i++){
             var item = $scope.flex.collectionView.items[i];
 
+            //[매출종합]은 무조건 'checked'
+            if(item.cfgCd == "SL"   &&   item.gChk == false){
+            	$scope._popMsg(messages["dailyReport.alert.require.cfgMandatory"]);	//[매출영업]은 필수항목입니다.
+            	retun;
+            }
+
         	if(item.gChk)	item.cfgSelYn = "Y";
         	else			item.cfgSelYn = "N";
 

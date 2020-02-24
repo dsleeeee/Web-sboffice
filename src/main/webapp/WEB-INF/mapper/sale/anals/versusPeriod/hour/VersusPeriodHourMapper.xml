@@ -10,15 +10,13 @@
 		PARAM : STORE_CD, SALE_DATE(FR,TO)
 	-->
     <select id="getVersusPeriodHourList" parameterType="versusPeriodHourVO" resultType="DefaultMap">
-    <include refid="CmmSQL.PagingTemplateHeader"/>
        SELECT  M.LV
      , SUM(M.REAL_SALE_AMT_A)    AS REAL_SALE_AMT_A
      , SUM(M.SALE_CNT_A)         AS SALE_CNT_A
      , SUM(M.REAL_SALE_AMT_B)    AS REAL_SALE_AMT_B
      , SUM(M.SALE_CNT_B)         AS SALE_CNT_B
-     , CASE WHEN (SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B)) != 0   THEN ROUND((SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B))/ SUM(M.REAL_SALE_AMT_B)*100,1) ELSE 0 END AS SIN_AMT
-     , CASE WHEN (SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B)) != 0   THEN ROUND((SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B))/ SUM(M.SALE_CNT_B)*100,1) ELSE 0 END AS SIN_CNT
-     <include refid="CmmSQL.PagingTemplateCount"/>
+     , CASE WHEN (SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B)) != 0   THEN NVL(ROUND((SUM(M.REAL_SALE_AMT_A)-SUM(M.REAL_SALE_AMT_B))/ DECODE(SUM(M.REAL_SALE_AMT_B), 0, NULL, SUM(M.REAL_SALE_AMT_B))*100,1),0) ELSE 0 END AS SIN_AMT
+     , CASE WHEN (SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B)) != 0   THEN  NVL(ROUND((SUM(M.SALE_CNT_A)-SUM(M.SALE_CNT_B))/ DECODE(SUM(M.SALE_CNT_B), 0, NULL, SUM(M.SALE_CNT_B))*100,1),0) ELSE 0 END AS SIN_CNT
   FROM (
 		SELECT M.LV
 		     , DECODE(M.GBN,'A',M.SALE_HOUR,'')  SALE_HOUR_A
@@ -51,15 +49,8 @@
                         				#{item}
                     			   </foreach>
         						 </if>
-								 <if test='startDate != null and startDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE >= #{startDate}
-								   ]]>
-								 </if>
-								 <if test='endDate != null and endDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE <= #{endDate}
-								   ]]>
+								 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 								 </if>
 								 GROUP BY TSDT.SALE_HOUR
 								) A
@@ -90,15 +81,8 @@
                         				#{item}
                     			   </foreach>
         						 </if>
-								 <if test='compStartDate != null and compStartDate != ""'>
-								   <![CDATA[
-								   AND TSDT.SALE_DATE >= #{compStartDate}
-								   ]]>
-								 </if>
-								 <if test='compEndDate != null and compEndDate != ""'>
-								 	<![CDATA[
-								   AND TSDT.SALE_DATE <= #{compEndDate}
-								   ]]>
+        						 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+							   	 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 								 </if>
 								 GROUP BY TSDT.SALE_HOUR
 								) A
@@ -109,7 +93,6 @@
 		) M
 GROUP BY M.LV
 ORDER BY M.LV
- <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>

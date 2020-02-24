@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/versusPeriod/cls/"/>
 
 <div id="versusPeriodClassView" class="subCon" style="display: none;">
@@ -11,7 +12,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.cls"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodClassCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodClassCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>
@@ -29,16 +30,38 @@
 		    	<th><s:message code="cmm.search.date" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="srchClassStartDate" class="w120px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchClassEndDate" class="w120px"></span>
-	            	<%-- <span class="chk ml10">
+					<span class="txtIn w120px">
+		              <wj-input-date
+		                      id="srchClassStartDate"
+		                      value="srchClassStartDate"
+		                      ng-model="srchStartDate"
+		                      control="startDateCombo"
+		                      min="2000-01-01"
+		                      max="2099-12-31"
+		                      initialized="_initDateBox(s)"
+		                      ng-change="changeDate()">
+		              </wj-input-date>
+		            </span>
+		            <span class="rg">~</span>
+		            <span class="txtIn w120px">
+		              <wj-input-date
+		                      id="srchClassEndDate"
+		                      value="srchClassEndDate"
+		                      ng-model="srchEndDate"
+		                      control="endDateCombo"
+		                      min="2000-01-01"
+		                      max="2099-12-31"
+		                      initialized="_initDateBox(s)"
+		                      ng-change="changeDate()">
+		              </wj-input-date>
+		            </span>
+		            <%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 		              	<label for="chkDt">
 	                		<s:message code="cmm.all.day" />
 	              		</label>
-	            	</span> --%>
-	          	</div>
+	            	</span>
+	          	</div> --%>
 	        	</td>
 			</tr>
 			<%-- 대비일자 --%>
@@ -46,9 +69,29 @@
 		    	<th><s:message code="versusPeriod.compDate" /></th>
 	        	<td colspan="3">
 	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="compClassStartDate" class="w120px"></span>
+	          	    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compClassStartDate"
+                             value="compStartDate"
+                             ng-model="compStartDate"
+                             control="compStartDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="compClassEndDate" class="w120px"></span>
+                    <span class="txtIn w120px">
+                        <wj-input-date
+                             id="compClassEndDate"
+                             value="compEndDate"
+                             ng-model="compEndDate"
+                             control="compEndDateCombo"
+                             min="2000-01-01"
+                             max="2099-12-31"
+                             initialized="_initDateBox(s)">
+                        </wj-input-date>
+                    </span>
 	            	<%-- <span class="chk ml10">
 						<input type="checkbox" ng-model="isCheckedComp" ng-change="isChkDtComp()" />
 		              	<label for="chkDt">
@@ -74,19 +117,20 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            <%-- 매장코드 --%>
 	          	<th><s:message code="todayBillSaleDtl.store"/></th>
 	          	<td>
-	          	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 	             		<jsp:param name="targetId" value="versusPeriodClassSelectStore"/>
 	            	</jsp:include>
 	              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	            </td>
 	          	</c:if>
 	          	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	        		<input type="hidden" id="versusPeriodClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
 	      		</c:if>
-	          	</td>
+	          	
 	        </tr>
 			</tbody>
 		</table>
@@ -108,7 +152,7 @@
 				<input type="text" id="versusPeriodClassSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClass()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
 
@@ -129,10 +173,10 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="대분류" 	binding="lv1Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="중분류" 	binding="lv2Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.first"/>" 	binding="lv1Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.second"/>" 	binding="lv2Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.category"/>" 	binding="lv3Cd" 		width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="소분류" 	binding="lv3Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.third"/>" 	binding="lv3Nm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 	binding="realSaleAmtA" 		width="*" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
@@ -168,7 +212,7 @@
 		    </wj-combo-box>
 
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClassDtl()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
 
@@ -187,10 +231,10 @@
 
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="realSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	        </wj-flex-grid>
@@ -204,15 +248,15 @@
 	    </div>
 	    <%--//위즈모 테이블--%>
 
-	  <%-- 페이지 리스트 --%>
+
+	</div>
+	<%-- 페이지 리스트 --%>
 	  <div class="pageNum mt20">
 	    <%-- id --%>
 	    <ul id="versusPeriodClassDtlCtrlPager" data-size="10">
 	    </ul>
 	  </div>
 	  <%--//페이지 리스트--%>
-	</div>
-
 </div>
 
 

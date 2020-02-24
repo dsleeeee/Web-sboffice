@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.month"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerMonthSearch" ng-click="_broadcast('cornerMonthCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerMonthSearch" ng-click="_broadcast('cornerMonthCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -24,15 +24,14 @@
       <tbody>
       <tr>
         <%-- 조회일자 --%>
-        <th><s:message code="cmm.search.date"/></th>
-        <td>
+        <th><s:message code="cmm.search.month"/></th>
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
           <span class="txtIn w110px">
               <wj-input-date
                       id="srchCornerMonthStartDate"
-                      value="srchCornerMonthStartDate"
                       ng-model="startDate"
-                      control="srchCornerMonthStartDateCombo"
+                      control="cornerMonthStartDateCombo"
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
@@ -44,9 +43,8 @@
             <span class="txtIn w110px">
               <wj-input-date
                       id="srchCornerMonthEndDate"
-                      value="srchCornerMonthEndDate"
                       ng-model="endDate"
-                      control="srchCornerMonthEndDateCombo"
+                      control="cornerMonthEndDateCombo"
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
@@ -54,10 +52,17 @@
                       format="y">
               </wj-input-date>
             </span>
+            <span class="chk ml10">
+				<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+				<label for="chkDt">
+					<s:message code="cmm.all.day" />
+				</label>
+			</span>  
         </div>
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="cornerMonthSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -88,6 +93,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerMonthSelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerMonthSelectStore"/>
+                <jsp:param name="closeFunc" value="getCornerNmList"/>
             </jsp:include>
         </td>
       </tr>
@@ -126,6 +132,7 @@
           control="flex"
           initialized="initGrid(s,e)"
           is-read-only="true"
+          frozen-columns="3"
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="corner.saleYm"/>"            binding="saleYm"            width="100" align="center" is-read-only="true" format="yyyy/MM"></wj-flex-grid-column>

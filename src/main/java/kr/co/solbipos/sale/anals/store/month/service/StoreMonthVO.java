@@ -13,6 +13,8 @@ public class StoreMonthVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 조회월 */
     private String saleDate;
     /** 정렬순서 */
@@ -116,4 +118,13 @@ public class StoreMonthVO extends PageVO {
 	public void setArrSaleDate(List<DefaultMap<String>> result) {
 		this.arrSaleDate = result;
 	}
+
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+
+	public void setArrStoreCd(String[] arrStoreCd) {
+		this.arrStoreCd = arrStoreCd;
+	}
+	
 }

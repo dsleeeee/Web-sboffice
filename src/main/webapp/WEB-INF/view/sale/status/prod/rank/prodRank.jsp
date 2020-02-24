@@ -4,6 +4,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/rank/prodRank/"/>
 
 <div id="prodRankView" class="subCon" style="display: none;">
@@ -11,17 +13,17 @@
     	<div class="searchBar flddUnfld">
       		<a href="#" class="open fl"><s:message code="prodsale.rank"/></a>
       		<%-- 조회 --%>
-      		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodRankCtrl')">
+      		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodRankCtrlSrch')">
         		<s:message code="cmm.search"/>
       		</button>
     	</div>
     	<%-- 조회조건 --%>
 		<table class="searchTbl">
       	<colgroup>
-        	<col class="w15"/>
-        	<col class="w35"/>
-        	<col class="w15"/>
-        	<col class="w35"/>
+        	<col class="w13"/>
+        	<col class="w37"/>
+        	<col class="w13"/>
+        	<col class="w37"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>
@@ -65,8 +67,7 @@
 		    <wj-combo-box
 		      class="w100px fl"
 		      id="prodRanklistScaleBox"
-		      ng-model="listScale"
-		      control="listScaleCombo"
+		      ng-model="prodRanklistScale"
 		      items-source="_getComboData('prodRanklistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
@@ -94,10 +95,12 @@
 	          item-formatter="_itemFormatter">
 	
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassNm"/>" 	binding="prodClassNm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodNm"/>"			binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

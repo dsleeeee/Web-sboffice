@@ -120,7 +120,7 @@ app.controller('posSaleCtrl', ['$scope', function ($scope) {
         var scope = agrid.getScope("posDayPeriodDtlCtrl");
         scope.flex.refresh();
 
-        scope = agrid.getScope("posDayPeriodCtrl");
+        scope = agrid.getScope("posDayPeriodMainCtrl");
         scope.flex.refresh();
     };
     

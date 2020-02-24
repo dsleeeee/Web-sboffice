@@ -12,12 +12,12 @@
     <select id="selectStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
         /* USE : IostockCmmMapper.selectStoreList */
         <![CDATA[
-        SELECT  tms.STORE_CD, tms.STORE_NM
+        SELECT  tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM
         FROM    TB_MS_STORE tms
         WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
         ]]>
         <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD = #{storeCd}
+            AND tms.STORE_CD LIKE'%'||#{storeCd}||'%'
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'

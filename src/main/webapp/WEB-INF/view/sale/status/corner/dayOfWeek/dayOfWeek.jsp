@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.dayOfWeek"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnCornerDayOfWeekSearch" ng-click="_broadcast('cornerDayOfWeekCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnCornerDayOfWeekSearch" ng-click="_broadcast('cornerDayOfWeekCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -25,7 +25,7 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td>
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
             <span class="txtIn"><input id="srchCornerDayOfWeekStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -40,6 +40,7 @@
         </td>
         
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="cornerDayOfWeekSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -70,6 +71,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDayOfWeekSelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerDayOfWeekSelectStore"/>
+                <jsp:param name="closeFunc" value="getCornerNmList"/>
             </jsp:include>
         </td>
       </tr>
@@ -99,7 +101,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap" style="height: 370px;">
         <wj-flex-grid
           id="cornrDayOfWeekGrid"
           autoGenerateColumns="false"
@@ -108,6 +110,7 @@
           control="flex"
           initialized="initGrid(s,e)"
           is-read-only="true"
+          frozen-columns="3"
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="100" align="center" is-read-only="true" ></wj-flex-grid-column>

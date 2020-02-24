@@ -14,10 +14,10 @@
             <li>
                 <a id="payMethodTab" href="#" class="on" ng-click="payMethodTabShow()"><s:message code="dailyReport.appr"/></a>
             </li>
-            <%-- 카드매입사별 --%>
-<!--             <li> -->
-<%--                 <a id="apprAcquireTab" href="#" ng-click="apprAcquireTabShow()"><s:message code="appr.cardAcquire"/></a> --%>
-<!--             </li> -->
+            <%-- 매입현황 --%>
+            <li>
+                <a id="apprAcquireTab" href="#" ng-click="apprAcquireTabShow()"><s:message code="dailyReport.acquire"/></a>
+            </li>
             <%-- 제휴카드 --%>
        <!--     <li>
                 <a id="apprCoprtnTab" href="#" ng-click="apprCoprtnTabShow()"><s:message code="corner.month"/></a>
@@ -25,8 +25,7 @@
             <%-- 현금영수증 --%>
             <li>
                 <a id="apprCashBillTab" href="#" ng-click="apprCashBillTabShow()"><s:message code="corner.dayPeriod"/></a>
-            </li>
-     -->
+           </li>   --> 
         </ul>
     </div>
 </div>
@@ -43,11 +42,11 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 카드매입사별 --%>
-<%-- <c:import url="/WEB-INF/view/sale/status/appr/acquire/acquire.jsp"> --%>
-<%--     <c:param name="menuCd" value="${menuCd}"/> --%>
-<%--     <c:param name="menuNm" value="${menuNm}"/> --%>
-<%-- </c:import> --%>
+<%-- 매입현황 --%>
+<c:import url="/WEB-INF/view/sale/status/appr/acquire/acquire.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
 <%-- 제휴카드별 --%>
 <%-- <c:import url="/WEB-INF/view/sale/status/appr/coprtn/coprtn.jsp"> --%>
@@ -60,3 +59,4 @@
 <%--     <c:param name="menuCd" value="${menuCd}"/> --%>
 <%--     <c:param name="menuNm" value="${menuNm}"/> --%>
 <%-- </c:import> --%>
+

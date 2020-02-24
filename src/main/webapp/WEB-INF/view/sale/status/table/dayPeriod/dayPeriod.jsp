@@ -13,7 +13,7 @@
 				code="tableDayPeriod.tableDayPeriodSale" /></a>
 		<%-- 조회 --%>
    		<div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      		<button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('tableDayPeriodCtrl')"><s:message code="cmm.search"/></button>
+      		<button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('tableDayPeriodCtrlSrch')"><s:message code="cmm.search"/></button>
    		</div>
 	</div>
 
@@ -31,14 +31,21 @@
 				<th><s:message code="cmm.search.date" /></th>
 				<td>
 					<div class="sb-select">
-						<span class="txtIn w110px"> <wj-input-date
-								id="srchStartDate" value="startDate" ng-model="startDate"
-								control="startDateCombo" min="2000-01-01" max="2099-12-31"
-								initialized="_initDateBox(s)"> </wj-input-date>
+						<span class="txtIn w110px">
+						<wj-input-date id="srchTableDayPeriodStartDate"
+								ng-model='srchTableDayPeriodStartDate'
+								control="tableDayPeriodStartDate"> </wj-input-date>
 						</span> <span class="rg">~</span> <span class="txtIn w110px"> <wj-input-date
-								id="srchEndDate" value="endDate" ng-model="endDate"
-								control="endDateCombo" min="2000-01-01" max="2099-12-31"
-								initialized="_initDateBox(s)"> </wj-input-date>
+								id="srchTableDayPeriodEndDate"
+								ng-model="srchTableDayPeriodEndDate"
+								control="tableDayPeriodEndDate"> </wj-input-date>
+
+						</span>
+						<span class="chk ml10">
+							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+							<label for="chkDt">
+								<s:message code="cmm.all.day" />
+							</label>
 						</span>
 					</div>
 				</td>

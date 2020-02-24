@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableMonth.tableMonthSale"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnTableMonthSearch" ng-click="_broadcast('tableMonthCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnTableMonthSearch" ng-click="_broadcast('tableMonthCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -25,15 +25,33 @@
        			<th><s:message code="cmm.search.date"/></th>
        			<td>
 					<div class="sb-select">
-						<span class="txtIn"><input id="srchTableMonthStartDate" class="w120px"></span>
-						<span class="rg">~</span>
-						<span class="txtIn"><input id="srchTableMonthEndDate" class="w120px"></span>
-						<span class="chk ml10">
+			          <span class="txtIn w110px">
+			              <wj-input-date
+			                      ng-model="srchTableMonthStartDate"
+			                      control="tableMonthStartDateCombo"
+			                      min="2000-01-01"
+			                      max="2099-12-31"
+			                      selection-mode="Month"
+			                      format="y">
+			              </wj-input-date>
+			            </span>
+			            <span class="rg">~</span>
+			            <span class="txtIn w110px">
+			              <wj-input-date
+			                      ng-model="srchTableMonthEndDate"
+			                      control="tableMonthEndDateCombo"
+			                      min="2000-01-01"
+			                      max="2099-12-31"
+			                      selection-mode="Month"
+			                      format="y">
+			              </wj-input-date>
+			            </span>
+		                <span class="chk ml10">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
 							</label>
-						</span>
+						</span>  
 					</div>
 				</td>
 			</tr>
@@ -47,6 +65,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 								<jsp:param name="targetId" value="tableMonthSelectStore"/>
 								<jsp:param name="targetTableId" value="tableMonthSelectTable"/>
+								<jsp:param name="closeFunc" value="getTableNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -66,6 +85,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableMonthSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableMonthSelectStore"/>
+							<jsp:param name="closeFunc" value="getTableNmList"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -106,6 +126,7 @@
 				control="flex"
 				initialized="initGrid(s,e)"
 				is-read-only="true"
+	            frozen-columns="4"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableMonth.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

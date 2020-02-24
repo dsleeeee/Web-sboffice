@@ -82,7 +82,7 @@ public class RtnStatusDayController {
         Model model, RtnStatusDayVO rtnStatusDayVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
+        
         List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusDayList(rtnStatusDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
     }
@@ -146,16 +146,6 @@ public class RtnStatusDayController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         
-//        if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
-//        	
-//        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
-//    		if (arrStoreCd.length > 0) {
-//    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-//    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
-//    			}
-//    		}
-//    	}
-
         List<DefaultMap<String>> list = rtnStatusDayService.getRtnStatusProdList(rtnStatusDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, rtnStatusDayVO);
     }

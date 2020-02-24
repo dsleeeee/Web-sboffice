@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.dayofweek"/></a>		
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayOfWeekCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayOfWeekCtrlSrch')">
     		<s:message code="cmm.search"/>
     	</button>		
 	</div> 
@@ -29,7 +29,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td>
+        	<td colspan="2">
           	<div class="sb-select">
        		    <span class="txtIn"><input id="srchDayOfWeekStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -67,19 +67,7 @@
       	</c:if>
 		</tbody>
 	</table>
-	<div class="mt40 oh sb-select dkbr">
-	    <%-- 페이지 스케일  --%>
-	    <wj-combo-box
-	      class="w100px fl"
-	      id="empDayOfWeeklistScaleBox"
-	      ng-model="listScale"
-	      control="listScaleCombo"
-	      items-source="_getComboData('empDayOfWeeklistScaleBox')"
-	      display-member-path="name"
-	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
-	    </wj-combo-box>
+	<div class="mt40 oh sb-select dkbr">	  
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="empDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
@@ -90,7 +78,7 @@
   
 	<%--위즈모 테이블--%>
     <div class="w100 mt10">   
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap" style="height: 395px;">
         <wj-flex-grid
           id="empDayOfWeekGrid"
           autoGenerateColumns="false"
@@ -99,6 +87,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
+          frozen-columns="4"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
@@ -116,15 +105,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
-    <ul id="empDayOfWeekCtrlPager" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
-  
+     
 </div>
 <script type="text/javascript">
 </script>

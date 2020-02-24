@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.day"/></a>		
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayCtrlSrch')">
     		<s:message code="cmm.search"/>
     	</button>		
 	</div> 
@@ -29,7 +29,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td>
+        	<td colspan="2">
           	<div class="sb-select">
        		    <span class="txtIn"><input id="srchDayStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -73,7 +73,7 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="empDaylistScaleBox"
-	      ng-model="listScale"
+	      ng-model="empDaylistScale"
 	      control="listScaleCombo"
 	      items-source="_getComboData('empDaylistScaleBox')"
 	      display-member-path="name"
@@ -100,6 +100,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
+          frozen-columns="5"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->

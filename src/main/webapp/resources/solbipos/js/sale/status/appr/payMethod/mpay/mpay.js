@@ -8,11 +8,25 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('apprMpayCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchApprMpayStartDate = wcombo.genDateVal("#srchApprMpayStartDate", gvStartDate);
-  $scope.srchApprMpayEndDate   = wcombo.genDateVal("#srchApprMpayEndDate", gvEndDate);
+  $scope.srchApprMpayStartDate = wcombo.genDateVal("#srchApprMpayStartDate", getToday());
+  $scope.srchApprMpayEndDate   = wcombo.genDateVal("#srchApprMpayEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprMpayListScaleBox", gvListScaleBoxData);
+  
+  //조회조건 승인구분 데이터 Set
+  $scope._setComboData("srchMpaySaleFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["appr.approve"], "value": "1"},
+    {"name": messages["cmm.cancel"], "value": "-1"}
+  ]);
+  
+  //조회조건 승인처리 데이터 Set
+  $scope._setComboData("srchMpayApprProcFgDisplay", [
+    {"name": messages["cmm.all"], "value": ""},
+    {"name": messages["card.apprProcFg1"], "value": "1"},
+    {"name": messages["card.apprProcFg2"], "value": "2"},
+  ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -37,6 +51,14 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+		if (rng && rng.columnSpan > 1) {
+			e.preventDefault();
+		}
+	  }
+      
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -51,7 +73,7 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	        $scope._broadcast('saleApprMpayCtrl', params);
 	    }
       }
-    });
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -118,12 +140,22 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }
     }
     // <-- //그리드 헤더2줄 -->
+    
   };
 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprMpayCtrl", function (event, data) {
-    $scope.searchApprMpayList();
+    $scope.searchApprMpayList(true);
+    
+    
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("apprMpayCtrlSrch", function (event, data) {
+    $scope.searchApprMpayList(false);
     
     
     // 기능수행 종료 : 반드시 추가
@@ -132,14 +164,17 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 
   // 신용카드 승인현황 리스트 조회
-  $scope.searchApprMpayList = function () {
+  $scope.searchApprMpayList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#apprMpaySelectStoreCd").val();
     params.posNo  	 = $("#apprMpaySelectPosCd").val();
-    params.cornrNo   = $("#apprMpaySelectCornerCd").val();
+    params.cornrCd   = $("#apprMpaySelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
+    params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprMpayListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -153,9 +188,9 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	}
 		
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/appr/mpay/list.sb", params);
+	$scope._inquiryMain("/sale/status/appr/mpay/list.sb", params);
 	
-	
+	$scope.editDataGrid();
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -196,11 +231,11 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '승인현황_승인현황_Mpay_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
@@ -225,6 +260,26 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	};
 
 
-	
+	// 선택한 승인구분에 따른 리스트 항목 visible
+	$scope.editDataGrid = function () {
+        var grid = wijmo.Control.getControl("#apprMpayGrid");
+        var columns = grid.columns;
+        if($scope.saleFg == '1'){
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = false;
+        	columns[7].visible = false;
+        }else if($scope.saleFg == '-1'){
+        	columns[4].visible = false;
+        	columns[5].visible = false;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }else{
+        	columns[4].visible = true;
+        	columns[5].visible = true;
+        	columns[6].visible = true;
+        	columns[7].visible = true;
+        }
+	}
 	
 }]);

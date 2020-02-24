@@ -28,20 +28,22 @@ public class DcDcfgServiceImpl implements DcDcfgService {
     @Override
     public List<DefaultMap<String>> getDcDcfgList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
     	dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
     	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
         	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
         }
-    	
+    	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        }
         return dcDcfgMapper.getDcDcfgList(dcDcfgVO);
     }
 
-    
+
     /** 할일구분별매출 - 상세 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getDcDcfgDtlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		
+
 		if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
         	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
         }
@@ -52,6 +54,14 @@ public class DcDcfgServiceImpl implements DcDcfgService {
 	@Override
 	public List<DefaultMap<String>> getDcNmlList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
 		dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
+        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
+        }
+
+		if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        }
 		return dcDcfgMapper.getDcNmList(dcDcfgVO);
 	}
 

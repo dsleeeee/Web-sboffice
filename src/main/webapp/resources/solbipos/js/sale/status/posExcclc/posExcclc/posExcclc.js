@@ -8,8 +8,8 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('posExcclcCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchPosExcclcStartDate = wcombo.genDateVal("#srchPosExcclcStartDate", gvStartDate);
-  $scope.srchPosExcclcEndDate   = wcombo.genDateVal("#srchPosExcclcEndDate", gvEndDate);
+  $scope.srchPosExcclcStartDate = wcombo.genDateVal("#srchPosExcclcStartDate", getToday());
+  $scope.srchPosExcclcEndDate   = wcombo.genDateVal("#srchPosExcclcEndDate", getToday());
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("posExcclcListScaleBox", gvListScaleBoxData);
@@ -48,6 +48,14 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+		if (rng && rng.columnSpan > 1) {
+			e.preventDefault();
+		}
+	  }
+  	
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         if (col.binding === "closeFgNm") {//마감구분
@@ -55,7 +63,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.openDtlLayer(selectedRow);
         }
       }
-    });
+    }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -157,6 +165,11 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // POS 정산내역 리스트 조회
   $scope.searchPosExcclcList = function () {
 
+	if ($("#posExcclcSelectStoreCd").val() === '') {
+		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+		return false;
+	}
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#posExcclcSelectStoreCd").val();
@@ -214,7 +227,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_POS정산내역_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

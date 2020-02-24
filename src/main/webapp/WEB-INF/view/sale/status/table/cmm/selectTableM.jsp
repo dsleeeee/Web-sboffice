@@ -1,7 +1,8 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<input type="hidden" id="HqOfficePopCd" name="HqOfficePopCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
@@ -55,7 +56,7 @@
    */
   var app = agrid.getApp();
 
-  /** 포스선택 controller */
+  /** 테이블선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
     var targetId = '${param.targetId}';
 
@@ -70,7 +71,7 @@
     // 다른 컨트롤러의 broadcast 받기
 
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
-      // 포스선택 팝업 오픈
+      // 테이블선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
 
       // 팝업 닫힐시 이벤트
@@ -93,6 +94,7 @@
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
+      params.hqOfficeCd = $("#HqOfficePopCd").val();
       $scope._inquirySub("/sale/status/table/day/tableNmList.sb", params, function () {
         $scope.searchFg = "Y";
       });
@@ -132,10 +134,12 @@
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }
       else if (cnt == 1) {
-        $("#" + targetId + "Nm").val("[" + strTableCd + "] " + strTableNm);
+		var storeTable = strTableCd.split("||");
+        $("#" + targetId + "Nm").val("[" + storeTable[1] + "] " + strTableNm);
       }
       else if (cnt > 1) {
-        $("#" + targetId + "Nm").val(strTableNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["tableDay.tableSelect"]);
+	    $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+	    $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');
     };

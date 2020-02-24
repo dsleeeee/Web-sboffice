@@ -10,7 +10,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.day"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosMonthSearch" ng-click="_broadcast('posMonthCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosMonthSearch" ng-click="_broadcast('posMonthCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
@@ -53,6 +53,12 @@
        							format="y">
        						</wj-input-date>
        					</span>
+       					<span class="chk ml10">
+							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+							<label for="chkDt">
+								<s:message code="cmm.all.day" />
+							</label>
+						</span>
        				</div>
        			</td>
 
@@ -78,6 +84,7 @@
 
 				<input type="hidden" id="posMonthSelectPosCd" value=""/>
 				<input type="hidden" id="posMonthSelectPosName" value=""/>
+				<input type="hidden" id="posMonthSelectHqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>
@@ -99,7 +106,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="posMonthListScaleBox"
 			ng-model="posMonthListScale"
@@ -108,7 +115,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
@@ -128,6 +135,7 @@
 				initialized="initGrid(s,e)"
 				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
+				frozen-columns="6"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
 				<wj-flex-grid-column header="<s:message code="pos.yearMonth"/>"			binding="yearMonth" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
@@ -147,11 +155,11 @@
 	</div>
 
 	<%-- 페이지 리스트 --%>
-	<div class="pageNum mt20">
-	<%-- id --%>
+	<%-- <div class="pageNum mt20">
+	id
 		<ul id="posMonthCtrlPager" data-size="10">
 		</ul>
-	</div>
+	</div> --%>
 	<%--//페이지 리스트--%>
 </div>
 

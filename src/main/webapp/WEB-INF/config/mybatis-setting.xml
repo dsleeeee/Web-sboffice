@@ -152,9 +152,6 @@
     <typeAlias alias="boardVO" type="kr.co.solbipos.sys.etc.board.service.BoardVO"/>
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
 -->
-    <!-- 게시판관리 -->
-    <typeAlias alias="boardMasterVO" type="kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO"/>
-
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
@@ -522,7 +519,7 @@
     <typeAlias alias="monthVO" type="kr.co.solbipos.sale.day.month.service.MonthVO"/>
     <typeAlias alias="dayPeriodVO" type="kr.co.solbipos.sale.day.dayPeriod.service.DayPeriodVO"/>
 
-    <!-- 할인구분별 -->
+	<!-- 할인구분별 -->
     <typeAlias alias="dcDcfgVO" type="kr.co.solbipos.sale.status.dc.dcfg.service.DcDcfgVO"/>
 
     <!-- 코너별 -->
@@ -542,12 +539,12 @@
     <typeAlias alias="posDayOfWeekVO" type="kr.co.solbipos.sale.status.pos.dayOfWeek.service.PosDayOfWeekVO"/>
     <typeAlias alias="posMonthVO" type="kr.co.solbipos.sale.status.pos.month.service.PosMonthVO"/>
     <typeAlias alias="posProdVO" type="kr.co.solbipos.sale.status.pos.prod.service.PosProdVO"/>
-    <typeAlias alias="posDayPeriodVO" type="kr.co.solbipos.sale.status.pos.dayPeriod.service.PosDayPeriodVO"/>
-    <typeAlias alias="posHourVO" type="kr.co.solbipos.sale.status.pos.hour.service.PosHourVO"/>
+	<typeAlias alias="posDayPeriodVO" type="kr.co.solbipos.sale.status.pos.dayPeriod.service.PosDayPeriodVO"/>
+	<typeAlias alias="posHourVO" type="kr.co.solbipos.sale.status.pos.hour.service.PosHourVO"/>
 
-    <typeAlias alias="posExcclcVO" type="kr.co.solbipos.sale.status.posExcclc.posExcclc.service.PosExcclcVO"/>
+	<typeAlias alias="posExcclcVO" type="kr.co.solbipos.sale.status.posExcclc.posExcclc.service.PosExcclcVO"/>
 
-    <!-- 상품별 -->
+	<!-- 상품별 -->
     <typeAlias alias="prodClassVO" type="kr.co.solbipos.sale.status.prod.cls.service.ProdClassVO"/>
     <typeAlias alias="prodRankVO" type="kr.co.solbipos.sale.status.prod.rank.service.ProdRankVO"/>
     <typeAlias alias="prodPayFgVO" type="kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgVO"/>
@@ -555,7 +552,7 @@
     <typeAlias alias="prodDayVO" type="kr.co.solbipos.sale.status.prod.day.service.ProdDayVO"/>
     <typeAlias alias="prodPosVO" type="kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO"/>
 
-    <!-- 판매자별 -->
+	<!-- 판매자별 -->
     <typeAlias alias="empDayVO" type="kr.co.solbipos.sale.status.emp.day.service.EmpDayVO"/>
     <typeAlias alias="empDayOfWeekVO" type="kr.co.solbipos.sale.status.emp.dayOfWeek.service.EmpDayOfWeekVO"/>
     <typeAlias alias="empMonthVO" type="kr.co.solbipos.sale.status.emp.month.service.EmpMonthVO"/>
@@ -575,17 +572,17 @@
     <typeAlias alias="storeProdVO" 	type="kr.co.solbipos.sale.anals.store.prod.service.StoreProdVO"/>
     <typeAlias alias="storeMonthVO" type="kr.co.solbipos.sale.anals.store.month.service.StoreMonthVO"/>
 
-    <!-- 매출관리 > 매출분석 > 대비기간 매출분석 -->
-    <typeAlias alias="versusPeriodClassVO" type="kr.co.solbipos.sale.anals.versusPeriod.cls.service.VersusPeriodClassVO"/>
-    <typeAlias alias="versusPeriodHourVO" type="kr.co.solbipos.sale.anals.versusPeriod.hour.service.VersusPeriodHourVO"/>
+   	<!-- 매출관리 > 매출분석 > 대비기간 매출분석 -->
+	<typeAlias alias="versusPeriodClassVO" type="kr.co.solbipos.sale.anals.versusPeriod.cls.service.VersusPeriodClassVO"/>
+	<typeAlias alias="versusPeriodHourVO" type="kr.co.solbipos.sale.anals.versusPeriod.hour.service.VersusPeriodHourVO"/>
     <typeAlias alias="versusPeriodWeekVO" type="kr.co.solbipos.sale.anals.versusPeriod.week.service.VersusPeriodWeekVO"/>
 
     <!-- 매출관리 > 매출분석 > 매출추이분석 -->
     <typeAlias alias="saleTrnsitnDatesVO" 		type="kr.co.solbipos.sale.anals.saletrnsitn.service.SaleTrnsitnDatesVO"/>
     <typeAlias alias="saleTrnsitnVO" 			type="kr.co.solbipos.sale.anals.saletrnsitn.service.SaleTrnsitnVO"/>
 
-    <!-- 매출관리 > 매출분석 > 영업일보 -->
-    <typeAlias alias="dailyReportVO" 			type="kr.co.solbipos.sale.anals.dailyreport.service.DailyReportVO"/>
+	<!-- 매출관리 > 매출분석 > 영업일보 -->
+	<typeAlias alias="dailyReportVO" 			type="kr.co.solbipos.sale.anals.dailyreport.service.DailyReportVO"/>
 
 
     <!-- 매출관리 > 매출분석 > 월력판매분석 -->
@@ -595,6 +592,7 @@
     <typeAlias alias="apprCardVO" type="kr.co.solbipos.sale.status.appr.payMethod.card.service.ApprCardVO"/>
     <typeAlias alias="apprCashBillVO" type="kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO"/>
     <typeAlias alias="apprCoprtnVO" type="kr.co.solbipos.sale.status.appr.coprtn.service.ApprCoprtnVO"/>
+    <typeAlias alias="apprAcquireVO" type="kr.co.solbipos.sale.status.appr.acquire.service.ApprAcquireVO"/>
 
     <!-- 매출 공통팝업-->
     <typeAlias alias="billInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.billInfo.service.BillInfoVO"/>

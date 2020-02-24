@@ -81,7 +81,7 @@ public class StoreFgController {
      * @author  정유경
      * @since   2020.01.31
      */
-    @RequestMapping(value = "/fg/storeFgComboList.sb", method = RequestMethod.POST)
+/*    @RequestMapping(value = "/fg/storeFgComboList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStoreFgComboList(HttpServletRequest request, HttpServletResponse response, Model model, StoreFgVO storeFgVO) {
 
@@ -90,6 +90,6 @@ public class StoreFgController {
         List<DefaultMap<String>> list = storeFgService.getStoreFgComboList(storeFgVO, sessionInfoVO);
         
         return ReturnUtil.returnListJson(Status.OK, list, storeFgVO);
-    }
+    }*/
 
 }

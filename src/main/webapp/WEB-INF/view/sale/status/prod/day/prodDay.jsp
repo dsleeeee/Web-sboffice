@@ -4,6 +4,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/day/prodDay/"/>
 
 <div id="prodDayView" class="subCon" style="display: none;">
@@ -11,7 +13,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>		
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodDayCtrl')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodDayCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>		
 		</div> 
@@ -86,7 +88,7 @@
 		    <wj-combo-box
 		      class="w100px fl"
 		      id="prodDaylistScaleBox"
-		      ng-model="listScale"
+		      ng-model="prodDaylistScale"
 		      control="listScaleCombo"
 		      items-source="_getComboData('prodDaylistScaleBox')"
 		      display-member-path="name"
@@ -115,10 +117,12 @@
 	          item-formatter="_itemFormatter">
 	
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodday.prodClassNm"/>" binding="prodClassNm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodday.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.saleDate"/>" 	binding="saleDate" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+         	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodday.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>          
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleQty"/>" 	binding="totSaleQty" 	width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totDcAmt"/>" 	binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

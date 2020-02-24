@@ -8,9 +8,9 @@
 
 <div id="apprMpayView" class="subCon"  ng-controller="apprMpayCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="dailyReport.appr"/></a>
+      <a href="#" class="open fl"><s:message code="dailyReport.apprMpay"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnApprMpaySearch" ng-click="_broadcast('apprMpayCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnApprMpaySearch" ng-click="_broadcast('apprMpayCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -25,7 +25,7 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td colspan="3">
+        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
         <div class="sb-select">
             <span class="txtIn"><input id="srchApprMpayStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -38,6 +38,31 @@
             </span>
         </div>
         </td>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <%-- 매장코드 --%>
+        <th><s:message code="todayBillSaleDtl.store"/></th>
+        <td>
+            <%-- 매장선택 모듈 싱글 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                            closeFunc - 팝업 닫기시 호출할 함수
+            --%>
+<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
+<%--                 <jsp:param name="targetId" value="apprMpaySelectStore"/> --%>
+<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
+<%--             </jsp:include> --%>
+            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
+            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="apprMpaySelectStore"/>
+                <jsp:param name="targetPosId" value="apprMpaySelectPos"/>
+                <jsp:param name="targetCornerId" value="apprMpaySelectCorner"/>
+                <jsp:param name="closeFunc" value="getCornerNmList,getPosNmList"/>
+            </jsp:include>
+            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+        </td>
+      </c:if>
       </tr>
       
       <tr>
@@ -65,33 +90,15 @@
       </tr>
       
       <tr>
-       <%-- 할부구분 --%>
-        <th><s:message code="appr.instFg" /></th>
-        <td>
-          <div class="sb-select">
-              <span class="txtIn">
-                    <wj-combo-box
-                      id="srchMpayInstCntFgDisplay"
-                      ng-model="instCntFg"
-                      items-source="_getComboData('srchMpayInstCntFgDisplay')"
-                      display-member-path="name"
-                      selected-value-path="value"
-                      is-editable="false"
-                      initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </span>
-          </div>
-        </td>
-      
         <%-- 승인구분 --%>
         <th><s:message code="dayMcoupn.apprProcFg" /></th>
         <td>
           <div class="sb-select">
               <span class="txtIn">
                     <wj-combo-box
-                      id="srchMpayApprFgDisplay"
-                      ng-model="apprFg"
-                      items-source="_getComboData('srchMpayApprFgDisplay')"
+                      id="srchMpaySaleFgDisplay"
+                      ng-model="saleFg"
+                      items-source="_getComboData('srchMpaySaleFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
@@ -100,18 +107,15 @@
                 </span>
           </div>
         </td>
-      </tr>
-      
-      <tr>
        <%-- 승인처리 --%>
         <th><s:message code="storeStatus.apprProcFg" /></th>
         <td>
           <div class="sb-select">
               <span class="txtIn">
                     <wj-combo-box
-                      id="srchMpayInstCntFgDisplay"
-                      ng-model="instCntFg"
-                      items-source="_getComboData('srchMpayInstCntFgDisplay')"
+                      id="srchMpayApprProcFgDisplay"
+                      ng-model="apprProcFg"
+                      items-source="_getComboData('srchMpayApprProcFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
@@ -120,32 +124,6 @@
                 </span>
           </div>
         </td>
-      
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
-        <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수
-            --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="apprMpaySelectStore"/> --%>
-<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
-<%--             </jsp:include> --%>
-            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
-            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
-                <jsp:param name="targetId" value="apprMpaySelectStore"/>
-                <jsp:param name="targetPosId" value="apprMpaySelectPos"/>
-                <jsp:param name="targetCornerId" value="apprMpaySelectCorner"/>
-                <jsp:param name="closeFunc" value="getCornerNmList,getPosNmList"/>
-            </jsp:include>
-            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-        </td>
-      </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
             <input type="hidden" id="apprMpaySelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
@@ -171,7 +149,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="text" id="apprMpaySelectStoreStoreNum" ng-model="storeNum">
+        <input type="hidden" id="apprMpaySelectStoreStoreNum" ng-model="storeNum">
     </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadMpay()"><s:message code="cmm.excel.down" />
@@ -226,8 +204,3 @@
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/mpay/mpay.js" charset="utf-8"></script>
 
-<%-- 매장현황 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/appr/apprMpay.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

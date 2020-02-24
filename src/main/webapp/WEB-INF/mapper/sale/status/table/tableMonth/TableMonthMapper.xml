@@ -6,9 +6,9 @@
 	<select id="getTableMonthList" parameterType="tableMonthVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT SALE_YM SALE_YM
-       		, SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
-       		, SUM(REAL_SALE_CNT) TOT_REAL_SALE_CNT
-       		, SUM(GUEST_CNT_1) TOT_GUEST_CNT
+       		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+       		, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+       		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
        		${sQuery1}
      	<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_SL_MONTHLY_TABLE TSDT
@@ -21,10 +21,10 @@
 				</foreach>
 			  </if>
 			  <if test='startDate != null and startDate != ""'>
-			  	AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
+			  	AND TSDT.SALE_YM <![CDATA[>= ]]> #{startDate}
 			  </if>
 			  <if test='endDate != null and endDate != ""'>
-			  	AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			  	AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
 			  </if>
 
 			<!--   AND TBL_CD in (${sQuery2})

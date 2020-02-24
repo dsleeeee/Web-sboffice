@@ -11,8 +11,8 @@
 
 var app 		= agrid.getApp();	//get application
 
-var startDate 	= wcombo.genDateVal("#startDate", gvStartDate	);
-var endDate 	= wcombo.genDateVal("#endDate",   gvEndDate		);
+var startDate 	= wcombo.genDateVal("#startDate", getToday()	);
+var endDate 	= wcombo.genDateVal("#endDate",   getToday()	);
 
 /* 전역으로 선언해도 인식못함.
 //매장선택 모듈 팝업 사용시 정의			----------------------------------------------------------------------------------------------------------------------
@@ -74,22 +74,24 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     	}
 
         var params = {};
-//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간
         	params.startDate 		= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
-	        ///*
+//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간	        
+	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
 			console.log("searchStoreCd :" + params.searchStoreCd	);
-			//*/
+			*/
         /*
         $scope._inquiryMain					(	"/sale/anals/dailyReport/report/list.sb",		function _inquiry(url, params, callback, isView, isMaster) {
         $scope._inquirySub					(	"/sale/anals/dailyReport/report/list.sb",
         $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReport/report/list.sb",
 	    $scope._postJSONQuery.withPopUp		(	"/sale/anals/dailyReport/report/list.sb",
         */
+	    //'데이터 처리 중입니다.' 시작
 	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
+
 	    $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReport/report/list.sb",
 					        					params,
 					        					function(response)	{
@@ -120,37 +122,23 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															            //[영업일보 구성] check-box setting
 															            for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
 															                var item = configCtrl_2.flex.collectionView.items[i];
+
+															                if(item.cfgCd    == "SL")	item.cfgSelYn = "Y";	//[매출종합]은 무조건 'checked' (처음 접속 or '영업일보 구성'을 저장하지 않은 매장의 경우 '영업일보 구성'에서 선택된 것이 없기에, [매출종합]은 선택되어 보여지게 함)
+
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
+															            		eval( '$(".div_' + item.cfgCd + '").show();' );
+															            	}else{
+															            		eval( '$(".div_' + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
 															            	}
 															            }
 
-															            /*
-															            //데이터 없으면 [접기]
-															            if(reportCtrl_sl    .flex.rows.length == 0)     $(".div_sl"     ).toggle();     //매출종합
-															            if(reportCtrl_pay   .flex.rows.length == 0)     $(".div_pay"    ).toggle();     //결제수단
-															            if(reportCtrl_nsl   .flex.rows.length == 0)     $(".div_nsl"    ).toggle();     //비매출종합
-															            if(reportCtrl_npay  .flex.rows.length == 0)     $(".div_npay"   ).toggle();     //비매출결제수단
-															            if(reportCtrl_pos   .flex.rows.length == 0)     $(".div_pos"    ).toggle();     //포스정산
-															            if(reportCtrl_emp   .flex.rows.length == 0)     $(".div_emp"    ).toggle();     //판매원별 매출
-															            if(reportCtrl_dc    .flex.rows.length == 0)     $(".div_dc"     ).toggle();     //할인내역
-															            if(reportCtrl_dcdtl .flex.rows.length == 0)     $(".div_dcdtl"  ).toggle();     //할인상세내역
-															            if(reportCtrl_gift  .flex.rows.length == 0)     $(".div_gift"   ).toggle();     //상품권 판매 및 회수내역
-															            if(reportCtrl_order .flex.rows.length == 0)     $(".div_order"  ).toggle();     //수발주내역
-															            if(reportCtrl_lv1   .flex.rows.length == 0)     $(".div_lv1"    ).toggle();     //대분류별 매출
-															            if(reportCtrl_lv2   .flex.rows.length == 0)     $(".div_lv2"    ).toggle();     //중분류별 매출
-															            if(reportCtrl_lv3   .flex.rows.length == 0)     $(".div_lv3"    ).toggle();     //소분류별 매출
-															            if(reportCtrl_prod  .flex.rows.length == 0)     $(".div_prod"   ).toggle();     //상품별 매출
-															            if(reportCtrl_compt .flex.rows.length == 0)     $(".div_compt"  ).toggle();     //경쟁사매출
-															            if(reportCtrl_appr  .flex.rows.length == 0)     $(".div_appr"   ).toggle();     //승인현황
-															            if(reportCtrl_membr .flex.rows.length == 0)     $(".div_membr"  ).toggle();     //회원
-															            if(reportCtrl_work  .flex.rows.length == 0)     $(".div_work"   ).toggle();     //근태관리
-																		*/
+															            //'영업일보(0000-00-00 ~ 0000-00-00)' 문구 setting
+															            var reportCtrl_excel = agrid.getScope('reportCtrl_excel');
+															            reportCtrl_excel.span_startDate	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
+															            reportCtrl_excel.span_endDate	= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
 
-															            //영업일보 구성에 없으면 [숨기기]
-															            //.....
-
-
+															            //'데이터 처리 중입니다.' 중지
 															            $scope.$broadcast('loadingPopupInactive');
 																	},	//callBack function
 												false);
@@ -163,24 +151,26 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 
 	//접기 & 펴기 - START			----------------------------------------------------------------------------------------------------------------------
-	$(".flddUnfld_sl"  	).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_sl"	   ).toggle();  });  //매출종합
-    $(".flddUnfld_pay"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_pay"   ).toggle();  });  //결제수단
-    $(".flddUnfld_nsl"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_nsl"   ).toggle();  });  //비매출종합
-    $(".flddUnfld_npay" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_npay"  ).toggle();  });  //비매출결제수단
-    $(".flddUnfld_pos"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_pos"   ).toggle();  });  //포스정산
-    $(".flddUnfld_emp"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_emp"   ).toggle();  });  //판매원별 매출
-    $(".flddUnfld_dc"   ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_dc"    ).toggle();  });  //할인내역
-    $(".flddUnfld_dcdtl").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_dcdtl" ).toggle();  });  //할인상세내역
-    $(".flddUnfld_gift" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_gift"  ).toggle();  });  //상품권 판매 및 회수내역
-    $(".flddUnfld_order").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_order" ).toggle();  });  //수발주내역
-    $(".flddUnfld_lv1"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv1"   ).toggle();  });  //대분류별 매출
-    $(".flddUnfld_lv2"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv2"   ).toggle();  });  //중분류별 매출
-    $(".flddUnfld_lv3"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_lv3"   ).toggle();  });  //소분류별 매출
-    $(".flddUnfld_prod" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_prod"  ).toggle();  });  //상품별 매출
-    $(".flddUnfld_compt").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_compt" ).toggle();  });  //경쟁사매출
-    $(".flddUnfld_appr" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_appr"  ).toggle();  });  //승인현황
-    $(".flddUnfld_membr").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_membr" ).toggle();  });  //회원
-    $(".flddUnfld_work" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_work"  ).toggle();  });  //근태관리
+    /*
+	$(".flddUnfld_sl"  	).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_SL"	   ).toggle();  });  //매출종합
+    $(".flddUnfld_pay"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_PAY"   ).toggle();  });  //결제수단
+    $(".flddUnfld_nsl"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_NSL"   ).toggle();  });  //비매출종합
+    $(".flddUnfld_npay" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_NPAY"  ).toggle();  });  //비매출결제수단
+    $(".flddUnfld_pos"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_POS"   ).toggle();  });  //포스정산
+    $(".flddUnfld_emp"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_EMP"   ).toggle();  });  //판매원별 매출
+    $(".flddUnfld_dc"   ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_DC"    ).toggle();  });  //할인내역
+    $(".flddUnfld_dcdtl").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_DCDTL" ).toggle();  });  //할인상세내역
+    $(".flddUnfld_gift" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_GIFT"  ).toggle();  });  //상품권 판매 및 회수내역
+    $(".flddUnfld_order").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_ORDER" ).toggle();  });  //수발주내역
+    $(".flddUnfld_lv1"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV1"   ).toggle();  });  //대분류별 매출
+    $(".flddUnfld_lv2"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV2"   ).toggle();  });  //중분류별 매출
+    $(".flddUnfld_lv3"  ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_LV3"   ).toggle();  });  //소분류별 매출
+    $(".flddUnfld_prod" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_PROD"  ).toggle();  });  //상품별 매출
+    $(".flddUnfld_compt").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_COMPT" ).toggle();  });  //경쟁사매출
+    $(".flddUnfld_appr" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_APPR"  ).toggle();  });  //승인현황
+    $(".flddUnfld_membr").click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_MEMBR" ).toggle();  });  //회원
+    $(".flddUnfld_work" ).click(    function(e){    $(this).children("a").toggleClass("open");  $(this).children("a").toggleClass("close"); $(".div_WORK"  ).toggle();  });  //근태관리
+    */
     //접기 & 펴기 - END				----------------------------------------------------------------------------------------------------------------------
 
 }]);
@@ -193,6 +183,8 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 //reportCtrl_sl    START   ############################################################################################################################################################################
 app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
+	angular.extend(this, new RootController('reportCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
+
 	$scope.initGrid = function (s, e) {
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
 	    s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
@@ -236,6 +228,18 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 	        }
 	    }	//s.itemFormatter = function (panel, r, c, cell) {
 
+	    // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+    	}, true);
+	    	
 	};
 }]);
 //reportCtrl_sl    	END		############################################################################################################################################################################
@@ -318,6 +322,19 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         }	//s.itemFormatter = function (panel, r, c, cell) {
+        
+        // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+    	}, true);
+    	
     }
 }]);
 //reportCtrl_pay    END		############################################################################################################################################################################
@@ -369,6 +386,19 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
+  	
   }
 }]);
 //reportCtrl_nsl    END		############################################################################################################################################################################
@@ -434,6 +464,19 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
+  	
   }
 }]);
 //reportCtrl_npay   END		############################################################################################################################################################################
@@ -486,6 +529,18 @@ app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_pos    END		############################################################################################################################################################################
@@ -562,6 +617,18 @@ app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_emp    END		############################################################################################################################################################################
@@ -614,6 +681,18 @@ app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_dc     END		############################################################################################################################################################################
@@ -666,6 +745,18 @@ app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_dcdtl  END		############################################################################################################################################################################
@@ -742,6 +833,18 @@ app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_gift   END		############################################################################################################################################################################
@@ -811,6 +914,18 @@ app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_order  END		############################################################################################################################################################################
@@ -863,6 +978,18 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv1    END		############################################################################################################################################################################
@@ -915,6 +1042,18 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv2    END		############################################################################################################################################################################
@@ -967,6 +1106,18 @@ app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_lv3    END		############################################################################################################################################################################
@@ -1019,6 +1170,18 @@ app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_prod   END		############################################################################################################################################################################
@@ -1071,6 +1234,18 @@ app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_compt  END		############################################################################################################################################################################
@@ -1113,7 +1288,7 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
           dataItem.apprApMcoupn       = messages["dailyReport.apprMcoupn"];
           dataItem.apprDcMcoupn       = messages["dailyReport.apprMcoupn"];
 
-          dataItem.apprCntPartne      = messages["dailyReport.apprPartner"];
+          dataItem.apprCntPartner     = messages["dailyReport.apprPartner"];
           dataItem.apprApPartner      = messages["dailyReport.apprPartner"];
           dataItem.apprDcPartner      = messages["dailyReport.apprPartner"];
 
@@ -1165,6 +1340,18 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_appr   END		############################################################################################################################################################################
@@ -1217,6 +1404,18 @@ app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_membr  END		############################################################################################################################################################################
@@ -1269,6 +1468,18 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
+      
+	   // 그리드 클릭 이벤트
+	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+		    	var ht = s.hitTest(e);
+	
+		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+	      		if (rng && rng.columnSpan > 1) {
+	      			e.preventDefault();
+	      		}
+	      	}
+	  	}, true);
   }
 }]);
 //reportCtrl_work   END		############################################################################################################################################################################
@@ -1278,7 +1489,11 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
 //reportCtrl_excel	START	############################################################################################################################################################################
 app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
-	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	//'영업일보(0000-00-00 ~ 0000-00-00)' 문구
+	$scope.span_startDate 	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
+	$scope.span_endDate		= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
+
+	//excelDownload		START	----------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){
 		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
 		if (reportCtrl_sl.flex.rows.length <= 0) {
@@ -1295,6 +1510,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	    //$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
 		var reportCtrl = agrid.getScope("reportCtrl");
 			reportCtrl.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
+
 		$timeout(function()	{
 						      //var reportCtrl_sl       = agrid.getScope("reportCtrl_sl");      //매출종합
 						    	var reportCtrl_pay      = agrid.getScope("reportCtrl_pay");     //결제수단
@@ -1334,6 +1550,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 							    var membr   = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(reportCtrl_membr.flex, {includeColumnHeaders: true, includeCellStyles: true, sheetIndex: 0, sheetName: messages["dailyReport.membr"	]}	);  //회원
 							    var work    = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(reportCtrl_work .flex, {includeColumnHeaders: true, includeCellStyles: true, sheetIndex: 0, sheetName: messages["dailyReport.work" 	]}	);  //근태관리
 
+							    /*
 								sl.sheets.push(pay	.sheets[0]);    //결제수단
 								sl.sheets.push(nsl	.sheets[0]);    //비매출종합
 							    sl.sheets.push(npay .sheets[0]);    //비매출결제수단
@@ -1351,6 +1568,17 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 							    sl.sheets.push(appr .sheets[0]);    //승인현황
 							    sl.sheets.push(membr.sheets[0]);    //회원
 							    sl.sheets.push(work .sheets[0]);    //근태관리
+								*/
+
+							    //[영업일보 구성]에서 선택된 부분만 엑셀 출력
+                                var configCtrl_2 = agrid.getScope('configCtrl_2');	//영업일보 구성
+					            for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+					                var item = configCtrl_2.flex.collectionView.items[i];
+					                if(item.cfgCd == 'SL')	continue;
+					            	if(item.cfgSelYn == "Y"){
+                                        eval( 'sl.sheets.push(' + item.cfgCd.toLowerCase() + '.sheets[0]);' );
+					            	}
+					            }
 
 								sl.saveAsync(excelFileName);
 
@@ -1358,7 +1586,352 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 								reportCtrl.$broadcast('loadingPopupInactive');
 							}, 1000);	//건수가 많아서 1000으로 했음 (현재 1년치 정도가 500ms 미만임)
 	};
-	//[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+	//excelDownload		END		----------------------------------------------------------------------------------------------------------------------
+
+
+
+	//print				START	----------------------------------------------------------------------------------------------------------------------
+	$scope.print_OLD_XXX = function(){
+		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
+		if (reportCtrl_sl.flex.rows.length <= 0) {
+				s_alert.pop( messages["dailyReport.alert.noDataToPrint"] );	//출력할 자료가 없습니다.
+				return false;
+		}
+
+		var dateFrom	= wijmo.Globalize.format(startDate.value, 'yyyy.MM.dd');
+		var dateTo		= wijmo.Globalize.format(endDate  .value, 'yyyy.MM.dd');
+	  //var printTitle	= '영업일보(' + dateFrom + ' ~ ' + dateTo + ')';	//파일명의 '~'  -->  '_'로 자동 치환됨.
+		var printTitle	= '영업일보(' + dateFrom + ' - ' + dateTo + ')';
+
+	    var doc 	= new wijmo.PrintDocument( {title : printTitle} );
+
+	    var browser = navigator.userAgent.toLowerCase();	//브라우저 체크하여 크롬인 경우 위에 빈칸 9mm 를 둔다. ie와 비슷하게 맞추기 위함...
+	    if (-1 != browser.indexOf('chrome')) {
+	    	//doc.append('<div style="height: 9mm;"></div>');
+	    }
+	    /*
+	    cf> <div id="reportView" class="subCon">
+
+	    var view = document.querySelector('#reportView');
+	    doc.append(view);
+
+	    doc.append( document.querySelector('#reportView') );	OK
+
+	    doc.append( document.querySelector('#subCon') );		X
+
+	    doc.append( document.querySelector('#div_print') );		<div id="div_print"> 추가 -> 현재 지웠음
+		*/
+	    doc.append( document.querySelector('#div_print') );
+
+	    doc.print();
+	};
+	//print				END		----------------------------------------------------------------------------------------------------------------------
+
+
+	//print				STATT	----------------------------------------------------------------------------------------------------------------------
+	$scope.print = function(){
+		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
+		if (reportCtrl_sl.flex.rows.length <= 0) {
+				s_alert.pop( messages["dailyReport.alert.noDataToPrint"] );	//출력할 자료가 없습니다.
+				return false;
+		}
+
+		var dateFrom	= wijmo.Globalize.format(startDate.value, 'yyyy.MM.dd');
+		var dateTo		= wijmo.Globalize.format(endDate  .value, 'yyyy.MM.dd');
+		var printTitle	= '영업일보(' + dateFrom + ' - ' + dateTo + ')';	//파일명의 '~'  -->  '_'로 자동 치환됨.
+
+	  //let doc = new wjcCore.PrintDocument	({
+        let doc = new wijmo.PrintDocument	({
+								            	title	: printTitle,
+								            	copyCss	: true //false가 낫다 -> To prevent cross-origin issues
+        									});
+
+        //https://www.grapecity.com/wijmo/api/classes/wijmo.printdocument.html
+        //add CSS explicitly (since we can't use copyCss in jsfiddle)
+        //doc.append('<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">');
+        //doc.append('<link href="https://cdn.grapecity.com/wijmo/5.latest/styles/wijmo.min.css"         rel="stylesheet">');
+        /*
+        doc.addCSS("/resource/solbipos/css/cmm/style.css");
+
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/app.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css"	/>');
+        doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
+		*/
+		doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
+
+        doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
+
+        //add a printer-friendly version of a FlexGrid to the document
+        //doc.append('<p>Here\'s a FlexGrid rendered as a table:</p>');
+        //let tbl = this._renderTable(reportCtrl_sl.flex);
+        //doc.append(tbl);
+        doc.append( this._renderTable(reportCtrl_sl.flex) );
+
+        var reportCtrl_pay      = agrid.getScope("reportCtrl_pay"   );
+        var reportCtrl_nsl      = agrid.getScope("reportCtrl_nsl"   );
+        var reportCtrl_npay     = agrid.getScope("reportCtrl_npay"  );
+        var reportCtrl_pos      = agrid.getScope("reportCtrl_pos"   );
+        var reportCtrl_emp      = agrid.getScope("reportCtrl_emp"   );
+        var reportCtrl_dc       = agrid.getScope("reportCtrl_dc"    );
+        var reportCtrl_dcdtl    = agrid.getScope("reportCtrl_dcdtl" );
+        var reportCtrl_gift     = agrid.getScope("reportCtrl_gift"  );
+        var reportCtrl_order    = agrid.getScope("reportCtrl_order" );
+        var reportCtrl_lv1      = agrid.getScope("reportCtrl_lv1"   );
+        var reportCtrl_lv2      = agrid.getScope("reportCtrl_lv2"   );
+        var reportCtrl_lv3      = agrid.getScope("reportCtrl_lv3"   );
+        var reportCtrl_prod     = agrid.getScope("reportCtrl_prod"  );
+        var reportCtrl_compt    = agrid.getScope("reportCtrl_compt" );
+        var reportCtrl_appr     = agrid.getScope("reportCtrl_appr"  );
+        var reportCtrl_membr    = agrid.getScope("reportCtrl_membr" );
+        var reportCtrl_work     = agrid.getScope("reportCtrl_work"  );
+
+	    //[영업일보 구성]에서 선택된 부분만 출력
+        var configCtrl_2 = agrid.getScope('configCtrl_2');	//영업일보 구성
+        for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+            var item = configCtrl_2.flex.collectionView.items[i];
+            if(item.cfgCd == 'SL')	continue;
+        	if(item.cfgSelYn == "Y"){
+        		doc.append("<br><br><br>");
+        		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
+                eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex) );'      	);
+        	}
+        }
+
+        doc.print();
+	};
+
+    //Grid를 Table로 rendering 처리
+	$scope._renderTable = function(flex){	//function(flex: wjcGrid.FlexGrid){
+		//Table - START
+			/*
+ 	        let tbl = '<table>';
+	        let tbl = '<table class="tblType01">';
+	        let tbl = '<table class="searchTbl">';
+			let tbl = '<table class="sam-tbl">';
+			let tbl = '<table class="reportPrint">';
+			*/
+			let tbl = '<table class="reportPrint">';
+
+        //Headers
+	      //if(flex.headersVisibility & wjcGrid.HeadersVisibility.Column){
+	        if(flex.headersVisibility & wijmo.grid.HeadersVisibility.Column){
+	            tbl += '<thead>';
+	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
+////////////////////tbl += this._renderRow       (flex.columnHeaders, r);
+	                tbl += this._renderRow_Header(flex.columnHeaders, r);
+	            }
+	            tbl += '</thead>';
+	        }
+
+        //Body
+	        tbl += '<tbody>';
+	        for(let r=0; r<flex.rows.length; r++){
+	            tbl += this._renderRow(flex.cells, r);
+	        }
+	        tbl += '</tbody>';
+
+        //Table - End
+	        tbl += '</table>';
+	        return tbl;
+    }
+
+
+	/*
+    for(let r=0; r<flex.columnHeaders.rows.length; r++){
+    	let columnHeaders =
+
+        //tbl += this._renderRow(flex.columnHeaders, r);
+          tbl += this._renderRow_Header(flex.columnHeaders, r);
+    }
+	*/
+
+	$scope._renderRow_Header = function(panel, r){
+        let tr 		= '',
+        row 		= panel.rows[r];
+      //row_next 	= panel.rows[r+1];
+
+        let header_rowspan 	= 1;
+        let header_colspan 	= 1;
+        let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col 			= panel.columns[c];
+                let col_next		= panel.columns[c+1];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+
+	                    let content 			= panel.getCellData(r, 	c,	true);
+	                    let content_prev_row	= "";																		//Previous 	row    값
+	                    let content_next_row	= "";																		//Next 		row    값
+	                    let content_next_col 	= "";																		//Next 		column 값
+
+	                    if(0                    <  r   )	content_prev_row 	= panel.getCellData(r-1,	c,  	true);	//Previous 	row    값
+	                    if(panel.rows   .length > (r+1))	content_next_row 	= panel.getCellData(r+1,	c,  	true);	//Next 		row    값
+	                    if(panel.columns.length > (c+1))	content_next_col 	= panel.getCellData(r,  	c+1,	true);	//Next 		column 값
+
+	                    if(header_colsize == 0)				header_colsize 		= col.renderSize;
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                    	/*
+                    	console.log('----------------------------------------------------------');
+                    	console.log('content_prev_row     : ' + content_prev_row				);
+                    	console.log('content              : ' + content							);
+                    	console.log('content_next_row     : ' + content_next_row				);
+                    	console.log('content_next_col     : ' + content_next_col				);
+                    	console.log('panel.columns.length : ' + panel.columns.length + ' & ' + c);
+						*/
+
+                    	/*
+                		if(panel.columns.length == (c+1)   &&   content == content_prev_row){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                		}
+                		*/
+                    	//[수발주내역] -> 특이한 CASE이기에 hard-coding으로 해결 - START
+                    	if(content_prev_row == ''   &&   content == '본사출고'){
+                    		if(content_next_row == '물량오류'){
+                    			tr += '<th rowspan="' + 1 + '" colspan="' + 3 + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    		}
+                    		continue;
+                    	}
+                    	if(content_prev_row == '본사출고'   &&   content == '본사출고'){
+                   				tr += '<th rowspan="' + 1 + '" colspan="' + 1 + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                   			continue;
+                    	}
+                    	//[수발주내역] -> 특이한 CASE이기에 hard-coding으로 해결 - END
+
+                    	if(content == content_prev_row)	continue;	//이전행 Header값과 같으면 skip
+
+                    	if(content == content_next_row){
+                    		header_rowspan++;
+                    	}
+
+                    	if(content == content_next_col){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                    		//console.log("content == content_next_col: " + content + " == " + content_next_col + " & " + header_colspan + " & " + header_colsize);
+                    	}
+                    	else{
+
+                    		//console.log('header_rowspan       : ' + header_rowspan + ' & header_colspan: ' + header_colspan);
+
+                    		if		(header_rowspan >  1    &&    header_colspan == 1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+
+                    		}else if(header_rowspan == 1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else if(header_rowspan >  1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else{
+                    			tr += '<th style="' + style + '">' + content + '</th>';
+                    		}
+                    	}
+                    	//header_prev = panel.getCellData(r, c, true);
+                }	//if(col.renderSize > 0){
+            }		//for(let c=0; c<panel.columns.length; c++){
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+                        let raw = panel.getCellData(r, c, false);
+                        if		(raw === true)	content = '&#9745;';
+                        else if	(raw === false)	content = '&#9744;';
+
+                        tr += '<td style="' + style + '">' + content + '</td>';
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow_OLD = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+	                  //if(panel.cellType == wjcGrid.CellType.ColumnHeader){
+	                    if(panel.cellType == wijmo.grid.CellType.ColumnHeader){
+	                        tr += '<th style="' + style + '">' + content + '</th>';
+
+	                    }else {
+	                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+	                        let raw = panel.getCellData(r, c, false);
+	                        if		(raw === true)	content = '&#9745;';
+	                        else if	(raw === false)	content = '&#9744;';
+
+	                        tr += '<td style="' + style + '">' + content + '</td>';
+	                    }
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+	//print				END		----------------------------------------------------------------------------------------------------------------------
+
+
 
 }]);
 //reportCtrl_excel	END		############################################################################################################################################################################

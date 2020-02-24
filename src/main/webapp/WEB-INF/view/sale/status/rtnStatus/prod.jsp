@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnRtnStatusProdSearch" ng-click="_broadcast('rtnStatusProdCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnRtnStatusProdSearch" ng-click="_broadcast('rtnStatusProdCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -54,10 +54,17 @@
                       format="y">
               </wj-input-date>
             </span>
+            <span class="chk ml10">
+                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+                <label for="chkDt">
+                    <s:message code="cmm.all.day" />
+                </label>
+            </span>
         </div>
         </td>
         
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <input type="hidden" id="rtnStatusProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -67,16 +74,10 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                 <jsp:param name="targetId" value="rtnStatusProdSelectStore"/>
             </jsp:include>
             <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
-            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="cornerDaySelectStore"/> --%>
-<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
-<%--             </jsp:include> --%>
-            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
@@ -118,9 +119,9 @@
                   is-read-only="true"
                   item-formatter="_itemFormatter">
                   <!-- define columns -->
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="prodClassNm"     width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="prodClassNm1"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="prodClassNm2"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"     width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>

@@ -8,9 +8,12 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeBrandCtrl', $scope, $http, $timeout, true));
 
-  $scope.srchStoreBrandStartDate = wcombo.genDateVal("#srchStoreBrandStartDate", gvStartDate);
-  $scope.srchStoreBrandEndDate   = wcombo.genDateVal("#srchStoreBrandEndDate", gvEndDate);
-
+  //groupRow 접고 펼치기 flag 변수
+  $scope.setCollapsed = false;
+  
+  $scope.srchStoreBrandStartDate = wcombo.genDateVal("#srchStoreBrandStartDate", getToday());
+  $scope.srchStoreBrandEndDate   = wcombo.genDateVal("#srchStoreBrandEndDate", getToday());
+  	
   // 리스트 콤보박스 데이터 Set
   $scope._setComboData("storeBrandListScaleBox", gvListScaleBoxData);
 
@@ -21,7 +24,7 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('storeBrandlistScaleBox', gvListScaleBoxData);
-	  
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeBrandCtrl");
 
@@ -29,13 +32,14 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
     // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
+    dataItem.hqBrandNm  = messages["store.hqBrandNm"];
     dataItem.storeNm  = messages["store.storeNm"];
     dataItem.totSaleAmt       = messages["store.totSaleAmt"];
     dataItem.totDcAmt      = messages["store.totDcAmt"];
@@ -83,45 +87,134 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
         }
       }
     }
+    
+    // 그리드 클릭 이벤트
+	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    	var ht = s.hitTest(e);
+
+    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0 && 머지된 column 인덱스 4 초과
+    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+    	 */
+    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 4) {
+    		s.allowSorting = false;
+		} else {
+			s.allowSorting = true;
+		}
+	});
+	
   }
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeBrandCtrl", function (event, data) {
-    $scope.searchStoreBrandList();
+    $scope.searchStoreBrandList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
+  $scope.$on("storeBrandCtrlSrch", function (event, data) {
+	    $scope.searchStoreBrandList(false);
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+
 
   // 브랜드별 매출 리스트 조회
-  $scope.searchStoreBrandList = function () {
+  $scope.searchStoreBrandList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
   //  params.startDate = wijmo.Globalize.format($scope.srchStoreBrandStartDate.value, 'yyyyMMdd');
   //  params.endDate = wijmo.Globalize.format($scope.srchStoreBrandEndDate.value, 'yyyyMMdd');
+    params.storeCd   = $("#storeBrandSelectStoreCd").val();
     params.sortFg = $scope.sortFg;
     params.listScale = $scope.listScale; //-페이지 스케일 갯수
-    
+    params.isPageChk = isPageChk;
+
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStoreBrandStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchStoreBrandEndDate.value, 'yyyyMMdd');
     }
-    
+
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/sale/anals/store/brand/list.sb", params);
+    $scope._inquiryMain("/sale/anals/store/brand/list.sb", params);
+    
+  //create a group to show the grand totals
+    var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
+    var grpLv2 = new wijmo.collections.PropertyGroupDescription('hqBrandNm');
+
+    var theGrid = new wijmo.Control.getControl('#storeBrandGrid');
+
+    theGrid.itemsSource = new wijmo.collections.CollectionView();
+    
+    // custom cell calculation
+    theGrid.formatItem.addHandler(function(s, e) {
+
+    	var lengthTemp = s.collectionView.groupDescriptions.length;
+
+    	if (lengthTemp < 2) {
+    		s.collectionView.groupDescriptions.push(grpLv1);
+        	s.collectionView.groupDescriptions.push(grpLv2);
+    	}
+
+    	s.rows.forEach(function(row) {
+    		if(row instanceof wijmo.grid.GroupRow){
+    			var groupProp=row.dataItem.groupDescription.propertyName;
+    			var className=null;
+    			switch(groupProp){
+    				case "전체":className="grp-lv-1";break;
+    				case "hqBrandNm":className="grp-lv-2";break;
+    			}
+
+    			if(className){
+    				row.cssClass=className;
+    			}
+    			
+    			// groupRow 접기
+    			if(row.level == 1) {  // 2단계 분류
+					if(!$scope.setCollapsed){
+						row.isCollapsed = true;
+					}
+				}
+    		}
+    	});
+
+    });
+    
+    // 그리드 클릭 이벤트 groupRow 펼치기-------------------------------------------------------------------------------------------------
+    theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
+      var ht = theGrid.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        if (theGrid.rows[ht.row].level == 1) { // 2단계 분류
+        	$scope.setCollapsed = true;
+        	var isCollapsed = theGrid.rows[ht.row].isCollapsed;
+        	theGrid.rows[ht.row].isCollapsed ? false : true;
+        }
+      }
+    });
+
+    // start collapsed
+    theGrid.collapseGroupsToLevel(1);
+    theGrid.collectionView.refresh();
   };
 
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchStoreBrandStartDate.isReadOnly = $scope.isChecked;
     $scope.srchStoreBrandEndDate.isReadOnly = $scope.isChecked;
+  };
+  
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeBrandSelectStoreShow = function () {
+    $scope._broadcast('storeBrandSelectStoreCtrl');
   };
 
   //엑셀 다운로드
@@ -135,18 +228,18 @@ app.controller('storeBrandCtrl', ['$scope', '$http', '$timeout', function ($scop
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'storeBrand.xlsx', function () {
+      }, '매출분석_매장별매출분석_브랜드별매출_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);
       });
     }, 10);
   };
-  
+
   //조회조건 정렬구분 리스트 조회
   $scope.getSortFgComboList = function () {
     var url             = '/sale/anals/store/brand/sortFgComboList.sb';

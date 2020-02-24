@@ -53,4 +53,11 @@ public interface ProdService {
 
     /** 상품코드 중복체크 */
     int getProdCdCnt(ProdVO prodVO);
+
+    /** 매장 적용/미적용 상품 조회 */
+    List<DefaultMap<String>> getStoreProdBatchList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장 적용상품 등록 */
+    int insertStoreProdBatch(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
 }

@@ -9,8 +9,9 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('prodPayFgCtrl', $scope, $http, true));
      
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", gvEndDate);
+  $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", getToday());
+  $scope.orgnFg = gvOrgnFg;
   
   // 콤보박스 데이터 Set
   $scope._setComboData('prodPayFglistScaleBox', gvListScaleBoxData);
@@ -19,7 +20,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.initGrid = function (s, e) {
 
     // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("prodClassCtrl");
+    $scope._makePickColumns("prodPayFgCtrl");
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -30,24 +31,29 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodPayFgCtrl", function (event, data) {
-    $scope.searchProdPayFgList();
+    $scope.searchProdPayFgList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodPayFgCtrlSrch", function (event, data) {
+    $scope.searchProdPayFgList(false);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  }); 
+  
   // 상품매출순위 리스트 조회
-  $scope.searchProdPayFgList = function () {
-
-    if ($("#pordPayFgSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
+  $scope.searchProdPayFgList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#pordPayFgSelectStoreCd").val();
     params.prodCd    = $("#srchPayFgProdCd").val();
     params.prodNm    = $("#srchPayFgProdNm").val();
+    params.orgnFg    = $scope.orgnFg;
+    params.listScale = $scope.prodPayFglistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -83,11 +89,11 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_상품별_결제수단별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

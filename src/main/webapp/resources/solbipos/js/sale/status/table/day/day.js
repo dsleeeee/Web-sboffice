@@ -9,17 +9,17 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('tableDayCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchTableDayStartDate = wcombo.genDateVal("#srchTableDayStartDate", gvStartDate);
-	$scope.srchTableDayEndDate   = wcombo.genDateVal("#srchTableDayEndDate", gvEndDate);
+	$scope.srchTableDayStartDate = wcombo.genDateVal("#srchTableDayStartDate", getToday());
+	$scope.srchTableDayEndDate   = wcombo.genDateVal("#srchTableDayEndDate", getToday());
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("tableDayListScaleBox", gvListScaleBoxData);
-
+	var checkInt = true;
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
 		var storeCd = "";
-		$scope.getReTableNmList(storeCd);
+		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("tableDayCtrl");
@@ -31,9 +31,13 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				if (col.binding.substring(0, 11) === "realSaleAmt") { // 실매출
 		          	wijmo.addClass(e.cell, 'wijLink');
 		        }
+				else if (col.binding === "totRealSaleAmt"){ // 총실매출
+					wijmo.addClass(e.cell, 'wijLink');
+				}
 			}
 		});
-
+		// 총매출열에 CSS 추가
+		wijmo.addClass(s.columns[2], 'wijLink');
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
@@ -93,60 +97,85 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		// 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
+
+	    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+    	
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.startDate = selectedRow.saleDate;
-	    		params.endDate = selectedRow.saleDate;
+	    		params.saleDate = selectedRow.saleDate;
+	    		params.chkPop   = "tablePop";
 	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
 	    		var storeTable   = $("#tableDaySelectTableCd").val().split(",");
-	    		var arrStore= [];
-	    		var arrTbl= [];
-	    		for(var i=0; i < storeTable.length; i++) {
-	    			var temp = storeTable[i].split("||");
-	    			arrStore.push(temp[0]);
-	    			arrTbl.push(temp[1]);
-	    		}
-	    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
-	    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
-
+	    		
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
+	    			var arrStore= [];
+		    		var arrTbl= [];
+		    		for(var i=0; i < storeTable.length; i++) {
+		    			var temp = storeTable[i].split("||");
+		    			arrStore.push(temp[0]);
+		    			arrTbl.push(temp[1]);
+		    		}
+		    		
+	    			params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
+		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+	    			$scope._broadcast('saleComTableCtrl', params);
+	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
+        			params.tblCd	 = storeTable;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}
-	    });
+	    }, true);
 	};
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayCtrl", function (event, data) {
 
-		if ($("#tableDaySelectStoreCd").val() === "") {
-			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-			return false;
-		}
+//		if ($("#tableDaySelectStoreCd").val() === '') {
+//			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+//			return false;
+//		}
 
-		if ($("#tableDaySelectTableCd").val() === '') {
-			$scope._popMsg(messages["tableDay.selectTable"]); // 테이블을 선택해주세요.
-			return false;
-		}
-
-		$scope.searchTableDayList();
+		$scope.searchTableDayList(true);
 
 		var storeCd = $("#tableDaySelectStoreCd").val();
 		var tableCd = $("#tableDaySelectTableCd").val();
 
-		$scope.getReTableNmList(storeCd, tableCd);
+		$scope.getReTableNmList(storeCd, tableCd, true);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("tableDayCtrlSrch", function (event, data) {
+
+//		if ($("#tableDaySelectStoreCd").val() === '') {
+//			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+//			return false;
+//		}
+
+		$scope.searchTableDayList(false);
+
+		var storeCd = $("#tableDaySelectStoreCd").val();
+		var tableCd = $("#tableDaySelectTableCd").val();
+
+		$scope.getReTableNmList(storeCd, tableCd, true);
 	});
 
 	// 테이블별매출일자별 리스트 조회
-	$scope.searchTableDayList = function () {
+	$scope.searchTableDayList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
 		params.storeCd = $("#tableDaySelectStoreCd").val();
 		params.tableCd = $("#tableDaySelectTableCd").val();
+		params.hqOfficeCd = $("#hqOfficeCd").val();
 		params.listScale = $scope.tableDayListScale; //-페이지 스케일 갯수
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -160,7 +189,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/table/day/list.sb", params);
+		$scope._inquiryMain("/sale/status/table/day/list.sb", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -195,11 +224,11 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'tableDay.xlsx', function () {
+			},'매출현황_테이블별_일자별_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);
@@ -207,12 +236,20 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		}, 10);
 	};
 
+	//매장의 테이블 리스트 조회
+	$scope.getTableNmList = function () {
+		var storeCd = $("#tableDaySelectStoreCd").val();
+		var tableCd = $("#tableDaySelectTableCd").val();
+		$scope.getReTableNmList(storeCd, tableCd,  false);
+	};
+
 	//매장의 테이블 리스트 재생성
-	$scope.getReTableNmList = function (storeCd, tableCd) {
+	$scope.getReTableNmList = function (storeCd, tableCd, grindSet) {
 		var url = "/sale/status/table/day/tableNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.tableCd = tableCd;
+	    params.hqOfficeCd = $("#HqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({
@@ -238,7 +275,9 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    			storeTableCd = $("#tableDaySelectTableCd").val();
 	    			storeTableNm = $("#tableDaySelectTableName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (grindSet) {
+	                    $scope.makeDataGrid();
+	                 }
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -280,22 +319,6 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				  grid.columnHeaders.setCellData(1, 'realSaleAmtT'+(i-1), colSplit[1]);
 				  grid.columnHeaders.setCellData(1, 'realSaleCntT'+(i-1), colSplit[1]);
 				  grid.columnHeaders.setCellData(1, 'guestCnt1T'+(i-1), colSplit[1]);
-
-//				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'realSaleAmtT"+i, width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-//				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'realSaleCntT"+i, width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-//				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'guestCnt1T"+i, width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-//
-//				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]);
-//				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]);
-//				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]);
-//
-//				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
-//				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
-//				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[1]);
-//
-//				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
-//				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
-//				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 
 			  }
 		  }

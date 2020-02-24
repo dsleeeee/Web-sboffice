@@ -110,4 +110,46 @@ public class SaleComPopupController {
 
         return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
     }
+    
+    /**
+     * 매출공통팝업 - 상품선택(대분류) 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 02. 04.
+     */
+    @RequestMapping(value = "/classProd/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getClassProdList(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.getClassProdList(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 상품선택(상품) 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 02. 04.
+     */
+    @RequestMapping(value = "/prodNm/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdList(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.getProdList(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
 }

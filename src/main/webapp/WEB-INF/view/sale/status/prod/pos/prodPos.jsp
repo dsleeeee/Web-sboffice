@@ -5,20 +5,23 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="prodPosView" class="subCon"  ng-controller="prodPosCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="pos.day"/></a>
+		<a href="#" class="open fl"><s:message code="prodsale.pos"/></a>
 		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('prodPosCtrl')">
+		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('prodPosCtrlSrch')">
 			<s:message code="cmm.search"/>
 		</button>
 	</div>
 	<table class="searchTbl">
 		<colgroup>
-			<col class="w15"/>
-			<col class="w35"/><col class="w15"/>
-        	<col class="w35"/>
+			<col class="w13"/>
+			<col class="w37"/>
+			<col class="w13"/>
+        	<col class="w37"/>
        	</colgroup>
        	<tbody>
        		<tr>
@@ -109,9 +112,14 @@
 				items-source="data"
 				control="flex"
 				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
 				is-read-only="true"
+				frozen-columns="9"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

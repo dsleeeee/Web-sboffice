@@ -23,6 +23,8 @@ public class ProdPayFgVO extends PageVO {
     /** 결제수단별, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
+    /** 본사,매장 구분 */
+    private String orgnFg;
     
     /**
      * @return the hqOfficeCd
@@ -136,4 +138,12 @@ public class ProdPayFgVO extends PageVO {
     public void setArrStoreCd(String[] arrStoreCd) {
         this.arrStoreCd = arrStoreCd;
     }
+    
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 }

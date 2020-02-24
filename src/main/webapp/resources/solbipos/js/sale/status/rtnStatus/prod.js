@@ -29,9 +29,9 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 첫째줄 헤더 생성
     var dataItem         = {};
-    dataItem.prodClassNm    = messages["rtnStatus.prodClassNm"];
-    dataItem.prodClassNm1  	= messages["rtnStatus.prodClassNm1"];
-    dataItem.prodClassNm2   = messages["rtnStatus.prodClassNm2"];
+    dataItem.lv1Nm    		= messages["rtnStatus.prodClassNm"];
+    dataItem.lv2Nm  		= messages["rtnStatus.prodClassNm1"];
+    dataItem.lv3Nm   		= messages["rtnStatus.prodClassNm2"];
     dataItem.prodCd 	    = messages["rtnStatus.prodCd"];
     dataItem.prodNm 	    = messages["rtnStatus.prodNm"];
     dataItem.barcdCd 	    = messages["rtnStatus.barcdCd"];
@@ -78,46 +78,69 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
         }
     }
     // <-- //그리드 헤더2줄 -->
+    
+    // 그리드 클릭 이벤트
+	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+    	var ht = s.hitTest(e);
+
+    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+    	 */
+    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 5) {
+    		s.allowSorting = false;
+		} else {
+			s.allowSorting = true;
+		}
+
+	});
   };
 
-
+  
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStatusProdCtrl", function (event, data) {
-    $scope.searchRtnStatusProdList();
+    $scope.searchRtnStatusProdList(true);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+//다른 컨트롤러의 broadcast 받기
+  $scope.$on("rtnStatusProdCtrlSrch", function (event, data) {
+    $scope.searchRtnStatusProdList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
 
   // 코너별매출일자별 리스트 조회
-  $scope.searchRtnStatusProdList = function () {
-
-	if ($("#rtnStatusProdSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
+  $scope.searchRtnStatusProdList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#rtnStatusProdSelectStoreCd").val();
     params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
-    params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
-    
+    params.isPageChk = isPageChk; //-페이징 초기화
+    //등록일자 '전체기간' 선택에 따른 params
+	if(!$scope.isChecked){
+		params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
+	//	    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+	    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyy-MM-dd');
+	    params.endDate   = (params.endDate).split("-");
+	    var endDay 		 = ( new Date(params.endDate[0],params.endDate[1], 0) ).getDate();
+	    params.endDate 	 = params.endDate[0] + params.endDate[1] + endDay;
+	}
 	if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/rtnStatus/prod/list.sb", params);
-	
-	
+	$scope._inquiryMain("/sale/status/rtnStatus/prod/list.sb", params);
   };
 
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
-    $scope.srchRtnStatusProdStartDate.isReadOnly = $scope.isChecked;
-    $scope.srchRtnStatusProdEndDate.isReadOnly = $scope.isChecked;
+    $scope.rtnStatusProdStartDateCombo.isReadOnly = $scope.isChecked;
+    $scope.rtnStatusProdEndDateCombo.isReadOnly = $scope.isChecked;
   };
 
   //매장선택 모듈 팝업 사용시 정의
@@ -138,11 +161,11 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_반품현황_상품별 반품현황_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

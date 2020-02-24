@@ -11,14 +11,12 @@
     -->
     <select id="getEmpDayOfWeekList" parameterType="empDayOfWeekVO" resultType="DefaultMap">
         /* USE : EmpDayOfWeekMapper.getEmpDayOfWeekList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
 			SELECT A.YOIL
 				, A.YOIL_NUM
 				, COUNT(DISTINCT A.STORE_CD) STORE_CNT
 				, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
 				, SUM(A.BILL_CNT_TOT) AS TOT_BILL_CNT
 				${sQuery1}
-				<include refid="CmmSQL.PagingTemplateCount"/>
 			FROM
 			(
 				SELECT TSDE.SALE_DATE      
@@ -47,7 +45,6 @@
 		WHERE 1 = 1
 		GROUP BY A.YOIL, A.YOIL_NUM, A.STORE_CD
 		ORDER BY YOIL_NUM ASC
-		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
 	<!-- 상품별매출 - 분류별 리스트 조회 -->
@@ -65,21 +62,30 @@
 		FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		WHERE TME.STORE_CD = TMS.STORE_CD
+		<if test='storeCd != null and storeCd != ""'>
 		AND TME.STORE_CD IN
 		  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                       #{item}
             </foreach>
+        </if>
 		  <if test='empChk != "Y"'>
 	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
 	                  WHERE Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
+	                  <if test='storeCd != null and storeCd != ""'>
 	                  AND Z.STORE_CD IN
 	                  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
                         	#{item}
                     	</foreach> 
-	                  AND Z.SALE_DATE >= #{startDate}          
-	                  AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate} 
+                      </if>
+                      <if test='startDate != null and startDate != ""'>
+		                   AND Z.SALE_DATE >= #{startDate}
+		              </if>
+		              <if test='endDate != null and endDate != ""'>
+		                   AND Z.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+		              </if>
 	                )
           </if>
+        ORDER BY TMS.STORE_CD
     </select>
 </mapper>

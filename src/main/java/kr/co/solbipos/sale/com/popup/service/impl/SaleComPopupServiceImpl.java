@@ -30,7 +30,18 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getTablePopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
+    	
+        if (saleComPopupVO.getTblCd() != null && !"".equals(saleComPopupVO.getTblCd())) {
+    		String[] arrTblCd = saleComPopupVO.getTblCd().split(",");
+    		if (arrTblCd.length > 1) {
+    			if (arrTblCd[0] != null && !"".equals(arrTblCd[0])) {
+    				saleComPopupVO.setTblCd("");
+    				saleComPopupVO.setArrStoreTbl(arrTblCd);
+    			}
+    		}
+    	} 
+        
+        
 		return saleComPopupMapper.getTablePopList(saleComPopupVO);
     }
     
@@ -39,6 +50,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getProdPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
@@ -51,6 +63,10 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     		return saleComPopupMapper.getProdPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("empPop")) {
     		return saleComPopupMapper.getEmpPopList(saleComPopupVO);
+    	}else if(saleComPopupVO.getChkPop().equals("posPop")) {
+    		return saleComPopupMapper.getPosPopList(saleComPopupVO);
+    	}else if(saleComPopupVO.getChkPop().equals("posHourPop")) {
+    		return saleComPopupMapper.getPosHourPopList(saleComPopupVO);
     	}
         return null;
     }
@@ -60,6 +76,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     public List<DefaultMap<String>> getApprPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
     	
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
@@ -84,5 +101,25 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	}
     	
         return null;
+    }
+    
+    /** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+    	
+    	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+		return saleComPopupMapper.getClassProdList(saleComPopupVO);
+    }
+    
+    /** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+    	
+    	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+		return saleComPopupMapper.getProdList(saleComPopupVO);
     }
 }

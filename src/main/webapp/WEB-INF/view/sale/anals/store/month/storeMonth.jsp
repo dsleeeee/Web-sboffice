@@ -84,6 +84,21 @@
                 </div>
             </td>     	
       	</tr>
+      	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
+            <%-- 매장코드 --%>           
+          	<th><s:message code="todayBillSaleDtl.store"/></th>
+          	<td colspan="3">
+            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+             		<jsp:param name="targetId" value="storeMonthSelectStore"/>
+            	</jsp:include>
+              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+          	</td> 	
+        </tr>
+        </c:if>
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+        	<input type="hidden" id="storeMonthSelectStoreCd" value="${sessionInfo.storeCd}"/>
+      	</c:if>
 		</tbody>
 	</table>
 

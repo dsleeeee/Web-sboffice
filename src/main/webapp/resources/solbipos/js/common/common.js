@@ -315,6 +315,25 @@ function isEmptyObject(obj) {
   return true;
 }
 
+function getToday() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd= '0' + dd;
+  }
+
+  if (mm < 10) {
+	mm = '0' + mm;
+  }
+
+  today = yyyy + mm + dd;
+
+  return today;
+}
+
 // 링크 태그 IE 팝업 방지( 이 웹사이트가 컴퓨터에서 앱을 열도록허용하시겠습니까? )
 $(document).on('click', 'a[href="#"]', function (e) {
   e.preventDefault();

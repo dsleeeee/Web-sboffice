@@ -28,15 +28,31 @@ public class CornerDayOfWeekServiceImpl implements CornerDayOfWeekService {
     @Override
     public List<DefaultMap<String>> getCornerDayOfWeekList(CornerDayOfWeekVO cornerDayOfWeekVO, SessionInfoVO sessionInfoVO) {
     	cornerDayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if (cornerDayOfWeekVO.getCornrCd() != null && !"".equals(cornerDayOfWeekVO.getCornrCd())) {
+    		String[] arrCornrCd = cornerDayOfWeekVO.getCornrCd().split(",");
+    		if (arrCornrCd.length > 0) {
+    			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+    				cornerDayOfWeekVO.setArrCornrCd(arrCornrCd);
+    				cornerDayOfWeekVO.setArrStoreCornr(arrCornrCd);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = cornerDayOfWeekVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				cornerDayOfWeekVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+    	
     	if(!StringUtil.getOrBlank(cornerDayOfWeekVO.getArrCornrCd()).equals("")) {
-    		
     		// 동적 컬럼 생성을 위한 쿼리 변수.
         	String sQuery1 = "";
         	for(int i=0; i<cornerDayOfWeekVO.getArrCornrCd().length; i++) {
         		String[] list = cornerDayOfWeekVO.getArrCornrCd();
         		sQuery1 += ", NVL(SUM(CASE STORE_CD||'||'||CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.REAL_SALE_AMT END),'0') REAL_SALE_AMT"+ i +"\n";
         		sQuery1 += ", NVL(SUM(CASE STORE_CD||'||'||CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.TOT_SALE_QTY END),'0') SALE_QTY"+ i +"\n";
-        	
         	}
         	cornerDayOfWeekVO.setsQuery1(sQuery1);
     	}

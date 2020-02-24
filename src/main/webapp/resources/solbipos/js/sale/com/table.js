@@ -16,11 +16,11 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
  // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
-    
+
     // 첫째줄 헤더 생성
     var dataItem         	= {};
     dataItem.posNo      	= messages["saleComPopup.posNo"];
@@ -41,9 +41,9 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     dataItem.guestCnt3    	= messages["saleComPopup.guestCnt"];
     dataItem.guestCnt4    	= messages["saleComPopup.guestCnt"];
     dataItem.guestAmt   	= messages["saleComPopup.guestAmt"];
-    
+
     s.columnHeaders.rows[0].dataItem = dataItem;
-    
+
     s.itemFormatter = function (panel, r, c, cell) {
         if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
             //align in center horizontally and vertically
@@ -91,7 +91,11 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
     $scope.tblCd    	= data.tblCd;
-
+    $scope.saleDate     = data.saleDate;
+    $scope.saleDay 		= data.saleDay;
+    $scope.saleYm     	= data.saleYm;
+    $scope.gubun     	= data.gubun;
+    
     $scope.tableLayer.show(true);
 
     $scope.searchSaleComTableList();
@@ -104,12 +108,19 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 테이블별 리스트 조회
   $scope.searchSaleComTableList = function () {
     // 파라미터
-    var params      = {};
-    params.storeCd  = $scope.storeCd;
-    params.startDate = $scope.startDate;
-    params.endDate = $scope.endDate;
-    params.tblCd    = $scope.tblCd;
-
+    var params      	= {};
+    if($scope.gubun == "month"){
+    	params.storeCd  	= $scope.storeCd;
+    	params.tblCd    	= $scope.tblCd;
+    	params.saleYm     	= $scope.saleYm;
+    }else{
+        params.storeCd  	= $scope.storeCd;
+        params.startDate 	= $scope.startDate;
+        params.endDate 		= $scope.endDate;
+        params.tblCd    	= $scope.tblCd;
+        params.saleDate 	= $scope.saleDate;
+        params.saleDay     	= $scope.saleDay;
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/table/view.sb", params);
   };

@@ -10,6 +10,8 @@ public class StoreRankVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 정렬순서 */
     private String chkSort;
     /** 결제수단전체 */
@@ -19,6 +21,8 @@ public class StoreRankVO extends PageVO {
     /** 판매자별, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
+    /** 본사,매장 구분 */
+    private String orgnFg;
 
     /**
      * @return the hqOfficeCd
@@ -87,4 +91,21 @@ public class StoreRankVO extends PageVO {
     public void setsQuery2(String sQuery2) {
         this.sQuery2 = sQuery2;
     }
+    
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+
+	public void setArrStoreCd(String[] arrStoreCd) {
+		this.arrStoreCd = arrStoreCd;
+	}
+	
 }

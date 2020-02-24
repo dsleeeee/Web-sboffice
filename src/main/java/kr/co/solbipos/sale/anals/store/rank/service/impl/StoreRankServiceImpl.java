@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.anals.store.rank.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.anals.store.rank.service.StoreRankService;
 import kr.co.solbipos.sale.anals.store.rank.service.StoreRankVO;
@@ -27,6 +28,10 @@ public class StoreRankServiceImpl implements StoreRankService {
     public List<DefaultMap<String>> getStoreRankList(StoreRankVO storeRankVO, SessionInfoVO sessionInfoVO) {
   
     	storeRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(storeRankVO.getStoreCd()).equals("")) {
+        	storeRankVO.setArrStoreCd(storeRankVO.getStoreCd().split(","));
+        }
     	
         // 판매자별 쿼리 변수
         String sQuery1 = "";

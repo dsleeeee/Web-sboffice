@@ -20,7 +20,7 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 	angular.extend(this, new RootController('saleTrnsitnCtrl', $scope, $http, true));
 
     //검색조건에 조회기간
-    var startDate 	= wcombo.genDateVal("#startDate", gvStartDate);
+    var startDate 	= wcombo.genDateVal("#startDate", getToday());
   //var endDate 	= wcombo.genDateVal("#endDate",   gvEndDate  );
 
 	//추후 칼럼이 추가나 삭제되는 경우를 대비해 변수값으로 사용
@@ -75,6 +75,16 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
         });
 		*/
 
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+        	var ht = s.hitTest(e);
+        	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+        		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+        		if (rng && rng.columnSpan > 1) {
+        			e.preventDefault();
+        		}
+        	}
+        }, true);
+
 
         //Grid Header 2줄 - START	----------------------------------------------------------------
         s.allowMerging = 2;
@@ -117,6 +127,7 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 			dataItem.dayAvrSale			= messages["saleTrnsitn.dayAvrSale"];
 			dataItem.exhaustionOrg		= messages["saleTrnsitn.exhaustionOrg"];
         s.columnHeaders.rows[0].dataItem = dataItem;
+
     	//Grid Header 2줄 - END		----------------------------------------------------------------
 
 
@@ -124,6 +135,10 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
                 panel.rows   [r].allowMerging	= true;
                 panel.columns[c].allowMerging	= true;
+
+                console.log(panel.rows[1]);
+
+                //panel.columns[3][0].allowSorting	= false;
 
                 wijmo.setCss(cell, {
 				                    display    : 'table',

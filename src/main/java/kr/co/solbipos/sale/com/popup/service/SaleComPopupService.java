@@ -15,4 +15,9 @@ public interface SaleComPopupService {
 	/** 매출공통팝업 - 승인현황(매장현황) 팝업(매장명 클릭) 리스트 조회 */
     List<DefaultMap<String>> getApprPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO);
     
+	/** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
+    List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO);
+    
+	/** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
+    List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO);
 }

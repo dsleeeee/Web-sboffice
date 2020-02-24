@@ -120,4 +120,10 @@ public interface ProdMapper {
     /** 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도  사이드 선택상품 추가 */
     String insertSdselProdToStore (ProdVO prodVO);
 
+    /** 매장 적용 상품 조회 */
+    List<DefaultMap<String>> getStoreProdRegList(ProdVO prodVO);
+
+    /** 매장 미적용 상품 조회 */
+    List<DefaultMap<String>> getStoreProdNoRegList(ProdVO prodVO);
+
 }

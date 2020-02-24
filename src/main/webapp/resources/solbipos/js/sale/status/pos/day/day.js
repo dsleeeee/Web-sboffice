@@ -15,10 +15,12 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#posDaySelectStoreCd").val();
 		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -29,7 +31,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	      if (e.panel === s.cells) {
 	        var col = s.columns[e.col];
 
-	        if (col.binding === "totSaleCnt") { // 수량
+	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt") { // 수량합계
 	        	var item = s.rows[e.row].dataItem;
 	          	wijmo.addClass(e.cell, 'wijLink');
 	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -95,22 +97,6 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			}
 		}
 
-		// 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
-	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
-	    	var ht = s.hitTest(e);
-	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
-	    		console.log("111");
-	    		var col         = ht.panel.columns[ht.col];
-	    		var selectedRow = s.rows[ht.row].dataItem;
-	    		var params       = {};
-	    		params.chkPop	= "empPop";
-	    		params.storeCd   = $("#posDaySelectStoreCd").val();
-	    		params.saleDate   = selectedRow.saleDate;
-	    		if (col.binding === "totSaleCnt") { // 수량합계
-	    			$scope._broadcast('saleComProdCtrl', params);
-	    		}
-	    	}
-	    });
 		// <-- //그리드 헤더2줄 -->
 	};
 
@@ -159,7 +145,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/pos/day/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/day/list.sb", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -194,11 +180,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'excel.xlsx', function () {
+			}, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.day"]+'_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);
@@ -220,6 +206,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    var params = {};
 	    params.storeCd = storeCd;
 	    params.PosNo = posCd;
+	    params.hqOfficeCd = $("#posDaySelectHqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({
@@ -245,7 +232,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    			storePosCd = $("#posDaySelectPosCd").val();
 	    			storePosNm = $("#posDaySelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -278,16 +269,17 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				  var colValue = arrPosCd[i-1];
 				  var colName = arrPosNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colSplit2 = colValue.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]);
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]+"("+colSplit2[0]+")");
 
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
@@ -298,10 +290,46 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-
+				  
 			  }
 		  }
-
+		  
+		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
+		    	var ht = grid.hitTest(e);
+		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
+	
+		    		var col         = ht.panel.columns[ht.col];
+		    		var selectedRow = grid.rows[ht.row].dataItem;
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
+			   		
+		    		var params       = {};
+		    		params.chkPop	= "posPop";    		
+		    		params.saleDate   = selectedRow.saleDate;
+		    		
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+			    		params.storeCd   = storeCd;
+			    		params.posNo	 = posNo;
+		    			$scope._broadcast('saleComProdCtrl', params); // 수량
+		    		}else if (col.binding === "totSaleCnt") { // 수량합계
+		    			params.storeCd   = $("#posDaySelectStoreCd").val();
+		    			$scope._broadcast('saleComProdCtrl', params);
+		    		}
+		    	}
+		    	
+		    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+		    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+		    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+		    	 */
+		    	if(ht.cellType == 2 && ht.row < 2 && ht.col > 6) {
+		    		grid.allowSorting = false;
+	    		} else {
+	    			grid.allowSorting = true;
+	    		}
+		  });
+		  
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -342,7 +370,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		  }
 
 		  $scope.flex.refresh();
-
+		  
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
 	  }

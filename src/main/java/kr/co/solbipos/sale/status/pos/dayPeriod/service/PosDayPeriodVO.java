@@ -20,6 +20,8 @@ public class PosDayPeriodVO extends PageVO {
 
 	/** 매출일자요일명 */
     private String dayName;
+    /** 본사사업장코드 */
+    private String orgnFg;
 	/** 본사사업장코드 */
     private String hqOfficeCd;
     /** 본사브랜드코드 */
@@ -37,7 +39,7 @@ public class PosDayPeriodVO extends PageVO {
 
     /** 조회매장포스수 */
     private int storePosCnt;
-
+    
 	public String getStoreCd() {
 		return storeCd;
 	}
@@ -130,5 +132,11 @@ public class PosDayPeriodVO extends PageVO {
 	}
 	public void setStorePosCnt(int storePosCnt) {
 		this.storePosCnt = storePosCnt;
+	}
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
 	}
 }

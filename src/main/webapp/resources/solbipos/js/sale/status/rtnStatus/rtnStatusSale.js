@@ -19,7 +19,13 @@ app.controller('rtnStatusSaleCtrl', ['$scope', function ($scope) {
         $("#rtnStatusProdView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
-        var scope = agrid.getScope("rtnStatusDayCtrl");
+        var scope = agrid.getScope("rtnStatusDayMainCtrl");
+        scope.flex.refresh();
+
+        scope = agrid.getScope("rtnStatusDayDtlCtrl");
+        scope.flex.refresh();
+
+        scope = agrid.getScope("rtnStatusPosDtlCtrl");
         scope.flex.refresh();
     };
 

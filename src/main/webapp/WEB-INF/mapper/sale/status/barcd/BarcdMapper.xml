@@ -4,46 +4,190 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.barcd.service.impl.BarcdMapper">
 
-    <!-- 코너별매출일자별 - 리스트 조회 -->
+    <!-- 바코드별별 - 리스트 조회 -->
     <!--
         TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
         PARAM    : cornerDayVO
-        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+        COMMENTS : 바코드별별 - 리스트를 조회한다.
     -->
     <select id="getBarcdList" parameterType="barcdVO" resultType="DefaultMap">
       <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT M.BARCD_CD
-              , M.PROD_CD
-              , M.PROD_NM
-              , SUM(TSDP.TOT_SALE_QTY) TOT_SALE_QTY
-              , SUM(TSDP.REAL_SALE_AMT) REAL_SALE_AMT
+       SELECT A.BARCD_CD
+       		  , B.LV1_NM
+       		  , B.LV2_NM
+       		  , B.LV3_NM
+              , B.PROD_CD
+              , B.PROD_NM
+              , SUM(B.TOT_SALE_QTY) TOT_SALE_QTY
+              , SUM(B.REAL_SALE_AMT) REAL_SALE_AMT
        ]]>
        <include refid="CmmSQL.PagingTemplateCount"/>
+       <choose>
+       <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+        FROM TB_HQ_PRODUCT_BARCD A
+        	,(
+    		   SELECT A.LV1_NM,
+	               A.LV2_NM,
+	               A.LV3_NM,
+	               C.PROD_CD,
+	               B.PROD_NM,
+	               C.STORE_CD,
+	               C.HQ_OFFICE_CD,
+	               SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,
+	               SUM(C.TOT_SALE_AMT)     AS TOT_SALE_AMT,
+	               SUM(C.TOT_DC_AMT)       AS TOT_DC_AMT,
+	               SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
+	            FROM    (
+	                         SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+	                                 A.PROD_CLASS_CD     AS LV2_CD,
+	                                 A.PROD_CLASS_NM     AS LV2_NM,
+	                                 B.PROD_CLASS_CD     AS LV3_CD,
+	                                 B.PROD_CLASS_NM     AS LV3_NM,
+	                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
+	                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
+	                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+	                         FROM    (
+	                                     SELECT  HQ_OFFICE_CD,
+	                                           P_PROD_CLASS_CD,
+	                                           PROD_CLASS_CD,
+	                                           PROD_CLASS_NM
+	                                     FROM    TB_HQ_PRODUCT_CLASS
+	                                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                                     AND     P_PROD_CLASS_CD IN (
+	                                                                    SELECT  PROD_CLASS_CD
+	                                                                    FROM    TB_HQ_PRODUCT_CLASS
+	                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                                                                    AND     P_PROD_CLASS_CD = '00000'
+	                                                                 )
+	                                 )                      A,
+	                                 TB_HQ_PRODUCT_CLASS    B
+	                         WHERE   B.P_PROD_CLASS_CD IN    (
+	                                                             SELECT  PROD_CLASS_CD
+	                                                             FROM    TB_HQ_PRODUCT_CLASS
+	                                                             WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                                                             AND     P_PROD_CLASS_CD IN (
+	                                                                                      SELECT  PROD_CLASS_CD
+	                                                                                            FROM    TB_HQ_PRODUCT_CLASS
+	                                                                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+	                                                                                            AND     P_PROD_CLASS_CD = '00000'
+	                                                                                         )
+	                                                         )
+	                         AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+	                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+	                     )                   A,
+	                     TB_HQ_PRODUCT       B,
+	                     TB_SL_DAILY_PROD    C
+	             WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
+	             AND     B.PROD_CLASS_CD = A.LV3_CD
+	             AND     B.PROD_CD       = C.PROD_CD
+	             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+	              <if test='startDate != null and startDate != ""'>
+                     AND C.SALE_DATE >= #{startDate}
+                  </if>
+                  <if test='endDate != null and endDate != ""'>
+                     AND C.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                  </if>
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>    <!-- 매장 -->
+            FROM TB_MS_PRODUCT_BARCD A
+        	,(
+    		   SELECT A.LV1_NM,
+	               A.LV2_NM,
+	               A.LV3_NM,
+	               C.PROD_CD,
+	               B.PROD_NM,
+	               C.STORE_CD,
+	               C.HQ_OFFICE_CD,
+	               SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,
+	               SUM(C.TOT_SALE_AMT)     AS TOT_SALE_AMT,
+	               SUM(C.TOT_DC_AMT)       AS TOT_DC_AMT,
+	               SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
+		           FROM    (
+		                         SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+		                                 A.PROD_CLASS_CD     AS LV2_CD,
+		                                 A.PROD_CLASS_NM     AS LV2_NM,
+		                                 B.PROD_CLASS_CD     AS LV3_CD,
+		                                 B.PROD_CLASS_NM     AS LV3_NM,
+		                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
+		                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
+		                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+		                         FROM    (
+		                                     SELECT  STORE_CD,
+		                                           P_PROD_CLASS_CD,
+		                                           PROD_CLASS_CD,
+		                                           PROD_CLASS_NM
+		                                     FROM    TB_MS_PRODUCT_CLASS
+		                                     WHERE   STORE_CD        = #{storeCd}
+		                                     AND     P_PROD_CLASS_CD IN (
+		                                                                    SELECT  PROD_CLASS_CD
+		                                                                    FROM    TB_MS_PRODUCT_CLASS
+		                                                                    WHERE   STORE_CD        = #{storeCd}
+		                                                                    AND     P_PROD_CLASS_CD = '00000'
+		                                                                 )
+		                                 )                      A,
+		                                 TB_MS_PRODUCT_CLASS    B
+		                         WHERE   B.P_PROD_CLASS_CD IN    (
+		                                                             SELECT  PROD_CLASS_CD
+		                                                             FROM    TB_MS_PRODUCT_CLASS
+		                                                             WHERE   STORE_CD        = #{storeCd}
+		                                                             AND     P_PROD_CLASS_CD IN (
+		                                                                                      SELECT  PROD_CLASS_CD
+		                                                                                            FROM    TB_MS_PRODUCT_CLASS
+		                                                                                            WHERE   STORE_CD        = #{storeCd}
+		                                                                                            AND     P_PROD_CLASS_CD = '00000'
+		                                                                                         )
+		                                                         )
+		                         AND     A.STORE_CD      = B.STORE_CD
+		                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+		                     )                   A,
+		                     TB_MS_PRODUCT       B,
+		                     TB_SL_DAILY_PROD    C
+		             WHERE   B.STORE_CD      = #{storeCd}
+		             AND     B.PROD_CLASS_CD = A.LV3_CD
+		             AND     B.PROD_CD       = C.PROD_CD
+		             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+		            <if test='startDate != null and startDate != ""'>
+			           AND C.SALE_DATE >= #{startDate}
+			        </if>
+			        <if test='endDate != null and endDate != ""'>
+			           AND C.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			        </if>
+            </when>
+        </choose>
+               GROUP BY    A.LV1_CD,
+                   A.LV2_CD,
+                   A.LV2_NM,
+                   A.LV3_CD,
+                   A.LV3_NM,
+                   A.LV1_NM,
+                   A.LV2_NM_FULL,
+                   A.LV3_NM_FULL,
+                   C.PROD_CD,
+                   B.PROD_NM,
+                   C.STORE_CD,
+                   C.HQ_OFFICE_CD
+       		   ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
+	        ) B
+	    WHERE 1=1
+        AND A.PROD_CD(+) = B.PROD_CD
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND A.HQ_OFFICE_CD(+) = B.HQ_OFFICE_CD
+        </if>
+        <if test='orgnFg != null and orgnFg == "S"'>
+            AND A.STORE_CD(+) = B.STORE_CD
+        </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND B.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+         <if test='prodNm != null and prodNm != ""'>
+           AND B.PROD_NM LIKE ('#{prodNm}%')
+        </if>
         <![CDATA[
-        FROM (
-	        SELECT TMPB.STORE_CD, TMP.PROD_CD, TMP.PROD_NM, TMPB.BARCD_CD, TMPB.BARCD_NM
-	          FROM TB_MS_PRODUCT_BARCD TMPB
-	             , TB_MS_PRODUCT TMP
-	         WHERE TMPB.STORE_CD = TMP.STORE_CD
-	           AND TMPB.PROD_CD = TMP.PROD_CD
-	           AND TMPB.STORE_CD = 'A000005'
-	                ) M
-	        , TB_SL_DAILY_PROD TSDP
-	    WHERE M.STORE_CD(+) = TSDP.STORE_CD
-          AND M.PROD_CD(+) = TSDP.PROD_CD
-        ]]>
-        <if test='storeCd != null and storeCd != ""'>
-           AND TSDP.STORE_CD = #{storeCd}
-        </if>
-        <if test='startDate != null and startDate != ""'>
-           AND TSDP.SALE_DATE >= #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-           AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
-        </if>
-        <![CDATA[
-	    GROUP BY M.BARCD_CD, M.PROD_CD, M.PROD_NM
+	    GROUP BY A.BARCD_CD, B.PROD_CD, B.PROD_NM, B.LV1_NM, B.LV2_NM, B.LV3_NM
         ]]>
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -57,44 +201,39 @@
     -->
     <select id="getBarcdDtlList" parameterType="barcdVO" resultType="DefaultMap">
       <include refid="CmmSQL.PagingTemplateHeader"/>
-       <![CDATA[
-       SELECT TSDP.SALE_DATE
-              , TSDP.STORE_CD
-              , M.STORE_NM
-              , M.PROD_NM
-              , SUM(TSDP.TOT_SALE_QTY) TOT_SALE_QTY
-              , SUM(TSDP.TOT_SALE_AMT) TOT_SALE_AMT
-              , SUM(TSDP.TOT_DC_AMT) TOT_DC_AMT
-              , SUM(TSDP.REAL_SALE_AMT) REAL_SALE_AMT
-       ]]>
+		SELECT TO_CHAR(TO_DATE(A.SALE_DATE), 'YYYY-MM-DD') AS SALE_DATE
+				, A.STORE_CD
+				, B.STORE_NM
+				, SUM(A.TOT_SALE_QTY) TOT_SALE_QTY
+				, SUM(A.TOT_SALE_AMT) TOT_SALE_AMT
+				, SUM(A.TOT_DC_AMT) TOT_DC_AMT
+				, SUM(A.REAL_SALE_AMT) REAL_SALE_AMT
        <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
-        FROM (
-	        SELECT TMPB.STORE_CD, TMS.STORE_NM, TMP.PROD_CD, TMP.PROD_NM, TMPB.BARCD_CD, TMPB.BARCD_NM
-	          FROM TB_MS_PRODUCT_BARCD TMPB
-	             , TB_MS_PRODUCT TMP
-	             , TB_MS_STORE TMS
-	         WHERE TMPB.STORE_CD = TMP.STORE_CD
-	           AND TMPB.PROD_CD = TMP.PROD_CD
-	           AND TMPB.STORE_CD = 'A000005'
-	            ) M
-	        , TB_SL_DAILY_PROD TSDP
-	    WHERE M.STORE_CD(+) = TSDP.STORE_CD
-        AND M.PROD_CD(+) = TSDP.PROD_CD
-        ]]>
-        <if test='storeCd != null and storeCd != ""'>
-           AND TSDP.STORE_CD = #{storeCd}
-        </if>
-        <if test='startDate != null and startDate != ""'>
-           AND TSDP.SALE_DATE >= #{startDate}
+		FROM TB_SL_DAILY_PROD A
+				,TB_MS_STORE B
+		WHERE 1 = 1
+		AND A.STORE_CD = B.STORE_CD
+		<if test='startDate != null and startDate != ""'>
+           AND A.SALE_DATE >= #{startDate}
         </if>
         <if test='endDate != null and endDate != ""'>
-           AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+           AND A.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
-        <![CDATA[
-        GROUP BY TSDP.SALE_DATE, TSDP.STORE_CD, M.STORE_NM, M.PROD_NM
-        ORDER BY TSDP.SALE_DATE DESC
-        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+           AND A.PROD_CD =  #{prodCd}
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+           AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='orgnFg != null and orgnFg == "S"'>
+	        <if test='arrStoreCd != null and arrStoreCd != ""'>
+	           AND A.STORE_CD IN
+	            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+	                #{item}
+	            </foreach>
+	        </if>
+        </if>
+        GROUP BY A.STORE_CD, A.SALE_DATE ,B.STORE_NM
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 </mapper>

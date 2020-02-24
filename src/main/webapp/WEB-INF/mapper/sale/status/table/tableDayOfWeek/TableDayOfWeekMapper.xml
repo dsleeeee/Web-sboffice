@@ -4,15 +4,21 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.table.dayOfWeek.service.impl.TableDayOfWeekMapper">
 
-	<select id="getTableDayOfWeekList"
-		parameterType="tableDayOfWeekVO" resultType="DefaultMap">
-		<include refid="CmmSQL.PagingTemplateHeader" />
-		SELECT TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
-				, SUM(REAL_SALE_AMT) TOT_REAL_SALE_AMT
-				, SUM(REAL_SALE_CNT) TOT_REAL_SALE_CNT
-				, SUM(GUEST_CNT_1) TOT_GUEST_CNT
+	<select id="getTableDayOfWeekList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
+		SELECT 	TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
+				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+    				WHEN '일' THEN 1
+    				WHEN '월' THEN 2
+    				WHEN '화' THEN 3
+    				WHEN '수' THEN 4
+    				WHEN '목' THEN 5
+    				WHEN '금' THEN 6
+    				ELSE 7
+    			END AS DAY_ORDER
+				, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+				, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+				, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
 				${sQuery1}
-				<include refid="CmmSQL.PagingTemplateCount" />
 		FROM TB_SL_DAILY_TABLE TSDT
 		WHERE 1 = 1
 		<!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
@@ -33,9 +39,8 @@
    			  AND TSDT.SALE_DATE >= #{startDate}
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]> -->
-		GROUP BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY')
-		ORDER BY TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') DESC
-		<include refid="CmmSQL.PagingTemplateBottom" />
+		GROUP BY TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+		ORDER BY DAY_ORDER
 	</select>
 
 	<select id="getStoreTableList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
@@ -45,6 +50,13 @@
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
 			FROM    TB_MS_TABLE TMP
 			WHERE	1=1
+			AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMP.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+				<if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+	               	AND TMP.STORE_CD IN
+	               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                   	#{item}
+	               	</foreach>
+	           	</if>
 	           	<if test='arrTableCd != null and arrTableCd.length >= 0'>
 	               	AND TMP.STORE_CD||'||'||TMP.TBL_CD IN
 	               	<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">

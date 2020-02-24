@@ -9,8 +9,8 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	angular.extend(this, new RootController('empDayCtrl', $scope, $http, true));
      
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchDayStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchDayEndDate", getToday());
   
 	// 콤보박스 데이터 Set
 	$scope._setComboData('empDaylistScaleBox', gvListScaleBoxData);
@@ -37,6 +37,17 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	      var ht = s.hitTest(e);
+	      
+	      /* 머지된 헤더 셀 클릭시 정렬 비활성화
+	       * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+	       * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	       */
+	    	if(ht.cellType == 2 && ht.row < 2 && ht.col > 4) {
+	    		s.allowSorting = false;
+			} else {
+				s.allowSorting = true;
+			}
+	    	
 	      if (ht.cellType === wijmo.grid.CellType.Cell) {
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;
@@ -114,20 +125,25 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayCtrl", function (event, data) {
 	  
-     if ($("#empDaySelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
-	  
-	 $scope.getEmpNmList();    
-	 $scope.searchEmpDayList();
+	 $scope.getEmpNmList(true);    
+	 $scope.searchEmpDayList(true);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("empDayCtrlSrch", function (event, data) {
+	  
+	 $scope.getEmpNmList(false);    
+	 $scope.searchEmpDayList(false);
 
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
   // 판매자일자별 리스트 조회
-  $scope.searchEmpDayList = function () {
+  $scope.searchEmpDayList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -146,6 +162,8 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     }else{
     	params.empChk = "N";
     }
+    params.listScale = $scope.empDaylistScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/emp/day/list.sb", params, function() {});
 
@@ -176,8 +194,10 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	    // 파라미터
 	    var params       = {};
 	    params.storeCd   = $("#empDaySelectStoreCd").val();
-	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    if(!$scope.isChecked){
+		    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    }
 	    
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";
@@ -198,13 +218,15 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 				//첫째줄 헤더 생성
 		   	 	for(var i=0; i<length; i++){
 			
-			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" , isReadOnly: "true", aggregate: "Sum" }));
 			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.billCnt"], binding: 'billCnt'+i, align: "center" , isReadOnly: "true", aggregate: "Sum"}));
 			   		grid.columnHeaders.setCellData(0, 5+(i*2), response.data.data.list[i].storeNm);
 			   		grid.columnHeaders.setCellData(0, 6+(i*2), response.data.data.list[i].storeNm);
 			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);
 			   		grid.columnHeaders.setCellData(1, 6+(i*2), response.data.data.list[i].nmcodeNm);
-	    	    
+			   		
+					grid.columnHeaders.rows[0].allowSorting = false;
+					grid.columnHeaders.rows[1].allowSorting = false;
 		   	 	}
 			}
 			
@@ -257,11 +279,11 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_일자별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

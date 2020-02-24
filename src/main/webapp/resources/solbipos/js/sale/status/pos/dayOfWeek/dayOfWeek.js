@@ -15,29 +15,30 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayOfWeekListScaleBox", gvListScaleBoxData);
 
+	var checkInt = true;
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
+
 		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posDayOfWeekCtrl");
 
 		// 그리드 링크 효과
-		s.formatItem.addHandler(function (s, e) {
-			if (e.panel === s.cells) {
-				var col = s.columns[e.col];
+	    s.formatItem.addHandler(function (s, e) {
+	      if (e.panel === s.cells) {
+	        var col = s.columns[e.col];
 
-				if (col.format === "date") {
-					e.cell.innerHTML = getFormatDate(e.cell.innerText);
-				} else if (col.format === "dateTime") {
-					e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-				} else if (col.format === "time") {
-					e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
-				}
-			}
-		});
+	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt") { // 수량합계
+	        	var item = s.rows[e.row].dataItem;
+	          	wijmo.addClass(e.cell, 'wijLink');
+	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
+	        }
+	      }
+	    });
 
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -101,7 +102,18 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayOfWeekCtrl", function (event, data) {
 
-		$scope.searchPosDayOfWeekList();
+		$scope.searchPosDayOfWeekList(true);
+
+		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
+		var posCd = $("#posDayOfWeekSelectPosCd").val();
+
+		$scope.getRePosNmList(storeCd, posCd);
+	});
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayOfWeekCtrlSrch", function (event, data) {
+
+		$scope.searchPosDayOfWeekList(false);
 
 		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
 		var posCd = $("#posDayOfWeekSelectPosCd").val();
@@ -110,7 +122,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	});
 
 	// 포스별매출요일별 리스트 조회
-	$scope.searchPosDayOfWeekList = function () {
+	$scope.searchPosDayOfWeekList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
@@ -118,6 +130,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		params.posNo = $("#posDayOfWeekSelectPosCd").val();
 		params.listScale = $scope.posDayOfWeekListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
+		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -131,7 +144,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/pos/dayOfWeek/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/dayOfWeek/list.sb", params);
 		$scope._setPagingInfo('curr', 1);
 	};
 
@@ -167,11 +180,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
 				includeColumnHeaders: true,
-				includeCellStyles   : false,
+				includeCellStyles   : true,
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, 'excel.xlsx', function () {
+			}, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayOfWeek"]+'_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);
@@ -193,6 +206,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		var params = {};
 	    params.storeCd = storeCd;
 	    params.PosNo = posCd;
+	    params.hqOfficeCd = $("#posDayOfWeekSelectHqOfficeCd").val();
 
 	    // ajax 통신 설정
 	    $http({
@@ -218,7 +232,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			storePosCd = $("#posDayOfWeekSelectPosCd").val();
 	    			storePosNm = $("#posDayOfWeekSelectPosName").val();
 
-	    			$scope.makeDataGrid();
+	    			if (!checkInt) {
+	    				$scope.makeDataGrid();
+	    			} else {
+	    				checkInt = false;
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -251,16 +269,17 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 				  var colValue = arrPosCd[i-1];
 				  var colName = arrPosNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colSplit2 = colValue.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum", dataType: 2}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum", dataType: 2}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum", dataType: 2}));
 
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]);
-				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]);
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]+"("+colSplit2[0]+")");
+				  grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]+"("+colSplit2[0]+")");
 
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
 				  grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
@@ -274,7 +293,45 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 			  }
 		  }
+		  
+		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
+		    	var ht = grid.hitTest(e);
+		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
+	
+		    		var col         = ht.panel.columns[ht.col];
+		    		var selectedRow = grid.rows[ht.row].dataItem;
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
+			   		
+		    		var params      = {};
+		    		params.chkPop	= "posPop";    		
+					params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
+					params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+		    		params.yoil     = selectedRow.dayName;
 
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+			    		params.storeCd   = storeCd;
+			    		params.posNo	 = posNo;
+		    			$scope._broadcast('saleComProdCtrl', params); // 수량
+		    		}else if (col.binding === "totSaleCnt") { // 수량합계
+		    			params.storeCd   = $("#posDayOfWeekSelectStoreCd").val();
+		    			$scope._broadcast('saleComProdCtrl', params);
+		    		}
+		    	}
+		    	
+		    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+		    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+		    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+		    	 */
+		    	if(ht.cellType == 2 && ht.row < 2 && ht.col > 5) {
+		    		grid.allowSorting = false;
+	    		} else {
+	    			grid.allowSorting = true;
+	    		}
+		  });
+		  	
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {

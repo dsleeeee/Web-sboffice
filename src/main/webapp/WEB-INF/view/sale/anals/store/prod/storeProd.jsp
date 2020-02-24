@@ -31,7 +31,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="5">
+        	<td colspan="3">
           	<div class="sb-select">      
        		    <span class="txtIn"><input id="srchProdStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -48,10 +48,10 @@
       	<tr>  
       		<th><s:message code="store.prodCat" /></th>
 		    <td>
-		        <input type="text" class="sb-input w70" id="srchProdDayCd" ng-model="prodDayCdNm" ng-click="popUpProdDay()" style="float: left;"
-		                 placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-		        <input type="hidden" id="_prodDayCd" name="prodDayCd" ng-model="prodDayCd" disabled />
-		        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdDayCd" style="margin-left: 5px;" ng-click="delProdDay()"><s:message code="cmm.selectCancel"/></button>
+		        <input type="text" class="sb-input w50" id="srchStoreProdProdNm" ng-model="prodCdNm" ng-click="popUpProd()" style="float: left; width:200px;" placeholder="선택" readonly/>
+		        <input type="hidden" id="srchStoreProdProdCd" name="srchStoreProdProdCd" ng-model="prodCd" disabled />
+		        <input type="hidden" id="srchStoreProdProdClassCd" name="srchStoreProdProdClassCd" ng-model="prodCalssCd" disabled />
+		        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
 		    </td>
          	<td colspan="2">
             	<span class="chk ml10">
@@ -60,6 +60,21 @@
             	</span>
         	</td>    	
       	</tr>
+      	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+      	<tr>
+            <%-- 매장코드 --%>           
+          	<th><s:message code="todayBillSaleDtl.store"/></th>
+          	<td colspan="3">
+            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+             		<jsp:param name="targetId" value="storeProdSelectStore"/>
+            	</jsp:include>
+              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+          	</td> 	
+        </tr>
+        </c:if>
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+        	<input type="hidden" id="storeProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
+      	</c:if>
 		</tbody>
 	</table>
 
@@ -95,8 +110,10 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.prodClassCd"/>" 	binding="prodClassNm" 	width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.prodCd"/>"		binding="prodCd" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.prodNm"/>" 		binding="prodNm" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
  		  <wj-flex-grid-column header="<s:message code="store.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
@@ -125,8 +142,8 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/prod/storeProd.js?ver=20190125.02" charset="utf-8"></script>
 
-<%-- 레이어 팝업 : 상품정보 입력/수정 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
+<%-- 레이어 팝업 : 상품정보 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

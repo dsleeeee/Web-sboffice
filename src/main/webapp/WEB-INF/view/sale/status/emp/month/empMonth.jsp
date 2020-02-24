@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.month"/></a>		
     	<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empMonthCtrl')">
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empMonthCtrlSrch')">
     		<s:message code="cmm.search"/>
     	</button>		
 	</div> 
@@ -28,8 +28,8 @@
       	<tbody>
        	<%-- 조회일자 --%>
 		<tr>
-	    	<th><s:message code="cmm.search.date" /></th>
-        	<td>
+	    	<th><s:message code="cmm.search.month" /></th>
+        	<td colspan="2">
           	<div class="sb-select">      
 	          <span class="txtIn w110px">
 	              <wj-input-date
@@ -57,7 +57,13 @@
 	                      selection-mode="Month" 
 	                      format="y">
 	              </wj-input-date>
-	            </span>        
+	            </span>      
+                <span class="chk ml10">
+					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+					<label for="chkDt">
+						<s:message code="cmm.all.day" />
+					</label>
+				</span>  
           	</div>
         	</td>
         	<td>
@@ -91,12 +97,12 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="empMonthlistScaleBox"
-	      ng-model="listScale"
+	      ng-model="empMonthlistScale"
 	      control="listScaleCombo"
 	      items-source="_getComboData('empMonthlistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
+	      is-editable="false"	      
 	      initialized="_initComboBox(s)">
 	    </wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -118,6 +124,7 @@
           sticky-headers="true"
           selection-mode="Row"
           items-source="data"
+          frozen-columns="4"
           item-formatter="_itemFormatter">
 
           <!-- define columns -->

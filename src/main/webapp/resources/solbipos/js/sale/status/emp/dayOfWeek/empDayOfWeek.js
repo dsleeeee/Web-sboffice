@@ -9,12 +9,9 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	angular.extend(this, new RootController('empDayOfWeekCtrl', $scope, $http, true));
      
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", gvEndDate);
-  
-	// 콤보박스 데이터 Set
-	$scope._setComboData('empDayOfWeeklistScaleBox', gvListScaleBoxData);
-  
+	$scope.srchStartDate = wcombo.genDateVal("#srchDayOfWeekStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchDayOfWeekEndDate", getToday());
+   
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 				
@@ -37,6 +34,17 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	      var ht = s.hitTest(e);
+	      
+	      /* 머지된 헤더 셀 클릭시 정렬 비활성화
+	       * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+	       * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	       */
+	       if(ht.cellType == 2 && ht.row < 2 && ht.col > 3) {
+	    	   s.allowSorting = false;
+	  		} else {
+	  			s.allowSorting = true;
+	  		}
+	    	
 	      if (ht.cellType === wijmo.grid.CellType.Cell) {
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;
@@ -114,21 +122,26 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayOfWeekCtrl", function (event, data) {
-	  
-     if ($("#empDayOfWeekSelectStoreCd").val() === '') {
-        $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-        return false;
-     }
+	    
+	 $scope.getEmpNmList(true);    
+	 $scope.searchEmpDayOfWeekList(true);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
   
-	 $scope.getEmpNmList();    
-	 $scope.searchEmpDayOfWeekList();
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("empDayOfWeekCtrlSrch", function (event, data) {
+	    
+	 $scope.getEmpNmList(false);    
+	 $scope.searchEmpDayOfWeekList(false);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 판매자요일별 리스트 조회
-  $scope.searchEmpDayOfWeekList = function () {
+  $scope.searchEmpDayOfWeekList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -147,6 +160,8 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
     }else{
     	params.empChk = "N";
     }
+    params.isPageChk = isPageChk;
+	params.listScale = $scope.empDayOfWeeklistScale; //-페이지 스케일 갯수
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/emp/dayOfWeek/list.sb", params, function() {});
 
@@ -177,8 +192,11 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    // 파라미터
 	    var params       = {};
 	    params.storeCd   = $("#empDayOfWeekSelectStoreCd").val();
-	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    
+	    if(!$scope.isChecked){
+		    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	    }
 	    
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";
@@ -206,6 +224,9 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 			   		grid.columnHeaders.setCellData(0, 5+(i*2), response.data.data.list[i].storeNm);    
 			   		grid.columnHeaders.setCellData(1, 4+(i*2), response.data.data.list[i].nmcodeNm);
 			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);  
+			   		
+					grid.columnHeaders.rows[0].allowSorting = false;
+					grid.columnHeaders.rows[1].allowSorting = false;
 			   	}
 		   	 }
 	 
@@ -260,11 +281,11 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_판매자별_요일별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

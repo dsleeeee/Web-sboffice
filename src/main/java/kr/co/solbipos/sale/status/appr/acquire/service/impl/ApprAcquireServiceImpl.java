@@ -28,6 +28,146 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	@Override
 	public List<DefaultMap<String>> getApprAcquireList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+    		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
+    			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprAcquireVO.setArrCornrCd(arrCornrCd);
+//        				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprAcquireVO.setArrPosNo(arrPosNo);
+//        				apprAcquireVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		
 		return apprAcquireMapper.getApprAcquireList(apprAcquireVO);
+	}
+
+
+	/** 승인현황 카드매입사별 탭 - 모바일쿠폰 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getApprAcquireMcouponList(ApprAcquireVO apprAcquireVO,	SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+    		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
+    			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprAcquireVO.setArrCornrCd(arrCornrCd);
+//        				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprAcquireVO.setArrPosNo(arrPosNo);
+//        				apprAcquireVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		
+		return apprAcquireMapper.getApprAcquireMcouponList(apprAcquireVO);
+	}
+
+
+	/** 승인현황 카드매입사별 탭 - 모바일페이 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getApprAcquireMpayList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+    		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
+    			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprAcquireVO.setArrCornrCd(arrCornrCd);
+//        				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprAcquireVO.setArrPosNo(arrPosNo);
+//        				apprAcquireVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		
+		return apprAcquireMapper.getApprAcquireMpayList(apprAcquireVO);
+	}
+
+
+	/** 승인현황 카드매입사별 탭 - 비매출카드 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getApprAcquireNcardList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
+		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		
+		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+    		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
+    			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprAcquireVO.setArrCornrCd(arrCornrCd);
+//        				apprAcquireVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+    			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprAcquireVO.setArrPosNo(arrPosNo);
+//        				apprAcquireVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprAcquireVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+		
+		return apprAcquireMapper.getApprAcquireNcardList(apprAcquireVO);
 	}
 }

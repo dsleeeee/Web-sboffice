@@ -21,8 +21,9 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData('storeProdlistScaleBox', gvListScaleBoxData);
     
 	// 조회일자 세팅
-	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", gvStartDate);
-	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", gvEndDate);
+	$scope.srchStartDate = wcombo.genDateVal("#srchProdStartDate", getToday());
+	$scope.srchEndDate   = wcombo.genDateVal("#srchProdEndDate", getToday());
+	$scope.orgnFg = gvOrgnFg;
 	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -45,13 +46,19 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 전체기간 체크박스 클릭이벤트
+  $scope.isChkDt = function() {
+    $scope.srchStartDate.isReadOnly = $scope.isChecked;
+    $scope.srchEndDate.isReadOnly = $scope.isChecked;
+  };
+  
   // 매장순위 리스트 조회
   $scope.searchStoreProdList = function () {
 
     // 파라미터
     var params       = {};
-//    params.storeCd = "Y";
+		params.storeCd   = $("#storeProdSelectStoreCd").val();
     if(!$scope.isChecked){
     	 params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
          params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
@@ -66,36 +73,36 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
 		params.chkProdAll = "N";
 	}
 	params.hqOfficeCd = $("#hqOfficeCd").val();
+	params.prodCd	 =  $("#srchStoreProdProdCd").val();
+	params.prodCalssCd =  $("#srchStoreProdProdClassCd").val();
+    params.orgnFg    = $scope.orgnFg;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/store/prod/list.sb", params, function() {});
 
   }; 
    
   // 상품분류정보 팝업
-  $scope.popUpProdDay = function() {
-    var popUp = $scope.prodClassPopUpLayer.show(true, function (s) {
-      // 선택 버튼 눌렀을때만
-      if (s.dialogResult === "wj-hide-apply") {
-        var scope = agrid.getScope('prodClassPopUpCtrl');
-        var prodDayCd = scope.getSelectedClass();
-        var params = {};
-        params.prodClassCd = prodDayCd;
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-          function(response){
-            $scope.prodDayCd = prodDayCd;
-            $scope.prodDayCdNm = response.data.data;
-          }
-        );
-      }
-    });
+  $scope.popUpProd = function() {
+    var params = {};
+    params.gubun = "StoreProd";
+    params.storeCd   = $("#storeProdSelectStoreCd").val();
+    //조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._broadcast('prodStrl', params);
   };
   
   // 상품분류정보 선택취소
-  $scope.delProdDay = function(){
-    $scope.prodDayCd = "";
-    $scope.prodDayCdNm = "";
+  $scope.delProd = function(){
+    $scope.prodCd = "";
+    $scope.prodCdNm = "";
+    $scope.prodCalssCd = "";
   }
+  
+  // 매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeProdSelectStoreShow = function () {
+    $scope._broadcast('storeProdSelectStoreCtrl');
+  };
   
   // 엑셀 다운로드
   $scope.excelDownloadStoreProd = function () {
@@ -108,11 +115,11 @@ app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출분석_매장별매출분석_매장상품순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

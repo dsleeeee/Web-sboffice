@@ -9,9 +9,10 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   angular.extend(this, new RootController('prodRankCtrl', $scope, $http, true));
     
   // 조회일자 세팅
-  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", gvEndDate);
- 
+  $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
+  $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
+  $scope.orgnFg = gvOrgnFg;
+  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
   
@@ -30,18 +31,20 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodRankCtrl", function (event, data) {
-    $scope.searchProdRankList();
+    $scope.searchProdRankList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-
+  
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodRankCtrlSrch", function (event, data) {
+    $scope.searchProdRankList(false);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
   // 상품매출순위 리스트 조회
-  $scope.searchProdRankList = function () {
-
-    if ($("#prodRankSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
-    }
+  $scope.searchProdRankList = function (isPageChk) {
 
     // 파라미터
     var params       = {};
@@ -57,7 +60,10 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
-    
+	params.listScale = $scope.prodRanklistScale; //-페이지 스케일 갯수
+	params.isPageChk = isPageChk;
+	params.orgnFg    = $scope.orgnFg;
+	
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {}, false);
 
@@ -87,11 +93,11 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'excel.xlsx', function () {
+      }, '매출현황_상품별_상품매출순위_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

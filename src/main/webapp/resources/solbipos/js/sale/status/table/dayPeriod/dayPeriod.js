@@ -9,10 +9,15 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('tableDayPeriodCtrl', $scope, $http, true));
 
+//  $scope.srchTableDayPeriodStartDate = wcombo.genDateVal("#srchTableDayPeriodStartDate", gvStartDate);
+//  $scope.srchTableDayPeriodEndDate   = wcombo.genDateVal("#srchTableDayPeriodEndDate", gvEndDate);
+
+  //comboBox 초기화
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+  var checkInt = true;
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	// comboBox 초기화
-	$scope._setComboData("listScaleBox", gvListScaleBoxData);
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("tableDayPeriodCtrl");
     // add the new GroupRow to the grid's 'columnFooters' panel
@@ -38,9 +43,10 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        params.storeCd  = $scope.storeCd;
-        params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+//        console.log(selectedRow);
+        params.chkPop   = "tablePop";
+        params.storeCd  = selectedRow.storeCd;
+        params.saleDate = selectedRow.saleDate;
         params.tblCd   = selectedRow.tblCd;
 
         if (col.binding === "realSaleAmt") { //실매출 클릭
@@ -59,33 +65,50 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("tableDayPeriodCtrl", function (event, data) {
 
-	$scope.searchTableDayList();
+	$scope.searchTableDayPeriodList(null, null, true);
+    event.preventDefault();
+
+  });
+
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("tableDayPeriodCtrlSrch", function (event, data) {
+
+	$scope.searchTableDayPeriodList(null, null, false);
     event.preventDefault();
 
   });
 
   // 테이블별 설정기간 리스트 리스트 조회
-  $scope.searchTableDayList = function (s, e) {
-	if ($("#tableDayPeriodSelectStoreCd").val() === '') {
-	    $scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-	    return false;
-	}
+  $scope.searchTableDayPeriodList = function (s, e, isPageChk) {
+
     // 파라미터
     var params       = {};
-    params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMMdd');
-    params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMMdd');
+    params.hqOfficeCd = $("#hqOfficeCd").val();
     params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
     params.listScale = $scope.listScale;
+    params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
 
+    //등록일자 '전체기간' 선택에 따른 params
+	if(!$scope.isChecked){
+		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
+	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
+	}
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params);
 
   };
+
+  	//전체기간 체크박스 클릭이벤트
+	$scope.isChkDt = function() {
+		$scope.tableDayPeriodStartDate.isReadOnly = $scope.isChecked;
+		$scope.tableDayPeriodEndDate.isReadOnly = $scope.isChecked;
+	};
 
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -105,11 +128,11 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, 'tableDayPeriod.xlsx', function () {
+      }, '매출현황_테이블별_설정기간별_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

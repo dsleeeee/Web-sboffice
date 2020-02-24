@@ -38,6 +38,7 @@
         </td>
 
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="posExcclcSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -47,15 +48,14 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
-                <jsp:param name="targetId" value="posExcclcSelectStore"/>
-            </jsp:include>
+<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
+<%--                 <jsp:param name="targetId" value="posExcclcSelectStore"/> --%>
+<%--             </jsp:include> --%>
             <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="posExcclcSelectStore"/> --%>
-<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
-<%--             </jsp:include> --%>
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                <jsp:param name="targetId" value="posExcclcSelectStore"/>
+            </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
@@ -116,8 +116,8 @@
           item-formatter="_itemFormatter">
           <!-- define columns -->
           <wj-flex-grid-column header=""        									 binding="hqOfficeCd"       width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="posExcclc.storeCd"/>"        binding="storeCd"          width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="posExcclc.storeNm"/>"        binding="storeNm"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header=""        									 binding="storeCd"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header=""        									 binding="storeNm"          width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.saleDate"/>"       binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.posNo"/>"          binding="posNo"            width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="posExcclc.closeFg"/>"        binding="closeFgNm"        width="80"  align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
