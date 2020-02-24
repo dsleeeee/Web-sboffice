@@ -164,6 +164,9 @@
     <typeAlias alias="dataRemoveVO" type="kr.co.solbipos.sys.admin.dataremove.service.DataRemoveVO"/>
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logsend.service.LogSendVO"/>
 -->
+    <!--게시판관리 -->
+    <typeAlias alias="boardMasterVO" type="kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO"/>
+
     <typeAlias alias="myInfoVO" type="kr.co.solbipos.base.store.myinfo.service.MyInfoVO"/>
 <!--
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
