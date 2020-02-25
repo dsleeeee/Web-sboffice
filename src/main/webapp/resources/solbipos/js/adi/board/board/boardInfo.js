@@ -53,9 +53,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.userNm = $scope.boardInfo.userNm;
             $scope.apprFg = $scope.boardInfo.apprFg;
             $scope.targetFg = $scope.boardInfo.targetFg;
-            if($scope.boardInfo.noticeYn = "Y") {
+            if($scope.boardInfo.noticeYn === "Y") {
                 $scope.noticeYn = true;
-            } else if ($scope.boardInfo.noticeYn = "N") {
+            } else if ($scope.boardInfo.noticeYn === "N") {
                 $scope.noticeYn = false;
             }
             // if($scope.boardInfo.smsYn = "Y") {
@@ -106,9 +106,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         params.userNm = $scope.userNm;
         params.apprFg = $scope.apprFg;
         params.targetFg = $scope.targetFg;
-        if($scope.noticeYn = true) {
+        if($scope.noticeYn === true) {
             params.noticeYn = "Y";
-        } else if($scope.noticeYn = false) {
+        } else if ($scope.noticeYn === false) {
             params.noticeYn = "N";
         }
         // if($scope.smsYn = true) {
@@ -120,10 +120,10 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = dateToDaystring($scope.endDate).replaceAll("-","");
 
         // 신규
-        if(params.status == "I") {
+        if(params.status === "I") {
             params.boardCd = boardCd;
             // 수정
-        } else if (params.status == "U") {
+        } else if (params.status === "U") {
             params.boardCd = $scope.selectedBoardInfo.boardCd;
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
         }
@@ -156,7 +156,16 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 파일찾기
     $scope.findFile = function(){
-        alert('test1111111');
+       //  alert('test1111111');
+
+        // File path = new File("D:/workspace_example/Data/");
+        // File[] fileList = path.listFiles();
+        //
+        // if(fileList.length > 0){
+        //     for(int i=0; i < fileList.length; i++){
+        //         System.out.println(fileList[i]) ;
+        //     }
+        // }
     };
 
 }]);

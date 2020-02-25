@@ -183,4 +183,4 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=202002204.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=202002204.10" charset="utf-8"></script>

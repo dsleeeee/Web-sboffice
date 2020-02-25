@@ -145,9 +145,9 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.boardDetail.userNm = $scope.boardDetail.userNm;
             $scope.boardDetail.regDt = $scope.boardDetail.regDt;
             $scope.boardDetail.target = $scope.boardDetail.target;
-            if($scope.boardDetail.noticeYn = "Y") {
+            if($scope.boardDetail.noticeYn === "Y") {
                 $scope.boardDetail.noticeYn = true;
-            } else if ($scope.boardDetail.noticeYn = "N") {
+            } else if ($scope.boardDetail.noticeYn === "N") {
                 $scope.boardDetail.noticeYn = false;
             }
             // if($scope.boardDetail.smsYn = "Y") {
@@ -160,9 +160,9 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.boardDetail.startDate = startDate;
             $scope.boardDetail.endDate = endDate;
 
-            if($scope.boardDetail.answerFg == "Y") {
+            if($scope.boardDetail.answerFg === "Y") {
                 $("#divAnswer").show();
-            } else if($scope.boardDetail.answerFg == "N") {
+            } else if($scope.boardDetail.answerFg === "N") {
                 $("#divAnswer").hide();
             }
         });
