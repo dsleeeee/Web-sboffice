@@ -289,6 +289,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#prodTitle").text('['+$scope.getProdInfo().prodCd +'] '+$scope.getProdInfo().prodNm);
       $("#hdSideProdYn").val($scope.getProdInfo().sideProdYn);
       $("#hdSdselGrpCd").val($scope.getProdInfo().sdselGrpCd);
+      $("#hdProdClassCd").val($scope.getProdInfo().prodClassCd);
     });
   });
 }]);

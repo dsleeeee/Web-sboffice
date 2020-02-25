@@ -111,6 +111,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
               }else{
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 $scope.prodModifyLayer.hide();
+
+                // 저장기능 수행후 재조회
+                $scope._broadcast('prodCtrl');
               }
             });
         }

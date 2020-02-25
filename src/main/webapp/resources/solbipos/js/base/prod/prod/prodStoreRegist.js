@@ -129,6 +129,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.flex.collectionView.items[i].prodCd = prodScope.getProdInfo().prodCd;
         $scope.flex.collectionView.items[i].sideProdYn = prodScope.getProdInfo().sideProdYn;
         $scope.flex.collectionView.items[i].sdselGrpCd = prodScope.getProdInfo().sdselGrpCd;
+        $scope.flex.collectionView.items[i].prodClassCd  = prodScope.getProdInfo().prodClassCd;
         params.push($scope.flex.collectionView.items[i]);
       }
     }

@@ -1842,4 +1842,45 @@
         </if>
         ORDER BY thp.PROD_CD ASC
     </select>
+
+    <!-- 본사상품 매장 등록 시, 본사에 포함되는 모든 매장에 상품분류 추가(본사 상품분류 > 매장 상품분류)-->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+          PARAM    : prodVO
+          COMMENTS : 본사상품 매장 등록 시, 본사에 포함되는 모든 매장에 상품분류 추가(본사 상품분류 > 매장 상품분류)
+    -->
+    <select  id="insertClsHqToStore" statementType="CALLABLE" parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.insertClsHqToStore */
+        {
+            CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_I02
+            (
+                #{hqOfficeCd},
+                #{prodClassCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도 상품분류 추가 or 수정(본사 상품분류 > 매장 상품분류)-->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS
+          PARAM    : prodVO
+          COMMENTS : 본사상품 매장 등록 시, 해당 상품을 사용하는 매장에도 상품분류 추가 or 수정(본사 상품분류 > 매장 상품분류)
+    -->
+    <select  id="updateClsHqToStore" statementType="CALLABLE" parameterType="prodVO" resultType="String">
+        /* USE : ProdMapper.updateClsHqToStore */
+        {
+            CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_U02
+            (
+                #{hqOfficeCd},
+                #{storeCd},
+                #{prodCd},
+                #{prodClassCd},
+                #{workMode},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 </mapper>

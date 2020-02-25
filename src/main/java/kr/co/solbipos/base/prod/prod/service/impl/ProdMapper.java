@@ -126,4 +126,10 @@ public interface ProdMapper {
     /** 매장 미적용 상품 조회 */
     List<DefaultMap<String>> getStoreProdNoRegList(ProdVO prodVO);
 
+    /** 본사 상품 등록시, 본사 상품의 상품분류 등록 */
+    String insertClsHqToStore(ProdVO prodVO);
+
+    /** 본사 상품 등록시, 본사 상품의 상품분류 수정 */
+    String updateClsHqToStore(ProdVO prodVO);
+
 }

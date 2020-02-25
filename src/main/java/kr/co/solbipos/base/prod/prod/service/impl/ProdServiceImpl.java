@@ -217,9 +217,16 @@ public class ProdServiceImpl implements ProdService {
 
             if(prodExist == 0) {
                 procResult = prodMapper.insertHqProdToStoreProd(prodVO);
+
+                // 상품분류 매장에 INSERT
+                prodMapper.insertClsHqToStore(prodVO);
+
             } else {
                 procResult = prodMapper.updateHqProdToStoreProd(prodVO);
-            }
+
+                // 상품분류 매장에 UPDATE
+                prodMapper.updateClsHqToStore(prodVO);
+        }
 
             //매장 상품 바코드 저장(바코드정보가 있을 경우만)
             if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
@@ -302,6 +309,9 @@ public class ProdServiceImpl implements ProdService {
             } else {
                 procCnt += result;
             }
+
+            // 해당 매장에 본사상품 상품분류 등록
+           prodMapper.updateClsHqToStore(prodVO);
 
             // 해당 매장에 본사 상품 등록
             int hqProdResult = prodMapper.insertProdStoreDetail(prodVO);
@@ -475,6 +485,9 @@ public class ProdServiceImpl implements ProdService {
             prodMapper.deleteProdStore(prodVO);
             int result = prodMapper.insertProdStore(prodVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // 해당 매장에 본사상품 상품분류 등록
+            prodMapper.updateClsHqToStore(prodVO);
 
             // 해당 매장에 본사 상품 등록
             int hqProdResult = prodMapper.insertProdStoreDetail(prodVO);

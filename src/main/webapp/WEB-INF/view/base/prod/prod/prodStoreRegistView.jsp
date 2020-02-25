@@ -26,6 +26,7 @@
           <td colspan="3" id="prodTitle"></td>
           <input type="hidden" id="hdSideProdYn" />
           <input type="hidden" id="hdSdselGrpCd" />
+          <input type="hidden" id="hdProdClassCd" />
         </tr>
         <tr>
           <th><s:message code="prod.storeCd"/></th>
@@ -106,4 +107,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=2019012101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=2019012101.02" charset="utf-8"></script>
