@@ -6,7 +6,9 @@
   <select id="getNotice" parameterType="sessionInfoVO" resultType="DefaultMap">
   <![CDATA[
   /* contentMapper.getNotice */
-  SELECT BOARD_CD, START_DATE, END_DATE,
+  SELECT BOARD_CD,
+          --BOARD_FG,
+          START_DATE, END_DATE,
          TITLE, NOTICE_YN, APPR_FG,
          TARGET_PART_FG, TARGET_SECT, TARGET_TEAM,
          VIEW_CNT, ANSWER_CNT, USE_YN, CONTENT,
@@ -14,6 +16,7 @@
     FROM TB_WB_BOARD_INFO
    WHERE START_DATE <= SYSDATE
      AND END_DATE >= SYSDATE
+     --AND BOARD_FG = '010'
      AND NOTICE_YN = 'Y'
      AND APPR_FG = '001'
      AND USE_YN = 'Y'
