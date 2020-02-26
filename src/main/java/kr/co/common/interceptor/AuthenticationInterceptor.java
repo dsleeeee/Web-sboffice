@@ -199,7 +199,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
      */
     private boolean checkUrl(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
         // main 주소는 제외
-        if (url.equals("/main.sb")) {
+        if (url.equals("/main.sb") || url.equals("/sample/tonymory/Login.sb")) {
             return true;
         }
         // url 파라미터 제거
