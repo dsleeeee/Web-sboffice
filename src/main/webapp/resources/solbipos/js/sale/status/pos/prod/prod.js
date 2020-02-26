@@ -23,7 +23,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 
-		$scope.getRePosNmList(storeCd);
+//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posProdCtrl");
@@ -116,7 +116,12 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posProdCtrlSrch", function (event, data) {
-
+		
+	    if( $("#posProdSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    } 
+	    
 		$scope.searchPosProdList(false);
 
 		var storeCd = $("#posProdSelectStoreCd").val();
@@ -136,12 +141,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 	    params.orgnFg    = $scope.orgnFg;
-	    
-	    if( $("#posProdSelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	   	 	return false;
-	    }  
-	    
+	     	    
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');

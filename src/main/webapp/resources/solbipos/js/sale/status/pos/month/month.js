@@ -19,7 +19,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 		var storeCd = $("#posMonthSelectStoreCd").val();
 
-		$scope.getRePosNmList(storeCd);
+//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posMonthCtrl");
@@ -109,7 +109,12 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posMonthCtrlSrch", function (event, data) {
-
+		
+	    if( $("#posMonthSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		$scope.searchPosMonthList(false);
 
 		var storeCd = $("#posMonthSelectStoreCd").val();

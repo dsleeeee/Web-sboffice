@@ -22,7 +22,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
 
-		$scope.getRePosNmList(storeCd);
+//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posDayOfWeekCtrl");
@@ -112,7 +112,12 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayOfWeekCtrlSrch", function (event, data) {
-
+		
+	    if( $("#posDayOfWeekSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		$scope.searchPosDayOfWeekList(false);
 
 		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
@@ -131,12 +136,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		params.listScale = $scope.posDayOfWeekListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
-		
-	    if( $("#posDayOfWeekSelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	   	 	return false;
-	    }  
-		
+			
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');

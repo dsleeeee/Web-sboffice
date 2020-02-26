@@ -21,7 +21,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.initGrid = function (s, e) {
 
 		var storeCd = $("#posDaySelectStoreCd").val();
-		$scope.getRePosNmList(storeCd);
+//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("posDayCtrl");
@@ -108,17 +108,23 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		var storeCd = $("#posDaySelectStoreCd").val();
 		var posCd = $("#posDaySelectPosCd").val();
 
-		$scope.getRePosNmList(storeCd, posCd);
+//		$scope.getRePosNmList(storeCd, posCd);
 	});
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayCtrlSrch", function (event, data) {
-
+		
+		if( $("#posDaySelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		$scope.searchPosDayList(false);
 
 		var storeCd = $("#posDaySelectStoreCd").val();
 		var posCd = $("#posDaySelectPosCd").val();
-
+		console.log("storeCd ::"+storeCd);
+		console.log("posCd ::"+posCd);
 		$scope.getRePosNmList(storeCd, posCd);
 	});
 
@@ -128,7 +134,9 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		// 파라미터
 		var params = {};
 		params.storeCd = $("#posDaySelectStoreCd").val();
+		console.log("params.storeCd :::"+params.storeCd)
 		params.posNo = $("#posDaySelectPosCd").val();
+		console.log("params.posNo :::"+params.posNo)
 		params.listScale = $scope.posDayListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;

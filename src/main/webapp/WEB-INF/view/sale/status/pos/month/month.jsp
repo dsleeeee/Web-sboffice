@@ -69,7 +69,8 @@
 						<th><s:message code="todayBillSaleDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true">
+<%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
+							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posMonthSelectStore"/>
 								<jsp:param name="targetPosId" value="posMonthSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
