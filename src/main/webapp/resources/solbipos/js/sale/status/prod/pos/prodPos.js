@@ -23,7 +23,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 
-		$scope.getRePosNmList(storeCd);
+//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("prodPosCtrl");
@@ -118,7 +118,12 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosCtrlSrch", function (event, data) {
-
+		
+	    if( $("#posProdSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		$scope.searchPosProdList(false);
 
 		var storeCd = $("#posProdSelectStoreCd").val();
@@ -151,7 +156,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/prod/prodPos/list.sb", params);
+		$scope._inquiryMain("/sale/status/prod/prodPos/list.sb", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
