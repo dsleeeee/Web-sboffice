@@ -136,7 +136,12 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 	    params.orgnFg    = $scope.orgnFg;
-
+	    
+	    if( $("#posProdSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+	    
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');

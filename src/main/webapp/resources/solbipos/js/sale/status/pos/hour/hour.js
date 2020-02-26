@@ -131,13 +131,18 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		params.listScale = $scope.posHourListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
-
+		
+	    if( $("#posHourSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
 			params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
 		}
-
+		
 		if(params.startDate > params.endDate){
 			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 			return false;

@@ -151,6 +151,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
+    if( $("#empDayOfWeekSelectStoreCd").val() === ''){
+   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+   	 	return false;
+    }   
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;

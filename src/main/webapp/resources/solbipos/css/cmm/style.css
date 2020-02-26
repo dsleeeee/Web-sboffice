@@ -2013,8 +2013,21 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 
 /* 검색조건 radio */
 .searchTbl .rdo {position:relative; top:2px}
-.searchTbl .rdo input[type=radio] {width:18px;height:18px;}
+.searchTbl .rdo input[type=radio] {width:17px;height:17px}
 .searchTbl .rdo label {position:relative; top:-4px; font-size:12px}
+.searchTbl .rdo label.r-box {margin-right:10px}
+.searchTbl .rdo label.r-box input[type=radio] {position:relative; top:4px; margin-right:5px}
+
+.searchTbl .pst1 {position:relative; top:1px}
+.searchTbl .pst2 {position:relative; top:2px}
+.searchTbl .pst3 {position:relative; top:3px}
+.searchTbl .pst4 {position:relative; top:4px}
+.searchTbl .pst5 {position:relative; top:5px}
+.searchTbl .pst6 {position:relative; top:6px}
+.searchTbl .pst7 {position:relative; top:7px}
+.searchTbl .pst8 {position:relative; top:8px}
+.searchTbl .pst9 {position:relative; top:9px}
+.searchTbl .pst10 {position:relative; top:10px}
 
 /* 월력판매분석 table */
 .tbl-d .tbl-cal {width:100%; margin-top:10px}
@@ -2099,55 +2112,51 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
 .tch-inner {float:left; width:190px; height:550px; margin-top:5px; padding:10px; border:1px solid #e8e8e8}
 .tch-inner.t2 {width:495px}
-
 .frGroupWrap.t2 {height:60px; padding:10px 10px 0; text-align:left}
 .frGroupWrap.t2 span {display:inline-block; }
 .frGroupWrap.t2 span a {width:auto; padding:10px}
 .prev1.t2 svg {min-width:auto !important; min-height:auto !important}
 
-
-/* wijmo grid box scroll custom 
-.wj-gridWrap {height:auto !important; overflow-y:hidden}
-.wj-gridWrap .wj-flexgrid {min-height:320px; max-height:393px}
-.wj-gridWrap .wj-flexgrid > div > div:last-child {min-height:320px}
-.wj-TblWrap {overflow:hidden}
-.wj-TblWrap .wj-TblWrapBr,.wj-TblWrapBr #theGrid {height:auto !important}
-.wj-TblWrap .wj-flexgrid {min-height:393px; max-height:393px}
-.wj-TblWrap .wj-flexgrid > div > div:last-child {min-height:393px}
-.wj-TblWrapBr #theGrid .wj-flexgrid {min-height:320px; max-height:393px}
-.wj-TblWrapBr #theGrid .wj-flexgrid > div > div:last-child {min-height:320px}
-.wj-TblWrap .wj-TblWrapBr:after,.wj-TblWrapBr #theGrid:after {display:block; clear:both; content:''}
-*/
-
-/* SCROLLBAR IE */
-/*
-html{
- //overflow:auto;
-
- scrollbar-arrow-color:#9D9992;
- scrollbar-3dlight-color:#D4D0C8;
- scrollbar-darkshadow-color:#D4D0C8;
- scrollbar-face-color:#FFFFFF;
- scrollbar-hightlight-color:#FFFFFF;
- scrollbar-shadow-color:#FFFFFF;
- scrollbar-track-color:#EAE7E1;
+/* 그리드 링크 컬러 추가 / 블랙/레드 */
+.wijLink-red {
+    color: #ff0000 !important;
+    text-decoration:underline;
+    cursor:pointer;
 }
-*/
 
-/* SCROLLBAR Chrome Safari 
-::-webkit-scrollbar {width: 17px; height: 17px}
-::-webkit-scrollbar-button {width: 17px;height: 17px; background:url(../img/ico_scroll_arrow.png) 0 0 no-repeat}
-::-webkit-scrollbar-button:horizontal:decrement {background-position:0 0}
-::-webkit-scrollbar-button:horizontal:increment {background-position:-17px 0}
-::-webkit-scrollbar-button:vertical:decrement {background-position:0 -34px}
-::-webkit-scrollbar-button:vertical:increment {background-position:-17px -34px}
-::-webkit-scrollbar-button:horizontal:decrement:hover {background-position:0 -17px}
-::-webkit-scrollbar-button:horizontal:increment:hover {background-position:-17px -17px}
-::-webkit-scrollbar-button:vertical:decrement:hover {background-position:0 -51px}
-::-webkit-scrollbar-button:vertical:increment:hover {background-position:-17px -51px}
-::-webkit-scrollbar-track {background: #f1f1f1}
-::-webkit-scrollbar-thumb {width:13px; height:13px; border:2px solid transparent; background-clip: content-box; background-color: #c1c1c1}
-::-webkit-scrollbar-thumb:hover {border:2px solid transparent; background-clip: content-box; background-color:#a8a8a8}
-::-webkit-scrollbar-thumb:active {border:2px solid transparent; background-clip: content-box; background-color:#787878}
-::-webkit-scrollbar-corner {background: #dcdcdc}
-*/ 
+.wijLink-black {
+    color: #222 !important;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+/* 전체화면 그리드 스크롤 및 height 가변 적용 */
+#wjGridWrap {}
+#wjGridWrap .wj-gridWrap {overflow:hidden}
+
+/* 가변 설정  포스넓이 1024px => 익스플로러 1028px*/
+@media all and (max-width:1028px) {
+	/* 그리드 리스트 5개 + 합계 1개 포함 총 6라인 */
+	#wjGridWrap .wj-gridWrap {height:257px}
+}
+@media all and (min-width:1029px){
+	#wjGridWrap .wj-gridWrap {height:auto}
+}
+
+/* SCROLLBAR Chrome Safari */
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar {width: 17px; height: 17px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button {width: 17px;height: 17px; background:url(../img/ico_scroll_arrow.png) 0 0 no-repeat}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement {background-position:0 0}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment {background-position:-17px 0}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement {background-position:0 -34px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment {background-position:-17px -34px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement:hover {background-position:0 -17px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment:hover {background-position:-17px -17px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement:hover {background-position:0 -51px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment:hover {background-position:-17px -51px}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-track {background: #f1f1f1}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb {width:13px; height:13px; border:2px solid transparent; background-clip: content-box; background-color: #c1c1c1}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:hover {border:2px solid transparent; background-clip: content-box; background-color:#a8a8a8}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:active {border:2px solid transparent; background-clip: content-box; background-color:#787878}
+#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner {background: #dcdcdc}
+

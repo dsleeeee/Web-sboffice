@@ -156,7 +156,12 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
 	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
-
+    
+    if( $("#empPosSelectStoreCd").val() === ''){
+   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+   	 	return false;
+    }   
+    
     params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){

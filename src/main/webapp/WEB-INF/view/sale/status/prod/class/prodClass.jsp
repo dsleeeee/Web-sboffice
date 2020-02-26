@@ -83,7 +83,7 @@
 		</tbody>
 	</table>
        	
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt20 oh sb-select dkbr">
 	    <%-- 페이지 스케일  --%>
 	    <wj-combo-box
 	      class="w100px fl"
@@ -105,8 +105,8 @@
 	</div>
   
 	<%--위즈모 테이블--%>
-    <div class="w100 mt10">   
-      <div class="wj-gridWrap" style="height: 350px;">
+    <div id="wjGridWrap" class="mt10">   
+      <div class="wj-gridWrap">
         <wj-flex-grid
           autoGenerateColumns="false"
           control="flex"
@@ -122,11 +122,11 @@
           <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.prodNm"/>"			binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.totSaleQty"/>" 	binding="totSaleQty" 	width="130" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.totSaleAmt"/>" 	binding="totSaleAmt" 	width="130" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.totDcAmt"/>" 		binding="totDcAmt" 		width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.realSaleAmt"/>" 	binding="realSaleAmt" 	width="145" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         
         <%-- ColumnPicker 사용시 include --%>

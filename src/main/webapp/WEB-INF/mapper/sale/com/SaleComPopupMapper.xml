@@ -778,7 +778,28 @@
 			, TSSPC.APPR_NO
 			, TSSPC.APPR_AMT
 		FROM TB_SL_SALE_PAY_CARD TSSPC
-		WHERE TSSPC.STORE_CD = #{storeCd}
+		WHERE 1=1
+		<if test='storeCd != null and storeCd != ""'>
+            AND TSSPC.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPC.STORE_CD||'||'||TSSPC.CORNR_CD  IN
+	        <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	        </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPC.STORE_CD||'||'||TSSPC.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TSSPC.APPR_PROC_FG = #{apprProcFg}
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND TSSPC.SALE_FG = #{saleFg}
+        </if>
 		<if test='acquireCd != null and acquireCd != ""'>
             AND TSSPC.ACQUIRE_CD = #{acquireCd}
         </if>
@@ -814,8 +835,31 @@
 			,TSSPC.APPR_NO
 			,TSSPC.SALE_AMT AS APPR_AMT
 		FROM TB_SL_SALE_PAY_CASH TSSPC
-		WHERE TSSPC.STORE_CD = #{storeCd}
-		AND APPR_PROC_FG IN ('1','2')
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TSSPC.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPC.STORE_CD||'||'||TSSPC.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPC.STORE_CD||'||'||TSSPC.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TSSPC.APPR_PROC_FG = #{apprProcFg}
+        </if>
+        <if test='apprProcFg == null and apprProcFg == ""'>
+            AND TSSPC.APPR_PROC_FG IN ('1','2')
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND TSSPC.SALE_FG = #{saleFg}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPC.SALE_DATE >= #{startDate}
 		</if>
@@ -846,7 +890,28 @@
 			,TSSPP.APPR_NO
 			,TSSPP.APPR_AMT
 		FROM TB_SL_SALE_PAY_PAYCO TSSPP
-		WHERE TSSPP.STORE_CD = #{storeCd}
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TSSPP.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPP.STORE_CD||'||'||TSSPP.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPP.STORE_CD||'||'||TSSPP.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TSSPP.APPR_PROC_FG = #{apprProcFg}
+        </if>
+         <if test='saleFg != null and saleFg != ""'>
+            AND TSSPP.SALE_YN = DECODE(#{saleFg},'1','Y','-1','N')
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPP.SALE_DATE >= #{startDate}
 		</if>
@@ -876,7 +941,28 @@
 			,TSSPM.APPR_NO
 			,TSSPM.SALE_AMT AS APPR_AMT
 		FROM TB_SL_SALE_PAY_MPAY TSSPM
-		WHERE TSSPM.STORE_CD = #{storeCd}
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TSSPM.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPM.STORE_CD||'||'||TSSPM.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPM.STORE_CD||'||'||TSSPM.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TSSPM.APPR_PROC_FG = #{apprProcFg}
+        </if>
+         <if test='saleFg != null and saleFg != ""'>
+            AND TSSPM.SALE_YN = DECODE(#{saleFg},'1','Y','-1','N')
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPM.SALE_DATE >= #{startDate}
 		</if>
@@ -912,7 +998,28 @@
 			,TSSPM.APPR_NO
 			,TSSPM.SALE_AMT AS APPR_AMT
 		FROM TB_SL_SALE_PAY_MCOUPN TSSPM
-		WHERE TSSPM.STORE_CD = #{storeCd}
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TSSPM.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPM.STORE_CD||'||'||TSSPM.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPM.STORE_CD||'||'||TSSPM.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='cashBillApprProcFg != null and cashBillApprProcFg != ""'>
+            AND TSSPM.CASH_BILL_APPR_PROC_FG = #{cashBillApprProcFg}
+        </if>
+         <if test='saleFg != null and saleFg != ""'>
+            AND TSSPM.SALE_FG = #{saleFg}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPM.SALE_DATE >= #{startDate}
 		</if>
@@ -947,7 +1054,28 @@
 				,TSSPP.APPR_NO
 				,TSSPP.SALE_AMT AS APPR_AMT
 		FROM TB_SL_SALE_PAY_PARTNER TSSPP
-		WHERE TSSPP.STORE_CD = #{storeCd}
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TSSPP.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TSSPP.STORE_CD||'||'||TSSPP.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TSSPP.STORE_CD||'||'||TSSPP.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TSSPP.APPR_PROC_FG = #{apprProcFg}
+        </if>
+         <if test='saleFg != null and saleFg != ""'>
+            AND TSSPP.SALE_FG = #{saleFg}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TSSPP.SALE_DATE >= #{startDate}
 		</if>
@@ -980,7 +1108,28 @@
 				,TNNPC.APPR_NO
 				,TNNPC.APPR_AMT
 		FROM TB_NS_NONSALE_PAY_CARD TNNPC
-		WHERE TNNPC.STORE_CD = #{storeCd}
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TNNPC.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TNNPC.STORE_CD||'||'||TNNPC.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TNNPC.STORE_CD||'||'||TNNPC.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TNNPC.APPR_PROC_FG = #{apprProcFg}
+        </if>
+         <if test='saleYn != null and saleYn != ""'>
+            AND TNNPC.SALE_YN = #{saleYn}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TNNPC.SALE_DATE >= #{startDate}
 		</if>
@@ -1012,8 +1161,31 @@
 				,TNNPC.APPR_NO
 				,TNNPC.SALE_AMT AS APPR_AMT
 		FROM TB_NS_NONSALE_PAY_CASH TNNPC
-		WHERE TNNPC.STORE_CD = #{storeCd}
-		AND APPR_PROC_FG IN ('1','2')
+		WHERE 1=1
+        <if test='storeCd != null and storeCd != ""'>
+            AND TNNPC.STORE_CD = #{storeCd}
+        </if>
+        <if test='arrStoreCornr != null and arrStoreCornr != ""'>
+                AND TNNPC.STORE_CD||'||'||TNNPC.CORNR_CD  IN
+            <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='arrStorePos != null and arrStorePos != ""'>
+                AND TNNPC.STORE_CD||'||'||TNNPC.POS_NO  IN
+            <foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND TNNPC.APPR_PROC_FG = #{apprProcFg}
+        </if>
+        <if test='apprProcFg == null and apprProcFg == ""'>
+            AND TNNPC.APPR_PROC_FG IN ('1','2')
+        </if>
+         <if test='saleYn != null and saleYn != ""'>
+            AND TNNPC.SALE_YN = #{saleYn}
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND TNNPC.SALE_DATE >= #{startDate}
 		</if>

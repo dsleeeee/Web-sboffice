@@ -48,7 +48,7 @@
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.totSaleAmt"/></div>
 							</th>
-							<td id="rTotSaleAmtt"></td>
+							<td id="rTotSaleAmt"></td>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.dcAmt"/></div>
 							</th>
@@ -174,7 +174,7 @@
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtFstmp"/></div>
 							</th>
-							<td id=rPayAmtFstmp"></td>
+							<td id="rPayAmtFstmp"></td>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtPartner"/></div>
 							</th>
@@ -188,13 +188,13 @@
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtEmpCard"/></div>
 							</th>
-							<td id=rPayAmtEmpCard"></td>
+							<td id="rPayAmtEmpCard"></td>
 							<th>
 								<div class="impWrap"><s:message code="posExcclc.payAmtEmpTemporary"/></div>
 							</th>
-							<td id=rPayAmtEmpTemporary"></td>
+							<td id="rPayAmtEmpTemporary"></td>
 							<th>
-								<div class="impWrap"><s:message code="posExcclc.payAmtPrev"/></div>
+								<div class="impWrap"><s:message code="posExcclc.paySmartOrderAmt"/></div>
 							</th>
 							<td id="rPayAmtPrev"></td>
 							<th>
@@ -207,7 +207,7 @@
 						</tbody>
 					</table>
 					<!-- //결제내역 end -->
-
+										
 					<!-- 할인내역 start -->
 					<h3 class="h3_tbl brt"><span class="bk s14"><s:message code="posExcclc.dcInfo"/></span></h3>
 					<table class="tblType01 tbl-pos-sh">
@@ -279,7 +279,77 @@
 						</tbody>
 					</table>
 					<!-- //할인내역 end -->
+					
+					<!-- 비매출내역 start -->
+					<h3 class="h3_tbl brt"><span class="bk s14"><s:message code="posExcclc.nSaleInfo"/></span></h3>
+					<table class="tblType01 tbl-pos-sh">
+						<colgroup>
+							<col class="w12"/>
+							<col class="w13"/>
+							<col class="w12"/>
+							<col class="w13"/>
+							<col class="w12"/>
+							<col class="w13"/>
+							<col class="w12"/>
+							<col class="w13"/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgCnt1"/></div>
+							</th>
+							<td id="rNonsaleCnt1"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgAmt1"/></div>
+							</th>
+							<td id="rNonsaleAmt1"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgCnt2"/></div>
+							</th>
+							<td id="rNonsaleCnt2"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgAmt2"/></div>
+							</th>
+							<td id="rNonsaleAmt2"></td>
+						</tr>
+						<tr>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgCnt3"/></div>
+							</th>
+							<td id="rNonsaleCnt3"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgAmt3"/></div>
+							</th>
+							<td id="rNonsaleAmt3"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgCnt4"/></div>
+							</th>
+							<td id="rNonsaleCnt4"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgAmt4"/></div>
+							</th>
+							<td id="rNonsaleAmt4"></td>
+						</tr>
+						<tr>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgCnt5"/></div>
+							</th>
+							<td id="rNonsaleCnt5"></td>
+							<th>
+								<div class="impWrap"><s:message code="posExcclc.nonsaleFgAmt5"/></div>
+							</th>
+							<td id="rNonsaleAmt5"></td>
+							<th></th>
+							<td></td>
+							<th></th>
+							<td></td>
+						</tr>
 
+
+						</tbody>
+					</table>
+					<!-- //비매출내역 end -->
+					
 					<!-- 입출금내역 start -->
 					<h3 class="h3_tbl brt"><span class="bk s14"><s:message code="posExcclc.inOutInfo"/></span></h3>
 					<table class="tblType01 tbl-pos-sh">
@@ -456,6 +526,7 @@
 	<%-- 상세정보 팝업 열기 --%>
 	function openDtlLayer(items) {
 		getDtlData(items);
+		console.log(items);
 	}
 
 	function getDtlData(items) {
@@ -468,16 +539,16 @@
 
 		    <%-- 상세정보 --%>
 		    $("#rStoreNm").text(data.storeCd + " " + data.storeNm);
-		    $("#rPosNo").text(data.posNo);
-		    $("#rCloseFg").text(data.closeFgNm);
-		    $("#rSaleDate").text(data.saleDate);
+		    $("#rPosNo").text(param.posNo);
+		    $("#rCloseFg").text(param.closeFgNm);
+		    $("#rSaleDate").text(param.saleDate);
 		    $("#rOpenDate").text(data.openDt);
 		    $("#rCloseDate").text(data.closeDt);
 
 		    $("#rPosFundAmt").text(numComma(data.totFundAmt));
 		    $("#rTotSaleAmt").text(numComma(data.totSaleAmt));
 		    $("#rDcAmt").text(numComma(data.totDcAmt));
-		    $("#rTotSaleAmt").text(numComma(data.realSaleAmt));
+		    $("#rRealSaleAmt").text(numComma(data.realSaleAmt));
 
 		    $("#rBillCnt").text(numComma(data.totBillCnt));
 		    $("#rBillTran").text(numComma(data.totBillTran));
@@ -512,7 +583,20 @@
 		    $("#rPayAmtEmpCard").text(numComma(data.payAmtEmpCard));
 		    $("#rPayAmtEmpTemporary").text(numComma(data.payAmtEmpTemporary));
 		    $("#rPayAmtPrev").text(numComma(data.payAmtPrev));
+			
+		    $("#rNonsaleCnt1").text(numComma(data.nonsaleCnt1));
+		    $("#rNonsaleAmt1").text(numComma(data.nonsaleAmt1));
+		    $("#rNonsaleCnt2").text(numComma(data.nonsaleCnt2));
+		    $("#rNonsaleAmt2").text(numComma(data.nonsaleAmt2));
 
+		    $("#rNonsaleCnt3").text(numComma(data.nonsaleCnt3));
+		    $("#rNonsaleAmt3").text(numComma(data.nonsaleAmt3));
+		    $("#rNonsaleCnt4").text(numComma(data.nonsaleCnt4));
+		    $("#rNonsaleAmt4").text(numComma(data.nonsaleAmt4));
+		    
+		    $("#rNonsaleCnt5").text(numComma(data.nonsaleCnt5));
+		    $("#rNonsaleAmt5").text(numComma(data.nonsaleAmt5));
+		    
 		    $("#rDcAmtGeneral").text(numComma(data.dcAmtGeneral));
 		    $("#rDcAmtCoupn").text(numComma(data.dcAmtCoupn));
 		    $("#rDcAmtMembr").text(numComma(data.dcAmtMembr));

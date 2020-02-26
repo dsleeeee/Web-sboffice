@@ -165,10 +165,10 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // POS 정산내역 리스트 조회
   $scope.searchPosExcclcList = function () {
 
-	if ($("#posExcclcSelectStoreCd").val() === '') {
-		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
-		return false;
-	}
+//	if ($("#posExcclcSelectStoreCd").val() === '') {
+//		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
+//		return false;
+//	}
 
     // 파라미터
     var params       = {};
@@ -189,7 +189,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
 	}
 
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquirySub("/sale/status/posExcclc/posExcclc/list.sb", params);
+	$scope._inquiryMain("/sale/status/posExcclc/posExcclc/list.sb", params);
 
 
   };
