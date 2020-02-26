@@ -26,6 +26,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.storeCd  	= data.storeCd;
     $scope.prodCd  		= data.prodCd;
     $scope.cornrCd  	= data.cornrCd;
+    $scope.arrStoreCornr  	= data.arrStoreCornr;
     $scope.saleDate 	= data.saleDate;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
@@ -53,6 +54,7 @@ app.controller('saleComProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCd   = $scope.storeCd;
     params.prodCd  	 = $scope.prodCd;
     params.cornrCd   = $scope.cornrCd;
+    params.arrStoreCornr  	= $scope.arrStoreCornr;
     params.saleDate  = $scope.saleDate;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;

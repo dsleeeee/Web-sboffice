@@ -85,6 +85,9 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope.$on("saleApprNcardCtrl", function (event, data) {
 
     $scope.storeCd  	= data.storeCd;
+    $scope.arrStorePos	= data.posNo;
+    $scope.saleYn 		= data.saleYn
+    $scope.apprProcFg 	= data.apprProcFg;
     $scope.acquireCd	= data.acquireCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
@@ -104,6 +107,9 @@ app.controller('saleApprNcardCtrl', ['$scope', '$http', '$timeout', function ($s
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;
+    params.arrStorePos	= $scope.arrStorePos;
+    params.saleYn 		= $scope.saleYn
+    params.apprProcFg 	= $scope.apprProcFg;
     params.acquireCd = $scope.acquireCd;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;

@@ -28,6 +28,7 @@ public class SaleComPopupVO extends PageVO {
     private String yoil;
     /** 포스번호 */
     private String posNo;
+    private String arrStorePos[];
     /** 영수증번호 */
     private String billNo;
     /** 매장코드 array */
@@ -38,6 +39,7 @@ public class SaleComPopupVO extends PageVO {
     private String arrStoreTbl[];
     /** 코너코드 array */
     private String arrCornrCd[];
+    private String arrStoreCornr[];
     /** 대분류코드 */
     private String prodClassCd;
     /** 상품코드 */
@@ -60,6 +62,13 @@ public class SaleComPopupVO extends PageVO {
     private String mpayCd;
     /** 모바일쿠폰 코드 */
     private String mcoupnCd;
+    /** 승인처리 코드 */
+    private String apprProcFg;
+    /** 현금영수증 승인처리 코드 */
+    private String cashBillApprProcFg;
+    /** 승인구분 코드 */
+    private String saleFg;
+    private String saleYn;
     /**
      * @return the hqOfficeCd
      */
@@ -315,6 +324,55 @@ public class SaleComPopupVO extends PageVO {
 	public void setMcoupnCd(String mcoupnCd) {
 		this.mcoupnCd = mcoupnCd;
 	}
+
+	public String[] getArrStoreCornr() {
+		return arrStoreCornr;
+	}
+
+	public void setArrStoreCornr(String arrStoreCornr[]) {
+		this.arrStoreCornr = arrStoreCornr;
+	}
+
+	public String[] getArrStorePos() {
+		return arrStorePos;
+	}
+
+	public void setArrStorePos(String arrStorePos[]) {
+		this.arrStorePos = arrStorePos;
+	}
+
+	public String getApprProcFg() {
+		return apprProcFg;
+	}
+
+	public void setApprProcFg(String apprProcFg) {
+		this.apprProcFg = apprProcFg;
+	}
+
+	public String getSaleFg() {
+		return saleFg;
+	}
+
+	public void setSaleFg(String saleFg) {
+		this.saleFg = saleFg;
+	}
+
+	public String getSaleYn() {
+		return saleYn;
+	}
+
+	public void setSaleYn(String saleYn) {
+		this.saleYn = saleYn;
+	}
+
+	public String getCashBillApprProcFg() {
+		return cashBillApprProcFg;
+	}
+
+	public void setCashBillApprProcFg(String cashBillApprProcFg) {
+		this.cashBillApprProcFg = cashBillApprProcFg;
+	}
+
 
 	
 }

@@ -28,6 +28,7 @@ public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
     @Override
     public List<DefaultMap<String>> getCornerDayPeriodList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO) {
     	cornerDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	cornerDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
     	if (cornerDayPeriodVO.getCornrCd() != null && !"".equals(cornerDayPeriodVO.getCornrCd())) {
     		String[] arrCornrCd = cornerDayPeriodVO.getCornrCd().split(",");
@@ -53,6 +54,7 @@ public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
 	@Override
 	public List<DefaultMap<String>> getCornerDayPeriodDtlList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO) {
 		cornerDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		cornerDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		return cornerDayPeriodMapper.getCornerDayPeriodDtlList(cornerDayPeriodVO);
 	}
 

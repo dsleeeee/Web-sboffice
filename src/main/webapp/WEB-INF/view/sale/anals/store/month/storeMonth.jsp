@@ -22,15 +22,16 @@
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
-        	<col class="w13"/>
-	        <col class="w37"/>
-	        <col class="w50"/>
+        	<col class="w15"/>
+	        <col class="w35"/>
+	        <col class="w15"/>
+	        <col class="w35"/>
       	</colgroup>
       	<tbody>
        	<%-- 조회일자 --%>
-		<tr>
-	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colsapn="2">
+				<tr>
+	    		<th><s:message code="cmm.search.date" /></th>
+        	<td colspan="3">
           	<div class="sb-select">      
 	          <span class="txtIn w110px">
 	              <wj-input-date
@@ -64,24 +65,22 @@
         </tr>
       	<tr>  
       		<th><s:message code="store.sort" /></th>
-        	<td>
-            	<span class="rdo ml10">
-                	<label><input type="radio"  ng-model="isCheckedSortMonth"  value="1" checked/>상위</label>
-                	<label><input type="radio"  ng-model="isCheckedSortMonth"  value="2" />하위</label>
-            	</span>   
-            </td>
-            <td>  	
-                <div class="sb-select fl w150px">
-                    <wj-combo-box
-                            id="rowNum"
-                            ng-model="rowNum"
-                            items-source="_getComboData('srchRowNumCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
+        	<td colspan="3">
+           	<span class="rdo fl mr20 pst7">
+               	<label class="r-box"><input type="radio"  ng-model="isCheckedSortMonth"  value="1" checked/>상위</label>
+               	<label class="r-box"><input type="radio"  ng-model="isCheckedSortMonth"  value="2" />하위</label>
+           	</span>   
+            <div class="sb-select fl w150px">
+                <wj-combo-box
+                        id="rowNum"
+                        ng-model="rowNum"
+                        items-source="_getComboData('srchRowNumCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+            </div>
             </td>     	
       	</tr>
       	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -122,11 +121,11 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-   		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-   		  <wj-flex-grid-column header="<s:message code="store.storeRat"/>" 		binding="storeRat" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>  
+          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 		binding="storeNm" 		width="250" align="center" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+   		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+   		  <wj-flex-grid-column header="<s:message code="store.storeRat"/>" 		binding="storeRat" 		width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>  
         </wj-flex-grid>
         
         <%-- ColumnPicker 사용시 include --%>

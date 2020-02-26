@@ -49,12 +49,6 @@
                 #{item}
             </foreach>
         </if>
-         <if test='cornrCd != null and cornrCd != ""'>
-            AND STORE_CD||'||'||CORNR_CD IN
-            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
         <if test='posNo != null and posNo != ""'>
             AND STORE_CD||'||'||POS_NO IN
             <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
@@ -84,12 +78,6 @@
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND STORE_CD IN
             <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-         <if test='cornrCd != null and cornrCd != ""'>
-            AND STORE_CD||'||'||CORNR_CD IN
-            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
                 #{item}
             </foreach>
         </if>

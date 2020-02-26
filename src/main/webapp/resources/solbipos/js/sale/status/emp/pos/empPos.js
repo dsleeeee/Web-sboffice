@@ -171,7 +171,18 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/status/emp/pos/list.sb", params, function() {});
+    $scope._inquiryMain("/sale/status/emp/pos/list.sb", params, function() {
+		var flex = $scope.flex;
+		//row수가 0이면
+		if(flex.rows.length === 0){
+			
+			var grid = wijmo.Control.getControl("#empPosGrid");
+			//컬럼 삭제
+			while(grid.columns.length > 5){
+		          grid.columns.removeAt(grid.columns.length-1);
+		    }
+		}   
+    });
 
   };
 

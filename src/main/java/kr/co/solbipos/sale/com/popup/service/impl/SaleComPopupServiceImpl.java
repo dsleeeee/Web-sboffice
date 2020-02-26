@@ -78,8 +78,11 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	
-        if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
-        	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(saleComPopupVO.getCornrCd()).equals("")) {
+        	saleComPopupVO.setArrStoreCornr(saleComPopupVO.getCornrCd().split(","));
+        }
+        if(!StringUtil.getOrBlank(saleComPopupVO.getPosNo()).equals("")) {
+        	saleComPopupVO.setArrStorePos(saleComPopupVO.getPosNo().split(","));
         }
 
     	if(saleComPopupVO.getChkPop().equals("cardApprPop")) {				//카드

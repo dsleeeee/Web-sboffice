@@ -47,15 +47,14 @@
         </tr>
       	<tr>  
       		<th><s:message code="store.sort" /></th>
-        	<td>
+        	<td colspan="3">
 
-            	<span class="rdo ml10">
-                	<label><input type="radio"  ng-model="isCheckedSort"  value="1" checked/>상위</label>
-                	<label><input type="radio"  ng-model="isCheckedSort"  value="2" />하위</label>
+            	<span class="rdo fl mr20 pst7">
+                	<label class="r-box"><input type="radio"  ng-model="isCheckedSort"  value="1" checked/>상위</label>
+                	<label class="r-box"><input type="radio"  ng-model="isCheckedSort"  value="2" />하위</label>
             	</span>   
-            </td>
-            <td>  	
-                <div class="sb-select fl w150px">
+            	 	
+                <div class="sb-select fl w150px mr20">
                     <wj-combo-box
                             id="rowNum"
                             ng-model="rowNum"
@@ -66,10 +65,8 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-            </td>  
-         	<td colspan="2">
         		<%-- 결제수단 전체보기 --%>
-            	<span class="chk ml10">
+            	<span class="chk pst4">
                 	<input type="checkbox"  ng-model="isCheckedPayAll" ng-change="totalPay()" />
                 	<label for="totalPay()">전체결제수단 표시</label>
             	</span>

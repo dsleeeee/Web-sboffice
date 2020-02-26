@@ -77,7 +77,7 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         	params.startDate 		= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
-//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간	        
+//For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간
 	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
@@ -137,6 +137,15 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															            var reportCtrl_excel = agrid.getScope('reportCtrl_excel');
 															            reportCtrl_excel.span_startDate	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
 															            reportCtrl_excel.span_endDate	= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
+
+															            //2020.02.24 - '본사'인 경우에도 [결제라인] [영업일보] button 보이기
+															            if($scope.orgnFg == "H") {	//H:본사, S:가맹점, M:?? -> 매장이 'M'으로 보이는 경우도 있음
+																    	    $("#btnAdd"	).show();
+																    	    $("#btnDel"	).show();
+																    	    $("#btnSave").show();
+
+																    		$("#btnSave2").show();
+															    		}
 
 															            //'데이터 처리 중입니다.' 중지
 															            $scope.$broadcast('loadingPopupInactive');
@@ -239,7 +248,7 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
         		}
         	}
     	}, true);
-	    	
+
 	};
 }]);
 //reportCtrl_sl    	END		############################################################################################################################################################################
@@ -322,7 +331,7 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         }	//s.itemFormatter = function (panel, r, c, cell) {
-        
+
         // 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
@@ -334,7 +343,7 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
         		}
         	}
     	}, true);
-    	
+
     }
 }]);
 //reportCtrl_pay    END		############################################################################################################################################################################
@@ -386,11 +395,11 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -398,7 +407,7 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
 	      		}
 	      	}
 	  	}, true);
-  	
+
   }
 }]);
 //reportCtrl_nsl    END		############################################################################################################################################################################
@@ -464,11 +473,11 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -476,7 +485,7 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
 	      		}
 	      	}
 	  	}, true);
-  	
+
   }
 }]);
 //reportCtrl_npay   END		############################################################################################################################################################################
@@ -529,11 +538,11 @@ app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -617,11 +626,11 @@ app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -681,11 +690,11 @@ app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -745,11 +754,11 @@ app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -833,11 +842,11 @@ app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -914,11 +923,11 @@ app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -978,11 +987,11 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1042,11 +1051,11 @@ $scope.initGrid = function (s, e) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1106,11 +1115,11 @@ app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1170,11 +1179,11 @@ app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1234,11 +1243,11 @@ app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1340,11 +1349,11 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1404,11 +1413,11 @@ app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) 
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {
@@ -1468,11 +1477,11 @@ app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
               }
           }
       }	//s.itemFormatter = function (panel, r, c, cell) {
-      
+
 	   // 그리드 클릭 이벤트
 	  	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 		    	var ht = s.hitTest(e);
-	
+
 		    	if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	      		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 	      		if (rng && rng.columnSpan > 1) {

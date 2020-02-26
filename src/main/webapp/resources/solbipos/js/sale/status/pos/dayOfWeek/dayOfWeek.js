@@ -9,8 +9,8 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posDayOfWeekCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosDayOfWeekStartDate = wcombo.genDateVal("#srchPosDayOfWeekStartDate", gvStartDate);
-	$scope.srchPosDayOfWeekEndDate   = wcombo.genDateVal("#srchPosDayOfWeekEndDate", gvEndDate);
+	$scope.srchPosDayOfWeekStartDate = wcombo.genDateVal("#srchPosDayOfWeekStartDate", getToday());
+	$scope.srchPosDayOfWeekEndDate   = wcombo.genDateVal("#srchPosDayOfWeekEndDate", getToday());
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayOfWeekListScaleBox", gvListScaleBoxData);
@@ -144,7 +144,20 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/pos/dayOfWeek/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/dayOfWeek/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+				
+				var grid = wijmo.Control.getControl("#posDayOfWeekGrid");
+				//컬럼 삭제
+				while(grid.columns.length > 6){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 		$scope._setPagingInfo('curr', 1);
 	};
 

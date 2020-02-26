@@ -123,6 +123,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   // 매장형태별 매출 리스트 조회
   $scope.searchStoreFgList = function (isPageChk) {
 
+  $scope.setCollapsed = false;
     // 파라미터
     var params       = {};
   //  params.startDate = wijmo.Globalize.format($scope.srchStoreFgStartDate.value, 'yyyyMMdd');

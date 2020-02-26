@@ -29,7 +29,7 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	public List<DefaultMap<String>> getApprAcquireList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
     			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {
@@ -66,7 +66,7 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	public List<DefaultMap<String>> getApprAcquireMcouponList(ApprAcquireVO apprAcquireVO,	SessionInfoVO sessionInfoVO) {
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
     			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {
@@ -103,7 +103,7 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	public List<DefaultMap<String>> getApprAcquireMpayList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
+		if ((apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) || (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo()))) {
     		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
     			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {
@@ -140,24 +140,13 @@ public class ApprAcquireServiceImpl implements ApprAcquireService {
 	public List<DefaultMap<String>> getApprAcquireNcardList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO) {
 		apprAcquireVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd()) || apprAcquireVO.getPosNo() != null || !"".equals(apprAcquireVO.getPosNo())) {
-    		if (apprAcquireVO.getCornrCd() != null && !"".equals(apprAcquireVO.getCornrCd())) {
-    			String[] arrCornrCd = apprAcquireVO.getCornrCd().split(",");
-    			if (arrCornrCd.length > 0) {
-        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
-        				apprAcquireVO.setArrCornrCd(arrCornrCd);
-//        				apprAcquireVO.setArrStoreCornr(arrCornrCd);
-        			}
-        		}
-    		}
-    		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
-    			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
-    			if (arrPosNo.length > 0) {
-        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
-        				apprAcquireVO.setArrPosNo(arrPosNo);
+		if (apprAcquireVO.getPosNo() != null && !"".equals(apprAcquireVO.getPosNo())) {
+			String[] arrPosNo = apprAcquireVO.getPosNo().split(",");
+			if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				apprAcquireVO.setArrPosNo(arrPosNo);
 //        				apprAcquireVO.setArrStorePos(arrPosNo);
-        			}
-        		}
+    			}
     		}
     	} else {
     		String[] arrStoreCd = apprAcquireVO.getStoreCd().split(",");

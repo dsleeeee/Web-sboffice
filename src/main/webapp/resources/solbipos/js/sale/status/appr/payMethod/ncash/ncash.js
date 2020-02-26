@@ -31,7 +31,6 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	$scope.getCornerNmList();
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("apprNcashCtrl");
@@ -63,14 +62,29 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        var storeCd		 = selectedRow.storeCd;
+        var arrPosNo	 = ($scope.srchPosNo).split(",");
         var params       = {};
-	    	params.storeCd   = selectedRow.storeCd;
+        	params.posNo = new Array();
+	        params.saleYn = $scope.srchSaleYn;
+	        params.apprProcFg = $scope.srchApprProcFg;
+	        if(params.posNo == "" && params.cornrCd == ""){
+	        	params.storeCd   = selectedRow.storeCd;
+	        }
+
 	    	if(!$scope.isChecked){
 	    		  params.startDate = wijmo.Globalize.format($scope.srchApprNcashStartDate.value, 'yyyyMMdd');
 	    		  params.endDate = wijmo.Globalize.format($scope.srchApprNcashEndDate.value, 'yyyyMMdd');
 	    	}
 	    	params.chkPop    = "ncashApprPop";
 	    if (col.binding === "storeNm") { // 매장명
+	    	if(arrPosNo != ""){
+        		for(var i=0; i<arrPosNo.length; i++){
+            		if(storeCd == arrPosNo[i].substring(0,7)){
+            			(params.posNo).push(arrPosNo[i]);
+            		}
+            	}
+        	}
 	        $scope._broadcast('saleApprNcashCtrl', params);
 	    }
       }
@@ -170,13 +184,16 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params       = {};
     params.storeCd   = $("#apprNcashSelectStoreCd").val();
     params.posNo  	 = $("#apprNcashSelectPosCd").val();
-    params.cornrNo   = $("#apprNcashSelectCornerCd").val();
     params.saleYn	 = $scope.saleYn;
     params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprNcashListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
-
+    
+    $scope.srchPosNo  	  = $("#apprNcashSelectPosCd").val();
+    $scope.srchSaleYn	  = $scope.saleYn;
+    $scope.srchApprProcFg = $scope.apprProcFg;
+    
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
 	  params.startDate = wijmo.Globalize.format($scope.srchApprNcashStartDate.value, 'yyyyMMdd');
@@ -213,13 +230,6 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 		$scope._broadcast('apprNcashSelectPosCtrl');
 	};
 
-	//포스선택 모듈 팝업 사용시 정의
-	//함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	//_broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.apprNcashSelectCornerShow = function () {
-		$scope._broadcast('apprNcashSelectCornerCtrl');
-	};
-	
 //엑셀 다운로드
   $scope.excelDownloadNcash = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -249,14 +259,6 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 		var comboParams     = {};
 
 		comboParams.storeCd = $("#posNcashSelectStoreCd").val();
-	};
-
-
- //매장의 코너(corner) 리스트 조회
-	$scope.getCornerNmList = function () {
-		var url             = '/sale/status/corner/corner/cornerNmList.sb';
-		var comboParams     = {};
-		comboParams.storeCd = $("#apprNcashSelectStoreCd").val();
 	};
 
 

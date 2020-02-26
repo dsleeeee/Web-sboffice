@@ -264,7 +264,7 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.isPageChk = isPageChk;
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquiryMain("/sale/status/emp/dayperiod/dtl.sb", params);
+	    $scope._inquirySub("/sale/status/emp/dayperiod/dtl.sb", params);
 	  };
 
 	  //엑셀 다운로드

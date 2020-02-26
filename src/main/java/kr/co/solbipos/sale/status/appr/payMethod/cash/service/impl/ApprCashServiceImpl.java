@@ -29,7 +29,7 @@ public class ApprCashServiceImpl implements ApprCashService {
 	public List<DefaultMap<String>> getApprCashList(ApprCashVO apprCashVO, SessionInfoVO sessionInfoVO) {
 		apprCashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd()) || apprCashVO.getPosNo() != null || !"".equals(apprCashVO.getPosNo())) {
+		if ((apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) || (apprCashVO.getPosNo() != null && !"".equals(apprCashVO.getPosNo()))) {
     		if (apprCashVO.getCornrCd() != null && !"".equals(apprCashVO.getCornrCd())) {
     			String[] arrCornrCd = apprCashVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {

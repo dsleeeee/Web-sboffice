@@ -56,8 +56,17 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        var storeCd		 = selectedRow.storeCd;
+        var arrPosNo	 = ($scope.srchPosNo).split(",");
+        var arrCornrCd	 = ($scope.srchCornrCd).split(",");
         var params       = {};
-        	params.storeCd   = selectedRow.storeCd;
+        	params.posNo = new Array();
+        	params.cornrCd = new Array();
+	        params.saleFg = $scope.srchSaleFg;
+	        params.apprProcFg = $scope.srchApprProcFg;
+	        if(params.posNo == "" && params.cornrCd == ""){
+	    		params.storeCd   = selectedRow.storeCd;
+	        }
         	params.acquireCd = selectedRow.acquireCd;
         	params.acquireNm = selectedRow.acquireNm;
         	if(!$scope.isChecked){
@@ -66,6 +75,20 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
         	}
         	params.chkPop    = "cardApprPop";
         if (col.binding === "storeNm") { // 매장명
+        	if(arrPosNo != ""){
+        		for(var i=0; i<arrPosNo.length; i++){
+            		if(storeCd == arrPosNo[i].substring(0,7)){
+            			(params.posNo).push(arrPosNo[i]);
+            		}
+            	}
+        	}
+        	if(arrCornrCd != ""){
+        		for(var i=0; i<arrCornrCd.length; i++){
+            		if(storeCd == arrCornrCd[i].substring(0,7)){
+            			(params.cornrCd).push(arrCornrCd[i]);
+            		}
+            	}
+        	}
             $scope._broadcast('saleApprCardCtrl', params);
         }
       }
@@ -177,11 +200,16 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
     var params       = {};
     params.storeCd   = $("#apprAcquireCardSelectStoreCd").val();
     params.posNo  	 = $("#apprAcquireCardSelectPosCd").val();
-    params.cornrNo   = $("#apprAcquireCardSelectCornerCd").val();
+    params.cornrCd   = $("#apprAcquireCardSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.apprProcFg = $scope.apprProcFg;
     params.listScale = $scope.apprAcquireCardListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    
+    $scope.srchPosNo  	  = $("#apprAcquireCardSelectPosCd").val();
+    $scope.srchCornrCd    = $("#apprAcquireCardSelectCornerCd").val();
+    $scope.srchSaleFg	  = $scope.saleFg;
+    $scope.srchApprProcFg = $scope.apprProcFg;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

@@ -43,13 +43,6 @@
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수
-            --%>
-            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                 <jsp:param name="targetId" value="apprAcquireCardSelectStore"/>
@@ -126,7 +119,7 @@
       </c:if>
         <input type="hidden" id="apprAcquireCardSelectPosCd" value=""/>
         <input type="hidden" id="apprAcquireCardSelectPosName" value=""/>
-        <input type="hidden" id="apprAcquireCardSelectCornrNo" value=""/>
+        <input type="hidden" id="apprAcquireCardSelectCornerCd" value=""/>
         <input type="hidden" id="apprAcquireCardSelectCornrName" value=""/>
       </tr>
       </tbody>

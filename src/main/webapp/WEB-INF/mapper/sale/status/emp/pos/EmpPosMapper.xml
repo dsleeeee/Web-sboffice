@@ -15,7 +15,7 @@
 			SELECT A.STORE_NM
 				, A.STORE_CD
 			    , A.POS_NO
-			    , COUNT(DISTINCT A.STORE_CD) STORE_CNT
+			    , A.STORE_CNT
 				, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
 				, SUM(A.BILL_CNT_TOT) AS TOT_BILL_CNT
 				${sQuery1}
@@ -25,6 +25,16 @@
 				SELECT TMS.STORE_NM
 						, TSDE.STORE_CD
 						, TSDE.POS_NO
+						,( SELECT COUNT(TMS.STORE_CD)	  
+							FROM TB_MS_STORE TMS
+							WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+							<if test='storeCd != null and storeCd != ""'>
+							   AND TMS.STORE_CD	IN
+						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+			                        #{item}
+			                    </foreach>
+							</if>
+					     ) AS STORE_CNT
 						, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT    
 						, COUNT(TSDE.BILL_NO) AS BILL_CNT_TOT    					
 						${sQuery2}                                          
@@ -46,7 +56,7 @@
 				GROUP BY TSDE.SALE_DATE, TSDE.EMP_NO, TSDE.STORE_CD, TSDE.BILL_NO, TSDE.POS_NO, TMS.STORE_NM  
 			) A 
 		WHERE 1 = 1
-		GROUP BY A.POS_NO, A.STORE_CD, A.STORE_NM
+		GROUP BY A.POS_NO, A.STORE_CD, A.STORE_NM, A.STORE_CNT
 		ORDER BY STORE_CD ASC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -66,6 +76,7 @@
 		  FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		   WHERE TME.STORE_CD = TMS.STORE_CD
+		   AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 		  <if test='storeCd != null and storeCd != ""'>
 		  AND TME.STORE_CD IN
   				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

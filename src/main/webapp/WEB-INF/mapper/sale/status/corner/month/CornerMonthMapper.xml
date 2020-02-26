@@ -13,8 +13,7 @@
     <select id="getCornerMonthList" parameterType="cornerMonthVO" resultType="DefaultMap">
         /* USE : CornerMonthMapper.getCornerMonthList */
        <include refid="CmmSQL.PagingTemplateHeader"/>
-       SELECT TSDCP.STORE_CD
-              ,TO_CHAR(TO_DATE(TSDCP.SALE_YM, 'yyyymm'), 'yyyy-mm') SALE_YM
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_YM, 'yyyymm'), 'yyyy-mm') SALE_YM
               ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT
               ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
               ${sQuery1}       
@@ -39,7 +38,7 @@
         <if test='endDate != null and endDate != ""'>
            AND TSDCP.SALE_YM <![CDATA[<= ]]> TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
         </if>
-        GROUP BY TSDCP.STORE_CD, TSDCP.SALE_YM
+        GROUP BY TSDCP.SALE_YM
         ORDER BY TSDCP.SALE_YM DESC
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

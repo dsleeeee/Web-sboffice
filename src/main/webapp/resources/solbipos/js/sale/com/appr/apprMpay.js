@@ -80,6 +80,10 @@ app.controller('saleApprMpayCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.$on("saleApprMpayCtrl", function (event, data) {
 
     $scope.storeCd  	= data.storeCd;
+    $scope.arrStoreCornr= data.cornrCd;
+    $scope.arrStorePos	= data.posNo;
+    $scope.saleFg 		= data.saleFg
+    $scope.apprProcFg 	= data.apprProcFg;
     $scope.mpayCd  	   	= data.mpayCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate; 
@@ -99,6 +103,10 @@ app.controller('saleApprMpayCtrl', ['$scope', '$http', '$timeout', function ($sc
     // 파라미터
     var params       = {};
     params.storeCd   = $scope.storeCd;
+    params.arrStoreCornr= $scope.arrStoreCornr;
+    params.arrStorePos	= $scope.arrStorePos;
+    params.saleFg 		= $scope.saleFg
+    params.apprProcFg 	= $scope.apprProcFg;
     params.mpayCd  	 = $scope.mpayCd;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;

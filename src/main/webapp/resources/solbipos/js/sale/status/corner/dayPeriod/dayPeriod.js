@@ -285,7 +285,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	    params.isPageChk = isPageChk;
 	    params.orgnFg    = $scope.orgnFg;
 
-	    $scope._inquiryMain("/sale/status/corner/corner/dtl.sb", params);
+	    $scope._inquirySub("/sale/status/corner/corner/dtl.sb", params);
 //		$scope.flex.refresh();
 	  };
 

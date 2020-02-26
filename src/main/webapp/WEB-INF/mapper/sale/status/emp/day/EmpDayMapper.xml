@@ -13,7 +13,7 @@
         /* USE : EmpDayMapper.getEmpDayList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT A.SALE_DATE
-		      , COUNT(DISTINCT A.STORE_CNT) STORE_CNT
+		      , A.STORE_CNT	
 		      , TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
 		      , SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
 		      , SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
@@ -22,7 +22,16 @@
 		FROM 
 		(
 			SELECT TSDE.SALE_DATE 
-		        , COUNT(DISTINCT TSDE.STORE_CD) STORE_CNT
+        		,( SELECT COUNT(TMS.STORE_CD)	  
+					FROM TB_MS_STORE TMS
+					WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+					<if test='storeCd != null and storeCd != ""'>
+					   AND TMS.STORE_CD	IN
+				        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+					</if>
+			     ) AS STORE_CNT
 				, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
 				, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
 				${sQuery2}
@@ -44,7 +53,7 @@
 			ORDER BY TSDE.SALE_DATE ASC
 		    ) A
     	WHERE 1 = 1
-    	GROUP BY A.SALE_DATE
+    	GROUP BY A.SALE_DATE, A.STORE_CNT
     	ORDER BY A.SALE_DATE
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -64,6 +73,7 @@
 		  FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		  WHERE TME.STORE_CD = TMS.STORE_CD
+		  AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 		  <if test='storeCd != null and storeCd != ""'>
 		  AND TME.STORE_CD IN
   				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

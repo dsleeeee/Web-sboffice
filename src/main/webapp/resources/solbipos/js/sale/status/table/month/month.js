@@ -181,7 +181,20 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/table/month/list.sb", params);
+		$scope._inquiryMain("/sale/status/table/month/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+				
+				var grid = wijmo.Control.getControl("#tableMonthGrid");
+				//컬럼 삭제
+				while(grid.columns.length > 4){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 	};
 
 	//전체기간 체크박스 클릭이벤트

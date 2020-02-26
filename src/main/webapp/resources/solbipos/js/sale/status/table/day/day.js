@@ -189,7 +189,20 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/table/day/list.sb", params);
+		$scope._inquiryMain("/sale/status/table/day/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+				
+				var grid = wijmo.Control.getControl("#tableDayGrid");
+				//컬럼 삭제
+				while(grid.columns.length > 5){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -244,7 +257,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	};
 
 	//매장의 테이블 리스트 재생성
-	$scope.getReTableNmList = function (storeCd, tableCd, grindSet) {
+	$scope.getReTableNmList = function (storeCd, tableCd, gridSet) {
 		var url = "/sale/status/table/day/tableNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
@@ -275,7 +288,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    			storeTableCd = $("#tableDaySelectTableCd").val();
 	    			storeTableNm = $("#tableDaySelectTableName").val();
 
-	    			if (grindSet) {
+	    			if (gridSet){// && response.data.data.page.totCnt != 0) {
 	                    $scope.makeDataGrid();
 	                 }
 	    		}
@@ -301,7 +314,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		  var arrTableCd = storeTableCd.split(',');
 		  var arrTableNm = storeTableNm.split(',');
 
-		  if (arrTableCd != null) {
+		  if (arrTableCd != null){// && grid.rows.length != 0) {
 			  for(var i = 1; i < arrTableCd.length + 1; i++) {
 
 				  var colValue = arrTableCd[i-1];
@@ -357,8 +370,8 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				  var col = panel.columns[c];
 				  if (col.isReadOnly) {
 					  wijmo.addClass(cell, 'wj-custom-readonly');
-				  }
-			  }
+				  } 
+			  } 
 
 		  }
 

@@ -25,7 +25,7 @@
       <tr>
         <%-- 조회일자 --%>
         <th><s:message code="cmm.search.date"/></th>
-        <td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if> >
+        <td>
         <div class="sb-select">
             <span class="txtIn"><input id="srchApprNcardStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -38,37 +38,28 @@
             </span>
         </div>
         </td>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="apprNcardSelectStoreStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수
-            --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="apprNcardSelectStore"/> --%>
-<%--                 <jsp:param name="closeFunc" value="getCornerNmList"/> --%>
-<%--             </jsp:include> --%>
-            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
             <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
                 <jsp:param name="targetId" value="apprNcardSelectStore"/>
                 <jsp:param name="targetPosId" value="apprNcardSelectPos"/>
                 <jsp:param name="targetCornerId" value="apprNcardSelectCorner"/>
-                <jsp:param name="closeFunc" value="getCornerNmList,getPosNmList"/>
+                <jsp:param name="closeFunc" value="getPosNmList"/>
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
-      </c:if>
+      
       </tr>
       
       <tr>
+     </c:if>
         <%-- 포스선택 --%>
         <th><s:message code="pos.pos" /></th>
-        <td>
+        <td <c:if test="${sessionInfo.orgnFg == 'HQ'}">colspan="3"</c:if>>
             <%-- 포스선택 모듈 멀티 선택 사용시 include --%>
             <jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
                 <jsp:param name="targetId" value="apprNcardSelectPos"/>
@@ -76,16 +67,6 @@
                 <jsp:param name="closeFunc" value="getPosNmList"/>
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-        </td>
-      
-        <%-- 코너표시 --%>
-        <th><s:message code="corner.cornrNm" /></th>
-        <td>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
-                <jsp:param name="targetId" value="apprNcardSelectCorner"/>
-                <jsp:param name="targetStoreId" value="apprNcardSelectStore"/>
-                <jsp:param name="closeFunc" value="getCornerNmList"/>
-            </jsp:include>
         </td>
       </tr>
       
@@ -129,8 +110,6 @@
       </c:if>
         <input type="hidden" id="posNcardSelectPosCd" value=""/>
         <input type="hidden" id="posNcardSelectPosName" value=""/>
-        <input type="hidden" id="apprNcardSelectCornrNo" value=""/>
-        <input type="hidden" id="apprNcardSelectCornrName" value=""/>
       </tr>
       </tbody>
     </table>

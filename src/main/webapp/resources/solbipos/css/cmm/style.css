@@ -2097,6 +2097,13 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .prodNavWrap.t2 {width:100%}
 .prodNavWrap.t2 .keyStyleWrap {position:relative; width:100%; height:auto; overflow:hidden}
 .prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
+.tch-inner {float:left; width:190px; height:550px; margin-top:5px; padding:10px; border:1px solid #e8e8e8}
+.tch-inner.t2 {width:495px}
+
+.frGroupWrap.t2 {height:60px; padding:10px 10px 0; text-align:left}
+.frGroupWrap.t2 span {display:inline-block; }
+.frGroupWrap.t2 span a {width:auto; padding:10px}
+.prev1.t2 svg {min-width:auto !important; min-height:auto !important}
 
 
 /* wijmo grid box scroll custom 

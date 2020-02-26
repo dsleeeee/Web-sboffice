@@ -59,25 +59,21 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         	params.endDate 	 = selectedRow.saleYm + "-" + endDay;
         	
         	var storeCornr   = $("#cornerMonthSelectCornerCd").val().split(",");
-        	var arrStore     = [];
-    		var arrCornr     = [];
+    		var arrStoreCornr     = [];
     		for(var i=0; i < storeCornr.length; i++) {
-    			var temp = storeCornr[i].split("||");
-    			arrStore.push(temp[0]);
-    			arrCornr.push(temp[1]);
+    			var temp = storeCornr[i];
+    			arrStoreCornr.push(temp);
     		}
     		
         if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-        	if(arrStore != ""){
-    			params.storeCd	 = arrStore;
-    			params.cornrCd	 = arrCornr;
+        	if(arrStoreCornr != ""){
+    			params.arrStoreCornr	 = arrStoreCornr;
     		}else{
     			params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
     		}
         	$scope._broadcast('saleComProdCtrl', params);
         }else if(col.binding.substring(0, 7) === "saleQty") {
-    		params.storeCd 	 = arrStore[Math.floor(ht.col/2) - 2];
-    		params.cornrCd   = arrCornr[Math.floor(ht.col/2) - 2];
+        	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
     		$scope._broadcast('saleComProdCtrl', params);
         }
         
@@ -191,7 +187,18 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-	$scope._inquiryMain("/sale/status/corner/month/list.sb", params);
+	$scope._inquiryMain("/sale/status/corner/month/list.sb", params, function(){
+		var flex = $scope.flex;
+		//row수가 0이면
+		if(flex.rows.length === 0){
+			
+			var grid = wijmo.Control.getControl("#cornrMonthGrid");
+			//컬럼 삭제
+			while(grid.columns.length > 3){
+		          grid.columns.removeAt(grid.columns.length-1);
+		    }
+		}
+	});
 	
 	
   };

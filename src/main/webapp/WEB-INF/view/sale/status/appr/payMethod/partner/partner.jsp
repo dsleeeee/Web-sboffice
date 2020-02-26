@@ -39,6 +39,7 @@
         </div>
         </td>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="apprPartnerSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -129,7 +130,7 @@
       </c:if>
         <input type="hidden" id="posPartnerSelectPosCd" value=""/>
         <input type="hidden" id="posPartnerSelectPosName" value=""/>
-        <input type="hidden" id="apprPartnerSelectCornrNo" value=""/>
+        <input type="hidden" id="apprPartnerSelectCornerCd" value=""/>
         <input type="hidden" id="apprPartnerSelectCornrName" value=""/>
       </tr>
       </tbody>

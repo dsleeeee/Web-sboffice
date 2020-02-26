@@ -394,7 +394,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    $("#strNm").text($scope.storeNm);
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquiryMain("/sale/status/rtnStatus/dayDtl/list.sb", params);
+	    $scope._inquirySub("/sale/status/rtnStatus/dayDtl/list.sb", params);
 	    $scope.flex.refresh();
 
 	    //메인그리드 조회후 상세그리드 조회.
@@ -505,7 +505,7 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    }
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquiryMain("/sale/status/rtnStatus/posDtl/list.sb", params);
+	    $scope._inquirySub("/sale/status/rtnStatus/posDtl/list.sb", params);
 	    $scope.flex.refresh();
 	  };
 

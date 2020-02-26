@@ -29,7 +29,7 @@ public class ApprMcouponServiceImpl implements ApprMcouponService {
 	public List<DefaultMap<String>> getApprMcouponList(ApprMcouponVO apprMcouponVO, SessionInfoVO sessionInfoVO) {
 		apprMcouponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd()) || apprMcouponVO.getPosNo() != null || !"".equals(apprMcouponVO.getPosNo())) {
+		if ((apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) || (apprMcouponVO.getPosNo() != null && !"".equals(apprMcouponVO.getPosNo()))) {
     		if (apprMcouponVO.getCornrCd() != null && !"".equals(apprMcouponVO.getCornrCd())) {
     			String[] arrCornrCd = apprMcouponVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {

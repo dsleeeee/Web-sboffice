@@ -62,14 +62,37 @@ app.controller('apprPaycoCtrl', ['$scope', '$http', '$timeout', function ($scope
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        var storeCd		 = selectedRow.storeCd;
+        var arrPosNo	 = ($scope.srchPosNo).split(",");
+        var arrCornrCd	 = ($scope.srchCornrCd).split(",");
         var params       = {};
-    		params.storeCd   = selectedRow.storeCd;
+	        params.posNo = new Array();
+	    	params.cornrCd = new Array();
+	        params.saleFg = $scope.srchSaleFg;
+	        params.apprProcFg = $scope.srchApprProcFg;
+	        if(params.posNo == "" && params.cornrCd == ""){
+	    		params.storeCd   = selectedRow.storeCd;
+	        }
 	    	if(!$scope.isChecked){
 	    		  params.startDate = wijmo.Globalize.format($scope.srchApprPaycoStartDate.value, 'yyyyMMdd');
 	    		  params.endDate = wijmo.Globalize.format($scope.srchApprPaycoEndDate.value, 'yyyyMMdd');
 	    	}
 	    	params.chkPop    = "paycoApprPop";
         if (col.binding === "storeNm") { // 매장명
+        	if(arrPosNo != ""){
+        		for(var i=0; i<arrPosNo.length; i++){
+            		if(storeCd == arrPosNo[i].substring(0,7)){
+            			(params.posNo).push(arrPosNo[i]);
+            		}
+            	}
+        	}
+        	if(arrCornrCd != ""){
+        		for(var i=0; i<arrCornrCd.length; i++){
+            		if(storeCd == arrCornrCd[i].substring(0,7)){
+            			(params.cornrCd).push(arrCornrCd[i]);
+            		}
+            	}
+        	}
             $scope._broadcast('saleApprPaycoCtrl', params);
         }
       }
@@ -168,9 +191,15 @@ app.controller('apprPaycoCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCd   = $("#apprPaycoSelectStoreCd").val();
     params.posNo  	 = $("#apprPaycoSelectPosCd").val();
     params.cornrCd   = $("#apprPaycoSelectCornerCd").val();
+    params.saleFg	 = $scope.saleFg;
     params.listScale = $scope.apprPaycoListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
+    
+    $scope.srchPosNo  	  = $("#apprPaycoSelectPosCd").val();
+    $scope.srchCornrCd    = $("#apprPaycoSelectCornerCd").val();
+    $scope.srchSaleFg	  = $scope.saleFg;
+    $scope.srchApprProcFg = $scope.apprProcFg;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

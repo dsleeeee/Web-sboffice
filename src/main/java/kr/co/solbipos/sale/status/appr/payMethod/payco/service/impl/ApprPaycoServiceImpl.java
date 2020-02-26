@@ -29,7 +29,7 @@ public class ApprPaycoServiceImpl implements ApprPaycoService {
 	public List<DefaultMap<String>> getApprPaycoList(ApprPaycoVO apprPaycoVO, SessionInfoVO sessionInfoVO) {
 		apprPaycoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprPaycoVO.getCornrCd() != null && !"".equals(apprPaycoVO.getCornrCd()) || apprPaycoVO.getPosNo() != null || !"".equals(apprPaycoVO.getPosNo())) {
+		if ((apprPaycoVO.getCornrCd() != null && !"".equals(apprPaycoVO.getCornrCd())) || (apprPaycoVO.getPosNo() != null && !"".equals(apprPaycoVO.getPosNo()))) {
     		if (apprPaycoVO.getCornrCd() != null && !"".equals(apprPaycoVO.getCornrCd())) {
     			String[] arrCornrCd = apprPaycoVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {

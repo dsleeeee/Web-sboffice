@@ -62,8 +62,17 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        var storeCd		 = selectedRow.storeCd;
+        var arrPosNo	 = ($scope.srchPosNo).split(",");
+        var arrCornrCd	 = ($scope.srchCornrCd).split(",");
         var params       = {};
-	    	params.storeCd   = selectedRow.storeCd;
+	        params.posNo = new Array();
+	    	params.cornrCd = new Array();
+	        params.saleFg = $scope.srchSaleFg;
+	        params.apprProcFg = $scope.srchApprProcFg;
+	        if(params.posNo == "" && params.cornrCd == ""){
+	    		params.storeCd   = selectedRow.storeCd;
+	        }
 	    	params.mpayCd	 = selectedRow.mpayCd;
 	    	if(!$scope.isChecked){
 	    		  params.startDate = wijmo.Globalize.format($scope.srchApprAcquireMpayStartDate.value, 'yyyyMMdd');
@@ -71,6 +80,20 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 	    	}
 	    	params.chkPop    = "mpayApprPop";
 	    if (col.binding === "storeNm") { // 매장명
+	    	if(arrPosNo != ""){
+        		for(var i=0; i<arrPosNo.length; i++){
+            		if(storeCd == arrPosNo[i].substring(0,7)){
+            			(params.posNo).push(arrPosNo[i]);
+            		}
+            	}
+        	}
+        	if(arrCornrCd != ""){
+        		for(var i=0; i<arrCornrCd.length; i++){
+            		if(storeCd == arrCornrCd[i].substring(0,7)){
+            			(params.cornrCd).push(arrCornrCd[i]);
+            		}
+            	}
+        	}
 	        $scope._broadcast('saleApprMpayCtrl', params);
 	    }
       }
@@ -179,6 +202,11 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
     params.listScale = $scope.apprAcquireMpayListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
+    
+    $scope.srchPosNo  	  = $("#apprAcquireMpaySelectPosCd").val();
+    $scope.srchCornrCd    = $("#apprAcquireMpaySelectCornerCd").val();
+    $scope.srchSaleFg	  = $scope.saleFg;
+    $scope.srchApprProcFg = $scope.apprProcFg;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

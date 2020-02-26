@@ -9,8 +9,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posDayCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosDayStartDate = wcombo.genDateVal("#srchPosDayStartDate", gvStartDate);
-	$scope.srchPosDayEndDate   = wcombo.genDateVal("#srchPosDayEndDate", gvEndDate);
+	$scope.srchPosDayStartDate = wcombo.genDateVal("#srchPosDayStartDate", getToday());
+	$scope.srchPosDayEndDate   = wcombo.genDateVal("#srchPosDayEndDate", getToday());
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posDayListScaleBox", gvListScaleBoxData);
@@ -145,7 +145,20 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/pos/day/list.sb", params);
+		$scope._inquiryMain("/sale/status/pos/day/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+				
+				 var grid = wijmo.Control.getControl("#posDayGrid")
+				//컬럼 삭제
+				while(grid.columns.length > 7){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 	};
 
 	//전체기간 체크박스 클릭이벤트

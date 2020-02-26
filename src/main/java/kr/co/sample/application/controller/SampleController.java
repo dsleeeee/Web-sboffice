@@ -63,16 +63,104 @@ public class SampleController {
         LOGGER.error("sample...... : {}", encoding);
 
         String param = "test";
-
+        /* m2m개발용 임시 주석 
         List<DefaultMap<Object>> temp = sampleService.selectSample(param);
-
         LOGGER.error("result : {}", temp);
-
         model.addAttribute("data", temp);
-
-        return "application/sample/sampleView";
+        return "application/sample/sampleView"; 	
+ */
+        return "application/sample/sampleViewM2mDev";
     }
 
+    // m2m 개발을 위한 샘플 페이지
+    @RequestMapping(value = "sample10.sb")
+    public String sample10(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mCss";
+    }         
+    @RequestMapping(value = "sample11.sb")
+    public String sample11(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mLayout";
+    }     
+    @RequestMapping(value = "sample12.sb")
+    public String sample12(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mForm";
+    }
+    @RequestMapping(value = "sample13.sb")
+    public String sample13(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mBtn";
+    }
+    @RequestMapping(value = "sample14.sb")
+    public String sample14(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mLyTab";
+    }
+    
+    @RequestMapping(value = "sample20.sb")
+    public String sample20(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mMonCal";
+    }     
+    @RequestMapping(value = "sample21.sb")
+    public String sample21(HttpSession session, Model model) {
+        return "application/sample/sampleViewM2mAgt";
+    }  
+    @RequestMapping(value = "sample22.sb")
+    public String sample22(HttpSession session, Model model) {
+    	return "application/sample/sampleViewM2mPsh";
+    }  
+    @RequestMapping(value = "sample23.sb")
+    public String sample23(HttpSession session, Model model) {
+    	return "application/sample/sampleViewM2mTouch";
+    }  
+    
+    // m2mglobal 샘플 페이지 - tonymory
+    @RequestMapping(value = "sample40.sb")
+    public String sample40(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm01";
+    }     
+    @RequestMapping(value = "sample41.sb")
+    public String sample41(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm02";
+    }  
+    @RequestMapping(value = "sample42.sb")
+    public String sample42(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm03";
+    }  
+    @RequestMapping(value = "sample43.sb")
+    public String sample43(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm04";
+    }  
+    @RequestMapping(value = "sample44.sb")
+    public String sample44(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm05";
+    }     
+    @RequestMapping(value = "sample45.sb")
+    public String sample45(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm06";
+    }  
+    @RequestMapping(value = "sample46.sb")
+    public String sample46(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm07";
+    }  
+    @RequestMapping(value = "sample47.sb")
+    public String sample47(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm08";
+    }  
+    @RequestMapping(value = "sample48.sb")
+    public String sample48(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm09";
+    }     
+    @RequestMapping(value = "sample49.sb")
+    public String sample49(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm10";
+    }  
+    @RequestMapping(value = "sample50.sb")
+    public String sample50(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm11";
+    }  
+    @RequestMapping(value = "sample51.sb")
+    public String sample51(HttpSession session, Model model) {
+    	return "application/sample/tonymory/sampleViewTm12";
+    }  
+    
     /**
      * json sample
      *

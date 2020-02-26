@@ -29,7 +29,7 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
 	public List<DefaultMap<String>> getApprPartnerList(ApprPartnerVO apprPartnerVO, SessionInfoVO sessionInfoVO) {
 		apprPartnerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd()) || apprPartnerVO.getPosNo() != null || !"".equals(apprPartnerVO.getPosNo())) {
+		if ((apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) || (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo()))) {
     		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) {
     			String[] arrCornrCd = apprPartnerVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {

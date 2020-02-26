@@ -29,7 +29,7 @@ public class ApprCardServiceImpl implements ApprCardService {
 	public List<DefaultMap<String>> getApprCardList(ApprCardVO apprCardVO, SessionInfoVO sessionInfoVO) {
 		apprCardVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		
-		if (apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd()) || apprCardVO.getPosNo() != null || !"".equals(apprCardVO.getPosNo())) {
+		if ((apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) || (apprCardVO.getPosNo() != null && !"".equals(apprCardVO.getPosNo()))) {
     		if (apprCardVO.getCornrCd() != null && !"".equals(apprCardVO.getCornrCd())) {
     			String[] arrCornrCd = apprCardVO.getCornrCd().split(",");
     			if (arrCornrCd.length > 0) {

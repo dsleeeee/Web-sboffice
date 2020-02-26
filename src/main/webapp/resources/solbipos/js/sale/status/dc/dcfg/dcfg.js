@@ -8,6 +8,9 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dcDcfgCtrl', $scope, $http, $timeout, true));
 
+  //groupRow 접고 펼치기 flag 변수
+  $scope.setCollapsed = false;
+  
   $scope.srchDcDcfgStartDate = wcombo.genDateVal("#srchDcDcfgStartDate", getToday());
   $scope.srchDcDcfgEndDate   = wcombo.genDateVal("#srchDcDcfgEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
@@ -114,14 +117,6 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
     	params.endDate = wijmo.Globalize.format($scope.srchDcDcfgEndDate.value, 'yyyyMMdd');
     }
     params.storeCd   = $("#dcDcfgSelectStoreCd").val();
-//    var storeDcfg   = $("#dcDcfgSelectStoreCd").val().split(",");
-//	var arrStore= [];
-//	var arrDcfg= [];
-//	for(var i=0; i < storeDcfg.length; i++) {
-//		var temp = storeDcfg[i].split("||");
-//		arrStore.push(temp[0]);
-//		arrDcfg.push(temp[1]);
-//	}
     params.dcCd = $("#dcDcfgSelectDcfgCd").val();
     params.listScale = $scope.dcDcfgListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
@@ -232,7 +227,7 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	  // 할인구분별매출일자별 리스트 조회
 	  $scope.searchDcfgDtlList = function (isPageChk) {
 
-
+		$scope.setCollapsed = false;
 	    // 파라미터
 	    var params       = {};
 	    params.startDate = $scope.startDate;
@@ -244,8 +239,64 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	    params.orgnFg    = $scope.orgnFg;
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	    $scope._inquiryMain("/sale/status/dc/dcfg/dtl.sb", params);
-	    $scope.flex.refresh();
+	    $scope._inquirySub("/sale/status/dc/dcfg/dtl.sb", params);
+	    
+	    //create a group to show the grand totals
+	    var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
+	    var grpLv2 = new wijmo.collections.PropertyGroupDescription('dcdtlDcNm');
+	    
+	    var theGrid = new wijmo.Control.getControl('#dcfgDtlGrid');
+	    theGrid.itemsSource = new wijmo.collections.CollectionView();
+	    
+	    // custom cell calculation
+	    theGrid.formatItem.addHandler(function(s, e) {
+
+	    	var lengthTemp = s.collectionView.groupDescriptions.length;
+
+	    	if (lengthTemp < 2) {
+	    		s.collectionView.groupDescriptions.push(grpLv1);
+	        	s.collectionView.groupDescriptions.push(grpLv2);
+	    	}
+
+	    	s.rows.forEach(function(row) {
+	    		if(row instanceof wijmo.grid.GroupRow){
+	    			var groupProp=row.dataItem.groupDescription.propertyName;
+	    			var className=null;
+	    			switch(groupProp){
+	    				case "전체":className="grp-lv-1";break;
+	    				case "dcdtlDcNm":className="grp-lv-2";break;
+	    			}
+
+	    			if(className){
+	    				row.cssClass=className;
+	    			}
+	    			
+	    			if(row.level == 1) { 
+						if(!$scope.setCollapsed){
+							row.isCollapsed = true;
+						}
+					}
+	    		}
+	    	});
+
+	    });
+	    
+		// 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+	    theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
+	      var ht = theGrid.hitTest(e);
+	      if (ht.cellType === wijmo.grid.CellType.Cell) {
+	        if (theGrid.rows[ht.row].level == 1) { // 2단계 분류
+	        	$scope.setCollapsed = true;
+	        	var isCollapsed = theGrid.rows[ht.row].isCollapsed;
+	        	theGrid.rows[ht.row].isCollapsed ? false : true;
+	        }
+	      }
+	    });
+
+	    // start collapsed
+	    theGrid.collapseGroupsToLevel(1);
+	    theGrid.collectionView.refresh();
+//	    $scope.flex.refresh();
 	  };
 
 	//엑셀 다운로드

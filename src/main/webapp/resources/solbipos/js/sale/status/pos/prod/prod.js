@@ -9,8 +9,8 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posProdCtrl', $scope, $http, $timeout, true));
 
-	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", gvStartDate);
-	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", gvEndDate);
+	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
+	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
 	$scope.orgnFg = gvOrgnFg;
 	
 	//조회조건 콤보박스 데이터 Set
@@ -149,7 +149,20 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquirySub("/sale/status/pos/prod/list.sb", params);
+		$scope._inquirySub("/sale/status/pos/prod/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+				
+				var grid = wijmo.Control.getControl("#posProdGrid");
+				//컬럼 삭제
+				while(grid.columns.length > 10){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 	};
 
 	//전체기간 체크박스 클릭이벤트
