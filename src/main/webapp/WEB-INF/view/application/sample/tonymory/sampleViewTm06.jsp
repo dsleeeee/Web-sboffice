@@ -38,6 +38,14 @@
 
 .menuControl {display:none}
 .userInfo.t2 {position:fixed; top:0; right:0; left:0; z-index:98; background-color:#ff9d39}
+.type_Green .userInfo.t2 {position:fixed; top:0; right:0; left:0; z-index:98; background-color:#00ba8b}
+.type_Green .userInfo.t2 .userId {border-left-color:#00a279}
+.type_Orange .userInfo.t2 {position:fixed; top:0; right:0; left:0; z-index:98; background-color:#ff9d39}
+.type_Orange .userInfo.t2 .userId {border-left-color:#ee8418}
+.type_Blue .userInfo.t2 {position:fixed; top:0; right:0; left:0; z-index:98; background-color:#1e88e5}
+.type_Blue .userInfo.t2 .userId {border-left-color:#127bd8}
+.type_Purple .userInfo.t2 {position:fixed; top:0; right:0; left:0; z-index:98; background-color:#ae63ff}
+.type_Purple .userInfo.t2 .userId {border-left-color:#8c38e6}
 .fixedMenu.t2 {position:fixed; top:50px; left:220px; right:0; z-index:97; box-shadow:0 0 0 0 #ff9d39}
 .fixedMenu.t2 ul li a {padding:0 35px 0 10px !important}
 .fixedMenu.t2 ul li a.btn_close {padding-right:0 !important; top:16px !important; right:10px !important}
