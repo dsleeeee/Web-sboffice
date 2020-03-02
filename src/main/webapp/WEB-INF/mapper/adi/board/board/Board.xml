@@ -11,6 +11,11 @@
 -->
 <mapper namespace="kr.co.solbipos.adi.board.board.service.impl.BoardMapper">
 
+    <!-- Clob -->
+    <resultMap id="BoardListMap" type="DefaultMap">
+        <result column="CONTENT" property="content" javaType="java.lang.String"/>
+    </resultMap>
+
     <!-- 일반게시판 조회 -->
     <!--
         TABLE    : TB_WB_BOARD_INFO, TB_CM_EMPLOYEE, TB_CM_AGENCY
@@ -87,7 +92,7 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_BOARD_MASTER
         COMMENTS : 게시판 정보, 게시판 마스터
     -->
-    <select id="getBoardDetailList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardDetailList" parameterType="BoardVO" resultMap="BoardListMap">
         /* BoardMapper.getBoardDetailList */
         SELECT
         twbi.TITLE,
@@ -99,6 +104,7 @@
         --sms전송
         twbi.START_DATE,
         twbi.END_DATE,
+        twbi.CONTENT,
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
         twbm.ANSWER_FG
         FROM TB_WB_BOARD_INFO twbi,
@@ -233,7 +239,7 @@
             #{targetFg},
             0,
             0,
-            '',
+            #{content},
             #{regDt},
             #{regId},
             #{modDt},
@@ -261,6 +267,7 @@
         NOTICE_YN = #{noticeYn},
         APPR_FG = #{apprFg},
         TARGET_FG = #{targetFg},
+        CONTENT = #{content},
         USER_NM = #{userNm},
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
@@ -304,6 +311,73 @@
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}
     </update>
+
+    <!-- 게시판 신규등록,수정 팝업 - 첨부파일 저장시 boardSeqNo 가져오기 -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <select id="getBoardAtchBoardSeqNo"  parameterType="BoardVO" resultType="String">
+        /* BoardMapper.getBoardAtchBoardSeqNo */
+        SELECT
+        MAX(twbi.BOARD_SEQ_NO) AS BOARD_SEQ_NO
+        FROM TB_WB_BOARD_INFO twbi
+        WHERE 1=1
+        AND twbi.BOARD_CD = #{boardCd}
+        AND twbi.TITLE = #{title}
+        AND twbi.USER_NM = #{userNm}
+        AND twbi.REG_ID = #{regId}
+    </select>
+
+    <!-- 첨부파일 저장시 IDX (자동채번) -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <select id="getBoardAtchIdx"  parameterType="BoardVO" resultType="String">
+        /* BoardMapper.getBoardAtchIdx */
+        SELECT
+        (NVL(MAX(twba.IDX), 0) + 1) AS IDX
+        FROM TB_WB_BOARD_ATCH twba
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+    </select>
+
+    <!-- 게시판 신규등록,수정 팝업 - 첨부파일 저장 isert -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <insert id="getBoardInfoAtchSaveIsert" parameterType="BoardVO">
+        /* BoardMapper.getBoardInfoAtchSaveIsert */
+        INSERT INTO TB_WB_BOARD_ATCH
+        (
+            BOARD_CD,
+            BOARD_SEQ_NO,
+            IDX,
+            FILE_PATH,
+            FILE_NM,
+            ORGINL_FILE_NM,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{boardCd},
+            #{boardSeqNo},
+            #{idx},
+            #{filePath},
+            #{fileNm},
+            #{orginlFileNm},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
 
     <!-- 게시판 댓글 조회 -->
     <!--

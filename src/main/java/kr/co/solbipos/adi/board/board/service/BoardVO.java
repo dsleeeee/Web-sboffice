@@ -81,6 +81,18 @@ public class BoardVO extends PageVO {
     /** 조회매장 */
     private String storeCd;
 
+    /** 파일 경로 */
+    private String filePath;
+
+    /** 원본 파일 명 */
+    private String orginlFileNm;
+
+    /** 파일 명 */
+    private String fileNm;
+
+    /** 구분 */
+    private String statusS;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -160,4 +172,20 @@ public class BoardVO extends PageVO {
     public String getStoreCd() { return storeCd; }
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+
+    public String getOrginlFileNm() { return orginlFileNm; }
+
+    public void setOrginlFileNm(String orginlFileNm) { this.orginlFileNm = orginlFileNm; }
+
+    public String getFileNm() { return fileNm; }
+
+    public void setFileNm(String fileNm) { this.fileNm = fileNm; }
+
+    public String getStatusS() { return statusS; }
+
+    public void setStatusS(String statusS) { this.statusS = statusS; }
 }
