@@ -2,7 +2,7 @@ package kr.co.solbipos.adi.board.board.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -34,6 +34,9 @@ public interface BoardService {
 
     /** 게시판 신규등록,수정 팝업 - 저장 */
     int getBoardInfoSave(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+
+    /** 게시판 신규등록,수정 팝업 - 첨부파일 저장 */
+    boolean getBoardInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
 
     /** 게시판 댓글 조회 */
     List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO, SessionInfoVO sessionInfoVO);

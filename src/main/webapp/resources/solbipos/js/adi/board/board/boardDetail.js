@@ -150,15 +150,20 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             } else if ($scope.boardDetail.noticeYn === "N") {
                 $scope.boardDetail.noticeYn = false;
             }
-            // if($scope.boardDetail.smsYn = "Y") {
+            // if($scope.boardDetail.smsYn === "Y") {
             //     $scope.boardDetail.smsYn = true;
-            // } else if ($scope.boardDetail.smsYn = "N") {
+            // } else if ($scope.boardDetail.smsYn === "N") {
             //     $scope.boardDetail.smsYn = false;
             // }
             var startDate = $scope.boardDetail.startDate.substr(0, 4) + "-" + $scope.boardDetail.startDate.substr(4, 2) + "-" + $scope.boardDetail.startDate.substr(6, 2);
             var endDate = $scope.boardDetail.endDate.substr(0, 4) + "-" + $scope.boardDetail.endDate.substr(4, 2) + "-" + $scope.boardDetail.endDate.substr(6, 2);
             $scope.boardDetail.startDate = startDate;
             $scope.boardDetail.endDate = endDate;
+
+            // 서머노트에 text 쓰기
+            $('#summernoteDetail').summernote('code', $scope.boardDetail.content);
+            // 서머노트 쓰기 비활성화
+            $('#summernoteDetail').summernote('disable');
 
             if($scope.boardDetail.answerFg === "Y") {
                 $("#divAnswer").show();
@@ -297,6 +302,9 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         columns[3].visible = true; // 수정
         columns[4].visible = false; // 저장
 
+        // 서머노트 리셋
+        $('#summernoteDetail').summernote('reset');
+
         $scope.wjBoardDetailLayer.hide();
     };
 
@@ -305,5 +313,10 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.wjBoardReadingHistLayer.show(true);
         event.preventDefault();
     };
+
+    // 글쓰기 에디터
+    $(document).ready(function() {
+        $('#summernoteDetail').summernote( { height: 150 });
+    });
 
 }]);

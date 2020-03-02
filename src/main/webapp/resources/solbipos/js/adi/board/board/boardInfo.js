@@ -58,15 +58,18 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             } else if ($scope.boardInfo.noticeYn === "N") {
                 $scope.noticeYn = false;
             }
-            // if($scope.boardInfo.smsYn = "Y") {
+            // if($scope.boardInfo.smsYn === "Y") {
             //     $scope.smsYn = true;
-            // } else if ($scope.boardInfo.smsYn = "N") {
+            // } else if ($scope.boardInfo.smsYn === "N") {
             //     $scope.smsYn = false;
             // }
             var startDate = $scope.boardInfo.startDate.substr(0, 4) + "/" + $scope.boardInfo.startDate.substr(4, 2) + "/" + $scope.boardInfo.startDate.substr(6, 2);
             var endDate = $scope.boardInfo.endDate.substr(0, 4) + "/" + $scope.boardInfo.endDate.substr(4, 2) + "/" + $scope.boardInfo.endDate.substr(6, 2);
             $scope.startDate = startDate;
             $scope.endDate = endDate;
+            // 서머노트에 text 쓰기
+            $('#summernote').summernote('code', $scope.boardInfo.content);
+            // $('#summernote').summernote('insertText', $scope.boardInfo.content);
         });
     };
 
@@ -111,18 +114,20 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         } else if ($scope.noticeYn === false) {
             params.noticeYn = "N";
         }
-        // if($scope.smsYn = true) {
+        // if($scope.smsYn === true) {
         //     params.smsYn = "Y";
-        // } else if($scope.smsYn = false) {
+        // } else if($scope.smsYn === false) {
         //     params.smsYn = "N";
         // }
         params.startDate = dateToDaystring($scope.startDate).replaceAll("-","");
         params.endDate = dateToDaystring($scope.endDate).replaceAll("-","");
+        var html = $('#summernote').summernote('code');
+        params.content = html;
 
         // 신규
         if(params.status === "I") {
             params.boardCd = boardCd;
-            // 수정
+        // 수정
         } else if (params.status === "U") {
             params.boardCd = $scope.selectedBoardInfo.boardCd;
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
@@ -130,7 +135,77 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
+
+        //첨부파일 저장
+        $scope.atchSave(params);
     });
+
+    // 첨부파일 저장
+    $scope.atchSave = function(data){
+        var params = {};
+        params.boardCd = data.boardCd;
+        params.boardSeqNo = data.boardSeqNo;
+        params.title = data.title;
+        params.userNm = data.userNm;
+        // 신규
+        if(data.status === "I") {
+            params.status = "INSERT";
+        } else {
+            params.status = "UPDATE";
+        }
+
+        var formData = new FormData($("#boradForm")[0]);
+        formData.append("boardCd", params.boardCd);
+        formData.append("boardSeqNo", params.boardSeqNo);
+        formData.append("status", params.status);
+        formData.append("title", params.title);
+        formData.append("userNm", params.userNm);
+
+        var url = '/adi/board/board/board/getBoardInfoAtchSave.sb';
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            // async:false,
+            success: function(result) {
+                // console.log('save result', result);
+                if (result.status === "OK") {
+                    if( isEmptyObject($scope.getSelectVersion()) ) {
+                        $scope._popMsg("등록되었습니다.");
+                    } else {
+                        $scope._popMsg("저장되었습니다.");
+                    }
+
+                    $scope.$broadcast('loadingPopupInactive');
+                    $scope.close();
+                }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            error : function(result){
+                $scope._popMsg("error");
+                $scope.$broadcast('loadingPopupInactive');
+            }
+        },function() {
+            $scope._popMsg("Ajax Fail By HTTP Request");
+            $scope.$broadcast('loadingPopupInactive');
+        });
+    };
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -151,21 +226,22 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 팝업 닫기
     $scope.close = function(){
         $scope.newForm();  //신규
+
+        // 서머노트 리셋
+        $('#summernote').summernote('reset');
+
+        // 첨부파일 리셋
+        // ie 일때
+        $("#file").replaceWith( $("#file").clone(true) );
+        // other browser
+        $("#file").val("");
+
         $scope.wjBoardInfoLayer.hide();
     };
 
-    // 파일찾기
-    $scope.findFile = function(){
-       //  alert('test1111111');
-
-        // File path = new File("D:/workspace_example/Data/");
-        // File[] fileList = path.listFiles();
-        //
-        // if(fileList.length > 0){
-        //     for(int i=0; i < fileList.length; i++){
-        //         System.out.println(fileList[i]) ;
-        //     }
-        // }
-    };
+    // 글쓰기 에디터
+    $(document).ready(function() {
+        $('#summernote').summernote( { height: 150 });
+    });
 
 }]);

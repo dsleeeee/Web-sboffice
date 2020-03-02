@@ -68,6 +68,16 @@ public interface BoardMapper {
     List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO);
 
 
+    /** 게시판 신규등록시 boardSeqNo 가져오기 */
+    String getBoardAtchBoardSeqNo(BoardVO boardVO);
+
+    /** 첨부파일 저장시 IDX (자동채번) */
+    String getBoardAtchIdx(BoardVO boardVO);
+
+    /** 첨부파일 저장 isert */
+    int getBoardInfoAtchSaveIsert(BoardVO boardVO);
+
+
     /** 게시판 댓글번호 조회(자동채번) */
     String getBoardAnswerIdx(BoardVO boardVO);
 

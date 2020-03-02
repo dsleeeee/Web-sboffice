@@ -1,15 +1,21 @@
 package kr.co.solbipos.adi.board.board.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -60,7 +66,6 @@ public class BoardServiceImpl implements BoardService {
 
         DefaultMap<String> resultMap = new DefaultMap<String>();
 
-        int procCnt = 0;
         String currentDt = currentDateTimeString();
 
         boardVO.setRegDt(currentDt);
@@ -124,6 +129,98 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return procCnt;
+    }
+
+    /** 게시판 신규등록,수정 팝업 - 첨부파일 저장 */
+    @Override
+    public boolean getBoardInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+
+        boolean isSuccess = false;
+
+        try{
+
+            // 업로드 파일 읽기
+            BoardVO boardInfo = new BoardVO();
+
+            // 파일서버 대응 경로 지정 (운영)
+//        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
+            String path = "C:/testBoardAtch/";
+            // 업로드 되는 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName="";
+
+            // 경로에 폴도가 있는지 체크
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            Iterator<String> files = multi.getFileNames();
+
+            List<MultipartFile> fileList = multi.getFiles("file");
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
+
+                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
+                    // 파일경로
+                    boardInfo.setFilePath(path);
+                    // 파일명 (물리적으로 저장되는 파일명)
+                    boardInfo.setFileNm(newFileName);
+                    // 원본 파일명
+                    boardInfo.setOrginlFileNm(orgFileName);
+                }
+
+                String currentDt = currentDateTimeString();
+                boardInfo.setModDt(currentDt);
+                boardInfo.setModId(sessionInfo.getUserId());
+                boardInfo.setRegDt(currentDt);
+                boardInfo.setRegId(sessionInfo.getUserId());
+
+                boardInfo.setStatusS((String)multi.getParameter("status"));
+                boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
+                boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
+
+                // 게시물이 신규 일때 boardSeqNo 가져오기
+                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
+
+                    boardInfo.setTitle((String)multi.getParameter("title"));
+                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
+
+                    // 게시판 신규등록시 boardSeqNo 가져오기
+                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
+                    boardInfo.setBoardSeqNo(boardSeqNo);
+                }
+
+//                System.out.println("test22222 StatusS : "+ boardInfo.getStatusS());
+//                System.out.println("test22222 BoardCd : "+ boardInfo.getBoardCd());
+//                System.out.println("test22222 BoardSeqNo : "+ boardInfo.getBoardSeqNo());
+//                System.out.println("test22222 FilePath : "+ boardInfo.getFilePath());
+//                System.out.println("test22222 OrginlFileNm : "+ boardInfo.getOrginlFileNm());
+//                System.out.println("test22222 title : "+ boardInfo.getTitle());
+//                System.out.println("test22222 userNm : "+ boardInfo.getUserNm());
+
+                // 첨부파일 저장시 IDX (자동채번)
+                String idx = boardMapper.getBoardAtchIdx(boardInfo);
+                boardInfo.setIdx(idx);
+
+                // 첨부파일 저장 isert
+                if(boardMapper.getBoardInfoAtchSaveIsert(boardInfo) > 0) {
+                    isSuccess = true;
+                } else {
+                    isSuccess = false;
+                }
+            }
+            
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+        return isSuccess;
     }
 
     /** 게시판 댓글 조회 */

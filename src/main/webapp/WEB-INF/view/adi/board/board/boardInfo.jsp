@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;height:570px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:750px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
 
         <%-- header --%>
@@ -14,7 +14,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 600px;">
+        <div class="wj-dialog-body sc2" style="height: 720px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -147,18 +147,42 @@
                         </td>
                     </tr>
                     <tr>
+                        <%-- 글쓰기 에디터 --%>
+                        <td colspan="4">
+                            <div id="summernote"></div>
+                        </td>
+                    </tr>
+                    <tr>
                         <%-- 첨부파일 --%>
                         <th>
                             <s:message code="boardInfo.file"/>
                         </th>
                         <td colspan="3">
-                            <div>
-                                <input type="text" style="border: 1px solid #d0d0d0; width: 85%;" id="srchFileNm" ng-model="fileNm" readonly="true"/>
-                                <%-- 파일찾기 --%>
-                                <button class="btn_skyblue ml5 fr" id="btnAddFile" ng-click="findFile()">
-                                    <s:message code="boardDetail.findFile" />
-                                </button>
-                            </div>
+                            <%--<div>--%>
+                            <%--<input type="text" style="border: 1px solid #d0d0d0; width: 83%;" id="srchFileNm" ng-model="fileNm" readonly="true"/>--%>
+                            <%--&lt;%&ndash; 파일찾기 &ndash;%&gt;--%>
+                            <%--<button class="btn_skyblue ml5 fr" id="btnAddFile" ng-click="findFile()">--%>
+                            <%--<s:message code="boardDetail.findFile" />--%>
+                            <%--</button>--%>
+                            <%--</div>--%>
+
+                            <f:form id="boradForm" name="boradForm" method="post" enctype="multipart/form-data" >
+                            <%--<f:form id="boradForm" name="boradForm[]" >--%>
+                            <%--<f:form id="boradForm" name="boradForm" >--%>
+                                <%--단일업로드--%>
+                                <%--<input type="file" class="form-control" id="file" name="file"/>--%>
+                                <%--다중업로드--%>
+                                <input multiple="multiple" type="file" id="file" name="file"/>
+                                <%--<input multiple="multiple" type="file"/>--%>
+                                <input type="text" name="src"/>
+                            </f:form>
+
+                            <%--<form name="boradForm" action="requestupload2" method="post" enctype="multipart/form-data">--%>
+                                <%--다중업로드--%>
+                                <%--<input multiple="multiple" type="file"/>--%>
+                                <%--<input type="text" name="src"/>--%>
+                                <%--<input type="submit" value="저장" />--%>
+                            <%--</form>--%>
                         </td>
                     </tr>
                 </tbody>
@@ -183,4 +207,13 @@
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=202002204.10" charset="utf-8"></script>
+<%-- 글쓰기 summernote 에디터 --%>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+<!-- include summernote css/js -->
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200302" charset="utf-8"></script>
