@@ -222,6 +222,52 @@ public class BoardController {
     }
 
     /**
+     * 게시판 첨부파일 조회
+     *
+     * @param boardVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 03. 03.
+     */
+    @RequestMapping(value = "/board/getBoardDetailAtchList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBoardDetailAtchList(BoardVO boardVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = boardService.getBoardDetailAtchList(boardVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, boardVO);
+    }
+
+    /**
+     * 게시판 첨부파일 삭제
+     *
+     * @param boardVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 03. 03.
+     */
+    @RequestMapping(value = "/board/getBoardInfoAtchDel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBoardInfoAtchDel(@RequestBody BoardVO boardVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = boardService.getBoardInfoAtchDel(boardVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 열람자목록 팝업 - 검색
      *
      * @param boardVO
@@ -243,97 +289,4 @@ public class BoardController {
 
         return ReturnUtil.returnListJson(Status.OK, result, boardVO);
     }
-
-
-
-//        System.out.println("test1111 : ");
-//        List<MultipartFile> fileList = mtfRequest.getFiles("file");
-//        String src = mtfRequest.getParameter("src");
-//        System.out.println("test1111 src value : " + src);
-//
-//        String path = "C:\\image\\";
-//
-//        for (MultipartFile mf : fileList) {
-//            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-//            long fileSize = mf.getSize(); // 파일 사이즈
-//
-//            System.out.println("originFileName : " + originFileName);
-//            System.out.println("fileSize : " + fileSize);
-//
-//            String safeFile = path + System.currentTimeMillis() + originFileName;
-////            try {
-////                mf.transferTo(new File(safeFile));
-////            } catch (IllegalStateException e) {
-////                // TODO Auto-generated catch block
-////                e.printStackTrace();
-////            } catch (IOException e) {
-////                // TODO Auto-generated catch block
-////                e.printStackTrace();
-////            }
-//        }
-//    @RequestMapping(value = "requestupload2")
-//    public String requestupload2(MultipartHttpServletRequest mtfRequest) {
-//
-//        List<MultipartFile> fileList = mtfRequest.getFiles("file");
-//        String src = mtfRequest.getParameter("src");
-//        System.out.println("src value : " + src);
-//
-//        String path = "C:\\image\\";
-//
-//        for (MultipartFile mf : fileList) {
-//            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-//            long fileSize = mf.getSize(); // 파일 사이즈
-//
-//            System.out.println("originFileName : " + originFileName);
-//            System.out.println("fileSize : " + fileSize);
-//
-//            String safeFile = path + System.currentTimeMillis() + originFileName;
-////            try {
-////                mf.transferTo(new File(safeFile));
-////            } catch (IllegalStateException e) {
-////                // TODO Auto-generated catch block
-////                e.printStackTrace();
-////            } catch (IOException e) {
-////                // TODO Auto-generated catch block
-////                e.printStackTrace();
-////            }
-//        }
-//
-//        return "redirect:/";
-//    }
-
-
-//    @RequestMapping(value = "/fileUpload") // method = RequestMethod.GET
-//     public Map fileUpload(HttpServletRequest req, HttpServletResponse rep) {
-//        //파일이 저장될 path 설정
-//         String path = "c://aaa"; Map returnObject = new HashMap();
-//         try {
-//                  // MultipartHttpServletRequest 생성
-//                  MultipartHttpServletRequest mhsr = (MultipartHttpServletRequest) req;
-//                  Iterator iter = mhsr.getFileNames();
-//
-//                  MultipartFile mfile = null;
-//                  String fieldName = "";
-//                  List resultList = new ArrayList();
-//
-//                  // 디레토리가 없다면 생성
-//                  File dir = new File(path);
-//                  if (!dir.isDirectory()) { dir.mkdirs();
-//              }
-//              // 값이 나올때까지
-//              while (iter.hasNext()) {
-//                      fieldName = iter.next();  // 내용을 가져와서
-//                       mfile = mhsr.getFile(fieldName);
-//                       String origName;
-//
-//                       origName = new String(mfile.getOriginalFilename().getBytes("8859_1"), "UTF-8"); //한글꺠짐 방지
-//                      // 파일명이 없다면
-//                       if ("".equals(origName))  {
-//                           continue;
-//                         }
-//
-//                   // 파일 명 변경(uuid로 암호화)
-//                   String ext = origName.substring(origName.lastIndexOf('.')); // 확장자 String saveFileName = getUuid() + ext; // 설정한 path에 파일저장 File serverFile = new File(path + File.separator + saveFileName); mfile.transferTo(serverFile); Map file = new HashMap(); file.put("origName", origName); file.put("sfile", serverFile); resultList.add(file); } returnObject.put("files", resultList); returnObject.put("params", mhsr.getParameterMap()); } catch (UnsupportedEncodingException e) { // TODO Auto-generated catch block e.printStackTrace(); }catch (IllegalStateException e) { // TODO Auto-generated catch block e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch block e.printStackTrace(); } return null; } //uuid생성 public static String getUuid() { return UUID.randomUUID().toString().replaceAll("-", ""); }
-//
-//              }
 }

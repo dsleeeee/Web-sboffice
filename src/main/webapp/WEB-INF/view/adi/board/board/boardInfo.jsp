@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:750px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:900px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
 
         <%-- header --%>
@@ -14,7 +14,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 720px;">
+        <div class="wj-dialog-body sc2" style="height: 870px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -158,35 +158,38 @@
                             <s:message code="boardInfo.file"/>
                         </th>
                         <td colspan="3">
-                            <%--<div>--%>
-                            <%--<input type="text" style="border: 1px solid #d0d0d0; width: 83%;" id="srchFileNm" ng-model="fileNm" readonly="true"/>--%>
-                            <%--&lt;%&ndash; 파일찾기 &ndash;%&gt;--%>
-                            <%--<button class="btn_skyblue ml5 fr" id="btnAddFile" ng-click="findFile()">--%>
-                            <%--<s:message code="boardDetail.findFile" />--%>
-                            <%--</button>--%>
-                            <%--</div>--%>
-
                             <f:form id="boradForm" name="boradForm" method="post" enctype="multipart/form-data" >
-                            <%--<f:form id="boradForm" name="boradForm[]" >--%>
-                            <%--<f:form id="boradForm" name="boradForm" >--%>
-                                <%--단일업로드--%>
-                                <%--<input type="file" class="form-control" id="file" name="file"/>--%>
                                 <%--다중업로드--%>
                                 <input multiple="multiple" type="file" id="file" name="file"/>
-                                <%--<input multiple="multiple" type="file"/>--%>
-                                <input type="text" name="src"/>
                             </f:form>
-
-                            <%--<form name="boradForm" action="requestupload2" method="post" enctype="multipart/form-data">--%>
-                                <%--다중업로드--%>
-                                <%--<input multiple="multiple" type="file"/>--%>
-                                <%--<input type="text" name="src"/>--%>
-                                <%--<input type="submit" value="저장" />--%>
-                            <%--</form>--%>
                         </td>
                     </tr>
                 </tbody>
             </table>
+
+            <%-- 첨부파일 그리드 --%>
+            <div class="w100 mt10 mb20">
+                <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; overflow-x: hidden;">
+                    <wj-flex-grid
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        is-read-only="true">
+
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="boardInfo.orginlFileNm"/>" binding="orginlFileNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardInfo.del"/>" binding="del" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                        <%--팝업 조회시 필요--%>
+                        <wj-flex-grid-column header="<s:message code="boardInfo.filePath"/>" binding="filePath" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
+                    </wj-flex-grid>
+                </div>
+            </div>
 
             <%-- 저장 버튼 --%>
             <div class="tc mt20">
@@ -216,4 +219,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200302" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200302.14" charset="utf-8"></script>

@@ -25,11 +25,52 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("apprFg", apprFgData); //승인구분
     $scope._setComboData("targetFg", targetFgData); //공개대상
 
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+
+                // 삭제
+                if (col.binding === "del") {
+                    // 값이 있으면 링크 효과
+                    if (item["del"] === '삭제') {
+                        wijmo.addClass(e.cell, 'wijLink');
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if( ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+
+                // 삭제 클릭시 상세정보 조회
+                if ( col.binding === "del") {
+                    // 값이 있으면 링크
+                    if (selectedRow["del"] === '삭제') {
+                        var params = {};
+                        params.idx = selectedRow.idx;
+
+                        $scope.delAtch(params);
+                    }
+                }
+            }
+        });
+    };
+
     // <-- 검색 호출 -->
     $scope.$on("boardInfoCtrl", function(event, data) {
         if( !isEmptyObject(data) ) {
             $scope.setSelectedBoardInfo(data);
             $scope.searchBoardInfo(); //수정
+            $scope.searchBoardDetailAtch(); // 첨부파일 조회
         } else {
             $scope.newForm();  //신규
         }
@@ -71,6 +112,15 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $('#summernote').summernote('code', $scope.boardInfo.content);
             // $('#summernote').summernote('insertText', $scope.boardInfo.content);
         });
+    };
+
+    // 첨부파일 조회
+    $scope.searchBoardDetailAtch = function() {
+        var params = {};
+        params.boardCd = $scope.selectedBoardInfo.boardCd;
+        params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
+
+        $scope._inquirySub("/adi/board/board/board/getBoardDetailAtchList.sb", params, function() {}, false);
     };
 
     // 신규
@@ -150,7 +200,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // 신규
         if(data.status === "I") {
             params.status = "INSERT";
-        } else {
+        // 수정
+        } else if (params.status === "U") {
             params.status = "UPDATE";
         }
 
@@ -205,6 +256,26 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg("Ajax Fail By HTTP Request");
             $scope.$broadcast('loadingPopupInactive');
         });
+    };
+
+    // 첨부파일 삭제
+    $scope.delAtch = function(data){
+        // 해당 파일을 삭제하시겠습니까?
+        $scope._popConfirm(messages["boardInfo.delConfirmAtch"], function() {
+
+            var params = {};
+            params.boardCd = $scope.selectedBoardInfo.boardCd;
+            params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
+            params.idx = data.idx;
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/adi/board/board/board/getBoardInfoAtchDel.sb", params, function(){ $scope.allSearch() });
+        });
+    };
+
+    // 재조회
+    $scope.allSearch = function () {
+        $scope.searchBoardDetailAtch();
     };
 
     // 매장선택 모듈 팝업 사용시 정의

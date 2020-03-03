@@ -5,6 +5,7 @@
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:710px;height:860px;" fade-in="false" fade-out="false">
+
     <div ng-controller="boardDetailCtrl">
 
         <%-- header --%>
@@ -90,17 +91,6 @@
                             <div id="summernoteDetail"></div>
                         </td>
                     </tr>
-                    <tr>
-                        <%-- 첨부파일 --%>
-                        <th>
-                            <s:message code="boardDetail.file"/>
-                        </th>
-                        <td colspan="3">
-                            <div>
-                                <input type="text" style="border: 1px solid #d0d0d0; width: 85%;" id="srchFileNm" ng-model="fileNm" disabled="true"/>
-                            </div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
 
@@ -149,8 +139,8 @@
                 <%-- 닫기 --%>
                 <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
             </div>
-
         </div>
+        <%-- //body --%>
 
     </div>
 </wj-popup>
@@ -164,7 +154,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200226.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200303" charset="utf-8"></script>
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>

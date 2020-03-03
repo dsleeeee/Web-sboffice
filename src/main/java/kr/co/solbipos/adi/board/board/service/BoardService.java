@@ -44,6 +44,12 @@ public interface BoardService {
     /** 게시판 댓글 저장 */
     int getBoardDetailAnswerSave(BoardVO boardVO, SessionInfoVO sessionInfoVO);
 
+    /** 게시판 첨부파일 조회 */
+    List<DefaultMap<Object>> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+
+    /** 게시판 첨부파일 삭제 */
+    int getBoardInfoAtchDel(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+
     /** 열람자목록 팝업 - 검색 */
     List<DefaultMap<Object>> getBoardReadingHistList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
 }
