@@ -18,7 +18,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#tableDaySelectStoreCd").val();
 		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -104,7 +104,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
         			e.preventDefault();
         		}
         	}
-    	
+
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
@@ -113,7 +113,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    		params.chkPop   = "tablePop";
 	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
 	    		var storeTable   = $("#tableDaySelectTableCd").val().split(",");
-	    		
+
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			var arrStore= [];
 		    		var arrTbl= [];
@@ -122,7 +122,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		    			arrStore.push(temp[0]);
 		    			arrTbl.push(temp[1]);
 		    		}
-		    		
+
 	    			params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
 		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
 	    			$scope._broadcast('saleComTableCtrl', params);
@@ -194,7 +194,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			var flex = $scope.flex;
 			//row수가 0이면
 			if(flex.rows.length === 0){
-				
+
 				var grid = wijmo.Control.getControl("#tableDayGrid");
 				//컬럼 삭제
 				while(grid.columns.length > 5){
@@ -370,8 +370,8 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 				  var col = panel.columns[c];
 				  if (col.isReadOnly) {
 					  wijmo.addClass(cell, 'wj-custom-readonly');
-				  } 
-			  } 
+				  }
+			  }
 
 		  }
 

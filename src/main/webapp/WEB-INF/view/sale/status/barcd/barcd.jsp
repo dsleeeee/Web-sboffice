@@ -69,13 +69,13 @@
         <%-- 바코드 --%>
         <th><s:message code="rtnStatus.barcdCd"/></th>
         <td>
-            <input type="text" class="sb-input w100" id="searchProdNm" ng-model="searchProdNm"/>
+            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd"/>
         </td>
         
         <%-- 상품명 --%>
         <th><s:message code="prodSaleDtl.prodNm"/></th>
         <td>
-            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd"/>
+            <input type="text" class="sb-input w100" id="searchProdNm" ng-model="searchProdNm"/>
         </td>
       </tr>
       </tbody>

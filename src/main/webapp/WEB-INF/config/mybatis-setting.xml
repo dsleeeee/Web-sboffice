@@ -580,6 +580,9 @@
 	<typeAlias alias="versusPeriodHourVO" type="kr.co.solbipos.sale.anals.versusPeriod.hour.service.VersusPeriodHourVO"/>
     <typeAlias alias="versusPeriodWeekVO" type="kr.co.solbipos.sale.anals.versusPeriod.week.service.VersusPeriodWeekVO"/>
 
+    <!-- 매출관리 > 상품ABC분석 > 상품ABC분석 -->
+    <typeAlias alias="abcVO" type="kr.co.solbipos.sale.anals.abc.abc.service.AbcVO"/>
+    
     <!-- 매출관리 > 매출분석 > 매출추이분석 -->
     <typeAlias alias="saleTrnsitnDatesVO" 		type="kr.co.solbipos.sale.anals.saletrnsitn.service.SaleTrnsitnDatesVO"/>
     <typeAlias alias="saleTrnsitnVO" 			type="kr.co.solbipos.sale.anals.saletrnsitn.service.SaleTrnsitnVO"/>
@@ -587,10 +590,12 @@
 	<!-- 매출관리 > 매출분석 > 영업일보 -->
 	<typeAlias alias="dailyReportVO" 			type="kr.co.solbipos.sale.anals.dailyreport.service.DailyReportVO"/>
 
-
     <!-- 매출관리 > 매출분석 > 월력판매분석 -->
     <typeAlias alias="saleAnalsMonthlyVO" type="kr.co.solbipos.sale.anals.monthly.service.SaleAnalsMonthlyVO"/>
-
+	
+	<!-- 매출관리 > 매출분석 > 매출목표관리 -->
+	<typeAlias alias="goalVO" type="kr.co.solbipos.sale.anals.goal.service.GoalVO"/>
+	
     <!-- 매출관리 > 승인현황  -->
     <typeAlias alias="apprCardVO" type="kr.co.solbipos.sale.status.appr.payMethod.card.service.ApprCardVO"/>
     <typeAlias alias="apprCashBillVO" type="kr.co.solbipos.sale.status.appr.cashBill.service.ApprCashBillVO"/>

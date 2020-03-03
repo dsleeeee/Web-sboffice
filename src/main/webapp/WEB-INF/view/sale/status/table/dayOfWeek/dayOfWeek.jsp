@@ -77,17 +77,6 @@
 	<div style="clear: both;"></div>
 
 	<div class="mt20 oh sb-select dkbr">
-		<%-- 페이지 스케일  --%>
-		<wj-combo-box
-			class="w100px fl"
-			id="tableDayOfWeekListScaleBox"
-			ng-model="tableDayOfWeekListScale"
-			items-source="_getComboData('tableDayOfWeekListScaleBox')"
-			display-member-path="name"
-			selected-value-path="value"
-			is-editable="false"			
-			initialized="initComboBox(s)">
-		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableDayOfWeekSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
@@ -99,7 +88,7 @@
 
 	<div class="w100 mt10">
 		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+		<div class="wj-gridWrap" style="height: 395px;">
 			<wj-flex-grid
 				id="tableDayOfWeekGrid"
 				autoGenerateColumns="false"

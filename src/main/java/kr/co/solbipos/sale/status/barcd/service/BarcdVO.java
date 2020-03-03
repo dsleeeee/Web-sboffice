@@ -38,7 +38,7 @@ public class BarcdVO extends PageVO {
     /** POS번호 */
     private String posNo;
     /** POS번호 */
-    private String barCd;
+    private String barcdCd;
     /** 테이블 기준, 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     /** 접속 매장 권한(본사, 가맹점)*/
@@ -147,12 +147,6 @@ public class BarcdVO extends PageVO {
 	public void setPosNo(String posNo) {
 		this.posNo = posNo;
 	}
-	public String getBarCd() {
-		return barCd;
-	}
-	public void setBarCd(String barCd) {
-		this.barCd = barCd;
-	}
 	public String getsQuery1() {
 		return sQuery1;
 	}
@@ -170,5 +164,11 @@ public class BarcdVO extends PageVO {
 	}
 	public void setProdNm(String prodNm) {
 		this.prodNm = prodNm;
+	}
+	public String getBarcdCd() {
+		return barcdCd;
+	}
+	public void setBarcdCd(String barcdCd) {
+		this.barcdCd = barcdCd;
 	}
 }

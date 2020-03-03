@@ -10,9 +10,9 @@ var vRowNum = [
 ];
 
 /** 매장상품순위 상세현황 controller */
-app.controller('storeProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('storeProdCtrl', $scope, $http, true));
+	angular.extend(this, new RootController('storeProdCtrl', $scope, $http, $timeout, true));
     
 	// 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchRowNumCombo", vRowNum);

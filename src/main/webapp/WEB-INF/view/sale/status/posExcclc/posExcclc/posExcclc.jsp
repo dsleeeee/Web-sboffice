@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="posExccl.posExcclInfo"/></a>
       <%-- 조회 --%>
-      <button class="btn_blue fr mt5 mr10" id="btnPosExcclcSearch" ng-click="_broadcast('posExcclcCtrl')">
+      <button class="btn_blue fr mt5 mr10" id="btnPosExcclcSearch" ng-click="_broadcast('posExcclcCtrlSrch')">
         <s:message code="cmm.search"/>
       </button>
     </div>

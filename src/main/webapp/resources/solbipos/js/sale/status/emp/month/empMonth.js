@@ -4,9 +4,9 @@
 var app = agrid.getApp();
 
 /** 판매자별(월별) 상세현황 controller */
-app.controller('empMonthCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('empMonthCtrl', $scope, $http, true));
+	angular.extend(this, new RootController('empMonthCtrl', $scope, $http, $timeout, true));
          
 	// 콤보박스 데이터 Set
 	$scope._setComboData('empMonthlistScaleBox', gvListScaleBoxData);

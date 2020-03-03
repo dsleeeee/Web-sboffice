@@ -183,8 +183,11 @@
                 #{item}
             </foreach>
         </if>
-         <if test='prodNm != null and prodNm != ""'>
-           AND B.PROD_NM LIKE ('#{prodNm}%')
+        <if test='prodNm != null and prodNm != ""'>
+           AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+           AND A.BARCD_CD LIKE '%'||#{barcdCd}||'%'
         </if>
         <![CDATA[
 	    GROUP BY A.BARCD_CD, B.PROD_CD, B.PROD_NM, B.LV1_NM, B.LV2_NM, B.LV3_NM

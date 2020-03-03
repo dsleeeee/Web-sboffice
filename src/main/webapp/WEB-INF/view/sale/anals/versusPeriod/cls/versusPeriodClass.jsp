@@ -136,18 +136,6 @@
 		</table>
 
 		<div class="mt40 oh sb-select dkbr">
-		    <%-- 페이지 스케일  --%>
-		    <wj-combo-box
-		      class="w100px fl"
-		      id="versusPeriodClasslistScaleBox"
-		      ng-model="listScale"
-		      control="listScaleCombo"
-		      items-source="_getComboData('versusPeriodClasslistScaleBox')"
-		      display-member-path="name"
-		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
-		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="versusPeriodClassSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>

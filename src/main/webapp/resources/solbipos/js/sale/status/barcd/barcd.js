@@ -14,6 +14,7 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("barcdListScaleBox", gvListScaleBoxData);
   $scope._setComboData("barcdDtlListScaleBox", gvListScaleBoxData);
+  $scope.orgnFg = gvOrgnFg;
 
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
@@ -92,7 +93,7 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
   });
 
 
-  // 코너별매출일자별 리스트 조회
+  // 바코드별매출 리스트 조회
   $scope.searchBarcdList = function (isPageChk) {
 
     // 파라미터
@@ -103,6 +104,8 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.storeCd   = $("#barcdSelectStoreCd").val();
     params.barcdCd	 = $scope.searchBarCd;
     params.prodNm    = $scope.searchProdNm;
+    params.orgnFg	 = $scope.orgnFg;
+    console.log("fff :: "+params.orgnFg);
     
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

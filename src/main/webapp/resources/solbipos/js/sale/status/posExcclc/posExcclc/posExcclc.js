@@ -139,7 +139,16 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("posExcclcCtrl", function (event, data) {
 	$scope.comboArray =  $scope.comboArrayForSrc;
-    $scope.searchPosExcclcList();
+    $scope.searchPosExcclcList(true);
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  //다른 컨트롤러의 broadcast 받기(페이징 초기화)
+  $scope.$on("posExcclcCtrlSrch", function (event, data) {
+	$scope.comboArray =  $scope.comboArrayForSrc;
+    $scope.searchPosExcclcList(false);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -163,7 +172,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   };
 
   // POS 정산내역 리스트 조회
-  $scope.searchPosExcclcList = function () {
+  $scope.searchPosExcclcList = function (isPageChk) {
 
 //	if ($("#posExcclcSelectStoreCd").val() === '') {
 //		$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
@@ -175,6 +184,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCd   = $("#posExcclcSelectStoreCd").val();
     params.closeFg   = $scope.closeFg;
     params.listScale = $scope.posExcclcListScale; //-페이지 스케일 갯수
+    params.isPageChk = isPageChk;
     params.isAll 	 = $scope.isAll;
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -223,7 +233,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

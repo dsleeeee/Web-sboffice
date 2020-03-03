@@ -18,7 +18,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-		var storeCd = "";
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
@@ -33,7 +33,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		        } else if (col.binding === "totRealSaleAmt"){
 					wijmo.addClass(e.cell, 'wijLink');
 				}
-			} 
+			}
 		});
 
 		// add the new GroupRow to the grid's 'columnFooters' panel
@@ -94,7 +94,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		// 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
-	    	
+
 	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
 	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
 	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -104,7 +104,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
     		} else {
     			s.allowSorting = true;
     		}
-	    	
+
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
@@ -113,7 +113,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 				params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
 	    		params.saleDay    = selectedRow.saleDay;
 	    		params.chkPop   = "tablePop";
-	    		
+
 	    		var storeTable   = $("#tableDayOfWeekSelectTableCd").val().split(",");
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
@@ -124,7 +124,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		    			arrStore.push(temp[0]);
 		    			arrTbl.push(temp[1]);
 		    		}
-		    		
+
 		    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
 		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
 	    			$scope._broadcast('saleComTableCtrl', params);
@@ -196,7 +196,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 			var flex = $scope.flex;
 			//row수가 0이면
 			if(flex.rows.length === 0){
-				
+
 				var grid = wijmo.Control.getControl("#tableDayOfWeekGrid");
 				//컬럼 삭제
 				while(grid.columns.length > 4){

@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.sale.anals.goal.service.impl.GoalMapper">
+    <!-- 매출목표관리 - 월별 목표대비 매출 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 월별 목표대비 매출 리스트 조회한다.
+    -->
+    <select id="getSaleGoalDayColList" parameterType="goalVO" resultType="DefaultMap">
+        SELECT B.STORE_CD, B.STORE_NM, A.SALE_GOAL_AMT
+	    FROM TB_SL_SALE_GOAL_MONTHLY A, TB_MS_STORE B
+	   WHERE 1=1
+	     AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+	     <if test='startDate != null and startDate != ""'>
+           AND A.SALE_GOAL_YM = #{startDate}
+         </if>
+	     <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND B.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+         </if>
+	     AND A.STORE_CD = B.STORE_CD
+	     ORDER BY A.STORE_CD
+    </select>
+
+    <!-- 매출목표관리 - 일자별 목표대비 매출 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 일자별 목표대비 매출 리스트 조회한다.
+    -->
+    <select id="getSaleGoalDayList" parameterType="goalVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TO_CHAR(TO_DATE(M.SALE_GOAL_DATE, 'YYYY-MM-DD'),'YYYY-MM-DD') SALE_GOAL_DATE
+               , M.SALE_GOAL_DY
+               ${sQuery1}
+               <include refid="CmmSQL.PagingTemplateCount"/>
+			FROM (
+			      SELECT TSSGD.SALE_GOAL_DATE
+			             , TO_CHAR(TO_DATE(TSSGD.SALE_GOAL_DATE, 'YYYYMMDD'),'DY') AS SALE_GOAL_DY
+			             ${sQuery2}
+			        FROM TB_SL_SALE_GOAL_DAILY TSSGD
+			             , TB_SL_DAILY_TOTAL TSDT
+			       WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
+			         AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
+			         <if test='startDate != null and startDate != ""'>
+			           AND TSSGD.SALE_GOAL_YM = #{startDate}
+			         </if>
+			         <if test='arrStoreCd != null and arrStoreCd != ""'>
+					   AND TSSGD.STORE_CD IN
+					    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+					        #{item}
+					    </foreach>
+					 </if>
+					 <if test='storeCd == null or storeCd == ""'>
+					   AND 1 = 2
+					 </if>
+			       GROUP BY TSSGD.SALE_GOAL_DATE, TO_CHAR(TO_DATE(TSSGD.SALE_GOAL_DATE, 'YYYYMMDD'),'DY')
+			       ORDER BY TSSGD.SALE_GOAL_DATE DESC
+			      ) M
+			GROUP BY M.SALE_GOAL_DATE
+			      , M.SALE_GOAL_DY
+			ORDER BY M.SALE_GOAL_DATE DESC
+			<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+	
+	<!-- 매출목표관리 - 월별 목표대비 매출 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 월별 목표대비 매출 리스트 조회한다.
+    -->
+    <select id="getSaleGoalMonthList" parameterType="goalVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT M.STORE_NM
+             , M.STORE_CD
+             , TO_CHAR(TO_DATE(M.SALE_GOAL_YM, 'YYYY-MM'),'YYYY-MM') SALE_GOAL_YM
+             , M.SALE_GOAL_DATE_CNT
+             , M.SALE_DATE_CNT
+             , M.SALE_GOAL_MONTHLY_AMT
+             , M.SALE_GOAL_AMT
+             , M.TOT_SALE_AMT
+             , ROUND((1+(NVL(M.TOT_SALE_AMT,0)-M.SALE_GOAL_MONTHLY_AMT)/ABS(M.SALE_GOAL_MONTHLY_AMT))*100,1) AS GOAL_ACHI_MONTHLY
+             , ROUND((1+(NVL(M.TOT_SALE_AMT,0)-M.SALE_GOAL_AMT)/ABS(M.SALE_GOAL_AMT))*100,1) AS GOAL_ACHI
+             <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM (
+                SELECT TMS.STORE_NM
+                     , TSSGD.STORE_CD
+                     , TSSGD.SALE_GOAL_YM
+                     , COUNT(TSSGD.SALE_GOAL_DATE) AS SALE_GOAL_DATE_CNT
+                     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL WHERE STORE_CD = TSSGD.STORE_CD AND SALE_DATE LIKE '201904%') AS SALE_DATE_CNT
+                     , (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_MONTHLY WHERE STORE_CD = TSSGD.STORE_CD AND SALE_GOAL_YM = TSSGD.SALE_GOAL_YM) AS SALE_GOAL_MONTHLY_AMT
+                     , SUM(TSSGD.SALE_GOAL_AMT) AS SALE_GOAL_AMT
+                     , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
+                  FROM TB_SL_SALE_GOAL_DAILY TSSGD
+                     , TB_SL_DAILY_TOTAL TSDT
+                     , TB_MS_STORE TMS
+                 WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
+                   AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
+                   <if test='startDate != null and startDate != ""'>
+                     AND TSSGD.SALE_GOAL_YM >= #{startDate}
+                   </if>
+                   <if test='endDate != null and endDate != ""'>
+                     AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
+                   </if>
+                   <if test='arrStoreCd != null and arrStoreCd != ""'>
+                     AND TSSGD.STORE_CD IN
+                      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                          #{item}
+                      </foreach>
+                   </if>
+                   AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TSSGD.STORE_CD = TMS.STORE_CD
+                 GROUP BY TSSGD.STORE_CD
+                     , TMS.STORE_NM
+                     , TSSGD.SALE_GOAL_YM
+                 ORDER BY TSSGD.STORE_CD, SALE_GOAL_YM
+               ) M
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 매출목표관리 - 매장 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 매장 리스트 조회한다.
+    -->
+    <select id="getSaleGoalStoreList" parameterType="goalVO" resultType="DefaultMap">
+		SELECT B.HQ_OFFICE_NM
+				,A.STORE_CD
+				,A.STORE_NM
+		FROM TB_MS_STORE A
+			, TB_HQ_OFFICE B
+		WHERE A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+		AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+	    AND A.STORE_CD = #{storeCd}	
+	    </if>
+    </select>
+    
+    <!-- 매출목표관리 - 매출목표 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_GOAL_WEIGHT, TB_SL_SALE_GOAL_MONTHLY
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 매출목표를 조회한다.
+    -->
+    <select id="getSaleGoalList" parameterType="goalVO" resultType="DefaultMap">
+    	SELECT A.STORE_CD
+		  ,B.STORE_NM
+		  ,A.SALE_GOAL_AMT
+		  ,SUM(B.SALE_GOAL_WEIGHT_1) AS SALE_GOAL_WEIGHT_1
+		  ,SUM(B.SALE_GOAL_WEIGHT_2) AS SALE_GOAL_WEIGHT_2
+		  ,SUM(B.SALE_GOAL_WEIGHT_3) AS SALE_GOAL_WEIGHT_3
+		  ,SUM(B.SALE_GOAL_WEIGHT_4) AS SALE_GOAL_WEIGHT_4
+		  ,SUM(B.SALE_GOAL_WEIGHT_5) AS SALE_GOAL_WEIGHT_5
+		  ,SUM(B.SALE_GOAL_WEIGHT_6) AS SALE_GOAL_WEIGHT_6
+		  ,SUM(B.SALE_GOAL_WEIGHT_7) AS SALE_GOAL_WEIGHT_7
+		FROM TB_SL_SALE_GOAL_MONTHLY A,
+		    (
+		      SELECT A.STORE_CD
+		        , C.STORE_NM
+		        , A.SALE_GOAL_YM
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '1' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_1
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '2' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_2
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '3' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_3
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '4' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_4
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '5' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_5
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '6' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_6
+		        , (CASE WHEN A.SALE_GOAL_WEIGHT_NO = '7' THEN A.SALE_GOAL_WEIGHT ELSE 0 END) AS SALE_GOAL_WEIGHT_7
+		      FROM TB_SL_SALE_GOAL_WEIGHT A
+		      ,TB_MS_STORE C
+		      WHERE  A.STORE_CD = C.STORE_CD
+		      AND A.STORE_CD = #{storeCd}
+		      AND A.SALE_GOAL_YM = #{saleDate}
+		    ) B
+		WHERE A.STORE_CD = B.STORE_CD
+		AND A.SALE_GOAL_YM = B.SALE_GOAL_YM
+		GROUP BY A.STORE_CD, B.STORE_NM, A.SALE_GOAL_AMT
+    </select>
+    
+    <!-- 매출목표관리 - 매출목표 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_GOAL_DAILY
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 매출목표를 상세조회한다.
+    -->
+    <select id="getSaleGoalDtl1List" parameterType="goalVO" resultType="DefaultMap">
+		SELECT STORE_CD
+		    ,SALE_GOAL_DATE
+			,SALE_GOAL_YM
+			,TO_CHAR(TO_DATE(SALE_GOAL_DATE, 'YYYYMMDD'),'DY') YOIL
+			,SALE_GOAL_AMT
+		FROM TB_SL_SALE_GOAL_DAILY
+		WHERE STORE_CD = #{storeCd}
+		AND SALE_GOAL_YM = #{saleDate}
+		AND SALE_GOAL_DATE <![CDATA[<]]> #{saleDate}||16
+		ORDER BY SALE_GOAL_DATE
+    </select>
+    
+    <!-- 매출목표관리 - 매출목표 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_GOAL_DAILY
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 매출목표를 상세조회한다.
+    -->
+    <select id="getSaleGoalDtl2List" parameterType="goalVO" resultType="DefaultMap">
+		SELECT STORE_CD
+		    ,SALE_GOAL_DATE
+			,SALE_GOAL_YM
+			,TO_CHAR(TO_DATE(SALE_GOAL_DATE, 'YYYYMMDD'),'DY') YOIL
+			,SALE_GOAL_AMT
+		FROM TB_SL_SALE_GOAL_DAILY
+		WHERE STORE_CD = #{storeCd}
+		AND SALE_GOAL_YM = #{saleDate}
+		AND SALE_GOAL_DATE <![CDATA[>=]]> #{saleDate}||16
+		ORDER BY SALE_GOAL_DATE
+    </select>
+    
+    <!-- :::::::::::::::::::::::::::::::::::::::::::: INSERT ::::::::::::::::::::::::::::::::::::::::::::  -->	
+    <insert id="saveSaleGoalSave" parameterType="goalVO">    
+	    /* goalMapper.saveSaleGoalSave */
+        MERGE INTO TB_SL_SALE_GOAL_MONTHLY A
+        USING DUAL
+           ON (A.STORE_CD = #{storeCd} AND A.SALE_GOAL_YM = #{saleGoalYm})
+         WHEN MATCHED THEN
+        UPDATE
+          SET A.SALE_GOAL_AMT 	= #{saleGoalAmt},
+              A.MOD_DT 			= #{modDt},
+              A.MOD_ID 			= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+      		 A.STORE_CD
+			,A.SALE_GOAL_YM
+			,A.SALE_GOAL_AMT
+			,A.REG_DT
+			,A.REG_ID
+			,A.MOD_DT
+			,A.MOD_ID
+        )
+        VALUES
+        (
+             #{storeCd}
+            ,#{saleGoalYm}
+            ,#{saleGoalAmt}
+            ,#{regDt}
+            ,#{regId}
+            ,#{modDt}
+            ,#{modId}
+        )
+	</insert>
+	
+	<insert id="saveGoalWeight" parameterType="goalVO">    
+	    /* goalMapper.saveGoalWeight */
+        MERGE INTO TB_SL_SALE_GOAL_WEIGHT A
+        USING DUAL
+           ON (A.STORE_CD = #{storeCd} AND A.SALE_GOAL_YM = #{saleGoalYm} AND A.SALE_GOAL_WEIGHT_NO = #{saleGoalWeightNo})
+         WHEN MATCHED THEN
+        UPDATE
+          SET A.SALE_GOAL_WEIGHT 	= #{saleGoalWeight},
+              A.MOD_DT 				= #{modDt},
+              A.MOD_ID 				= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+      		 A.STORE_CD
+			,A.SALE_GOAL_YM
+			,A.SALE_GOAL_WEIGHT_NO
+			,A.SALE_GOAL_WEIGHT
+			,A.REG_DT
+			,A.REG_ID
+			,A.MOD_DT
+			,A.MOD_ID
+        )
+        VALUES
+        (
+             #{storeCd}
+            ,#{saleGoalYm}
+            ,#{saleGoalWeightNo}
+            ,#{saleGoalWeight}
+            ,#{regDt}
+            ,#{regId}
+            ,#{modDt}
+            ,#{modId}
+        )
+	</insert>
+	
+	<insert id="saveGoalDaily" parameterType="goalVO">    
+	    /* goalMapper.saveGoalDaily */
+        MERGE INTO TB_SL_SALE_GOAL_DAILY A
+        USING DUAL
+           ON (A.STORE_CD = #{storeCd} AND A.SALE_GOAL_YM = #{saleGoalYm} AND A.SALE_GOAL_DATE = #{saleGoalDate})
+         WHEN MATCHED THEN
+        UPDATE
+          SET 
+          	<if test='saleEndDateYn == "N"'>
+	            <if test='saleGoalWeight == "1"'>
+	            	A.SALE_GOAL_AMT = (SELECT ROUND(#{saleGoalAmt}/#{saleGoalWeightNoTot},0) FROM DUAL),
+	            </if>
+	            <if test='saleGoalWeight == "0"'>
+	            	A.SALE_GOAL_AMT = '0',
+	            </if>
+	            <if test='saleGoalWeight != "1" and saleGoalWeight != "0"'>
+	            	A.SALE_GOAL_AMT = (SELECT CEIL((#{saleGoalAmt}/#{saleGoalWeightNoTot})*#{saleGoalWeight}) FROM DUAL),
+	            </if>
+            </if>
+            <if test='saleEndDateYn == "Y"'>
+            	 A.SALE_GOAL_AMT =  #{saleGoalAmt} - (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_DAILY WHERE STORE_CD = #{storeCd} AND SUBSTR(SALE_GOAL_DATE,0,6) = #{saleGoalYm} AND SALE_GOAL_DATE != #{saleEndDate}),
+            </if>
+              A.MOD_DT 			= #{modDt},
+              A.MOD_ID 			= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+      		 A.STORE_CD
+			,A.SALE_GOAL_YM
+			,A.SALE_GOAL_DATE
+			,A.SALE_GOAL_AMT
+			,A.REG_DT
+			,A.REG_ID
+			,A.MOD_DT
+			,A.MOD_ID
+        )
+        VALUES
+        (
+             #{storeCd}
+            ,#{saleGoalYm}
+            ,#{saleGoalDate}
+            <if test='saleEndDateYn == "N"'>
+	            <if test='saleGoalWeight == "1"'>
+	            	,(SELECT ROUND(#{saleGoalAmt}/#{saleGoalWeightNoTot},0) FROM DUAL)
+	            </if>
+	            <if test='saleGoalWeight == "0"'>
+	            	,'0'
+	            </if>
+	            <if test='saleGoalWeight != "1" and saleGoalWeight != "0"'>
+	            	,(SELECT CEIL((#{saleGoalAmt}/#{saleGoalWeightNoTot})*#{saleGoalWeight}) FROM DUAL)
+	            </if>
+            </if>
+            <if test='saleEndDateYn == "Y"'>
+            	,#{saleGoalAmt} - (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_DAILY WHERE STORE_CD = #{storeCd} AND SUBSTR(SALE_GOAL_DATE,0,6) = #{saleGoalYm} AND SALE_GOAL_DATE != #{saleEndDate})
+            </if>
+            ,#{regDt}
+            ,#{regId}
+            ,#{modDt}
+            ,#{modId}
+        )
+	</insert>
+	
+	<insert id="saveSaleGoalgoalDeatilSave" parameterType="goalVO">    
+	    /* goalMapper.saveGoalDaily */
+        MERGE INTO TB_SL_SALE_GOAL_DAILY A
+        USING DUAL
+           ON (A.STORE_CD = #{storeCd} AND A.SALE_GOAL_YM = #{saleGoalYm} AND A.SALE_GOAL_DATE = #{saleGoalDate})
+         WHEN MATCHED THEN
+        UPDATE
+          SET A.SALE_GOAL_AMT 	= #{saleGoalAmt},
+              A.MOD_DT 			= #{modDt},
+              A.MOD_ID 			= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+      		 A.STORE_CD
+			,A.SALE_GOAL_YM
+			,A.SALE_GOAL_DATE
+			,A.SALE_GOAL_AMT
+			,A.REG_DT
+			,A.REG_ID
+			,A.MOD_DT
+			,A.MOD_ID
+        )
+        VALUES
+        (
+             #{storeCd}
+            ,#{saleGoalYm}
+            ,#{saleGoalDate}
+            ,NVL(#{saleGoalAmt}, 0)
+            ,#{regDt}
+            ,#{regId}
+            ,#{modDt}
+            ,#{modId}
+        )
+	</insert>
+	
+    <!-- :::::::::::::::::::::::::::::::::::::::::::: UPDATE ::::::::::::::::::::::::::::::::::::::::::::  -->	    	
+	<update id="saveSaleGoalAmtTotSave" parameterType="goalVO">    
+	    /* goalMapper.saveSaleGoalAmtTotSave */
+        UPDATE TB_SL_SALE_GOAL_MONTHLY
+          SET SALE_GOAL_AMT 	= (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_DAILY WHERE STORE_CD = #{storeCd} AND SALE_GOAL_YM = #{saleGoalYm})
+             ,MOD_DT 			= #{modDt}
+             ,MOD_ID 			= #{modId}
+          WHERE STORE_CD 	 = #{storeCd}
+          AND	SALE_GOAL_YM = #{saleGoalYm}
+	</update>
+	
+	<!-- :::::::::::::::::::::::::::::::::::::::::::: DELETE ::::::::::::::::::::::::::::::::::::::::::::  -->	 
+</mapper>
