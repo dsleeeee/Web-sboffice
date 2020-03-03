@@ -538,6 +538,45 @@
         AND BOARD_SEQ_NO = #{boardSeqNo}
     </update>
 
+    <!-- 게시판 첨부파일 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <select id="getBoardDetailAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+        /* BoardMapper.getBoardDetailAtchList */
+        SELECT
+        SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
+        '삭제' AS DEL,
+        twba.IDX,
+        (twba.FILE_PATH || twba.FILE_NM) AS FILE_PATH
+        FROM TB_WB_BOARD_ATCH twba
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+        AND twba.USE_YN = 'Y'
+        ORDER BY twba.BOARD_CD, twba.BOARD_SEQ_NO, twba.IDX
+    </select>
+
+    <!-- 게시판 첨부파일 삭제 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <update id="getBoardInfoAtchDel" parameterType="BoardVO">
+        /* BoardMapper.getBoardInfoAtchDel */
+        UPDATE
+        TB_WB_BOARD_ATCH
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+        AND IDX = #{idx}
+    </update>
+
     <!-- 열람자목록 팝업 - 검색 -->
     <!--
         TABLE    : TB_WB_BOARD_READNG_HIST, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO,

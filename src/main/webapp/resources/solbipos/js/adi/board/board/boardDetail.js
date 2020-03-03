@@ -81,7 +81,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( col.binding === "del") {
                     // 값이 있으면 링크
                     if (selectedRow["del"] === '삭제') {
-                        var params      = {};
+                        var params = {};
                         params.idx = selectedRow.idx;
 
                         $scope.delAnswer(params);
@@ -106,7 +106,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( col.binding === "save") {
                     // 값이 있으면 링크
                     if (selectedRow["save"] === '저장') {
-                        var params      = {};
+                        var params = {};
                         params.idx = selectedRow.idx;
                         params.content = selectedRow.content;
 

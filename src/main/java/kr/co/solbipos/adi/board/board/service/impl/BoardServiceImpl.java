@@ -126,6 +126,9 @@ public class BoardServiceImpl implements BoardService {
 
             // 게시판 전체 댓글 delete
             boardMapper.getBoardDetailAnswerSaveTotDelete(boardVO);
+
+            // 게시판 전체 첨부파일 delete
+            boardMapper.getBoardInfoAtchDel(boardVO);
         }
 
         return procCnt;
@@ -135,6 +138,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public boolean getBoardInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
+//        System.out.println("test1111");
         boolean isSuccess = false;
 
         try{
@@ -195,14 +199,6 @@ public class BoardServiceImpl implements BoardService {
                     String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
                     boardInfo.setBoardSeqNo(boardSeqNo);
                 }
-
-//                System.out.println("test22222 StatusS : "+ boardInfo.getStatusS());
-//                System.out.println("test22222 BoardCd : "+ boardInfo.getBoardCd());
-//                System.out.println("test22222 BoardSeqNo : "+ boardInfo.getBoardSeqNo());
-//                System.out.println("test22222 FilePath : "+ boardInfo.getFilePath());
-//                System.out.println("test22222 OrginlFileNm : "+ boardInfo.getOrginlFileNm());
-//                System.out.println("test22222 title : "+ boardInfo.getTitle());
-//                System.out.println("test22222 userNm : "+ boardInfo.getUserNm());
 
                 // 첨부파일 저장시 IDX (자동채번)
                 String idx = boardMapper.getBoardAtchIdx(boardInfo);
@@ -270,6 +266,29 @@ public class BoardServiceImpl implements BoardService {
         boardVO.setAnswerCnt(answerCnt);
         // 게시판 댓글수 update
         boardMapper.getBoardAnswerCntUpdate(boardVO);
+
+        return procCnt;
+    }
+
+    /** 게시판 첨부파일 조회 */
+    @Override
+    public List<DefaultMap<Object>> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO) {
+
+        return boardMapper.getBoardDetailAtchList(boardVO);
+    }
+
+
+    /** 게시판 첨부파일 삭제 */
+    @Override
+    public int getBoardInfoAtchDel(BoardVO boardVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        boardVO.setModDt(currentDt);
+        boardVO.setModId(sessionInfoVO.getUserId());
+
+        procCnt = boardMapper.getBoardInfoAtchDel(boardVO);
 
         return procCnt;
     }

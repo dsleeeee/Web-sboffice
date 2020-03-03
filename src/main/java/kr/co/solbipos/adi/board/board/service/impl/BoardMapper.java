@@ -64,9 +64,6 @@ public interface BoardMapper {
     /** 게시판 전체 댓글 delete */
     int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
 
-    /** 게시판 댓글 조회 */
-    List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO);
-
 
     /** 게시판 신규등록시 boardSeqNo 가져오기 */
     String getBoardAtchBoardSeqNo(BoardVO boardVO);
@@ -76,6 +73,10 @@ public interface BoardMapper {
 
     /** 첨부파일 저장 isert */
     int getBoardInfoAtchSaveIsert(BoardVO boardVO);
+
+
+    /** 게시판 댓글 조회 */
+    List<DefaultMap<Object>> getBoardDetailAnswerList(BoardVO boardVO);
 
 
     /** 게시판 댓글번호 조회(자동채번) */
@@ -98,6 +99,13 @@ public interface BoardMapper {
 
     /** 게시판 댓글수 update */
     int getBoardAnswerCntUpdate(BoardVO boardVO);
+
+
+    /** 게시판 첨부파일 조회 */
+    List<DefaultMap<Object>> getBoardDetailAtchList(BoardVO boardVO);
+
+    /** 게시판 첨부파일 삭제 */
+    int getBoardInfoAtchDel(BoardVO boardVO);
 
 
     /** 열람자목록 팝업 - 검색 */
