@@ -770,11 +770,26 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         storeProductVO.setPrintYn(useYn);
 
-        // 상품 분류 조회
-        List<DefaultMap<String>> prodClassList = mapper.getProdClass(storeProductVO);
-
         // 상품 목록 조회
         List<DefaultMap<String>> list = mapper.getPrintProductInfo(storeProductVO);
+
+        // 검색 조건(상품명)이 있는 경우에만
+        if(storeProductVO.getProdNm() != null && storeProductVO.getProdNm().length() > 0) {
+            String str = "";
+            for (int i = 0; i < list.size(); i++) {
+                if (i == 0) {
+                    str = list.get(i).get("prodClassCd");
+                } else {
+                    if (str.indexOf(list.get(i).get("prodClassCd")) < 0) {
+                        str += "," + list.get(i).get("prodClassCd");
+                    }
+                }
+            }
+            storeProductVO.setArrProdClassCd(str.split(","));
+        }
+
+        // 상품 분류 조회
+        List<DefaultMap<String>> prodClassList = mapper.getProdClass(storeProductVO);
 
         // 상품 트리데이터 생성
         List<StoreProductVO> prodList = makeTreeData(prodClassList, list);

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Corner.xml
+    상품별 코너변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2020.02.27     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.prod.corner.service.impl.CornerMapper">
+    <!-- 상품별 코너 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_MS_PRODUCT, TB_MS_CORNER
+        PARAM    : cornerVO
+        COMMENTS : 상품별 코너를 조회한다. (매장)
+    -->
+    <select id="getProdCornerList" parameterType="cornerVO" resultType="DefaultMap">
+        /* USE : CornerMapper.getProdCornerList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                        tms.HQ_OFFICE_CD,
+                        tmp.STORE_CD,
+                        tmp.PROD_CLASS_CD,
+                        ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                        tmp.CORNR_CD,
+                        tmc.CORNR_NM,
+                        tmp.PROD_CD,
+                        tmp.PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM   TB_MS_STORE tms,
+                        TB_MS_PRODUCT tmp,
+                        TB_MS_CORNER tmc
+                WHERE tmp.STORE_CD = #{storeCd}
+                AND tms.STORE_CD = tmp.STORE_CD
+                AND tmc.STORE_CD (+)= tms.STORE_CD
+                AND tmc.CORNR_CD (+)= tmp.CORNR_CD
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                            SELECT PROD_CLASS_CD
+                                                              FROM TB_MS_PRODUCT_CLASS
+                                                             WHERE STORE_CD = #{storeCd}
+                                                        START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                               AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                                               AND STORE_CD = #{storeCd}
+                                              )
+                </if>
+                <if test="srchCornrCd != null and srchCornrCd != ''">
+                    AND tmp.CORNR_CD = #{srchCornrCd}
+                </if>
+                ORDER BY tmp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품별 코너 이동 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : cornerVO
+        COMMENTS : 상품의 코너를 수정한다.
+    -->
+    <update id="changeProdCorner" parameterType="cornerVO">
+        /* USE : CornerMapper.changeProdCorner */
+        UPDATE TB_MS_PRODUCT
+           SET  CORNR_CD = #{cornrCd},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+            AND PROD_CD IN
+            <foreach collection="arrProdCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+    </update>
+</mapper>

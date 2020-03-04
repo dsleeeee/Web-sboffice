@@ -212,6 +212,7 @@
     <typeAlias alias="sideMenuSelGroupVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelGroupVO"/>
     <typeAlias alias="sideMenuSelClassVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO"/>
     <typeAlias alias="sideMenuSelProdVO" type="kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO"/>
+    <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO" />
 
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>

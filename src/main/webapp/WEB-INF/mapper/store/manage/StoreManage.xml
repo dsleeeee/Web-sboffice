@@ -2058,6 +2058,12 @@
                                         AND PRTER_NO = #{prterNo})
                  AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                  AND tmp.USE_YN = 'Y'
+          <if test='arrProdClassCd != null and arrProdClassCd != ""'>
+              AND tmpc.PROD_CLASS_CD IN
+              <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
+                  #{item}
+              </foreach>
+          </if>
                GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
       </if>
       <if test='printYn != null and printYn.toString() != "Y"'>
@@ -2067,6 +2073,12 @@
                                             AND PRTER_NO = #{prterNo})
                  AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
                  AND tmp.USE_YN = 'Y'
+            <if test='arrProdClassCd != null and arrProdClassCd != ""'>
+                 AND tmpc.PROD_CLASS_CD IN
+                  <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
+                      #{item}
+                  </foreach>
+            </if>
                GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
       </if>
                    ) tmp
@@ -2110,6 +2122,9 @@
                               WHERE STORE_CD = #{storeCd}
                                 AND PRTER_NO = #{prterNo})
          </if>
+        <if test='prodNm != null and prodNm != ""'>
+          AND PROD_NM LIKE '%'|| #{prodNm} ||'%'
+        </if>
     </select>
 
     <!-- 주방프린터 연결상품 등록 -->

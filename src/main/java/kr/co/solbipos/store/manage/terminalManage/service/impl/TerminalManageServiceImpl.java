@@ -1,5 +1,6 @@
 package kr.co.solbipos.store.manage.terminalManage.service.impl;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -170,6 +171,24 @@ public class TerminalManageServiceImpl implements TerminalManageService{
                 result += mapper.updateCornerTerminalInfo(storeTerminalVO);
             }
         }
+
+        return result;
+    }
+
+    /** 코너 저장 */
+    @Override
+    public int insertCorner(StoreCornerVO storeCornerVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        storeCornerVO.setUseYn(UseYn.Y.getCode());
+        storeCornerVO.setRegDt(dt);
+        storeCornerVO.setRegId(sessionInfoVO.getUserId());
+        storeCornerVO.setModDt(dt);
+        storeCornerVO.setModId(sessionInfoVO.getUserId());
+
+        result += mapper.insertCorner(storeCornerVO);
 
         return result;
     }

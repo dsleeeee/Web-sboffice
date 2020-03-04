@@ -8,8 +8,27 @@
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
   </div>
+
+  <table class="searchTbl">
+    <colgroup>
+      <col width="15%" />
+      <col width="70%" />
+    </colgroup>
+    <tbody>
+    <tr>
+      <%-- 상품명 --%>
+      <th><s:message code="storeManage.prodNm"/></th>
+      <td>
+        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w60" maxlength="13"/><br/>
+        <p class="s12 bk mt10 lh10">
+            * 상품명 검색 사용시, <u><b>상품명 입력 후 프린터 코드를 선택</b></u> 하세요.
+        </p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
   <div class="wj-TblWrap mt20 mb40" ng-controller="storeKitchenPrintProductCtrl" ng-init="_broadcast('storeKitchenPrintProductCtrl')">
     <%-- 주방프린터 --%>
@@ -88,4 +107,4 @@
 <script>
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20181115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20181115.02" charset="utf-8"></script>
