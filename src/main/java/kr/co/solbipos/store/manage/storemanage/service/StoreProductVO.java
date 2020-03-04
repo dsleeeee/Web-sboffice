@@ -99,6 +99,8 @@ public class StoreProductVO extends CmmVO {
     private UseYn printYn;
     /** child items */
     private List<StoreProductVO> items;
+    /** 상품분류코드목록*/
+    private String arrProdClassCd[];
     
     
     /**
@@ -557,5 +559,12 @@ public class StoreProductVO extends CmmVO {
     public void setItems(List<StoreProductVO> items) {
         this.items = items;
     }
-    
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
 }

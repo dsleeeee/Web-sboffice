@@ -253,4 +253,31 @@ public class TerminalManageController {
         }
         return returnListJson(Status.OK, result);
     }
+
+    /**
+     * 코너 저장
+     * @param storeCornerVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "corner/insertCorner.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result insertCorner(StoreCornerVO storeCornerVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+            // 코너 저장
+            result = service.insertCorner(storeCornerVO, sessionInfoVO);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return returnListJson(Status.OK, result);
+    }
 }

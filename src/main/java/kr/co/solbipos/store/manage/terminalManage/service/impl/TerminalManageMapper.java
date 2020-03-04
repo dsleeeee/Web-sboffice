@@ -66,6 +66,8 @@ public interface TerminalManageMapper {
     /** 코너 터미널 정보 수정 */
     int updateCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
 
+    /** 코너 저장 */
+    int insertCorner(StoreCornerVO storeCornerVO);
 
 }
 
