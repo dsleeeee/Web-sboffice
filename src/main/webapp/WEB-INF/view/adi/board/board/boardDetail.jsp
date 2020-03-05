@@ -15,7 +15,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 810px;">
+        <div class="wj-dialog-body sc2" style="height: 840px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
