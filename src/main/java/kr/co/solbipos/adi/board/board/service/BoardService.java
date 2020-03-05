@@ -45,7 +45,10 @@ public interface BoardService {
     int getBoardDetailAnswerSave(BoardVO boardVO, SessionInfoVO sessionInfoVO);
 
     /** 게시판 첨부파일 조회 */
-    List<DefaultMap<Object>> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<Object>> getBoardInfoAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
+
+    /** 게시판 첨부파일 조회 */
+    List<BoardVO> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO);
 
     /** 게시판 첨부파일 삭제 */
     int getBoardInfoAtchDel(BoardVO boardVO, SessionInfoVO sessionInfoVO);

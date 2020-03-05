@@ -5,9 +5,11 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
+import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -232,17 +234,41 @@ public class BoardController {
      * @author  김설아
      * @since   2020. 03. 03.
      */
-    @RequestMapping(value = "/board/getBoardDetailAtchList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/getBoardInfoAtchList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getBoardDetailAtchList(BoardVO boardVO, HttpServletRequest request,
+    public Result getBoardInfoAtchList(BoardVO boardVO, HttpServletRequest request,
                                            HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = boardService.getBoardDetailAtchList(boardVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = boardService.getBoardInfoAtchList(boardVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, boardVO);
     }
+
+    /**
+     * 게시판 첨부파일 조회
+     *
+     * @param boardVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 03. 04.
+     */
+    @RequestMapping(value = "board/getBoardDetailAtchList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBoardDetailAtchList(BoardVO boardVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<BoardVO> result =  boardService.getBoardDetailAtchList(boardVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 
     /**
      * 게시판 첨부파일 삭제

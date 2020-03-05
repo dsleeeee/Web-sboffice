@@ -120,7 +120,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         params.boardCd = $scope.selectedBoardInfo.boardCd;
         params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
 
-        $scope._inquirySub("/adi/board/board/board/getBoardDetailAtchList.sb", params, function() {}, false);
+        $scope._inquirySub("/adi/board/board/board/getBoardInfoAtchList.sb", params, function() {}, false);
     };
 
     // 신규

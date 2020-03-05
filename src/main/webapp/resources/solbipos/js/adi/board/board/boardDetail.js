@@ -129,6 +129,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.setSelectedBoardDetail(data);
         $scope.searchBoardDetail();
         $scope.searchBoardDetailAnswer();
+        $scope.searchBoardDetailAtch();
         event.preventDefault();
     });
 
@@ -144,7 +145,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.boardDetail.title = $scope.boardDetail.title;
             $scope.boardDetail.userNm = $scope.boardDetail.userNm;
             $scope.boardDetail.regDt = $scope.boardDetail.regDt;
-            $scope.boardDetail.target = $scope.boardDetail.target;
+            if($scope.boardDetail.targetFg === "1") {
+                $scope.boardDetail.targetFg = "전체";
+            } else if($scope.boardDetail.targetFg === "2") {
+                $scope.boardDetail.targetFg = "특정매장";
+            }
             if($scope.boardDetail.noticeYn === "Y") {
                 $scope.boardDetail.noticeYn = true;
             } else if ($scope.boardDetail.noticeYn === "N") {
@@ -180,6 +185,37 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
 
         $scope._inquirySub("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function() {}, false);
+    };
+
+    // 첨부파일 조회
+    $scope.searchBoardDetailAtch = function() {
+        var params = {};
+        params.boardCd = $scope.selectedBoardDetail.boardCd;
+        params.boardSeqNo = $scope.selectedBoardDetail.boardSeqNo;
+
+        $scope._postJSONQuery.withOutPopUp( "/adi/board/board/board/getBoardDetailAtchList.sb", params, function(response){
+            if($.isEmptyObject(response.data) ) {
+                $scope._popMsg(messages["cmm.empty.data"]);
+                return false;
+            }
+
+            var list = response.data.data;
+            var innerHtml = "";
+
+            for(var i=0; i< list.length; i++) {
+
+                innerHtml += "<tr>";
+                if(i === 0) {
+                    innerHtml += "<th rowspan='"+list.length+"'>"+messages["boardDetail.file"]+"</th>";
+                }
+                // innerHtml += "<a href=\"" + list[i].filePath + "\">" + list[i].orginlFileNm + "</a>";
+                innerHtml += "<td>"+"<a href=\"" + list[i].filePath + "\" download >" + list[i].orginlFileNm + "</a>"+"</td>";
+                innerHtml += "</tr>";
+            }
+
+
+            $("#fileContent").html(innerHtml);
+        });
     };
     // <-- //검색 호출 -->
 

@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:710px;height:860px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:710px;height:900px;" fade-in="false" fade-out="false">
 
     <div ng-controller="boardDetailCtrl">
 
@@ -52,10 +52,10 @@
                         </td>
                         <%-- 게시대상 --%>
                         <th>
-                            <s:message code="boardDetail.target"/>
+                            <s:message code="boardDetail.targetFg"/>
                         </th>
                         <td>
-                            {{boardDetail.target}}
+                            {{boardDetail.targetFg}}
                         </td>
                     </tr>
                     <tr>
@@ -89,6 +89,22 @@
                         <%-- 글쓰기 에디터 --%>
                         <td colspan="4">
                             <div id="summernoteDetail"></div>
+                        </td>
+                    </tr>
+                    <%--<tr>--%>
+                        <%-- 첨부파일 --%>
+                        <%--<th>--%>
+                            <%--<s:message code="boardDetail.file"/>--%>
+                        <%--</th>--%>
+                        <%--<td colspan="3">--%>
+                            <%--<a href="/testBoardAtch/20200304/1583325012469.txt" download >ddddddddd</a>--%>
+                        <%--</td>--%>
+                    <%--</tr>--%>
+                    <tr>
+                        <%-- 첨부파일 --%>
+                        <td colspan="4">
+                            <tbody id="fileContent">
+                            </tbody>
                         </td>
                     </tr>
                 </tbody>
@@ -139,6 +155,7 @@
                 <%-- 닫기 --%>
                 <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
             </div>
+
         </div>
         <%-- //body --%>
 
@@ -154,7 +171,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200303" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200305.23" charset="utf-8"></script>
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>
@@ -164,6 +181,6 @@
 
 <%-- 열람자목록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardReadingHist.jsp">
-<c:param name="menuCd" value="${menuCd}"/>
-<c:param name="menuNm" value="${menuNm}"/>
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

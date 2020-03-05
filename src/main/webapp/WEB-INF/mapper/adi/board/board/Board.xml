@@ -543,13 +543,31 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getBoardDetailAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardInfoAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+        /* BoardMapper.getBoardInfoAtchList */
+        SELECT
+--         SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
+        twba.ORGINL_FILE_NM,
+        '삭제' AS DEL,
+        twba.IDX
+        FROM TB_WB_BOARD_ATCH twba
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+        AND twba.USE_YN = 'Y'
+        ORDER BY twba.BOARD_CD, twba.BOARD_SEQ_NO, twba.IDX
+    </select>
+
+    <!-- 게시판 첨부파일 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <select id="getBoardDetailAtchList"  parameterType="BoardVO" resultType="BoardVO">
         /* BoardMapper.getBoardDetailAtchList */
         SELECT
-        SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
-        '삭제' AS DEL,
-        twba.IDX,
-        (twba.FILE_PATH || twba.FILE_NM) AS FILE_PATH
+        twba.ORGINL_FILE_NM,
+        SUBSTR(twba.FILE_PATH, INSTR(twba.FILE_PATH, '\', 1, 1)) || twba.FILE_NM AS FILE_PATH
         FROM TB_WB_BOARD_ATCH twba
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}
@@ -565,7 +583,7 @@
     -->
     <update id="getBoardInfoAtchDel" parameterType="BoardVO">
         /* BoardMapper.getBoardInfoAtchDel */
-        UPDATE
+        UPDATEgetBoardDetailAtchList
         TB_WB_BOARD_ATCH
         SET
         USE_YN = 'N',
