@@ -583,7 +583,7 @@
     -->
     <update id="getBoardInfoAtchDel" parameterType="BoardVO">
         /* BoardMapper.getBoardInfoAtchDel */
-        UPDATEgetBoardDetailAtchList
+        UPDATE
         TB_WB_BOARD_ATCH
         SET
         USE_YN = 'N',
