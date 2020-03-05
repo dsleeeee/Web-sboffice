@@ -111,6 +111,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $("#storeInfo").val("["+data.storeCd+"] "+data.storeNm);
       $("#storeCd").val(data.storeCd);
+      $("#storeNm").val(data.storeNm);
     });
   };
 
@@ -156,7 +157,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
 
       // 코너별 승인
-      if($scope.terminalFg  === "2") {
+      if($scope.terminalFg  === "1" || $scope.terminalFg  === "2") {
         $scope.showCorner();
       }
       // 포스별 승인
@@ -164,7 +165,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.showPos();
       }
 
-      $scope._popMsg(messages["terminalManage.require.select.pos"]);
+      // POS 선택하라는 alert
+      //$scope._popMsg(messages["terminalManage.require.select.pos"]);
 
       // 그리드 초기화
       var posScope = agrid.getScope('posCtrl');
@@ -178,6 +180,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 코너 보여주기
   $scope.showCorner = function(){
+
+    $("#lblToolTip").text("* 코너를 선택하세요.");
+
     $("#cornerListArea").show();
     $("#cornerArea").show();
     $("#cornerBtnArea").show();
@@ -189,6 +194,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 포스 보여주기
   $scope.showPos = function(){
+
+    $("#lblToolTip").text("* POS를 선택하세요.");
 
     $("#cornerListArea").hide();
     $("#cornerArea").hide();
@@ -222,7 +229,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.showPos();
     }
     // 코너 목록 조회
-    else if(selectedTerminalFgVal === "2") {
+    else if(selectedTerminalFgVal === "1" || selectedTerminalFgVal === "2") {
       $scope.showCorner();
     }
   };
@@ -268,6 +275,46 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     var cornerScope = agrid.getScope('cornerCtrl');
     cornerScope.save();
   };
+
+  // 코너 추가 등록 팝업
+  $scope.cornerAdd = function(){
+
+    $scope.cornerAddLayer.show(true);
+
+    var params      = {};
+    params.storeCd = $("#storeCd").val();
+    params.storeNm = $("#storeNm").val();
+
+    $scope._broadcast('cornerAddCtrl', params);
+
+  };
+
+  // 코너 추가 후 코너 SelectBox 재조회
+  $scope.setCorner = function(){
+
+    // 코너 SelectBox 데이터 초기화
+    $scope.cornerFgArr = [];
+    $scope.cornerFgArr.push({value:"", name:"코너 선택"})
+
+    // 코너 조회
+    var params = {};
+    params.storeCd = $("#storeCd").val();
+    
+    $scope._postJSONQuery.withOutPopUp( baseUrl + "terminalManage/getTerminalEnv.sb", params, function(result){
+
+      var cornerList = result.data.data.cornerList;
+
+      for(var j=0; j<=cornerList.length; j++){
+        $scope.cornerFgArr.push(cornerList[j]);
+      }
+      $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView( $scope.cornerFgArr);
+      
+      // 코너 그리드 초기화
+      var cornerScope = agrid.getScope('cornerCtrl');
+      cornerScope._gridDataInit();
+      
+    });
+  }
 
 }]);
 

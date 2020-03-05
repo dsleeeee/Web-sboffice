@@ -97,6 +97,7 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
     var params      = {};
     params.storeCd  = gvStoreCd
     params.prterNo  = $scope.getSelectedPrter().prterNo;
+    params.prodNm = $("#srchProdNm").val();
 
     // console.log(params);
 

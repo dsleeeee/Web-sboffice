@@ -3,7 +3,7 @@ package kr.co.solbipos.store.manage.terminalManage.service;
 import kr.co.solbipos.application.common.service.CmmVO;
 
 /**
- * @Class Name : StorePosVO.java
+ * @Class Name : StoreCornerVO.java
  * @Description :
  * @Modification Information
  * @

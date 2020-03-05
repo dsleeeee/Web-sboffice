@@ -34,6 +34,7 @@
           <td class="oh" colspan="3">
             <input type="text" class="sb-input w40" name="storeInfo" id="storeInfo" readonly="readonly" >
             <input type="hidden" id="storeCd" ng-model="storeCd" >
+            <input type="hidden" id="storeNm" ng-model="storeNm" >
           </td>
         </tr>
       </tbody>
@@ -86,12 +87,18 @@
             </wj-combo-box>
           </div>
 
+          <%-- 안내문구 --%>
+          <div class="sb-select w10 fl" align="left" style="width:300px; margin-left:20px;">
+            <label style="font-size:0.75em; color: #72777b;" id="lblToolTip"></label>
+          </div>
+
           <div class="fr mb10" id="posBtnArea" style="display:none">
             <button class="btn_skyblue" ng-click="copyEnv()"><s:message code="terminalManage.copy.posEnvst"/></button>
             <button class="btn_skyblue" ng-click="posAddRow()"><s:message code="cmm.add"/></button>
             <button class="btn_skyblue" ng-click="posSave()"><s:message code="cmm.save"/></button>
           </div>
           <div class="fr mb10" id="cornerBtnArea" style="display:none">
+            <button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>
             <button class="btn_skyblue" ng-click="cornerAddRow()"><s:message code="cmm.add"/></button>
             <button class="btn_skyblue" ng-click="cornerSave()"><s:message code="cmm.save"/></button>
           </div>
@@ -156,8 +163,12 @@ var vandorList = ${vendorList};
 var terminalFg = ${cnv.getEnvCodeExcpAll("2028")};
 var useYnFg    = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100601.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=2018100602" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">
+</c:import>
+
+<%-- 코너추가 레이어 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/terminalManage/cornerAdd.jsp">
 </c:import>

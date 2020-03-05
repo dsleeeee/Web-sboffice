@@ -1,7 +1,6 @@
 package kr.co.solbipos.store.manage.terminalManage.service;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
@@ -55,6 +54,9 @@ public interface TerminalManageService {
 
     /** 코너 터미널 정보 저장 */
     int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);
+
+    /** 코너 저장 */
+    int insertCorner(StoreCornerVO storeCornerVO, SessionInfoVO sessionInfoVO);
 
 
 }
