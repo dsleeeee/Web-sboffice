@@ -47,23 +47,35 @@
         <th></th>
         <td></td>
       </tr>
-      <!--<tr>
+      <tr ng-show="userOrgnFg == 'M'">
+        <%-- 총판/대리점 코드 --%>
+        <th><s:message code="pwdManage.agencyCd" /></th>
+        <td>
+          <input type="text" id="srchAgencyCd" class="sb-input w100" ng-model="srchAgencyCd" maxlength="5"/>
+        </td>
+        <%-- 총판/대리점명 --%>
+        <th><s:message code="pwdManage.agencyNm" /></th>
+        <td>
+          <input type="text" id="srchAgencyNm" class="sb-input w100" ng-model="agencyNm" maxlength="50"/>
+        </td>
+      </tr>
+      <tr ng-show="userOrgnFg != 'H' && userOrgnFg != 'S'">
         <%-- 본사코드 --%>
         <th><s:message code="pwdManage.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd" maxlength="5"/>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="srchHqOfficeCd" maxlength="5"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="pwdManage.hqOfficeNm" /></th>
         <td>
           <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" maxlength="50"/>
         </td>
-      </tr>-->
+      </tr>
       <tr ng-show="userOrgnFg != 'S'">
         <%-- 매장코드 --%>
         <th><s:message code="pwdManage.storeCd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" maxlength="7"/>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="srchStoreCd" maxlength="7"/>
         </td>
         <%-- 매장명 --%>
         <th><s:message code="pwdManage.storeNm" /></th>
@@ -115,6 +127,12 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.empOrgnFg"/>" binding="empOrgnFg" data-map="empOrgnFgDataMap" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+
+      <c:if test="${orgnFg != 'HQ' and orgnFg != 'STORE'}">
+        <wj-flex-grid-column header="<s:message code="pwdManage.agencyCd"/>" binding="agencyCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="pwdManage.agencyNm"/>" binding="agencyNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+      </c:if>
+
       <c:if test="${orgnFg != 'STORE'}">
         <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeCd"/>" binding="hqOfficeCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="pwdManage.hqOfficeNm"/>" binding="hqOfficeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -143,10 +161,16 @@
   var serviceFg    = ${ccu.getCommCode("007")};
   var webUseYn     = ${ccu.getCommCode("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=2018121101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdManage.js?ver=2018121102.08" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/store/manage/pwdManage/pwdChange.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 로그인 잠금해제 --%>
+<c:import url="/WEB-INF/view/store/manage/pwdManage/pwdUnlock.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

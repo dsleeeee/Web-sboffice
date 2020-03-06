@@ -17,6 +17,7 @@ var app = agrid.getApp();
 // 조회조건 DropBoxDataMap
 var empOrgnFgData = [
   {"name":"전체","value":""},
+  {"name":"총판/대리점","value":"A"},
   {"name":"본사","value":"H"},
   {"name":"매장","value":"S"}
 ];
@@ -31,12 +32,17 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('pwdManageCtrl', $scope, $http, true));
 
+  // 사용자의 권한구분
+  $scope.userOrgnFg = gvOrgnFg;
+  
+  // 본사, 매장은 총판/대리점 검색 코드값 제거
+  if($scope.userOrgnFg == "H" || $scope.userOrgnFg == "S"){
+    empOrgnFgData.splice(1,1);
+  }
+
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("empOrgnFg", empOrgnFgData);
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
-
-  // 사용자의 권한구분
-  $scope.userOrgnFg = gvOrgnFg;
 
   // 선택 사원
   $scope.emp;
@@ -63,6 +69,13 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "userId") {
           wijmo.addClass(e.cell, 'wijLink');
         }
+
+        // 관리자만 로그인 잠금해제 가능
+        if($scope.userOrgnFg === "M"){
+          if(col.binding === "userNm"){
+            wijmo.addClass(e.cell, 'wijLink');
+          }
+        }
       }
     });
 
@@ -83,6 +96,17 @@ app.controller('pwdManageCtrl', ['$scope', '$http', function ($scope, $http) {
           });
           event.preventDefault();
         }
+
+        // 관리자만 선택 사원 웹 비밀번호잠김해제 팝업
+        if($scope.userOrgnFg === "M"){
+          if ( col.binding === "userNm" ) {
+            var selectedData = s.rows[ht.row].dataItem;
+            $scope.pwdUnlockPopupLayer.show(true);
+            $scope._broadcast('pwdUnlockCtrl', selectedData);
+            event.preventDefault();
+          }
+        }
+
       }
     });
   };

@@ -1,6 +1,7 @@
 package kr.co.solbipos.store.manage.pwdmanage.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.pwdmanage.enums.EmpOrgnFg;
 import kr.co.solbipos.store.manage.pwdmanage.enums.PwdChgFg;
@@ -26,6 +27,8 @@ public class PwdManageVO extends PageVO {
     private static final long serialVersionUID = 6990091657881306739L;
     /** 대리점코드 */
     private String agencyCd;
+    /** 대리점명 */
+    private String agencyNm;
     /** 대리점의 부모 대리점 코드 */
     private String pAgencyCd;
     /** 본사코드 */
@@ -68,6 +71,14 @@ public class PwdManageVO extends PageVO {
     private OrgnFg orgnFg;
     /** 조회 사원 구분 */
     private EmpOrgnFg empOrgnFg;
+    /** 사용자상태구분 */
+    private UserStatFg userStatFg;
+    /** 조회용 본사코드 */
+    private String srchHqOfficeCd;
+    /** 조회용 매장코드 */
+    private String srchStoreCd;
+    /** 조회용 총판/대리점 코드 */
+    private String srchAgencyCd;
 
 
     /**
@@ -83,6 +94,14 @@ public class PwdManageVO extends PageVO {
      */
     public void setAgencyCd(String agencyCd) {
         this.agencyCd = agencyCd;
+    }
+
+    public String getAgencyNm() {
+        return agencyNm;
+    }
+
+    public void setAgencyNm(String agencyNm) {
+        this.agencyNm = agencyNm;
     }
 
     public String getpAgencyCd() {
@@ -338,5 +357,37 @@ public class PwdManageVO extends PageVO {
      */
     public void setEmpOrgnFg(EmpOrgnFg empOrgnFg) {
         this.empOrgnFg = empOrgnFg;
+    }
+
+    public UserStatFg getUserStatFg() {
+        return userStatFg;
+    }
+
+    public void setUserStatFg(UserStatFg userStatFg) {
+        this.userStatFg = userStatFg;
+    }
+
+    public String getSrchHqOfficeCd() {
+        return srchHqOfficeCd;
+    }
+
+    public void setSrchHqOfficeCd(String srchHqOfficeCd) {
+        this.srchHqOfficeCd = srchHqOfficeCd;
+    }
+
+    public String getSrchStoreCd() {
+        return srchStoreCd;
+    }
+
+    public void setSrchStoreCd(String srchStoreCd) {
+        this.srchStoreCd = srchStoreCd;
+    }
+
+    public String getSrchAgencyCd() {
+        return srchAgencyCd;
+    }
+
+    public void setSrchAgencyCd(String srchAgencyCd) {
+        this.srchAgencyCd = srchAgencyCd;
     }
 }

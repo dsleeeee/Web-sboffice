@@ -122,4 +122,27 @@ public class PwdManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 웹 비밀번호 잠김해제
+     * @param   request
+     * @param   response
+     * @param   pwdManageVO
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020. 03. 05.
+     */
+    @RequestMapping(value = "/pwdManage/updatePasswordUnLock.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updatePasswordUnLock(@RequestBody PwdManageVO pwdManageVO, HttpServletRequest request,
+                                 HttpServletResponse response,  Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 패스워드 변경
+        PwChgResult result = pwdManageService.updatePasswordUnLock(pwdManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }
