@@ -7,6 +7,7 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.HttpUtils;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.solbipos.application.session.auth.enums.UserStatFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
@@ -128,6 +129,21 @@ public class PwdManageServiceImpl implements PwdManageService {
         int insertResult = pwdManageMapper.insertPasswordHistory(pwdManageVO);
 
         return PwChgResult.CHECK_OK;
+
+    }
+
+    /** 로그인 잠금해제 */
+    @Override
+    public PwChgResult updatePasswordUnLock(PwdManageVO pwdManageVO , SessionInfoVO sessionInfoVO) {
+
+        // 사용자 상태 - 정상
+        pwdManageVO.setUserStatFg(UserStatFg.NORMAL);
+
+        if(pwdManageMapper.updatePasswordUnLock(pwdManageVO) > 0){
+            return PwChgResult.CHECK_OK;
+        } else{
+            return PwChgResult.CHECK_NOK;
+        }
     }
 
 }

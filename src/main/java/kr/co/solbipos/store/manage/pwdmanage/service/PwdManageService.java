@@ -29,4 +29,7 @@ public interface PwdManageService {
     /** 비밀번호 변경 */
     PwChgResult modifyPwd(PwdManageVO pwdManageVO);
 
+    /** 로그인 잠금해제 */
+    PwChgResult updatePasswordUnLock(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
+
 }

@@ -14,6 +14,8 @@ public enum EmpOrgnFg implements CodeEnum  {
 
     /** 전체 */
     ALL(""),
+    /** 대리점 */
+    AGENCY("A"),
     /** 본사 */
     HQ("H"),
     /** 매장 */

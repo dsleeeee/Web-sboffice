@@ -38,5 +38,8 @@ public interface PwdManageMapper {
     
     /** 비밀번호 변경이력 저장 */
     int insertPasswordHistory(PwdManageVO pwdManageVO);
+
+    /** 로그인 잠금해제 */
+    int updatePasswordUnLock(PwdManageVO pwdManageVO);
     
 }
