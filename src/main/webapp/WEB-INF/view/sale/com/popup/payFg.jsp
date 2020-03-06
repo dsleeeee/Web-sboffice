@@ -9,7 +9,7 @@
 <wj-popup id="payFgLayer" control="payFgLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComPayFgCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-              제목
+        결제수단별 매출현황 - {{dialogHd}}
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
@@ -17,8 +17,27 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-                  테이블
-        <%--//위즈모 테이블--%>
+	    <div class="w100 mt10">
+	      <div class="wj-gridWrap" style="height: 340px;">
+	        <wj-flex-grid
+	          autoGenerateColumns="false"
+	          control="flex"
+	          initialized="initGrid(s,e)"
+	          sticky-headers="true"
+	          selection-mode="Row"
+	          items-source="data"
+	          is-read-only="true"
+	          item-formatter="_itemFormatter">
+
+	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleDate"/>" 	binding="saleDate" 		width="150" align="center"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodpayfg.posNm"/>" 	binding="posNo" 		width="120" align="center"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodpayfg.billNo"/>" 	binding="billNo" 		width="120" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.billDt"/>" 		binding="billDt" 		width="200" align="center""></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmt"/>" 		binding="payAmt" 		width="150" align="right" aggregate="Sum"></wj-flex-grid-column>
+	      </div>
+	    </div>
+	    <%--//위즈모 테이블--%>
       </div>
     </div>
   </div>

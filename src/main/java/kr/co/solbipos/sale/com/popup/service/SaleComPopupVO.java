@@ -69,7 +69,10 @@ public class SaleComPopupVO extends PageVO {
     /** 승인구분 코드 */
     private String saleFg;
     private String saleYn;
-    /**
+    /** 결제수단 코드 */
+    private String payCd;
+
+	/**
      * @return the hqOfficeCd
      */
     public String getHqOfficeCd() {
@@ -373,6 +376,12 @@ public class SaleComPopupVO extends PageVO {
 		this.cashBillApprProcFg = cashBillApprProcFg;
 	}
 
+    public String getPayCd() {
+		return payCd;
+	}
 
+	public void setPayCd(String payCd) {
+		this.payCd = payCd;
+	}
 	
 }
