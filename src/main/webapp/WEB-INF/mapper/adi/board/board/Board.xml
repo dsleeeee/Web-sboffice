@@ -18,8 +18,14 @@
 
     <!-- 일반게시판 조회 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_CM_EMPLOYEE, TB_CM_AGENCY
-        COMMENTS : 게시판 정보, [공통]시스템/대리점 사원 정보, [공통]대리점 정보
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO,
+                   TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
+                   TB_MS_EMPLOYEE, TB_MS_STORE,
+                   TB_CM_EMPLOYEE, TB_CM_AGENCY
+        COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보,
+                   [본사]사원 정보, [본사]본사 정보,
+                   [매장]사원 정보, [매장]매장 정보,
+                   [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
     <select id="getBoardList"  parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardList */
@@ -31,14 +37,18 @@
         twbi.VIEW_CNT,
         twbi.TARGET_FG,
         twbi.APPR_FG,
-        tca.AGENCY_NM,
+        (CASE  WHEN twagi.AUTH_GRP_NM = 'HQ' THEN (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = UPPER(twbi.USER_ID)) --본사
+               WHEN twagi.AUTH_GRP_NM = 'STORE' THEN (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = UPPER(twbi.USER_ID))  --매장
+               WHEN twagi.AUTH_GRP_NM in ('SYSTEM','AGENCY') THEN (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD =(SELECT AGENCY_CD FROM TB_CM_EMPLOYEE WHERE USER_ID = twbi.USER_ID)) --관리자,총판
+              ELSE null END
+        ) AS AGENCY_NM,
         twbi.USER_ID,
         twbi.USER_NM,
         twbi.MOD_DT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_WB_BOARD_INFO twbi,
-        TB_CM_EMPLOYEE tce,
-        TB_CM_AGENCY tca
+        TB_WB_USER_INFO twui,
+        TB_WB_AUTHOR_GRP_INFO twagi
         WHERE 1=1
         AND twbi.BOARD_CD = #{boardCd}
         AND twbi.USE_YN = 'Y'
@@ -81,16 +91,16 @@
                 </if>
             </when>
         </choose>
-        AND tce.USER_ID (+)= twbi.USER_ID
-        AND tca.AGENCY_CD (+)= tce.AGENCY_CD
+        AND twui.USER_ID (+)= twbi.USER_ID
+        AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
         ORDER BY twbi.BOARD_CD, twbi.BOARD_SEQ_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 게시판 상세 팝업 - 조회 -->
     <!--
-        TABLE    : TB_WB_BOARD_INFO, TB_WB_BOARD_MASTER
-        COMMENTS : 게시판 정보, 게시판 마스터
+        TABLE    : TB_WB_BOARD_INFO, TB_WB_BOARD_MASTER, TB_WB_BOARD_PART_STORE, TB_MS_STORE
+        COMMENTS : 게시판 정보, 게시판 마스터, 게시판 일부 매장, [매장]매장 정보
     -->
     <select id="getBoardDetailList" parameterType="BoardVO" resultMap="BoardListMap">
         /* BoardMapper.getBoardDetailList */
@@ -99,7 +109,8 @@
         twbi.USER_NM,
         twbi.APPR_FG,
         twbi.TARGET_FG,
-        --매장선택시 매장
+        twbps.PART_ORGN_CD,
+        twbps.PART_ORGN_NM,
         twbi.NOTICE_YN,
         --sms전송
         twbi.START_DATE,
@@ -108,11 +119,25 @@
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
         twbm.ANSWER_FG
         FROM TB_WB_BOARD_INFO twbi,
-        TB_WB_BOARD_MASTER twbm
+        TB_WB_BOARD_MASTER twbm,
+        (
+          SELECT
+          twbps.BOARD_CD,
+          twbps.BOARD_SEQ_NO,
+          LISTAGG(twbps.PART_ORGN_CD, ',') WITHIN GROUP (ORDER BY twbps.PART_ORGN_CD) AS PART_ORGN_CD,
+          LISTAGG(tms.STORE_NM, ',') WITHIN GROUP (ORDER BY tms.STORE_NM) AS PART_ORGN_NM
+          FROM TB_WB_BOARD_PART_STORE twbps,
+          TB_MS_STORE tms
+          WHERE 1=1
+          AND tms.STORE_CD (+)= twbps.PART_ORGN_CD
+          GROUP BY twbps.BOARD_CD, twbps.BOARD_SEQ_NO
+        ) twbps
         WHERE 1=1
         AND twbi.BOARD_CD = #{boardCd}
         AND twbi.BOARD_SEQ_NO = #{boardSeqNo}
         AND twbm.BOARD_CD (+)= twbi.BOARD_CD
+        AND twbps.BOARD_CD (+)= twbi.BOARD_CD
+        AND twbps.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
     </select>
 
     <!-- 게시판 조회수 조회 -->
@@ -311,6 +336,95 @@
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}
     </update>
+
+    <!-- 게시판 공개대상 insert -->
+    <!--
+        TABLE    : TB_WB_BOARD_PART_STORE
+        COMMENTS : 게시판 일부 매장
+    -->
+    <insert id="getBoardPartStoreSaveInsert" parameterType="BoardVO">
+        /* BoardMapper.getBoardPartStoreSaveInsert */
+        INSERT INTO TB_WB_BOARD_PART_STORE
+        (
+            BOARD_CD,
+            BOARD_SEQ_NO,
+            PART_ORGN_CD,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{boardCd},
+            #{boardSeqNo},
+            #{storeCd},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 게시판 공개대상에 선택한 매장이있는지 select -->
+    <!--
+      TABLE    : TB_WB_BOARD_PART_STORE
+        COMMENTS : 게시판 일부 매장
+    -->
+    <select id="getBoardParStorePartOrgnCd"  parameterType="BoardVO" resultType="String">
+        /* BoardMapper.getBoardParStorePartOrgnCd */
+        SELECT
+        COUNT(twbps.PART_ORGN_CD)
+        FROM TB_WB_BOARD_PART_STORE twbps
+        WHERE 1=1
+        AND twbps.BOARD_CD = #{boardCd}
+        AND twbps.BOARD_SEQ_NO = #{boardSeqNo}
+        AND twbps.PART_ORGN_CD = #{storeCd}
+    </select>
+
+    <!-- 게시판 공개대상 update -->
+    <!--
+        TABLE    : TB_WB_BOARD_PART_STORE
+        COMMENTS : 게시판 일부 매장
+    -->
+    <update id="getBoardPartStoreSaveUpdate" parameterType="BoardVO">
+        /* BoardMapper.getBoardPartStoreSaveUpdate */
+        UPDATE
+        TB_WB_BOARD_PART_STORE
+        SET
+        USE_YN = 'Y',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+        AND PART_ORGN_CD = #{storeCd}
+    </update>
+
+    <!-- 게시판 공개대상 delete -->
+    <!--
+        TABLE    : TB_WB_BOARD_PART_STORE
+        COMMENTS : 게시판 일부 매장
+    -->
+    <update id="getBoardPartStoreSaveDelete" parameterType="BoardVO">
+        /* BoardMapper.getBoardPartStoreSaveDelete */
+        UPDATE
+        TB_WB_BOARD_PART_STORE
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+    </update>
+
+
+
+
+
+
+
 
     <!-- 게시판 신규등록,수정 팝업 - 첨부파일 저장시 boardSeqNo 가져오기 -->
     <!--

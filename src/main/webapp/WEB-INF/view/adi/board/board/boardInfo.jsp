@@ -184,7 +184,7 @@
                         <wj-flex-grid-column header="<s:message code="boardInfo.orginlFileNm"/>" binding="orginlFileNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardInfo.del"/>" binding="del" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
 
-                        <%--팝업 조회시 필요--%>
+                        <%-- 삭제시 필요 --%>
                         <wj-flex-grid-column header="<s:message code="boardInfo.idx"/>" binding="idx" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
@@ -220,4 +220,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200305.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200305.19" charset="utf-8"></script>

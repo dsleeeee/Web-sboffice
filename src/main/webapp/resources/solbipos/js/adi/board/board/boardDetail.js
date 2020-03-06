@@ -148,7 +148,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             if($scope.boardDetail.targetFg === "1") {
                 $scope.boardDetail.targetFg = "전체";
             } else if($scope.boardDetail.targetFg === "2") {
-                $scope.boardDetail.targetFg = "특정매장";
+                $scope.boardDetail.targetFg = $scope.boardDetail.partOrgnNm;
             }
             if($scope.boardDetail.noticeYn === "Y") {
                 $scope.boardDetail.noticeYn = true;

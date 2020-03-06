@@ -91,15 +91,6 @@
                             <div id="summernoteDetail"></div>
                         </td>
                     </tr>
-                    <%--<tr>--%>
-                        <%-- 첨부파일 --%>
-                        <%--<th>--%>
-                            <%--<s:message code="boardDetail.file"/>--%>
-                        <%--</th>--%>
-                        <%--<td colspan="3">--%>
-                            <%--<a href="/testBoardAtch/20200304/1583325012469.txt" download >ddddddddd</a>--%>
-                        <%--</td>--%>
-                    <%--</tr>--%>
                     <tr>
                         <%-- 첨부파일 --%>
                         <td colspan="4">
@@ -171,7 +162,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200305.23" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200305.24" charset="utf-8"></script>
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>
