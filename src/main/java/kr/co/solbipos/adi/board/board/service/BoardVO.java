@@ -93,6 +93,15 @@ public class BoardVO extends PageVO {
     /** 구분 */
     private String statusS;
 
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 본사 또는 매장 코드 */
+    private String partOrgnCd;
+
+    /** 본사 또는 매장 명칭 */
+    private String partOrgnNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -188,4 +197,17 @@ public class BoardVO extends PageVO {
     public String getStatusS() { return statusS; }
 
     public void setStatusS(String statusS) { this.statusS = statusS; }
+
+    public String getStoreCds() { return storeCds; }
+
+    public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
+
+    public String getPartOrgnCd() { return partOrgnCd; }
+
+    public void setPartOrgnCd(String partOrgnCd) { this.partOrgnCd = partOrgnCd; }
+
+    public String getPartOrgnNm() { return partOrgnNm; }
+
+    public void setPartOrgnNm(String partOrgnNm) { this.partOrgnNm = partOrgnNm; }
+
 }

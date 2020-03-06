@@ -65,6 +65,19 @@ public interface BoardMapper {
     int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
 
 
+    /** 게시판 공개대상 insert */
+    int getBoardPartStoreSaveInsert(BoardVO boardVO);
+
+    /** 게시판 공개대상에 선택한 매장이있는지 select */
+    String getBoardParStorePartOrgnCd(BoardVO boardVO);
+
+    /** 게시판 공개대상 update */
+    int getBoardPartStoreSaveUpdate(BoardVO boardVO);
+
+    /** 게시판 공개대상 delete */
+    int getBoardPartStoreSaveDelete(BoardVO boardVO);
+
+
     /** 게시판 신규등록시 boardSeqNo 가져오기 */
     String getBoardAtchBoardSeqNo(BoardVO boardVO);
 

@@ -106,20 +106,55 @@ public class BoardServiceImpl implements BoardService {
 
         boardVO.setModDt(currentDt);
         boardVO.setModId(sessionInfoVO.getUserId());
+        boardVO.setRegDt(currentDt);
+        boardVO.setRegId(sessionInfoVO.getUserId());
 
         if (boardVO.getStatus() == GridDataFg.INSERT) {
-
-            boardVO.setRegDt(currentDt);
-            boardVO.setRegId(sessionInfoVO.getUserId());
-
             // 게시판 게시일련번호 조회(자동채번)
             String boardSeqNo = boardMapper.getBoardBoardSeqNo(boardVO);
             boardVO.setBoardSeqNo(boardSeqNo);
 
             procCnt = boardMapper.getBoardInfoSaveInsert(boardVO);
 
+            // 공개대상
+            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
+
+                // 매장 array 값 세팅
+                String[] storeCds = boardVO.getStoreCds().split(",");
+                for(int i=0; i<storeCds.length; i++) {
+                    boardVO.setStoreCd(storeCds[i]);
+
+                    // 게시판 공개대상 insert
+                    boardMapper.getBoardPartStoreSaveInsert(boardVO);
+                }
+            }
+
         } else if(boardVO.getStatus() == GridDataFg.UPDATE) {
             procCnt = boardMapper.getBoardInfoSaveUpdate(boardVO);
+
+            // 게시판 공개대상 delete
+            boardMapper.getBoardPartStoreSaveDelete(boardVO);
+
+            // 공개대상
+            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
+
+                // 매장 array 값 세팅
+                String[] storeCds = boardVO.getStoreCds().split(",");
+                for(int i=0; i<storeCds.length; i++) {
+                    boardVO.setStoreCd(storeCds[i]);
+
+                    // 게시판 공개대상에 선택한 매장이있는지 select
+                    String partOrgnCd = boardMapper.getBoardParStorePartOrgnCd(boardVO);
+
+                    if(String.valueOf(0).equals(partOrgnCd)) {
+                        // 게시판 공개대상 insert
+                        boardMapper.getBoardPartStoreSaveInsert(boardVO);
+                    } else {
+                        // 게시판 공개대상 update
+                        boardMapper.getBoardPartStoreSaveUpdate(boardVO);
+                    }
+                }
+            }
 
         } else if (boardVO.getStatus() == GridDataFg.DELETE) {
             // 게시판 delete
@@ -130,6 +165,9 @@ public class BoardServiceImpl implements BoardService {
 
             // 게시판 전체 첨부파일 delete
             boardMapper.getBoardInfoAtchDel(boardVO);
+
+            // 게시판 공개대상 delete
+            boardMapper.getBoardPartStoreSaveDelete(boardVO);
         }
 
         return procCnt;
@@ -164,7 +202,7 @@ public class BoardServiceImpl implements BoardService {
                 dir.mkdir();
             }
 
-            Iterator<String> files = multi.getFileNames();
+//            Iterator<String> files = multi.getFileNames();
 
             List<MultipartFile> fileList = multi.getFiles("file");
             for(MultipartFile mFile : fileList)
