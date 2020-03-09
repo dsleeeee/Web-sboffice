@@ -37,9 +37,9 @@
         twbi.VIEW_CNT,
         twbi.TARGET_FG,
         twbi.APPR_FG,
-        (CASE  WHEN twagi.AUTH_GRP_NM = 'HQ' THEN (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = UPPER(twbi.USER_ID)) --본사
+        (CASE WHEN twagi.AUTH_GRP_NM = 'HQ' THEN (SELECT HQ_OFFICE_NM FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = UPPER(twbi.USER_ID)) --본사
                WHEN twagi.AUTH_GRP_NM = 'STORE' THEN (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = UPPER(twbi.USER_ID))  --매장
-               WHEN twagi.AUTH_GRP_NM in ('SYSTEM','AGENCY') THEN (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD =(SELECT AGENCY_CD FROM TB_CM_EMPLOYEE WHERE USER_ID = twbi.USER_ID)) --관리자,총판
+               WHEN twagi.AUTH_GRP_NM IN ('SYSTEM','AGENCY') THEN (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD =(SELECT AGENCY_CD FROM TB_CM_EMPLOYEE WHERE USER_ID = twbi.USER_ID)) --관리자,총판
               ELSE null END
         ) AS AGENCY_NM,
         twbi.USER_ID,
@@ -419,13 +419,6 @@
         AND BOARD_SEQ_NO = #{boardSeqNo}
     </update>
 
-
-
-
-
-
-
-
     <!-- 게시판 신규등록,수정 팝업 - 첨부파일 저장시 boardSeqNo 가져오기 -->
     <!--
         TABLE    : TB_WB_BOARD_INFO
@@ -535,14 +528,42 @@
 
     <!-- 아이디에 따른 작성자 조회 -->
     <!--
-        TABLE    : TB_CM_EMPLOYEE
-        COMMENTS : [공통]시스템/대리점 사원 정보
+        TABLE    : TB_HQ_EMPLOYEE, TB_MS_EMPLOYEE, TB_CM_EMPLOYEE
+        COMMENTS : [본사]사원 정보, [매장]사원 정보, [공통]시스템/대리점 사원 정보
     -->
     <select id="getBoardUserNm"  parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardUserNm */
         SELECT
-        tce.EMP_NM
-        FROM TB_CM_EMPLOYEE tce
+        tce.USER_NM
+        FROM
+        (
+            (
+                --본사
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_HQ_EMPLOYEE
+                WHERE 1=1
+            )
+            UNION ALL
+            (
+                --매장
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_MS_EMPLOYEE
+                WHERE 1=1
+            )
+            UNION ALL
+            (
+                --관리자,총판
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_CM_EMPLOYEE
+                WHERE 1=1
+            )
+        ) tce
         WHERE 1=1
         AND tce.USER_ID = #{userId}
     </select>
