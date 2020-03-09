@@ -473,6 +473,7 @@
             FILE_PATH,
             FILE_NM,
             ORGINL_FILE_NM,
+            FILE_EXT,
             USE_YN,
             REG_DT,
             REG_ID,
@@ -485,6 +486,7 @@
             #{filePath},
             #{fileNm},
             #{orginlFileNm},
+            #{fileExt},
             'Y',
             #{regDt},
             #{regId},
@@ -681,7 +683,8 @@
         /* BoardMapper.getBoardDetailAtchList */
         SELECT
         twba.ORGINL_FILE_NM,
-        SUBSTR(twba.FILE_PATH, INSTR(twba.FILE_PATH, '\', 1, 1)) || twba.FILE_NM AS FILE_PATH
+        twba.FILE_NM,
+        twba.FILE_EXT
         FROM TB_WB_BOARD_ATCH twba
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}

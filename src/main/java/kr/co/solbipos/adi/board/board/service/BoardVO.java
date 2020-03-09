@@ -102,6 +102,9 @@ public class BoardVO extends PageVO {
     /** 본사 또는 매장 명칭 */
     private String partOrgnNm;
 
+    /** 파일확장자 */
+    private String fileExt;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -210,4 +213,7 @@ public class BoardVO extends PageVO {
 
     public void setPartOrgnNm(String partOrgnNm) { this.partOrgnNm = partOrgnNm; }
 
+    public String getFileExt() { return fileExt; }
+
+    public void setFileExt(String fileExt) { this.fileExt = fileExt; }
 }

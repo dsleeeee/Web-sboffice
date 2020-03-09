@@ -187,10 +187,13 @@ public class BoardServiceImpl implements BoardService {
 
             // 현재 일자
             String currentDate = currentDateString();
+
+            // 저장 경로 설정 (개발시 로컬)
+//            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\";
+
             // 파일서버 대응 경로 지정 (운영)
-//        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
-//            String path = "C:\\testBoardAtch\\" + currentDate + "\\";
-            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\" + currentDate + "\\";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "board/";
+
             // 업로드 되는 파일명
             String newFileName = "";
             // 원본 파일명
@@ -211,6 +214,7 @@ public class BoardServiceImpl implements BoardService {
                 orgFileName = mFile.getOriginalFilename(); // 원본 파일명
                 String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
 
+                orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
                 // orgFileName
                 // IE에선 C:\Users\김설아\Desktop\123\new2.txt
                 // 크롬에선 new2.txt
@@ -218,8 +222,6 @@ public class BoardServiceImpl implements BoardService {
                     orgFileName = orgFileName.substring(orgFileName.lastIndexOf("\\"));
                     orgFileName = orgFileName.substring(1);
                 }
-
-                newFileName = newFileName+"."+fileExt;
 
                 if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
 
@@ -230,6 +232,8 @@ public class BoardServiceImpl implements BoardService {
                     boardInfo.setFileNm(newFileName);
                     // 원본 파일명
                     boardInfo.setOrginlFileNm(orgFileName);
+                    // 파일확장자
+                    boardInfo.setFileExt(fileExt);
                 }
 
                 // 파일 저장하는 부분
@@ -339,7 +343,7 @@ public class BoardServiceImpl implements BoardService {
 
     /** 게시판 첨부파일 조회 */
     @Override
-    public List<BoardVO> getBoardDetailAtchList(BoardVO boardVO,  SessionInfoVO sessionInfoVO) {
+    public List<BoardVO> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO) {
 
         return boardMapper.getBoardDetailAtchList(boardVO);
     }
