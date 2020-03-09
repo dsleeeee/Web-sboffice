@@ -86,7 +86,7 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                        AND twbi.APPR_FG = '2'
+                        AND ( (twbi.APPR_FG = '2') OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId}) OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId}) )
                     ]]>
                 </if>
             </when>
