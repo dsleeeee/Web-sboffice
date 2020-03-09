@@ -209,10 +209,12 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     innerHtml += "<th rowspan='"+list.length+"'>"+messages["boardDetail.file"]+"</th>";
                 }
                 // innerHtml += "<a href=\"" + list[i].filePath + "\">" + list[i].orginlFileNm + "</a>";
-                innerHtml += "<td>"+"<a href=\"" + list[i].filePath + "\" download >" + list[i].orginlFileNm + "</a>"+"</td>";
+                // innerHtml += "<td>"+"<a href=\"" + list[i].filePath + "\" download >" + list[i].orginlFileNm + "</a>"+"</td>";
+                // innerHtml += "<td><a href=\"http://www.naver.com\" >" + list[i].orginlFileNm + "</a></td>";
+                // innerHtml += "<td><a href=\"/adi/board/board/board/getBoardDetailAtchDownload.sb\" >" + list[i].orginlFileNm + "</a></td>";
+                innerHtml += "<td><a href=\"/adi/board/board/board/getBoardDetailAtchDownload.sb?fileNm=" + list[i].fileNm + "&orginlFileNm=" + list[i].orginlFileNm + "&fileExt=" + list[i].fileExt + "\">" + list[i].orginlFileNm +"."+ list[i].fileExt + "</a></td>";
                 innerHtml += "</tr>";
             }
-
 
             $("#fileContent").html(innerHtml);
         });
