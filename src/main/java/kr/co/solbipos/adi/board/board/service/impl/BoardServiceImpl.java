@@ -58,6 +58,8 @@ public class BoardServiceImpl implements BoardService {
         // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
         boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+        boardVO.setUserId(sessionInfoVO.getUserId());
+
         return boardMapper.getBoardList(boardVO);
     }
 
