@@ -21,11 +21,13 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO, TB_WB_AUTHOR_GRP_INFO,
                    TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
                    TB_MS_EMPLOYEE, TB_MS_STORE,
-                   TB_CM_EMPLOYEE, TB_CM_AGENCY
+                   TB_CM_EMPLOYEE, TB_CM_AGENCY,
+                   TB_WB_BOARD_PART_STORE
         COMMENTS : 게시판 정보, 웹 사용자 정보, 권한 그룹 정보,
                    [본사]사원 정보, [본사]본사 정보,
                    [매장]사원 정보, [매장]매장 정보,
-                   [공통]시스템/대리점 사원 정보, [공통]대리점 정보
+                   [공통]시스템/대리점 사원 정보, [공통]대리점 정보,
+                   게시판 일부 매장
     -->
     <select id="getBoardList"  parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardList */
@@ -86,7 +88,15 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
-                        AND ( (twbi.APPR_FG = '2') OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId}) OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId}) )
+                        AND (
+                                (twbi.APPR_FG = '2')
+                                OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
+                                OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId})
+                            )
+                        AND (
+                              ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
+                               OR (twbi.TARGET_FG = '1')
+                            )
                     ]]>
                 </if>
             </when>
@@ -418,23 +428,6 @@
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}
     </update>
-
-    <!-- 게시판 신규등록,수정 팝업 - 첨부파일 저장시 boardSeqNo 가져오기 -->
-    <!--
-        TABLE    : TB_WB_BOARD_INFO
-        COMMENTS : 게시판 정보
-    -->
-    <select id="getBoardAtchBoardSeqNo"  parameterType="BoardVO" resultType="String">
-        /* BoardMapper.getBoardAtchBoardSeqNo */
-        SELECT
-        MAX(twbi.BOARD_SEQ_NO) AS BOARD_SEQ_NO
-        FROM TB_WB_BOARD_INFO twbi
-        WHERE 1=1
-        AND twbi.BOARD_CD = #{boardCd}
-        AND twbi.TITLE = #{title}
-        AND twbi.USER_NM = #{userNm}
-        AND twbi.REG_ID = #{regId}
-    </select>
 
     <!-- 첨부파일 저장시 IDX (자동채번) -->
     <!--
