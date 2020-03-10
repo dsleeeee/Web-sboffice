@@ -677,7 +677,7 @@
         /* BoardMapper.getBoardInfoAtchList */
         SELECT
 --         SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
-        twba.ORGINL_FILE_NM,
+        (twba.ORGINL_FILE_NM || '.' || twba.FILE_EXT) AS ORGINL_FILE_NM,
         '삭제' AS DEL,
         twba.IDX
         FROM TB_WB_BOARD_ATCH twba
