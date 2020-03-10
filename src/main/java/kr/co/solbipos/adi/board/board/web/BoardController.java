@@ -158,6 +158,7 @@ public class BoardController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = boardService.getBoardInfoSave(boardVO, sessionInfoVO);
+//        System.out.println("test1111 : " + result);
 
         return returnJson(Status.OK, result);
     }

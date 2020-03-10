@@ -172,6 +172,13 @@ public class BoardServiceImpl implements BoardService {
             boardMapper.getBoardPartStoreSaveDelete(boardVO);
         }
 
+        // 첨부파일 저장할때 쓰려고
+        if (procCnt > 0){
+            if (boardVO.getStatus() == GridDataFg.INSERT) {
+                procCnt = Integer.parseInt(boardVO.getBoardSeqNo());
+            }
+        }
+
         return procCnt;
     }
 
@@ -251,20 +258,20 @@ public class BoardServiceImpl implements BoardService {
                 boardInfo.setRegDt(currentDt);
                 boardInfo.setRegId(sessionInfo.getUserId());
 
-                boardInfo.setStatusS((String)multi.getParameter("status"));
+//                boardInfo.setStatusS((String)multi.getParameter("status"));
                 boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
                 boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
 
                 // 게시물이 신규 일때 boardSeqNo 가져오기
-                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
-
-                    boardInfo.setTitle((String)multi.getParameter("title"));
-                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
-
-                    // 게시판 신규등록시 boardSeqNo 가져오기
-                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
-                    boardInfo.setBoardSeqNo(boardSeqNo);
-                }
+//                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
+//
+//                    boardInfo.setTitle((String)multi.getParameter("title"));
+//                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
+//
+//                    // 게시판 신규등록시 boardSeqNo 가져오기
+//                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
+//                    boardInfo.setBoardSeqNo(boardSeqNo);
+//                }
 
                 // 첨부파일 저장시 IDX (자동채번)
                 String idx = boardMapper.getBoardAtchIdx(boardInfo);

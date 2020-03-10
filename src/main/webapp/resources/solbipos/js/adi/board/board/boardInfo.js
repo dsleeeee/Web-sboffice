@@ -211,33 +211,50 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
+        // $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
+        $.ajax({
+            type: "POST",
+            url: "/adi/board/board/board/getBoardInfoSave.sb",
+            data:  JSON.stringify(params),
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                if (result.status === "OK") {
+                    // 신규
+                    if(params.status === "I") {
+                        params.boardSeqNo = result.data;
+                    }
+                    //첨부파일 저장
+                    $scope.atchSave(params);
 
-        //첨부파일 저장
-        $scope.atchSave(params);
+                    $scope._popMsg("저장되었습니다.");
+                }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json'
+        });
     });
 
     // 첨부파일 저장
     $scope.atchSave = function(data){
-        var params = {};
-        params.boardCd = data.boardCd;
-        params.boardSeqNo = data.boardSeqNo;
-        params.title = data.title;
-        params.userNm = data.userNm;
-        // 신규
-        if(data.status === "I") {
-            params.status = "INSERT";
-        // 수정
-        } else if (params.status === "U") {
-            params.status = "UPDATE";
-        }
 
         var formData = new FormData($("#boradForm")[0]);
-        formData.append("boardCd", params.boardCd);
-        formData.append("boardSeqNo", params.boardSeqNo);
-        formData.append("status", params.status);
-        formData.append("title", params.title);
-        formData.append("userNm", params.userNm);
+        formData.append("boardCd", data.boardCd);
+        formData.append("boardSeqNo", data.boardSeqNo);
 
         var url = '/adi/board/board/board/getBoardInfoAtchSave.sb';
 
