@@ -154,6 +154,9 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.setSelectedBoardInfo(null);
 
+        var storeScope = agrid.getScope('boardInfoCtrl');
+        storeScope._gridDataInit();   // 그리드 초기화
+
         // 서머노트 리셋
         $('#summernote').summernote('reset');
 
