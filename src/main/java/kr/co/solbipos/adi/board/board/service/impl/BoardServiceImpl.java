@@ -187,7 +187,8 @@ public class BoardServiceImpl implements BoardService {
     public boolean getBoardInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
 //        System.out.println("test1111");
-        boolean isSuccess = false;
+//        boolean isSuccess = false;
+        boolean isSuccess = true;
 
         try{
 
@@ -223,8 +224,10 @@ public class BoardServiceImpl implements BoardService {
                 orgFileName = mFile.getOriginalFilename(); // 원본 파일명
                 String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
 
-                orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
                 // orgFileName
+                if ( orgFileName.contains(".") ) {
+                    orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
+                }
                 // IE에선 C:\Users\김설아\Desktop\123\new2.txt
                 // 크롬에선 new2.txt
                 if ( orgFileName.contains("\\") ) {
@@ -233,7 +236,6 @@ public class BoardServiceImpl implements BoardService {
                 }
 
                 if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
-
 //                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
                     // 파일경로
                     boardInfo.setFilePath(path);
@@ -243,28 +245,25 @@ public class BoardServiceImpl implements BoardService {
                     boardInfo.setOrginlFileNm(orgFileName);
                     // 파일확장자
                     boardInfo.setFileExt(fileExt);
-                }
 
-                // 파일 저장하는 부분
-                try {
-                    mFile.transferTo(new File(path+newFileName));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                String currentDt = currentDateTimeString();
-                boardInfo.setModDt(currentDt);
-                boardInfo.setModId(sessionInfo.getUserId());
-                boardInfo.setRegDt(currentDt);
-                boardInfo.setRegId(sessionInfo.getUserId());
+                    String currentDt = currentDateTimeString();
+                    boardInfo.setModDt(currentDt);
+                    boardInfo.setModId(sessionInfo.getUserId());
+                    boardInfo.setRegDt(currentDt);
+                    boardInfo.setRegId(sessionInfo.getUserId());
 
-//                boardInfo.setStatusS((String)multi.getParameter("status"));
-                boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
-                boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
+                    boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
+                    boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
 
-                // 게시물이 신규 일때 boardSeqNo 가져오기
+                    // 게시물이 신규 일때 boardSeqNo 가져오기
 //                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
-//
 //                    boardInfo.setTitle((String)multi.getParameter("title"));
 //                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
 //
@@ -273,15 +272,16 @@ public class BoardServiceImpl implements BoardService {
 //                    boardInfo.setBoardSeqNo(boardSeqNo);
 //                }
 
-                // 첨부파일 저장시 IDX (자동채번)
-                String idx = boardMapper.getBoardAtchIdx(boardInfo);
-                boardInfo.setIdx(idx);
+                    // 첨부파일 저장시 IDX (자동채번)
+                    String idx = boardMapper.getBoardAtchIdx(boardInfo);
+                    boardInfo.setIdx(idx);
 
-                // 첨부파일 저장 isert
-                if(boardMapper.getBoardInfoAtchSaveIsert(boardInfo) > 0) {
-                    isSuccess = true;
-                } else {
-                    isSuccess = false;
+                    // 첨부파일 저장 isert
+                    if(boardMapper.getBoardInfoAtchSaveIsert(boardInfo) > 0) {
+                        isSuccess = true;
+                    } else {
+                        isSuccess = false;
+                    }
                 }
             }
             

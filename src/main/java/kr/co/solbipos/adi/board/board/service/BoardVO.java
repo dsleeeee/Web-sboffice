@@ -90,9 +90,6 @@ public class BoardVO extends PageVO {
     /** 파일 명 */
     private String fileNm;
 
-    /** 구분 */
-    private String statusS;
-
     /** 조회매장 */
     private String storeCds;
 
@@ -196,10 +193,6 @@ public class BoardVO extends PageVO {
     public String getFileNm() { return fileNm; }
 
     public void setFileNm(String fileNm) { this.fileNm = fileNm; }
-
-    public String getStatusS() { return statusS; }
-
-    public void setStatusS(String statusS) { this.statusS = statusS; }
 
     public String getStoreCds() { return storeCds; }
 
