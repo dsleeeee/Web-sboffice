@@ -242,11 +242,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

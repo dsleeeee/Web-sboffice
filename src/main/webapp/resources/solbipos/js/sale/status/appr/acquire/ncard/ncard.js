@@ -67,7 +67,7 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
         	params.posNo = new Array();
 	        params.saleYn = $scope.srchSaleYn;
 	        params.apprProcFg = $scope.srchApprProcFg;
-	        if(params.posNo == "" && params.cornrCd == ""){
+	        if(params.posNo == ""){
 	        	params.storeCd   = selectedRow.storeCd;
 	        }
 	    	params.acquireCd = selectedRow.acquireCd;

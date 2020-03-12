@@ -71,9 +71,7 @@
     </table>
     <div style="clear: both;"></div>
 
-    <!-- contents start -->
-    <%-- wj grid start --%>
-    <div class="subCon wj-TblWrap">
+
             <%-- left --%>
             <div class="w50 fl" ng-controller="posDayPeriodMainCtrl">
             <div class="mt20 oh sb-select dkbr pd10">
@@ -92,8 +90,9 @@
             <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriod()"><s:message code="cmm.excel.down" />
             </button>
             </div>
-            <div class="wj-TblWrapBr mr10 pd10">
-                <div style="height:300px">
+            <%--위즈모 테이블--%>
+		    <div class="w100 mt10" id="wjWrapType1">
+		      <div class="wj-gridWrap">
                    <wj-flex-grid
                       id="posDayPeriodGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -142,8 +141,9 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriodDtl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-                <div class="wj-TblWrapBr ml10 pd10">
-                    <div style="height:300px">
+                <%--위즈모 테이블--%>
+			    <div class="w100 mt10" id="wjWrapType1">
+			      <div class="wj-gridWrap">
                        <wj-flex-grid
                           id="posDayPeriodDtlGrid"
                           autoGenerateColumns="false"
@@ -179,7 +179,6 @@
     </div>
     <%-- //wj grid end --%>
 <!-- //contents end -->
-</div>
 
 <script type="text/javascript">
 </script>

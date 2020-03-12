@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprAcquireCardView" class="subCon"  ng-controller="apprAcquireCardCtrl">
+<div id="apprAcquireCardView" class="subCon3"  ng-controller="apprAcquireCardCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="store.pay1"/></a>
       <%-- 조회 --%>
@@ -148,7 +148,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="apprAcquireCardGrid"
           autoGenerateColumns="false"

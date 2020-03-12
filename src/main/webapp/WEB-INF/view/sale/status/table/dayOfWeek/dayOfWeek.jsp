@@ -86,9 +86,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 395px;">
+	<%--위즈모 테이블--%>
+	<div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="tableDayOfWeekGrid"
 				autoGenerateColumns="false"

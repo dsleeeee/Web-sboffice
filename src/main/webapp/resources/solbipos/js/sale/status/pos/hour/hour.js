@@ -249,11 +249,11 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posHourSelectPosCd").val();
 	    			storePosNm = $("#posHourSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

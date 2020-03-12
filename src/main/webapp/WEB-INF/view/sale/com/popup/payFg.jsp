@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/com/popup/"/>
 
 <wj-popup id="payFgLayer" control="payFgLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
@@ -31,9 +32,17 @@
 
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleDate"/>" 	binding="saleDate" 		width="150" align="center"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodpayfg.posNm"/>" 	binding="posNo" 		width="120" align="center"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodpayfg.billNo"/>" 	binding="billNo" 		width="120" align="center"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.billDt"/>" 		binding="billDt" 		width="200" align="center""></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.storeCd"/>" 		binding="storeCd" 		width="150" align="center" visible="false"></wj-flex-grid-column>
+	          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.storeNm"/>" 		binding="storeNm" 		width="150" align="center"></wj-flex-grid-column>
+	          </c:if>
+	          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.storeNm"/>" 		binding="storeNm" 		width="150" align="center" visible="false"></wj-flex-grid-column>
+	          </c:if>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.saleFg"/>" 		binding="saleFg" 		width="150" align="center" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodpayfg.posNm"/>" 		binding="posNo" 		width="140" align="center"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodpayfg.billNo"/>" 		binding="billNo" 		width="140" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.billDt"/>" 		binding="billDt" 		width="*" align="center""></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmt"/>" 		binding="payAmt" 		width="150" align="right" aggregate="Sum"></wj-flex-grid-column>
 	      </div>
 	    </div>
@@ -44,3 +53,13 @@
 </wj-popup>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/com/payFg.js?ver=20190207.01" charset="utf-8"></script>
+
+<%-- 영수증 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/billSalePop.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<c:import url="/WEB-INF/view/sale/com/popup/billRtnPop.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

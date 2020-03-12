@@ -28,6 +28,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="storeCd" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="saleDate" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="posNo" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>" 		binding="billNo"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billDt"/>" 		binding="billDt"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
@@ -56,8 +58,12 @@
 </wj-popup>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.01" charset="utf-8"></script>
-<%-- 매출상세내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
+<%-- 영수증 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/billSalePop.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<c:import url="/WEB-INF/view/sale/com/popup/billRtnPop.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

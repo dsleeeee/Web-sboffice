@@ -126,9 +126,16 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empPosCtrl", function (event, data) {
-
-	 $scope.getEmpNmList();
-	 $scope.searchEmpPosList(true);
+    if( $("#empPosSelectStoreCd").val() === ''){
+   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+   	 	return false;
+    }   
+    if(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
+   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+	$scope.getEmpNmList();
+	$scope.searchEmpPosList(true);
 
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -136,9 +143,16 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 
   	//다른 컨트롤러의 broadcast 받기
 	$scope.$on("empPosCtrlSrch", function (event, data) {
-
-		 $scope.getEmpNmList();
-		 $scope.searchEmpPosList(false);
+	    if( $("#empPosSelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }   
+	    if(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
+	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+	   	 	return false;
+	    }
+		$scope.getEmpNmList();
+		$scope.searchEmpPosList(false);
 
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
@@ -156,18 +170,8 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
 	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
-    
-    if( $("#empPosSelectStoreCd").val() === ''){
-   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-   	 	return false;
-    }   
-    
+      
     params.isPageChk = isPageChk;
-
-    if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-   	 	return false;
-    }
 
     if($scope.isCheckedEmpAll){
     	params.empChk = "Y";

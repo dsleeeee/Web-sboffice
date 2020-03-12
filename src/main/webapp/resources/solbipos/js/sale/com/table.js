@@ -16,7 +16,43 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+    
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
 
+        if (col.binding === "billNo") { // 결제수단
+        	var item = s.rows[e.row].dataItem;
+          	wijmo.addClass(e.cell, 'wijLink');
+        } 
+      }
+    });
+    
+    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params       = {};
+        	params.storeCd   = selectedRow.storeCd;
+        	params.posNo   	 = selectedRow.posNo;
+        	params.saleDate  = selectedRow.saleDate;
+        	params.billNo	 = selectedRow.billNo;
+
+        if (col.binding === "billNo") { // 영수증번호
+        	//판매여부 
+        	if(selectedRow.saleFg === "판매"){
+        		$scope._broadcast('billSalePopCtrl', params);
+        	}else if(selectedRow.saleFg === "반품"){
+        		$scope._broadcast('billRtnPopCtrl', params);
+        	}
+        } 
+      }
+    });
+   
  // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -86,7 +122,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("saleComTableCtrl", function (event, data) {
-
+	  	  
     $scope.storeCd  	= data.storeCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
@@ -109,6 +145,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.searchSaleComTableList = function () {
     // 파라미터
     var params      	= {};
+
     if($scope.gubun == "month"){
     	params.storeCd  	= $scope.storeCd;
     	params.tblCd    	= $scope.tblCd;

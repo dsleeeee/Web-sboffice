@@ -250,11 +250,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			storePosCd = $("#posDayOfWeekSelectPosCd").val();
 	    			storePosNm = $("#posDayOfWeekSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

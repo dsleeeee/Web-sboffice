@@ -35,7 +35,7 @@
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
-                      selection-mode="Month" 
+                      selection-mode="Month"
                       format="y">
               </wj-input-date>
             </span>
@@ -48,7 +48,7 @@
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
-                      selection-mode="Month" 
+                      selection-mode="Month"
                       format="y">
               </wj-input-date>
             </span>
@@ -57,10 +57,10 @@
 				<label for="chkDt">
 					<s:message code="cmm.all.day" />
 				</label>
-			</span>  
+			</span>
         </div>
         </td>
-        
+
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="cornerMonthSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
@@ -79,13 +79,13 @@
             </jsp:include>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="cornerMonthSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
                 <input type="hidden" id="cornerMonthSelectCornerCd" value=""/>
                 <input type="hidden" id="cornerMonthSelectCornerName" value=""/>
       </tr>
-      
+
       <tr>
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrDisplay" /></th>
@@ -100,7 +100,7 @@
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
@@ -121,9 +121,9 @@
     </button>
   </div>
 
-    <div class="w100 mt10">
-      <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+    <%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
         <wj-flex-grid
           id="cornrMonthGrid"
           autoGenerateColumns="false"
@@ -147,7 +147,7 @@
       </div>
       <%--//위즈모 테이블--%>
     </div>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
    <%-- id --%>

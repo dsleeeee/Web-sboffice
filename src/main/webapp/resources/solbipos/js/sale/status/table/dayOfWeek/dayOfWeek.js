@@ -109,8 +109,10 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
-				params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
+				if(!$scope.isChecked){
+					params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
+					params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
+				}
 	    		params.saleDay    = selectedRow.saleDay;
 	    		params.chkPop   = "tablePop";
 
@@ -129,7 +131,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
-        			params.tblCd	 = storeTable;
+        			params.tblCd	 = storeTable.join(",");;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}

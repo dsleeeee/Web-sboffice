@@ -55,13 +55,13 @@
           	</td>
         </tr>
       	</c:if>
-     	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+     	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
         	<input type="hidden" id="prodRankSelectStoreCd" value="${sessionInfo.storeCd}"/>
       	</c:if>
       	</tbody>
 		</table>
     	<div style="clear: both;"></div>
-	
+
 		<div class="mt40 oh sb-select dkbr">
 		    <%-- 페이지 스케일  --%>
 		    <wj-combo-box
@@ -81,10 +81,10 @@
 		    <button class="btn_skyblue fr" ng-click="excelDownloadRank()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
-	
-	    <div class="w100 mt10">
+
+	    <div class="w100 mt10" id="wjWrapType1">
 	      <%--위즈모 테이블--%>
-	      <div class="wj-gridWrap" style="height: 350px;">
+	      <div class="wj-gridWrap">
 	        <wj-flex-grid
 	          autoGenerateColumns="false"
 	          selection-mode="Row"
@@ -93,7 +93,7 @@
 	          initialized="initGrid(s,e)"
 	          is-read-only="true"
 	          item-formatter="_itemFormatter">
-	
+
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -113,7 +113,7 @@
 	        <%--// ColumnPicker 사용시 include --%>
 	      </div>
 	      <%--//위즈모 테이블--%>
-      
+
 	      <%-- 페이지 리스트 --%>
 		  <div class="pageNum mt20">
 		    <%-- id --%>

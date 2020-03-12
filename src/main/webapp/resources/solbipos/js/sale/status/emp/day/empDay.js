@@ -52,7 +52,7 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;
 	        var params       = {};
-	        	params.chkPop	= "tablePop";
+	        	params.chkPop	= "empPop";
 	        	params.storeCd   = $("#empDaySelectStoreCd").val();
 	        	params.saleDate   = selectedRow.saleDate;
 	        if (col.binding === "totBillCnt") { // 수량
@@ -124,6 +124,15 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayCtrl", function (event, data) {
+	 
+     if( $("#empDaySelectStoreCd").val() === ''){
+    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+    	 return false;
+     }   
+     if( wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
+    	 $scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+    	 return false;
+     }  
 	  
 	 $scope.getEmpNmList(true);    
 	 $scope.searchEmpDayList(true);
@@ -134,6 +143,16 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("empDayCtrlSrch", function (event, data) {
+	 
+     if( $("#empDaySelectStoreCd").val() === ''){
+   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+   	 	return false;
+     }   
+
+     if( wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
+   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+     } 
 	  
 	 $scope.getEmpNmList(false);    
 	 $scope.searchEmpDayList(false);
@@ -152,14 +171,6 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    }
-    if( $("#empDaySelectStoreCd").val() === ''){
-   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-   	 	return false;
-    }   
-    if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-   	 	return false;
     }
     if($scope.isCheckedEmpAll){
     	params.empChk = "Y";

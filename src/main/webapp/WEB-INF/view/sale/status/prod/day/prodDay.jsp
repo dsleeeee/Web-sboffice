@@ -11,12 +11,12 @@
 <div id="prodDayView" class="subCon" style="display: none;">
 	<div ng-controller="prodDayCtrl">
 		<div class="searchBar flddUnfld">
-			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>		
+			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>
 	    	<%-- 조회 --%>
 	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodDayCtrlSrch')">
 	    		<s:message code="cmm.search"/>
-	    	</button>		
-		</div> 
+	    	</button>
+		</div>
 	    <%-- 조회조건 --%>
 	    <table class="searchTbl">
 			<colgroup>
@@ -51,7 +51,7 @@
 	        <th><s:message code="prodcalss.prodNm" /></th>
 	        <td><input type="text" id="srchDayProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
 	      	</tr>
-	      	
+
 	        <tr>
 	        	<%-- 분류조회 --%>
 		        <th><s:message code="prod.prodClass" /></th>
@@ -76,13 +76,13 @@
 	              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 	          	</td>
 	          	</c:if>
-	        </tr>	      	
-	      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+	        </tr>
+	      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	        	<input type="hidden" id="pordDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
 	      	</c:if>
 			</tbody>
 		</table>
-       	
+
 		<div class="mt40 oh sb-select dkbr">
 		    <%-- 페이지 스케일  --%>
 		    <wj-combo-box
@@ -103,10 +103,10 @@
 		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
 		    </button>
 		</div>
-	  
+
 		<%--위즈모 테이블--%>
-	    <div class="w100 mt10">   
-	      <div class="wj-gridWrap" style="height: 350px;">
+	    <div id="wjWrapType1" class="w100 mt10">
+	      <div class="wj-gridWrap">
 	        <wj-flex-grid
 	          autoGenerateColumns="false"
 	          control="flex"
@@ -115,20 +115,20 @@
 	          selection-mode="Row"
 	          items-source="data"
 	          item-formatter="_itemFormatter">
-	
+
 	          <!-- define columns -->
 	          <wj-flex-grid-column header="<s:message code="prodday.saleDate"/>" 	binding="saleDate" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>          
+	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleQty"/>" 	binding="totSaleQty" 	width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totDcAmt"/>" 	binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.realSaleAmt"/>" binding="realSaleAmt" 	width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	        </wj-flex-grid>
-	        
+
 	        <%-- ColumnPicker 사용시 include --%>
 	        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
 	          <jsp:param name="pickerTarget" value="prodDayCtrl"/>
@@ -137,7 +137,7 @@
 	      </div>
 	    </div>
 	    <%--//위즈모 테이블--%>
-	    
+
 	  <%-- 페이지 리스트 --%>
 	  <div class="pageNum mt20">
 	    <%-- id --%>
@@ -145,7 +145,7 @@
 	    </ul>
 	  </div>
 	  <%--//페이지 리스트--%>
-	</div>  
+	</div>
 </div>
 <script type="text/javascript">
 </script>

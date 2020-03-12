@@ -102,13 +102,18 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayCtrl", function (event, data) {
-
-		$scope.searchPosDayList(true);
-
+		
+		if( $("#posDaySelectStoreCd").val() === ''){
+	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	   	 	return false;
+	    }  
+		
 		var storeCd = $("#posDaySelectStoreCd").val();
 		var posCd = $("#posDaySelectPosCd").val();
 
-//		$scope.getRePosNmList(storeCd, posCd);
+		$scope.getRePosNmList(storeCd, posCd);		
+		$scope.searchPosDayList(true);
+
 	});
 
 	// 다른 컨트롤러의 broadcast 받기
@@ -119,13 +124,13 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	   	 	return false;
 	    }  
 		
-		$scope.searchPosDayList(false);
-
 		var storeCd = $("#posDaySelectStoreCd").val();
 		var posCd = $("#posDaySelectPosCd").val();
-		console.log("storeCd ::"+storeCd);
-		console.log("posCd ::"+posCd);
-		$scope.getRePosNmList(storeCd, posCd);
+
+		$scope.getRePosNmList(storeCd, posCd);	
+		$scope.searchPosDayList(false);
+
+
 	});
 
 	// 포스별매출일자별 리스트 조회
@@ -228,6 +233,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 	//매장의 포스 리스트 재생성
 	$scope.getRePosNmList = function (storeCd, posCd) {
+
 		var url = "/sale/status/pos/pos/posNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
@@ -257,12 +263,12 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 	    			storePosCd = $("#posDaySelectPosCd").val();
 	    			storePosNm = $("#posDaySelectPosName").val();
-
-	    			if (!checkInt) {
+	    			
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

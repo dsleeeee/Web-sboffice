@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprNcardView" class="subCon"  ng-controller="apprNcardCtrl">
+<div id="apprNcardView" class="subCon3"  ng-controller="apprNcardCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="dailyReport.apprNcard"/></a>
       <%-- 조회 --%>
@@ -137,7 +137,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="apprNcardGrid"
           autoGenerateColumns="false"

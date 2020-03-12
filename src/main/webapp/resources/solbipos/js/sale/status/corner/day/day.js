@@ -64,14 +64,14 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.startDate = selectedRow.saleDate;
         	params.endDate   = selectedRow.saleDate;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-        		if(arrStoreCornr != ""){
-        			params.arrStoreCornr	 = arrStoreCornr;
-        		}else{
-        			params.storeCd	 = $("#cornerDaySelectStoreCd").val();
-        		}
+    			params.arrStoreCornr	 = arrStoreCornr;
+    			params.storeCd	 = $("#cornerDaySelectStoreCd").val();
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {       
             	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
+            	if(gvOrgnFg == "S"){
+            		params.storeCd	 = $("#cornerDaySelectStoreCd").val();
+            	}
         		$scope._broadcast('saleComProdCtrl', params);
             }
       }

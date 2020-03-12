@@ -13,6 +13,28 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('abcCtrl', $scope, $http, $timeout, true));
 
+  // 상품 본사통제구분 (H : 본사, S: 매장)
+  $scope.prodEnvstVal = prodEnvstVal;
+  $scope.userOrgnFg = gvOrgnFg;
+
+  // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
+  $scope.userStoreCd = gvStoreCd;
+  $scope.btnShowFg = false;
+
+  if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+    || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+        $scope.btnShowFg = true;
+  }
+
+  // 상품 상세 정보
+  $scope.prodInfo = {};
+  $scope.setProdInfo = function(data){
+    $scope.prodInfo = data;
+  };
+  $scope.getProdInfo = function(){
+    return $scope.prodInfo;
+  };
+
   $scope.srchAbcStartDate = wcombo.genDateVal("#srchAbcStartDate", getToday());
   $scope.srchAbcEndDate   = wcombo.genDateVal("#srchAbcEndDate", getToday());
 
@@ -50,14 +72,8 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        var params      = {};
-//        console.log(selectedRow);
-        //params.chkPop   = "tablePop";
-        params.prodCd = selectedRow.prodCd;
-        params.saleDate = selectedRow.saleDate;
-
-        if (col.binding === "prodCd") { //상품코드 클릭
-          $scope._broadcast('saleComTableCtrl', params);
+        if( col.binding === "prodCd") {
+            $scope.searchProdDetail(selectedRow.prodCd);
         }
       }
     });
@@ -85,6 +101,8 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
 
     // 파라미터
     var params       = {};
+    params.orgnFg    = $scope.orgnFg;
+    params.hqOfficeCd    = $scope.hqOfficeCd;
     params.gradeA = $("#abcGradeA").val();
     params.gradeB = $("#abcGradeB").val();
     params.gradeC = $("#abcGradeC").val();
@@ -92,10 +110,7 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     params.storeCd = $("#abcSelectStoreCd").val();
     params.listScale = $scope.listScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
-    params.orgnFg    = $scope.orgnFg;
-    params.hqOfficeCd    = $scope.hqOfficeCd;
 
-    console.log(params);
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchAbcStartDate.value, 'yyyyMMdd');
@@ -148,4 +163,42 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     }, 10);
   };
 
+  // 상세정보 팝업
+  $scope.searchProdDetail = function(prodCd) {
+    var detailPopUp = $scope.prodDetailLayer;
+    setTimeout(function() {
+      detailPopUp.show(true, function (s) {
+        // 수정 버튼 눌렀을때만
+        if (s.dialogResult === "wj-hide-apply") {
+          // 상품정보 수정 팝업
+          var modifyPopUp = $scope.prodModifyLayer;
+          modifyPopUp.show();
+          /*modifyPopUp.show(true, function (s) {
+            // 상품정보 수정 팝업 - 저장
+            if (s.dialogResult === "wj-hide-apply") {
+              // 팝업 속성에서 상품정보 get
+              var params = s.data;
+              // 저장수행
+              $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function () {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+              });
+            }
+          });*/
+        }
+      });
+    }, 50);
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+    // 상품상세정보 팝업 핸들러 추가
+    $scope.prodDetailLayer.shown.addHandler(function (s) {
+      var selectedRow = $scope.flex.selectedRows[0]._data;
+      setTimeout(function() {
+        var params = {};
+        params.prodCd = selectedRow.prodCd;
+        $scope._broadcast('prodDetailCtrl', params);
+      }, 50);
+    });
+  });
 }]);

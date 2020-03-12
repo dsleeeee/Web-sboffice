@@ -10,187 +10,6 @@
 	-->
 
     <select id="getAbcList" parameterType="abcVO" resultType="DefaultMap">
-        <!-- <include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT A.LV1_CD,
-		       A.LV1_NM,
-		       A.LV2_CD,
-		       A.LV2_NM,
-		       A.LV3_CD,
-		       A.LV3_NM,
-		       C.PROD_CD,
-		       B.PROD_NM,
-		       C.STORE_CD,
-               C.STORE_NM,
-               C.PROD_CD,
-               C.REAL_SALE_AMT,
-               C.TOT_SALE_QTY,
-               C.RAT,
-               C.ACC_RAT,
-               C.GRADE
-		  <include refid="CmmSQL.PagingTemplateCount"/>
-		  FROM
-		  <choose>
-		  <when test='orgnFg != null and orgnFg == "H"'>    본사
-		            (
-		             SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-		                     A.PROD_CLASS_CD     AS LV2_CD,
-		                     A.PROD_CLASS_NM     AS LV2_NM,
-		                     B.PROD_CLASS_CD     AS LV3_CD,
-		                     B.PROD_CLASS_NM     AS LV3_NM,
-		                     (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-		                     (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-		                     (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
-		             FROM    (
-		                         SELECT  HQ_OFFICE_CD,
-		                               P_PROD_CLASS_CD,
-		                               PROD_CLASS_CD,
-		                               PROD_CLASS_NM
-		                         FROM    TB_HQ_PRODUCT_CLASS
-		                         WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-		                         AND     P_PROD_CLASS_CD IN (
-		                                                        SELECT  PROD_CLASS_CD
-		                                                        FROM    TB_HQ_PRODUCT_CLASS
-		                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-		                                                        AND     P_PROD_CLASS_CD = '00000'
-		                                                     )
-		                     )                    AS  A,
-		                     TB_HQ_PRODUCT_CLASS  AS  B
-		             WHERE   B.P_PROD_CLASS_CD IN    (
-		                                                 SELECT  PROD_CLASS_CD
-		                                                 FROM    TB_HQ_PRODUCT_CLASS
-		                                                 WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-		                                                 AND     P_PROD_CLASS_CD IN (
-		                                                                          SELECT  PROD_CLASS_CD
-		                                                                                FROM    TB_HQ_PRODUCT_CLASS
-		                                                                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-		                                                                                AND     P_PROD_CLASS_CD = '00000'
-		                                                                             )
-		                                             )
-		             AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-		             AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-		         )               AS    A,
-		         TB_HQ_PRODUCT   AS    B,
-		  </when>
-		  <when test='orgnFg != null and orgnFg == "S"'>
-		  (
-		             SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-		                     A.PROD_CLASS_CD     AS LV2_CD,
-		                     A.PROD_CLASS_NM     AS LV2_NM,
-		                     B.PROD_CLASS_CD     AS LV3_CD,
-		                     B.PROD_CLASS_NM     AS LV3_NM,
-		                     (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-		                     (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-		                     (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
-		             FROM    (
-		                         SELECT  STORE_CD,
-		                               P_PROD_CLASS_CD,
-		                               PROD_CLASS_CD,
-		                               PROD_CLASS_NM
-		                         FROM    TB_MS_PRODUCT_CLASS
-		                         WHERE   STORE_CD        = #{storeCd}
-		                         AND     P_PROD_CLASS_CD IN (
-		                                                        SELECT  PROD_CLASS_CD
-		                                                        FROM    TB_MS_PRODUCT_CLASS
-		                                                        WHERE   STORE_CD        = #{storeCd}
-		                                                        AND     P_PROD_CLASS_CD = '00000'
-		                                                     )
-		                     )                    AS  A,
-		                     TB_MS_PRODUCT_CLASS  AS  B
-		             WHERE   B.P_PROD_CLASS_CD IN    (
-		                                                 SELECT  PROD_CLASS_CD
-		                                                 FROM    TB_MS_PRODUCT_CLASS
-		                                                 WHERE   STORE_CD        = #{storeCd}
-		                                                 AND     P_PROD_CLASS_CD IN (
-		                                                                          SELECT  PROD_CLASS_CD
-		                                                                                FROM    TB_MS_PRODUCT_CLASS
-		                                                                                WHERE   STORE_CD        = #{storeCd}
-		                                                                                AND     P_PROD_CLASS_CD = '00000'
-		                                                                             )
-		                                             )
-		             AND     A.STORE_CD      = B.STORE_CD
-		             AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
-		         )                AS   A,
-		         TB_MS_PRODUCT    AS    B,
-		  </when>
-		  </choose>
-		        (
-		        SELECT M.STORE_CD
-		             , M.STORE_NM
-		             , M.PROD_CD
-		             , M.REAL_SALE_AMT
-		             , M.TOT_SALE_QTY
-		             , M.RAT
-		             , M.ACC_RAT
-		              , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-		                    WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
-		                    ELSE 'C'
-		                END AS GRADE
-		          FROM (
-		                SELECT M.STORE_CD
-		                     , M.STORE_NM
-		                     , M.PROD_CD
-		                     , M.REAL_SALE_AMT
-		                     , M.TOT_SALE_QTY
-		                     <choose>
-		                        <when test='sortFg != null and sortFg == "1"'>    금액순
-		                            , M.RAT_REAL_SALE_AMT  AS RAT
-		                            , SUM(M.RAT_REAL_SALE_AMT) OVER(ORDER BY M.REAL_SALE_AMT DESC) AS ACC_RAT
-		                        </when>
-		                        <when test='sortFg != null and sortFg == "2"'>    수량순
-		                            , M.RAT_TOT_SALE_QTY AS RAT
-		                            , SUM(M.RAT_TOT_SALE_QTY) OVER(ORDER BY M.TOT_SALE_QTY DESC) AS ACC_RAT
-		                        </when>
-		                    </choose>
-		                  FROM  (
-		                        SELECT TSDP.STORE_CD
-		                             , TMS.STORE_NM
-		                             , TSDP.PROD_CD
-		                             , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-		                             , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
-		                             , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() *100, 1) AS RAT_REAL_SALE_AMT
-		                             , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() *100, 1) AS RAT_TOT_SALE_QTY
-		                          FROM TB_MS_STORE TMS
-		                             , TB_SL_DAILY_PROD TSDP
-		                         WHERE TMS.STORE_CD = TSDP.STORE_CD
-		                              <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
-		                                  AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-		                              </if>
-		                              <choose>
-		                                  <when test='orgnFg != null and orgnFg == "H"'>    본사
-			                                  <if test='arrStoreCd != null and arrStoreCd != ""'>
-			                                      AND TMS.STORE_CD IN
-			                                              <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-			                                                    #{item}
-			                                              </foreach>
-			                                  </if>
-		                                  </when>
-		                                  <when test='orgnFg != null and orgnFg == "S"'>    가맹점
-		                                        WHERE TMS.STORE_CD      = #{storeCd}
-		                                  </when>
-		                             </choose>
-		                         GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TSDP.PROD_CD
-		                         ) M
-		                <choose>
-		                    <when test='sortFg != null and sortFg == "1"'>    금액순
-		                        ORDER BY M.REAL_SALE_AMT DESC
-		                    </when>
-		                    <when test='sortFg != null and sortFg == "2"'>    수량순
-		                        ORDER BY M.TOT_SALE_QTY DESC
-		                    </when>
-		                </choose>
-		              ) M
-		        ) C
-		  <choose>
-			  <when test='orgnFg != null and orgnFg == "H"'>    본사
-			     WHERE B.HQ_OFFICE_CD   = #{hqOfficeCd}
-			  </when>
-			  <when test='orgnFg != null and orgnFg == "S"'>    가맹점
-			     WHERE C.STORE_CD      = #{storeCd}
-			  </when>
-		  </choose>
-		    AND B.PROD_CLASS_CD = A.LV3_CD
-		    AND B.PROD_CD       = C.PROD_CD
-         <include refid="CmmSQL.PagingTemplateBottom"/> -->
 <include refid="CmmSQL.PagingTemplateHeader"/>
          SELECT A.LV1_CD,
        A.LV1_NM,
@@ -199,9 +18,11 @@
        A.LV3_CD,
        A.LV3_NM,
        C.PROD_CD,
-       B.PROD_NM,
-       C.STORE_CD,
-       C.STORE_NM,
+       B.PROD_NM,       
+       <if test='orgnFg != null and orgnFg == "S"'>
+	   C.STORE_CD,
+	   C.STORE_NM,          
+	   </if>
        C.REAL_SALE_AMT,
        C.TOT_SALE_QTY,
        C.RAT,
@@ -250,6 +71,54 @@
                      AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
                  )                   A,
                  TB_HQ_PRODUCT       B,
+                 (
+	                SELECT M.PROD_CD
+	                     , M.REAL_SALE_AMT
+	                     , M.TOT_SALE_QTY
+	                     , M.RAT
+	                     , M.ACC_RAT
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                            ELSE 'C'
+	                        END AS GRADE
+	                  FROM (
+	                        SELECT M.PROD_CD
+	                             , M.REAL_SALE_AMT
+	                             , M.TOT_SALE_QTY
+	                             <choose>
+	                                <when test='sortFg != null and sortFg == "1"'>    <!-- 금액순 -->
+	                                    , M.RAT_REAL_SALE_AMT  AS RAT
+	                                    , SUM(M.RAT_REAL_SALE_AMT) OVER(ORDER BY M.REAL_SALE_AMT DESC) AS ACC_RAT
+	                                </when>
+	                                <when test='sortFg != null and sortFg == "2"'>    <!-- 수량순 -->
+	                                    , M.RAT_TOT_SALE_QTY AS RAT
+	                                    , SUM(M.RAT_TOT_SALE_QTY) OVER(ORDER BY M.TOT_SALE_QTY DESC) AS ACC_RAT
+	                                </when>
+	                            </choose>
+	                          FROM  (
+	                                SELECT TSDP.PROD_CD
+	                                     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+	                                     , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
+	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER(), 2) *100 AS RAT_REAL_SALE_AMT
+	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_TOT_SALE_QTY
+	                                  FROM TB_SL_DAILY_PROD TSDP
+	                                 WHERE 1=1
+	                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+	                                      </if>
+	                                      <if test='arrStoreCd != null and arrStoreCd != ""'>
+	                                                  AND TMS.STORE_CD IN
+	                                                          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                                                                #{item}
+	                                                          </foreach>
+                                          </if>	                                      
+	                                 GROUP BY TSDP.PROD_CD
+	                                 ) M
+	                      ) M
+	                ) C
+		  WHERE B.HQ_OFFICE_CD   = #{hqOfficeCd}
+			AND B.PROD_CLASS_CD = A.LV3_CD
+            AND B.PROD_CD       = C.PROD_CD
           </when>
            <when test='orgnFg != null and orgnFg == "S"'>
           (
@@ -291,78 +160,59 @@
                      AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
                  )                   A,
                  TB_MS_PRODUCT       B,
-          </when>
-       </choose>
-               (
-                SELECT M.STORE_CD
-                     , M.STORE_NM
-                     , M.PROD_CD
-                     , M.REAL_SALE_AMT
-                     , M.TOT_SALE_QTY
-                     , M.RAT
-                     , M.ACC_RAT
-                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
-                            ELSE 'C'
-                        END AS GRADE
-                  FROM (
-                        SELECT M.STORE_CD
-                             , M.STORE_NM
-                             , M.PROD_CD
-                             , M.REAL_SALE_AMT
-                             , M.TOT_SALE_QTY
-                             <choose>
-                                <when test='sortFg != null and sortFg == "1"'>    <!-- 금액순 -->
-                                    , M.RAT_REAL_SALE_AMT  AS RAT
-                                    , SUM(M.RAT_REAL_SALE_AMT) OVER(ORDER BY M.REAL_SALE_AMT DESC) AS ACC_RAT
-                                </when>
-                                <when test='sortFg != null and sortFg == "2"'>    <!-- 수량순 -->
-                                    , M.RAT_TOT_SALE_QTY AS RAT
-                                    , SUM(M.RAT_TOT_SALE_QTY) OVER(ORDER BY M.TOT_SALE_QTY DESC) AS ACC_RAT
-                                </when>
-                            </choose>
-                          FROM  (
-                                SELECT TSDP.STORE_CD
-                                     , TMS.STORE_NM
-                                     , TSDP.PROD_CD
-                                     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-                                     , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
-                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() *100, 1) AS RAT_REAL_SALE_AMT
-                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() *100, 1) AS RAT_TOT_SALE_QTY
-                                  FROM TB_MS_STORE TMS
-                                     , TB_SL_DAILY_PROD TSDP
-                                 WHERE TMS.STORE_CD = TSDP.STORE_CD
-                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
-                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                                      </if>
-                                      <choose>
-                                          <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-                                              <if test='arrStoreCd != null and arrStoreCd != ""'>
-                                                  AND TMS.STORE_CD IN
-                                                          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                                                                #{item}
-                                                          </foreach>
-                                              </if>
-                                          </when>
-                                          <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-                                                AND TMS.STORE_CD      = #{storeCd}
-                                          </when>
-                                     </choose>
-                                 GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TSDP.PROD_CD
-                                 ) M
-                      ) M
-                ) C
-          <choose>
-              <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
-                 WHERE B.HQ_OFFICE_CD   = #{hqOfficeCd}
-              </when>
-              <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-                 WHERE C.STORE_CD      = #{storeCd}
+                 (
+	                SELECT M.STORE_CD
+	                     , M.STORE_NM
+	                     , M.PROD_CD
+	                     , M.REAL_SALE_AMT
+	                     , M.TOT_SALE_QTY
+	                     , M.RAT
+	                     , M.ACC_RAT
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                            ELSE 'C'
+	                        END AS GRADE
+	                  FROM (
+	                        SELECT M.STORE_CD
+	                             , M.STORE_NM
+	                             , M.PROD_CD
+	                             , M.REAL_SALE_AMT
+	                             , M.TOT_SALE_QTY
+	                             <choose>
+	                                <when test='sortFg != null and sortFg == "1"'>    <!-- 금액순 -->
+	                                    , M.RAT_REAL_SALE_AMT  AS RAT
+	                                    , SUM(M.RAT_REAL_SALE_AMT) OVER(ORDER BY M.REAL_SALE_AMT DESC) AS ACC_RAT
+	                                </when>
+	                                <when test='sortFg != null and sortFg == "2"'>    <!-- 수량순 -->
+	                                    , M.RAT_TOT_SALE_QTY AS RAT
+	                                    , SUM(M.RAT_TOT_SALE_QTY) OVER(ORDER BY M.TOT_SALE_QTY DESC) AS ACC_RAT
+	                                </when>
+	                            </choose>
+	                          FROM  (
+	                                SELECT TSDP.STORE_CD
+	                                     , TMS.STORE_NM
+	                                     , TSDP.PROD_CD
+	                                     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+	                                     , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
+	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER(), 2) *100 AS RAT_REAL_SALE_AMT
+	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_TOT_SALE_QTY
+	                                  FROM TB_MS_STORE TMS
+	                                     , TB_SL_DAILY_PROD TSDP
+	                                 WHERE TMS.STORE_CD = TSDP.STORE_CD
+	                                   AND TMS.STORE_CD      = #{storeCd}
+	                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+	                                      </if>	                                     
+	                                 GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TSDP.PROD_CD
+	                                 ) M
+	                      ) M
+	                ) C
+			   WHERE C.STORE_CD      = #{storeCd}
                  AND B.STORE_CD = C.STORE_CD
-              </when>
-          </choose>
-            AND B.PROD_CLASS_CD = A.LV3_CD
-            AND B.PROD_CD       = C.PROD_CD
+                 AND B.PROD_CLASS_CD = A.LV3_CD
+                 AND B.PROD_CD       = C.PROD_CD	                
+          </when>
+       </choose>                                
           <choose>
               <when test='sortFg != null and sortFg == "1"'>    <!-- 금액순 -->
                   ORDER BY C.REAL_SALE_AMT DESC

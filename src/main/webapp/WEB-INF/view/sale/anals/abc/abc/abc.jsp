@@ -6,9 +6,10 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="gvOrgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 <c:set var="baseUrl" value="/sale/anals/abc/" />
 
-<div id="abcView" class="subCon" ng-controller="abcCtrl">
+<div id="abcView" class="subCon3" ng-controller="abcCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="abc.abc" /></a>
         <%-- 조회 --%>
@@ -82,7 +83,7 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
+    <div class="mt20 oh sb-select dkbr">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
               class="w100px fl"
@@ -103,7 +104,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px;">
+          <div class="wj-gridWrap1">
             <wj-flex-grid
               id="abcGrid"
               autoGenerateColumns="false"
@@ -124,7 +125,7 @@
               <wj-flex-grid-column header="<s:message code="abc.realSaleAmt"/>"        binding="realSaleAmt"   width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.totSaleQty"/>"         binding="totSaleQty"   width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.rat"/>"                binding="rat"        width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.acc"/>"                binding="accRat"        width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.acc"/>"                binding="accRat"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -145,4 +146,15 @@
 
     </div>
 
+<script>
+  var prodEnvstVal = "${prodEnvstVal}";
+</script>
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/abc/abc/abc.js?ver=20190125.02" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 상품상세정보 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
+</c:import>

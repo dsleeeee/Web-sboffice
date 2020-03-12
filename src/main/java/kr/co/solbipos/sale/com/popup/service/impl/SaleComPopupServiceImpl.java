@@ -7,7 +7,6 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupService;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
-import kr.co.solbipos.sale.status.prod.cls.service.ProdClassVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,5 +138,97 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
         }
 		
 		return saleComPopupMapper.getPayFgList(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 매장정보,매출종합내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop1(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+       		
+		return saleComPopupMapper.selectBillSalePop1(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 결제내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop3(SaleComPopupVO saleComPopupVO ,SessionInfoVO sessionInfoVO) {
+		
+        // 결제수단별 쿼리 변수
+        String sQuery1 = "";
+        
+        List<DefaultMap<String>> payCd = saleComPopupMapper.getPayColList(saleComPopupVO);
+		
+        for(int i = 0; i < payCd.size(); i++) {
+        	String j = payCd.get(i).get("payCd");
+        	sQuery1 +=", CASE WHEN A.PAY_CD = "+ j + " THEN SUM(A.PAY_AMT) ELSE NULL END AS PAY" + j +  "\n";
+        }
+        
+        saleComPopupVO.setsQuery1(sQuery1);
+        
+		return saleComPopupMapper.selectBillSalePop3(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 회원정보 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop4(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+       		
+		return saleComPopupMapper.selectBillSalePop4(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 신용카드,현금 결제내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop5(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+
+		//신용카드
+		if(saleComPopupVO.getPayCd().equals("01")) {
+			return saleComPopupMapper.selectBillSalePopCard(saleComPopupVO);
+		//현금
+		}else if(saleComPopupVO.getPayCd().equals("02")) {
+			return saleComPopupMapper.selectBillSalePopCash(saleComPopupVO);
+		}
+		
+		return null;
+	}
+	
+	/** 매출공통팝업 - 상품내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop6(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+       		
+		return saleComPopupMapper.selectBillSalePop6(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 원거래매출정보 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillSalePop7(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+       		
+		return saleComPopupMapper.selectBillSalePop7(saleComPopupVO);
+	}
+	
+	/** 매출공통팝업 - 신용카드,현금 결제취소내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectBillRtnPop5(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+
+		//신용카드
+		if(saleComPopupVO.getPayCd().equals("01")) {
+			return saleComPopupMapper.selectBillRtnPopCard(saleComPopupVO);
+		//현금
+		}else if(saleComPopupVO.getPayCd().equals("02")) {
+			return saleComPopupMapper.selectBillRtnPopCash(saleComPopupVO);
+		}
+		
+		return null;
+	}
+	
+	/** 매출공통팝업 - 원 신용카드,현금 결제내역 - 영수증 팝업 조회 */
+	@Override
+	public List<DefaultMap<String>> selectbillRealPop(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+
+		//신용카드
+		if(saleComPopupVO.getPayCd().equals("01")) {
+			return saleComPopupMapper.selectBillRealRtnPopCard(saleComPopupVO);
+		//현금
+		}else if(saleComPopupVO.getPayCd().equals("02")) {
+			return saleComPopupMapper.selectBillRealRtnPopCash(saleComPopupVO);
+		}
+		
+		return null;
 	}
 }

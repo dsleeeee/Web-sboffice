@@ -9,7 +9,7 @@
 <wj-popup id="prodLayer" control="prodLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="saleComPopup.table"/>
+      <s:message code="saleComPopup.prod"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>

@@ -11,12 +11,12 @@
 
 <div id="empDayView" class="subCon" ng-controller="empDayCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="empsale.day"/></a>		
+		<a href="#" class="open fl"><s:message code="empsale.day"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empDayCtrlSrch')">
     		<s:message code="cmm.search"/>
-    	</button>		
-	</div> 
+    	</button>
+	</div>
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
@@ -51,7 +51,7 @@
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-      	<tr>  
+      	<tr>
            <%-- 매장코드 --%>
          	<th><s:message code="todayBillSaleDtl.store"/></th>
          	<td colspan="3">
@@ -59,15 +59,15 @@
            		<jsp:param name="targetId" value="empDaySelectStore"/>
            	</jsp:include>
              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-         	</td>        	
+         	</td>
       </tr>
       </c:if>
-      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
         	<input type="hidden" id="empDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
       	</c:if>
 		</tbody>
 	</table>
-    ${cornrList}   	
+    ${cornrList}
 	<div class="mt40 oh sb-select dkbr">
 	    <%-- 페이지 스케일  --%>
 	    <wj-combo-box
@@ -88,10 +88,10 @@
 	    <button class="btn_skyblue fr" ng-click="excelDownloadEmpDay()"><s:message code="cmm.excel.down" />
 	    </button>
 	</div>
-  
+
 	<%--위즈모 테이블--%>
-    <div class="w100 mt10">   
-      <div class="wj-gridWrap" style="height: 350px;">
+    <div class="w100 mt10" id="wjWrapType3">
+      <div class="wj-gridWrap">
         <wj-flex-grid
           id="empDayGrid"
           autoGenerateColumns="false"
@@ -108,9 +108,9 @@
           <wj-flex-grid-column header="<s:message code="empday.yoil"/>" 			binding="yoil" 				width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>   
+          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
-        
+
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
           <jsp:param name="pickerTarget" value="empDayCtrl"/>
@@ -119,7 +119,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -127,7 +127,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
 </div>
 <script type="text/javascript">
 </script>

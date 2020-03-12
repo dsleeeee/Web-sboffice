@@ -55,15 +55,15 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     s.refresh();
-    
+
     var srchStartDate = new Date($scope.srchStartDate);
-    srchStartDate.setDate(1);	
+    srchStartDate.setDate(1);
     $scope.startDateCombo.text = $scope.getFormatDate(srchStartDate);
-    
+
 	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
+	compEndDateDash = $scope.compEndDateCombo.text;
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("versusPeriodClassCtrl");
@@ -134,14 +134,14 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   		if (rng && rng.columnSpan > 1) {
   			e.preventDefault();
   		}
   	}
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -154,12 +154,12 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         	var isCollapsed = s.rows[ht.row].isCollapsed;
         	s.rows[ht.row].isCollapsed ? false : true;
         }
-        
+
         // 클릭시 상세 그리드 조회
         if (col.binding === "lv3Nm") { // 3단계 분류
           $scope._broadcast('versusPeriodClassDtlCtrlSrch', params);
         }
-        
+
       }
     }, true);
   };
@@ -191,12 +191,12 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   // 상품매출순위 리스트 조회
   $scope.searchVersusPeriodClassList = function (isPageChk) {
 	$scope.setCollapsed = false;
-	
+
 	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
-	
+	compEndDateDash = $scope.compEndDateCombo.text;
+
     // 파라미터
     var params       = {};
     //var params2       = {};
@@ -224,7 +224,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
-    
+
     var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
     var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일)\n";
     var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";
@@ -267,14 +267,14 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     				row.cssClass=className;
     			}
     			// 3단계 group row 접기
-				if(row.level == 2) { 
+				if(row.level == 2) {
 					if(!$scope.setCollapsed){
 						row.isCollapsed = true;
 					}
 				}
     		}
     	});
-    	
+
     	// 그리드 링크 효과, 정렬 효과
 
       if (e.panel === s.cells) {
@@ -305,7 +305,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 
 
     });
-    
+
     /*// start collapsed
     theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
     	var ht = theGrid.hitTest(e);
@@ -313,17 +313,17 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 	     머지된 헤더 셀 클릭시 정렬 비활성화
 		 * 헤더 cellType: 2 && 머지된 row 인덱스: 0
 		 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
-		 
+
 		if(ht.cellType == 2 && ht.row < 1) {
 			theGrid.allowSorting = false;
 		} else {
 			theGrid.allowSorting = true;
 		}
-	    
+
 	    theGrid.collapseGroupsToLevel(1);
 	    theGrid.collectionView.refresh();
     });*/
-   
+
   };
 
   //메인그리드 조회후 상세그리드 조회.
@@ -343,7 +343,7 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   	    // 대비기간매출분석 매출현황 상세조회.
 	    $scope._broadcast("versusPeriodClassDtlCtrlSrch", params);
     }
-	   
+
   }
 
   //조회일자 전체기간 체크박스 클릭이벤트
@@ -571,7 +571,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
         }
       }
     }
-    
+
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
 

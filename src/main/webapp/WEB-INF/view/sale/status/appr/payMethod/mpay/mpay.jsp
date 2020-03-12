@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprMpayView" class="subCon"  ng-controller="apprMpayCtrl">
+<div id="apprMpayView" class="subCon3"  ng-controller="apprMpayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="dailyReport.apprMpay"/></a>
       <%-- 조회 --%>
@@ -148,7 +148,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="apprMpayGrid"
           autoGenerateColumns="false"

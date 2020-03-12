@@ -7,8 +7,8 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posDayPeriodCtrl', $scope, $http, $timeout, true));
 	
-	  $scope.srchPosDayPeriodStartDate = wcombo.genDateVal("#srchPosDayPeriodStartDate", gvStartDate);
-	  $scope.srchPosDayPeriodEndDate   = wcombo.genDateVal("#srchPosDayPeriodEndDate", gvEndDate);
+	  $scope.srchPosDayPeriodStartDate = wcombo.genDateVal("#srchPosDayPeriodStartDate", getToday());
+	  $scope.srchPosDayPeriodEndDate   = wcombo.genDateVal("#srchPosDayPeriodEndDate", getToday());
 
 	  //조회조건 콤보박스 데이터 Set
 	  $scope._setComboData("posDayPeriodListScaleBox", gvListScaleBoxData);

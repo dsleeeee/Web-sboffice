@@ -246,11 +246,11 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    			storePosCd = $("#posMonthSelectPosCd").val();
 	    			storePosNm = $("#posMonthSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {

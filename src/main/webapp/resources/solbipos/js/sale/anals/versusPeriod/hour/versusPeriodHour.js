@@ -18,9 +18,9 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
 //  $scope.srchCompEndDate   = wcombo.genDateVal("#compHourEndDate", getToday());
 
 
- 
+
 //  var srchStartDate = new Date($scope.srchStartDate);
-//  
+//
 //  $scope.changeDate = function() {
 //
 //	var srchStartDate = new Date($scope.srchStartDate);
@@ -50,16 +50,16 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	
+
 	var srchStartDate = new Date($scope.srchStartDate);
-    srchStartDate.setDate(1);	
+    srchStartDate.setDate(1);
     $scope.startDateCombo.text = $scope.getFormatDate(srchStartDate);
-    
+
 	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
-    
+	compEndDateDash = $scope.compEndDateCombo.text;
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("versusPeriodHourCtrl");
 
@@ -121,7 +121,7 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
         }
       }
     }
-    
+
     // 그리드 클릭 이벤트
 	s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
@@ -173,8 +173,8 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
     srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
-		
+	compEndDateDash = $scope.compEndDateCombo.text;
+
     // 파라미터
     var params       = {};
     params.startDate = srchStartDateDash;

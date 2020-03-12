@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="prodPosView" class="subCon"  ng-controller="prodPosCtrl">
+<div id="prodPosView" class="subCon3" ng-controller="prodPosCtrl"> <%-- 수정 사항 :: class="subCon" >> class="subCon3"--%>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="prodsale.pos"/></a>
 		<%-- 조회 --%>
@@ -82,7 +82,7 @@
 	</table>
 	<div style="clear: both;"></div>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt20 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"
@@ -103,9 +103,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
+	<div id="wjWrapType3" class="w100 mt10"> <%-- 수정 사항 || head line 3 아이디 추가 :: id="wjWrapType3" --%>
 		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+		<div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
 			<wj-flex-grid
 				id="posProdGrid"
 				autoGenerateColumns="false"

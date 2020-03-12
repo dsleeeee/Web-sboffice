@@ -102,7 +102,8 @@
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
-			<div class="wj-gridWrap" style="height: 350px;">
+			<div class="w100 mt10" id="wjWrapType1">
+              <div class="wj-gridWrap">
 				<wj-flex-grid loaded-rows="loadedRows(s,e)" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -120,6 +121,7 @@
 					<jsp:param name="pickerTarget" value="dcDcfgMainCtrl" />
 				</jsp:include>
 				<%--// ColumnPicker 사용시 include --%>
+			 </div>
 			</div>
 			<%--//위즈모 테이블--%>
 			<div class="pageNum mt20">
@@ -140,7 +142,8 @@
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
-			<div class="wj-gridWrap" style="height: 350px;">
+			<div class="w100 mt10 dtl">
+              <div class="wj-gridWrap">
 				<wj-flex-grid id="dcfgDtlGrid" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -159,16 +162,14 @@
 					<jsp:param name="pickerTarget" value="dcDcfgDtlCtrl" />
 				</jsp:include>
 				<%--// ColumnPicker 사용시 include --%>
-			</div>
+			 </div>
+		    </div>
 			<%--//위즈모 테이블--%>
 		</div>
 	</div>
 
 </div>
 
-<script type="text/javascript">
-
-</script>
 <script type="text/javascript"
 	src="/resource/solbipos/js/sale/status/dc/dcfg/dcfg.js?ver=20190125.02"
 	charset="utf-8"></script>

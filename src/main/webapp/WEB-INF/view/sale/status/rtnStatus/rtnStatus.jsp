@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusDayView" class="subCon"  ng-controller="rtnStatusDayCtrl">
+<div id="rtnStatusDayView" class="subCon3"  ng-controller="rtnStatusDayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
@@ -86,8 +86,7 @@
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
         </button>
         </div>
-	    <div class="wj-gridWrap mt10">
-	        <div style="height:400px">
+	    <div class="wj-gridWrap2 mt10">
 		        <wj-flex-grid
 		          id="rtnStatusDayGrid"
 		          loaded-rows="loadedRows(s,e)"
@@ -113,7 +112,6 @@
 		          <jsp:param name="pickerTarget" value="rtnStatusDayMainCtrl"/>
 		        </jsp:include>
 		        <%--// ColumnPicker 사용시 include --%>
-            </div>
 	    </div>
 	    <%-- //wj grid end --%>
 	    <%-- 페이지 리스트 --%>
@@ -148,40 +146,38 @@
             <button class="btn_skyblue fr" ng-click="excelDownloadDayDtlCtrl()"><s:message code="cmm.excel.down" />
             </button>
             </div>
-	            <div class="wj-TblWrapBr mr10 pd10">
-	                <div style="height:300px">
-	                   <wj-flex-grid
-		                  id="rtnStatusDayDtlGrid"
-		                  loaded-rows="loadedRows2(s,e)"
-		                  autoGenerateColumns="false"
-		                  selection-mode="Row"
-		                  items-source="data"
-		                  control="flex"
-		                  initialized="initGrid(s,e)"
-		                  is-read-only="true"
-		                  item-formatter="_itemFormatter">
-		                  <!-- define columns -->
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"   binding="saleDate"       width="*" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntY"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtY"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntN"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtN"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cnt"            width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                </wj-flex-grid>
-		                <%-- ColumnPicker 사용시 include --%>
-		                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-		                  <jsp:param name="pickerTarget" value="rtnStatusDayDtlCtrl"/>
-		                </jsp:include>
-		                <%--// ColumnPicker 사용시 include --%>
-	                </div>
-	        </div>
-	        <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
-              <ul id="rtnStatusDayDtlCtrlPager" data-size="10">
-              </ul>
-            </div>
-            <%--//페이지 리스트--%>
+	            <div class="wj-TblWrapBr2 mr10 pd10">
+                   <wj-flex-grid
+	                  id="rtnStatusDayDtlGrid"
+	                  loaded-rows="loadedRows2(s,e)"
+	                  autoGenerateColumns="false"
+	                  selection-mode="Row"
+	                  items-source="data"
+	                  control="flex"
+	                  initialized="initGrid(s,e)"
+	                  is-read-only="true"
+	                  item-formatter="_itemFormatter">
+	                  <!-- define columns -->
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"   binding="saleDate"       width="*" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntY"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtY"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntN"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtN"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cnt"            width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                </wj-flex-grid>
+	                <%-- ColumnPicker 사용시 include --%>
+	                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+	                  <jsp:param name="pickerTarget" value="rtnStatusDayDtlCtrl"/>
+	                </jsp:include>
+	                <%--// ColumnPicker 사용시 include --%>
+	           </div>
+		       <%-- 페이지 리스트 --%>
+	           <div class="pageNum mt20">
+	             <ul id="rtnStatusDayDtlCtrlPager" data-size="10">
+	             </ul>
+	           </div>
+	           <%--//페이지 리스트--%>
         </div>
 
         <%-- right --%>
@@ -203,31 +199,29 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtlCtrl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-	            <div class="wj-TblWrapBr ml10 pd10">
-	                <div style="height:300px">
-	                   <wj-flex-grid
-	                      id="rtnStatusPosDtlGrid"
-		                  autoGenerateColumns="false"
-		                  selection-mode="Row"
-		                  items-source="data"
-		                  control="flex"
-		                  initialized="initGrid(s,e)"
-		                  is-read-only="true"
-		                  item-formatter="_itemFormatter">
-		                  <!-- define columns -->
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"       binding="posNo"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"     binding="billNo"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleFg"/>"      binding="saleYn"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleAmt"/>"  binding="totSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.dcAmt"/>"       binding="totDcAmt"      width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                  <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>" binding="realSaleAmt"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		                </wj-flex-grid>
-		                <%-- ColumnPicker 사용시 include --%>
-		                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-		                  <jsp:param name="pickerTarget" value="rtnStatusPosDtlCtrl"/>
-		                </jsp:include>
-		                <%--// ColumnPicker 사용시 include --%>
-	                </div>
+	            <div class="wj-TblWrapBr1 ml10 pd10">
+                   <wj-flex-grid
+                      id="rtnStatusPosDtlGrid"
+	                  autoGenerateColumns="false"
+	                  selection-mode="Row"
+	                  items-source="data"
+	                  control="flex"
+	                  initialized="initGrid(s,e)"
+	                  is-read-only="true"
+	                  item-formatter="_itemFormatter">
+	                  <!-- define columns -->
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"       binding="posNo"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"     binding="billNo"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleFg"/>"      binding="saleYn"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleAmt"/>"  binding="totSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.dcAmt"/>"       binding="totDcAmt"      width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>" binding="realSaleAmt"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                </wj-flex-grid>
+	                <%-- ColumnPicker 사용시 include --%>
+	                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+	                  <jsp:param name="pickerTarget" value="rtnStatusPosDtlCtrl"/>
+	                </jsp:include>
+	                <%--// ColumnPicker 사용시 include --%>
 	            </div>
 	          <%-- 페이지 리스트 --%>
 			  <div class="pageNum mt20">

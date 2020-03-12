@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="barcdView" class="subCon"  ng-controller="barcdCtrl">
+<div id="barcdView" class="subCon3"  ng-controller="barcdCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
@@ -103,7 +103,7 @@
 	            <button class="btn_skyblue fr" ng-click="excelDownloadBarcd()"><s:message code="cmm.excel.down" />
 	            </button>
             </div>
-            <div class="wj-TblWrapBr mr10 pd10" style="height:300px">
+            <div class="wj-TblWrapBr1 mr10 pd10">
                    <wj-flex-grid
                       id="barcdGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -159,7 +159,7 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadBarcdDtl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-                <div class="wj-TblWrapBr ml10 pd10" style="height:300px">
+                <div class="wj-TblWrapBr1 ml10 pd10">
                        <wj-flex-grid
                           id="barcdDtlGrid"
                           autoGenerateColumns="false"

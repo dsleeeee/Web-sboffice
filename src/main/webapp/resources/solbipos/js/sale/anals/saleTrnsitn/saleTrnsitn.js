@@ -18,6 +18,9 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 */
 	//상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('saleTrnsitnCtrl', $scope, $http, true));
+	
+	// 콤보박스 데이터 Set
+    $scope._setComboData('saleTrnsitnlistScaleBox', gvListScaleBoxData);
 
     //검색조건에 조회기간
     var startDate 	= wcombo.genDateVal("#startDate", getToday());
@@ -204,54 +207,66 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
     };	//$scope.initGrid	--------------------------------------------------------------------------------------------------------------------------
 
 
-
     //[조회] - START			--------------------------------------------------------------------------------------------------------------------------
-    $scope.$on("saleTrnsitnCtrl", function(event, data) {	//판매추이분석 Grid 조회
-        var params = {};
-	    	//params.srchProdCd   = srchProdCd.value;
-	    	//params.srchProdNm   = srchProdNm.value;
-	        params.startDate 	= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-	      //params.endDate 		= wijmo.Globalize.format(endDate.value,   'yyyyMMdd');
-	        //console.log("startDate:" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') );
-
-        $scope._inquiryMain("/sale/anals/saletrnsitn/list.sb",
-        					params,
-        					function()	{
-        									var flex = $scope.flex;
-
-        									/* For TEST
-        									for (var r=0; r<flex.itemsSource.itemCount; r++){
-        										console.log("[" + r + "] : " + flex.rows[r]._data.prodCd);
-        									}
-        									console.log("Header: " + flex.columnHeaders.getCellData(1,3) );
-        									console.log("Header: " + flex.columnHeaders.getCellData(1,4) );
-        									*/
-
-        									/* _data 는 배열기능이 없다. 칼럼명을 지정해 주어야 함.
-	     									   dataItem ??
-	     									for(var i=global_idxDateHeaderFrom; i<=global_idxDateHeaderTo; i++){
-	     										flex.columnHeaders.setCellData(global_idxDateHeaderRow,i, flex.rows[0]._data.dateBeforeThirteen);
-	     										...
-	     									}
-	     									*/
-        									//console.log("$scope.flex.rows.length: " + $scope.flex.rows.length);
-        									if ($scope.flex.rows.length > 0) {	//데이터가 있는 경우에만
-	        									var idxTemp = global_idxDateVariableLast;
-	        									for(var i=global_idxDateHeaderFrom; i<=global_idxDateHeaderTo; i++){
-//        											console.log(global_idxDateVariableLast + ": " + eval('flex.rows[0]._data.dateBefore' + idxTemp) );
-	        										flex.columnHeaders.setCellData(global_idxDateHeaderRow, i, eval('flex.rows[0]._data.dateBefore' + idxTemp) );
-
-	        										idxTemp--;
-	        									}
-        									}
-        								},	//callBack function
-        					false);
-
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("saleTrnsitnCtrl", function (event, data) {
+        $scope.searchSaleTrnsitnList(true);
+        // 기능수행 종료 : 반드시 추가
         event.preventDefault();
-    });	//$scope.$on("saleTrnsitnCtrl", function(event, data) {
+    });
+    
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("saleTrnsitnCtrlSrch", function (event, data) {
+        $scope.searchSaleTrnsitnList(false);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+    
+    $scope.searchSaleTrnsitnList = function(isPageChk){
+        var params = {};
+    	//params.srchProdCd   = srchProdCd.value;
+    	//params.srchProdNm   = srchProdNm.value;
+    	params.listScale = $scope.saleTrnsitnlistScale; //-페이지 스케일 갯수
+    	params.isPageChk = isPageChk;
+        params.startDate 	= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+      //params.endDate 		= wijmo.Globalize.format(endDate.value,   'yyyyMMdd');
+        //console.log("startDate:" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') );
+
+    $scope._inquiryMain("/sale/anals/saletrnsitn/list.sb",
+    					params,
+    					function()	{
+    									var flex = $scope.flex;
+
+    									/* For TEST
+    									for (var r=0; r<flex.itemsSource.itemCount; r++){
+    										console.log("[" + r + "] : " + flex.rows[r]._data.prodCd);
+    									}
+    									console.log("Header: " + flex.columnHeaders.getCellData(1,3) );
+    									console.log("Header: " + flex.columnHeaders.getCellData(1,4) );
+    									*/
+
+    									/* _data 는 배열기능이 없다. 칼럼명을 지정해 주어야 함.
+     									   dataItem ??
+     									for(var i=global_idxDateHeaderFrom; i<=global_idxDateHeaderTo; i++){
+     										flex.columnHeaders.setCellData(global_idxDateHeaderRow,i, flex.rows[0]._data.dateBeforeThirteen);
+     										...
+     									}
+     									*/
+    									//console.log("$scope.flex.rows.length: " + $scope.flex.rows.length);
+    									if ($scope.flex.rows.length > 0) {	//데이터가 있는 경우에만
+        									var idxTemp = global_idxDateVariableLast;
+        									for(var i=global_idxDateHeaderFrom; i<=global_idxDateHeaderTo; i++){
+//    											console.log(global_idxDateVariableLast + ": " + eval('flex.rows[0]._data.dateBefore' + idxTemp) );
+        										flex.columnHeaders.setCellData(global_idxDateHeaderRow, i, eval('flex.rows[0]._data.dateBefore' + idxTemp) );
+
+        										idxTemp--;
+        									}
+    									}
+    								},	//callBack function
+    					false);
+    }
     //[조회] - END			--------------------------------------------------------------------------------------------------------------------------
-
-
+    
 	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){
 		if ($scope.flex.rows.length <= 0) {

@@ -51,7 +51,7 @@
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
 							</label>
-						</span>  
+						</span>
 					</div>
 				</td>
 			</tr>
@@ -115,9 +115,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+	<%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="tableMonthGrid"
 				autoGenerateColumns="false"

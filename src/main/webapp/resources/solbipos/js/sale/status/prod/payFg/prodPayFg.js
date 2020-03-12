@@ -50,10 +50,10 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	//params.chkPop	= "tablePop";
-        
         	params.storeCd   = $("#pordPayFgSelectStoreCd").val();
         	params.prodCd = selectedRow.prodCd
         	params.dialogHd  = col.header;
+        	
         	// 등록일자 '전체기간' 선택에 따른 params
             if(!$scope.isChecked){
               params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -62,7 +62,6 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         if ((col.binding.substr(0, 3) === "pay") && col.binding !== "payAmt") { // 결제수단
           params.payCd = col.binding.substr(3,2); // pay01 : 끝에 2자리 숫자만 가져옴
-          console.log(col.binding);
           $scope._broadcast('saleComPayFgCtrl', params);
         } else if (col.binding === "payAmt") { // 실매출액
           $scope._broadcast('saleComPayFgCtrl', params);

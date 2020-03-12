@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
 import kr.co.solbipos.sale.status.prod.cls.service.ProdClassVO;
+import kr.co.solbipos.sale.status.prod.payFg.service.ProdPayFgVO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -61,4 +62,40 @@ public interface SaleComPopupMapper {
     
     /** 매출공통팝업 - 상품선택(상품) - 결제수단별탭 팝업 리스트 조회 */
     List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO);
+    
+    /** 결제수단 컬럼 리스트 조회 */
+    List<DefaultMap<String>> getPayColList(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 매장정보,매출종합내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePop1(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 결제내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePop3(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 회원정보 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePop4(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 신용카드결제내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePopCard(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 현금결제내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePopCash(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 상품내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePop6(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 원거래매출정보 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillSalePop7(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 신용카드결제취소내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillRtnPopCard(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 현금결제취소내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillRtnPopCash(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 원 신용카드결제내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillRealRtnPopCard(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 원 현금결제내역 - 영수증 팝업 조회 */
+    List<DefaultMap<String>> selectBillRealRtnPopCash(SaleComPopupVO saleComPopupVO);
 }

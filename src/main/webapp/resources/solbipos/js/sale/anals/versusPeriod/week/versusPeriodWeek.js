@@ -47,14 +47,14 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
   $scope.initGrid = function (s, e) {
 
     var srchStartDate = new Date($scope.srchStartDate);
-    srchStartDate.setDate(1);	
+    srchStartDate.setDate(1);
     $scope.startDateCombo.text = $scope.getFormatDate(srchStartDate);
-    
+
 	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
-		
+	compEndDateDash = $scope.compEndDateCombo.text;
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("versusPeriodWeekCtrl");
 
@@ -137,7 +137,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 			s.allowSorting = true;
 		}
 	});
-	
+
   };
 
   $scope.getFormatDate = function getFormatDate(date) {
@@ -170,11 +170,11 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 //      $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해주세요.
 //      return false;
 //    }
-	  
+
 	srchStartDateDash = wijmo.Globalize.format($scope.srchStartDate, 'yyyy-MM-dd');
 	srchEndDateDash = wijmo.Globalize.format($scope.srchEndDate, 'yyyy-MM-dd');
 	compStartDateDash = $scope.compStartDateCombo.text;
-	compEndDateDash = $scope.compStartDateCombo.text;
+	compEndDateDash = $scope.compEndDateCombo.text;
 
     // 파라미터
     var params       = {};

@@ -8,14 +8,14 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div class="subCon" ng-controller="saleTrnsitnCtrl">
+<div class="subCon3" ng-controller="saleTrnsitnCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('saleTrnsitnCtrl')">
+            <button class="btn_blue fr" ng-click="_broadcast('saleTrnsitnCtrlSrch')">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -89,13 +89,26 @@
 
 
     <div class="mt20 oh sb-select dkbr">
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+          class="w100px fl"
+          id="saleTrnsitnlistScaleBox"
+          ng-model="saleTrnsitnlistScale"
+          control="listScaleCombo"
+          items-source="_getComboData('saleTrnsitnlistScaleBox')"
+          display-member-path="name"
+          selected-value-path="value"
+          is-editable="false"
+          initialized="_initComboBox(s)">
+        </wj-combo-box>
+    
     	<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 //TODO --%>
 	</div>
 
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap2" style="overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid	#saleTrnsitnGrid
             				autoGenerateColumns="false"
 			                control="flex"
@@ -161,8 +174,14 @@
 
             </wj-flex-grid>
         </div>
+        <%-- 페이지 리스트 --%>
+	    <div class="pageNum mt20">
+	      <%-- id --%>
+	      <ul id="saleTrnsitnCtrlPager" data-size="10">
+	      </ul>
+	    </div>
+        <%--//페이지 리스트--%>
     </div>
-
 </div>
 
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp"/><%-- 상품분류 팝업 --%>

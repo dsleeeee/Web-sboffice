@@ -94,11 +94,9 @@
 
 	</div>
 
-	<%-- 테이블 일자별 매출 --%>
-	<div class="w100 mt10 mb20">
-
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 370px;">
+	<%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType1">
+        <div class="wj-gridWrap">
 			<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter" allowMerging="Cells">
 			<!-- define columns -->
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.saleDate"/>" binding="saleDate" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>

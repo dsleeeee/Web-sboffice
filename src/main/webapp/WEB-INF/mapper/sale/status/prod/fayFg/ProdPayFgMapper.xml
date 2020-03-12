@@ -23,6 +23,8 @@
 			      , NVL(C.REAL_SALE_AMT, 0 ) AS REAL_SALE_AMT
 			      , NVL(C.TOT_TIP_AMT, 0 ) AS TOT_TIP_AMT
 			      , NVL(C.TOT_ETC_AMT, 0 ) AS TOT_ETC_AMT
+			      , NVL(C.TOT_VAT_AMT, 0 ) AS TOT_VAT_AMT 
+			      , NVL(C.REAL_SALE_AMT - C.TOT_VAT_AMT, 0 ) AS TOT_GA_AMT 
 			      , NVL(D.PAY_AMT, 0 ) AS PAY_AMT	 		      
 				  ${sQuery1}
 				  <include refid="CmmSQL.PagingTemplateCount"/>					
@@ -75,6 +77,7 @@
 				              , SUM(C.REAL_SALE_AMT) AS REAL_SALE_AMT
 				              , SUM(C.TOT_TIP_AMT) AS TOT_TIP_AMT
 				              , SUM(C.TOT_ETC_AMT) AS TOT_ETC_AMT
+				              , SUM(C.TOT_VAT_AMT) AS TOT_VAT_AMT
 				        FROM TB_SL_DAILY_PROD    C
 				        WHERE 1 = 1
 						<if test='storeCd != null and storeCd != ""'>
@@ -124,10 +127,10 @@
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.PROD_CD  	 = D.PROD_CD(+)
 	        <if test='prodCd != null and prodCd != ""'>
-	           AND C.PROD_CD	= #{prodCd}
+	           AND B.PROD_CD	= #{prodCd}
 	        </if>
 	    	<if test='prodNm != null and prodNm != ""'>
-	           AND C.PROD_NM	LIKE '%'||#{prodNm}||'%'
+	           AND B.PROD_NM	LIKE '%'||#{prodNm}||'%'
 	        </if>
 			</when>
 			<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
@@ -178,6 +181,7 @@
 				              , SUM(C.REAL_SALE_AMT) AS REAL_SALE_AMT
 				              , SUM(C.TOT_TIP_AMT) AS TOT_TIP_AMT
 				              , SUM(C.TOT_ETC_AMT) AS TOT_ETC_AMT
+				              , SUM(C.TOT_VAT_AMT) AS TOT_VAT_AMT
 				        FROM TB_SL_DAILY_PROD    C
 				        WHERE 1 = 1
 						<if test='storeCd != null and storeCd != ""'>
@@ -227,14 +231,14 @@
             AND     B.PROD_CD       = C.PROD_CD
             AND     C.PROD_CD  	    = D.PROD_CD(+)
 	        <if test='prodCd != null and prodCd != ""'>
-	           AND C.PROD_CD	= #{prodCd}
+	           AND B.PROD_CD	= #{prodCd}
 	        </if>
 	    	<if test='prodNm != null and prodNm != ""'>
-	           AND C.PROD_NM	LIKE '%'||#{prodNm}||'%'
+	           AND B.PROD_NM	LIKE '%'||#{prodNm}||'%'
 	        </if>
 			</when>
 			</choose>
-			ORDER BY C.PROD_CD   
+			ORDER BY B.PROD_CD   
 			<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	

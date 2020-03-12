@@ -105,7 +105,8 @@
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
-			<div class="wj-gridWrap" style="height: 350px;">
+		    <div class="w100 mt10" id="wjWrapType1">
+		        <div class="wj-gridWrap">
 				<wj-flex-grid
 				    loaded-rows="loadedRows(s,e)"
 					autoGenerateColumns="false"
@@ -127,6 +128,7 @@
 					<jsp:param name="pickerTarget" value="cornerDayPeriodMainCtrl" />
 				</jsp:include>
 				<%--// ColumnPicker 사용시 include --%>
+			 </div>
 			</div>
 			<%--//위즈모 테이블--%>
 			<%-- 페이지 리스트 --%>
@@ -162,7 +164,8 @@
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
-			<div class="wj-gridWrap" style="height: 350px;">
+		    <div class="w100 mt10" id="wjWrapType1">
+		        <div class="wj-gridWrap">
 				<wj-flex-grid
 				    autoGenerateColumns="false"
                     selection-mode="Row"
@@ -186,6 +189,7 @@
 					<jsp:param name="pickerTarget" value="cornerDayPeriodDtlCtrl" />
 				</jsp:include>
 				<%--// ColumnPicker 사용시 include --%>
+			  </div>
 			</div>
 			<%--//위즈모 테이블--%>
 			<%-- 페이지 리스트 --%>

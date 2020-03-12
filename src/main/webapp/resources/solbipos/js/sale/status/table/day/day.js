@@ -127,7 +127,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
-        			params.tblCd	 = storeTable;
+        			params.tblCd	 = storeTable.join(",");
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}

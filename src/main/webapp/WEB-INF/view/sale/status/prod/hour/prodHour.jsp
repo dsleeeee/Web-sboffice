@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/prod/hour/prodHour/"/>
 
-<div id="prodHourView" name="dayView" class="subCon" style="display: none;" ng-controller="prodHourCtrl">
+<div id="prodHourView" name="dayView" class="subCon3" style="display: none;" ng-controller="prodHourCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="day.time"/></a>
         <%-- 조회 --%>
@@ -34,38 +34,36 @@
                     <span class="rg">~</span>
                     <span class="txtIn"><input id="srchHourEndDate" class="w120px"></span>
                     <span class="chk ml10">
-					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-	              	<label for="chkDt">
-                		<s:message code="cmm.all.day" />
-              		</label>
+										<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+		              	<label for="chkDt">
+	                		<s:message code="cmm.all.day" />
+	              		</label>
             	</span>
                 </div>
             </td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="day.time.store"/></th>
-                <td colspan="3">
-                        <%-- 매장선택 모듈 싱글 선택 사용시 include
-                             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                          closeFunc - 팝업 닫기시 호출할 함수
-                        --%>
-                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="dayTimeSelectStore"/>
-                    </jsp:include>
-                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-                </td>
-            </tr>
+          <tr>
+              <%-- 매장코드 --%>
+              <th><s:message code="day.time.store"/></th>
+              <td>
+                      <%-- 매장선택 모듈 싱글 선택 사용시 include
+                           param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                        displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                        modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                        closeFunc - 팝업 닫기시 호출할 함수
+                      --%>
+                  <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                      <jsp:param name="targetId" value="dayTimeSelectStore"/>
+                  </jsp:include>
+                      <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+              </td>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="dayTimeSelectStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
-        <tr>
             <th><s:message code="day.time.time"/></th>
-            <td colspan="3">
+            <td>
                 <div class="sb-select fl w200px">
                     <wj-combo-box
                             id="saleTime"
@@ -83,7 +81,7 @@
     </table>
     <div style="clear: both;"></div>
 	
-	<div class="mt40 oh sb-select dkbr">		
+	<div class="mt20 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
 		<%-- 페이지 스케일  --%>
 	    <wj-combo-box
 	      class="w100px fl"
@@ -104,9 +102,9 @@
 	    </button>
 	</div>
 	
-    <div class="w100 mt10">
+    <div id="wjWrapType2" class="w100 mt10"> <%-- 수정 사항 || head line 2 아이디 추가 :: id="wjWrapType2" --%>
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px;">
+        <div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
             <wj-flex-grid
                     autoGenerateColumns="false"
                     selection-mode="Row"

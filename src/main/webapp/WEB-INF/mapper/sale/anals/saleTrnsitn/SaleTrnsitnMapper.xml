@@ -63,6 +63,7 @@
 	        COMMENTS : 매출추이분석 목록을 조회한다.
     -->
     <select id="getSaletrnsitnList" parameterType="saleTrnsitnVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  PROD_CD,
                 PROD_NM,
                 SPLY_UPRC,
@@ -99,6 +100,7 @@
 
                 SUM(TOT_SALE_QTY)                                               AS  TWO_WEEK_TOT,
                 TRUNC(SUM(TOT_SALE_QTY)/14,2)                                   AS  TWO_WEEK_AVR
+                <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    (
                     SELECT  A.PROD_CD,
                             A.PROD_NM,
@@ -154,6 +156,7 @@
                 )
         GROUP BY PROD_CD, PROD_NM, SPLY_UPRC
         ORDER BY PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	<select id="getSaletrnsitnList_OLD" parameterType="saleTrnsitnVO" resultType="DefaultMap">
         SELECT	PROD_CD,
