@@ -4,12 +4,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.common.utils.security.EncUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
-import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +23,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import java.io.File;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.net.URLEncoder;
+import org.springframework.util.FileCopyUtils;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
@@ -152,6 +158,7 @@ public class BoardController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = boardService.getBoardInfoSave(boardVO, sessionInfoVO);
+//        System.out.println("test1111 : " + result);
 
         return returnJson(Status.OK, result);
     }
@@ -269,6 +276,58 @@ public class BoardController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 게시판 첨부파일 다운로드
+     *
+     * @param boardVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value="/board/getBoardDetailAtchDownload.sb")
+    @ResponseBody
+    public void getBoardDetailAtchDownload(BoardVO boardVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) throws Exception {
+
+//        System.out.println(request.getParameter("fileNm"));
+//        System.out.println("test1111 : " + boardVO.getFileNm());
+
+//        File file = new File("D:\\Workspace\\javaWeb\\testBoardAtch\\", boardVO.getFileNm());
+        File file = new File(BaseEnv.FILE_UPLOAD_DIR + "board/", boardVO.getFileNm());
+
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
+
+        //User-Agent : 어떤 운영체제로  어떤 브라우저를 서버( 홈페이지 )에 접근하는지 확인함
+        String header = request.getHeader("User-Agent");
+        String fileName;
+        String orginlFileNm;
+        String fileExt;
+        if ((header.contains("MSIE")) || (header.contains("Trident")) || (header.contains("Edge"))) {
+            //인터넷 익스플로러 10이하 버전, 11버전, 엣지에서 인코딩
+            fileName = URLEncoder.encode(boardVO.getFileNm(), "UTF-8");
+            orginlFileNm = URLEncoder.encode(boardVO.getOrginlFileNm(), "UTF-8");
+            fileExt = URLEncoder.encode(boardVO.getFileExt(), "UTF-8");
+        } else {
+            //나머지 브라우저에서 인코딩
+            fileName = new String(boardVO.getFileNm().getBytes("UTF-8"), "iso-8859-1");
+            orginlFileNm = new String(boardVO.getOrginlFileNm().getBytes("UTF-8"), "iso-8859-1");
+            fileExt = new String(boardVO.getFileExt().getBytes("UTF-8"), "iso-8859-1");
+        }
+
+        //형식을 모르는 파일첨부용 contentType
+        response.setContentType("application/octet-stream");
+        //다운로드와 다운로드될 파일이름
+//        response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName + "\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+ orginlFileNm + "." + fileExt + "\"");
+        //파일복사
+        FileCopyUtils.copy(in, response.getOutputStream());
+        in.close();
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+    }
 
     /**
      * 게시판 첨부파일 삭제

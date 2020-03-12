@@ -90,8 +90,17 @@ public class BoardVO extends PageVO {
     /** 파일 명 */
     private String fileNm;
 
-    /** 구분 */
-    private String statusS;
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 본사 또는 매장 코드 */
+    private String partOrgnCd;
+
+    /** 본사 또는 매장 명칭 */
+    private String partOrgnNm;
+
+    /** 파일확장자 */
+    private String fileExt;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -185,7 +194,19 @@ public class BoardVO extends PageVO {
 
     public void setFileNm(String fileNm) { this.fileNm = fileNm; }
 
-    public String getStatusS() { return statusS; }
+    public String getStoreCds() { return storeCds; }
 
-    public void setStatusS(String statusS) { this.statusS = statusS; }
+    public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
+
+    public String getPartOrgnCd() { return partOrgnCd; }
+
+    public void setPartOrgnCd(String partOrgnCd) { this.partOrgnCd = partOrgnCd; }
+
+    public String getPartOrgnNm() { return partOrgnNm; }
+
+    public void setPartOrgnNm(String partOrgnNm) { this.partOrgnNm = partOrgnNm; }
+
+    public String getFileExt() { return fileExt; }
+
+    public void setFileExt(String fileExt) { this.fileExt = fileExt; }
 }

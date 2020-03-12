@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.com.popup.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
+import kr.co.solbipos.sale.status.prod.cls.service.ProdClassVO;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -57,4 +58,7 @@ public interface SaleComPopupMapper {
     
     /** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
     List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO);
+    
+    /** 매출공통팝업 - 상품선택(상품) - 결제수단별탭 팝업 리스트 조회 */
+    List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO);
 }

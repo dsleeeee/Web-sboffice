@@ -58,6 +58,8 @@ public class BoardServiceImpl implements BoardService {
         // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
         boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
+        boardVO.setUserId(sessionInfoVO.getUserId());
+
         return boardMapper.getBoardList(boardVO);
     }
 
@@ -106,20 +108,55 @@ public class BoardServiceImpl implements BoardService {
 
         boardVO.setModDt(currentDt);
         boardVO.setModId(sessionInfoVO.getUserId());
+        boardVO.setRegDt(currentDt);
+        boardVO.setRegId(sessionInfoVO.getUserId());
 
         if (boardVO.getStatus() == GridDataFg.INSERT) {
-
-            boardVO.setRegDt(currentDt);
-            boardVO.setRegId(sessionInfoVO.getUserId());
-
             // 게시판 게시일련번호 조회(자동채번)
             String boardSeqNo = boardMapper.getBoardBoardSeqNo(boardVO);
             boardVO.setBoardSeqNo(boardSeqNo);
 
             procCnt = boardMapper.getBoardInfoSaveInsert(boardVO);
 
+            // 공개대상
+            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
+
+                // 매장 array 값 세팅
+                String[] storeCds = boardVO.getStoreCds().split(",");
+                for(int i=0; i<storeCds.length; i++) {
+                    boardVO.setStoreCd(storeCds[i]);
+
+                    // 게시판 공개대상 insert
+                    boardMapper.getBoardPartStoreSaveInsert(boardVO);
+                }
+            }
+
         } else if(boardVO.getStatus() == GridDataFg.UPDATE) {
             procCnt = boardMapper.getBoardInfoSaveUpdate(boardVO);
+
+            // 게시판 공개대상 delete
+            boardMapper.getBoardPartStoreSaveDelete(boardVO);
+
+            // 공개대상
+            if(String.valueOf(2).equals(boardVO.getTargetFg())) {
+
+                // 매장 array 값 세팅
+                String[] storeCds = boardVO.getStoreCds().split(",");
+                for(int i=0; i<storeCds.length; i++) {
+                    boardVO.setStoreCd(storeCds[i]);
+
+                    // 게시판 공개대상에 선택한 매장이있는지 select
+                    String partOrgnCd = boardMapper.getBoardParStorePartOrgnCd(boardVO);
+
+                    if(String.valueOf(0).equals(partOrgnCd)) {
+                        // 게시판 공개대상 insert
+                        boardMapper.getBoardPartStoreSaveInsert(boardVO);
+                    } else {
+                        // 게시판 공개대상 update
+                        boardMapper.getBoardPartStoreSaveUpdate(boardVO);
+                    }
+                }
+            }
 
         } else if (boardVO.getStatus() == GridDataFg.DELETE) {
             // 게시판 delete
@@ -130,6 +167,16 @@ public class BoardServiceImpl implements BoardService {
 
             // 게시판 전체 첨부파일 delete
             boardMapper.getBoardInfoAtchDel(boardVO);
+
+            // 게시판 공개대상 delete
+            boardMapper.getBoardPartStoreSaveDelete(boardVO);
+        }
+
+        // 첨부파일 저장할때 쓰려고
+        if (procCnt > 0){
+            if (boardVO.getStatus() == GridDataFg.INSERT) {
+                procCnt = Integer.parseInt(boardVO.getBoardSeqNo());
+            }
         }
 
         return procCnt;
@@ -140,7 +187,8 @@ public class BoardServiceImpl implements BoardService {
     public boolean getBoardInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
 //        System.out.println("test1111");
-        boolean isSuccess = false;
+//        boolean isSuccess = false;
+        boolean isSuccess = true;
 
         try{
 
@@ -149,10 +197,13 @@ public class BoardServiceImpl implements BoardService {
 
             // 현재 일자
             String currentDate = currentDateString();
+
+            // 저장 경로 설정 (개발시 로컬)
+//            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\";
+
             // 파일서버 대응 경로 지정 (운영)
-//        String path = BaseEnv.FILE_UPLOAD_DIR + "posVer/";
-//            String path = "C:\\testBoardAtch\\" + currentDate + "\\";
-            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\" + currentDate + "\\";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "board/";
+
             // 업로드 되는 파일명
             String newFileName = "";
             // 원본 파일명
@@ -164,7 +215,7 @@ public class BoardServiceImpl implements BoardService {
                 dir.mkdir();
             }
 
-            Iterator<String> files = multi.getFileNames();
+//            Iterator<String> files = multi.getFileNames();
 
             List<MultipartFile> fileList = multi.getFiles("file");
             for(MultipartFile mFile : fileList)
@@ -174,6 +225,9 @@ public class BoardServiceImpl implements BoardService {
                 String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
 
                 // orgFileName
+                if ( orgFileName.contains(".") ) {
+                    orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
+                }
                 // IE에선 C:\Users\김설아\Desktop\123\new2.txt
                 // 크롬에선 new2.txt
                 if ( orgFileName.contains("\\") ) {
@@ -181,10 +235,7 @@ public class BoardServiceImpl implements BoardService {
                     orgFileName = orgFileName.substring(1);
                 }
 
-                newFileName = newFileName+"."+fileExt;
-
                 if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
-
 //                    orgFileName = mFile.getOriginalFilename().substring(0, mFile.getOriginalFilename().lastIndexOf('.'));
                     // 파일경로
                     boardInfo.setFilePath(path);
@@ -192,45 +243,45 @@ public class BoardServiceImpl implements BoardService {
                     boardInfo.setFileNm(newFileName);
                     // 원본 파일명
                     boardInfo.setOrginlFileNm(orgFileName);
-                }
+                    // 파일확장자
+                    boardInfo.setFileExt(fileExt);
 
-                // 파일 저장하는 부분
-                try {
-                    mFile.transferTo(new File(path+newFileName));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                String currentDt = currentDateTimeString();
-                boardInfo.setModDt(currentDt);
-                boardInfo.setModId(sessionInfo.getUserId());
-                boardInfo.setRegDt(currentDt);
-                boardInfo.setRegId(sessionInfo.getUserId());
+                    String currentDt = currentDateTimeString();
+                    boardInfo.setModDt(currentDt);
+                    boardInfo.setModId(sessionInfo.getUserId());
+                    boardInfo.setRegDt(currentDt);
+                    boardInfo.setRegId(sessionInfo.getUserId());
 
-                boardInfo.setStatusS((String)multi.getParameter("status"));
-                boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
-                boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
+                    boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
+                    boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
 
-                // 게시물이 신규 일때 boardSeqNo 가져오기
-                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
+                    // 게시물이 신규 일때 boardSeqNo 가져오기
+//                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
+//                    boardInfo.setTitle((String)multi.getParameter("title"));
+//                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
+//
+//                    // 게시판 신규등록시 boardSeqNo 가져오기
+//                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
+//                    boardInfo.setBoardSeqNo(boardSeqNo);
+//                }
 
-                    boardInfo.setTitle((String)multi.getParameter("title"));
-                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
+                    // 첨부파일 저장시 IDX (자동채번)
+                    String idx = boardMapper.getBoardAtchIdx(boardInfo);
+                    boardInfo.setIdx(idx);
 
-                    // 게시판 신규등록시 boardSeqNo 가져오기
-                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
-                    boardInfo.setBoardSeqNo(boardSeqNo);
-                }
-
-                // 첨부파일 저장시 IDX (자동채번)
-                String idx = boardMapper.getBoardAtchIdx(boardInfo);
-                boardInfo.setIdx(idx);
-
-                // 첨부파일 저장 isert
-                if(boardMapper.getBoardInfoAtchSaveIsert(boardInfo) > 0) {
-                    isSuccess = true;
-                } else {
-                    isSuccess = false;
+                    // 첨부파일 저장 isert
+                    if(boardMapper.getBoardInfoAtchSaveIsert(boardInfo) > 0) {
+                        isSuccess = true;
+                    } else {
+                        isSuccess = false;
+                    }
                 }
             }
             
@@ -301,7 +352,7 @@ public class BoardServiceImpl implements BoardService {
 
     /** 게시판 첨부파일 조회 */
     @Override
-    public List<BoardVO> getBoardDetailAtchList(BoardVO boardVO,  SessionInfoVO sessionInfoVO) {
+    public List<BoardVO> getBoardDetailAtchList(BoardVO boardVO, SessionInfoVO sessionInfoVO) {
 
         return boardMapper.getBoardDetailAtchList(boardVO);
     }

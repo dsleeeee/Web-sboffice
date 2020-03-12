@@ -7,6 +7,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupService;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
+import kr.co.solbipos.sale.status.prod.cls.service.ProdClassVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,4 +126,18 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 
 		return saleComPopupMapper.getProdList(saleComPopupVO);
     }
+
+
+    /** 매출공통팝업 - 상품선택(상품) 결제수단별탭 팝업 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
+
+		saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        
+        if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
+        	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
+        }
+		
+		return saleComPopupMapper.getPayFgList(saleComPopupVO);
+	}
 }

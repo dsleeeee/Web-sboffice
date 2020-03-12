@@ -152,4 +152,26 @@ public class SaleComPopupController {
 
         return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
     }
+    
+    
+    /**
+     * 매출공통팝업 - 상품선택(상품) - 결제수단별탭 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 03. 03.
+     */
+    @RequestMapping(value = "/payFg/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPayFgList(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.getPayFgList(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
 }

@@ -56,3 +56,8 @@
 </wj-popup>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.01" charset="utf-8"></script>
+<%-- 매출상세내역 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
