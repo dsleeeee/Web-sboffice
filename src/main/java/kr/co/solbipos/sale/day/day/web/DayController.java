@@ -226,6 +226,50 @@ public class DayController {
     }
 
     /**
+     * 일자별(상품분류별 탭) - 분류레벨에 따른 상품분류 가져오기
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  이다솜
+     * @since   2020. 03. 06.
+     */
+    @RequestMapping(value = "/dayProdClass/level.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayProdClassLevel(HttpServletRequest request, HttpServletResponse response,
+                                      Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayProdClassLevel(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
+     * 일자별(상품분류별 탭) - 상품분류별 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dayVO
+     * @return  String
+     * @author  이다솜
+     * @since   2020. 03. 06.
+     */
+    @RequestMapping(value = "/dayProdClass/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayProdClassList(HttpServletRequest request, HttpServletResponse response,
+                                 Model model, DayVO dayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dayService.getDayProdClassList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dayVO);
+    }
+
+    /**
      * 코너별 - 코너별 매출조회
      *
      * @param dayVO

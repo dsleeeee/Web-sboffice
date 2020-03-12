@@ -99,6 +99,9 @@ public class SaleByPeriodController {
 //        System.out.println("posColList : "+posColList);
 //        System.out.println("posCol : "+posCol);
 
+        // 상분분류별 탭 - 분류레벨 최대값 조회
+        model.addAttribute("maxLevel", dayService.getDayProdClassMaxLevel(dayVO, sessionInfoVO));
+
 
         return "sale/day/saleByPeriod";
     }

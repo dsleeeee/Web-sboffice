@@ -42,6 +42,15 @@ public interface DayService {
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져오기 */
+    int getDayProdClassMaxLevel(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 일자별(상품분류 탭) - 분류레벨에 따른 상품분류 가져오기 */
+    public List<DefaultMap<String>> getDayProdClassLevel(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 일자별(상품분류 탭) - 상품분류별 리스트 조회 */
+    public List<DefaultMap<String>> getDayProdClassList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
     /**  코너별 - 코너별 매출조회 */
     List<DefaultMap<Object>> getDayCornerList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 

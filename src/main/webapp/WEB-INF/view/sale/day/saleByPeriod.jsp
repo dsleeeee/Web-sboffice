@@ -99,6 +99,9 @@
 
     var posCol    = '${posCol}';
     var arrPosCol = posCol.split(',');
+
+    // 상품분류별 - 분류레벨 최대값
+    var maxLevel    = '${maxLevel}';
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/saleByPeriod.js?ver=20200130.04" charset="utf-8"></script>

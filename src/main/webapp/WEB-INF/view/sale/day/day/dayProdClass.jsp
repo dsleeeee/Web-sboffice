@@ -28,9 +28,9 @@
             <th><s:message code="cmm.search.date"/></th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"><input id="srchProdClassStartDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchProdClassStartDate" ng-model="startDate" class="w120px"></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchProdClassEndDate" class="w120px"></span>
+                    <span class="txtIn"><input id="srchProdClassEndDate" ng-model="endDate" class="w120px"></span>
                 </div>
             </td>
         </tr>
@@ -66,9 +66,12 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            selected-index-changed="setProdClass(s)">
                     </wj-combo-box>
                 </div>
+                <input type="hidden" id="hdProdClassCd"/>
+                <input type="hidden" id="hdProdClassNm"/>
             </td>
             <th><s:message code="day.prodClass.prodCd"/></th>
             <td>
@@ -87,9 +90,14 @@
         </tr>
         <tr>
             <th><s:message code="day.prodClass.srchClass"/></th>
-            <td colspan="3">
-
+            <td>
+                <input type="text" class="sb-input w70" id="srchProdClassProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                       placeholder="<s:message code="day.prodClass.srchClass" /> 선택" readonly/>
+                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
+            <th></th>
+            <td></td>
         </tr>
         </tbody>
     </table>
@@ -105,13 +113,20 @@
                     control="flex"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
-                    item-formatter="_itemFormatter">
+                    item-formatter="_itemFormatter"
+                    id="wjDayProdClassList">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="day.prodClass.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="day.prodClass.yoil"/>" binding="yoil" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.prodClass.totRealSaleAmt"/>" binding="storeCnt" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="day.prodClass.totSaleQty"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="day.prodClass.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="day.prodClass.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+                <%-- 컬럼 생성--%>
+                <c:forEach var="i" begin="1" end="100" step="1">
+                    <wj-flex-grid-column header="<s:message code="day.prodClass.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="day.prodClass.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
+                </c:forEach>
 
 
 
@@ -129,4 +144,8 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200108.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200109" charset="utf-8"></script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>

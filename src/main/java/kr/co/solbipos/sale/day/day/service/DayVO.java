@@ -7,6 +7,14 @@ public class DayVO extends PageVO {
 
     private static final long serialVersionUID = 7461756476951960825L;
 
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
     /** 본사코드 */
     private String hqOfficeCd;
     /** 브랜드코드 */
@@ -75,6 +83,40 @@ public class DayVO extends PageVO {
 
     /** 매장코너 코드 */
     private String storeCornerCd;
+
+    /** 상품분류 LEVEL */
+    private String level;
+    /** 다중 상품분류코드(string 형) */
+    private String strProdClassCd;
+    /** 다중 상품분류코드(배열형) */
+    private String[] arrProdClassCd;
+    /** 상품분류코드*/
+    private String prodClassCd;
+    /** 상위상품 분류코드 */
+    private String pProdClassCd;
+    /** 쿼리문의 PIVOT IN에 사용할 상품분류별 컬럼 문자열 */
+    private String pivotProdClassCol1;
+    private String pivotProdClassCol2;
+    private String pivotProdClassCol3;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
+    /** 바코드 */
+    private String barCd;
+    /** 검색 시작 날짜 */
+    private String startDate;
+    /** 검색 종료 날짜 */
+    private String endDate;
+
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     /**
      * @return the hqOfficeCd
@@ -341,4 +383,112 @@ public class DayVO extends PageVO {
     public String getStoreCornerCd() { return storeCornerCd; }
 
     public void setStoreCornerCd(String storeCornerCd) { this.storeCornerCd = storeCornerCd; }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getStrProdClassCd() {
+        return strProdClassCd;
+    }
+
+    public void setStrProdClassCd(String strProdClassCd) {
+        this.strProdClassCd = strProdClassCd;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String getpProdClassCd() {
+        return pProdClassCd;
+    }
+
+    public void setpProdClassCd(String pProdClassCd) {
+        this.pProdClassCd = pProdClassCd;
+    }
+
+    public String getPivotProdClassCol1() {
+        return pivotProdClassCol1;
+    }
+
+    public void setPivotProdClassCol1(String pivotProdClassCol1) {
+        this.pivotProdClassCol1 = pivotProdClassCol1;
+    }
+
+    public String getPivotProdClassCol2() {
+        return pivotProdClassCol2;
+    }
+
+    public void setPivotProdClassCol2(String pivotProdClassCol2) {
+        this.pivotProdClassCol2 = pivotProdClassCol2;
+    }
+
+    public String getPivotProdClassCol3() {
+        return pivotProdClassCol3;
+    }
+
+    public void setPivotProdClassCol3(String pivotProdClassCol3) {
+        this.pivotProdClassCol3 = pivotProdClassCol3;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    public String getBarCd() {
+        return barCd;
+    }
+
+    public void setBarCd(String barCd) {
+        this.barCd = barCd;
+    }
+
+    @Override
+    public String getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    @Override
+    public String getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 }
