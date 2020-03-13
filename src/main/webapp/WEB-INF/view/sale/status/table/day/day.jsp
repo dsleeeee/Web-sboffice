@@ -80,7 +80,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<!-- <wj-combo-box
+		<wj-combo-box
 			class="w100px fl"
 			id="tableDayListScaleBox"
 			ng-model="tableDayListScale"
@@ -89,7 +89,7 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box> -->
+		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableDaySelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
