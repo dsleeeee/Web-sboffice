@@ -106,7 +106,7 @@
           </div>
         </td>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
-            <input type="hidden" id="apprNcardSelectStoreStoreCd" value="${sessionInfo.storeCd}"/>
+            <input type="hidden" id="apprNcardSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
         <input type="hidden" id="posNcardSelectPosCd" value=""/>
         <input type="hidden" id="posNcardSelectPosName" value=""/>
@@ -128,7 +128,7 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <input type="hidden" id="apprNcardSelectStoreStoreNum" ng-model="storeNum">
+            <input type="hidden" id="apprNcardSelectStoreNum" ng-model="storeNum">
         </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadNcard()"><s:message code="cmm.excel.down" />

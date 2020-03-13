@@ -39,7 +39,7 @@
         </div>
         </td>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <input type="hidden" id="apprAcquireNcardSelectStoreStoreCd" value=""/>
+        <input type="hidden" id="apprAcquireNcardSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
         <th><s:message code="todayBillSaleDtl.store"/></th>
         <td>
@@ -106,7 +106,7 @@
           </div>
         </td>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
-            <input type="hidden" id="apprAcquireNcardSelectStoreStoreCd" value="${sessionInfo.storeCd}"/>
+            <input type="hidden" id="apprAcquireNcardSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
         <input type="hidden" id="posAcquireNcardSelectPosCd" value=""/>
         <input type="hidden" id="posAcquireNcardSelectPosName" value=""/>

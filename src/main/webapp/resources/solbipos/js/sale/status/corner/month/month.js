@@ -66,15 +66,15 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     		}
     		
         if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
-        	if(arrStoreCornr != ""){
-    			params.arrStoreCornr	 = arrStoreCornr;
-    		}else{
-    			params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
-    		}
+			params.arrStoreCornr	 = arrStoreCornr;
+			params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
         	$scope._broadcast('saleComProdCtrl', params);
         }else if(col.binding.substring(0, 7) === "saleQty") {
         	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
-    		$scope._broadcast('saleComProdCtrl', params);
+        	if(gvOrgnFg == "S"){
+        		params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
+        	}
+        	$scope._broadcast('saleComProdCtrl', params);
         }
         
       }

@@ -51,8 +51,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	        var params       = {};
 	        	params.chkPop	= "empPop";
 	        	params.storeCd   = $("#empDayOfWeekSelectStoreCd").val();
-	    	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	    	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	        	if(!$scope.isChecked){
+	        		params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+	        		params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	        	}
 	    	    params.yoil   = selectedRow.yoil;
 	        if (col.binding === "totBillCnt") { // 수량
 	          $scope._broadcast('saleComProdCtrl', params);
@@ -281,8 +283,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 				   		params.chkPop	= "empPop";
 				   		params.empNo    = empNoCd;
 				   		params.storeCd   = storeCd;
-			    	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-			    	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+				   		if(!$scope.isChecked){
+				   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+				   			params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+				   		}
 			    	    params.yoil   = selectedRow.yoil;
 				    		
 				   		if (col.binding.substring(0, 7) === "billCnt") { //영수건수 클릭

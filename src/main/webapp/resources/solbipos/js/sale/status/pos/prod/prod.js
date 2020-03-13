@@ -328,9 +328,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
 			   		
 		    		var params       = {};
-		    		params.chkPop	= "posPop";    		
-					params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
+		    		params.chkPop	= "posPop";   
+		    		if(!$scope.isChecked){
+		    			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
+		    			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
+		    		}
 		    		params.prodCd   = selectedRow.prodCd;
 		    		
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 

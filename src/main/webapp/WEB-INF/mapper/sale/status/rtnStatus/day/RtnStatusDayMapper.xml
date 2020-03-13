@@ -154,7 +154,7 @@
         ,SUM(C.REAL_SALE_AMT) AS REAL_SALE_AMT
         ,SUM(C.CNT) AS CNT
       <include refid="CmmSQL.PagingTemplateCount"/>
-<choose>
+        <choose>
          <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
          FROM    (
             SELECT  A.P_PROD_CLASS_CD   AS LV1_CD
@@ -237,7 +237,7 @@
             ) A
          ,TB_MS_PRODUCT B      
          </when> 
-</choose>                                            
+        </choose>                                            
         , (SELECT TSSH.STORE_CD, TSSH.PROD_CD, SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT, COUNT(*) AS CNT
             FROM TB_SL_SALE_DTL TSSH
             WHERE 1=1
@@ -257,8 +257,14 @@
         </if>
            GROUP BY TSSH.STORE_CD, TSSH.PROD_CD
            ) C
-         WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
-         AND     B.PROD_CLASS_CD = A.LV3_CD
+         WHERE   
+         <choose>
+	         <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+	            B.HQ_OFFICE_CD   = #{hqOfficeCd}
+	            AND
+	         </when>
+         </choose>     
+         B.PROD_CLASS_CD = A.LV3_CD
          AND     B.PROD_CD       = C.PROD_CD               
          GROUP BY    A.LV1_CD
                      ,A.LV2_CD

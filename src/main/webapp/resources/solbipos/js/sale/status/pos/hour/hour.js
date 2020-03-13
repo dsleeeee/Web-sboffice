@@ -324,8 +324,10 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			   		
 		    		var params       = {};
 		    		params.chkPop	= "posHourPop";    	
-					params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+		    		if(!$scope.isChecked){
+		    			params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
+		    			params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+		    		}
 		    		params.saleHour   = selectedRow.saleHour;
 		    		
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 

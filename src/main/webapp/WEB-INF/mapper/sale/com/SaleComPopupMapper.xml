@@ -747,8 +747,7 @@
 		                     WHERE   B.STORE_CD      = #{storeCd}
 		                     AND     B.PROD_CLASS_CD = A.LV3_CD
 		             ) A,
-                     TB_MS_PRODUCT       B,
-                                          (
+                     (
 				      SELECT TSSD.STORE_CD
 				           , TSSD.PROD_CD
 			               , TSSD.SALE_DATE

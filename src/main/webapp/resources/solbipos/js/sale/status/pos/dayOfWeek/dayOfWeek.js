@@ -324,9 +324,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
 			   		
 		    		var params      = {};
-		    		params.chkPop	= "posPop";    		
-					params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+		    		params.chkPop	= "posPop";    	
+		    		if(!$scope.isChecked){
+		    			params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
+		    			params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+		    		}
 		    		params.yoil     = selectedRow.dayName;
 
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
