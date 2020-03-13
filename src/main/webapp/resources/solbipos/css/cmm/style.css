@@ -888,6 +888,21 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
     cursor:pointer;
 }
 
+
+/* 그리드 링크 컬러 추가 / 블랙/레드 */
+.wijLink-red {
+    color: #ff0000 !important;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+.wijLink-black {
+    color: #222 !important;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+
 .pageNum {position:relative; width:100%; text-align:center;}
 .pageNum ul {height:30px; text-align:center; display:inline-block; overflow:hidden;}
 .pageNum ul li {display:inline-block; width:34px; height:30px; float:left; margin:0 2px;}
@@ -2110,53 +2125,103 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .prodNavWrap.t2 {width:100%}
 .prodNavWrap.t2 .keyStyleWrap {position:relative; width:100%; height:auto; overflow:hidden}
 .prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
-.tch-inner {float:left; width:190px; height:550px; margin-top:5px; padding:10px; border:1px solid #e8e8e8}
+.tch-inner {float:left; width:228px; height:605px; margin:26px 0 0 20px; padding:10px; border:1px solid #dbdbdb}
 .tch-inner.t2 {width:495px}
 .frGroupWrap.t2 {height:60px; padding:10px 10px 0; text-align:left}
 .frGroupWrap.t2 span {display:inline-block; }
-.frGroupWrap.t2 span a {width:auto; padding:10px}
+.frGroupWrap.t2 span a {width:auto; padding:10px; margin:0 3px}
 .prev1.t2 svg {min-width:auto !important; min-height:auto !important}
 
-/* 그리드 링크 컬러 추가 / 블랙/레드 */
-.wijLink-red {
-    color: #ff0000 !important;
-    text-decoration:underline;
-    cursor:pointer;
-}
 
-.wijLink-black {
-    color: #222 !important;
-    text-decoration:underline;
-    cursor:pointer;
-}
+/* 컨텐츠 영역 가변 그리드 관련 패딩 적용 */
+.subCon3 {padding:20px}
 
 /* 전체화면 그리드 스크롤 및 height 가변 적용 */
-#wjGridWrap {}
-#wjGridWrap .wj-gridWrap {overflow:hidden}
+#wjWrapType1,#wjWrapType2,#wjWrapType3 {width:100%}
+#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {overflow:hidden}
 
-/* 가변 설정  포스넓이 1024px => 익스플로러 1028px*/
+/* 가변 설정  포스넓이 1024px => 익스플로러 1028px */
 @media all and (max-width:1028px) {
-	/* 그리드 리스트 5개 + 합계 1개 포함 총 6라인 */
-	#wjGridWrap .wj-gridWrap {height:257px}
+	/* 그리드 리스트 5개 + 합계 1개 포함 총 6라인 // 그리드 헤더 1단*/
+	#wjWrapType1 .wj-gridWrap {height:257px}
+	#wjWrapType2 .wj-gridWrap {height:291px}
+	#wjWrapType3 .wj-gridWrap {height:325px}
 }
 @media all and (min-width:1029px){
-	#wjGridWrap .wj-gridWrap {height:auto}
+	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; border-bottom-color:#eee}
 }
 
-/* SCROLLBAR Chrome Safari */
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar {width: 17px; height: 17px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button {width: 17px;height: 17px; background:url(../img/ico_scroll_arrow.png) 0 0 no-repeat}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement {background-position:0 0}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment {background-position:-17px 0}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement {background-position:0 -34px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment {background-position:-17px -34px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement:hover {background-position:0 -17px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment:hover {background-position:-17px -17px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement:hover {background-position:0 -51px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment:hover {background-position:-17px -51px}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-track {background: #f1f1f1}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb {width:13px; height:13px; border:2px solid transparent; background-clip: content-box; background-color: #c1c1c1}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:hover {border:2px solid transparent; background-clip: content-box; background-color:#a8a8a8}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:active {border:2px solid transparent; background-clip: content-box; background-color:#787878}
-#wjGridWrap .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner {background: #dcdcdc}
+/* SCROLLBAR Chrome, Safari, Whale */
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar {width: 17px; height: 17px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button {width: 17px;height: 17px; background:url(../img/ico_scroll_arrow.png) 0 0 no-repeat}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement {background-position:0 0}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment {background-position:-17px 0}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement {background-position:0 -34px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment {background-position:-17px -34px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement:hover,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement:hover,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:decrement:hover {background-position:0 -17px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment:hover,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment:hover,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:horizontal:increment:hover {background-position:-17px -17px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement:hover,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement:hover,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:decrement:hover {background-position:0 -51px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment:hover,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment:hover,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-button:vertical:increment:hover {background-position:-17px -51px}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-track,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-track,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-track {background: #f1f1f1}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb {width:13px; height:13px; border:2px solid transparent; background-clip: content-box; background-color: #c1c1c1}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:hover,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:hover,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:hover {border:2px solid transparent; background-clip: content-box; background-color:#a8a8a8}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:active,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:active,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-thumb:active {border:2px solid transparent; background-clip: content-box; background-color:#787878}
+
+#wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner,
+#wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner,
+#wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner {background: #dcdcdc}
+
+
+/* tab type 추가 및  con padding 재정의 
+.con {padding:20px 20px 0}
+.tabType1.t3 {padding:0 20px; height:auto}
+.tabType1.t3:after {display:block; clear:both; content:''}
+.tabType1.t3 ul {height:auto; border-color:#eee}
+.tabType1.t3 ul li {float:left; margin:0}
+.tabType1.t3 ul li a {display:block; padding:10px 15px; font-size:13px; height:auto; line-height:16px !important; background-color:#fff; color:#999}
+.tabType1.t3 ul li a:hover {background-color:#eee; color:#999}
+.tabType1.t3 ul li a.on {padding:10px 15px 8px; background-color:#fff; color:#222; border-bottom:2px solid #222} 
+
+*/
 
