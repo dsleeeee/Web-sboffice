@@ -128,6 +128,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     var chngCnt  = 0; // 변경된 건수
+    var arrChg = []; //  변경된 환경변수 배열 Key 값
     var params = [];
 
     for(var i=0; i<objEnvstCd.length; i++){
@@ -143,6 +144,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       if(objOldEnvstVal[i].value !== $("#env"+objEnvstCd[i].value).val()) {
+        arrChg.push(i);
         chngCnt ++;
       }
     }
@@ -156,7 +158,7 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var storeScope = agrid.getScope('storeManageCtrl');
 
-      for(var i=0; i<objEnvstCd.length; i++){
+      /*for(var i=0; i<objEnvstCd.length; i++){
 
         var obj = {};
         obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
@@ -167,6 +169,22 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         obj.envstGrpCd  = objEnvstGrpCd[i].value;
         obj.envstVal    = objEnvstValCd[i].value;
         obj.dirctInYn   = objDirctInYn[i].value;
+
+        params.push(obj);
+      }*/
+
+      // 기존에 전체 환경변수값 저장에서 변경된 환경변수값만 저장되도록 수정
+      for(var i=0; i<arrChg.length; i++){
+
+        var obj = {};
+        obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
+        obj.storeCd     = storeScope.getSelectedStore().storeCd;
+        obj.status      = objStatus[arrChg[i]].value;
+        obj.envstCd     = objEnvstCd[arrChg[i]].value;
+        obj.envstNm     = objEnvstNm[arrChg[i]].value;
+        obj.envstGrpCd  = objEnvstGrpCd[arrChg[i]].value;
+        obj.envstVal    = objEnvstValCd[arrChg[i]].value;
+        obj.dirctInYn   = objDirctInYn[arrChg[i]].value;
 
         params.push(obj);
       }

@@ -162,14 +162,14 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.save = function(){
 
-    var objStatus       = document.getElementsByName("status");
-    var objEnvstCd      = document.getElementsByName("envstCd");
-    var objEnvstNm      = document.getElementsByName("envstNm");
-    var objEnvstGrpCd   = document.getElementsByName("envstGrpCd");
-    var objDefault      = document.getElementsByName("defltYn");
-    var objEnvstValCd   = document.getElementsByName("envstValCd");
-    var objDirctInYn    = document.getElementsByName("dirctInYn");
-    var objOldEnvstVal  = document.getElementsByName("oldEnvstVal");
+    var objStatus       = document.getElementsByName("pos_status");
+    var objEnvstCd      = document.getElementsByName("pos_envstCd");
+    var objEnvstNm      = document.getElementsByName("pos_envstNm");
+    var objEnvstGrpCd   = document.getElementsByName("pos_envstGrpCd");
+    var objDefault      = document.getElementsByName("pos_defltYn");
+    var objEnvstValCd   = document.getElementsByName("pos_envstValCd");
+    var objDirctInYn    = document.getElementsByName("pos_dirctInYn");
+    var objOldEnvstVal  = document.getElementsByName("pos_oldEnvstVal");
 
     // 포스형태[204]가 외식업-후불제인 경우에만 후불제를 선택할 수 있습니다.
     var env1015 = $("#env1015").val();
@@ -182,6 +182,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     var chngCnt  = 0; // 변경된 건수
+    var arrChg = []; //  변경된 환경변수 배열 Key 값
     var params = new Array();
 
     for(var i=0; i<objEnvstCd.length; i++){
@@ -196,6 +197,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       if(objOldEnvstVal[i].value != $("#env"+objEnvstCd[i].value).val()) {
+        arrChg.push(i);
         chngCnt ++;
       }
     }
@@ -209,7 +211,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var storeScope = agrid.getScope('storeManageCtrl');
 
-      for(var i=0; i<objEnvstCd.length; i++){
+      /*for(var i=0; i<objEnvstCd.length; i++){
 
         var obj = {};
         obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
@@ -220,6 +222,24 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         obj.envstGrpCd  = objEnvstGrpCd[i].value;
         obj.envstVal    = objEnvstValCd[i].value;
         obj.dirctInYn   = objDirctInYn[i].value;
+        obj.posNo       = $scope.getSelectedPosNo();
+        obj.useYn       = "Y";
+
+        params.push(obj);
+      }*/
+
+      // 기존에 전체 환경변수값 저장에서 변경된 환경변수값만 저장되도록 수정
+      for(var i=0; i<arrChg.length; i++){
+
+        var obj = {};
+        obj.hqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
+        obj.storeCd     = storeScope.getSelectedStore().storeCd;
+        obj.status      = objStatus[arrChg[i]].value;
+        obj.envstCd     = objEnvstCd[arrChg[i]].value;
+        obj.envstNm     = objEnvstNm[arrChg[i]].value;
+        obj.envstGrpCd  = objEnvstGrpCd[arrChg[i]].value;
+        obj.envstVal    = objEnvstValCd[arrChg[i]].value;
+        obj.dirctInYn   = objDirctInYn[arrChg[i]].value;
         obj.posNo       = $scope.getSelectedPosNo();
         obj.useYn       = "Y";
 
