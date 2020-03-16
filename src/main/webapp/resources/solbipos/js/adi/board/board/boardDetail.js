@@ -187,7 +187,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquirySub("/adi/board/board/board/getBoardDetailAnswerList.sb", params, function() {}, false);
     };
 
-    // 첨부파일 조회
+    // 첨부파일 다운로드 조회
     $scope.searchBoardDetailAtch = function() {
         var params = {};
         params.boardCd = $scope.selectedBoardDetail.boardCd;
@@ -290,7 +290,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 게시판 삭제
-    $scope.del = function(data){
+    $scope.del = function(){
         // 해당 게시물을 삭제하시겠습니까?
         $scope._popConfirm(messages["boardDetail.delConfirm"], function() {
 
@@ -344,6 +344,9 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $('#summernoteDetail').summernote('reset');
 
         $scope.wjBoardDetailLayer.hide();
+
+        // 재조회
+        $scope._broadcast('boardListCtrl');
     };
 
     // 열람자 목록

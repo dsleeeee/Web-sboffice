@@ -15,11 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
 
-import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
@@ -196,7 +193,15 @@ public class BoardServiceImpl implements BoardService {
             BoardVO boardInfo = new BoardVO();
 
             // 현재 일자
-            String currentDate = currentDateString();
+            String currentDt = currentDateTimeString();
+
+            boardInfo.setModDt(currentDt);
+            boardInfo.setModId(sessionInfo.getUserId());
+            boardInfo.setRegDt(currentDt);
+            boardInfo.setRegId(sessionInfo.getUserId());
+
+            boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
+            boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
 
             // 저장 경로 설정 (개발시 로컬)
 //            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\";
@@ -252,25 +257,6 @@ public class BoardServiceImpl implements BoardService {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    String currentDt = currentDateTimeString();
-                    boardInfo.setModDt(currentDt);
-                    boardInfo.setModId(sessionInfo.getUserId());
-                    boardInfo.setRegDt(currentDt);
-                    boardInfo.setRegId(sessionInfo.getUserId());
-
-                    boardInfo.setBoardCd((String)multi.getParameter("boardCd"));
-                    boardInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
-
-                    // 게시물이 신규 일때 boardSeqNo 가져오기
-//                if(String.valueOf(GridDataFg.INSERT).equals(multi.getParameter("status"))) {
-//                    boardInfo.setTitle((String)multi.getParameter("title"));
-//                    boardInfo.setUserNm((String)multi.getParameter("userNm"));
-//
-//                    // 게시판 신규등록시 boardSeqNo 가져오기
-//                    String boardSeqNo = boardMapper.getBoardAtchBoardSeqNo(boardInfo);
-//                    boardInfo.setBoardSeqNo(boardSeqNo);
-//                }
 
                     // 첨부파일 저장시 IDX (자동채번)
                     String idx = boardMapper.getBoardAtchIdx(boardInfo);
