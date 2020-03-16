@@ -149,7 +149,6 @@
     <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>
 
 <!--
-    <typeAlias alias="boardVO" type="kr.co.solbipos.sys.etc.board.service.BoardVO"/>
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>
 -->
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
@@ -441,6 +440,7 @@
     <typeAlias alias="crncyCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO"/>
     <!-- 게시판 -->
     <typeAlias alias="boardVO" type="kr.co.solbipos.adi.board.board.service.BoardVO"/>
+    <typeAlias alias="libraryVO" type="kr.co.solbipos.adi.board.library.service.LibraryVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
     <typeAlias alias="msgManageVO" type="kr.co.solbipos.adi.sms.msgmanage.service.MsgManageVO"/>
@@ -454,8 +454,6 @@
     <typeAlias alias="annvrsryVO" type="kr.co.solbipos.adi.sms.annvrsry.service.AnnvrsryVO"/>
     <typeAlias alias="weatherVO" type="kr.co.solbipos.adi.cldr.weather.service.WeatherVO"/>
     <typeAlias alias="manualVO" type="kr.co.solbipos.adi.board.manual.service.ManualVO"/>
-    <typeAlias alias="docVO" type="kr.co.solbipos.adi.board.doc.service.DocVO"/>
-    <typeAlias alias="totalVO" type="kr.co.solbipos.adi.board.total.service.TotalVO"/>
     <typeAlias alias="orderDtstmnVO" type="kr.co.solbipos.si.edi.orderdtstmn.service.OrderDtstmnVO"/>
     <typeAlias alias="orderSmVO" type="kr.co.solbipos.si.edi.ordersm.service.OrderSmVO"/>
     <typeAlias alias="newProdVO" type="kr.co.solbipos.si.edi.newprod.service.NewProdVO"/>

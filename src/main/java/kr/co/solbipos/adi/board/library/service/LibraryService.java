@@ -1,0 +1,44 @@
+package kr.co.solbipos.adi.board.library.service;
+
+import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.adi.board.library.service.LibraryVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.util.List;
+
+/**
+ * @Class Name : LibraryService.java
+ * @Description : 부가서비스 > 자료실 > 자료실
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.03.11  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2020.03.11
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public interface LibraryService {
+
+    /** 자료실 조회 */
+    List<DefaultMap<Object>> getLibraryList(LibraryVO libraryVO, SessionInfoVO sessionInfoVO);
+
+    /** 자료실 상세 팝업 - 첨부파일 조회 */
+    List<LibraryVO> getLibraryDetailAtchList(LibraryVO libraryVO, SessionInfoVO sessionInfoVO);
+
+    /** 자료실 신규등록,수정 팝업 - 자료실 조회 */
+    List<DefaultMap<Object>> getLibraryInfoList(LibraryVO libraryVO, SessionInfoVO sessionInfoVO);
+
+    /** 자료실 신규등록,수정 팝업 - 첨부파일 저장 */
+    boolean getLibraryInfoAtchSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
+
+    /** 자료실 신규등록,수정 팝업 - 저장 */
+    int getLibraryInfoSave(LibraryVO libraryVO, SessionInfoVO sessionInfoVO);
+
+    /** 자료실 첨부파일 삭제 */
+    int getLibraryInfoAtchDel(LibraryVO libraryVO, SessionInfoVO sessionInfoVO);
+}

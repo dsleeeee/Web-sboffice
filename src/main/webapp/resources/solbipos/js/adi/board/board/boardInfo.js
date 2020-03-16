@@ -170,6 +170,15 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // <-- //검색 호출 -->
 
+    // 선택 매장
+    $scope.selectedBoardInfo;
+    $scope.setSelectedBoardInfo = function(store) {
+        $scope.selectedBoardInfo = store;
+    };
+    $scope.getSelectedBoardInfo = function(){
+        return $scope.selectedBoardInfo;
+    };
+
     // 저장
     $("#funcSave").click(function(e){
         if($scope.title === "") {
@@ -231,6 +240,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.atchSave(params);
 
                     $scope._popMsg("저장되었습니다.");
+
+                    $scope.close();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -272,14 +283,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             success: function(result) {
                 // console.log('save result', result);
                 if (result.status === "OK") {
-                    if( isEmptyObject($scope.getSelectVersion()) ) {
-                        $scope._popMsg("등록되었습니다.");
-                    } else {
-                        $scope._popMsg("저장되었습니다.");
-                    }
-
+                    $scope._popMsg("저장되었습니다.");
                     $scope.$broadcast('loadingPopupInactive');
-                    $scope.close();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -332,20 +337,14 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._broadcast('boardInfoStoreCtrl');
     };
 
-    // 선택 매장
-    $scope.selectedBoardInfo;
-    $scope.setSelectedBoardInfo = function(store) {
-        $scope.selectedBoardInfo = store;
-    };
-    $scope.getSelectedBoardInfo = function(){
-        return $scope.selectedBoardInfo;
-    };
-
     // 팝업 닫기
     $scope.close = function(){
         $scope.newForm();  //신규
-
         $scope.wjBoardInfoLayer.hide();
+        $scope.wjBoardDetailLayer.hide();
+
+        // 저장기능 수행후 재조회
+        $scope._broadcast('boardListCtrl');
     };
 
     // 글쓰기 에디터

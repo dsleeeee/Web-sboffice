@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Library.xml
+    자료실
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.03.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.board.library.service.impl.LibraryMapper">
+
+    <!-- 자료실 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <select id="getLibraryList"  parameterType="LibraryVO" resultType="DefaultMap">
+        /* LibraryMapper.getLibraryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        twbi.TITLE,
+        twbi.USER_NM,
+        twbi.REG_DT,
+        twbi.BOARD_CD,
+        twbi.BOARD_SEQ_NO,
+        twbi.USER_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_WB_BOARD_INFO twbi
+        WHERE 1=1
+        AND twbi.BOARD_CD = #{boardCd}
+        AND twbi.USE_YN = 'Y'
+        <choose>
+            <when test='gubunCombo != null'>
+                <!-- 자료명 -->
+                <if test='gubunCombo == "1"'>
+                    <![CDATA[
+                        AND twbi.TITLE LIKE '%'||#{gubunName}||'%'
+                    ]]>
+                </if>
+                <!-- 작성자 -->
+                <if test='gubunCombo == "2"'>
+                    <![CDATA[
+                        AND twbi.USER_NM LIKE '%'||#{gubunName}||'%'
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        ORDER BY twbi.BOARD_CD, twbi.BOARD_SEQ_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 자료실 상세 팝업 - 첨부파일 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH, TB_WB_BOARD_INFO
+        COMMENTS : 게시판 첨부, 게시판 정보
+    -->
+    <select id="getLibraryDetailAtchList"  parameterType="LibraryVO" resultType="LibraryVO">
+        /* LibraryMapper.getLibraryDetailAtchList */
+        SELECT
+        twbi.TITLE,
+        twba.ORGINL_FILE_NM,
+        twba.FILE_NM,
+        twba.FILE_EXT
+        FROM TB_WB_BOARD_ATCH twba,
+        TB_WB_BOARD_INFO twbi
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+        AND twba.USE_YN = 'Y'
+        AND twbi.BOARD_CD (+)= twba.BOARD_CD
+        AND twbi.BOARD_SEQ_NO (+)= twba.BOARD_SEQ_NO
+        ORDER BY twba.BOARD_CD, twba.BOARD_SEQ_NO, twba.IDX
+    </select>
+
+    <!-- 자료실 신규등록,수정 팝업 - 자료실 조회 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <select id="getLibraryInfoList"  parameterType="LibraryVO" resultType="DefaultMap">
+        /* LibraryMapper.getLibraryInfoList */
+        SELECT
+        twba.IDX,
+        (twba.ORGINL_FILE_NM || '.' || twba.FILE_EXT) AS ORGINL_FILE_NM,
+        '삭제' AS DEL
+        FROM TB_WB_BOARD_ATCH twba
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+        AND twba.USE_YN = 'Y'
+        ORDER BY twba.BOARD_CD, twba.BOARD_SEQ_NO, twba.IDX
+    </select>
+
+    <!-- 게시판 게시일련번호 조회(자동채번) -->
+    <!--
+      TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <select id="getBoardBoardSeqNo"  parameterType="LibraryVO" resultType="String">
+        /* LibraryMapper.getBoardBoardSeqNo */
+        SELECT
+        (NVL(MAX(twbi.BOARD_SEQ_NO), 0) + 1) AS BOARD_SEQ_NO
+        FROM TB_WB_BOARD_INFO twbi
+        WHERE 1=1
+        AND twbi.BOARD_CD = #{boardCd}
+    </select>
+
+    <!-- 아이디에 따른 작성자 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE, TB_MS_EMPLOYEE, TB_CM_EMPLOYEE
+        COMMENTS : [본사]사원 정보, [매장]사원 정보, [공통]시스템/대리점 사원 정보
+    -->
+    <select id="getBoardUserNm"  parameterType="LibraryVO" resultType="String">
+        /* LibraryMapper.getBoardUserNm */
+        SELECT
+        tce.USER_NM
+        FROM
+        (
+            (
+                --본사
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_HQ_EMPLOYEE
+                WHERE 1=1
+            )
+            UNION ALL
+            (
+                --매장
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_MS_EMPLOYEE
+                WHERE 1=1
+            )
+            UNION ALL
+            (
+                --관리자,총판
+                SELECT
+                USER_ID,
+                EMP_NM AS USER_NM
+                FROM TB_CM_EMPLOYEE
+                WHERE 1=1
+            )
+        ) tce
+        WHERE 1=1
+        AND tce.USER_ID = #{userId}
+    </select>
+
+    <!-- 첨부파일 저장시 IDX (자동채번) -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <select id="getBoardAtchIdx"  parameterType="LibraryVO" resultType="String">
+        /* LibraryMapper.getBoardAtchIdx */
+        SELECT
+        (NVL(MAX(twba.IDX), 0) + 1) AS IDX
+        FROM TB_WB_BOARD_ATCH twba
+        WHERE 1=1
+        AND twba.BOARD_CD = #{boardCd}
+        AND twba.BOARD_SEQ_NO = #{boardSeqNo}
+    </select>
+
+    <!-- 자료실 신규등록,수정 팝업 - 첨부파일 저장 isert -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <insert id="getLibraryInfoAtchSaveIsert" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoAtchSaveIsert */
+        INSERT INTO TB_WB_BOARD_ATCH
+        (
+            BOARD_CD,
+            BOARD_SEQ_NO,
+            IDX,
+            FILE_PATH,
+            FILE_NM,
+            ORGINL_FILE_NM,
+            FILE_EXT,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{boardCd},
+            #{boardSeqNo},
+            #{idx},
+            #{filePath},
+            #{fileNm},
+            #{orginlFileNm},
+            #{fileExt},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 첨부파일 자료명 저장 insert -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <insert id="getLibraryInfoSaveInsert" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoSaveInsert */
+        INSERT INTO TB_WB_BOARD_INFO
+        (
+            BOARD_CD,
+            START_DATE,
+            END_DATE,
+            TITLE,
+            NOTICE_YN,
+            APPR_FG,
+            TARGET_FG,
+            VIEW_CNT,
+            ANSWER_CNT,
+            CONTENT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            BOARD_SEQ_NO,
+            USE_YN,
+            USER_ID,
+            USER_NM
+        ) VALUES (
+            #{boardCd},
+            99999999,
+            99999999,
+            #{title},
+            'Y',
+            1,
+            1,
+            0,
+            0,
+            0,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{boardSeqNo},
+            'Y',
+            #{regId},
+            #{userNm}
+        )
+    </insert>
+
+    <!-- 첨부파일 자료명 저장 update -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <update id="getLibraryInfoSaveUpate" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoSaveUpate */
+        UPDATE
+        TB_WB_BOARD_INFO
+        SET
+        TiTLE = #{title},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+    </update>
+
+    <!-- 자료실 신규등록,수정 팝업 -  저장 delete -->
+    <!--
+        TABLE    : TB_WB_BOARD_INFO
+        COMMENTS : 게시판 정보
+    -->
+    <update id="getLibraryInfoSaveDelete" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoSaveDelete */
+        UPDATE
+        TB_WB_BOARD_INFO
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+    </update>
+
+    <!-- 자료실 신규등록,수정 팝업 -  저장 delete -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <update id="getLibraryInfoAtchSaveDelete" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoAtchSaveDelete */
+        UPDATE
+        TB_WB_BOARD_ATCH
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+    </update>
+
+
+    <!-- 자료실 첨부파일 삭제 -->
+    <!--
+        TABLE    : TB_WB_BOARD_ATCH
+        COMMENTS : 게시판 첨부
+    -->
+    <update id="getLibraryInfoAtchDel" parameterType="LibraryVO">
+        /* LibraryMapper.getLibraryInfoAtchDel */
+        UPDATE
+        TB_WB_BOARD_ATCH
+        SET
+        USE_YN = 'N',
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND BOARD_CD = #{boardCd}
+        AND BOARD_SEQ_NO = #{boardSeqNo}
+        AND IDX = #{idx}
+    </update>
+
+</mapper>
