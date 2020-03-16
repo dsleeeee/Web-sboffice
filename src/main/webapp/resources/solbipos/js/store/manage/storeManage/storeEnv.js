@@ -113,25 +113,46 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
           if (b_env === "" || b_env !== list[j].envstCd) {
             if (storeEnvCnt === 0 || storeEnvCnt % 2 === 0) storeEnvHtml += '<tr>';
 
-            storeEnvHtml += '  <th class=\"tc\">' + list[j].envstCd + '</th>';
+            storeEnvHtml += '  <th class=\"tc\">' + list[j].envstCd + (list[j].existFg === "N" ? " <em class=\"imp\">*</em> " : "") + '</th>';
             storeEnvHtml += '  <td>' + list[j].envstNm + '</td>';
             storeEnvHtml += '  <td>';
 
-            if (list[j].dirctInYn === "Y") { // 직접입력
-              storeEnvHtml += '    <input type=\"text\" name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-input w100\">';
-            } else {  // 값 선택
-              storeEnvHtml += '    <select name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
-            }
+            // 매장환경, 외식환경, 유통환경 환경변수 그리기
+            if(envType === "S") {
+              if (list[j].dirctInYn === "Y") { // 직접입력
+                storeEnvHtml += '    <input type=\"text\" name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-input w100\">';
+              } else {  // 값 선택
+                storeEnvHtml += '    <select name=\"envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
+              }
 
-            storeEnvHtml += '    <input type=\"hidden\" name=\"status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"envstCd\"     value=\"' + list[j].envstCd + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"envstNm\"     value=\"' + list[j].envstNm + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"defltYn\"     value=\"' + list[j].defltYn + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"     value=\"' + list[j].targtFg + '\">';
-            storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
-            storeEnvHtml += '  </td>';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstCd\"     value=\"' + list[j].envstCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstNm\"     value=\"' + list[j].envstNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"defltYn\"     value=\"' + list[j].defltYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"targtFg\"     value=\"' + list[j].targtFg + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '  </td>';
+
+            } else if(envType === "P") { // 포스환경 환경변수 그리기
+              if (list[j].dirctInYn === "Y") { // 직접입력
+                storeEnvHtml += '    <input type=\"text\" name=\"pos_envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-input w100\">';
+              } else {  // 값 선택
+                storeEnvHtml += '    <select name=\"pos_envstValCd\" id=\"env' + list[j].envstCd + '\" class=\"sb-select w100\" />';
+              }
+
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_status\"      value=\"' + (list[j].existFg === "N" ? "I" : "U") + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstCd\"     value=\"' + list[j].envstCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstNm\"     value=\"' + list[j].envstNm + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_envstGrpCd\"  value=\"' + list[j].envstGrpCd + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_defltYn\"     value=\"' + list[j].defltYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_dirctInYn\"   value=\"' + list[j].dirctInYn + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_targtFg\"     value=\"' + list[j].targtFg + '\">';
+              storeEnvHtml += '    <input type=\"hidden\" name=\"pos_oldEnvstVal\" value=\"' + list[j].selEnvstVal + '\">';
+              storeEnvHtml += '  </td>';
+            }
+            //--------------------------------------------------------
 
             b_env = list[j].envstCd;
             storeEnvCnt++;
