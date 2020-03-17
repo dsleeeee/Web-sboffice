@@ -238,6 +238,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope._popMsg("저장되었습니다.");
 
                     $scope.close();
+
+                    params.userId = $scope.selectedBoardInfo.userId;
                     // 저장기능 수행후 재조회
                     $scope._broadcast('boardDetailCtrl', params);
                 }

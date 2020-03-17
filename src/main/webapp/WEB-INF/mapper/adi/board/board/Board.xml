@@ -46,7 +46,7 @@
         ) AS AGENCY_NM,
         twbi.USER_ID,
         twbi.USER_NM,
-        (twbi.START_DATE || '~' || twbi.END_DATE) AS NOTICE_DATE
+        (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_USER_INFO twui,
