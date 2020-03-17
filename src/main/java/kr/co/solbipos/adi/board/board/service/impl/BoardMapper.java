@@ -60,7 +60,7 @@ public interface BoardMapper {
     int getBoardInfoSaveDelete(BoardVO boardVO);
 
     /** 게시판 전체 댓글 delete */
-    int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
+//    int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
 
 
     /** 게시판 공개대상 insert */
@@ -89,9 +89,6 @@ public interface BoardMapper {
 
     /** 게시판 댓글번호 조회(자동채번) */
     String getBoardAnswerIdx(BoardVO boardVO);
-
-    /** 아이디에 따른 작성자 조회 */
-    String getBoardUserNm(BoardVO boardVO);
 
     /** 게시판 댓글 저장 isert */
     int getBoardDetailAnswerSaveInsert(BoardVO boardVO);

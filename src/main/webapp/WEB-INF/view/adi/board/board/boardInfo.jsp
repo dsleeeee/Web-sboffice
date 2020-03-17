@@ -2,6 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
 
 <wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:900px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
@@ -38,7 +39,7 @@
                             <s:message code="boardInfo.userNm"/>
                         </th>
                         <td colspan="3">
-                            <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" />
+                            <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" disabled="true" />
                         </td>
                     </tr>
                     <tr>
@@ -209,6 +210,8 @@
     var targetFgData = ${ccu.getCommCodeExcpAll("106")};
     <%-- 승인구분 --%>
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
+
+    var userNm = "${userNm}";
 </script>
 
 <%-- 글쓰기 summernote 에디터 --%>
@@ -220,4 +223,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200310.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200317.01" charset="utf-8"></script>

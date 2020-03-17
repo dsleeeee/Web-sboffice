@@ -43,9 +43,6 @@ public interface LibraryMapper {
     /** 자료실 게시일련번호 조회(자동채번)  */
     String getBoardBoardSeqNo(LibraryVO libraryVO);
 
-    /** 아이디에 따른 작성자 조회 */
-    String getBoardUserNm(LibraryVO libraryVO);
-
     /** 첨부파일 저장시 IDX (자동채번)  */
     String getBoardAtchIdx(LibraryVO libraryVO);
 
@@ -63,7 +60,7 @@ public interface LibraryMapper {
     int getLibraryInfoSaveDelete(LibraryVO libraryVO);
 
     /** 자료실 신규등록,수정 팝업 - 저장 delete */
-    int getLibraryInfoAtchSaveDelete(LibraryVO libraryVO);
+//    int getLibraryInfoAtchSaveDelete(LibraryVO libraryVO);
 
 
     /** 자료실 첨부파일 삭제 */

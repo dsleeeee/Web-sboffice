@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static kr.co.common.utils.DateUtil.currentDateString;
 
 /**
  * @Class Name : BoardServiceImpl.java
@@ -56,6 +57,9 @@ public class BoardServiceImpl implements BoardService {
         boardVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         boardVO.setUserId(sessionInfoVO.getUserId());
+
+        String currentDate = currentDateString();
+        boardVO.setDate(currentDate);
 
         return boardMapper.getBoardList(boardVO);
     }
@@ -160,13 +164,13 @@ public class BoardServiceImpl implements BoardService {
             procCnt = boardMapper.getBoardInfoSaveDelete(boardVO);
 
             // 게시판 전체 댓글 delete
-            boardMapper.getBoardDetailAnswerSaveTotDelete(boardVO);
+//            boardMapper.getBoardDetailAnswerSaveTotDelete(boardVO);
 
             // 게시판 전체 첨부파일 delete
-            boardMapper.getBoardInfoAtchDel(boardVO);
+//            boardMapper.getBoardInfoAtchTotDel(boardVO);
 
-            // 게시판 공개대상 delete
-            boardMapper.getBoardPartStoreSaveDelete(boardVO);
+            // 게시판 전체 공개대상 delete
+//            boardMapper.getBoardPartStoreSaveDelete(boardVO);
         }
 
         // 첨부파일 저장할때 쓰려고
@@ -302,14 +306,11 @@ public class BoardServiceImpl implements BoardService {
             boardVO.setRegDt(currentDt);
             boardVO.setRegId(sessionInfoVO.getUserId());
             boardVO.setUserId(sessionInfoVO.getUserId());
+            boardVO.setUserNm(sessionInfoVO.getUserNm());
 
             // 게시판 댓글번호 조회(자동채번)
             String idx = boardMapper.getBoardAnswerIdx(boardVO);
             boardVO.setIdx(idx);
-
-            // 아이디에 따른 작성자 조회
-            String userNm = boardMapper.getBoardUserNm(boardVO);
-            boardVO.setUserNm(userNm);
 
             procCnt = boardMapper.getBoardDetailAnswerSaveInsert(boardVO);
 

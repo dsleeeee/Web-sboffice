@@ -102,6 +102,9 @@ public class BoardVO extends PageVO {
     /** 파일확장자 */
     private String fileExt;
 
+    /** 날짜 */
+    private String date;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -209,4 +212,8 @@ public class BoardVO extends PageVO {
     public String getFileExt() { return fileExt; }
 
     public void setFileExt(String fileExt) { this.fileExt = fileExt; }
+
+    public String getDate() { return date; }
+
+    public void setDate(String date) { this.date = date; }
 }

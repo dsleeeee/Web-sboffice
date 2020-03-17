@@ -115,12 +115,13 @@
                         id="wjGridBoardDetailAnswerList">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="boardDetail.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardDetail.userNm"/>" binding="userNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardDetail.content"/>" binding="content" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardDetail.answer.regDt"/>" binding="regDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.edit"/>" binding="edit" width="50" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.save"/>" binding="save" width="50" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.del"/>" binding="del" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardDetail.answer.modDt"/>" binding="modDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardDetail.edit"/>" binding="edit" width="45" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardDetail.save"/>" binding="save" width="45" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardDetail.del"/>" binding="del" width="45" is-read-only="true" align="center"></wj-flex-grid-column>
 
                         <%--팝업 조회시 필요--%>
                         <wj-flex-grid-column header="<s:message code="boardDetail.idx"/>" binding="idx" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -162,7 +163,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200309.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200317.12" charset="utf-8"></script>
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>

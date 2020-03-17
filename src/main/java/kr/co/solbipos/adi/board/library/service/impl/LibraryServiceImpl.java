@@ -88,6 +88,7 @@ public class LibraryServiceImpl implements LibraryService {
             libraryInfo.setRegDt(currentDt);
             libraryInfo.setRegId(sessionInfo.getUserId());
             libraryInfo.setUserId(sessionInfo.getUserId());
+            libraryInfo.setUserNm(sessionInfo.getUserNm());
 
             libraryInfo.setBoardCd((String)multi.getParameter("boardCd"));
             libraryInfo.setBoardSeqNo((String)multi.getParameter("boardSeqNo"));
@@ -99,10 +100,6 @@ public class LibraryServiceImpl implements LibraryService {
                 // 게시판 게시일련번호 조회(자동채번)
                 String boardSeqNo = libraryMapper.getBoardBoardSeqNo(libraryInfo);
                 libraryInfo.setBoardSeqNo(boardSeqNo);
-
-                // 아이디에 따른 작성자 조회
-                String userNm = libraryMapper.getBoardUserNm(libraryInfo);
-                libraryInfo.setUserNm(userNm);
 
                 // 첨부파일 자료명 저장 insert
                 libraryMapper.getLibraryInfoSaveInsert(libraryInfo);
@@ -201,7 +198,7 @@ public class LibraryServiceImpl implements LibraryService {
 
             procCnt = libraryMapper.getLibraryInfoSaveDelete(libraryVO);
 
-            libraryMapper.getLibraryInfoAtchSaveDelete(libraryVO);
+//            libraryMapper.getLibraryInfoAtchSaveDelete(libraryVO);
         }
 
         return procCnt;

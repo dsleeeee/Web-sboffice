@@ -46,7 +46,7 @@
         ) AS AGENCY_NM,
         twbi.USER_ID,
         twbi.USER_NM,
-        twbi.MOD_DT
+        (twbi.START_DATE || '~' || twbi.END_DATE) AS NOTICE_DATE
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_USER_INFO twui,
@@ -97,6 +97,15 @@
                               ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
                                OR (twbi.TARGET_FG = '1')
                             )
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twagi.AUTH_GRP_NM = 'SYSTEM'
+                        AND twbi.APPR_FG = '2'
+                        AND twbi.START_DATE <= #{date}
+                        AND twbi.END_DATE >= #{date}
                     ]]>
                 </if>
             </when>
@@ -334,18 +343,18 @@
         TABLE    : TB_WB_BOARD_ANSWER
         COMMENTS : 게시판 댓글
     -->
-    <update id="getBoardDetailAnswerSaveTotDelete" parameterType="BoardVO">
-        /* BoardMapper.getBoardDetailAnswerSaveTotDelete */
-        UPDATE
-        TB_WB_BOARD_ANSWER
-        SET
-        USE_YN = 'N',
-        MOD_DT = #{modDt},
-        MOD_ID = #{modId}
-        WHERE 1=1
-        AND BOARD_CD = #{boardCd}
-        AND BOARD_SEQ_NO = #{boardSeqNo}
-    </update>
+    <!--<update id="getBoardDetailAnswerSaveTotDelete" parameterType="BoardVO">-->
+        <!--/* BoardMapper.getBoardDetailAnswerSaveTotDelete */-->
+        <!--UPDATE-->
+        <!--TB_WB_BOARD_ANSWER-->
+        <!--SET-->
+        <!--USE_YN = 'N',-->
+        <!--MOD_DT = #{modDt},-->
+        <!--MOD_ID = #{modId}-->
+        <!--WHERE 1=1-->
+        <!--AND BOARD_CD = #{boardCd}-->
+        <!--AND BOARD_SEQ_NO = #{boardSeqNo}-->
+    <!--</update>-->
 
     <!-- 게시판 공개대상 insert -->
     <!--
@@ -495,7 +504,8 @@
         (CASE WHEN twba.USER_ID = #{userId} THEN '삭제' ELSE '' END) AS DEL,
         twba.USER_NM,
         twba.CONTENT,
-        twba.REG_DT
+        twba.REG_DT,
+        (CASE WHEN twba.MOD_DT = twba.REG_DT THEN '' ELSE twba.MOD_DT END) AS MOD_DT
         FROM TB_WB_BOARD_ANSWER twba
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}
@@ -517,48 +527,6 @@
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}
         AND twba.BOARD_SEQ_NO = #{boardSeqNo}
-    </select>
-
-    <!-- 아이디에 따른 작성자 조회 -->
-    <!--
-        TABLE    : TB_HQ_EMPLOYEE, TB_MS_EMPLOYEE, TB_CM_EMPLOYEE
-        COMMENTS : [본사]사원 정보, [매장]사원 정보, [공통]시스템/대리점 사원 정보
-    -->
-    <select id="getBoardUserNm"  parameterType="BoardVO" resultType="String">
-        /* BoardMapper.getBoardUserNm */
-        SELECT
-        tce.USER_NM
-        FROM
-        (
-            (
-                --본사
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_HQ_EMPLOYEE
-                WHERE 1=1
-            )
-            UNION ALL
-            (
-                --매장
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_MS_EMPLOYEE
-                WHERE 1=1
-            )
-            UNION ALL
-            (
-                --관리자,총판
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_CM_EMPLOYEE
-                WHERE 1=1
-            )
-        ) tce
-        WHERE 1=1
-        AND tce.USER_ID = #{userId}
     </select>
 
     <!-- 게시판 댓글 저장 isert -->

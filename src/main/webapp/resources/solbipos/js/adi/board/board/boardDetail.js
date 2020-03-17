@@ -97,8 +97,8 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                         var grid = wijmo.Control.getControl("#wjGridBoardDetailAnswerList");
                         var columns = grid.columns;
                         columns[1].isReadOnly = false; // 내용
-                        columns[3].visible = false; // 수정
-                        columns[4].visible = true; // 저장
+                        columns[4].visible = false; // 수정
+                        columns[5].visible = true; // 저장
                     }
                 }
 
@@ -164,6 +164,11 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             var endDate = $scope.boardDetail.endDate.substr(0, 4) + "-" + $scope.boardDetail.endDate.substr(4, 2) + "-" + $scope.boardDetail.endDate.substr(6, 2);
             $scope.boardDetail.startDate = startDate;
             $scope.boardDetail.endDate = endDate;
+
+            // alert($scope.boardDetail.content);
+            // $('#summernoteDetail').text($scope.boardDetail.content);
+            // $('#summernoteDetail').innerHTML($scope.boardDetail.content);
+            // $('#summernoteDetail').innerText($scope.boardDetail.content);
 
             // 서머노트에 text 쓰기
             $('#summernoteDetail').summernote('code', $scope.boardDetail.content);
@@ -285,8 +290,8 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var grid = wijmo.Control.getControl("#wjGridBoardDetailAnswerList");
         var columns = grid.columns;
         columns[1].isReadOnly = true; // 내용
-        columns[3].visible = true; // 수정
-        columns[4].visible = false; // 저장
+        columns[4].visible = true; // 수정
+        columns[5].visible = false; // 저장
     };
 
     // 게시판 삭제
@@ -337,8 +342,8 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         var grid = wijmo.Control.getControl("#wjGridBoardDetailAnswerList");
         var columns = grid.columns;
         columns[1].isReadOnly = true; // 내용
-        columns[3].visible = true; // 수정
-        columns[4].visible = false; // 저장
+        columns[4].visible = true; // 수정
+        columns[5].visible = false; // 저장
 
         // 서머노트 리셋
         $('#summernoteDetail').summernote('reset');

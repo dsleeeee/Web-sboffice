@@ -144,7 +144,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblStatus").text("I");
 
         $scope.title = "";
-        $scope.userNm = "";
+        $scope.userNm = userNm;
         $scope.apprFg = "1";
         $scope.targetFg = "1";
         $scope.noticeYn = false;
@@ -183,10 +183,6 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#funcSave").click(function(e){
         if($scope.title === "") {
             $scope._popMsg(messages["boardInfo.titleBlank"]); // 제목을 입력해주세요
-            return false;
-        }
-        if($scope.userNm === "") {
-            $scope._popMsg(messages["boardInfo.userNmBlank"]); // 작성자를 입력해주세요
             return false;
         }
 
@@ -242,6 +238,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope._popMsg("저장되었습니다.");
 
                     $scope.close();
+                    // 저장기능 수행후 재조회
+                    $scope._broadcast('boardDetailCtrl', params);
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -341,7 +339,6 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.close = function(){
         $scope.newForm();  //신규
         $scope.wjBoardInfoLayer.hide();
-        $scope.wjBoardDetailLayer.hide();
 
         // 저장기능 수행후 재조회
         $scope._broadcast('boardListCtrl');

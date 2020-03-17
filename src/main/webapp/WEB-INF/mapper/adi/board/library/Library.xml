@@ -107,48 +107,6 @@
         AND twbi.BOARD_CD = #{boardCd}
     </select>
 
-    <!-- 아이디에 따른 작성자 조회 -->
-    <!--
-        TABLE    : TB_HQ_EMPLOYEE, TB_MS_EMPLOYEE, TB_CM_EMPLOYEE
-        COMMENTS : [본사]사원 정보, [매장]사원 정보, [공통]시스템/대리점 사원 정보
-    -->
-    <select id="getBoardUserNm"  parameterType="LibraryVO" resultType="String">
-        /* LibraryMapper.getBoardUserNm */
-        SELECT
-        tce.USER_NM
-        FROM
-        (
-            (
-                --본사
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_HQ_EMPLOYEE
-                WHERE 1=1
-            )
-            UNION ALL
-            (
-                --매장
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_MS_EMPLOYEE
-                WHERE 1=1
-            )
-            UNION ALL
-            (
-                --관리자,총판
-                SELECT
-                USER_ID,
-                EMP_NM AS USER_NM
-                FROM TB_CM_EMPLOYEE
-                WHERE 1=1
-            )
-        ) tce
-        WHERE 1=1
-        AND tce.USER_ID = #{userId}
-    </select>
-
     <!-- 첨부파일 저장시 IDX (자동채번) -->
     <!--
         TABLE    : TB_WB_BOARD_ATCH
@@ -291,19 +249,18 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <update id="getLibraryInfoAtchSaveDelete" parameterType="LibraryVO">
-        /* LibraryMapper.getLibraryInfoAtchSaveDelete */
-        UPDATE
-        TB_WB_BOARD_ATCH
-        SET
-        USE_YN = 'N',
-        MOD_DT = #{modDt},
-        MOD_ID = #{modId}
-        WHERE 1=1
-        AND BOARD_CD = #{boardCd}
-        AND BOARD_SEQ_NO = #{boardSeqNo}
-    </update>
-
+    <!--<update id="getLibraryInfoAtchSaveDelete" parameterType="LibraryVO">-->
+        <!--/* LibraryMapper.getLibraryInfoAtchSaveDelete */-->
+        <!--UPDATE-->
+        <!--TB_WB_BOARD_ATCH-->
+        <!--SET-->
+        <!--USE_YN = 'N',-->
+        <!--MOD_DT = #{modDt},-->
+        <!--MOD_ID = #{modId}-->
+        <!--WHERE 1=1-->
+        <!--AND BOARD_CD = #{boardCd}-->
+        <!--AND BOARD_SEQ_NO = #{boardSeqNo}-->
+    <!--</update>-->
 
     <!-- 자료실 첨부파일 삭제 -->
     <!--

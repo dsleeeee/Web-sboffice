@@ -69,9 +69,11 @@
         <%--// 페이지 스케일  --%>
 
         <%-- 신규등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
-            <s:message code="board.newInfo" />
-        </button>
+        <div <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
+                <s:message code="board.newInfo" />
+            </button>
+        </div>
     </div>
 
     <%-- 그리드 --%>
@@ -94,7 +96,7 @@
                 <wj-flex-grid-column header="<s:message code="board.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userNm"/>" binding="userNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="board.modDt"/>" binding="modDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.noticeDate"/>" binding="noticeDate" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 <%--팝업 조회시 필요--%>
                 <wj-flex-grid-column header="<s:message code="board.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -124,7 +126,7 @@
     var boardCd = "${boardCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20200224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20200317.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

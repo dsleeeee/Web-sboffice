@@ -51,14 +51,6 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                 }
-
-                if (col.format === "date") {
-                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
-                } else if (col.format === "dateTime") {
-                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-                } else if (col.format === "time") {
-                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
-                }
             }
         });
 
