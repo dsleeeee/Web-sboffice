@@ -169,6 +169,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             // $('#summernoteDetail').text($scope.boardDetail.content);
             // $('#summernoteDetail').innerHTML($scope.boardDetail.content);
             // $('#summernoteDetail').innerText($scope.boardDetail.content);
+            // $('#summernoteDetail').innerText = $scope.boardDetail.content;
 
             // 서머노트에 text 쓰기
             $('#summernoteDetail').summernote('code', $scope.boardDetail.content);

@@ -85,9 +85,16 @@
         </choose>
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
+                    ]]>
+                </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     <![CDATA[
+                        AND twagi.AUTH_GRP_NM IN ('HQ','STORE')
                         AND (
                                 (twbi.APPR_FG = '2')
                                 OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
@@ -97,6 +104,12 @@
                               ( (twbi.TARGET_FG = '2') AND (twbi.BOARD_SEQ_NO IN (SELECT BOARD_SEQ_NO FROM TB_WB_BOARD_PART_STORE WHERE BOARD_CD = #{boardCd} AND PART_ORGN_CD = UPPER(#{userId}) AND USE_YN = 'Y')) )
                                OR (twbi.TARGET_FG = '1')
                             )
+                    ]]>
+                </if>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                        AND twagi.AUTH_GRP_NM = 'SYSTEM'
                     ]]>
                 </if>
                 <!-- 대리점 -->
