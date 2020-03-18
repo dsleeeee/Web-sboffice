@@ -518,7 +518,8 @@
         twba.USER_NM,
         twba.CONTENT,
         twba.REG_DT,
-        (CASE WHEN twba.MOD_DT = twba.REG_DT THEN '' ELSE twba.MOD_DT END) AS MOD_DT
+        twba.REG_ID,
+        TO_CHAR(TO_DATE(twba.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD HH24:MI:SS') AS MOD_DT
         FROM TB_WB_BOARD_ANSWER twba
         WHERE 1=1
         AND twba.BOARD_CD = #{boardCd}

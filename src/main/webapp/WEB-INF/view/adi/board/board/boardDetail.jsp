@@ -85,55 +85,38 @@
                             {{boardDetail.startDate}} ~ {{boardDetail.endDate}}
                         </td>
                     </tr>
-                    <tr>
-                        <%-- 글쓰기 에디터 --%>
-                        <td colspan="4">
-                            <div id="summernoteDetail"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 첨부파일 --%>
-                        <td colspan="4">
-                            <tbody id="fileContent">
-                            </tbody>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
 
-            <%-- 댓글 그리드 --%>
+            <%-- 게시글내용 --%>
+            <div id="summernoteDetail" style="overflow:auto; height:250px; padding:10px;"></div>
+
+            <%-- 첨부파일 --%>
+            <div id="fileContent"></div>
+
+            <%-- 댓글 --%>
             <div class="w100 mt10 mb20" id="divAnswer">
-                <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; overflow-x: hidden;">
-                    <wj-flex-grid
-                        autoGenerateColumns="false"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        sticky-headers="true"
-                        selection-mode="Row"
-                        items-source="data"
-                        item-formatter="_itemFormatter"
-                        id="wjGridBoardDetailAnswerList">
-
-                        <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="boardDetail.userNm"/>" binding="userNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.content"/>" binding="content" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.answer.regDt"/>" binding="regDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.answer.modDt"/>" binding="modDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.edit"/>" binding="edit" width="45" is-read-only="true" align="center" visible="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.save"/>" binding="save" width="45" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.del"/>" binding="del" width="45" is-read-only="true" align="center"></wj-flex-grid-column>
-
-                        <%--팝업 조회시 필요--%>
-                        <wj-flex-grid-column header="<s:message code="boardDetail.idx"/>" binding="idx" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-
-                    </wj-flex-grid>
-                </div>
-                <div>
-                    <input type="text" style="border: 1px solid #d0d0d0; width: 88%; background-color: #e8e8e8;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/>
-                    <%-- 댓글등록 --%>
-                    <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="saveAnswer()">
-                        <s:message code="boardDetail.newAnswer" />
-                    </button>
+                <%-- 댓글 리스트 --%>
+                <div id="divComment"></div>
+                <%-- 댓글 입력 --%>
+                <div style="padding-top:20px;">
+                    <table class="tblType01" style="border: 0px;">
+                        <colgroup>
+                            <col width="85%" />
+                            <col width="15%" />
+                        </colgroup>
+                        <tbody>
+                            <tr style="border: 0px;">
+                                <td><input type="text" style="border: 1px solid #d0d0d0;" id="srchContent" ng-model="content" placeholder="댓글을 입력해주세요"/></td>
+                                <td>
+                                    <%-- 댓글등록 --%>
+                                    <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="saveAnswer()">
+                                        <s:message code="boardDetail.newAnswer" />
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -163,7 +146,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200317.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20200318.24" charset="utf-8"></script>
 
 <%-- 게시판 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/board/boardInfo.jsp">--%>

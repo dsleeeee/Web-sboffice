@@ -39,7 +39,7 @@
                             <s:message code="boardInfo.userNm"/>
                         </th>
                         <td colspan="3">
-                            <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" disabled="true" />
+                            <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" />
                         </td>
                     </tr>
                     <tr>
