@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="tableDayOfWeekView" class="subCon"  ng-controller="tableDayOfWeekCtrl">
+<div id="tableDayOfWeekView" class="subCon"  ng-controller="tableDayOfWeekCtrl" style="display: none;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDayOfWeek.tableDayOfWeekSale"/></a>
 		<%-- 조회 --%>
@@ -44,7 +44,7 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDayOfWeekSelectStore"/>
 								<jsp:param name="targetTableId" value="tableDayOfWeekSelectTable"/>
 								<jsp:param name="closeFunc" value="getTableNmList"/>
@@ -102,7 +102,7 @@
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totRealSaleCnt"/>" binding="totRealSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
@@ -117,9 +117,4 @@
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20190125.02" charset="utf-8"></script>
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/table.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
 

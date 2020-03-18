@@ -80,7 +80,7 @@
 
 	<div id="gridRepresent" ng-controller="dcDcfgMainCtrl" class="w50 fl" style="width: 49%;">
 		<%-- 할인구분별 --%>
-		<div class="w100 mt40">
+		<div class="w100 mt20">
 			<div class="oh sb-select mb10">
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
@@ -133,7 +133,7 @@
 
 	<div id="gridDetail" class="w50 fr" style="width: 49%;">
 		<%-- 상품상세 --%>
-		<div class="w100 mt40" ng-controller="dcDcfgDtlCtrl">
+		<div class="w100 mt20" ng-controller="dcDcfgDtlCtrl">
 			<div class="oh sb-select mb10">
 				<%-- 할인구분별 매출 상세 엑셀다운로드 --%>
 				<button class="btn_skyblue fr"

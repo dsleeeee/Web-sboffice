@@ -7,7 +7,7 @@
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT SALE_YM SALE_YM
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-       		, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+       		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
        		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
        		${sQuery1}
      	<include refid="CmmSQL.PagingTemplateCount"/>

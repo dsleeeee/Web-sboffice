@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="posProdView" class="subCon"  ng-controller="posProdCtrl">
+<div id="posProdView" class="subCon" style="display: none;" ng-controller="posProdCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.day"/></a>
 		<%-- 조회 --%>
@@ -119,7 +119,7 @@
 				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" binding="lv1Nm" 	width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" binding="lv2Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" binding="lv3Nm" 	width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="day.prodClass.prodCd"/>"	binding="prodCd" width="100" align="center" visible="false" is-read-only="true" ></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="day.prodClass.prodCd"/>"	binding="prodCd" width="100" align="center" visible="false" is-read-only="true" format="d"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

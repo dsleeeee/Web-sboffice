@@ -138,7 +138,7 @@
         $("#" + targetId + "Nm").val("[" + storeTable[1] + "] " + strTableNm);
       }
       else if (cnt > 1) {
-	    $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+	    $("#" + targetId + "Nm").val(strTableNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["cmm.cntTable"]);
 	    $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');

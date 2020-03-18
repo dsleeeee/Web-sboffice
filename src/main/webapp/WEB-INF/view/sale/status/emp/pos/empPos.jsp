@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/emp/month/"/>
 
-<div id="empPosView" class="subCon" ng-controller="empPosCtrl">
+<div id="empPosView" class="subCon" style="display: none;" ng-controller="empPosCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.month"/></a>
     	<%-- 조회 --%>
@@ -132,8 +132,3 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20190125.02" charset="utf-8"></script>
 
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

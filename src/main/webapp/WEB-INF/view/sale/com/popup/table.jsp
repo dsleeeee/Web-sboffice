@@ -28,8 +28,8 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="storeCd" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="saleDate" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="" 		binding="storeCd" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="" 		binding="saleDate" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="posNo" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>" 		binding="billNo"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billDt"/>" 		binding="billDt"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
@@ -37,7 +37,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.netSaleAmt"/>" 	binding="netSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.taxSaleAmt"/>" 	binding="taxSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.taxSaleAmt"/>" 	binding="vatAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payTot"/>" 		binding="payTot"		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.pay01"/>" 		binding="pay01" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.pay02"/>" 		binding="pay02" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -50,6 +50,12 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.guestAmt"/>" 	binding="guestAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
+          
+            <%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="saleComTableCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
         </div>
         <%--//위즈모 테이블--%>
       </div>

@@ -5,7 +5,7 @@
 <c:set var="menuCd"	value="${sessionScope.sessionInfo.currentMenu.resrceCd}" />
 <c:set var="menuNm"	value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 
-<div id="cornerDayPeriodView" class="subCon" ng-controller="cornerDayPeriodCtrl">
+<div id="cornerDayPeriodView" class="subCon" style="display: none;" ng-controller="cornerDayPeriodCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="corner.dayPeriod" /></a>
 		<%-- 조회 --%>
@@ -119,7 +119,7 @@
 
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd" 	width="250" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="250" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 				</wj-flex-grid>
@@ -179,8 +179,8 @@
 					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="corner.prodNm"/>"	binding="prodNm" width="250" align="center" is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="corner.prodNm"/>"	binding="prodNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
 				</wj-flex-grid>
@@ -205,9 +205,3 @@
 <script type="text/javascript">
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20190125.02" charset="utf-8"></script>
-
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-	<c:param name="menuCd" value="${menuCd}" />
-	<c:param name="menuNm" value="${menuNm}" />
-</c:import>

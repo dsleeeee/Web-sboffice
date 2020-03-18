@@ -1068,7 +1068,7 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .posWrap {width:760px; height:635px; position:relative;}
 .touchKeyWrap {width:100%; height:635px; position:relative;}
 
-.prev1 {width:510px; height:510px; border:1px solid #dbdbdb;}
+.prev1 {width:500px; height:500px; border:1px solid #dbdbdb;}
 /*.prev2 {width:402px; height:542px; border:1px solid #dbdbdb; position:relative;}*/
 .groupKeyPrev {width:497px; height:542px; border:1px solid #dbdbdb; position:relative;}
 .touchKeyPrev {width:497px; height:542px; border:1px solid #dbdbdb; position:relative;}
@@ -2213,7 +2213,7 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 #wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner {background: #dcdcdc}
 
 
-/* tab type 추가 및  con padding 재정의 
+/* tab type 추가 및  con padding 재정의
 .con {padding:20px 20px 0}
 .tabType1.t3 {padding:0 20px; height:auto}
 .tabType1.t3:after {display:block; clear:both; content:''}
@@ -2221,7 +2221,7 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .tabType1.t3 ul li {float:left; margin:0}
 .tabType1.t3 ul li a {display:block; padding:10px 15px; font-size:13px; height:auto; line-height:16px !important; background-color:#fff; color:#999}
 .tabType1.t3 ul li a:hover {background-color:#eee; color:#999}
-.tabType1.t3 ul li a.on {padding:10px 15px 8px; background-color:#fff; color:#222; border-bottom:2px solid #222} 
+.tabType1.t3 ul li a.on {padding:10px 15px 8px; background-color:#fff; color:#222; border-bottom:2px solid #222}
 
 */
 

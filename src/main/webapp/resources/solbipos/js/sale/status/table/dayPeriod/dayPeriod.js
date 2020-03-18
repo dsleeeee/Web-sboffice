@@ -47,7 +47,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         params.chkPop   = "tablePop";
         params.storeCd  = selectedRow.storeCd;
         params.saleDate = selectedRow.saleDate;
-        params.tblCd   = selectedRow.tblCd;
+        params.tblCd   = selectedRow.storeCd+"||"+selectedRow.tblCd;
 
         if (col.binding === "realSaleAmt") { //실매출 클릭
           $scope._broadcast('saleComTableCtrl', params);

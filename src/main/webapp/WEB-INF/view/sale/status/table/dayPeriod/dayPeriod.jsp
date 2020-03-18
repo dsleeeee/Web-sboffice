@@ -6,8 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="baseUrl" value="/sale/satus/table/" />
 
-<div id="tableDayPeriodView" class="subCon"
-	ng-controller="tableDayPeriodCtrl">
+<div id="tableDayPeriodView" class="subCon" ng-controller="tableDayPeriodCtrl" style="display: none;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message
 				code="tableDayPeriod.tableDayPeriodSale" /></a>
@@ -74,7 +73,7 @@
 		</tbody>
 	</table>
 
-	<div class="mt40 oh sb-select dkbr">
+	<div class="mt20 oh sb-select dkbr">
 		<div class="sb-select dkbr">
 			<%-- 페이지 스케일  --%>
 			<wj-combo-box class="w100px fl" id="listScaleBox"
@@ -104,7 +103,7 @@
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblNm"/>" binding="tblNm" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblGrpNm"/>" binding="" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.col5"/>" binding="" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.realSaleCnt"/>" binding="realSaleCnt" width="*" align="center" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.saleCnt"/>" binding="saleCnt" width="*" align="center" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.guestCnt"/>" binding="guestCnt" width="*" align="center" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.totSaleAmt"/>" binding="totSaleAmt" width="*" align="right" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.totDcAmt"/>" binding="totDcAmt" width="*" align="right" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>

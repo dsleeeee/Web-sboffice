@@ -58,3 +58,9 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 <%-- 탭페이지 레이어 끝 --%>
+
+<%-- 상품매출내역 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/table.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

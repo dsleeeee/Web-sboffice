@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/emp/day/empDayOfWeek/"/>
 
-<div id="empDayOfWeekView" class="subCon" ng-controller="empDayOfWeekCtrl">
+<div id="empDayOfWeekView" class="subCon" style="display: none;" ng-controller="empDayOfWeekCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="empsale.dayofweek"/></a>
     	<%-- 조회 --%>

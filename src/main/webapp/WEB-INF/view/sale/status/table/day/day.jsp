@@ -46,7 +46,7 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDaySelectStore"/>
 								<jsp:param name="targetTableId" value="tableDaySelectTable"/>
 								<jsp:param name="closeFunc" value="getTableNmList"/>
@@ -116,7 +116,7 @@
               <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="130" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDay.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDay.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="tableDay.totRealSaleCnt"/>" binding="totRealSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableDay.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDay.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
@@ -138,9 +138,4 @@
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/day/day.js?ver=20190125.02" charset="utf-8"></script>
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/table.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
 

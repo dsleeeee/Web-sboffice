@@ -40,7 +40,7 @@
             </span>
         </div>
         </td>
-        
+
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="hidden" id="barcdSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <%-- 매장코드 --%>
@@ -60,18 +60,18 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="barcdSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
-      
+
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="rtnStatus.barcdCd"/></th>
         <td>
             <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd"/>
         </td>
-        
+
         <%-- 상품명 --%>
         <th><s:message code="prodSaleDtl.prodNm"/></th>
         <td>
@@ -80,13 +80,13 @@
       </tr>
       </tbody>
     </table>
-    
+
     <!-- contents start -->
     <%-- wj grid start --%>
     <%-- left --%>
     <div id="gridRepresent" ng-controller="barcdMainCtrl" class="w50 fl" style="width: 49%;">
         <%-- 할인구분별 --%>
-        <div class="w100 mt40">
+        <div class="w100 mt20">
             <div class="oh sb-select mb10">
 	            <%-- 페이지 스케일  --%>
 	            <wj-combo-box
@@ -103,7 +103,7 @@
 	            <button class="btn_skyblue fr" ng-click="excelDownloadBarcd()"><s:message code="cmm.excel.down" />
 	            </button>
             </div>
-            <div class="wj-TblWrapBr1 mr10 pd10">
+            <div class="wj-TblWrapBr1">
                    <wj-flex-grid
                       id="barcdGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -119,7 +119,7 @@
                       <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="totSaleQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -138,11 +138,11 @@
             <%--//페이지 리스트--%>
         </div>
       </div>
-            
+
       <%-- right --%>
       <div id="gridDetail" class="w50 fr" style="width: 49%;">
         <%-- 상품상세 --%>
-        <div class="w100 mt40" ng-controller="barcdDtlCtrl">
+        <div class="w100 mt20" ng-controller="barcdDtlCtrl">
             <div class="oh sb-select mb10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
@@ -159,7 +159,7 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadBarcdDtl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-                <div class="wj-TblWrapBr1 ml10 pd10">
+                <div class="wj-TblWrapBr1">
                        <wj-flex-grid
                           id="barcdDtlGrid"
                           autoGenerateColumns="false"
@@ -192,8 +192,8 @@
               </div>
               <%--//페이지 리스트--%>
         </div>
-     </div>  
-    <%-- //wj grid end --%> 
+     </div>
+    <%-- //wj grid end --%>
 <!-- //contents end -->
 </div>
 

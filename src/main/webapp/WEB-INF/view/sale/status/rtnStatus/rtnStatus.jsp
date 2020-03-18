@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusDayView" class="subCon3"  ng-controller="rtnStatusDayCtrl">
+<div id="rtnStatusDayView" class="subCon"  ng-controller="rtnStatusDayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
@@ -65,7 +65,7 @@
     <div style="clear: both;"></div>
 
     <!-- contents start -->
-	<div class="subCon" ng-controller="rtnStatusDayMainCtrl">
+	<div class="wj-gridWrap2 mt20" ng-controller="rtnStatusDayMainCtrl">
 	    <%-- wj grid start --%>
 	    <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
@@ -126,10 +126,10 @@
 
     <!-- contents start -->
     <%-- wj grid start --%>
-    <div class="subCon wj-TblWrap">
+    <div class="wj-TblWrap">
 	        <%-- left --%>
 	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl">
-	        <div class="mt20 oh sb-select dkbr pd10" >
+	        <div class="mt20 oh sb-select dkbr mb10 mr10" >
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                     class="w100px fl"
@@ -141,12 +141,12 @@
                     is-editable="false"
                     initialized="initComboBox(s)">
             </wj-combo-box>
-            <span class="fl bk lh30" id="strNm"></span>
+            <span class="fl bk lh30 pdl20" id="strNm"></span>
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadDayDtlCtrl()"><s:message code="cmm.excel.down" />
             </button>
             </div>
-	            <div class="wj-TblWrapBr2 mr10 pd10">
+	            <div class="wj-TblWrapBr2 mr10">
                    <wj-flex-grid
 	                  id="rtnStatusDayDtlGrid"
 	                  loaded-rows="loadedRows2(s,e)"
@@ -182,7 +182,7 @@
 
         <%-- right --%>
         <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl">
-        <div class="mt20 oh sb-select dkbr pd10">
+        <div class="mt20 oh sb-select dkbr mb10 ml10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
                    class="w100px fl"
@@ -194,12 +194,12 @@
                    is-editable="false"
                    initialized="initComboBox(s)">
            </wj-combo-box>
-           <span class="fl bk lh30" id="dateYMD"></span>
+           <span class="fl bk lh30 pdl20" id="dateYMD"></span>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtlCtrl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-	            <div class="wj-TblWrapBr1 ml10 pd10">
+	            <div class="wj-TblWrapBr1 ml10">
                    <wj-flex-grid
                       id="rtnStatusPosDtlGrid"
 	                  autoGenerateColumns="false"

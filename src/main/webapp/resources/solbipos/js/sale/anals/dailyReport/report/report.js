@@ -78,6 +78,7 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
 //For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간
+
 	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
@@ -127,10 +128,17 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
-															            		eval( '$(".div_' + item.cfgCd + '").show();' );
+                                                                                eval( '$(".div_'  + item.cfgCd + '").show();' );
+                                                                                eval( '$("#span_' + item.cfgCd + '").show();' );
+                                                                                     //$(".oh .sb-select, .mb10"  ).show();
+                                                                                     //$(".sb-select"             ).show();
+
 															            	}else{
-															            		eval( '$(".div_' + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
-															            	}
+                                                                                eval( '$(".div_'  + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
+                                                                                eval( '$("#span_' + item.cfgCd + '").hide();' );
+                                                                                     //$(".oh .sb-select, .mb10"  ).hide();
+                                                                                     //$(".sb-select"             ).hide();
+                                                                            }
 															            }
 
 															            //'영업일보(0000-00-00 ~ 0000-00-00)' 문구 setting
@@ -195,6 +203,8 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 	angular.extend(this, new RootController('reportCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 	$scope.initGrid = function (s, e) {
+        $scope._makePickColumns("reportCtrl_sl");   	        //picker 사용시 호출
+
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
 	    s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -257,10 +267,13 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_pay    START   ############################################################################################################################################################################
 app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
+    angular.extend(this, new RootController('reportCtrl_pay', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
     $scope.initGrid = function (s, e) {
+        $scope._makePickColumns("reportCtrl_pay");   	        //picker 사용시 호출
+
         //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-        //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+        //s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
         //Grid Header 2줄 - START	----------------------------------------------------------------
         s.allowMerging = 2;
@@ -352,10 +365,13 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_nsl 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_nsl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_nsl");   	        //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -416,8 +432,11 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_npay 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_npay', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_npay");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -495,8 +514,11 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_pos  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_pos', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_pos");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -559,8 +581,11 @@ app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_emp  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_emp', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_emp");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -647,8 +672,11 @@ app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_dc   	START   ############################################################################################################################################################################
 app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_dc', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_dc");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -711,8 +739,11 @@ app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_dcdtl	START   ############################################################################################################################################################################
 app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_dcdtl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_dcdtl");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -775,8 +806,11 @@ app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_gift 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_gift', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_gift");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -863,10 +897,13 @@ app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_order	START   ############################################################################################################################################################################
 app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_order', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_order");          //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
       //Grid Header 2줄 - START	----------------------------------------------------------------
       s.allowMerging = 2;
@@ -944,8 +981,11 @@ app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_lv1  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv1', ['$scope', '$http', function ($scope, $http) {
+angular.extend(this, new RootController('reportCtrl_lv1', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 $scope.initGrid = function (s, e) {
+    $scope._makePickColumns("reportCtrl_lv1");              //picker 사용시 호출
+
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
     s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1008,8 +1048,11 @@ $scope.initGrid = function (s, e) {
 
 //reportCtrl_lv2  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv2', ['$scope', '$http', function ($scope, $http) {
+angular.extend(this, new RootController('reportCtrl_lv2', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 $scope.initGrid = function (s, e) {
+    $scope._makePickColumns("reportCtrl_lv2");              //picker 사용시 호출
+
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
     s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1072,10 +1115,13 @@ $scope.initGrid = function (s, e) {
 
 //reportCtrl_lv3  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_lv3', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_lv3");            //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');          //add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -1136,10 +1182,13 @@ app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_prod 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_prod', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_prod");           //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');          //add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -1200,8 +1249,11 @@ app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_compt	START   ############################################################################################################################################################################
 app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_compt', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_compt");              //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1264,10 +1316,13 @@ app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_appr 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_appr', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_appr");           //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');		    //add a sigma to the header to show that this is a summary row
 
       //Grid Header 2줄 - START	----------------------------------------------------------------
       s.allowMerging = 2;
@@ -1370,8 +1425,11 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_membr	START   ############################################################################################################################################################################
 app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_membr', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_membr");              //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1434,8 +1492,11 @@ app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_work   START   ############################################################################################################################################################################
 app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_work', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_work");                //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 

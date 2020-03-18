@@ -28,30 +28,30 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     /** 매출공통팝업 - 테이블별 매출현황 팝업(실매출 클릭) */
     @Override
     public List<DefaultMap<String>> getTablePopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-    	
+
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	
+
         if (saleComPopupVO.getTblCd() != null && !"".equals(saleComPopupVO.getTblCd())) {
     		String[] arrTblCd = saleComPopupVO.getTblCd().split(",");
-    		if (arrTblCd.length > 1) {
+    		if (arrTblCd.length > 0) {
     			if (arrTblCd[0] != null && !"".equals(arrTblCd[0])) {
     				saleComPopupVO.setTblCd("");
     				saleComPopupVO.setArrStoreTbl(arrTblCd);
     			}
     		}
-    	} 
-        
-        
+    	}
+
+
 		return saleComPopupMapper.getTablePopList(saleComPopupVO);
     }
-    
+
     /** 매출공통팝업 - 상품매출내역 팝업(수량 클릭) */
     @Override
     public List<DefaultMap<String>> getProdPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-    	
+
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-    	
+
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
         }
@@ -70,14 +70,14 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	}
         return null;
     }
-    
+
     /** 매출공통팝업 - 승인현황(매장현황) 팝업(매장명 클릭) */
     @Override
     public List<DefaultMap<String>> getApprPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-    	
+
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-    	
+
         if(!StringUtil.getOrBlank(saleComPopupVO.getCornrCd()).equals("")) {
         	saleComPopupVO.setArrStoreCornr(saleComPopupVO.getCornrCd().split(","));
         }
@@ -102,24 +102,24 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	}else if(saleComPopupVO.getChkPop().equals("ncashApprPop")) {		//비매출현금
     		return saleComPopupMapper.getNcashApprPopList(saleComPopupVO);
     	}
-    	
+
         return null;
     }
-    
+
     /** 매출공통팝업 - 상품선택(대분류) 팝업 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getClassProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-    	
+
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
 		return saleComPopupMapper.getClassProdList(saleComPopupVO);
     }
-    
+
     /** 매출공통팝업 - 상품선택(상품) 팝업 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getProdList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-    	
+
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
@@ -132,47 +132,47 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 	public List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
 
 		saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        
+
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
         	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
         }
-		
+
 		return saleComPopupMapper.getPayFgList(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 매장정보,매출종합내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop1(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-       		
+
 		return saleComPopupMapper.selectBillSalePop1(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 결제내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop3(SaleComPopupVO saleComPopupVO ,SessionInfoVO sessionInfoVO) {
-		
+
         // 결제수단별 쿼리 변수
         String sQuery1 = "";
-        
+
         List<DefaultMap<String>> payCd = saleComPopupMapper.getPayColList(saleComPopupVO);
-		
+
         for(int i = 0; i < payCd.size(); i++) {
         	String j = payCd.get(i).get("payCd");
         	sQuery1 +=", CASE WHEN A.PAY_CD = "+ j + " THEN SUM(A.PAY_AMT) ELSE NULL END AS PAY" + j +  "\n";
         }
-        
+
         saleComPopupVO.setsQuery1(sQuery1);
-        
+
 		return saleComPopupMapper.selectBillSalePop3(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 회원정보 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop4(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-       		
+
 		return saleComPopupMapper.selectBillSalePop4(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 신용카드,현금 결제내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop5(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
@@ -184,24 +184,24 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 		}else if(saleComPopupVO.getPayCd().equals("02")) {
 			return saleComPopupMapper.selectBillSalePopCash(saleComPopupVO);
 		}
-		
+
 		return null;
 	}
-	
+
 	/** 매출공통팝업 - 상품내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop6(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-       		
+
 		return saleComPopupMapper.selectBillSalePop6(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 원거래매출정보 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillSalePop7(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
-       		
+
 		return saleComPopupMapper.selectBillSalePop7(saleComPopupVO);
 	}
-	
+
 	/** 매출공통팝업 - 신용카드,현금 결제취소내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectBillRtnPop5(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
@@ -213,10 +213,10 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 		}else if(saleComPopupVO.getPayCd().equals("02")) {
 			return saleComPopupMapper.selectBillRtnPopCash(saleComPopupVO);
 		}
-		
+
 		return null;
 	}
-	
+
 	/** 매출공통팝업 - 원 신용카드,현금 결제내역 - 영수증 팝업 조회 */
 	@Override
 	public List<DefaultMap<String>> selectbillRealPop(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
@@ -228,7 +228,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 		}else if(saleComPopupVO.getPayCd().equals("02")) {
 			return saleComPopupMapper.selectBillRealRtnPopCash(saleComPopupVO);
 		}
-		
+
 		return null;
 	}
 }

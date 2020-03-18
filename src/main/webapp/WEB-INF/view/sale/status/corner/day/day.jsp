@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="cornerDayView" class="subCon"  ng-controller="cornerDayCtrl">
+<div id="cornerDayView" class="subCon" ng-controller="cornerDayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.day"/></a>
       <%-- 조회 --%>
@@ -138,9 +138,3 @@
 <script type="text/javascript">
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20190125.02" charset="utf-8"></script>
-
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

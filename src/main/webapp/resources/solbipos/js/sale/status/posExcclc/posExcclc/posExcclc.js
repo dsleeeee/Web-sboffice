@@ -48,14 +48,14 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 		if (rng && rng.columnSpan > 1) {
 			e.preventDefault();
 		}
 	  }
-  	
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         if (col.binding === "closeFgNm") {//마감구분
@@ -144,7 +144,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("posExcclcCtrlSrch", function (event, data) {
 	$scope.comboArray =  $scope.comboArrayForSrc;
@@ -262,15 +262,15 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
   // callback : queryCombo 후 callback 할 함수
   $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
 
-	  var listCd       = ["1","2","3"];
-	  var listNm       = ["개점", "중간마감", "일마감"];
+	  var listCd       = ["3","1","2"];
+	  var listNm       = ["일마감", "개점", "중간마감"];
       var comboArray = [];
       var comboArrayForSrc = [];
       var comboData  = {};
 
       if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
         comboArray = [];
-        if (option === "A") {
+        /*if (option === "A") {
           comboData.name  = messages["cmm.all"];
           comboData.value = "";
           comboArray.push(comboData);
@@ -278,7 +278,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
           comboData.name  = messages["cmm.select"];
           comboData.value = "";
           comboArray.push(comboData);
-        }
+        }*/
         for (var i = 0; i < listCd.length; i++) {
           comboData       = {};
           comboData.name  = listNm[i]

@@ -113,7 +113,7 @@ public class TableMonthController {
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
 					+ "' THEN REAL_SALE_AMT END), 0) AS REAL_SALE_AMT_T" + i + "\n";
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
-					+ "' THEN REAL_SALE_CNT END), 0) AS REAL_SALE_CNT_T" + i + "\n";
+					+ "' THEN SALE_CNT END), 0) AS SALE_CNT_T" + i + "\n";
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
 					+ "' THEN GUEST_CNT_1 END), 0) AS GUEST_CNT_1_T" + i + "\n";
 		}

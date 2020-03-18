@@ -64,3 +64,11 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+
+<%-- 팝업 레이어 시작 --%>
+<%-- 상품매출내역 팝업 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

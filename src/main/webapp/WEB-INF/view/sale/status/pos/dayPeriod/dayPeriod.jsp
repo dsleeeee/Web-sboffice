@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="posDayPeriodView" class="subCon"  ng-controller="posDayPeriodCtrl">
+<div id="posDayPeriodView" class="subCon" style="display: none;" ng-controller="posDayPeriodCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
       <%-- 조회 --%>
@@ -73,8 +73,8 @@
 
 
             <%-- left --%>
-            <div class="w50 fl" ng-controller="posDayPeriodMainCtrl">
-            <div class="mt20 oh sb-select dkbr pd10">
+            <div class="w50 fl" ng-controller="posDayPeriodMainCtrl" style="width: 49%;">
+            <div class="mt20 oh sb-select dkbr mb10">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
                     class="w100px fl"
@@ -125,7 +125,7 @@
 
         <%-- right --%>
         <div class="w50 fr" ng-controller="posDayPeriodDtlCtrl">
-        <div class="mt20 oh sb-select dkbr pd10">
+        <div class="mt20 oh sb-select dkbr mb10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
                    class="w100px fl"
@@ -157,7 +157,7 @@
                           <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                          <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"         binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

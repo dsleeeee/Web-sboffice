@@ -94,9 +94,12 @@
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
-      $scope._inquirySub("/sale/status/pos/pos/posNmList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+      
+      if(params.storeCd !== ""){
+	      $scope._inquirySub("/sale/status/pos/pos/posNmList.sb", params, function () {
+	        $scope.searchFg = "Y";
+	      });
+      }
     };
 
     $scope.posSelected = function () {
