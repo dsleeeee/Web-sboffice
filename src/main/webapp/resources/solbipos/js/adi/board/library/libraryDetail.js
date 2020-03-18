@@ -77,7 +77,7 @@ app.controller('libraryDetailCtrl', ['$scope', '$http', function ($scope, $http)
     };
 
     // 삭제
-    $scope.del = function(data){
+    $scope.del = function(){
         // 해당 자료를 삭제하시겠습니까?
         $scope._popConfirm(messages["libraryDetail.delConfirm"], function() {
 
@@ -87,7 +87,8 @@ app.controller('libraryDetailCtrl', ['$scope', '$http', function ($scope, $http)
             params.status = "D";
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/adi/board/library/library/getLibraryInfoSave.sb", params, function(){ });
+            // $scope._save("/adi/board/library/library/getLibraryInfoSave.sb", params, function(){ });
+            $scope._postJSONSave.withPopUp("/adi/board/library/library/getLibraryInfoSave.sb", params, function () { $scope.close(); });
         });
     };
 

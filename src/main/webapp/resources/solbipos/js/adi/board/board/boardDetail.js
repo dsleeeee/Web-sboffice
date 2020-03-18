@@ -54,11 +54,6 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("apprFgBoardDetail", apprFgData); //승인구분
     $scope._setComboData("targetFgBoardDetail", targetFgData); //공개대상
 
-    // grid 초기화 : 생성되기전 초기화되면서 생성된다
-    $scope.initGrid = function (s, e) {
-
-    };
-
     // <-- 검색 호출 -->
     $scope.$on("boardDetailCtrl", function(event, data) {
 
@@ -339,9 +334,5 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.wjBoardReadingHistLayer.show(true);
         event.preventDefault();
     };
-
-    // 글쓰기 에디터
-    $(document).ready(function() {
-    });
 
 }]);

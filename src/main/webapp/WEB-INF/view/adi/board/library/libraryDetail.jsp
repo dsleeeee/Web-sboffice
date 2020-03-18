@@ -57,7 +57,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/library/libraryDetail.js?ver=20200317.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/library/libraryDetail.js?ver=20200317.02" charset="utf-8"></script>
 
 <%-- 자료실 신규등록,수정 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/board/library/libraryInfo.jsp">--%>
