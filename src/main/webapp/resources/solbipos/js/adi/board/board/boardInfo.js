@@ -348,7 +348,22 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 글쓰기 에디터
     $(document).ready(function() {
-        $('#summernote').summernote( { height: 150 });
+        $('#summernote').summernote( {
+            height: 200,
+            toolbar: [
+                ['fontname', ['fontname']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['paragraph']],
+                ['height', ['height']],
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['insert', ['link','image', 'doc', 'video', 'table']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+            ],
+            fontSizes: [ '8', '10', '12', '14','16', '18', '24', '36'],
+        });
     });
 
 }]);
