@@ -33,6 +33,22 @@
     ]]>
   </select>
 
+  <!-- 회원정보 중복체크 -->
+  <!--
+      TABLE    : TB_MB_MEMBER
+      PARAM    : memberVO
+      COMMENTS : 회원등록전, 이미 등록된 회원인지 아닌지 체크한다.
+  -->
+  <select id="chkDuplicateMember" parameterType="memberVO" resultType="DefaultMap">
+     /* USE : SimpleMemberJoinMapper.chkDuplicateMember */
+     SELECT MEMBR_NO,
+             USE_YN
+       FROM TB_MB_MEMBER
+      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_NM = #{membrNm}
+        AND TEL_NO = #{telNo}
+  </select>
+
     <!-- 신규회원번호 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER

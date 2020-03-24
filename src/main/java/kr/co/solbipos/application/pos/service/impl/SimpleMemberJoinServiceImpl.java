@@ -1,6 +1,7 @@
 package kr.co.solbipos.application.pos.service.impl;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.pos.service.MemberVO;
@@ -10,6 +11,8 @@ import kr.co.solbipos.base.store.view.service.VanConfigVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -52,9 +55,23 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         int result = 0;
         String dt = currentDateTimeString();
 
+        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
+
+        // 회원정보 중복체크
+        List<DefaultMap<String>> memberInfo = mapper.chkDuplicateMember(memberVO);
+
+        if(memberInfo.size() > 0){
+            for(int i=0; i<memberInfo.size(); i++){
+                if("N".equals(memberInfo.get(i).getStr("useYn"))){
+                    throw new JsonException(Status.FAIL, messageService.get("applicatoan.pos.simpleMemberJoin.duplidateAndUseYn"));
+                }
+            }
+            throw new JsonException(Status.FAIL, messageService.get("applicatoan.pos.simpleMemberJoin.duplidate"));
+        }
+
+        // 신규회원번호 조회
         String membrNo = mapper.getNewMembrNo(sessionInfoVO);
 
-        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
         memberVO.setMembrNo(membrNo);                           //회원번호
         //TODO 2018.08.14 안동관. 현재는 회원분류코드를 하드코딩으로 넣고 있으나 나중에는 화면에서 받아서 처리해야함.
         memberVO.setMembrClassCd("000");                        //회원분류코드

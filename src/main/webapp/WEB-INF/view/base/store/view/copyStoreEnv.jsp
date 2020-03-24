@@ -45,6 +45,13 @@
               </jsp:include>
             </td>
           </tr>
+          <tr>
+            <td colspan="2">
+              <p class="s12 bk mt10 lh20">
+                * [기준매장]의 환경설정값을 복사하여, [적용대상매장]에 적용합니다.<br />
+              </p>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -75,4 +82,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181228.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181228.10" charset="utf-8"></script>
