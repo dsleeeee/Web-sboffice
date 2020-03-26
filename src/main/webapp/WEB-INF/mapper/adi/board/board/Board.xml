@@ -110,6 +110,11 @@
                 <if test='orgnFg == "M"'>
                     <![CDATA[
                         AND twagi.AUTH_GRP_NM = 'SYSTEM'
+                        AND (
+                                (twbi.APPR_FG = '2')
+                                OR (twbi.APPR_FG = '1' AND twbi.USER_ID = #{userId})
+                                OR (twbi.APPR_FG = '3' AND twbi.USER_ID = #{userId})
+                            )
                     ]]>
                 </if>
                 <!-- 대리점 -->
@@ -125,7 +130,7 @@
         </choose>
         AND twui.USER_ID (+)= twbi.USER_ID
         AND twagi.AUTH_GRP_CD (+)= twui.AUTH_GRP_CD
-        ORDER BY twbi.BOARD_CD, twbi.BOARD_SEQ_NO
+        ORDER BY twbi.MOD_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

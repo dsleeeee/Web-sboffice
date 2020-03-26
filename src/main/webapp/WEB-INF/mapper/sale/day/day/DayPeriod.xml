@@ -83,8 +83,10 @@
 
     <!-- 상품분류별탭 - 상품분류별 매출조회 -->
     <!--
-        TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
-        COMMENTS : [매출]상세, [매장]상품, [매장]상품_분류
+        TABLE    : TB_SL_SALE_DTL, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS,
+                   TB_MS_STORE, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
+        COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류
+                   [매장]매장 정보, [매장]상품, [매장]상품_분류
     -->
     <select id="getDayPeriodProdClassList"  parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodProdClassList */

@@ -8,6 +8,7 @@
 <c:set var="baseUrl" value="/sale/day/day/dayProdclass/"/>
 
 <div id="dayProdClassView" name="dayView" class="subCon" style="display: none;" ng-controller="dayProdClassCtrl">
+
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="day.prodClass"/></a>
         <%-- 조회 --%>
@@ -128,24 +129,28 @@
                     <wj-flex-grid-column header="<s:message code="day.prodClass.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                 </c:forEach>
 
-
-
             </wj-flex-grid>
+
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
                 <jsp:param name="pickerTarget" value="dayProdClassCtrl"/>
             </jsp:include>
             <%--// ColumnPicker 사용시 include --%>
+
         </div>
         <%--//위즈모 테이블--%>
     </div>
+
 </div>
 
-<script type="text/javascript">
-
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200109" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayProdClass.js?ver=20200324" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 상품매출 상세 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

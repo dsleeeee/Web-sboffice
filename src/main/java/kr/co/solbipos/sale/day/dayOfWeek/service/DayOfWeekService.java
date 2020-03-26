@@ -25,21 +25,24 @@ public interface DayOfWeekService {
     /** 주간종합탭 - 주간종합조회 */
     List<DefaultMap<Object>> getDayOfWeekTotalList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 할인구별별탭 - 할인구분별매출조회 */
+    /** 할인구별별탭 - 할인구분별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekDcList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 과면세별탭 - 과면세별매출조회 */
+    /** 과면세별탭 - 과면세별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTaxList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 시간대별 - 시간대별매출조회 */
+    /** 시간대별탭 - 시간대별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTimeList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 코너별 - 코너별 매출조회 */
+    /** 상품분류별탭 - 상품분류별 매출조회 */
+    List<DefaultMap<Object>> getDayOfWeekProdClassList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
+
+    /** 코너별탭 - 코너별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekCornerList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 외식테이블별 - 외식테이블별매출조회 */
+    /** 외식테이블별탭 - 외식테이블별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekTableList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 
-    /** 포스별 - 포스별매출조회 */
+    /** 포스별탭 - 포스별 매출조회 */
     List<DefaultMap<Object>> getDayOfWeekPosList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO);
 }

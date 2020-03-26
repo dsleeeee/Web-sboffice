@@ -14,21 +14,24 @@ public interface MonthMapper {
     /** 월별종합탭 - 월별종합조회 */
     List<DefaultMap<Object>> getMonthTotalList(MonthVO monthVO);
 
-    /** 할인구별별탭 - 할인구분별매출조회 */
+    /** 할인구별별탭 - 할인구분별 매출조회 */
     List<DefaultMap<Object>> getMonthDcList(MonthVO monthVO);
 
-    /** 과면세별탭 - 과면세별매출조회 */
+    /** 과면세별탭 - 과면세별 매출조회 */
     List<DefaultMap<Object>> getMonthTaxList(MonthVO monthVO);
 
-    /** 시간대별 - 시간대별매출조회 */
+    /** 시간대별탭 - 시간대별 매출조회 */
     List<DefaultMap<Object>> getMonthTimeList(MonthVO monthVO);
 
-    /** 코너별 - 코너별 매출조회 */
+    /** 상품분류별탭 - 상품분류별 매출조회 */
+    List<DefaultMap<Object>> getMonthProdClassList(MonthVO monthVO);
+
+    /** 코너별탭 - 코너별 매출조회 */
     List<DefaultMap<Object>> getMonthCornerList(MonthVO monthVO);
 
-    /** 외식테이블별 - 외식테이블별매출조회 */
+    /** 외식테이블별탭 - 외식테이블별 매출조회 */
     List<DefaultMap<Object>> getMonthTableList(MonthVO monthVO);
 
-    /** 포스별 - 포스별매출조회 */
+    /** 포스별탭 - 포스별 매출조회 */
     List<DefaultMap<Object>> getMonthPosList(MonthVO monthVO);
 }

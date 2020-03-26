@@ -47,7 +47,7 @@
                 </if>
             </when>
         </choose>
-        ORDER BY twbi.BOARD_CD, twbi.BOARD_SEQ_NO
+        ORDER BY twbi.MOD_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

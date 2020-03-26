@@ -116,7 +116,7 @@ public class MonthController {
     }
 
     /**
-     * 시간대별 - 시간대별 매출조회
+     * 시간대별탭 - 시간대별 매출조회
      *
      * @param monthVO
      * @param request
@@ -139,7 +139,30 @@ public class MonthController {
     }
 
     /**
-     * 코너별 - 코너별 매출조회
+     * 상품분류별탭 - 상품분류별 매출조회
+     *
+     * @param monthVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 03. 20.
+     */
+    @RequestMapping(value = "/month/getMonthProdClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMonthProdClassList(MonthVO monthVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = monthService.getMonthProdClassList(monthVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, monthVO);
+    }
+
+    /**
+     * 코너별탭 - 코너별 매출조회
      *
      * @param monthVO
      * @param request
@@ -162,7 +185,7 @@ public class MonthController {
     }
 
     /**
-     * 외식테이블 - 외식테이블별 매출조회
+     * 외식테이블탭 - 외식테이블별 매출조회
      *
      * @param monthVO
      * @param request
@@ -185,7 +208,7 @@ public class MonthController {
     }
 
     /**
-     * 포스별 - 포스별 매출조회
+     * 포스별탭 - 포스별 매출조회
      *
      * @param monthVO
      * @param request

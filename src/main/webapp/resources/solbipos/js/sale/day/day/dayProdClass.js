@@ -49,6 +49,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
+        // <-- 그리드 헤더2줄 -->
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -90,6 +91,82 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
                 }
             }
         }
+        // <-- //그리드 헤더2줄 -->
+
+        //그리드 링크설정
+        // ReadOnly 효과설정
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                // 수량합계
+                if (col.binding === "totSaleQty") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+
+                // 수량
+                var arr = $("#hdProdClassCd").val().split(",");
+                for (var i = 0; i < arr.length; i++) {
+                    if (col.binding === ("pay" + (i+1) + "SaleQty")) {
+                        var item = s.rows[e.row].dataItem;
+
+                        // 값이 있으면 링크 효과
+                        if (nvl(item[("pay" + (i+1) + "SaleQty")], '') !== '') {
+                            wijmo.addClass(e.cell, 'wijLink');
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        }
+                    }
+                }
+            }
+        });
+
+        // 그리드 선택 이벤트
+        s.addEventListener(s.hostElement, 'mousedown', function(e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+
+                //  수량합계 클릭시 상세정보 조회
+                if (col.binding === "totSaleQty") {
+                    var selectedRow = s.rows[ht.row].dataItem;
+                    var params = {};
+                    params.saleDate = selectedRow.saleDate;
+                    params.strProdClassCd = $("#hdProdClassCd").val();
+                    params.level = $scope.level;
+                    params.prodCd = $scope.prodCd;
+                    params.prodNm = $scope.prodNm;
+                    params.barCd = $scope.barCd;
+                    params.prodClassCd = $scope.prodClassCd;
+                    params.storeCd = $("#dayProdClassSelectStoreCd").val();
+                    params.gubun = "dayProdClass";
+
+                    $scope._broadcast('prodSaleDtlCtrl', params);
+                }
+
+                // 수량 클릭시 상세정보 조회
+                var arr = $("#hdProdClassCd").val().split(",");
+                for (var i = 0; i < arr.length; i++) {
+                    if (col.binding === ("pay" + (i + 1) + "SaleQty")) {
+
+                        var selectedRow = s.rows[ht.row].dataItem;
+                        var params = {};
+                        params.saleDate = selectedRow.saleDate;
+                        params.strProdClassCd = $("#hdProdClassCd").val();
+                        params.level = $scope.level;
+                        params.prodCd = $scope.prodCd;
+                        params.prodNm = $scope.prodNm;
+                        params.barCd = $scope.barCd;
+                        params.prodClassCd = arr[i];
+                        params.storeCd = $("#dayProdClassSelectStoreCd").val();
+                        params.gubun = "dayProdClass";
+
+                        // 값이 있으면 링크
+                        if (nvl(selectedRow[("pay" + (i + 1) + "SaleQty")], '') !== '') {
+                            $scope._broadcast('prodSaleDtlCtrl', params);
+                        }
+                    }
+                }
+            }
+        });
 
     };
 
@@ -170,8 +247,6 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
             grid.columnHeaders.rows[0].dataItem = dataItem
 
         }, false);
-
-
     };
 
     // 매장선택 모듈 팝업 사용시 정의

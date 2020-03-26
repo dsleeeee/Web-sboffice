@@ -90,7 +90,7 @@
                 is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="250" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
