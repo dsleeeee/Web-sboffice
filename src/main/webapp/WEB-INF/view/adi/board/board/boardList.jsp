@@ -119,9 +119,18 @@
 
 <script type="text/javascript">
     <%-- 공개대상 --%>
-    var targetFgData = ${ccu.getCommCodeExcpAll("106")};
+    //var targetFgData = ${ccu.getCommCodeExcpAll("106")};
+    var targetFgData = [
+        {"name":"전체","value":"1"},
+        {"name":"특정매장","value":"2"}
+    ];
     <%-- 승인구분 --%>
-    var apprFgData = ${ccu.getCommCodeExcpAll("107")};
+    //var apprFgData = ${ccu.getCommCodeExcpAll("107")};
+    var apprFgData = [
+        {"name":"기안","value":"1"},
+        {"name":"승인","value":"2"},
+        {"name":"반려","value":"3"}
+    ];
 
     var boardCd = "${boardCd}";
 </script>

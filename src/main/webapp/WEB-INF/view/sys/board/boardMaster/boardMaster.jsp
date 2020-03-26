@@ -60,7 +60,13 @@
 
 <script type="text/javascript">
     <%-- 게시판 구분 --%>
-    var boardFgData = ${ccu.getCommCodeExcpAll("105")};
+    //var boardFgData = ${ccu.getCommCodeExcpAll("105")};
+    var boardFgData = [
+        {"name":"본사전용","value":"1"},
+        {"name":"매장전용","value":"2"},
+        {"name":"본사/매장공용","value":"3"},
+    ];
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20200210.05" charset="utf-8"></script>

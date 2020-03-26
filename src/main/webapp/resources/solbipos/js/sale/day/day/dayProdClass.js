@@ -224,7 +224,7 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
             var end = (arr.length * 2) + 3;
             
             // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-            for(var i = 4; i <= 99; i++){
+            for(var i = 4; i <= 199; i++){
                 if(i >= start && i <= end){
                     columns[i].visible = true;
                 }else{

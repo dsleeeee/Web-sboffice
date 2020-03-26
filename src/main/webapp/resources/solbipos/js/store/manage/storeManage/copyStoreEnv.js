@@ -63,12 +63,12 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
 
 
     if( isEmptyObject($("#originalStoreCd").val()) ) {
-      $scope._popMsg("원매장을 선택해주세요.");
+      $scope._popMsg("기준매장을 선택해주세요.");
       return false;
     }
 
     if( isEmptyObject($("#targetStoreCd").val()) ) {
-      $scope._popMsg("복사대상매장을 선택해주세요.");
+      $scope._popMsg("적용대상매장을 선택해주세요.");
       return false;
     }
 
@@ -92,32 +92,37 @@ console.log('storeParams',storeParams);
       return false;
     }
 
-    $scope.$broadcast('loadingPopupActive');
+    var msg = "(" + $("#originalStoreNm").val() + ")의 환경설정값을 ("  + $("#targetStoreNm").val() + ")에 적용하시겠습니까?";
+    s_alert.popConf(msg, function(){
 
-    $http({
-      method : 'POST', //방식
-      url    : '/base/store/view/copyStoreEnv/copyStoreEnvInfo.sb', /* 통신할 URL */
-      data   : params, /* 파라메터로 보낼 데이터 */
-      params : storeParams,
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
+      $scope.$broadcast('loadingPopupActive');
 
-        console.log('response', response);
-        if(response.data.status == 'OK'){
+      $http({
+        method : 'POST', //방식
+        url    : '/base/store/view/copyStoreEnv/copyStoreEnvInfo.sb', /* 통신할 URL */
+        data   : params, /* 파라메터로 보낼 데이터 */
+        params : storeParams,
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
 
-          $scope._popMsg("복사되었습니다");
-          $scope.searchEnvList();
-          $scope.$broadcast('loadingPopupInactive');
+          console.log('response', response);
+          if(response.data.status == 'OK'){
+
+            $scope._popMsg("복사되었습니다");
+            $scope.searchEnvList();
+            $scope.$broadcast('loadingPopupInactive');
+          }
         }
-      }
-    }, function errorCallback(response) {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(response.data.message);
-      return false;
-    }).then(function () {
-      $scope.$broadcast('loadingPopupInactive');
+      }, function errorCallback(response) {
+        $scope.$broadcast('loadingPopupInactive');
+        $scope._popMsg(response.data.message);
+        return false;
+      }).then(function () {
+        $scope.$broadcast('loadingPopupInactive');
+      });
     });
+
   };
 
   // 팝업 닫기
