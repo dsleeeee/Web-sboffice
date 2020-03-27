@@ -87,6 +87,8 @@ public interface ViewMapper {
     /** 상품권 복사 */
     String copyGift(CopyStoreEnvVO copyStoreEnvVO);
 
+    /** 입금/출금계정 복사 */
+    String copyAccount(CopyStoreEnvVO copyStoreEnvVO);
 
 
 }

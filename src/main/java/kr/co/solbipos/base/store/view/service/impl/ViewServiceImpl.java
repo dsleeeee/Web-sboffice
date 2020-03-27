@@ -174,6 +174,9 @@ public class ViewServiceImpl implements ViewService {
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.GIFT) { // 상품권
                 procResult = viewMapper.copyGift(copyStoreEnvVO);
             }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.ACCOUNT) { // 입금/출금계정
+                procResult = viewMapper.copyAccount(copyStoreEnvVO);
+            }
         }
 
         return result;
