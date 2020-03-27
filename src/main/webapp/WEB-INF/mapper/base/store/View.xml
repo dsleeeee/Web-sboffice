@@ -470,4 +470,24 @@
         }
     </select>
 
+    <!-- 입금/출금계정 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_ACCOUNT
+        PARAM    :
+        COMMENTS : 금전처리의 입금/출금계정 관련 정보를 복사한다.
+    -->
+    <select id="copyAccount" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+          /* USE : ViewMapper.copyAccount */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_ACCOUNT
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>

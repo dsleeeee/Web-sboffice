@@ -82,4 +82,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181228.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/copyStoreEnv.js?ver=20181229" charset="utf-8"></script>

@@ -29,4 +29,7 @@ public interface DepositService {
 
     /** 계정 정보 저장 */
     int saveDepositAccntList(AccntVO[] accntVOs, SessionInfoVO sessionInfoVO);
+
+    /** 계정 정보 일괄저장 */
+    int batchDepositAccntList(AccntVO accntVO, SessionInfoVO sessionInfoVO);
 }
