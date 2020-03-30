@@ -76,6 +76,12 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
     var storeParams             = {};
     storeParams.originalStoreCd = $("#originalStoreCd").val();
     storeParams.targetStoreCd   = $("#targetStoreCd").val();
+    // 가상로그인 대응
+    // 가상로그인으로 들어왔을때 저장시 Controller에서 sid값을 못읽는 현상 때문에 추가. (2020.03.26_이다솜)
+    if (document.getElementsByName('sessionId')[0]) {
+      storeParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
 
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {

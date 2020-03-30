@@ -121,4 +121,34 @@ public class DepositServiceImpl implements DepositService{
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 계정 정보 일괄저장 */
+    @Override
+    public int batchDepositAccntList(AccntVO accntVO, SessionInfoVO sessionInfoVO) {
+
+        int resultCnt = 0;
+        String dt = currentDateTimeString();
+
+        accntVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        accntVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        accntVO.setRegDt(dt);
+        accntVO.setRegId(sessionInfoVO.getUserId());
+
+        // 본사의 계정 리스트 조회
+        List<DefaultMap<String>> accntList = depositMapper.getDepositAccntList(accntVO);
+
+        //본사의 계정리스트를 전 매장에 동일적용
+        for (int i = 0; i < accntList.size(); i++) {
+            accntVO.setAccntCd(accntList.get(i).getStr("accntCd"));
+            depositMapper.insertAccntToStore(accntVO);
+            resultCnt++;
+        }
+
+        if (resultCnt == accntList.size()) {
+            return resultCnt;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
 }

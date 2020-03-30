@@ -99,6 +99,34 @@ app.controller('depositCtrl', ['$scope', '$http', function ($scope, $http) {
     );
   };
 
+  // 입금계정 일괄저장
+  $scope.batch = function() {
+
+    var msg = "";
+
+    if($scope.flex.collectionView.items.length == 0){
+      msg = messages["accntManage.emptyBatchList.msg"]; //적용할 내역이 없습니다.
+      s_alert.pop(msg);
+      return;
+    }
+
+    msg = messages["accntManage.chkDeposit.msg"]; // 입금계정을 전 매장에 적용하시겠습니까?
+    s_alert.popConf(msg, function() {
+
+        // 파라미터
+        var params = {};
+        params.accntFg="1"; // 입금
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save(baseUrl + "deposit/batchDepositAccntList.sb", params,
+            function (result) {
+              $scope.searchDepositAccntList();
+            }
+        );
+
+    });
+  };
+
 }]);
 
 
@@ -178,6 +206,35 @@ app.controller('withdrawCtrl', ['$scope', '$http', function ($scope, $http) {
         }
     );
   };
+
+  // 출금계정 일괄저장
+  $scope.batch = function() {
+
+    var msg = "";
+
+    if($scope.flex.collectionView.items.length == 0){
+      msg = messages["accntManage.emptyBatchList.msg"]; //적용할 내역이 없습니다.
+      s_alert.pop(msg);
+      return;
+    }
+
+    msg = messages["accntManage.chkWidthdraw.msg"]; // 출금계정을 전 매장에 적용하시겠습니까?
+    s_alert.popConf(msg, function() {
+
+        // 파라미터
+        var params = {};
+        params.accntFg="2"; // 출금
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save(baseUrl + "deposit/batchDepositAccntList.sb", params,
+            function(){
+              $scope.searchDepositAccntList();
+            }
+        );
+
+    });
+  };
+
 }]);
 
 

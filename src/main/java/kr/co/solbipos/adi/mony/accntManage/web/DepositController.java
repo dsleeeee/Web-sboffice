@@ -116,4 +116,30 @@ public class DepositController {
         return returnListJson(Status.OK, result);
     }
 
+    /**
+     * 계정 정보 일괄저장
+     * @param accntVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deposit/batchDepositAccntList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result batchDepositAccntList(@RequestBody AccntVO accntVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = 0;
+
+        try{
+            result = depositService.batchDepositAccntList(accntVO, sessionInfoVO);
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return returnListJson(Status.OK, result);
+    }
+
 }
