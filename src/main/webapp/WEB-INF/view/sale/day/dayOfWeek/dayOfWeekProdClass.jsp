@@ -140,12 +140,19 @@
                     <wj-flex-grid-column header="<s:message code="dayofweek.totSaleQty"/>" binding="totSaleQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     <%-- 컬럼 생성--%>
-                    <c:forEach var="i" begin="1" end="100" step="1">
+                    <c:forEach var="i" begin="1" end="200" step="1">
                         <wj-flex-grid-column header="<s:message code="dayofweek.realSaleAmt"/>" binding="pay${i}SaleAmt" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayofweek.saleQty"/>" binding="pay${i}SaleQty" width="100" align="right" is-read-only="true" visible="false" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="dayOfWeekProdClassCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -156,7 +163,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20200323.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekProdClass.js?ver=20200323.09" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>

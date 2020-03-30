@@ -43,6 +43,10 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayOfWeekProdClassCtrl");
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -116,7 +120,7 @@ app.controller('dayOfWeekProdClassCtrl', ['$scope', '$http', '$timeout', functio
             var end = (arr.length * 2) + 3;
 
             // 분류갯수 파악하여 리스트 컬럼 보이게/안보이게 처리
-            for(var i = 4; i <= 99; i++){
+            for(var i = 4; i <= 199; i++){
                 if(i >= start && i <= end){
                     columns[i].visible = true;
                 }else{

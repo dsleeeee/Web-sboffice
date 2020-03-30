@@ -443,7 +443,8 @@
                             TB_MS_PRODUCT tmp,
                             TB_MS_PRODUCT_CLASS tmpc,
                             (
-                                SELECT tmpc.PROD_CLASS_CD,
+                                SELECT
+                                tmpc.PROD_CLASS_CD,
                                 SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD, '/') PATH
                                 FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                                 WHERE 1=1

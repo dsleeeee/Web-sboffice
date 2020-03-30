@@ -99,6 +99,13 @@
                     <wj-flex-grid-column header="<s:message code="month.packRealSaleAmtPer"/>" binding="packRealSaleAmtPer" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="monthTotalCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -109,7 +116,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.19" charset="utf-8"></script>
 
 <%-- 매장별 매출현황 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">

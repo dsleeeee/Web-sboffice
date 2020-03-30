@@ -90,6 +90,13 @@
                     </c:forEach>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="dayTableCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -100,7 +107,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTable.js?ver=20200121.02" charset="utf-8"></script>
 
 <%-- 상품매출 상세내역 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayProdSaleDtl.jsp">

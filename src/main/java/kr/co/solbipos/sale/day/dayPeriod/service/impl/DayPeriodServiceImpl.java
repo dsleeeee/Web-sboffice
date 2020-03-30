@@ -79,13 +79,16 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     public List<DefaultMap<Object>> getDayPeriodProdClassList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
 
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayPeriodVO.setStoreCds(sessionInfoVO.getStoreCd());
-        }
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
-        // 매장 array 값 세팅
-        String[] storeCds = dayPeriodVO.getStoreCds().split(",");
-        dayPeriodVO.setStoreCdList(storeCds);
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
+            dayPeriodVO.setStoreCdList(storeCds);
+        }
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayPeriodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return dayPeriodMapper.getDayPeriodProdClassList(dayPeriodVO);
     }
@@ -95,6 +98,16 @@ public class DayPeriodServiceImpl implements DayPeriodService {
     public List<DefaultMap<Object>> getDayPeriodProdClassDetailList(DayPeriodVO dayPeriodVO, SessionInfoVO sessionInfoVO) {
 
         dayPeriodVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = dayPeriodVO.getStoreCds().split(",");
+            dayPeriodVO.setStoreCdList(storeCds);
+        }
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayPeriodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         return dayPeriodMapper.getDayPeriodProdClassDetailList(dayPeriodVO);
     }
