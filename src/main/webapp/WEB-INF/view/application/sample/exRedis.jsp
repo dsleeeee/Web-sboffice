@@ -36,6 +36,12 @@ userId : <input id="userId" />
 <br><br>
 <div id="comboResult"></div>
 
+<hr/>
+<input type="text" id="nmcodeGrpCd"/>
+<button id="set" type="button" class="btn btn_dark btn_md w_lg" onclick="setGrpCd();">
+  레디스에 코드값 SET
+</button>
+
 <script>
 
 var comboData = ${ccu.getCommCode("011")};
@@ -67,6 +73,15 @@ function get() {
 	param.sessionId = $("#sessionId").val();
 	
 	ajaxSend("/exRedisGet.sb", param);
+}
+
+function setGrpCd(){
+
+  var param = {};
+
+  param.nmcodeGrpCd = $("#nmcodeGrpCd").val();
+
+  ajaxSend("/exRedisSetGrpCd.sb", param);
 }
 
 

@@ -12,7 +12,6 @@
  * get application
  */
 var app = agrid.getApp();
-var selectedGiftClass;
 
 /**
  *  상품권분류등록 그리드 생성
@@ -68,7 +67,9 @@ app.controller('giftClassCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
           } else {
             $("#giftSubTitle").text(" [" + selectedRow.payClassNm+ "]");
-            $scope._broadcast('giftCtrl', selectedRow);
+            $("#hdPayClassCd").val(selectedRow.payClassCd);
+            //$scope._broadcast('giftCtrl', selectedRow);
+            $scope._pageView('giftCtrl', 1);
           }
         }
       }
@@ -279,17 +280,15 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   $scope.$on("giftCtrl", function(event, data) {
-    selectedGiftClass = data;
-
-    $scope.searchGift(data);
+    $scope.searchGift();
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 상품권 그리드 조회
-  $scope.searchGift = function(data){
+  $scope.searchGift = function(){
     var params = {};
-    params.payClassCd = data.payClassCd;
+    params.payClassCd = $("#hdPayClassCd").val();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getGiftList.sb", params, function(){}, false);
   };
@@ -347,7 +346,7 @@ app.controller('giftCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allSearch = function () {
     var giftClassGrid = agrid.getScope("giftClassCtrl");
     giftClassGrid.searchGiftClass();
-    $scope.searchGift(selectedGiftClass);
+    $scope.searchGift();
   };
 
 }]);
