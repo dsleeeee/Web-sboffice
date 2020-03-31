@@ -68,24 +68,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="cmm.hedofc.cd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" class="sb-input" maxlength="7" size="50" ng-value="">
+          <input type="text" id="srchHqOfficeCd" ng-model="hqOfficeCd" class="sb-input" size="50" ng-value="">
         </td>
         <%-- 본사명 --%>
         <th><s:message code="cmm.hedofc.nm" /></th>
         <td>
-          <input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" class="sb-input" maxlength="16" size="50" ng-value="">
+          <input type="text" id="srchHqOfficeNm" ng-model="hqOfficeNm" class="sb-input" size="50" ng-value="">
         </td>
       </tr>
       <tr>
         <%-- 매장 코드 --%>
         <th><s:message code="cmm.mrhst.cd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" ng-model="storeCd" class="sb-input" maxlength="5" size="50" ng-value="">
+          <input type="text" id="srchStoreCd" ng-model="storeCd" class="sb-input" size="50" ng-value="">
         </td>
         <%-- 매장명 --%>
         <th><s:message code="cmm.mrhst.nm" /></th>
         <td>
-          <input type="text" id="srchStoreNm" ng-model="storeNm" class="sb-input" maxlength="16" size="50" ng-value="">
+          <input type="text" id="srchStoreNm" ng-model="storeNm" class="sb-input" size="50" ng-value="">
         </td>
       </tr>
       <tr>

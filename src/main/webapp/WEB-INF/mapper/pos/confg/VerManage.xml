@@ -49,7 +49,10 @@
                ) tcpvs
          WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
         <if test='verSerNo != null and verSerNo != ""'>
-           AND tcpv.VER_SER_NO = #{verSerNo}
+           AND tcpv.VER_SER_NO LIKE '%' || #{verSerNo} || '%'
+        </if>
+        <if test='verSerNm != null and verSerNm != ""'>
+            AND tcpv.VER_SER_NM LIKE '%' || #{verSerNm} || '%'
         </if>
         <if test='fileDesc != null and fileDesc != ""'>
            AND tcpv.FILE_DESC = #{fileDesc}

@@ -30,12 +30,12 @@
         <%-- 버전일련번호 --%>
         <th><s:message code="verManage.verSerNo" /></th>
         <td>
-          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo" maxlength="20"/>
+          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo"/>
         </td>
         <%-- 버전적용명 --%>
         <th><s:message code="verManage.verSerNm" /></th>
         <td>
-          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm" maxlength="10"/>
+          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm"/>
         </td>
       </tr>
     </tbody>
