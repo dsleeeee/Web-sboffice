@@ -17,7 +17,7 @@
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-        <button class="btn_blue fr" id="btnSearch" ng-click="searchGiftClass()">
+        <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('giftClassCtrl', 1)">
           <s:message code="cmm.search" />
         </button>
       </div>
@@ -99,6 +99,7 @@
         <button class="btn_skyblue" id="btnGiftDel" ng-click="del()" ng-if="userUseYn"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnGiftSave" ng-click="save()" ng-if="userUseYn"><s:message code='cmm.save' /></button>
       </div>
+      <input type="hidden" id="hdPayClassCd"/>
       <%-- 상품권등록 그리드 --%>
       <div id="giftGrid" class="wj-gridWrap" style="height:370px;overflow-y: hidden;">
         <wj-flex-grid
@@ -143,4 +144,4 @@ var giftApplyFg  = ${ccu.getCommCodeExcpAll("043")};
 var baseUrl      = "${baseUrl}";
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=2018081301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/gift/gift.js?ver=20180814" charset="utf-8"></script>
