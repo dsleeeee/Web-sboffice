@@ -156,8 +156,12 @@ app.controller('libraryInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.$broadcast('loadingPopupInactive');
 
                     $scope.close();
-                    // 저장기능 수행후 재조회
-                    $scope._broadcast('libraryDetailCtrl', params);
+
+                    // 수정
+                    if (params.status === "U") {
+                        // 저장기능 수행후 재조회
+                        $scope._broadcast('libraryDetailCtrl', params);
+                    }
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
