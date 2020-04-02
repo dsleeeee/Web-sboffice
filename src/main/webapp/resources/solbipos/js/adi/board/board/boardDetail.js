@@ -106,6 +106,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             var endDate = $scope.boardDetail.endDate.substr(0, 4) + "-" + $scope.boardDetail.endDate.substr(4, 2) + "-" + $scope.boardDetail.endDate.substr(6, 2);
             $scope.boardDetail.startDate = startDate;
             $scope.boardDetail.endDate = endDate;
+            $scope.boardDetail.remark = $scope.boardDetail.remark;
 
             // 게시글 내용 div 에 넣기
             $("#summernoteDetail").html($scope.boardDetail.content);

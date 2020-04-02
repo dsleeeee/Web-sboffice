@@ -105,6 +105,9 @@ public class BoardVO extends PageVO {
     /** 날짜 */
     private String date;
 
+    /** 비고 */
+    private String remark;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -216,4 +219,8 @@ public class BoardVO extends PageVO {
     public String getDate() { return date; }
 
     public void setDate(String date) { this.date = date; }
+
+    public String getRemark() { return remark; }
+
+    public void seRemark(String remark) { this.remark = remark; }
 }

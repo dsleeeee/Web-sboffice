@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}" />
 
-<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:940px;" fade-in="false" fade-out="false">
+<wj-popup control="wjBoardInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:980px;" fade-in="false" fade-out="false">
     <div ng-controller="boardInfoCtrl">
 
         <%-- header --%>
@@ -15,7 +15,7 @@
         </div>
 
         <%-- body --%>
-        <div class="wj-dialog-body sc2" style="height: 900px;">
+        <div class="wj-dialog-body sc2" style="height: 940px;">
             <table class="tblType01">
                 <colgroup>
                     <col class="w15"/>
@@ -148,6 +148,15 @@
                         </td>
                     </tr>
                     <tr>
+                        <%-- 비고 --%>
+                        <th>
+                            <s:message code="boardInfo.remark"/>
+                        </th>
+                        <td colspan="3">
+                            <input type="text" class="sb-input w100" id="srchRemark" ng-model="remark" maxlength="100" />
+                        </td>
+                    </tr>
+                    <tr>
                         <%-- 글쓰기 에디터 --%>
                         <td colspan="4">
                             <div id="summernote"></div>
@@ -233,4 +242,4 @@
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200318.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20200318.13" charset="utf-8"></script>

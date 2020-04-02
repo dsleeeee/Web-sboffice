@@ -46,7 +46,8 @@
         ) AS AGENCY_NM,
         twbi.USER_ID,
         twbi.USER_NM,
-        (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE
+        (TO_CHAR(TO_DATE(twbi.START_DATE, 'YYYYMMDD'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(twbi.END_DATE, 'YYYYMMDD'), 'yyyy-mm-dd')) AS NOTICE_DATE,
+        twbi.REMARK
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_USER_INFO twui,
@@ -154,7 +155,8 @@
         twbi.END_DATE,
         twbi.CONTENT,
         TO_CHAR(TO_DATE(twbi.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
-        twbm.ANSWER_FG
+        twbm.ANSWER_FG,
+        twbi.REMARK
         FROM TB_WB_BOARD_INFO twbi,
         TB_WB_BOARD_MASTER twbm,
         (
@@ -290,7 +292,8 @@
             BOARD_SEQ_NO,
             USE_YN,
             USER_ID,
-            USER_NM
+            USER_NM,
+            REMARK
         ) VALUES (
             #{boardCd},
             #{startDate},
@@ -309,7 +312,8 @@
             #{boardSeqNo},
             'Y',
             #{regId},
-            #{userNm}
+            #{userNm},
+            #{remark}
         )
     </insert>
 
@@ -332,7 +336,8 @@
         CONTENT = #{content},
         USER_NM = #{userNm},
         MOD_DT = #{modDt},
-        MOD_ID = #{modId}
+        MOD_ID = #{modId},
+        REMARK = #{remark}
         WHERE 1=1
         AND BOARD_CD = #{boardCd}
         AND BOARD_SEQ_NO = #{boardSeqNo}

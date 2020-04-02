@@ -123,6 +123,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             var endDate = $scope.boardInfo.endDate.substr(0, 4) + "/" + $scope.boardInfo.endDate.substr(4, 2) + "/" + $scope.boardInfo.endDate.substr(6, 2);
             $scope.startDate = startDate;
             $scope.endDate = endDate;
+            $scope.remark = $scope.boardInfo.remark;
             // 서머노트에 text 쓰기
             $('#summernote').summernote('code', $scope.boardInfo.content);
             // $('#summernote').summernote('insertText', $scope.boardInfo.content);
@@ -151,6 +152,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.smsYn = false;
         $scope.startDate = new Date();
         $scope.endDate = new Date();
+        $scope.remark = "";
 
         $scope.setSelectedBoardInfo(null);
 
@@ -205,6 +207,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // }
         params.startDate = dateToDaystring($scope.startDate).replaceAll("-","");
         params.endDate = dateToDaystring($scope.endDate).replaceAll("-","");
+        params.remark = $scope.remark;
         var html = $('#summernote').summernote('code');
         params.content = html;
         params.storeCds = $("#boardInfoStoreCd").val();
