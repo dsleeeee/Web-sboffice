@@ -29,7 +29,7 @@
         <%-- 매장코드 --%>
         <th><s:message code="storeView.storeCd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd" maxlength="10"/>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/>
           <%--
           <div class="sb-select">
             <div id="sStoreCd"></div>
@@ -39,7 +39,7 @@
         <%-- 매장명 --%>
         <th><s:message code="storeView.storeNm" /></th>
         <td>
-          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" maxlength="10"/>
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm"/>
           <%--
           <div class="sb-select">
             <div id="sStoreNm"></div>

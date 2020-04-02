@@ -38,12 +38,12 @@
           <%-- 버전일련번호 --%>
           <th><s:message code="verRecv.verSerNo" /></th>
           <td>
-            <input type="text" id="verSerNo" name="verSerNo" ng-model="verSerNo" class="sb-input w100" maxlength="50" size="50">
+            <input type="text" id="verSerNo" name="verSerNo" ng-model="verSerNo" class="sb-input w100" size="50">
           </td>
           <%-- 버전적용명 --%>
           <th><s:message code="verRecv.verSerNm" /></th>
           <td>
-            <input type="text" id="verSerNm" name="verSerNm" ng-mode="verSerNm" class="sb-input w100" maxlength="50" size="50">
+            <input type="text" id="verSerNm" name="verSerNm" ng-mode="verSerNm" class="sb-input w100" size="50">
           </td>
         </tr>
         <tr>

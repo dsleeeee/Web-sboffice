@@ -236,7 +236,8 @@ public class RegistServiceImpl implements RegistService {
         int registCnt = 0;
 
         for(RegistVO registVO : registVOs) {
-            registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            //registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             registVO.setModId(sessionInfoVO.getUserId());
             registVO.setModDt(DateUtil.currentDateTimeString());
 
