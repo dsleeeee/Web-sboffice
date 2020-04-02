@@ -238,12 +238,15 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     //첨부파일 저장
                     $scope.atchSave(params);
 
-                    params.userId = $scope.selectedBoardInfo.userId;
-                    // 저장기능 수행후 재조회
-                    $scope._broadcast('boardDetailCtrl', params);
+                    // 수정
+                    if(params.status === "U") {
+                        params.userId = $scope.selectedBoardInfo.userId;
+
+                        // 저장기능 수행후 재조회
+                        $scope._broadcast('boardDetailCtrl', params);
+                    }
 
                     $scope._popMsg("저장되었습니다.");
-
                     $scope.close();
                 }
                 else if (result.status === "FAIL") {
