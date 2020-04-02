@@ -1,7 +1,6 @@
 package kr.co.solbipos.sys.board.boardMaster.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
