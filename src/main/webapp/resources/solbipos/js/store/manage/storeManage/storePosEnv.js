@@ -251,9 +251,10 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
         $scope.$broadcast('loadingPopupInactive');
         $scope._popMsg(messages["cmm.saveSucc"]);
-        // 재조회
-        var envScope = agrid.getScope('storeEnvCtrl');
-        $scope.changeEnvGroup(envScope.getEnvGroupCd());
+        // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
+        //var envScope = agrid.getScope('storeEnvCtrl');
+        //$scope.changeEnvGroup(envScope.getEnvGroupCd());
+        $scope.searchPosEnv();
       });
     });
     event.preventDefault();
