@@ -35,12 +35,12 @@
                     <%-- 매장코드 --%>
                     <th><s:message code="prod.storeCd" /></th>
                     <td>
-                        <input type="text" id="srchBatStoreCd" class="sb-input w100" ng-model="storeCd" maxlength="10"/>
+                        <input type="text" id="srchBatStoreCd" class="sb-input w100" ng-model="storeCd" />
                     </td>
                     <%-- 매장명 --%>
                     <th><s:message code="prod.storeNm" /></th>
                     <td>
-                        <input type="text" id="srchBatStoreNm" class="sb-input w100" ng-model="storeNm" maxlength="10"/>
+                        <input type="text" id="srchBatStoreNm" class="sb-input w100" ng-model="storeNm" />
                     </td>
                 </tr>
                 </tbody>

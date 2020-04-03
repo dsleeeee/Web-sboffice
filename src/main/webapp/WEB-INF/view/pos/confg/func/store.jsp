@@ -54,9 +54,9 @@
             </tr>
             <tr>
               <th><s:message code="func.storeCd" /></th>
-              <td><input type="text" id="srchStoreCd" maxlength="7"/></td>
+              <td><input type="text" id="srchStoreCd" /></td>
               <th><s:message code="func.storeNm" /></th>
-              <td><input type="text" id="srchStoreNm" maxlength="20"/></td>
+              <td><input type="text" id="srchStoreNm" /></td>
             </tr>
           </tbody>
         </table>

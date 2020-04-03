@@ -28,18 +28,18 @@
     <tr>
       <%-- 본사코드 --%>
       <th><s:message code="posFunc.hqOfficeCd" /></th>
-      <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" maxlength="5" /></td>
+      <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" /></td>
       <%-- 본사명 --%>
       <th><s:message code="posFunc.hqOfficeNm" /></th>
-      <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="15" /></td>
+      <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" /></td>
     </tr>
     <tr>
       <%-- 매장코드 --%>
       <th><s:message code="posFunc.storeCd" /></th>
-      <td><input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7"/></td>
+      <td><input type="text" id="srchStoreCd" class="sb-input w100" /></td>
       <%-- 매장명 --%>
       <th><s:message code="posFunc.storeNm" /></th>
-      <td><input type="text" id="srchStoreNm" class="sb-input w100" maxlength="15"/></td>
+      <td><input type="text" id="srchStoreNm" class="sb-input w100" /></td>
     </tr>
     </tbody>
   </table>
