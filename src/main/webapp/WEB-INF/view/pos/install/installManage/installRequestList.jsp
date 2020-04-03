@@ -32,10 +32,10 @@
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="instl.storeCd" /></th>
-        <td><input type="text" id="srchStoreCd" class="sb-input w100" maxlength="5" ng-model="storeCd"/></td>
+        <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/></td>
         <%-- 매장명 --%>
         <th><s:message code="instl.storeNm" /></th>
-        <td><input type="text" id="srchStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/></td>
+        <td><input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm"/></td>
       </tr>
       <tr <c:if test="${orgnFg == 'AGENCY' and pAgencyCd != '00000'}">style="display: none;"</c:if>>
           <%-- 대리점코드 --%>

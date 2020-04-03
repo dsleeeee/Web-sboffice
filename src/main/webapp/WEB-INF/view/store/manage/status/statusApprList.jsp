@@ -47,7 +47,7 @@
                     <s:message code="storeStatus.storeNm"/>
                 </th>
                 <td>
-                    <input type="text" id="srchApprStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/>
+                    <input type="text" id="srchApprStoreNm" class="sb-input w100" ng-model="storeNm"/>
                 </td>
             </tr>
             <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>

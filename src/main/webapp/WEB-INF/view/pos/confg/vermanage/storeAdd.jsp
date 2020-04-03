@@ -71,12 +71,12 @@
               <%-- 매장코드 --%>
               <th><s:message code="verManage.store.storeCd" /></th>
               <td>
-                <input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7" ng-value=""/>
+                <input type="text" id="srchStoreCd" class="sb-input w100" ng-value=""/>
               </td>
               <%-- 매장명 --%>
               <th><s:message code="verManage.store.storeNm" /></th>
               <td>
-                <input type="text" id="srchStoreNm" class="sb-input w100" maxlength="20" ng-value=""/>
+                <input type="text" id="srchStoreNm" class="sb-input w100" ng-value=""/>
               </td>
             </tr>
             </tbody>
