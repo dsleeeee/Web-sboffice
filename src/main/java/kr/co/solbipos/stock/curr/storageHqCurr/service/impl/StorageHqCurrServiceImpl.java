@@ -35,25 +35,24 @@ public class StorageHqCurrServiceImpl implements StorageHqCurrService {
         if(!StringUtil.getOrBlank(storageHqCurrVO.getStorageCd()).equals("")) {
         	storageHqCurrVO.setArrStorageCd(storageHqCurrVO.getStorageCd().split(","));
         }
+        // 동적 쿼리 생성
+    	if(!StringUtil.getOrBlank(storageHqCurrVO.getStorageCd()).equals("")) {
+    		// 동적 컬럼 생성을 위한 쿼리 변수.
+	    	String sQuery1 = "";
+	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
+	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
+	    		sQuery1 += ", B.CURR_QTY_"+ ArrStorageCd[i] +"\n";
+	    	}
+	    	String sQuery2 = "";
+	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
+	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
+	    		sQuery2 += ", SUM(DECODE(B.STORAGE_CD,'"+ ArrStorageCd[i] +"',B.CURR_QTY,0))   AS   CURR_QTY_"+ ArrStorageCd[i] +"\n";
+	    	}
+	    	storageHqCurrVO.setsQuery1(sQuery1);
+	    	storageHqCurrVO.setsQuery2(sQuery2);
+    	}
         List<DefaultMap<String>> list;
         if(storageHqCurrVO.getOrgnFg() == "H" && storageHqCurrVO.getOrgnFg() != null) { // 본사권한
-        	System.out.println("storageHqCurrVO.getStorageCd :: "+storageHqCurrVO.getStorageCd());
-        	if(!StringUtil.getOrBlank(storageHqCurrVO.getStorageCd()).equals("")) {
-        		System.out.println("storageHqCurrVO.getArrStorageCd :: "+storageHqCurrVO.getArrStorageCd());
-        		// 동적 컬럼 생성을 위한 쿼리 변수.
-    	    	String sQuery1 = "";
-    	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
-    	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
-    	    		sQuery1 += ", B.CURR_QTY_"+ ArrStorageCd[i] +"\n";
-    	    	}
-    	    	String sQuery2 = "";
-    	    	for(int i=0; i<storageHqCurrVO.getArrStorageCd().length; i++) {
-    	    		String[] ArrStorageCd = storageHqCurrVO.getArrStorageCd();
-    	    		sQuery2 += ", SUM(DECODE(B.STORAGE_CD,'"+ ArrStorageCd[i] +"',B.CURR_QTY,0))   AS   CURR_QTY_"+ ArrStorageCd[i] +"\n";
-    	    	}
-    	    	storageHqCurrVO.setsQuery1(sQuery1);
-    	    	storageHqCurrVO.setsQuery2(sQuery2);
-        	}
 			list = storageHqCurrMapper.getStorageHqCurrList(storageHqCurrVO);
 		}else { // 매장권한
 			storageHqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
