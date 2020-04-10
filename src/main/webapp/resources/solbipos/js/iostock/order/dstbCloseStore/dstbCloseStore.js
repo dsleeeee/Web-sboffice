@@ -102,7 +102,7 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
   };
 
 
-  <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
+  //체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용
   $scope.itemFormatter = function (panel, r, c, cell) {
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
       //align in center horizontally and vertically
@@ -150,10 +150,9 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
             flex.beginUpdate();
             for (var i = 0; i < flex.rows.length; i++) {
               var cell = flex.cells.getCellElement(i, c);
-
               // 활성화 및 readOnly 아닌 경우에만 체크되도록
-              if (!cell.children[0].disabled) {
-                flex.setCellData(i, c, cb.checked);
+              if (flex.getCellData(i, 4) === '10') {
+                  flex.setCellData(i, c, cb.checked);
               }
             }
             flex.endUpdate();
@@ -217,7 +216,7 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
         if (item.gChk === true) {
           item.status    = "U";
           item.empNo     = "0000";
-          item.storageCd = "001";
+          item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
           params.push(item);
         }
@@ -307,5 +306,38 @@ app.controller('dstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function ($
       }
     });
   };
+
+
+  	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                //return column.visible;
+                                                return column.binding != 'gChk'; //선택
+                                            }
+                },
+              //'분배마감(매장별)_' + getToday() + '.xlsx',
+                '분배마감(매장별)_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
 
 }]);

@@ -38,12 +38,22 @@
             			</span>
 					</div>
 				</td>
+				<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
 			</tr>
 			<tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<%-- 매장코드 --%>
 					<th><s:message code="todayBillSaleDtl.store" /></th>
-					<td>
+					<td colspan="3">
 						<%-- 매장선택 모듈 싱글 선택 사용시 include param 정의 :
 							targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                             displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -52,6 +62,7 @@
                         <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 							<jsp:param name="targetId" value="dcDcfgSelectStore" />
 							<jsp:param name="targetDcfgId" value="dcDcfgSelectDcfg" />
+							<jsp:param name="closeFunc" value="getDcNmList"/>
 						</jsp:include>
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -146,9 +157,9 @@
               <div class="wj-gridWrap">
 				<wj-flex-grid id="dcfgDtlGrid" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" 			binding="prodNm" 	    width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.prodNm"/>" 			binding="dcdtlDcNm" 	width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dcDcfgDtl.saleQty"/>" 		binding="saleQty" 		width="80"  align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

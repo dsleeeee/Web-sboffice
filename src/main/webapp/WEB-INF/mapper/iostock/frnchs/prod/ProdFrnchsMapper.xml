@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.frnchs.prod.service.impl.ProdFrnchsMapper">
+    <!-- 거래처 상품별 입출고내역 - 상품별 입출고내역 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_PRODUCT
+        PARAM    : ProdFrnchsVO
+        COMMENTS : 수불관리 - 본사-매장간 입출고 내역 - 상품별 입출고내역
+    -->
+    <select id="getProdFrnchsList" parameterType="prodFrnchsVO" resultType="DefaultMap">
+        /* USE : ProdFrnchsMapper.getProdFrnchsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT A.PROD_CD
+	 		, Z.PROD_NM
+	 	<choose>
+        	<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+         	, (SELECT NMCODE_NM
+         	     FROM TB_HQ_NMCODE
+         	    WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = A.HQ_OFFICE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM
+	 		</when>
+	 		<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+	 		, (SELECT NMCODE_NM
+	 		     FROM TB_MS_STORE_NMCODE
+	 		    WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM	
+	 		</when>
+	 	</choose>
+			, A.PO_UNIT_QTY
+	 		, COUNT(*)                         AS OUT_CNT
+	 		, SUM(A.OUT_TOT_QTY)               AS OUT_TOT_QTY
+	 		, SUM(A.OUT_TOT)                   AS OUT_TOT
+	 		, SUM(A.IN_TOT_QTY)                AS IN_TOT_QTY
+	 		, SUM(A.IN_TOT)                    AS IN_TOT
+	 		, SUM(A.PENALTY_AMT)               AS PENALTY_AMT
+	 	<include refid="CmmSQL.PagingTemplateCount"/>	
+  		FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
+  	 		, TB_MS_PRODUCT              Z
+ 		WHERE A.STORE_CD = Z.STORE_CD
+   		  AND A.PROD_CD  = Z.PROD_CD
+   		<if test='orgnFg != null and orgnFg == "H"'>
+   			AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+   		</if>
+        <if test='storeCd != null and storeCd != ""'>
+			AND A.STORE_CD IN
+               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               </foreach>
+		</if>
+<!-- 		<if test='prodClassCd != null and prodClassCd != ""'> -->
+<!--    			AND Z.PROD_CLASS_CD = #{prodClassCd} -->
+<!-- 		</if> -->
+        <if test='prodClassCd != null and prodClassCd != ""'> 
+            <if test='orgnFg != null and orgnFg == "H"'>
+	            AND Z.PROD_CLASS_CD IN  (
+                               SELECT              PROD_CLASS_CD
+                               FROM                TB_HQ_PRODUCT_CLASS
+                               WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
+                               START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                           )
+	        </if>
+	        <if test='orgnFg != null and orgnFg == "S"'>
+                AND Z.PROD_CLASS_CD IN  (
+                                SELECT              PROD_CLASS_CD
+                                FROM                TB_MS_PRODUCT_CLASS
+                                WHERE               STORE_CD        = #{storeCd}
+                                START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                AND                 STORE_CD        = #{storeCd}
+                                CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                AND                 STORE_CD        = #{storeCd}
+                            )
+            </if>
+        </if>
+			
+		<if test='prodCd != null and prodCd != ""'>
+   			AND Z.PROD_CD = #{prodCd}
+		</if>
+		<if test='prodNm != null and prodNm != ""'>
+ 	  		AND Z.PROD_NM = #{prodNm}
+		</if>
+   		AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M
+   					WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+   					AND M.SLIP_NO = A.SLIP_NO
+   					<if test='startDate != null and startDate != ""'>
+   						AND M.OUT_DATE <![CDATA[ >= ]]> #{startDate}
+   					</if>
+					<if test='endDate != null and endDate != ""'>
+   						AND M.OUT_DATE <![CDATA[ <= ]]> #{endDate}
+   					</if>
+   					)
+ 		GROUP BY A.PROD_CD
+	 		   , Z.PROD_NM
+	 		   , A.PO_UNIT_FG
+	 		   , A.PO_UNIT_QTY
+	 		<choose>
+				<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+			 		, A.HQ_OFFICE_CD
+				</when>
+				<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+					, A.STORE_CD
+				</when>
+			</choose>
+		ORDER BY A.PROD_CD
+		 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+     <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_PRODUCT, TB_MS_STORE
+        PARAM    : ProdFrnchsVO
+        COMMENTS : 수불관리 - 본사-매장간 입출고 내역 - 상품별 입출고내역 팝업 리스트
+    -->
+    <select id="getProdInOutstockInfoList" parameterType="prodFrnchsVO" resultType="DefaultMap">
+            /* USE : ProdFrnchsMapper.getProdInOutstockInfoList */
+			SELECT TO_CHAR(TO_DATE(TPHSO.OUT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS OUT_DT
+	 			, TO_CHAR(TO_DATE(TPHSO.IN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS IN_DT
+	 			, TMS.STORE_NM
+	 			, DECODE(TPHSOD.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM
+	 			, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '114' AND NMCODE_CD = TPHSO.SLIP_KIND) AS SLIP_KIND_NM
+	 			, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113' AND NMCODE_CD = TPHSOD.PROC_FG)  AS PROC_FG_NM
+	 			, TMP.SPLY_UPRC
+	 			, TPHSOD.OUT_TOT_QTY
+	 			, TPHSOD.OUT_AMT
+	 			, TPHSOD.OUT_VAT
+	 			, TPHSOD.OUT_TOT
+	 			, TPHSOD.IN_TOT_QTY
+	 			, TPHSOD.IN_AMT
+	 			, TPHSOD.IN_VAT
+	 			, TPHSOD.IN_TOT
+	 			, TPHSOD.PENALTY_AMT
+	 			, TPHSOD.REMARK
+  			FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+  	 			, TB_PO_HQ_STORE_OUTSTOCK_DTL TPHSOD
+  	 			, TB_MS_PRODUCT TMP
+  	 			, TB_MS_STORE TMS
+			WHERE TPHSOD.PROD_CD = #{prodCd}
+			<if test='orgnFg != null and orgnFg == "H"'>   <!-- 본사 -->
+   			  AND TPHSOD.HQ_OFFICE_CD = #{hqOfficeCd}
+   		    </if>
+        	<if test='storeCd != null and storeCd != ""'>
+			  AND TPHSOD.STORE_CD IN
+               	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   	#{item}
+               	</foreach>
+			</if>
+   			  AND TPHSO.HQ_OFFICE_CD  = TPHSOD.HQ_OFFICE_CD
+   			  AND TPHSO.SLIP_NO       = TPHSOD.SLIP_NO
+   			  AND TPHSOD.STORE_CD     = TMP.STORE_CD
+   			  AND TPHSOD.PROD_CD      = TMP.PROD_CD
+   			  AND TPHSOD.STORE_CD     = TMS.STORE_CD
+   			<if test='startDate != null and startDate != ""'>
+   			  AND TPHSO.OUT_DATE <![CDATA[ >= ]]> #{startDate}
+   			</if>
+			<if test='endDate != null and endDate != ""'>
+   			  AND TPHSO.OUT_DATE <![CDATA[ <= ]]> #{endDate}
+   			</if>
+ 			ORDER BY TPHSO.OUT_DT, TPHSOD.STORE_CD
+    </select>
+</mapper>

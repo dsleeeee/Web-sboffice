@@ -31,7 +31,12 @@ app.controller('vendrInstockReportCtrl', ['$scope', '$http', '$timeout', functio
     params.slipNo  = $scope.slipNo;
     params.slipFg  = $scope.slipFg;
     params.vendrCd = $scope.vendrCd;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }    
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -131,7 +136,12 @@ app.controller('vendrInstockReportCtrl', ['$scope', '$http', '$timeout', functio
     params.slipNo  = $scope.slipNo;
     params.slipFg  = $scope.slipFg;
     params.vendrCd = $scope.vendrCd;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

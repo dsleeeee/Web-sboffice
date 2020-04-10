@@ -81,7 +81,7 @@
             AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
-            AND tho.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         ORDER BY tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>

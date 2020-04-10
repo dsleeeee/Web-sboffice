@@ -93,7 +93,7 @@
 	          <wj-flex-grid-column header="<s:message code="store.hqBrandNm"/>"  binding="hqBrandNm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 	binding="storeNm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" binding="totDcAmt" 	width="*" align="center" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" binding="totDcAmt" 	width="*" align="right" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="*" align="right" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.saleCnt"/>" 	binding="saleCnt" 	width="*" align="center" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.ratRealSaleAmt"/>" 		binding="ratRealSaleAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" ></wj-flex-grid-column>

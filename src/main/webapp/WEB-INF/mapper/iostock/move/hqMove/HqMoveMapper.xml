@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.move.hqMove.service.impl.HqMoveMapper">
+    <!-- 본사이동관리 - 본사이동관리 리스트 조회 -->
+    <select id="getHqMoveList" parameterType="hqMoveVO" resultType="DefaultMap">
+        /* USE : HqMoveMapper.getHqMoveList */
+        <![CDATA[
+        SELECT   tphm.HQ_OFFICE_CD, tphm.SLIP_NO, tphm.MOVE_DATE
+        ,        tphm.DLVR_FG, tphm.PROC_FG, tphm.DTL_CNT
+        ,        tphm.OUT_STORAGE_CD, thsout.STORAGE_NM AS OUT_STORAGE_NM
+        ,        tphm.IN_STORAGE_CD, thsin.STORAGE_NM AS IN_STORAGE_NM
+        ,        tphm.OUT_TOT_QTY, tphm.OUT_TOT, tphm.IN_TOT
+        FROM     TB_PO_HQ_MOVE tphm
+        ,        TB_HQ_STORAGE thsout
+        ,        TB_HQ_STORAGE thsin
+        WHERE    tphm.HQ_OFFICE_CD  =       #{hqOfficeCd}
+        AND      tphm.MOVE_DATE     BETWEEN #{startDate} AND #{endDate}
+        AND      thsout.STORAGE_CD    =   tphm.OUT_STORAGE_CD
+        AND      thsin.STORAGE_CD     =   tphm.IN_STORAGE_CD
+        ]]>
+        <if test='dlvrFg != null and dlvrFg != ""'>
+            AND tphm.DLVR_FG = #{dlvrFg}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphm.PROC_FG = #{procFg}
+        </if>
+        <if test='outStorageCd != null and outStorageCd != ""'>
+            AND thsout.STORAGE_CD = #{outStorageCd}
+        </if>
+        <if test='inStorageCd != null and inStorageCd != ""'>
+            AND thsin.STORAGE_CD = #{inStorageCd}
+        </if>
+        <![CDATA[
+        ORDER BY tphm.MOVE_DATE DESC, tphm.SLIP_NO DESC
+        ]]>
+    </select>
+
+    <!-- 본사이동관리 - 전표상세 조회 -->
+    <select id="getSlipNoInfo" parameterType="hqMoveVO" resultType="DefaultMap">
+        /* USE : HqMoveMapper.getSlipNoInfo */
+        <![CDATA[
+        SELECT  tphm.MOVE_DATE
+        ,       tphm.DLVR_FG
+        ,       tphm.PROC_FG
+        ,       tphm.OUT_STORAGE_CD
+        ,       thsout.STORAGE_NM AS OUT_STORAGE_NM
+        ,       tphm.IN_STORAGE_CD
+        ,       thsin.STORAGE_NM AS IN_STORAGE_NM
+        ,       tphm.REMARK
+        ,       tphm.REG_DT
+        ,       tphm.HQ_CONFM_DT
+        FROM    TB_PO_HQ_MOVE tphm
+        ,       TB_HQ_STORAGE thsout
+        ,       TB_HQ_STORAGE thsin
+        WHERE   tphm.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tphm.SLIP_NO      =   #{slipNo}
+        AND     thsout.STORAGE_CD   =   tphm.OUT_STORAGE_CD
+        AND     thsin.STORAGE_CD    =   tphm.IN_STORAGE_CD
+        ]]>
+    </select>
+
+    <!-- 본사이동관리 - 본사이동관리 상세 리스트 조회 -->
+    <select id="getHqMoveDtlList" parameterType="hqMoveVO" resultType="DefaultMap">
+        /* USE : HqMoveMapper.getHqMoveDtlList */
+        <![CDATA[
+        SELECT   tphmd.PROD_CD, thp.PROD_NM
+        ,        NVL(thsout.CURR_QTY,0) AS OUT_CURR_QTY
+        ,        NVL(thsin.CURR_QTY,0) AS IN_CURR_QTY
+        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
+        ,        thp.PO_UNIT_FG
+        ,        (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = thp.PO_UNIT_FG) AS PO_UNIT_FG_NM, thp.PO_UNIT_QTY
+        ,        thp.PO_PROD_FG
+        ,        tphmd.OUT_SPLY_UPRC
+        ,        theout.ENVST_VAL AS OUT_ENVST0011
+        ,        tphmd.IN_SPLY_UPRC
+        ,        thein.ENVST_VAL AS IN_ENVST0011
+        ,        tphmd.OUT_UNIT_QTY
+        ,        tphmd.OUT_ETC_QTY
+        ,        tphmd.OUT_TOT_QTY
+        ,        tphmd.OUT_AMT
+        ,        tphmd.OUT_VAT
+        ,        tphmd.OUT_TOT
+        ,        tphmd.IN_AMT
+        ,        tphmd.IN_VAT
+        ,        tphmd.IN_TOT
+        ,        tphmd.OUT_TOT_QTY AS PREV_OUT_TOT_QTY
+        FROM     TB_PO_HQ_MOVE tphm
+        ,        TB_PO_HQ_MOVE_DTL tphmd
+        ,        TB_HQ_PRODUCT thp
+        ,        TB_HQ_ENVST theout
+        ,        TB_HQ_ENVST thein
+        ,        TB_ST_HQ_STOCK_CUR thsout
+        ,        TB_ST_HQ_STOCK_CUR thsin
+        WHERE    tphm.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND      tphm.SLIP_NO       =   #{slipNo}
+        AND      tphmd.HQ_OFFICE_CD =   tphm.HQ_OFFICE_CD
+        AND      tphmd.SLIP_NO      =   tphm.SLIP_NO
+        AND      thp.HQ_OFFICE_CD   =   tphmd.HQ_OFFICE_CD
+        AND      thp.PROD_CD        =   tphmd.PROD_CD
+        AND      theout.HQ_OFFICE_CD   =   tphm.HQ_OFFICE_CD
+        AND      theout.ENVST_CD   =   '0011'
+        AND      thein.HQ_OFFICE_CD    =   tphm.HQ_OFFICE_CD
+        AND      thein.ENVST_CD    =   '0011'
+        AND      tphm.HQ_OFFICE_CD 	= thsout.HQ_OFFICE_CD(+)
+        AND      tphm.HQ_OFFICE_CD 	= thsin.HQ_OFFICE_CD(+)
+        AND      tphmd.PROD_CD 		  = thsout.PROD_CD(+)
+        AND      tphmd.PROD_CD 			= thsin.PROD_CD(+)
+        AND      thsout.STORAGE_CD(+) 	= tphm.OUT_STORAGE_CD
+        AND      thsin.STORAGE_CD(+) 	= tphm.IN_STORAGE_CD
+        ORDER BY tphmd.PROD_CD
+        ]]>
+    </select>
+
+    <!-- 본사이동관리 - 본사이동관리 신규등록 상품 리스트 조회 -->
+    <select id="getHqMoveRegistList" parameterType="hqMoveVO" resultType="DefaultMap">
+        /* USE : HqMoveMapper.getHqMoveRegistList */
+        <![CDATA[
+        SELECT   tmpout.PROD_CD
+        ,        tmpout.PROD_NM
+        ,        tmpout.VAT_FG AS VAT_FG01
+        ,        tmpout.PO_UNIT_FG
+        ,        (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = tmpout.PO_UNIT_FG) AS PO_UNIT_FG_NM
+        ,        tmpout.PO_UNIT_QTY
+        ,        tmpout.PO_PROD_FG
+        ,        NVL(thsout.CURR_QTY,0) AS OUT_CURR_QTY
+        ,        tmpout.SPLY_UPRC AS OUT_SPLY_UPRC
+        ,        tmseout.ENVST_VAL AS OUT_ENVST0011
+        ,        NVL(thsin.CURR_QTY,0) AS IN_CURR_QTY
+        ,        tmpin.SPLY_UPRC AS IN_SPLY_UPRC
+        ,        tmsein.ENVST_VAL AS IN_ENVST0011
+        FROM     TB_HQ_PRODUCT tmpout
+        ,        TB_HQ_ENVST tmseout
+        ,        TB_ST_HQ_STOCK_CUR thsout
+        ,        TB_HQ_PRODUCT tmpin
+        ,        TB_HQ_ENVST tmsein
+        ,        TB_ST_HQ_STOCK_CUR thsin
+        WHERE    tmpout.HQ_OFFICE_CD  	= #{hqOfficeCd}
+        AND      tmpin.HQ_OFFICE_CD   	= #{hqOfficeCd}
+        AND      tmpout.HQ_OFFICE_CD 	= thsout.HQ_OFFICE_CD(+)
+        AND      tmpin.HQ_OFFICE_CD 	= thsin.HQ_OFFICE_CD(+)
+        AND      tmpout.PROD_CD 		= thsout.PROD_CD(+)
+        AND      tmpin.PROD_CD 			= thsin.PROD_CD(+)
+        AND      thsout.STORAGE_CD(+) 	= #{outStorageCd}
+        AND      thsin.STORAGE_CD(+) 	= #{inStorageCd}
+        AND      tmpin.PROD_CD    		= tmpout.PROD_CD
+        AND      tmseout.HQ_OFFICE_CD 	= tmpout.HQ_OFFICE_CD
+        AND      tmseout.ENVST_CD 		= '0011'
+        AND      tmsein.HQ_OFFICE_CD  	= tmpin.HQ_OFFICE_CD
+        AND      tmsein.ENVST_CD  		= '0011'
+        ]]>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmpout.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmpout.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='slipNo != null and slipNo != ""'>
+            AND tmpout.PROD_CD NOT IN (   SELECT  PROD_CD
+                                          FROM    TB_PO_STORE_MOVE_DTL
+                                          WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                          AND     SLIP_NO      = #{slipNo}
+                                      )
+        </if>
+        ORDER BY tmpout.PROD_CD
+    </select>
+
+    <!-- 본사이동관리 - 본사이동관리 상세 리스트 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 상세 리스트 DTL을 수정한다.
+    -->
+    <update id="updateHqMoveDtl" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.updateHqMoveDtl */
+       UPDATE  TB_PO_HQ_MOVE_DTL
+        SET     OUT_SPLY_UPRC    = #{outSplyUprc},
+                OUT_UNIT_QTY     = #{outUnitQty},
+                OUT_ETC_QTY      = #{outEtcQty},
+                OUT_TOT_QTY      = #{outTotQty},
+                OUT_AMT          = #{outAmt},
+                OUT_VAT          = #{outVat},
+                OUT_TOT          = #{outTot},
+                IN_SPLY_UPRC     = #{inSplyUprc},
+                IN_UNIT_QTY      = #{inUnitQty},
+                IN_ETC_QTY       = #{inEtcQty},
+                IN_TOT_QTY       = #{inTotQty},
+                IN_AMT           = #{inAmt},
+                IN_VAT           = #{inVat},
+                IN_TOT           = #{inTot},
+                MOD_DT           = #{modDt},
+                MOD_ID           = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+    <!-- 본사이동관리 - 본사이동관리 상세 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 상세 리스트 HD 수정한다.
+    -->
+    <update id="updateHqMoveHd" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.updateHqMoveHd */
+        UPDATE  TB_PO_HQ_MOVE
+        SET     (   DTL_CNT
+                ,   OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+                ,   IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+                ,   DLVR_FG
+                ,   REMARK            
+                ,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*)
+                    ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+                    ,       #{dlvrFg}
+                    ,       #{remark}         
+                    ,       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_HQ_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+
+    <!-- 본사이동관리 - 본사이동관리 상세 DTL 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 상세 DTL 의 내용을 모두 삭제한다.
+    -->
+    <delete id="deleteAllHqMoveDtl" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.deleteAllHqMoveDtl */
+        DELETE  TB_PO_HQ_MOVE_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+
+    <!-- 본사이동관리 - 본사이동관리 상세 HD 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 상세 HD를 삭제한다.
+    -->
+    <delete id="deleteHqMoveHd" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.deleteHqMoveHd */
+        DELETE  TB_PO_HQ_MOVE
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+
+    <!-- 본사이동관리 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 신규전표번호를 조회한다.
+    -->
+    <select id="getNewSlipNo" parameterType="hqMoveVO" resultType="String">
+        /* USE : HqMoveMapper.getNewSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'0000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_MOVE tphso
+/*        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso */
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+    <!-- 본사이동관리 - 신규등록 상품 리스트 DTL 저장 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE_DTL
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 신규등록 상품 리스트를 등록한다.
+    -->
+    <insert id="insertHqMoveDtl" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.insertHqMoveDtl */
+        INSERT INTO TB_PO_HQ_MOVE_DTL
+        (
+            HQ_OFFICE_CD,
+            SLIP_NO,
+            STORAGE_CD,
+            HQ_BRAND_CD,
+            PROD_CD,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            OUT_SPLY_UPRC,
+            OUT_UNIT_QTY,
+            OUT_ETC_QTY,
+            OUT_TOT_QTY,
+            OUT_AMT,
+            OUT_VAT,
+            OUT_TOT,
+            IN_SPLY_UPRC,
+            IN_UNIT_QTY,
+            IN_ETC_QTY,
+            IN_TOT_QTY,
+            IN_AMT,
+            IN_VAT,
+            IN_TOT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{slipNo},
+            #{storageCd},
+            #{hqBrandCd},
+            #{prodCd},
+            #{poUnitFg},
+            #{poUnitQty},
+            #{outSplyUprc},
+            #{outUnitQty},
+            #{outEtcQty},
+            #{outTotQty},
+            #{outAmt},
+            #{outVat},
+            #{outTot},
+            #{inSplyUprc},
+            #{inUnitQty},
+            #{inEtcQty},
+            #{inTotQty},
+            #{inAmt},
+            #{inVat},
+            #{inTot},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 본사이동관리 - 신규등록 상품 리스트 HD 저장 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 신규등록 상품 리스트를 등록한다.
+    -->
+    <insert id="insertHqMoveHd" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.insertHqMoveHd */
+        INSERT INTO TB_PO_HQ_MOVE
+        (       HQ_OFFICE_CD      ,   SLIP_NO           ,   MOVE_DATE         ,   OUT_STORAGE_CD    ,   IN_STORAGE_CD   ,   PROC_FG
+        ,       DLVR_FG           ,   DTL_CNT
+        ,       OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+        ,       IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+        ,       REMARK            
+        ,       REG_DT            ,   REG_ID            ,   MOD_DT            ,   MOD_ID
+        )
+        SELECT  #{hqOfficeCd}     ,   #{slipNo}         ,   #{moveDate}       ,   #{outStorageCd}   ,   #{inStorageCd}  ,   '0'
+        ,       #{dlvrFg}         ,   COUNT(*)
+        ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+        ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+        ,       #{remark}         
+        ,       #{regDt}          ,   #{regId}          ,   #{modDt}          ,   #{modId}
+        FROM    TB_PO_HQ_MOVE_DTL
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </insert>
+	
+	<!-- 본사이동관리 - 신규테이블 저장 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 신규테이블 리스트를 등록한다.
+    -->
+    <insert id="insertHqStoreOutstockProd" parameterType="hqStoreMoveVO">
+        /* USE : HqMoveMapper.insertHqStoreOutstockProd */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_PROD
+        (
+			HQ_OFFICE_CD,
+			SLIP_NO,
+			PROD_CD,
+			STORAGE_CD,
+			OCCR_FG,
+			CONFM_YN,
+			IN_UNIT_QTY,
+			IN_ETC_QTY,
+			IN_TOT_QTY,
+			IN_AMT,
+			IN_VAT,
+			IN_TOT,
+			REG_DT,
+			REG_ID,
+			MOD_DT,
+			MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{slipNo},
+            #{prodCd},
+            #{storageCd},
+            #{occrFg}, 
+            #{confirmFg},           
+            #{inUnitQty},
+            #{inEtcQty},
+            #{inTotQty},
+            #{inAmt},
+            #{inVat},
+            #{inTot},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+	
+    <!-- 본사이동관리 - 신규등록 상품 리스트 HD 확정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 진행구분을 수정한다.
+    -->
+    <update id="updateHqMoveConfirm" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.updateHqMoveConfirm */
+        UPDATE  TB_PO_HQ_MOVE
+        SET     PROC_FG      = #{procFg},
+                HQ_CONFM_DT  = #{modDt},
+                HQ_CONFM_ID  = #{modId},
+                MOD_DT       = #{modDt},
+                MOD_ID       = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+
+    <!-- 본사이동관리 - 출고, 반품 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : volmErrVO
+        COMMENTS : 본사이동관리 확정시 출고, 반품 신규전표번호를 조회한다.
+    -->
+    <select id="getIostockNewSlipNo" parameterType="hqMoveVO" resultType="String">
+        /* USE : HqMoveMapper.getIostockNewSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_MOVE tphso
+/*         FROM    TB_PO_HQ_STORE_OUTSTOCK tphso */
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+
+    <!-- 본사이동관리 - 본사이동관리 상품추가 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : hqMoveVO
+        COMMENTS : 본사이동관리 상품추가 리스트 HD 수정한다.
+    -->
+    <update id="updateHqMoveAddProdHd" parameterType="hqMoveVO">
+        /* USE : HqMoveMapper.updateHqMoveAddProdHd */
+        UPDATE  TB_PO_HQ_MOVE
+        SET     (   DTL_CNT
+                ,   OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+                ,   IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+                ,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*)
+                    ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+                    ,       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_HQ_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+</mapper>

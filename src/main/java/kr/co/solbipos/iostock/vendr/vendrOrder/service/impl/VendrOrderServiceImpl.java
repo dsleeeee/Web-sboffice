@@ -12,12 +12,14 @@ import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("vendrOrderService")
+@Transactional
 public class VendrOrderServiceImpl implements VendrOrderService {
     private final VendrOrderMapper vendrOrderMapper;
     private final MessageService messageService;

@@ -4,7 +4,7 @@
 var app = agrid.getApp();
 
 /** 물량오류관리 그리드 controller */
-app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('volmErrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout){
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('volmErrCtrl', $scope, $http, true));
 
@@ -12,8 +12,8 @@ app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
   var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
   $scope.slipFgMap = new wijmo.grid.DataMap([
-    {id: "1", name: messages["volmErr.orderSlipFg"]},
-    {id: "-1", name: messages["volmErr.rtnSlipFg"]},
+    {id: "1",   name: messages["volmErr.orderSlipFg"]},
+    {id: "-1",  name: messages["volmErr.rtnSlipFg"]},
   ], 'id', 'name');
 
   $scope.procFgMap = new wijmo.grid.DataMap([
@@ -22,20 +22,20 @@ app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
   ], 'id', 'name');
 
   $scope._setComboData("srchSlipFg", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["volmErr.orderSlipFg"], "value": "1"},
-    {"name": messages["volmErr.rtnSlipFg"], "value": "-1"}
+    {"name": messages["cmm.all"],               "value":  ""},
+    {"name": messages["volmErr.orderSlipFg"],   "value":  "1"},
+    {"name": messages["volmErr.rtnSlipFg"],     "value": "-1"}
   ]);
 
   $scope._setComboData("srchDateFg", [
-    {"name": messages["volmErr.outDate"], "value": "out"},
-    {"name": messages["volmErr.inDate"], "value": "in"}
+    {"name": messages["volmErr.outDate"],   "value": "out"},
+    {"name": messages["volmErr.inDate"],    "value": "in"}
   ]);
 
   $scope._setComboData("srchProcFg", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["volmErr.reg"], "value": "0"},
-    {"name": messages["volmErr.confirm"], "value": "1"}
+    {"name": messages["cmm.all"],           "value": ""},
+    {"name": messages["volmErr.reg"],       "value": "0"},
+    {"name": messages["volmErr.confirm"],   "value": "1"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -70,12 +70,21 @@ app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
-          params.slipNo = selectedRow.slipNo;
-          params.slipFg = selectedRow.slipFg;
-          params.procFg = selectedRow.procFg;
-          params.storeCd = selectedRow.storeCd;
-          params.storeNm = selectedRow.storeNm;
-          params.hdRemark = selectedRow.remark;
+          params.slipNo     = selectedRow.slipNo;
+          params.slipFg     = selectedRow.slipFg;
+          params.procFg     = selectedRow.procFg;
+          params.storeCd    = selectedRow.storeCd;
+          params.storeNm    = selectedRow.storeNm;
+          params.hdRemark   = selectedRow.remark;
+
+            /*
+            console.log('params:' + JSON.stringify(params));
+            console.log('params.procFg === 0  : ' + params.procFg === "0"     );
+            console.log('params.procFg ==  0  : ' + params.procFg ==  "0"     );
+            if(params.procFg === "0")   console.log("===");
+            if(params.procFg ==  "0")   console.log("==" );
+            */
+
           $scope._broadcast('volmErrDtlCtrl', params);
         }
       }
@@ -85,6 +94,11 @@ app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+
+    //Header column merge (출고수량, 입고수량)
+    s.allowMerging                          = 'ColumnHeaders';
+    s.columnHeaders.rows[0].allowMerging    = true;
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -115,5 +129,37 @@ app.controller('volmErrCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.volmErrSelectStoreShow = function () {
     $scope._broadcast('volmErrSelectStoreCtrl');
   };
+
+
+	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                return column.visible;
+                                            }
+                },
+              //'물량오류관리_' + getToday() + '.xlsx',
+                '물량오류관리_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
 
 }]);

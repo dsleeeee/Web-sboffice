@@ -171,6 +171,7 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
     params.storeCd   = $("#rtnStatusDaySelectStoreCd").val();
     params.listScale = $scope.rtnStatusDayListScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -282,6 +283,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	        	params.storeCd   = $scope.storeCd;
 	        	params.saleDate  = selectedRow.saleDate;
 	        	params.isPageChk = false;
+	        	
 	        if (col.binding === "saleDate") { // 일자
 	            $scope._broadcast('rtnStatusPosDtlCtrlSrch', params);
 	        }else if(col.binding === "cntY"){
@@ -391,6 +393,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd   = $scope.storeCd;
 	    params.storeNm   = $scope.storeNm;
 	    params.isPageChk	= isPageChk;
+	    params.listScale = $scope.rtnStatusDayDtlListScale; //-페이지 스케일 갯수
 	    $("#strNm").text($scope.storeNm);
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -496,6 +499,8 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd      = $scope.storeCd;
 	    params.saleYn		= $scope.saleYn;
 	    params.isPageChk	= isPageChk;
+	    params.listScale    = $scope.rtnStatusPosDtlListScale; //-페이지 스케일 갯수
+	    
 	    if(params.saleDate != null){
 	    	var saleDate	=$scope.saleDate;
 //		    var saleDate	=(""+$scope.saleDate).substring(0,4);

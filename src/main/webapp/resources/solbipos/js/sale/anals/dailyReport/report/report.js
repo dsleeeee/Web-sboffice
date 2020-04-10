@@ -1712,7 +1712,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 	  //let doc = new wjcCore.PrintDocument	({
         let doc = new wijmo.PrintDocument	({
-								            	title	: printTitle,
+                                              //title	: printTitle,   --> 아래의 제목스타일 '영업일보 기간'으로 대체
+                                                title	: '',
 								            	copyCss	: true //false가 낫다 -> To prevent cross-origin issues
         									});
 
@@ -1730,7 +1731,65 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 		*/
 		doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
 
-        doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
+        //영업일보 기간
+            doc.append('<h3 align="center">' + printTitle + '</h3><br><br><br>');
+
+        //결제라인
+            var flex_payline        = agrid.getScope('configCtrl_1').flex; //결제라인 Grid
+            var arr_cfgPayLineSeq   = new Array();
+            var arr_cfgPayLineNm    = new Array();
+            var tmp_table           = "";
+
+            for(var i=0; i<flex_payline.collectionView.items.length; i++){
+                var item = flex_payline.collectionView.items[i];
+                //console.log('arr_cfgPayLineSeq:' + item.cfgPayLineSeq);
+                //console.log('arr_cfgPayLineNm :' + item.cfgPayLineNm );
+                arr_cfgPayLineSeq.push(item.cfgPayLineSeq);
+                arr_cfgPayLineNm .push(item.cfgPayLineNm );
+            }
+            /*
+            tmp_table += '<table class="reportPrint" align="right">';
+            tmp_table += '    <thead>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <th colspan="2" style="width:120px;text-align:center;padding-right: 6px">' + arr_cfgPayLineSeq[i] + '</th>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </thead>';
+            tmp_table += '    <tbody>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <td style="width:80px;text-align:center;padding-right: 6px">' + arr_cfgPayLineNm[i] + '</td>';
+                tmp_table += '        <td style="width:40px;text-align:center;padding-right: 6px"></td>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </tbody>';
+            tmp_table += '</table><br><br><br><br><br><br>';
+            doc.append(tmp_table);
+            */
+            tmp_table += '<table class="reportPrint" align="right">';
+            tmp_table += '    <thead>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <th style="width:100px;text-align:center;padding-right: 6px">' + arr_cfgPayLineNm[i] + '</th>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </thead>';
+            tmp_table += '    <tbody>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <td height="60px"></td>';	//참고: .reportPrint tr {height: 30px;} -> '서명'부분 2배크기로 설정함
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </tbody>';
+            tmp_table += '</table><br><br><br><br><br><br>';
+
+          //doc.append('<h3 align="right">' + messages["dailyReport.cfgPayLine"] + '</h3><br>');
+            doc.append(tmp_table);
+
+
+        //매출종합
+            doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
 
         //add a printer-friendly version of a FlexGrid to the document
         //doc.append('<p>Here\'s a FlexGrid rendered as a table:</p>');
@@ -1789,7 +1848,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	            tbl += '<thead>';
 	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
 ////////////////////tbl += this._renderRow       (flex.columnHeaders, r);
-	                tbl += this._renderRow_Header(flex.columnHeaders, r);
+                    tbl += this._renderRow_Header(flex.columnHeaders, r);
+                    //console.log('Headers > tbl: ' + this._renderRow_Header(flex.columnHeaders, r));
 	            }
 	            tbl += '</thead>';
 	        }
@@ -1797,12 +1857,14 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         //Body
 	        tbl += '<tbody>';
 	        for(let r=0; r<flex.rows.length; r++){
-	            tbl += this._renderRow(flex.cells, r);
+                tbl += this._renderRow(flex.cells, r);
+                //console.log('Body    > tbl: ' + this._renderRow(flex.cells, r));
 	        }
 	        tbl += '</tbody>';
 
         //Table - End
-	        tbl += '</table>';
+            tbl += '</table>';
+            //console.log('tbl: ' + tbl);
 	        return tbl;
     }
 
@@ -1818,8 +1880,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 	$scope._renderRow_Header = function(panel, r){
         let tr 		= '',
-        row 		= panel.rows[r];
-      //row_next 	= panel.rows[r+1];
+            row 	= panel.rows[r];
+          //row_next= panel.rows[r+1];
 
         let header_rowspan 	= 1;
         let header_colspan 	= 1;

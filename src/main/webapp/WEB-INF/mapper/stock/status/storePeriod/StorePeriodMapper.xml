@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.status.storeperiod.service.impl.StorePeriodMapper">
+
+	<!-- 매장기간수불 - 리스트 조회 -->
+    <!--
+        TABLE    : 
+        PARAM    : storePeriodVO
+        COMMENTS : 매장기간수불 - 리스트를 조회한다.
+    -->
+    <select id="getStorePeriodList" parameterType="storePeriodVO" resultType="DefaultMap">
+        /* USE : StorePeriodMapper.getStorePeriodList */
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT A.LV1_CD
+			 , A.LV1_NM
+		     , A.LV2_CD
+		     , A.LV2_NM
+		     , A.LV3_CD
+		     , A.LV3_NM
+			 , TPSS.PROD_CD
+		     , TMP.PROD_NM
+		     , TPSS.STORE_CD
+			 , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSS.STORE_CD) AS STORE_NM
+		     , TMP.PO_UNIT_QTY
+		     , TMP.PO_UNIT_FG
+		     , TMPB.BARCD_CD
+		     <if test='unitFg == "0"'>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+		     </if>
+		     <if test='unitFg == "1"'>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+		     </if>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_21 /* 재고조정 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+  		<include refid="CmmSQL.PagingTemplateCount"/>
+  		FROM 
+  			(
+  				SELECT   A.P_PROD_CLASS_CD   AS LV1_CD
+  						,A.PROD_CLASS_CD     AS LV2_CD
+  						,A.PROD_CLASS_NM     AS LV2_NM
+  						,B.PROD_CLASS_CD     AS LV3_CD
+  						,B.PROD_CLASS_NM     AS LV3_NM
+  						,(SELECT  SF_GET_PROD_CLASSES('H', 'A0001',    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
+  				FROM    (
+		  					SELECT  HQ_OFFICE_CD
+		  							, P_PROD_CLASS_CD
+		  							, PROD_CLASS_CD
+		  							, PROD_CLASS_NM
+		  					FROM    TB_HQ_PRODUCT_CLASS
+		  					WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		  						AND     P_PROD_CLASS_CD IN (
+		  													SELECT  PROD_CLASS_CD
+		  													FROM    TB_HQ_PRODUCT_CLASS
+		  													WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		  													AND     P_PROD_CLASS_CD = '00000'
+		  													)
+		  						) A,
+		  						TB_HQ_PRODUCT_CLASS    B
+			                  WHERE   B.P_PROD_CLASS_CD IN    (
+			                  										SELECT  PROD_CLASS_CD
+			                  										FROM    TB_HQ_PRODUCT_CLASS
+			                  										WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+																	AND     P_PROD_CLASS_CD IN (
+																								SELECT  PROD_CLASS_CD
+																								FROM    TB_HQ_PRODUCT_CLASS
+																								WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+																								AND     P_PROD_CLASS_CD = '00000'
+																								)
+																)
+							  AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+			                  AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+			              )  A
+  			 , TB_PO_STORE_STOCK TPSS
+		     , TB_MS_PRODUCT TMP
+		     , TB_MS_PRODUCT_BARCD TMPB
+ 		WHERE TPSS.STORE_CD 	= TMP.STORE_CD
+	    AND TPSS.PROD_CD     = TMP.PROD_CD
+	    AND TPSS.STORE_CD 	= TMPB.STORE_CD(+)
+	    AND TPSS.PROD_CD     = TMPB.PROD_CD(+)
+	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+ 			AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="prodCd != null and prodCd != ''">
+			AND TMP.PROD_CD = #{prodCd}
+		</if>
+		<if test="storeCd != null and storeCd != ''">
+			AND TMP.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+				#{item}
+			</foreach>
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND TMP.PROD_NM LIKE '%'||#{prodNm}||'%'
+		</if>
+		<if test="barcdCd != null and barcdCd != ''">
+			AND TMPB.BARCD_CD = #{barcdCd}
+		</if>
+		<if test='prodClassCd != null and prodClassCd != ""'>
+	              AND TMP.PROD_CLASS_CD IN  (
+	                                          SELECT              PROD_CLASS_CD
+	                                          FROM                TB_HQ_PRODUCT_CLASS
+	                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
+	                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
+	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+	                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+	                                         )
+	     </if>
+	     <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN    ( SELECT  PROD_CD
+                                    FROM    TB_MS_VENDOR_PROD
+                                    WHERE   STORE_CD = TPSS.STORE_CD
+                                    AND     VENDR_CD IN
+                                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                  )
+        	</if>
+ 		GROUP BY
+ 			 A.LV1_CD
+		     , A.LV1_NM
+		     , A.LV2_CD
+		     , A.LV2_NM
+		     , A.LV3_CD
+		     , A.LV3_NM  
+ 			 , TPSS.PROD_CD
+		     , TMP.PROD_NM
+		     , TPSS.STORE_CD
+		     , TMP.PO_UNIT_QTY
+		     , TMP.PO_UNIT_FG
+		     , TMPB.BARCD_CD
+ 		ORDER BY TPSS.PROD_CD, TPSS.STORE_CD
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getStorePeriodDtlList" parameterType="storePeriodVO" resultType="DefaultMap">
+    	/* USE : StorePeriodMapper.getPeriodiostockProdDtlList */
+    	<!-- 쿼리 바꿔야함. PeriodIostockMapper.xml에 있는거 복붙함 -->
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+		SELECT SUBSTR(TPHS.IO_OCCR_DT,1,8) AS IO_OCCR_DT
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_01 /* 본사입고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_16 /* 업체반출 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '13', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_13 /* 본사출고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '13', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_13 /* 본사출고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '02', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_02 /* 본사반입 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '02', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_02 /* 본사반입 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '04', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '04', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '14', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '14', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '17', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '17', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '21', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '21', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_21 /* 재고조정 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '22', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '22', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_19 /* 거래처출고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '19', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_19 /* 거래처출고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_33 /* 거래처반품 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '33', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_33 /* 거래처반품 금액*/
+		     <include refid="CmmSQL.PagingTemplateCount"/>
+  		FROM TB_PO_HQ_STOCK TPHS
+ 		WHERE TPHS.HQ_OFFICE_CD = #{hqOfficeCd}
+ 			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+ 			  AND SUBSTR(TPHS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+			  AND TPHS.PROD_CD = #{prodCd}
+ 		GROUP BY SUBSTR(TPHS.IO_OCCR_DT,1,8)
+ 		ORDER BY SUBSTR(TPHS.IO_OCCR_DT,1,8) DESC
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getStorePeriodQtyDtlList" parameterType="storePeriodVO" resultType="DefaultMap">
+    	SELECT '2017-12-10' AS SALE_DATE
+            , '200000' AS  STORE_CD
+            , '본사출고매장' AS  STORE_NM
+        FROM DUAL
+        UNION ALL
+        SELECT '2017-12-10' AS SALE_DATE
+            , '300000' AS  STORE_CD
+            , '반입매장' AS  STORE_NM
+        FROM DUAL
+    </select>
+
+</mapper>

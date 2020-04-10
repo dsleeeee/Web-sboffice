@@ -127,7 +127,8 @@
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="storeOrder.dtl.excelFormUpload"/></a>
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="storeOrder.dtl.textFormUpload"/></a>
             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="storeOrder.dtl.excelFormUploadErrorInfo"/></a>
+        <%--<a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="storeOrder.dtl.excelFormUploadErrorInfo"/></a> *label변경: 엑셀 업로드 오류내역 -> 업로드 오류내역 --%>
+        	<a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="storeOrder.dtl.uploadErrorInfo"/></a>
           </td>
         </tr>
         </tbody>

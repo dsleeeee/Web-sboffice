@@ -6,6 +6,9 @@ public class StoreCurrVO extends PageVO {
 
     private static final long serialVersionUID = -5398533977092106922L;
 
+    /** 본사코드 */
+    
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 창고코드 */
@@ -62,6 +65,20 @@ public class StoreCurrVO extends PageVO {
     private String weightFg;
     /** 안전재고구분 */
     private String safeStockFg;
+    
+    /**
+     * @return the hqOfficeCd
+     */
+    public String getHqOfficeCd() {
+		return hqOfficeCd;
+	}
+
+    /**
+     * @param hqOfficeCd the hqOfficeCd to set
+     */
+	public void setHqOfficeCd(String hqOfficeCd) {
+		this.hqOfficeCd = hqOfficeCd;
+	}
 
     /**
      * @return the storeCd

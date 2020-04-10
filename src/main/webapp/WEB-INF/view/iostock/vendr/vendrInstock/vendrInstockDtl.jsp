@@ -128,8 +128,8 @@
       <p class="s12 bk lh30 fl mr10">]</p>
       <button type="button" id="btnDtlConfirm" class="btn_skyblue ml5" ng-click="confirm('1')" ng-if="btnDtlConfirmShowFg">
         <s:message code="vendrInstock.dtl.confirm"/></button>
-      <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmCancelShowFg">
-        <s:message code="vendrInstock.dtl.confirmCancel"/></button>
+<!--       <button type="button" id="btnDtlConfirmCancel" class="btn_skyblue ml5" ng-click="confirm('0')" ng-if="btnDtlConfirmCancelShowFg"> -->
+<%--         <s:message code="vendrInstock.dtl.confirmCancel"/></button> --%>
     </div>
   </h3>
   <table class="tblType01">
@@ -160,11 +160,13 @@
     </tr>
     <tr>
       <%-- 입고총수량 --%>
-      <th><s:message code="vendrInstock.dtl.inTotQty"/></th>
+      <th ng-bind-html="instockTotQtyTxt"></th>
+<%--       <th><s:message code="vendrInstock.dtl.inTotQty"/></th> --%>
       <td><span id="slipDtlInTotQty" class="pd5 txtIn s12" ng-bind="slipInfo.inTotQty"></span>
       </td>
       <%-- 입고총금액 --%>
-      <th><s:message code="vendrInstock.dtl.inTotAmt"/></th>
+      <th ng-bind-html="instockTotAmtTxt"></th>
+<%--       <th><s:message code="vendrInstock.dtl.inTotAmt"/></th> --%>
       <td><span id="slipDtlInTotAmt" class="pd5 txtIn s12" ng-bind="slipInfo.inTot"></span>
       </td>
     </tr>

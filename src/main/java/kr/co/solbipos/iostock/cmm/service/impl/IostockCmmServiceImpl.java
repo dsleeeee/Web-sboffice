@@ -40,6 +40,15 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         return iostockCmmMapper.getVendrList(iostockCmmVO);
     }
 
+    /** 수불&재고관련 공통 - 창고선택 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> selectStorageList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO) {
+        iostockCmmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        iostockCmmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        iostockCmmVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        return iostockCmmMapper.selectStorageList(iostockCmmVO);
+    }
+
 
     /** 수불&재고관련 공통 - 공통 명칭 콤보조회 */
     @Override

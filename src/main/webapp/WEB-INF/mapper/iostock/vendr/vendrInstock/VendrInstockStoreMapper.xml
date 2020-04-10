@@ -90,8 +90,8 @@
         ,       tmereg.EMP_NM AS REG_NM
         ,       DECODE(tpsvi.PROC_FG, 0, NULL, tpsvi.CONFM_DT) AS CONFM_DT
         ,       DECODE(tpsvi.PROC_FG, 0, NULL, tmeconfm.EMP_NM) AS CONFM_NM
-        ,       tpsvi.IN_TOT_QTY * tpsvi.SLIP_FG AS IN_TOT_QTY
-        ,       tpsvi.IN_TOT * tpsvi.SLIP_FG AS IN_TOT
+        ,       ABS(tpsvi.IN_TOT_QTY) * tpsvi.SLIP_FG AS IN_TOT_QTY
+        ,       ABS(tpsvi.IN_TOT) * tpsvi.SLIP_FG AS IN_TOT
         FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
         ,       TB_MS_VENDOR tmv
         ,       TB_MS_EMPLOYEE tmereg
@@ -136,13 +136,13 @@
         <![CDATA[
         SELECT  tpsvid.PROD_CD, tmp.PROD_NM, tpsvid.PO_UNIT_FG, tpsvid.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tpsvid.SLIP_FG, tpsvid.COST_UPRC, tmp.PO_MIN_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS PREV_IN_TOT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY , 0, NULL, tpsvid.IN_ETC_QTY *tpsvid.SLIP_FG)) AS IN_ETC_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS IN_TOT_QTY
-        ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
-        ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
-        ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, ABS(tpsvid.IN_TOT_QTY) *tpsvid.SLIP_FG)) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, ABS(tpsvid.IN_UNIT_QTY)*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY , 0, NULL, ABS(tpsvid.IN_ETC_QTY) *tpsvid.SLIP_FG)) AS IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY , 0, NULL, ABS(tpsvid.IN_TOT_QTY) *tpsvid.SLIP_FG)) AS IN_TOT_QTY
+        ,       ABS(tpsvid.IN_AMT)*tpsvid.SLIP_FG AS IN_AMT
+        ,       ABS(tpsvid.IN_VAT)*tpsvid.SLIP_FG AS IN_VAT
+        ,       ABS(tpsvid.IN_TOT)*tpsvid.SLIP_FG AS IN_TOT
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
         ,       tmsn.NMCODE_NM AS PO_UNIT_FG_NM
@@ -157,7 +157,8 @@
         AND     tmv.STORE_CD    =   tpsvid.STORE_CD
         AND     tmv.VENDR_CD    =   #{vendrCd}
         AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
-        AND     tmsn.NMCODE_GRP_CD (+)=   '097'
+        /* AND     tmsn.NMCODE_GRP_CD (+)=   '097'  20200309 097 -> 093 수정 */
+        AND     tmsn.NMCODE_GRP_CD (+)=   '093'
         AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
         ORDER
         BY      tpsvid.PROD_CD
@@ -202,12 +203,12 @@
         ,       tmp.PO_UNIT_FG
         ,       tmp.PO_UNIT_QTY
         ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
-        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY,  0, NULL, tpsvid.IN_ETC_QTY*tpsvid.SLIP_FG )) AS PREV_IN_ETC_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY,  0, NULL, tpsvid.IN_TOT_QTY*tpsvid.SLIP_FG )) AS PREV_IN_TOT_QTY
-        ,       TO_NUMBER(DECODE(tpsvid.IN_AMT    ,  0, NULL, tpsvid.IN_AMT*tpsvid.SLIP_FG     )) AS IN_AMT
-        ,       TO_NUMBER(DECODE(tpsvid.IN_VAT    ,  0, NULL, tpsvid.IN_VAT*tpsvid.SLIP_FG     )) AS IN_VAT
-        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT    ,  0, NULL, tpsvid.IN_TOT*tpsvid.SLIP_FG     )) AS IN_TOT
+        ,       TO_NUMBER(DECODE(tpsvid.IN_UNIT_QTY, 0, NULL, ABS(tpsvid.IN_UNIT_QTY)*tpsvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_ETC_QTY,  0, NULL, ABS(tpsvid.IN_ETC_QTY)*tpsvid.SLIP_FG )) AS PREV_IN_ETC_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT_QTY,  0, NULL, ABS(tpsvid.IN_TOT_QTY)*tpsvid.SLIP_FG )) AS PREV_IN_TOT_QTY
+        ,       TO_NUMBER(DECODE(tpsvid.IN_AMT    ,  0, NULL, ABS(tpsvid.IN_AMT)*tpsvid.SLIP_FG     )) AS IN_AMT
+        ,       TO_NUMBER(DECODE(tpsvid.IN_VAT    ,  0, NULL, ABS(tpsvid.IN_VAT)*tpsvid.SLIP_FG     )) AS IN_VAT
+        ,       TO_NUMBER(DECODE(tpsvid.IN_TOT    ,  0, NULL, ABS(tpsvid.IN_TOT)*tpsvid.SLIP_FG     )) AS IN_TOT
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -281,6 +282,7 @@
     -->
     <select id="getVendrInstockOrderInfoRegList" parameterType="vendrInstockVO" resultType="DefaultMap">
         /* USE : VendrInstockStoreMapper.getVendrInstockOrderInfoRegList */
+        <!-- 
         <![CDATA[
         SELECT  tpsvod.PROD_CD, tmp.PROD_NM, tpsvod.PO_UNIT_FG, tpsvod.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
         ,       tpsvod.SLIP_FG, tmp.PO_MIN_QTY
@@ -288,7 +290,7 @@
         ,       tpsvod.COST_UPRC AS ORDER_COST_UPRC
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_UNIT_QTY*tpsvod.SLIP_FG)) AS ORDER_UNIT_QTY
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_ETC_QTY *tpsvod.SLIP_FG)) AS ORDER_ETC_QTY
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_TOT_QTY *tpsvod.SLIP_FG)) AS ORDER_TOT_QTY
+        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_TOT_QTY *tpsvod.SLIP_FG)) AS ORDER_TOT_QTY         
         ,       tpsvid.COST_UPRC
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
         ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_ETC_QTY *tpsvid.SLIP_FG)) AS IN_ETC_QTY
@@ -315,6 +317,154 @@
         ORDER
         BY      tpsvid.PROD_CD
         ]]>
+         -->
+		SELECT	A.PROD_CD
+		,		A.PROD_NM
+		,		A.PO_UNIT_FG
+		,		A.PO_UNIT_QTY
+		,		A.PO_UNIT_ALLOW_FG
+		,		A.SLIP_FG
+		,		A.PO_MIN_QTY
+		,		A.LAST_COST_UPRC
+		,		A.ORDER_COST_UPRC
+		,		A.ORDER_UNIT_QTY
+		,		A.ORDER_ETC_QTY
+		,		A.ORDER_TOT_QTY
+		,		A.COST_UPRC
+		,		A.IN_UNIT_QTY
+		,		A.IN_ETC_QTY
+		,		A.IN_TOT_QTY
+		,		A.PREV_IN_TOT_QTY
+		,		A.IN_AMT
+		,		A.IN_VAT
+		,		A.IN_TOT
+		,		A.VAT_FG01
+		,		A.VENDR_VAT_FG01
+		,		LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,		LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
+		FROM	(
+				SELECT	A.PROD_CD
+				,		A.PROD_NM
+				,		A.PO_UNIT_FG
+				,		A.PO_UNIT_QTY
+				,		A.PO_UNIT_ALLOW_FG
+				,		A.SLIP_FG
+				,		A.PO_MIN_QTY
+				,		A.LAST_COST_UPRC
+				,		A.ORDER_COST_UPRC
+				,		A.ORDER_UNIT_QTY
+				,		A.ORDER_ETC_QTY
+				,		A.ORDER_TOT_QTY
+				,		A.COST_UPRC
+				,		A.IN_UNIT_QTY
+				,		A.IN_ETC_QTY
+				,		A.IN_TOT_QTY
+				,		A.PREV_IN_TOT_QTY
+				,		A.IN_AMT
+				,		A.IN_VAT
+				,		A.IN_TOT
+				,		A.VAT_FG01
+				,		A.VENDR_VAT_FG01
+				,		B.PROD_CD       AS  A_PROD_CD
+				,       B.STORAGE_CD    AS  A_STORAGE_CD
+				,       B.STORAGE_NM    AS  A_STORAGE_NM
+				,       B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY
+				,       B.IN_ETC_QTY    AS  A_IN_ETC_QTY
+				,       B.IN_TOT_QTY    AS  A_IN_TOT_QTY
+				,       B.IN_AMT        AS  A_IN_AMT
+				,       B.IN_VAT        AS  A_IN_VAT
+				,       B.IN_TOT        AS  A_IN_TOT
+				FROM    (
+				        SELECT  tpsvod.STORE_CD, tpsvod.SLIP_NO, tpsvod.PROD_CD, tmp.PROD_NM, tpsvod.PO_UNIT_FG, tpsvod.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
+				        ,       tpsvod.SLIP_FG, tmp.PO_MIN_QTY
+				        ,       tmp.LAST_COST_UPRC
+				        ,       tpsvod.COST_UPRC AS ORDER_COST_UPRC
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_UNIT_QTY*tpsvod.SLIP_FG)) AS ORDER_UNIT_QTY
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_ETC_QTY *tpsvod.SLIP_FG)) AS ORDER_ETC_QTY
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvod.ORDER_TOT_QTY *tpsvod.SLIP_FG)) AS ORDER_TOT_QTY
+				        ,       tpsvid.COST_UPRC
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_UNIT_QTY*tpsvid.SLIP_FG)) AS IN_UNIT_QTY
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_ETC_QTY *tpsvid.SLIP_FG)) AS IN_ETC_QTY
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS IN_TOT_QTY
+				        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsvid.IN_TOT_QTY *tpsvid.SLIP_FG)) AS PREV_IN_TOT_QTY
+				        ,       tpsvid.IN_AMT*tpsvid.SLIP_FG AS IN_AMT
+				        ,       tpsvid.IN_VAT*tpsvid.SLIP_FG AS IN_VAT
+				        ,       tpsvid.IN_TOT*tpsvid.SLIP_FG AS IN_TOT
+				        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
+				        ,       DECODE(tmv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+				        FROM    TB_PO_STORE_VENDR_ORDER_DTL tpsvod
+				        ,       TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
+				        ,       TB_MS_PRODUCT tmp
+				        ,       TB_MS_VENDOR tmv
+				        WHERE   tpsvod.STORE_CD     =   #{storeCd}
+				        AND     tpsvod.SLIP_NO      =   #{orderSlipNo}
+				        AND     tpsvid.STORE_CD (+) =   tpsvod.STORE_CD
+				        AND     tpsvid.SLIP_NO  (+) =   #{slipNo}
+				        AND     tpsvid.PROD_CD  (+) =   tpsvod.PROD_CD
+				        AND     tmp.STORE_CD        =   tpsvod.STORE_CD
+				        AND     tmp.PROD_CD         =   tpsvod.PROD_CD
+				        AND     tmv.STORE_CD        =   tpsvod.STORE_CD
+				        AND     tmv.VENDR_CD        =   #{vendrCd}
+						)	A
+			            LEFT OUTER JOIN
+			            (
+							SELECT  X.STORE_CD,
+			                        X.STORAGE_CD,
+			                        X.STORAGE_NM,
+			                        --Y.HQ_OFFICE_CD,			                        
+			                        NVL(Y.SLIP_NO,'20040001')	AS SLIP_NO,
+			                        Y.PROD_CD,
+			                        --Y.STORAGE_CD,
+			                        NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
+			                        NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
+			                        NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
+			                        NVL(Y.IN_AMT,       0)  AS IN_AMT,
+			                        NVL(Y.IN_VAT,       0)  AS IN_VAT,
+			                        NVL(Y.IN_TOT,       0)  AS IN_TOT
+			                FROM            TB_MS_STORAGE                   	X
+			                LEFT OUTER JOIN TB_PO_STORE_VENDR_INSTOCK_PROD    	Y
+			                ON              X.STORE_CD		= Y.STORE_CD
+			                AND             X.STORAGE_CD    = Y.STORAGE_CD
+			                AND             Y.STORE_CD  	= #{storeCd}
+			                AND             Y.SLIP_NO       = #{slipNo}
+			                WHERE   X.STORE_CD  = #{storeCd}
+			                AND     X.USE_YN    = 'Y'
+			            )   B
+			            ON      A.STORE_CD  	= B.STORE_CD
+			            AND     A.SLIP_NO       = B.SLIP_NO
+			            AND     A.PROD_CD       = (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+				)	A
+		GROUP
+		BY		A.PROD_CD
+		,		A.PROD_NM
+		,		A.PO_UNIT_FG
+		,		A.PO_UNIT_QTY
+		,		A.PO_UNIT_ALLOW_FG
+		,		A.SLIP_FG
+		,		A.PO_MIN_QTY
+		,		A.LAST_COST_UPRC
+		,		A.ORDER_COST_UPRC
+		,		A.ORDER_UNIT_QTY
+		,		A.ORDER_ETC_QTY
+		,		A.ORDER_TOT_QTY
+		,		A.COST_UPRC
+		,		A.IN_UNIT_QTY
+		,		A.IN_ETC_QTY
+		,		A.IN_TOT_QTY
+		,		A.PREV_IN_TOT_QTY
+		,		A.IN_AMT
+		,		A.IN_VAT
+		,		A.IN_TOT
+		,		A.VAT_FG01
+		,		A.VENDR_VAT_FG01
+		ORDER
+		BY      A.PROD_CD         
     </select>
 
 
@@ -729,7 +879,60 @@
         )
     </insert>
 
-
+	<!-- 거래처 입고/반출등록 - 입고/반출정보 PROD 등록 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_PROD
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보 PROD을 등록한다.
+    -->
+    <insert id="insertVendrInstockProd" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.insertVendrInstockProd */
+        INSERT INTO TB_PO_STORE_VENDR_INSTOCK_PROD
+        (
+            STORE_CD,
+            SLIP_NO,
+            PROD_CD,
+            STORAGE_CD,
+            OCCR_FG,  
+            SLIP_FG,
+            COST_UPRC,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            IN_UNIT_QTY,
+            IN_ETC_QTY,
+            IN_TOT_QTY,
+            IN_AMT,
+            IN_VAT,
+            IN_TOT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd},
+            #{slipNo},
+            #{prodCd},
+            #{storageCd},
+            #{occrFg},
+            #{slipFg},
+            #{costUprc},
+            #{poUnitFg},
+            #{poUnitQty},
+            #{inUnitQty},
+            #{inEtcQty},
+            #{inTotQty},
+            #{inAmt},
+            #{inVat},
+            #{inTot},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+    
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 수정 -->
     <!--
         TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL
@@ -753,7 +956,46 @@
         AND     PROD_CD   = #{prodCd}
     </update>
 
-
+	<!-- 거래처 입고/반출등록 - 입고/반출정보 PROD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_PROD
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보 PROD를 수정한다.
+    -->
+    <update id="updateVendrInstockProd" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.updateVendrInstockProd */
+        UPDATE  TB_PO_STORE_VENDR_INSTOCK_PROD
+        SET     COST_UPRC   = #{costUprc}
+        ,       IN_UNIT_QTY = #{inUnitQty}
+        ,       IN_ETC_QTY  = #{inEtcQty}
+        ,       IN_TOT_QTY  = #{inTotQty}
+        ,       IN_AMT      = #{inAmt}
+        ,       IN_VAT      = #{inVat}
+        ,       IN_TOT      = #{inTot}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND 	STORAGE_CD  = #{storageCd}
+        AND     SLIP_NO     = #{slipNo}
+        AND     PROD_CD     = #{prodCd}
+    </update>
+    
+    <!-- 거래처 입고/반출등록 - 입고/반출정보 PROD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_VENDR_INSTOCK_PROD
+        PARAM    : vendrInstockVO
+        COMMENTS : 거래처 입고/반출정보 PROD를 수정한다.
+    -->
+    <update id="saveVendrInstockProd" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.saveVendrInstockProd */
+        UPDATE  TB_PO_STORE_VENDR_INSTOCK_PROD
+        SET     CONFM_YN    = 'Y'
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     SLIP_NO     = #{slipNo}
+    </update>
+    
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 삭제 -->
     <!--
         TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL
@@ -767,8 +1009,7 @@
         AND     SLIP_NO   = #{slipNo}
         AND     PROD_CD   = #{prodCd}
     </delete>
-
-
+	
     <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 등록 -->
     <!--
         TABLE    : TB_PO_STORE_VENDR_EXACT_CALC, TB_PO_STORE_VENDR_INSTOCK
@@ -935,7 +1176,7 @@
         )
         SELECT  #{storeCd}
         ,       #{slipNo}
-        ,       '000' AS STORAGE_CD
+        ,       '999' AS STORAGE_CD
         ,       '00' AS HQ_BRAND_CD
         ,       tpte.PROD_CD
         ,       #{slipFg}

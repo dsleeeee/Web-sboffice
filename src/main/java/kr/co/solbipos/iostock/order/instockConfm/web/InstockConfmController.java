@@ -10,6 +10,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmService;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +45,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/iostock/order/instockConfm")
 public class InstockConfmController {
+	private final Logger	LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final SessionService sessionService;
     private final InstockConfmService instockConfmService;
     private final CmmEnvService cmmEnvService;
@@ -91,7 +96,13 @@ public class InstockConfmController {
         Model model, InstockConfmVO instockConfmVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        instockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        instockConfmVO.setOrgnFg	(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
+        instockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd()		);	//본사코드
+        instockConfmVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
+
+        LOGGER.debug("### OrgnFg        : " + instockConfmVO.getOrgnFg		());
+        LOGGER.debug("### hqOfficeCd    : " + instockConfmVO.getHqOfficeCd	());
+        LOGGER.debug("### storeCd       : " + instockConfmVO.getStoreCd		());
 
         List<DefaultMap<String>> list = instockConfmService.getInstockConfmList(instockConfmVO);
 
@@ -138,6 +149,7 @@ public class InstockConfmController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         instockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        instockConfmVO.setStoreCd   (sessionInfoVO.getStoreCd   ());
 
         List<DefaultMap<String>> list = instockConfmService.getInstockConfmDtlList(instockConfmVO);
 

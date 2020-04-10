@@ -6,7 +6,7 @@ var app = agrid.getApp();
 app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('posDayPeriodCtrl', $scope, $http, $timeout, true));
-	
+
 	  $scope.srchPosDayPeriodStartDate = wcombo.genDateVal("#srchPosDayPeriodStartDate", getToday());
 	  $scope.srchPosDayPeriodEndDate   = wcombo.genDateVal("#srchPosDayPeriodEndDate", getToday());
 
@@ -14,12 +14,17 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  $scope._setComboData("posDayPeriodListScaleBox", gvListScaleBoxData);
 	  $scope._setComboData("posDayPeriodDtlListScaleBox", gvListScaleBoxData);
 	  $scope.orgnFg = gvOrgnFg;
-	  
+
 	  //전체기간 체크박스 클릭이벤트
 	  $scope.isChkDt = function() {
 	    $scope.srchPosDayPeriodStartDate.isReadOnly = $scope.isChecked;
 	    $scope.srchPosDayPeriodEndDate.isReadOnly = $scope.isChecked;
 	  };
+
+	  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	  $scope.isChkProdClassDisplay = function(){
+		  $scope._broadcast("chkProdClassDisplay");
+	  }
 
 	  //매장선택 모듈 팝업 사용시 정의
 	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -27,7 +32,7 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  $scope.posDayPeriodSelectStoreShow = function () {
 	    $scope._broadcast('posDayPeriodSelectStoreCtrl');
 	  };
-	
+
 }]);
 
 /** 일자별(코너별 매출) controller */
@@ -112,6 +117,10 @@ app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 
 	  params.startDate = wijmo.Globalize.format($scope.srchPosDayPeriodStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchPosDayPeriodEndDate.value, 'yyyyMMdd');
+
+	  //params.startDate = '20191201';
+	  //params.endDate = '20191231';
+
 	}else{
     	$scope.startDateForDt = "";
     	$scope.endDateForDt = "";
@@ -132,10 +141,17 @@ app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 //    	params.posNo     = arrPosNo[1];
     	params.storeCd   = rows[0].dataItem.storeCd;
 		params.posNo     = rows[0].dataItem.posNo;
+		params.data      = $scope.flex.collectionView; //새로 추가
 		params.isPageChk = false;
 
 	    // 코너별 매출현황 상세조회.
 	    $scope._broadcast("posDayPeriodDtlCtrl", params);
+
+	    // 설정기간별(포스별 매출) 바 차트
+	    $scope._broadcast("posDayPeriodBarChartCtrl", params);
+
+	    // 설정기간별(포스별 매출) 파이 차트
+	    $scope._broadcast("posDayPeriodPieChartCtrl", params);
 	}
   };
 
@@ -180,6 +196,16 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	  }
+
+	  $scope.$on("chkProdClassDisplay", function (event) {
+		  var columns = $scope.flex.columns;
+
+		  for(var i=0; i<columns.length; i++){
+			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			  }
+		  }
+	  });
 
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("posDayPeriodDtlCtrl", function (event, data) {
@@ -242,4 +268,137 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	      });
 	    }, 10);
 	  };
+}]);
+
+
+/** 설정기간별 차트 (포스별 바) controller */
+app.controller('posDayPeriodBarChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('posDayPeriodBarChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto 50 auto';
+		s.axisX.labelAngle = 0;
+	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
+
+	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.All,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+
+	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayPeriodBarChartCtrl", function (event, data) {
+
+		if (data != undefined) {
+			$scope.data = data.data.items;
+		}
+
+		event.preventDefault();
+	});
+
+	$scope.rendered = function(s, e) {
+
+		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+		var pAreaWidth = pArea.width.baseVal.value;
+		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
+
+		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
+		var widthMax = new Array();
+
+        labels.forEach((value, key, parent) => {
+
+        	var x = +value.getAttribute('x');
+            var y = +value.getAttribute('y');
+            var text = value.innerHTML.split(' - ');
+            value.innerHTML = '';
+
+            widthMax[key] = new Array();
+
+            text.forEach((item, index) => {
+
+                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                //e.setAttribute("x", (x + 0).toString());
+                e.setAttribute('y', (y + (15 * index)).toString());
+                e.innerHTML = item;
+                value.appendChild(e);
+
+                var bbox = e.getBoundingClientRect();
+                var extent = e.getExtentOfChar(0);
+                var boxWidth = e.getComputedTextLength();
+                var gap = 0;
+
+                console.log(boxWidth);
+
+                gap = (groupWidth - boxWidth) / 2;
+                widthMax[key][index] = gap;
+
+                e.setAttribute('x', (x + gap).toString());
+            });
+        });
+
+        labels.forEach((value, key, parent) => {
+
+        	var children = value.childNodes;
+
+        	for (var i = 0; i < children.length; i++) {
+        		var e = value.childNodes[i];
+        		var extent = e.getExtentOfChar(0);
+
+        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
+        	}
+        });
+
+        s.tooltip.content = function (ht) {
+        	var title = ht.name;
+			var nameArr = ht._xfmt.split(" - ");
+			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + value;
+		}
+    }
+
+}]);
+
+/** 설정기간별 차트 (포스별 파이) controller */
+app.controller('posDayPeriodPieChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('posDayPeriodPieChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto auto auto';
+		var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.Point,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayPeriodPieChartCtrl", function (event, data) {
+
+		if (data != undefined) {
+			$scope.data = data.data.items;
+			$scope.sum = $scope.data.map(c => c.realSaleAmt).reduce((sum, cur) => sum + cur);
+
+			$scope.posDayPeriodPieChart.dataLabel.content = function (ht) {
+				var dataLabel = "";
+
+				if (ht.value > 0) {
+					dataLabel = ht.name;
+				}
+
+				return dataLabel;
+			}
+
+			$scope.posDayPeriodPieChart.tooltip.content = function (ht) {
+				var nameArr = ht.name.split(" - ");
+				return nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + (ht.value / $scope.sum * 100).toFixed(2) + "%";
+			}
+		}
+
+		event.preventDefault();
+	});
+
 }]);

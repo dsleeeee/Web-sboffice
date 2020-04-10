@@ -2,10 +2,8 @@ package kr.co.solbipos.sale.status.pos.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sale.status.pos.day.service.PosDayVO;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Mapper

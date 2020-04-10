@@ -244,7 +244,24 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
-
+	
+	<!-- 반품매장출고 - 반품매장출고 PROD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : rtnOutstockConfmVO
+        COMMENTS : 반품매장출고 - 반품매장출고시 DTL의 진행구분을 수정한다.
+    -->
+    <update id="updateOutstockProdConfirm" parameterType="rtnOutstockConfmVO">
+        /* USE : RtnOutstockConfmMapper.updateOutstockProdConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        SET     CONFM_YN        = 'Y',
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     OCCR_FG	  	  = '12'
+    </update>
+	
     <!-- 반품매장출고 - 반품매장출고 HD 수정-->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK

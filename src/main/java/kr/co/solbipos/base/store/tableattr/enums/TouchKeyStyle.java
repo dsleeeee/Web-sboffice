@@ -11,12 +11,12 @@ import java.util.List;
 /**
  * 테이블 속성 셀 스타일 enum type<br>
  * TB_MS_TABLE_ATTR, TB_CM_TABLE_ATTR > FONT_NM, FONT_SIZE 등
- * 
+ *
  * @author bjcho
  *
  */
 public enum TouchKeyStyle implements CodeEnum {
-    
+
     /** 좌우정렬 */
     ALIGN("align"),
     /** 수직정렬 */
@@ -68,14 +68,17 @@ public enum TouchKeyStyle implements CodeEnum {
     BG_COLOR("fillColor"),
     /** 백그라운드이미지-custom */
     BG_IMG("image"),
+    /** 백그라운드이미지파일명-custom */
+    BG_IMG_NM("bgImg"),
+
     /** 백그라운드이미지-custom */
     IMG_WIDTH("imageWidth"),
     /** 백그라운드이미지-custom */
     IMG_HEIGHT("imageHeight");
 
-    
+
     private String code;
-  
+
     TouchKeyStyle(String code) {
         this.code = code;
     }
@@ -85,13 +88,13 @@ public enum TouchKeyStyle implements CodeEnum {
         super(TouchKeyStyle.class);
         }
     }
-     
+
     @Override
     @JsonValue
     public String getCode() {
         return code;
     }
-    
+
     public static TouchKeyStyle getEnum(String code) {
         List<TouchKeyStyle> list = Arrays.asList(TouchKeyStyle.values());
         return list.stream().filter(m -> m.code.equals(code)).findAny().orElse(null);

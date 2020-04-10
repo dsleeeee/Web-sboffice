@@ -69,7 +69,12 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     var params       = {};
     params.acinsDate = $scope.acinsDate;
     params.seqNo     = $scope.seqNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -157,7 +162,7 @@ app.controller('acinsDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.acinsDate  = $scope.acinsDate;
       item.seqNo      = $scope.seqNo;
       item.acinsTitle = $scope.acinsTitle;
-      item.storageCd  = "001";
+      item.storageCd  = "999";	//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg  = confirmFg;
 

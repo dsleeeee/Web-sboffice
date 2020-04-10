@@ -89,6 +89,10 @@
       event.preventDefault();
     });
 
+    $scope.$on('dcDcfgSelectedTableCtrl', function(){
+    	$scope.searchTable();
+    });
+
     $scope.searchTable = function () {
       // 파라미터
       var params = {};

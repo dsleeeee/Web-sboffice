@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("disuseService")
+@Transactional
 public class DisuseServiceImpl implements DisuseService {
     private final DisuseMapper disuseMapper;
     private final MessageService messageService;

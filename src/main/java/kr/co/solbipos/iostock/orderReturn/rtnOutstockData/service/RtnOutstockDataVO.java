@@ -118,7 +118,8 @@ public class RtnOutstockDataVO extends PageVO {
     private String yymm;
     /** 브랜드코드 */
     private String hqBrandCd;
-
+    /** 출고예약일자 */
+    private String reqDate;
     /**
      * @return the hqOfficeCd
      */
@@ -902,4 +903,13 @@ public class RtnOutstockDataVO extends PageVO {
     public void setHqBrandCd(String hqBrandCd) {
         this.hqBrandCd = hqBrandCd;
     }
+
+	public String getReqDate() {
+		return reqDate;
+	}
+
+	public void setReqDate(String reqDate) {
+		this.reqDate = reqDate;
+	}
+    
 }

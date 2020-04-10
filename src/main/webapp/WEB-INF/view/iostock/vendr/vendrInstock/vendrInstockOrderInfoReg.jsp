@@ -48,11 +48,11 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.orderCostUprc"/>" binding="orderCostUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.orderUnitQty"/>" binding="orderUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.orderEtcQty"/>" binding="orderEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"/>" binding="orderUnitQty" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"/>" binding="orderEtcQty" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inCostUprc"/>" binding="costUprc" width="80" align="right" is-read-only="false" max-length=8></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inUnitQty"/>" binding="inUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inEtcQty"/>" binding="inEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"/>" binding="inUnitQty" width="80" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"/>" binding="inEtcQty" width="80" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inTotQty"/>" binding="inTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.prevInTotQty"/>" binding="prevInTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inAmt"/>" binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -60,7 +60,18 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.inTot"/>" binding="inTot" width="90" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.ord.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-
+			
+		    <wj-flex-grid-column header=""                                                  binding="arrStorageCd"  width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                  binding="arrStorageNm"  width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+	
+			<wj-flex-grid-column header=""                                                  binding="arrInUnitQty"  width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                  binding="arrInEtcQty"   width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                  binding="arrInTotQty"   width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+	
+			<wj-flex-grid-column header=""                                                  binding="arrInAmt"      width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                  binding="arrInVat"      width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                  binding="arrInTot"      width="200" align="left"   	is-read-only="true"     visible="false"     ></wj-flex-grid-column>
+			
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>

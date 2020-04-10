@@ -18,7 +18,10 @@ public interface RtnOutstockConfmMapper {
 
     /** 반품매장출고 - 반품매장출고시 DTL 수정 */
     int updateOutstockDtlConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
-
+    
+    /** 반품매장출고 - 반품매장출고시 PROD 수정 */
+    int updateOutstockProdConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
     /** 반품매장출고 - 반품매장출고시 HD 수정 */
     int updateOutstockConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
 

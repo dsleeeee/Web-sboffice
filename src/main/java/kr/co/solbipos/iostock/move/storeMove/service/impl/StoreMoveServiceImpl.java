@@ -11,12 +11,14 @@ import kr.co.solbipos.iostock.move.storeMove.service.StoreMoveService;
 import kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("storeMoveService")
+@Transactional
 public class StoreMoveServiceImpl implements StoreMoveService {
     private final StoreMoveMapper storeMoveMapper;
     private final MessageService messageService;
@@ -120,7 +122,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
                 // DTL 수정
                 result = storeMoveMapper.updateStoreMoveDtl(storeMoveVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if (result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
                 returnResult += result;
             }
@@ -129,7 +131,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
         // HD 수정
         result = storeMoveMapper.updateStoreMoveHd(storeMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // 확정인 경우
         if(confirmFg.equals("Y")) {
@@ -138,7 +140,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
             // HD의 수정
             result = storeMoveMapper.updateStoreMoveConfirm(storeMoveHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
         }
 
         return returnResult;
@@ -154,11 +156,11 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
         // DTL 삭제
         result = storeMoveMapper.deleteAllStoreMoveDtl(storeMoveVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // HD 삭제
         result = storeMoveMapper.deleteStoreMoveHd(storeMoveVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         return result;
     }
@@ -226,7 +228,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
             // DTL 등록
             result = storeMoveMapper.insertStoreMoveDtl(storeMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
@@ -234,7 +236,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
         // HD 등록
         result = storeMoveMapper.insertStoreMoveHd(storeMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // 확정인 경우
         if(confirmFg.equals("Y")) {
@@ -243,7 +245,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
             // HD의 수정
             result = storeMoveMapper.updateStoreMoveConfirm(storeMoveHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
         }
 
         return returnResult;
@@ -292,7 +294,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
             // DTL 등록
             result = storeMoveMapper.insertStoreMoveDtl(storeMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
@@ -300,7 +302,7 @@ public class StoreMoveServiceImpl implements StoreMoveService {
 
         // HD 수정
         result = storeMoveMapper.updateStoreMoveAddProdHd(storeMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         return returnResult;
     }

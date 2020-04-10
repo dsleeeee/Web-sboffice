@@ -164,7 +164,18 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$scope.srchPosProdStartDate.isReadOnly = $scope.isChecked;
 		$scope.srchPosProdEndDate.isReadOnly = $scope.isChecked;
 	};
+	
+    // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+    $scope.isChkProdClassDisplay = function(){
+  	  var columns = $scope.flex.columns;
 
+  	  for(var i=0; i<columns.length; i++){
+  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+  		  }
+  	  }
+    }
+	
 	//매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -205,10 +216,12 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	//매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
-		var url             = '/sale/status/pos/pos/posNmList.sb';
+//		var url             = '/sale/status/pos/pos/posNmList.sb';
 		var comboParams     = {};
 
-		comboParams.storeCd = $("#posProdSelectStoreCd").val();
+		var storeCd = $("#posProdSelectStoreCd").val();
+		var posCd = $("#posProdSelectPosCd").val();
+		$scope.getRePosNmList(storeCd,posCd)
 	};
 
 	//매장의 포스 리스트 재생성

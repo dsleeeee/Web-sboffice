@@ -60,8 +60,7 @@ public class RtnOutstockDataServiceImpl implements RtnOutstockDataService {
 
             for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
-                String slipNo    = yymm + StringUtil
-                    .lpad(String.valueOf(maxSlipNoIdx+slipNoIdx), 6, "0");
+                String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx+slipNoIdx), 6, "0");
                 String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
                 String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
@@ -82,11 +81,13 @@ public class RtnOutstockDataServiceImpl implements RtnOutstockDataService {
                 rtnOutstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
                 result = rtnOutstockDataMapper.insertRtnOutstockDataCreate(rtnOutstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                
+                result = rtnOutstockDataMapper.insertRtnStoreOutStockProd(rtnOutstockDataVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
             returnResult += result;
-        }
-
+        }       
         return returnResult;
     }
 

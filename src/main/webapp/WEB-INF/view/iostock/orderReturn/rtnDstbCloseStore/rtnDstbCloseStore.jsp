@@ -103,10 +103,10 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="itemFormatter">
+        item-formatter="itemFormatter"> <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="gChk" width="40" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>

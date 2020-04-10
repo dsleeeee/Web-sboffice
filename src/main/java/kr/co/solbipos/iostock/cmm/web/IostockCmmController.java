@@ -94,6 +94,28 @@ public class IostockCmmController {
         return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
     }
 
+    /**
+     * 수불&재고관련 공통 - 창고 선택모듈 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.03.26
+     */
+    @RequestMapping(value = "/selectStorageList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectStorageList(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = iostockCmmService.selectStorageList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+
 
     /**
      * 공통 명칭 콤보조회

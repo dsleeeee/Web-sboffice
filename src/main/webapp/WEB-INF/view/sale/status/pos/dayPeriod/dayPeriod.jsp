@@ -25,53 +25,63 @@
       </colgroup>
       <tbody>
       <tr>
-        <%-- 조회일자 --%>
-        <th><s:message code="cmm.search.date"/></th>
-        <td>
-        <div class="sb-select">
-            <span class="txtIn"><input id="srchPosDayPeriodStartDate" class="w120px"></span>
-                <span class="rg">~</span>
-            <span class="txtIn"><input id="srchPosDayPeriodEndDate" class="w120px"></span>
-            <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
-                <label for="chkDt">
-                    <s:message code="cmm.all.day" />
-                </label>
-            </span>
-        </div>
-        </td>
-
+	        <%-- 조회일자 --%>
+	        <th><s:message code="cmm.search.date"/></th>
+	        <td>
+	        <div class="sb-select">
+	            <span class="txtIn"><input id="srchPosDayPeriodStartDate" class="w120px"></span>
+	                <span class="rg">~</span>
+	            <span class="txtIn"><input id="srchPosDayPeriodEndDate" class="w120px"></span>
+	            <span class="chk ml10">
+	                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	                <label for="chkDt">
+	                    <s:message code="cmm.all.day" />
+	                </label>
+	            </span>
+	        </div>
+	        </td>
+        	<%-- 조회옵션 --%>
+			<th><s:message code="periodIostock.srchOption" /></th>
+			<td>
+	          	<span class="chk ml10">
+					<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+	              	<label for="chkDt">
+                		<s:message code="periodIostock.prodClassDisplay" />
+              		</label>
+            	</span>
+			</td>
+		</tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-        <%-- 매장코드 --%>
-        <th><s:message code="todayBillSaleDtl.store"/></th>
-        <td>
-            <%-- 매장선택 모듈 싱글 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수
-            --%>
-<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
-<%--                 <jsp:param name="targetId" value="posDayPeriodSelectStore"/> --%>
-<%--             </jsp:include> --%>
-            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
-            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                <jsp:param name="targetId" value="posDayPeriodSelectStore"/>
-            </jsp:include>
-            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-        </td>
+        <tr>
+	        <%-- 매장코드 --%>
+	        <th><s:message code="todayBillSaleDtl.store"/></th>
+	        <td colspan="3">
+	            <%-- 매장선택 모듈 싱글 선택 사용시 include
+	               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+	                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+	                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+	                            closeFunc - 팝업 닫기시 호출할 함수
+	            --%>
+	<%--             <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true"> --%>
+	<%--                 <jsp:param name="targetId" value="posDayPeriodSelectStore"/> --%>
+	<%--             </jsp:include> --%>
+	            <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
+	            <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+	            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+	                <jsp:param name="targetId" value="posDayPeriodSelectStore"/>
+	            </jsp:include>
+	            <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	        </td>
+        </tr>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="posDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
-      </tr>
+
 
       </tbody>
     </table>
     <div style="clear: both;"></div>
-
-
             <%-- left --%>
             <div class="w50 fl" ng-controller="posDayPeriodMainCtrl" style="width: 49%;">
             <div class="mt20 oh sb-select dkbr mb10">
@@ -154,9 +164,9 @@
                           is-read-only="true"
                           item-formatter="_itemFormatter">
                           <!-- define columns -->
-                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -175,6 +185,55 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
+        </div>
+
+        <%-- left --%>
+     	<div class="w50 fl">
+     		<div class="mt20 oh sb-select dkbr pd10">
+     			<!-- 막대 차트 샘플 -->
+				<div ng-controller="posDayPeriodBarChartCtrl">
+					<div>
+						<wj-flex-chart
+							id="posDayPeriodBarChart"
+							name="barChart1"
+							class="custom-flex-chart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							rendered="rendered(s,e)"
+							binding-x="storeNmPosNo">
+							<wj-flex-chart-series name="<s:message code="pos.saleQty"/>" binding="saleCnt">
+							</wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmt"/>" chart-type="LineSymbols" binding="realSaleAmt">
+							</wj-flex-chart-series>
+						</wj-flex-chart>
+					</div>
+				</div>
+     		</div>
+        </div>
+
+        <div class="w50 fr">
+        	<div class="mt20 oh sb-select dkbr pd10">
+        		<!-- 파이 차트 샘플 -->
+				<div ng-controller="posDayPeriodPieChartCtrl">
+					<div>
+						<wj-flex-pie
+							id="posDayPeriodPieChartCtrl"
+							class="custom-flex-pie-chart"
+							binding-name = "storeNmPosNo"
+							binding = "realSaleAmt"
+							is-animated = "True"
+							selection-mode="Point"
+							selected-item-position="3"
+							selected-item-offset="0.1"
+							inner-radius="0.5"
+							control="posDayPeriodPieChart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							>
+						</wj-flex-pie>
+					</div>
+				</div>
+        	</div>
         </div>
     </div>
     <%-- //wj grid end --%>

@@ -28,7 +28,12 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   $scope.barcdSelectStoreShow = function () {
     $scope._broadcast('barcdSelectStoreCtrl');
   };
-
+  
+  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  $scope._broadcast("chkProdClassDisplay");
+  }
+  
 }]);
 
 
@@ -77,7 +82,16 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.bottomLeftCells.setCellData(0, 0, '합계');
   };
 
+  $scope.$on("chkProdClassDisplay", function (event) {
+	  var columns = $scope.flex.columns;
 
+	  for(var i=0; i<columns.length; i++){
+		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+		  }
+	  }
+  });
+  
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("barcdMainCtrl", function (event, data) {
     $scope.searchBarcdList(true);
@@ -105,7 +119,6 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.barcdCd	 = $scope.searchBarCd;
     params.prodNm    = $scope.searchProdNm;
     params.orgnFg	 = $scope.orgnFg;
-    console.log("fff :: "+params.orgnFg);
     
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

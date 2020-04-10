@@ -1,5 +1,9 @@
 package kr.co.solbipos.base.store.tablelayout.service;
 
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import kr.co.common.data.structure.Result;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
@@ -35,6 +39,8 @@ public interface TableLayoutService {
      * @return Result
      */
     Result setTableLayout(SessionInfoVO sessionInfoVO, String xml);
+
+    String uploadFile(String uploadPath, String storeCd, String originalName, byte[] fileData) throws IOException;
 
 
 }

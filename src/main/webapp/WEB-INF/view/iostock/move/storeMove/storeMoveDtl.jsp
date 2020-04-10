@@ -153,7 +153,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitFg"/>" binding="poUnitFgNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -168,6 +168,7 @@
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"  visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

@@ -105,9 +105,9 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="empday.storeNm"/>" 			binding="storeNm" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 

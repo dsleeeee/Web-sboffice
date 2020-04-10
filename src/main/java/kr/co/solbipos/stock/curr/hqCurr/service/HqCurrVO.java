@@ -72,6 +72,10 @@ public class HqCurrVO extends PageVO {
     private String weightFg;
     /** 안전재고구분 */
     private String safeStockFg;
+    /** 로그인 권한(본사:HQ / 매장:STORE) */
+    private String orgnFg;
+    /** 매장코드 */
+    private String storeCd;
 
     /**
      * @return the hqOfficeCd
@@ -534,4 +538,20 @@ public class HqCurrVO extends PageVO {
     public void setSafeStockFg(String safeStockFg) {
         this.safeStockFg = safeStockFg;
     }
+
+	public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	public String getStoreCd() {
+		return storeCd;
+	}
+
+	public void setStoreCd(String storeCd) {
+		this.storeCd = storeCd;
+	}
 }

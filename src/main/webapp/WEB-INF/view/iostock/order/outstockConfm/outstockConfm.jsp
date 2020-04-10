@@ -99,12 +99,12 @@
       <%-- 매장코드 --%>
       <th><s:message code="outstockConfm.storeCd"/></th>
       <td>
-        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" />
+        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/>
       </td>
       <%-- 매장명 --%>
       <th><s:message code="outstockConfm.storeNm"/></th>
       <td>
-        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" />
+        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
     </tbody>

@@ -12,21 +12,22 @@
     -->
     <select id="getVolmErrList" parameterType="volmErrVO" resultType="DefaultMap">
         /* USE : VolmErrMapper.getVolmErrList */
-        <![CDATA[
         SELECT   tpsie.SLIP_NO, tpsie.SLIP_FG, tpsie.PROC_FG, tpsie.STORE_CD, tms.STORE_NM
         ,        tpsie.OUT_DATE, tpsie.IN_DATE, tpsie.NEW_SLIP_NO
-        ,        tpsie.OUT_UNIT_QTY*tpsie.SLIP_FG AS OUT_UNIT_QTY
-        ,        tpsie.OUT_ETC_QTY*tpsie.SLIP_FG  AS OUT_ETC_QTY
-        ,        tpsie.OUT_TOT_QTY*tpsie.SLIP_FG  AS OUT_TOT_QTY
-        ,        tpsie.IN_UNIT_QTY*tpsie.SLIP_FG  AS IN_UNIT_QTY
-        ,        tpsie.IN_ETC_QTY*tpsie.SLIP_FG   AS IN_ETC_QTY
-        ,        tpsie.IN_TOT_QTY*tpsie.SLIP_FG   AS IN_TOT_QTY
+        ,        tpsie.OUT_UNIT_QTY	* tpsie.SLIP_FG		AS OUT_UNIT_QTY
+        ,        tpsie.OUT_ETC_QTY	* tpsie.SLIP_FG  	AS OUT_ETC_QTY
+        ,        tpsie.OUT_TOT_QTY	* tpsie.SLIP_FG  	AS OUT_TOT_QTY
+        ,        tpsie.IN_UNIT_QTY	* tpsie.SLIP_FG  	AS IN_UNIT_QTY
+        ,        tpsie.IN_ETC_QTY	* tpsie.SLIP_FG   	AS IN_ETC_QTY
+        ,        tpsie.IN_TOT_QTY	* tpsie.SLIP_FG   	AS IN_TOT_QTY
         ,        tpsie.REMARK
         FROM     TB_PO_STORE_INSTOCK_ERROR tpsie
         ,        TB_MS_STORE tms
-        WHERE    tpsie.HQ_OFFICE_CD =   #{hqOfficeCd}
-        AND      tms.STORE_CD       =   tpsie.STORE_CD
-        ]]>
+        WHERE    tpsie.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+        AND 	 tpsie.STORE_CD		= #{storeCd}
+		</if>
+        AND      tms.STORE_CD       = tpsie.STORE_CD
         <if test='dateFg == "out"'>
             AND tpsie.OUT_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -59,19 +60,19 @@
         <![CDATA[
         SELECT   tpsied.SEQ, tpsied.PROD_CD, thp.PROD_NM, tpsied.DSTB_FG, tpsied.ERR_FG
         ,        tpsied.PO_UNIT_FG, tpsied.PO_UNIT_QTY
-        ,        tpsied.OUT_SPLY_UPRC                AS OUT_SPLY_UPRC
-        ,        tpsied.OUT_UNIT_QTY*tpsied.SLIP_FG  AS OUT_UNIT_QTY
-        ,        tpsied.OUT_ETC_QTY*tpsied.SLIP_FG   AS OUT_ETC_QTY
-        ,        tpsied.OUT_TOT_QTY *tpsied.SLIP_FG  AS OUT_TOT_QTY
-        ,        tpsied.OUT_AMT *tpsied.SLIP_FG      AS OUT_AMT
-        ,        tpsied.IN_SPLY_UPRC                 AS IN_SPLY_UPRC
-        ,        tpsied.IN_UNIT_QTY *tpsied.SLIP_FG  AS IN_UNIT_QTY
-        ,        tpsied.IN_ETC_QTY *tpsied.SLIP_FG   AS IN_ETC_QTY
-        ,        tpsied.IN_TOT_QTY  *tpsied.SLIP_FG  AS IN_TOT_QTY
-        ,        tpsied.IN_AMT  *tpsied.SLIP_FG      AS IN_AMT
+        ,        tpsied.OUT_SPLY_UPRC                	AS OUT_SPLY_UPRC
+        ,        tpsied.OUT_UNIT_QTY* tpsied.SLIP_FG  	AS OUT_UNIT_QTY
+        ,        tpsied.OUT_ETC_QTY	* tpsied.SLIP_FG   	AS OUT_ETC_QTY
+        ,        tpsied.OUT_TOT_QTY	* tpsied.SLIP_FG  	AS OUT_TOT_QTY
+        ,        tpsied.OUT_AMT 	* tpsied.SLIP_FG    AS OUT_AMT
+        ,        tpsied.IN_SPLY_UPRC                 	AS IN_SPLY_UPRC
+        ,        tpsied.IN_UNIT_QTY * tpsied.SLIP_FG  	AS IN_UNIT_QTY
+        ,        tpsied.IN_ETC_QTY 	* tpsied.SLIP_FG   	AS IN_ETC_QTY
+        ,        tpsied.IN_TOT_QTY  * tpsied.SLIP_FG  	AS IN_TOT_QTY
+        ,        tpsied.IN_AMT  	* tpsied.SLIP_FG	AS IN_AMT
         ,        tpsied.REMARK
-        FROM     TB_PO_STORE_INSTOCK_ERROR_DTL tpsied
-        ,        TB_HQ_PRODUCT thp
+        FROM     TB_PO_STORE_INSTOCK_ERROR_DTL 	tpsied
+        ,        TB_HQ_PRODUCT					thp
         WHERE    tpsied.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND      tpsied.SLIP_NO       =   #{slipNo}
         AND      thp.HQ_OFFICE_CD     =   tpsied.HQ_OFFICE_CD
@@ -247,7 +248,7 @@
         ,       MOD_ID
         )
         SELECT  #{hqOfficeCd}   ,       #{newSlipNo }   ,       SEQ           ,       #{storeCd}
-        ,       SLIP_FG         ,       '1'             ,       DSTB_FG
+        ,       SLIP_FG         ,       '10'            ,       DSTB_FG
         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD       ,       PO_UNIT_FG      ,       PO_UNIT_QTY
         ,       REMARK          ,       #{outDate}
         ,       OUT_SPLY_UPRC
@@ -322,6 +323,118 @@
                 ) tphsod
         WHERE   tpsie.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tpsie.SLIP_NO      =   #{slipNo}
+    </insert>
+
+
+
+    <insert id="insertVolmErrHqAdjustDtl" parameterType="volmErrVO">
+        INSERT INTO TB_ST_HQ_ADJUST_DTL
+        (
+            HQ_OFFICE_CD,
+            ADJ_DATE,
+            SEQ_NO,
+            HQ_BRAND_CD,
+            PROD_CD,
+            COST_UPRC,
+            PO_UNIT_QTY,
+            CURR_QTY,
+            ADJ_QTY,
+            ADJ_AMT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT	A.HQ_OFFICE_CD,
+	            TO_CHAR(SYSDATE,'YYYYMMDD'),
+	            (
+					SELECT  NVL(MAX(SEQ_NO), 0) + 1
+			        FROM    TB_ST_HQ_ADJUST_DTL
+			        WHERE   HQ_OFFICE_CD  	= A.HQ_OFFICE_CD
+			        AND     ADJ_DATE		= TO_CHAR(SYSDATE,'YYYYMMDD')
+			        AND		PROD_CD			= A.PROD_CD
+	            ),
+				A.HQ_BRAND_CD,
+	            A.PROD_CD,
+				A.IN_SPLY_UPRC,
+				A.PO_UNIT_QTY,
+	            (
+					SELECT  CURR_QTY
+					FROM    TB_ST_HQ_STOCK_CUR
+					WHERE   HQ_OFFICE_CD	= A.HQ_OFFICE_CD
+					AND     STORAGE_CD		= '999'				<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
+					AND     PROD_CD			= A.PROD_CD
+	            ),
+	            A.IN_TOT_QTY - A.OUT_TOT_QTY,					<!-- 본사기준의 재고에 반영할 것이므로 '입고 - 출고' (ex - 본사출고:10 & 매장입고:5 인 경우, 본사재고에 '-5'를 해줘야 함) -->
+	            A.IN_AMT	 - A.OUT_AMT,
+	            A.REMARK,
+	            #{regDt},
+	            #{regId},
+	            #{modDt},
+	            #{modId}
+		FROM	TB_PO_STORE_INSTOCK_ERROR_DTL	A
+		WHERE   A.HQ_OFFICE_CD	= #{hqOfficeCd}
+		AND		A.SLIP_NO		= #{slipNo}
+		AND		A.SEQ           = #{seq}
+    </insert>
+
+    <insert id="insertVolmErrHqAdjustHd" parameterType="volmErrVO">
+        INSERT INTO TB_ST_HQ_ADJUST
+        (
+            HQ_OFFICE_CD,
+            STORAGE_CD,
+            ADJ_DATE,
+            SEQ_NO,
+            ADJ_TITLE,
+            PROC_FG,
+            ADJ_FG,
+            DTL_CNT,
+            TOT_ADJ_AMT,
+            CONFM_DATE,
+			CONFM_ID,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT  A.HQ_OFFICE_CD,
+                '999',														<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
+                A.ADJ_DATE,
+				(
+					SELECT	NVL(MAX(SEQ_NO), 0) + 1
+					FROM	TB_ST_HQ_ADJUST
+					WHERE	HQ_OFFICE_CD	= #{hqOfficeCd}
+					AND     STORAGE_CD		= '999'							<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
+					AND		ADJ_DATE		= TO_CHAR(SYSDATE,'YYYYMMDD')
+				),
+                #{hdRemark},
+                '0',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
+                '1',						<!-- ADJ_FG - 조정구분 (0:조정 1:물량오류) -->
+                COUNT(A.PROD_CD),
+                SUM  (A.ADJ_AMT),
+                TO_CHAR(SYSDATE,'YYYYMMDD'),<!-- CONFM_DATE -->
+                #{regId},					<!-- CONFM_ID   -->
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+        FROM    TB_ST_HQ_ADJUST_DTL A
+        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     A.ADJ_DATE      = TO_CHAR(SYSDATE,'YYYYMMDD')
+        GROUP BY
+                A.HQ_OFFICE_CD,
+                '999',
+                A.ADJ_DATE,
+                #{hdRemark},
+                '0',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
+                '1',						<!-- ADJ_FG - 조정구분 (0:조정 1:물량오류) -->
+                TO_CHAR(SYSDATE,'YYYYMMDD'),<!-- CONFM_DATE -->
+                #{regId},                	<!-- CONFM_ID   -->
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
     </insert>
 
 

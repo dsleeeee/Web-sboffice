@@ -107,7 +107,7 @@
 	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 	                                      </if>
 	                                      <if test='arrStoreCd != null and arrStoreCd != ""'>
-	                                                  AND TMS.STORE_CD IN
+	                                                  AND TSDP.STORE_CD IN
 	                                                          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 	                                                                #{item}
 	                                                          </foreach>

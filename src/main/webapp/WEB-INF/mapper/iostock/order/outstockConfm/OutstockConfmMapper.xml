@@ -144,6 +144,7 @@
     -->
     <select id="getOutstockConfmDtlList" parameterType="outstockConfmVO" resultType="DefaultMap">
         /* USE : OutstockConfmMapper.getOutstockConfmDtlList */
+        <!-- 
         <![CDATA[
         SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
@@ -191,6 +192,212 @@
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         ]]>
+         -->
+		SELECT  A.SLIP_NO
+		,		A.SLIP_FG
+		,		A.PROD_CD
+		,		A.PROD_NM
+		,		A.SEQ
+		,		A.PO_UNIT_FG
+		,		A.PO_UNIT_QTY
+		,		A.PO_UNIT_ALLOW_FG
+		,		A.VAT_FG01
+		,		A.ORDER_SPLY_UPRC
+		,		A.ORDER_UNIT_QTY
+		,		A.ORDER_ETC_QTY
+		,		A.ORDER_AMT
+		,		A.ORDER_VAT
+		,		A.ORDER_TOT
+		,		A.MGR_SPLY_UPRC
+		,		A.MGR_UNIT_QTY
+		,		A.MGR_ETC_QTY
+		,		A.MGR_AMT
+		,		A.MGR_VAT
+		,		A.MGR_TOT
+		,		A.OUT_SPLY_UPRC
+		,		A.OUT_UNIT_QTY
+		,		A.OUT_ETC_QTY
+		,		A.OUT_TOT_QTY
+		,		A.OUT_AMT
+		,		A.OUT_VAT
+		,		A.OUT_TOT
+		,		A.IN_SPLY_UPRC
+		,		A.IN_UNIT_QTY
+		,		A.IN_ETC_QTY
+		,		A.IN_AMT
+		,		A.IN_VAT
+		,		A.IN_TOT
+		,		A.REMARK
+		,		A.ENVST0011
+		,		A.BARCD_CD
+		,		LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,		LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
+		FROM	(
+				SELECT	A.SLIP_NO
+				,		A.SLIP_FG
+				,		A.PROD_CD
+				,		A.PROD_NM
+				,		A.SEQ
+				,		A.PO_UNIT_FG
+				,		A.PO_UNIT_QTY
+				,		A.PO_UNIT_ALLOW_FG
+				,		A.VAT_FG01
+				,		A.ORDER_SPLY_UPRC
+				,		A.ORDER_UNIT_QTY
+				,		A.ORDER_ETC_QTY
+				,		A.ORDER_AMT
+				,		A.ORDER_VAT
+				,		A.ORDER_TOT
+				,		A.MGR_SPLY_UPRC
+				,		A.MGR_UNIT_QTY
+				,		A.MGR_ETC_QTY
+				,		A.MGR_AMT
+				,		A.MGR_VAT
+				,		A.MGR_TOT
+				,		A.OUT_SPLY_UPRC
+				,		A.OUT_UNIT_QTY
+				,		A.OUT_ETC_QTY
+				,		A.OUT_TOT_QTY
+				,		A.OUT_AMT
+				,		A.OUT_VAT
+				,		A.OUT_TOT
+				,		A.IN_SPLY_UPRC
+				,		A.IN_UNIT_QTY
+				,		A.IN_ETC_QTY
+				,		A.IN_AMT
+				,		A.IN_VAT
+				,		A.IN_TOT
+				,		A.REMARK
+				,		A.ENVST0011
+				,		A.BARCD_CD
+				,		B.PROD_CD       AS  A_PROD_CD
+				,		B.STORAGE_CD    AS  A_STORAGE_CD
+				,		B.STORAGE_NM    AS  A_STORAGE_NM
+				,		B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY
+				,		B.IN_ETC_QTY    AS  A_IN_ETC_QTY
+				,		B.IN_TOT_QTY    AS  A_IN_TOT_QTY
+				,		B.IN_AMT        AS  A_IN_AMT
+				,		B.IN_VAT        AS  A_IN_VAT
+				,		B.IN_TOT        AS  A_IN_TOT
+				FROM	(
+				        SELECT   tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
+				        ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
+				        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
+				        ,        tphsod.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC
+				        ,        TO_NUMBER(DECODE(tphsod.ORDER_UNIT_QTY,0,NULL,tphsod.ORDER_UNIT_QTY*tphsod.SLIP_FG)) AS ORDER_UNIT_QTY
+				        ,        TO_NUMBER(DECODE(tphsod.ORDER_ETC_QTY ,0,NULL,tphsod.ORDER_ETC_QTY *tphsod.SLIP_FG)) AS ORDER_ETC_QTY
+				        ,        tphsod.ORDER_AMT *tphsod.SLIP_FG                                                     AS ORDER_AMT
+				        ,        tphsod.ORDER_VAT *tphsod.SLIP_FG                                                     AS ORDER_VAT
+				        ,        tphsod.ORDER_TOT *tphsod.SLIP_FG                                                     AS ORDER_TOT
+				        ,        tphsod.MGR_SPLY_UPRC                                                                 AS MGR_SPLY_UPRC
+				        ,        TO_NUMBER(DECODE(tphsod.MGR_UNIT_QTY,0,NULL,tphsod.MGR_UNIT_QTY*tphsod.SLIP_FG))     AS MGR_UNIT_QTY
+				        ,        TO_NUMBER(DECODE(tphsod.MGR_ETC_QTY ,0,NULL,tphsod.MGR_ETC_QTY *tphsod.SLIP_FG))     AS MGR_ETC_QTY
+				        ,        tphsod.MGR_AMT *tphsod.SLIP_FG                                                       AS MGR_AMT
+				        ,        tphsod.MGR_VAT *tphsod.SLIP_FG                                                       AS MGR_VAT
+				        ,        tphsod.MGR_TOT *tphsod.SLIP_FG                                                       AS MGR_TOT
+				        ,        tphsod.OUT_SPLY_UPRC                                                                 AS OUT_SPLY_UPRC
+				        ,        TO_NUMBER(DECODE(tphsod.OUT_UNIT_QTY,0,NULL,tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG))     AS OUT_UNIT_QTY
+				        ,        TO_NUMBER(DECODE(tphsod.OUT_ETC_QTY ,0,NULL,tphsod.OUT_ETC_QTY *tphsod.SLIP_FG))     AS OUT_ETC_QTY
+				        ,        TO_NUMBER(DECODE(tphsod.OUT_TOT_QTY ,0,NULL,tphsod.OUT_TOT_QTY *tphsod.SLIP_FG))     AS OUT_TOT_QTY
+				        ,        tphsod.OUT_AMT *tphsod.SLIP_FG                                                       AS OUT_AMT
+				        ,        tphsod.OUT_VAT *tphsod.SLIP_FG                                                       AS OUT_VAT
+				        ,        tphsod.OUT_TOT *tphsod.SLIP_FG                                                       AS OUT_TOT
+				        ,        tphsod.IN_SPLY_UPRC                                                                  AS IN_SPLY_UPRC
+				        ,        TO_NUMBER(DECODE(tphsod.IN_UNIT_QTY ,0,NULL,tphsod.IN_UNIT_QTY*tphsod.SLIP_FG))      AS IN_UNIT_QTY
+				        ,        TO_NUMBER(DECODE(tphsod.IN_ETC_QTY  ,0,NULL,tphsod.IN_ETC_QTY *tphsod.SLIP_FG))      AS IN_ETC_QTY
+				        ,        tphsod.IN_AMT  *tphsod.SLIP_FG                                                       AS IN_AMT
+				        ,        tphsod.IN_VAT  *tphsod.SLIP_FG                                                       AS IN_VAT
+				        ,        tphsod.IN_TOT  *tphsod.SLIP_FG                                                       AS IN_TOT
+				        ,        tphsod.REMARK
+				        ,        the.ENVST_VAL AS ENVST0011
+				        ,        thpb.BARCD_CD
+				        FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+				        ,        TB_HQ_PRODUCT thp
+				        ,        TB_HQ_PRODUCT_BARCD thpb
+				        ,        TB_HQ_ENVST the
+				        WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
+				        AND      tphsod.SLIP_NO         =   #{slipNo}
+				        AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
+				        AND      thp.PROD_CD            =   tphsod.PROD_CD
+				        AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
+				        AND      thpb.PROD_CD       (+) =   tphsod.PROD_CD
+				        AND      the.HQ_OFFICE_CD       =   #{hqOfficeCd}
+				        AND      the.ENVST_CD           =   '0011'
+				        ORDER
+				        BY       tphsod.PROD_CD, tphsod.SEQ
+						)	A
+						LEFT OUTER JOIN
+						(
+							SELECT	X.HQ_OFFICE_CD
+							,		X.STORAGE_CD
+							,		X.STORAGE_NM
+							,		Y.PROD_CD
+							,		#{slipNo}					AS 	SLIP_NO
+							,		NVL(Y.SLIP_FG,1)			AS	SLIP_FG
+							,		NVL(Y.IN_UNIT_QTY,	0)		AS	IN_UNIT_QTY
+							,		NVL(Y.IN_ETC_QTY,	0)		AS	IN_ETC_QTY
+							,		NVL(Y.IN_TOT_QTY,	0)		AS	IN_TOT_QTY
+							,		NVL(Y.IN_AMT,	0)			AS	IN_AMT
+							,		NVL(Y.IN_VAT,	0)			AS	IN_VAT
+							,		NVL(Y.IN_TOT,	0)			AS	IN_TOT
+							FROM   TB_HQ_STORAGE                     X
+							LEFT
+			                OUTER
+			                JOIN    TB_PO_HQ_STORE_OUTSTOCK_PROD          Y
+			                ON      X.HQ_OFFICE_CD  =   Y.HQ_OFFICE_CD
+			                AND     X.STORAGE_CD    =    Y.STORAGE_CD
+							AND     Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
+			                AND     Y.SLIP_NO       =	#{slipNo}
+						)	B
+						ON		A.HQ_OFFICE_CD  =	B.HQ_OFFICE_CD
+					    AND     A.SLIP_NO       = 	B.SLIP_NO
+					    AND     A.PROD_CD       = 	(CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+				)	A
+		GROUP
+		BY      A.SLIP_NO
+		,      A.SLIP_FG
+		,      A.PROD_CD
+		,      A.PROD_NM
+		,      A.SEQ
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.PO_UNIT_ALLOW_FG
+		,      A.VAT_FG01
+		,      A.ORDER_SPLY_UPRC
+		,      A.ORDER_UNIT_QTY
+		,      A.ORDER_ETC_QTY
+		,      A.ORDER_AMT
+		,      A.ORDER_VAT
+		,      A.ORDER_TOT
+		,      A.MGR_SPLY_UPRC
+		,      A.MGR_UNIT_QTY
+		,      A.MGR_ETC_QTY
+		,      A.MGR_AMT
+		,      A.MGR_VAT
+		,      A.MGR_TOT
+		,      A.OUT_SPLY_UPRC
+		,      A.OUT_UNIT_QTY
+		,      A.OUT_ETC_QTY
+		,      A.OUT_TOT_QTY
+		,      A.OUT_AMT
+		,      A.OUT_VAT
+		,      A.OUT_TOT
+		,      A.IN_SPLY_UPRC
+		,      A.IN_UNIT_QTY
+		,      A.IN_ETC_QTY
+		,      A.IN_AMT
+		,      A.IN_VAT
+		,      A.IN_TOT
+		,      A.REMARK
+		,      A.ENVST0011
+		,      A.BARCD_CD  
+         
     </select>
 
     <!-- 출고확정 - 출고확정 DTL 수정 -->
@@ -341,4 +548,70 @@
         WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     SLIP_NO       =   #{slipNo}
     </update>
+    
+    <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
+
+	        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+	        PARAM    : instockConfmProdVO
+	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
+    -->
+	<update id="mergeInstockConfmProd" parameterType="outstockConfmVO">
+	    MERGE INTO TB_PO_HQ_STORE_OUTSTOCK_PROD	A
+	    USING DUAL ON           (
+	                                    A.HQ_OFFICE_CD	= #{hqOfficeCd}
+	                                    AND A.SLIP_NO		= #{slipNo}
+	                                    AND A.PROD_CD  		= #{prodCd}
+	                                    AND A.STORAGE_CD  	= #{storageCd}
+	                                    AND A.OCCR_FG		= #{occrFg}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = #{confmYn},
+	    									A.IN_UNIT_QTY	= #{inUnitQty},
+											A.IN_ETC_QTY	= #{inEtcQty},
+											A.IN_TOT_QTY	= #{inTotQty},
+											A.IN_AMT		= #{inAmt},
+											A.IN_VAT		= #{inVat},
+											A.IN_TOT		= #{inTot},
+	                                        A.MOD_DT    	= #{modDt},
+	                                        A.MOD_ID    	= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+											A.HQ_OFFICE_CD,
+											A.SLIP_NO,
+											A.PROD_CD,
+											A.STORAGE_CD,
+											A.OCCR_FG,
+											A.STORE_CD,
+											A.SLIP_FG,
+											A.CONFM_YN,
+											A.IN_UNIT_QTY,
+											A.IN_ETC_QTY,
+											A.IN_TOT_QTY,
+											A.IN_AMT,
+											A.IN_VAT,
+											A.IN_TOT,
+											A.REG_DT,
+											A.REG_ID,
+											A.MOD_DT,
+											A.MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{hqOfficeCd},
+											#{slipNo},
+											#{prodCd},
+											#{storageCd},
+											#{occrFg},		<!-- 발생구분(30:매장입고) -->
+											#{storeCd},
+											#{slipFg},
+											#{confmYn},
+											#{inUnitQty},
+											#{inEtcQty},
+											#{inTotQty},
+											#{inAmt},
+											#{inVat},
+											#{inTot},
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</update>
 </mapper>

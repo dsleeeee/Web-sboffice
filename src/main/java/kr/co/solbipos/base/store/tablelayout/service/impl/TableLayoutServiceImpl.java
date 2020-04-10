@@ -25,11 +25,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
@@ -52,9 +62,9 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("tableLayoutService")
 @Transactional
 public class TableLayoutServiceImpl implements TableLayoutService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     MessageService messageService;
 
@@ -67,7 +77,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
     @Override
     public String selectTableLayoutByStore(SessionInfoVO sessionInfoVO) {
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TABLE_LAYOUT.getCode());
         String returnStr = attrMapper.selectXmlByStore(param);
         return returnStr;
@@ -78,8 +88,9 @@ public class TableLayoutServiceImpl implements TableLayoutService {
 
         //XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
         param.put("confgFg", ConfgFg.TABLE_LAYOUT.getCode());
+        param.put("confgSubFg", "1");
         param.put("xml", xml);
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
@@ -101,13 +112,13 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         List<TableGroupVO> tableGroupVOs = parseXML(xml);
 
         //매장의 현재 설정정보 삭제
-        mapper.deleteTableGroupByStore(sessionInfoVO.getOrgnCd());
-        mapper.deleteTableByStore(sessionInfoVO.getOrgnCd());
+        mapper.deleteTableGroupByStore(sessionInfoVO.getStoreCd());
+        mapper.deleteTableByStore(sessionInfoVO.getStoreCd());
 
         //리스트의 아이템을 DB에 Merge
         for(TableGroupVO tableGroupVO : tableGroupVOs) {
             //테이블 그룹 저장
-            tableGroupVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            tableGroupVO.setStoreCd(sessionInfoVO.getStoreCd());
             tableGroupVO.setRegId(sessionInfoVO.getUserId());
 
             if( mapper.mergeTableGroupByStore(tableGroupVO) != 1 ) {
@@ -115,7 +126,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
             }
             //테이블 저장
             for(TableVO tableVO : tableGroupVO.getTables()) {
-                tableVO.setStoreCd(sessionInfoVO.getOrgnCd());
+                tableVO.setStoreCd(sessionInfoVO.getStoreCd());
                 tableVO.setRegId(sessionInfoVO.getUserId());
                 if( mapper.mergeTableByStore(tableVO) != 1 ) {
                     throw new BizException( messageService.get("cmm.saveFail") );
@@ -169,7 +180,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                         if(styleKeyValue.length < 2) {
                             continue;
                         }
-                        //LOGGER.debug(styleKeyValue[0]);
+                        LOGGER.debug(styleKeyValue[0]);
                         switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
                             case TBL_GRP_FG:
                                 tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
@@ -177,7 +188,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                             case BG_COLOR:
                                 tableGroupVO.setBgColor(styleKeyValue[1]);
                                 break;
-                            case BG_IMG:
+                            case BG_IMG_NM:
                                 tableGroupVO.setBgImgNm(styleKeyValue[1]);
                             break;
                             default:
@@ -219,14 +230,14 @@ public class TableLayoutServiceImpl implements TableLayoutService {
             tableVO = new TableVO();
             tableVO.setStoreCd(tableGroupVO.getStoreCd());
             tableVO.setTblCd(cell.getId());
-            
+
             //swimlane으로 했을 때 테이블 번호(명)
             tableVO.setTblNm(String.valueOf(cell.getValue()));
             //swimlane 아니고 박스로 할 경우 라벨 추출
             //tableVO.setTblNm(getLabel(graph, cell));
-            
+
             tableVO.setTblGrpCd(tableGroupVO.getTblGrpCd());
-           
+
             //테이블 좌석 수 설정
             //스타일
             String styleStr = cell.getStyle();
@@ -238,25 +249,30 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                     if(styleKeyValue.length < 2) {
                         continue;
                     }
-                    switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                        case TBL_SEAT_CNT: tableVO.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
-                            break;
-                        case TBL_TYPE_FG: tableVO.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));
-                            break;
-                        default:
-                            break;
+
+                    if (TouchKeyStyle.getEnum(styleKeyValue[0]) != null) {
+                    	switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
+	                        case TBL_SEAT_CNT: tableVO.setTblSeatCnt(Long.parseLong(styleKeyValue[1]));
+	                            break;
+	                        case TBL_TYPE_FG: tableVO.setTblTypeFg(TblTypeFg.getEnum(styleKeyValue[1]));
+	                            break;
+	                        case BG_IMG: tableVO.setImgNm(styleKeyValue[1]);
+	                        	break;
+	                        default:
+	                            break;
+	                    }
                     }
                 }
             }
-            
+
             //좌표, 크기
             mxGeometry geo = cell.getGeometry();
             tableVO.setX((long)geo.getX());
             tableVO.setY((long)geo.getY());
             tableVO.setWidth((long)geo.getWidth());
             tableVO.setHeight((long)geo.getHeight());
-            
-            //TODO 원탁의 경우가 생기면 XML의 STYLE에 셋팅하고 여기서 저장 
+
+            //TODO 원탁의 경우가 생기면 XML의 STYLE에 셋팅하고 여기서 저장
             tableVO.setTblTypeFg(TblTypeFg.SQUARE);
             tableVO.setUseYn(tableGroupVO.getUseYn());
             tableVO.setRegDt(tableGroupVO.getRegDt());
@@ -283,4 +299,48 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         }
         return finalLabel;
     }
+
+    @Override
+    public String uploadFile(String uploadPath, String storeCd, String originalName, byte[] fileData) throws IOException {
+        // UUID 발급
+        UUID uuid = UUID.randomUUID();
+        // 저장할 파일명 = UUID + 원본이름
+        String savedName = uuid.toString() + "_" + originalName;
+        // 업로드할 디렉토리(날짜별 폴더) 생성
+        String savedPath = calcPath(uploadPath, storeCd);
+        // 파일 경로(기존의 업로드경로+날짜별경로), 파일명을 받아 파일 객체 생성
+        File target = new File(uploadPath + savedPath, savedName);
+        // 임시 디렉토리에 업로드된 파일을 지정된 디렉토리로 복사
+        FileCopyUtils.copy(fileData, target);
+
+        return savedName;
+    }
+
+    // 날짜별 디렉토리 추출
+    private static String calcPath(String uploadPath, String storeCd) {
+        // File.separator : 디렉토리 구분자(\\)
+        // 매장코드
+        String storePath = File.separator + storeCd;
+        // 디렉토리 생성 메서드 호출
+        makeDir(uploadPath, storePath);
+        return storePath;
+    }
+
+    // 디렉토리 생성
+    private static void makeDir(String uploadPath, String... paths) {
+        // 디렉토리가 존재하면
+        if (new File(paths[paths.length - 1]).exists()){
+            return;
+        }
+        // 디렉토리가 존재하지 않으면
+        for (String path : paths) {
+            //
+            File dirPath = new File(uploadPath + path);
+            // 디렉토리가 존재하지 않으면
+            if (!dirPath.exists()) {
+                dirPath.mkdir(); //디렉토리 생성
+            }
+        }
+    }
+
 }

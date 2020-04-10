@@ -29,7 +29,7 @@
        	<%-- 조회일자 --%>
       	<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="3">
+        	<td>
           	<div class="sb-select">
           	    <span class="txtIn"><input id="srchRankStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -42,6 +42,16 @@
             	</span>
           	</div>
         	</td>
+        	<%-- 조회옵션 --%>
+			<th><s:message code="periodIostock.srchOption" /></th>
+			<td>
+	          	<span class="chk ml10">
+					<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+	              	<label for="chkDt">
+                		<s:message code="periodIostock.prodClassDisplay" />
+              		</label>
+            	</span>
+			</td>
        	</tr>
       	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <tr>
@@ -95,9 +105,9 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodNm"/>"			binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>

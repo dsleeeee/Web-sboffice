@@ -21,6 +21,12 @@ app.controller('vendrOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._queryCombo("combo,map", "srchProcFg", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
     // $scope._queryCombo("map", "procFgMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var url = '/iostock/vendr/vendrOrder/vendrOrderDtl/getOrderTypeCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, "orderTypeMap", url, comboParams, "A");
@@ -107,7 +113,10 @@ app.controller('vendrOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     if (url) {
       comboUrl = url;
     }
-
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

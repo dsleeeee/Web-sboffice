@@ -104,14 +104,14 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>" binding="slipFg" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>"  binding="reqDate" 	width="100" align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>"   binding="slipFg" 	width="70" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>"   binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtlCnt"/>"   binding="dtlCnt" 	width="70" 	align="right" 	is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderAmt"/>" binding="orderAmt" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderVat"/>" binding="orderVat" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderTot"/>" binding="orderTot" width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.remark"/>"   binding="remark" 	width="*" 	align="left" 	is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

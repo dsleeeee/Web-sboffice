@@ -92,7 +92,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px;">
+        <div class="wj-gridWrap" style="height: 280px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -100,31 +100,58 @@
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            frozen-columns		="6">	<%-- allowMerging		="Cells" --%>
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.slipNo"/>" binding="slipNo" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.slipFg"/>" binding="slipFg" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.seq"/>" binding="seq" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.barcdCd"/>" binding="barcdCd" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="true" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outUnitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outEtcQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inUnitQty"/>" binding="inUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inEtcQty"/>" binding="inEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inTotQty"/>" binding="inTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.penaltyAmt"/>" binding="penaltyAmt" width="70" align="right" is-read-only="false" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.slipNo"/>" 	  binding="slipNo" 		width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.slipFg"/>" 	  binding="slipFg" 		width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.seq"/>" 		  binding="seq" 		width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.storeCd"/>" 	  binding="storeCd" 	width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodCd"/>" 	  binding="prodCd" 		width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.prodNm"/>" 	  binding="prodNm" 		width="100" align="left" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.barcdCd"/>" 	  binding="barcdCd" 	width="100" align="left" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitFg"/>" 	  binding="poUnitFg" 	width="60" 	align="center" 	is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.poUnitQty"/>"   binding="poUnitQty" 	width="60" 	align="right" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="60" 	align="right" 	is-read-only="true" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
+            
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"  	/>"   binding="outUnitQty"  width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"		/>"   binding="outEtcQty"   width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.unitQty"   	/>"   binding="inUnitQty"   width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.etcQty"		/>"   binding="inEtcQty"    width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"  max-length=8    ></wj-flex-grid-column>
+
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTotQty"    />"   binding="inTotQty"    width="0"   align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inAmt"       />"   binding="inAmt"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inVat"       />"   binding="inVat"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.inTot"       />"   binding="inTot"       width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0" aggregate="Sum"                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.remark"      />"   binding="remark"      width="100" align="left"    is-read-only="false"                                                    max-length=200  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="instockConfm.dtl.vatFg"       />"   binding="vatFg01"     width="70"  align="right"   is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+
+			<wj-flex-grid-column header=""                                                    binding="arrStorageCd"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                    binding="arrStorageNm"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+
+			<wj-flex-grid-column header=""                                                    binding="arrInUnitQty"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                    binding="arrInEtcQty"   width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                    binding="arrInTotQty"   width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+
+			<wj-flex-grid-column header=""                                                    binding="arrInAmt"      width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                    binding="arrInVat"      width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""                                                    binding="arrInTot"      width="200" align="left"   	is-read-only="true"     visible="false"    												></wj-flex-grid-column>
+            
+            
+            
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outUnitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.outEtcQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inUnitQty"/>" binding="inUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inEtcQty"/>" binding="inEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inTotQty"/>" binding="inTotQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.penaltyAmt"/>" binding="penaltyAmt" width="70" align="right" is-read-only="false" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column> --%>
+<%--             <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column> --%>
 
           </wj-flex-grid>
         </div>

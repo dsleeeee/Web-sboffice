@@ -41,9 +41,9 @@
             AND tpsm.DLVR_FG = #{dlvrFg}
         </if>
         <if test='procFg != null and procFg != ""'>
-            AND tphso.PROC_FG = #{procFg}
+            AND tpsm.PROC_FG = #{procFg}
         </if>
-        <if test='inStoreCd != null and inStoreCd != ""'>
+        <if test='inStoreCd != ""'>
             AND (tmsout.STORE_CD = #{inStoreCd} OR tmsin.STORE_CD = #{inStoreCd})
         </if>
         <![CDATA[
@@ -86,25 +86,27 @@
 
     <!-- 매장이동관리 - 매장이동관리 상세 리스트 조회 -->
     <!--
-        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST, TB_CM_NMCODE
         PARAM    : storeMoveVO
         COMMENTS : 매장이동관리 - 매장이동관리 상세 리스트를 조회한다.
     -->
     <select id="getStoreMoveDtlList" parameterType="storeMoveVO" resultType="DefaultMap">
         /* USE : StoreMoveMapper.getStoreMoveDtlList */
         <![CDATA[
-        SELECT  tpsmd.PROD_CD, thp.PROD_NM, thp.PO_UNIT_FG, thp.PO_UNIT_QTY
+        SELECT  tpsmd.PROD_CD, thp.PROD_NM
+        ,       thp.PO_UNIT_FG
+        ,       (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = thp.PO_UNIT_FG) AS PO_UNIT_FG_NM, thp.PO_UNIT_QTY
         ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsmd.OUT_UNIT_QTY)) AS OUT_UNIT_QTY
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(tpsmd.OUT_ETC_QTY))  AS OUT_ETC_QTY
+        ,       TO_NUMBER(tpsmd.OUT_UNIT_QTY) AS OUT_UNIT_QTY
+        ,       TO_NUMBER(tpsmd.OUT_ETC_QTY)  AS OUT_ETC_QTY
         ,       tpsmd.OUT_TOT_QTY
         ,       tpsmd.OUT_TOT_QTY AS PREV_OUT_TOT_QTY
         ,       tpsmd.OUT_SPLY_UPRC
         ,       tpsmd.IN_SPLY_UPRC
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC ))) AS SPLY_UPRC
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_AMT       , tpsmd.IN_AMT       ))) AS AMT
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_VAT       , tpsmd.IN_VAT       ))) AS VAT
-        ,       TO_NUMBER(SF_ZERO_TO_NULL(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_TOT       , tpsmd.IN_TOT       ))) AS TOT
+        ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC )) AS SPLY_UPRC
+        ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_AMT       , tpsmd.IN_AMT       )) AS AMT
+        ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_VAT       , tpsmd.IN_VAT       )) AS VAT
+        ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_TOT       , tpsmd.IN_TOT       )) AS TOT
         ,       tmseout.ENVST_VAL AS OUT_ENVST0011
         ,       tmsein.ENVST_VAL  AS IN_ENVST0011
         FROM    TB_PO_STORE_MOVE tpsm
@@ -128,7 +130,7 @@
 
     <!-- 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회 -->
     <!--
-        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST, TB_CM_NMCODE
         PARAM    : storeMoveVO
         COMMENTS : 매장이동관리 - 매장이동관리 신규등록 상품 리스트를 조회한다.
     -->
@@ -137,7 +139,8 @@
         <![CDATA[
         SELECT   tmpout.PROD_CD, tmpout.PROD_NM
         ,        tmpout.VAT_FG AS VAT_FG01
-        ,        tmpout.PO_UNIT_FG, tmpout.PO_UNIT_QTY
+        ,        tmpout.PO_UNIT_FG
+        ,        (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = tmpout.PO_UNIT_FG) AS PO_UNIT_FG_NM, tmpout.PO_UNIT_QTY
         ,        tmpout.PO_PROD_FG
         ,        tmpout.SPLY_UPRC AS OUT_SPLY_UPRC, tmseout.ENVST_VAL AS OUT_ENVST0011
         ,        tmpin.SPLY_UPRC AS IN_SPLY_UPRC, tmsein.ENVST_VAL AS IN_ENVST0011

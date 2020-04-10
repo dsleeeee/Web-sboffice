@@ -1310,7 +1310,7 @@
                 )
                 SELECT  #{hqOfficeCd}
                 ,       #{slipNo}
-                ,       '000' AS STORAGE_CD
+                ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
                 ,       #{slipFg}
@@ -1405,7 +1405,7 @@
                 )
                 SELECT  #{storeCd}
                 ,       #{slipNo}
-                ,       '000' AS STORAGE_CD
+                ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
                 ,       #{slipFg}

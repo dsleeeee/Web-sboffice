@@ -159,7 +159,7 @@ app.controller('storeMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
       item.inStoreCd  = $scope.inStoreCd;
       item.dlvrFg     = $scope.regDlvrFg;
       item.remark     = $scope.hdRemark;
-      item.storageCd  = "001";
+      item.storageCd  = "999";
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg  = confirmFg;
 

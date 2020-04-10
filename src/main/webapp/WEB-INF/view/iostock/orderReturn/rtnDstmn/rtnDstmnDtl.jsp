@@ -66,7 +66,7 @@
               </wj-combo-box>
             </span>
             <a href="#" class="btn_grayS" ng-click="reportTrans()"><s:message code="rtnDstmn.dtl.stmtAcctPrint"/></a>
-            <%--<a href="#" class="btn_grayS" ng-click=""><s:message code="rtnDstmn.dtl.stmtAcctExcel"/></a>--%>
+            <a href="#" class="btn_grayS" ng-click=""><s:message code="rtnDstmn.dtl.stmtAcctExcel"/></a>
           </td>
         </tr>
         </tbody>

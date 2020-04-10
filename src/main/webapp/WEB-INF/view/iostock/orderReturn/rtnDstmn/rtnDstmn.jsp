@@ -84,12 +84,12 @@
       <%-- 매장코드 --%>
       <th><s:message code="rtnDstmn.storeCd"/></th>
       <td>
-        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" />
+        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/>
       </td>
       <%-- 매장명 --%>
       <th><s:message code="rtnDstmn.storeNm"/></th>
       <td>
-        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" />
+        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
     <tr>
@@ -182,26 +182,26 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipFg"/>" binding="slipFg" width="60" align="center" is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.dlvrNm"/>" binding="dlvrCd" width="70" align="center" is-read-only="true" data-map="dlvrMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.reqDate"/>" binding="reqDate" width="90" align="center" is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.outDate"/>" binding="outDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.inDate"/>" binding="inDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.orderTot"/>" binding="orderTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.mgrTot"/>" binding="mgrTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.outTot"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.inTot"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.penaltyAmt"/>" binding="penaltyAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.hqRemark"/>" binding="hqRemark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.outDt"/>" binding="outDt" width="150" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstmn.outNm"/>" binding="outNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 			binding="gChk" 		width="40" 	align="center" 	is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipNo"/>" 	binding="slipNo" 	width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipFg"/>" 	binding="slipFg" 	width="60" 	align="center" 	is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.slipKind"/>" binding="slipKind" 	width="70" 	align="center" 	is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.procFg"/>" 	binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.storeCd"/>" 	binding="storeCd" 	width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.storeNm"/>" 	binding="storeNm" 	width="180" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.dlvrNm"/>" 	binding="dlvrCd" 	width="70" 	align="center" 	is-read-only="true" data-map="dlvrMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.reqDate"/>" 	binding="reqDate" 	width="90" 	align="center" 	is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.outDate"/>" 	binding="outDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.inDate"/>" 	binding="inDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.orderTot"/>" binding="orderTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.mgrTot"/>" 	binding="mgrTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.outTot"/>" 	binding="outTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.inTot"/>" 	binding="inTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.penaltyAmt"/>" binding="penaltyAmt" width="130" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.remark"/>" 	binding="remark" 	width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.hqRemark"/>" binding="hqRemark" 	width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.outDt"/>" 	binding="outDt" 	width="150" align="center" 	is-read-only="true" format="dateTime"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstmn.outNm"/>" 	binding="outNm" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

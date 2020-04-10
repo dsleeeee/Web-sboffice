@@ -160,6 +160,17 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
       $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };
     
+    // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+    $scope.isChkProdClassDisplay = function(){
+  	  var columns = $scope.flex.columns;
+
+  	  for(var i=0; i<columns.length; i++){
+  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+  		  }
+  	  }
+    }
+    
     // 시간별 리스트 조회
     $scope.searchProdHourList = function (isPageChk) {
         $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();

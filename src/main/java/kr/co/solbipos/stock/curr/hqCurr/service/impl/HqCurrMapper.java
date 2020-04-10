@@ -10,7 +10,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface HqCurrMapper {
-    /** 현재고현황 - 현재고현황 리스트 조회 */
+    /** 현재고현황 - 본사 현재고현황 리스트 조회 */
     List<DefaultMap<String>> getHqCurrList(HqCurrVO hqCurrVO);
-
+    /** 현재고현황 - 매장 현재고현황 리스트 조회 */
+    List<DefaultMap<String>> getHqStoreCurrList(HqCurrVO hqCurrVO);
 }

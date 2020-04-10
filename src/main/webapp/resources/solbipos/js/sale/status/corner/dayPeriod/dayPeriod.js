@@ -35,7 +35,12 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 		$scope.srchCornerDayPeriodStartDate.isReadOnly = $scope.isChecked;
 		$scope.srchCornerDayPeriodEndDate.isReadOnly = $scope.isChecked;
 	};
-
+	
+	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		$scope._broadcast("chkProdClassDisplay");
+	}
+	
 	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
@@ -262,7 +267,17 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-
+	  
+	  $scope.$on("chkProdClassDisplay", function (event) {
+		  var columns = $scope.flex.columns;
+	
+		  for(var i=0; i<columns.length; i++){
+			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			  }
+		  }
+	  });
+	  
 	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {
 		$scope.storeCd   = data.storeCd;
@@ -272,7 +287,7 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-
+	  
 	  // 코너별매출일자별 리스트 조회
 	  $scope.searchCornerDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터

@@ -18,8 +18,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-//		var storeCd = $("#tableMonthSelectStoreCd").val();;
-//		$scope.getReTableNmList(storeCd, "", false);
+		var storeCd = $("#tableMonthSelectStoreCd").val();;
+		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("tableMonthCtrl");
@@ -251,8 +251,9 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 		var storeCd = $("#tableMonthSelectStoreCd").val();
 		var tableCd = $("#tableMonthSelectTableCd").val();
-
 		$scope.getReTableNmList(storeCd, tableCd,  false);
+		$("#tableMonthSelectTableNm").val(messages["cmm.all"]);
+		$("#tableMonthSelectTableCd").val("");
 	};
 
 	//매장의 테이블 리스트 재생성
@@ -325,7 +326,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 				  var colSplit = colName.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleAmt"], binding: 'realSaleAmtT'+i, width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-				  grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.saleCnt"], binding: 'saleCntT'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+				  grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleCnt"], binding: 'saleCntT'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 				  grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.guestCnt"], binding: 'guestCnt1T'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
 				  grid.columnHeaders.setCellData(0, 'realSaleAmtT'+i, colSplit[0]);

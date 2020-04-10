@@ -27,10 +27,16 @@ public interface RtnStoreOrderMapper {
 
     /** 반품등록 반품상품 등록 */
     int insertRtnStoreOrderDtl(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
-
+    
+    /** 반품등록 PROD 등록 */
+    int savetRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
+    
     /** 반품등록 반품상품 삭제 */
     int deleteRtnStoreOrderDtl(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
-
+    
+    /** 반품등록 PROD 삭제 */
+    int deleteRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
+    
     /** 반품등록 반품상품HD 수정 */
     int updateRtnStoreOrder(RtnStoreOrderVO rtnStoreOrderVO);
 

@@ -293,9 +293,9 @@ public class VendrOrderController {
     public Result getOrderTypeCombo(HttpServletRequest request, HttpServletResponse response,
         Model model, IostockCmmVO iostockCmmVO) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
+        
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
-
+        
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             iostockCmmVO.setSelectTable("TB_HQ_NMCODE");
             iostockCmmVO.setSelectCd("NMCODE_CD");

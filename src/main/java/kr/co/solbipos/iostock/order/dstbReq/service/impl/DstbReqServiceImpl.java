@@ -1,5 +1,12 @@
 package kr.co.solbipos.iostock.order.dstbReq.service.impl;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -11,13 +18,9 @@ import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.impl.StoreOrderMapper;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("dstbReqService")
+@Transactional
 public class DstbReqServiceImpl implements DstbReqService {
     private final DstbReqMapper dstbReqMapper;
     private final StoreOrderMapper storeOrderMapper;

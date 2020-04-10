@@ -85,7 +85,6 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableMonthSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableMonthSelectStore"/>
-							<jsp:param name="closeFunc" value="getTableNmList"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>

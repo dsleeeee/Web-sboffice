@@ -212,6 +212,11 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.slipFg  = $scope.slipFg;
     params.remark  = $scope.dtlHdRemark;
     params.storeCd = $scope.storeCd;
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }	
 
     $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/confirm.sb", params, function () {
       $scope.saveOrderDtlCallback()

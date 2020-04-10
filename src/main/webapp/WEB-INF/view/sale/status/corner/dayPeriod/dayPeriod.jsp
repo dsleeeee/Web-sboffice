@@ -41,31 +41,41 @@
 						</span>
 					</div>
 				</td>
-
-				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
-					<%-- 매장코드 --%>
-					<th><s:message code="todayBillSaleDtl.store" /></th>
-					<td>
-						<%-- 매장선택 모듈 싱글 선택 사용시 include
-							param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                            closeFunc - 팝업 닫기시 호출할 함수            --%>
-                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
-							<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
-							<jsp:param name="targetCornerId" value="cornerDayPeriodSelectCorner" />
-							<jsp:param name="closeFunc" value="getCornerNmList" />
-						</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-					</td>
-				</c:if>
-				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
-					<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}" />
-				</c:if>
-				<input type="hidden" id="cornerDayPeriodSelectCornerCd" value="" />
-				<input type="hidden" id="cornerDayPeriodSelectCornerName" value="" />
-			</tr>
-
+				<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
+			</tr>		
+			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
+				<tr>
+				<%-- 매장코드 --%>
+				<th><s:message code="todayBillSaleDtl.store" /></th>
+				<td colspan="3">
+					<%-- 매장선택 모듈 싱글 선택 사용시 include
+						param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                           modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                           closeFunc - 팝업 닫기시 호출할 함수            --%>
+                       <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+						<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
+						<jsp:param name="targetCornerId" value="cornerDayPeriodSelectCorner" />
+						<jsp:param name="closeFunc" value="getCornerNmList" />
+					</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+				</td>
+				</tr>
+			</c:if>
+			<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="${sessionInfo.storeCd}" />
+			</c:if>
+			<input type="hidden" id="cornerDayPeriodSelectCornerCd" value="" />
+			<input type="hidden" id="cornerDayPeriodSelectCornerName" value="" />
 			<tr>
 				<%-- 코너표시 --%>
 				<th><s:message code="corner.cornrDisplay" /></th>
@@ -176,9 +186,9 @@
 					item-formatter="_itemFormatter">
 
 					<!-- define columns -->
-					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.prodNm"/>"	binding="prodNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>

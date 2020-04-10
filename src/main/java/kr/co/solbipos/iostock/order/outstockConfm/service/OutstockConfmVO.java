@@ -146,7 +146,37 @@ public class OutstockConfmVO extends PageVO {
     private String penaltyCd;
     /** 패널티금액 반품시 */
     private Integer penaltyAmt;
+    /** 진행코 */
+    private String occrFg;
+    /** 확정여부 */
+    private String confmYn;
+    /** 창고 갯수 */
+    //private int	storageCnt;
 
+    /** 창고별 배열값-창고코드 */
+    private String  arrStorageCd;
+
+    /** 창고별 배열값-창고명 */
+    private String  arrStorageNm;
+
+    /** 창고별 배열값-입고수량 주문단위 */
+    private String  arrInUnitQty;
+
+    /** 창고별 배열값-입고수량 나머지 */
+    private String  arrInEtcQty;
+
+    /** 창고별 배열값-입고수량 합계 */
+    private String  arrInTotQty;
+
+    /** 창고별 배열값-입고금액 */
+    private String  arrInAmt;
+
+    /** 창고별 배열값-입고금액 부가세 */
+    private String  arrInVat;
+
+    /** 창고별 배열값-입고금액 합계 */
+    private String  arrInTot;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1126,4 +1156,86 @@ public class OutstockConfmVO extends PageVO {
     public void setPenaltyAmt(Integer penaltyAmt) {
         this.penaltyAmt = penaltyAmt;
     }
+
+	public String getArrStorageCd() {
+		return arrStorageCd;
+	}
+
+	public void setArrStorageCd(String arrStorageCd) {
+		this.arrStorageCd = arrStorageCd;
+	}
+
+	public String getArrStorageNm() {
+		return arrStorageNm;
+	}
+
+	public void setArrStorageNm(String arrStorageNm) {
+		this.arrStorageNm = arrStorageNm;
+	}
+
+	public String getArrInUnitQty() {
+		return arrInUnitQty;
+	}
+
+	public void setArrInUnitQty(String arrInUnitQty) {
+		this.arrInUnitQty = arrInUnitQty;
+	}
+
+	public String getArrInEtcQty() {
+		return arrInEtcQty;
+	}
+
+	public void setArrInEtcQty(String arrInEtcQty) {
+		this.arrInEtcQty = arrInEtcQty;
+	}
+
+	public String getArrInTotQty() {
+		return arrInTotQty;
+	}
+
+	public void setArrInTotQty(String arrInTotQty) {
+		this.arrInTotQty = arrInTotQty;
+	}
+
+	public String getArrInAmt() {
+		return arrInAmt;
+	}
+
+	public void setArrInAmt(String arrInAmt) {
+		this.arrInAmt = arrInAmt;
+	}
+
+	public String getArrInVat() {
+		return arrInVat;
+	}
+
+	public void setArrInVat(String arrInVat) {
+		this.arrInVat = arrInVat;
+	}
+
+	public String getArrInTot() {
+		return arrInTot;
+	}
+
+	public void setArrInTot(String arrInTot) {
+		this.arrInTot = arrInTot;
+	}
+
+	public String getOccrFg() {
+		return occrFg;
+	}
+
+	public void setOccrFg(String occrFg) {
+		this.occrFg = occrFg;
+	}
+
+	public String getConfmYn() {
+		return confmYn;
+	}
+
+	public void setConfmYn(String confmYn) {
+		this.confmYn = confmYn;
+	}
+    
+    
 }

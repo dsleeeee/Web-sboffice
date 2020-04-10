@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.curr.storageHqCurr.service.impl.StorageHqCurrMapper">
+
+    <select id="getStorageHqCurrList" parameterType="storageHqCurrVO" resultType="DefaultMap">
+        /* USE : HqCurrMapper.getHqCurrList */
+		SELECT A.PROD_CD             ,   A.PROD_NM             
+		,	A.FIRST_VENDR_IN_DATE ,   A.LAST_VENDR_IN_DATE
+		,	A.FIRST_HQ_OUT_DATE   ,   A.LAST_HQ_OUT_DATE  
+		,	A.FIRST_SALE_DATE     ,   A.LAST_SALE_DATE
+		,   A.COST_UPRC                                                                             
+		,	A.VENDR_NM                                                                              
+		,	A.BARCD_CD                                                                             
+		,	A.PO_UNIT_QTY                                                                           
+		,	A.CURR_AMT                       
+		,	A.PO_UNIT_FG                                                           
+		,	A.SAFE_STOCK_QTY                                                      
+		,	A.CURR_QTY              
+		,	A.ACC_VENDR_IN_QTY      
+		,	A.ACC_VENDR_OUT_QTY     
+		,	A.ACC_HQ_OUT_QTY        
+		,	A.ACC_HQ_IN_QTY         
+		,	A.ACC_STORE_MOVE_IN_QTY 
+		,	A.ACC_STORE_MOVE_OUT_QTY
+		,	A.ACC_DISUSE_QTY        
+		,	A.ACC_ADJ_QTY           
+		,	A.ACC_SET_IN_QTY        
+		,	A.ACC_SALE_VENDR_OUT_QTY
+		,	A.ACC_SALE_VENDR_IN_QTY 
+		,	A.PROD_CLASS_CD        
+		,   A.TOT_CNT                                                                     
+		,   C.LV1_CD
+		,   C.LV1_NM
+		,   C.LV2_CD
+		,   C.LV2_NM
+		,   C.LV3_CD
+		,   C.LV3_NM
+		,   B.PROD_CD
+		,   B.CURR_QTY_000      --매대
+		/*   동적 START */
+		${sQuery1}
+		/*   동적 END */
+		FROM   (
+		        <include refid="CmmSQL.PagingTemplateHeader"/>
+		        SELECT  tshsc.PROD_CD             ,   thp.PROD_NM
+		        ,       tshsc.FIRST_VENDR_IN_DATE ,   tshsc.LAST_VENDR_IN_DATE
+		        ,       tshsc.FIRST_HQ_OUT_DATE   ,   tshsc.LAST_HQ_OUT_DATE
+		        ,       tshsc.FIRST_SALE_DATE     ,   tshsc.LAST_SALE_DATE
+		        ,       thp.COST_UPRC
+		        ,       thv.VENDR_NM
+		        ,       thpb.BARCD_CD
+		        ,       thp.PO_UNIT_QTY
+		        ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
+		        ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
+		        <if test='unitFg == "0"'>
+		        ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                                / thp.PO_UNIT_QTY)) AS CURR_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                        / thp.PO_UNIT_QTY)) AS ACC_VENDR_IN_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                       / thp.PO_UNIT_QTY)) AS ACC_VENDR_OUT_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                          / thp.PO_UNIT_QTY)) AS ACC_HQ_OUT_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                           / thp.PO_UNIT_QTY)) AS ACC_HQ_IN_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                   / thp.PO_UNIT_QTY)) AS ACC_STORE_MOVE_IN_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                  / thp.PO_UNIT_QTY)) AS ACC_STORE_MOVE_OUT_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                          / thp.PO_UNIT_QTY)) AS ACC_DISUSE_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                             / thp.PO_UNIT_QTY)) AS ACC_ADJ_QTY
+		        ,       SF_ZERO_TO_NULL(((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY)  / thp.PO_UNIT_QTY)) AS ACC_SET_IN_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                  / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_OUT_QTY
+		        ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                   / thp.PO_UNIT_QTY)) AS ACC_SALE_VENDR_IN_QTY
+		        </if>
+		        <if test='unitFg == "1"'>
+		        ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      )) AS ACC_VENDR_OUT_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         )) AS ACC_HQ_OUT_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          )) AS ACC_HQ_IN_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  )) AS ACC_STORE_MOVE_IN_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 )) AS ACC_STORE_MOVE_OUT_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 )) AS ACC_SALE_VENDR_OUT_QTY
+                ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
+		        </if>
+		        ,       thp.PROD_CLASS_CD
+		        <include refid="CmmSQL.PagingTemplateCount"/>
+		        FROM    tb_st_hq_stock_cur tshsc
+		        
+		        ,       TB_HQ_PRODUCT thp
+		        ,       TB_HQ_PRODUCT_BARCD thpb
+		        ,       (   SELECT   thvp.PROD_CD
+		                    ,      LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thv.VENDR_CD) AS VENDR_NM
+		                    FROM   TB_HQ_BRAND thb
+		                    ,      TB_HQ_VENDOR thv
+		                    ,      TB_HQ_VENDOR_PROD thvp
+		                    WHERE   thb.HQ_OFFICE_CD    =   #{hqOfficeCd}
+		                    AND     thv.HQ_BRAND_CD     =   thb.HQ_BRAND_CD
+		                    AND     thvp.HQ_BRAND_CD    =   thv.HQ_BRAND_CD
+		                    AND     thvp.VENDR_CD       =   thv.VENDR_CD
+		                    GROUP
+		                    BY      thvp.PROD_CD
+		                ) thv
+		        WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+		        AND     tshsc.STORAGE_CD      =   '999'
+		        AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
+		 
+		        AND     thp.PROD_CD           =   tshsc.PROD_CD
+		        AND     thp.STOCK_PROD_YN     =   'Y'
+		        AND     thp.USE_YN            =   'Y'
+		        AND     thpb.HQ_OFFICE_CD (+) =   tshsc.HQ_OFFICE_CD
+		        AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
+		        AND     thv.PROD_CD       (+) =   tshsc.PROD_CD
+		        <if test='safeStockFg == "0"'>
+		          AND     tshsc.CURR_QTY <![CDATA[<]]> thp.SAFE_STOCK_QTY  
+		        </if>
+		        ORDER BY tshsc.PROD_CD
+		        <include refid="CmmSQL.PagingTemplateBottom"/>
+		      )   A
+		      LEFT
+		      OUTER
+		      JOIN    (
+		            SELECT  B.HQ_OFFICE_CD
+		            ,      B.PROD_CD
+		            ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		            /* 동적 START */  
+		            ${sQuery2}          
+		            /* 동적 END */
+		            FROM   (
+		                  SELECT   B.HQ_OFFICE_CD
+		                  ,      B.STORAGE_CD
+		                  ,      B.PROD_CD
+		                  ,      SUM(B.CURR_QTY)   AS   CURR_QTY
+		                  FROM   TB_ST_HQ_STOCK_CUR   B
+		                  WHERE   B.HQ_OFFICE_CD   =   #{hqOfficeCd}
+		                  AND      B.STORAGE_CD   >=   '000'
+		                  AND      B.STORAGE_CD   <![CDATA[<]]>    '999'
+		                  GROUP
+		                  BY      B.HQ_OFFICE_CD
+		                  ,      B.STORAGE_CD
+		                  ,      B.PROD_CD
+		                  )   B
+		            GROUP
+		            BY      B.HQ_OFFICE_CD
+		            ,      B.PROD_CD
+		            )   B
+		      ON      A.PROD_CD   =   B.PROD_CD
+		      ,(
+		             SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+		                     A.PROD_CLASS_CD     AS LV2_CD,
+		                     A.PROD_CLASS_NM     AS LV2_NM,
+		                     B.PROD_CLASS_CD     AS LV3_CD,
+		                     B.PROD_CLASS_NM     AS LV3_NM,
+		                     (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
+		             FROM    (
+		                         SELECT  HQ_OFFICE_CD,
+		                               P_PROD_CLASS_CD,
+		                               PROD_CLASS_CD,
+		                               PROD_CLASS_NM
+		                         FROM    TB_HQ_PRODUCT_CLASS
+		                         WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		                         AND     P_PROD_CLASS_CD IN (
+		                                                        SELECT  PROD_CLASS_CD
+		                                                        FROM    TB_HQ_PRODUCT_CLASS
+		                                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		                                                        AND     P_PROD_CLASS_CD = '00000'
+		                                                     )
+		                     )                      A,
+		                     TB_HQ_PRODUCT_CLASS    B
+		             WHERE   B.P_PROD_CLASS_CD IN    (
+		                                                 SELECT  PROD_CLASS_CD
+		                                                 FROM    TB_HQ_PRODUCT_CLASS
+		                                                 WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		                                                 AND     P_PROD_CLASS_CD IN (
+		                                                                          SELECT  PROD_CLASS_CD
+		                                                                                FROM    TB_HQ_PRODUCT_CLASS
+		                                                                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		                                                                                AND     P_PROD_CLASS_CD = '00000'
+		                                                                             )
+		                                             )
+		             AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+		             AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+		         )  C
+		WHERE A.PROD_CLASS_CD = C.LV3_CD
+    </select>
+
+    <select id="getStorageStorageCurrList" parameterType="storageHqCurrVO" resultType="DefaultMap">
+        select '대분류' as lv1Nm
+             , '중분류' as lv2Nm
+             , '소분류' as lv3Nm
+             , '상품코드' as prodCd          
+             , '상품명' as prodNm          
+             , '입수' as poUnitQty     
+             , '단위' as poUnitFg       
+             , '거래처' as vendrNm         
+             , '바코드' as barcdNm        
+             , '원가단가' as costUprc       
+             , '안전재고' as safeStockQty  
+             , '전체현재고' as totCurrQty     
+             , '최초입고일' as firstVendrInDate
+             , '최종입고일' as lastVendrInDate
+             , '최초출고일' as firstHqOutDate 
+             , '최종출고일' as lastHqOutDate  
+             , '최초판매일' as firstSaleDate   
+             , '최종판매일' as lastSaleDate   
+        from dual
+    </select>
+    
+    <select id="getStorageHqList" parameterType="storageHqCurrVO" resultType="DefaultMap">
+        /* USE : StorageHqCurrMapper.getStorageHqList - 본사 창고정보 조회 */
+        SELECT   B.HQ_OFFICE_CD
+		  ,      B.STORAGE_CD
+		  ,      THS.STORAGE_NM
+		FROM   TB_ST_HQ_STOCK_CUR B
+		  ,    TB_HQ_STORAGE THS
+		WHERE   B.HQ_OFFICE_CD   =   #{hqOfficeCd}
+		AND      B.STORAGE_CD   >=   '000'
+		AND      B.STORAGE_CD   <![CDATA[<]]>   '999'
+		AND      B.STORAGE_CD = THS.STORAGE_CD
+		GROUP
+		BY      B.HQ_OFFICE_CD
+		 ,      B.STORAGE_CD
+		 ,      THS.STORAGE_NM
+    </select>
+    
+    <select id="getStorageStorageList" parameterType="storageHqCurrVO" resultType="DefaultMap">
+        /* USE : StorageHqCurrMapper.getStorageStorageList - 매장 창고정보 조회 */
+        SELECT TMS.STORAGE_CD,
+               TMS.STORAGE_NM
+        FROM TB_MS_STORAGE TMS
+        WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+          AND TMS.STORE_CD = #{storeCd}
+        ORDER BY TMS.STORAGE_CD ASC
+    </select>
+    
+</mapper>

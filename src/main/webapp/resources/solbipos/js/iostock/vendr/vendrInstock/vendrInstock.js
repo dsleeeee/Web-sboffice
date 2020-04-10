@@ -13,7 +13,7 @@ app.controller('vendrInstockCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   $scope._setComboData("srchDateFg", [
     {"name": messages["vendrInstock.regDate"], "value": "reg"},
-    {"name": messages["vendrInstock.instockDate"], "value": "in"}
+    {"name": messages["vendrInstock.instockRtnDate"], "value": "in"}
   ]);
 
   // 조회조건 전표구분

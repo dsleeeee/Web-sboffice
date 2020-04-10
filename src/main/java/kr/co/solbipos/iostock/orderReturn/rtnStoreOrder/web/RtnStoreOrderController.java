@@ -215,7 +215,7 @@ public class RtnStoreOrderController {
     }
 
     /**
-     * 주문등록 - 주문등록 확정
+     * 반품등록 -  반품등록 확정
      * @param   request
      * @param   response
      * @param   model
@@ -226,8 +226,7 @@ public class RtnStoreOrderController {
      */
     @RequestMapping(value = "/rtnStoreOrderDtl/confirm.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveRtnStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response,
-        Model model, RtnStoreOrderVO rtnStoreOrderVO) {
+    public Result saveRtnStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody RtnStoreOrderVO rtnStoreOrderVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

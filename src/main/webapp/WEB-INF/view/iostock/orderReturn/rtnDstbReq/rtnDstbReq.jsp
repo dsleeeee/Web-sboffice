@@ -80,7 +80,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
@@ -89,8 +89,8 @@
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstbReq.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnDstbReq.mdTot"/>" binding="mdTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstbReq.orderTot"/>" binding="orderTot" width="130" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnDstbReq.mdTot"/>" binding="mdTot" width="130" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.modDt"/>" binding="modDt" width="130" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.remark"/>" binding="remark" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbReq.slipFg"/>" binding="slipFg" width="70" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>

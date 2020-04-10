@@ -96,7 +96,12 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params     = {};
     params.adjDate = $scope.adjDate;
     params.seqNo   = $scope.seqNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -191,7 +196,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
-      item.storageCd = "001";
+      item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);
@@ -210,7 +215,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
-      item.storageCd = "001";
+      item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);
@@ -435,7 +440,12 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.addQtyFg = $scope.addQtyFg;
 
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : '/stock/adj/adj/adjRegist/excelUpload.sb', /* 통신할 URL */

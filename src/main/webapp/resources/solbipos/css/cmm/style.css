@@ -20,8 +20,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,time,figure,article,
     box-sizing:border-box;
     font-family:'NotoR', Malgun Gothic, '맑은 고딕', Dotum, '돋움', sans-serif;
     font-weight:normal;
-    font-size:16px; /*em : psd의 px기준에서 16으로 나누기*/
-    color:#888;
+    /* font-size:16px;  em : psd의 px기준에서 16으로 나누기*/
+    /* color:#888; */
     line-height:1em;
 }
 ol,ul, li {list-style: none;}
@@ -2125,12 +2125,18 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .prodNavWrap.t2 {width:100%}
 .prodNavWrap.t2 .keyStyleWrap {position:relative; width:100%; height:auto; overflow:hidden}
 .prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
-.tch-inner {float:left; width:228px; height:605px; margin:26px 0 0 20px; padding:10px; border:1px solid #dbdbdb}
+.tch-inner {float:left; width:230px; height:605px; margin:26px 0 0 10px; padding:10px; border:1px solid #dbdbdb}
 .tch-inner.t2 {width:495px}
 .frGroupWrap.t2 {height:60px; padding:10px 10px 0; text-align:left}
 .frGroupWrap.t2 span {display:inline-block; }
 .frGroupWrap.t2 span a {width:auto; padding:10px; margin:0 3px}
 .prev1.t2 svg {min-width:auto !important; min-height:auto !important}
+.tablethum {padding:20px; border-bottom:1px solid #ddd}
+.tablethum .thumarea {position:relative; width:150px; height:150px; text-align:center; margin:0 auto}
+.tablethum .thumarea .thInner {}
+.tablethum .thumarea .thInner svg {}
+.tablethum .thumarea .thInner svg g {}
+.tablethum .thumarea .thInner svg div {}
 
 
 /* 컨텐츠 영역 가변 그리드 관련 패딩 적용 */
@@ -2148,7 +2154,7 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 	#wjWrapType3 .wj-gridWrap {height:325px}
 }
 @media all and (min-width:1029px){
-	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; border-bottom-color:#eee}
+	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; min-height:257px; border-bottom-color:#eee}
 }
 
 /* SCROLLBAR Chrome, Safari, Whale */

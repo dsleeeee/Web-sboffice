@@ -74,9 +74,13 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
     comboParams.nmcodeGrpCd = "087";
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo,map", "srchSlipKind", "slipKindMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
+    
     // 배송기사
     comboParams             = {}; // 여러번 조회시 초기화를 해줘야함...
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
     var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo,map", "srchDlvrCd", "dlvrMap", url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.

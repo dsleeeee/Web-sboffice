@@ -131,8 +131,8 @@ public class RtnDstbCloseStoreServiceImpl implements RtnDstbCloseStoreService {
             Long mgrAmt      = (rtnDstbCloseStoreVO.getMgrAmt()     == null ? 0 : rtnDstbCloseStoreVO.getMgrAmt())     * slipFg;
             Long mgrVat      = (rtnDstbCloseStoreVO.getMgrVat()     == null ? 0 : rtnDstbCloseStoreVO.getMgrVat())     * slipFg;
             Long mgrTot      = (rtnDstbCloseStoreVO.getMgrTot()     == null ? 0 : rtnDstbCloseStoreVO.getMgrTot())     * slipFg;
-
-            if(mgrTotQty > 0) {
+            
+            if(mgrTotQty < 0) {
                 rtnDstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
                 rtnDstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
                 rtnDstbCloseStoreVO.setMgrTotQty(mgrTotQty);

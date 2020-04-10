@@ -12,7 +12,7 @@
     -->
     <select id="getPosDayPeriodList" parameterType="posDayPeriodVO" resultType="DefaultMap">
     	<include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO) STORE_NM_POS_NO
+    	SELECT CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO) STORE_NM_POS_NO
     	       , TSDP.POS_NO
     	       , TSDP.STORE_CD
     	       , SUM(TSDP.SALE_CNT) AS SALE_CNT
@@ -35,7 +35,7 @@
            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
            	</if>
            	    AND TSDP.STORE_CD = TMS.STORE_CD
-        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
+        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
         ORDER BY STORE_NM_POS_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

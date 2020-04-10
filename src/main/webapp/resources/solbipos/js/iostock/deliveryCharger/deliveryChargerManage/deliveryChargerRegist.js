@@ -13,6 +13,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.$on('dlvrRegistCtrl', function (event, data) {
     $scope.dlvrCd = data.dlvrCd;
     $scope.dlvrNm = data.dlvrNm;
+    $scope.hqOfficeCd = data.hqOfficeCd;
 
     // 배송기사 상세 팝업 오픈
     $scope.wjDlvrRegistLayer.show(true);
@@ -36,6 +37,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     else {
       $("#registTitleDlvrNm").html("신규등록");
       $scope.dlvr = angular.copy($scope.default); // 기본값 세팅
+      $scope.dlvr.hqOfficeCd = $scope.hqOfficeCd;
 
       // 그리드 초기화
       var cv          = new wijmo.collections.CollectionView([]);
@@ -57,6 +59,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchDlvrInfo = function () {
     var param    = {};
     param.dlvrCd = $scope.dlvrCd;
+    param.hqOfficeCd = $scope.hqOfficeCd;
 
     $http({
       method : 'POST', //방식
@@ -91,7 +94,6 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.submitForm = function () {
     //값체크
     if (!valueCheck()) return false;
-
     $http({
       method : 'POST', //방식
       url    : "/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/dlvrSave.sb", /* 통신할 URL */
@@ -127,7 +129,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     s_alert.popConf(msg, function() {
       var params    = {};
       params.dlvrCd = $scope.dlvrCd;
-
+      params.hqOfficeCd = $scope.hqOfficeCd;
       // 로딩바 show
       $scope.$broadcast('loadingPopupActive', messages['cmm.saving']);
 
@@ -175,6 +177,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params    = {};
     params.dlvrCd = $scope.dlvrCd;
+    params.hqOfficeCd = $scope.hqOfficeCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/list.sb", params, "", false);
   };
@@ -184,7 +187,10 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.delStorage = function () {
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      var item = $scope.flex.collectionView.itemsEdited[i];
+
+      item.status = "U";
+      item.hqOfficeCd = $scope.hqOfficeCd;
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     $scope._save("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerRegist/delete.sb", params, function () {
@@ -198,6 +204,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     var params    = {};
     params.dlvrCd = $scope.dlvrCd;
     params.dlvrNm = $scope.dlvrNm;
+    params.hqOfficeCd = $scope.hqOfficeCd;
     $scope._broadcast('dlvrStorageMgrCtrl', params);
   };
 

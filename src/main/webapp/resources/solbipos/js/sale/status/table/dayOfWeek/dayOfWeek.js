@@ -18,8 +18,8 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-//		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
-//		$scope.getReTableNmList(storeCd, "", false);
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
+		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("tableDayOfWeekCtrl");
@@ -254,8 +254,9 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 
 		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
-
 		$scope.getReTableNmList(storeCd, tableCd,  false);
+		$("#tableDayOfWeekSelectTableNm").val(messages["cmm.all"]);
+		$("#tableDayOfWeekSelectTableCd").val("");
 	};
 
 	//매장의 테이블 리스트 재생성

@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.order.outstockConfm.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -42,5 +43,7 @@ public interface OutstockConfmMapper {
 
     /** 출고확정 - 출고확정 이후 저장시 HD 수정 */
     int updateOutstockAfterHd(OutstockConfmVO outstockConfmVO);
-
+    
+    /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int mergeInstockConfmProd(OutstockConfmVO outstockConfmVO);
 }

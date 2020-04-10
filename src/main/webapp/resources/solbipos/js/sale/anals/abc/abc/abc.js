@@ -132,13 +132,24 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     $scope.srchAbcStartDate.isReadOnly = $scope.isChecked;
     $scope.srchAbcEndDate.isReadOnly = $scope.isChecked;
   };
+  
+  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  var columns = $scope.flex.columns;
 
-	//매장선택 모듈 팝업 사용시 정의
-	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.abcSelectStoreShow = function () {
-		$scope._broadcast('abcSelectStoreCtrl');
-	};
+	  for(var i=0; i<columns.length; i++){
+		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+		  }
+	  }
+  }
+  
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.abcSelectStoreShow = function () {
+	  $scope._broadcast('abcSelectStoreCtrl');
+  };
 
   //엑셀 다운로드
   $scope.excelDownloadAbc = function () {

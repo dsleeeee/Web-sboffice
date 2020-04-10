@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.adj.adj.service.AdjService;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("adjServiceImpl")
+@Transactional
 public class AdjServiceImpl implements AdjService {
     private final AdjMapper adjMapper;
     private final MessageService messageService;

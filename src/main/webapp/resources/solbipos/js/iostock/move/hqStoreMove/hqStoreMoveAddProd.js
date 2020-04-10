@@ -6,6 +6,10 @@ app.controller('hqStoreMoveAddProdCtrl', ['$scope', '$http', '$timeout', functio
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+	  
+	// picker 사용시 호출 : 미사용시 호출안함
+	$scope._makePickColumns("hqStoreMoveAddProdCtrl");
+	  
     var comboParams         = {};
     comboParams.nmcodeGrpCd = "097";
     var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -54,7 +58,7 @@ app.controller('hqStoreMoveAddProdCtrl', ['$scope', '$http', '$timeout', functio
     s.columnHeaders.rows[0].dataItem = {
       prodCd     : messages["hqStoreMove.add.prodCd"],
       prodNm     : messages["hqStoreMove.add.prodNm"],
-      poUnitFg   : messages["hqStoreMove.add.poUnitFg"],
+      poUnitFgNm : messages["hqStoreMove.add.poUnitFg"],
       poUnitQty  : messages["hqStoreMove.add.poUnitQty"],
       outUnitQty : messages["hqStoreMove.add.qty"],
       outEtcQty  : messages["hqStoreMove.add.qty"],
@@ -70,6 +74,7 @@ app.controller('hqStoreMoveAddProdCtrl', ['$scope', '$http', '$timeout', functio
       vatFg      : messages["hqStoreMove.add.vatFg"],
       envst0011  : messages["hqStoreMove.add.envst0011"],
       envst0011  : messages["hqStoreMove.add.envst0011"],
+      poUnitFg   : messages["hqStoreMove.add.poUnitFg"],
     };
 
     s.itemFormatter = function(panel, r, c, cell) {
@@ -199,7 +204,7 @@ app.controller('hqStoreMoveAddProdCtrl', ['$scope', '$http', '$timeout', functio
 
       item.status     = "U";
       item.slipNo     = $scope.slipNo;
-      item.storageCd  = "001";
+      item.storageCd  = "999";
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);

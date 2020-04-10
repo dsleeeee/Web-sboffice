@@ -36,7 +36,8 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.initGrid = function (s, e) {
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
         s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
-
+        //ColumnPicker 조회
+        $scope._makePickColumns("saleTrnsitnCtrl");
         /*
 		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" ,  isReadOnly: "true", aggregate: "Sum"}));
 		grid.columns.push(new wijmo.grid.Column({header: messages["empday.billCnt"],     binding: 'billCnt'    +i, align: "center" , isReadOnly: "true", aggregate: "Sum"}));

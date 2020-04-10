@@ -10,6 +10,7 @@ import kr.co.solbipos.stock.setProdAdj.setProdAdj.service.SetProdAdjService;
 import kr.co.solbipos.stock.setProdAdj.setProdAdj.service.SetProdAdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("setProdAdjService")
+@Transactional
 public class SetProdAdjServiceImpl implements SetProdAdjService {
     private final SetProdAdjMapper setProdAdjMapper;
     private final MessageService messageService;

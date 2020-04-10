@@ -47,7 +47,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
         deliveryChargerManageVO.setRegDt(currentDt);
         deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
@@ -55,6 +55,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
 
         if (StringUtil.getOrBlank(deliveryChargerManageVO.getDlvrCd()).equals("")) {
             // 신규 배송기사코드 조회
+        	sessionInfoVO.setHqOfficeCd(deliveryChargerManageVO.getHqOfficeCd());
             String dlvrCd = deliveryChargerManageMapper.getNewDlvrCd(sessionInfoVO);
             deliveryChargerManageVO.setDlvrCd(dlvrCd);
             // 추가
@@ -109,7 +110,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
         String currentDt = currentDateTimeString();
 
         for (DeliveryChargerManageVO deliveryChargerManageVO : deliveryChargerManageVOs) {
-            deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//            deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
             deliveryChargerManageVO.setRegDt(currentDt);
             deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
@@ -149,7 +150,7 @@ public class DeliveryChargerManageServiceImpl implements DeliveryChargerManageSe
         String currentDt = currentDateTimeString();
 
         for (DeliveryChargerManageVO deliveryChargerManageVO : deliveryChargerManageVOs) {
-            deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//            deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
             deliveryChargerManageVO.setRegDt(currentDt);
             deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());

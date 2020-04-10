@@ -51,41 +51,55 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("tableAttrService")
 @Transactional
 public class TableAttrServiceImpl implements TableAttrService {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     MessageService messageService;
     @Autowired
     private TableAttrMapper mapper;
 
-
     @Override
     public List<TableAttrVO> selectTableAttrDefault() {
-        return mapper.selectDefaultXml();
+    	DefaultMap<String> param = new DefaultMap<String>();
+    	param.put("tblTypeFg", "1");
+        return mapper.selectDefaultXml(param);
     }
 
     @Override
-    public String selectTableAttrByStore(SessionInfoVO sessionInfoVO) {
+    public List<TableAttrVO> selectTblAttrCommCode() {
+        return mapper.selectTblAttrCommCode();
+    }
+
+    @Override
+    public String selectTableAttrByStore(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO) {
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
-        param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
+        param.put("confgFg", ConfgFg.TABLE_ATTR_TYPE.getCode());
+        param.put("confgSubFg", tableAttrVO.getConfgSubFg());
 
         String returnStr = mapper.selectXmlByStore(param);
         if( returnStr == null) {
-            returnStr = parseDB(mapper.selectDefaultXml());
+            returnStr = parseDB(mapper.selectDefaultXml(param));
         }
         return returnStr;
     }
 
     @Override
-    public Result setTableAttr(SessionInfoVO sessionInfoVO, String xml) {
+    public Result setTableAttr(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO, String xmlGraph, String xmlPreview) {
+
+    	String confgSubFg = "1";
+
+    	if (tableAttrVO.getConfgSubFg() != null && !"".equals(tableAttrVO.getConfgSubFg())) {
+    		confgSubFg = tableAttrVO.getConfgSubFg();
+    	}
 
         //XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
-        param.put("storeCd", sessionInfoVO.getOrgnCd());
-        param.put("confgFg", ConfgFg.TABLE_ATTR.getCode());
-        param.put("xml", xml);
+        param.put("storeCd", sessionInfoVO.getStoreCd());
+        param.put("confgFg", ConfgFg.TABLE_ATTR_TYPE.getCode());
+        param.put("confgSubFg", confgSubFg);
+        param.put("xml", xmlGraph);
         param.put("useYn", "Y");
         param.put("regDt", currentDateTimeString());
         param.put("regId", sessionInfoVO.getUserId());
@@ -103,13 +117,13 @@ public class TableAttrServiceImpl implements TableAttrService {
 
         //XML 분석, 속성 코드별 TableAttr Domain 생성
         //테이블속성 TABLE(TB_MS_TABLE_ATTR)
-        List<TableAttrVO> tableAttrVOs = parseXML(xml);
+        List<TableAttrVO> tableAttrVOs = parseXML(xmlPreview);
 
         //리스트의 아이템을 DB에 Merge
-        for(TableAttrVO tableAttrVO : tableAttrVOs) {
-            tableAttrVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            tableAttrVO.setRegId(sessionInfoVO.getUserId());
-            if( mapper.mergeStoreTableAttr(tableAttrVO) != 1 ) {
+        for(TableAttrVO tableAttrTempVO : tableAttrVOs) {
+        	tableAttrTempVO.setStoreCd(sessionInfoVO.getStoreCd());
+        	tableAttrTempVO.setRegId(sessionInfoVO.getUserId());
+            if( mapper.mergeStoreTableAttr(tableAttrTempVO) != 1 ) {
                 throw new BizException( messageService.get("cmm.saveFail") );
             }
         }
@@ -139,7 +153,7 @@ public class TableAttrServiceImpl implements TableAttrService {
             Object[] cells = graph.getChildVertices(graph.getDefaultParent());
             for(Object c : cells) {
                 mxCell cell = (mxCell) c;
-                
+
                 //lombok 초기값 셋팅 사용
                 tableAttrVO = new TableAttrVO();
 
@@ -148,7 +162,7 @@ public class TableAttrServiceImpl implements TableAttrService {
 
                 //TEST
                 //tableAttr.setStoreCd("S000001");
-                tableAttrVO.setTblTypeFg(TblTypeFg.SQUARE);
+                //tableAttrVO.setTblTypeFg(TblTypeFg.SQUARE);
 
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();
@@ -186,6 +200,9 @@ public class TableAttrServiceImpl implements TableAttrService {
                                 break;
                             case VERTICAL_ALIGN:
                                 tableAttrVO.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
+                                break;
+                            case TBL_TYPE_FG:
+                                tableAttrVO.setTblTypeFg(styleKeyValue[1]);
                                 break;
                             default:
                                 break;
@@ -231,6 +248,7 @@ public class TableAttrServiceImpl implements TableAttrService {
 
                 //스타일 셋팅
                 styleStr = "tableAttr";
+                styleStr += tableAttrVO.getTblTypeFg() != null ? (SM + TouchKeyStyle.TBL_TYPE_FG.getCode() +EQ+ tableAttrVO.getTblTypeFg()):"";
                 styleStr += tableAttrVO.getFontNm() != null ? (SM + TouchKeyStyle.FONT_NM.getCode() +EQ+ tableAttrVO.getFontNm()):"";
                 styleStr += tableAttrVO.getFontStyleFg() != null ? (SM + TouchKeyStyle.FONT_STYLE_FG.getCode() +EQ+ tableAttrVO.getFontStyleFg()):"";
                 styleStr += tableAttrVO.getFontSize() != null ? (SM + TouchKeyStyle.FONT_SIZE.getCode() +EQ+ tableAttrVO.getFontSize()):"";

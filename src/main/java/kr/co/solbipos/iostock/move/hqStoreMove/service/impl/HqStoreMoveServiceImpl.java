@@ -11,12 +11,14 @@ import kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveService;
 import kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("hqStoreMoveService")
+@Transactional
 public class HqStoreMoveServiceImpl implements HqStoreMoveService {
     private final HqStoreMoveMapper hqStoreMoveMapper;
     private final MessageService messageService;
@@ -87,7 +89,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // DTL 수정
             result = hqStoreMoveMapper.updateHqStoreMoveDtl(hqStoreMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
@@ -95,7 +97,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
         // HD 수정
         result = hqStoreMoveMapper.updateHqStoreMoveHd(hqStoreMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // 본사확정인 경우
         if(confirmFg.equals("Y")) {
@@ -115,7 +117,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // HD의 수정
             result = hqStoreMoveMapper.updateHqStoreMoveConfirm(hqStoreMoveHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
         }
 
         return returnResult;
@@ -131,11 +133,11 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
         // DTL 삭제
         result = hqStoreMoveMapper.deleteAllHqStoreMoveDtl(hqStoreMoveVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // HD 삭제
         result = hqStoreMoveMapper.deleteHqStoreMoveHd(hqStoreMoveVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         return result;
     }
@@ -203,7 +205,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // DTL 등록
             result = hqStoreMoveMapper.insertHqStoreMoveDtl(hqStoreMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
@@ -211,7 +213,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
         // HD 등록
         result = hqStoreMoveMapper.insertHqStoreMoveHd(hqStoreMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         // 본사확정인 경우
         if(confirmFg.equals("Y")) {
@@ -230,7 +232,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // HD의 수정
             result = hqStoreMoveMapper.updateHqStoreMoveConfirm(hqStoreMoveHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
         }
 
         return returnResult;
@@ -279,7 +281,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // DTL 등록
             result = hqStoreMoveMapper.insertHqStoreMoveDtl(hqStoreMoveVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             returnResult += result;
             i++;
@@ -287,7 +289,7 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
         // HD 수정
         result = hqStoreMoveMapper.updateHqStoreMoveAddProdHd(hqStoreMoveHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
         return returnResult;
     }

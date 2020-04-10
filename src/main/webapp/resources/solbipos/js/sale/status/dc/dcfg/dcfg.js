@@ -10,11 +10,11 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
   //groupRow 접고 펼치기 flag 변수
   $scope.setCollapsed = false;
-  
+
   $scope.srchDcDcfgStartDate = wcombo.genDateVal("#srchDcDcfgStartDate", getToday());
   $scope.srchDcDcfgEndDate   = wcombo.genDateVal("#srchDcDcfgEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
-	
+
   // 리스트 콤보박스 데이터 Set
   $scope._setComboData("dcDcfgListScaleBox", gvListScaleBoxData);
   $scope._setComboData("dcDcfgDtlListScaleBox", gvListScaleBoxData);
@@ -33,11 +33,22 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     $scope._broadcast('dcDcfgSelectDcfgCtrl');
   };
 
+  $scope.getDcNmList = function() {
+	  $scope._broadcast('dcDcfgSelectedTableCtrl');
+	  $("#dcDcfgSelectDcfgNm").val(messages["cmm.all"]);
+	  $("#dcDcfgSelectDcfgCd").val("");
+  }
+
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchDcDcfgStartDate.isReadOnly = $scope.isChecked;
     $scope.srchDcDcfgEndDate.isReadOnly = $scope.isChecked;
   };
+
+  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  $scope._broadcast("chkProdClassDisplay");
+  }
 
 }]);
 
@@ -224,6 +235,15 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 		    event.preventDefault();
 	  });
 
+	  $scope.$on("chkProdClassDisplay", function (event) {
+		  var columns = $scope.flex.columns;
+
+		  for(var i=0; i<columns.length; i++){
+			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			  }
+		  }
+	  });
 	  // 할인구분별매출일자별 리스트 조회
 	  $scope.searchDcfgDtlList = function (isPageChk) {
 
@@ -240,14 +260,14 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/dc/dcfg/dtl.sb", params);
-	    
+
 	    //create a group to show the grand totals
 	    var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
 	    var grpLv2 = new wijmo.collections.PropertyGroupDescription('dcdtlDcNm');
-	    
+
 	    var theGrid = new wijmo.Control.getControl('#dcfgDtlGrid');
 	    theGrid.itemsSource = new wijmo.collections.CollectionView();
-	    
+
 	    // custom cell calculation
 	    theGrid.formatItem.addHandler(function(s, e) {
 
@@ -270,8 +290,8 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	    			if(className){
 	    				row.cssClass=className;
 	    			}
-	    			
-	    			if(row.level == 1) { 
+
+	    			if(row.level == 1) {
 						if(!$scope.setCollapsed){
 							row.isCollapsed = true;
 						}
@@ -280,7 +300,7 @@ app.controller('dcDcfgDtlCtrl', ['$scope', '$http','$timeout', function ($scope,
 	    	});
 
 	    });
-	    
+
 		// 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
 	      var ht = theGrid.hitTest(e);

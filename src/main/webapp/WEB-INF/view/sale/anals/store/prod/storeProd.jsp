@@ -31,7 +31,7 @@
        	<%-- 조회일자 --%>
 		<tr>
 	    	<th><s:message code="cmm.search.date" /></th>
-        	<td colspan="3">
+        	<td>
           	<div class="sb-select">      
        		    <span class="txtIn"><input id="srchProdStartDate" class="w120px"></span>
                 <span class="rg">~</span>
@@ -44,6 +44,16 @@
             	</span>
           	</div>
         	</td>
+        	<%-- 조회옵션 --%>
+			<th><s:message code="periodIostock.srchOption" /></th>
+			<td>
+	          	<span class="chk ml10">
+					<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+	              	<label for="chkDt">
+                		<s:message code="periodIostock.prodClassDisplay" />
+              		</label>
+            	</span>
+			</td>
         </tr>
       	<tr>  
       		<th><s:message code="store.prodCat" /></th>
@@ -109,15 +119,15 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.prodCd"/>"		binding="prodCd" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="store.prodNm"/>" 		binding="prodNm" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
- 		  <wj-flex-grid-column header="<s:message code="store.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-  		  <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-   		  <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
-   		  <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.prodCd"/>"			binding="prodCd" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.prodNm"/>" 			binding="prodNm" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
+ 		  <wj-flex-grid-column header="<s:message code="store.totSaleQty"/>" 		binding="totSaleQty" 	width="100" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+  		  <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 		binding="totSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+   		  <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 			binding="totDcAmt" 		width="100" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+   		  <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 		binding="realSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
         
         <%-- ColumnPicker 사용시 include --%>

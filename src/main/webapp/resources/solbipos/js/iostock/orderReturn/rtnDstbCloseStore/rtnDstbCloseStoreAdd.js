@@ -212,7 +212,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       item.slipFg    = $scope.slipFg;
       item.storeCd   = $scope.storeCd;
       item.empNo     = "0000";
-      item.storageCd = "001";
+      item.storageCd = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       params.push(item);
     }

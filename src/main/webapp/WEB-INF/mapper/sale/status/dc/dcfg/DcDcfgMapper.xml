@@ -94,8 +94,9 @@
 		          , (
 		                 SELECT  MAX(COUPN_NM)               AS COUPN_NM
 		                 FROM    TB_MS_COUPON
+		                 WHERE 1 = 1
 		                 <if test='storeCd != null and storeCd != ""'>
-		                  WHERE   STORE_CD                    = #{storeCd}
+		                  AND   STORE_CD                    = #{storeCd}
 		                 </if>
 		                 AND     PAY_CLASS_CD || COUPN_CD    = TSSDD.DC_REASON_CD
 		             )   AS MS_COUPN_NM

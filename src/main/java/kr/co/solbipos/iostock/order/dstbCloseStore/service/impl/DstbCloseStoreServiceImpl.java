@@ -1,5 +1,12 @@
 package kr.co.solbipos.iostock.order.dstbCloseStore.service.impl;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -8,13 +15,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreService;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("dstbCloseStoreService")
+@Transactional
 public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
     private final DstbCloseStoreMapper dstbCloseStoreMapper;
     private final MessageService messageService;

@@ -67,6 +67,10 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 배송기사
     comboParams = {}; // 여러번 조회시 초기화를 해줘야함...
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
     var url     = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo,map", "srchDlvrCd", "dlvrMap", url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -134,7 +138,12 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

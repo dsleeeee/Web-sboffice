@@ -153,7 +153,12 @@ app.controller('orderStockInfoCtrl', ['$scope', '$http', '$timeout', function ($
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.vendrCd   = $("#orderStockInfoSelectVendrCd").val();
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/vendr/orderStockInfo/orderStockInfo/list.sb", params, function () {
       // 거래처별 정산 그리드 조회 후 상세내역 그리드 초기화
@@ -184,7 +189,12 @@ app.controller('orderStockInfoCtrl', ['$scope', '$http', '$timeout', function ($
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -378,6 +388,12 @@ app.controller('orderStockInfoDtlCtrl', ['$scope', '$http', '$timeout', function
     params.inSlipNo  = $scope.inSlipNo;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/vendr/orderStockInfo/orderStockInfoDtl/list.sb", params);
   };

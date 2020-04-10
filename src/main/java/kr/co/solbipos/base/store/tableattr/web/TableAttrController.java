@@ -8,6 +8,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrService;
+import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +45,9 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 @Controller
 @RequestMapping(value = "/base/store/tableAttr/tableAttr")
 public class TableAttrController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     private final String RESULT_URI = "base/store/tableattr";
 
     @Autowired
@@ -71,7 +73,7 @@ public class TableAttrController {
     public String view(HttpServletRequest request, HttpSession session, Model model) {
 
         //테이블속성 항목값 - 공통코드
-        model.addAttribute("tableAttrs", cmmCode.getCommCodeAll("207"));
+        model.addAttribute("tableAttrs", convertToJson(tableAttrService.selectTblAttrCommCode()));
         //Default 테이블속성 조회 - 각 항목의 좌표 사용을 위해
         model.addAttribute("defaults", convertToJson(tableAttrService.selectTableAttrDefault()));
 
@@ -88,13 +90,13 @@ public class TableAttrController {
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result open(HttpServletRequest request, HttpSession session, Model model) {
+    public Result open(HttpServletRequest request, HttpSession session, Model model, TableAttrVO tableAttrVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         LOGGER.debug(sessionInfoVO.toString());
-        String xml = tableAttrService.selectTableAttrByStore(sessionInfoVO);
-        LOGGER.debug(xml);
+        String xml = tableAttrService.selectTableAttrByStore(sessionInfoVO, tableAttrVO);
+        //LOGGER.debug(xml);
         return new Result(Status.OK, xml);
     }
 
@@ -108,19 +110,26 @@ public class TableAttrController {
      */
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result save(HttpServletRequest request, HttpSession session, Model model) {
+    public Result save(HttpServletRequest request, HttpSession session, Model model, TableAttrVO tableAttrVO) {
 
-        String xml = "";
+        String xmlGraph = "";
+        String xmlPreview = "";
+
         Result result = new Result(Status.FAIL);
         try {
-          LOGGER.debug(request.getParameter("xml"));
-          xml = URLDecoder.decode(request.getParameter("xml"), "UTF-8").replace("\n", "&#xa;");
-          LOGGER.debug(XssPreventer.unescape(xml));
+          LOGGER.debug(request.getParameter("xmlGraph"));
+          LOGGER.debug(request.getParameter("xmlPreview"));
+
+          xmlGraph = URLDecoder.decode(request.getParameter("xmlGraph"), "UTF-8").replace("\n", "&#xa;");
+          xmlPreview = URLDecoder.decode(request.getParameter("xmlPreview"), "UTF-8").replace("\n", "&#xa;");
+
+          LOGGER.debug(XssPreventer.unescape(xmlGraph));
+          LOGGER.debug(XssPreventer.unescape(xmlPreview));
 
           SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
           LOGGER.debug(sessionInfoVO.toString());
 
-          result = tableAttrService.setTableAttr(sessionInfoVO, XssPreventer.unescape(xml));
+          result = tableAttrService.setTableAttr(sessionInfoVO, tableAttrVO, XssPreventer.unescape(xmlGraph), XssPreventer.unescape(xmlPreview));
           LOGGER.debug(result.toString());
         } catch (UnsupportedEncodingException e) {
           e.printStackTrace();

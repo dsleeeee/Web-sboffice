@@ -28,7 +28,12 @@ app.controller('dstbDlvrProdStoreReportCtrl', ['$scope', '$http', '$timeout', fu
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.dlvrCd = $scope.strDlvrCd;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

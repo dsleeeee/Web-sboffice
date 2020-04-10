@@ -27,7 +27,7 @@ app.controller('storeMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($sc
         var col  = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
         if (col.binding === "outEtcQty") { // 입수에 따라 주문수량 컬럼 readonly 컨트롤
-          if (item.poUnitQty === 1) {
+          if (item.poUnitQty === 1) { // 입수(발주단위수량)가 1일때
             wijmo.addClass(e.cell, 'wj-custom-readonly');
             wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -101,6 +101,11 @@ app.controller('storeMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.getSlipNoInfo = function () {
     var params    = {};
     params.slipNo = $scope.slipNo;
+
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+       params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
 
     // ajax 통신 설정
     $http({
@@ -218,7 +223,7 @@ app.controller('storeMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($sc
       item.dlvrFg    = $scope.dlvrFg;
       item.remark    = $scope.dtlHdRemark;
       item.procFg    = $scope.procFg;
-      item.storageCd = "001";
+      item.storageCd = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg = confirmFg;
 
@@ -262,6 +267,10 @@ app.controller('storeMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($sc
     s_alert.popConf(msg, function () {
       var params    = {};
       params.slipNo = $scope.slipNo;
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+         params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
 
       /** 로딩바 show */
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);

@@ -5,6 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="baseUrl" value="/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/"/>
 
 <div class="subCon" ng-controller="dlvrChgrListCtrl">

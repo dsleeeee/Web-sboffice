@@ -149,7 +149,7 @@
   </div>
   <%--//페이지 리스트--%>
 </div>
->
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=201901112.15" charset="utf-8"></script>
 
 <%-- 본사 상세정보 레이어 --%>

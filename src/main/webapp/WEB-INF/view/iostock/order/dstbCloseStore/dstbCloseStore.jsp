@@ -44,12 +44,12 @@
       <%-- 매장코드 --%>
       <th><s:message code="dstbCloseStore.storeCd"/></th>
       <td>
-        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" />
+        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/>
       </td>
       <%-- 매장명 --%>
       <th><s:message code="dstbCloseStore.storeNm"/></th>
       <td>
-        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" />
+        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
     <tr>
@@ -92,6 +92,8 @@
     <%-- 확정 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()">
       <s:message code="dstbCloseStore.confirm"/></button>
+    <%-- 엑셀 다운로드 --%>
+	<button                               class="btn_skyblue ml5" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
   </div>
 
   <div class="w100 mt10">

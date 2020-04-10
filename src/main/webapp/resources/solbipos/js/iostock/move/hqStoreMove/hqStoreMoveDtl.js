@@ -3,10 +3,10 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('hqStoreMoveDtlCtrl', $scope, $http, true));
 
-  $scope.moveDate            = wcombo.genDate("#dtlMoveDate");
+  $scope.moveDate            = wcombo.genDate("#dtlHqStoreMoveMoveDate");
   $scope.moveDate.isReadOnly = true;
-
-  $scope._setComboData("srchDtlDlvrFg", [
+  
+  $scope._setComboData("srchHqStoreMoveDtlDlvrFg", [
     {"name": messages["hqStoreMove.dlvrFg0"], "value": "0"},
     {"name": messages["hqStoreMove.dlvrFg1"], "value": "1"},
     {"name": messages["hqStoreMove.dlvrFg2"], "value": "2"}
@@ -14,6 +14,10 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+	  
+	// picker 사용시 호출 : 미사용시 호출안함
+	$scope._makePickColumns("hqStoreMoveDtlCtrl");
+	  
     var comboParams         = {};
     comboParams.nmcodeGrpCd = "097";
     var url                 = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -62,7 +66,7 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
     s.columnHeaders.rows[0].dataItem = {
       prodCd     : messages["hqStoreMove.dtl.prodCd"],
       prodNm     : messages["hqStoreMove.dtl.prodNm"],
-      poUnitFg   : messages["hqStoreMove.dtl.poUnitFg"],
+      poUnitFgNm : messages["hqStoreMove.dtl.poUnitFg"],
       poUnitQty  : messages["hqStoreMove.dtl.poUnitQty"],
       outUnitQty : messages["hqStoreMove.dtl.qty"],
       outEtcQty  : messages["hqStoreMove.dtl.qty"],
@@ -78,6 +82,7 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
       vatFg      : messages["hqStoreMove.dtl.vatFg"],
       envst0011  : messages["hqStoreMove.dtl.envst0011"],
       envst0011  : messages["hqStoreMove.dtl.envst0011"],
+      poUnitFg   : messages["hqStoreMove.dtl.poUnitFg"],
     };
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -169,6 +174,10 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.getSlipNoInfo = function () {
     var params    = {};
     params.slipNo = $scope.slipNo;
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+       params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
 
     // ajax 통신 설정
     $http({
@@ -201,12 +210,12 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
           var outSlipNo  = response.data.data.outSlipNo;
           var inSlipNo   = response.data.data.inSlipNo;
 
-          $("#regDt").html(regDt !== null ? getFormatDateTime(regDt) : "");
-          $("#outConfmDt").html(outConfmDt !== null ? getFormatDateTime(outConfmDt) : "");
-          $("#inConfmDt").html(inConfmDt !== null ? getFormatDateTime(inConfmDt) : "");
-          $("#hqConfmDt").html(hqConfmDt !== null ? getFormatDateTime(hqConfmDt) : "");
-          $("#outSlipNo").html(outSlipNo);
-          $("#inSlipNo").html(inSlipNo);
+          $("#regHqDt").html(regDt !== null ? getFormatDateTime(regDt) : "");
+          $("#outConfmHqDt").html(outConfmDt !== null ? getFormatDateTime(outConfmDt) : "");
+          $("#inConfmHqDt").html(inConfmDt !== null ? getFormatDateTime(inConfmDt) : "");
+          $("#hqConfmHqDt").html(hqConfmDt !== null ? getFormatDateTime(hqConfmDt) : "");
+          $("#outSlipHqNo").html(outSlipNo);
+          $("#inSlipHqNo").html(inSlipNo);
 
           if ($scope.procFg === "3") {
             $scope.hqStoreMoveDtlBtnLayer = false;
@@ -275,7 +284,7 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
       item.slipNo    = $scope.slipNo;
       item.dlvrFg    = $scope.dlvrFg;
       item.remark    = $scope.dtlHdRemark;
-      item.storageCd = "001";
+      item.storageCd = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg = confirmFg;
 
@@ -319,6 +328,10 @@ app.controller('hqStoreMoveDtlCtrl', ['$scope', '$http', '$timeout', function ($
     s_alert.popConf(msg, function () {
       var params    = {};
       params.slipNo = $scope.slipNo;
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+         params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
 
       /** 로딩바 show */
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);

@@ -15,6 +15,10 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
   $scope.initGrid = function (s, e) {
     // 배송기사
     var comboParams             = {};
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
     var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -95,7 +99,12 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
   $scope.getSlipNoInfo = function () {
     var params    = {};
     params.slipNo = $scope.slipNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -209,7 +218,6 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
 
       params.push(item);
     }
-
     $scope._save("/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl/save.sb", params, function () {
       $scope.saveRtnOutstockConfmDtlCallback()
     });
@@ -262,7 +270,16 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
       $("#divDtlOutDate").hide();
     }
   };
-
+  
+  
+  // 거래명세표
+  $scope.reportTrans = function () {
+    var params        = {};
+    params.slipFg     = $scope.slipFg;
+    params.strSlipNo  = $scope.slipNo;
+    params.stmtAcctFg = $scope.stmtAcctFg;
+    $scope._broadcast('transReportCtrl', params);
+  };
 
   // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
   // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.

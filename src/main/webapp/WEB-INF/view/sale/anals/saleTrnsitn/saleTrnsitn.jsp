@@ -173,6 +173,11 @@
 				<wj-flex-grid-column header="" binding="dateBefore0" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="saleTrnsitnCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
         </div>
         <%-- 페이지 리스트 --%>
 	    <div class="pageNum mt20">

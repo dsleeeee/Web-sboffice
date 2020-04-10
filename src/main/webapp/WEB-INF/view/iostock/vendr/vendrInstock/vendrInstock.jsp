@@ -125,7 +125,7 @@
         <wj-flex-grid-column header="<s:message code="vendrInstock.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.instockType"/>" binding="instockType" width="80" align="center" is-read-only="true" data-map="instockTypeMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.instockDate"/>" binding="instockDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.instockRtnDate"/>" binding="instockDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

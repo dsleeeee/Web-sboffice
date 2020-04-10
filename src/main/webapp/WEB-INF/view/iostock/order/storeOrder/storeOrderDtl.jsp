@@ -42,6 +42,11 @@
         <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveStoreOrderDtl('confirm')" ng-if="btnConfirm">
           <s:message code="storeOrder.dtl.confirm"/></button>
       </div>
+
+		<div class="mt20 oh sb-select dkbr">
+			<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 --%>
+		</div>
+
       <div style="clear: both;"></div>
 
       <div class="w100 mt10 mb20">

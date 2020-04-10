@@ -6,9 +6,12 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/move/hqStoreMove/hqStoreMove/"/>
 
-<div class="subCon" ng-controller="hqStoreMoveCtrl">
+<div id="hqStoreMoveView" class="subCon" ng-controller="hqStoreMoveCtrl" style="display: none;">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnHqStoreMoveSearch" ng-click="_broadcast('hqStoreMoveCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -23,9 +26,9 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqStoreMoveStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchHqStoreMoveEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -36,9 +39,9 @@
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
-              id="srchDlvrFg"
+              id="srchHqStoreMoveDlvrFg"
               ng-model="dlvrFg"
-              items-source="_getComboData('srchDlvrFg')"
+              items-source="_getComboData('srchHqStoreMoveDlvrFg')"
               display-member-path="name"
               selected-value-path="value"
               is-editable="false"
@@ -53,9 +56,9 @@
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
-              id="srchProcFg"
+              id="srchHqStoreMoveProcFg"
               ng-model="procFg"
-              items-source="_getComboData('srchProcFg')"
+              items-source="_getComboData('srchHqStoreMoveProcFg')"
               display-member-path="name"
               selected-value-path="value"
               is-editable="false"
@@ -102,15 +105,9 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('hqStoreMoveCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10">
     <%-- 신규 --%>
-    <button type="button" id="btnRegist" class="btn_skyblue ml5" ng-click="newRegist()">
+    <button type="button" id="btnHqStoreMoveRegist" class="btn_skyblue ml5" ng-click="newHqStoreMoveRegist()">
       <s:message code="hqStoreMove.newRegist"/></button>
   </div>
   <div style="clear: both;"></div>
@@ -130,9 +127,9 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="hqStoreMove.moveDate"/>" binding="moveDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.dlvrFg"/>" binding="dlvrFg" width="60" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.dlvrFg"/>" binding="dlvrFg" width="70" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqStoreMove.dtlCnt"/>" binding="dtlCnt" width="60" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqStoreMove.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeCd"/>" binding="outStoreCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.storeNm"/>" binding="outStoreNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqStoreMove.totAmt"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -151,21 +148,21 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/move/hqStoreMove/hqStoreMove.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/move/hqStoreMove/hqStoreMove.js" charset="utf-8"></script>
 
-<%-- 매장이동관리 상세 레이어 --%>
+<%-- 본사 매장이동관리 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장이동관리 신규등록 레이어 --%>
+<%-- 본사 매장이동관리 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장이동관리 상품추가 레이어 --%>
+<%-- 본사 매장이동관리 상품추가 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/hqStoreMove/hqStoreMoveAddProd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

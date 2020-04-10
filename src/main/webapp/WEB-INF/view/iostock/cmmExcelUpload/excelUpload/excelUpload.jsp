@@ -231,6 +231,11 @@
     // 현재 세션ID 와 동일한 데이터 삭제
     $scope.delete = function (upFg) {
       var params = {};
+      //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+
       $http({
         method : 'POST', //방식
         url    : "/iostock/cmmExcelUpload/excelUpload/excelUpload/delete.sb", /* 통신할 URL */
@@ -302,7 +307,11 @@
                 uploadData += String.fromCharCode(bytes[i]);
               }
             }
-
+/*
+console.log('### uploadData: \n' + uploadData);
+console.log('### uploadData: \n' + JSON.stringify($scope.textUploadToJsonConvert(uploadData)) );
+return;
+*/
             // 읽어온 파일데이터가 null 이 아닌 경우
             if (nvl(uploadData, '') !== '') {
               var jsonData = $scope.textUploadToJsonConvert(uploadData);
@@ -338,7 +347,8 @@
       var uploadDataArrLength = uploadDataArr.length;
       var jsonData            = [];
       var item                = {};
-      var columnNum           = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
+    //var columnNum           = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
+      var columnNum           = 3; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
 
       for (var i = 0; i < uploadDataArrLength; i++) {
         // String.fromCharCode(13) 으로 replace 를 하면 제대로 되지 않음..그래서 \n으로 replace 함..
@@ -362,12 +372,16 @@
             if (value !== '') {
               //1줄의 데이터가 columnNum 보다 많은 경우 양식이 이상한 것이므로 for문 종료
               if (j >= columnNum) break;
-
+			  /*
               if (j % columnNum === 0) {
                 item.prodBarcdCd = value;
               } else if (j % columnNum === 1) {
                 item.qty = value;
               }
+			  */
+              if		(j % columnNum === 0)	item.prodBarcdCd 	= value;
+              else if 	(j % columnNum === 1)	item.unitQty 		= value;
+              else if 	(j % columnNum === 2)	item.etcQty 		= value;
             }
           }
 
@@ -442,6 +456,10 @@
         jsonData.push(item);
       }
 
+/*
+console.log('### excelUploadToJsonConvert: \n' + JSON.stringify(jsonData) );
+return;
+*/
       $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
       $timeout(function () {
         $scope.save(jsonData);
@@ -478,7 +496,8 @@
         }
 
         // 엑셀업로드시 업로드구분에 따른 필수값 체크
-        if ($scope.excelTextFg === 'excel') {
+      //if ($scope.excelTextFg === 'excel') {
+        if ($scope.excelTextFg === 'excel'  ||  $scope.excelTextFg === 'text') {	//'Text'인 경우도 추가
           // 주문등록, 반품등록, 분배마감, 반품마감, 거래처 발주등록, 거래처 입고등록
           if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr') {
             // 단위수량
@@ -590,11 +609,18 @@
         params.push(item);
       }
 
+      //가상로그인 session 설정
+	    var sParam = {};
+	    if(document.getElementsByName('sessionId')[0]){
+	        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+
       // ajax 통신 설정
       $http({
         method : 'POST', //방식
         url    : '/iostock/cmmExcelUpload/excelUpload/excelUpload/save.sb', /* 통신할 URL */
         data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+        params : sParam,
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
@@ -628,6 +654,11 @@
     $scope.saveUpdateProdCd = function () {
       var params      = {};
       params.uploadFg = $scope.uploadFg;
+
+      //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
       // ajax 통신 설정
       $http({

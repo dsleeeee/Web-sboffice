@@ -23,11 +23,11 @@
 			      , NVL(C.REAL_SALE_AMT, 0 ) AS REAL_SALE_AMT
 			      , NVL(C.TOT_TIP_AMT, 0 ) AS TOT_TIP_AMT
 			      , NVL(C.TOT_ETC_AMT, 0 ) AS TOT_ETC_AMT
-			      , NVL(C.TOT_VAT_AMT, 0 ) AS TOT_VAT_AMT 
-			      , NVL(C.REAL_SALE_AMT - C.TOT_VAT_AMT, 0 ) AS TOT_GA_AMT 
-			      , NVL(D.PAY_AMT, 0 ) AS PAY_AMT	 		      
+			      , NVL(C.TOT_VAT_AMT, 0 ) AS TOT_VAT_AMT
+			      , NVL(C.REAL_SALE_AMT - C.TOT_VAT_AMT, 0 ) AS TOT_GA_AMT
+			      , NVL(D.PAY_AMT, 0 ) AS PAY_AMT
 				  ${sQuery1}
-				  <include refid="CmmSQL.PagingTemplateCount"/>					
+				  <include refid="CmmSQL.PagingTemplateCount"/>
  			 <choose>
 		     <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
              FROM    (
@@ -84,7 +84,7 @@
 						   AND C.STORE_CD IN
 					     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 									#{item}
-							</foreach>  
+							</foreach>
 						</if>
 						<if test='startDate != null and startDate != ""'>
 						   AND C.SALE_DATE >= #{startDate}
@@ -97,19 +97,19 @@
                      (
 						SELECT D.PROD_CD
 				            , NVL(SUM(D.PAY_AMT), 0 ) AS PAY_AMT
-							${sQuery2} 
+							${sQuery2}
 				          FROM (
 				                SELECT D.PROD_CD
 				                     , D.PAY_CD
 				                     , SUM(D.PAY_AMT) AS PAY_AMT
-				                     ${sQuery3} 
-				                  FROM TB_SL_DAILY_PROD_PAY D 
+				                     ${sQuery3}
+				                  FROM TB_SL_DAILY_PROD_PAY D
 				                 WHERE 1 = 1
 						        <if test='storeCd != null and storeCd != ""'>
 								   AND D.STORE_CD IN
 							     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 											#{item}
-									</foreach>  
+									</foreach>
 								</if>
 								<if test='startDate != null and startDate != ""'>
 								   AND D.SALE_DATE >= #{startDate}
@@ -118,10 +118,10 @@
 								   AND D.SALE_DATE <![CDATA[<= ]]> #{endDate}
 								</if>
 				                 GROUP BY D.PROD_CD, D.PAY_CD
-				              ) D 
-				        GROUP BY D.PROD_CD 
+				              ) D
+				        GROUP BY D.PROD_CD
 				        ORDER BY D.PROD_CD
-				     ) D 
+				     ) D
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
              AND     B.PROD_CLASS_CD = A.LV3_CD
              AND     B.PROD_CD       = C.PROD_CD
@@ -188,7 +188,7 @@
 						   AND C.STORE_CD IN
 					     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 									#{item}
-							</foreach>  
+							</foreach>
 						</if>
 						<if test='startDate != null and startDate != ""'>
 						   AND C.SALE_DATE >= #{startDate}
@@ -201,19 +201,19 @@
                      (
 						SELECT D.PROD_CD
 				            , NVL(SUM(D.PAY_AMT), 0 ) AS PAY_AMT
-							${sQuery2} 
+							${sQuery2}
 				          FROM (
 				                SELECT D.PROD_CD
 				                     , D.PAY_CD
 				                     , SUM(D.PAY_AMT) AS PAY_AMT
-				                     ${sQuery3} 
-				                  FROM TB_SL_DAILY_PROD_PAY D 
+				                     ${sQuery3}
+				                  FROM TB_SL_DAILY_PROD_PAY D
 				                 WHERE 1 = 1
 						        <if test='storeCd != null and storeCd != ""'>
 								   AND D.STORE_CD IN
 							     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 											#{item}
-									</foreach>  
+									</foreach>
 								</if>
 								<if test='startDate != null and startDate != ""'>
 								   AND D.SALE_DATE >= #{startDate}
@@ -222,10 +222,10 @@
 								   AND D.SALE_DATE <![CDATA[<= ]]> #{endDate}
 								</if>
 				                 GROUP BY D.PROD_CD, D.PAY_CD
-				              ) D 
-				        GROUP BY D.PROD_CD 
+				              ) D
+				        GROUP BY D.PROD_CD
 				        ORDER BY D.PROD_CD
-				     ) D 
+				     ) D
             WHERE   B.STORE_CD      = #{storeCd}
             AND     B.PROD_CLASS_CD = A.LV3_CD
             AND     B.PROD_CD       = C.PROD_CD
@@ -238,10 +238,10 @@
 	        </if>
 			</when>
 			</choose>
-			ORDER BY B.PROD_CD   
+			ORDER BY B.PROD_CD
 			<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-	
+
     <!-- 상품별매출 - 결제수단 컬럼 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -250,13 +250,38 @@
     -->
     <select id="getPayColList" parameterType="prodPayFgVO" resultType="DefaultMap">
         /* USE : ProdPayFgMapper.getPayColList */
-        <![CDATA[
-        SELECT  TCN.NMCODE_CD AS PAY_CD, TCN.NMCODE_NM AS PAY_NM, TCN.NMCODE_ITEM_1 AS PAY_METHOD
-        FROM    TB_CM_NMCODE TCN
-        WHERE   TCN.NMCODE_GRP_CD   =   '024'
-        ORDER
-        BY      TCN.NMCODE_CD
-        ]]>
+        SELECT	SUBSTR(A.SHOW_HD_CD,3,2) AS PAY_CD
+        		, B.NMCODE_NM AS PAY_NM
+        		, B.NMCODE_ITEM_1 AS PAY_METHOD
+        <choose>
+        	<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+        FROM	TB_HQ_SHOW_HD A
+        	</when>
+        	<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+        FROM	TB_MS_SHOW_HD A
+       		</when>
+        </choose>
+       			,(
+       				SELECT	NMCODE_CD
+       						, NMCODE_NM
+       						, NMCODE_ITEM_1
+       						, NMCODE_ITEM_2
+       				FROM    TB_CM_NMCODE
+       				WHERE   NMCODE_GRP_CD = '201'
+       			) B
+       	WHERE   A.BUSI_FG = B.NMCODE_ITEM_1
+       			AND A.SHOW_HD_CD = B.NMCODE_CD
+       	<choose>
+       		<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+        		AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        	</when>
+        	<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+        		AND A.STORE_CD = #{storeCd}
+        	</when>
+        </choose>
+       			AND B.NMCODE_ITEM_1 = 'SL'
+       			AND NVL(A.SHOW_YN,'N') = 'Y'
+       	ORDER BY A.SHOW_HD_CD
     </select>
-    
+
 </mapper>

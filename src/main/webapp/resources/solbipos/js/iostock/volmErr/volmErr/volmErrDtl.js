@@ -1,5 +1,5 @@
 /** 물량오류 상세 그리드 controller */
-app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout){
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('volmErrDtlCtrl', $scope, $http, true));
 
@@ -16,6 +16,11 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+
+    //Header column merge (출고수량, 입고수량)
+    s.allowMerging                          = 'ColumnHeaders';
+    s.columnHeaders.rows[0].allowMerging    = true;
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -29,25 +34,47 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.wjVolmErrDtlLayer.show(true);
     $("#spanDtlTitle").html(messages["volmErr.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["volmErr.dtl.store"] + ' : ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
+        /*
+        console.log('data.procFg        : ' + data.procFg     );
+        console.log('$scope.procFg      : ' + $scope.procFg   );
 
-    if ($scope.procFg === "0") {
+        console.log('scope.procFg === 0 : ' + $scope.procFg === "0"     );
+        console.log('scope.procFg ==  0 : ' + $scope.procFg ==  "0"     );
+        console.log('scope.procFg === 0 : ' + $scope.procFg ===  0      );
+        console.log('scope.procFg ==  0 : ' + $scope.procFg ==   0      );
+        console.log('scope.procFg === 0 : ' + $scope.procFg === '0'     );
+        console.log('scope.procFg ==  0 : ' + $scope.procFg ==  '0'     );
+
+        console.log('data.procFg === 0  : ' + data.procFg === "0"     );
+        console.log('data.procFg ==  0  : ' + data.procFg ==  "0"     );
+        console.log('data.procFg === 0  : ' + data.procFg ===  0      );
+        console.log('data.procFg ==  0  : ' + data.procFg ==   0      );
+        console.log('data.procFg === 0  : ' + data.procFg === '0'     );
+        console.log('data.procFg ==  0  : ' + data.procFg ==  '0'     );
+
+        console.log('data.procFg ==     : ' + data.procFg === $scope.procFg );
+        console.log('data.procFg ==     : ' + data.procFg ==  $scope.procFg );
+        */
+    if ($scope.procFg === "0") {    //procFgMap(0:입력, 1:확정)
+      //console.log('000 $scope.procFg === "0"');
       $("#volmErrBtnLayer").show();
-      $scope.volmErrConfirmFg = true;
-      $scope.btnDtlSave = true;
+      $scope.volmErrConfirmFg   = true;
+      $scope.btnDtlSave         = true;
     }
     else {
+      //console.log('000 else');
       $("#volmErrBtnLayer").hide();
-      $scope.volmErrConfirmFg = false;
-      $scope.btnDtlSave = false;
+      $scope.volmErrConfirmFg   = false;
+      $scope.btnDtlSave         = false;
     }
 
-    $("#volmErrConfirmFg").prop("checked", false);
-    $("#divDtlOutDate").hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
+    $("#volmErrConfirmFg"   ).prop("checked", false);
+    $("#divDtlOutDate"      ).hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
 
     // 물량오류 처리구분 콤보박스 조회 및 생성. slipFg 가 있어야 하므로 상세페이지를 호출할때 조회하도록 함.
     var comboParams         = {};
-    comboParams.nmcodeGrpCd = "089";
-    comboParams.nmcodeItem1 = $scope.slipFg;
+        comboParams.nmcodeGrpCd = "089";
+        comboParams.nmcodeItem1 = $scope.slipFg;
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, "errFgMap", "/iostock/cmm/iostockCmm/getCombo.sb", comboParams);
 
@@ -60,7 +87,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchVolmErrDtlList = function () {
     // 파라미터
     var params    = {};
-    params.slipNo = $scope.slipNo;
+        params.slipNo = $scope.slipNo;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/volmErr/volmErr/volmErrDtl/list.sb", params, function () {
     });
@@ -87,13 +114,13 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      if (newSlipNoFg === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
+      if (newSlipNoFg       === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
         newSlipNoFg = "Y";
       }
-      if (hqNewAdjustFg === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4")) {
+      if (hqNewAdjustFg     === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4")) {
         hqNewAdjustFg = "Y";
       }
-      if (storeNewAdjustFg === "N" && item.errFg === "R2") {
+      if (storeNewAdjustFg  === "N" && item.errFg === "R2") {
         storeNewAdjustFg = "Y";
       }
 
@@ -221,5 +248,37 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     });
   };
+
+
+	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                return column.visible;
+                                            }
+                },
+              //'물량오류관리_상세_' + getToday() + '.xlsx',
+                '물량오류관리_상세_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
 
 }]);

@@ -104,10 +104,10 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="empday.saleDate"/>" 		binding="saleDate" 			width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.yoil"/>" 			binding="yoil" 				width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.saleDate"/>" 		binding="saleDate" 			width="90"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.yoil"/>" 			binding="yoil" 				width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 

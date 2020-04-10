@@ -6,6 +6,15 @@ public class DstbReqVO extends PageVO {
 
     private static final long serialVersionUID = 6264807923226458551L;
 
+	/**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 본사코드 */
     private String hqOfficeCd;
     /** 출고요청일자 */
@@ -101,7 +110,16 @@ public class DstbReqVO extends PageVO {
     /** 분배완료여부 */
     private String dstbConfirmFg;
 
-    /**
+
+    public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
+
+	/**
      * @return the hqOfficeCd
      */
     public String getHqOfficeCd() {

@@ -22,6 +22,10 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 배송기사
     comboParams = {}; // 여러번 조회시 초기화를 해줘야함...
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
     var url     = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -96,7 +100,12 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.getSlipNoInfo = function () {
     var params    = {};
     params.slipNo = $scope.slipNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -174,8 +183,12 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 저장
   $scope.save = function () {
-    var params = [];
 
+    var params = [];
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
     // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
     if ($("#outstockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
       var item = $scope.flex.collectionView.items[0];
@@ -233,7 +246,12 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.hdRemark = $scope.hdRemark;
     params.hqRemark = $scope.hqRemark;
     params.dlvrCd   = $scope.dlvrCd;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -290,7 +308,7 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
     if (url) {
       comboUrl = url;
     }
-
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

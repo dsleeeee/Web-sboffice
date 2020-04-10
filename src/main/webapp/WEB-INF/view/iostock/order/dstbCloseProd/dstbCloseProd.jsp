@@ -80,6 +80,8 @@
     <%-- 확정 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()">
       <s:message code="dstbCloseProd.confirm"/></button>
+    <%-- 엑셀 다운로드 --%>
+	<button class="btn_skyblue ml5" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
   </div>
 
   <div class="w100 mt10">
@@ -92,7 +94,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>

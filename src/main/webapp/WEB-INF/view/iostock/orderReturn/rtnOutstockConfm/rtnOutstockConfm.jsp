@@ -98,12 +98,12 @@
       <%-- 매장코드 --%>
       <th><s:message code="rtnOutstockConfm.storeCd"/></th>
       <td>
-        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100"/>
+        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" maxlength="7"/>
       </td>
       <%-- 매장명 --%>
       <th><s:message code="rtnOutstockConfm.storeNm"/></th>
       <td>
-        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100"/>
+        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
     </tbody>
@@ -129,26 +129,26 @@
 
         <!-- define columns -->
         <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>--%>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipFg"/>" binding="slipFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.vendrNm"/>" binding="vendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dlvrNm"/>" binding="dlvrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.reqDate"/>" binding="reqDate" width="90" align="center" is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outDate"/>" binding="outDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.inDate"/>" binding="inDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.orderTot"/>" binding="orderTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.mgrTot"/>" binding="mgrTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outTot"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.inTot"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.penaltyAmt"/>" binding="penaltyAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.hqRemark"/>" binding="hqRemark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outDt"/>" binding="outDt" width="150" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outNm"/>" binding="outNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipNo"/>" 	binding="slipNo" 	width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipFg"/>" 	binding="slipFg" 	width="100" align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.vendrNm"/>" 	binding="vendrNm" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.slipKind"/>" binding="slipKind" 	width="70" 	align="center" 	is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.procFg"/>" 	binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.storeNm"/>" 	binding="storeNm" 	width="180" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dlvrNm"/>" 	binding="dlvrNm" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.reqDate"/>" 	binding="reqDate" 	width="90" 	align="center" 	is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outDate"/>" 	binding="outDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.inDate"/>" 	binding="inDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.orderTot"/>" binding="orderTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.mgrTot"/>" 	binding="mgrTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outTot"/>" 	binding="outTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.inTot"/>"  	binding="inTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.penaltyAmt"/>" binding="penaltyAmt" width="130" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.remark"/>" 	binding="remark" 	width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.hqRemark"/>" binding="hqRemark" 	width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outDt"/>" 	binding="outDt" 	width="150" align="center" 	is-read-only="true" format="dateTime"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.outNm"/>" 	binding="outNm" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

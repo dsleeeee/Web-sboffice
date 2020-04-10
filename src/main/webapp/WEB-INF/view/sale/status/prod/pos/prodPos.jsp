@@ -39,13 +39,23 @@
 						</span>
 					</div>
 				</td>
-
+				<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
+			</tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="hidden" id="posProdSelectStoreCd" value=""/>
 					<tr>
 						<%-- 매장코드 --%>
 						<th><s:message code="todayBillSaleDtl.store"/></th>
-						<td>
+						<td colspan="3">
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
 							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
@@ -66,7 +76,7 @@
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>
-					<td>
+					<td colspan="3">
 						<%-- 포스선택 모듈 멀티 선택 사용시 include --%>
 						<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
 							<jsp:param name="targetId" value="posProdSelectPos"/>
@@ -76,7 +86,6 @@
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
 				</tr>
-
 			</tr>
 		</tbody>
 	</table>
@@ -118,9 +127,9 @@
 				frozen-columns="9"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
-				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

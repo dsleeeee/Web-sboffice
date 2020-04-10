@@ -12,12 +12,12 @@
     <select id="selectStoreList" parameterType="iostockCmmVO" resultType="DefaultMap">
         /* USE : IostockCmmMapper.selectStoreList */
         <![CDATA[
-        SELECT  tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM
+        SELECT  tms.STORE_CD, tms.STORE_NM
         FROM    TB_MS_STORE tms
         WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
         ]]>
         <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD LIKE'%'||#{storeCd}||'%'
+            AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
@@ -53,6 +53,34 @@
                 FROM    TB_MS_VENDOR tmv
                 WHERE   tmv.STORE_CD  = #{storeCd}
                 ]]>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 창고선택 조회 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : iostockCmmVO
+        COMMENTS : 창고선택 리스트를 조회한다.
+    -->
+    <select id="selectStorageList" parameterType="iostockCmmVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectStorageList */
+        SELECT  STORAGE_CD, STORAGE_NM
+	    <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                FROM    TB_HQ_STORAGE
+		        WHERE   1 = 1
+	              AND   HQ_OFFICE_CD      =   #{hqOfficeCd}
+	              AND   USE_YN = 'Y'
+	         ORDER BY STORAGE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                FROM    TB_MS_STORAGE
+				WHERE   STORE_CD      =   #{storeCd}
+				AND     USE_YN = 'Y'
+				ORDER BY STORE_CD
             </when>
         </choose>
     </select>

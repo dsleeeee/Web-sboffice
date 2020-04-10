@@ -25,12 +25,12 @@
           <%-- 상품코드 --%>
             <th><s:message code="hqStoreMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchAddProdCd" name="srchAddProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchHqStoreMoveAddProdCd" name="srchHqStoreMoveAddProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
             <th><s:message code="hqStoreMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchAddProdNm" name="srchAddProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchHqStoreMoveAddProdNm" name="srchHqStoreMoveAddProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>
@@ -44,13 +44,13 @@
 
       <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchHqStoreMoveAddProdList();">
+        <button type="button" class="btn_blue fr" id="btnHqStoreMoveSearch" ng-click="searchHqStoreMoveAddProdList();">
           <s:message code="cmm.search"/></button>
       </div>
 
       <div class="tr mt20 fr">
         <%-- 저장 --%>
-        <button type="button" id="btnRegSave" class="btn_skyblue ml5 fl" ng-click="save()">
+        <button type="button" id="btnHqStoreMoveRegSave" class="btn_skyblue ml5 fl" ng-click="save()">
           <s:message code="cmm.save"/></button>
       </div>
       <div style="clear: both;"></div>
@@ -70,7 +70,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.add.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.add.poUnitFg"/>" binding="poUnitFgNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -86,8 +86,14 @@
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.add.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.add.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
+          <%-- ColumnPicker 사용시 include --%>
+          <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="hqStoreMoveAddProdCtrl"/>
+          </jsp:include>
+          <%--// ColumnPicker 사용시 include --%>
         </div>
         <%--//위즈모 테이블--%>
 

@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.acins.acins.service.AcinsService;
 import kr.co.solbipos.stock.acins.acins.service.AcinsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("acinsService")
+@Transactional
 public class AcinsServiceImpl implements AcinsService {
     private final AcinsMapper acinsMapper;
     private final MessageService messageService;

@@ -112,6 +112,11 @@ app.controller('acinsCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
 
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $scope._save("/stock/acins/acins/acins/delete.sb", params, function () {
         $scope.searchAcinsList()
       });

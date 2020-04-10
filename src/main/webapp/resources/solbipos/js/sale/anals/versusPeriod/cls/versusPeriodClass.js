@@ -626,6 +626,7 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	    params.storeCd = $scope.storeCd;
 	    params.prodClassCd = $scope.prodClassCd;
 	    params.isPageChk = isPageChk;
+	    params.listScale = $scope.listScale;
 
 
 	  /*else {

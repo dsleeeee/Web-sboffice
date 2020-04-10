@@ -177,7 +177,11 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
             // DTL의 진행구분 수정. 수주확정 -> 출고확정
             result = rtnOutstockConfmMapper.updateOutstockDtlConfirm(rtnOutstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+            
+            // PROD의 진행구분 수정. 수주확정 -> 출고확정
+            result = rtnOutstockConfmMapper.updateOutstockProdConfirm(rtnOutstockConfmHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            
             // HD의 진행구분 수정. 수주확정 -> 출고확정
             result = rtnOutstockConfmMapper.updateOutstockConfirm(rtnOutstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

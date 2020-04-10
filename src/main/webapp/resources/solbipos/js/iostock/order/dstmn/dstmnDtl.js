@@ -97,6 +97,10 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var params    = {};
     params.slipNo = $scope.slipNo;
 
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -166,6 +170,10 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 파라미터
     var params    = {};
     params.slipNo = $scope.slipNo;
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/order/dstmn/dstmnDtl/list.sb", params, function () {
     });
@@ -210,7 +218,10 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
       params.push(item);
     }
-
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
     $scope._save("/iostock/order/dstmn/dstmnDtl/save.sb", params, function () {
       $scope.saveDstmnDtlCallback()
     });
@@ -232,7 +243,12 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.hdRemark = $scope.hdRemark;
     params.hqRemark = $scope.hqRemark;
     params.dlvrCd   = $scope.dlvrCd;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -288,7 +304,10 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     if (url) {
       comboUrl = url;
     }
-
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

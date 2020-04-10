@@ -29,19 +29,29 @@
 	       	<%-- 조회일자 --%>
 			<tr>
 		    	<th><s:message code="cmm.search.date" /></th>
-	        	<td colspan="3">
-	          	<div class="sb-select">
-	          	    <span class="txtIn"><input id="srchDayStartDate" class="w120px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchDayEndDate" class="w120px"></span>
-	            	<span class="chk ml10">
-						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	        	<td>
+		          	<div class="sb-select">
+		          	    <span class="txtIn"><input id="srchDayStartDate" class="w120px"></span>
+	                    <span class="rg">~</span>
+	                    <span class="txtIn"><input id="srchDayEndDate" class="w120px"></span>
+		            	<span class="chk ml10">
+							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+			              	<label for="chkDt">
+		                		<s:message code="cmm.all.day" />
+		              		</label>
+		            	</span>
+		          	</div>
+	        	</td>
+	        	<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
 		              	<label for="chkDt">
-	                		<s:message code="cmm.all.day" />
+	                		<s:message code="periodIostock.prodClassDisplay" />
 	              		</label>
 	            	</span>
-	          	</div>
-	        	</td>
+				</td>
 			</tr>
 			<tr>
 	        <%-- 상품코드 --%>
@@ -117,10 +127,10 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodday.saleDate"/>" 	binding="saleDate" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-         	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodday.saleDate"/>" 	binding="saleDate" 		width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+         	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 	binding="prodNm" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodday.totSaleQty"/>" 	binding="totSaleQty" 	width="200" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

@@ -6,10 +6,15 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/stock/curr/storeCurr/storeCurr/"/>
 
-<div class="subCon" ng-controller="storeCurrCtrl">
-  <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
-  </div>
+<div class="subCon3" ng-controller="storeCurrCtrl">
+	<div class="searchBar flddUnfld">
+      <a href="#" class="open fl">${menuNm}</a>
+        
+      <%-- 조회 --%>
+      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeCurrCtrl')">
+        <s:message code="cmm.search"/>
+      </button>
+    </div>
   <table class="searchTbl">
     <colgroup>
       <col class="w15"/>
@@ -73,9 +78,10 @@
       <%-- 분류 --%>
       <th><s:message code="storeCurr.prodClass"/></th>
       <td>
-        <input type="text" class="sb-input w200px" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
+        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
                placeholder="<s:message code="cmm.all" />" readonly/>
         <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
       </td>
     </tr>
     <tr>
@@ -93,6 +99,12 @@
               is-editable="false"
               initialized="_initComboBox(s)">
             </wj-combo-box>
+          </span>
+          <span class="chk ml10">
+				<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+	            <label for="chkDt">
+                	<s:message code="periodIostock.prodClassDisplay" />
+              	</label>
           </span>
         </div>
       </td>
@@ -129,11 +141,6 @@
     <li><s:message code="storeCurr.txt1"/></li>
   </ul>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeCurrCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
   <div style="clear: both;"></div>
 
   <div class="w100 mt10">
@@ -146,11 +153,17 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="true"
-        item-formatter="_itemFormatter">
+        item-formatter="_itemFormatter"
+        frozen-columns="5">
 
         <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="periodIostock.lv1Nm"/>"        			binding="lv1Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="periodIostock.lv2Nm"/>"        			binding="lv2Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="periodIostock.lv3Nm"/>"       			binding="lv3Nm"					width="120"		align="center"		is-read-only="true"		visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeCurr.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeCurr.storeNm"/>" binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitQty"/>" binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.vendrCd"/>" binding="vendrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -160,12 +173,12 @@
         <wj-flex-grid-column header="<s:message code="storeCurr.safeStockQty"/>" binding="safeStockQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.currQty"/>" binding="currQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.currAmt"/>" binding="currAmt" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-        <c:if test="${sessionInfo.orgnFg == 'STORE' && sessionInfo.hqOfficeCd != '0000'}">
+<%--         <c:if test="${sessionInfo.orgnFg == 'STORE' && sessionInfo.hqOfficeCd != '0000'}"> --%>
           <wj-flex-grid-column header="<s:message code="storeCurr.accStoreInQty"/>" binding="accStoreInQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCurr.accStoreOutQty"/>" binding="accStoreOutQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCurr.accMoveInQty"/>" binding="accMoveInQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storeCurr.accMoveOutQty"/>" binding="accMoveOutQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-        </c:if>
+<%--         </c:if> --%>
         <wj-flex-grid-column header="<s:message code="storeCurr.accPurchsInQty"/>" binding="accPurchsInQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.accPurchsOutQty"/>" binding="accPurchsOutQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.accStoreSaleQty"/>" binding="accStoreSaleQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
@@ -198,4 +211,8 @@
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
+<%-- 재고현황 팝업 --%>
+<c:import url="/WEB-INF/view/stock/com/popup/cmmStockStatus/cmmStockStatus.jsp">
 </c:import>

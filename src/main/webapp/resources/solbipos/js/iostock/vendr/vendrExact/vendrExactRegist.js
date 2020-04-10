@@ -47,7 +47,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
     params.vendrCd    = $scope.vendrCd;
     params.excclcDate = $scope.excclcDate;
     params.seqNo      = $scope.seqNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrExact/vendrExactRegist/getExactInfo.sb", /* 통신할 URL */
@@ -108,7 +113,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
     params.excclcTot  = removeComma($scope.vendrExact.excclcTot);
     params.excclcFg   = '2';
     params.remark     = $scope.vendrExact.remark;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrExact/vendrExactRegist/save.sb", /* 통신할 URL */
@@ -152,7 +162,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
       params.vendrCd    = $("#vendrExactRegistSelectVendrCd").val();
       params.seqNo      = $scope.seqNo;
       params.excclcDate = wijmo.Globalize.format($scope.vendrExact.excclcDate, 'yyyyMMdd');
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrExact/vendrExactRegist/delete.sb", /* 통신할 URL */

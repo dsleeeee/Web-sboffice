@@ -149,6 +149,11 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
 
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -184,7 +189,9 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                 }
               }
 
-              $("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신잔액 : " + addComma($scope.currLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
+            //$("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신잔액 : " + addComma($scope.currLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
+            //$("#dtlStoreLoanInfo").html("[1회주문한도액] " + addComma($scope.maxOrderAmt) + "  [여신잔액] " + addComma($scope.currLoanAmt) + "  [미출고액] " + addComma($scope.prevOrderTot) + "  [주문가능액] " + addComma($scope.availableOrderAmt));
+              $("#dtlStoreLoanInfo").html("1회주문한도액 [" + addComma($scope.maxOrderAmt) + "]   여신잔액 [" + addComma($scope.currLoanAmt) + "]   미출고액 [" + addComma($scope.prevOrderTot) + "]   주문가능액 [" + addComma($scope.availableOrderAmt) + "]");
             } else {
               $("#dtlStoreLoanInfo").html('');
             }
@@ -236,7 +243,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       if (saveFg === "confirm") {
         $scope.confirm();
       } else {
-        $scope._popMsg(messages["cmm.not.modify"]);
+        $scope._popMsg(messages["cmm.not.modify"]); //cmm.not.modify=변경 사항이 없습니다.
       }
       return false;
     } else {
@@ -245,16 +252,23 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
     if ($scope.availableOrderAmt != null) {
       if (parseInt($scope.availableOrderAmt) < parseInt(orderTot)) {
-        $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
+        $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);    //storeOrder.dtl.orderTotOver=주문 총금액이 주문가능액을 초과하였습니다.
         return false;
       }
     }
+
+    //가상로그인 session 설정
+	    var sParam = {};
+	    if(document.getElementsByName('sessionId')[0]){
+	        sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
       url    : '/iostock/order/storeOrder/storeOrderRegist/save.sb', /* 통신할 URL */
       data   : params, /* 파라메터로 보낼 데이터 */
+      params : sParam,
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if ($scope._httpStatusCheck(response, true)) {
@@ -280,12 +294,24 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
   // 주문확정
   $scope.confirm = function () {
-    var params     = {};
-    params.reqDate = $scope.reqDate;
-    params.slipFg  = $scope.slipFg;
-    params.remark  = $scope.dtlHdRemark;
+    var params          = {};
+        params.reqDate  = $scope.reqDate;
+        params.slipFg   = $scope.slipFg;
+        params.remark   = $scope.dtlHdRemark;
+        params.envst1042= gEnvst1042;
 
-    $scope._save("/iostock/order/storeOrder/storeOrderDtl/confirm.sb", params, function () {
+        //여신잔액 check를 위한 추가 - START
+	        var orderTot = 0;
+	        for(var i=0; i<$scope.flex.collectionView.items.length; i++){
+	        	var item = $scope.flex.collectionView.items[i];
+
+	        	orderTot += parseInt(item.orderTot, 0);
+	        }
+	        params.orderTot = orderTot;
+        //여신잔액 check를 위한 추가 - END
+
+        //console.log('params:' + JSON.stringify(params));
+      $scope._save("/iostock/order/storeOrder/storeOrderDtl/confirm.sb", params, function () {
       $scope.saveOrderDtlCallback()
     });
   };
@@ -323,6 +349,11 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     if (url) {
       comboUrl = url;
     }
+
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
 
     // ajax 통신 설정
     $http({
@@ -381,5 +412,39 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       }
     });
   };
+
+
+
+	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                return column.visible;
+                                            }
+                },
+              //'주문등록_상세_' + getToday() + '.xlsx',
+                '주문등록_상세_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
+
 
 }]);

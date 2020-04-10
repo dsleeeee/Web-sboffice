@@ -59,11 +59,21 @@
             <tr>
                 <%-- 누적판매비율 --%>
                 <th><s:message code="abc.totSaleRate" /></th>
-                <td colspan="3">
-                        <span class="txtIn">A등급<input id="abcGradeA" class="w120px sb-input" value="70">%</span>
-                        <span class="txtIn">B등급<input id="abcGradeB" class="w120px sb-input" value="90">%</span>
-                        <span class="txtIn">C등급<input id="abcGradeC" class="w120px sb-input" value="100">%</span>
+                <td>
+                    <span class="txtIn" style="width:32%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:32%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:32%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
                 </td>
+	            <%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
             </tr>
             <tr>
                 <%-- 정렬순서 --%>
@@ -117,10 +127,10 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="abc.grade"/>"              binding="grade"       width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv1Nm"/>"              binding="lv1Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv2Nm"/>"              binding="lv2Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv3Nm"/>"              binding="lv3Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.prodCd"/>"             binding="prodCd"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv1Nm"/>"              binding="lv1Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv2Nm"/>"              binding="lv2Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv3Nm"/>"              binding="lv3Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.prodCd"/>"             binding="prodCd"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true" format="d"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.prodNm"/>"             binding="prodNm"   width="165" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.realSaleAmt"/>"        binding="realSaleAmt"   width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.totSaleQty"/>"         binding="totSaleQty"   width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>

@@ -1,3 +1,5 @@
+//var app = agrid.getApp();
+
 /** 주문등록 상세 그리드 controller */
 app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
@@ -186,6 +188,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
 
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -222,6 +229,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
 
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -257,6 +269,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
     // ajax 통신 설정
     $http({
@@ -296,6 +313,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
     // ajax 통신 설정
     $http({
@@ -363,7 +385,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.reqDate   = $scope.reqDate;
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format($scope.srchRegStartDate.value, 'yyyyMMdd');
-    params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value,   'yyyyMMdd');
     params.listScale = 50;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -391,7 +413,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         $scope._popMsg(messages["storeOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
         return false;
       }
-      if (item.orderTot !== null && (parseInt(item.orderTot) > 9999999999)) {
+    //if (item.orderTot !== null && (parseInt(item.orderTot) > 9999999999)) {
+      if (item.orderTot !== null && (parseInt(item.orderTot) > 999999999 )) {
         $scope._popMsg(messages["storeOrder.dtl.not.overOrderTot"]); // 주문금액이 너무 큽니다.
         return false;
       }
@@ -511,6 +534,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     if (url) {
       comboUrl = url;
     }
+
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
     // ajax 통신 설정
     $http({
@@ -656,6 +684,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     params.addQtyFg = $scope.addQtyFg;
 
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 
     $http({
       method : 'POST', //방식

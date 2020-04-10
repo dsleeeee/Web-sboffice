@@ -100,10 +100,12 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND		STORAGE_CD = '999'
                 )   tshsc
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_STORE_STOCK_CUR
                     WHERE   STORE_CD  =   #{storeCd}
+                    AND		STORAGE_CD = '999'
                 )   tsssc
         ,        TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}

@@ -107,7 +107,12 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -161,7 +166,7 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
         item.status    = "U";
         item.outDate   = wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
         item.empNo     = "0000";
-        item.storageCd = "001";
+        item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
         item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
         params.push(item);
       }

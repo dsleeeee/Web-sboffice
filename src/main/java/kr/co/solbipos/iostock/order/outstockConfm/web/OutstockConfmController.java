@@ -252,7 +252,8 @@ public class OutstockConfmController {
         iostockCmmVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER");
         iostockCmmVO.setSelectCd("DLVR_CD");
         iostockCmmVO.setSelectNm("DLVR_NM");
-        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+        //iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"'");
             list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 //        }
 //        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
