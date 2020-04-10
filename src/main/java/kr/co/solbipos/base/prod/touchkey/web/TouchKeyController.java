@@ -112,6 +112,10 @@ public class TouchKeyController {
         String touchKeyEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
         model.addAttribute("touchKeyEnvstVal", touchKeyEnvstVal);
 
+        // 터치키 그룹 가져오기
+        List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
+        model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
         return "base/prod/touchKey/touchKey";
     }
 
@@ -127,7 +131,7 @@ public class TouchKeyController {
     @ResponseBody
     public Result getTouchKeyStyleCd(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(sessionInfoVO)));
+        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(sessionInfoVO, request.getParameter("tukeyGrpCd"))));
     }
 
     /**
@@ -194,7 +198,7 @@ public class TouchKeyController {
     @ResponseBody
     public Result getTouchKeyXml(HttpServletRequest request, HttpSession session, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO);
+        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO, request.getParameter("tukeyGrpCd"));
         return new Result(Status.OK, xml);
     }
 
@@ -216,7 +220,7 @@ public class TouchKeyController {
         String xml = CmmUtil.decoder(request.getParameter("xml"));
         xml.replace("\n", "&#xa;");
 
-        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
+        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml), request.getParameter("tukeyGrpCd"));
 
         return result;
     }

@@ -87,4 +87,7 @@ public interface TouchKeyMapper {
     /** 터치키 매장생성 */
     int insertTouchKeyToStore(TouchKeyVO touchKeyVO);
 
+    /** 판매터치키 그룹 조회 */
+    List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO);
+
 }

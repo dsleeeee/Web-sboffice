@@ -35,20 +35,23 @@ public interface TouchKeyService {
     List<DefaultMap<String>> getTouchKeyStyleList(TouchKeyStyleVO touchKeyStyleVO, SessionInfoVO sessionInfoVO);
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
-    String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO);
+    String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO, String tukeyGrpCd);
 
     /** 판매터치키 XML 정보 조회 */
-    String getTouchKeyXml(SessionInfoVO sessionInfoVO);
+    String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd);
 
     /** 판매터치키 저장 상품정보 조회 */
     List<DefaultMap<String>> getTouchKeyProdInfoList(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 
     /** 판매터치키 저장 */
-    Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml);
+    Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd);
 
     /** 매장목록 조회 */
     List<DefaultMap<String>> getStoreList(TouchKeyVO TouchKeyVO, SessionInfoVO sessionInfoVO);
 
     /** 터치키 매장적용 */
     int saveTouchKeyToStore(TouchKeyVO[] TouchKeyVOs, SessionInfoVO sessionInfoVO);
+
+    /** 판매터치키 그룹 조회 */
+    List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 }

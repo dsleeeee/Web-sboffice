@@ -105,6 +105,8 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }, 10);
   };
+  //
+  $scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
   $scope.setTouchKeyFilter = function(s) {
@@ -214,18 +216,25 @@ $(document).ready(function() {
       params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
 
-    // 스타일 코드 조회
-    $.ajax({
-      type: 'POST',
-      async: false,
-      cache: false,
-      dataType: 'json',
-      url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCd.sb',
-      data: params,
-      success: function(data){
-        touchKeyStyleCd = data.data;
-      }
-    });
+    // 터치키그룹 추가
+    var scope = agrid.getScope("touchKeyCtrl");
+    params['tukeyGrpCd'] = scope.touchKeyGrp;
+
+    if(scope.touchKeyGrp !== null && scope.touchKeyGrp !== "") { // 기존에 사용중인 터치키그룹이 있는 경우에만 조회(없으면 기본 스타일 '01'로 셋팅)
+      // 스타일 코드 조회
+      $.ajax({
+        type: 'POST',
+        async: false,
+        cache: false,
+        dataType: 'json',
+        url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCd.sb',
+        data: params,
+        success: function (data) {
+          touchKeyStyleCd = data.data;
+        }
+      });
+    }else{ touchKeyStyleCd = '01' }
+
     // 스타일 코드목록 조회
     $.ajax({
       type: 'POST',
@@ -289,7 +298,6 @@ $(document).ready(function() {
   })();
 
 });
-
 
 //지정된 영역에만 터치키를 넣을 수 있도록 처리
 mxGraph.prototype.allowNegativeCoordinates = false;
@@ -1398,11 +1406,138 @@ Format.prototype.initElements = function () {
   var graph = this.graph;
   var format = this;
 
-  // 조회 버튼
+  // 상품목록 조회 버튼
   addClickHandler(document.getElementById('btnSearch'), function () {
-    format.open(false);
+    //format.open(false);
     var scope = agrid.getScope("touchKeyCtrl");
     scope._broadcast('touchKeyCtrl');
+  });
+
+  // 새로그리기 버튼
+  addClickHandler(document.getElementById('btnNewGrp'), function () {
+
+    var scope = agrid.getScope("touchKeyCtrl");
+    var classArea = format.touchkey.classArea;
+    var prodArea = format.touchkey.prodArea;
+
+    // 터치키 그룹코드와 새 그룹으로 저장 버튼 막기
+    $("#btnSave").css("display", "none");
+    $("#touchKeyGrpCombo").attr("disabled", true);
+
+    // 아무것도 없는 빈 XML 터치키 셋팅
+    format.setGraphXml(classArea, null);
+    format.setGraphXml(prodArea, null);
+    scope._broadcast('touchKeyCtrl');
+
+  });
+
+  // 조회버튼
+  addClickHandler(document.getElementById('btnSrchTouchKey'), function () {
+
+    var scope = agrid.getScope("touchKeyCtrl");
+    var classArea = format.touchkey.classArea;
+    var prodArea = format.touchkey.prodArea;
+
+    var params = {};
+    if (document.getElementsByName('sessionId')[0]) {
+      params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // 터치키그룹 추가
+    params['tukeyGrpCd'] = scope.touchKeyGrp;
+
+    // 스타일 코드 조회
+    $.ajax({
+      type: 'POST',
+      async: false,
+      cache: false,
+      dataType: 'json',
+      url: '/base/prod/touchKey/touchKey/getTouchKeyStyleCd.sb',
+      data: params,
+      success: function(data){
+        touchKeyStyleCd = (data['data']).replaceAll('\"','');
+        format.selectStyle.selectedValue = touchKeyStyleCd;
+        format.setBtnStyle();
+      }
+    });
+
+    // 터치키 XML과 사용중인 상품 조회
+    $.ajax({
+      type: 'POST',
+      async: false,
+      cache: false,
+      dataType: 'json',
+      url:  TOUCHKEY_OPEN_URL,
+      data: params,
+      success: function(data){
+
+        if (data.status === 'OK') {
+          try {
+            //var jsonStr = JSON.parse(data);
+            var xmlStr = data.data;
+
+            if (xmlStr != null) {
+              var xmlArr = xmlStr.split("|");
+
+              //터치키분류 영역 추가
+              var classXml = mxUtils.parseXml(xmlArr[0]);
+              format.setGraphXml(classArea, classXml.documentElement);
+
+              //상품 영역 추가
+              var prodXml = mxUtils.parseXml(xmlArr[1]);
+              format.setGraphXml(prodArea, prodXml.documentElement);
+
+              var model = classArea.getModel();
+              var parent = classArea.getDefaultParent();
+
+              // 터치키분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
+              var firstCell = model.getChildAt(parent, 0);
+              // 셀이 존재하는 경우에만 선택 후 이동처리
+              if ( firstCell != null ) {
+                classArea.selectCellForEvent(firstCell);
+                var layer = prodArea.model.getCell(firstCell.getId());
+                // 상품영역 레이어 변경
+                prodArea.switchLayer(layer);
+              }
+
+              // 터치키분류 영역 스크롤 초기화
+              document.getElementById('classWrap').scrollLeft = 0;
+              // 터치키분류 영역 페이지번호 초기화
+              document.getElementById('classPageNoText').textContent = "PAGE : 1";
+
+            } else {
+              // xml이 없는경우 초기화
+              format.setGraphXml(classArea, null);
+              format.setGraphXml(prodArea, null);
+            }
+            scope._broadcast('touchKeyCtrl');
+
+          }
+          catch (e) {
+            scope.$apply(function(){
+              alert(e.message);
+              scope.$broadcast('loadingPopupInactive');
+              scope._popMsg(mxResources.get('errorOpeningFile'));
+            });
+          }
+        }
+        else {
+          scope.$apply(function(){
+            alert(data.status);
+            scope.$broadcast('loadingPopupInactive');
+            scope._popMsg(mxResources.get('errorOpeningFile'));
+          });
+        }
+      }
+    });
+
+    // 터치키 저장 Flag '수정'으로 기본셋팅(조회를 한다는 것 > 터치키 그룹이 있다는것)
+    $("#hdNewGrp").val("N");
+
+    // 터치키 그룹코드와 새 그룹으로 저장 버튼 보이기
+    $("#btnSave").css("display", "");
+    $("#touchKeyGrpCombo").attr("disabled", false);
+
   });
 
   // 스타일적용 버튼
@@ -1436,6 +1571,19 @@ Format.prototype.initElements = function () {
 
   // 저장 버튼
   addClickHandler(document.getElementById('btnSave'), function () {
+
+    // 터치키 저장 시 수정하겠다는 Flag
+    $("#hdNewGrp").val("N");
+
+    format.save(format.touchkey.classArea, format.touchkey.prodArea);
+  });
+
+  // 새 그룹으로 저장 버튼
+  addClickHandler(document.getElementById('btnSaveNewGrp'), function () {
+   
+    // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
+    $("#hdNewGrp").val("Y");
+
     format.save(format.touchkey.classArea, format.touchkey.prodArea);
   });
 
@@ -1810,74 +1958,86 @@ Format.prototype.open = function (isLoad) {
     TOUCHKEY_OPEN_URL = TOUCHKEY_OPEN_URL + "?sid=" + document.getElementsByName('sessionId')[0].value;
   }
 
-  //open
-  var reqArea = mxUtils.post(TOUCHKEY_OPEN_URL, '',
-    mxUtils.bind(this, function (req) {
-      var scope = agrid.getScope("touchKeyCtrl");
-      //var enabled = req.getStatus() != 404;
-      if (req.getStatus() === 200) {
-        try {
-          var jsonStr = JSON.parse(req.getText());
-          var xmlStr = jsonStr.data;
+  // 터치키그룹 추가
+  var scope = agrid.getScope("touchKeyCtrl");
+  var params = 'tukeyGrpCd=' + scope.touchKeyGrp;
 
-          if (xmlStr != null) {
-            var xmlArr = xmlStr.split("|");
+  if(scope.touchKeyGrp !== null && scope.touchKeyGrp !== "") {
 
-            //터치키분류 영역 추가
-            var classXml = mxUtils.parseXml(xmlArr[0]);
-            this.setGraphXml(classArea, classXml.documentElement);
+    //open
+    var reqArea = mxUtils.post(TOUCHKEY_OPEN_URL, params,
+        mxUtils.bind(this, function (req) {
+          //var enabled = req.getStatus() != 404;
+          if (req.getStatus() === 200) {
+            try {
+              var jsonStr = JSON.parse(req.getText());
+              var xmlStr = jsonStr.data;
 
-            //상품 영역 추가
-            var prodXml = mxUtils.parseXml(xmlArr[1]);
-            this.setGraphXml(prodArea, prodXml.documentElement);
+              if (xmlStr != null) {
+                var xmlArr = xmlStr.split("|");
 
-            var model = classArea.getModel();
-            var parent = classArea.getDefaultParent();
+                //터치키분류 영역 추가
+                var classXml = mxUtils.parseXml(xmlArr[0]);
+                this.setGraphXml(classArea, classXml.documentElement);
 
-            // 터치키분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
-            var firstCell = model.getChildAt(parent, 0);
-            // 셀이 존재하는 경우에만 선택 후 이동처리
-            if ( firstCell != null ) {
-              classArea.selectCellForEvent(firstCell);
-              var layer = prodArea.model.getCell(firstCell.getId());
-              // 상품영역 레이어 변경
-              prodArea.switchLayer(layer);
+                //상품 영역 추가
+                var prodXml = mxUtils.parseXml(xmlArr[1]);
+                this.setGraphXml(prodArea, prodXml.documentElement);
+
+                var model = classArea.getModel();
+                var parent = classArea.getDefaultParent();
+
+                // 터치키분류 영역에서 첫번째(무엇이될지는모름) 셀을 선택하고 상품영역에서도 해당 레이어 활성화
+                var firstCell = model.getChildAt(parent, 0);
+                // 셀이 존재하는 경우에만 선택 후 이동처리
+                if ( firstCell != null ) {
+                  classArea.selectCellForEvent(firstCell);
+                  var layer = prodArea.model.getCell(firstCell.getId());
+                  // 상품영역 레이어 변경
+                  prodArea.switchLayer(layer);
+                }
+
+                // 터치키분류 영역 스크롤 초기화
+                document.getElementById('classWrap').scrollLeft = 0;
+                // 터치키분류 영역 페이지번호 초기화
+                document.getElementById('classPageNoText').textContent = "PAGE : 1";
+
+              } else {
+                // xml이 없는경우 초기화
+                this.setGraphXml(classArea, null);
+                this.setGraphXml(prodArea, null);
+              }
+              scope._broadcast('touchKeyCtrl');
+
             }
-
-            // 터치키분류 영역 스크롤 초기화
-            document.getElementById('classWrap').scrollLeft = 0;
-            // 터치키분류 영역 페이지번호 초기화
-            document.getElementById('classPageNoText').textContent = "PAGE : 1";
-
-          } else {
-            // xml이 없는경우 초기화
-            this.setGraphXml(classArea, null);
-            this.setGraphXml(prodArea, null);
+            catch (e) {
+              scope.$apply(function(){
+                scope.$broadcast('loadingPopupInactive');
+                scope._popMsg(mxResources.get('errorOpeningFile'));
+              });
+            }
+            if (!isLoad) {
+              scope.$apply(function(){
+                scope.$broadcast('loadingPopupInactive');
+                scope._popMsg(mxResources.get('opened'));
+              });
+            }
           }
-          scope._broadcast('touchKeyCtrl');
+          else {
+            scope.$apply(function(){
+              scope.$broadcast('loadingPopupInactive');
+              scope._popMsg(mxResources.get('errorOpeningFile'));
+            });
+          }
+        })
+    );
+  }else{
+    // xml이 없는경우 초기화
+    this.setGraphXml(classArea, null);
+    this.setGraphXml(prodArea, null);
 
-        }
-        catch (e) {
-          scope.$apply(function(){
-            scope.$broadcast('loadingPopupInactive');
-            scope._popMsg(mxResources.get('errorOpeningFile'));
-          });
-        }
-        if (!isLoad) {
-          scope.$apply(function(){
-            scope.$broadcast('loadingPopupInactive');
-            scope._popMsg(mxResources.get('opened'));
-          });
-        }
-      }
-      else {
-        scope.$apply(function(){
-          scope.$broadcast('loadingPopupInactive');
-          scope._popMsg(mxResources.get('errorOpeningFile'));
-        });
-      }
-    })
-  );
+    scope._broadcast('touchKeyCtrl');
+  }
 
 };
 
@@ -1962,6 +2122,14 @@ Format.prototype.save = function () {
       });
 
       var params = 'xml=' + xml;
+
+      // 수정인지 신규저장인지 파악하기 위해
+      if($("#hdNewGrp").val() === 'Y'){
+        params += '&tukeyGrpCd=';
+      }else{
+        params += '&tukeyGrpCd=' + scope.touchKeyGrp;
+      }
+
       // 가상로그인 대응
       if (document.getElementsByName('sessionId')[0]) {
         params += "&sid=" + document.getElementsByName('sessionId')[0].value;

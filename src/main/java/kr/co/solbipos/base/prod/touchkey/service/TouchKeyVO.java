@@ -76,6 +76,9 @@ public class TouchKeyVO extends CmmVO {
     /** 조회용 가맹점명 */
     private String storeNm;
 
+    /** 터치키그룹코드 : 시즌,행사별 등 일종의 템플릿 */
+    private String tukeyGrpCd;
+
     /**
      * @return the orgnFg
      */
@@ -357,5 +360,13 @@ public class TouchKeyVO extends CmmVO {
      */
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+
+    public String getTukeyGrpCd() {
+        return tukeyGrpCd;
+    }
+
+    public void setTukeyGrpCd(String tukeyGrpCd) {
+        this.tukeyGrpCd = tukeyGrpCd;
     }
 }

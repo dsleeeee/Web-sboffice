@@ -7,6 +7,7 @@
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="touchKeyEnvstVal" value="${touchKeyEnvstVal}" />
+<c:set var="touchKeyGrp" value="${touchKeyGrp}" />
 
 <%--서브컨텐츠--%>
 <div class="subCon" ng-controller="touchKeyCtrl">
@@ -15,26 +16,48 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('gridCtrl');">
+      <button class="btn_blue fr" id="btnSrchTouchKey">
         <s:message code="cmm.search" />
       </button>
     </div>
   </div>
-  <table class="searchTbl" ng-show="userOrgnFg != 'S'">
+  <table class="searchTbl">
     <colgroup>
       <col class="w10" />
-      <col class="w20" />
-      <col class="w70" />
+      <col class="w40" />
+      <col class="w10" />
+      <col class="w40" />
     </colgroup>
     <tbody>
-    <tr>
+    <tr id="trTouchKeyGrp">
+      <%-- 분류조회 --%>
+      <th><s:message code="touchKey.grp" /></th>
+      <td colspan="3">
+        <div class="sb-select" style="width:120px; float:left;">
+        <wj-combo-box
+                id="touchKeyGrpCombo"
+                ng-model="touchKeyGrp"
+                items-source="_getComboData('touchKeyGrpCombo')"
+                display-member-path="name"
+                selected-value-path="name"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+        </wj-combo-box>
+        </div>
+        <%-- 새로그리기 --%>
+        <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
+        <%-- 새로그리기 취소 --%>
+        <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
+        <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
+        <input type="hidden" id="hdNewGrp"/>
+      </td>
+    </tr>
+    <tr id="trApplyStore" ng-show="userOrgnFg != 'S'">
       <th><s:message code="touchKey.applyStore" /></th>
-      <td colspan="2" class="oh">
+      <td colspan="3" class="oh">
         <button class="btn_blk fl" id="btnApplyStore" ng-click="$broadcast('showPopUp')">
           <s:message code="touchKey.applyStore" />
         </button>
-      </td>
-      <td>
       </td>
     </tr>
     </tbody>
@@ -69,6 +92,9 @@
                  ng-model="prodClassInfo.prodClassCdNm"
                  ng-click="popUpProdClass()"
                  placeholder="상품분류 선택" ng-readonly="true">
+          <button class="btn_skyblue fl ml5" id="btnSearch">
+            <s:message code="cmm.search" />
+          </button>
         </div>
       </div>
       <%--위즈모 테이블--%>
@@ -111,8 +137,9 @@
           <div class="sb-select dkbr fl w120px">
             <div id="selectStyle" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>></div>
           </div>
-          <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>><s:message code="touchKey.applyStyle"/></button>
-          <button class="btn_skyblue fl ml20" id="btnSave" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>><s:message code="cmm.save"/></button>
+          <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSaveNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.saveNewGrp"/></button>
         </div>
       </div>
       <div id="touchArea" class="prev2 fl">
@@ -208,6 +235,30 @@
 <%--//서브컨텐츠--%>
 
 <script>
+  var touchKeyGrpData = ${touchKeyGrp};
+
+  // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
+  if(touchKeyGrpData.length === 0){
+    $("#btnSrchTouchKey").css("display", "none");  //조회버튼
+    $("#btnNewGrp").css("display", "none");         //새로그리기버튼
+    //$("#btnCancleNewGrp").css("display", "none");      //새로그리기취소버튼
+    $("#btnSave").css("display", "none");            //저장버튼
+    $("#touchKeyGrpCombo").attr("disabled", true);  //터치키 그룹코드 콤보박스
+    $("#btnApplyStore").css("display", "none");     //터치키매장적용버튼
+    $("#trTouchKeyGrp").css("display", "none");     //터치키그룹코드 콤보박스 행
+    $("#trApplyStore").css("display", "none");     //터치키매장적용버튼 행
+
+  }else{
+    $("#btnSrchTouchKey").css("display", "");
+    $("#btnNewGrp").css("display", "");
+    //$("#btnCancleNewGrp").css("display", "");
+    $("#btnSave").css("display", "");
+    $("#touchKeyGrpCombo").attr("disabled", false);
+    $("#btnApplyStore").css("display", "");
+    $("#trTouchKeyGrp").css("display", "");
+    $("#trApplyStore").css("display", "");
+  }
+
   var urlParams = (function (url) {
     var result = {};
     var idx = url.lastIndexOf('?');
@@ -258,5 +309,5 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2019010202"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2019010202.190"
         charset="utf-8"></script>
