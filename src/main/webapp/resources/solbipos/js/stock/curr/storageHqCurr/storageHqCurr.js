@@ -24,7 +24,9 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 	  
-	  $scope.isDisplay = false;
+	$scope.isDisplay = false;
+	// 접속 사용자의 권한
+	$scope.orgnFg = gvOrgnFg;
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storageHqCurrCtrl");
@@ -88,11 +90,17 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
     var params       = {};
     params.storeCd   = $("#storageHqCurrSelectStoreCd").val();
     params.storageCd = $("#storageHqCurrSelectStorageCd").val();
+    params.vendrCd   = $("#storageHqCurrSelectVendrCd").val();
     params.safeStockFg = $scope.safeStockFg;
+    params.prodCd	 = $scope.prodCd;
+    params.prodNm	 = $scope.prodNm;
+    params.barcdCd	 = $scope.barcdCd;
+    params.prodClassCd	 = $scope.prodClassCd;
     params.unitFg 	 = $scope.unitFg;
     params.isPageChk = isPageChk;
     params.listScale = $scope.storageHqCurrListScale; //-페이지 스케일 갯수
     
+    console.log("params :: "+ JSON.stringify(params));
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/stock/curr/storageHqCurr/storageHqCurr/list.sb", params, function() {});
   };
@@ -230,12 +238,19 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
 		  var arrStorageNm = storageNm.split(',');
 		  var colLength = grid.columns.length;
 		  var addLength = arrStorageCd.length;
-		  if(colLength-6 > 13){
-			  for(var i=13; i<colLength-6; i++){
-		          grid.columns.removeAt(13);
+		  if($scope.orgnFg == "H"){
+			  if(colLength-6 > 13){
+				  for(var i=13; i<colLength-6; i++){
+			          grid.columns.removeAt(13);
+				  }
+			  }
+		  }else{
+			  if(colLength-4 > 13){
+				  for(var i=13; i<colLength-4; i++){
+			          grid.columns.removeAt(13);
+				  }
 			  }
 		  }
-		  
 		  if (arrStorageCd != "") {
 			  for(var i = 1; i < arrStorageCd.length + 1; i++) {
 				  var colValue = arrStorageCd[i-1];

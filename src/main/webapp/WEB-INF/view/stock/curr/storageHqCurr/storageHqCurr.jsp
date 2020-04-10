@@ -166,12 +166,20 @@
           <wj-flex-grid-column header="<s:message code="storageHqCurr.safeStockQty"/>"      binding="safeStockQty"      width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.totCurrQty"/>"        binding="currQty"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.currQty000"/>"        binding="currQty000"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"  binding="firstVendrInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"   binding="lastVendrInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstHqOutDate"/>"    binding="firstHqOutDate"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastHqOutDate"/>"     binding="lastHqOutDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstSaleDate"/>"     binding="firstSaleDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastSaleDate"/>"      binding="lastSaleDate"      width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"  binding="firstVendrInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"   binding="lastVendrInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstHqOutDate"/>"    binding="firstHqOutDate"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastHqOutDate"/>"     binding="lastHqOutDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstSaleDate"/>"     binding="firstSaleDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastSaleDate"/>"      binding="lastSaleDate"      width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          </c:if>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"       binding="firstInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"        binding="lastInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.firstSaleDate"/>"     binding="firstSaleDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.lastSaleDate"/>"      binding="lastSaleDate"      width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          </c:if>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
