@@ -74,7 +74,7 @@
 
             <%-- 그리드 --%>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="wj-gridWrap" style="height:270px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"
@@ -88,8 +88,8 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="boardReadingHist.hqOfficeNm"/>" binding="hqOfficeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardReadingHist.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardReadingHist.authGrpNm"/>" binding="authGrpNm" data-map="authGrpNmDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="boardReadingHist.buso"/>" binding="buso" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardReadingHist.authGrpNm"/>" binding="authGrpNm" data-map="authGrpNmDataMap" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardReadingHist.buso"/>" binding="buso" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardReadingHist.userNm"/>" binding="userNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="boardReadingHist.readngDt"/>" binding="readngDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
 
