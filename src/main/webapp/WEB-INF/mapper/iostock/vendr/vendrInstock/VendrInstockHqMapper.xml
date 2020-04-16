@@ -193,64 +193,161 @@
         /* USE : VendrInstockHqMapper.getVendrInstockProdRegList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-        SELECT  thvp.PROD_CD
-        ,       thp.PROD_NM
-        ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
-        , 		NVL(tphvid.COST_UPRC, thp.COST_UPRC) AS COST_UPRC
-        , 		thp.LAST_COST_UPRC
-        ,       thp.PO_UNIT_ALLOW_FG
-        ,       thp.PO_UNIT_FG
-        ,       thp.PO_UNIT_QTY
-        ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
-        ,       TO_NUMBER(DECODE(tphvid.IN_UNIT_QTY, 0, NULL, tphvid.IN_UNIT_QTY*tphvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
-        ,       TO_NUMBER(DECODE(tphvid.IN_ETC_QTY,  0, NULL, tphvid.IN_ETC_QTY*tphvid.SLIP_FG )) AS PREV_IN_ETC_QTY
-        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY,  0, NULL, tphvid.IN_TOT_QTY*tphvid.SLIP_FG )) AS PREV_IN_TOT_QTY
-        ,       TO_NUMBER(DECODE(tphvid.IN_AMT    ,  0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG     )) AS IN_AMT
-        ,       TO_NUMBER(DECODE(tphvid.IN_VAT    ,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG     )) AS IN_VAT
-        ,       TO_NUMBER(DECODE(tphvid.IN_TOT    ,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG     )) AS IN_TOT
-        ]]>
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
-        FROM    TB_HQ_VENDOR_PROD thvp
-        ,       TB_HQ_PRODUCT thp
-        ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
-        ,       TB_HQ_VENDOR thv
-        WHERE   thvp.HQ_OFFICE_CD     =   #{hqOfficeCd}
-        AND     thvp.VENDR_CD         =   #{vendrCd}
-        AND     thp.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
-        AND     thp.PROD_CD           =   thvp.PROD_CD
-        AND     thp.USE_YN            =   'Y'
-        AND     tphvid.HQ_OFFICE_CD(+)=   thvp.HQ_OFFICE_CD
-        AND     tphvid.SLIP_NO    (+) =   #{slipNo}
-        AND     tphvid.PROD_CD    (+) =   thp.PROD_CD
-        AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
-        AND     thv.VENDR_CD          =   #{vendrCd}
-        ]]>
-        <if test='prodCd != null and prodCd != ""'>
-            AND thp.PROD_CD = #{prodCd}
-        </if>
-        <if test='prodNm != null and prodNm != ""'>
-            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
-        </if>
-        <if test="barcdCd != null and barcdCd != ''">
-            AND thp.PROD_CD IN  ( SELECT  thpb.PROD_CD
-                                  FROM    TB_HQ_PRODUCT_BARCD thpb
-                                  WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
-                                  AND     thpb.BARCD_CD     = #{barcdCd}
-                                )
-        </if>
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND thp.PROD_CLASS_CD IN  ( SELECT	#{prodClassCd} AS PROD_CLASS_CD
-                                        FROM	DUAL
-                                        UNION
-                                        SELECT  thpc.PROD_CLASS_CD
-                                        FROM    TB_HQ_PRODUCT_CLASS thpc
-                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
-                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
-                                      )
-        </if>
-        ORDER BY thp.PROD_CD
+		SELECT	A.PROD_CD
+		,		A.PROD_NM
+		,		A.VAT_FG01
+		,		A.COST_UPRC
+		,		A.LAST_COST_UPRC
+		,		A.PO_UNIT_ALLOW_FG
+		,		A.PO_UNIT_FG
+		,		A.PO_UNIT_QTY
+		,		A.VENDR_VAT_FG01
+		,		A.PREV_IN_UNIT_QTY
+		,		A.PREV_IN_ETC_QTY
+		,		A.PREV_IN_TOT_QTY
+		,		A.IN_AMT
+		,		A.IN_VAT
+		,		A.IN_TOT
+		,		LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,		LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT
+		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
+		FROM	(
+				SELECT  A.PROD_CD
+				,		A.PROD_NM
+				,		A.VAT_FG01
+				,		A.COST_UPRC
+				,		A.LAST_COST_UPRC
+				,		A.PO_UNIT_ALLOW_FG
+				,		A.PO_UNIT_FG
+				,		A.PO_UNIT_QTY
+				,		A.VENDR_VAT_FG01
+				,		A.PREV_IN_UNIT_QTY
+				,		A.PREV_IN_ETC_QTY
+				,		A.PREV_IN_TOT_QTY
+				,		A.IN_AMT
+				,		A.IN_VAT
+				,		A.IN_TOT
+				,		B.PROD_CD       AS  A_PROD_CD
+				,       B.STORAGE_CD    AS  A_STORAGE_CD
+				,       B.STORAGE_NM    AS  A_STORAGE_NM
+				,       B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY
+				,       B.IN_ETC_QTY    AS  A_IN_ETC_QTY
+				,       B.IN_TOT_QTY    AS  A_IN_TOT_QTY
+				,       B.IN_AMT        AS  A_IN_AMT
+				,       B.IN_VAT        AS  A_IN_VAT
+				,       B.IN_TOT        AS  A_IN_TOT
+				FROM	(                
+				        SELECT  thvp.HQ_OFFICE_CD
+						,		NVL(tphvid.SLIP_NO,#{slipNo})	AS SLIP_NO
+						,		thvp.PROD_CD
+				        ,       thp.PROD_NM
+				        ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
+				        , 		NVL(tphvid.COST_UPRC, thp.COST_UPRC) AS COST_UPRC
+				        , 		thp.LAST_COST_UPRC
+				        ,       thp.PO_UNIT_ALLOW_FG
+				        ,       thp.PO_UNIT_FG
+				        ,       thp.PO_UNIT_QTY
+				        ,       DECODE(thv.VAT_INCLD_YN, 'Y', 1, 0) AS VENDR_VAT_FG01
+				        ,       TO_NUMBER(DECODE(tphvid.IN_UNIT_QTY, 0, NULL, tphvid.IN_UNIT_QTY*tphvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
+				        ,       TO_NUMBER(DECODE(tphvid.IN_ETC_QTY,  0, NULL, tphvid.IN_ETC_QTY*tphvid.SLIP_FG )) AS PREV_IN_ETC_QTY
+				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY,  0, NULL, tphvid.IN_TOT_QTY*tphvid.SLIP_FG )) AS PREV_IN_TOT_QTY
+				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT    ,  0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG     )) AS IN_AMT
+				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT    ,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG     )) AS IN_VAT
+				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT    ,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG     )) AS IN_TOT
+				        ]]>
+				        <include refid="CmmSQL.PagingTemplateCount"/>
+				        <![CDATA[
+				        FROM    TB_HQ_VENDOR_PROD thvp
+				        ,       TB_HQ_PRODUCT thp
+				        ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+				        ,       TB_HQ_VENDOR thv
+				        WHERE   thvp.HQ_OFFICE_CD     =   #{hqOfficeCd}
+				        AND     thvp.VENDR_CD         =   #{vendrCd}
+				        AND     thp.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
+				        AND     thp.PROD_CD           =   thvp.PROD_CD
+				        AND     thp.USE_YN            =   'Y'
+				        AND     tphvid.HQ_OFFICE_CD(+)=   thvp.HQ_OFFICE_CD
+				        AND     tphvid.SLIP_NO    (+) =   #{slipNo}
+				        AND     tphvid.PROD_CD    (+) =   thp.PROD_CD
+				        AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
+				        AND     thv.VENDR_CD          =   #{vendrCd}
+				        ]]>
+				        <if test='prodCd != null and prodCd != ""'>
+				            AND thp.PROD_CD = #{prodCd}
+				        </if>
+				        <if test='prodNm != null and prodNm != ""'>
+				            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+				        </if>
+				        <if test="barcdCd != null and barcdCd != ''">
+				            AND thp.PROD_CD IN  ( SELECT  thpb.PROD_CD
+				                                  FROM    TB_HQ_PRODUCT_BARCD thpb
+				                                  WHERE   thpb.HQ_OFFICE_CD = #{hqOfficeCd}
+				                                  AND     thpb.BARCD_CD     = #{barcdCd}
+				                                )
+				        </if>
+				        <if test="prodClassCd != null and prodClassCd != ''">
+				            AND thp.PROD_CLASS_CD IN  ( SELECT	#{prodClassCd} AS PROD_CLASS_CD
+				                                        FROM	DUAL
+				                                        UNION
+				                                        SELECT  thpc.PROD_CLASS_CD
+				                                        FROM    TB_HQ_PRODUCT_CLASS thpc
+				                                        WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+				                                        START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd}
+				                                        CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+				                                      )
+				        </if>
+				        )	A
+				        LEFT OUTER JOIN
+				        (
+						SELECT  X.HQ_OFFICE_CD,
+				                      X.STORAGE_CD,
+				                      X.STORAGE_NM,
+				                      NVL(Y.SLIP_NO,#{slipNo})				AS SLIP_NO,
+				                      Y.PROD_CD,
+				                      NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
+				                      NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
+				                      NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
+				                      NVL(Y.IN_AMT,       0)  AS IN_AMT,
+				                      NVL(Y.IN_VAT,       0)  AS IN_VAT,
+				                      NVL(Y.IN_TOT,       0)  AS IN_TOT
+				              FROM            TB_HQ_STORAGE                   X
+				              LEFT OUTER JOIN TB_PO_HQ_VENDR_INSTOCK_PROD    	Y
+				              ON              X.HQ_OFFICE_CD	= Y.HQ_OFFICE_CD
+				              AND             X.STORAGE_CD    = Y.STORAGE_CD
+				              AND             Y.HQ_OFFICE_CD  = #{hqOfficeCd}
+				              AND             Y.SLIP_NO       = #{slipNo}
+				--                AND             Y.SLIP_FG       = '1'
+				              WHERE   X.HQ_OFFICE_CD  = #{hqOfficeCd}
+				              AND     X.USE_YN    = 'Y'
+				          )   B
+				          ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+				          AND     A.SLIP_NO       = B.SLIP_NO
+				          AND     A.PROD_CD       = (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+					)	A
+			GROUP
+			BY		A.PROD_CD
+			,		A.PROD_NM
+			,		A.VAT_FG01
+			,		A.COST_UPRC
+			,		A.LAST_COST_UPRC
+			,		A.PO_UNIT_ALLOW_FG
+			,		A.PO_UNIT_FG
+			,		A.PO_UNIT_QTY
+			,		A.VENDR_VAT_FG01
+			,		A.PREV_IN_UNIT_QTY
+			,		A.PREV_IN_ETC_QTY
+			,		A.PREV_IN_TOT_QTY
+			,		A.IN_AMT
+			,		A.IN_VAT
+			,		A.IN_TOT
+			ORDER
+			BY      A.PROD_CD        
+
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -420,7 +517,7 @@
 			                        X.STORAGE_CD,
 			                        X.STORAGE_NM,
 			                        --Y.HQ_OFFICE_CD,
-			                        NVL(Y.SLIP_NO,'20040001')				AS SLIP_NO,
+			                        NVL(Y.SLIP_NO,#{slipNo})				AS SLIP_NO,
 			                        Y.PROD_CD,
 			                        --Y.STORAGE_CD,
 			                        NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,

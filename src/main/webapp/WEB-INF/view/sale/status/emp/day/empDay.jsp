@@ -74,12 +74,13 @@
 	      class="w100px fl"
 	      id="empDaylistScaleBox"
 	      ng-model="empDaylistScale"
-	      control="listScaleCombo"
 	      items-source="_getComboData('empDaylistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
+	      initialized="_initComboBox(s)"
+	      control="listScaleCombo"
+          is-editable="true"
+          text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="empDaySelectStoreStoreNum" ng-model="storeNum">

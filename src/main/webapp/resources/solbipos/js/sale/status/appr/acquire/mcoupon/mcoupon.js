@@ -200,7 +200,7 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
     params.cornrCd   = $("#apprAcquireMcouponSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.cashBillApprProcFg = $scope.cashBillApprProcFg;
-    params.listScale = $scope.apprAcquireMcouponListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

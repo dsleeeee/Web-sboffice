@@ -13,7 +13,7 @@
     	<div class="searchBar flddUnfld">
       		<a href="#" class="open fl"><s:message code="prodsale.rank"/></a>
       		<%-- 조회 --%>
-      		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodRankCtrlSrch')">
+      		<button class="btn_blue fr mt5 mr10" id="btnProdRankSearch" ng-click="_broadcast('prodRankCtrlSrch')">
         		<s:message code="cmm.search"/>
       		</button>
     	</div>
@@ -81,8 +81,10 @@
 		      items-source="_getComboData('prodRanklistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      control="listScaleCombo"
+		      is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="prodRankSelectStoreStoreNum" ng-model="storeNum">
@@ -90,6 +92,10 @@
 		    <%-- 엑셀 다운로드 //TODO --%>
 		    <button class="btn_skyblue fr" ng-click="excelDownloadRank()"><s:message code="cmm.excel.down" />
 		    </button>
+		    <%-- 차트 --%>
+		    <button class="btn_skyblue fr" id="btnShowChart" ng-click="">
+			<s:message code="cmm.chart" />
+			</button>
 		</div>
 
 	    <div class="w100 mt10" id="wjWrapType1">
@@ -134,8 +140,86 @@
 		  </div>
 	</div>
 </div>
+<%--layer:For Center screen--%>
+<div class="fullDimmed prodRankLayer" id="prodRankMask" style="display: none; z-index:4;"></div>
+<div class="layer prodRankLayer" id="prodRankLayer" style="display: none; z-index:5;">
+    <div class="layer_inner">
 
+        <%--layerContent--%>
+        <div class="title" style="width:1010px">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
+            </p>
+            <a href="#" class="btn_close _btnClose"></a>
+
+            <%--위즈모 테이블--%>
+		    <div class="w100 mt10" id="wjWrapType1" ng-controller="prodRankChartCtrl">
+		    	<div class="wj-gridWrap" style="display:none;" >
+		    		<wj-flex-grid
+						id="prodRankChartGrid"
+						autoGenerateColumns="false"
+						selection-mode="Row"
+						items-source="data"
+						control="flex"
+						is-read-only="true"
+						item-formatter="_itemFormatter">
+						<!-- define columns -->
+						<wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"		binding="realSaleAmt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<%-- <wj-flex-grid-column header="<s:message code="pos.realSaleAmtTue"/>"		binding="realSaleAmtTue" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtWed"/>"		binding="realSaleAmtWed" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtThu"/>"		binding="realSaleAmtThu" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtFri"/>"		binding="realSaleAmtFri" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSat"/>"		binding="realSaleAmtSat" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSun"/>"		binding="realSaleAmtSun" width="100" align="center" is-read-only="true" ></wj-flex-grid-column> --%>
+					</wj-flex-grid>
+				</div>
+
+				<div class="mt20 oh sb-select dkbr pd10">
+					<!-- 막대 차트 샘플 -->
+					<div>
+						<wj-flex-chart
+							id="prodRankBarChart"
+							name="barChart1"
+							class="custom-flex-chart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							binding-x="prodNm">
+
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmt"/>" binding="realSaleAmt"></wj-flex-chart-series>
+							<%-- <wj-flex-chart-series name="<s:message code="pos.realSaleAmtTue"/>" binding="realSaleAmtTue"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtWed"/>" binding="realSaleAmtWed"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtThu"/>" binding="realSaleAmtThu"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtFri"/>" binding="realSaleAmtFri"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSat"/>" binding="realSaleAmtSat"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSun"/>" binding="realSaleAmtSun"></wj-flex-chart-series> --%>
+						</wj-flex-chart>
+					</div>
+				</div>
+			</div>
+               <%--//위즈모 테이블--%>
+        </div>
+
+    </div>
+    <%--//layerContent--%>
+</div>
+<%--//layer:For Center screen--%>
 <script type="text/javascript">
+</script>
+<script>
+$(document).ready(function() {
+
+    $("#btnShowChart").click(function(e) {
+
+    	$("div.prodRankLayer").show();
+
+        $("#btnProdRankSearch").click();
+    });
+
+    $("._btnClose").click(function(e) {
+        $("div.prodRankLayer").hide();
+    });
+
+});
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/rank/prodRank.js?ver=20190125.02" charset="utf-8"></script>
 

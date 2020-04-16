@@ -192,7 +192,7 @@ app.controller('apprPaycoCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.posNo  	 = $("#apprPaycoSelectPosCd").val();
     params.cornrCd   = $("#apprPaycoSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
-    params.listScale = $scope.apprPaycoListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

@@ -6,55 +6,24 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/move/standMove/standMoveDtl/"/>
 
-<wj-popup id="wjStoreMoveDtlLayer" control="wjStoreMoveDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="storeMoveDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="standMoveDtlCtrl">
+<wj-popup id="wjStandMoveDtlLayer" control="wjStandMoveDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+  <div id="standMoveDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="standMoveDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="storeMove.reg.registTitle"/>
+      <s:message code="standMove.dtl.dtlTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <table class="tblType01">
-        <colgroup>
-          <col class="w15"/>
-          <col class="w35"/>
-          <col class="w15"/>
-          <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-          <%-- 상품코드 --%>
-          <th><s:message code="storeMove.add.prodCd"/></th>
-          <td>
-            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
-          </td>
-          <%-- 상품명 --%>
-          <th><s:message code="storeMove.add.prodNm"/></th>
-          <td>
-            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-
-      <ul class="txtSty3 mt10">
-        <li><s:message code="storeMove.reg.txt1"/></li>
-        <li><s:message code="storeMove.reg.txt2"/></li>
-        <li><s:message code="storeMove.reg.txt3"/></li>
-      </ul>
-
-      <div class="mt10 pdb20 oh bb">
-        <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreMoveDtltList();">
-          <s:message code="cmm.search"/></button>
-      </div>
 
       <div class="tr mt20 fr">
+        <%-- 상품추가/변경 --%>
+        <button type="button" id="btnAddProd" class="btn_skyblue ml5 fl" ng-click="addStandMoveDtlProd()" ng-if="btnAddProd">
+          <s:message code="standMove.addProd"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnRegSave" class="btn_skyblue ml5 fl" ng-click="save()">
+        <button type="button" id="btnRegSave" class="btn_skyblue ml5 fl" ng-click="saveDtl()" ng-if="btnDtlSave">
           <s:message code="cmm.save"/></button>
-        <%-- 저장 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()">
-          <s:message code="storeMove.reg.confirmBtn"/></button>
+        <%-- 확정 --%>
+        <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="confirmDtl()" ng-if="btnConfirm">
+          <s:message code="standMove.confm"/></button>
       </div>
       <div style="clear: both;"></div>
 
@@ -78,7 +47,7 @@
            
             <wj-flex-grid-column header="<s:message code="standMove.safeStockQty"/>" 		binding="safeStockQty" 		width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrQty"/>"    	binding="totCurrQty" 		width="70" align="right" aggregate="Sum" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="standMove.standTotQty"/>" 		binding="standTotQty" 		width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true" value="0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standTotQty"/>" 		binding="standTotQty" 		width="70" align="right" visible="false" max-length=8 data-type="Number" format="n0" is-read-only="true" value="0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrUnitQty"/>" 	binding="standCurrUnitQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrEtcQty"/>" 	binding="standCurrEtcQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
                         

@@ -170,7 +170,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		params.storeCd = $("#tableDaySelectStoreCd").val();
 		params.tableCd = $("#tableDaySelectTableCd").val();
 		params.hqOfficeCd = $("#hqOfficeCd").val();
-		params.listScale = $scope.tableDayListScale; //-페이지 스케일 갯수
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params

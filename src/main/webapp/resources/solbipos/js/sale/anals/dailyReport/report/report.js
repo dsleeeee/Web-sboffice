@@ -1821,9 +1821,14 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
             var item = configCtrl_2.flex.collectionView.items[i];
             if(item.cfgCd == 'SL')	continue;
         	if(item.cfgSelYn == "Y"){
+        		/* 2020.04.14 변경: [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
         		doc.append("<br><br><br>");
         		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
                 eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex) );'      	);
+                */
+        		doc.append("<br><br><br>");
+        		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
+        		eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex, "'+ item.cfgCd.toLowerCase() + '") );'	);	//parameter 추가 용도 : [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
         	}
         }
 
@@ -1831,7 +1836,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	};
 
     //Grid를 Table로 rendering 처리
-	$scope._renderTable = function(flex){	//function(flex: wjcGrid.FlexGrid){
+	$scope._renderTable = function(flex, name){	//function(flex: wjcGrid.FlexGrid){
 		//Table - START
 			/*
  	        let tbl = '<table>';
@@ -1848,7 +1853,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	            tbl += '<thead>';
 	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
 ////////////////////tbl += this._renderRow       (flex.columnHeaders, r);
-                    tbl += this._renderRow_Header(flex.columnHeaders, r);
+                    tbl += this._renderRow_Header(flex.columnHeaders, r, name);
                     //console.log('Headers > tbl: ' + this._renderRow_Header(flex.columnHeaders, r));
 	            }
 	            tbl += '</thead>';
@@ -1857,7 +1862,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         //Body
 	        tbl += '<tbody>';
 	        for(let r=0; r<flex.rows.length; r++){
-                tbl += this._renderRow(flex.cells, r);
+                tbl += this._renderRow(flex.cells, r, name);
                 //console.log('Body    > tbl: ' + this._renderRow(flex.cells, r));
 	        }
 	        tbl += '</tbody>';
@@ -1868,17 +1873,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	        return tbl;
     }
 
-
-	/*
-    for(let r=0; r<flex.columnHeaders.rows.length; r++){
-    	let columnHeaders =
-
-        //tbl += this._renderRow(flex.columnHeaders, r);
-          tbl += this._renderRow_Header(flex.columnHeaders, r);
-    }
-	*/
-
-	$scope._renderRow_Header = function(panel, r){
+	$scope._renderRow_Header = function(panel, r, name){
         let tr 		= '',
             row 	= panel.rows[r];
           //row_next= panel.rows[r+1];
@@ -1887,16 +1882,31 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         let header_colspan 	= 1;
         let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
 
+        var tmpFlex 		= agrid.getScope("reportCtrl_pay").flex;	//용도 : [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+
         if(row.renderSize > 0){
             tr += '<tr>';
 
             for(let c=0; c<panel.columns.length; c++){
+            	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	            	if(name=="pay"   &&   r==1   &&   c >= 3){	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+	            		/*
+	            		console.log('----------------------------0');
+	            		console.log('r: ' + r + ' & c:' + c);
+	            		console.log(tmpFlex.getCellData(0,c) );
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            		console.log('----------------------------1');
+	            		*/
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            	}
+
                 let col 			= panel.columns[c];
                 let col_next		= panel.columns[c+1];
 
                 if(col.renderSize > 0){
                     //Cell style & content 구하기
-	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                  //let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:center;'                     + 'padding-right: 6px';
 
 	                    let content 			= panel.getCellData(r, 	c,	true);
 	                    let content_prev_row	= "";																		//Previous 	row    값
@@ -1986,7 +1996,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 
 
-	$scope._renderRow = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+	$scope._renderRow = function(panel, r, name){	//function(panel: wjcGrid.GridPanel, r: number){
         let tr 	= '',
         row 	= panel.rows[r];
 
@@ -2000,6 +2010,11 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
                     //Cell style & content 구하기
 	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
 	                    let content = panel.getCellData(r, c, true);
+
+	                	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	                    	if(name=="pay"   &&   c >= 3   &&   content == 0)	continue;	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+		                    //console.log('----------------------------------------------------------');
+		                    //console.log('content              : ' + content			);
 
 	                    if(!row.isContentHtml && !col.isContentHtml){
 	                      //content = wjcCore.escapeHtml(content);
@@ -2061,6 +2076,165 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         }
         return tr;
     }
+
+
+/*
+	//결제수단용 (금액이 '0'인 결제수단은 인쇄시 제외)	START	--------------------------------------------------------
+    //Grid를 Table로 rendering 처리
+	$scope._renderTable_PAY = function(flex){	//function(flex: wjcGrid.FlexGrid){
+		//Table - START
+			let tbl = '<table class="reportPrint">';
+
+        //Headers
+	        if(flex.headersVisibility & wijmo.grid.HeadersVisibility.Column){
+	            tbl += '<thead>';
+	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
+                    tbl += this._renderRow_Header_PAY(flex.columnHeaders, r);
+                    //console.log('Headers > tbl: ' + this._renderRow_Header(flex.columnHeaders, r));
+	            }
+	            tbl += '</thead>';
+	        }
+
+        //Body
+	        tbl += '<tbody>';
+	        for(let r=0; r<flex.rows.length; r++){
+                tbl += this._renderRow_PAY(flex.cells, r);
+                //console.log('Body    > tbl: ' + this._renderRow(flex.cells, r));
+	        }
+	        tbl += '</tbody>';
+
+        //Table - End
+            tbl += '</table>';
+            //console.log('tbl: ' + tbl);
+	        return tbl;
+    }
+
+	$scope._renderRow_Header_PAY = function(panel, r){
+		var tmpFlex = agrid.getScope("reportCtrl_pay").flex;
+        let tr 		= '',
+            row 	= panel.rows[r];
+
+        let header_rowspan 	= 1;
+        let header_colspan 	= 1;
+        let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+
+            	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	            	if(r==1   &&   c >= 3){	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            	}
+
+                let col 			= panel.columns[c];
+                let col_next		= panel.columns[c+1];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+
+	                    let content 			= panel.getCellData(r, 	c,	true);
+	                    let content_prev_row	= "";																		//Previous 	row    값
+	                    let content_next_row	= "";																		//Next 		row    값
+	                    let content_next_col 	= "";																		//Next 		column 값
+
+	                    if(0                    <  r   )	content_prev_row 	= panel.getCellData(r-1,	c,  	true);	//Previous 	row    값
+	                    if(panel.rows   .length > (r+1))	content_next_row 	= panel.getCellData(r+1,	c,  	true);	//Next 		row    값
+	                    if(panel.columns.length > (c+1))	content_next_col 	= panel.getCellData(r,  	c+1,	true);	//Next 		column 값
+
+	                    if(header_colsize == 0)				header_colsize 		= col.renderSize;
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                    	if(content == content_prev_row)	continue;	//이전행 Header값과 같으면 skip
+
+                    	if(content == content_next_row){
+                    		header_rowspan++;
+                    	}
+
+                    	if(content == content_next_col){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                    		//console.log("content == content_next_col: " + content + " == " + content_next_col + " & " + header_colspan + " & " + header_colsize);
+                    	}
+                    	else{
+
+                    		//console.log('header_rowspan       : ' + header_rowspan + ' & header_colspan: ' + header_colspan);
+
+                    		if		(header_rowspan >  1    &&    header_colspan == 1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+
+                    		}else if(header_rowspan == 1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else if(header_rowspan >  1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else{
+                    			tr += '<th style="' + style + '">' + content + '</th>';
+                    		}
+                    	}
+                    	//header_prev = panel.getCellData(r, c, true);
+                }	//if(col.renderSize > 0){
+            }		//for(let c=0; c<panel.columns.length; c++){
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow_PAY = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	                    	if(c >= 3   &&   content == 0)	continue;	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+		                    //console.log('----------------------------------------------------------');
+		                    //console.log('content              : ' + content			);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+                        let raw = panel.getCellData(r, c, false);
+                        if		(raw === true)	content = '&#9745;';
+                        else if	(raw === false)	content = '&#9744;';
+
+                        tr += '<td style="' + style + '">' + content + '</td>';
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+	//결제수단용 (금액이 '0'인 결제수단은 인쇄시 제외)	END		--------------------------------------------------------
+	*/
 	//print				END		----------------------------------------------------------------------------------------------------------------------
 
 

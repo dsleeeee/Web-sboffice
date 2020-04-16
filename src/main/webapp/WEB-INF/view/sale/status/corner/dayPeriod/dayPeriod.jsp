@@ -51,7 +51,7 @@
 	              		</label>
 	            	</span>
 				</td>
-			</tr>		
+			</tr>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
 				<tr>
@@ -102,8 +102,10 @@
 					items-source="_getComboData('cornerDayPeriodListScaleBox')"
 					display-member-path="name"
 					selected-value-path="value"
-					is-editable="false"
-					initialized="initComboBox(s)">
+					initialized="initComboBox(s)"
+					control="listScaleCombo"
+                    is-editable="true"
+                    text-changed="_checkValidation(s)">
 				</wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="text" id="cornerDayPeriodSelectStoreStoreNum" ng-model="storeNum" />
@@ -156,14 +158,18 @@
 			<div class="oh sb-select mb10">
 				<%--          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span> --%>
 				<%-- 페이지 스케일  --%>
-				<wj-combo-box class="w100px fl"
+				<wj-combo-box
+				    class="w100px fl"
 				    id="cornerDayPeriodDtlListScaleBox"
 					ng-model="cornerDayPeriodDtlListScale"
 					items-source="_getComboData('cornerDayPeriodDtlListScaleBox')"
 					display-member-path="name"
 					selected-value-path="value"
-					is-editable="false"
-					initialized="initComboBox(s)"> </wj-combo-box>
+					initialized="initComboBox(s)"
+					control="listScaleCombo"
+                    is-editable="true"
+                    text-changed="_checkValidation(s)">
+			    </wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="text" id="cornerDayPeriodDtlSelectStoreStoreNum" ng-model="storeNum">
 				</c:if>

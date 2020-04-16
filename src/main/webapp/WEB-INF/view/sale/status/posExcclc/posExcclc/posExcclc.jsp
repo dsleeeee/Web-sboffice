@@ -93,8 +93,10 @@
             items-source="_getComboData('posExcclcListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
     </wj-combo-box>
 
     <%-- 엑셀 다운로드 //TODO --%>

@@ -39,9 +39,9 @@
           			<jsp:param name="targetId" value="storePeriodSelectStore"/>
         		</jsp:include>
 			</td>
-			
+
 		</tr>
-		
+
 		<c:if test="${sessionInfo.orgnFg == 'STORE'}">
       		<input type="hidden" id="todayGnrlzSelectStoreCd" value="${sessionInfo.storeCd}"/>
       	</c:if>
@@ -69,27 +69,17 @@
 	                <input type="text" id="srchBarcdCd" class="sb-input w100" maxlength="100" />
 	            </span>
 			</td>
-			<%-- 거래처 --%>
-			<th><s:message code="storePeriod.vendr" /></th>
-			<td>
-          <%-- 거래처선택 모듈 멀티 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-          --%>
-          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-            <jsp:param name="targetId" value="storePeriodIostockSelectVendr"/>
-          </jsp:include>
-          <input type="hidden" id="storePeriodIostockSelectVendrCd" value=""/>
-        </td>
+
+			<%-- 분류 --%>
+            <th><s:message code="storePeriod.prodClass" /></th>
+            <td>
+                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                        placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+            </td>
 		</tr>
 		<tr>
-			<%-- 분류 --%>
-			<th><s:message code="storePeriod.prodClass" /></th>
-			<td>
-				<input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
-						placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-	          	<input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-	          	<button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-			</td>
 			<%-- 단위구분 --%>
 			<th><s:message code="storePeriod.unitFg" /></th>
 			<td>
@@ -107,31 +97,43 @@
 	          		</span>
 	        	</div>
 			</td>
+
+			<%-- 조회옵션 --%>
+            <th><s:message code="storePeriod.srchOption" /></th>
+            <td>
+                <div class="sb-select">
+                    <span class="txtIn w150px">
+                        <wj-combo-box
+                            id="srchSrchOption"
+                            ng-model="srchOption"
+                            items-source="_getComboData('srchSrchOption')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+                    <span class="chk ml10">
+                    <input type="checkbox" ng-model="isChkProdClassDisplay" />
+                    <label for="chkDt">
+                        <s:message code="storePeriod.prodClassDisplay" />
+                    </label>
+                </span>
+                </div>
+            </td>
 		</tr>
 		<tr>
-			<%-- 조회옵션 --%>
-			<th><s:message code="storePeriod.srchOption" /></th>
-			<td colspan="3">
-				<div class="sb-select">
-	          		<span class="txtIn w150px">
-	            		<wj-combo-box
-	              			id="srchSrchOption"
-	              			ng-model="srchOption"
-	              			items-source="_getComboData('srchSrchOption')"
-	              			display-member-path="name"
-	              			selected-value-path="value"
-	              			is-editable="false"
-	              			initialized="_initComboBox(s)">
-	            		</wj-combo-box>
-	          		</span>
-	          		<span class="chk ml10">
-					<input type="checkbox" ng-model="isChkProdClassDisplay" />
-	              	<label for="chkDt">
-                		<s:message code="storePeriod.prodClassDisplay" />
-              		</label>
-            	</span>
-	        	</div>
-			</td>
+			<%-- 거래처 --%>
+            <th style="display: none;"><s:message code="storePeriod.vendr" /></th>
+            <td style="display: none;">
+              <%-- 거래처선택 모듈 멀티 선택 사용시 include
+                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+              --%>
+              <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
+                <jsp:param name="targetId" value="storePeriodIostockSelectVendr"/>
+              </jsp:include>
+              <input type="hidden" id="storePeriodIostockSelectVendrCd" value=""/>
+            </td>
 		</tr>
 	</table>
 	<div class="mt20 oh sb-select dkbr">
@@ -140,18 +142,19 @@
             class="w100px fl"
             id="storePeriodListScaleBox"
             ng-model="listScale"
-            control="listScaleCombo"
             items-source="_getComboData('storePeriodListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
         </wj-combo-box>
-        
+
     	<%-- 엑셀 다운로드 --%>
     	<button class="btn_skyblue ml5 fr" id="btnExcelDown" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
   	</div>
-  	
+
   	<%--위즈모 테이블 : 수정해야함--%>
     <div id="wjGridWrap" class="mt10">
       <div class="wj-gridWrap">
@@ -177,7 +180,7 @@
           <wj-flex-grid-column header="<s:message code="storePeriod.poUnitQty"/>"	binding="poUnitQty"			width="80"		align="center"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.poUnitFg"/>"	binding="poUnitFg"			width="80"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storePeriod.barcdCd"/>"		binding="barcdCd"			width="150"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          
+
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty03"		width="80"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
 	      <wj-flex-grid-column header="<s:message code="storePeriod.tot"/>"			binding="ioOccrTot03"		width="100"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty12"		width="80"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
@@ -198,7 +201,7 @@
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty21"		width="80"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
 	      <wj-flex-grid-column header="<s:message code="storePeriod.tot"/>"			binding="ioOccrTot21"		width="100"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
 	      <wj-flex-grid-column header="<s:message code="storePeriod.qty"/>"			binding="ioOccrQty22"		width="80"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
-	      <wj-flex-grid-column header="<s:message code="storePeriod.tot"/>"			binding="ioOccrTot22"		width="100"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column> 
+	      <wj-flex-grid-column header="<s:message code="storePeriod.tot"/>"			binding="ioOccrTot22"		width="100"		align="right"	is-read-only="true" aggregate="Sum"	visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
 
         <%-- ColumnPicker 사용시 include --%>
@@ -209,7 +212,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -217,8 +220,8 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-    
-    
+
+
 </div>
 
 <script type="text/javascript">

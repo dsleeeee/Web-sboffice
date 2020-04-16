@@ -84,6 +84,7 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);

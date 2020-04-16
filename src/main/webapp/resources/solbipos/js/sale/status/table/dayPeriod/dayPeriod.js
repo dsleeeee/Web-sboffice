@@ -58,8 +58,8 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     // 헤더 컬럼 2개 머지
     s.allowMerging = 'ColumnHeaders';
     s.columnHeaders.rows[0].allowMerging = true;
-    s.columnHeaders.setCellData(0,1,"테이블");
-    s.columnHeaders.setCellData(0,2,"테이블");
+//    s.columnHeaders.setCellData(0,1,"테이블");
+//    s.columnHeaders.setCellData(0,2,"테이블");
   }
 
   // 다른 컨트롤러의 broadcast 받기
@@ -85,7 +85,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     var params       = {};
     params.hqOfficeCd = $("#hqOfficeCd").val();
     params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
-    params.listScale = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){

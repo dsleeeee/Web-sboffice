@@ -12,18 +12,18 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
     {"name": messages["storageHqCurr.unitStockFg"], "value": "0"},
     {"name": messages["storageHqCurr.unitOrderFg"], "value": "1"}
   ]);
-  
+
   $scope._setComboData("srchSafeStockFg", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["storageHqCurr.safeStockFg0"], "value": "0"}
   ]);
-  
+
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("storageHqCurrListScaleBox", gvListScaleBoxData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	  
+
 	$scope.isDisplay = false;
 	// 접속 사용자의 권한
 	$scope.orgnFg = gvOrgnFg;
@@ -41,25 +41,27 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
   	  if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   	  	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   	  	if (rng && rng.columnSpan > 1) {
   	  		e.preventDefault();
   	  	}
   	  }
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	if (col.binding === "currQty") { // 현재고
     			params.prodCd	 = selectedRow.prodCd;
-            	$scope._broadcast('cmmStockStatusCtrl', params);
+    			params.prodNm	 = selectedRow.prodNm;
+    			params.hqOfficeCd	= $("#hqOfficeCd").val();
+    		    params.storeCd		= $("#storeCd").val();
+    			$scope._broadcast('hqCurrDtlCtrl', params);
             }
       }
     });
@@ -75,13 +77,13 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storageHqCurrCtrl", function (event, data) {
 	$scope.getReStorageNmList(true, true); //(동적 그리드 그리기, 페이징)
-	
+
   });
-  
+
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("storageHqCurrCtrlSrch", function (event, data) {
 	$scope.getReStorageNmList(true, false); //(동적 그리드 그리기, 페이징)
-     
+
   });
 
   // 창고별현재고현황 리스트 조회
@@ -98,9 +100,8 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
     params.prodClassCd	 = $scope.prodClassCd;
     params.unitFg 	 = $scope.unitFg;
     params.isPageChk = isPageChk;
-    params.listScale = $scope.storageHqCurrListScale; //-페이지 스케일 갯수
-    
-    console.log("params :: "+ JSON.stringify(params));
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/stock/curr/storageHqCurr/storageHqCurr/list.sb", params, function() {});
   };
@@ -138,13 +139,13 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope.storageHqCurrSelectVendrShow = function () {
     $scope._broadcast('storageHqCurrSelectVendrCtrl');
   };
-  
+
   //상품분류 항목표시 함수
   $scope.fnDisplay = function() {
 	  var grid = wijmo.Control.getControl("#storageHqCurrGrid");
       var columns = grid.columns;
       var length  = grid.columns.length;
-      var isDisplay  = $scope.isDisplay; 
+      var isDisplay  = $scope.isDisplay;
 	  if(isDisplay){
 		  for(var i=0; i<length; i++){
 			  if(columns[i].binding.substring(0,2) == 'lv'){
@@ -159,7 +160,7 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
           }
 	  }
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownloadStorageHqCurr = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -183,7 +184,7 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
     }, 10);
   };
 
-  
+
 	//창고 리스트 조회
 	$scope.getReStorageNmList = function (gridSet, isPageChk) {
 		var url = "/stock/curr/storageHqCurr/storageHqCurr/storageList.sb";
@@ -233,19 +234,19 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
 
 	  $scope.makeDataGrid = function () {
 		  var grid = wijmo.Control.getControl("#storageHqCurrGrid");
-		  
+
 		  var arrStorageCd = storageCd.split(',');
 		  var arrStorageNm = storageNm.split(',');
 		  var colLength = grid.columns.length;
 		  var addLength = arrStorageCd.length;
 		  if($scope.orgnFg == "H"){
-			  if(colLength-6 > 13){
-				  for(var i=13; i<colLength-6; i++){
-			          grid.columns.removeAt(13);
+			  if(colLength-6 > 11){
+				  for(var i=12; i<colLength-6; i++){
+			          grid.columns.removeAt(12);
 				  }
 			  }
 		  }else{
-			  if(colLength-4 > 13){
+			  if(colLength-4 > 12){
 				  for(var i=13; i<colLength-4; i++){
 			          grid.columns.removeAt(13);
 				  }
@@ -255,7 +256,11 @@ app.controller('storageHqCurrCtrl', ['$scope', '$http', '$timeout', function ($s
 			  for(var i = 1; i < arrStorageCd.length + 1; i++) {
 				  var colValue = arrStorageCd[i-1];
 				  var colName = arrStorageNm[i-1];
-				  grid.columns.insert(13+(i-1), new wijmo.grid.Column({header: colName+messages["storageHqCurr.currQty"], binding: 'currQty'+colValue, width: 100, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+				  if($scope.orgnFg == "H"){
+					  grid.columns.insert(12+(i-1), new wijmo.grid.Column({header: colName+messages["storageHqCurr.currQty"], binding: 'currQty'+colValue, width: 100, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+				  }else{
+					  grid.columns.insert(13+(i-1), new wijmo.grid.Column({header: colName+messages["storageHqCurr.currQty"], binding: 'currQty'+colValue, width: 100, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+				  }
 			  }
 		  }
 

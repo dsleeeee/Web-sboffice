@@ -124,7 +124,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCd   = $("#frnchsStoreSelectStoreCd").val();
     params.storeNm    = $("#storeNm").val();
     params.orgnFg    = $scope.orgnFg;
-    params.listScale = $scope.frnchsStorelistScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     // 등록일자 '전체기간' 선택에 따른 params

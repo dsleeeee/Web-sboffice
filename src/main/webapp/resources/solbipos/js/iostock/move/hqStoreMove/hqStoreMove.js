@@ -119,26 +119,6 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
           textAlign    : 'center'
         });
       }
-      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-        // GroupRow 인 경우에는 표시하지 않는다.
-        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-          cell.textContent = '';
-        } else {
-          if (!isEmpty(panel._rows[r]._data.rnum)) {
-            cell.textContent = (panel._rows[r]._data.rnum).toString();
-          } else {
-            cell.textContent = (r + 1).toString();
-          }
-        }
-      }
-      // readOnly 배경색 표시
-      else if (panel.cellType === wijmo.grid.CellType.Cell) {
-        var col = panel.columns[c];
-        if (col.isReadOnly) {
-          wijmo.addClass(cell, 'wj-custom-readonly');
-        }
-      }
     }
 
 

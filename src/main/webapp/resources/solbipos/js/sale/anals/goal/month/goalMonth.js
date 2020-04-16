@@ -133,7 +133,7 @@ app.controller('goalMonthCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params       = {};
     params.storeCd   = $("#goalMonthSelectStoreCd").val();
     params.isPageChk = isPageChk;
-    params.listScale = $scope.goalMonthListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){

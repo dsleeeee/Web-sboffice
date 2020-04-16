@@ -171,7 +171,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 		params.storeCd = $("#tableMonthSelectStoreCd").val();
 		params.tableCd = $("#tableMonthSelectTableCd").val();
 		params.hqOfficeCd = $("#hqOfficeCd").val();
-		params.listScale = $scope.tableMonthListScale; //-페이지 스케일 갯수
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 		params.isPageChk = isPageChk;
 
 		//등록일자 '전체기간' 선택에 따른 params

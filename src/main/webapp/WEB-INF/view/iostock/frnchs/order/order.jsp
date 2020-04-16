@@ -120,8 +120,10 @@
 	                items-source="_getComboData('orderMainListScaleBox')"
 	                display-member-path="name"
 	                selected-value-path="value"
-	                is-editable="false"
-	                initialized="initComboBox(s)">
+	                initialized="initComboBox(s)"
+	                control="conListScale"
+					is-editable="true"
+					text-changed="_checkValidation(s)">
 	        </wj-combo-box>
 	        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            <input type="text" id="orderMainSelectStoreStoreNum" ng-model="storeNum">
@@ -194,8 +196,10 @@
                   items-source="_getComboData('orderDtlListScaleBox')"
                   display-member-path="name"
                   selected-value-path="value"
-                  is-editable="false"
-                  initialized="initComboBox(s)">
+                  initialized="initComboBox(s)"
+                  control="conListScale"
+			      is-editable="true"
+			      text-changed="_checkValidation(s)">
           </wj-combo-box>
           
           <span class="fl bk lh30 ml10" id="dtlSlipNo"></span>

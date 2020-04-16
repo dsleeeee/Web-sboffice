@@ -106,7 +106,7 @@ app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 
     // 파라미터
     var params       = {};
-    params.listScale = $scope.posDayPeriodListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.storeCd   = $("#posDayPeriodSelectStoreCd").val();
     params.isPageChk = isPageChk;
 
@@ -146,12 +146,6 @@ app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 
 	    // 코너별 매출현황 상세조회.
 	    $scope._broadcast("posDayPeriodDtlCtrl", params);
-
-	    // 설정기간별(포스별 매출) 바 차트
-	    $scope._broadcast("posDayPeriodBarChartCtrl", params);
-
-	    // 설정기간별(포스별 매출) 파이 차트
-	    $scope._broadcast("posDayPeriodPieChartCtrl", params);
 	}
   };
 
@@ -230,7 +224,7 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	  $scope.searchPosDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params          = {};
-	    params.listScale    = $scope.posDayPeriodDtlListScale; //-페이지 스케일 갯수
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.posNo        = $scope.posNo;
 	    params.storeCd      = $scope.storeCd;
 	    params.startDate    = $scope.startDateForDt;
@@ -268,137 +262,4 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	      });
 	    }, 10);
 	  };
-}]);
-
-
-/** 설정기간별 차트 (포스별 바) controller */
-app.controller('posDayPeriodBarChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
-	angular.extend(this, new RootController('posDayPeriodBarChartCtrl', $scope, $http, $timeout, true));
-
-	//메인그리드 조회후 상세그리드 조회.
-	$scope.initChart = function(s, args){
-		s.plotMargin = 'auto auto 50 auto';
-		s.axisX.labelAngle = 0;
-	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
-
-	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
-	        animationMode: wijmo.chart.animation.AnimationMode.All,
-	        easing: wijmo.chart.animation.Easing.Linear,
-	        duration: 400
-	    });
-
-	}
-
-	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("posDayPeriodBarChartCtrl", function (event, data) {
-
-		if (data != undefined) {
-			$scope.data = data.data.items;
-		}
-
-		event.preventDefault();
-	});
-
-	$scope.rendered = function(s, e) {
-
-		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
-		var pAreaWidth = pArea.width.baseVal.value;
-		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
-
-		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
-		var widthMax = new Array();
-
-        labels.forEach((value, key, parent) => {
-
-        	var x = +value.getAttribute('x');
-            var y = +value.getAttribute('y');
-            var text = value.innerHTML.split(' - ');
-            value.innerHTML = '';
-
-            widthMax[key] = new Array();
-
-            text.forEach((item, index) => {
-
-                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-                //e.setAttribute("x", (x + 0).toString());
-                e.setAttribute('y', (y + (15 * index)).toString());
-                e.innerHTML = item;
-                value.appendChild(e);
-
-                var bbox = e.getBoundingClientRect();
-                var extent = e.getExtentOfChar(0);
-                var boxWidth = e.getComputedTextLength();
-                var gap = 0;
-
-                console.log(boxWidth);
-
-                gap = (groupWidth - boxWidth) / 2;
-                widthMax[key][index] = gap;
-
-                e.setAttribute('x', (x + gap).toString());
-            });
-        });
-
-        labels.forEach((value, key, parent) => {
-
-        	var children = value.childNodes;
-
-        	for (var i = 0; i < children.length; i++) {
-        		var e = value.childNodes[i];
-        		var extent = e.getExtentOfChar(0);
-
-        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
-        	}
-        });
-
-        s.tooltip.content = function (ht) {
-        	var title = ht.name;
-			var nameArr = ht._xfmt.split(" - ");
-			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + value;
-		}
-    }
-
-}]);
-
-/** 설정기간별 차트 (포스별 파이) controller */
-app.controller('posDayPeriodPieChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
-	angular.extend(this, new RootController('posDayPeriodPieChartCtrl', $scope, $http, $timeout, true));
-
-	//메인그리드 조회후 상세그리드 조회.
-	$scope.initChart = function(s, args){
-		s.plotMargin = 'auto auto auto auto';
-		var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
-	        animationMode: wijmo.chart.animation.AnimationMode.Point,
-	        easing: wijmo.chart.animation.Easing.Linear,
-	        duration: 400
-	    });
-	}
-
-	// 다른 컨트롤러의 broadcast 받기
-	$scope.$on("posDayPeriodPieChartCtrl", function (event, data) {
-
-		if (data != undefined) {
-			$scope.data = data.data.items;
-			$scope.sum = $scope.data.map(c => c.realSaleAmt).reduce((sum, cur) => sum + cur);
-
-			$scope.posDayPeriodPieChart.dataLabel.content = function (ht) {
-				var dataLabel = "";
-
-				if (ht.value > 0) {
-					dataLabel = ht.name;
-				}
-
-				return dataLabel;
-			}
-
-			$scope.posDayPeriodPieChart.tooltip.content = function (ht) {
-				var nameArr = ht.name.split(" - ");
-				return nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + (ht.value / $scope.sum * 100).toFixed(2) + "%";
-			}
-		}
-
-		event.preventDefault();
-	});
-
 }]);

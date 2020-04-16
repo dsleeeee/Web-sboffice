@@ -175,7 +175,7 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, $("#spanDtlTitle").text()+'_'+getToday()+'.xlsx', function () {
+	      }, $(menuNm).selector + '_' + messages["periodIostock.iostockDetail"]+'_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);

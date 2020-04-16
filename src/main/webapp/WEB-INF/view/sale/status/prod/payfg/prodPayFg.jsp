@@ -89,8 +89,9 @@
 		      items-source="_getComboData('prodPayFglistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="pordPayFgSelectStoreStoreNum" ng-model="storeNum">

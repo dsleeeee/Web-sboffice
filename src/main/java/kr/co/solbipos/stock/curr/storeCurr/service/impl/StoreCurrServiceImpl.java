@@ -32,6 +32,13 @@ public class StoreCurrServiceImpl implements StoreCurrService {
         if(!StringUtil.getOrBlank(storeCurrVO.getVendrCd()).equals("")) {
             storeCurrVO.setArrVendrCd(storeCurrVO.getVendrCd().split(","));
         }
+        
+        System.out.println("매장코드 출력: " + storeCurrVO.getStoreCd());
+        // 매장 멀티 선택
+        if(!StringUtil.getOrBlank(storeCurrVO.getStoreCd()).equals("")) {
+        	storeCurrVO.setArrStoreCd(storeCurrVO.getStoreCd().split(","));
+        }
+
 
         return storeCurrMapper.getStoreCurrList(storeCurrVO);
     }

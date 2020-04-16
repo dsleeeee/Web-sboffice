@@ -36,7 +36,7 @@
 
   <%-- 조회 --%>
   <div class="mt10 pdb20 oh bb">
-    <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanManage()"><s:message code="cmm.search"/></button>
+    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeLoanManageCtrlSrch')"><s:message code="cmm.search"/></button>
   </div>
 
   <ul class="txtSty2 mt10 pdb20 bb">
@@ -71,8 +71,10 @@
       items-source="_getComboData('listScaleBox')"
       display-member-path="name"
       selected-value-path="value"
-      is-editable="false"
-      initialized="_initComboBox(s)">
+      initialized="_initComboBox(s)"
+      control="conListScale"
+	  is-editable="true"
+	  text-changed="_checkValidation(s)">
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
     <%-- 엑셀 다운로드 --%>

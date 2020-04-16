@@ -92,12 +92,13 @@
 	      class="w100px fl"
 	      id="storeProdlistScaleBox"
 	      ng-model="listScale"
-	      control="listScaleCombo"
 	      items-source="_getComboData('storeProdlistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
+	      initialized="_initComboBox(s)"
+	      control="conListScale"
+		  is-editable="true"
+		  text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 	    <%-- 엑셀 다운로드 //TODO --%>
 	    <button class="btn_skyblue fr" ng-click="excelDownloadStoreProd()"><s:message code="cmm.excel.down" />

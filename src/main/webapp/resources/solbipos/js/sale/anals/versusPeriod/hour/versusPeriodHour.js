@@ -44,10 +44,6 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
 //
 //  };
 
-
-  // 콤보박스 데이터 Set
-  $scope._setComboData('versusPeriodHourlistScaleBox', gvListScaleBoxData);
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -265,16 +261,118 @@ app.controller('versusPeriodHourCtrl', ['$scope', '$http', '$timeout', function 
     }, 10);
   };
 
+  //엑셀 다운로드
+  $scope.showChart = function () {
+
+	  // 파라미터
+	  var params       = {};
+	  params.data      = $scope.flex.collectionView; //새로 추가
+
+	  $("div.versusPeriodHourLayer").show();
+
+	  $scope._broadcast("versusPeriodHourChartCtrl", params);
+  };
+
   //두개의 날짜를 비교하여 차이를 알려준다.
   $scope.dateDiff = function(date1, date2) {
 
-	    var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
-	    var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
+	  var diffDate_1 = date1 instanceof Date ? date1 : new Date(date1);
+	  var diffDate_2 = date2 instanceof Date ? date2 : new Date(date2);
 
-	    var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
-	    diff = Math.ceil(diff / (1000 * 3600 * 24));
+	  var diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
+	  diff = Math.ceil(diff / (1000 * 3600 * 24));
 
-	    return diff + 1;
+	  return diff + 1;
+  }
+
+}]);
+
+/** 설정기간별 차트 (포스별 바) controller */
+app.controller('versusPeriodHourChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('versusPeriodHourChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto 50 auto';
+		s.axisX.labelAngle = 0;
+	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
+
+	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.All,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+
 	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("versusPeriodHourChartCtrl", function (event, data) {
+
+		if (data != undefined) {
+			$scope.data = data.data.items;
+		}
+
+		event.preventDefault();
+	});
+
+	$scope.rendered = function(s, e) {
+
+		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+		var pAreaWidth = pArea.width.baseVal.value;
+		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
+
+		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
+		var widthMax = new Array();
+
+        labels.forEach((value, key, parent) => {
+
+        	var x = +value.getAttribute('x');
+            var y = +value.getAttribute('y');
+            var text = value.innerHTML.split(' - ');
+            value.innerHTML = '';
+
+            widthMax[key] = new Array();
+
+            text.forEach((item, index) => {
+
+                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                //e.setAttribute("x", (x + 0).toString());
+                e.setAttribute('y', (y + (15 * index)).toString());
+                e.innerHTML = item;
+                value.appendChild(e);
+
+                var bbox = e.getBoundingClientRect();
+                var extent = e.getExtentOfChar(0);
+                var boxWidth = e.getComputedTextLength();
+                var gap = 0;
+
+                console.log(boxWidth);
+
+                gap = (groupWidth - boxWidth) / 2;
+                widthMax[key][index] = gap;
+
+                e.setAttribute('x', (x + gap).toString());
+            });
+        });
+
+        labels.forEach((value, key, parent) => {
+
+        	var children = value.childNodes;
+
+        	for (var i = 0; i < children.length; i++) {
+        		var e = value.childNodes[i];
+        		var extent = e.getExtentOfChar(0);
+
+        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
+        	}
+        });
+
+        s.tooltip.content = function (ht) {
+        	var title = ht.name;
+			var nameArr = ht._xfmt.split(" - ");
+			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + value;
+		}
+    }
 
 }]);

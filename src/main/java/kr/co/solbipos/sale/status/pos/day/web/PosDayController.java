@@ -121,6 +121,59 @@ public class PosDayController {
         return ReturnUtil.returnListJson(Status.OK, list, posDayVO);
     }
 
+    /**
+     * 포스별매출 일자별 - 리스트 조회(엑셀)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posDaylVO
+     * @return  String
+     * @author  이승규
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosDayExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosDayVO posDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (posDayVO.getPosNo() != null && !"".equals(posDayVO.getPosNo())) {
+        	 String[] arrPosNo = posDayVO.getPosNo().split(",");
+             posDayVO.setArrPosNo(arrPosNo);
+             posDayVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = posDayVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			posDayVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = posDayService.getPosNmList(posDayVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                posDayVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        List<DefaultMap<String>> list = posDayService.getPosDayExcelList(posDayVO, sessionInfoVO);
+        //System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
+        return ReturnUtil.returnListJson(Status.OK, list, posDayVO);
+    }
+
 
     /**
      * 포스별매출 일자별 - 포스 리스트 조회

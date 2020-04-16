@@ -40,8 +40,6 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 //
 //  };
 
-  // 콤보박스 데이터 Set
-  $scope._setComboData('versusPeriodWeeklistScaleBox', gvListScaleBoxData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -226,6 +224,9 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
     grid.saleCntB   = messages["versusPeriod.comp"] + (compDays + compStartToEnd);
     grid.ratB   = messages["versusPeriod.comp"] + (compDays + compStartToEnd);
 
+	// 대비기간매출분석(주간대비) 바 차트
+    $scope._broadcast("versusPeriodWeekChartCtrl", params);
+    
   };
 
   //조회일자 전체기간 체크박스 클릭이벤트
@@ -234,6 +235,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
     $scope.endDateCombo.isReadOnly = $scope.isChecked;
   };
 
+  
   // 대비기간 전체기간 체크박스 클릭이벤트
   $scope.isChkDtComp = function() {
 	$scope.srchCompStartDate.isReadOnly = $scope.isCheckedComp;
@@ -283,3 +285,156 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
   }
 
 }]);
+
+
+
+/** 대비기간매출분석 주간대비 차트 (요일 바) controller */
+app.controller('versusPeriodWeekChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('versusPeriodWeekChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto 50 auto';
+		s.axisX.labelAngle = 0;
+	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
+
+	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.All,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+
+	    /*var axisY2 = new wijmo.chart.Axis();
+	    axisY2.position = 'Right';
+	    axisY2.title = '판매수량';
+	    axisY2.format = 'n0';
+	    axisY2.min = 0;
+	    axisY2.axisLine = true;
+
+	    getSeries("saleCntMon").axisY = axisY2;
+	    getSeries("saleCntTue").axisY = axisY2;
+	    getSeries("saleCntWed").axisY = axisY2;
+	    getSeries("saleCntThu").axisY = axisY2;
+	    getSeries("saleCntFri").axisY = axisY2;
+	    getSeries("saleCntSat").axisY = axisY2;
+	    getSeries("saleCntSun").axisY = axisY2;
+
+	    function getSeries(binding) {
+	        var seriesTemp = s.series;
+	        //
+	        for (var i = 0; i < seriesTemp.length; i++) {
+	            if (seriesTemp[i].binding == binding) {
+	                return seriesTemp[i];
+	            }
+	        }
+	        //
+	        return null;
+	    }*/
+
+	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("versusPeriodWeekChartCtrl", function (event, data) {
+
+		var isPageChk = true;
+
+		if(data != undefined) {
+
+			$scope.startDate     = data.startDate;
+			$scope.endDate       = data.endDate;
+			$scope.compStartDate = data.compStartDate;
+			$scope.compEndDate   = data.compEndDate;
+			$scope.storeCd       = data.storeCd;
+			$scope.isPageChk     = data.isPageChk;
+
+		}
+
+	    $scope.versusPeriodWeekChartList(isPageChk);
+	    // 기능수행 종료 : 반드시 추가
+	    //event.preventDefault();
+	  });
+
+
+	  // 대비기간매출분석 주간대비 리스트 조회
+	  $scope.versusPeriodWeekChartList = function (isPageChk) {
+
+		  // 파라미터
+		  var params            = {};
+		  params.listScale      = 10;
+		  params.startDate      = $scope.startDate;
+		  params.endDate        = $scope.endDate;
+		  params.compStartDate  = $scope.compStartDate;
+		  params.compEndDate    = $scope.compEndDate;
+		  params.storeCd        = $scope.storeCd;
+
+		  if (isPageChk != null && isPageChk != undefined) {
+			  params.isPageChk    = isPageChk;
+		  } else {
+			  params.isPageChk    = true;
+		  }
+
+		  // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		  $scope._inquiryMain("/sale/anals/versusPeriod/week/chartList.sb", params);
+	  };
+
+	$scope.rendered = function(s, e) {
+		
+		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+		var pAreaWidth = pArea.width.baseVal.value;
+		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
+
+		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
+		var widthMax = new Array();
+
+        labels.forEach((value, key, parent) => {
+
+        	var x = +value.getAttribute('x');
+            var y = +value.getAttribute('y');
+            var text = value.innerHTML.split(' - ');
+            value.innerHTML = '';
+
+            widthMax[key] = new Array();
+
+            text.forEach((item, index) => {
+
+                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                //e.setAttribute("x", (x + 0).toString());
+                e.setAttribute('y', (y + (15 * index)).toString());
+                e.innerHTML = item;
+                value.appendChild(e);
+
+                var bbox = e.getBoundingClientRect();
+                var extent = e.getExtentOfChar(0);
+                var boxWidth = e.getComputedTextLength();
+                var gap = 0;
+
+                gap = (groupWidth - boxWidth) / 2;
+                widthMax[key][index] = gap;
+
+                e.setAttribute('x', (x + gap).toString());
+            });
+        });
+
+        labels.forEach((value, key, parent) => {
+
+        	var children = value.childNodes;
+
+        	for (var i = 0; i < children.length; i++) {
+        		var e = value.childNodes[i];
+        		var extent = e.getExtentOfChar(0);
+
+        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
+        	}
+        });
+
+        s.tooltip.content = function (ht) {
+        	var title = ht.name;
+			var nameArr = ht._xfmt;
+			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return "<b>" + title + "</b><br><br>" + nameArr + "<br><br>" + value;
+		}
+    }
+
+}]);
+
+

@@ -475,10 +475,10 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
           $scope.flex.collectionView.editItem(item);
 
           if (nvl(item.safeStockUnitQty, 0) > 0) {
-            item.orderUnitQty = parseInt(item.safeStockUnitQty) - parseInt(nvl(item.storeCurrUnitQty, 0));
+            item.orderUnitQty = parseInt(item.safeStockUnitQty) - parseInt(nvl(item.storeCurUnitQty, 0));
           }
           if (nvl(item.safeStockEtcQty, 0) > 0) {
-            item.orderEtcQty = parseInt(item.safeStockEtcQty) - parseInt(nvl(item.storeCurrEtcQty, 0));
+            item.orderEtcQty = parseInt(item.safeStockEtcQty) - parseInt(nvl(item.storeCurEtcQty, 0));
           }
           $scope.calcAmt(item);
           $scope.flex.collectionView.commitEdit();

@@ -15,4 +15,6 @@ public interface VersusPeriodWeekMapper {
     /** 상품별 매출 - 일자별 리스트 조회 */
     List<DefaultMap<String>> getVersusPeriodWeekList(VersusPeriodWeekVO versusPeriodWeekVO);
 
+    /** 상품별 매출 - 차트 조회 */
+    List<DefaultMap<String>> getVersusPeriodWeekChartList(VersusPeriodWeekVO versusPeriodWeekVO);
 }

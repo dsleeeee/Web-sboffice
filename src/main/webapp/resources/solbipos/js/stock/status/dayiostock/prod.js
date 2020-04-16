@@ -7,33 +7,33 @@ var app = agrid.getApp();
 app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('dayIostockCtrl', $scope, $http, true));
-	  
+
 	$scope.srchStartDate = wcombo.genDateVal("#srchDayIostockStartDate", getToday());
-	
+
 	  // 접속 사용자의 권한
 	  $scope.orgnFg = gvOrgnFg;
 	  $scope.isChecked = false;
-	
+
 	  //조회조건 단위구분 데이터 Set
 	  $scope._setComboData("srchUnitFgDisplay", [
 	    {"name": messages["dayIostock.unitStockFg"], "value": "0"}, // 재고단위
 	    {"name": messages["dayIostock.unitOrderFg"], "value": "1"} // 주문단위
 	  ]);
-	
+
 	  //조회조건 조회옵션 데이터 Set
 	  $scope._setComboData("srchOptionDisplay", [
 		{"name": messages["dayIostock.Qty"] + "+" + messages["dayIostock.Amt"], "value": "3"}, // 수량+금액
 	    {"name": messages["dayIostock.Qty"], "value": "1"}, // 수량
 	    {"name": messages["dayIostock.Amt"], "value": "2"} // 금액
 	  ]);
-	  
+
 	  //거래처선택 모듈 팝업 사용시 정의
 	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
 	  $scope.dayIostockSelectVendrShow = function () {
 	    $scope._broadcast('dayIostockSelectVendrCtrl');
 	  };
-	  
+
 	  // 상품분류정보 팝업
 	  $scope.popUpProdClass = function() {
 	    var popUp = $scope.prodClassPopUpLayer;
@@ -60,8 +60,8 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    $scope.prodClassCd = "";
 	    $scope.prodClassCdNm = "";
 	  }
-	
-	
+
+
 	  // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
 	  // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
 	  // comboId : combo 생성할 ID
@@ -75,7 +75,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    if (url) {
 	      comboUrl = url;
 	    }
-	
+
 	    // ajax 통신 설정
 	    $http({
 	      method : 'POST', //방식
@@ -88,7 +88,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	          var list       = response.data.data.list;
 	          var comboArray = [];
 	          var comboData  = {};
-	
+
 	          if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
 	            comboArray = [];
 	            if (option === "A") {
@@ -100,7 +100,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	              comboData.value = "";
 	              comboArray.push(comboData);
 	            }
-	
+
 	            for (var i = 0; i < list.length; i++) {
 	              comboData       = {};
 	              comboData.name  = list[i].nmcodeNm;
@@ -109,7 +109,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	            }
 	            $scope._setComboData(comboId, comboArray);
 	          }
-	
+
 	          if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
 	            comboArray = [];
 	            for (var i = 0; i < list.length; i++) {
@@ -133,7 +133,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	      }
 	    });
 	  };
-	  
+
 	  //상품분류 항목표시 함수
 	  $scope.isChkDt = function() {
 		  var grid = wijmo.Control.getControl("#dayIostockMainGrid");
@@ -164,7 +164,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
 
   //조회조건 콤보박스 listScale 세팅
   $scope._setComboData("dayIostockMainlistScaleBox", gvListScaleBoxData);
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -187,18 +187,18 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   		if (rng && rng.columnSpan > 1) {
   			e.preventDefault();
   		}
 	  }
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var colLength 	= col.binding.length;
@@ -212,19 +212,19 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
 				params.storeCd   = $("#storeCd").val();
 	            params.storeNm   = $("#storeNm").val();
 			}
-			
+
             params.poUnitQty = selectedRow.poUnitQty;
             if (col.binding === "prodCd") { // 상품코드
     			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'); // 시작날짜
     			params.endDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'); // 시작날짜
-    		    
+
     			$scope._broadcast('prodCodeDtlCtrl', params);
     		}
             if (col.binding.substring(colLength-2,colLength-5) === 'Qty' && selectedRow[col.binding] != null) { // 수량
             	var colCode = col.binding.substring(colLength, colLength-2);
             	params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
             	params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
-        	
+
             	$scope._broadcast('prodQtyDtlCtrl', params);
             }
       }
@@ -242,13 +242,13 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
 	  lv1Nm			: messages["dayIostock.prodClassLNm"],
 	  lv2Nm			: messages["dayIostock.prodClassMNm"],
 	  lv3Nm			: messages["dayIostock.prodClassSNm"],
-		
+
 	  prodCd 		: messages["dayIostock.prodCd"],
 	  prodNm 		: messages["dayIostock.prodNm"],
 	  poUnitQty		: messages["dayIostock.poUnitQty"],
 	  poUnitFgNm	: messages["dayIostock.poUnitFg"],
 	  barcdCd		: messages["dayIostock.barcdCd"],
-	  
+
 //      if($scope.orgnFg === "HQ"){
 	  	  ioOccrQty01		:messages["dayIostock.accVendrIn"],
 	  	  ioOccrTot01		:messages["dayIostock.accVendrIn"],
@@ -257,9 +257,9 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     	  ioOccrQty13 		:messages["dayIostock.hqOut"],
     	  ioOccrTot13 		:messages["dayIostock.hqOut"],
     	  ioOccrQty02		:messages["dayIostock.hqIn"],
-    	  ioOccrTot02 		:messages["dayIostock.hqIn"],   
+    	  ioOccrTot02 		:messages["dayIostock.hqIn"],
 //      }
-    
+
 //      if($scope.orgnFg === "STORE"){
     	  ioOccrQty03		:messages["dayIostock.accStoreIn"],
     	  ioOccrTot03		:messages["dayIostock.accStoreIn"],
@@ -282,7 +282,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
       ioOccrTot21 			:messages["dayIostock.accAdj"],
       ioOccrQty22			:messages["dayIostock.accSetIn"],
       ioOccrTot22			:messages["dayIostock.accSetIn"],
-      
+
 //      if($scope.orgnFg === "HQ"){
       	  ioOccrQty19		:messages["dayIostock.accSaleVendrOut"],
       	  ioOccrTot19		:messages["dayIostock.accSaleVendrOut"],
@@ -337,7 +337,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("dayIostockMainCtrlSrch", function (event, data) {
     $scope.searchDayIostockList(false);
@@ -360,29 +360,29 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     params.prodClassCd = $scope.prodClassCd;
     params.unitFg 	   = $scope.unitFg;
     params.isPageChk   = isPageChk;
-    params.listScale   = $scope.listScale;
-    
+    params.listScale = $scope.listScaleCombo.text;
+
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/status/dayIoStock/prod/viewList.sb", params, function () {
     	$scope.displayChg($scope.srchOption);
     });
   };
-  
-  
+
+
   //조회옵션 함수
   $scope.displayChg = function (srchOption) {
 	  var check = srchOption;
 	  var grid = wijmo.Control.getControl("#dayIostockMainGrid");
       var columns = grid.columns;
       var length  = grid.columns.length;
-      
+
       if(check == '1'){ // 수량
     	  for(var i=0; i<length; i++){
     		  var colLength = columns[i].binding.length;
 			  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
     			  columns[i].visible = false;
-    		  }else if(columns[i].binding != 'lv1Nm' || columns[i].binding != 'lv2Nm' || columns[i].binding != 'lv3Nm'){
+    		  }else if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
     			  columns[i].visible = true;
     		  }
           }
@@ -392,7 +392,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     		  if(columns[i].binding != 'poUnitQty'){
 				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
 	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    		  }else if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
 	    			  columns[i].visible = true;
 	    		  }
     		  }
@@ -405,7 +405,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
           }
       }
   }
-  
+
   //엑셀 다운로드
   $scope.excelDownloadDayIostock = function () {
     if ($scope.flex.rows.length <= 0) {

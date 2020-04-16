@@ -34,5 +34,17 @@ public class VersusPeriodWeekServiceImpl implements VersusPeriodWeekService {
     	
         return versusPeriodWeekMapper.getVersusPeriodWeekList(versusPeriodWeekVO);
     }
-
+    
+	/** 상품별 매출 - 차트 */
+    @Override
+    public List<DefaultMap<String>> getVersusPeriodWeekChartList(VersusPeriodWeekVO versusPeriodWeekVO, SessionInfoVO sessionInfoVO) {
+  
+    	versusPeriodWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if(!StringUtil.getOrBlank(versusPeriodWeekVO.getStoreCd()).equals("")) {
+        	versusPeriodWeekVO.setArrStoreCd(versusPeriodWeekVO.getStoreCd().split(","));
+        }
+    	
+        return versusPeriodWeekMapper.getVersusPeriodWeekChartList(versusPeriodWeekVO);
+    }
 }

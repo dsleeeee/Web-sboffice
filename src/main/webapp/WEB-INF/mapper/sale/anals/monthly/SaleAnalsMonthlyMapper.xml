@@ -71,5 +71,43 @@
 		ORDER BY WEEK
 		]]>
 	</select>
-
+    
+    <!-- 월력판매분석 - 결제수단 상세 팝업 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL_PAY
+        PARAM    : saleAnalsMonthlyVO
+        COMMENTS : 월력판매분석 - 결제수단 상세 팝업 리스트를 조회한다.
+    -->
+    <select id="getSaleAnalsMonthlyPopupList" parameterType="saleAnalsMonthlyVO" resultType="DefaultMap">
+		SELECT  TSSDP.SALE_DATE
+		,       TSSDP.POS_NO
+		,       TSSDP.BILL_NO
+		,       TSSDP.PAY_CD
+		,       (   SELECT  NMCODE_NM
+		            FROM    TB_CM_NMCODE
+		            WHERE   NMCODE_GRP_CD   =   '024'
+		            AND     NMCODE_CD       =   TSSDP.PAY_CD
+		        )   AS  PAY_CD_NM
+		,       SUM(TSSDP.PAY_AMT)  AS PAY_AMT
+		FROM    TB_SL_SALE_HDR TSSH
+		,       TB_SL_SALE_DTL_PAY TSSDP
+		WHERE   TSSH.HQ_OFFICE_CD = TSSDP.HQ_OFFICE_CD
+		AND     TSSH.HQ_BRAND_CD = TSSDP.HQ_BRAND_CD
+		AND     TSSH.STORE_CD = TSSDP.STORE_CD
+		AND     TSSH.SALE_DATE = TSSDP.SALE_DATE
+		AND     TSSH.POS_NO = TSSDP.POS_NO
+		AND     TSSH.BILL_NO = TSSDP.BILL_NO
+		<if test='storeCd != null and storeCd != ""'>
+		    AND     TSSDP.STORE_CD  = #{storeCd}
+		</if>
+		<if test='saleDate != null and saleDate != ""'>
+            AND     TSSDP.SALE_DATE = #{saleDate}
+        </if>
+		GROUP
+		BY      TSSDP.SALE_DATE
+		,       TSSDP.POS_NO
+		,       TSSDP.BILL_NO
+		,       TSSDP.PAY_CD
+		ORDER BY TSSDP.POS_NO, TSSDP.BILL_NO,   TSSDP.PAY_CD
+    </select>
 </mapper>

@@ -361,7 +361,7 @@
 				)	A
 		GROUP
 		BY      A.SLIP_NO
-		,      A.SLIP_FG
+		,      	A.SLIP_FG
 		,      A.PROD_CD
 		,      A.PROD_NM
 		,      A.SEQ
@@ -397,7 +397,8 @@
 		,      A.REMARK
 		,      A.ENVST0011
 		,      A.BARCD_CD  
-         
+        ORDER
+        BY		A.PROD_CD 
     </select>
 
     <!-- 출고확정 - 출고확정 DTL 수정 -->

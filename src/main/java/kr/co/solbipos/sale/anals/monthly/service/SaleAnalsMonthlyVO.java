@@ -28,6 +28,8 @@ public class SaleAnalsMonthlyVO extends PageVO {
     private String fri;
     /** 조회일(토요일) */
     private String sat;
+    /** 조회일자 */
+    private String saleDate;
 
 	public String getHqOfficeCd() {
 		return hqOfficeCd;
@@ -117,6 +119,14 @@ public class SaleAnalsMonthlyVO extends PageVO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(String saleDate) {
+		this.saleDate = saleDate;
 	}
 
 }

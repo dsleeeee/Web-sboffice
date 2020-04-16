@@ -120,7 +120,7 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
   });
 
   // 매대이동관리 신규등록 상품 리스트 조회
-  $scope.searchStoreMoveRegistList = function () {
+  $scope.searchStandMoveRegistList = function () {
 
     // 파라미터
     var params        = {};
@@ -172,7 +172,7 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
 		  		grid.columns.removeAt(grid.columns.length-1);
 		  	}
 		  	*/
-		  	while(grid.columns.length > 30){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
+		  	while(grid.columns.length > 9){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
 		  		grid.columns.removeAt(grid.columns.length-1);
 		  	}
 
@@ -193,6 +193,7 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
             	if(i == 0){
             		//입고수량, 금액, VAT, 합계
 //            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.currQty"],	binding:"arrCurrQty_"		+ j,	width:80,    align:"right",    isReadOnly:true,		aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//재고수량 - 주문딘위
+            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.currQty"],	binding:"currQty00"	+ (j+1),		width:70,    align:"right",    isReadOnly:true,		dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 주문딘위
             		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrUnitQty_"	+ j,	width:50,    align:"right",    isReadOnly:false,	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 주문딘위
                 	grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrEtcQty_"	+ j,    width:50,    align:"right",    isReadOnly:false,  	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 나머지
                   //grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTotQty"], binding:"arrTotQty_"	+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum"}) );					//입고수량 - 합계
@@ -203,6 +204,7 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
             	}
             	
 //            	grid.columnHeaders.setCellData(0, 'arrCurrQty_'			+ j, arrStorageNm[i][j]);
+            	grid.columnHeaders.setCellData(0, 'currQty00'		+ (j+1), arrStorageNm[i][j]);
             	grid.columnHeaders.setCellData(0, 'arrUnitQty_'	+ j, arrStorageNm[i][j]);
             	grid.columnHeaders.setCellData(0, 'arrEtcQty_'		+ j, arrStorageNm[i][j]);
               //grid.columnHeaders.setCellData(0, 'arrTotQty_'	+ j, arrStorageNm[i][j]);
@@ -328,7 +330,7 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
     }
     console.log(params);
     $scope._save("/iostock/move/standMove/standMoveRegist/save.sb", params, function () {
-      $scope.saveStoreMoveRegistCallback()
+      $scope.saveStandMoveRegistCallback()
     });
   };
 
@@ -341,11 +343,11 @@ app.controller('standMoveRegistCtrl', ['$scope', '$http', '$timeout', function (
   };
 
 
-  $scope.saveStoreMoveRegistCallback = function () {
-//    $scope.wjStoreMoveRegistLayer.hide(true);
+  $scope.saveStandMoveRegistCallback = function () {
+    $scope.wjStandMoveRegistLayer.hide(true);
 
-//    var storeMoveScope = agrid.getScope('standMoveCtrl');
-//    standMoveScope.searchStandMoveList();
+	  var standMoveScope = agrid.getScope('standMoveCtrl');
+	  standMoveScope.searchStandMoveList();
   };
 
 }]);

@@ -7,21 +7,21 @@ var app = agrid.getApp();
 app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('storePeriodCtrl', $scope, $http, true));
-	
+
 	// 조회일자 세팅
 	$scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
 	$scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
 	$scope.orgnFg = gvOrgnFg; // ?
 	// 조회조건 콤보박스 listScale 세팅
 	$scope._setComboData("storePeriodListScaleBox", gvListScaleBoxData);
-	
+
 	// 매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
 	$scope.storePeriodSelectStoreShow = function () {
 		$scope._broadcast('storePeriodSelectStoreCtrl');
 	};
-	
+
 	//거래처선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -34,19 +34,19 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    {"name": messages["storePeriod.unitStockFg"], "value": "0"},
 	    {"name": messages["storePeriod.orderPoUnitFg"], "value": "1"}
 	]);
-	
+
 	// 조회옵션 세팅
 	$scope._setComboData("srchSrchOption", [
 		{"name": messages["storePeriod.qtyTot"], "value": "QtyTot"},
 		{"name": messages["storePeriod.qty"], "value": "Qty"},
 	    {"name": messages["storePeriod.tot"], "value": "Tot"}
 	]);
-	
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("storePeriodCtrl");
-		
+
 		// 그리드 링크 효과
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
@@ -66,7 +66,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
 		s.bottomLeftCells.setCellData(0, 0, '합계');
-	    
+
 		// <-- 그리드 헤더2줄 -->
 	    // 헤더머지
 	    s.allowMerging = 2;
@@ -84,8 +84,8 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    dataItem.poUnitQty			= messages["storePeriod.poUnitQty"];
 	    dataItem.poUnitFg			= messages["storePeriod.poUnitFg"];
 	    dataItem.barcdCd			= messages["storePeriod.barcdCd"];
-	    
-	    
+
+
 	    dataItem.ioOccrQty03		= messages["storePeriod.ioOccr03"]; // 매장입고
 	    dataItem.ioOccrTot03		= messages["storePeriod.ioOccr03"];
 	    dataItem.ioOccrQty12		= messages["storePeriod.ioOccr12"]; // 매장반품
@@ -96,8 +96,8 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    dataItem.ioOccrTot18		= messages["storePeriod.ioOccr18"];
 	    dataItem.ioOccrQty11		= messages["storePeriod.ioOccr11"]; // 매장판매
 	    dataItem.ioOccrTot11		= messages["storePeriod.ioOccr11"];
-	    
-	    
+
+
 	    /*
 	    dataItem.ioOccrQty03		= messages["periodIostock.ioOccr03"]; // 본사입고
 	    dataItem.ioOccrTot03		= messages["periodIostock.ioOccr03"];
@@ -107,14 +107,14 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    dataItem.ioOccrTot06		= messages["periodIostock.ioOccr06"];
 	    dataItem.ioOccrQty18		= messages["periodIostock.ioOccr18"]; // 본사반입
 	    dataItem.ioOccrTot18		= messages["periodIostock.ioOccr18"];
-	    
-	    
+
+
 	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 거래처출고
 	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
 	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 거래처반입
 	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
 	    */
-	    
+
 	    dataItem.ioOccrQty04		= messages["storePeriod.ioOccr04"]; // 매장이입
 	    dataItem.ioOccrTot04		= messages["storePeriod.ioOccr04"];
 	    dataItem.ioOccrQty14		= messages["storePeriod.ioOccr14"]; // 매장이출
@@ -125,7 +125,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    dataItem.ioOccrTot21		= messages["storePeriod.ioOccr21"];
 	    dataItem.ioOccrQty22		= messages["storePeriod.ioOccr22"]; // 세트생성
 	    dataItem.ioOccrTot22		= messages["storePeriod.ioOccr22"];
-	    
+
 	    s.columnHeaders.rows[0].dataItem = dataItem;
 
 	    s.itemFormatter = function (panel, r, c, cell) {
@@ -166,22 +166,22 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        }
 	    }
 	    // <-- //그리드 헤더2줄 -->
-	    
+
 	    // 그리드 클릭 이벤트
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
-	    	
+
 	        if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 		    	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 		    	if (rng && rng.columnSpan > 1) {
 		    		e.preventDefault();
 		    	}
 		  }
-	    	
+
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
-	    		
+
 	    		var params       = {};
 	    		params.orgnFg = $scope.orgnFg;
 	    		params.prodCd = selectedRow.prodCd; // 상품코드
@@ -201,13 +201,13 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    			params.poUnitQty = selectedRow.poUnitQty; // 입수
 	    	        params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
 	    	        params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
-	    	        
+
 	    			$scope._broadcast('prodQtyDtlCtrl', params);
 	    		}
 	    	}
 	    }, true);
 	};
-	
+
 	// 상품분류정보 팝업
 	$scope.popUpProdClass = function() {
 		var popUp = $scope.prodClassPopUpLayer;
@@ -228,30 +228,30 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 			}
 		});
 	};
-	
+
 	// 상품분류정보 선택취소
 	$scope.delProdClass = function(){
 		$scope.prodClassCd = "";
 		$scope.prodClassCdNm = "";
 	}
-	
+
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("storePeriodCtrl", function (event, data) {
-		
+
 		$scope.searchStorePeriodList(true);
 		// 기능수행 종료 : 반드시 추가
 		event.preventDefault();
 	});
-	
+
 	//다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	$scope.$on("storePeriodCtrlSrch", function (event, data) {
 		$scope.comboArray =  $scope.comboArrayForSrc; // ?????????????
 		$scope.searchStorePeriodList(false);
-   
+
 		// 기능수행 종료 : 반드시 추가
     	event.preventDefault();
     });
-	
+
 	// 매장기간수불 리스트 조회
 	$scope.searchStorePeriodList = function (isPageChk) {
 		// 파라미터
@@ -265,20 +265,21 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		params.vendrCd = $("#storePeriodIostockSelectVendrCd").val(); // 거래처
 		params.prodClassCd	= $scope.prodClassCd; // 분류
 		params.unitFg = $("#srchUnitFg").val(); // 단위구분
+		params.listScale = $scope.listScaleCombo.text;
 		params.isPageChk = isPageChk;
-		
+
 		if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 		}
-	
+
 		$scope.srchOptionView();
 		$scope.chkProdClassDisplay();
-				
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/stock/status/storePeriod/storePeriod/storeperiodList.sb", params);
 	};
-	
+
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
 		var srchSrchOption = $scope.srchOption;
@@ -291,20 +292,20 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 			}
 		}
 	};
-	
+
 	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
 	$scope.chkProdClassDisplay = function(){
 		var grid = wijmo.Control.getControl("#storePeriodGrid");
 		var columns = grid.columns;
 		var length  = grid.columns.length;
-		
+
 		for(var i=0; i<length; i++){
 			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
 				$scope.isChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
 	}
-	
+
 	//엑셀 다운로드
 	$scope.excelDownload = function () {
 		if ($scope.flex.rows.length <= 0) {
@@ -327,5 +328,5 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 			});
 		}, 10);
 	};
-	
+
 }]);

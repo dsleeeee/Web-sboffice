@@ -128,6 +128,12 @@
 <script type="text/javascript">
 var gReqDate = "${reqDate}";
 var gEnvst1044 = "${envst1044}";
+var gEnvst1042 	= '${envst1042}';
+/*
+console.log('gReqDate  : ' + gReqDate);
+console.log('gEnvst1044: ' + gEnvst1044);
+console.log('gEnvst1042: ' + gEnvst1042);
+*/
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20181224.01" charset="utf-8"></script>

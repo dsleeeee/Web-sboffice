@@ -43,10 +43,10 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", getToday());
     $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", getToday());
     $scope.orgnFg        = gvOrgnFg;
-    
+
     // 콤보박스 데이터 Set
     $scope._setComboData('prodHourlistScaleBox', gvListScaleBoxData);
-    
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -122,7 +122,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 }
             }
         }
-        
+
         // 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
@@ -146,20 +146,20 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-    
+
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("prodHourCtrlSrch", function (event, data) {
         $scope.searchProdHourList(false);
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-    
+
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
       $scope.srchStartDate.isReadOnly = $scope.isChecked;
       $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };
-    
+
     // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
     $scope.isChkProdClassDisplay = function(){
   	  var columns = $scope.flex.columns;
@@ -170,19 +170,19 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
   		  }
   	  }
     }
-    
+
     // 시간별 리스트 조회
     $scope.searchProdHourList = function (isPageChk) {
         $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
-       
+
         // 파라미터
         var params= {};
-        
+
         if(!$scope.isChecked){
         	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         	params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
-        
+
         if(params.startDate > params.endDate){
        	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
        	 	return false;
@@ -190,7 +190,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
         params.storeCd = $scope.searchedStoreCd;
         params.saleTime = $scope.saleTime;
-        params.listScale = $scope.prodHourlistScale; //-페이지 스케일 갯수
+        params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
         params.isPageChk = isPageChk;
         params.orgnFg    = $scope.orgnFg;
 
@@ -203,67 +203,67 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var start = 0;
         var end = 0;
 
-        if($scope.saleTime === "1"){ 
+        if($scope.saleTime === "1"){
             start = 6;
             end = 7;
-        }else if($scope.saleTime  === "2"){ 
+        }else if($scope.saleTime  === "2"){
             start = 8;
             end = 9;
-        }else if($scope.saleTime  === "3"){ 
+        }else if($scope.saleTime  === "3"){
             start = 10;
             end = 11;
-        }else if($scope.saleTime  === "4"){ 
+        }else if($scope.saleTime  === "4"){
             start = 12;
             end = 13;
-        }else if($scope.saleTime  === "5"){ 
+        }else if($scope.saleTime  === "5"){
             start = 14;
             end = 15;
-        }else if($scope.saleTime  === "6"){ 
+        }else if($scope.saleTime  === "6"){
             start = 16;
             end = 17;
-        }else if($scope.saleTime  === "7"){ 
+        }else if($scope.saleTime  === "7"){
             start = 18;
             end = 19;
-        }else if($scope.saleTime  === "8"){ 
+        }else if($scope.saleTime  === "8"){
             start = 20;
             end = 21;
-        }else if($scope.saleTime  === "9"){ 
+        }else if($scope.saleTime  === "9"){
             start = 22;
             end = 23;
-        }else if($scope.saleTime  === "10"){ 
+        }else if($scope.saleTime  === "10"){
             start = 24;
             end = 25;
-        }else if($scope.saleTime  === "11"){ 
+        }else if($scope.saleTime  === "11"){
             start = 26;
             end = 27;
-        }else if($scope.saleTime  === "12"){ 
+        }else if($scope.saleTime  === "12"){
             start = 28;
             end = 29;
-        }else if($scope.saleTime  === "13"){ 
+        }else if($scope.saleTime  === "13"){
             start = 30;
             end = 31;
         }else if($scope.saleTime  === "14"){
             start = 32;
-            end = 33;    
-        }else if($scope.saleTime  === "15"){ 
+            end = 33;
+        }else if($scope.saleTime  === "15"){
             start = 34;
             end = 35;
-        }else if($scope.saleTime  === "16"){ 
+        }else if($scope.saleTime  === "16"){
             start = 36;
             end = 37;
         }else if($scope.saleTime  === "17"){
             start = 38;
             end = 39;
-        }else if($scope.saleTime  === "18"){ 
+        }else if($scope.saleTime  === "18"){
             start = 40;
             end = 41;
-        }else if($scope.saleTime  === "19"){ 
+        }else if($scope.saleTime  === "19"){
             start = 42;
             end = 43;
-        }else if($scope.saleTime  === "20"){ 
+        }else if($scope.saleTime  === "20"){
             start = 44;
             end = 45;
-        }else if($scope.saleTime  === "21"){ 
+        }else if($scope.saleTime  === "21"){
             start = 46;
             end = 47;
         }else if($scope.saleTime  === "22"){
@@ -279,7 +279,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
             start = 6;
             end = 53;
         }
-        
+
         start++;
         end++;
 
@@ -298,7 +298,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.dayTimeSelectStoreShow = function () {
         $scope._broadcast('dayTimeSelectStoreCtrl');
     };
-    
+
     // 엑셀 다운로드
     $scope.excelDownloadHour = function () {
       if ($scope.flex.rows.length <= 0) {

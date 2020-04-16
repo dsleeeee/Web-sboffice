@@ -53,7 +53,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.storeCd   = $("#pordPayFgSelectStoreCd").val();
         	params.prodCd = selectedRow.prodCd
         	params.dialogHd  = col.header;
-        	
+
         	// 등록일자 '전체기간' 선택에 따른 params
             if(!$scope.isChecked){
               params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -95,7 +95,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodCd    = $("#srchPayFgProdCd").val();
     params.prodNm    = $("#srchPayFgProdNm").val();
     params.orgnFg    = $scope.orgnFg;
-    params.listScale = $scope.prodPayFglistScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -113,7 +113,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.srchStartDate.isReadOnly = $scope.isChecked;
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
-  
+
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -124,7 +124,7 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
 		  }
 	  }
   }
-  
+
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

@@ -135,8 +135,10 @@
             items-source="_getComboData('apprMcouponListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="conListScale"
+			is-editable="true"
+			text-changed="_checkValidation(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="apprMcouponSelectStoreStoreNum" ng-model="storeNum">

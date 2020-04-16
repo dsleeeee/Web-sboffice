@@ -61,8 +61,10 @@
         items-source="_getComboData('listScaleBox')"
         display-member-path="name"
         selected-value-path="value"
-        is-editable="false"
-        initialized="_initComboBox(s)">
+        initialized="_initComboBox(s)"
+        control="conListScale"
+		is-editable="true"
+		text-changed="_checkValidation(s)">
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
       <div class="tr">

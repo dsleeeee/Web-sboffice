@@ -59,6 +59,7 @@ app.controller('storeProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 파라미터
     var params       = {};
 		params.storeCd   = $("#storeProdSelectStoreCd").val();
+		params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     if(!$scope.isChecked){
     	 params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
          params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');

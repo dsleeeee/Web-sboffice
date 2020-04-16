@@ -93,8 +93,10 @@
                     items-source="_getComboData('posDayPeriodListScaleBox')"
                     display-member-path="name"
                     selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
+                    initialized="initComboBox(s)"
+                    control="listScaleCombo"
+                    is-editable="true"
+                    text-changed="_checkValidation(s)">
             </wj-combo-box>
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriod()"><s:message code="cmm.excel.down" />
@@ -144,8 +146,10 @@
                    items-source="_getComboData('posDayPeriodDtlListScaleBox')"
                    display-member-path="name"
                    selected-value-path="value"
-                   is-editable="false"
-                   initialized="initComboBox(s)">
+                   initialized="initComboBox(s)"
+                   control="listScaleCombo"
+                   is-editable="true"
+                   text-changed="_checkValidation(s)">
            </wj-combo-box>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadDayPeriodDtl()"><s:message code="cmm.excel.down" />
@@ -185,55 +189,6 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
-        </div>
-
-        <%-- left --%>
-     	<div class="w50 fl">
-     		<div class="mt20 oh sb-select dkbr pd10">
-     			<!-- 막대 차트 샘플 -->
-				<div ng-controller="posDayPeriodBarChartCtrl">
-					<div>
-						<wj-flex-chart
-							id="posDayPeriodBarChart"
-							name="barChart1"
-							class="custom-flex-chart"
-							initialized="initChart(s,e)"
-							items-source="data"
-							rendered="rendered(s,e)"
-							binding-x="storeNmPosNo">
-							<wj-flex-chart-series name="<s:message code="pos.saleQty"/>" binding="saleCnt">
-							</wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmt"/>" chart-type="LineSymbols" binding="realSaleAmt">
-							</wj-flex-chart-series>
-						</wj-flex-chart>
-					</div>
-				</div>
-     		</div>
-        </div>
-
-        <div class="w50 fr">
-        	<div class="mt20 oh sb-select dkbr pd10">
-        		<!-- 파이 차트 샘플 -->
-				<div ng-controller="posDayPeriodPieChartCtrl">
-					<div>
-						<wj-flex-pie
-							id="posDayPeriodPieChartCtrl"
-							class="custom-flex-pie-chart"
-							binding-name = "storeNmPosNo"
-							binding = "realSaleAmt"
-							is-animated = "True"
-							selection-mode="Point"
-							selected-item-position="3"
-							selected-item-offset="0.1"
-							inner-radius="0.5"
-							control="posDayPeriodPieChart"
-							initialized="initChart(s,e)"
-							items-source="data"
-							>
-						</wj-flex-pie>
-					</div>
-				</div>
-        	</div>
         </div>
     </div>
     <%-- //wj grid end --%>

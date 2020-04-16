@@ -94,18 +94,6 @@
     </table>
 
     <div class="mt20 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-              class="w100px fl"
-              id="abclistScaleBox"
-              ng-model="listScale"
-              control="listScaleCombo"
-              items-source="_getComboData('abclistScaleBox')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
 
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadAbc()"><s:message code="cmm.excel.down" />

@@ -40,4 +40,15 @@ public class HqCurrServiceImpl implements HqCurrService {
         return list;
     }
 
+	@Override
+	public List<DefaultMap<String>> gethqCurrDtlList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
+		//hqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	if( !StringUtil.getOrBlank(hqCurrVO.getHqOfficeCd()).equals("")) {
+			return hqCurrMapper.getHqCurrDtlList(hqCurrVO);
+		} else {
+			//hqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
+			return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
+		}
+	}
+
 }

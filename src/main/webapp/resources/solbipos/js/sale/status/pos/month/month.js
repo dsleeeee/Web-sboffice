@@ -109,12 +109,12 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posMonthCtrlSrch", function (event, data) {
-		
+
 	    if( $("#posMonthSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
-	    }  
-		
+	    }
+
 		$scope.searchPosMonthList(false);
 
 		var storeCd = $("#posMonthSelectStoreCd").val();
@@ -130,7 +130,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		var params = {};
 		params.storeCd = $("#posMonthSelectStoreCd").val();
 		params.posNo = $("#posMonthSelectPosCd").val();
-		params.listScale = $scope.posMonthListScale; //-페이지 스케일 갯수
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 
@@ -151,7 +151,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			var flex = $scope.flex;
 			//row수가 0이면
 			if(flex.rows.length === 0){
-				
+
 				var grid = wijmo.Control.getControl("#posMonthGrid");
 				//컬럼 삭제
 				while(grid.columns.length > 6){
@@ -307,23 +307,23 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 			  }
 		  }
-		  
+
 		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
 		    	var ht = grid.hitTest(e);
 		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
-	
+
 		    		var col         = ht.panel.columns[ht.col];
 		    		var selectedRow = grid.rows[ht.row].dataItem;
-			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
-			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
-			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
-			   		
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+
 		    		var params       = {};
-		    		params.chkPop	= "posPop";    		
+		    		params.chkPop	= "posPop";
 		    		params.saleMonth   = selectedRow.yearMonth;
-		    		
-		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
 			    		params.storeCd   = storeCd;
 			    		params.posNo	 = posNo;
 		    			$scope._broadcast('saleComProdCtrl', params); // 수량
@@ -333,7 +333,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		    		}
 		    	}
 		  });
-		  
+
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {

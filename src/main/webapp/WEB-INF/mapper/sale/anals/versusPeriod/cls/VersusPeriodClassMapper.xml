@@ -21,8 +21,8 @@
      		 , SUM(DM.SALE_CNT_A)   	AS SALE_CNT_A
      		 , SUM(DM.REAL_SALE_AMT_B)  AS REAL_SALE_AMT_B
      		 , SUM(DM.SALE_CNT_B)       AS SALE_CNT_B
-     		 , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
-     		 , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+     		 , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+     		 , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
      	FROM (
      		   SELECT UM.LV1_CD
 		     		, UM.LV1_NM
@@ -326,8 +326,8 @@
 			 , SUM(DM.SALE_CNT_A)   	AS SALE_CNT_A
 			 , SUM(DM.REAL_SALE_AMT_B)  AS REAL_SALE_AMT_B
 			 , SUM(DM.SALE_CNT_B)       AS SALE_CNT_B
-		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
-		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM (
 				SELECT UM.PROD_CD
@@ -461,9 +461,9 @@
 		ORDER BY SUM(DM.REAL_SALE_AMT_A) DESC
 	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <select id="getBrandCdList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
-    
+
 	    SELECT HQ_BRAND_CD AS NMCODE_CD
 	         , HQ_BRAND_NM AS NMCODE_NM
 	      FROM TB_HQ_BRAND
@@ -471,7 +471,7 @@
 	     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
 	        AND HQ_OFFICE_CD = #{hqOfficeCd};
 	     </if>
-     
+
     </select>
 
 </mapper>

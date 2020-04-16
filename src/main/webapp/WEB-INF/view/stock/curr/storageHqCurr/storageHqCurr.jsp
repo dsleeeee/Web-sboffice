@@ -36,7 +36,7 @@
 	      <td>
 	        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
 	      </td>
-      </tr>   
+      </tr>
       <tr>
 	      <%-- 바코드 --%>
 	      <th><s:message code="storeCurr.barcdNm"/></th>
@@ -62,34 +62,18 @@
 	      </td>
       </tr>
       <tr>
-	      <%-- 거래처 --%>
-	      <th><s:message code="storeCurr.vendrNm"/></th>
-	      <td>
-	        <%-- 거래처선택 모듈 싱글 선택 사용시 include
-	             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-	                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-	                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-	                          closeFunc - 팝업 닫기시 호출할 함수
-	        --%>
-	        <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-	          <jsp:param name="targetId" value="storageHqCurrSelectVendr"/>
-	          <jsp:param name="displayNm" value="전체"/>
-	        </jsp:include>
-	        <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
-	      </td>
-	      <%-- 분류 --%>
-	      <th><s:message code="storeCurr.prodClass"/></th>
-	      <td>
-	        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
-	               placeholder="<s:message code="cmm.all" />" readonly/>
-	        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
-	        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-	      </td>
-      </tr>
-      <tr>
-        <%-- 안전재고 --%>
+		<%-- 분류 --%>
+		<th><s:message code="storeCurr.prodClass"/></th>
+		<td>
+		  <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
+		         placeholder="<s:message code="cmm.all" />" readonly/>
+		  <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+		  <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+		</td>
+
+	    <%-- 안전재고 --%>
         <th><s:message code="hqCurr.safeStockFg"/></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
             <span class="txtIn w150px">
               <wj-combo-box
@@ -111,12 +95,32 @@
           </div>
         </td>
       </tr>
+      <tr>
+        <%-- 거래처 --%>
+        <th style="display: none;"><s:message code="storeCurr.vendrNm"/></th>
+        <td style="display: none;">
+          <%-- 거래처선택 모듈 싱글 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                            displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                            modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                            closeFunc - 팝업 닫기시 호출할 함수
+          --%>
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
+            <jsp:param name="targetId" value="storageHqCurrSelectVendr"/>
+            <jsp:param name="displayNm" value="전체"/>
+          </jsp:include>
+          <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+        </td>
+      </tr>
       </tbody>
     </table>
-    
+
+    <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
+    <input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
+
     <input type="hidden" id="storageHqCurrSelectStorageCd" value="">
     <input type="hidden" id="storageHqCurrSelectStorageName" value="">
-    
+
     <div style="clear: both;"></div>
 
     <div class="mt20 oh sb-select dkbr">
@@ -128,14 +132,16 @@
 	            items-source="_getComboData('storageHqCurrListScaleBox')"
 	            display-member-path="name"
 	            selected-value-path="value"
-	            is-editable="false"
-	            initialized="initComboBox(s)">
+	            initialized="initComboBox(s)"
+	            control="listScaleCombo"
+				is-editable="true"
+				text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 	    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <input type="text" id="storageHqCurrSelectStoreStoreNum" ng-model="storeNum">
 	    </c:if>
 	    <%-- 엑셀 다운로드 //TODO --%>
-	    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+	    <button class="btn_skyblue fr" ng-click="excelDownloadStorageHqCurr()"><s:message code="cmm.excel.down" />
 	    </button>
     </div>
 
@@ -151,21 +157,24 @@
           initialized="initGrid(s,e)"
           is-read-only="true"
           item-formatter="_itemFormatter"
-          frozen-columns="5">
+          frozen-columns="5"
+          allow-dragging="None">
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv1Nm"/>"             binding="lv1Nm"             width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv2Nm"/>"             binding="lv2Nm"             width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv1Nm"/>"             binding="lv1Nm"             width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv2Nm"/>"             binding="lv2Nm"             width="140" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.lv3Nm"/>"             binding="lv3Nm"             width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.prodCd"/>"            binding="prodCd"            width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.prodNm"/>"            binding="prodNm"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitQty"/>"         binding="poUnitQty"         width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitFg"/>"          binding="poUnitFg"          width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.vendrNm"/>"           binding="vendrNm"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.barcdNm"/>"           binding="barcdCd"           width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.vendrNm"/>"           binding="vendrNm"           width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.barcdNm"/>"           binding="barcdCd"           width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.costUprc"/>"          binding="costUprc"          width="80" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.safeStockQty"/>"      binding="safeStockQty"      width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.totCurrQty"/>"        binding="currQty"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.currQty000"/>"        binding="currQty000"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <wj-flex-grid-column header="<s:message code="storageHqCurr.currQty000"/>"        binding="currQty000"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:if>
           <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"  binding="firstVendrInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"   binding="lastVendrInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
@@ -206,4 +215,4 @@
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 <%-- 재고현황 팝업 --%>
-<c:import url="/WEB-INF/view/stock/com/popup/cmmStockStatus/cmmStockStatus.jsp"></c:import>
+<c:import url="/WEB-INF/view/stock/curr/hqCurr/hqCurrDtl.jsp"></c:import>

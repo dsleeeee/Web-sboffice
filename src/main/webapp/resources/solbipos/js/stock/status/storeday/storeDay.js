@@ -137,7 +137,7 @@ app.controller('storeDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	      }
 	    });
 	  };
-	  
+
 	  //상품분류 항목표시 함수
 	  $scope.isChkDt = function() {
 		  var grid = wijmo.Control.getControl("#storeDayMainGrid");
@@ -223,11 +223,11 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
 	        params.storeCd   = selectedRow.storeCd; // 매장코드
 	        params.storeNm   = selectedRow.storeNm; // 매장이름
 	        params.poUnitQty = selectedRow.poUnitQty; // 입수
-	        
+
 	        if (col.binding === "prodCd") { // 상품코드
     			params.startDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyy-MM-dd'); // 시작날짜
     		    params.endDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyy-MM-dd'); // 종료날짜
-    		    
+
     			$scope._broadcast('prodCodeDtlCtrl', params);
     		}
 	        if (col.binding.substring(colLength-2,colLength-5) === 'Qty' && selectedRow[col.binding] != null) { // 수량
@@ -353,7 +353,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.prodClassCd = $scope.prodClassCd;
     params.unitFg 	   = $scope.unitFg;
     params.isPageChk   = isPageChk;
-    params.listScale   = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text;
 
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

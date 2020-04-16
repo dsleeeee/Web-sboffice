@@ -72,12 +72,12 @@
           <%-- 상품코드 --%>
           <th><s:message code="storeMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchstoreMoveRegProdCd" name="srchstoreMoveRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
           <th><s:message code="storeMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchstoreMoveRegProdNm" name="srchstoreMoveRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>

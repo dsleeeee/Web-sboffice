@@ -105,9 +105,11 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_STORE_STOCK_CUR
                     WHERE   STORE_CD  =   #{storeCd}
+                    AND		STORAGE_CD = '999'
                 )   tsssc
         ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND		tphsd.STORE_CD  	 =   #{storeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
         AND     tphsd.SLIP_FG        =   #{slipFg}
         AND     tphsd.PROC_FG        =   #{procFg}
@@ -281,6 +283,7 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     STORAGE_CD = '999'
                 )   tshsc
         ,       (   SELECT  tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
                     ,       SUM(DECODE(tphsd.MGR_TOT_QTY, 0, tphsd.MD_TOT_QTY, tphsd.MGR_TOT_QTY)) AS PREV_MGR_UNIT_QTY
@@ -341,6 +344,7 @@
         <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
+        AND     tsssc.STORAGE_CD  (+) =    '999'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
@@ -352,6 +356,7 @@
         AND     tmpb.PROD_CD      (+) =   tmp.PROD_CD
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
+        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1)
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}

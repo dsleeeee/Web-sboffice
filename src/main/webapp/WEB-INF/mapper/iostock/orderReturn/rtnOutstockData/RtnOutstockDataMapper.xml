@@ -318,7 +318,7 @@
         	,	STORAGE_CD    
         	,	'12'
         	,   STORE_CD   
-        	,	SLIP_FG     
+        	,	'-1'     
  			,	ORDER_UNIT_QTY
  			,  	ORDER_ETC_QTY
   			,	ORDER_TOT_QTY

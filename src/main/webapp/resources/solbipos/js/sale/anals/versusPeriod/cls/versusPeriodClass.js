@@ -626,8 +626,8 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	    params.storeCd = $scope.storeCd;
 	    params.prodClassCd = $scope.prodClassCd;
 	    params.isPageChk = isPageChk;
-	    params.listScale = $scope.listScale;
-
+	    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
+	    
 
 	  /*else {
 		  console.log("2222");

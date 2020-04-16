@@ -191,7 +191,7 @@ app.controller('apprAcquireNcardCtrl', ['$scope', '$http', '$timeout', function 
     params.posNo  	 = $("#apprAcquireNcardSelectPosCd").val();
     params.saleYn	 = $scope.saleYn;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprAcquireNcardListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     
