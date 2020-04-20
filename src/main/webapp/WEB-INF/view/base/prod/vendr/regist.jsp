@@ -75,22 +75,26 @@
                   <div class="impWrap"><s:message code="vendr.bizNo" /></div>
                 </th>
                 <td id="vBizNo"></td>
+                <%-- 전화번호 --%>
                 <th>
                   <div class="impWrap"><s:message code="vendr.telNo" /></div>
                 </th>
                 <td id="vTelNo"></td>
               </tr>
               <tr>
+                <%-- 이메일주소 --%>
                 <th>
                   <div class="impWrap"><s:message code="vendr.emailAddr" /></div>
                 </th>
                 <td id="vEmailAddr"></td>
+                <%-- 팩스번호 --%>
                 <th>
                   <div class="impWrap"><s:message code="vendr.faxNo" /></div>
                 </th>
                 <td id="vFaxNo"></td>
               </tr>
               <tr>
+                <%-- 주소 --%>
                 <th>
                   <div class="impWrap"><s:message code="vendr.addr" /></div>
                 </th>
@@ -248,7 +252,7 @@
 
       <%-- 공통 버튼 영역 --%>
       <div class="btnSet">
-        <%-- 등록 --%>
+        <%-- 신규등록 --%>
         <span><a href="#" class="btn_blue" id="btnReg" style="display:none;"><s:message code="cmm.new.add" /></a></span>
         <%-- 저장 --%>
         <span><a href="#" class="btn_blue" id="btnSave" style="display:none;"><s:message code="cmm.save" /></a></span>
@@ -470,11 +474,11 @@
   function chkVal(sendUrl) {
 
     <%-- 거래처코드을 입력해주세요. --%>
-    var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.text'/>";
-    if(rVendrCd.value === "") {
-      s_alert.pop(msg);
-      return false;
-    }
+    <%--var msg = "<s:message code='vendr.vendrCd'/> <s:message code='cmm.require.text'/>";--%>
+    <%--if(rVendrCd.value === "") {--%>
+      <%--s_alert.pop(msg);--%>
+      <%--return false;--%>
+    <%--}--%>
 
     <%-- 거래처명을 입력해주세요. --%>
     var msg = "<s:message code='vendr.vendrNm'/> <s:message code='cmm.require.text'/>";
@@ -524,10 +528,13 @@
     var inputArr = [
       rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
     ].forEach(function(element){element.value="";});
+
     var selectArr = [
         rVendorFg, rVatIncldYn, rUseYn
     ].forEach(function(element){element.selectedIndex=0;});
-    rVendrCd.isReadOnly=false;
+
+    // rVendrCd.isReadOnly=false;
+    rVendrCd.isReadOnly=true;
   }
 
   <%-- 취급상품 탭 클릭 --%>

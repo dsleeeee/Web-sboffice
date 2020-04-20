@@ -120,12 +120,20 @@ public class VendrServiceImpl implements VendrService {
         {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+            // 신규등록일때 거래처코드(본사 자동채번)
+            String vendrCd = vendrMapper.getHqVendrCd(vendrVO);
+            vendrVO.setVendrCd(vendrCd);
+
             result = vendrMapper.insertHqVendr(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
             vendrVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+            // 신규등록일때 거래처코드(매장 자동채번)
+            String vendrCd = vendrMapper.getMsVendrCd(vendrVO);
+            vendrVO.setVendrCd(vendrCd);
 
             result = vendrMapper.insertMsVendr(vendrVO);
         }else
@@ -288,6 +296,8 @@ public class VendrServiceImpl implements VendrService {
 
         for(VendrVO vendrVO : vendrVOs){
 
+            vendrVO.setRegDt(currentDt);
+            vendrVO.setRegId(sessionInfoVO.getUserId());
             vendrVO.setModDt(currentDt);
             vendrVO.setModId(sessionInfoVO.getUserId());
 

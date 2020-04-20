@@ -41,6 +41,12 @@ public interface VendrMapper {
     /** 브랜드 코드 조회 */
     String getHqBrandCd(VendrVO vendrVO);
 
+    /** 거래처코드(본사 자동채번)  */
+    String getHqVendrCd(VendrVO vendrVO);
+
+    /** 거래처코드(매장 자동채번)  */
+    String getMsVendrCd(VendrVO vendrVO);
+
     /** 거래처(본사) 등록 */
     int insertHqVendr(VendrVO vendrVO);
 

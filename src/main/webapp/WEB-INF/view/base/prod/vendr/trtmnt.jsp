@@ -52,19 +52,19 @@
                 </div>
               </td>
             </tr>
-            <tr>
-              <%-- 분류조회 --%>
-              <th>
-                <s:message code="vendr.productClass" />
-              </th>
-              <td>
-                <div class="sb-select">
-                  <div id="sProductClass"></div>
-                </div>
-              </td>
-              <th>&nbsp;</th>
-              <td>&nbsp;</td>
-            </tr>
+            <%--<tr>--%>
+              <%--&lt;%&ndash; 분류조회 &ndash;%&gt;--%>
+              <%--<th>--%>
+                <%--<s:message code="vendr.productClass" />--%>
+              <%--</th>--%>
+              <%--<td>--%>
+                <%--<div class="sb-select">--%>
+                  <%--<div id="sProductClass"></div>--%>
+                <%--</div>--%>
+              <%--</td>--%>
+              <%--<th></th>--%>
+              <%--<td></td>--%>
+            <%--</tr>--%>
           </tbody>
         </table>
         <%-- 조회버튼 --%>
@@ -76,28 +76,28 @@
         <div class="wj-TblWrap mt20">
           <!--left-->
           <div class="w50 fl">
-            <div class="wj-TblWrapBr mr10 pd10" style="height:200px;">
+            <div class="wj-TblWrapBr mr10 pd10" style="height:300px;">
               <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:300px; position:relative;">
                 <s:message code="vendr.trtmnt.yes" />
                 <span class="fr" style="font-size:1em;" id="btnDelete">
                   <a href="#" class="btn_grayS"><s:message code="cmm.delete" /></a>
                 </span>
               </h3>
-              <div style="height:410px;" id="theGrid1"></div>
+              <div style="height:240px;" id="theGrid1"></div>
             </div>
           </div>
           <!--//left-->
 
           <!--right-->
           <div class="w50 fr">
-            <div class="wj-TblWrapBr ml10 pd10" style="height:200px;">
+            <div class="wj-TblWrapBr ml10 pd10" style="height:300px;">
               <h3 class="lh30" style="font-size:0.75em; border:1px solid #ccc; background:#e8e8e8; padding:5px 15px; color:#222; min-width:300px; position:relative;">
                 <s:message code="vendr.trtmnt.no" />
                 <span class="fr" style="font-size:1em;" id="btnRegist" >
                   <a href="#" class="btn_grayS"><s:message code="vendr.regist" /></a>
                 </span>
               </h3>
-              <div style="height:350px;" id="theGrid2"></div>
+              <div style="height:240px;" id="theGrid2"></div>
             </div>
           </div>
           <!--//right-->
@@ -107,6 +107,7 @@
     </div>
   </div>
 </div>
+
 <script>
   var selectData = "";
   var selectCnt = 0;
@@ -114,7 +115,7 @@
   var sVendrCd       = "";
   var sProdCd        = wcombo.genInput("#sProdCd");
   var sProdNm        = wcombo.genInput("#sProdNm");
-  var sProductClass  = wcombo.genInput("#sProductClass");
+  // var sProductClass  = wcombo.genInput("#sProductClass");
 
   <%-- CollectionView --%>
   var hData =
@@ -254,7 +255,8 @@
   <%--취급상품 탭 초기화--%>
   function prodInit() {
     var inputArr = [
-        sProdCd, sProdNm, sProductClass
+        sProdCd, sProdNm
+        // , sProductClass
     ].forEach(function(element){element.text="";});
   }
 
