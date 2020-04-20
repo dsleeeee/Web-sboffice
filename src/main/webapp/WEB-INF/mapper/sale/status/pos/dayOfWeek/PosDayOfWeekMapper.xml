@@ -100,6 +100,67 @@
 		        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <select id="getPosDayOfWeekChartList" parameterType="posDayOfWeekVO" resultType="DefaultMap">
+    	SELECT	A.STORE_CD
+    			, A.POS_NO
+    			, A.STORE_NM
+                , SUM(DECODE(A.DAY_ORDER,'1',A.SALE_CNT,0)) AS SALE_CNT_MON
+                , SUM(DECODE(A.DAY_ORDER,'2',A.SALE_CNT,0)) AS SALE_CNT_TUE
+                , SUM(DECODE(A.DAY_ORDER,'3',A.SALE_CNT,0)) AS SALE_CNT_WED
+                , SUM(DECODE(A.DAY_ORDER,'4',A.SALE_CNT,0)) AS SALE_CNT_THU
+                , SUM(DECODE(A.DAY_ORDER,'5',A.SALE_CNT,0)) AS SALE_CNT_FRI
+                , SUM(DECODE(A.DAY_ORDER,'6',A.SALE_CNT,0)) AS SALE_CNT_SAT
+                , SUM(DECODE(A.DAY_ORDER,'7',A.SALE_CNT,0)) AS SALE_CNT_SUN
+                , SUM(DECODE(A.DAY_ORDER,'1',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_MON
+                , SUM(DECODE(A.DAY_ORDER,'2',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_TUE
+                , SUM(DECODE(A.DAY_ORDER,'3',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_WED
+                , SUM(DECODE(A.DAY_ORDER,'4',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_THU
+                , SUM(DECODE(A.DAY_ORDER,'5',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_FRI
+                , SUM(DECODE(A.DAY_ORDER,'6',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_SAT
+                , SUM(DECODE(A.DAY_ORDER,'7',A.REAL_SALE_AMT,0)) AS REAL_SALE_AMT_SUN
+    	FROM	(
+    				SELECT	DISTINCT TSDP.STORE_CD AS STORE_CD
+    						, (SELECT STORE_NM FROM TB_MS_STORE WHERE HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD AND STORE_CD = TSDP.STORE_CD)||' - '||TSDP.POS_NO AS STORE_NM
+			    			, TSDP.POS_NO AS POS_NO
+			    			, TO_CHAR(TO_DATE(TSDP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS DAY_NAME
+			    			, CASE TO_CHAR(TO_DATE(TSDP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+				    				WHEN '월' THEN 1
+				    				WHEN '화' THEN 2
+				    				WHEN '수' THEN 3
+				    				WHEN '목' THEN 4
+				    				WHEN '금' THEN 5
+				    				WHEN '토' THEN 6
+				    				ELSE 0
+				    			END AS DAY_ORDER
+			    			, TSDP.TOT_SALE_AMT AS SALE_AMT
+			    			, TSDP.TOT_DC_AMT AS DC_AMT
+			    			, TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
+			    			, TSDP.SALE_CNT AS SALE_CNT
+			    	FROM	TB_SL_DAILY_POS TSDP
+			    			, TB_SL_DAILY_POS_PROD TSDPP
+			    	WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
+			    			AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
+			    			AND TSDP.STORE_CD = TSDPP.STORE_CD
+			    			AND TSDP.SALE_DATE = TSDPP.SALE_DATE
+			    			AND TSDP.POS_NO = TSDPP.POS_NO
+			    			AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+						<if test='arrStorePos != null and arrStorePos.length >= 0'>
+							AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+							<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+								#{item}
+							</foreach>
+						</if>
+						<if test='startDate != null and startDate != ""'>
+							AND TSDP.SALE_DATE >= #{startDate}
+						</if>
+						<if test='endDate != null and endDate != ""'>
+							AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+						</if>
+    			) A
+    	GROUP BY A.STORE_CD, A.POS_NO, A.STORE_NM
+        ORDER BY A.STORE_CD, A.POS_NO
+    </select>
+
     <select id="getStorePosList" parameterType="posDayOfWeekVO" resultType="DefaultMap">
     	SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
     	FROM	TB_SL_DAILY_POS TSDP

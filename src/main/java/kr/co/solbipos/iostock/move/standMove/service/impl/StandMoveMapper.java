@@ -23,8 +23,11 @@ public interface StandMoveMapper {
     /** 매장이동관리 - 매장이동관리 상세 리스트 조회 */
     List<DefaultMap<String>> getStandMoveDtlList(StandMoveVO standMoveVO);
 
-    /** 매장이동관리 - 매장이동관리 신규등록, 상품추가 상품 리스트 조회 */
+    /** 매장이동관리 - 매장이동관리 신규등록 상품 리스트 조회 */
     List<DefaultMap<String>> getStandMoveRegistList(StandMoveVO standMoveVO);
+    
+    /** 매장이동관리 - 매장이동관리 상품추가 상품 리스트 조회 */
+    List<DefaultMap<String>> getStandMoveProdList(StandMoveVO standMoveVO);
 
     /** 매장이동관리 - 매장이동관리 상세 리스트 DTL 수정 */
     int updateStandMoveDtl(StandMoveVO standMoveVO);
@@ -41,8 +44,8 @@ public interface StandMoveMapper {
     /** 매장이동관리 - 매장이동관리 신규등록 HD 등록 */
     int insertStandMoveHd(StandMoveVO standMoveVO);
 
-    /** 매장이동관리 - 매장이동관리 상세 HD 삭제 */
-    int deleteStandMoveHd(StandMoveVO standMoveVO);
+    /** 매장이동관리 - 매장이동관리 상세 DTL 삭제 */
+    int deleteStandMoveDtl(StandMoveVO standMoveVO);
 
     /** 매장이동관리 - 매장이동관리 확정 */
     int updateStandMoveConfirm(StandMoveVO standMoveVO);
@@ -61,6 +64,9 @@ public interface StandMoveMapper {
 	
     /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeStandMoveDtl(StandMoveVO standMoveVO);
+    
+    /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int mergeStandMoveProd(StandMoveVO standMoveVO);
     
     /** 반품자료생성 - TB_PO_HQ_STORE_OUTSTOCK_PROD 자료입력*/
     int insertRtnStoreOutStockProd(StandMoveVO standMoveVO);

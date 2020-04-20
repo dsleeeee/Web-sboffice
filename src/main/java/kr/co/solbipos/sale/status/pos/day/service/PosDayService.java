@@ -12,6 +12,9 @@ public interface PosDayService {
     /** 포스별매출일자별 - 리스트 조회 */
     List<DefaultMap<String>> getPosDayList(PosDayVO posDayVO, SessionInfoVO sessionInfoVO);
 
+    /** 포스별매출일자별 - 리스트 조회(엑셀) */
+    List<DefaultMap<String>> getPosDayExcelList(PosDayVO posDayVO, SessionInfoVO sessionInfoVO);
+
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	List<DefaultMap<String>> getPosNmList(PosDayVO posDayVO, SessionInfoVO sessionInfoVO);
 

@@ -33,7 +33,7 @@
 		                <span class="rg">~</span>
 		            <span class="txtIn"><input id="srchBarcdEndDate" class="w120px"></span>
 		            <span class="chk ml10">
-		                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+		                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
 		                <label for="chkDt">
 		                    <s:message code="cmm.all.day" />
 		                </label>
@@ -44,14 +44,14 @@
 			<th><s:message code="periodIostock.srchOption" /></th>
 			<td>
 	          	<span class="chk ml10">
-					<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
-	              	<label for="chkDt">
+					<input type="checkbox" id="chkChkProd" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+	              	<label for="chkChkProd">
                 		<s:message code="periodIostock.prodClassDisplay" />
               		</label>
             	</span>
 			</td>
 		</tr>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">      
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="barcdSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <tr>
 	        <%-- 매장코드 --%>
@@ -74,13 +74,13 @@
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="barcdSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
-      
+
 
       <tr>
         <%-- 바코드 --%>
         <th><s:message code="rtnStatus.barcdCd"/></th>
         <td>
-            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd"/>
+            <input type="text" class="sb-input w100" id="searchBarCd" ng-model="searchBarCd" ng-keydown="searchBarCdKeyEvt($event)"/>
         </td>
 
         <%-- 상품명 --%>
@@ -107,8 +107,10 @@
 	                    items-source="_getComboData('barcdListScaleBox')"
 	                    display-member-path="name"
 	                    selected-value-path="value"
-	                    is-editable="false"
-	                    initialized="initComboBox(s)">
+	                    initialized="initComboBox(s)"
+	                    control="listScaleCombo"
+	                    is-editable="true"
+	                    text-changed="_checkValidation(s)">
 	            </wj-combo-box>
 	            <%-- 엑셀 다운로드 //TODO --%>
 	            <button class="btn_skyblue fr" ng-click="excelDownloadBarcd()"><s:message code="cmm.excel.down" />
@@ -163,8 +165,10 @@
                    items-source="_getComboData('barcdDtlListScaleBox')"
                    display-member-path="name"
                    selected-value-path="value"
-                   is-editable="false"
-                   initialized="initComboBox(s)">
+                   initialized="initComboBox(s)"
+                   control="listScaleCombo"
+                   is-editable="true"
+                   text-changed="_checkValidation(s)">
            </wj-combo-box>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadBarcdDtl()"><s:message code="cmm.excel.down" />

@@ -64,10 +64,40 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
     s.bottomLeftCells.setCellData(0, 0, '합계');
   };
 
+  	//다른 컨트롤러의 broadcast 받기
+	$scope.$on("storeLoanManageCtrl", function (event, data) {
+	
+//		if( $("#posDaySelectStoreCd").val() === ''){
+//		 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+//		 	return false;
+//		}  
+		
+		$scope.searchStoreLoanManage(true);
+		
+//		var storeCd = $("#posDaySelectStoreCd").val();
+//			$scope.getRePosNmList(storeCd, posCd);
+	});
+  
+	//다른 컨트롤러의 broadcast 받기(페이징 초기화)
+	$scope.$on("storeLoanManageCtrlSrch", function (event, data) {
+	
+//		if( $("#posDaySelectStoreCd").val() === ''){
+//		 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+//		 	return false;
+//		}  
+		
+		$scope.searchStoreLoanManage(false);
+		
+//		var storeCd = $("#posDaySelectStoreCd").val();
+//			$scope.getRePosNmList(storeCd, posCd);
+	});
+  
   // 리스트 조회
-  $scope.searchStoreLoanManage = function () {
+  $scope.searchStoreLoanManage = function (isPageChk) {
     // 파라미터
     var params = {};
+    params.isPageChk = isPageChk;
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     // param.storeCd = $("#srchStoreCd").val();
     // param.storeNm = $("#srchStoreNm").val();
 

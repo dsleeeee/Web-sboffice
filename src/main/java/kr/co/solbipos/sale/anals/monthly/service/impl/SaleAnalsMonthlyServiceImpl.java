@@ -30,4 +30,13 @@ public class SaleAnalsMonthlyServiceImpl implements SaleAnalsMonthlyService {
 
         return result;
     }
+
+    /** 월력판매분석 - 결제수단별 팝업 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getSaleAnalsMonthlyPopupList(SaleAnalsMonthlyVO SaleAnalsMonthlyVO, SessionInfoVO sessionInfoVO) {
+		List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+        result = SaleAnalsMonthlyMapper.getSaleAnalsMonthlyPopupList(SaleAnalsMonthlyVO);
+
+        return result;
+	}
 }

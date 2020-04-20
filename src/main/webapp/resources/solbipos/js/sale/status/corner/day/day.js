@@ -16,10 +16,10 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	  
+
 	  var storeCd = $("#cornerDaySelectStoreCd").val();
 	  $scope.getReCornerNmList(storeCd, "", false);
-	  
+
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("cornerDayCtrl");
@@ -35,11 +35,11 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       /* 머지된 헤더 셀 클릭시 정렬 비활성화
   	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
   	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -49,7 +49,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 			} else {
 				s.allowSorting = true;
 			}
-  	
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -67,7 +67,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     			params.arrStoreCornr	 = arrStoreCornr;
     			params.storeCd	 = $("#cornerDaySelectStoreCd").val();
             	$scope._broadcast('saleComProdCtrl', params);
-            }else if(col.binding.substring(0, 7) === "saleQty") {       
+            }else if(col.binding.substring(0, 7) === "saleQty") {
             	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
             	if(gvOrgnFg == "S"){
             		params.storeCd	 = $("#cornerDaySelectStoreCd").val();
@@ -139,23 +139,23 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerDayCtrl", function (event, data) {
     $scope.searchCornerDayList(true);
-    
+
     var storeCd = $("#cornerDaySelectStoreCd").val();
 	var cornrCd = $("#cornerDaySelectCornerCd").val();
 
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
   });
-  
+
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("cornerDayCtrlSrch", function (event, data) {
-	
+
     $scope.searchCornerDayList(false);
-    
+
 	var storeCd = $("#cornerDaySelectStoreCd").val();
 	var cornrCd = $("#cornerDaySelectCornerCd").val();
 
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
-   
+
   });
 
 
@@ -166,7 +166,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.storeCd   = $("#cornerDaySelectStoreCd").val();
     params.cornrCd   = $("#cornerDaySelectCornerCd").val();
     params.isPageChk = isPageChk;
-    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -183,7 +183,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 		var flex = $scope.flex;
 		//row수가 0이면
 		if(flex.rows.length === 0){
-			
+
 			var grid = wijmo.Control.getControl("#cornrDayGrid");
 			//컬럼 삭제
 			while(grid.columns.length > 4){
@@ -192,7 +192,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 		}
 
 	});
-	
+
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -208,7 +208,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.cornerDaySelectStoreShow = function () {
     $scope._broadcast('cornerDaySelectStoreCtrl');
   };
-  
+
   //코너선택 모듈 팝업 사용시 정의
   //함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   //_broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -239,14 +239,14 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     }, 10);
   };
 
-  
+
   	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDaySelectStoreCd").val();
 		var cornrCd = $("#cornerDaySelectCornerCd").val();
 		$scope.getReCornerNmList(storeCd, cornrCd, false);
 	};
-	
+
 	//매장의 코너 리스트 재생성
 	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
 		var url = "/sale/status/corner/corner/cornerNmList.sb";
@@ -299,13 +299,13 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 		  while(grid.columns.length > 4){
 	            grid.columns.removeAt(grid.columns.length-1);
 	        }
-		  
+
 		  var arrCornrCd = storeCornrCd.split(',');
 		  var arrCornrNm = storeCornrNm.split(',');
-		  
+
 		  if (arrCornrCd != "") {
 			  for(var i = 1; i < arrCornrCd.length + 1; i++) {
-				  
+
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
@@ -318,7 +318,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 		          grid.columnHeaders.setCellData(0, 'realSaleAmt'+(i-1), colSplit[0]);
 		          grid.columnHeaders.setCellData(0, 'saleQty'+(i-1), colSplit[0]);
-		          
+
 				  grid.columnHeaders.setCellData(1, 'realSaleAmt'+(i-1), colSplit[1]);
 		          grid.columnHeaders.setCellData(1, 'saleQty'+(i-1), colSplit[1]);
 			  }

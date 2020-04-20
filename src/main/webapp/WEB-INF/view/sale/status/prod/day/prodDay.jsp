@@ -103,8 +103,9 @@
 		      items-source="_getComboData('prodDaylistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="pordDaySelectStoreStoreNum" ng-model="storeNum">

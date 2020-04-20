@@ -76,8 +76,10 @@
                 items-source="_getComboData('rtnStatusDayListScaleBox')"
                 display-member-path="name"
                 selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
+                initialized="initComboBox(s)"
+                control="listScaleCombo"
+                is-editable="true"
+                text-changed="_checkValidation(s)">
         </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="text" id="rtnStatusDaySelectStoreStoreNum" ng-model="storeNum">
@@ -138,8 +140,10 @@
                     items-source="_getComboData('rtnStatusDayDtlListScaleBox')"
                     display-member-path="name"
                     selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
+                    initialized="initComboBox(s)"
+                    control="listScaleCombo"
+	                is-editable="true"
+	                text-changed="_checkValidation(s)">
             </wj-combo-box>
             <span class="fl bk lh30 pdl20" id="strNm"></span>
             <%-- 엑셀 다운로드 //TODO --%>
@@ -191,8 +195,10 @@
                    items-source="_getComboData('rtnStatusPosDtlListScaleBox')"
                    display-member-path="name"
                    selected-value-path="value"
-                   is-editable="false"
-                   initialized="initComboBox(s)">
+                   initialized="initComboBox(s)"
+                   control="listScaleCombo"
+	               is-editable="true"
+	               text-changed="_checkValidation(s)">
            </wj-combo-box>
            <span class="fl bk lh30 pdl20" id="dateYMD"></span>
            <%-- 엑셀 다운로드 //TODO --%>

@@ -22,7 +22,7 @@
        	</colgroup>
        	<tbody>
        		<tr>
-       			<th><s:message code="cmm.search.date"/></th>
+       			<th><s:message code="cmm.search.month"/></th>
        			<td>
 					<div class="sb-select">
 			          <span class="txtIn w110px">
@@ -99,11 +99,13 @@
 			class="w100px fl"
 			id="tableMonthListScaleBox"
 			ng-model="tableMonthListScale"
+			control="listScaleCombo"
 			items-source="_getComboData('tableMonthListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableMonthSelectStoreStoreNum" ng-model="storeNum">

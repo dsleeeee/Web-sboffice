@@ -100,8 +100,10 @@
 			items-source="_getComboData('posProdListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="posProdSelectStoreStoreNum" ng-model="storeNum">

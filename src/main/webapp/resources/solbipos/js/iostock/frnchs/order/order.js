@@ -278,7 +278,7 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // 파라미터
     var params       = {};
-    params.listScale = $scope.orderMainListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.storeCd	 = $("#orderSelectStoreCd").val();
@@ -527,7 +527,7 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchOrderDtlList = function (isPageChk) {
     // 파라미터
     var params       = {};
-    params.listScale = $scope.orderDtlListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.slipNo    = $scope.slipNo;
     params.inSlipNo  = $scope.inSlipNo;
     params.startDate = $scope.startDate;

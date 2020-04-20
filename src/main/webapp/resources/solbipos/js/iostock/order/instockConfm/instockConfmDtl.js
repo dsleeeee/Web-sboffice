@@ -180,7 +180,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
     };
     $scope.calcAmt = function (item, idx) {
     	//$scope.flex.collectionView.editItem(item);
-
+    	
         var outSplyUprc = parseInt(item.outSplyUprc	);
         var poUnitQty   = parseInt(item.poUnitQty	);
         var vat01       = parseInt(item.vatFg01		);
@@ -450,11 +450,17 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
 	                	/*
 	                	[저장]을 한 후 [확정]을 함께 하는 경우에는 상관이 없으나,
 	                	[저장]이후 화면을 닫은 후 다시 화면을 열어 [확정]만 하는 경우에는  'inTotQty' 값이 setting이 되지않아서 문제가 생길 수 있음.
-	                	 고로 상세페이지 열리는 경우에 금액계산하는 부분 호출함.
+	                	 고로 상세페이지 열리는 경우에 금액계산하는 부분 호출함.	==> 2020.04.14: for문에서 제외하고  아래로 옮김(Grid의 행갯수만큼 $scope.calcAmt 실행)
+
+						$scope.calcAmt($scope.flex.collectionView.items[i], i);
 	                	*/
-	                	$scope.calcAmt($scope.flex.collectionView.items[i], i);
                 }	//for(var i=0; i<arrStorageCd.length; i++){
 
+                for(var i=0; i<grid.collectionView.items.length; i++){
+            		//console.log('$scope.calcAmt - Before: ' + i);
+                	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+                	//console.log('$scope.calcAmt - After : ' + i);
+                }
                 /*
 				console.log('panel.cellType: ' + wijmo.grid.CellType.None			);	//0
 				console.log('panel.cellType: ' + wijmo.grid.CellType.Cell			);	//1

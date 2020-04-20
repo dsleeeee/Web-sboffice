@@ -91,28 +91,6 @@ public class StandMoveController {
     }
 
     /**
-     * 매대이동관리 - 전표상세 조회
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   standMoveVO
-     * @return  String
-     * @author  김진
-     * @since   2020. 04. 09.
-     */
-    @RequestMapping(value = "/standMoveDtl/getSlipNoInfo.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSlipNoInfo(HttpServletRequest request, HttpServletResponse response, Model model, StandMoveVO standMoveVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        standMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        DefaultMap<String> result = standMoveService.getSlipNoInfo(standMoveVO);
-
-        return ReturnUtil.returnJson(Status.OK, result);
-    }
-
-    /**
      * 매대이동관리 - 매대이동관리 상세 리스트 조회
      * @param   request
      * @param   response
@@ -154,30 +132,7 @@ public class StandMoveController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
-
-
-    /**
-     * 매대이동관리 - 매대이동관리 상세 삭제
-     * @param   request
-     * @param   response
-     * @param   model
-     * @param   standMoveVO
-     * @return  String
-     * @author  김진
-     * @since   2020. 04. 09.
-     */
-    @RequestMapping(value = "/standMoveDtl/delete.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result deletestandMoveDtl(HttpServletRequest request, HttpServletResponse response, Model model, StandMoveVO standMoveVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = standMoveService.deleteStandMoveDtl(standMoveVO, sessionInfoVO);
-
-        return ReturnUtil.returnJson(Status.OK, result);
-    }
-
-
+      
     /**
      * 매대이동관리 - 매대이동관리 신규등록 상품 리스트 조회
      * @param   request

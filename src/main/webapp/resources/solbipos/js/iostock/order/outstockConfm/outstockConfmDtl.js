@@ -225,12 +225,13 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 	        item.inVat      = Math.round(          tempAmt * vat01 / (10 + envst0011));	//VAT
 	        item.inTot      = parseInt(item.inAmt + item.inVat);    					//합계
 	        */
-	        item.inUnitQty	= arrInUnitQty; //입고수량 - 단위
-	        item.inEtcQty   = arrInEtcQty;  //입고수량 - 나머지
-	        item.inTotQty   = arrInTotQty;  //총입고수량
-	        item.inAmt      = arrInAmt;		//금액
-	        item.inVat      = arrInVat;    	//VAT
-	        item.inTot      = arrInTot;    	//합계
+	        
+	        item.outUnitQty	= arrInUnitQty; //입고수량 - 단위
+	        item.outEtcQty   = arrInEtcQty;  //입고수량 - 나머지
+	        item.outTotQty   = arrInTotQty;  //총입고수량
+	        item.outAmt      = arrInAmt;		//금액
+	        item.outVat      = arrInVat;    	//VAT
+	        item.outTot      = arrInTot;    	//합계
 
 	        //console.log(idx + ': ' +  item.outTotQty  + ' & ' +  item.inTotQty);
 	    //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - END
@@ -447,10 +448,21 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
             	[저장]을 한 후 [확정]을 함께 하는 경우에는 상관이 없으나,
             	[저장]이후 화면을 닫은 후 다시 화면을 열어 [확정]만 하는 경우에는  'inTotQty' 값이 setting이 되지않아서 문제가 생길 수 있음.
             	 고로 상세페이지 열리는 경우에 금액계산하는 부분 호출함.
-            	*/
+            	
             	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+            	*/
         }	//for(var i=0; i<arrStorageCd.length; i++){
-
+        
+        for(var i=0; i<grid.collectionView.items.length; i++){
+        	
+        	item.arrInUnitQty_0	= item.outUnitQty;
+            item.arrInEtcQty_0	= item.outEtcQty;
+        	
+    		//console.log('$scope.calcAmt - Before: ' + i);
+        	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+        	//console.log('$scope.calcAmt - After : ' + i);
+        }
+        
         /*
 		console.log('panel.cellType: ' + wijmo.grid.CellType.None			);	//0
 		console.log('panel.cellType: ' + wijmo.grid.CellType.Cell			);	//1

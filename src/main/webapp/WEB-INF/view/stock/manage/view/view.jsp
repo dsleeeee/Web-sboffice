@@ -70,28 +70,29 @@
 			</td>
 		</tr>
 	</table>
-	
+
 	<input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
 	<input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
-	
+
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
         <wj-combo-box
             class="w100px fl"
             id="stockManageViewListScaleBox"
             ng-model="listScale"
-            control="listScaleCombo"
             items-source="_getComboData('stockManageViewListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
         </wj-combo-box>
-        
+
     	<%-- 엑셀 다운로드 --%>
     	<button class="btn_skyblue ml5 fr" id="btnExcelDown" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
   	</div>
-  	
+
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="mt10">
       <div class="wj-gridWrap">
@@ -123,7 +124,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
+
     <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -131,8 +132,8 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-    
-    
+
+
 </div>
 
 <%-- 상품코드 상세 레이어 --%>

@@ -128,7 +128,7 @@ app.controller('goalDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     var params       = {};
     params.storeCd   = $("#goalDaySelectStoreCd").val();
     params.isPageChk = isPageChk;
-    params.listScale = $scope.goalDayListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.startDate = wijmo.Globalize.format($scope.goalDayStartDateCombo.value, 'yyyyMM');
     
 	// 동적 그리드 생성.

@@ -227,7 +227,7 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
         var params = {};
     	//params.srchProdCd   = srchProdCd.value;
     	//params.srchProdNm   = srchProdNm.value;
-    	params.listScale = $scope.saleTrnsitnlistScale; //-페이지 스케일 갯수
+        params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     	params.isPageChk = isPageChk;
         params.startDate 	= wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
       //params.endDate 		= wijmo.Globalize.format(endDate.value,   'yyyyMMdd');

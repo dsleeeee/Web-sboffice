@@ -275,7 +275,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 파라미터
     var params       = {};
-    params.listScale = $scope.slipMainListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.storeCd   = $("#slipSelectStoreCd").val();
@@ -481,7 +481,7 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.searchSlipDtlList = function (isPageChk) {
     // 파라미터
     var params       = {};
-    params.listScale = $scope.slipDtlListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.slipNo    = $scope.slipNo;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;

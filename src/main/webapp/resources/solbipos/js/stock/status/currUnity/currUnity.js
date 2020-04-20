@@ -8,20 +8,6 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('currUnityCtrl', $scope, $http, true));
 
-  $scope._setComboData("srchUnitFg", [
-    {"name": messages["hqCurr.unitStockFg"], "value": "stock"},
-    {"name": messages["hqCurr.unitOrderFg"], "value": "order"}
-  ]);
-
-  $scope._setComboData("srchWeightFg", [
-    {"name": messages["hqCurr.weightFg0"], "value": "0"},
-    {"name": messages["hqCurr.weightFg1"], "value": "1"}
-  ]);
-
-  $scope._setComboData("srchSafeStockFg", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["hqCurr.safeStockFg0"], "value": "0"}
-  ]);
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("currUnityListScaleBox", gvListScaleBoxData);
@@ -37,7 +23,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
         var col = s.columns[e.col];
         if ((col.binding === "hCurrQty" || col.binding === "mCurrQty") && s.cells.getCellData(e.row,e.col,false) != null ) { // 본사수량 클릭
           wijmo.addClass(e.cell, 'wijLink');
-        } 
+        }
       }
     });
 
@@ -53,7 +39,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
 			var params    = {};
 			params.prodCd   = selectedRow.prodCd;
 			$scope._broadcast('currUnityHqDtlSrchCtrl', params);
-			
+
 		} else if (col.binding === "mCurrQty") { // 매장수량 클릭
 			$("#currUnityStoreDtl").show();
 			$("#currUnityHqDtl").hide();
@@ -76,7 +62,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
 //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnitySrchCtrl", function (event, data) {
     $scope.searchCurrUnityList(false);
@@ -94,13 +80,13 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.vendrCd = $("#currUnitySelectVendrCd").val();
     params.prodClassCd = $scope.prodClassCd;
     params.isPageChk   = isPageChk;
-    params.listScale   = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityList.sb", params, function () {
     	$scope.isChkDt($scope.isChecked);
     });
-    
+
     //메인그리드 조회후 상세그리드 조회.
     $scope.loadedRows = function(sender, args){
         var rows = sender.rows;
@@ -138,13 +124,13 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
     });
   };
-  
+
   //상품분류정보 선택취소
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassCdNm = "";
   }
-  
+
   //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -211,11 +197,11 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnityHqDtlSrchCtrl", function (event, data) {
 	$scope.srchProdCd   = data.prodCd;
-	
+
     $scope.searchCurrUnityHqDtlList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -226,9 +212,9 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
     // 파라미터
     var params     = {};
     params.isPageChk = isPageChk;
-    params.listScale = $scope.listScale;
-    params.prodCd      =	$scope.srchProdCd   
-    	
+    params.listScale = $scope.listScaleCombo.text;
+    params.prodCd      =	$scope.srchProdCd
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityHqDtlList.sb", params);
   };
@@ -242,7 +228,7 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
       $scope.flex.refresh();
     }, 10);
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownload = function () {
     if ($scope.flex.rows.length <= 0) {
@@ -291,11 +277,11 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnityStoreDtlSrchCtrl", function (event, data) {
 	$scope.srchProdCd   = data.prodCd;
-	
+
     $scope.searchCurrUnityStoreDtlList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -307,7 +293,7 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     var params     = {};
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScale;
-    params.prodCd      =	$scope.srchProdCd   
+    params.prodCd      =	$scope.srchProdCd
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityStoreDtlList.sb", params);

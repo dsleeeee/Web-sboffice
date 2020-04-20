@@ -23,12 +23,12 @@
 		     , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
 		     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
 		     , SUM(TSDP.TOT_SALE_QTY) AS SALE_CNT
-		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER(), 2) *100 AS RAT_REAL_SALE_AMT
-		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_CNT
+		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() * 100, 2) AS RAT_REAL_SALE_AMT
+		     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() * 100, 2) AS RAT_CNT
 		  FROM TB_MS_STORE TMS
 		     , TB_SL_DAILY_PROD TSDP
 		 WHERE TMS.STORE_CD = TSDP.STORE_CD
-		 
+
 			<if test='hqOfficeCd != null and hqOfficeCd != ""'>
 	            AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
 	        </if>
@@ -38,7 +38,7 @@
 			<if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
 			    AND TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 			</if>
-    
+
 		<choose>
 		    <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
 			   <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -51,9 +51,9 @@
 	                AND EXISTS (SELECT * FROM TB_HQ_PRODUCT Z WHERE Z.HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD AND Z.PROD_CD = TSDP.PROD_CD AND Z.PROD_CD = #{prodCd})
 	           </if>
 	         </when>
-	         
+
              <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
-	           
+
 	           <if test='arrStoreCd != null and arrStoreCd != ""'>
 	                AND TMS.STORE_CD IN
 	               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -63,13 +63,13 @@
 	           <if test='prodCd != null and prodCd != ""'>
 	                AND EXISTS (SELECT * FROM TB_MS_PRODUCT Z WHERE Z.STORE_CD = TSDP.STORE_CD AND Z.PROD_CD = TSDP.PROD_CD AND Z.PROD_CD = #{prodCd})
 	           </if>
-	           
+
 	         </when>
          </choose>
-		   
+
 		 GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TMS.CLS_FG
 		 ORDER BY TMS.CLS_FG, SUM(TSDP.TOT_SALE_AMT) DESC
-    
+
     </select>
 
 </mapper>

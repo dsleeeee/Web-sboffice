@@ -99,12 +99,13 @@
 	      class="w100px fl"
 	      id="unusualMainListScaleBox"
 	      ng-model="unusualMainListScale"
-	      control="listScaleCombo"
 	      items-source="_getComboData('unusualMainListScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
+	      initialized="_initComboBox(s)"
+	      control="conListScale"
+		  is-editable="true"
+		  text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 	    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <input type="text" id="unusualSelectStoreStoreNum" ng-model="storeNum">
@@ -164,12 +165,13 @@
        class="w100px fl"
        id="unusualDtlListScaleBox"
        ng-model="unusualDtlListScale"
-       control="listScaleCombo"
        items-source="_getComboData('unusualDtlListScaleBox')"
        display-member-path="name"
        selected-value-path="value"
-       is-editable="false"
-       initialized="_initComboBox(s)">
+       initialized="_initComboBox(s)"
+       control="conListScale"
+	   is-editable="true"
+	   text-changed="_checkValidation(s)">
      </wj-combo-box>
         <span class="fl bk lh30 pdl20" id="dtlSlipNo"></span>
         

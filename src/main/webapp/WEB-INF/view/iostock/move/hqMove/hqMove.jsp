@@ -108,16 +108,18 @@
 
   <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
-        <wj-combo-box
+        <!-- <wj-combo-box
             class="w100px fl"
             id="hqMoveListScaleBox"
             ng-model="hqMoveListScale"
             items-source="_getComboData('hqMoveListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-        </wj-combo-box>
+            initialized="initComboBox(s)"
+            control="conListScale"
+			is-editable="true"
+			text-changed="_checkValidation(s)">
+        </wj-combo-box> -->
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()">
             <s:message code="cmm.excel.down" />

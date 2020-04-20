@@ -33,7 +33,7 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("stockViewStoreCtrl");
-    
+
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -46,21 +46,21 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
         }
       }
     });
-    
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
-    	
+
     	if (ht.cellType === wijmo.grid.CellType.Cell) {
     		var col         = ht.panel.columns[ht.col];
     		var selectedRow = s.rows[ht.row].dataItem;
     		var params       = {};
-			
+
     		if (col.binding === "totDate") { // 일자
     			params.orgnFg = $scope.orgnFg;
     			params.totDate		= selectedRow.totDate; // 날짜
@@ -68,7 +68,7 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
     			params.hqGbn		= selectedRow.hqGbn; // 상태
     		    params.title		= selectedRow.title; // 제목
     		    params.storeCd		= selectedRow.storeCd; // 매장코드
-    		    
+
     			$scope._broadcast('viewDtlCtrl', params);
     		}
     	}
@@ -91,6 +91,7 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
     params.statusFg = $scope.statusFg;
     params.procFg = $scope.procFg;
     params.storeCd = $("#stockViewStoreSelectStoreCd").val();
+    params.listScale = $scope.listScaleCombo.text;
 
     if(params.startDate > params.endDate){
 		$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.

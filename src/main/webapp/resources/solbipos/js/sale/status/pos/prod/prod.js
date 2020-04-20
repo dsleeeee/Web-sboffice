@@ -12,7 +12,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
 	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
 	$scope.orgnFg = gvOrgnFg;
-	
+
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
 
@@ -116,12 +116,12 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posProdCtrlSrch", function (event, data) {
-		
+
 	    if( $("#posProdSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
-	    } 
-	    
+	    }
+
 		$scope.searchPosProdList(false);
 
 		var storeCd = $("#posProdSelectStoreCd").val();
@@ -137,11 +137,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		var params = {};
 		params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
-		params.listScale = $scope.posProdListScale; //-페이지 스케일 갯수
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 	    params.orgnFg    = $scope.orgnFg;
-	     	    
+
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
@@ -159,7 +159,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			var flex = $scope.flex;
 			//row수가 0이면
 			if(flex.rows.length === 0){
-				
+
 				var grid = wijmo.Control.getControl("#posProdGrid");
 				//컬럼 삭제
 				while(grid.columns.length > 10){
@@ -175,7 +175,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$scope.srchPosProdStartDate.isReadOnly = $scope.isChecked;
 		$scope.srchPosProdEndDate.isReadOnly = $scope.isChecked;
 	};
-	
+
 	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
 	$scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -186,7 +186,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		  }
 	  }
 	}
-	
+
 	//매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -303,7 +303,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  var colName = arrPosNm[i-1];
 				  var colSplit = colName.split('||');
 				  var colSplit2 = colValue.split('||');
-				  
+
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 				  grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
@@ -324,29 +324,29 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
 
-			  }		  
+			  }
 		  }
-		  
+
 		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
 		    	var ht = grid.hitTest(e);
 		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
-	
+
 		    		var col         = ht.panel.columns[ht.col];
 		    		var selectedRow = grid.rows[ht.row].dataItem;
-			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
-			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
-			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
-			   		
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+
 		    		var params       = {};
-		    		params.chkPop	= "posPop";   
+		    		params.chkPop	= "posPop";
 		    		if(!$scope.isChecked){
 		    			params.startDate = wijmo.Globalize.format($scope.srchPosProdStartDate.value, 'yyyyMMdd');
 		    			params.endDate = wijmo.Globalize.format($scope.srchPosProdEndDate.value, 'yyyyMMdd');
 		    		}
 		    		params.prodCd   = selectedRow.prodCd;
-		    		
-		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
 			    		params.storeCd   = storeCd;
 			    		params.posNo	 = posNo;
 		    			$scope._broadcast('saleComProdCtrl', params); // 수량
@@ -355,7 +355,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		    			$scope._broadcast('saleComProdCtrl', params);
 		    		}
 		    	}
-		    	
+
 		    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
 		    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
 		    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -366,7 +366,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			grid.allowSorting = true;
 	    		}
 		  });
-		  
+
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {

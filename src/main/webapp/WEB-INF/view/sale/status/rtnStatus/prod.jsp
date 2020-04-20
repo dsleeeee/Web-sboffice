@@ -55,7 +55,7 @@
               </wj-input-date>
             </span>
             <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                 <label for="chkDt">
                     <s:message code="cmm.all.day" />
                 </label>
@@ -78,6 +78,14 @@
                 <jsp:param name="targetId" value="rtnStatusProdSelectStore"/>
             </jsp:include>
             <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
+            <div class="mt10">
+                <span class="chk ml10">
+                    <input type="checkbox" id="chkProdClass" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+                    <label for="chkProdClass">
+                        <s:message code="periodIostock.prodClassDisplay" />
+                    </label>
+                </span>
+            </div>
         </td>
       </c:if>
       <c:if test="${sessionInfo.orgnFg == 'STORE'}">
@@ -100,8 +108,10 @@
                 items-source="_getComboData('rtnStatusProdListScaleBox')"
                 display-member-path="name"
                 selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
+                initialized="initComboBox(s)"
+                control="listScaleCombo"
+                is-editable="true"
+                text-changed="_checkValidation(s)">
         </wj-combo-box>
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
@@ -118,9 +128,9 @@
                  is-read-only="true"
                  item-formatter="_itemFormatter">
                  <!-- define columns -->
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
                  <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>

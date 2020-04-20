@@ -40,6 +40,17 @@ public class PosDayServiceImpl implements PosDayService {
         return posDayMapper.getPosDayList(posDayVO);
     }
 
+    /** 포스별매출일자별 - 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosDayExcelList(PosDayVO posDayVO, SessionInfoVO sessionInfoVO) {
+    	posDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+//    	if (!StringUtil.getOrBlank(posDayVO.getStoreCd()).equals("")) {
+//    		posDayVO.setArrStoreCd(posDayVO.getStoreCd().split(","));
+//		}
+        return posDayMapper.getPosDayExcelList(posDayVO);
+    }
+
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPosNmList(PosDayVO posDayVO, SessionInfoVO sessionInfoVO) {

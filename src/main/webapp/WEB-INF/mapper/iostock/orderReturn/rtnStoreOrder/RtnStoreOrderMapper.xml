@@ -54,29 +54,139 @@
     <select id="getRtnStoreOrderDtlList" parameterType="rtnStoreOrderDtlVO" resultType="DefaultMap">
         /* USE : RtnStoreOrderMapper.getRtnStoreOrderDtlList */
         <![CDATA[
-        SELECT  tphso.PROD_CD, tmp.PROD_NM, tphso.PO_UNIT_FG, tphso.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
-        ,       tphso.SLIP_FG, tphso.REMARK, tphso.ORDER_SPLY_UPRC, tmp.PO_MIN_QTY
-        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS PREV_ORDER_TOT_QTY
-        ,       TO_NUMBER(DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG)) AS ORDER_UNIT_QTY
-        ,       TO_NUMBER(DECODE(tphso.ORDER_ETC_QTY , 0, NULL, tphso.ORDER_ETC_QTY *tphso.SLIP_FG)) AS ORDER_ETC_QTY
-        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS ORDER_TOT_QTY
-        ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
-        ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
-        ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
-        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
-        ,       the.ENVST_VAL AS ENVST0011
-        FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
-        ,       TB_MS_PRODUCT tmp
-        ,       TB_HQ_ENVST the
-        WHERE   tphso.REQ_DATE      =   #{reqDate}
-        AND     tphso.STORE_CD      =   #{storeCd}
-        AND     tphso.SLIP_FG       =   #{slipFg}
-        AND     tmp.STORE_CD        =   tphso.STORE_CD
-        AND     tmp.PROD_CD         =   tphso.PROD_CD
-        AND     the.HQ_OFFICE_CD    =   #{hqOfficeCd}
-        AND     the.ENVST_CD        =   '0011'
-        ORDER
-        BY      tphso.PROD_CD
+        SELECT   A.PROD_CD
+	      ,      A.PROD_NM
+	      ,      A.REQ_DATE
+	      ,      A.STORE_CD
+	      ,      A.SLIP_FG
+	      ,      A.VAT_FG01
+	      ,      A.ORDER_SPLY_UPRC
+	      ,      A.PO_MIN_QTY
+	      ,      A.PO_UNIT_ALLOW_FG
+	      ,      A.PO_UNIT_FG
+	      ,      A.PO_UNIT_QTY
+	      ,      A.ENVST0011
+	      ,      A.PREV_ORDER_TOT_QTY
+	      ,      A.ORDER_AMT
+	      ,      A.ORDER_VAT
+	      ,      A.ORDER_TOT
+	      ,      A.ORDER_UNIT_QTY
+          ,      A.ORDER_ETC_QTY
+          ,      A.ORDER_TOT_QTY
+	      ,      LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+	      ,      LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_UNIT_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_ETC_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_AMT
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_VAT
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT
+	      FROM    (
+	              SELECT  A.PROD_CD
+	               ,      A.PROD_NM
+	               ,      A.REQ_DATE
+	               ,      A.STORE_CD
+	               ,      A.SLIP_FG
+	               ,      A.VAT_FG01
+	               ,      A.ORDER_SPLY_UPRC
+	               ,      A.PO_MIN_QTY
+	               ,      A.PO_UNIT_ALLOW_FG
+	               ,      A.PO_UNIT_FG
+	               ,      A.PO_UNIT_QTY
+	               ,      A.ENVST0011
+	               ,      A.PREV_ORDER_TOT_QTY
+	               ,      A.ORDER_UNIT_QTY
+          		   ,      A.ORDER_ETC_QTY
+          	   	   ,      A.ORDER_TOT_QTY
+	               ,      A.ORDER_AMT
+	               ,      A.ORDER_VAT
+	               ,      A.ORDER_TOT
+	               ,      B.PROD_CD       AS  A_PROD_CD
+	               ,      B.STORAGE_CD    AS  A_STORAGE_CD
+	               ,      B.STORAGE_NM    AS  A_STORAGE_NM
+	               ,      B.ORDER_UNIT_QTY   AS  A_ORDER_UNIT_QTY
+	               ,      B.ORDER_ETC_QTY    AS  A_ORDER_ETC_QTY
+	               ,      B.ORDER_TOT_QTY    AS  A_ORDER_TOT_QTY
+	               ,      B.ORDER_AMT        AS  A_ORDER_AMT
+	               ,      B.ORDER_VAT        AS  A_ORDER_VAT
+	               ,      B.ORDER_TOT        AS  A_ORDER_TOT
+	                FROM    (
+	                        SELECT  NVL(tphso.REQ_DATE, #{reqDate})  AS    REQ_DATE
+	                        ,       NVL(tphso.STORE_CD, #{storeCd})   AS   STORE_CD            
+	                        ,       tphso.PROD_CD, tmp.PROD_NM, tphso.PO_UNIT_FG, tphso.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
+	                        ,       tphso.SLIP_FG, tphso.REMARK, tphso.ORDER_SPLY_UPRC, tmp.PO_MIN_QTY
+	                        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS PREV_ORDER_TOT_QTY
+	                        ,       TO_NUMBER(DECODE(tphso.ORDER_UNIT_QTY, 0, NULL, tphso.ORDER_UNIT_QTY*tphso.SLIP_FG)) AS ORDER_UNIT_QTY
+	                        ,       TO_NUMBER(DECODE(tphso.ORDER_ETC_QTY , 0, NULL, tphso.ORDER_ETC_QTY *tphso.SLIP_FG)) AS ORDER_ETC_QTY
+	                        ,       TO_NUMBER(DECODE(tphso.ORDER_TOT_QTY , 0, NULL, tphso.ORDER_TOT_QTY *tphso.SLIP_FG)) AS ORDER_TOT_QTY
+	                        ,       tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
+	                        ,       tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
+	                        ,       tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
+	                        ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
+	                        ,       the.ENVST_VAL AS ENVST0011
+	                        FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
+	                        ,       TB_MS_PRODUCT tmp
+	                        ,       TB_HQ_ENVST the
+	                        WHERE   tphso.REQ_DATE      =   #{reqDate}
+	                        AND     tphso.STORE_CD      =   #{storeCd}
+	                        AND     tphso.SLIP_FG       =   -1
+	                        AND     tmp.STORE_CD        =   tphso.STORE_CD
+	                        AND     tmp.PROD_CD         =   tphso.PROD_CD
+	                        AND     the.HQ_OFFICE_CD    =   #{hqOfficeCd}
+	                        AND     the.ENVST_CD        =   '0011'                        
+	                        )   A
+	                        LEFT OUTER JOIN
+	                        (
+	                             SELECT  X.STORE_CD,
+	                                     X.STORAGE_CD,
+	                                     X.STORAGE_NM,
+	                                     Y.PROD_CD,
+	                                     #{hqOfficeCd}               AS   HQ_OFFICE_CD,
+	                                     NVL(Y.REQ_DATE, #{reqDate})      AS   REQ_DATE,
+	                                     NVL(Y.SLIP_FG, 1)               AS   SLIP_FG,                                                     
+	                                     NVL(Y.ORDER_UNIT_QTY,   0)      AS   ORDER_UNIT_QTY,
+	                                     NVL(Y.ORDER_ETC_QTY,   0)      AS   ORDER_ETC_QTY,
+	                                     NVL(Y.ORDER_TOT_QTY,   0)      AS   ORDER_TOT_QTY,
+	                                     NVL(Y.ORDER_AMT,   0)         AS   ORDER_AMT,
+	                                     NVL(Y.ORDER_VAT,   0)         AS   ORDER_VAT,
+	                                     NVL(Y.ORDER_TOT,   0)         AS   ORDER_TOT
+	                              FROM   TB_MS_STORAGE                     X
+	                             LEFT
+	                             OUTER
+	                             JOIN    TB_PO_HQ_STORE_ORDER_PROD  Y
+	                              ON      X.STORE_CD      =   Y.STORE_CD
+	                              AND     X.STORAGE_CD    =   Y.STORAGE_CD
+	                              AND     Y.REQ_DATE     =    #{reqDate}
+	                              AND     Y.STORE_CD     =    #{storeCd}
+	                              WHERE   X.STORE_CD     =    #{storeCd}
+	                              AND     X.USE_YN    = 'Y'
+	                         )   B
+	                         ON      A.REQ_DATE      =   B.REQ_DATE
+	                         AND      A.STORE_CD     =   B.STORE_CD
+	                         AND     A.PROD_CD       =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+	              )   A
+		GROUP   
+		BY      A.PROD_CD
+		      ,      A.PROD_NM
+		      ,      A.REQ_DATE
+		      ,      A.STORE_CD
+		      ,      A.SLIP_FG
+		      ,      A.VAT_FG01
+		      ,      A.ORDER_SPLY_UPRC
+		      ,      A.PO_MIN_QTY
+		      ,      A.PO_UNIT_ALLOW_FG
+		      ,      A.PO_UNIT_FG
+		      ,      A.PO_UNIT_QTY
+		      ,      A.ENVST0011
+		      ,      A.PREV_ORDER_TOT_QTY
+		      ,      A.ORDER_AMT
+		      ,      A.ORDER_VAT
+		      ,      A.ORDER_TOT
+		      ,      A.ORDER_UNIT_QTY
+          	  ,      A.ORDER_ETC_QTY
+          	  ,      A.ORDER_TOT_QTY
+		ORDER
+		BY      A.PROD_CD     
         ]]>
     </select>
 
@@ -90,85 +200,85 @@
         /* USE : RtnStoreOrderMapper.getRtnStoreOrderRegistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT   A.PROD_CD
-		,      A.PROD_NM
-		,      A.REQ_DATE
-		,      A.STORE_CD
-		,      A.SLIP_FG
-		,      A.VAT_FG01
-		,      A.HD_CUR_UNIT_QTY
-		,      A.HD_CUR_ETC_QTY
-		,      A.STORE_CUR_UNIT_QTY
-		,      A.STORE_CUR_ETC_QTY
-		,      A.SALE_UPRC
-		,      A.ORDER_SPLY_UPRC
-		,      A.PO_MIN_QTY
-		,      A.PO_UNIT_ALLOW_FG
-		,      A.PO_PROD_FG
-		,      A.USE_YN
-		,      A.PO_UNIT_FG
-		,      A.PO_UNIT_QTY
-		,      A.ENVST0011
-		,      A.SAFE_STOCK_QTY
-		,      A.SAFE_STOCK_UNIT_QTY
-		,      A.SAFE_STOCK_ETC_QTY
-		,      A.PREV_ORDER_UNIT_QTY
-		,      A.PREV_ORDER_ETC_QTY
-		,      A.PREV_ORDER_TOT_QTY
-		,      A.ORDER_AMT
-		,      A.ORDER_VAT
-		,      A.ORDER_TOT
-		,      LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
-		,      LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_UNIT_QTY
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_ETC_QTY
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT_QTY
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_AMT
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_VAT
-		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT
+	      ,      A.PROD_NM
+	      ,      A.REQ_DATE
+	      ,      A.STORE_CD
+	      ,      A.SLIP_FG
+	      ,      A.VAT_FG01
+	      ,      A.HD_CUR_UNIT_QTY
+	      ,      A.HD_CUR_ETC_QTY
+	      ,      A.STORE_CUR_UNIT_QTY
+	      ,      A.STORE_CUR_ETC_QTY
+	      ,      A.SALE_UPRC
+	      ,      A.ORDER_SPLY_UPRC
+	      ,      A.PO_MIN_QTY
+	      ,      A.PO_UNIT_ALLOW_FG
+	      ,      A.PO_PROD_FG
+	      ,      A.USE_YN
+	      ,      A.PO_UNIT_FG
+	      ,      A.PO_UNIT_QTY
+	      ,      A.ENVST0011
+	      ,      A.SAFE_STOCK_QTY
+	      ,      A.SAFE_STOCK_UNIT_QTY
+	      ,      A.SAFE_STOCK_ETC_QTY
+	      ,      A.PREV_ORDER_UNIT_QTY
+	      ,      A.PREV_ORDER_ETC_QTY
+	      ,      A.PREV_ORDER_TOT_QTY
+	      ,      A.ORDER_AMT
+	      ,      A.ORDER_VAT
+	      ,      A.ORDER_TOT
+	      ,      LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+	      ,      LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_UNIT_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_ETC_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT_QTY
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_AMT
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_VAT
+	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT
 		<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM(
-		        SELECT  A.PROD_CD
-		         ,      A.PROD_NM
-		         ,      A.REQ_DATE
-		         ,      A.STORE_CD
-		         ,      A.SLIP_FG
-		         ,      A.VAT_FG01
-		         ,      A.HD_CUR_UNIT_QTY
-		         ,      A.HD_CUR_ETC_QTY
-		         ,      A.STORE_CUR_UNIT_QTY
-		         ,      A.STORE_CUR_ETC_QTY
-		         ,      A.SALE_UPRC
-		         ,      A.ORDER_SPLY_UPRC
-		         ,      A.PO_MIN_QTY
-		         ,      A.PO_UNIT_ALLOW_FG
-		         ,      A.PO_PROD_FG
-		         ,      A.USE_YN
-		         ,      A.PO_UNIT_FG
-		         ,      A.PO_UNIT_QTY
-		         ,      A.ENVST0011
-		         ,      A.SAFE_STOCK_QTY
-		         ,      A.SAFE_STOCK_UNIT_QTY
-		         ,      A.SAFE_STOCK_ETC_QTY
-		         ,      A.PREV_ORDER_UNIT_QTY
-		         ,      A.PREV_ORDER_ETC_QTY
-		         ,      A.PREV_ORDER_TOT_QTY
-		         ,      A.ORDER_AMT
-		         ,      A.ORDER_VAT
-		         ,      A.ORDER_TOT
+              SELECT  A.PROD_CD
+               ,      A.PROD_NM
+               ,      A.REQ_DATE
+               ,      A.STORE_CD
+               ,      A.SLIP_FG
+               ,      A.VAT_FG01
+               ,      A.HD_CUR_UNIT_QTY
+               ,      A.HD_CUR_ETC_QTY
+               ,      A.STORE_CUR_UNIT_QTY
+               ,      A.STORE_CUR_ETC_QTY
+               ,      A.SALE_UPRC
+               ,      A.ORDER_SPLY_UPRC
+               ,      A.PO_MIN_QTY
+               ,      A.PO_UNIT_ALLOW_FG
+               ,      A.PO_PROD_FG
+               ,      A.USE_YN
+               ,      A.PO_UNIT_FG
+               ,      A.PO_UNIT_QTY
+               ,      A.ENVST0011
+               ,      A.SAFE_STOCK_QTY
+               ,      A.SAFE_STOCK_UNIT_QTY
+               ,      A.SAFE_STOCK_ETC_QTY
+               ,      A.PREV_ORDER_UNIT_QTY
+               ,      A.PREV_ORDER_ETC_QTY
+               ,      A.PREV_ORDER_TOT_QTY
+               ,      A.ORDER_AMT
+               ,      A.ORDER_VAT
+               ,      A.ORDER_TOT
          		<if test='option2 != null and option2 != ""'>
 		         , 		A.ORDER_UNIT_QTY
 		         ,	 	A.ORDER_ETC_QTY
 		         , 		A.ORDER_TOT_QTY
 		        </if>
-		         ,      B.PROD_CD       AS  A_PROD_CD
-		         ,      B.STORAGE_CD    AS  A_STORAGE_CD
-		         ,      B.STORAGE_NM    AS  A_STORAGE_NM
-		         ,      B.ORDER_UNIT_QTY   AS  A_ORDER_UNIT_QTY
-		         ,      B.ORDER_ETC_QTY    AS  A_ORDER_ETC_QTY
-		         ,      B.ORDER_TOT_QTY    AS  A_ORDER_TOT_QTY
-		         ,      B.ORDER_AMT        AS  A_ORDER_AMT
-		         ,      B.ORDER_VAT        AS  A_ORDER_VAT
-		         ,      B.ORDER_TOT        AS  A_ORDER_TOT
+               ,      B.PROD_CD       AS  A_PROD_CD
+               ,      B.STORAGE_CD    AS  A_STORAGE_CD
+               ,      B.STORAGE_NM    AS  A_STORAGE_NM
+               ,      B.ORDER_UNIT_QTY   AS  A_ORDER_UNIT_QTY
+               ,      B.ORDER_ETC_QTY    AS  A_ORDER_ETC_QTY
+               ,      B.ORDER_TOT_QTY    AS  A_ORDER_TOT_QTY
+               ,      B.ORDER_AMT        AS  A_ORDER_AMT
+               ,      B.ORDER_VAT        AS  A_ORDER_VAT
+               ,      B.ORDER_TOT        AS  A_ORDER_TOT
 				FROM(
 				        SELECT  tmp.PROD_CD
 				        ,       tmp.PROD_NM
@@ -281,6 +391,7 @@
                     	AND     tphsod.SLIP_FG    (+) =   -1
 				        AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
 				        AND     the.ENVST_CD          =   '0011'
+				        AND     TMP.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
 				        ]]>
 				        <if test='prodCd != null and prodCd != ""'>
 				            AND tmp.PROD_CD = #{prodCd}
@@ -332,52 +443,74 @@
                              NVL(Y.ORDER_VAT,   0)      	AS   ORDER_VAT,
                              NVL(Y.ORDER_TOT,   0)      	AS   ORDER_TOT
 		              FROM   TB_MS_STORAGE                     X
-                     LEFT
+		             LEFT
                      OUTER
-                     JOIN    TB_PO_HQ_STORE_ORDER_PROD       Y
-                      ON      X.STORE_CD      =   Y.STORE_CD
+                     JOIN    (
+                                SELECT  X.STORE_CD
+                                ,       X.PROD_CD                               
+                                ,       NVL(Y.REQ_DATE, #{reqDate})      AS   REQ_DATE
+                                ,       NVL(Y.STORAGE_CD, X.STORAGE_CD) AS STORAGE_CD
+                                ,       NVL(Y.SLIP_FG, 1)               AS   SLIP_FG
+                              ,       NVL(Y.ORDER_UNIT_QTY,   0)      AS   ORDER_UNIT_QTY
+                                ,       NVL(Y.ORDER_ETC_QTY,   0)      AS   ORDER_ETC_QTY
+                                ,       NVL(Y.ORDER_TOT_QTY,   0)      AS   ORDER_TOT_QTY
+                                ,       NVL(Y.ORDER_AMT,   0)         AS   ORDER_AMT
+                                ,       NVL(Y.ORDER_VAT,   0)         AS   ORDER_VAT
+                                ,       NVL(Y.ORDER_TOT,   0)         AS   ORDER_TOT
+                                FROM    TB_ST_STORE_STOCK_CUR    X                                
+                                ,       TB_PO_HQ_STORE_ORDER_PROD       Y
+                                WHERE   Y.STORE_CD (+) 		=   X.STORE_CD
+                                AND     Y.PROD_CD  (+)  	= X.PROD_CD
+                                AND     Y.STORAGE_CD  (+)  	= X.STORAGE_CD
+                                AND     Y.REQ_DATE  (+) 	=    #{reqDate}
+                                AND     Y.STORE_CD (+) 		=    #{storeCd}                              
+                                AND     X.STORE_CD  		=   #{storeCd}   
+                                AND     X.STORAGE_CD   		>=    '001'
+                                AND     X.STORAGE_CD   		<![CDATA[ < ]]>   '999'
+                     )  Y
+		               ON      X.STORE_CD      =   Y.STORE_CD
                       AND     X.STORAGE_CD    =    Y.STORAGE_CD
                       AND     Y.REQ_DATE     =    #{reqDate}
                       AND     Y.STORE_CD     =    #{storeCd}
                       WHERE   X.STORE_CD     =    #{storeCd}
                       AND     X.USE_YN    = 'Y'
 		         )   B
-				 ON      A.REQ_DATE      =   B.REQ_DATE
+				 ON       A.REQ_DATE      =   B.REQ_DATE
                  AND      A.STORE_CD     =   B.STORE_CD
                  AND      A.SLIP_FG      =   B.SLIP_FG
-                 AND     A.PROD_CD       =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+                 AND      A.PROD_CD       =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
         ) A
-	   GROUP
-	   BY      A.PROD_CD
-	   ,      A.PROD_NM
-	   ,      A.REQ_DATE
-	   ,      A.STORE_CD
-	   ,      A.SLIP_FG
-	   ,      A.VAT_FG01
-	   ,      A.HD_CUR_UNIT_QTY
-	   ,      A.HD_CUR_ETC_QTY
-	   ,      A.STORE_CUR_UNIT_QTY
-	   ,      A.STORE_CUR_ETC_QTY
-	   ,      A.SALE_UPRC
-	   ,      A.ORDER_SPLY_UPRC
-	   ,      A.PO_MIN_QTY
-	   ,      A.PO_UNIT_ALLOW_FG
-	   ,      A.PO_PROD_FG
-	   ,      A.USE_YN
-	   ,      A.PO_UNIT_FG
-	   ,      A.PO_UNIT_QTY
-	   ,      A.ENVST0011
-	   ,      A.SAFE_STOCK_QTY
-	   ,      A.SAFE_STOCK_UNIT_QTY
-	   ,      A.SAFE_STOCK_ETC_QTY
-	   ,      A.PREV_ORDER_UNIT_QTY
-	   ,      A.PREV_ORDER_ETC_QTY
-	   ,      A.PREV_ORDER_TOT_QTY
-	   ,      A.ORDER_AMT
-	   ,      A.ORDER_VAT
-	   ,      A.ORDER_TOT
-	   ORDER
-	   BY      A.PROD_CD
+      GROUP
+      BY      A.PROD_CD
+      ,      A.PROD_NM
+      ,      A.REQ_DATE
+      ,      A.STORE_CD
+      ,      A.SLIP_FG
+      ,      A.VAT_FG01
+      ,      A.HD_CUR_UNIT_QTY
+      ,      A.HD_CUR_ETC_QTY
+      ,      A.STORE_CUR_UNIT_QTY
+      ,      A.STORE_CUR_ETC_QTY
+      ,      A.SALE_UPRC
+      ,      A.ORDER_SPLY_UPRC
+      ,      A.PO_MIN_QTY
+      ,      A.PO_UNIT_ALLOW_FG
+      ,      A.PO_PROD_FG
+      ,      A.USE_YN
+      ,      A.PO_UNIT_FG
+      ,      A.PO_UNIT_QTY
+      ,      A.ENVST0011
+      ,      A.SAFE_STOCK_QTY
+      ,      A.SAFE_STOCK_UNIT_QTY
+      ,      A.SAFE_STOCK_ETC_QTY
+      ,      A.PREV_ORDER_UNIT_QTY
+      ,      A.PREV_ORDER_ETC_QTY
+      ,      A.PREV_ORDER_TOT_QTY
+      ,      A.ORDER_AMT
+      ,      A.ORDER_VAT
+      ,      A.ORDER_TOT
+      ORDER
+      BY      A.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -530,7 +663,40 @@
             #{modId}
         )
     </insert>
-	
+    
+	<update id="updateRtnStoreOrderProd" parameterType="rtnStoreOrderDtlVO">
+	    UPDATE  TB_PO_HQ_STORE_ORDER_PROD 
+        SET     (  	
+              		 PO_UNIT_QTY 
+              		,ORDER_UNIT_QTY	
+              		,ORDER_ETC_QTY	
+              		,ORDER_TOT_QTY	
+              		,ORDER_AMT		
+              		,ORDER_VAT		
+              		,ORDER_TOT			
+				 )
+            =   ( SELECT  (PO_UNIT_QTY)+#{poUnitQty}
+            			, (ORDER_UNIT_QTY)+#{orderUnitQty}
+            			, (ORDER_ETC_QTY)+#{orderEtcQty}
+            			, (ORDER_TOT_QTY)+#{orderTotQty}
+                        , (ORDER_AMT)+#{orderAmt}
+            			, (ORDER_VAT)+#{orderVat}
+            			, (ORDER_TOT)+#{orderTot}
+            	  FROM TB_PO_HQ_STORE_ORDER_PROD
+				  WHERE REQ_DATE = #{reqDate} 
+				  AND STORE_CD = #{storeCd} 
+				  AND SLIP_FG = #{slipFg} 
+				  AND PROD_CD = #{prodCd} 
+				  AND STORAGE_CD = #{storageCd}
+                )
+        ,       MOD_DT  = #{modDt}
+        ,       MOD_ID  = #{modId}
+		WHERE REQ_DATE = #{reqDate} 
+		AND STORE_CD = #{storeCd} 
+		AND SLIP_FG = #{slipFg} 
+		AND PROD_CD = #{prodCd} 
+		AND STORAGE_CD = #{storageCd}
+	</update>
 	<!-- 반품등록 반품상품 PROD 저장 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_PROD
@@ -581,7 +747,7 @@
          (	 
          	 #{storageCd},
          	 #{prodCd},
-         	 #{slipFg},        	 
+         	 '1',        	 
          	 #{reqDate},
          	 #{storeCd},
              #{poUnitFg},
@@ -653,7 +819,7 @@
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
         WHERE   REQ_DATE    = #{reqDate}
         AND     STORE_CD    = #{storeCd}
-        AND     SLIP_FG     = #{slipFg}
+        AND     SLIP_FG     = '1'
         AND     PROD_CD     = #{prodCd}
     </delete>
 	

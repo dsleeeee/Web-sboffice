@@ -196,7 +196,7 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.cornrCd   = $("#apprMcouponSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.cashBillApprProcFg = $scope.cashBillApprProcFg;
-    params.listScale = $scope.apprMcouponListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

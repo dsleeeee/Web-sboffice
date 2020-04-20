@@ -129,7 +129,7 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
     }
     params.storeCd   = $("#dcDcfgSelectStoreCd").val();
     params.dcCd = $("#dcDcfgSelectDcfgCd").val();
-    params.listScale = $scope.dcDcfgListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){

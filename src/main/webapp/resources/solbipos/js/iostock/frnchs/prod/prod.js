@@ -186,7 +186,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.prodCd      = $scope.prodCd
     params.prodNm      = $("#srchProdNm").val();
     params.storeCd     = $("#prodSelectStoreCd").val();
-    params.listScale   = $scope.prodlistScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk   = isPageChk;
     
     // 등록일자 '전체기간' 선택에 따른 params

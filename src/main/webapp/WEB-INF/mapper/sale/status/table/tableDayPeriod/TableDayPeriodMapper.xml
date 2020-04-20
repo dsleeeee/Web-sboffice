@@ -7,9 +7,10 @@
 	<select id="getTableDayPeriodList" parameterType="tableDayPeriodVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT TSDT.SALE_DATE,
+		       TMTG.STORE_CD,
+               TMS.STORE_NM,
 			   TMT.TBL_CD,
 			   TMT.TBL_NM,
-			   TMTG.STORE_CD,
 			   <!-- TMTG.TBL_GRP_NM, -->
 			   NVL(SUM(TSDT.SALE_CNT), 0) AS SALE_CNT,
 			   NVL(SUM((TSDT.GUEST_CNT_1+GUEST_CNT_2)), 0) AS GUEST_CNT,
@@ -21,10 +22,12 @@
 		FROM TB_MS_TABLE_GROUP TMTG
      	   , TB_MS_TABLE TMT
      	   , TB_SL_DAILY_TABLE TSDT
+     	   , TB_MS_STORE TMS
      	WHERE TMTG.TBL_GRP_CD = TMT.TBL_GRP_CD
    			  AND TMT.TBL_CD = TSDT.TBL_CD
    			  AND TMT.STORE_CD = TSDT.STORE_CD
           	  AND TMTG.STORE_CD = TSDT.STORE_CD
+          	  AND TMT.STORE_CD = TMS.STORE_CD
    			  <if test='arrStoreCd != null and arrStoreCd != ""'>
 			  	AND TMTG.STORE_CD IN
 			  	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -37,7 +40,7 @@
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]>
    			  </if>
-        GROUP BY TMTG.STORE_CD, TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
+        GROUP BY TMTG.STORE_CD, TMS.STORE_NM, TSDT.SALE_DATE, TMT.TBL_CD, TMT.TBL_NM
         ORDER BY TSDT.SALE_DATE DESC, TMT.TBL_CD, TMT.TBL_NM
         <include refid="CmmSQL.PagingTemplateBottom"/>
 

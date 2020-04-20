@@ -106,4 +106,24 @@ public class HqCurrController {
 
         return ReturnUtil.returnListJson(Status.OK, list, hqCurrVO);
     }
+    
+    /**
+     * 현재고현황 - 재고현황 팝업 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  박정은
+     * @since   2020.04.13
+     */
+	@RequestMapping(value = "/hqCurr/getHqCurrDtlList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getCmmStockStatusList(HttpServletRequest request, HttpServletResponse response, HqCurrVO hqCurrVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = hqCurrService.gethqCurrDtlList(hqCurrVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, hqCurrVO);
+	}
 }

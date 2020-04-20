@@ -76,11 +76,17 @@
 	<div class="mt20 oh sb-select dkbr">
 		<div class="sb-select dkbr">
 			<%-- 페이지 스케일  --%>
-			<wj-combo-box class="w100px fl" id="listScaleBox"
-				ng-model="listScale" control="listScaleCombo"
+			<wj-combo-box
+			    class="w100px fl"
+			    id="listScaleBox"
+				ng-model="listScale"
+				control="listScaleCombo"
 				items-source="_getComboData('listScaleBox')"
-				display-member-path="name" selected-value-path="value"
-				is-editable="false" initialized="_initComboBox(s)">
+				display-member-path="name"
+				selected-value-path="value"
+				initialized="_initComboBox(s)"
+				is-editable="true"
+                text-changed="_checkValidation(s)">
 			</wj-combo-box>
 			<%--// 페이지 스케일  --%>
 		</div>
@@ -98,11 +104,13 @@
         <div class="wj-gridWrap">
 			<wj-flex-grid autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter" allowMerging="Cells">
 			<!-- define columns -->
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.saleDate"/>" binding="saleDate" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblCd"/>" binding="tblCd" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblNm"/>" binding="tblNm" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblGrpNm"/>" binding="" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="tableDayPeriod.col5"/>" binding="" width="*" align="center" is-read-only="true" format="n0"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.saleDate"/>" binding="saleDate" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.storeCd"/>" binding="storeCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="tableDayPeriod.storeNm"/>" binding="storeNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblCd"/>" binding="tblCd" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblNm"/>" binding="tblNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.tblGrpNm"/>" binding="" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="tableDayPeriod.col5"/>" binding="" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.saleCnt"/>" binding="saleCnt" width="*" align="center" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.guestCnt"/>" binding="guestCnt" width="*" align="center" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="tableDayPeriod.totSaleAmt"/>" binding="totSaleAmt" width="*" align="right" is-read-only="true" data-type="Number" aggregate="Sum" format="n0"></wj-flex-grid-column>

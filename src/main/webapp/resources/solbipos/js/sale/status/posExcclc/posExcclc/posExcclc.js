@@ -183,7 +183,7 @@ app.controller('posExcclcCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params       = {};
     params.storeCd   = $("#posExcclcSelectStoreCd").val();
     params.closeFg   = $scope.closeFg;
-    params.listScale = $scope.posExcclcListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.isAll 	 = $scope.isAll;
 

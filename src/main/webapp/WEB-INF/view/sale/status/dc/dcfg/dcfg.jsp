@@ -101,8 +101,10 @@
 		   			items-source="_getComboData('dcDcfgListScaleBox')"
 					display-member-path="name"
 					selected-value-path="value"
-					is-editable="false"
-					initialized="initComboBox(s)">
+					initialized="initComboBox(s)"
+					control="listScaleCombo"
+                    is-editable="true"
+					text-changed="_checkValidation(s)">
 				</wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="text" id="dcDcfgSelectStoreStoreNum" ng-model="storeNum">
@@ -157,6 +159,8 @@
               <div class="wj-gridWrap">
 				<wj-flex-grid id="dcfgDtlGrid" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
+					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.storeNm"/>" binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>

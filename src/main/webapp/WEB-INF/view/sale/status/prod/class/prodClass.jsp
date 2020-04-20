@@ -11,12 +11,12 @@
 
 <div id="prodClassView" class="subCon3" ng-controller="prodClassCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="prodsale.class"/></a>		
+		<a href="#" class="open fl"><s:message code="prodsale.class"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodClassCtrlSrch')">
     		<s:message code="cmm.search"/>
-    	</button>		
-	</div> 
+    	</button>
+	</div>
     <%-- 조회조건 --%>
     <table class="searchTbl">
 		<colgroup>
@@ -61,7 +61,7 @@
         <th><s:message code="prodcalss.prodNm" /></th>
         <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
       	</tr>
-      	
+
         <tr>
         	<%-- 분류조회 --%>
 	        <th><s:message code="prod.prodClass" /></th>
@@ -87,12 +87,12 @@
           	</td>
         	</c:if>
         </tr>
-      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
         	<input type="hidden" id="pordClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
       	</c:if>
 		</tbody>
 	</table>
-       	
+
 	<div class="mt20 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
 	    <%-- 페이지 스케일  --%>
 	    <wj-combo-box
@@ -103,8 +103,9 @@
 	      items-source="_getComboData('prodClasslistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
+	      initialized="_initComboBox(s)"
+	      is-editable="true"
+          text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="pordClassSelectStoreStoreNum" ng-model="storeNum">
@@ -113,7 +114,7 @@
 	    <button class="btn_skyblue fr" ng-click="excelDownloadClass()"><s:message code="cmm.excel.down" />
 	    </button>
 	</div>
-  
+
 	<%--위즈모 테이블--%>
     <div id="wjWrapType1" class="w100 mt10"> <%-- 수정 사항 || head line 1 아이디 추가 :: id="wjWrapType1" --%>
       <div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
@@ -138,7 +139,7 @@
           <wj-flex-grid-column header="<s:message code="prodrank.totDcAmt"/>" 		binding="totDcAmt" 		width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodrank.realSaleAmt"/>" 	binding="realSaleAmt" 	width="145" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
-        
+
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
           <jsp:param name="pickerTarget" value="prodClassCtrl"/>
@@ -147,7 +148,7 @@
       </div>
     </div>
     <%--//위즈모 테이블--%>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
@@ -155,7 +156,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
 </div>
 <script type="text/javascript">
 </script>

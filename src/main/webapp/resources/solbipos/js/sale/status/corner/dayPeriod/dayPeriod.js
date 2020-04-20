@@ -15,7 +15,7 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 	$scope._setComboData("cornerDayPeriodListScaleBox", gvListScaleBoxData);
 	$scope._setComboData("cornerDayPeriodDtlListScaleBox", gvListScaleBoxData);
 	$scope.orgnFg = gvOrgnFg;
-	
+
 	//매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -35,12 +35,12 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 		$scope.srchCornerDayPeriodStartDate.isReadOnly = $scope.isChecked;
 		$scope.srchCornerDayPeriodEndDate.isReadOnly = $scope.isChecked;
 	};
-	
+
 	// 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
 	$scope.isChkProdClassDisplay = function(){
 		$scope._broadcast("chkProdClassDisplay");
 	}
-	
+
 	//매장의 코너(corner) 리스트 조회
 	$scope.getCornerNmList = function () {
 		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
@@ -171,7 +171,7 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
     if(params.cornrCd == ""){ //-해당 매장의 코너가 없을시 조회x
     	params.cornrCd = -1;
     }
-    params.listScale = $scope.cornerDayPeriodListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk; //-페이지 초기화 여부
 
 	//등록일자 '전체기간' 선택에 따른 params
@@ -267,17 +267,17 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	  $scope.$on("chkProdClassDisplay", function (event) {
 		  var columns = $scope.flex.columns;
-	
+
 		  for(var i=0; i<columns.length; i++){
 			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }
 	  });
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {
 		$scope.storeCd   = data.storeCd;
@@ -287,12 +287,12 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	  // 코너별매출일자별 리스트 조회
 	  $scope.searchCornerDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
-	    params.listScale = $scope.cornerDayPeriodDtlListScale; //-페이지 스케일 갯수
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.startDate = $scope.startDateForDt;
 	    params.endDate   = $scope.endDateForDt;
 	    params.storeCd   = $scope.storeCd;

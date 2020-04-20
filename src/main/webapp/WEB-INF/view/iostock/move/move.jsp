@@ -26,12 +26,6 @@
 </c:import>
 <%-- /탭페이지 레이어 종료 --%>
 
-<%-- 매장 매대이동관리 --%>
-<c:import url="/WEB-INF/view/iostock/move/standMove/standMove.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-<%-- /탭페이지 레이어 종료 --%>
 <script type="text/javascript">
 </script>
 

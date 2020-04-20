@@ -82,7 +82,7 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<wj-combo-box
+		<!-- <wj-combo-box
 			class="w100px fl"
 			id="posDayOfWeekListScaleBox"
 			ng-model="posDayOfWeekListScale"
@@ -91,11 +91,14 @@
 			selected-value-path="value"
 			is-editable="false"
 			initialized="initComboBox(s)">
-		</wj-combo-box>
+		</wj-combo-box> -->
 
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
 			<s:message code="cmm.excel.down" />
+		</button>
+		<button class="btn_skyblue fr" id="btnShowChart">
+			<s:message code="cmm.chart" />
 		</button>
 	</div>
 
@@ -136,10 +139,91 @@
 		<ul id="posDayOfWeekCtrlPager" data-size="10">
 		</ul>
 	</div>
-	<%--//페이지 리스트--%>
+
 </div>
 
-<script type="text/javascript">
+<%--layer:For Center screen--%>
+<div class="fullDimmed posDayOfWeekLayer" id="posDayOfWeekMask" style="display: none; z-index:4;"></div>
+<div class="layer posDayOfWeekLayer" id="posDayOfWeekLayer" style="display: none; z-index:5;">
+    <div class="layer_inner">
+
+        <%--layerContent--%>
+        <div class="title" style="width:1010px">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
+            </p>
+            <a href="#" class="btn_close _btnClose"></a>
+
+            <%--위즈모 테이블--%>
+		    <div class="w100 mt10" id="wjWrapType1" ng-controller="posDayOfWeekChartCtrl">
+		    	<div class="wj-gridWrap" style="display:none;" >
+		    		<wj-flex-grid
+						id="posDayOfWeekChartGrid"
+						autoGenerateColumns="false"
+						selection-mode="Row"
+						items-source="data"
+						control="flex"
+						is-read-only="true"
+						item-formatter="_itemFormatter">
+						<!-- define columns -->
+						<wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"				binding="storeNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtMon"/>"		binding="realSaleAmtMon" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtTue"/>"		binding="realSaleAmtTue" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtWed"/>"		binding="realSaleAmtWed" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtThu"/>"		binding="realSaleAmtThu" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtFri"/>"		binding="realSaleAmtFri" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSat"/>"		binding="realSaleAmtSat" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSun"/>"		binding="realSaleAmtSun" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+					</wj-flex-grid>
+				</div>
+
+				<div class="mt20 oh sb-select dkbr pd10">
+					<!-- 막대 차트 샘플 -->
+					<div>
+						<wj-flex-chart
+							id="posDayOfWeekBarChart"
+							name="barChart1"
+							class="custom-flex-chart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							rendered="rendered(s,e)"
+							binding-x="storeNm">
+
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtMon"/>" binding="realSaleAmtMon"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtTue"/>" binding="realSaleAmtTue"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtWed"/>" binding="realSaleAmtWed"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtThu"/>" binding="realSaleAmtThu"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtFri"/>" binding="realSaleAmtFri"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSat"/>" binding="realSaleAmtSat"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSun"/>" binding="realSaleAmtSun"></wj-flex-chart-series>
+						</wj-flex-chart>
+					</div>
+				</div>
+			</div>
+               <%--//위즈모 테이블--%>
+        </div>
+
+    </div>
+    <%--//layerContent--%>
+</div>
+<%--//layer:For Center screen--%>
+
+<script>
+    $(document).ready(function() {
+
+        $("#btnShowChart").click(function(e) {
+
+        	if( $("#posDayOfWeekSelectStoreCd").val() !== ''){
+        		$("div.posDayOfWeekLayer").show();
+    	    }
+
+            $("#btnPosDayOfWeekSearch").click();
+        });
+
+        $("._btnClose").click(function(e) {
+            $("div.posDayOfWeekLayer").hide();
+        });
+
+    });
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/dayOfWeek/dayOfWeek.js?ver=20190125.02" charset="utf-8"></script>
 

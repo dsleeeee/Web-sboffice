@@ -7,7 +7,7 @@ var app = agrid.getApp();
 app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('periodiostockCtrl', $scope, $http, true));
-	
+
 	// 조회일자 세팅
 	$scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
 	$scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
@@ -19,23 +19,23 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    {"name": messages["periodIostock.unitStockFg"], "value": "0"},
 	    {"name": messages["periodIostock.unitOrderFg"], "value": "1"}
 	]);
-	
+
 	// 조회옵션 세팅
 	$scope._setComboData("srchSrchOption", [
 		{"name": messages["periodIostock.QtyTot"], "value": "QtyTot"},
 		{"name": messages["periodIostock.Qty"], "value": "Qty"},
 	    {"name": messages["periodIostock.Tot"], "value": "Tot"}
 	]);
-	
+
 	$scope.periodIostockSelectVendrShow = function () {
 		$scope._broadcast('periodIostockSelectVendrCtrl');
 	};
-	
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("periodiostockCtrl");
-		
+
 		// 그리드 링크 효과
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
@@ -55,7 +55,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
 		// add a sigma to the header to show that this is a summary row
 		s.bottomLeftCells.setCellData(0, 0, '합계');
-	    
+
 		// <-- 그리드 헤더2줄 -->
 	    // 헤더머지
 	    s.allowMerging = 2;
@@ -71,7 +71,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    dataItem.poUnitQty			= messages["periodIostock.poUnitQty"];
 	    dataItem.poUnitFg			= messages["periodIostock.poUnitFg"];
 	    dataItem.barcdCd			= messages["periodIostock.barcdCd"];
-	    
+
 	    // 본사
 	    dataItem.ioOccrQty01		= messages["periodIostock.ioOccr01"]; // 본사입고
 	    dataItem.ioOccrTot01		= messages["periodIostock.ioOccr01"];
@@ -81,7 +81,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    dataItem.ioOccrTot13		= messages["periodIostock.ioOccr13"];
 	    dataItem.ioOccrQty02		= messages["periodIostock.ioOccr02"]; // 본사반입
 	    dataItem.ioOccrTot02		= messages["periodIostock.ioOccr02"];
-	    
+
 	    // 공통
 	    dataItem.ioOccrQty04		= messages["periodIostock.ioOccr04"]; // 매장이입
 	    dataItem.ioOccrTot04		= messages["periodIostock.ioOccr04"];
@@ -93,8 +93,8 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    dataItem.ioOccrTot21		= messages["periodIostock.ioOccr21"];
 	    dataItem.ioOccrQty22		= messages["periodIostock.ioOccr22"]; // 세트생성
 	    dataItem.ioOccrTot22		= messages["periodIostock.ioOccr22"];
-	    
-	    
+
+
 	    // 매장
 	    dataItem.ioOccrQty03		= messages["periodIostock.ioOccr03"]; // 매장입고
 	    dataItem.ioOccrTot03		= messages["periodIostock.ioOccr03"];
@@ -106,13 +106,13 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    dataItem.ioOccrTot18		= messages["periodIostock.ioOccr18"];
 	    dataItem.ioOccrQty11		= messages["periodIostock.ioOccr11"]; // 매장판매
 	    dataItem.ioOccrTot11		= messages["periodIostock.ioOccr11"];
-	    
+
 	    // 본사
 	    dataItem.ioOccrQty19		= messages["periodIostock.ioOccr19"]; // 거래처출고
 	    dataItem.ioOccrTot19		= messages["periodIostock.ioOccr19"];
 	    dataItem.ioOccrQty33		= messages["periodIostock.ioOccr33"]; // 거래처반품
 	    dataItem.ioOccrTot33		= messages["periodIostock.ioOccr33"];
-	    
+
 	    s.columnHeaders.rows[0].dataItem = dataItem;
 
 	    s.itemFormatter = function (panel, r, c, cell) {
@@ -153,11 +153,11 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	        }
 	    }
 	    // <-- //그리드 헤더2줄 -->
-	    
+
 	    // 그리드 클릭 이벤트
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
-	    	
+
 	    	// 병합된 그리드 헤더 정렬기능 제거, 버블링옵션추가(true) 필요
 	        if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 	        	  var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
@@ -165,22 +165,22 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	        	  	e.preventDefault();
 	        	  }
 	  	    }
-	    	
+
 	    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
-	    		
+
 	    		var params       = {};
 	    		params.orgnFg = $scope.orgnFg;
 	    		params.prodCd = selectedRow.prodCd; // 상품코드
     			params.prodNm = selectedRow.prodNm; // 상품명
     	        params.storeCd		= $("#storeCd").val();
     	        params.storeNm = $("#storeNm").val();
-    			
+
 	    		if (col.binding === "prodCd") { // 상품코드
 	    			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'); // 시작날짜
 	    		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'); // 종료날짜
-	    		    
+
 	    			$scope._broadcast('prodCodeDtlCtrl', params);
 	    		}
 	    		if (col.binding.substr(6, 3) === "Qty" && selectedRow[col.binding] != null){
@@ -190,13 +190,13 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    	        params.poUnitQty = selectedRow.poUnitQty; // 입수
 	    	        params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
 	    	        params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
-	    	        
+
 	    			$scope._broadcast('prodQtyDtlCtrl', params);
 	    		}
 	    	}
 	    }, true);
 	};
-	          
+
 	// 상품분류정보 팝업
 	$scope.popUpProdClass = function() {
 		var popUp = $scope.prodClassPopUpLayer;
@@ -217,30 +217,30 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 			}
 		});
 	};
-	
+
 	// 상품분류정보 선택취소
 	$scope.delProdClass = function(){
 		$scope.prodClassCd = "";
 		$scope.prodClassCdNm = "";
 	}
-	
+
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("periodiostockCtrl", function (event, data) {
-		
+
 		$scope.searchStorePeriodList(true);
 		// 기능수행 종료 : 반드시 추가
 		event.preventDefault();
 	});
-	
+
 	//다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	$scope.$on("periodiostockCtrlSrch", function (event, data) {
 		$scope.comboArray =  $scope.comboArrayForSrc; // ?????????????
 		$scope.searchStorePeriodList(false);
-   
+
 		// 기능수행 종료 : 반드시 추가
     	event.preventDefault();
     });
-	
+
 	// 매장기간수불 리스트 조회
 	$scope.searchStorePeriodList = function (isPageChk) {
 		// 파라미터
@@ -255,19 +255,20 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		params.unitFg		= $("#srchUnitFg").val(); // 단위구분
 		params.srchOption	= $("#srchSrchOption").val(); // 조회옵션
 		params.isPageChk	= isPageChk;
+		params.listScale = $scope.listScaleCombo.text;
 		params.orgnFg		= $scope.orgnFg;
-		
+
 		if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 		}
-	
+
 		$scope.srchOptionView();
-				
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/stock/status/periodIoStock/prod/periodiostockList.sb", params);
 	};
-	
+
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
 		var srchSrchOption = $scope.srchOption;
@@ -280,7 +281,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 			}
 		}
 	};
-	
+
 	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
 	$scope.isChkProdClassDisplay = function(){
 		var columns = $scope.flex.columns;
@@ -291,7 +292,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 			}
 		}
 	};
-	
+
 	//엑셀 다운로드
 	$scope.excelDownload = function () {
 		if ($scope.flex.rows.length <= 0) {
@@ -307,7 +308,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 				includeColumns      : function (column) {
 					return column.visible;
 				}
-			}, '재고현황_기간수불현황_'+getToday()+'.xlsx', function () {
+			}, '재고현황_' + messages["periodIostock.periodIostock"] +'_'+getToday()+'.xlsx', function () {
 				$timeout(function () {
 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 				}, 10);

@@ -40,7 +40,8 @@
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            frozen-columns		="4">
 
             <!-- define columns -->
         <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                           binding="gChk"             	width="40"  align="center"></wj-flex-grid-column>--%>
@@ -52,10 +53,10 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.poUnitQty"/>" 	    binding="poUnitQty"         width="70"  align="right"   is-read-only="true"                                                                     ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.splyUprc"/>" 	    binding="splyUprc"          width="80"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrSplyUprc"/>"    binding="mgrSplyUprc"       width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0"                 max-length=10   ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.hqStock"/>"        binding="hqUnitStock"       width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.hqStock"/>"        binding="hqEtcStock"        width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.storeStock"/>"     binding="storeUnitStock"    width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.storeStock"/>"     binding="storeEtcStock"     width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.hqStock"/>"        binding="hdCurUnitQty"       width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.hqStock"/>"        binding="hdCurEtcQty"        width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.storeStock"/>"     binding="storeCurUnitQty"    width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.storeStock"/>"     binding="storeCurEtcQty"     width="70"  align="right"   is-read-only="true"     data-type="Number"  format="n0"                                 ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrUnitQty"/>"     binding="mgrUnitQty"        width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0" aggregate="Sum" max-length=8    ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrEtcQty"/>"      binding="mgrEtcQty"         width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0" aggregate="Sum" max-length=8    ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.dtl.mgrTotQty"/>"      binding="mgrTotQty"         width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>

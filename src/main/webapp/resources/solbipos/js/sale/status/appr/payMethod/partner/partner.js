@@ -199,7 +199,7 @@ app.controller('apprPartnerCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.cornrCd   = $("#apprPartnerSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprPartnerListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

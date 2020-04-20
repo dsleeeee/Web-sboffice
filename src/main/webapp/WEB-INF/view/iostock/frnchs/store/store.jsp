@@ -74,7 +74,7 @@
             <%-- 매장명 --%>
             <th><s:message code="frnchsStore.storeNm" /></th>
             <td colspan="3">
-	            <span class="txtIn w150px">
+	            <span class="txtIn w35">
 	                <input type="text" id="storeNm" class="sb-input w100" maxlength="100" />
 	            </span>
             </td>
@@ -158,12 +158,13 @@
           class="w100px fl"
           id="frnchsStorelistScaleBox"
           ng-model="listScale"
-          control="listScaleCombo"
           items-source="_getComboData('frnchsStorelistScaleBox')"
           display-member-path="name"
           selected-value-path="value"
-          is-editable="false"
-          initialized="_initComboBox(s)">
+          initialized="_initComboBox(s)"
+          control="conListScale"
+		  is-editable="true"
+		  text-changed="_checkValidation(s)">
         </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="text" id="frnchsStoreSelectStoreStoreNum" ng-model="storeNum">

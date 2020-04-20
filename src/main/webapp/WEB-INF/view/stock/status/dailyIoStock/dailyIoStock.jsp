@@ -62,12 +62,13 @@
             class="w100px fl"
             id="dailyIoStockListScaleBox"
             ng-model="listScale"
-            control="listScaleCombo"
             items-source="_getComboData('dailyIoStockListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
         </wj-combo-box>
 
         <%-- 엑셀 다운로드 //TODO --%>

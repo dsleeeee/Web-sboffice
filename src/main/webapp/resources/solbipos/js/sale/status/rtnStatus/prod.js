@@ -14,6 +14,8 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
+	$scope.ChkProdClassDisplay = false;
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("rtnStatusProdCtrl");
 
@@ -78,7 +80,7 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
         }
     }
     // <-- //그리드 헤더2줄 -->
-    
+
     // 그리드 클릭 이벤트
 	s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
@@ -96,14 +98,14 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
 	});
   };
 
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStatusProdCtrl", function (event, data) {
     $scope.searchRtnStatusProdList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
 //다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStatusProdCtrlSrch", function (event, data) {
     $scope.searchRtnStatusProdList(false);
@@ -118,7 +120,7 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
     // 파라미터
     var params       = {};
     params.storeCd   = $("#rtnStatusProdSelectStoreCd").val();
-    params.listScale = $scope.cornerDayListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk; //-페이징 초기화
     //등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -150,7 +152,7 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._broadcast('rtnStatusProdSelectStoreCtrl');
   };
 
-//엑셀 다운로드
+  //엑셀 다운로드
   $scope.excelDownloadDay = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -171,6 +173,17 @@ app.controller('rtnStatusProdCtrl', ['$scope', '$http', '$timeout', function ($s
         }, 10);
       });
     }, 10);
+  };
+
+  //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  var columns = $scope.flex.columns;
+
+	  for(var i=0; i<columns.length; i++){
+		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+		  }
+	  }
   };
 
 }]);

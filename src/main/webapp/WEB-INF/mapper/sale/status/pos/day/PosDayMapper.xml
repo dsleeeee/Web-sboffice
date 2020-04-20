@@ -86,6 +86,79 @@
 		        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <select id="getPosDayExcelList" parameterType="posDayVO" resultType="DefaultMap">
+    	SELECT	A.SALE_DATE
+    			, TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS DAY_NAME
+    			, A.SALE_STORE_CNT
+    			, A.TOT_SALE_AMT
+    			, A.TOT_DC_AMT
+    			, A.TOT_REAL_SALE_AMT
+    			, A.TOT_SALE_CNT
+    			, B.*
+    	FROM	(
+    				SELECT	TSDP.SALE_DATE
+    						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
+    						, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
+    						, SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
+    						, SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+    						, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+		            FROM	TB_SL_DAILY_POS TSDP
+		            WHERE	1 = 1
+		            		AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
+                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            	#{item}
+                        	</foreach>
+                    	</if>
+		            	<if test='startDate != null and startDate != ""'>
+		            		AND TSDP.SALE_DATE >= #{startDate}
+		            	</if>
+		            	<if test='endDate != null and endDate != ""'>
+		            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		            	</if>
+		            GROUP BY TSDP.SALE_DATE
+				) A,
+				(
+					WITH T AS
+					(
+						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
+								, TSDP.SALE_DATE AS SALE_DATE_TEMP
+		                        , TSDP.TOT_SALE_AMT AS SALE_AMT
+		                        , TSDP.TOT_DC_AMT AS DC_AMT
+		                        , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
+		                        , TSDP.SALE_CNT AS SALE_CNT
+		                FROM    TB_SL_DAILY_POS TSDP
+		                WHERE   1 = 1
+		                        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+							<if test='arrStorePos != null and arrStorePos.length >= 0'>
+	                        	AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
+	                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+	                            	#{item}
+	                        	</foreach>
+	                    	</if>
+							<if test='startDate != null and startDate != ""'>
+								AND TSDP.SALE_DATE >= #{startDate}
+							</if>
+							<if test='endDate != null and endDate != ""'>
+								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+							</if>
+		            )
+		            SELECT  *
+		            FROM    T
+		            PIVOT	(
+		                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+		                        FOR STORE_CD IN (
+		                        	<foreach collection="arrStorePos" item="item" separator=",">
+										'${item}'
+									</foreach>
+	                        )
+		            )
+		        ) B
+		        WHERE   A.SALE_DATE = B.SALE_DATE_TEMP
+		        ORDER BY A.SALE_DATE
+    </select>
+
     <select id="getStorePosList" parameterType="posDayVO" resultType="DefaultMap">
     	SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
     	FROM	TB_SL_DAILY_POS TSDP

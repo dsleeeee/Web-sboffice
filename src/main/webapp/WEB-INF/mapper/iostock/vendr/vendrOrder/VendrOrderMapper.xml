@@ -345,18 +345,19 @@
                 ,       TB_ST_HQ_STOCK_CUR tshsc
                 ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_VENDOR thv
-                WHERE   thvp.HQ_OFFICE_CD     =   #{hqOfficeCd}
-                AND     thvp.VENDR_CD         =   #{vendrCd}
-                AND     thp.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     thp.PROD_CD           =   thvp.PROD_CD
-                AND     thp.USE_YN            =   'Y'
-                AND     tshsc.HQ_OFFICE_CD(+) =   thp.HQ_OFFICE_CD
-                AND     tshsc.PROD_CD     (+) =   thp.PROD_CD
-                AND     tphvod.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
-                AND     tphvod.SLIP_NO    (+) =   #{slipNo}
-                AND     tphvod.PROD_CD    (+) =   thp.PROD_CD
-                AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
-                AND     thv.VENDR_CD          =   #{vendrCd}
+                WHERE   thvp.HQ_OFFICE_CD     	=   #{hqOfficeCd}
+                AND     thvp.VENDR_CD         	=   #{vendrCd}
+                AND     thp.HQ_OFFICE_CD      	=   #{hqOfficeCd}
+                AND     thp.PROD_CD           	=   thvp.PROD_CD
+                AND     thp.USE_YN            	=   'Y'
+                AND		tshsc.STORAGE_CD	(+)	=	'999'
+                AND     tshsc.HQ_OFFICE_CD(+) 	=   thp.HQ_OFFICE_CD
+                AND     tshsc.PROD_CD     (+) 	=   thp.PROD_CD
+                AND     tphvod.HQ_OFFICE_CD(+)	=   thp.HQ_OFFICE_CD
+                AND     tphvod.SLIP_NO    (+) 	=   #{slipNo}
+                AND     tphvod.PROD_CD    (+) 	=   thp.PROD_CD
+                AND     thv.HQ_OFFICE_CD      	=   thvp.HQ_OFFICE_CD
+                AND     thv.VENDR_CD          	=   #{vendrCd}
                 ]]>
                 <if test='prodCd != null and prodCd != ""'>
                     AND thp.PROD_CD = #{prodCd}
@@ -427,6 +428,7 @@
                 AND     tmp.STORE_CD        =   tmvp.STORE_CD
                 AND     tmp.PROD_CD         =   tmvp.PROD_CD
                 AND     tmp.USE_YN          =   'Y'
+                AND		tsssc.STORAGE_CD (+)	=	'999'
                 AND     tsssc.STORE_CD  (+) =   tmp.STORE_CD
                 AND     tsssc.PROD_CD   (+) =   tmp.PROD_CD
                 AND     tpsvod.STORE_CD (+) =   tmp.STORE_CD

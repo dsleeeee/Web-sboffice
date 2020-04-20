@@ -105,6 +105,7 @@
 	    AND TPSS.PROD_CD     = TMP.PROD_CD
 	    AND TPSS.STORE_CD 	= TMPB.STORE_CD(+)
 	    AND TPSS.PROD_CD     = TMPB.PROD_CD(+)
+	    AND TMP.PROD_CLASS_CD = A.LV3_CD
 	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
  			AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
 		</if>

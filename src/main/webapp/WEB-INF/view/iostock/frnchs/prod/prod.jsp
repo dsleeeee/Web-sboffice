@@ -79,12 +79,13 @@
 	  class="w100px fl"
 	  id="prodlistScaleBox"
 	  ng-model="prodlistScale"
-	  control="listScaleCombo"
 	  items-source="_getComboData('prodlistScaleBox')"
 	  display-member-path="name"
 	  selected-value-path="value"
-	  is-editable="false"
-	  initialized="_initComboBox(s)">
+	  initialized="_initComboBox(s)"
+	  control="conListScale"
+	  is-editable="true"
+	  text-changed="_checkValidation(s)">
 	</wj-combo-box>
 	<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	  <input type="text" id="prodSelectStoreStoreNum" ng-model="storeNum">

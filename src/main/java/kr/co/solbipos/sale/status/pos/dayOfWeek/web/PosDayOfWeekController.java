@@ -121,4 +121,57 @@ public class PosDayOfWeekController {
         return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
     }
 
+    /**
+     * 포스별매출 요일별 - 차트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posDayOfWeekVO
+     * @return  String
+     * @author  이승규
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/dayOfWeek/chartList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosDayOfWeekChartList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosDayOfWeekVO posDayOfWeekVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (posDayOfWeekVO.getPosNo() != null && !"".equals(posDayOfWeekVO.getPosNo())) {
+        	 String[] arrPosNo = posDayOfWeekVO.getPosNo().split(",");
+             posDayOfWeekVO.setArrPosNo(arrPosNo);
+             posDayOfWeekVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = posDayOfWeekVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			posDayOfWeekVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = posDayOfWeekService.getPosNmList(posDayOfWeekVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                posDayOfWeekVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        List<DefaultMap<String>> list = posDayOfWeekService.getPosDayOfWeekChartList(posDayOfWeekVO, sessionInfoVO);
+        //System.out.println("list.size() :: "+posDayOfWeekVO.getArrPosCd().length);
+        return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
+    }
+
 }

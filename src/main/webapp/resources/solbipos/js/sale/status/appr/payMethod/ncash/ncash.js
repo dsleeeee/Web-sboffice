@@ -186,7 +186,7 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.posNo  	 = $("#apprNcashSelectPosCd").val();
     params.saleYn	 = $scope.saleYn;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprNcashListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

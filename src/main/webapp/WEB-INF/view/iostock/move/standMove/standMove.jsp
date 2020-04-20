@@ -92,7 +92,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="standMove.moveDate"/>"binding="moveDate" 	width="*" align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="standMove.slipNo"/>" 	binding="slipNo" 	width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="standMove.slipFg"/>" 	binding="slipFg" 	width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="standMove.slipFg"/>" 	binding="slipFg" 	width="*" align="center" 	is-read-only="true" data-map="ioFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="standMove.dtlCnt"/>" 	binding="dtlCnt" 	width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="standMove.confmYn"/>" binding="confmYn" 	width="*" align="center" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
       </wj-flex-grid>
@@ -124,7 +124,7 @@
 </c:import>
 
 <%-- 매장 매장이동관리 상품추가 레이어 --%>
-<c:import url="/WEB-INF/view/iostock/move/storeMove/storeMoveAddProd.jsp">
+<c:import url="/WEB-INF/view/iostock/move/standMove/standMoveAddProd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

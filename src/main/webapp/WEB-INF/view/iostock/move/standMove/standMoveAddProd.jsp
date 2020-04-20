@@ -4,12 +4,12 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/move/storeMove/storeMoveAddProd/"/>
+<c:set var="baseUrl" value="/iostock/move/standMove/standMoveRegist/"/>
 
-<wj-popup id="wjStoreMoveAddProdLayer" control="wjStoreMoveAddProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-  <div id="storeMoveAddProdLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeMoveAddProdCtrl">
+<wj-popup id="wjStandMoveProdLayer" control="wjStandMoveProdLayer" show-trigger="Click" hide-trigger="Click" style="display:none; width:900px;">
+  <div id="standMoveProdLayer" class="wj-dialog wj-dialog-columns" ng-controller=standMoveProdCtrl>
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="storeMove.add.dtlTitle"/>
+      <s:message code="standMove.prod.prodTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
@@ -23,28 +23,28 @@
         <tbody>
         <tr>
           <%-- 상품코드 --%>
-            <th><s:message code="storeMove.add.prodCd"/></th>
+          <th><s:message code="storeMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchAddProdCd" name="srchAddProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
-            <th><s:message code="storeMove.add.prodNm"/></th>
+          <th><s:message code="storeMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchAddProdNm" name="srchAddProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>
       </table>
 
       <ul class="txtSty3 mt10">
-        <li class="red"><s:message code="storeMove.add.txt1"/></li>
-        <li class="red"><s:message code="storeMove.add.txt2"/></li>
-        <li class="red"><s:message code="storeMove.add.txt3"/></li>
+        <li><s:message code="storeMove.reg.txt1"/></li>
+<%--         <li><s:message code="storeMove.reg.txt2"/></li> --%>
+<%--         <li><s:message code="storeMove.reg.txt3"/></li> --%>
       </ul>
 
       <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreMoveAddProdList();">
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreMoveRegistList();">
           <s:message code="cmm.search"/></button>
       </div>
 
@@ -68,26 +68,28 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="storeMove.add.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.poUnitFg"/>" binding="poUnitFgNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.splyUprc"/>" binding="outSplyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.amt"/>" binding="outAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.vat"/>" binding="outVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.tot"/>" binding="outTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.inSplyUprc"/>" binding="inSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.add.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.prodCd"/>" 			binding="prodCd" 	width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.prodNm"/>" 			binding="prodNm" 	width="150" align="left" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitFg"/>" 		binding="poUnitFg"  width="70" 	align="right" 	is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitQty"/>" 		binding="poUnitQty" width="70" align="right" 	is-read-only="true"></wj-flex-grid-column>
+           
+            <wj-flex-grid-column header="<s:message code="standMove.safeStockQty"/>" 		binding="safeStockQty" 		width="70" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standCurrQty"/>"    	binding="totCurrQty" 		width="70" align="right" aggregate="Sum" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standTotQty"/>" 		binding="standTotQty" 		width="70" align="right" max-length=8 visible="false" data-type="Number" format="n0" is-read-only="true" value="0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standCurrUnitQty"/>" 	binding="standCurrUnitQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standCurrEtcQty"/>" 	binding="standCurrEtcQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
+                        
+            <wj-flex-grid-column header=""              binding="arrStorageCd"  	width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""              binding="arrStorageNm"  	width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column>
+			
+			<wj-flex-grid-column header=""              binding="arrCurrQty"  		width="200" align="left"   	is-read-only="true"     visible="false" 		 ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""              binding="arrUnitQty"  		width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""              binding="arrEtcQty"   		width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column>
+			<wj-flex-grid-column header=""              binding="arrTotQty"   		width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column>
 
+<!-- 			<wj-flex-grid-column header=""              binding="arrOrderAmt"      	width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""              binding="arrOrderVat"      	width="200" align="left"   	is-read-only="true"     visible="false"          ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""              binding="arrOrderTot"      	width="200" align="left"   	is-read-only="true"     visible="false"  		 ></wj-flex-grid-column> -->
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -97,4 +99,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/move/storeMove/storeMoveAddProd.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/move/standMove/standMoveAddProd.js?ver=20181224.01" charset="utf-8"></script>

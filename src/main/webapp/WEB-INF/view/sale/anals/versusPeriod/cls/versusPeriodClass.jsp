@@ -169,8 +169,8 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 		binding="sinAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -191,12 +191,13 @@
 		      class="w100px fl"
 		      id="versusPeriodClassDtllistScaleBox"
 		      ng-model="listScale"
-		      control="listScaleCombo"
 		      items-source="_getComboData('versusPeriodClassDtllistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      control="conListScale"
+              is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 
 		    <%-- 엑셀 다운로드 //TODO --%>
@@ -223,8 +224,8 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>

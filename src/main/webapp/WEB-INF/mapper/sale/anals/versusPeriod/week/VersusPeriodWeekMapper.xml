@@ -28,8 +28,8 @@
 		     , SUM(DM.SALE_CNT_B)         AS SALE_CNT_B
 		     , SUM(DM.TOT_REAL_SALE_AMT_B) AS TOT_REAL_SALE_AMT_B
 			 , ROUND(RATIO_TO_REPORT(SUM(DM.REAL_SALE_AMT_B)) OVER(), 2) *100 AS RAT_B
-		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
-		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
 		  FROM (
 				SELECT UM.LV, UM.GBN
 				     , DECODE(UM.GBN,'A',UM.SALE_DATE_D,'')  SALE_DATE_D_A
@@ -137,4 +137,186 @@ ORDER BY LV.LV
 
     </select>
 
+    	<!-- 대비기간매출분석-주간대비탭 - 차트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : versusPeriodWeekVO
+        COMMENTS : 대비기간 매출(주간) 차트를 조회한다.
+    -->
+
+    <select id="getVersusPeriodWeekChartList" parameterType="versusPeriodWeekVO" resultType="DefaultMap">
+	WITH  A
+    		 AS (
+            	SELECT M.*
+              	  FROM (
+                      	SELECT LEVEL LV, DECODE(LEVEL,1,'일',2,'월',3,'화',4,'수',5,'목',6,'금',7,'토') LV_NM
+                        FROM DUAL CONNECT BY LEVEL  <![CDATA[<= 7]]>
+                   		) LV
+               , (
+                SELECT DM.LV
+                     , SUM(DM.SALE_DATE_CNT_A)    AS SALE_DATE_CNT_A
+                     , SUM(DM.REAL_SALE_AMT_A)    AS REAL_SALE_AMT_A
+                     , SUM(DM.SALE_CNT_A)         AS SALE_CNT_A
+                     , SUM(DM.TOT_REAL_SALE_AMT_A) AS TOT_REAL_SALE_AMT_A
+                     , ROUND(RATIO_TO_REPORT(SUM(DM.REAL_SALE_AMT_A)) OVER(), 2) *100 AS RAT_A
+                     , SUM(DM.SALE_DATE_CNT_B)    AS SALE_DATE_CNT_B
+                     , SUM(DM.REAL_SALE_AMT_B)    AS REAL_SALE_AMT_B
+                     , SUM(DM.SALE_CNT_B)         AS SALE_CNT_B
+                     , SUM(DM.TOT_REAL_SALE_AMT_B) AS TOT_REAL_SALE_AMT_B
+                     , ROUND(RATIO_TO_REPORT(SUM(DM.REAL_SALE_AMT_B)) OVER(), 2) *100 AS RAT_B
+                     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
+                     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+                  FROM (
+                  		SELECT UM.LV, UM.GBN
+                             , DECODE(UM.GBN,'A',UM.SALE_DATE_D,'')       SALE_DATE_D_A
+                             , DECODE(UM.GBN,'A',UM.SALE_DATE_CNT,'')     SALE_DATE_CNT_A
+                             , DECODE(UM.GBN,'A',UM.REAL_SALE_AMT,'')     REAL_SALE_AMT_A
+                             , DECODE(UM.GBN,'A',UM.SALE_CNT,'')          SALE_CNT_A
+                             , DECODE(UM.GBN,'A',UM.TOT_REAL_SALE_AMT,'') TOT_REAL_SALE_AMT_A
+                             , DECODE(UM.GBN,'B',UM.SALE_DATE_D,'')       SALE_DATE_D_B
+                             , DECODE(UM.GBN,'B',UM.SALE_DATE_CNT,'')     SALE_DATE_CNT_B
+                             , DECODE(UM.GBN,'B',UM.REAL_SALE_AMT,'')     REAL_SALE_AMT_B
+                             , DECODE(UM.GBN,'B',UM.SALE_CNT,'')          SALE_CNT_B
+                             , DECODE(UM.GBN,'B',UM.TOT_REAL_SALE_AMT,'') TOT_REAL_SALE_AMT_B
+                              FROM (
+                                    SELECT M.LV, M.GBN
+                                         , NVL(M.SALE_DATE_D, LV) AS SALE_DATE_D
+                                         , SUM(M.SALE_DATE_CNT)   AS SALE_DATE_CNT
+                                         , SUM(M.REAL_SALE_AMT)   AS REAL_SALE_AMT
+                                         , SUM(M.SALE_CNT)        AS SALE_CNT
+                                         , SUM(DECODE(GROUPING(NVL(M.SALE_DATE_D, LV)),0,SUM(M.REAL_SALE_AMT))) OVER () AS TOT_REAL_SALE_AMT
+                                      FROM (
+                                            SELECT LV.LV
+                                                 , DECODE(SALE_DATE,'',0,1) AS SALE_DATE_CNT
+                                                 , NVL(M.GBN,'A')           AS GBN
+                                                 , M.SALE_DATE_D
+                                                 , NVL(M.REAL_SALE_AMT,0)   AS REAL_SALE_AMT
+                                                 , NVL(M.SALE_CNT,0)        AS SALE_CNT
+                                              FROM (
+                                                     SELECT LEVEL LV
+                                                       FROM DUAL CONNECT BY LEVEL <![CDATA[<= 7]]>
+                                                   ) LV
+                                                 , (
+                                                    SELECT 'A' AS GBN
+                                                         , TSDT.SALE_DATE
+                                                         , TO_CHAR(TO_DATE(TSDT.SALE_DATE,'YYYYMMDD'),'DY') AS SALE_DATE_DY
+                                                         , TO_CHAR(TO_DATE(TSDT.SALE_DATE,'YYYYMMDD'),'D')  AS SALE_DATE_D
+                                                         , SUM(REAL_SALE_AMT)                               AS REAL_SALE_AMT
+                                                         , SUM(SALE_CNT)                                    AS SALE_CNT
+                                                      FROM TB_SL_DAILY_TOTAL TSDT
+                                                     WHERE 1=1
+										 				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
+										 				</if>
+										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
+										 					AND TSDT.STORE_CD IN
+										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+										 						#{item}
+										 					</foreach>
+														</if>
+                                                    GROUP BY TSDT.SALE_DATE
+                                                    ORDER BY TSDT.SALE_DATE
+                                                   ) M
+                                             WHERE LV.LV = M.SALE_DATE_D(+)
+                                             ORDER BY LV
+                                           ) M
+                                    GROUP BY M.LV, M.GBN, NVL(M.SALE_DATE_D, LV)
+                                    UNION ALL
+                                    SELECT M.LV, M.GBN
+                                         , NVL(M.SALE_DATE_D, LV) AS SALE_DATE_D
+                                         , SUM(M.SALE_DATE_CNT) AS SALE_DATE_CNT
+                                         , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                         , SUM(M.SALE_CNT) AS SALE_CNT
+                                         , SUM(DECODE(GROUPING(NVL(M.SALE_DATE_D, LV)),0,SUM(M.REAL_SALE_AMT))) OVER () AS TOT_REAL_SALE_AMT
+                                      FROM (
+                                            SELECT LV.LV
+                                                 , DECODE(SALE_DATE,'',0,1) AS SALE_DATE_CNT
+                                                 , NVL(M.GBN,'B') AS GBN
+                                                 , M.SALE_DATE_D
+                                                 , NVL(M.REAL_SALE_AMT,0) AS REAL_SALE_AMT
+                                                 , NVL(M.SALE_CNT,0) AS SALE_CNT
+                                              FROM (
+                                                     SELECT LEVEL LV
+                                                       FROM DUAL CONNECT BY LEVEL <![CDATA[<= 7]]>
+                                                   ) LV
+                                                 , (
+                                                    SELECT 'B' AS GBN
+                                                         , TSDT.SALE_DATE
+                                                         , TO_CHAR(TO_DATE(TSDT.SALE_DATE,'YYYYMMDD'),'DY') AS SALE_DATE_DY
+                                                         , TO_CHAR(TO_DATE(TSDT.SALE_DATE,'YYYYMMDD'),'D') AS SALE_DATE_D
+                                                         , SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                                                         , SUM(SALE_CNT) AS SALE_CNT
+                                                      FROM TB_SL_DAILY_TOTAL TSDT
+                                                     WHERE 1=1
+										 				<if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
+										 				</if>
+										 				<if test='arrStoreCd != null and arrStoreCd != ""'>
+										 					AND TSDT.STORE_CD IN
+										 					<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+										 						#{item}
+										 					</foreach>
+														</if>
+                                                    GROUP BY TSDT.SALE_DATE
+                                                    ORDER BY TSDT.SALE_DATE
+                                                   ) M
+                                             WHERE LV.LV = M.SALE_DATE_D(+)
+                                             ORDER BY LV
+                                           ) M
+                                    GROUP BY M.LV, M.GBN, NVL(M.SALE_DATE_D, LV)
+                                   ) UM
+                           ) DM
+                    GROUP BY DM.LV
+                   ) M
+            WHERE LV.LV = M.LV
+        )
+    SELECT '월 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'1',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'1',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'1',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'1',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+    SELECT '화 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'2',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'2',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'2',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'2',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+	SELECT '수 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'3',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'3',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'3',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'3',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+	SELECT '목 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'4',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'4',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'4',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'4',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+	SELECT '금 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'5',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'5',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'5',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'5',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+	SELECT '토 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'6',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'6',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'6',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'6',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+	UNION ALL
+	SELECT '일 ' AS SEARCH_NAME
+       , SUM(DECODE(A.LV,'7',A.SALE_CNT_A,0)) AS SALE_CNT_A
+       , SUM(DECODE(A.LV,'7',A.REAL_SALE_AMT_A,0)) AS REAL_SALE_AMT_A
+       , SUM(DECODE(A.LV,'7',A.SALE_CNT_B,0)) AS SALE_CNT_B
+       , SUM(DECODE(A.LV,'7',A.REAL_SALE_AMT_B,0)) AS REAL_SALE_AMT_B
+	FROM A
+    </select>
 </mapper>

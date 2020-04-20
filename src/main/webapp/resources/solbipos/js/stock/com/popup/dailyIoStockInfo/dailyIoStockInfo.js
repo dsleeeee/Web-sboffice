@@ -145,7 +145,7 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, '재고현황_일자별수불현황_본사출고정보_'+getToday()+'.xlsx', function () {
+      }, '재고현황_일자별수불현황_' + $scope.ioOccrNm + '정보_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

@@ -10,7 +10,7 @@
 <div class="subCon3" ng-controller="storeDayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
-      
+
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeDayMainCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -32,7 +32,7 @@
             <span class="txtIn"><input id="srchStoreDayStartDate" class="w120px"></span>
           </div>
         </td>
-        
+
         <input type="hidden" id="storeDaySelectStoreCd" valaue=""/>
         <%-- 매장코드 --%>
         <th><s:message code="storeDay.storeNm"/></th>
@@ -52,7 +52,7 @@
         <%-- 상품코드 --%>
         <th><s:message code="storeDay.prodCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd"/></td>
-        
+
         <%-- 상품명 --%>
         <th><s:message code="storeDay.prodNm"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm"/></td>
@@ -61,20 +61,7 @@
         <%-- 바코드 --%>
         <th><s:message code="storeDay.barcdCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="srchBarcdCd"/></td>
-        
-        <%-- 거래처 --%>
-        <th><s:message code="storeDay.vendr"/></th>
-        <td>
-          <%-- 거래처선택 모듈 멀티 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-          --%>
-          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-            <jsp:param name="targetId" value="storeDaySelectVendr"/>
-          </jsp:include>
-          <input type="hidden" id="storeDaySelectVendrCd" value=""/>
-        </td>
-      </tr>
-      <tr>
+
         <%-- 상품분류 --%>
         <th><s:message code="storeDay.prodClass"/></th>
         <td>
@@ -83,7 +70,8 @@
           <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         </td>
-        
+      </tr>
+      <tr>
         <%-- 단위구분 --%>
         <th><s:message code="storeDay.unitFg"/></th>
         <td>
@@ -101,11 +89,10 @@
             </span>
           </div>
         </td>
-      </tr>
-      <tr>
+
         <%-- 조회옵션 --%>
         <th><s:message code="storeDay.srchOption"/></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
             <span class="txtIn">
                 <wj-combo-box
@@ -127,11 +114,24 @@
           </div>
         </td>
       </tr>
+      <tr>
+        <%-- 거래처 --%>
+        <th style="display: none;"><s:message code="storeDay.vendr"/></th>
+        <td style="display: none;">
+          <%-- 거래처선택 모듈 멀티 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+          --%>
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
+            <jsp:param name="targetId" value="storeDaySelectVendr"/>
+          </jsp:include>
+          <input type="hidden" id="storeDaySelectVendrCd" value=""/>
+        </td>
+      </tr>
       </tbody>
     </table>
-    
+
     <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
-    
+
     <div ng-controller="storeDayMainCtrl">
 	    <div class="mt20 oh sb-select dkbr">
 	      <%-- 페이지 스케일  --%>
@@ -139,12 +139,13 @@
             class="w100px fl"
             id="storeDayMainlistScaleBox"
             ng-model="listScale"
-            control="listScaleCombo"
             items-source="_getComboData('storeDayMainlistScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
           </wj-combo-box>
           <c:if test="${sessionInfo.orgnFg == 'HQ'}">
               <input type="text" id="storeDayMainSelectStoreStoreNum" ng-model="storeNum">
@@ -153,7 +154,7 @@
 	      <button class="btn_skyblue fr" ng-click="excelDownloadStoreDay()"><s:message code="cmm.excel.down" />
 	      </button>
 	    </div>
-	    
+
 	    <%-- gird 1 --%>
 	    <div class="w100 mt10" id="wjWrapType2">
 	        <div class="wj-gridWrap">
@@ -168,12 +169,12 @@
 	              is-read-only="true"
 	              item-formatter="_itemFormatter"
 	              frozen-columns="5">
-	
+
 	              <!-- define columns -->
 	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassLNm"/>"               binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassMNm"/>"               binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassSNm"/>"               binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	              
+
 	              <wj-flex-grid-column header="<s:message code="storeDay.prodCd"/>"                     binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.prodNm"/>"                     binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.storeCd"/>"                    binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -181,7 +182,7 @@
 	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitQty"/>"                  binding="poUnitQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitFg"/>"                   binding="poUnitFgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.barcdCd"/>"                    binding="barcdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-	              
+
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInQty"/>"               binding="ioOccrQty03" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInAmt"/>"               binding="ioOccrTot03" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreOutQty"/>"              binding="ioOccrQty12" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -192,7 +193,7 @@
 	              <wj-flex-grid-column header="<s:message code="storeDay.accPurchsOutAmt"/>"             binding="ioOccrTot18" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreSaleQty"/>"             binding="ioOccrQty11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreSaleAmt"/>"             binding="ioOccrTot11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              
+
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveInQty"/>"                binding="ioOccrQty04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveInAmt"/>"                binding="ioOccrTot04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveOutQty"/>"               binding="ioOccrQty14" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

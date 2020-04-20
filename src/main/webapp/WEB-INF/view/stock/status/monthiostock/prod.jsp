@@ -10,7 +10,7 @@
 <div class="subCon3" ng-controller="monthIostockCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
-      
+
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('monthIostockMainCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -48,7 +48,7 @@
         <%-- 상품코드 --%>
         <th><s:message code="monthIostock.prodCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="srchProdCd"/></td>
-        
+
         <%-- 상품명 --%>
         <th><s:message code="monthIostock.prodNm"/></th>
         <td><input type="text" class="sb-input w100" id="srchProdNm" ng-model="srchProdNm"/></td>
@@ -57,20 +57,7 @@
         <%-- 바코드 --%>
         <th><s:message code="monthIostock.barcdCd"/></th>
         <td><input type="text" class="sb-input w100" id="srchBarcdCd" ng-model="srchBarcdCd"/></td>
-        
-        <%-- 거래처 --%>
-        <th><s:message code="monthIostock.vendr"/></th>
-        <td>
-          <%-- 거래처선택 모듈 멀티 선택 사용시 include
-               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-          --%>
-          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-            <jsp:param name="targetId" value="monthIostockSelectVendr"/>
-          </jsp:include>
-          <input type="hidden" id="monthIostockSelectVendrCd" value=""/>
-        </td>
-      </tr>
-      <tr>
+
         <%-- 상품분류 --%>
         <th><s:message code="monthIostock.prodClass"/></th>
         <td>
@@ -79,7 +66,8 @@
           <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
           <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         </td>
-        
+      </tr>
+      <tr>
         <%-- 단위구분 --%>
         <th><s:message code="monthIostock.unitFg"/></th>
         <td>
@@ -97,11 +85,10 @@
             </span>
           </div>
         </td>
-      </tr>
-      <tr>
+
         <%-- 조회옵션 --%>
         <th><s:message code="monthIostock.srchOption"/></th>
-        <td colspan="3">
+        <td>
           <div class="sb-select">
             <span class="txtIn">
                 <wj-combo-box
@@ -115,7 +102,7 @@
                 </wj-combo-box>
             </span>
             <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
+                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()"/>
                 <label for="chkDt">
                     <s:message code="monthIostock.prodClassDisplay" />
                 </label>
@@ -123,33 +110,47 @@
           </div>
         </td>
       </tr>
+      <tr>
+        <%-- 거래처 --%>
+        <th style="display: none;"><s:message code="monthIostock.vendr"/></th>
+        <td style="display: none;">
+          <%-- 거래처선택 모듈 멀티 선택 사용시 include
+               param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+          --%>
+          <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
+            <jsp:param name="targetId" value="monthIostockSelectVendr"/>
+          </jsp:include>
+          <input type="hidden" id="monthIostockSelectVendrCd" value=""/>
+        </td>
+      </tr>
       </tbody>
     </table>
-    
+
     <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
     <c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	    <input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
 	    <input type="hidden" id="storeNm" value="${sessionInfo.storeNm}"/>
     </c:if>
-    <div ng-controller="monthIostockMainCtrl"> 
+    <div ng-controller="monthIostockMainCtrl">
 	    <div class="mt20 oh sb-select dkbr">
 	      <%-- 페이지 스케일  --%>
           <wj-combo-box
             class="w100px fl"
             id="monthIostockMainlistScaleBox"
             ng-model="listScale"
-            control="listScaleCombo"
             items-source="_getComboData('monthIostockMainlistScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="_initComboBox(s)">
+            initialized="_initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
           </wj-combo-box>
 	        <%-- 엑셀 다운로드 //TODO --%>
 	        <button class="btn_skyblue fr" ng-click="excelDownloadMonthIostock()"><s:message code="cmm.excel.down" />
 	        </button>
 	    </div>
-	    
+
 	    <%-- gird 1 --%>
 	    <div class="w100 mt10" id="wjWrapType2">
 	        <div class="wj-gridWrap">
@@ -164,12 +165,12 @@
 	              is-read-only="true"
 	              item-formatter="_itemFormatter"
 	              frozen-columns="5">
-	
+
 	              <!-- define columns -->
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassLNm"/>"                binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassMNm"/>"                binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodClassSNm"/>"                binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	              
+
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodCd"/>"                   binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.prodNm"/>"                   binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.poUnitQty"/>"                binding="poUnitQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -187,7 +188,7 @@
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.hqInQty"/>"                 binding="ioOccrQty02" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.hqInAmt"/>"                 binding="ioOccrTot02" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              </c:if>
-	              
+
 	              <c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accStoreInQty"/>"               binding="ioOccrQty03" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accStoreInAmt"/>"               binding="ioOccrTot03" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -200,7 +201,7 @@
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accStoreSaleQty"/>"             binding="ioOccrQty11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accStoreSaleAmt"/>"             binding="ioOccrTot11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              </c:if>
-	              
+
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accStoreMoveInQty"/>"                binding="ioOccrQty04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accStoreMoveInAmt"/>"                binding="ioOccrTot04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accStoreMoveOutQty"/>"               binding="ioOccrQty14" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -211,7 +212,7 @@
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accAdjAmt"/>"                        binding="ioOccrTot21" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accSetInQty"/>"                      binding="ioOccrQty22" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="monthIostock.accSetInAmt"/>"                      binding="ioOccrTot22" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              
+
 	              <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accSaleVendrOutQty"/>"           binding="ioOccrQty19" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	                  <wj-flex-grid-column header="<s:message code="monthIostock.accSaleVendrOutAmt"/>"           binding="ioOccrTot19" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

@@ -430,8 +430,8 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
 
         		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				("01"										);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
+        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
 
         		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
         		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
@@ -477,8 +477,8 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
 
         		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				("06"										);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
+        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
+        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
 
         		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
         		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지

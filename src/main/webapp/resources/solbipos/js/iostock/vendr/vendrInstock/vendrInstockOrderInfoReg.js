@@ -170,11 +170,16 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
 //	  var unitQty = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.inUnitQty, 0))) * parseInt(item.poUnitQty);
 //	  var etcQty  = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.inEtcQty, 0));
 	  var totQty  = parseInt(unitQty + etcQty);
+      console.log('unitQty: ' + unitQty);
+      console.log('etcQty : ' + etcQty );	  
+      console.log('totQty : ' + totQty );
 	  var tempAmt = Math.round(totQty * costUprc / poUnitQty);
 	  var inAmt   = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
 	  var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
 	  var inTot   = parseInt(inAmt + inVat);
-
+	  console.log('inAmt: ' + inAmt);
+      console.log('inVat : ' + inVat );
+      console.log('inTot : ' + inTot );
 //	  var arrInUnitQty = parseInt(nvl(eval(item.orderUnitQty), 0));
 //	  var arrInEtcQty = parseInt(nvl(eval(item.orderEtcQty), 0));
 	    
@@ -204,7 +209,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
 	        }
 	        item.inUnitQty	= arrInUnitQty;					//입고수량 - 단위
 	        item.inEtcQty   = arrInEtcQty;  											//입고수량 - 나머지
-	        item.inTotQty   = parseInt(arrInUnitQty + arrInEtcQty);  					//총입고수량
+	        item.inTotQty   = arrInTotQty ; //parseInt(arrInUnitQty + arrInEtcQty);  					//총입고수량
 
 	        tempAmt     	= Math.round( parseInt(arrInUnitQty + arrInEtcQty) * costUprc / poUnitQty);
 	                
