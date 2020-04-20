@@ -26,4 +26,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchProdClassCd.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchProdClassCd.js?ver=20181120.05" charset="utf-8"></script>
