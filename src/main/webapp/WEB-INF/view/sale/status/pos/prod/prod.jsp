@@ -57,9 +57,9 @@
 						<td colspan="3">
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posProdSelectStore"/>
-								<jsp:param name="targetPosId" value="posProdSelectPos"/>
+								<jsp:param name="subTargetId" value="posProdSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -155,6 +155,42 @@
 		</ul>
 	</div>
 	<%--//페이지 리스트--%>
+
+	<%-- 엑셀 리스트 --%>
+	<div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="posProdExcelCtrl">
+      <div class="wj-gridWrap">
+			<wj-flex-grid
+				id="posProdExcelGrid"
+				autoGenerateColumns="false"
+				selection-mode="Row"
+				items-source="data"
+				control="excelFlex"
+				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
+				is-read-only="true"
+				frozen-columns="10"
+				item-formatter="_itemFormatter">
+				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" binding="lv1Nm" 	width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" binding="lv2Nm" 	width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" binding="lv3Nm" 	width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="day.prodClass.prodCd"/>"	binding="prodCd" width="100" align="center" visible="false" is-read-only="true" format="d"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			</wj-flex-grid>
+			<%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="posProdCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
+		</div>
+	</div>
+	<%--//엑셀 리스트--%>
+
 </div>
 
 <script type="text/javascript">

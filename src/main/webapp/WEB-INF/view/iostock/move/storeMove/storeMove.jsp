@@ -107,11 +107,10 @@
     </tbody>
   </table>
 
-  <div class="tr mt10">
+  <div class="tr mt20">
     <%-- 신규 --%>
     <button type="button" id="btnRegist" class="btn_skyblue ml5" ng-click="newRegist()"><s:message code="storeMove.newRegist"/></button>
   </div>
-  <div style="clear: both;"></div>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>

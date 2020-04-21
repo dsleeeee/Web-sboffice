@@ -116,9 +116,13 @@ public class PosDayOfWeekController {
 
         }
 
-        List<DefaultMap<String>> list = posDayOfWeekService.getPosDayOfWeekList(posDayOfWeekVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posDayOfWeekVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
+        if (posDayOfWeekVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posDayOfWeekVO);
+        } else {
+        	List<DefaultMap<String>> list = posDayOfWeekService.getPosDayOfWeekList(posDayOfWeekVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posDayOfWeekVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
+        }
     }
 
     /**
@@ -169,9 +173,13 @@ public class PosDayOfWeekController {
 
         }
 
-        List<DefaultMap<String>> list = posDayOfWeekService.getPosDayOfWeekChartList(posDayOfWeekVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posDayOfWeekVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
+        if (posDayOfWeekVO.getArrStorePos() == null) {
+        	 return ReturnUtil.returnListJson(Status.OK, null, posDayOfWeekVO);
+        } else {
+        	List<DefaultMap<String>> list = posDayOfWeekService.getPosDayOfWeekChartList(posDayOfWeekVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posDayOfWeekVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posDayOfWeekVO);
+        }
     }
 
 }

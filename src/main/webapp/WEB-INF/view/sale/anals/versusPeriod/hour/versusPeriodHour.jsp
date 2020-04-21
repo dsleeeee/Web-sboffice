@@ -122,12 +122,13 @@
 				<input type="text" id="versusPeriodHourSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
 
-			<%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
-		    </button>
-			<%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="showChart()"><s:message code="cmm.chart" />
-		    </button>
+			<div class="fr">
+				<%-- 차트  --%>
+				<button class="btn_skyblue" ng-click="showChart()"><s:message code="cmm.chart" /></button>
+				<%-- 엑셀 다운로드 //TODO --%>
+			  <button class="btn_skyblue" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" /></button>
+		    </div>
+		  <div class="clearfix"></div>
 		</div>
 
 		<%--위즈모 테이블--%>
@@ -149,7 +150,7 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
@@ -163,19 +164,17 @@
 	    <%--//위즈모 테이블--%>
 
 	    <%--layer:For Center screen--%>
-		<div class="fullDimmed versusPeriodHourLayer" id="versusPeriodHourMask" style="display: none; z-index:4;"></div>
-		<div class="layer versusPeriodHourLayer" id="versusPeriodHourLayer" style="display: none; z-index:5;">
+		<div class="fullDimmed versusPeriodHourLayer" id="versusPeriodHourMask" style="display: none"></div>
+		<div class="layer versusPeriodHourLayer" id="versusPeriodHourLayer" style="display: none; z-index:1499;">
 		    <div class="layer_inner">
 
 		        <%--layerContent--%>
-		        <div class="title" style="width:1010px"  ng-controller="versusPeriodHourChartCtrl">
-		            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
-		            </p>
+		        <div class="title" style="width:980px; padding:0"  ng-controller="versusPeriodHourChartCtrl">
+		            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
 		            <a href="#" class="btn_close _btnClose"></a>
 
 		            <%--위즈모 테이블--%>
 				    <div class="w100 mt10" id="wjWrapType1">
-						<div class="mt20 oh sb-select dkbr pd10">
 							<!-- 막대 차트 샘플 -->
 							<div>
 								<wj-flex-chart
@@ -189,7 +188,6 @@
 									<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSrch"/>" binding="realSaleAmtA"></wj-flex-chart-series>
 									<wj-flex-chart-series name="<s:message code="pos.realSaleAmtVs"/>" binding="realSaleAmtB"></wj-flex-chart-series>
 								</wj-flex-chart>
-							</div>
 						</div>
 					</div>
 		               <%--//위즈모 테이블--%>

@@ -113,8 +113,8 @@
           <wj-flex-grid-column header="<s:message code="prodStockInfo.prodCd"/>"    binding="prodCd"        width="140" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.prodNm"/>"    binding="prodNm"        width="180" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitFg"/>"  binding="poUnitFgNm"    width="80"  align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitQty"/>" binding="poUnitQty"     width="80"  align="right" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodStockInfo.outCnt"/>"    binding="outCnt"        width="80"  align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitQty"/>" binding="poUnitQty"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodStockInfo.outCnt"/>"    binding="outCnt"        width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.inTotQty"/>"  binding="outTotQty"     width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.inTot"/>"     binding="outTot"        width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.inTotQty"/>"  binding="inTotQty"      width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

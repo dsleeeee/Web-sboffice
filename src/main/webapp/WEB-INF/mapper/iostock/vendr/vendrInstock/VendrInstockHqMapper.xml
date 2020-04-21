@@ -205,6 +205,9 @@
 		,		A.PREV_IN_UNIT_QTY
 		,		A.PREV_IN_ETC_QTY
 		,		A.PREV_IN_TOT_QTY
+		,		A.PREV_IN_AMT
+		,		A.PREV_IN_VAT
+		,		A.PREV_IN_TOT		
 		,		A.IN_AMT
 		,		A.IN_VAT
 		,		A.IN_TOT
@@ -229,9 +232,13 @@
 				,		A.PREV_IN_UNIT_QTY
 				,		A.PREV_IN_ETC_QTY
 				,		A.PREV_IN_TOT_QTY
+				,		A.PREV_IN_AMT
+				,		A.PREV_IN_VAT
+				,		A.PREV_IN_TOT				
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
+				
 				,		B.PROD_CD       AS  A_PROD_CD
 				,       B.STORAGE_CD    AS  A_STORAGE_CD
 				,       B.STORAGE_NM    AS  A_STORAGE_NM
@@ -240,7 +247,18 @@
 				,       B.IN_TOT_QTY    AS  A_IN_TOT_QTY
 				,       B.IN_AMT        AS  A_IN_AMT
 				,       B.IN_VAT        AS  A_IN_VAT
-				,       B.IN_TOT        AS  A_IN_TOT
+				,       B.IN_TOT        AS  A_IN_TOT				
+				/*
+				,		NVL(B.PROD_CD, A.PROD_CD)       AS  A_PROD_CD
+				,       NVL(B.STORAGE_CD, '001')        AS  A_STORAGE_CD
+				,       NVL(B.STORAGE_NM, '대표창고')    AS  A_STORAGE_NM
+				,       NVL(B.IN_UNIT_QTY,0)   AS  A_IN_UNIT_QTY
+				,       NVL(B.IN_ETC_QTY,0)    AS  A_IN_ETC_QTY
+				,       NVL(B.IN_TOT_QTY,0)    AS  A_IN_TOT_QTY
+				,       NVL(B.IN_AMT,0)        AS  A_IN_AMT
+				,       NVL(B.IN_VAT,0)        AS  A_IN_VAT
+				,       NVL(B.IN_TOT,0)        AS  A_IN_TOT
+				*/
 				FROM	(                
 				        SELECT  thvp.HQ_OFFICE_CD
 						,		NVL(tphvid.SLIP_NO,#{slipNo})	AS SLIP_NO
@@ -256,6 +274,9 @@
 				        ,       TO_NUMBER(DECODE(tphvid.IN_UNIT_QTY, 0, NULL, tphvid.IN_UNIT_QTY*tphvid.SLIP_FG)) AS PREV_IN_UNIT_QTY
 				        ,       TO_NUMBER(DECODE(tphvid.IN_ETC_QTY,  0, NULL, tphvid.IN_ETC_QTY*tphvid.SLIP_FG )) AS PREV_IN_ETC_QTY
 				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT_QTY,  0, NULL, tphvid.IN_TOT_QTY*tphvid.SLIP_FG )) AS PREV_IN_TOT_QTY
+				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT, 0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG)) AS PREV_IN_AMT
+				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG )) AS PREV_IN_VAT
+				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG )) AS PREV_IN_TOT				        
 				        ,       TO_NUMBER(DECODE(tphvid.IN_AMT    ,  0, NULL, tphvid.IN_AMT*tphvid.SLIP_FG     )) AS IN_AMT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_VAT    ,  0, NULL, tphvid.IN_VAT*tphvid.SLIP_FG     )) AS IN_VAT
 				        ,       TO_NUMBER(DECODE(tphvid.IN_TOT    ,  0, NULL, tphvid.IN_TOT*tphvid.SLIP_FG     )) AS IN_TOT
@@ -304,7 +325,7 @@
 				        )	A
 				        LEFT OUTER JOIN
 				        (
-						SELECT  X.HQ_OFFICE_CD,
+							SELECT  X.HQ_OFFICE_CD,
 				                      X.STORAGE_CD,
 				                      X.STORAGE_NM,
 				                      NVL(Y.SLIP_NO,#{slipNo})				AS SLIP_NO,
@@ -315,15 +336,15 @@
 				                      NVL(Y.IN_AMT,       0)  AS IN_AMT,
 				                      NVL(Y.IN_VAT,       0)  AS IN_VAT,
 				                      NVL(Y.IN_TOT,       0)  AS IN_TOT
-				              FROM            TB_HQ_STORAGE                   X
-				              LEFT OUTER JOIN TB_PO_HQ_VENDR_INSTOCK_PROD    	Y
-				              ON              X.HQ_OFFICE_CD	= Y.HQ_OFFICE_CD
-				              AND             X.STORAGE_CD    = Y.STORAGE_CD
-				              AND             Y.HQ_OFFICE_CD  = #{hqOfficeCd}
-				              AND             Y.SLIP_NO       = #{slipNo}
-				--                AND             Y.SLIP_FG       = '1'
-				              WHERE   X.HQ_OFFICE_CD  = #{hqOfficeCd}
-				              AND     X.USE_YN    = 'Y'
+				        	FROM            TB_HQ_STORAGE                   X
+				            LEFT OUTER JOIN TB_PO_HQ_VENDR_INSTOCK_PROD    	Y
+				            ON              X.HQ_OFFICE_CD	= 	Y.HQ_OFFICE_CD
+				            AND             X.STORAGE_CD    = 	Y.STORAGE_CD
+				            AND             Y.HQ_OFFICE_CD  = 	#{hqOfficeCd}
+				            AND             Y.SLIP_NO       = 	#{slipNo}				            										
+				              WHERE   X.HQ_OFFICE_CD  	= 	#{hqOfficeCd}
+				              AND     X.USE_YN    		= 	'Y'
+				              AND     X.AREA_FG       	=   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
 				          )   B
 				          ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 				          AND     A.SLIP_NO       = B.SLIP_NO
@@ -342,6 +363,9 @@
 			,		A.PREV_IN_UNIT_QTY
 			,		A.PREV_IN_ETC_QTY
 			,		A.PREV_IN_TOT_QTY
+			,		A.PREV_IN_AMT
+			,		A.PREV_IN_VAT
+			,		A.PREV_IN_TOT
 			,		A.IN_AMT
 			,		A.IN_VAT
 			,		A.IN_TOT
@@ -534,6 +558,7 @@
 			                AND             Y.SLIP_NO       = #{slipNo}
 			                WHERE   X.HQ_OFFICE_CD  = #{hqOfficeCd}
 			                AND     X.USE_YN    = 'Y'
+			                AND     X.AREA_FG       =   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
 			            )   B
 			            ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 			            AND     A.SLIP_NO       = B.SLIP_NO
@@ -1107,6 +1132,16 @@
         AND     SLIP_NO       = #{slipNo}
         AND     PROD_CD       = #{prodCd}
     </delete>
+    
+    <delete id="deleteVendrInstockProd" parameterType="vendrInstockVO">
+        /* USE : VendrInstockHqMapper.deleteVendrInstockProd */
+        DELETE  TB_PO_HQ_VENDR_INSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  	= 	#{hqOfficeCd}
+        AND     SLIP_NO       	= 	#{slipNo}
+        AND     PROD_CD       	= 	#{prodCd}
+        AND		OCCR_FG			=	#{occrFg}
+    </delete>
+        
    
     <!-- 거래처 입고/반출등록 - 입고/반출 상품 공급가 수정(본사) -->
     <!--

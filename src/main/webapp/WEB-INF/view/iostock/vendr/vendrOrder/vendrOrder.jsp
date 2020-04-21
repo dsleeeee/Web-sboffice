@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="vendrOrderCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)"><s:message code="cmm.search"/></button>
     <%--<a href="#" class="open"></a>--%>
     <%-- 조회 --%>
     <%--<button class="btn_blue fr" style="position: absolute; top:5px; right:5px;" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">--%>
@@ -76,12 +78,6 @@
     </tr>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrOrderCtrl', 1)">
-      <s:message code="cmm.search"/></button>
-  </div>
 
   <div class="mt20 tr">
     <%-- 발주신규등록 --%>

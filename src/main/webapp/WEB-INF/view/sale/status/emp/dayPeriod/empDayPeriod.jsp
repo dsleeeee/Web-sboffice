@@ -64,7 +64,7 @@
 
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
      <%-- 판매자별 --%>
-     <div class="w100 mt10" ng-controller="empDayPeriodMainCtrl">
+     <div class="w100 mt20" ng-controller="empDayPeriodMainCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='empsale.empsale'/></span>
 
@@ -85,7 +85,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap col2-t2">
         <wj-flex-grid
           id="empDayPeriodGrid"
           loaded-rows="loadedRows(s,e)"
@@ -113,7 +113,7 @@
       <%--//위즈모 테이블--%>
 
       <%--페이지 리스트--%>
-      <div class="pageNum mt20">
+      <div class="pageNum3 mt20">
       	<%-- id --%>
       	<ul id="empDayPeriodMainCtrlPager" data-size="10"></ul>
       </div>
@@ -124,7 +124,7 @@
 
     <div id="gridDetail" class="w50 fr" style="width:49%;">
      <%-- 코너별 --%>
-     <div class="w100 mt10" ng-controller="empDayPeriodDtlCtrl">
+     <div class="w100 mt20" ng-controller="empDayPeriodDtlCtrl">
        <div class="oh sb-select mb10">
          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span>
 
@@ -145,7 +145,7 @@
        </div>
       <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap col2-t2">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -174,7 +174,7 @@
       <%--//위즈모 테이블--%>
 
       <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
+      <div class="pageNum3 mt20">
       	<%-- id --%>
       	<ul id="empDayPeriodDtlCtrlPager" data-size="10"></ul>
       </div>

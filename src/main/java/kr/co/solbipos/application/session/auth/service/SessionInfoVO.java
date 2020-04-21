@@ -153,9 +153,14 @@ public class SessionInfoVO extends CmmVO {
     /** 대리점의 부모 대리점 코드 */
     private String pAgencyCd;
 
+    /** 사용자의 권역 코드 */
+    private String areaFg;
+    
+    
 
 
-    /**
+	
+	/**
      * @return the sessionId
      */
     public String getSessionId() {
@@ -613,4 +618,11 @@ public class SessionInfoVO extends CmmVO {
     public void setpAgencyCd(String pAgencyCd) {
         this.pAgencyCd = pAgencyCd;
     }
+    
+    public String getAreaFg() {
+		return areaFg;
+	}
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}    
 }

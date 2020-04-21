@@ -96,14 +96,16 @@
 	</table>
 
 	<div class="mt40 oh sb-select dkbr">
+	    
+	  <div class="fr">
+	  	<%-- 차트 --%>
+	    <button class="btn_skyblue" id="btnShowChart"><s:message code="cmm.chart" /></button>
 	    <%-- 엑셀 다운로드 //TODO --%>
-	    <button class="btn_skyblue fr" ng-click="excelDownloadStoreRank()"><s:message code="cmm.excel.down" />
-	    </button>
-	    <button class="btn_skyblue fr" id="btnShowChart">
-			<s:message code="cmm.chart" />
-		</button>
+	    <button class="btn_skyblue" ng-click="excelDownloadStoreRank()"><s:message code="cmm.excel.down" /></button>
+		</div>
 	</div>
-
+	<div class="clearfix"></div>
+	
 	<%--위즈모 테이블--%>
     <div class="w100 mt10">
       <div class="wj-gridWrap" style="height: 350px;">
@@ -142,19 +144,17 @@
     <%--//위즈모 테이블--%>
 
     <%--layer:For Center screen--%>
-	<div class="fullDimmed storeRankLayer" id="storeRankMask" style="display: none; z-index:4;"></div>
-	<div class="layer storeRankLayer" id="storeRankLayer" style="display: none; z-index:5;">
+	<div class="fullDimmed storeRankLayer" id="storeRankMask" style="display: none"></div>
+	<div class="layer storeRankLayer" id="storeRankLayer" style="display: none; z-index:1499;">
 	    <div class="layer_inner">
 
 	        <%--layerContent--%>
-	        <div class="title" style="width:1010px" ng-controller="storeRankBarChartCtrl">
-	            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
-	            </p>
+	        <div class="title" style="width:980px; padding:0;" ng-controller="storeRankBarChartCtrl">
+	            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
 	            <a href="#" class="btn_close _btnClose"></a>
 
 	            <%--위즈모 테이블--%>
-			    <div class="w100 mt10" id="wjWrapType1">
-					<div class="mt20 oh sb-select dkbr pd10">
+			    <div class="w100">
 						<!-- 막대 차트 샘플 -->
 						<div>
 							<wj-flex-chart
@@ -167,7 +167,6 @@
 
 								<wj-flex-chart-series name="<s:message code="pos.realSaleAmt"/>" binding="realSaleAmt"></wj-flex-chart-series>
 							</wj-flex-chart>
-						</div>
 					</div>
 				</div>
 	            <%--//위즈모 테이블--%>

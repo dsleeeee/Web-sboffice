@@ -92,4 +92,47 @@ public class CornerDayPeriodController {
         List<DefaultMap<String>> list = cornerDayPeriodService.getCornerDayPeriodDtlList(cornerDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerDayPeriodVO);
     }
+    
+    
+    /**
+     * 코너별매출 설정기간별 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerDayPeriodVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/corner/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCornerDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, CornerDayPeriodVO cornerDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = cornerDayPeriodService.getCornerDayPeriodExcelList(cornerDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, cornerDayPeriodVO);
+    }
+    
+    /**
+     * 코너별매출 설정기간별 - 엑셀 리스트 상세 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerDayPeriodVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/corner/excelDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCornerDayPeriodDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, CornerDayPeriodVO cornerDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = cornerDayPeriodService.getCornerDayPeriodDtlExcelList(cornerDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, cornerDayPeriodVO);
+    }
 }

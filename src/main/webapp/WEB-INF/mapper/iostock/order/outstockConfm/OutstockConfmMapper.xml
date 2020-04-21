@@ -195,6 +195,7 @@
          -->
 		SELECT  A.SLIP_NO
 		,		A.SLIP_FG
+		,		A.SLIP_KIND
 		,		A.PROD_CD
 		,		A.PROD_NM
 		,		A.SEQ
@@ -241,6 +242,7 @@
 		FROM	(
 				SELECT	A.SLIP_NO
 				,		A.SLIP_FG
+				,		A.SLIP_KIND
 				,		A.PROD_CD
 				,		A.PROD_NM
 				,		A.SEQ
@@ -286,7 +288,7 @@
 				,		B.IN_VAT        AS  A_IN_VAT
 				,		B.IN_TOT        AS  A_IN_TOT
 				FROM	(
-				        SELECT   tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
+				        SELECT   tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO, tphsod.SLIP_FG, tphso.SLIP_KIND, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
 				        ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
 				        ,        DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
 				        ,        tphsod.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC
@@ -317,12 +319,15 @@
 				        ,        tphsod.REMARK
 				        ,        the.ENVST_VAL AS ENVST0011
 				        ,        thpb.BARCD_CD
-				        FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+				        FROM     TB_PO_HQ_STORE_OUTSTOCK 	 tphso
+				        ,		 TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
 				        ,        TB_HQ_PRODUCT thp
 				        ,        TB_HQ_PRODUCT_BARCD thpb
 				        ,        TB_HQ_ENVST the
 				        WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
 				        AND      tphsod.SLIP_NO         =   #{slipNo}
+				        AND		 tphso.HQ_OFFICE_CD		=	tphsod.HQ_OFFICE_CD
+				        AND		 tphso.SLIP_NO			=	tphsod.SLIP_NO
 				        AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
 				        AND      thp.PROD_CD            =   tphsod.PROD_CD
 				        AND      thpb.HQ_OFFICE_CD  (+) =   tphsod.HQ_OFFICE_CD
@@ -354,6 +359,9 @@
 			                AND     X.STORAGE_CD    =    Y.STORAGE_CD
 							AND     Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
 			                AND     Y.SLIP_NO       =	#{slipNo}
+			                WHERE   X.HQ_OFFICE_CD  	= 	#{hqOfficeCd}
+				              AND     X.USE_YN    		= 	'Y'
+				              AND     X.AREA_FG       	=   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
 						)	B
 						ON		A.HQ_OFFICE_CD  =	B.HQ_OFFICE_CD
 					    AND     A.SLIP_NO       = 	B.SLIP_NO
@@ -362,6 +370,7 @@
 		GROUP
 		BY      A.SLIP_NO
 		,      	A.SLIP_FG
+		,      	A.SLIP_KIND
 		,      A.PROD_CD
 		,      A.PROD_NM
 		,      A.SEQ

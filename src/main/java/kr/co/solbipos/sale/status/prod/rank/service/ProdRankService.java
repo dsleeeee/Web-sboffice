@@ -11,4 +11,7 @@ public interface ProdRankService {
 
     /** 상품별 매출 - 차트 조회 */
     List<DefaultMap<String>> getProdRankChartList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO);
+    
+    /** 상품별 매출 - 엑셀다운로드 조회 */
+    List<DefaultMap<String>> getProdRankExcelList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO);
 }

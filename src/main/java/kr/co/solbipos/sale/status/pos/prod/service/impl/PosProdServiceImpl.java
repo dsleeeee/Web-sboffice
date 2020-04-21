@@ -40,6 +40,17 @@ public class PosProdServiceImpl implements PosProdService {
         return posProdMapper.getPosProdList(posProdVO);
     }
 
+    /** 포스별매출상품별 - 리스트 조회 (엑셀) */
+    @Override
+    public List<DefaultMap<String>> getPosProdExcelList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {
+    	posProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+//    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
+//    		posProdVO.setArrStoreCd(posProdVO.getStoreCd().split(","));
+//		}
+        return posProdMapper.getPosProdExcelList(posProdVO);
+    }
+
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPosNmList(PosProdVO posProdVO, SessionInfoVO sessionInfoVO) {

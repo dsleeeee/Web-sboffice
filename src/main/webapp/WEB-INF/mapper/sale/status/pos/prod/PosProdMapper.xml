@@ -127,7 +127,7 @@
 				            AND B.PROD_CLASS_CD = A.LV3_CD
 				            AND B.PROD_CD       = TSDPP.PROD_CD
 				            AND TSDPP.HQ_OFFICE_CD  = #{hqOfficeCd}
-				            AND TSDPP.STORE_CD      = #{storeCd}					
+				            AND TSDPP.STORE_CD      = #{storeCd}
 		         		</when>
 		         	</choose>
 		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -153,10 +153,10 @@
 					(
 						SELECT	DISTINCT TSDPP.STORE_CD || '||' || TSDPP.POS_NO AS STORE_CD
 								, TSDPP.PROD_CD AS PROD_CD_TEMP
-		                        , TSDPP.TOT_SALE_AMT AS SALE_AMT
-		                        , TSDPP.TOT_DC_AMT AS DC_AMT
-		                        , TSDPP.REAL_SALE_AMT AS REAL_SALE_AMT
-		                        , TSDPP.TOT_SALE_QTY AS SALE_CNT
+		                        , SUM(TSDPP.TOT_SALE_AMT) AS SALE_AMT
+                                , SUM(TSDPP.TOT_DC_AMT) AS DC_AMT
+                                , SUM(TSDPP.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                , SUM(TSDPP.TOT_SALE_QTY) AS SALE_CNT
 		                FROM    TB_SL_DAILY_POS_PROD TSDPP
 		                WHERE   TSDPP.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -171,6 +171,7 @@
 							<if test='endDate != null and endDate != ""'>
 								AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 							</if>
+					    GROUP BY TSDPP.STORE_CD || '||' || TSDPP.POS_NO, TSDPP.PROD_CD
 		            )
 		            SELECT  *
 		            FROM    T
@@ -186,6 +187,188 @@
 		        WHERE   A.PROD_CD = B.PROD_CD_TEMP
 		        ORDER BY A.PROD_CD
 		        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+	<!-- 포스별매출요일별 - 리스트 조회 (엑셀) -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_POS
+        PARAM    : posProdVO
+        COMMENTS : 포스별매출요일별 - 리스트를 조회한다.
+    -->
+    <select id="getPosProdExcelList" parameterType="posProdVO" resultType="DefaultMap">
+    	SELECT	A.PROD_CD
+    			, A.PROD_NM
+    			, A.LV1_NM
+                , A.LV2_NM
+                , A.LV3_NM
+    			, A.SALE_STORE_CNT
+    			, A.TOT_SALE_AMT
+    			, A.TOT_DC_AMT
+    			, A.TOT_REAL_SALE_AMT
+    			, A.TOT_SALE_CNT
+    			, B.*
+    	FROM	(
+		            SELECT	TSDPP.PROD_CD AS PROD_CD
+		            		, B.PROD_NM AS PROD_NM
+		            		, A.LV1_NM
+                			, A.LV2_NM
+                			, A.LV3_NM
+    						, COUNT(DISTINCT TSDPP.STORE_CD) AS SALE_STORE_CNT
+    						, SUM(TSDPP.TOT_SALE_AMT) AS TOT_SALE_AMT
+    						, SUM(TSDPP.TOT_DC_AMT) AS TOT_DC_AMT
+    						, SUM(TSDPP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+    						, SUM(TSDPP.TOT_SALE_QTY) AS TOT_SALE_CNT
+    		<choose>
+				<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+		    				FROM    TB_SL_DAILY_POS_PROD TSDPP
+		    						, (
+		    						     SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+				                                 A.PROD_CLASS_CD     AS LV2_CD,
+				                                 A.PROD_CLASS_NM     AS LV2_NM,
+				                                 B.PROD_CLASS_CD     AS LV3_CD,
+				                                 B.PROD_CLASS_NM     AS LV3_NM,
+				                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
+				                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
+				                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+				                         FROM    (
+				                                     SELECT  HQ_OFFICE_CD,
+				                                           P_PROD_CLASS_CD,
+				                                           PROD_CLASS_CD,
+				                                           PROD_CLASS_NM
+				                                     FROM    TB_HQ_PRODUCT_CLASS
+				                                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+				                                     AND     P_PROD_CLASS_CD IN (
+				                                                                    SELECT  PROD_CLASS_CD
+				                                                                    FROM    TB_HQ_PRODUCT_CLASS
+				                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+				                                                                    AND     P_PROD_CLASS_CD = '00000'
+				                                                                 )
+				                                 )                      A,
+				                                 TB_HQ_PRODUCT_CLASS    B
+				                         WHERE   B.P_PROD_CLASS_CD IN    (
+				                                                             SELECT  PROD_CLASS_CD
+				                                                             FROM    TB_HQ_PRODUCT_CLASS
+				                                                             WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+				                                                             AND     P_PROD_CLASS_CD IN (
+				                                                                                      SELECT  PROD_CLASS_CD
+				                                                                                            FROM    TB_HQ_PRODUCT_CLASS
+				                                                                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+				                                                                                            AND     P_PROD_CLASS_CD = '00000'
+				                                                                                         )
+				                                                         )
+				                         AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+				                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+				                     )                   A,
+				                     TB_HQ_PRODUCT       B
+		    				WHERE    B.HQ_OFFICE_CD   =  #{hqOfficeCd}
+						            AND B.PROD_CLASS_CD = A.LV3_CD
+						            AND B.PROD_CD       = TSDPP.PROD_CD
+						            AND TSDPP.HQ_OFFICE_CD  =  #{hqOfficeCd}
+						</when>
+		         		<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+							FROM    TB_SL_DAILY_POS_PROD TSDPP
+		    						, (
+				    					SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
+				                                 A.PROD_CLASS_CD     AS LV2_CD,
+				                                 A.PROD_CLASS_NM     AS LV2_NM,
+				                                 B.PROD_CLASS_CD     AS LV3_CD,
+				                                 B.PROD_CLASS_NM     AS LV3_NM,
+				                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
+				                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
+				                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
+				                         FROM    (
+				                                     SELECT  STORE_CD,
+				                                           P_PROD_CLASS_CD,
+				                                           PROD_CLASS_CD,
+				                                           PROD_CLASS_NM
+				                                     FROM    TB_MS_PRODUCT_CLASS
+				                                     WHERE   STORE_CD        = #{storeCd}
+				                                     AND     P_PROD_CLASS_CD IN (
+				                                                                    SELECT  PROD_CLASS_CD
+				                                                                    FROM    TB_MS_PRODUCT_CLASS
+				                                                                    WHERE   STORE_CD        = #{storeCd}
+				                                                                    AND     P_PROD_CLASS_CD = '00000'
+				                                                                 )
+				                                 )                      A,
+				                                 TB_MS_PRODUCT_CLASS    B
+				                         WHERE   B.P_PROD_CLASS_CD IN    (
+				                                                             SELECT  PROD_CLASS_CD
+				                                                             FROM    TB_MS_PRODUCT_CLASS
+				                                                             WHERE   STORE_CD        = #{storeCd}
+				                                                             AND     P_PROD_CLASS_CD IN (
+				                                                                                      SELECT  PROD_CLASS_CD
+				                                                                                            FROM    TB_MS_PRODUCT_CLASS
+				                                                                                            WHERE   STORE_CD        = #{storeCd}
+				                                                                                            AND     P_PROD_CLASS_CD = '00000'
+				                                                                                         )
+				                                                         )
+				                         AND     A.STORE_CD      = B.STORE_CD
+				                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+				                     )                   A,
+				                     TB_MS_PRODUCT       B
+							WHERE B.STORE_CD      = #{storeCd}
+				            AND B.PROD_CLASS_CD = A.LV3_CD
+				            AND B.PROD_CD       = TSDPP.PROD_CD
+				            AND TSDPP.HQ_OFFICE_CD  = #{hqOfficeCd}
+				            AND TSDPP.STORE_CD      = #{storeCd}
+		         		</when>
+		         	</choose>
+		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
+                        	AND TSDPP.STORE_CD||'||'||TSDPP.POS_NO IN
+                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+                            	#{item}
+                        	</foreach>
+                    	</if>
+		            	<if test='startDate != null and startDate != ""'>
+		            		AND TSDPP.SALE_DATE >= #{startDate}
+		            	</if>
+		            	<if test='endDate != null and endDate != ""'>
+		            		AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		            	</if>
+		            GROUP BY TSDPP.PROD_CD
+		            		 , B.PROD_NM
+		            		 , A.LV1_NM
+		                     , A.LV2_NM
+		                     , A.LV3_NM
+				) A,
+				(
+					WITH T AS
+					(
+						SELECT	DISTINCT TSDPP.STORE_CD || '||' || TSDPP.POS_NO AS STORE_CD
+								, TSDPP.PROD_CD AS PROD_CD_TEMP
+		                        , SUM(TSDPP.TOT_SALE_AMT) AS SALE_AMT
+                                , SUM(TSDPP.TOT_DC_AMT) AS DC_AMT
+                                , SUM(TSDPP.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                , SUM(TSDPP.TOT_SALE_QTY) AS SALE_CNT
+		                FROM    TB_SL_DAILY_POS_PROD TSDPP
+		                WHERE   TSDPP.HQ_OFFICE_CD = #{hqOfficeCd}
+							<if test='arrStorePos != null and arrStorePos.length >= 0'>
+	                        	AND TSDPP.STORE_CD||'||'||TSDPP.POS_NO IN
+	                        	<foreach collection="arrStorePos" item="item" open="(" close=")" separator=",">
+	                            	#{item}
+	                        	</foreach>
+	                    	</if>
+							<if test='startDate != null and startDate != ""'>
+								AND TSDPP.SALE_DATE >= #{startDate}
+							</if>
+							<if test='endDate != null and endDate != ""'>
+								AND TSDPP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+							</if>
+					    GROUP BY TSDPP.STORE_CD || '||' || TSDPP.POS_NO, TSDPP.PROD_CD
+		            )
+		            SELECT  *
+		            FROM    T
+		            PIVOT	(
+		                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+		                        FOR STORE_CD IN (
+		                        	<foreach collection="arrStorePos" item="item" separator=",">
+										'${item}'
+									</foreach>
+	                        	)
+		            		)
+		        ) B
+		        WHERE   A.PROD_CD = B.PROD_CD_TEMP
+		        ORDER BY A.PROD_CD
     </select>
 
     <select id="getStorePosList" parameterType="posProdVO" resultType="DefaultMap">

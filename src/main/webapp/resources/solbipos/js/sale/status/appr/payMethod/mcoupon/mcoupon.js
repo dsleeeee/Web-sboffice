@@ -259,7 +259,7 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
     $timeout(function () {
       wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
         includeColumnHeaders: true,
-        includeCellStyles   : false,
+        includeCellStyles   : true,
         includeColumns      : function (column) {
           return column.visible;
         }

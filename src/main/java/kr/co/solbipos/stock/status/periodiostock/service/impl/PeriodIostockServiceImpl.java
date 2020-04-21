@@ -50,4 +50,22 @@ public class PeriodIostockServiceImpl implements PeriodIostockService {
 			return periodIostockMapper.getPeriodiostockProdStoreDtlList(periodIostockVO);
 		}
 	}
+
+	@Override
+	public List<DefaultMap<String>> getPeriodIostockExcelList(PeriodIostockVO periodIostockVO,
+			SessionInfoVO sessionInfoVO) {
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(periodIostockVO.getVendrCd()).equals("")) {
+        	periodIostockVO.setArrVendrCd(periodIostockVO.getVendrCd().split(","));
+        }
+        
+		periodIostockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		periodIostockVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+		if(sessionInfoVO.getOrgnFg() != null && sessionInfoVO.getOrgnFg().toString().equals("HQ")) {
+			return periodIostockMapper.getPeriodIostockExcelList(periodIostockVO);
+		} else {
+			return periodIostockMapper.getPeriodIostockStoreExcelList(periodIostockVO);
+		}
+	}
 }

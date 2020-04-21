@@ -116,9 +116,13 @@ public class PosMonthController {
 
         }
 
-        List<DefaultMap<String>> list = posMonthService.getPosMonthList(posMonthVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posMonthVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posMonthVO);
+        if (posMonthVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posMonthVO);
+        } else {
+        	List<DefaultMap<String>> list = posMonthService.getPosMonthList(posMonthVO, sessionInfoVO);
+        	//System.out.println("list.size() :: "+posMonthVO.getArrPosCd().length);
+        	return ReturnUtil.returnListJson(Status.OK, list, posMonthVO);
+        }
     }
 
 }

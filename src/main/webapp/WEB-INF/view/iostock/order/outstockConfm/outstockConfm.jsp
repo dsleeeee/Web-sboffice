@@ -8,7 +8,10 @@
 
 <div class="subCon" ng-controller="outstockConfmCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -110,12 +113,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10 fr">
     <p class="s14 bk fl mr10 lh30"><s:message code="outstockConfm.reqNoConfirm"/> : </p>
     <p class="s14 bk fl mr10 lh30 red" id="reqNoConfirmCnt"></p>
@@ -127,8 +124,8 @@
       <span class="txtIn"><input id="outDate" class="w120px"></span>
     </div>
     <%-- 출고자료생성 --%>
-    <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">
-      <s:message code="outstockConfm.outstockConfirm"/></button>
+<!--     <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()"> -->
+<%--       <s:message code="outstockConfm.outstockConfirm"/></button> --%>
   </div>
   <div style="clear: both;"></div>
 

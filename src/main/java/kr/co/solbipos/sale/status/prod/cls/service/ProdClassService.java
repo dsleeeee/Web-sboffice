@@ -8,5 +8,7 @@ import java.util.List;
 public interface ProdClassService {
 	/** 상품별 매출 - 상품매출순위 리스트 조회 */
     List<DefaultMap<String>> getProdClassList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO);
-
+    
+    /** 상품별 매출 - 상품매출순위 엑셀 조회 */
+    List<DefaultMap<String>> getProdClassExcelList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO);
 }

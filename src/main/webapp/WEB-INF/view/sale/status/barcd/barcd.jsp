@@ -116,7 +116,8 @@
 	            <button class="btn_skyblue fr" ng-click="excelDownloadBarcd()"><s:message code="cmm.excel.down" />
 	            </button>
             </div>
-            <div class="wj-TblWrapBr1">
+            <div class="wj-TblWrapBr1"  id="wjWrapType1">
+            		<div class="wj-gridWrap col2-t2">
                    <wj-flex-grid
                       id="barcdGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -142,9 +143,10 @@
                       <jsp:param name="pickerTarget" value="barcdMainCtrl"/>
                     </jsp:include>
                     <%--// ColumnPicker 사용시 include --%>
+              </div>
             </div>
             <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
+            <div class="pageNum3 mt20">
               <ul id="barcdMainCtrlPager" data-size="10">
               </ul>
             </div>
@@ -174,7 +176,8 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadBarcdDtl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-                <div class="wj-TblWrapBr1">
+                <div class="wj-TblWrapBr1" id="wjWrapType1">
+                	<div class="wj-gridWrap col2-t2">
                        <wj-flex-grid
                           id="barcdDtlGrid"
                           autoGenerateColumns="false"
@@ -199,9 +202,10 @@
                           <jsp:param name="pickerTarget" value="barcdDtlCtrl"/>
                         </jsp:include>
                         <%--// ColumnPicker 사용시 include --%>
+                  </div>
                 </div>
               <%-- 페이지 리스트 --%>
-              <div class="pageNum mt20">
+              <div class="pageNum3 mt20">
                 <ul id="barcdDtlCtrlPager" data-size="10">
                 </ul>
               </div>

@@ -123,13 +123,14 @@
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="versusPeriodWeekSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
-		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
-		    </button>
+			
+			<div class="fr">
 		    <%-- 차트 --%>
-		    <button class="btn_skyblue fr" id="btnShowChart">
-			<s:message code="cmm.chart" />
-		</button>
+		    <button class="btn_skyblue" id="btnShowChart"><s:message code="cmm.chart" /></button>
+		    <%-- 엑셀 다운로드 //TODO --%>
+		    <button class="btn_skyblue" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" /></button>
+			</div>
+			<div class="clearfix"></div>
 		</div>
 
 		<%--위즈모 테이블--%>
@@ -155,7 +156,7 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" binding="ratB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum"  format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum"  format="n2"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
@@ -170,18 +171,17 @@
 </div>
 
 <%--layer:For Center screen--%>
-<div class="fullDimmed versusPeriodWeekLayer" id="versusPeriodWeekMask" style="display: none; z-index:4;"></div>
-<div class="layer versusPeriodWeekLayer" id="versusPeriodWeekLayer" style="display: none; z-index:5;">
+<div class="fullDimmed versusPeriodWeekLayer" id="versusPeriodWeekMask" style="display: none"></div>
+<div class="layer versusPeriodWeekLayer" id="versusPeriodWeekLayer" style="display: none; z-index:1499;">
     <div class="layer_inner">
 
         <%--layerContent--%>
-        <div class="title" style="width:1010px">
-            <p class="tit" id="versusPeriodWeekTitle" style="padding-left:20px">
-            </p>
+        <div class="title" style="width:980px; padding:0">
+            <p class="tit" id="versusPeriodWeekTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
             <a href="#" class="btn_close _btnClose"></a>
 
             <%--위즈모 테이블--%>
-		    <div class="w100 mt10" id="wjWrapType1" ng-controller="versusPeriodWeekChartCtrl">
+		    <div class="w100" id="wjWrapType1" ng-controller="versusPeriodWeekChartCtrl">
 		    	<div class="wj-gridWrap" style="display:none;" >
 		    		<wj-flex-grid
 						id="versusPeriodWeekChartGrid"

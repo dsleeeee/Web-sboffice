@@ -117,7 +117,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.mrhst.nm"/>"                     binding="storeNm"            width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleMonth"/>"         binding="saleGoalYm"         width="150" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.monthDay"/>"          binding="saleGoalDateCnt"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleCnt"/>"           binding="saleDateCnt"        width="100" align="right"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleCnt"/>"           binding="saleDateCnt"        width="100" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalDay.monthGoalAmt"/>"        binding="saleGoalMonthlyAmt" width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTotSale"/>"        binding="saleGoalAmt"        width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.realSaleAmt"/>"       binding="totSaleAmt"         width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

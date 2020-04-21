@@ -13,4 +13,11 @@ public interface CurrUnityService {
     List<DefaultMap<String>> getCurrUnityHqDtlList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO);
     /** 본사매장통합현재고 - 본사매장통합현재고 매장 상세 리스트 조회 */
     List<DefaultMap<String>> getCurrUnityStoreDtlList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO);
+    
+    /** 본사매장통합현재고 - 본사매장통합현재고 전체 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getCurrUnityExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO);
+    /** 본사매장통합현재고 - 본사매장통합현재고 본사 상세 전체 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getCurrUnityHqDtlExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO);
+    /** 본사매장통합현재고 - 본사매장통합현재고 매장 상세 전체 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getCurrUnityStoreDtlExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO);
 }

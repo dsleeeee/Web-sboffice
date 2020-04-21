@@ -249,14 +249,17 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		}, 10);
 	};
 
-	//매장의 테이블 리스트 조회
-	$scope.getTableNmList = function () {
+	// 조회조건 매장 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectStore = function () {
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
+		$scope.getReTableNmList(storeCd, "",  false);
+	};
 
+	// 조회조건 테이블 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectTable = function () {
 		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
 		$scope.getReTableNmList(storeCd, tableCd,  false);
-		$("#tableDayOfWeekSelectTableNm").val(messages["cmm.all"]);
-		$("#tableDayOfWeekSelectTableCd").val("");
 	};
 
 	//매장의 테이블 리스트 재생성

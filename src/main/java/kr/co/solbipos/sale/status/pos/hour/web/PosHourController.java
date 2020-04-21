@@ -116,9 +116,13 @@ public class PosHourController {
 
         }
 
-        List<DefaultMap<String>> list = posHourService.getPosDayList(posHourVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posHourVO);
+        if (posHourVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posHourVO);
+        } else {
+        	List<DefaultMap<String>> list = posHourService.getPosDayList(posHourVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posHourVO);
+        }
     }
 
 

@@ -161,6 +161,7 @@
         -->
 		SELECT  A.SLIP_NO,
 		        A.SLIP_FG,
+		        A.SLIP_KIND,
 		        A.PROD_CD,
 		        A.PROD_NM,
 		        A.SEQ,
@@ -207,6 +208,7 @@
 		FROM    (
 		            SELECT  A.SLIP_NO,
 		                    A.SLIP_FG,
+		                    A.SLIP_KIND,
 		                    A.PROD_CD,
 		                    A.PROD_NM,
 		                    A.SEQ,
@@ -254,6 +256,7 @@
 		            FROM    (
 		                        SELECT  A.HQ_OFFICE_CD,
 		                                A.SLIP_NO,
+		                                E.SLIP_KIND,
 		                                A.SLIP_FG,
 		                                A.PROD_CD,
 		                                B.PROD_NM,
@@ -290,12 +293,15 @@
 		                                A.REMARK,
 		                                D.ENVST_VAL                                                                     AS ENVST0011,
 		                                C.BARCD_CD
-		                        FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL    A,
+		                        FROM    TB_PO_HQ_STORE_OUTSTOCK    	   E,
+		                        		TB_PO_HQ_STORE_OUTSTOCK_DTL    A,
 		                                TB_HQ_PRODUCT                  B,
 		                                TB_HQ_PRODUCT_BARCD            C,
 		                                TB_HQ_ENVST                    D
 		                        WHERE   A.HQ_OFFICE_CD         = #{hqOfficeCd}
 		                        AND     A.SLIP_NO              = #{slipNo}
+		                        AND     E.HQ_OFFICE_CD         = A.HQ_OFFICE_CD
+		                        AND     E.SLIP_NO              = A.SLIP_NO
 		                        AND     B.HQ_OFFICE_CD         = A.HQ_OFFICE_CD
 		                        AND     B.PROD_CD              = A.PROD_CD
 		                        AND     C.HQ_OFFICE_CD     (+) = A.HQ_OFFICE_CD
@@ -337,6 +343,7 @@
 		GROUP BY
 		            A.SLIP_NO,
 		            A.SLIP_FG,
+		            A.SLIP_KIND,
 		            A.PROD_CD,
 		            A.PROD_NM,
 		            A.SEQ,

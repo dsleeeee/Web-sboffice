@@ -14,6 +14,8 @@
   <div class="searchBar flddUnfld">
     <%-- <a href="#" class="open fl">${menuNm}</a> --%>
     <a href="#" class="open fl"><s:message code="saleAnalsMonthly.title"/></a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" ng-click="_broadcast('saleAnalsMonthlyCtrl')"><s:message code="cmm.search" /></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -70,15 +72,6 @@
     </tr> --%>
     </tbody>
   </table>
-  
-  
-
-    <%-- 조회 --%>
-    <div class="fr mt10" style="position: relative">
-      <button class="btn_blue fr" ng-click="_broadcast('saleAnalsMonthlyCtrl')">
-        <s:message code="cmm.search" />
-      </button>
-    </div>
 
     <div class="clearfix"></div>
 

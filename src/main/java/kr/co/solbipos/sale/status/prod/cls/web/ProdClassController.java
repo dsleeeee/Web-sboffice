@@ -101,4 +101,26 @@ public class ProdClassController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodClassVO);
     }
+    
+    /**
+     * 상품별 매출 -분류별상품 엑셀 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodRnakVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 20.
+     */
+    
+    @RequestMapping(value = "/class/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdCalssExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdClassVO prodClassVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodClassService.getProdClassExcelList(prodClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodClassVO);
+    }
 }

@@ -72,6 +72,35 @@ public class TableDayController {
 		return ReturnUtil.returnListJson(Status.OK, list, tableDayVO);
 	}
 
+	/** 테이블별 - 일자별 엑셀 리스트 조회 */
+	@RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getTableDayExcelList(HttpServletRequest request, HttpServletResponse response, TableDayVO tableDayVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		// 테이블 리스트 조회
+        List<DefaultMap<String>> tblColList = tableDayService.getStoreTableList(tableDayVO, sessionInfoVO);
+
+        // 테이블 목록을 , 로 연결하는 문자열 생성
+        String tblCol = "";
+        if(tableDayVO.getTableCd() == "" ) {
+        	for(int i=0; i < tblColList.size(); i++) {
+        		tblCol += (tblCol.equals("") ? "" : ",") + tblColList.get(i).getStr("nmcodeCd");
+        	}
+        }
+        else {
+        	tblCol += tableDayVO.getTableCd() + ",";
+        }
+        tableDayVO.setTableCd(tblCol);
+
+		// 테이블 목록 컬럼 쿼리 추가
+		tableDayVO = setCol(tableDayVO);
+		List<DefaultMap<String>> list = tableDayService.getTableDayExcelList(tableDayVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, tableDayVO);
+	}
+
 	/** 테이블별 = 매장코드로 해당 매장의 테이블 목록 조회, 콤보박스 데이터 */
 	@RequestMapping(value = "/day/tableNmList.sb", method = RequestMethod.POST)
 	@ResponseBody

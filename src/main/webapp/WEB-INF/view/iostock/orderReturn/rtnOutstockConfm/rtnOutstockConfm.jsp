@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="rtnOutstockConfmCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnOutstockConfmCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -109,13 +111,7 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnOutstockConfmCtrl')"><s:message code="cmm.search"/></button>
-  </div>
-  <div style="clear: both;"></div>
-
-  <div class="w100 mt10">
+  <div class="w100 mt40">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px;">
       <wj-flex-grid

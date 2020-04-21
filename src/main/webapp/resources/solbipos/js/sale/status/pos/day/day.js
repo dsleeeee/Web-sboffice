@@ -144,10 +144,10 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 
-	    if( $("#posDaySelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+		/*if( params.arrPosCd == null || params.arrPosCd == undefined || params.arrPosCd == ""){
+	   	 	$scope._popMsg(messages["pos.require.arrPosCd"]); // 포스 정보가 존재하지 않습니다.
 	   	 	return false;
-	    }
+	    }*/
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
@@ -570,8 +570,6 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 			          grid.columns.removeAt(grid.columns.length-1);
 			    }
 			}
-
-			console.log(flex.rows.length);
 
 			if (flex.rows.length <= 0) {
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.

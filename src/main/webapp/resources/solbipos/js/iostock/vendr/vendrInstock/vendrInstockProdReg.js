@@ -198,8 +198,11 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
 //	    var inVat   = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
 //	    var inTot   = parseInt(inAmt + inVat);	  
 	  
-      var unitQty     = (parseInt(nvl(item.prevOrderUnitQty, 0))	+ parseInt(nvl(eval('item.arrInUnitQty_' + idx), 0))) * parseInt(item.poUnitQty);
-      var etcQty      = parseInt(nvl(item.prevOrderEtcQty, 0))		+ parseInt(nvl(eval('item.arrInEtcQty_'  + idx), 0));
+//      var unitQty     = (parseInt(nvl(item.prevInUnitQty, 0))	+ parseInt(nvl(eval('item.arrInUnitQty_' + idx), 0))) * parseInt(item.poUnitQty);
+//      var etcQty      = parseInt(nvl(item.prevInEtcQty, 0))		+ parseInt(nvl(eval('item.arrInEtcQty_'  + idx), 0));
+      
+      var unitQty     = parseInt(nvl(eval('item.arrInUnitQty_' + idx), 0)) * parseInt(item.poUnitQty);
+      var etcQty      = parseInt(nvl(eval('item.arrInEtcQty_'  + idx), 0));      
       console.log('unitQty: ' + unitQty);
       console.log('etcQty : ' + etcQty );
       var totQty      = parseInt(unitQty + etcQty);
@@ -207,9 +210,9 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
       var inAmt       = tempAmt - Math.round(tempAmt * vat01 * vendrVatFg01 / 11);
       var inVat       = Math.round(tempAmt * vat01 / (10 + vendrVatFg01));
       var inTot       = parseInt(inAmt + inVat);
-      console.log('inAmt: ' + inAmt);
-      console.log('inVat : ' + inVat );
-      console.log('inTot : ' + inTot );
+//      console.log('inAmt: ' + inAmt);
+//      console.log('inVat : ' + inVat );
+//      console.log('inTot : ' + inTot );
       eval('item.arrInTotQty_'+ idx + ' = totQty;');	//총입고수량
       eval('item.arrInAmt_' 	+ idx + ' = inAmt;'	); 	//금액
       eval('item.arrInVat_' 	+ idx + ' = inVat;'	); 	//VAT
@@ -232,7 +235,9 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
 	        	eval('arrInVat		+= parseInt(nvl(item.arrInVat_'		+ i + ',0));');
 	            eval('arrInTot		+= parseInt(nvl(item.arrInTot_'		+ i + ',0));');			
 	        }
-	     
+	        console.log("calcamt arrInUnitQty::"+arrInUnitQty);
+	        console.log("calcamt arrInEtcQty::"+arrInEtcQty);
+	        console.log("calcamt arrInTotQty::"+arrInTotQty);
 	        item.inUnitQty	= arrInUnitQty; //입고수량 - 단위
 	        item.inEtcQty   = arrInEtcQty;  //입고수량 - 나머지
 	        item.inTotQty   = arrInTotQty;  //총입고수량
@@ -310,6 +315,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
         var grid 			= $scope.flex;
         var item;
     	for(var i=0; i<grid.collectionView.items.length; i++){
+    		
             item 			= grid.collectionView.items[i];
 
             arrProdCd   [i] = item.prodCd;
@@ -365,11 +371,11 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
             	grid.columnHeaders.setCellData(0, 'arrInVat_'		+ j, arrStorageNm[i][j]);
                 grid.columnHeaders.setCellData(0, 'arrInTot_'		+ j, arrStorageNm[i][j]);
 
-                grid.setCellData(i, 'arrInUnitQty_'	+ j,	arrInUnitQty[i][j]);
-                grid.setCellData(i, 'arrInEtcQty_'	+ j,	arrInEtcQty	[i][j]);
-                grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
-                grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
-                grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
+//                grid.setCellData(i, 'arrInUnitQty_'	+ j,	arrInUnitQty[i][j]);
+//                grid.setCellData(i, 'arrInEtcQty_'	+ j,	arrInEtcQty	[i][j]);
+//                grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
+//                grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
+//                grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
 
         	}	//for(var j=0; j<arrStorageCd[i].length; j++){
 
@@ -384,7 +390,7 @@ app.controller('vendrInstockProdRegCtrl', ['$scope', '$http', '$timeout', functi
 
         for(var i=0; i<grid.collectionView.items.length; i++){
     		//console.log('$scope.calcAmt - Before: ' + i);
-        	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+//        	$scope.calcAmt($scope.flex.collectionView.items[i], i);
         	//console.log('$scope.calcAmt - After : ' + i);
         }
         /*

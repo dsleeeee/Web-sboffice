@@ -199,6 +199,8 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     var params       = {};
     params.slipFg    = $scope.slipFg;
     params.strSlipNo = strSlipNo;
+    params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
 
     // 상품
     if (reportFg === 'prod') {

@@ -148,7 +148,7 @@
                     AND     B.SALE_DATE     BETWEEN #{dateBefore13}
                                             AND     #{dateBefore0}
                 	<if test="prodCd != null and prodCd != ''">
-                    AND     A.PROD_CD       LIKE '%' || #{prodCd} || '%'
+                    AND     A.PROD_CD       = #{prodCd}
                 	</if>
                 	<if test="prodNm != null and prodNm != ''">
                     AND     A.PROD_NM       LIKE '%' || #{prodNm} || '%'

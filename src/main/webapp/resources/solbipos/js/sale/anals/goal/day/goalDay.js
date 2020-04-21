@@ -150,7 +150,7 @@ app.controller('goalDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			  grid.columns.push(new wijmo.grid.Column({header: messages["goal.goalDay.dayGoalAmt"], binding: 'saleGoalAmt'+i, width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 	          grid.columns.push(new wijmo.grid.Column({header: messages["goal.goalDay.daySale"], binding: 'totSaleAmt'+i, width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 	          grid.columns.push(new wijmo.grid.Column({header: messages["goal.goalDay.totSale"], binding: 'acc'+i, width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-	          grid.columns.push(new wijmo.grid.Column({header: messages["goal.goalDay.goalAchv"], binding: 'goalAchi'+i, width: 100, align: 'right', isReadOnly: 'true', dataType: 'Number', format: 'p1', aggregate: 'Sum'}));
+	          grid.columns.push(new wijmo.grid.Column({header: messages["goal.goalDay.goalAchv"], binding: 'goalAchi'+i, width: 100, align: 'center', isReadOnly: 'true', dataType: 'Number', format: 'p1', aggregate: 'Sum'}));
 	          
 	          grid.columnHeaders.setCellData(0, 'saleGoalAmt'+i, "<" + storeNm + ">" +  messages["goal.goalDay.monthGoalAmt"] + " : " + String(saleGoalAmt).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));
 	          grid.columnHeaders.setCellData(0, 'totSaleAmt'+i, "<" + storeNm + ">" +  messages["goal.goalDay.monthGoalAmt"] + " : " + String(saleGoalAmt).replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,'));

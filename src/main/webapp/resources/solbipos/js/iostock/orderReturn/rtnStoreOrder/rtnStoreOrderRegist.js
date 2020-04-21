@@ -166,7 +166,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   $scope.calcAmt = function (item, idx) {
   	//$scope.flex.collectionView.editItem(item);
 
-	  var orderSplyUprc = parseInt(item.saleUprc);
+	  var orderSplyUprc = parseInt(item.orderSplyUprc);
 	  var poUnitQty     = parseInt(item.poUnitQty);
 	  var vat01         = parseInt(item.vatFg01);
 	  var envst0011     = parseInt(item.envst0011);

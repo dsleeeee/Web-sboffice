@@ -266,12 +266,9 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
             }
         }
+        
+        return returnResult;
 
-        if ( returnResult == rtnStoreOrderDtlVOs.length) {
-            return returnResult;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
     }
     
     /** 반품등록 반품상품상세 저장 */
@@ -425,12 +422,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
             }
         }
-
-        if ( returnResult == rtnStoreOrderDtlVOs.length) {
-            return returnResult;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        
+        return returnResult;
     }
     
     

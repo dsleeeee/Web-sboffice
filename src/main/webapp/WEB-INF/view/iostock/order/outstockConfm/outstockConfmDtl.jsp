@@ -138,11 +138,12 @@
             initialized="initGrid(s,e)"
             is-read-only="false"
             item-formatter="_itemFormatter"
-			frozen-columns		="6">	<%-- allowMerging		="Cells" --%>            
+			frozen-columns		="7">	<%-- allowMerging		="Cells" --%>            
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.slipNo"/>" binding="slipNo" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.slipFg"/>" binding="slipFg" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.slipFg"/>" binding="slipKind" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.seq"/>" binding="seq" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockConfm.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>

@@ -107,16 +107,16 @@
 					text-changed="_checkValidation(s)">
 				</wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="text" id="dcDcfgSelectStoreStoreNum" ng-model="storeNum">
+					<input type="text" id="dcDcfgSelectStoreStoreNum" ng-model="storeNum" class="inputTxt">
 				</c:if>
 				<%-- 할인구분별 매출 엑셀다운로드 --%>
-				<button class="btn_skyblue fr" ng-click="excelDownloadDcDcfg()">
+				<button class="btn_skyblue fr" ng-click="excelDownload()">
 					<s:message code="cmm.excel.down" />
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
 			<div class="w100 mt10" id="wjWrapType1">
-              <div class="wj-gridWrap">
+              <div class="wj-gridWrap col2-t2">
 				<wj-flex-grid loaded-rows="loadedRows(s,e)" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -137,7 +137,7 @@
 			 </div>
 			</div>
 			<%--//위즈모 테이블--%>
-			<div class="pageNum mt20">
+			<div class="pageNum3 mt20">
 			<%-- id --%>
 				<ul id="dcDcfgMainCtrlPager" data-size="10"></ul>
 			</div>
@@ -155,8 +155,8 @@
 				</button>
 			</div>
 			<%--위즈모 테이블--%>
-			<div class="w100 mt10 dtl">
-              <div class="wj-gridWrap">
+			<div class="w100 mt10 dtl"  id="wjWrapType1">
+              <div class="wj-gridWrap col2-t2">
 				<wj-flex-grid id="dcfgDtlGrid" autoGenerateColumns="false" selection-mode="Row" items-source="data" control="flex" initialized="initGrid(s,e)" is-read-only="false" item-formatter="_itemFormatter">
 					<!-- define columns -->
 					<wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -183,6 +183,34 @@
 		</div>
 	</div>
 
+    <%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="dcDcfgExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="dcDcfgExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                loaded-rows="loadedRows(s,e)"
+                is-read-only="true"
+                frozen-columns="7"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.storeNm"/>" binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.dcCd"/>" binding="dcCd" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.dcNm"/>" binding="dcNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.totSaleQty"/>" binding="totSaleQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.totDcAmt"/>" binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dcDcfg.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript"

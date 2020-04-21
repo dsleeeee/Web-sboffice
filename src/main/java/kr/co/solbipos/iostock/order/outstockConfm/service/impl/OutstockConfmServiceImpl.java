@@ -10,6 +10,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
+import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 
 import org.slf4j.Logger;
@@ -107,7 +108,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
     /** 출고확정 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO) {
+    public List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO) {
+        
+    	// regId, regDt, modId, modDt, hqOfficd, storeCd 세팅
+    	outstockConfmVO = setSessionValue(outstockConfmVO, sessionInfoVO, null);
+    	
         return outstockConfmMapper.getOutstockConfmDtlList(outstockConfmVO);
     }
 
@@ -155,13 +160,15 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                 outstockConfmHdVO.setModDt(currentDt);
             }
 
-            int slipFg     = outstockConfmVO.getSlipFg();
-            int outUnitQty = (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
-            int outEtcQty  = (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
-            int outTotQty  = (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;
-            Long outAmt    = (outstockConfmVO.getOutAmt()     == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
-            Long outVat    = (outstockConfmVO.getOutVat()     == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
-            Long outTot    = (outstockConfmVO.getOutTot()     == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
+            int slipFg     	= outstockConfmVO.getSlipFg();
+            String slipKind	= outstockConfmVO.getSlipKind();
+            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            int outUnitQty 	= (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
+            int outEtcQty  	= (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
+            int outTotQty  	= (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;
+            Long outAmt    	= (outstockConfmVO.getOutAmt()     == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
+            Long outVat    	= (outstockConfmVO.getOutVat()     == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
+            Long outTot    	= (outstockConfmVO.getOutTot()     == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
 
             outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             outstockConfmVO.setOutUnitQty(outUnitQty);
@@ -204,9 +211,9 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
 	            outstockConfmVO.setHqOfficeCd			(outstockConfmHdVO	.getHqOfficeCd	()		);	//본사코드
 	            outstockConfmVO.setSlipNo				(outstockConfmHdVO	.getSlipNo		()		);	//전표번호
-	            outstockConfmVO.setProdCd				(outstockConfmVO		.getProdCd		()	);	//상품코드
+	            outstockConfmVO.setProdCd				(outstockConfmVO	.getProdCd		()	);	//상품코드
 	            outstockConfmVO.setStorageCd			(storageCd[k]								);	//창고코드
-	            outstockConfmVO.setOccrFg				("13"										);	//발생구분(13:본사출고)
+	            outstockConfmVO.setOccrFg				(occrFg										);	//발생구분(13:본사출고)
 	            outstockConfmVO.setStoreCd		        (sessionInfoVO		.getStoreCd		()		);	//매장코드
 	            outstockConfmVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
 
@@ -290,4 +297,22 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         return returnResult;
     }
+    
+    /** regId, regDt, modId, modDt, hqOfficd, storeCd, areaFg 세팅  */
+    public OutstockConfmVO setSessionValue(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO, String currentDt) {
+        if(StringUtil.getOrBlank(currentDt).equals("")) {
+            currentDt = currentDateTimeString();
+        }
+
+        outstockConfmVO.setRegId(sessionInfoVO.getUserId());
+        outstockConfmVO.setRegDt(currentDt);
+        outstockConfmVO.setModId(sessionInfoVO.getUserId());
+        outstockConfmVO.setModDt(currentDt);
+
+        outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        outstockConfmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
+
+        return outstockConfmVO;
+    }    
 }

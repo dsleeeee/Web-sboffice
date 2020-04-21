@@ -26,6 +26,7 @@
             twui.LOGIN_FAIL_CNT,
             twui.USER_STAT_FG,
             info.P_AGENCY_CD,
+            twui.AREA_FG,
             #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
             TB_WB_USER_INFO twui

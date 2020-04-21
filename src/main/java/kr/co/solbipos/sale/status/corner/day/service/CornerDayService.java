@@ -12,4 +12,7 @@ public interface CornerDayService {
     /** 코너별매출 - 매장 코너 리스트 조회 */
 	List<DefaultMap<String>> getCornerNmList(CornerDayVO cornerDayVO, SessionInfoVO sessionInfoVO);
 
+	/** 코너별매출일자별 - 엑셀 리스트 조회 */
+	List<DefaultMap<String>> getCornerDayExcelList(CornerDayVO cornerDayVO, SessionInfoVO sessionInfoVO);
+
 }

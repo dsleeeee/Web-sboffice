@@ -379,21 +379,44 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                 else if(vendrInstockVO.getInTotQty() != null) {
                     insFg = "I";
                 }
+                
+                int prevUnitQty  = (vendrInstockVO.getPrevInUnitQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInUnitQty()));
+                int prevEtcQty   = (vendrInstockVO.getPrevInEtcQty()  == null ? 0 : Math.abs(vendrInstockVO.getPrevInEtcQty()));
+                int prevTotQty  = (vendrInstockVO.getPrevInTotQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInTotQty()));
+                
+                Long prevAmt    = (vendrInstockVO.getPrevInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInAmt()));
+                Long prevVat    = (vendrInstockVO.getPrevInVat()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInVat()));
+                Long prevTot    = (vendrInstockVO.getPrevInTot()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInTot()));                
 
                 if(!insFg.equals("D")) {
                     int slipFg       = vendrInstockVO.getSlipFg();
-                    int poUnitQty    = Math.abs(vendrInstockVO.getPoUnitQty());
-                    int prevUnitQty  = (vendrInstockVO.getPrevInUnitQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInUnitQty()));
-                    int prevEtcQty   = (vendrInstockVO.getPrevInEtcQty()  == null ? 0 : Math.abs(vendrInstockVO.getPrevInEtcQty()));
+                    int poUnitQty    = Math.abs(vendrInstockVO.getPoUnitQty());                    
+//                    int prevUnitQty  = (vendrInstockVO.getPrevInUnitQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInUnitQty()));
+//                    int prevEtcQty   = (vendrInstockVO.getPrevInEtcQty()  == null ? 0 : Math.abs(vendrInstockVO.getPrevInEtcQty()));
+//                    int prevTotQty  = (vendrInstockVO.getPrevInTotQty() == null ? 0 : Math.abs(vendrInstockVO.getPrevInTotQty()));
+//                    
+//                    Long prevAmt    = (vendrInstockVO.getPrevInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInAmt()));
+//                    Long prevVat    = (vendrInstockVO.getPrevInVat()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInVat()));
+//                    Long prevTot    = (vendrInstockVO.getPrevInTot()      == null ? 0 : Math.abs(vendrInstockVO.getPrevInTot()));
+                    
+                    
                     int unitQty      = (vendrInstockVO.getInUnitQty()     == null ? 0 : Math.abs(vendrInstockVO.getInUnitQty()));
                     int etcQty       = (vendrInstockVO.getInEtcQty()      == null ? 0 : Math.abs(vendrInstockVO.getInEtcQty()));
                                         
                     int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                     int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
-                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
-                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
-                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
+                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
+                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : prevAmt	+	Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
+                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : prevVat	+	Math.abs(vendrInstockVO.getInVat()))    * slipFg;
+                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : prevTot	+	Math.abs(vendrInstockVO.getInTot()))    * slipFg;
+                  
+                    
+                    vendrInstockVO.setPrevInUnitQty(prevUnitQty);
+                    vendrInstockVO.setPrevInEtcQty(prevEtcQty);
+                    vendrInstockVO.setPrevInTotQty(prevTotQty);
+                    vendrInstockVO.setPrevInAmt(prevAmt);
+                    vendrInstockVO.setPrevInVat(prevVat);
+                    vendrInstockVO.setPrevInTot(prevTot);
                     
                     vendrInstockVO.setInUnitQty(orderUnitQty);
                     vendrInstockVO.setInEtcQty(orderEtcQty);
@@ -527,15 +550,16 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
 
         		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				("01"										);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
-
-        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
-        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//        		            vendrInstockVO.setOccrFg				("01"										);	//발생구분(03:매장입고)
+        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품        		            
+        		            
+        		            vendrInstockVO.setInUnitQty		        (prevUnitQty +	Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+        		            vendrInstockVO.setInEtcQty		        (prevEtcQty +	Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+        		            vendrInstockVO.setInTotQty		        (prevTotQty +	Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+        		            vendrInstockVO.setInAmt			        (prevAmt +	Long.parseLong		(storageInAmt		[k]));	//입고금액
+        		            vendrInstockVO.setInVat			        (prevVat +	Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+        		            vendrInstockVO.setInTot			        (prevTot +	Long.parseLong		(storageInTot		[k]));	//입고금액합계
 
         		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
         		            vendrInstockVO.setRegDt			        (currentDt	);
@@ -574,7 +598,8 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
 
         		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				("06"										);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setOccrFg				("06"										);	//발생구분(03:매장입고)
+        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
         		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
 
         		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
@@ -602,6 +627,12 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                     if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                         result = vendrInstockHqMapper.deleteVendrInstockDtl(vendrInstockVO);
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+                        
+                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                        
                     }
                     else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                         result = vendrInstockStoreMapper.deleteVendrInstockDtl(vendrInstockVO);
@@ -746,7 +777,7 @@ public class VendrInstockServiceImpl implements VendrInstockService {
     }
 
 
-    /** regId, regDt, modId, modDt, hqOfficd, storeCd 세팅  */
+    /** regId, regDt, modId, modDt, hqOfficd, storeCd, areaFg 세팅  */
     public VendrInstockVO setSessionValue(VendrInstockVO vendrInstockVO, SessionInfoVO sessionInfoVO, String currentDt) {
         if(StringUtil.getOrBlank(currentDt).equals("")) {
             currentDt = currentDateTimeString();
@@ -759,6 +790,7 @@ public class VendrInstockServiceImpl implements VendrInstockService {
 
         vendrInstockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         vendrInstockVO.setStoreCd(sessionInfoVO.getStoreCd());
+        vendrInstockVO.setAreaFg(sessionInfoVO.getAreaFg());
 
         return vendrInstockVO;
     }

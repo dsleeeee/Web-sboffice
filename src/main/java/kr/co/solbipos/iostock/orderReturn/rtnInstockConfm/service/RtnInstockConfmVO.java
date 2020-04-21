@@ -146,6 +146,8 @@ public class RtnInstockConfmVO extends PageVO {
     private String penaltyCd;
     /** 패널티금액 반품시 */
     private Integer penaltyAmt;
+    /** 권역창고 */
+    private String areaFg;
     
     /** 창고 갯수 */
     //private int	storageCnt;
@@ -1239,5 +1241,14 @@ public class RtnInstockConfmVO extends PageVO {
 	public void setConfmYn(String confmYn) {
 		this.confmYn = confmYn;
 	}
+
+	public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
+
     
 }

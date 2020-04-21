@@ -49,5 +49,18 @@ public class ProdRankServiceImpl implements ProdRankService {
 
         return prodRankMapper.getProdRankChartList(prodRankVO);
     }
+    
+    /** 상품별 매출 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdRankExcelList(ProdRankVO prodRankVO, SessionInfoVO sessionInfoVO) {
+
+    	prodRankVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+    	if (!StringUtil.getOrBlank(prodRankVO.getStoreCd()).equals("")) {
+    		prodRankVO.setArrStoreCd(prodRankVO.getStoreCd().split(","));
+		}
+
+        return prodRankMapper.getProdRankExcelList(prodRankVO);
+    }
 
 }

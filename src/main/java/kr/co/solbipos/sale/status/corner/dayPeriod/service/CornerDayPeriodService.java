@@ -12,4 +12,10 @@ public interface CornerDayPeriodService {
     /** 코너별 설정기간별 탭 - 리스트 상세 조회 */
 	List<DefaultMap<String>> getCornerDayPeriodDtlList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO);
 
+	/** 코너별 설정기간별 탭 - 엑셀 리스트 조회 */
+	List<DefaultMap<String>> getCornerDayPeriodExcelList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO);
+
+	/** 코너별 설정기간별 탭 - 엑셀 리스트 상세 조회 */
+	List<DefaultMap<String>> getCornerDayPeriodDtlExcelList(CornerDayPeriodVO cornerDayPeriodVO, SessionInfoVO sessionInfoVO);
+
 }

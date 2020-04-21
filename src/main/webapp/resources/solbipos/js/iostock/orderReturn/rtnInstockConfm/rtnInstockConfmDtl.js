@@ -255,7 +255,6 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   $scope.getSlipNoInfo = function () {
     var params    = {};
     	params.slipNo = $scope.slipNo;
-    
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;

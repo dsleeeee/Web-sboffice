@@ -106,5 +106,26 @@ public class ProdRankController {
         List<DefaultMap<String>> list = prodRankService.getProdRankChartList(prodRankVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
     }
+    
+    /**
+     * 상품별매출 - 상품매출순위 엑셀다운로드 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodRankVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/rank/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRankExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ProdRankVO prodRankVO) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodRankService.getProdRankExcelList(prodRankVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
+    }
+    
 }

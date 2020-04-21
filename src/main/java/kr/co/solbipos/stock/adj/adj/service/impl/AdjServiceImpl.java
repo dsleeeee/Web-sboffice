@@ -324,6 +324,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setRegDt(currentDt);
                 adjHdVO.setModId(sessionInfoVO.getUserId());
                 adjHdVO.setModDt(currentDt);
+                adjHdVO.setStatus(adjVO.getStatus());
             }
 
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -376,17 +377,20 @@ public class AdjServiceImpl implements AdjService {
             returnResult += result;
             i++;
         }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            // HD 수정
-            result = adjMapper.updateHqAdjHd(adjHdVO);
+        
+        //삭제가 아닐경우만
+        if(!StringUtil.getOrBlank(adjHdVO.getStatus()).equals("DELETE")) {
+	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+	            // HD 수정
+	            result = adjMapper.updateHqAdjHd(adjHdVO);
+	        }
+	        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+	            // HD 수정
+	            result = adjMapper.updateStAdjHd(adjHdVO);
+	        }
+	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            // HD 수정
-            result = adjMapper.updateStAdjHd(adjHdVO);
-        }
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+        
         return returnResult;
     }
 

@@ -82,8 +82,8 @@
       </tbody>
     </table>
     <div style="clear: both;"></div>
-            <%-- left --%>
-            <div class="w50 fl" ng-controller="posDayPeriodMainCtrl" style="width: 49%;">
+       <%-- left --%>
+       <div class="w50 fl" ng-controller="posDayPeriodMainCtrl" style="width: 49%;">
             <div class="mt20 oh sb-select dkbr mb10">
             <%-- 페이지 스케일  --%>
             <wj-combo-box
@@ -104,7 +104,7 @@
             </div>
             <%--위즈모 테이블--%>
 		    <div class="w100 mt10" id="wjWrapType1">
-		      <div class="wj-gridWrap">
+		      <div class="wj-gridWrap col2-t1">
                    <wj-flex-grid
                       id="posDayPeriodGrid"
                       loaded-rows="loadedRows(s,e)"
@@ -128,7 +128,7 @@
                 </div>
             </div>
             <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
+            <div class="pageNum3 mt20">
               <ul id="posDayPeriodMainCtrlPager" data-size="10">
               </ul>
             </div>
@@ -157,7 +157,7 @@
            </div>
                 <%--위즈모 테이블--%>
 			    <div class="w100 mt10" id="wjWrapType1">
-			      <div class="wj-gridWrap">
+			      <div class="wj-gridWrap col2-t1">
                        <wj-flex-grid
                           id="posDayPeriodDtlGrid"
                           autoGenerateColumns="false"
@@ -184,11 +184,73 @@
                     </div>
                 </div>
               <%-- 페이지 리스트 --%>
-              <div class="pageNum mt20">
+              <div class="pageNum3 mt20">
                 <ul id="posDayPeriodDtlCtrlPager" data-size="10">
                 </ul>
               </div>
               <%--//페이지 리스트--%>
+        </div>
+    </div>
+    <%-- //wj grid end --%>
+
+    <div style="clear: both;display:none;"></div>
+       <%-- left --%>
+       <div class="w50 fl" ng-controller="posDayPeriodMainExcelCtrl" style="display:none;">
+            <%--위즈모 테이블--%>
+		      <div class="wj-gridWrap">
+                   <wj-flex-grid
+                      id="posDayPeriodExcelGrid"
+                      loaded-rows="loadedRows(s,e)"
+                      autoGenerateColumns="false"
+                      selection-mode="Row"
+                      items-source="data"
+                      control="excelFlex"
+                      initialized="initGrid(s,e)"
+                      is-read-only="true"
+                      item-formatter="_itemFormatter">
+                      <!-- define columns -->
+                      <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                      <jsp:param name="pickerTarget" value="posDayPeriodMainCtrl"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+                </div>
+        </div>
+
+        <%-- right --%>
+        <div class="w50 fr" ng-controller="posDayPeriodDtlExcelCtrl" style="display:none;">
+                <%--위즈모 테이블--%>
+			    <div class="w100 mt10" id="wjWrapType1">
+			      <div class="wj-gridWrap">
+                       <wj-flex-grid
+                          id="posDayPeriodDtlExcelGrid"
+                          autoGenerateColumns="false"
+                          selection-mode="Row"
+                          items-source="data"
+                          control="excelFlex"
+                          initialized="initGrid(s,e)"
+                          is-read-only="true"
+                          item-formatter="_itemFormatter">
+                          <!-- define columns -->
+                          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          				  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="corner.prodCd"/>"           binding="prodCd"        width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="corner.prodNm"/>"           binding="prodNm"        width="*"   align="center"   is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"             binding="totSaleQty"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"         binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        </wj-flex-grid>
+                        <%-- ColumnPicker 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                          <jsp:param name="pickerTarget" value="posDayPeriodDtlCtrl"/>
+                        </jsp:include>
+                        <%--// ColumnPicker 사용시 include --%>
+                    </div>
+                </div>
         </div>
     </div>
     <%-- //wj grid end --%>

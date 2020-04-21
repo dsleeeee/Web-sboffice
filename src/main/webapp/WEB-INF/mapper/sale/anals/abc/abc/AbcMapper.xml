@@ -75,8 +75,8 @@
 	                     , M.TOT_SALE_QTY
 	                     , M.RAT
 	                     , M.ACC_RAT
-	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<= #{gradeB} ]]> THEN 'B'
 	                            ELSE 'C'
 	                        END AS GRADE
 	                  FROM (
@@ -166,8 +166,8 @@
 	                     , M.TOT_SALE_QTY
 	                     , M.RAT
 	                     , M.ACC_RAT
-	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<=  #{gradeB} ]]> THEN 'B'
 	                            ELSE 'C'
 	                        END AS GRADE
 	                  FROM (

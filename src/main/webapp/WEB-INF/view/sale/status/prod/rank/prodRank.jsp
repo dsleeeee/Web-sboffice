@@ -89,15 +89,17 @@
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="prodRankSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
-		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadRank()"><s:message code="cmm.excel.down" />
-		    </button>
+			<div class="fr">
 		    <%-- 차트 --%>
-		    <button class="btn_skyblue fr" id="btnShowChart" ng-click="">
-			<s:message code="cmm.chart" />
-			</button>
+		    <button class="btn_skyblue" id="btnShowChart" ng-click=""><s:message code="cmm.chart" /></button>
+		    <%-- 엑셀 다운로드 //TODO --%>
+		    <button class="btn_skyblue" ng-click="excelDownloadRank()"><s:message code="cmm.excel.down" /></button>
+		    </div>
+		   
+		  <div class="clearfix">
+		  </div>
 		</div>
-
+		
 	    <div class="w100 mt10" id="wjWrapType1">
 	      <%--위즈모 테이블--%>
 	      <div class="wj-gridWrap">
@@ -130,29 +132,62 @@
 	      </div>
 	      <%--//위즈모 테이블--%>
 
-	      <%-- 페이지 리스트 --%>
-		  <div class="pageNum mt20">
-		    <%-- id --%>
-		    <ul id="prodRankCtrlPager" data-size="10">
-		    </ul>
+		      <%-- 페이지 리스트 --%>
+			  <div class="pageNum mt20">
+			    <%-- id --%>
+			    <ul id="prodRankCtrlPager" data-size="10">
+			    </ul>
+			  </div>
+			  <%--//페이지 리스트--%>
 		  </div>
-		  <%--//페이지 리스트--%>
+		  
+		  <%--엑셀 리스트--%>
+		  <div class="w100 mt10" id="wjWrapType1" style="display:none;" ng-controller="prodRankExcelCtrl">
+		      <%--위즈모 테이블--%>
+		      <div class="wj-gridWrap">
+		        <wj-flex-grid
+		          autoGenerateColumns="false"
+		          selection-mode="Row"
+		          items-source="data"
+		          control="excelFlexSec"
+		          initialized="initGrid(s,e)"
+		          is-read-only="true"
+		          item-formatter="_itemFormatter">
+	
+		          <!-- define columns -->
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodNm"/>"			binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="prodrank.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		         </wj-flex-grid>
+		        <%-- ColumnPicker 사용시 include --%>
+		        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+		          <jsp:param name="pickerTarget" value="prodRankCtrl"/>
+		        </jsp:include>
+		        <%--// ColumnPicker 사용시 include --%>
+		      </div>
+		      <%--//위즈모 테이블--%>
 		  </div>
 	</div>
-</div>
+</div>	
 <%--layer:For Center screen--%>
-<div class="fullDimmed prodRankLayer" id="prodRankMask" style="display: none; z-index:4;"></div>
-<div class="layer prodRankLayer" id="prodRankLayer" style="display: none; z-index:5;">
+<div class="fullDimmed prodRankLayer" id="prodRankMask" style="display: none"></div>
+<div class="layer prodRankLayer" id="prodRankLayer" style="display: none; z-index:1499">
     <div class="layer_inner">
 
         <%--layerContent--%>
-        <div class="title" style="width:1010px">
-            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
-            </p>
+        <div class="title" style="width:980px; padding:0">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
             <a href="#" class="btn_close _btnClose"></a>
 
             <%--위즈모 테이블--%>
-		    <div class="w100 mt10" id="wjWrapType1" ng-controller="prodRankChartCtrl">
+		    <div class="w100" id="wjWrapType1" ng-controller="prodRankChartCtrl">
 		    	<div class="wj-gridWrap" style="display:none;" >
 		    		<wj-flex-grid
 						id="prodRankChartGrid"
@@ -165,16 +200,9 @@
 						<!-- define columns -->
 						<wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 						<wj-flex-grid-column header="<s:message code="pos.realSaleAmt"/>"		binding="realSaleAmt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<%-- <wj-flex-grid-column header="<s:message code="pos.realSaleAmtTue"/>"		binding="realSaleAmtTue" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtWed"/>"		binding="realSaleAmtWed" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtThu"/>"		binding="realSaleAmtThu" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtFri"/>"		binding="realSaleAmtFri" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSat"/>"		binding="realSaleAmtSat" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSun"/>"		binding="realSaleAmtSun" width="100" align="center" is-read-only="true" ></wj-flex-grid-column> --%>
 					</wj-flex-grid>
 				</div>
 
-				<div class="mt20 oh sb-select dkbr pd10">
 					<!-- 막대 차트 샘플 -->
 					<div>
 						<wj-flex-chart
@@ -186,15 +214,9 @@
 							binding-x="prodNm">
 
 							<wj-flex-chart-series name="<s:message code="pos.realSaleAmt"/>" binding="realSaleAmt"></wj-flex-chart-series>
-							<%-- <wj-flex-chart-series name="<s:message code="pos.realSaleAmtTue"/>" binding="realSaleAmtTue"></wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtWed"/>" binding="realSaleAmtWed"></wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtThu"/>" binding="realSaleAmtThu"></wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtFri"/>" binding="realSaleAmtFri"></wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSat"/>" binding="realSaleAmtSat"></wj-flex-chart-series>
-							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSun"/>" binding="realSaleAmtSun"></wj-flex-chart-series> --%>
 						</wj-flex-chart>
 					</div>
-				</div>
+
 			</div>
                <%--//위즈모 테이블--%>
         </div>

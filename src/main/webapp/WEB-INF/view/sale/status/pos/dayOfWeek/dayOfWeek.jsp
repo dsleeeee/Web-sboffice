@@ -45,9 +45,9 @@
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posDayOfWeekSelectStore"/>
-								<jsp:param name="targetPosId" value="posDayOfWeekSelectPos"/>
+								<jsp:param name="subTargetId" value="posDayOfWeekSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -93,13 +93,13 @@
 			initialized="initComboBox(s)">
 		</wj-combo-box> -->
 
-		<%-- 엑셀 다운로드 //TODO --%>
-		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
-			<s:message code="cmm.excel.down" />
-		</button>
-		<button class="btn_skyblue fr" id="btnShowChart">
-			<s:message code="cmm.chart" />
-		</button>
+		<div class="fr">
+			<%-- 차트 --%>
+			<button class="btn_skyblue" id="btnShowChart"><s:message code="cmm.chart" /></button>
+			<%-- 엑셀 다운로드 //TODO --%>
+			<button class="btn_skyblue" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" /></button>
+		</div>
+		<div class="clearfix"></div>
 	</div>
 
 	<%--위즈모 테이블--%>
@@ -143,18 +143,17 @@
 </div>
 
 <%--layer:For Center screen--%>
-<div class="fullDimmed posDayOfWeekLayer" id="posDayOfWeekMask" style="display: none; z-index:4;"></div>
-<div class="layer posDayOfWeekLayer" id="posDayOfWeekLayer" style="display: none; z-index:5;">
+<div class="fullDimmed posDayOfWeekLayer" id="posDayOfWeekMask" style="display: none;"></div>
+<div class="layer posDayOfWeekLayer" id="posDayOfWeekLayer" style="display: none; z-index:1499">
     <div class="layer_inner">
 
         <%--layerContent--%>
-        <div class="title" style="width:1010px">
-            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
-            </p>
+        <div class="title" style="width:980px; padding:0">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
             <a href="#" class="btn_close _btnClose"></a>
-
+            
             <%--위즈모 테이블--%>
-		    <div class="w100 mt10" id="wjWrapType1" ng-controller="posDayOfWeekChartCtrl">
+		    <div class="w100" id="wjWrapType1" ng-controller="posDayOfWeekChartCtrl">
 		    	<div class="wj-gridWrap" style="display:none;" >
 		    		<wj-flex-grid
 						id="posDayOfWeekChartGrid"
@@ -176,7 +175,7 @@
 					</wj-flex-grid>
 				</div>
 
-				<div class="mt20 oh sb-select dkbr pd10">
+				<div class="oh">
 					<!-- 막대 차트 샘플 -->
 					<div>
 						<wj-flex-chart

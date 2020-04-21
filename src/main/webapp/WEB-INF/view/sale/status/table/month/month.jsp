@@ -62,10 +62,10 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableMonthSelectStore"/>
-								<jsp:param name="targetTableId" value="tableMonthSelectTable"/>
-								<jsp:param name="closeFunc" value="getTableNmList"/>
+								<jsp:param name="subTargetId" value="tableMonthSelectTable"/>
+								<jsp:param name="closeFunc" value="closeSelectStore"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -85,6 +85,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableMonthSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableMonthSelectStore"/>
+							<jsp:param name="closeFunc" value="closeSelectTable"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -151,6 +152,29 @@
 		</ul>
 	</div>
 	<%--//페이지 리스트--%>
+
+	<%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="tableMonthExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="tableMonthExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                is-read-only="true"
+                frozen-columns="4"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="tableMonth.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/table/month/month.js?ver=20190125.02" charset="utf-8"></script>

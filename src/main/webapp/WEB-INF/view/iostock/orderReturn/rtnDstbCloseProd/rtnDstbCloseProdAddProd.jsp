@@ -29,7 +29,7 @@
           <th><s:message code="rtnDstbCloseProd.add.store"/></th>
           <td>
             <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
               <jsp:param name="targetId" value="rtnDstbCloseProdAddProdSelectStore"/>
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
@@ -86,7 +86,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <%-- 저장 --%>
-        <button type="button" class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveDstbCloseProdAddProd()"><s:message code="cmm.save"/></button>
+<%--         <button type="button" class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveDstbCloseProdAddProd()"><s:message code="cmm.save"/></button> --%>
       </div>
 
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>

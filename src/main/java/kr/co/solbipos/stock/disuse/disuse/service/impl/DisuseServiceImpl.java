@@ -323,6 +323,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setRegDt(currentDt);
                 disuseHdVO.setModId(sessionInfoVO.getUserId());
                 disuseHdVO.setModDt(currentDt);
+                disuseHdVO.setStatus(disuseVO.getStatus());
             }
 
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -375,17 +376,20 @@ public class DisuseServiceImpl implements DisuseService {
             returnResult += result;
             i++;
         }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            // HD 수정
-            result = disuseMapper.updateHqDisuseHd(disuseHdVO);
+        
+        //삭제가 아닐경우만
+        if(!StringUtil.getOrBlank(disuseHdVO.getStatus()).equals("DELETE")) {
+	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+	            // HD 수정
+	            result = disuseMapper.updateHqDisuseHd(disuseHdVO);
+	        }
+	        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+	            // HD 수정
+	            result = disuseMapper.updateStDisuseHd(disuseHdVO);
+	        }
+	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            // HD 수정
-            result = disuseMapper.updateStDisuseHd(disuseHdVO);
-        }
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+        
         return returnResult;
     }
 

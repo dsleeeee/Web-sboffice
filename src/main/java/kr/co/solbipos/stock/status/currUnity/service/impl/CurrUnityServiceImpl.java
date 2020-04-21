@@ -63,4 +63,39 @@ public class CurrUnityServiceImpl implements CurrUnityService {
     }
 
 
+	@Override
+	public List<DefaultMap<String>> getCurrUnityExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
+		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(currUnityVO.getVendrCd()).equals("")) {
+            currUnityVO.setArrVendrCd(currUnityVO.getVendrCd().split(","));
+        }
+
+        return currUnityMapper.getCurrUnityExcelList(currUnityVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getCurrUnityHqDtlExcelList(CurrUnityVO currUnityVO, SessionInfoVO sessionInfoVO) {
+		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(currUnityVO.getVendrCd()).equals("")) {
+            currUnityVO.setArrVendrCd(currUnityVO.getVendrCd().split(","));
+        }
+
+        return currUnityMapper.getCurrUnityHqDtlExcelList(currUnityVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getCurrUnityStoreDtlExcelList(CurrUnityVO currUnityVO,
+			SessionInfoVO sessionInfoVO) {
+		currUnityVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(currUnityVO.getVendrCd()).equals("")) {
+            currUnityVO.setArrVendrCd(currUnityVO.getVendrCd().split(","));
+        }
+
+        return currUnityMapper.getCurrUnityStoreDtlExcelList(currUnityVO);
+	}
 }

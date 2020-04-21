@@ -76,6 +76,9 @@ public interface VendrInstockHqMapper {
     
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 삭제 */
     int deleteVendrInstockDtl(VendrInstockVO vendrInstockVO);
+    
+    /** 거래처 입고/반출등록 - 입고/반출상품 PROD 삭제 */
+    int deleteVendrInstockProd(VendrInstockVO vendrInstockVO);    
 
     /** 거래처 입고/반출등록 - 입고/반출 상품 공급가 수정 */
     int updateProdSplyUprc(VendrInstockVO vendrInstockVO);

@@ -44,7 +44,9 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
     /** 반품본사입고 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO) {
+    public List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO, SessionInfoVO sessionInfoVO) {
+    	String areaFg	 = sessionInfoVO.getAreaFg();
+    	rtnInstockConfmVO.setAreaFg(areaFg);
         return rtnInstockConfmMapper.getRtnInstockConfmDtlList(rtnInstockConfmVO);
     }
 

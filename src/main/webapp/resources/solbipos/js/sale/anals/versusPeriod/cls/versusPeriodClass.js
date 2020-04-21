@@ -145,8 +145,9 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        var params       = $scope.params;
-        	params.prodClassCd   = selectedRow.lv3Cd;
+        var params = $scope.params;
+        params.prodClassCd = selectedRow.lv3Cd;
+        $scope.srchProdClassCd = selectedRow.lv3Cd;
 
         // groupRow 펼치기
         if (s.rows[ht.row].level == 2) { // 3단계 분류
@@ -339,7 +340,8 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
   	    params.compEndDate = compEndDateDash;
   	    params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
   	    params.brandCd = $scope.brandCd;
-  	    params.prodClassCd   = rows[0].dataItem.lv3Cd;
+  	    params.prodClassCd = rows[0].dataItem.lv3Cd;
+  	    $scope.srchProdClassCd = rows[0].dataItem.lv3Cd;
   	    // 대비기간매출분석 매출현황 상세조회.
 	    $scope._broadcast("versusPeriodClassDtlCtrlSrch", params);
     }
@@ -598,47 +600,63 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
   });
 
   $scope.$on("versusPeriodClassDtlCtrlSrch", function (event, data) {
-	 if(data != undefined) {
-		 $scope.startDate = data.startDate;
-		 $scope.endDate   = data.endDate;
-		 $scope.compStartDate = data.compStartDate;
-		 $scope.compEndDate   = data.compEndDate;
-		 $scope.brandCd = data.brandCd;
-		 $scope.storeCd = $("#versusPeriodClassSelectStoreCd").val();
-		 $scope.prodClassCd = data.prodClassCd;
-	 }
+
+	  if(data != undefined) {
+		  $scope.startDate = data.startDate;
+		  $scope.endDate   = data.endDate;
+		  $scope.compStartDate = data.compStartDate;
+		  $scope.compEndDate   = data.compEndDate;
+		  $scope.brandCd = data.brandCd;
+		  $scope.storeCd = $("#versusPeriodClassSelectStoreCd").val();
+		  $scope.prodClassCd = data.prodClassCd;
+	  }
 
 	  $scope.searchVersusPeriodClassDtlList(false, data);
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
+	  // 기능수행 종료 : 반드시 추가
+	  event.preventDefault();
+  });
+
+  $scope.$on("versusPeriodClassChartCtrlSrch", function (event, data) {
+
+	  if ($scope.flex.rows.length <= 0) {
+	      return false;
+	  }
+
+	  $("div.versusPeriodClassLayer").show();
+
+	  var params = {};
+
+	  params.startDate = $scope.startDate;
+	  params.endDate = $scope.endDate;
+	  params.compStartDate = $scope.compStartDate;
+	  params.compEndDate = $scope.compEndDate;
+	  params.storeCd = $("#versusPeriodClassSelectStoreCd").val();
+	  params.brandCd = $scope.brandCd;
+	  params.prodClassCd = $scope.srchProdClassCd;
+
+	  $scope._broadcast('versusPeriodClassChartCtrl', params);
+	  // 기능수행 종료 : 반드시 추가
+	  event.preventDefault();
   });
 
   // 주간대비 리스트 조회
   $scope.searchVersusPeriodClassDtlList = function (isPageChk, data) {
 
-	 // 파라미터
-	    var params       = {};
-	    params.startDate = $scope.startDate;
-	    params.endDate = $scope.endDate;
-	    params.compStartDate = $scope.compStartDate;
-	    params.compEndDate = $scope.compEndDate;
-	    params.brandCd = $scope.brandCd;
-	    params.storeCd = $scope.storeCd;
-	    params.prodClassCd = $scope.prodClassCd;
-	    params.isPageChk = isPageChk;
-	    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
-	    
-
-	  /*else {
-		  console.log("2222");
-		  //params.storeCd = -1;
-
-	  }*/
-
-
+	// 파라미터
+	var params       = {};
+	params.startDate = $scope.startDate;
+	params.endDate = $scope.endDate;
+	params.compStartDate = $scope.compStartDate;
+	params.compEndDate = $scope.compEndDate;
+	params.brandCd = $scope.brandCd;
+	params.storeCd = $scope.storeCd;
+	params.prodClassCd = $scope.prodClassCd;
+	params.isPageChk = isPageChk;
+	params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-	  $scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
+	$scope._inquirySub("/sale/anals/versusPeriod/class/versusPeriodClassDtlList.sb", params, function() {});
+
     $scope.flex.refresh();
 
     var days = "(" + $scope.dateDiff($scope.startDate, $scope.endDate) + "일)\n";
@@ -694,5 +712,153 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 	  }
 	return diff + 1;
   }
+
+}]);
+
+/** 일자별상품 상세현황 차트 controller */
+app.controller('versusPeriodClassChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('versusPeriodClassChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto 50 auto';
+		s.axisX.labelAngle = 0;
+	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
+
+	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.All,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+
+	    /*var axisY2 = new wijmo.chart.Axis();
+	    axisY2.position = 'Right';
+	    axisY2.title = '판매수량';
+	    axisY2.format = 'n0';
+	    axisY2.min = 0;
+	    axisY2.axisLine = true;
+
+	    getSeries("saleCntMon").axisY = axisY2;
+	    getSeries("saleCntTue").axisY = axisY2;
+	    getSeries("saleCntWed").axisY = axisY2;
+	    getSeries("saleCntThu").axisY = axisY2;
+	    getSeries("saleCntFri").axisY = axisY2;
+	    getSeries("saleCntSat").axisY = axisY2;
+	    getSeries("saleCntSun").axisY = axisY2;
+
+	    function getSeries(binding) {
+	        var seriesTemp = s.series;
+	        //
+	        for (var i = 0; i < seriesTemp.length; i++) {
+	            if (seriesTemp[i].binding == binding) {
+	                return seriesTemp[i];
+	            }
+	        }
+	        //
+	        return null;
+	    }*/
+
+	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("versusPeriodClassChartCtrl", function (event, data) {
+
+		var isPageChk = true;
+
+		if(data != undefined) {
+
+			isPageChk = true;
+
+			$scope.startDate = data.startDate;
+			$scope.endDate = data.endDate;
+			$scope.compStartDate = data.compStartDate;
+			$scope.compEndDate = data.compEndDate;
+			$scope.brandCd = data.brandCd;
+			$scope.storeCd = data.storeCd;
+			$scope.prodClassCd = data.prodClassCd;
+		}
+
+	    $scope.versusPeriodClassBarChartList(isPageChk);
+	    // 기능수행 종료 : 반드시 추가
+	    //event.preventDefault();
+	  });
+
+
+	  // 코너별매출일자별 리스트 조회
+	  $scope.versusPeriodClassBarChartList = function (isPageChk) {
+
+		  // 파라미터
+		  var params          = {};
+		  params.startDate = $scope.startDate;
+		  params.endDate = $scope.endDate;
+		  params.compStartDate = $scope.compStartDate;
+		  params.compEndDate = $scope.compEndDate;
+		  params.brandCd = $scope.brandCd;
+		  params.storeCd = $scope.storeCd;
+		  params.prodClassCd = $scope.prodClassCd;
+		  params.listScale = 10; //-페이지 스케일 갯수
+		  params.isPageChk = isPageChk;
+
+		  // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		  $scope._inquiryMain("/sale/anals/versusPeriod/class/versusPeriodClassDtlChartList.sb", params);
+	  };
+
+	$scope.rendered = function(s, e) {
+
+		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+		var pAreaWidth = pArea.width.baseVal.value;
+		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
+
+		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
+		var widthMax = new Array();
+
+        labels.forEach((value, key, parent) => {
+
+        	var x = +value.getAttribute('x');
+            var y = +value.getAttribute('y');
+            var text = value.innerHTML.split(' - ');
+            value.innerHTML = '';
+
+            widthMax[key] = new Array();
+
+            text.forEach((item, index) => {
+
+                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                //e.setAttribute("x", (x + 0).toString());
+                e.setAttribute('y', (y + (15 * index)).toString());
+                e.innerHTML = item;
+                value.appendChild(e);
+
+                var bbox = e.getBoundingClientRect();
+                var extent = e.getExtentOfChar(0);
+                var boxWidth = e.getComputedTextLength();
+                var gap = 0;
+
+                gap = (groupWidth - boxWidth) / 2;
+                widthMax[key][index] = gap;
+
+                e.setAttribute('x', (x + gap).toString());
+            });
+        });
+
+        labels.forEach((value, key, parent) => {
+
+        	var children = value.childNodes;
+
+        	for (var i = 0; i < children.length; i++) {
+        		var e = value.childNodes[i];
+        		var extent = e.getExtentOfChar(0);
+
+        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
+        	}
+        });
+
+        s.tooltip.content = function (ht) {
+        	var title = ht.name;
+			var nameArr = ht._xfmt.split(" - ");
+			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + value;
+		}
+    }
 
 }]);

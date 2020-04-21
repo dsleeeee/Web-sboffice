@@ -59,10 +59,10 @@
 						(
 							SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
 									, TSDP.SALE_HOUR AS SALE_HOUR_TEMP
-			                        , SF_ZERO_TO_NULL(TSDP.TOT_SALE_AMT) AS SALE_AMT
-			                        , SF_ZERO_TO_NULL(TSDP.TOT_DC_AMT) AS DC_AMT
-			                        , SF_ZERO_TO_NULL(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-			                        , SF_ZERO_TO_NULL(TSDP.SALE_CNT) AS SALE_CNT
+									, SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
+                                    , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
+                                    , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                    , SUM(TSDP.SALE_CNT) AS SALE_CNT
 			                FROM    TB_SL_DAILY_POS_TIME TSDP
 			                WHERE   TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 								<if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -77,6 +77,7 @@
 								<if test='endDate != null and endDate != ""'>
 									AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 								</if>
+						    GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TSDP.SALE_HOUR
 			            )
 			            SELECT  *
 			            FROM    T

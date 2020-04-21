@@ -403,7 +403,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
       		  		grid.columns.removeAt(grid.columns.length-1);
       		  	}
       		  	*/
-      		  	while(grid.columns.length > 28){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
+      		  	while(grid.columns.length > 29){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
       		  		grid.columns.removeAt(grid.columns.length-1);
       		  	}
 

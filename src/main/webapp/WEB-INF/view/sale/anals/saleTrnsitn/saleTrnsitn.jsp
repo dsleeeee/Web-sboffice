@@ -121,7 +121,7 @@
 			                is-read-only="true"
 			                frozen-columns="3">
 
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.prodCd"/>" 			binding="prodCd"  			width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleTrnsitn.prodCd"/>" 			binding="prodCd"  			width="100" is-read-only="true" align="center" format="d"	></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.prodNm"/>" 			binding="prodNm" 			width="130" is-read-only="true" align="left"	></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.splyUprc"/>" 			binding="splyUprc" 			width="100" is-read-only="true" align="right"	></wj-flex-grid-column>
 

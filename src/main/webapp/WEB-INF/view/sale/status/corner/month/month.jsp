@@ -157,6 +157,27 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+    <%--엑셀 리스트--%>
+    <div class="w100 mt10" id="wjWrapType3" style="display: none" ng-controller="cornerMonthExcelCtrl">
+        <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="cornrMonthExcelGrid"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="true"
+          frozen-columns="3"
+          item-formatter="_itemFormatter">
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="corner.saleYm"/>"            binding="saleYm"            width="100" align="center" is-read-only="true" format="yyyy/MM"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.totRealSaleAmt"/>"    binding="totRealSaleAmt"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.totSaleQty"/>"        binding="totSaleQty"        width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+    </div>
 </div>
 
 <script type="text/javascript">

@@ -118,6 +118,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
 	            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
             	params.storeCd   = selectedRow.storeCd;
         	    params.prodCd    = selectedRow.prodCd;
+        	    params.prodNm    = selectedRow.prodNm;
 
             if (col.binding === "prodCd") { // 상품코드
               $scope._broadcast('frnchsStoreProdDtlCtrl', params);

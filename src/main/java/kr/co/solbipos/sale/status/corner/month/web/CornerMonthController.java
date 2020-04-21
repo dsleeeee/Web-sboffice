@@ -70,4 +70,25 @@ public class CornerMonthController {
         List<DefaultMap<String>> list = cornerMonthService.getCornerMonthList(cornerMonthVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerMonthVO);
     }
+    
+    /**
+     * 코너별매출 일자별 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerMonthVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/month/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCornerMonthExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, CornerMonthVO cornerMonthVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = cornerMonthService.getCornerMonthExcelList(cornerMonthVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, cornerMonthVO);
+    }
 }

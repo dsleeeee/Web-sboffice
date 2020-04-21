@@ -130,7 +130,7 @@
     <%-- wj grid start --%>
     <div class="wj-TblWrap">
 	        <%-- left --%>
-	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl">
+	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl" style="width:48%">
 	        <div class="mt20 oh sb-select dkbr mb10 mr10" >
             <%-- 페이지 스케일  --%>
             <wj-combo-box
@@ -151,6 +151,7 @@
             </button>
             </div>
 	            <div class="wj-TblWrapBr2 mr10">
+	            	<div class="wj-gridWrap">
                    <wj-flex-grid
 	                  id="rtnStatusDayDtlGrid"
 	                  loaded-rows="loadedRows2(s,e)"
@@ -175,9 +176,10 @@
 	                  <jsp:param name="pickerTarget" value="rtnStatusDayDtlCtrl"/>
 	                </jsp:include>
 	                <%--// ColumnPicker 사용시 include --%>
+	              </div>
 	           </div>
 		       <%-- 페이지 리스트 --%>
-	           <div class="pageNum mt20">
+	           <div class="pageNum3 mt20">
 	             <ul id="rtnStatusDayDtlCtrlPager" data-size="10">
 	             </ul>
 	           </div>
@@ -185,8 +187,8 @@
         </div>
 
         <%-- right --%>
-        <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl">
-        <div class="mt20 oh sb-select dkbr mb10 ml10">
+        <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl" style="width:48%">
+        <div class="mt20 oh sb-select dkbr mb10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
                    class="w100px fl"
@@ -205,7 +207,8 @@
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtlCtrl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-	            <div class="wj-TblWrapBr1 ml10">
+	            <div class="wj-TblWrapBr1">
+	            	<div class="wj-gridWrap">
                    <wj-flex-grid
                       id="rtnStatusPosDtlGrid"
 	                  autoGenerateColumns="false"
@@ -229,8 +232,9 @@
 	                </jsp:include>
 	                <%--// ColumnPicker 사용시 include --%>
 	            </div>
+	           </div>
 	          <%-- 페이지 리스트 --%>
-			  <div class="pageNum mt20">
+			  <div class="pageNum3 mt20">
 			    <ul id="rtnStatusPosDtlCtrlPager" data-size="10">
 			    </ul>
 			  </div>

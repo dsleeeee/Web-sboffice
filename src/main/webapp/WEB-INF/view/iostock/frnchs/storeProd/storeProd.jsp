@@ -118,8 +118,8 @@
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodCd"/>"         binding="prodCd"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodNm"/>"         binding="prodNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitFg"/>"        binding="poUnitFgNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.outCnt"/>"        binding="outCnt"       width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.outCnt"/>"        binding="outCnt"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"     binding="outTotQty"    width="130" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.totAmt"/>"       binding="outTot"      width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"    binding="inTotQty"   width="145" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

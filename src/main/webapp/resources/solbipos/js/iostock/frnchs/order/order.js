@@ -302,8 +302,10 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         	$('#dtlSlipNo').text('');
         }
         
-        if(rows[0].dataItem.slipNo != "미생성"){
-        	$scope._broadcast("orderDtlCtrlSrch", params);
+        if(rows.length > 0){
+	        if(rows[0].dataItem.slipNo != "미생성"){
+	        	$scope._broadcast("orderDtlCtrlSrch", params);
+	        }
         }
     }
     

@@ -65,12 +65,14 @@
     $scope.initGrid = function (s, e) {
     };
 
-    $scope.searchFg = "N";
+    $scope.searchFg = "";
+    
     // 다른 컨트롤러의 broadcast 받기
-
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 포스선택 팝업 오픈
-      eval('$scope.wj' + targetId + 'LayerM.show(true)');
+      if($("#${param.targetStoreId}Cd").val() !== ""){
+    	  eval('$scope.wj' + targetId + 'LayerM.show(true)');
+      }
 
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
@@ -78,10 +80,6 @@
           eval('$scope.${param.closeFunc}()');
         }
       });
-
-      if ($scope.searchFg == "N") {
-        $scope.searchCorner();
-      }
 
       $scope.searchCorner();
       // 기능수행 종료 : 반드시 추가
@@ -92,9 +90,14 @@
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
-      $scope._inquiryMain("/sale/status/corner/corner/cornerNmList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+      
+      if(params.storeCd !== "" && params.storeCd !== $scope.searchFg){
+	      $scope._inquiryMain("/sale/status/corner/corner/cornerNmList.sb", params, function () {
+	        $scope.searchFg = params.storeCd;
+	      });
+      }else if(params.storeCd === ""){
+          $scope._popMsg(messages["cmm.require.selectStore"]);
+      }
     };
 
     $scope.cornerSelected = function () {

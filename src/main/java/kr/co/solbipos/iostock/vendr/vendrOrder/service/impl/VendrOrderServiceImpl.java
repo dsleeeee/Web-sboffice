@@ -186,11 +186,14 @@ public class VendrOrderServiceImpl implements VendrOrderService {
             vendrOrderVO = setSessionValue(vendrOrderVO, sessionInfoVO, currentDt);
 
             String insFg = "";
+            int orderTotQty  = vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty();
+            
             // 기주문수량이 있는 경우 수정
             if(vendrOrderVO.getPrevOrderTotQty() != null) {
                 insFg = "U";
                 // 기주문수량이 있으면서 주문수량이 0 이나 null 인 경우 삭제
-                if(vendrOrderVO.getOrderTotQty() == 0 || vendrOrderVO.getOrderTotQty() == null) {
+//                if(vendrOrderVO.getOrderTotQty() == 0 || vendrOrderVO.getOrderTotQty() == null) {
+                if(orderTotQty == 0) {
                     insFg = "D";
                 }
             }
@@ -207,7 +210,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
                 int etcQty       = (vendrOrderVO.getOrderEtcQty()      == null ? 0 : vendrOrderVO.getOrderEtcQty());
                 int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                 int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-                int orderTotQty  = (vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty()) * slipFg;
+                	orderTotQty  = (vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty()) * slipFg;
                 Long orderAmt    = (vendrOrderVO.getOrderAmt()      == null ? 0 : vendrOrderVO.getOrderAmt())    * slipFg;
                 Long orderVat    = (vendrOrderVO.getOrderVat()      == null ? 0 : vendrOrderVO.getOrderVat())    * slipFg;
                 Long orderTot    = (vendrOrderVO.getOrderTot()      == null ? 0 : vendrOrderVO.getOrderTot())    * slipFg;

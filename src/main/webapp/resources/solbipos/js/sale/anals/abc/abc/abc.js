@@ -117,7 +117,13 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     }
 
     if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+    	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+    
+    // 누적판매비율 validation check
+    if(!$scope.gradeValidation()){
+    	$scope._popMsg($scope.highGrade + messages["abc.rateMessage1"] + ' ' + $scope.lowGrade + messages["abc.rateMessage2"]);    	
    	 	return false;
     }
 
@@ -125,7 +131,27 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     $scope._inquiryMain("/sale/anals/abc/abc/abcList.sb", params);
 
   };
-
+  
+  $scope.gradeValidation = function(){
+	  var valCheck = true;
+	  
+	  if(Number($("#abcGradeA").val()) >= Number($("#abcGradeB").val())){
+		  $scope.highGrade = 'A';
+		  $scope.lowGrade = 'B';
+		  valCheck = false;
+	  } else if(Number($("#abcGradeA").val()) >= Number($("#abcGradeC").val())){
+		  $scope.highGrade = 'A';
+		  $scope.lowGrade = 'C';
+		  valCheck = false;
+	  } else if(Number($("#abcGradeB").val()) >= Number($("#abcGradeC").val())){
+		  $scope.highGrade = 'B';
+		  $scope.lowGrade = 'C';
+		  valCheck = false;
+	  }
+	  
+	  return valCheck;
+  }
+  
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchAbcStartDate.isReadOnly = $scope.isChecked;

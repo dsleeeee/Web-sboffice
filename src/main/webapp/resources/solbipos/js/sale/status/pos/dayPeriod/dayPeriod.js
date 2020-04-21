@@ -24,6 +24,7 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
 	  $scope.isChkProdClassDisplay = function(){
 		  $scope._broadcast("chkProdClassDisplay");
+		  $scope._broadcast("chkProdClassExcelDisplay");
 	  }
 
 	  //매장선택 모듈 팝업 사용시 정의
@@ -151,26 +152,138 @@ app.controller('posDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 
 //엑셀 다운로드
   $scope.excelDownloadDayPeriod = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
+		// 파라미터
+	    var params       = {};
+	    params.listScale = 10; //-페이지 스케일 갯수
+	    params.storeCd   = $("#posDayPeriodSelectStoreCd").val();
+	    params.isPageChk = true;
+
+		//등록일자 '전체기간' 선택에 따른 params
+		if(!$scope.isChecked){
+		  $scope.startDateForDt = wijmo.Globalize.format($scope.srchPosDayPeriodStartDate.value, 'yyyyMMdd');
+	      $scope.endDateForDt = wijmo.Globalize.format($scope.srchPosDayPeriodEndDate.value, 'yyyyMMdd');
+
+		  params.startDate = wijmo.Globalize.format($scope.srchPosDayPeriodStartDate.value, 'yyyyMMdd');
+		  params.endDate = wijmo.Globalize.format($scope.srchPosDayPeriodEndDate.value, 'yyyyMMdd');
+
+		  //params.startDate = '20191201';
+		  //params.endDate = '20191231';
+
+		}else{
+	    	$scope.startDateForDt = "";
+	    	$scope.endDateForDt = "";
+	    }
+
+		if(params.startDate > params.endDate){
+			$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+			return false;
+		}
+
+		$scope._broadcast('posDayPeriodMainExcelCtrl',params);
+	};
+}]);
+
+/** 일자별(코너별 매출 엑셀) controller */
+app.controller('posDayPeriodMainExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('posDayPeriodMainExcelCtrl', $scope, $http, $timeout, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // picker 사용시 호출 : 미사용시 호출안함
+    $scope._makePickColumns("posDayPeriodMainExcelCtrl");
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params       = {};
+        	params.storeCd   = selectedRow.storeCd;
+//        	var arrPosNo     = (selectedRow.posNo).split("POS ");
+//        	params.posNo     = arrPosNo[1];
+        	params.posNo     = selectedRow.posNo;
+        	params.startDate = $scope.startDateForDt;
+        	params.endDate   = $scope.endDateForDt;
+        	params.isPageChk = false;
+        if (col.binding === "realSaleAmt") { // 실매출
+            $scope._broadcast('posDayPeriodDtlCtrl', params);
         }
-      }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_MAIN_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+      }
+    });
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
   };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("posDayPeriodMainExcelCtrl", function (event, data) {
+
+	  if(data != undefined){
+		  $scope.startDate = data.startDate;
+		  $scope.endDate = data.endDate;
+		  $scope.posNo = data.posNo;
+		  $scope.storeCd = data.storeCd;
+	  }
+
+	  $scope.searchPosDayPeriodExcelList(true);
+
+	  // 기능수행 종료 : 반드시 추가
+	  event.preventDefault();
+
+  });
+
+  // 코너별매출일자별 리스트 조회
+  $scope.searchPosDayPeriodExcelList = function (isPageChk) {
+
+    // 파라미터
+    var params       = {};
+    params.listScale = 10; //-페이지 스케일 갯수
+    params.storeCd   = $scope.storeCd
+    params.isPageChk = true
+    params.startDate = $scope.startDate;
+    params.endDate   = $scope.endDate;
+    params.posNo     = $scope.posNo;
+
+	if(params.startDate > params.endDate){
+		$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+		return false;
+	}
+
+	// 조회 수행 : 조회URL, 파라미터, 콜백함수
+	$scope._inquiryMain("/sale/status/pos/pos/excelList.sb", params, function() {
+
+		var flex = $scope.excelFlex;
+
+		if (flex.rows.length <= 0) {
+	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+	      return false;
+	    }
+
+	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+	    $timeout(function () {
+	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+	        includeColumnHeaders: true,
+	        includeCellStyles   : true,
+	        includeColumns      : function (column) {
+	          return column.visible;
+	        }
+	      }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_MAIN_'+getToday()+'.xlsx', function () {
+	        $timeout(function () {
+	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+	        }, 10);
+	      });
+	    }, 10);
+
+	});
+
+  };
+
 }]);
 
 /** 반품현황 상세(포스별 상세) controller */
@@ -219,12 +332,11 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    event.preventDefault();
 	  });
 
-
 	  // 코너별매출일자별 리스트 조회
 	  $scope.searchPosDayPeriodDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params          = {};
-	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	    params.listScale    = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.posNo        = $scope.posNo;
 	    params.storeCd      = $scope.storeCd;
 	    params.startDate    = $scope.startDateForDt;
@@ -240,26 +352,108 @@ app.controller('posDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    $scope._inquiryMain("/sale/status/pos/pos/dtl.sb", params);
 	  };
 
-	//엑셀 다운로드
+	  //엑셀 다운로드
 	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
-	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-	      return false;
-	    }
 
-	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-	        includeColumnHeaders: true,
-	        includeCellStyles   : true,
-	        includeColumns      : function (column) {
-	          return column.visible;
-	        }
-	      }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_DETAIL_'+getToday()+'.xlsx', function () {
-	        $timeout(function () {
-	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-	        }, 10);
-	      });
-	    }, 10);
-	  };
+		// 파라미터
+	    var params          = {};
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	    params.posNo        = $scope.posNo;
+	    params.storeCd      = $scope.storeCd;
+	    params.startDate    = $scope.startDateForDt;
+	    params.endDate      = $scope.endDateForDt;
+	    params.orgnFg    	= $scope.orgnFg;
+
+		params.isPageChk = true;
+
+		$scope._broadcast('posDayPeriodDtlExcelCtrl',params);
+
+	 };
+}]);
+
+/** 반품현황 상세(포스별 상세 엑셀) controller */
+app.controller('posDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	 // 상위 객체 상속 : T/F 는 picker
+	  angular.extend(this, new RootController('posDayPeriodDtlExcelCtrl', $scope, $http, $timeout, true));
+
+	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+	  $scope.initGrid = function (s, e) {
+
+	    // picker 사용시 호출 : 미사용시 호출안함
+	    $scope._makePickColumns("posDayPeriodDtlExcelCtrl");
+
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+	  }
+
+	  $scope.$on("chkProdClassExcelDisplay", function (event) {
+		  var columns = $scope.flex.columns;
+
+		  for(var i=0; i<columns.length; i++){
+			  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			  }
+		  }
+	  });
+
+	  // 다른 컨트롤러의 broadcast 받기
+	  $scope.$on("posDayPeriodDtlExcelCtrl", function (event, data) {
+
+		  var isPageChk = true;
+
+		  if(data != undefined){
+			$scope.startDate = data.startDate;
+			$scope.endDate = data.endDate;
+			$scope.posNo = data.posNo;
+			$scope.storeCd = data.storeCd;
+		  }
+
+		  $scope.searchPosDayPeriodDtlExcelList(isPageChk);
+
+		  // 기능수행 종료 : 반드시 추가
+		  event.preventDefault();
+	  });
+
+
+	  // 코너별매출일자별 리스트 조회
+	  $scope.searchPosDayPeriodDtlExcelList = function (isPageChk) {
+	    // 파라미터
+	    var params          = {};
+	    params.listScale    = 10 //-페이지 스케일 갯수
+	    params.posNo        = $scope.posNo;
+	    params.storeCd      = $scope.storeCd;
+	    params.startDate    = $scope.startDateForDt;
+	    params.endDate      = $scope.endDateForDt;
+	    params.orgnFg    	= $scope.orgnFg;
+	    params.isPageChk    = isPageChk;
+
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+	    $scope._inquiryMain("/sale/status/pos/pos/dtlExcelList.sb", params, function() {
+
+	    	var flex = $scope.excelFlex;
+
+	    	if (flex.rows.length <= 0) {
+	  	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+	  	      return false;
+	  	    }
+
+	  	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+	  	    $timeout(function () {
+	  	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+	  	        includeColumnHeaders: true,
+	  	        includeCellStyles   : true,
+	  	        includeColumns      : function (column) {
+	  	          return column.visible;
+	  	        }
+	  	      }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_DETAIL_'+getToday()+'.xlsx', function () {
+	  	        $timeout(function () {
+	  	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+	  	        }, 10);
+	  	      });
+	  	    }, 10);
+	  });
+	};
 }]);

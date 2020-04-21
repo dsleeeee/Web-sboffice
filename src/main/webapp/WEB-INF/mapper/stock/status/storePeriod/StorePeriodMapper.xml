@@ -211,5 +211,154 @@
             , '반입매장' AS  STORE_NM
         FROM DUAL
     </select>
+    
+    <select id="getStoreperiodExcelList" parameterType="storePeriodVO" resultType="DefaultMap">
+    	/* USE : StorePeriodMapper.getStorePeriodList */
+		SELECT A.LV1_CD
+			 , A.LV1_NM
+		     , A.LV2_CD
+		     , A.LV2_NM
+		     , A.LV3_CD
+		     , A.LV3_NM
+			 , TPSS.PROD_CD
+		     , TMP.PROD_NM
+		     , TPSS.STORE_CD
+			 , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSS.STORE_CD) AS STORE_NM
+		     , TMP.PO_UNIT_QTY
+		     , TMP.PO_UNIT_FG
+		     , TMPB.BARCD_CD
+		     <if test='unitFg == "0"'>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY / TMP.PO_UNIT_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+		     </if>
+		     <if test='unitFg == "1"'>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_06 /* 사입입고 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_18 /* 사입반품 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_11 /* 매장판매 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_04 /* 매장이입 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_14 /* 매장이출 수량*/
+			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_17 /* 재고폐기 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_21 /* 재고조정 수량*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_22 /* 세트생성 수량*/
+		     </if>
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_12 /* 매장반품 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '06', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_06 /* 사입입고 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '18', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_18 /* 사입반품 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '11', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_11 /* 매장판매 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '04', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_04 /* 매장이입 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '14', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_14 /* 매장이출 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '17', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_17 /* 재고폐기 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '21', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_21 /* 재고조정 금액*/
+		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '22', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_22 /* 세트생성 금액*/
+  		FROM 
+  			(
+  				SELECT   A.P_PROD_CLASS_CD   AS LV1_CD
+  						,A.PROD_CLASS_CD     AS LV2_CD
+  						,A.PROD_CLASS_NM     AS LV2_NM
+  						,B.PROD_CLASS_CD     AS LV3_CD
+  						,B.PROD_CLASS_NM     AS LV3_NM
+  						,(SELECT  SF_GET_PROD_CLASSES('H', 'A0001',    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
+  				FROM    (
+		  					SELECT  HQ_OFFICE_CD
+		  							, P_PROD_CLASS_CD
+		  							, PROD_CLASS_CD
+		  							, PROD_CLASS_NM
+		  					FROM    TB_HQ_PRODUCT_CLASS
+		  					WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		  						AND     P_PROD_CLASS_CD IN (
+		  													SELECT  PROD_CLASS_CD
+		  													FROM    TB_HQ_PRODUCT_CLASS
+		  													WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+		  													AND     P_PROD_CLASS_CD = '00000'
+		  													)
+		  						) A,
+		  						TB_HQ_PRODUCT_CLASS    B
+			                  WHERE   B.P_PROD_CLASS_CD IN    (
+			                  										SELECT  PROD_CLASS_CD
+			                  										FROM    TB_HQ_PRODUCT_CLASS
+			                  										WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+																	AND     P_PROD_CLASS_CD IN (
+																								SELECT  PROD_CLASS_CD
+																								FROM    TB_HQ_PRODUCT_CLASS
+																								WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+																								AND     P_PROD_CLASS_CD = '00000'
+																								)
+																)
+							  AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+			                  AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+			              )  A
+  			 , TB_PO_STORE_STOCK TPSS
+		     , TB_MS_PRODUCT TMP
+		     , TB_MS_PRODUCT_BARCD TMPB
+ 		WHERE TPSS.STORE_CD 	= TMP.STORE_CD
+	    AND TPSS.PROD_CD     = TMP.PROD_CD
+	    AND TPSS.STORE_CD 	= TMPB.STORE_CD(+)
+	    AND TPSS.PROD_CD     = TMPB.PROD_CD(+)
+	    AND TMP.PROD_CLASS_CD = A.LV3_CD
+	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+ 			AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+		</if>
+		<if test="prodCd != null and prodCd != ''">
+			AND TMP.PROD_CD = #{prodCd}
+		</if>
+		<if test="storeCd != null and storeCd != ''">
+			AND TMP.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+				#{item}
+			</foreach>
+		</if>
+		<if test="prodNm != null and prodNm != ''">
+			AND TMP.PROD_NM LIKE '%'||#{prodNm}||'%'
+		</if>
+		<if test="barcdCd != null and barcdCd != ''">
+			AND TMPB.BARCD_CD = #{barcdCd}
+		</if>
+		<if test='prodClassCd != null and prodClassCd != ""'>
+	              AND TMP.PROD_CLASS_CD IN  (
+	                                          SELECT              PROD_CLASS_CD
+	                                          FROM                TB_HQ_PRODUCT_CLASS
+	                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
+	                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
+	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+	                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+	                                         )
+	     </if>
+	     <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN    ( SELECT  PROD_CD
+                                    FROM    TB_MS_VENDOR_PROD
+                                    WHERE   STORE_CD = TPSS.STORE_CD
+                                    AND     VENDR_CD IN
+                                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                  )
+        	</if>
+ 		GROUP BY
+ 			 A.LV1_CD
+		     , A.LV1_NM
+		     , A.LV2_CD
+		     , A.LV2_NM
+		     , A.LV3_CD
+		     , A.LV3_NM  
+ 			 , TPSS.PROD_CD
+		     , TMP.PROD_NM
+		     , TPSS.STORE_CD
+		     , TMP.PO_UNIT_QTY
+		     , TMP.PO_UNIT_FG
+		     , TMPB.BARCD_CD
+ 		ORDER BY TPSS.PROD_CD, TPSS.STORE_CD
+    </select>
 
 </mapper>

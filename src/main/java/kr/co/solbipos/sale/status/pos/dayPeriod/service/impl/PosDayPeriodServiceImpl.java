@@ -63,6 +63,44 @@ public class PosDayPeriodServiceImpl implements PosDayPeriodService {
         return posDayPeriodMapper.getPosDayPeriodDtlList(posDayPeriodVO);
 	}
 
+	/** 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosDayPeriodExcelList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO) {
+
+    	posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+    	if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
+    		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
+	        if (arrStoreCd.length > 0) {
+	    		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+	    			posDayPeriodVO.setArrStoreCd(arrStoreCd);
+	    		}
+	    	}
+    	}
+
+        return posDayPeriodMapper.getPosDayPeriodExcelList(posDayPeriodVO);
+    }
+
+
+    /** 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getPosDayPeriodDtlExcelList(PosDayPeriodVO posDayPeriodVO, SessionInfoVO sessionInfoVO) {
+
+		posDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	posDayPeriodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+		if (posDayPeriodVO.getStoreCd() != null && !"".equals(posDayPeriodVO.getStoreCd())) {
+    		String[] arrStoreCd = posDayPeriodVO.getStoreCd().split(",");
+	        if (arrStoreCd.length > 0) {
+	    		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+	    			posDayPeriodVO.setArrStoreCd(arrStoreCd);
+	    		}
+	    	}
+    	}
+
+        return posDayPeriodMapper.getPosDayPeriodDtlExcelList(posDayPeriodVO);
+	}
 
 
 }

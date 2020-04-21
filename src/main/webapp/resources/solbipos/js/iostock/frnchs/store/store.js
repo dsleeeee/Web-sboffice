@@ -163,8 +163,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   //리포트
   $scope.report = function (reportFg) {
-	var strSlipNo = '2003000001,2003000002'; // 박정은 20.03.12 (수정 예정)
-    //var strSlipNo = ''; // 박정은 20.03.12 (수정 예정)
+    var strSlipNo = '';
     var strDlvrCd = '';
     if (!$scope.flex.collectionView) {
       $scope.flex.itemsSource = new wijmo.collections.CollectionView();
@@ -172,7 +171,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
       if (item.gChk === true) {
-        //strSlipNo += (strSlipNo === '' ? '' : ',') + item.slipNo; // 박정은 20.03.12 (수정 예정)
+    	  strSlipNo += (strSlipNo === '' ? '' : ',') + item.slipNo;
         if (nvl(item.dlvrCd, '') !== '' && strDlvrCd.indexOf(item.dlvrCd) < 0) {
           strDlvrCd += (strDlvrCd === '' ? '' : ',') + item.dlvrCd;
         }

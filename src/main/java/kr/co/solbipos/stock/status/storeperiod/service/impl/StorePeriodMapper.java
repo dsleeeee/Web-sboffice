@@ -13,4 +13,7 @@ public interface StorePeriodMapper {
     
     /** 매장기간수불 - 매장기간수불 수량 선택 상세 리스트 조회 */
     List<DefaultMap<String>> getStorePeriodQtyDtlList(StorePeriodVO storePeriodVO);
+    
+    /** 매장기간수불 - 매장기간수불 엑셀 전체 리스트 조회 */
+    List<DefaultMap<String>>getStoreperiodExcelList(StorePeriodVO storePeriodVO);
 }

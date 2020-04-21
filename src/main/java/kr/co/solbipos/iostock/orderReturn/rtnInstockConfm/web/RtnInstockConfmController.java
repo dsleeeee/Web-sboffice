@@ -134,12 +134,12 @@ public class RtnInstockConfmController {
     @RequestMapping(value = "/rtnInstockConfmDtl/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getRtnInstockConfmDtlList(HttpServletRequest request, HttpServletResponse response,
-        Model model, RtnInstockConfmVO rtnInstockConfmVO) {
+        Model model, RtnInstockConfmVO rtnInstockConfmVO, SessionInfoVO sessionInfoVO) {
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        sessionInfoVO = sessionService.getSessionInfo(request);
         rtnInstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = rtnInstockConfmService.getRtnInstockConfmDtlList(rtnInstockConfmVO);
+        List<DefaultMap<String>> list = rtnInstockConfmService.getRtnInstockConfmDtlList(rtnInstockConfmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, rtnInstockConfmVO);
     }
