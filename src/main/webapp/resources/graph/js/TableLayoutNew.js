@@ -3,6 +3,7 @@ mxGraph.prototype.gridSize = 10;
 mxGraph.prototype.foldingEnabled = false;
 mxGraphView.prototype.gridColor = '#e0e0e0';
 var currentCell;
+var currentCells = [];
 var backgroundColor;
 var currentGraph;
 
@@ -549,8 +550,8 @@ GraphLayout.prototype.init = function() {
     var rubberband = new mxRubberband(graph);
     graph.keyHandler = graph.createKeyHandler(graph);
 
-    var graphHandlerMouseDown = mxGraphHandler.prototype.mouseDown;
-    graph.graphHandler.mouseDown = function(sender, me) {
+    var graphHandlermouseUp = mxGraphHandler.prototype.mouseUp;
+    graph.graphHandler.mouseUp = function(sender, me) {
 
     	currentGraph = graph;
 
@@ -565,6 +566,8 @@ GraphLayout.prototype.init = function() {
         	var cellStyle = selectedCell.style;
 
         	currentCell = selectedCell;
+        	//console.log(graph.getSelectionCells());
+        	currentCells = graph.getSelectionCells();
 
         	var styleObjArr = getCellStyle(cellStyle);
 
@@ -577,11 +580,14 @@ GraphLayout.prototype.init = function() {
         	tblTypeFgComboBox.selectedValue = styleObjArr[0].tblTypeFg;
         	tblSeatCntComboBox.selectedValue = styleObjArr[1].tblSeatCnt;
 
+        	$("#btnTblAttConfig").show();
+
         	//console.log(styleObjArr);
 
     	} else {
 
     		currentCell = null;
+    		currentCells = null;
 
     		$("#cellX").val("");
         	$("#cellY").val("");
@@ -591,9 +597,11 @@ GraphLayout.prototype.init = function() {
 
         	tblSeatCntComboBox.selectedValue = "0";
         	tblTypeFgComboBox.selectedValue = "1";
+
+        	$("#btnTblAttConfig").hide();
     	}
 
-    	graphHandlerMouseDown.apply(this, arguments);
+    	graphHandlermouseUp.apply(this, arguments);
     }
 
     // 구성요소 이동 시 처리

@@ -8,6 +8,7 @@ mxGraph.prototype.allowNegativeCoordinates = false;
 mxGraphHandler.prototype.guidesEnabled = true;
 
 var currentTblTypeFg = "1";
+var currentTblNum = "";
 var currentBgImg = "";
 var currentHorizontalRatio = 0;
 var currentVerticalRatio = 0;
@@ -770,10 +771,9 @@ FormatAttr.prototype.refresh = function() {
     //this.setElementsValue(graph);
 
     //선택된 셀이 있을 때만 활성화 되는 부분
-    var cells = graph.getSelectionCells();
     document.getElementById('fontStyle').style.display = 'none';
     document.getElementById('textAlign').style.display = 'none';
-    if (cells.length > 0) {
+    if (currentCells.length > 0) {
         //폰트 설정
         document.getElementById('fontStyle').style.display = 'block';
         //정렬 옵션
@@ -820,6 +820,11 @@ FormatAttr.prototype.initElements = function() {
     //저장 버튼
     addClickHandler(document.getElementById('btnSaveAttr'), function() {
         format.save();
+    });
+
+  //저장 버튼
+    addClickHandler(document.getElementById('btnSaveTypeAttr'), function() {
+        format.typeSave();
     });
 
     /**
@@ -932,15 +937,14 @@ FormatAttr.prototype.setElementsValue = function(graph) {
     var format = this;
 
     //선택된 셀에서 스타일 정보 읽기
-    var cells = graph.getSelectionCells();
     var initFontSize = 10;
     var initFontFamily;
     var initFontColor;
     var initFontStyle;
     var initAlign;
     var initVAlign;
-    for (var i = 0; i < cells.length; i++) {
-        var cell = cells[i];
+    for (var i = 0; i < currentCells.length; i++) {
+        var cell = currentCells[i];
         var state = graph.view.getState(cell);
         if (state != null) {
             initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
@@ -994,9 +998,8 @@ FormatAttr.prototype.getSelectedPreviewCells = function() {
     var childCount = model.getChildCount(parent);
     var cellsTemp = [];
 
-    var graphCells = graph.getSelectionCells();
-    for (var i = 0; i < graphCells.length; i++) {
-        var graphCell = graphCells[i];
+    for (var i = 0; i < currentCells.length; i++) {
+        var graphCell = currentCells[i];
         for (var j = 0; j < childCount; j++) {
             var previewCell = model.getChildAt(parent, j);
             if (graphCell.id == previewCell.id) {
@@ -1013,7 +1016,25 @@ FormatAttr.prototype.getSelectedPreviewCells = function() {
  */
 FormatAttr.prototype.open = function(isLoad) {
 
-	if (currentCell != null && currentCell != undefined) {
+	var graph = this.graph;
+	var preview = this.preview;
+    var main = this.main;
+    var param = "confgSubFg=";
+
+    if (currentCells.length > 1) {
+    	currentCell = currentCells[0];
+    	$("#btnSaveTypeAttr").hide();
+    } else {
+    	$("#btnSaveTypeAttr").show();
+    }
+
+    if (currentCell != null && currentCell != undefined) {
+
+    	if (currentCell.geometry != null && currentCell.geometry != undefined) {
+        	currentWidth = currentCell.geometry.width;
+        	currentHeight = currentCell.geometry.height;
+        }
+
 		var styleObjArr = getCellStyle(currentCell.style);
 
 		if (styleObjArr[0].tblTypeFg == undefined) {
@@ -1022,19 +1043,15 @@ FormatAttr.prototype.open = function(isLoad) {
 			currentTblTypeFg = styleObjArr[0].tblTypeFg;
 		}
 
+		if (currentCell.id != null && currentCell.id != undefined) {
+			currentTblNum = currentCell.id;
+		}
+
     	currentBgImg = styleObjArr[3].image;
 	}
 
-	currentWidth = $("#cellW").val();
-	currentHeight = $("#cellH").val();
-
-	var graph = this.graph;
-	var preview = this.preview;
-    var main = this.main;
-    var param = "confgSubFg=1";
-
-    if (currentTblTypeFg != undefined && currentTblTypeFg != "") {
-    	param = "confgSubFg="+currentTblTypeFg;
+    if (currentTblNum != undefined && currentTblNum != "") {
+    	param = "confgSubFg="+currentTblNum;
     }
 
     var sid = "";
@@ -1043,8 +1060,10 @@ FormatAttr.prototype.open = function(isLoad) {
     	param += "&sid=" + document.getElementsByName('sessionId')[0].value;
     }
 
+    param += "&tblTypeFg=" + currentTblTypeFg;
+
     //open
-    var reqGroup = mxUtils.post(TABLEATTR_OPEN_URL, param,
+    var reqGroup = mxUtils.post(TABLEATTR_NUM_OPEN_URL, param,
         mxUtils.bind(this, function(req) {
             //var enabled = req.getStatus() != 404;
             if (req.getStatus() == 200) {
@@ -1054,7 +1073,6 @@ FormatAttr.prototype.open = function(isLoad) {
                 if (xmlStr != null) {
                     try {
                         var xml = mxUtils.parseXml(xmlStr);
-                        //console.log(xml);
                         this.setGraphXml(graph, xml.documentElement, graph.container.offsetWidth, graph.container.offsetHeight);
                         this.setGraphXml(preview, xml.documentElement, currentWidth, currentHeight);
                         this.resizeCells(preview);
@@ -1146,9 +1164,91 @@ FormatAttr.prototype.resizeCells = function(graph) {
 };
 
 /**
- * 화면구성 XML을 서버에 저장
+ * 화면구성 XML을 서버에 저장(테이블별 저장)
  */
 FormatAttr.prototype.save = function() {
+
+	var graph = this.graph;
+    var preview = this.preview;
+
+    if (graph.isEditing()) {
+        graph.stopEditing();
+    }
+
+    if (preview.isEditing()) {
+    	preview.stopEditing();
+    }
+
+    var nodeGraph = null;
+    var nodePreview = null;
+    var arrTblCd = [];
+
+    var enc = new mxCodec(mxUtils.createXmlDocument());
+
+    nodeGraph = enc.encode(graph.getModel());
+    nodePreview = enc.encode(preview.getModel());
+
+    //저장 될 XML을 보고 싶을 때 사용
+
+    //var xmlPretty = mxUtils.getPrettyXml(node);
+    //console.log(xmlPretty);
+    //mxLog.show();
+    //mxLog.write(xmlPretty);
+
+    var xmlGraph = mxUtils.getXml(nodeGraph);
+    var xmlPreview = mxUtils.getXml(nodePreview);
+
+    xmlGraph = encodeURIComponent(xmlGraph);
+    xmlPreview = encodeURIComponent(xmlPreview);
+
+    var sid = "";
+
+    if(document.getElementsByName('sessionId')[0]){
+    	sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+	for (var i = 0; i < currentCells.length; i++) {
+		arrTblCd.push(String(currentCells[i].id));
+    }
+
+    var params = {};
+    params.sid = sid;
+    params.xmlGraph = xmlGraph;
+    params.xmlPreview = xmlPreview;
+    params.confgSubFg = currentTblTypeFg;
+    params.arrTblCd = arrTblCd;
+
+    //console.log(params);
+
+    if (xmlGraph.length < MAX_REQUEST_SIZE) {
+
+    	$.ajaxSettings.traditional = true;
+
+    	// ajax 통신 설정
+    	$.ajax({
+    	    type: "POST",
+    	    url : TABLEATTR_NUM_SAVE_URL,
+    	    data : params,
+            contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+    	    success : function(data) {
+    	        // Sucess시, 처리
+    	    	mxUtils.alert(mxResources.get('saved'));
+    	    },
+    	    error : function(xhr, textStatus, errorThrown){
+    	    	mxUtils.alert(mxResources.get('errorSavingFile'));
+    	    }
+    	});
+
+    } else {
+        mxUtils.alert(mxResources.get('drawingTooLarge'));
+    }
+
+};
+
+/**
+ * 화면구성 XML을 서버에 저장 (유형별 저장)
+ */
+FormatAttr.prototype.typeSave = function() {
 
 	var graph = this.graph;
     var preview = this.preview;
@@ -1188,26 +1288,30 @@ FormatAttr.prototype.save = function() {
     	sid = document.getElementsByName('sessionId')[0].value;
     }
 
-    try {
-        if (xmlGraph.length < MAX_REQUEST_SIZE) {
+    var params = {};
+    params.sid = sid;
+    params.xmlGraph = xmlGraph;
+    params.xmlPreview = xmlPreview;
+    params.confgSubFg = currentTblTypeFg;
 
-        	var onload = function(req) {
-                mxUtils.alert(mxResources.get('saved'));
-            }
+    if (xmlGraph.length < MAX_REQUEST_SIZE) {
 
-        	var onerror = function(req) {
-                mxUtils.alert('Error');
-            }
+    	// ajax 통신 설정
+    	$.ajax({
+    	    type: "POST",
+    	    url : TABLEATTR_SAVE_URL,
+    	    data : params,
+    	    success : function(data) {
+    	        // Sucess시, 처리
+    	    	mxUtils.alert(mxResources.get('saved'));
+    	    },
+    	    error : function(xhr, textStatus, errorThrown){
+    	    	mxUtils.alert(mxResources.get('errorSavingFile'));
+    	    }
+    	});
 
-            new mxXmlRequest(TABLEATTR_SAVE_URL, 'sid=' + sid + '&xmlGraph=' + xmlGraph + '&xmlPreview=' + xmlPreview + "&confgSubFg="+currentTblTypeFg).send(onload, onerror);
-
-        } else {
-            mxUtils.alert(mxResources.get('drawingTooLarge'));
-            //mxUtils.popup(xml);
-            return;
-        }
-    } catch (e) {
-        mxUtils.alert(mxResources.get('errorSavingFile'));
+    } else {
+        mxUtils.alert(mxResources.get('drawingTooLarge'));
     }
 
 };
