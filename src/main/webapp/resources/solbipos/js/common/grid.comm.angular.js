@@ -766,11 +766,11 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         var page_scale = $scope._getPagingInfo('pageScale');
         var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
-        var firstBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageFirst(\'{ctrlName}\', 0);\"></a></li>';
+        var firstBtnTag = '<li class=\"btn_previous first\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageFirst(\'{ctrlName}\', 0);\"></a></li>';
         var prevBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pagePrev($event, \'{ctrlName}\', \'{prev}\');\"></a></li>';
         var pageBtnTag = '<li><a href=\"javascript:void(0);\" onclick="return false;" class=\"{cnm}\" ng-click=\"_pageView(\'{ctrlName}\', \'{i}\');\">{i}</a></li>';
         var nextBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageNext($event, \'{ctrlName}\', \'{next}\');\"></a></li>';
-        var lastBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageLast(\'{ctrlName}\', \'{totalPage}\');\"></a></li>';
+        var lastBtnTag = '<li class=\"btn_next last\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageLast(\'{ctrlName}\', \'{totalPage}\');\"></a></li>';
         var pagerTag = '';
 
         var item = {};
@@ -936,12 +936,19 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       $scope._getComboData = function (id) {
         return comboData.get(id);
       };
-
-      /*
-       * 콤보박스 listScale 수기 입력시 숫자만 입력 받도록 함
-      */
+      // 콤보박스 listScale 수기 입력시 숫자만 입력 받도록 함
       $scope._checkValidation = function(s){
+
     	  s.text = s.text.replace(/[^0-9]/g,"");
+
+    	  var str = s.text.split("");
+    	  if(str[0] == "0") {
+    		  s.text = s.text.replace(/(^0+)/,"");
+    	  }
+
+    	  if(parseInt(s.text) > 999) {
+    		  s.text = 999;
+    	  }
       }
       // initMenu Data Setter
       $scope._setInitMenu = function (data) {
