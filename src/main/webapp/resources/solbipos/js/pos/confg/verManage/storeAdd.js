@@ -25,6 +25,35 @@ function search(){
   scope._pageView('addStoreCtrl', 1);
 }
 
+// 매장코드 입력양식 값 제어
+function setText(){
+
+  if ($("#chkNulti").prop("checked")) {
+    var val = $("#srchStoreCd").val();
+    var pattern = /[^a-zA-Z0-9]/gi;   // 특수문자, 공백, 한글 제거
+
+    $("#srchStoreCd").val(comma(val.replace(pattern, "")));
+  }
+}
+
+// 매장코드 자릿수(7자리) 체크하여 콤마 찍기
+function comma(num){
+  var len, point, str;
+
+  num = num + "";
+  point = num.length % 7 ;
+  len = num.length;
+
+  str = num.substring(0, point);
+  while (point < len) {
+    if (str != "") str += ",";
+    str += num.substring(point, point + 7);
+    point += 7;
+  }
+
+  return str;
+}
+
 /**********************************************************************
  *  적용매장 그리드
  **********************************************************************/

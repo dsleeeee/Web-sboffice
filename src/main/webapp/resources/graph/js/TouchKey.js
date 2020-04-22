@@ -80,6 +80,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.filter.showFilterIcons = false;
     $scope.touchKeyFilter = 'F';
+    $scope.touchKeyGrp = null;
   };
   // 필터선언
   $scope.filter = {
@@ -105,8 +106,10 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }, 10);
   };
-  //
+  //터치키 그룹코드 콤보
   $scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
+  //터치키 그룹코드 콤보(터치키 매장적용 팝업)
+  $scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
   // 버튼사용여부 필터 콤보
   $scope._setComboData("touchKeyFilterCombo", touchKeyFilterData);
   $scope.setTouchKeyFilter = function(s) {
@@ -117,6 +120,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params = {};
     params.prodClassCd = $scope.getProdClassInfo().prodClassCd;
+    params.prodNm = $scope.getProdClassInfo().prodNm;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub("/base/prod/touchKey/touchKey/list.sb", params, function() {
       // 조회내용 없을 경우 팝업메시지 별도 처리
@@ -188,6 +192,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
 
         for (var i = 0; i < scopeLayer.flexLayer.itemsSource.items.length; i++) {
           if ( scopeLayer.flexLayer.itemsSource.items[i].gChk === true ) {
+            scopeLayer.flexLayer.itemsSource.items[i].tukeyGrpCd = scopeLayer.applyTouchKeyGrp;
             paramArr.push(scopeLayer.flexLayer.itemsSource.items[i]);
           }
         }
@@ -385,6 +390,9 @@ Touchkey.prototype.init = function () {
   //마우스 오른쪽 클릭 - 컨텍스트 메뉴
   mxEvent.disableContextMenu(this.classContainer);
   mxEvent.disableContextMenu(this.prodContainer);
+
+  format.selectStyle.selectedValue = touchKeyStyleCd.replaceAll('\"','');
+  format.setBtnStyle();
 
   //서버의 초기 설정 로드
   this.format.open(true);
@@ -1413,16 +1421,20 @@ Format.prototype.initElements = function () {
     scope._broadcast('touchKeyCtrl');
   });
 
-  // 새로그리기 버튼
+  // 신규생성 버튼
   addClickHandler(document.getElementById('btnNewGrp'), function () {
 
     var scope = agrid.getScope("touchKeyCtrl");
     var classArea = format.touchkey.classArea;
     var prodArea = format.touchkey.prodArea;
 
-    // 터치키 그룹코드와 새 그룹으로 저장 버튼 막기
+    // 터치키 그룹코드와 저장 버튼 막기
     $("#btnSave").css("display", "none");
     $("#touchKeyGrpCombo").attr("disabled", true);
+    $("#touchKeyGrpCombo").css('background-color', '#F0F0F0');
+
+    format.selectStyle.selectedValue = '01';
+    format.setBtnStyle();
 
     // 아무것도 없는 빈 XML 터치키 셋팅
     format.setGraphXml(classArea, null);
@@ -1531,12 +1543,10 @@ Format.prototype.initElements = function () {
       }
     });
 
-    // 터치키 저장 Flag '수정'으로 기본셋팅(조회를 한다는 것 > 터치키 그룹이 있다는것)
-    $("#hdNewGrp").val("N");
-
     // 터치키 그룹코드와 새 그룹으로 저장 버튼 보이기
     $("#btnSave").css("display", "");
     $("#touchKeyGrpCombo").attr("disabled", false);
+    $("#touchKeyGrpCombo").css('background-color', '#FFFFFF');
 
   });
 
@@ -1569,22 +1579,34 @@ Format.prototype.initElements = function () {
 
   });
 
-  // 저장 버튼
+  // 수정 버튼
   addClickHandler(document.getElementById('btnSave'), function () {
 
-    // 터치키 저장 시 수정하겠다는 Flag
-    $("#hdNewGrp").val("N");
+    var scope = agrid.getScope("touchKeyCtrl");
+    scope.$apply(function(){
+      scope._popConfirm("해당 그룹의 터치키를 수정하시겠습니까?", function() {
 
-    format.save(format.touchkey.classArea, format.touchkey.prodArea);
+        // 터치키 저장 시 수정하겠다는 Flag
+        $("#hdNewGrp").val("N");
+        // 저장
+        format.save(format.touchkey.classArea, format.touchkey.prodArea);
+      });
+    });
   });
 
-  // 새 그룹으로 저장 버튼
+  // 신규저장 버튼
   addClickHandler(document.getElementById('btnSaveNewGrp'), function () {
-   
-    // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
-    $("#hdNewGrp").val("Y");
 
-    format.save(format.touchkey.classArea, format.touchkey.prodArea);
+    var scope = agrid.getScope("touchKeyCtrl");
+    scope.$apply(function(){
+      scope._popConfirm("신규 그룹으로 터치키를 생성하시겟습니까?", function() {
+
+        // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
+        $("#hdNewGrp").val("Y");
+        // 저장
+        format.save(format.touchkey.classArea, format.touchkey.prodArea);
+      });
+    });
   });
 
   // 버튼초기화 버튼
@@ -2109,6 +2131,52 @@ Format.prototype.save = function () {
         scope.$apply(function(){
           scope.$broadcast('loadingPopupInactive');
           scope._popMsg(mxResources.get('saved'));
+
+          // 새로 저장한 그룹코드 값으로 selectBox 셋팅
+          setTimeout(function () {
+            var jsonStr = JSON.parse(req.getText());
+            var xmlStr = JSON.stringify(jsonStr.data).replaceAll('\"','');
+            scope.touchKeyGrp = xmlStr;
+            scope.touchKeyGrpCombo.selectedValue = xmlStr;
+          }, 50);
+          
+          // 터치키 그룹 코드 재조회
+          $.ajax({
+            type: 'POST',
+            async: false,
+            cache: false,
+            dataType: 'json',
+            data: params,
+            url: '/base/prod/touchKey/touchKey/getTouchKeyGrp.sb',
+            success: function(data){
+
+              var list = data.data.list;
+              var comboArray = [];
+              var comboData  = {};
+
+              for (var i = 0; i < list.length; i++) {
+                comboData       = {};
+                comboData.name  = list[i].name;
+                comboData.value = list[i].value;
+                comboArray.push(comboData);
+              }
+
+              touchKeyGrpData = comboArray;
+              scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
+              scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+            }
+          });
+
+          // 터치키 그룹이 있으므로, 보여주기
+          $("#btnSrchTouchKey").css("display", "");
+          $("#btnNewGrp").css("display", "");
+          //$("#btnCancleNewGrp").css("display", "");
+          $("#btnSave").css("display", "");
+          $("#touchKeyGrpCombo").attr("disabled", false);
+          $("#touchKeyGrpCombo").css('background-color', '#FFFFFF');
+          $("#btnApplyStore").css("display", "");
+          $("#trTouchKeyGrp").css("display", "");
+          $("#trApplyStore").css("display", "");
         });
       };
       var onerror = function (req) {
@@ -2135,7 +2203,7 @@ Format.prototype.save = function () {
         params += "&sid=" + document.getElementsByName('sessionId')[0].value;
       }
       new mxXmlRequest(TOUCHKEY_SAVE_URL, params).send(onload, onerror);
-    }
+  }
     else {
       scope.$apply(function(){
         scope.$broadcast('loadingPopupInactive');

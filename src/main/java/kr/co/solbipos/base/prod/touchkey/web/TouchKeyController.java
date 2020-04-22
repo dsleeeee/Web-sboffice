@@ -273,4 +273,27 @@ public class TouchKeyController {
         return returnJson(Status.OK, result);
 
     }
+
+    /**
+     * 터치키 그룹 가져오기(터치기 수정/저장 후 사용)
+     *
+     * @param touchKeyVO TouchKeyVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getTouchKeyGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyGrp(TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        TouchKeyVO params = new TouchKeyVO();
+        params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        params.setStoreCd(sessionInfoVO.getStoreCd());
+        params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return returnListJson(Status.OK, touchkeyService.getTouchKeyGrp(params, sessionInfoVO));
+    }
+
 }

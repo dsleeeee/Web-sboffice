@@ -269,6 +269,12 @@
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
         </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
         <if test='storeNm != null and storeNm != ""'>
            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>

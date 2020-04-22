@@ -37,16 +37,17 @@
         <wj-combo-box
                 id="touchKeyGrpCombo"
                 ng-model="touchKeyGrp"
+                control="touchKeyGrpCombo"
                 items-source="_getComboData('touchKeyGrpCombo')"
                 display-member-path="name"
-                selected-value-path="name"
+                selected-value-path="value"
                 is-editable="false"
                 initialized="_initComboBox(s)">
         </wj-combo-box>
         </div>
-        <%-- 새로그리기 --%>
+        <%-- 신규생성 --%>
         <button class="btn_skyblue fl ml20" id="btnNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.newGrp"/></button>
-        <%-- 새로그리기 취소 --%>
+        <%-- 신규생성 취소 --%>
         <%--<button class="btn_skyblue fl ml20" id="btnCancleNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.cancle"/></button>--%>
         <%-- 터치키 신규 등록인지 수정인지 여부 파악을 위해--%>
         <input type="hidden" id="hdNewGrp"/>
@@ -92,13 +93,17 @@
                  ng-model="prodClassInfo.prodClassCdNm"
                  ng-click="popUpProdClass()"
                  placeholder="상품분류 선택" ng-readonly="true">
-          <button class="btn_skyblue fl ml5" id="btnSearch">
-            <s:message code="cmm.search" />
-          </button>
+        </div>
+        <div class="updownSet mt5">
+            <span class="fl bk lh30 s14 ml5">&nbsp;&nbsp;&nbsp;<s:message code="touchKey.grid.prodNm"/> :</span>
+            <input type="text" id="_prodNm" name="prodNm" class="sb-input fl w60 ml5" style="font-size: 13px;" ng-model="prodClassInfo.prodNm">
+            <button class="btn_skyblue fl ml5" id="btnSearch">
+                <s:message code="cmm.search" />
+            </button>
         </div>
       </div>
       <%--위즈모 테이블--%>
-      <div class="cfgWrap2">
+      <div class="cfgWrap2" style="height:461px;">
         <wj-flex-grid
           autoGenerateColumns="false"
           control="flex"
@@ -135,11 +140,11 @@
         <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
         <div class="txtIn">
           <div class="sb-select dkbr fl w120px">
-            <div id="selectStyle" <c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>></div>
+            <div id="selectStyle" ng-model="selectStyle" <%--<c:if test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:if>--%>></div>
           </div>
-          <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
-          <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
-          <button class="btn_skyblue fl ml20" id="btnSaveNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.saveNewGrp"/></button>
+          <button class="btn_skyblue fl ml5" id="btnApplyStyle" <%--<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>--%>style="margin-left : 4px;"><s:message code="touchKey.applyStyle"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSave" <%--<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>--%>style="margin-left : 4px;"><s:message code="cmm.edit"/></button>
+          <button class="btn_skyblue fl ml20" id="btnSaveNewGrp" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="display: none;"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.saveNewGrp"/></button>
         </div>
       </div>
       <div id="touchArea" class="prev2 fl">
@@ -240,10 +245,11 @@
   // 기존 터치키 그룹이 있을 떄/ 없을 때 버튼, selectBox 설정
   if(touchKeyGrpData.length === 0){
     $("#btnSrchTouchKey").css("display", "none");  //조회버튼
-    $("#btnNewGrp").css("display", "none");         //새로그리기버튼
-    //$("#btnCancleNewGrp").css("display", "none");      //새로그리기취소버튼
+    $("#btnNewGrp").css("display", "none");         //신규생성버튼
+    //$("#btnCancleNewGrp").css("display", "none");      //신규생성취소버튼
     $("#btnSave").css("display", "none");            //저장버튼
     $("#touchKeyGrpCombo").attr("disabled", true);  //터치키 그룹코드 콤보박스
+    $("#touchKeyGrpCombo").css('background-color', '#F0F0F0'); // 터치키 그룹코드 콤보박스 (회색처리)
     $("#btnApplyStore").css("display", "none");     //터치키매장적용버튼
     $("#trTouchKeyGrp").css("display", "none");     //터치키그룹코드 콤보박스 행
     $("#trApplyStore").css("display", "none");     //터치키매장적용버튼 행
@@ -254,6 +260,7 @@
     //$("#btnCancleNewGrp").css("display", "");
     $("#btnSave").css("display", "");
     $("#touchKeyGrpCombo").attr("disabled", false);
+    $("#touchKeyGrpCombo").css('background-color', '#FFFFFF');
     $("#btnApplyStore").css("display", "");
     $("#trTouchKeyGrp").css("display", "");
     $("#trApplyStore").css("display", "");
@@ -309,5 +316,5 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2019010202.190"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=2019010203"
         charset="utf-8"></script>
