@@ -21,19 +21,26 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     $scope.srchBarcdStartDate.isReadOnly = $scope.isChecked;
     $scope.srchBarcdEndDate.isReadOnly = $scope.isChecked;
   };
-  
+
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.barcdSelectStoreShow = function () {
     $scope._broadcast('barcdSelectStoreCtrl');
   };
-  
+
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  $scope._broadcast("chkProdClassDisplay");
   }
-  
+
+  // 조회조건 바코드코드 엔터 이벤트
+  $scope.searchBarCdKeyEvt = function (event) {
+	  if (event.keyCode === 13) { // 이벤트가 enter 이면
+		  $scope._broadcast('barcdMainCtrlSrch');
+	  }
+  }
+
 }]);
 
 
@@ -60,7 +67,7 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
@@ -91,14 +98,14 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 		  }
 	  }
   });
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("barcdMainCtrl", function (event, data) {
     $scope.searchBarcdList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("barcdMainCtrlSrch", function (event, data) {
     $scope.searchBarcdList(false);
@@ -112,19 +119,19 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // 파라미터
     var params       = {};
-    params.listScale = $scope.barcdListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.storeCd   = $("#barcdSelectStoreCd").val();
     $scope.storeCd   = $("#barcdSelectStoreCd").val();
     params.barcdCd	 = $scope.searchBarCd;
     params.prodNm    = $scope.searchProdNm;
     params.orgnFg	 = $scope.orgnFg;
-    
+
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
 	  $scope.startDateForDt = wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyyMMdd');
       $scope.endDateForDt = wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyyMMdd');
-      
+
 	  params.startDate = wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyyMMdd');
 	}else{
@@ -137,22 +144,27 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/barcd/barcd/list.sb", params);
-	
+
 	//메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
 		var rows = sender.rows;
-		
-		var params		 = {};
-	    params.prodCd    = rows[0].dataItem.prodCd;
-	    params.storeCd	 = $("#barcdSelectStoreCd").val();
-	   
-	    // 코너별 매출현황 상세조회.
-	    $scope._broadcast("barcdDtlCtrlSrch", params);
+        var params       = {};
+        if(rows.length > 0){
+        	params.prodCd    = rows[0].dataItem.prodCd;
+    	    params.storeCd	 = $("#barcdSelectStoreCd").val();
+
+    	    // 코너별 매출현황 상세조회.
+    	    $scope._broadcast("barcdDtlCtrlSrch", params);
+        }else{
+            // 바코드별 매출 그리드 조회 후 상세내역 그리드 초기화
+            var orderDtlScope = agrid.getScope('barcdDtlCtrl');
+            orderDtlScope.dtlGridDefault();
+        }
 	}
   };
 
 
-//엑셀 다운로드
+  //엑셀 다운로드
   $scope.excelDownloadBarcd = function () {
     if ($scope.flex.rows.length <= 0) {
       $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -193,7 +205,7 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	    s.bottomLeftCells.setCellData(0, 0, '합계');
 
 	  }
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("barcdDtlCtrl", function (event, data) {
 		  if(data != undefined){
@@ -201,12 +213,12 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 			$scope.barcdCd	  = data.barcdCd;
 			$scope.storeCd	  = data.storeCd;
 		  }
-		
+
 	    $scope.searchBarcdDtlList(true);
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("barcdDtlCtrlSrch", function (event, data) {
 		  if(data != undefined){
@@ -225,7 +237,7 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	  $scope.searchBarcdDtlList = function (isPageChk) {
 	    // 파라미터
 	    var params          = {};
-	    params.listScale    = $scope.barcdDtlListScale; //-페이지 스케일 갯수
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.isPageChk	= isPageChk;
 	    // 등록일자 '전체기간' 선택에 따른 params
 	    if(!$scope.isChecked){
@@ -233,11 +245,11 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	      params.endDate = wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyyMMdd');
 	    }
 	    params.prodCd		= $scope.prodCd;
-	    params.storeCd		= $scope.storeCd;   
+	    params.storeCd		= $scope.storeCd;
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/barcd/barcdDtl/list.sb", params);
 	  };
-	  
+
 	//엑셀 다운로드
 	  $scope.excelDownloadBarcdDtl = function () {
 	    if ($scope.flex.rows.length <= 0) {
@@ -258,6 +270,16 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);
 	      });
+	    }, 10);
+	  };
+
+	  // 상세 그리드 초기화
+	  $scope.dtlGridDefault = function () {
+	    $timeout(function () {
+	      var cv          = new wijmo.collections.CollectionView([]);
+	      cv.trackChanges = true;
+	      $scope.data     = cv;
+	      $scope.flex.refresh();
 	    }, 10);
 	  };
 }]);

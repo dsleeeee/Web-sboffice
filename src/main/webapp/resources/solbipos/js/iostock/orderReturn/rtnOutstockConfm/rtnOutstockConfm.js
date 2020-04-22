@@ -53,6 +53,8 @@ app.controller('rtnOutstockConfmCtrl', ['$scope', '$http', '$timeout', function 
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
           params.slipNo = selectedRow.slipNo;
+          params.storeCd = selectedRow.storeCd;
+          params.reqDate = selectedRow.reqDate;
           $scope._broadcast('rtnOutstockConfmDtlCtrl', params);
         }
       }
@@ -128,7 +130,12 @@ app.controller('rtnOutstockConfmCtrl', ['$scope', '$http', '$timeout', function 
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

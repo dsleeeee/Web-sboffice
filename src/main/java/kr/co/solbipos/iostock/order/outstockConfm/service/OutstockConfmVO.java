@@ -177,6 +177,9 @@ public class OutstockConfmVO extends PageVO {
     /** 창고별 배열값-입고금액 합계 */
     private String  arrInTot;
     
+    /** 권역별 창고 코드 */
+    private String  areaFg;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1235,6 +1238,14 @@ public class OutstockConfmVO extends PageVO {
 
 	public void setConfmYn(String confmYn) {
 		this.confmYn = confmYn;
+	}
+	
+	public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
 	}
     
     

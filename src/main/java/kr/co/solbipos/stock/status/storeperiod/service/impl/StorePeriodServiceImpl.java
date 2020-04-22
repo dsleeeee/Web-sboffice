@@ -47,4 +47,19 @@ public class StorePeriodServiceImpl implements StorePeriodService {
 		return storePeriodMapper.getStorePeriodQtyDtlList(storePeriodVO);
 	}
 
+	@Override
+	public List<DefaultMap<String>> getStoreperiodExcelList(StorePeriodVO storePeriodVO, SessionInfoVO sessionInfoVO) {
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(storePeriodVO.getVendrCd()).equals("")) {
+        	storePeriodVO.setArrVendrCd(storePeriodVO.getVendrCd().split(","));
+        }
+        
+		storePeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		if(!StringUtil.getOrBlank(storePeriodVO.getStoreCd()).equals("")) {
+			storePeriodVO.setArrStoreCd(storePeriodVO.getStoreCd().split(","));
+        }
+
+        return storePeriodMapper.getStoreperiodExcelList(storePeriodVO);
+	}
+
 }

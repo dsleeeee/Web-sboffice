@@ -22,7 +22,9 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
 
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
-
+  
+  var global_storage_cnt = 0;	//매장의 창고 갯수
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -113,8 +115,8 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         dataItem.safeStockUnitQty   = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
         dataItem.safeStockEtcQty    = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
              
-        dataItem.storeCurrUnitQty   = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고
-        dataItem.storeCurrEtcQty    = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고      
+        dataItem.storeCurUnitQty   = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고
+        dataItem.storeCurEtcQty    = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고      
         dataItem.remark         	= messages["rtnStoreOrder.dtl.remark"        ]; //비고
         dataItem.poMinQty        	= messages["rtnStoreOrder.dtl.poMinQty"      ]; //발주최소수량
         dataItem.vatFg01        	= messages["rtnStoreOrder.dtl.vatFg"         ]; //상품부가세구분
@@ -164,7 +166,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   $scope.calcAmt = function (item, idx) {
   	//$scope.flex.collectionView.editItem(item);
 
-	  var orderSplyUprc = parseInt(item.saleUprc);
+	  var orderSplyUprc = parseInt(item.orderSplyUprc);
 	  var poUnitQty     = parseInt(item.poUnitQty);
 	  var vat01         = parseInt(item.vatFg01);
 	  var envst0011     = parseInt(item.envst0011);
@@ -496,6 +498,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       item.status    = "U";
       item.reqDate   = $scope.reqDate;
       item.slipFg    = $scope.slipFg;
+      item.storageCd  = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.hdRemark  = $scope.regHdRemark;
       item.storeCd   = $scope.storeCd;
@@ -531,7 +534,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       item.arrOrderAmt 		= arrOrderAmt;
       item.arrOrderVat		= arrOrderVat;
       item.arrOrderTot 		= arrOrderTot;
-		
+
       params.push(item);
     }
 

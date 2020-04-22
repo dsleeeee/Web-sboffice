@@ -9,7 +9,9 @@
 <div class="subCon">
   <div ng-controller="orderStockInfoCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open">${menuNm}</a>
+      <a href="#" class="open fl">${menuNm}</a>
+      <%-- 조회 --%>
+      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('orderStockInfoCtrl', 1)"><s:message code="cmm.search"/></button>
     </div>
     <table class="searchTbl">
       <colgroup>
@@ -51,19 +53,12 @@
       </tbody>
     </table>
 
-    <div class="mt10 pdb20 oh bb">
-      <%-- 조회 --%>
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('orderStockInfoCtrl', 1)">
-        <%--<button class="btn_blue fr" id="btnSearch" ng-click="fnSearch()">--%>
-        <s:message code="cmm.search"/></button>
-    </div>
-
-    <div class="wj-TblWrap" style="height: 350px;">
+    <div class="wj-TblWrap" style="height: 500px;">
 
       <div class="w100 mt10">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 250px;">
+          <div class="wj-gridWrap" style="height: 200px;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -106,7 +101,7 @@
       <div class="w100 mt10" ng-controller="orderStockInfoDtlCtrl">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 250px;">
+          <div class="wj-gridWrap" style="height: 200px;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"

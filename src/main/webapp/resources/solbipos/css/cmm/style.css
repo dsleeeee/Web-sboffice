@@ -2069,13 +2069,14 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 	.wj-TblWrap .w-r:nth-child(4) .wj-TblWrapBr {margin-right:0}
 }
 
+
 /* paging type 3 >> 2 col */
 .pageNum3 {position:relative; width:100%; text-align:center;}
 .pageNum3 ul {height:24px; text-align:center; display:inline-block; overflow:hidden;}
 .pageNum3 ul li {display:inline-block; width:24px; height:24px; float:left; margin:0 1px; font-size:0.875em;}
 .pageNum3 ul li a {font-size:0.875em; display:block; line-height:24px; border-radius:4px;}
 .pageNum3 ul li a:hover {background:#dedede;}
-.pageNum3 ul li a.on {background:#bfbfbf; color:#fff;}
+.pageNum3 ul li a.on {background:#1e88e5; color:#fff;}
 
 .pageNum3 ul li.btn_previous, .pageNum3 ul li.btn_next {width:24px; height:24px; position:relative; margin:0 4px;}
 .pageNum3 ul li.btn_previous a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; background-size:8px 12px; width:24px; height:24px; display:inline-block; position:absolute; left:0px; top:0px}
@@ -2083,6 +2084,13 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 .pageNum3 ul li.btn_next a {border:1px solid #ccc; background:url(../img/ic_pagenum.png) center center no-repeat; background-size:8px 12px; width:24px; height:24px; display:inline-block; position:absolute; left:0px; top:0px; transform:rotate(180deg);}
 .pageNum3 ul li.btn_next a:hover {background:url(../img/ic_pagenum_hover.png) #ccc center center no-repeat;}
 .pageNum3 ul li.btn_previous a span, .pageNum3 ul li.btn_next a span {font-size:0px;}
+
+/* paging 처음/끝 추가 관련 수정 */
+.pageNum ul li.btn_previous.first a,.pageNum2 ul li.btn_previous.first a,.pageNum3 ul li.btn_previous.first a {background:url(../img/ic_pagenum2.png) center center no-repeat;}
+.pageNum ul li.btn_previous.first a:hover,.pageNum2 ul li.btn_previous.first a:hover,.pageNum3 ul li.btn_previous.first a:hover {background:url(../img/ic_pagenum2_hover.png) #ccc center center no-repeat;}
+.pageNum ul li.btn_next.last a,.pageNum2 ul li.btn_next.last a,.pageNum3 ul li.btn_next.last a {background:url(../img/ic_pagenum2.png) center center no-repeat;}
+.pageNum ul li.btn_next.last a:hover,.pageNum2 ul li.btn_next.last a:hover,.pageNum3 ul li.btn_next.last a:hover {background:url(../img/ic_pagenum2_hover.png) #ccc center center no-repeat;}
+
 
 /* grid headers/footer >> total text align */
 .wj-colheaders .wj-header {font-weight:bold !important}
@@ -2152,9 +2160,23 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 	#wjWrapType1 .wj-gridWrap {height:257px}
 	#wjWrapType2 .wj-gridWrap {height:291px}
 	#wjWrapType3 .wj-gridWrap {height:325px}
+	#wjWrapType1 .wj-gridWrap.col2-t1 {height:240px}
+	.wj-gridWrap #rtnStatusPosDtlGrid,.wj-gridWrap #rtnStatusDayDtlGrid{height:442px}
+		
 }
 @media all and (min-width:1029px){
 	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; min-height:257px; border-bottom-color:#eee}
+	#wjWrapType1 .wj-gridWrap.col2-t2,	#wjWrapType1 .wj-gridWrap.col2-t2 #dcfgDtlGrid {max-height:408px; min-height:408px}
+	.wj-gridWrap #rtnStatusPosDtlGrid,.wj-gridWrap #rtnStatusDayDtlGrid{height:442px}
+		
+	/* paging type 3 >> 2 col */
+	.pageNum3 ul {height:30px}
+	.pageNum3 ul li {width:34px; height:30px; margin:0 2px; font-size:1em;}
+	.pageNum3 ul li a {line-height:30px; border-radius:4px;}	
+	.pageNum3 ul li.btn_previous, .pageNum3 ul li.btn_next {width:34px; height:30px; margin:0 8px;}
+	.pageNum3 ul li.btn_previous a {width:34px; height:30px}
+	.pageNum3 ul li.btn_next a {width:34px; height:30px}
+	
 }
 
 /* SCROLLBAR Chrome, Safari, Whale */
@@ -2217,6 +2239,21 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 #wjWrapType1 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner,
 #wjWrapType2 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner,
 #wjWrapType3 .wj-gridWrap [wj-part="root"]::-webkit-scrollbar-corner {background: #dcdcdc}
+
+
+/* 외식테이블 폰터 색상 변경에 땨른 추가 css */
+.linkArea a {color:#222}
+.userLayer ul li a,.tabType1 ul li a,.pageNum ul li a,.pageNum2 ul li a,.pageNum3 ul li a {color:#888}
+.wj-control .wj-input-group .wj-form-control,.wj-input-group-btn > .wj-btn.wj-btn-default,.wj-listbox-item {color:#888 !important}
+
+/* 차트 관련 수정  2020-04-20 */
+.custom-flex-chart.wj-flexchart {font-size:14px; font-weight:normal; color:#000; padding:20px 30px 20px 20px; border:0}
+.custom-flex-chart.wj-flexchart .wj-gridline {stroke:#ddd !important}
+.custom-flex-chart.wj-flexchart .wj-plot-area > rect {stroke-width:0; fill:#fff !important}
+.custom-flex-chart.wj-flexchart .wj-legend > rect {stroke-width:0}
+
+/* col2 select 영역 input text 관련 수정 */
+.inputTxt {max-width:180px; padding:5px 0 0 5px}
 
 
 /* tab type 추가 및  con padding 재정의

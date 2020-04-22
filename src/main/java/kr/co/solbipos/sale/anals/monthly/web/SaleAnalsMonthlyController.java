@@ -85,5 +85,27 @@ public class SaleAnalsMonthlyController {
 
         return ReturnUtil.returnListJson(Status.OK, list, SaleAnalsMonthlyVO);
     }
+    
+    /**
+     * 월력 판매분석- 결제수단별 팝업 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleAnalsMonthlyVO
+     * @return  String
+     * @author  안동관
+     * @since   2018. 11. 13.
+     */
+    @RequestMapping(value = "/monthlyPopup/payFg/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleAnalsMonthlyPopupList(HttpServletRequest request, HttpServletResponse response,
+        Model model, SaleAnalsMonthlyVO SaleAnalsMonthlyVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = SaleAnalsMonthlyService.getSaleAnalsMonthlyPopupList(SaleAnalsMonthlyVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, SaleAnalsMonthlyVO);
+    }
 
 }

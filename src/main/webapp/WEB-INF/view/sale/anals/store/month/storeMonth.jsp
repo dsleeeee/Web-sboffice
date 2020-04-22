@@ -28,9 +28,9 @@
 	        <col class="w35"/>
       	</colgroup>
       	<tbody>
-       	<%-- 조회일자 --%>
+       	<%-- 조회월 --%>
 				<tr>
-	    		<th><s:message code="cmm.search.date" /></th>
+	    		<th><s:message code="cmm.search.month" /></th>
         	<td colspan="3">
           	<div class="sb-select">      
 	          <span class="txtIn w110px">

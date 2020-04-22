@@ -9,4 +9,7 @@ public interface CornerMonthService {
     /** 코너별별요일별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getCornerMonthList(CornerMonthVO cornerMonthVO, SessionInfoVO sessionInfoVO);
 
+    /** 코너별별요일별 탭 - 엑셀 리스트 조회 */
+	List<DefaultMap<String>> getCornerMonthExcelList(CornerMonthVO cornerMonthVO, SessionInfoVO sessionInfoVO);
+
 }

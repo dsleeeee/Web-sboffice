@@ -58,9 +58,9 @@
 						<td colspan="3">
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posProdSelectStore"/>
-								<jsp:param name="targetPosId" value="posProdSelectPos"/>
+								<jsp:param name="subTargetId" value="posProdSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -81,7 +81,6 @@
 						<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
 							<jsp:param name="targetId" value="posProdSelectPos"/>
 							<jsp:param name="targetStoreId" value="posProdSelectStore"/>
-							<jsp:param name="closeFunc" value="getPosNmList"/>
 						</jsp:include>
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -100,11 +99,13 @@
 			items-source="_getComboData('posProdListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-			<input type="text" id="posProdSelectStoreStoreNum" ng-model="storeNum">
+			<input type="hidden" id="posProdSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">

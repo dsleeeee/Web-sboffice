@@ -179,7 +179,7 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
-      if (item.prevOrderTotQty === null && item.orderTotQty === 0) {
+      if (item.prevOrderTotQty === null && (item.orderTotQty === 0 || item.orderTotQty === undefined)) {
         continue;
       }
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
@@ -190,7 +190,7 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
         $scope._popMsg(messages["vendrOrder.reg.not.overOrderTot"]); // 주문금액이 너무 큽니다.
         return false;
       }
-
+      
       item.status    = "U";
       item.slipNo    = $scope.slipNo;
       item.slipFg    = $scope.slipFg;

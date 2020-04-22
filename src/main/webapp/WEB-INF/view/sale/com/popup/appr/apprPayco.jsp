@@ -32,7 +32,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.posNo"/>" 		binding="posNo"			width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprGuBun"/>" 	binding="apprGubun"		width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprProcFg"/>" binding="apprProcFg" 	width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprCompanyNm"/>" 	binding="apprCompanyNm" 	width="150" 	align="right"  is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.payco.apprCompanyNm"/>" 	binding="apprCompanyNm" 	width="150" 	align="center"  is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.saleAmt"/>" 	binding="saleAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>            
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.tipAmt"/>" 	binding="tipAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>     
             <wj-flex-grid-column header="<s:message code="saleComPopup.payco.vatAmt"/>" 	binding="vatAmt"		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>          

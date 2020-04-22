@@ -116,9 +116,70 @@ public class PosProdController {
 
         }
 
-        List<DefaultMap<String>> list = posProdService.getPosProdList(posProdVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posProdVO);
+        if (posProdVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posProdVO);
+        } else {
+        	List<DefaultMap<String>> list = posProdService.getPosProdList(posProdVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posProdVO);
+        }
+    }
+
+    /**
+     * 포스별매출 상품별 - 리스트 조회 (엑셀)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posProdVO
+     * @return  String
+     * @author  이승규
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/prod/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosProdExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosProdVO posProdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (posProdVO.getPosNo() != null && !"".equals(posProdVO.getPosNo())) {
+        	 String[] arrPosNo = posProdVO.getPosNo().split(",");
+             posProdVO.setArrPosNo(arrPosNo);
+             posProdVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = posProdVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			posProdVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = posProdService.getPosNmList(posProdVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                posProdVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        if (posProdVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posProdVO);
+        } else {
+        	List<DefaultMap<String>> list = posProdService.getPosProdExcelList(posProdVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posProdVO);
+        }
     }
 
 }

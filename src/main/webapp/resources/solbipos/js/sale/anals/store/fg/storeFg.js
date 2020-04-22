@@ -12,10 +12,11 @@ var vSortFg = [
 app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeFgCtrl', $scope, $http, $timeout, true));
+  $scope.orgnFg = gvOrgnFg;
 
   //groupRow 접고 펼치기 flag 변수
   $scope.setCollapsed = false;
-  
+
   $scope.srchStoreFgStartDate = wcombo.genDateVal("#srchStoreFgStartDate", getToday());
   $scope.srchStoreFgEndDate   = wcombo.genDateVal("#srchStoreFgEndDate", getToday());
 
@@ -25,7 +26,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('storeFglistScaleBox', gvListScaleBoxData);
 	$scope._setComboData("srchStoreFgDisplay", vSortFg);
-	
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeFgCtrl");
 
@@ -88,7 +89,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
       }
     }
-    
+
     // 그리드 클릭 이벤트
 	s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
@@ -145,7 +146,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
-    
+
 //    if ($("#srchStoreFgProdCd").val() === "") {
 //        $scope._popMsg(messages["storeManage.require.select.prod"]); // 상품을 선택해 주세요.
 //        return false;
@@ -153,7 +154,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/store/fg/list.sb", params);
-    
+
     //create a group to show the grand totals
     var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
     var grpLv2 = new wijmo.collections.PropertyGroupDescription('clsFg');
@@ -161,7 +162,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     var theGrid = new wijmo.Control.getControl('#storeFgGrid');
 
     theGrid.itemsSource = new wijmo.collections.CollectionView();
-    
+
     // custom cell calculation
     theGrid.formatItem.addHandler(function(s, e) {
 
@@ -184,8 +185,8 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     			if(className){
     				row.cssClass=className;
     			}
-    			
-    			if(row.level == 1) { 
+
+    			if(row.level == 1) {
 					if(!$scope.setCollapsed){
 						row.isCollapsed = true;
 					}
@@ -194,7 +195,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     	});
 
     });
-    
+
 	// 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
       var ht = theGrid.hitTest(e);
@@ -240,7 +241,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.storeFgSelectStoreShow = function () {
     $scope._broadcast('storeFgSelectStoreCtrl');
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownloadStoreFg = function () {
     if ($scope.flex.rows.length <= 0) {

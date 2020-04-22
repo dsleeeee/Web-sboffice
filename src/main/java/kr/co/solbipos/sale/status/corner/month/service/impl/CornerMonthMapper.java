@@ -11,7 +11,10 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CornerMonthMapper {
-    /** 코너별매출 일자별 탭 - 리스트 조회 */
+    /** 코너별매출 월별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getCornerMonthList(CornerMonthVO cornerMonthVO);
+
+    /** 코너별매출 월별 탭 - 엑셀 리스트 조회 */
+	List<DefaultMap<String>> getCornerMonthExcelList(CornerMonthVO cornerMonthVO);
 
 }

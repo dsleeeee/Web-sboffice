@@ -70,9 +70,9 @@
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posMonthSelectStore"/>
-								<jsp:param name="targetPosId" value="posMonthSelectPos"/>
+								<jsp:param name="subTargetId" value="posMonthSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -107,16 +107,18 @@
 
 	<div class="mt20 oh sb-select dkbr">
 		<%-- 페이지 스케일  --%>
-		<!-- <wj-combo-box
+		<wj-combo-box
 			class="w100px fl"
 			id="posMonthListScaleBox"
 			ng-model="posMonthListScale"
 			items-source="_getComboData('posMonthListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
-		</wj-combo-box> -->
+			initialized="initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
+		</wj-combo-box>
 
 		<%-- 엑셀 다운로드 //TODO --%>
 		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">

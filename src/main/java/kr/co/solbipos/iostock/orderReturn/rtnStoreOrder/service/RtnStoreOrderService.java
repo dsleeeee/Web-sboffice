@@ -18,7 +18,10 @@ public interface RtnStoreOrderService {
 
     /** 반품등록 반품상품 저장 */
     int saveRtnStoreOrderRegist(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO);
-
+    
+    /** 반품등록 반품상세 저장 */
+    int saveRtnStoreOrderDtl(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO);
+    
     /** 반품등록 반품진행구분 조회 */
     DefaultMap<String> getOrderProcFgCheck(RtnStoreOrderVO rtnStoreOrderVO);
 

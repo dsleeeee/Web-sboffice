@@ -40,6 +40,7 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "prodCd") { // 상품코드 클릭
           var params      = {};
+          params.storeCd  = $("#rtnDstbCloseProdAddProdSelectStoreCd").val();
           params.reqDate  = $scope.reqDate;
           params.prodCd   = selectedRow.prodCd;
           params.prodNm   = selectedRow.prodNm;
@@ -80,10 +81,17 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
 
   // 분배가능상품 리스트 조회
   $scope.searchRtnDstbCloseProdAddProdList = function () {
+	
+    if ($("#rtnDstbCloseProdAddProdSelectStoreCd").val() === "") {
+        $scope._popMsg(messages["rtnDstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
+        return false;
+    }
+
     // 파라미터
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);

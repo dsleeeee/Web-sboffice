@@ -8,20 +8,6 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('currUnityCtrl', $scope, $http, true));
 
-  $scope._setComboData("srchUnitFg", [
-    {"name": messages["hqCurr.unitStockFg"], "value": "stock"},
-    {"name": messages["hqCurr.unitOrderFg"], "value": "order"}
-  ]);
-
-  $scope._setComboData("srchWeightFg", [
-    {"name": messages["hqCurr.weightFg0"], "value": "0"},
-    {"name": messages["hqCurr.weightFg1"], "value": "1"}
-  ]);
-
-  $scope._setComboData("srchSafeStockFg", [
-    {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["hqCurr.safeStockFg0"], "value": "0"}
-  ]);
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("currUnityListScaleBox", gvListScaleBoxData);
@@ -37,7 +23,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
         var col = s.columns[e.col];
         if ((col.binding === "hCurrQty" || col.binding === "mCurrQty") && s.cells.getCellData(e.row,e.col,false) != null ) { // 본사수량 클릭
           wijmo.addClass(e.cell, 'wijLink');
-        } 
+        }
       }
     });
 
@@ -53,7 +39,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
 			var params    = {};
 			params.prodCd   = selectedRow.prodCd;
 			$scope._broadcast('currUnityHqDtlSrchCtrl', params);
-			
+
 		} else if (col.binding === "mCurrQty") { // 매장수량 클릭
 			$("#currUnityStoreDtl").show();
 			$("#currUnityHqDtl").hide();
@@ -76,7 +62,7 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
 //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnitySrchCtrl", function (event, data) {
     $scope.searchCurrUnityList(false);
@@ -94,13 +80,11 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.vendrCd = $("#currUnitySelectVendrCd").val();
     params.prodClassCd = $scope.prodClassCd;
     params.isPageChk   = isPageChk;
-    params.listScale   = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityList.sb", params, function () {
-    	$scope.isChkDt($scope.isChecked);
-    });
-    
+    $scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityList.sb", params);
+
     //메인그리드 조회후 상세그리드 조회.
     $scope.loadedRows = function(sender, args){
         var rows = sender.rows;
@@ -138,13 +122,13 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
     });
   };
-  
+
   //상품분류정보 선택취소
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassCdNm = "";
   }
-  
+
   //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -163,27 +147,19 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._broadcast('currUnitySelectVendrCtrl');
   };
 
-  //엑셀 다운로드
+  //엑셀 다운로드1
   $scope.excelDownload = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '재고현황_본사매장통합현재고_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	// 파라미터
+	var params     = {};
+	params.prodCd = $scope.prodCd;
+	params.prodNm = $scope.prodNm;
+	params.barcdCd = $scope.barcdCd;
+	params.vendrCd = $("#currUnitySelectVendrCd").val();
+	params.prodClassCd = $scope.prodClassCd;
+	params.isPageChk   = true;
+	params.listScale = $scope.listScaleCombo.text;
+	
+	$scope._broadcast('currUnityMainExcelCtrl',params);
   };
 
 }]);
@@ -211,11 +187,11 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnityHqDtlSrchCtrl", function (event, data) {
 	$scope.srchProdCd   = data.prodCd;
-	
+
     $scope.searchCurrUnityHqDtlList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -226,9 +202,9 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
     // 파라미터
     var params     = {};
     params.isPageChk = isPageChk;
-    params.listScale = $scope.listScale;
-    params.prodCd      =	$scope.srchProdCd   
-    	
+    params.listScale = $scope.listScaleCombo.text;
+    params.prodCd      =	$scope.srchProdCd
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityHqDtlList.sb", params);
   };
@@ -242,28 +218,16 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
       $scope.flex.refresh();
     }, 10);
   };
-  
-  //엑셀 다운로드
-  $scope.excelDownload = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '재고현황_본사매장통합현재고_본사재고수량_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+  //엑셀 다운로드2
+  $scope.excelDownload = function () {	  
+	// 파라미터
+	var params     = {};
+	params.isPageChk = true;
+	params.listScale = $scope.listScaleCombo.text;
+	params.prodCd      =	$scope.srchProdCd;
+	
+	$scope._broadcast('currUnityHqDtlExcelCtrl',params);
   };
 
 }]);
@@ -291,11 +255,11 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("currUnityStoreDtlSrchCtrl", function (event, data) {
 	$scope.srchProdCd   = data.prodCd;
-	
+
     $scope.searchCurrUnityStoreDtlList(false);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -307,33 +271,238 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     var params     = {};
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScale;
-    params.prodCd      =	$scope.srchProdCd   
+    params.prodCd      =	$scope.srchProdCd
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityStoreDtlList.sb", params);
   };
 
-  //엑셀 다운로드
+  //엑셀 다운로드3
   $scope.excelDownload = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '재고현황_본사매장통합현재고_매장재고수량'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	// 파라미터
+	var params     = {};
+	params.isPageChk = true;
+	params.listScale = $scope.listScale;
+	params.prodCd      =	$scope.srchProdCd;
+	
+	$scope._broadcast('currUnityStoreDtlExcelCtrl',params);
   };
+
+}]);
+
+// 엑셀 전체 다운 컨트롤러1
+app.controller('currUnityMainExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('currUnityMainExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("currUnityMainExcelCtrl", function (event, data) {
+		if(data != undefined) {			
+			$scope.prodCd = data.prodCd;
+			$scope.prodNm = data.prodNm;
+			$scope.barcdCd = data.barcdCd;
+			$scope.vendrCd = data.vendrCd;
+			$scope.prodClassCd = data.prodClassCd;
+			$scope.isPageChk = data.isPageChk;
+			$scope.listScale = data.listScale;
+
+			$scope.searchCurrUnityExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+
+		}
+
+	});
+
+	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.mainExcelFlex.columns;
+
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
+
+	// 전체 엑셀 리스트 조회
+	$scope.searchCurrUnityExcelList = function (isPageChk) {// 파라미터
+		
+		// 파라미터
+	    var params     = {};
+	    params.prodCd = $scope.prodCd;
+	    params.prodNm = $scope.prodNm;
+	    params.barcdCd = $scope.barcdCd;
+	    params.vendrCd = $("#currUnitySelectVendrCd").val();
+	    params.prodClassCd = $scope.prodClassCd;
+	    params.isPageChk   = isPageChk;
+	    params.listScale = $scope.listScaleCombo.text;
+
+		$scope.isChkProdClassDisplay();
+
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityExcelList.sb", params, function(){
+			if ($scope.mainExcelFlex.rows.length <= 0) {
+			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			      return false;
+			    }
+
+			    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			    $timeout(function () {
+			      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.mainExcelFlex, {
+			        includeColumnHeaders: true,
+			        includeCellStyles   : true,
+			        includeColumns      : function (column) {
+			          return column.visible;
+			        }
+			      }, '재고현황_본사매장통합현재고_'+getToday()+'.xlsx', function () {
+			        $timeout(function () {
+			          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+			        }, 10);
+			      });
+			    }, 10);
+		});
+	};
+
+}]);
+
+// 엑셀 전체 다운 컨트롤러2
+app.controller('currUnityHqDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('currUnityHqDtlExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("currUnityHqDtlExcelCtrl", function (event, data) {
+		if(data != undefined) {			
+			$scope.isPageChk = data.isPageChk;
+			$scope.listScale = data.listScale;
+			$scope.prodCd = data.prodCd;
+
+			$scope.searchCurrUnityHqDtlExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+
+		}
+	});
+
+	// 전체 엑셀 리스트 조회
+	$scope.searchCurrUnityHqDtlExcelList = function (isPageChk) {// 파라미터
+		
+		// 파라미터
+	    var params     = {};
+	    params.isPageChk = isPageChk;
+	    params.listScale = $scope.listScaleCombo.text;
+	    params.prodCd      =	$scope.srchProdCd;
+	    
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityHqDtlExcelList.sb", params, function(){
+			if ($scope.HqDtlExcelFlex.rows.length <= 0) {
+		        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+		        return false;
+		      }
+
+		      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		      $timeout(function () {
+		        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.HqDtlExcelFlex, {
+		          includeColumnHeaders: true,
+		          includeCellStyles   : true,
+		          includeColumns      : function (column) {
+		            return column.visible;
+		          }
+		        }, '재고현황_본사매장통합현재고_본사재고수량_'+getToday()+'.xlsx', function () {
+		          $timeout(function () {
+		            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+		          }, 10);
+		        });
+		      }, 10);
+		});
+	};
+
+}]);
+
+
+//엑셀 전체 다운 컨트롤러3
+app.controller('currUnityStoreDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('currUnityStoreDtlExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("currUnityStoreDtlExcelCtrl", function (event, data) {
+		if(data != undefined) {			
+			$scope.isPageChk = data.isPageChk;
+			$scope.listScale = data.listScale;
+			$scope.prodCd = data.prodCd;
+
+			$scope.searchCurrUnityStoreDtlExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+
+		}
+	});
+	  
+	// 전체 엑셀 리스트 조회
+	$scope.searchCurrUnityStoreDtlExcelList = function (isPageChk) {// 파라미터
+		// 파라미터
+	    var params     = {};
+	    params.isPageChk = isPageChk;
+	    params.listScale = $scope.listScale;
+	    params.prodCd      =	$scope.srchProdCd;
+	    
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityStoreDtlExcelList.sb", params, function(){
+			if ($scope.storeDtlExcelFlex.rows.length <= 0) {
+			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			      return false;
+			    }
+
+			    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			    $timeout(function () {
+			      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.storeDtlExcelFlex, {
+			        includeColumnHeaders: true,
+			        includeCellStyles   : true,
+			        includeColumns      : function (column) {
+			          return column.visible;
+			        }
+			      }, '재고현황_본사매장통합현재고_매장재고수량'+getToday()+'.xlsx', function () {
+			        $timeout(function () {
+			          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+			        }, 10);
+			      });
+			    }, 10);
+		});
+	};
 
 }]);

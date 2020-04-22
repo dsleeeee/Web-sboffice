@@ -2,6 +2,8 @@ package kr.co.solbipos.iostock.order.outstockData.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO;
+import kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.RtnOutstockDataVO;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -30,4 +32,7 @@ public interface OutstockDataMapper {
 
     /** 출고자료생성 - 출고자료생성 TB_PO_HQ_STORE_OUTSTOCK 자료입력 */
     int insertOutstockDataCreate(OutstockDataVO outstockDataVO);
+    
+    /** 반품자료생성 - TB_PO_HQ_STORE_OUTSTOCK_PROD 자료입력*/
+    int insertRtnStoreOutStockProd(OutstockDataVO outstockDataVO);
 }

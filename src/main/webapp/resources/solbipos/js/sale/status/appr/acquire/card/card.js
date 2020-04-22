@@ -203,7 +203,7 @@ app.controller('apprAcquireCardCtrl', ['$scope', '$http', '$timeout', function (
     params.cornrCd   = $("#apprAcquireCardSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprAcquireCardListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     
     $scope.srchPosNo  	  = $("#apprAcquireCardSelectPosCd").val();

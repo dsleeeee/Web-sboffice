@@ -1,32 +1,43 @@
-
 //그리드의 크기
 mxGraph.prototype.gridSize = 10;
 
-//지정된 영역에만 구성요소를 넣을 수 있도록 처리 
+//지정된 영역에만 구성요소를 넣을 수 있도록 처리
 mxGraph.prototype.allowNegativeCoordinates = false;
 
 //셀 가이드 사용 여부
 mxGraphHandler.prototype.guidesEnabled = true;
 
+var currentTblTypeFg = "1";
+var currentBgImg = "";
+var currentHorizontalRatio = 0;
+var currentVerticalRatio = 0;
+var tblAttrGrid;
+var currentWidth;
+var currentHeight;
 
 /**
  * 메인 Class
  */
 TableAttr = function(themes) {
-  mxEventSource.call(this);
-  this.container = document.getElementById('content');
-  
-  //그래프 객체 생성
-  this.graph = new Graph(this.container, themes);
-  
-  //왼쪽 속성명
-  this.comp = new Sidebar(this.graph);
+    mxEventSource.call(this);
+    this.container = document.getElementById('contentTblAttr');
+    this.containerPreview = document.getElementById('previewTblAttr');
 
-  //오른쪽 설정 영역 생성
-  this.format = new Format(this);
-  
-  this.init();
-  
+    //그래프 프리뷰 객체 생성
+    this.preview = new PreViewAttr(this.containerPreview, themes);
+    this.preview.setEnabled(true);
+
+    //그래프 객체 생성
+    this.graph = new GraphAttr(this.container, themes, this.preview);
+
+    //왼쪽 속성명
+    this.comp = new SidebarAttr(this.graph);
+
+    //오른쪽 설정 영역 생성
+    this.format = new FormatAttr(this);
+
+    this.init();
+
 };
 
 //Extends mxEditor
@@ -41,337 +52,368 @@ TableAttr.prototype.format = null;
 //배경색
 TableAttr.prototype.defaultBackgroundColor = '#ffffff';
 
-
 /**
  * 메인 - 초기화
  */
 TableAttr.prototype.init = function() {
-  
 
-  //마우스 오른쪽 클릭 - 컨텍스트 메뉴
-  mxEvent.disableContextMenu(this.container);
+    //마우스 오른쪽 클릭 - 컨텍스트 메뉴
+    mxEvent.disableContextMenu(this.container);
 
-  //매장영역에서 이벤트 발생 시 설정영역을 새로 그려주기 위한 이벤트 핸들러
-  this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
-  this.graph.addListener(mxEvent.EDITING_STARTED, this.format.update);
-  this.graph.addListener(mxEvent.EDITING_STOPPED, this.format.update);
-  this.graph.getModel().addListener(mxEvent.CHANGE, this.format.update);
-  this.graph.addListener(mxEvent.ROOT, this.format.update);
+    //매장영역에서 이벤트 발생 시 설정영역을 새로 그려주기 위한 이벤트 핸들러
+    this.graph.getSelectionModel().addListener(mxEvent.CHANGE, this.format.update);
+    this.graph.addListener(mxEvent.EDITING_STARTED, this.format.update);
+    this.graph.addListener(mxEvent.EDITING_STOPPED, this.format.update);
+    this.graph.getModel().addListener(mxEvent.CHANGE, this.format.update);
+    this.graph.addListener(mxEvent.ROOT, this.format.update);
 
-  //서버의 초기 설정 로드
-  var openResult = this.format.open(true);
-  
+    //서버의 초기 설정 로드
+    var openResult = this.format.open(true);
+
 };
 /**
- * 메인 - 기존 설정 opn 시 값 초기화 
+ * 메인 - 기존 설정 opn 시 값 초기화
  */
 TableAttr.prototype.initValue = function() {
-  
-  //기존 설정 오픈 시 그리드 초기값 설정(사용여부)
-  this.comp.initValue();
+    //기존 설정 오픈 시 그리드 초기값 설정(사용여부)
+    this.comp.initValue();
 };
 
-/** 
- * DOM element 클릭 이벤트 추가 공통 함수
- */
-function addClickHandler(elt, funct) {
-  if (funct != null) {
-    mxEvent.addListener(elt, 'click', function(evt) {
-      funct(evt);
-      mxEvent.consume(evt);
-    });
-    
-    if (document.documentMode != null && document.documentMode >= 9) {
-      // Prevents focus
-      mxEvent.addListener(elt, 'mousedown', function(evt) {
-        evt.preventDefault();
-      });
-    }
-  }
-}
-
-
-
-
 /**
-* 왼쪽 속성명 처리
-*/
-Sidebar = function(graph) {
-  this.graph = graph;
-  this.init();
+ * 왼쪽 속성명 처리
+ */
+SidebarAttr = function(graph) {
+    this.graph = graph;
+    this.init();
 }
 
 /**
  * 속성명 영역 초기화
  */
-Sidebar.prototype.init = function() {
-  
-  this.grid = this.makeGrid();
-  
-  var graph = this.graph;
-  var theGrid = this.grid;
-  
-  //셀 삭제 시 그리드에서 사용여부 해제 처리
-  var cellsRemoved = graph.cellsRemoved;
-  graph.cellsRemoved = function(cells) {
-    for(var i=0; i < cells.length; i++) {
-      var cell = cells[i];
-      theGrid.setCellData((parseInt(cell.getId())-1), 'used', false);
+SidebarAttr.prototype.init = function() {
+
+    this.tblAttrGrid = this.makeGrid();
+
+    var graph = this.graph;
+    tblAttrGrid = this.tblAttrGrid;
+
+    //셀 삭제 시 그리드에서 사용여부 해제 처리
+    var cellsRemoved = graph.cellsRemoved;
+    graph.cellsRemoved = function(cells) {
+        for (var i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
+        }
+        cellsRemoved.apply(this, arguments);
     }
-    cellsRemoved.apply(this, arguments);
-  }
-  //셀 추가 시 그리드에서 사용여부 체크 처리
-  var cellsAdded = graph.cellsAdded;
-  graph.cellsAdded = function(cells) {
-    for(var i=0; i < cells.length; i++) {
-      var cell = cells[i];
-      theGrid.setCellData((parseInt(cell.getId())-1), 'used', true);
+    //셀 추가 시 그리드에서 사용여부 체크 처리
+    var cellsAdded = graph.cellsAdded;
+    graph.cellsAdded = function(cells) {
+        for (var i = 0; i < cells.length; i++) {
+            var cell = cells[i];
+            tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+        }
+        cellsAdded.apply(this, arguments);
     }
-    cellsAdded.apply(this, arguments);
-  }
-  
-  //UNDO 를 했을 때 그리드의 사용여부 업데이트
-  var undoHandler = function(sender, evt) {
-    var model = graph.getModel();
-    var cells = [];
-    
-    //추가된 경우 사용여부 true
-    var cand = graph.getSelectionCellsForChanges(evt.getProperty('edit').changes);
-    for (var i = 0; i < cand.length; i++) {
-      if ((model.isVertex(cand[i]) || model.isEdge(cand[i])) && graph.view.getState(cand[i]) != null) {
-        cells.push(cand[i]);
-        theGrid.setCellData(parseInt(cand[i].id)-1, 'used', true);
-      }
+
+    //UNDO 를 했을 때 그리드의 사용여부 업데이트
+    var undoHandler = function(sender, evt) {
+        var model = graph.getModel();
+        var cells = [];
+
+        //추가된 경우 사용여부 true
+        var cand = graph.getSelectionCellsForChanges(evt.getProperty('edit').changes);
+        for (var i = 0; i < cand.length; i++) {
+            if ((model.isVertex(cand[i]) || model.isEdge(cand[i])) && graph.view.getState(cand[i]) != null) {
+                cells.push(cand[i]);
+                tblAttrGrid.setCellData(parseInt(cand[i].id) - 1, 'used', true);
+            }
+        }
+        graph.setSelectionCells(cells);
+
+        //삭제된 경우 사용여부 false
+        var removes = graph.getRemovedCellsForChanges(evt.getProperty('edit').changes);
+        for (var i = 0; i < removes.length; i++) {
+            if ((model.isVertex(removes[i]) || model.isEdge(removes[i]))) {
+                tblAttrGrid.setCellData(parseInt(removes[i].id) - 1, 'used', false);
+            }
+        }
     }
-    graph.setSelectionCells(cells);
-    
-    //삭제된 경우 사용여부 false
-    var removes = graph.getRemovedCellsForChanges(evt.getProperty('edit').changes);
-    for (var i = 0; i < removes.length; i++) {
-      if ((model.isVertex(removes[i]) || model.isEdge(removes[i]))) {
-        theGrid.setCellData(parseInt(removes[i].id)-1, 'used', false);
-      }
-    }
-  }
-  graph.undoManager.addListener(mxEvent.UNDO, undoHandler);
-  graph.undoManager.addListener(mxEvent.REDO, undoHandler);
+    graph.undoManager.addListener(mxEvent.UNDO, undoHandler);
+    graph.undoManager.addListener(mxEvent.REDO, undoHandler);
 
 };
 /**
  * 속성명 영역 값 초기화
  */
-Sidebar.prototype.initValue = function() {
-  var graph = this.graph;
-  var theGrid = this.grid;
-  
-  //그리드에서 사용여부 초기화
-  this.initUsed();
-  
+SidebarAttr.prototype.initValue = function() {
+    var graph = this.graph;
+    tblAttrGrid = this.tblAttrGrid;
+
+    //그리드에서 사용여부 초기화
+    this.initUsed();
 };
 /**
  * 사용여부 초기화
  */
-Sidebar.prototype.initUsed = function() {
-  var graph = this.graph;
-  var theGrid = this.grid;
+SidebarAttr.prototype.initUsed = function() {
+    var graph = this.graph;
+    tblAttrGrid = this.tblAttrGrid;
 
-  //모든 속성 사용여부 false로 초기화
-  for(i = 0; i < theGrid.rows.length; i++) {
-    theGrid.setCellData(theGrid.rows[i].index, 'used', false);
-  }
-  
-  //그래픽 영역의 Object를 체크해 사용여부 true 처리
-  var parent = graph.getDefaultParent();
-  var model = graph.getModel();
-  var childCount = model.getChildCount(parent);
-  for(var i = 0; i < childCount; i++) {
-    var cell = model.getChildAt(parent, i);
-    theGrid.setCellData((parseInt(cell.getId())-1), 'used', true);
-  }
+    //모든 속성 사용여부 false로 초기화
+    for (i = 0; i < tblAttrGrid.rows.length; i++) {
+        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'used', false);
+    }
 
+    //그래픽 영역의 Object를 체크해 사용여부 true 처리
+    var parent = graph.getDefaultParent();
+    var model = graph.getModel();
+    var childCount = model.getChildCount(parent);
+    for (var i = 0; i < childCount; i++) {
+        var cell = model.getChildAt(parent, i);
+        tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+    }
 };
 
 /**
  * 그리드 생성
  */
-Sidebar.prototype.makeGrid = function() {
+SidebarAttr.prototype.makeGrid = function() {
 
-  var sidebar = this;
-  var graph = this.graph;
-  
-  //속성명 FlexGrid 생성
-  var theGrid = new wijmo.grid.FlexGrid('#theGrid', {
-    autoGenerateColumns: false,
-    selectionMode: 'ListBox',
-    isReadOnly: true,
-    itemsSource: getData(),
-    columns: [
-      { binding: 'idx', visible: false},
-      { binding: 'name', header: mxResources.get('attrName'), width: '*', isReadOnly: true },
-      { binding: 'tag', header: mxResources.get('preview'), isReadOnly: true, visible: false},
-      { binding: 'used', header: mxResources.get('alreadyUsed'), width: 60, isReadOnly: true },
-      { binding: 'rect', visible: false}
-    ],
-    showAlternatingRows: false,
-    formatItem: function(s, e) {
-      if (e.panel == s.cells && s.columns[e.col].binding == 'tag') {
-        var item = s.rows[e.row].dataItem;
-        e.cell.innerHTML = item.tag;
-      }
+    //var sidebar = this;
+    var graph = this.graph;
+
+    //속성명 FlexGrid 생성
+    var tblAttrGridTemp = new wijmo.grid.FlexGrid('#tblAttrGrid', {
+        autoGenerateColumns: false,
+        selectionMode: 'ListBox',
+        isReadOnly: true,
+        itemsSource: getData(),
+        columns:
+        	[{
+                binding: 'idx',
+                visible: false
+            },
+            {
+                binding: 'name',
+                header: mxResources.get('attrName'),
+                width: '*',
+                isReadOnly: true
+            },
+            {
+                binding: 'tag',
+                header: mxResources.get('preview'),
+                isReadOnly: true,
+                visible: false
+            },
+            {
+                binding: 'used',
+                header: mxResources.get('alreadyUsed'),
+                width: 60,
+                isReadOnly: true
+            },
+            {
+                binding: 'rect',
+                visible: false
+            }
+        ],
+        showAlternatingRows: false,
+        formatItem: function(s, e) {
+            if (e.panel == s.cells && s.columns[e.col].binding == 'tag') {
+                var item = s.rows[e.row].dataItem;
+                e.cell.innerHTML = item.tag;
+            }
+        }
+    });
+
+    //RowHeader 없애기
+    tblAttrGridTemp.rowHeaders.columns.splice(0, 1);
+
+    //ListBox 선택모드에서 cell의 hostElement를 가져오는데 문제가 있어
+    //아래 2줄을 추가 하였음
+    if (tblAttrGridTemp.collectionView.items.length > 0) {
+        tblAttrGridTemp.select(-1, -1);
+        tblAttrGridTemp.select(0, 1);
     }
-  });
 
-  //RowHeader 없애기
-  theGrid.rowHeaders.columns.splice(0, 1);
+    //선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
+    tblAttrGridTemp.selectionChanged.addHandler(function(s, e) {
+        //idx가져오기(0번째 항목)
+        var idx = tblAttrGridTemp.getCellData(e.row, 0, true);
+        var used = tblAttrGridTemp.getCellData(e.row, 3, true);
+        //사용중일 경우만 선택 활성화
+        if (used) {
+            var cell = graph.getModel().getCell(idx);
+            graph.setSelectionCell(cell);
 
-  //ListBox 선택모드에서 cell의 hostElement를 가져오는데 문제가 있어
-  //아래 2줄을 추가 하였음
-  if ( theGrid.collectionView.items.length > 0 ) {
-    theGrid.select(-1, -1);
-    theGrid.select(0, 1);
-  }
+        	var selectedCell = cell.geometry;
 
-  //선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
-  theGrid.selectionChanged.addHandler(function (s, e) {
-    //idx가져오기(0번째 항목)
-    var idx = theGrid.getCellData(e.row, 0, true);
-    var used = theGrid.getCellData(e.row, 3, true);
-    //사용중일 경우만 선택 활성화
-    if(used) {
-      var cell = graph.getModel().getCell(idx);
-      graph.setSelectionCell(cell);
-      //console.log(cell);
-      //맨앞으로 가져오기
-      graph.orderCells(false);
-      graph.container.focus();
+        	currentCell = selectedCell;
+
+        	$("#attrCellX").val(selectedCell.x);
+        	$("#attrCellY").val(selectedCell.y);
+        	$("#attrCellW").val(selectedCell.width);
+        	$("#attrCellH").val(selectedCell.height);
+
+            //맨앞으로 가져오기
+            graph.orderCells(false);
+            graph.container.focus();
+        }
+    });
+
+    //판매금액 포맷팅
+    var numberWithCommas = function(x) {
+        var isInteger = function(num) {
+            return (num ^ 0) === num;
+        };
+        if (isInteger(x)) {
+            x = x.toString();
+            var pattern = /(-?\d+)(\d{3})/;
+            while (pattern.test(x)) {
+                x = x.replace(pattern, "$1,$2");
+            }
+        }
+        return x;
     }
-  });
 
-  //판매금액 포맷팅
-  var numberWithCommas = function(x) {
-    var isInteger = function(num) {
-      return (num ^ 0) === num;
+    //Drop 이벤트
+    var dropEvent = function(graph, evt, cell, x, y) {
+        var parent = graph.getDefaultParent();
+        var model = graph.getModel();
+
+        //Drop 할 때 오브젝트 생성
+        var pt = graph.getPointForEvent(evt);
+        for (var selected = 0; selected < tblAttrGridTemp.selectedItems.length; selected++) {
+            var rows = tblAttrGridTemp.selectedRows[selected];
+            var item = rows.dataItem;
+            //console.log(item.tag);
+            //사용중이 아닌 항목만 넣기
+            if (!item.used) {
+                var lastCell;
+                model.beginUpdate();
+                try {
+                    lastCell = graph.insertVertex(parent,
+                        item.idx,
+                        numberWithCommas(item.tag),
+                        item.rect.x, item.rect.y,
+                        item.rect.width, item.rect.height,
+                        'tableAttr');
+                } finally {
+                    model.endUpdate();
+                }
+                graph.setSelectionCell(lastCell);
+            }
+        }
     };
-    if(isInteger(x)) {
-      x = x.toString();
-      var pattern = /(-?\d+)(\d{3})/;
-      while (pattern.test(x)) {
-        x = x.replace(pattern, "$1,$2");
-      }
-    }
-    return x;
-  }
 
-  
-  //Drop 이벤트
-  var dropEvent = function(graph, evt, cell, x, y) {
-    var parent = graph.getDefaultParent();
-    var model = graph.getModel();
-    
-    //Drop 할 때 오브젝트 생성
-    var pt = graph.getPointForEvent(evt);
-    for(var selected = 0; selected < theGrid.selectedItems.length; selected++ ) {
-      var rows = theGrid.selectedRows[selected];
-      var item = rows.dataItem;
-      //console.log(item.tag);
-      //사용중이 아닌 항목만 넣기
-      if(!item.used) {
-        var lastCell;
-        model.beginUpdate();
-        try {
-          lastCell = graph.insertVertex(parent,
-              item.idx,
-              numberWithCommas(item.tag),
-              item.rect.x, item.rect.y,
-              item.rect.width, item.rect.height,
-              'tableAttr');
-        }
-        finally {
-          model.endUpdate();
-        }
-        graph.setSelectionCell(lastCell);
-      }
+    //Row에 DnD이벤트 생성
+    var cells = tblAttrGridTemp.cells.hostElement.childNodes;
+    for (var i = 1; i < cells.length; i++) {
+        var ds = mxUtils.makeDraggable(cells[i], graph, dropEvent, cells[i], -10, -(tblAttrGridTemp.rows.defaultSize * (i - 1)));
+        ds.highlightDropTargets = true;
+        ds.guidesEnabled = true;
     }
-  };
-  //Row에 DnD이벤트 생성
-  var cells = theGrid.cells.hostElement.childNodes;
-  for(var i = 1; i < cells.length; i++) {
-    var ds = mxUtils.makeDraggable(cells[i], graph, dropEvent, cells[i], -10, -(theGrid.rows.defaultSize * (i-1)));
-    ds.highlightDropTargets = true;
-    ds.guidesEnabled = true;
-  }
-  
-  //서버에서 받은 데이터로 설정
-  function getData() {
-    
-    //기본값 테이블에서 초기 위치 추출
-    var findPos = function(cd) {
-      var obj;
-      for(x = 0; x < TABLE_ATTR_DEFAULTS.length; x++) {
-        obj = TABLE_ATTR_DEFAULTS[x];
-        if( cd == obj.attrCd) {
-          return new mxRectangle(obj.x, obj.y, obj.width, obj.height);
+
+    //서버에서 받은 데이터로 설정
+    function getData() {
+
+        //기본값 테이블에서 초기 위치 추출
+        var findPos = function(cd) {
+            var obj;
+            for (x = 0; x < TABLE_ATTR_DEFAULTS.length; x++) {
+                obj = TABLE_ATTR_DEFAULTS[x];
+                if (cd == obj.attrCd) {
+                    return new mxRectangle(obj.x, obj.y, obj.width, obj.height);
+                }
+            }
+            return new mxRectangle(10, 10, 50, 50);
+        };
+
+        //그래프의 child node는 2부터 시작할 수 밖에 없어 코드 맞추기 위해 lpad 하였음
+        function lpad(s, padLength, padString) {
+            while (s.length < padLength)
+                s = padString + s;
+            return s;
         }
-      }
-      return new mxRectangle(10, 10, 50, 50);
-    };
-    
-    //그래프의 child node는 2부터 시작할 수 밖에 없어 코드 맞추기 위해 lpad 하였음
-    function lpad(s, padLength, padString){
-      while(s.length < padLength)
-          s = padString + s;
-      return s;
+
+        //데이터 생성
+        var data = [];
+        for (i = 0; i < TABLE_ATTR_ITEMS.length; i++) {
+            var cd = lpad((i + 1).toString(), 2, '0');
+            data.push({
+                name: TABLE_ATTR_ITEMS[i].nmcodeNm,
+                tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
+                used: false,
+                rect: findPos(cd),
+                idx: cd
+            });
+        }
+        return data;
     }
-    
-    //데이터 생성
-    var data = [];
-    for(i = 0; i < TABLE_ATTR_ITEMS.length; i++) {
-      //console.log(TABLE_ATTR_ITEMS[i]);
-      var cd = lpad((i+1).toString(), 2, '0');
-      data.push({
-        name: TABLE_ATTR_ITEMS[i].nmcodeNm,
-        tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
-        used: false,
-        rect: findPos(cd),
-        idx: cd 
-      });
-    }
-    return data;
-  }
-  
-  return theGrid;
+
+    return tblAttrGridTemp;
 };
 
 /**
-* 그래픽 영역
-*/
-function Graph(container, themes) {
+ * 그래픽 영역
+ */
+function GraphAttr(container, themes, preview) {
 
-  mxGraph.call(this, container, null, null, null);
-  this.themes = themes || this.defaultThemes;
+	this.preview = preview;
 
-  var loadStylesheet = function(graph) {
-    var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
-      (!mxStyleRegistry.dynamicLoading) ? null :
-      mxUtils.load(STYLE_PATH + '/tableAttr.xml').getDocumentElement();
+    mxGraph.call(this, container);
+    this.themes = themes || this.defaultThemes;
 
-    if (node != null) {
-      var dec = new mxCodec(node.ownerDocument);
-      dec.decode(node, graph.getStylesheet());
-    }
-  };
-  this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
-  loadStylesheet(this);
+    var loadStylesheet = function(graph) {
+        var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
+            (!mxStyleRegistry.dynamicLoading) ? null :
+            mxUtils.load(STYLE_PATH + '/tableAttr.xml').getDocumentElement();
+
+        if (node != null) {
+            var dec = new mxCodec(node.ownerDocument);
+            dec.decode(node, graph.getStylesheet());
+        }
+    };
+    this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
+    loadStylesheet(this);
+
+}
+
+/**
+ * 그래픽 프리뷰 영역
+ */
+function PreViewAttr(container, themes) {
+
+    mxGraph.call(this, container);
+    this.themes = themes || this.defaultThemes;
+
+    var loadStylesheet = function(graph) {
+        var node = (graph.themes != null) ? graph.themes[graph.defaultThemeName] :
+            (!mxStyleRegistry.dynamicLoading) ? null :
+            mxUtils.load(STYLE_PATH + '/tableAttr.xml').getDocumentElement();
+
+        if (node != null) {
+            var dec = new mxCodec(node.ownerDocument);
+            dec.decode(node, graph.getStylesheet());
+        }
+    };
+    this.currentVertexStyle = mxUtils.clone(this.defaultVertexStyle);
+    loadStylesheet(this);
+
 }
 /**
  * Graph inherits from mxGraph.
  */
-mxUtils.extend(Graph, mxGraph);
+mxUtils.extend(GraphAttr, mxGraph);
+mxUtils.extend(PreViewAttr, mxGraph);
 
-Graph.prototype.defaultThemes = {};
-Graph.prototype.defaultVertexStyle = {};
+GraphAttr.prototype.defaultThemes = {};
+GraphAttr.prototype.defaultVertexStyle = {};
+PreViewAttr.prototype.defaultThemes = {};
+PreViewAttr.prototype.defaultVertexStyle = {};
 
-Graph.prototype.defaultThemeName = 'tableAttr';
+GraphAttr.prototype.defaultThemeName = 'tableAttr';
+PreViewAttr.prototype.defaultThemeName = 'tableAttr';
 
 //배경이미지 - 기본설정
 //테이블 구성 모양을 넣고 싶을 때 사용 가능
@@ -381,503 +423,791 @@ Graph.prototype.defaultThemeName = 'tableAttr';
 /**
  * 영역 초기화
  */
-Graph.prototype.init = function() {
+GraphAttr.prototype.init = function() {
 
-  mxGraph.prototype.init.apply(this, arguments);
-  
-  var graph = this;
+    mxGraph.prototype.init.apply(this, arguments);
 
-  //console.log(graph);
-  
-  //그래프 영역의 배경 색 설정 - 기본설정
-  //graph.setBackgroundImage(new mxImage(this.graphBackgroundImage, 600, 640));
-  
-  graph.minimumGraphSize = new mxRectangle(0, 0, 510, 510);
-  graph.maximumGraphBounds = new mxRectangle(0, 0, 510, 510);
+    var graph = this;
+    //console.log(graph);
 
-  
-  //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
-  graph.setPanning(false);
-  
-  //Enables HTML labels
-  graph.setHtmlLabels(true);
-  
-  //셀을 이동했을 때 스크롤 금지
-  graph.graphHandler.scrollOnMove = false;
-  graph.autoScroll = false;
+    //그래프 영역의 배경 색 설정 - 기본설정
+    //graph.setBackgroundImage(new mxImage(this.graphBackgroundImage, 600, 640));
 
-  //UNDO, 키 핸들러 추가
-  graph.undoManager = graph.createUndoManager(graph);
-  var rubberband = new mxRubberband(graph);
-  graph.keyHandler = graph.createKeyHandler(graph);
-  //console.log(this);
-  
-  //마우스 클릭 할 때 focus 처리, jsp에서 content에 tabindex -1 로 처리 했으나 추가
-  //https://jgraph.github.io/mxgraph/docs/known-issues.html
-  if (mxClient.IS_NS) {
-    mxEvent.addListener(graph.container, 'mousedown', function() {
-      if (!graph.isEditing()) {
-        graph.container.setAttribute('tabindex', '-1');
-        graph.container.focus();
-      }
-    });
-  }
+    graph.minimumGraphSize = new mxRectangle(0, 0, 500, 500);
+    graph.maximumGraphBounds = new mxRectangle(0, 0, 500, 500);
+
+
+    //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
+    graph.setPanning(false);
+
+    //Enables HTML labels
+    graph.setHtmlLabels(true);
+
+    //셀을 이동했을 때 스크롤 금지
+    graph.graphHandler.scrollOnMove = false;
+    graph.autoScroll = false;
+
+    //UNDO, 키 핸들러 추가
+    graph.undoManager = graph.createUndoManager(graph);
+    var rubberband = new mxRubberband(graph);
+    graph.keyHandler = graph.createKeyHandler(graph);
+    //console.log(this);
+
+    //마우스 클릭 할 때 focus 처리, jsp에서 content에 tabindex -1 로 처리 했으나 추가
+    //https://jgraph.github.io/mxgraph/docs/known-issues.html
+    if (mxClient.IS_NS) {
+        mxEvent.addListener(graph.container, 'mousedown', function() {
+            if (!graph.isEditing()) {
+                graph.container.setAttribute('tabindex', '-1');
+                graph.container.focus();
+            }
+        });
+    }
+
+    // 구성요소 이동 시 처리
+    var mxGraphHandlerMoveCells = mxGraphHandler.prototype.moveCells;
+    graph.graphHandler.moveCells = function(cells, dx, dy, clone, target, evt) {
+
+        var pt = graph.getPointForEvent(evt);
+
+        // 네 모서리에 셀이 있으면 이동 금지
+        var x1 = this.bounds.x + dx;
+        var y1 = this.bounds.y + dy;
+        var x2 = x1 + this.bounds.width;
+        var y2 = y1 + this.bounds.height;
+
+    	$("#attrCellX").val(x1);
+    	$("#attrCellY").val(y1);
+
+        mxGraphHandlerMoveCells.apply(this, arguments);
+    };
+
+    // 셀의 사이즈가 변경되었을 때 배경 크기에 맞게 보정
+    var mxGraphResizeCell = mxGraph.prototype.resizeCell;
+    graph.resizeCell = function(cell, bounds, recurse) {
+
+        // 네 모서리에 셀이 있으면 이동 금지
+        var x1 = bounds.x;
+        var y1 = bounds.y;
+        var x2 = x1 + bounds.width;
+        var y2 = y1 + bounds.height;
+
+    	$("#attrCellW").val(bounds.width);
+    	$("#attrCellH").val(bounds.height);
+
+        mxGraphResizeCell.apply(this, arguments);
+    };
+
+    var graphHandlerMouseDown = mxGraphHandler.prototype.mouseDown;
+    graph.graphHandler.mouseDown = function(sender, me) {
+
+    	if (me.state != null && me.state != undefined) {
+
+    		var selectedCell = me.state.cell;
+        	var cell = selectedCell.geometry;
+        	var cellStyle = selectedCell.style;
+
+        	currentCell = selectedCell;
+
+        	$("#attrCellX").val(cell.x);
+        	$("#attrCellY").val(cell.y);
+        	$("#attrCellW").val(cell.width);
+        	$("#attrCellH").val(cell.height);
+
+        	for (var selected = 0; selected < tblAttrGrid.rows.length; selected++) {
+                var rows = tblAttrGrid.rows[selected];
+                var item = rows.dataItem;
+
+                if (item.used) {
+                	if (selectedCell.id == item.idx) {
+                		tblAttrGrid.select(new wijmo.grid.CellRange(selected, 1), true);
+                	}
+                }
+            }
+
+    	} else {
+
+    		currentCell = null;
+
+    		$("#attrCellX").val("");
+        	$("#attrCellY").val("");
+        	$("#attrCellW").val("");
+        	$("#attrCellH").val("");
+
+    	}
+
+    	graphHandlerMouseDown.apply(this, arguments);
+    }
+};
+
+/**
+ * 프리뷰 영역 초기화
+ */
+PreViewAttr.prototype.init = function() {
+
+    mxGraph.prototype.init.apply(this, arguments);
+
+    var preview = this;
+
+    //console.log(graph);
+
+    //그래프 영역의 배경 색 설정 - 기본설정
+    //graph.setBackgroundImage(new mxImage(this.graphBackgroundImage, 600, 640));
+
+    preview.minimumGraphSize = new mxRectangle(0, 0, 100, 100);
+    preview.maximumGraphBounds = new mxRectangle(0, 0, 100, 100);
+
+
+    //마우스를 영역 밖으로 드래그 했을 때 패닝이 되지 않도록 처리
+    preview.setPanning(false);
+
+    //Enables HTML labels
+    preview.setHtmlLabels(true);
+
+    //셀을 이동했을 때 스크롤 금지
+    preview.graphHandler.scrollOnMove = false;
+    preview.autoScroll = false;
 
 };
 
 /**
  * Sanitizes the given HTML markup.
  */
-Graph.prototype.sanitizeHtml = function(value, editing) {
-  // Uses https://code.google.com/p/google-caja/wiki/JsHtmlSanitizer
-  // NOTE: Original minimized sanitizer was modified to support
-  // data URIs for images, and mailto and special data:-links.
-  // LATER: Add MathML to whitelisted tags
-  function urlX(link) {
-    if (link != null && link.toString().toLowerCase().substring(0, 11) !== 'javascript:') {
-      return link;
-    }
-    
-    return null;
-  };
-  function idX(id) { return id };
-  return html_sanitize(value, urlX, idX);
+GraphAttr.prototype.sanitizeHtml = function(value, editing) {
+    // Uses https://code.google.com/p/google-caja/wiki/JsHtmlSanitizer
+    // NOTE: Original minimized sanitizer was modified to support
+    // data URIs for images, and mailto and special data:-links.
+    // LATER: Add MathML to whitelisted tags
+    function urlX(link) {
+        if (link != null && link.toString().toLowerCase().substring(0, 11) !== 'javascript:') {
+            return link;
+        }
+
+        return null;
+    };
+
+    function idX(id) {
+        return id
+    };
+    return html_sanitize(value, urlX, idX);
+};
+
+/**
+ * Sanitizes the given HTML markup.
+ */
+PreViewAttr.prototype.sanitizeHtml = function(value, editing) {
+    // Uses https://code.google.com/p/google-caja/wiki/JsHtmlSanitizer
+    // NOTE: Original minimized sanitizer was modified to support
+    // data URIs for images, and mailto and special data:-links.
+    // LATER: Add MathML to whitelisted tags
+    function urlX(link) {
+        if (link != null && link.toString().toLowerCase().substring(0, 11) !== 'javascript:') {
+            return link;
+        }
+
+        return null;
+    };
+
+    function idX(id) {
+        return id
+    };
+    return html_sanitize(value, urlX, idX);
 };
 
 
 /**
- * UNDO/REDO 이벤트 생성 
+ * UNDO/REDO 이벤트 생성
  */
-Graph.prototype.createUndoManager = function(graph) {
-  
-  var undoManager = new mxUndoManager();
-  var listener = function(sender, evt) {
-    undoManager.undoableEditHappened(evt.getProperty('edit'));
-  };
-  graph.getModel().addListener(mxEvent.UNDO, listener);
-  graph.getView().addListener(mxEvent.UNDO, listener);
-  
-  return undoManager;
+GraphAttr.prototype.createUndoManager = function(graph) {
+
+    var undoManager = new mxUndoManager();
+    var listener = function(sender, evt) {
+        undoManager.undoableEditHappened(evt.getProperty('edit'));
+    };
+    graph.getModel().addListener(mxEvent.UNDO, listener);
+    graph.getView().addListener(mxEvent.UNDO, listener);
+
+    return undoManager;
 };
+
 /**
  * 키보드 이벤트 생성
  */
-Graph.prototype.createKeyHandler = function(graph) {
-  var keyHandler = new mxKeyHandler(graph);
-  
-  keyHandler.bindKey(46, function(evt) {
-    graph.escape();
-    var cells = graph.getDeletableCells(graph.getSelectionCells());
-    
-    if (cells != null && cells.length > 0) { 
-      var parents = graph.model.getParents(cells);
-      graph.removeCells(cells);
-      
-      // Selects parents for easier editing of groups
-      if (parents != null) {
-        var select = [];
-        for (var i = 0; i < parents.length; i++) {
-          if ( graph.model.contains(parents[i]) && graph.model.isVertex(parents[i]) ) {
-            select.push(parents[i]);
-          }
-        }
-        graph.setSelectionCells(select);
-      }
-    }
-  });
+GraphAttr.prototype.createKeyHandler = function(graph) {
+    var keyHandler = new mxKeyHandler(graph);
 
-  //Ctrl + z
-  keyHandler.bindControlKey(90, function(evt) { graph.undoManager.undo() });
-  //Ctrl + Shift + z
-  keyHandler.bindControlShiftKey(90, function(evt) { graph.undoManager.redo() });
-  
-  return keyHandler;
+    keyHandler.bindKey(46, function(evt) {
+        graph.escape();
+        var cells = graph.getDeletableCells(graph.getSelectionCells());
+
+        if (cells != null && cells.length > 0) {
+            var parents = graph.model.getParents(cells);
+            graph.removeCells(cells);
+
+            // Selects parents for easier editing of groups
+            if (parents != null) {
+                var select = [];
+                for (var i = 0; i < parents.length; i++) {
+                    if (graph.model.contains(parents[i]) && graph.model.isVertex(parents[i])) {
+                        select.push(parents[i]);
+                    }
+                }
+                graph.setSelectionCells(select);
+            }
+        }
+    });
+
+    //Ctrl + z
+    keyHandler.bindControlKey(90, function(evt) {
+        graph.undoManager.undo()
+    });
+    //Ctrl + Shift + z
+    keyHandler.bindControlShiftKey(90, function(evt) {
+        graph.undoManager.redo()
+    });
+
+    return keyHandler;
 };
 
-
-
 /**
-* 오른쪽 설정 기능 패널
-*/
-function Format(tableattr) {
-  
-  this.container = document.getElementById('format');
+ * 오른쪽 설정 기능 패널
+ */
+function FormatAttr(tableattr) {
 
-  this.main = tableattr;
-  this.graph = tableattr.graph;
-  
-  this.init();
+    this.container = document.getElementById('format');
+
+    this.main = tableattr;
+    this.graph = tableattr.graph;
+    this.preview = tableattr.preview ;
+
+    this.init();
 }
 
-Format.prototype.fontFamily = null;
-Format.prototype.fontColor = null;
-Format.prototype.fontSize = null;
-Format.prototype.fontBold = null;
+FormatAttr.prototype.fontFamily = null;
+FormatAttr.prototype.fontColor = null;
+FormatAttr.prototype.fontSize = null;
+FormatAttr.prototype.fontBold = null;
 
 //TODO 폰트 종류 - POS에서 가능한 폰트로 변경할 것
-Format.prototype.defaultFonts = [
-  {name:'NotoR', value:0},
-  {name:'Hanna', value:1},
-  {name:'Jeju Gothic', value:2},
-  {name:'Jeju Hallasan', value:3},
-  {name:'Jeju Myeongjo', value:4},
-  {name:'Kopub Batang', value:5},
-  {name:'Nanum Brush Script', value:6},
-  {name:'Nanum Gothic', value:7},
-  {name:'Nanum Gothic Coding', value:8},
-  {name:'Nanum Myeongjo', value:9},
-  {name:'Nanum Pen Script', value:10},
-  {name:'Noto Sans KR', value:11}
-  ];
+FormatAttr.prototype.defaultFonts =
+	[{
+        name: 'NotoR',
+        value: 0
+    },
+    {
+        name: 'Hanna',
+        value: 1
+    },
+    {
+        name: 'Jeju Gothic',
+        value: 2
+    },
+    {
+        name: 'Jeju Hallasan',
+        value: 3
+    },
+    {
+        name: 'Jeju Myeongjo',
+        value: 4
+    },
+    {
+        name: 'Kopub Batang',
+        value: 5
+    },
+    {
+        name: 'Nanum Brush Script',
+        value: 6
+    },
+    {
+        name: 'Nanum Gothic',
+        value: 7
+    },
+    {
+        name: 'Nanum Gothic Coding',
+        value: 8
+    },
+    {
+        name: 'Nanum Myeongjo',
+        value: 9
+    },
+    {
+        name: 'Nanum Pen Script',
+        value: 10
+    },
+    {
+        name: 'Noto Sans KR',
+        value: 11
+    }
+];
 
 
 /**
  * 기능 패널 초기화
  */
-Format.prototype.init = function() {
+FormatAttr.prototype.init = function() {
 
-  var format = this;
-  
-  //그래픽 영역에서 선택 항목 변경 시 이벤트 처리
-  this.update = mxUtils.bind(this, function(sender, evt) {
-    format.refresh();
-  });
+    var format = this;
 
-  //모든 구성 요소 생성
-  this.initElements();
+    //그래픽 영역에서 선택 항목 변경 시 이벤트 처리
+    this.update = mxUtils.bind(this, function(sender, evt) {
+        format.refresh();
+    });
+
+    //모든 구성 요소 생성
+    this.initElements();
 
 };
 
 /**
  * 화면 새로 그리기
  */
-Format.prototype.refresh = function() {
+FormatAttr.prototype.refresh = function() {
 
-  var graph = this.graph;
-  
-  //설정 값 초기화
-  this.setElementsValue();
-  
-  //선택된 셀이 있을 때만 활성화 되는 부분
-  var cells = graph.getSelectionCells();
-  document.getElementById('fontStyle').style.display = 'none';
-  document.getElementById('textAlign').style.display = 'none';
-  if(cells.length > 0 ) {
-    //폰트 설정
-    document.getElementById('fontStyle').style.display = 'block';
-    //정렬 옵션
-    document.getElementById('textAlign').style.display = 'block';
-  }
+    var graph = this.graph;
+    var preview = this.preview;
 
-  
+    //설정 값 초기화
+    //this.setElementsValue(graph);
+
+    //선택된 셀이 있을 때만 활성화 되는 부분
+    var cells = graph.getSelectionCells();
+    document.getElementById('fontStyle').style.display = 'none';
+    document.getElementById('textAlign').style.display = 'none';
+    if (cells.length > 0) {
+        //폰트 설정
+        document.getElementById('fontStyle').style.display = 'block';
+        //정렬 옵션
+        document.getElementById('textAlign').style.display = 'block';
+    }
+
+    this.previewDraw();
+};
+
+FormatAttr.prototype.previewDraw = function() {
+
+    var graph = this.graph;
+    var preview = this.preview;
+
+    var node = null;
+    var enc = new mxCodec(mxUtils.createXmlDocument());
+    node = enc.encode(graph.getModel());
+
+    this.setGraphXml(preview, node, currentWidth, currentHeight);
+    this.resizeCells(preview);
 };
 
 /**
  * 폰트/정렬 설정 초기화
  */
-Format.prototype.initElements = function() {
-  var graph = this.graph;
-  var format = this;
-  
-  //초기화 버튼
-  addClickHandler(document.getElementById('btnInit'), function() {
-    format.open(false);
-  });
-  
-  //저장 버튼
-  addClickHandler(document.getElementById('btnSave'), function() {
-    format.save();
-  });
+FormatAttr.prototype.initElements = function() {
 
-  /**
-   * 폰트 종류
-   */
-  var template = '<div style="font-family:{name}">{name}</div>';
-  this.fontFamily = new wijmo.input.ComboBox('#fontFamily', {
-    itemsSource: format.defaultFonts,
-    displayMemberPath: 'name',
-    selectedValuePath: 'value',
-    formatItem: function(s, e) {
-      //콤보박스 안에 폰트모양 적용
-      var html = wijmo.format(template, e.data, function(data, name, fmt, val) {
-        return wijmo.isString(data[name]) ? wijmo.escapeHtml(data[name]) : val;
-      });
-      e.item.innerHTML = html;
-    },
-    selectedIndexChanged: function(s, e) {
-      //콤보 박스 선택한 내용이 변경되었을 때 처리
-      graph.setCellStyles(mxConstants.STYLE_FONTFAMILY, s.text, graph.getSelectionCells());
-    }
-  });
-  //폰트 기본값 설정
-  this.fontFamily.text = 'NotoR';
-  
-  
-  /**
-   * 폰트 색상 설정 시작
-   */
-  this.fontColor = new wijmo.input.InputColor('#fontColor', {
-    placeholder: 'Select the color',
-    value: '#000000',
-    valueChanged: function(s, e) {
-      graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, graph.getSelectionCells());
-    }
-  });
+	var graph = this.graph;
+	var preview = this.preview;
 
-  /**
-   * 폰트 크기 설정
-   */
-  this.fontSize = new wijmo.input.InputNumber('#fontSize', {
-    format: 'n0',
-    step: 1,
-    min: 8,
-    max: 20,
-    value: 10,
-    valueChanged: function(s, e) {
-      graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, graph.getSelectionCells());
-    }
-  });
+	var model = graph.getModel();
+    var format = this;
 
-  /**
-   * 폰트 스타일(굵게, 기울임, 밑줄)
-   */
-  addClickHandler(document.getElementById('btnBold'), function() {
-    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
-  });
-  addClickHandler(document.getElementById('btnItalic'), function() {
-    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
-  });
-  addClickHandler(document.getElementById('btnUnderline'), function() {
-    graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
-  });
+    //초기화 버튼
+    addClickHandler(document.getElementById('btnInitAttr'), function() {
+        format.open(false);
+    });
 
-  /**
-   * 텍스트 위치(왼쪽/중앙/오른쪽, TOP/MIDDLE/BOTTOM)
-   */
-  addClickHandler(document.getElementById('btnLeft'), function() {
-    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
-  });
-  addClickHandler(document.getElementById('btnCenter'), function() {
-    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
-  });
-  addClickHandler(document.getElementById('btnRight'), function() {
-    graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
-  });
+    //속성 변경 버튼
+    addClickHandler(document.getElementById('btnChangeAttr'), function() {
+        format.open(true);
+    });
 
-  addClickHandler(document.getElementById('btnTop'), function() {
-    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
-  });
-  addClickHandler(document.getElementById('btnMiddle'), function() {
-    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
-  });
-  addClickHandler(document.getElementById('btnBottom'), function() {
-    graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
-  });
+    //저장 버튼
+    addClickHandler(document.getElementById('btnSaveAttr'), function() {
+        format.save();
+    });
 
-  
+    /**
+     * 폰트 종류
+     */
+    var template = '<div style="font-family:{name}">{name}</div>';
+    this.fontFamily = new wijmo.input.ComboBox('#fontFamily', {
+        itemsSource: format.defaultFonts,
+        displayMemberPath: 'name',
+        selectedValuePath: 'value',
+        formatItem: function(s, e) {
+            //콤보박스 안에 폰트모양 적용
+            var html = wijmo.format(template, e.data, function(data, name, fmt, val) {
+                return wijmo.isString(data[name]) ? wijmo.escapeHtml(data[name]) : val;
+            });
+            e.item.innerHTML = html;
+        },
+        selectedIndexChanged: function(s, e) {
+            //콤보 박스 선택한 내용이 변경되었을 때 처리
+        	format.getSelectedPreviewCells();
+            graph.setCellStyles(mxConstants.STYLE_FONTFAMILY, s.text, graph.getSelectionCells());
+            preview.setCellStyles(mxConstants.STYLE_FONTFAMILY, s.text, preview.getSelectionCells());
+        }
+    });
+
+    //폰트 기본값 설정
+    this.fontFamily.text = 'NotoR';
+
+    /**
+     * 폰트 색상 설정 시작
+     */
+    this.fontColor = new wijmo.input.InputColor('#fontColor', {
+        placeholder: 'Select the color',
+        value: '#000000',
+        valueChanged: function(s, e) {
+        	format.getSelectedPreviewCells();
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, graph.getSelectionCells());
+            preview.setCellStyles(mxConstants.STYLE_FONTCOLOR, s.value, preview.getSelectionCells());
+        }
+    });
+
+    /**
+     * 폰트 크기 설정
+     */
+    this.fontSize = new wijmo.input.InputNumber('#fontSize', {
+        format: 'n0',
+        step: 1,
+        min: 1,
+        max: 30,
+        value: 10,
+        valueChanged: function(s, e) {
+        	format.getSelectedPreviewCells();
+            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, graph.getSelectionCells());
+            preview.setCellStyles(mxConstants.STYLE_FONTSIZE, s.value, preview.getSelectionCells());
+        }
+    });
+
+    /**
+     * 폰트 스타일(굵게, 기울임, 밑줄)
+     */
+    addClickHandler(document.getElementById('btnBold'), function() {
+        graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+        preview.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_BOLD);
+    });
+    addClickHandler(document.getElementById('btnItalic'), function() {
+        graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
+        preview.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_ITALIC);
+    });
+    addClickHandler(document.getElementById('btnUnderline'), function() {
+        graph.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
+        preview.toggleCellStyleFlags(mxConstants.STYLE_FONTSTYLE, mxConstants.FONT_UNDERLINE);
+    });
+
+    /**
+     * 텍스트 위치(왼쪽/중앙/오른쪽, TOP/MIDDLE/BOTTOM)
+     */
+    addClickHandler(document.getElementById('btnLeft'), function() {
+        graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+        preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
+    });
+    addClickHandler(document.getElementById('btnCenter'), function() {
+        graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+        preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+    });
+    addClickHandler(document.getElementById('btnRight'), function() {
+        graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
+        preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
+    });
+
+    addClickHandler(document.getElementById('btnTop'), function() {
+        graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
+        preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
+    });
+    addClickHandler(document.getElementById('btnMiddle'), function() {
+        graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+        preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+    });
+    addClickHandler(document.getElementById('btnBottom'), function() {
+        graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
+        preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
+    });
+
 };
 
 /**
  * 폰트/정렬 설정값 Set
  */
-Format.prototype.setElementsValue = function() {
-  var graph = this.graph;
-  var format = this;
+FormatAttr.prototype.setElementsValue = function(graph) {
 
-  //선택된 셀에서 스타일 정보 읽기
-  var cells = graph.getSelectionCells();
-  var initFontSize = 10;
-  var initFontFamily;
-  var initFontColor;
-  var initFontStyle;
-  var initAlign;
-  var initVAlign;
-  for(var i=0; i < cells.length; i++) {
-    var cell = cells[i];
-    var state = graph.view.getState(cell);
-    if (state != null) {
-      initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
-      initFontFamily = mxUtils.getValue(state.style, mxConstants.STYLE_FONTFAMILY, null);
-      initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
-      initFontStyle = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSTYLE, 0); 
-      initAlign = mxUtils.getValue(state.style, mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER); 
-      initVAlign = mxUtils.getValue(state.style, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE); 
+    var format = this;
+
+    //선택된 셀에서 스타일 정보 읽기
+    var cells = graph.getSelectionCells();
+    var initFontSize = 10;
+    var initFontFamily;
+    var initFontColor;
+    var initFontStyle;
+    var initAlign;
+    var initVAlign;
+    for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        var state = graph.view.getState(cell);
+        if (state != null) {
+            initFontSize = Math.max(0, parseInt(mxUtils.getValue(state.style, mxConstants.STYLE_FONTSIZE, null)));
+            initFontFamily = mxUtils.getValue(state.style, mxConstants.STYLE_FONTFAMILY, null);
+            initFontColor = mxUtils.getValue(state.style, mxConstants.STYLE_FONTCOLOR, null);
+            initFontStyle = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSTYLE, 0);
+            initAlign = mxUtils.getValue(state.style, mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
+            initVAlign = mxUtils.getValue(state.style, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+        }
     }
-  }
-  
-  format.fontFamily.text = initFontFamily;
-  format.fontColor.value = initFontColor;
-  format.fontSize.value = initFontSize;
-  
-  this.setSelected(document.getElementById('btnBold'), 'on', (initFontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD);
-  this.setSelected(document.getElementById('btnItalic'), 'on', (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
-  this.setSelected(document.getElementById('btnUnderline'), 'on', (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
-  
-  this.setSelected(document.getElementById('btnLeft'), 'on', initAlign == mxConstants.ALIGN_LEFT);
-  this.setSelected(document.getElementById('btnCenter'), 'on', initAlign == mxConstants.ALIGN_CENTER);
-  this.setSelected(document.getElementById('btnRight'), 'on', initAlign == mxConstants.ALIGN_RIGHT);
-  
-  this.setSelected(document.getElementById('btnTop'), 'on', initVAlign == mxConstants.ALIGN_TOP);
-  this.setSelected(document.getElementById('btnMiddle'), 'on', initVAlign == mxConstants.ALIGN_MIDDLE);
-  this.setSelected(document.getElementById('btnBottom'), 'on', initVAlign == mxConstants.ALIGN_BOTTOM);
-  
+
+    format.fontFamily.text = initFontFamily;
+    format.fontColor.value = initFontColor;
+    format.fontSize.value = initFontSize;
+
+    this.setSelected(document.getElementById('btnBold'), 'on', (initFontStyle & mxConstants.FONT_BOLD) == mxConstants.FONT_BOLD);
+    this.setSelected(document.getElementById('btnItalic'), 'on', (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
+    this.setSelected(document.getElementById('btnUnderline'), 'on', (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
+
+    this.setSelected(document.getElementById('btnLeft'), 'on', initAlign == mxConstants.ALIGN_LEFT);
+    this.setSelected(document.getElementById('btnCenter'), 'on', initAlign == mxConstants.ALIGN_CENTER);
+    this.setSelected(document.getElementById('btnRight'), 'on', initAlign == mxConstants.ALIGN_RIGHT);
+
+    this.setSelected(document.getElementById('btnTop'), 'on', initVAlign == mxConstants.ALIGN_TOP);
+    this.setSelected(document.getElementById('btnMiddle'), 'on', initVAlign == mxConstants.ALIGN_MIDDLE);
+    this.setSelected(document.getElementById('btnBottom'), 'on', initVAlign == mxConstants.ALIGN_BOTTOM);
 };
 
 /**
  * 엘리먼트 선택 표시
  */
-Format.prototype.setSelected = function(elt, name, selected) {
-  
-  if(selected){
-    var arr = elt.className.split(' ');
-    if(arr.indexOf('on') == -1) {
-      elt.className += ' ' + name;
+FormatAttr.prototype.setSelected = function(elt, name, selected) {
+
+    if (selected) {
+        var arr = elt.className.split(' ');
+        if (arr.indexOf('on') == -1) {
+            elt.className += ' ' + name;
+        }
+    } else {
+        elt.className = elt.className.replace(new RegExp(name, 'g'), '').trim();
     }
-  }
-  else {
-    elt.className = elt.className.replace(new RegExp(name, 'g'), '').trim();
-  }
 };
 
+FormatAttr.prototype.getSelectedPreviewCells = function() {
+
+	var graph = this.graph;
+	var preview = this.preview;
+
+	var parent = preview.getDefaultParent();
+    var model = preview.getModel();
+    var childCount = model.getChildCount(parent);
+    var cellsTemp = [];
+
+    var graphCells = graph.getSelectionCells();
+    for (var i = 0; i < graphCells.length; i++) {
+        var graphCell = graphCells[i];
+        for (var j = 0; j < childCount; j++) {
+            var previewCell = model.getChildAt(parent, j);
+            if (graphCell.id == previewCell.id) {
+            	cellsTemp.push(previewCell);
+            }
+        }
+    }
+
+    preview.setSelectionCells(cellsTemp);
+};
 
 /**
  * 기존 구성 조회
  */
-Format.prototype.open = function(isLoad) {
-  var graph = this.graph;
-  var main = this.main;
-  //open
-  var reqGroup = mxUtils.post(TABLEATTR_OPEN_URL, '',
-      mxUtils.bind(this, function(req) {
-        //var enabled = req.getStatus() != 404;
-        if( req.getStatus() == 200 ) {
-          var jsonStr = JSON.parse(req.getText());
-          var xmlStr = jsonStr.data;
-          if(xmlStr != null) {
-            try {
-              var xml = mxUtils.parseXml(xmlStr);
-              this.setGraphXml(graph, xml.documentElement);
-              main.initValue();
-              if(!isLoad) {
-                mxUtils.alert(mxResources.get('opened'));
-              }
-            }
-            catch (e) {
-              mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
-            }
-          }
-        }
-        else {
-          mxUtils.alert(mxResources.get('errorOpeningFile'));
-          
-        }
-      })
-  );
+FormatAttr.prototype.open = function(isLoad) {
 
+	if (currentCell != null && currentCell != undefined) {
+		var styleObjArr = getCellStyle(currentCell.style);
+
+		if (styleObjArr[0].tblTypeFg == undefined) {
+			currentTblTypeFg = "1";
+		} else {
+			currentTblTypeFg = styleObjArr[0].tblTypeFg;
+		}
+
+    	currentBgImg = styleObjArr[3].image;
+	}
+
+	currentWidth = $("#cellW").val();
+	currentHeight = $("#cellH").val();
+
+	var graph = this.graph;
+	var preview = this.preview;
+    var main = this.main;
+    var param = "confgSubFg=1";
+
+    if (currentTblTypeFg != undefined && currentTblTypeFg != "") {
+    	param = "confgSubFg="+currentTblTypeFg;
+    }
+
+    var sid = "";
+
+    if(document.getElementsByName('sessionId')[0]){
+    	param += "&sid=" + document.getElementsByName('sessionId')[0].value;
+    }
+
+    //open
+    var reqGroup = mxUtils.post(TABLEATTR_OPEN_URL, param,
+        mxUtils.bind(this, function(req) {
+            //var enabled = req.getStatus() != 404;
+            if (req.getStatus() == 200) {
+                var jsonStr = JSON.parse(req.getText());
+                var xmlStr = jsonStr.data;
+
+                if (xmlStr != null) {
+                    try {
+                        var xml = mxUtils.parseXml(xmlStr);
+                        //console.log(xml);
+                        this.setGraphXml(graph, xml.documentElement, graph.container.offsetWidth, graph.container.offsetHeight);
+                        this.setGraphXml(preview, xml.documentElement, currentWidth, currentHeight);
+                        this.resizeCells(preview);
+
+                        main.initValue();
+                        if (!isLoad) {
+                            mxUtils.alert(mxResources.get('opened'));
+                        }
+
+                    } catch (e) {
+                        mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+                    }
+                }
+
+            } else {
+                mxUtils.alert(mxResources.get('errorOpeningFile'));
+
+            }
+        })
+    );
 };
+
 /**
  * Sets the XML node for the current diagram.
  */
-Format.prototype.setGraphXml = function(graph, node) {
-  
-  if (node != null) {
-    var dec = new mxCodec(node.ownerDocument);
-    if (node.nodeName == 'mxGraphModel') {
-      graph.model.beginUpdate();
-      try {
+FormatAttr.prototype.setGraphXml = function(graph, node, width, height) {
+
+    if (node != null) {
+        var dec = new mxCodec(node.ownerDocument);
+        if (node.nodeName == 'mxGraphModel') {
+            graph.model.beginUpdate();
+            try {
+                graph.model.clear();
+                dec.decode(node, graph.getModel());
+            } finally {
+                graph.model.endUpdate();
+
+                if (currentBgImg != undefined && currentBgImg != "") {
+                	var img = new mxImage(currentBgImg, width, height);
+                    graph.setBackgroundImage(img);
+                    graph.view.validateBackgroundImage();
+                }
+
+            }
+        } else {
+            throw {
+                message: mxResources.get('cannotOpenFile'),
+                node: node,
+                toString: function() {
+                    return this.message;
+                }
+            };
+        }
+    } else {
         graph.model.clear();
-        dec.decode(node, graph.getModel());
-      }
-      finally {
-        graph.model.endUpdate();
-      }
     }
-    else {
-      throw {
-          message: mxResources.get('cannotOpenFile'), 
-          node: node,
-          toString: function() { return this.message; }
-      };
-    }
-  }
-  else {
-    graph.model.clear();
-  }
 };
+
+FormatAttr.prototype.resizeCells = function(graph) {
+
+	currentHorizontalRatio = currentWidth / 500;
+	currentVerticalRatio = currentHeight / 500;
+
+    //그래픽 영역의 Object를 체크해 사용여부 true 처리
+    var parent = graph.getDefaultParent();
+    var model = graph.getModel();
+    var childCount = model.getChildCount(parent);
+    var cellsTemp = [];
+
+    for (var i = 0; i < childCount; i++) {
+        var cell = model.getChildAt(parent, i);
+
+        var cellX = cell.geometry.x;
+        var cellY = cell.geometry.y;
+        var cellW = cell.geometry.width;
+        var cellH = cell.geometry.height;
+
+        cell.geometry.x = parseFloat(cellX * currentHorizontalRatio);
+        cell.geometry.y = parseFloat(cellY * currentVerticalRatio);
+        cell.geometry.width = parseFloat(cellW * currentHorizontalRatio);
+        cell.geometry.height = parseFloat(cellH * currentVerticalRatio);
+
+        cellsTemp.push(cell);
+    }
+
+    graph.setCellStyles(mxConstants.STYLE_STROKECOLOR, 'none', cellsTemp);
+    graph.refresh();
+
+};
+
 /**
  * 화면구성 XML을 서버에 저장
  */
-Format.prototype.save = function() {
-  var graph = this.graph;
-  
-  if (graph.isEditing()) {
-    graph.stopEditing();
-  }
-  
-  
-  
-  var node = null;
-  var enc = new mxCodec(mxUtils.createXmlDocument());
-  node = enc.encode(graph.getModel());
-  
-  //저장 될 XML을 보고 싶을 때 사용
-  /*
-  var xmlPretty = mxUtils.getPrettyXml(node);
-  mxLog.show();
-  mxLog.write(xmlPretty);
-  */
-  
-  var xml = mxUtils.getXml(node);
+FormatAttr.prototype.save = function() {
 
-  var xml = encodeURIComponent(xml);
-  
-  try {
-    if (xml.length < MAX_REQUEST_SIZE) {
-      var onload = function(req) {
-        mxUtils.alert(mxResources.get('saved'));
-      }
-      var onerror = function(req) {
-        mxUtils.alert('Error');
-      }
-      new mxXmlRequest(TABLEATTR_SAVE_URL, 'xml=' + xml).send(onload, onerror);
+	var graph = this.graph;
+    var preview = this.preview;
+
+    if (graph.isEditing()) {
+        graph.stopEditing();
     }
-    else {
-      mxUtils.alert(mxResources.get('drawingTooLarge'));
-      //mxUtils.popup(xml);
-      return;
+
+    if (preview.isEditing()) {
+    	preview.stopEditing();
     }
-  }
-  catch (e) {
-    mxUtils.alert(mxResources.get('errorSavingFile'));
-  }
+
+    var nodeGraph = null;
+    var nodePreview = null;
+
+    var enc = new mxCodec(mxUtils.createXmlDocument());
+
+    nodeGraph = enc.encode(graph.getModel());
+    nodePreview = enc.encode(preview.getModel());
+
+    //저장 될 XML을 보고 싶을 때 사용
+
+    //var xmlPretty = mxUtils.getPrettyXml(node);
+    //console.log(xmlPretty);
+    //mxLog.show();
+    //mxLog.write(xmlPretty);
+
+    var xmlGraph = mxUtils.getXml(nodeGraph);
+    var xmlPreview = mxUtils.getXml(nodePreview);
+
+    xmlGraph = encodeURIComponent(xmlGraph);
+    xmlPreview = encodeURIComponent(xmlPreview);
+
+    var sid = "";
+
+    if(document.getElementsByName('sessionId')[0]){
+    	sid = document.getElementsByName('sessionId')[0].value;
+    }
+
+    try {
+        if (xmlGraph.length < MAX_REQUEST_SIZE) {
+
+        	var onload = function(req) {
+                mxUtils.alert(mxResources.get('saved'));
+            }
+
+        	var onerror = function(req) {
+                mxUtils.alert('Error');
+            }
+
+            new mxXmlRequest(TABLEATTR_SAVE_URL, 'sid=' + sid + '&xmlGraph=' + xmlGraph + '&xmlPreview=' + xmlPreview + "&confgSubFg="+currentTblTypeFg).send(onload, onerror);
+
+        } else {
+            mxUtils.alert(mxResources.get('drawingTooLarge'));
+            //mxUtils.popup(xml);
+            return;
+        }
+    } catch (e) {
+        mxUtils.alert(mxResources.get('errorSavingFile'));
+    }
 
 };
-
-
-
-
-
-
-
-/**
- * 로딩 시점에 초기화
- * @returns
- */
-(function() {
-  //Sets colors for handles
-  mxConstants.HANDLE_FILLCOLOR = '#99ccff';
-  mxConstants.HANDLE_STROKECOLOR = '#0088cf';
-  mxConstants.VERTEX_SELECTION_COLOR = '#00a8ff';
-  mxConstants.OUTLINE_COLOR = '#00a8ff';
-  mxConstants.OUTLINE_HANDLE_FILLCOLOR = '#99ccff';
-  mxConstants.OUTLINE_HANDLE_STROKECOLOR = '#00a8ff';
-  mxConstants.CONNECT_HANDLE_FILLCOLOR = '#cee7ff';
-  mxConstants.EDGE_SELECTION_COLOR = '#00a8ff';
-  mxConstants.DEFAULT_VALID_COLOR = '#00a8ff';
-  mxConstants.LABEL_HANDLE_FILLCOLOR = '#cee7ff';
-  mxConstants.GUIDE_COLOR = '#0088cf';
-  mxConstants.HIGHLIGHT_OPACITY = 30;
-  mxConstants.HIGHLIGHT_SIZE = 8;
-
-
-})();

@@ -14,26 +14,26 @@ app.controller('standMoveCtrl', ['$scope', '$http', function ($scope, $http) {
   
   //이동구분
   $scope.ioFgMap = new wijmo.grid.DataMap([
-    {id: "out", name: messages["standMove.standMove"]},
-    {id: "in", name: messages["standMove.storageMove"]}
+    {id: "-1", name: messages["standMove.standMove"]},
+    {id: "1", name: messages["standMove.storageMove"]}
   ], 'id', 'name');
   //진행구분
   $scope.procFgMap = new wijmo.grid.DataMap([
     {id: "0", name: messages["standMove.procFg0"]},
     {id: "1", name: messages["standMove.procFg1"]}
   ], 'id', 'name');
-  
+
   //이동구분
   $scope._setComboData("srchIoFg", [
     {"name": messages["cmm.all"], "value": ""},
-    {"name": messages["standMove.standMove"],  "value": "1"},
-    {"name": messages["standMove.storageMove"], "value": "-1"}
+    {"name": messages["standMove.standMove"],  "value": "-1"},
+    {"name": messages["standMove.storageMove"], "value": "1"}
   ]);
   //진행구분
   $scope._setComboData("srchProcFg", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["standMove.procFg0"], "value": "N"},
-    {"name": messages["hqStoreMove.procFg1"], "value": "Y"}
+    {"name": messages["standMove.procFg1"], "value": "Y"}
   ]);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -68,8 +68,10 @@ app.controller('standMoveCtrl', ['$scope', '$http', function ($scope, $http) {
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.slipFg 	= selectedRow.slipFg;
           params.slipNo 	= selectedRow.slipNo;
           params.moveDate 	= selectedRow.moveDate;
+          params.confmYn	= selectedRow.confmYn;
           $scope._broadcast('standMoveDtlCtrl', params);
         }
       }

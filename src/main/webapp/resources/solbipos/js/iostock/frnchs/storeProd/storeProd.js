@@ -118,6 +118,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
 	            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
             	params.storeCd   = selectedRow.storeCd;
         	    params.prodCd    = selectedRow.prodCd;
+        	    params.prodNm    = selectedRow.prodNm;
 
             if (col.binding === "prodCd") { // 상품코드
               $scope._broadcast('frnchsStoreProdDtlCtrl', params);
@@ -154,7 +155,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     params.prodCd    = $("#srchProdCd").val();
     params.prodNm    = $("#srchProdNm").val();
     params.orgnFg    = $scope.orgnFg;
-    params.listScale = $scope.frnchsStoreProdlistScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){

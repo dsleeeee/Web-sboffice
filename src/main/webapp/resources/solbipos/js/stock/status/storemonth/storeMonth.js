@@ -7,7 +7,7 @@ var app = agrid.getApp();
 app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('storeMonthCtrl', $scope, $http, true));
-	
+
 	  $scope.isChecked = false;
 
 	  // 접속 사용자의 권한
@@ -139,7 +139,7 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	      }
 	    });
 	  };
-	  
+
 	//상품분류 항목표시 함수
 	  $scope.isChkDt = function() {
 		  var grid = wijmo.Control.getControl("#storeMonthMainGrid");
@@ -356,7 +356,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     params.prodClassCd = $scope.prodClassCd;
     params.unitFg 	   = $scope.unitFg;
     params.isPageChk   = isPageChk;
-    params.listScale   = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text;
 
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

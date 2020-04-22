@@ -168,7 +168,7 @@ app.controller('hqMoveCtrl', ['$scope', '$http', function ($scope, $http) {
     params.procFg = $scope.procFg;
     params.outStorageCd = $("#hqMoveOutSelectStorageCd").val();
     params.inStorageCd  = $("#hqMoveInSelectStorageCd").val();
-    params.listScale = $scope.listScale;
+    //params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/move/hqMove/hqMove/list.sb", params);

@@ -199,7 +199,7 @@
 				<%-- 현금 결제내역 --%>
 				<div>
 	          		<h3>
-	          			<s:message code="saleComPopup.bill.cash" />0
+	          			<s:message code="saleComPopup.bill.cash" />
 	        		</h3>
 	       		</div>	
 				<div class="wj-TblWrap mt10">					

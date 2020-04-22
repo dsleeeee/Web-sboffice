@@ -21,8 +21,8 @@
      		 , SUM(DM.SALE_CNT_A)   	AS SALE_CNT_A
      		 , SUM(DM.REAL_SALE_AMT_B)  AS REAL_SALE_AMT_B
      		 , SUM(DM.SALE_CNT_B)       AS SALE_CNT_B
-     		 , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
-     		 , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+     		 , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+     		 , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
      	FROM (
      		   SELECT UM.LV1_CD
 		     		, UM.LV1_NM
@@ -326,8 +326,8 @@
 			 , SUM(DM.SALE_CNT_A)   	AS SALE_CNT_A
 			 , SUM(DM.REAL_SALE_AMT_B)  AS REAL_SALE_AMT_B
 			 , SUM(DM.SALE_CNT_B)       AS SALE_CNT_B
-		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,1) AS SIN_AMT
-		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,1) AS SIN_CNT
+		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM (
 				SELECT UM.PROD_CD
@@ -461,9 +461,152 @@
 		ORDER BY SUM(DM.REAL_SALE_AMT_A) DESC
 	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
+    <select id="getVersusPeriodClassDtlChartList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
+		SELECT DM.PROD_CD
+		     , DM.PROD_NM
+			 , SUM(DM.REAL_SALE_AMT_A)  AS REAL_SALE_AMT_A
+			 , SUM(DM.SALE_CNT_A)   	AS SALE_CNT_A
+			 , SUM(DM.REAL_SALE_AMT_B)  AS REAL_SALE_AMT_B
+			 , SUM(DM.SALE_CNT_B)       AS SALE_CNT_B
+		     , ROUND(NVL((SUM(DM.REAL_SALE_AMT_A)-SUM(DM.REAL_SALE_AMT_B))/ DECODE(SUM(DM.REAL_SALE_AMT_B), 0, NULL, SUM(DM.REAL_SALE_AMT_B)),0) *100,2) AS SIN_AMT
+		     , ROUND(NVL((SUM(DM.SALE_CNT_A)-SUM(DM.SALE_CNT_B))/ DECODE(SUM(DM.SALE_CNT_B), 0, NULL, SUM(DM.SALE_CNT_B)),0) *100,2) AS SIN_CNT
+		  FROM (
+				SELECT UM.PROD_CD
+				     , UM.PROD_NM
+					 , DECODE(UM.GBN,'A',UM.REAL_SALE_AMT,'')  REAL_SALE_AMT_A
+					 , DECODE(UM.GBN,'A',UM.TOT_SALE_QTY,'')      SALE_CNT_A
+					 , DECODE(UM.GBN,'B',UM.REAL_SALE_AMT,'') REAL_SALE_AMT_B
+					 , DECODE(UM.GBN,'B',UM.TOT_SALE_QTY,'')      SALE_CNT_B
+				  FROM (
+						SELECT  'A' GBN
+							 ,  B.PROD_CD
+							 ,  B.PROD_NM
+						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
+						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
+						  FROM  (
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									  FROM (
+											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											  FROM TB_MS_PRODUCT       B
+											 WHERE 1=1
+											 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									   	   	  	   AND B.STORE_CD IN
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+														#{item}
+										      	   </foreach>
+									   	  	</if>
+									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
+											   AND B.PROD_CLASS_CD = #{prodClassCd}
+											</if>
+											<if test='brandCd != null and brandCd != ""'>
+                                                AND B.HQ_BRAND_CD = #{brandCd}
+                                             </if>
+									       ) B
+									     , (
+											SELECT C.PROD_CD
+											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
+											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
+											  FROM TB_SL_DAILY_PROD    C
+											 WHERE 1=1
+											 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									   	   	  	   AND C.STORE_CD IN
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+														#{item}
+										      	   </foreach>
+									   	  	</if>
+											<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+											   	  AND C.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
+										 	 </if>
+										 	 <if test='brandCd != null and brandCd != ""'>
+                                                AND C.HQ_BRAND_CD = #{brandCd}
+                                             </if>
+											 GROUP BY C.PROD_CD
+									       ) C
+									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									  	  WHERE Z.STORE_CD IN
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+									  	  		#{item}
+									  	  	</foreach>
+	                                     </if>
+									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
+									 </if>
+						         ) B
+						  GROUP BY B.PROD_CD
+								 , B.PROD_NM
+						UNION ALL
+						SELECT  'B' GBN
+							 ,  B.PROD_CD
+							 ,  B.PROD_NM
+						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
+						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
+						  FROM  (
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									  FROM (
+											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											  FROM TB_MS_PRODUCT       B
+											 WHERE 1=1
+											 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									   	   	  	   AND B.STORE_CD IN
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+														#{item}
+										      	   </foreach>
+									   	  	</if>
+									   	  	<if test='prodClassCd != null and prodClassCd != ""'>
+											   AND B.PROD_CLASS_CD = #{prodClassCd}
+											</if>
+											<if test='brandCd != null and brandCd != ""'>
+                                                AND B.HQ_BRAND_CD = #{brandCd}
+                                             </if>
+									       ) B
+									     , (
+											SELECT C.PROD_CD
+											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
+											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
+											  FROM TB_SL_DAILY_PROD    C
+											 WHERE 1=1
+											 <if test='arrStoreCd != null and arrStoreCd != ""'>
+									   	   	  	   AND C.STORE_CD IN
+										      	   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+														#{item}
+										      	   </foreach>
+									   	  	 </if>
+											 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
+											   	AND C.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
+										 	 </if>
+										 	 <if test='brandCd != null and brandCd != ""'>
+										 	    AND C.HQ_BRAND_CD = #{brandCd}
+										 	 </if>
+											 GROUP BY C.PROD_CD
+									       ) C
+									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
+									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
+							             <if test='arrStoreCd != null and arrStoreCd != ""'>
+									  	  WHERE Z.STORE_CD IN
+									  	 	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+									  	  		#{item}
+									  	  	</foreach>
+	                                     </if>
+									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
+									 </if>
+						         ) B
+						  GROUP BY B.PROD_CD
+								 , B.PROD_NM
+						) UM
+		       ) DM
+		GROUP BY DM.PROD_CD
+		     , DM.PROD_NM
+		HAVING	SUM(DM.SALE_CNT_A) > 0
+				OR SUM(DM.SALE_CNT_B) > 0
+		ORDER BY SUM(DM.REAL_SALE_AMT_A) DESC
+    </select>
+
     <select id="getBrandCdList" parameterType="versusPeriodClassVO" resultType="DefaultMap">
-    
+
 	    SELECT HQ_BRAND_CD AS NMCODE_CD
 	         , HQ_BRAND_NM AS NMCODE_NM
 	      FROM TB_HQ_BRAND
@@ -471,7 +614,7 @@
 	     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
 	        AND HQ_OFFICE_CD = #{hqOfficeCd};
 	     </if>
-     
+
     </select>
 
 </mapper>

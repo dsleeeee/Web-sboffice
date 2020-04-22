@@ -41,9 +41,26 @@
       <td>
         <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
       </td>
-      <%-- 거래처 --%>
-      <th><s:message code="hqCurr.vendrNm"/></th>
+
+      <%-- 분류 --%>
+      <th><s:message code="hqCurr.prodClass"/></th>
       <td>
+        <input type="text" class="sb-input w50" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
+               placeholder="<s:message code="cmm.all" />" readonly/>
+        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+        <span class="chk ml10">
+            <input type="checkbox" class="mt10" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+                <label for="chkDt">
+                <s:message code="currUnity.isChk" />
+            </label>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <%-- 거래처 --%>
+      <th style="display: none;"><s:message code="hqCurr.vendrNm"/></th>
+      <td style="display: none;">
         <%-- 거래처선택 모듈 싱글 선택 사용시 include
              param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -58,23 +75,6 @@
         <input type="hidden" id="currUnitySelectVendrCd"/>
       </td>
     </tr>
-    <tr>
-      <%-- 분류 --%>
-      <th><s:message code="hqCurr.prodClass"/></th>
-      <td colspan="3">
-        <input type="text" class="sb-input w30" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
-               placeholder="<s:message code="cmm.all" />" readonly/>
-        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
-        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-		<span class="chk ml10">
-			<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
-				<label for="chkDt">
-				<s:message code="currUnity.isChk" />
-			</label>
-		</span>
-		</div>
-      </td>
-    </tr>
     </tbody>
   </table>
 
@@ -85,12 +85,13 @@
 			class="w100px fl"
 			id="currUnityListScaleBox"
 			ng-model="listScale"
-			control="listScaleCombo"
 			items-source="_getComboData('currUnityHqDtlListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="_initComboBox(s)">
+			initialized="_initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 
 		<%-- 엑셀 다운로드 //TODO --%>
@@ -116,10 +117,10 @@
         <wj-flex-grid-column header="<s:message code="currUnity.lv1Nm"/>"          binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.lv2Nm"/>"          binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.lv3Nm"/>"          binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"   binding="hSafeStockQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.hqQty"/>"          binding="hCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.storeQty"/>"       binding="mCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
@@ -140,6 +141,42 @@
         </ul>
     </div>
     <%--//페이지 리스트--%>
+    
+    <%--엑셀 리스트--%>
+    <div class="w100 mt10" id="wjWrapType1" style="display:none;" ng-controller="currUnityMainExcelCtrl">
+    <div class="wj-gridWrap" style="height: 350px;">
+      <wj-flex-grid
+        id="currUnityMainExcelGrid"
+        loaded-rows="loadedRows(s,e)"
+        autoGenerateColumns="false"
+        selection-mode="Row"
+        items-source="data"
+        control="mainExcelFlex"
+        initialized="initGrid(s,e)"
+        is-read-only="true"
+        item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="currUnity.lv1Nm"/>"          binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.lv2Nm"/>"          binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.lv3Nm"/>"          binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"   binding="hSafeStockQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqQty"/>"          binding="hCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeQty"/>"       binding="mCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.totStockQty"/>"    binding="totCurrQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+      </wj-flex-grid>
+      <%-- ColumnPicker 사용시 include --%>
+      <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+        <jsp:param name="pickerTarget" value="currUnityCtrl"/>
+      </jsp:include>
+      <%--// ColumnPicker 사용시 include --%>
+    </div>
+    </div>
+    <%--//엑셀 리스트--%>
 </div>
 
 </div>
@@ -152,11 +189,13 @@
               class="w100px fl"
               id="currUnityHqDtlListScaleBox"
               ng-model="listScale"
-              control="listScaleCombo"
               items-source="_getComboData('currUnityHqDtlListScaleBox')"
               display-member-path="name"
               selected-value-path="value"
-              initialized="_initComboBox(s)">
+              initialized="_initComboBox(s)"
+              control="listScaleCombo"
+			  is-editable="true"
+			  text-changed="_checkValidation(s)">
             </wj-combo-box>
 
             <%-- 엑셀 다운로드 //TODO --%>
@@ -200,6 +239,36 @@
 			</ul>
 		</div>
 		<%--//페이지 리스트--%>
+		
+		<%--엑셀 리스트--%>
+        <div class="w100 mt10" style="display:none;" ng-controller="currUnityHqDtlExcelCtrl">
+          <div class="wj-gridWrap" style="height: 350px;">
+            <wj-flex-grid
+              id="currUnityHqDtlExcelGrid"
+              autoGenerateColumns="false"
+              control="HqDtlExcelFlex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+
+              item-formatter="_itemFormatter">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="currUnityHqDtlCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+          </div>
+        </div>
+        <%--//엑셀리스트--%>
 
     </div>
 
@@ -260,6 +329,36 @@
         </ul>
       </div>
       <%--//페이지 리스트--%>
+      
+      <%--엑셀 리스트--%>
+        <div class="w100 mt10">
+          <div class="wj-gridWrap" style="height: 350px; display:none;" ng-controller="currUnityStoreDtlExcelCtrl">
+            <wj-flex-grid
+              id="currUnityStoreDtlExcelGrid"
+              autoGenerateColumns="false"
+              control="storeDtlExcelFlex"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              selection-mode="Row"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="currUnity.storeCd"/>"           binding="storeCd"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.storeNm"/>"           binding="storeNm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.outPrice"/>"          binding="splyUprc"      width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="currUnityStoreDtlCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+          </div>
+        </div>
+        <%--//엑셀 리스트--%>
 
     </div>
 </div>

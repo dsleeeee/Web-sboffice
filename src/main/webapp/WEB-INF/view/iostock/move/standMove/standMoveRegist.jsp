@@ -9,7 +9,7 @@
 <wj-popup id="wjStandMoveRegistLayer" control="wjStandMoveRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="standMoveRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="standMoveRegistCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="storeMove.reg.registTitle"/>
+      <s:message code="standMove.reg.registTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
@@ -50,12 +50,12 @@
           <%-- 상품코드 --%>
           <th><s:message code="storeMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchStandMoveRegProdCd" name="srchStandMoveRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
           <th><s:message code="storeMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchStandMoveRegProdNm" name="srchStandMoveRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>
@@ -63,13 +63,13 @@
 
       <ul class="txtSty3 mt10">
         <li><s:message code="storeMove.reg.txt1"/></li>
-        <li><s:message code="storeMove.reg.txt2"/></li>
-        <li><s:message code="storeMove.reg.txt3"/></li>
+<%--         <li><s:message code="storeMove.reg.txt2"/></li> --%>
+<%--         <li><s:message code="storeMove.reg.txt3"/></li> --%>
       </ul>
 
       <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStoreMoveRegistList();">
+        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchStandMoveRegistList();">
           <s:message code="cmm.search"/></button>
       </div>
 
@@ -103,7 +103,7 @@
            
             <wj-flex-grid-column header="<s:message code="standMove.safeStockQty"/>" 		binding="safeStockQty" 		width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrQty"/>"    	binding="totCurrQty" 		width="70" align="right" aggregate="Sum" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="standMove.standTotQty"/>" 		binding="standTotQty" 		width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true" value="0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="standMove.standTotQty"/>" 		binding="standTotQty" 		width="70" align="right" visible="false" max-length=8 data-type="Number" format="n0" is-read-only="true" value="0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrUnitQty"/>" 	binding="standCurrUnitQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="standMove.standCurrEtcQty"/>" 	binding="standCurrEtcQty" 	width="70" align="right" max-length=8 data-type="Number" format="n0" is-read-only="true"></wj-flex-grid-column>
                         

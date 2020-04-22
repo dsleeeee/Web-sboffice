@@ -193,7 +193,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.slipFg	 = $scope.slipFg;
     params.outDateFg = $scope.outDateFg;
     params.storeCd	 = $("#unusualSelectStoreCd").val();
-    params.listScale = $scope.unusualMainListScale;
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -506,7 +506,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.slipNo    = $scope.slipNo;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
-    params.listScale = $scope.unusualDtlListScale;
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/slip/ioStockDtl/list.sb", params);

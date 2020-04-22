@@ -76,8 +76,10 @@
                 items-source="_getComboData('rtnStatusDayListScaleBox')"
                 display-member-path="name"
                 selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
+                initialized="initComboBox(s)"
+                control="listScaleCombo"
+                is-editable="true"
+                text-changed="_checkValidation(s)">
         </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="text" id="rtnStatusDaySelectStoreStoreNum" ng-model="storeNum">
@@ -128,7 +130,7 @@
     <%-- wj grid start --%>
     <div class="wj-TblWrap">
 	        <%-- left --%>
-	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl">
+	        <div class="w50 fl" ng-controller="rtnStatusDayDtlCtrl" style="width:48%">
 	        <div class="mt20 oh sb-select dkbr mb10 mr10" >
             <%-- 페이지 스케일  --%>
             <wj-combo-box
@@ -138,8 +140,10 @@
                     items-source="_getComboData('rtnStatusDayDtlListScaleBox')"
                     display-member-path="name"
                     selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
+                    initialized="initComboBox(s)"
+                    control="listScaleCombo"
+	                is-editable="true"
+	                text-changed="_checkValidation(s)">
             </wj-combo-box>
             <span class="fl bk lh30 pdl20" id="strNm"></span>
             <%-- 엑셀 다운로드 //TODO --%>
@@ -147,6 +151,7 @@
             </button>
             </div>
 	            <div class="wj-TblWrapBr2 mr10">
+	            	<div class="wj-gridWrap">
                    <wj-flex-grid
 	                  id="rtnStatusDayDtlGrid"
 	                  loaded-rows="loadedRows2(s,e)"
@@ -171,9 +176,10 @@
 	                  <jsp:param name="pickerTarget" value="rtnStatusDayDtlCtrl"/>
 	                </jsp:include>
 	                <%--// ColumnPicker 사용시 include --%>
+	              </div>
 	           </div>
 		       <%-- 페이지 리스트 --%>
-	           <div class="pageNum mt20">
+	           <div class="pageNum3 mt20">
 	             <ul id="rtnStatusDayDtlCtrlPager" data-size="10">
 	             </ul>
 	           </div>
@@ -181,8 +187,8 @@
         </div>
 
         <%-- right --%>
-        <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl">
-        <div class="mt20 oh sb-select dkbr mb10 ml10">
+        <div class="w50 fr" ng-controller="rtnStatusPosDtlCtrl" style="width:48%">
+        <div class="mt20 oh sb-select dkbr mb10">
            <%-- 페이지 스케일  --%>
            <wj-combo-box
                    class="w100px fl"
@@ -191,15 +197,18 @@
                    items-source="_getComboData('rtnStatusPosDtlListScaleBox')"
                    display-member-path="name"
                    selected-value-path="value"
-                   is-editable="false"
-                   initialized="initComboBox(s)">
+                   initialized="initComboBox(s)"
+                   control="listScaleCombo"
+	               is-editable="true"
+	               text-changed="_checkValidation(s)">
            </wj-combo-box>
            <span class="fl bk lh30 pdl20" id="dateYMD"></span>
            <%-- 엑셀 다운로드 //TODO --%>
            <button class="btn_skyblue fr" ng-click="excelDownloadPosDtlCtrl()"><s:message code="cmm.excel.down" />
            </button>
            </div>
-	            <div class="wj-TblWrapBr1 ml10">
+	            <div class="wj-TblWrapBr1">
+	            	<div class="wj-gridWrap">
                    <wj-flex-grid
                       id="rtnStatusPosDtlGrid"
 	                  autoGenerateColumns="false"
@@ -223,8 +232,9 @@
 	                </jsp:include>
 	                <%--// ColumnPicker 사용시 include --%>
 	            </div>
+	           </div>
 	          <%-- 페이지 리스트 --%>
-			  <div class="pageNum mt20">
+			  <div class="pageNum3 mt20">
 			    <ul id="rtnStatusPosDtlCtrlPager" data-size="10">
 			    </ul>
 			  </div>

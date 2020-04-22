@@ -9,9 +9,6 @@ public interface StandMoveService {
     /** 매대이동관리 - 매대이동관리 리스트 조회 */
     List<DefaultMap<String>> getStandMoveList(StandMoveVO standMoveVO);
 
-    /** 매대이동관리 - 매대이동관리 전표상세 상세 조회 */
-    DefaultMap<String> getSlipNoInfo(StandMoveVO standMoveVO);
-
     /** 매대이동관리 - 매대이동관리 상세 리스트 조회 */
     List<DefaultMap<String>> getStandMoveDtlList(StandMoveVO standMoveVO);
 
@@ -23,10 +20,7 @@ public interface StandMoveService {
 
     /** 매대이동관리 - 매대이동관리 상세 리스트 저장 */
     int saveStandMoveDtl(StandMoveVO[] standMoveVOs, SessionInfoVO sessionInfoVO);
-
-    /** 매대이동관리 - 매대이동관리 상세 삭제 */
-    int deleteStandMoveDtl(StandMoveVO standMoveVO, SessionInfoVO sessionInfoVO);
-
+        
     /** 매대이동관리 - 매대이동관리 신규등록 리스트 저장 */
     int saveStandMoveRegist(StandMoveVO[] standMoveVOs, SessionInfoVO sessionInfoVO);
 

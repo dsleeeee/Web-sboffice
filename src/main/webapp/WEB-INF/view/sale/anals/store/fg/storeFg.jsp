@@ -64,17 +64,17 @@
 
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
-            <%-- 매장코드 --%>           
+            <%-- 매장코드 --%>
 	            <th><s:message code="todayBillSaleDtl.store"/></th>
 	            <td colspan="3">
 	                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 	                    <jsp:param name="targetId" value="storeFgSelectStore"/>
 	                </jsp:include>
 	                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-	            </td>   
+	            </td>
 	        </tr>
-	        </c:if> 
-	        <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+	        </c:if>
+	        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	            <input type="hidden" id="storeFgSelectStoreCd" value="${sessionInfo.storeCd}"/>
 	        </c:if>
 		</tbody>
@@ -106,8 +106,8 @@
 	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 			binding="totDcAmt" 			width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 		binding="realSaleAmt" 		width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="store.saleCnt"/>" 			binding="saleCnt" 			width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.ratRealSaleAmt"/>" 	binding="ratRealSaleAmt" 	width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.ratCnt"/>" 			binding="ratCnt" 			width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.ratRealSaleAmt"/>" 	binding="ratRealSaleAmt" 	width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.ratCnt"/>" 			binding="ratCnt" 			width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>

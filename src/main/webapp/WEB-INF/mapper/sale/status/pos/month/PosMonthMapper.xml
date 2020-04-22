@@ -49,10 +49,10 @@
 					(
 						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
 								, TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH_TEMP
-		                        , TSDP.TOT_SALE_AMT AS SALE_AMT
-		                        , TSDP.TOT_DC_AMT AS DC_AMT
-		                        , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-		                        , TSDP.SALE_CNT AS SALE_CNT
+		                        , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
+                                , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
+                                , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                , SUM(TSDP.SALE_CNT) AS SALE_CNT
 		                FROM    TB_SL_DAILY_POS TSDP
 		                WHERE   1 = 1
 		                        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -68,6 +68,7 @@
 							<if test='endDate != null and endDate != ""'>
 								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
 							</if>
+						GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM')
 		            )
 		            SELECT  *
 		            FROM    T

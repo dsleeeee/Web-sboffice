@@ -63,6 +63,7 @@ app.controller('dlvrChgrListCtrl', ['$scope', '$http', function ($scope, $http) 
   $scope.searchDlvrChgrList = function () {
     // 파라미터
     var params = {};
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/list.sb", params);
   };

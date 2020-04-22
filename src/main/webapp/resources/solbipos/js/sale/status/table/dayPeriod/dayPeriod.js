@@ -58,8 +58,8 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     // 헤더 컬럼 2개 머지
     s.allowMerging = 'ColumnHeaders';
     s.columnHeaders.rows[0].allowMerging = true;
-    s.columnHeaders.setCellData(0,1,"테이블");
-    s.columnHeaders.setCellData(0,2,"테이블");
+//    s.columnHeaders.setCellData(0,1,"테이블");
+//    s.columnHeaders.setCellData(0,2,"테이블");
   }
 
   // 다른 컨트롤러의 broadcast 받기
@@ -85,7 +85,7 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     var params       = {};
     params.hqOfficeCd = $("#hqOfficeCd").val();
     params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
-    params.listScale = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     if(params.startDate > params.endDate){
@@ -117,27 +117,119 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     $scope._broadcast('tableDayPeriodSelectStoreCtrl');
   };
 
-//	엑셀 다운로드
-  $scope.excelDownloadClass = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
+  //엑셀 다운로드
+  $scope.excelDownload = function () {
+	// 파라미터
+	var params = {};
+	params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '매출현황_테이블별_설정기간별_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
-  };
+	if(!$scope.isChecked){
+		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
+	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
+	}
+
+	params.isPageChk = true;
+
+	$scope._broadcast('tableDayPeriodExcelCtrl',params);
+};
+
+}]);
+
+app.controller('tableDayPeriodExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('tableDayPeriodExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+
+		// add the new GroupRow to the grid's 'columnFooters' panel
+		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+		// add a sigma to the header to show that this is a summary row
+		s.bottomLeftCells.setCellData(0, 0, '합계');
+
+	};
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("tableDayPeriodExcelCtrl", function (event, data) {
+
+		var storeCd = $("#tableDayPeriodSelectStoreCd").val();
+
+		if(data != undefined) {
+
+			if(data.startDate > data.endDate){
+				$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+				return false;
+			}
+
+			$scope.storeCd = data.storeCd;
+			$scope.startDate = data.startDate;
+			$scope.endDate = data.endDate;
+
+			$scope.searchTableDayPeriodList(true);
+
+		}
+
+	});
+
+	// 테이블별 설정기간 리스트 리스트 조회
+	  $scope.searchTableDayPeriodList = function (isPageChk) {
+
+	    // 파라미터
+	    var params       = {};
+	    params.hqOfficeCd = $("#hqOfficeCd").val();
+	    params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
+	    params.isPageChk = isPageChk;
+
+	    if(params.startDate > params.endDate){
+	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+	   	 	return false;
+	    }
+
+	    //등록일자 '전체기간' 선택에 따른 params
+		if(!$scope.isChecked){
+			params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
+		    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
+		}
+
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+	    $scope._inquiryMain("/sale/status/table/dayperiod/excelList.sb", params, function() {
+
+			var flex = $scope.excelFlex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+
+				 var grid = wijmo.Control.getControl("#tableDayPeriodExcelGrid")
+				//컬럼 삭제
+				while(grid.columns.length > 7){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+			if (flex.rows.length <= 0) {
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, messages["month.sale"]+'_'+messages["tableDay.table"]+'_'+messages["tableDayPeriod.tableDayPeriodSale"]+'_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+
+		});
+
+	  };
 
 }]);

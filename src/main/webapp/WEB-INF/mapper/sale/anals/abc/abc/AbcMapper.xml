@@ -10,7 +10,6 @@
 	-->
 
     <select id="getAbcList" parameterType="abcVO" resultType="DefaultMap">
-<include refid="CmmSQL.PagingTemplateHeader"/>
          SELECT A.LV1_CD,
        A.LV1_NM,
        A.LV2_CD,
@@ -18,17 +17,16 @@
        A.LV3_CD,
        A.LV3_NM,
        C.PROD_CD,
-       B.PROD_NM,       
+       B.PROD_NM,
        <if test='orgnFg != null and orgnFg == "S"'>
-	   C.STORE_CD,
-	   C.STORE_NM,          
+		   C.STORE_CD,
+		   C.STORE_NM,
 	   </if>
        C.REAL_SALE_AMT,
        C.TOT_SALE_QTY,
        C.RAT,
        C.ACC_RAT,
        C.GRADE
-<include refid="CmmSQL.PagingTemplateCount"/>
        FROM
   <choose>
           <when test='orgnFg != null and orgnFg == "H"'>
@@ -77,8 +75,8 @@
 	                     , M.TOT_SALE_QTY
 	                     , M.RAT
 	                     , M.ACC_RAT
-	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<= #{gradeB} ]]> THEN 'B'
 	                            ELSE 'C'
 	                        END AS GRADE
 	                  FROM (
@@ -111,7 +109,7 @@
 	                                                          <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 	                                                                #{item}
 	                                                          </foreach>
-                                          </if>	                                      
+                                          </if>
 	                                 GROUP BY TSDP.PROD_CD
 	                                 ) M
 	                      ) M
@@ -168,8 +166,8 @@
 	                     , M.TOT_SALE_QTY
 	                     , M.RAT
 	                     , M.ACC_RAT
-	                      , CASE WHEN M.ACC_RAT <![CDATA[<= ]]>70 THEN 'A'
-	                            WHEN M.ACC_RAT <![CDATA[> ]]>70 AND M.ACC_RAT <![CDATA[<= ]]>90 THEN 'B'
+	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<=  #{gradeB} ]]> THEN 'B'
 	                            ELSE 'C'
 	                        END AS GRADE
 	                  FROM (
@@ -202,7 +200,7 @@
 	                                   AND TMS.STORE_CD      = #{storeCd}
 	                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
 	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-	                                      </if>	                                     
+	                                      </if>
 	                                 GROUP BY TSDP.STORE_CD, TMS.STORE_NM, TSDP.PROD_CD
 	                                 ) M
 	                      ) M
@@ -210,9 +208,9 @@
 			   WHERE C.STORE_CD      = #{storeCd}
                  AND B.STORE_CD = C.STORE_CD
                  AND B.PROD_CLASS_CD = A.LV3_CD
-                 AND B.PROD_CD       = C.PROD_CD	                
+                 AND B.PROD_CD       = C.PROD_CD
           </when>
-       </choose>                                
+       </choose>
           <choose>
               <when test='sortFg != null and sortFg == "1"'>    <!-- 금액순 -->
                   ORDER BY C.REAL_SALE_AMT DESC
@@ -221,7 +219,6 @@
                   ORDER BY C.TOT_SALE_QTY DESC
               </when>
           </choose>
-  <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 

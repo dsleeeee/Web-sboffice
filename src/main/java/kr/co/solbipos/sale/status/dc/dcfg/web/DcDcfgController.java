@@ -37,7 +37,7 @@ public class DcDcfgController {
     public String dcDcfgView(HttpServletRequest request, HttpServletResponse response, Model model) {
         return "sale/status/dc/dcSale";
     }
-    
+
     @RequestMapping(value = "/dcfg/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgList(HttpServletRequest request, HttpServletResponse response,
@@ -48,7 +48,17 @@ public class DcDcfgController {
         List<DefaultMap<String>> list = dcDcfgService.getDcDcfgList(dcDcfgVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
-    
+
+    @RequestMapping(value = "/dcfg/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDcDcfgExcelList(HttpServletRequest request, HttpServletResponse response, Model model, DcDcfgVO dcDcfgVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcDcfgService.getDcDcfgExcelList(dcDcfgVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
+    }
+
     @RequestMapping(value = "/dcfg/dtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcDcfgDtlList(HttpServletRequest request, HttpServletResponse response,
@@ -59,7 +69,7 @@ public class DcDcfgController {
         List<DefaultMap<String>> list = dcDcfgService.getDcDcfgDtlList(dcDcfgVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, dcDcfgVO);
     }
-    
+
     @RequestMapping(value = "/dcfg/dcNmList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDcNmList(HttpServletRequest request, HttpServletResponse response,

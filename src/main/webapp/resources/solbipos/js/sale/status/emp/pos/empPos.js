@@ -4,7 +4,7 @@
 var app = agrid.getApp();
 
 /** 판매자별(월별) 상세현황 controller */
-app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('empPosCtrl', $scope, $http, true));
 
@@ -37,7 +37,7 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	      var ht = s.hitTest(e);
-	      
+
 	      /* 머지된 헤더 셀 클릭시 정렬 비활성화
     	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
     	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -47,7 +47,7 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	  		} else {
 	  			s.allowSorting = true;
 	  		}
-	    	
+
 	      if (ht.cellType === wijmo.grid.CellType.Cell) {
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;
@@ -131,7 +131,7 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
     if( $("#empPosSelectStoreCd").val() === ''){
    	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
    	 	return false;
-    }   
+    }
     if(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
@@ -148,7 +148,7 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	    if( $("#empPosSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
-	    }   
+	    }
 	    if(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') > wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd')){
 	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 	   	 	return false;
@@ -167,12 +167,13 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params       = {};
     params.storeCd   = $("#empPosSelectStoreCd").val();
-    
+    params.listScale = $scope.listScaleCombo.text;
+
     if(!$scope.isChecked){
 	    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
 	    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
-      
+
     params.isPageChk = isPageChk;
 
     if($scope.isCheckedEmpAll){
@@ -186,13 +187,13 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 		var flex = $scope.flex;
 		//row수가 0이면
 		if(flex.rows.length === 0){
-			
+
 			var grid = wijmo.Control.getControl("#empPosGrid");
 			//컬럼 삭제
 			while(grid.columns.length > 5){
 		          grid.columns.removeAt(grid.columns.length-1);
 		    }
-		}   
+		}
     });
 
   };
@@ -216,12 +217,12 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 	  	// 파라미터
 	  	var params       = {};
 	  	params.storeCd   = $("#empPosSelectStoreCd").val();
-	  	
+
 	  	if(!$scope.isChecked){
 		    params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
 		    params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 	  	}
-	    
+
 	    if($scope.isCheckedEmpAll){
 	    	params.empChk = "Y";
 	    }else{
@@ -248,7 +249,7 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http) {
 			   		grid.columnHeaders.setCellData(0, 6+(i*2), response.data.data.list[i].storeNm);
 			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);
 			   		grid.columnHeaders.setCellData(1, 6+(i*2), response.data.data.list[i].nmcodeNm);
-			   		
+
 					grid.columnHeaders.rows[0].allowSorting = false;
 					grid.columnHeaders.rows[1].allowSorting = false;
 			   	}

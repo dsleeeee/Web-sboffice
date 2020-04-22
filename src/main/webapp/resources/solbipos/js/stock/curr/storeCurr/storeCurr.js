@@ -22,6 +22,13 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["storeCurr.safeStockFg0"], "value": "0"}
   ]);
+  
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show']
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeCurrSelectStoreShow = function () {
+	  $scope._broadcast('storeCurrSelectStoreCtrl');
+  };
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -62,7 +69,7 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
            params.prodCd = selectedRow.prodCd;
            params.prodNm = selectedRow.prodNm;
            params.storeCd = selectedRow.storeCd;
-           $scope._broadcast('cmmStoreStockStatusCtrl', params);
+           $scope._broadcast('hqCurrDtlCtrl', params);
          }
       }
     });
@@ -87,6 +94,8 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 파라미터
     var params     = {};
     params.vendrCd = $("#storeCurrSelectVendrCd").val();
+    params.storeCd = $("#storeCurrSelectStoreCd").val(); // 매장코드
+    params.storageCd = $("#storeCurrSelectStorageCd").val(); // 창고코드
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/curr/storeCurr/storeCurr/list.sb", params);
@@ -209,6 +218,13 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.storeCurrSelectVendrShow = function () {
     $scope._broadcast('storeCurrSelectVendrCtrl');
+  };
+  
+//창고선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storageCurrSelectStorageShow = function () {
+    $scope._broadcast('storageCurrSelectStorageCtrl');
   };
 
 }]);

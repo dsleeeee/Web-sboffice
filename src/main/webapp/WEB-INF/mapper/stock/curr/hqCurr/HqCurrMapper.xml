@@ -48,6 +48,8 @@
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY ) / thp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_OUT_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_IN_QTY
         </if>
         <if test='unitFg == "1"'>
             ,       thp.STOCK_UNIT_FG AS PO_UNIT_FG
@@ -64,6 +66,8 @@
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 )) AS ACC_SALE_VENDR_OUT_QTY
             ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  )) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  )) AS ACC_HQ_MOVE_IN_QTY
         </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    
@@ -328,6 +332,52 @@
         </if>
         ORDER BY tsssc.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getHqCurrDtlList" parameterType="hqCurrVO" resultType="DefaultMap">
+	    SELECT	TSHSC.PROD_CD
+		,		TSHSC.STORAGE_CD
+		,		THS.STORAGE_NM
+		,		SUM(TSHSC.CURR_QTY)	AS	CURR_QTY
+		FROM	TB_ST_HQ_STOCK_CUR 	TSHSC
+		,		TB_HQ_STORAGE		THS
+		WHERE	TSHSC.HQ_OFFICE_CD	=	#{hqOfficeCd}
+		AND		TSHSC.STORAGE_CD	<![CDATA[ >= ]]>	'001'			<!-- 고정 -->
+		AND		TSHSC.STORAGE_CD	<![CDATA[ < ]]>	'999'			<!-- 고정 -->
+		<if test='prodCd != null and prodCd != ""'>
+		AND		TSHSC.PROD_CD		=	#{prodCd}
+		</if>
+		AND		THS.HQ_OFFICE_CD		=	TSHSC.HQ_OFFICE_CD
+		AND		THS.STORAGE_CD		=	TSHSC.STORAGE_CD
+		GROUP
+		BY		TSHSC.PROD_CD
+		,		TSHSC.STORAGE_CD
+		,		THS.STORAGE_NM
+		ORDER
+		BY		TSHSC.STORAGE_CD
+    </select>
+    
+    <select id="getStoreCurrDtlList" parameterType="hqCurrVO" resultType="DefaultMap">
+	    SELECT	TSSSC.PROD_CD
+		,		TSSSC.STORAGE_CD
+		,		DECODE(TSSSC.STORAGE_CD, '000', '매대', TMS.STORAGE_NM)	AS STORAGE_NM
+		,		SUM(TSSSC.CURR_QTY)	AS	CURR_QTY
+		FROM	TB_ST_STORE_STOCK_CUR 	TSSSC
+		,		TB_MS_STORAGE		TMS
+		WHERE	TSSSC.STORE_CD	=	#{storeCd}
+		AND		TSSSC.STORAGE_CD	<![CDATA[ >= ]]> '000'
+		AND		TSSSC.STORAGE_CD	<![CDATA[ < ]]>	'999'
+		<if test='prodCd != null and prodCd != ""'>
+		AND		TSSSC.PROD_CD		=	#{prodCd}
+		</if>
+		AND		TMS.STORE_CD	(+)	=	TSSSC.STORE_CD
+		AND		TMS.STORAGE_CD	(+)	=	TSSSC.STORAGE_CD
+		GROUP
+		BY		TSSSC.PROD_CD
+		,		TSSSC.STORAGE_CD
+		,		TMS.STORAGE_NM
+		ORDER
+		BY		TSSSC.STORAGE_CD
     </select>
 
 </mapper>

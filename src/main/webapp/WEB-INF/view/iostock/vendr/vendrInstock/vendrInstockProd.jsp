@@ -7,9 +7,9 @@
 <c:set var="baseUrl" value="/iostock/vendr/vendrInstock/vendrInstockProd/"/>
 
 <div id="prodView" style="display: none;" ng-controller="vendrInstockProdCtrl">
-  <ul class="txtSty3 mt10">
-    <li class="red"><s:message code="vendrInstock.prod.txt1"/></li>
-  </ul>
+<!--   <ul class="txtSty3 mt10"> -->
+<%--     <li class="red"><s:message code="vendrInstock.prod.txt1"/></li> --%>
+<!--   </ul> -->
 
   <div class="mt20 tr">
     <%-- 발주내역으로 등록 --%>
@@ -18,9 +18,10 @@
     <%-- 추가/변경 --%>
     <button type="button" class="btn_skyblue ml5" id="btnAddProd" ng-click="addProd()" ng-if="btnAddProdIfFg">
       <s:message code="vendrInstock.prod.addProd"/></button>
-    <%-- 저장 --%>
+    <%-- 저장
     <button type="button" class="btn_skyblue ml5" id="btnProdSave" ng-click="save()" ng-if="btnProdSaveIfFg">
       <s:message code="cmm.save"/></button>
+    --%>
   </div>
 
   <div class="w100 mt10 mb20">
@@ -38,11 +39,11 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inUnitQty"/>" binding="inUnitQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inEtcQty"/>" binding="inEtcQty" width="50" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inUnitQty"/>" binding="inUnitQty" width="50" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inEtcQty"/>" binding="inEtcQty" width="50" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inTotQty"/>" binding="inTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.prevInTotQty"/>" binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.prod.inAmt"/>" binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>

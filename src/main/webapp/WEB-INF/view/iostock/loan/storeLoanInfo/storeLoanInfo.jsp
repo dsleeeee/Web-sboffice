@@ -9,7 +9,9 @@
 
 <div class="subCon" ng-controller="storeLoanInfoCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="searchStoreLoanInfo()"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -43,11 +45,6 @@
     </tr>
     </tbody>
   </table>
-
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
-    <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanInfo()"><s:message code="cmm.search"/></button>
-  </div>
 
   <div class="mt20 oh sb-select dkbr">
     <%-- 엑셀 다운로드 --%>

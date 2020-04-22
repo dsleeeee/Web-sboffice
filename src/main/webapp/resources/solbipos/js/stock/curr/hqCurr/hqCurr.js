@@ -9,8 +9,8 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   angular.extend(this, new RootController('hqCurrCtrl', $scope, $http, true));
 
   $scope._setComboData("srchUnitFg", [
-    {"name": messages["hqCurr.unitStockFg"], "value": "stock"},
-    {"name": messages["hqCurr.unitOrderFg"], "value": "order"}
+    {"name": messages["hqCurr.unitStockFg"], "value": "0"},
+    {"name": messages["hqCurr.unitOrderFg"], "value": "1"}
   ]);
 
   $scope._setComboData("srchWeightFg", [
@@ -28,6 +28,8 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
+	$scope.ChkProdClassDisplay = false;
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("hqCurrCtrl");
@@ -59,7 +61,9 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			var params    = {};
 			params.prodCd = selectedRow.prodCd;
 			params.prodNm = selectedRow.prodNm;
-			$scope._broadcast('cmmStockStatusCtrl', params);
+			params.hqOfficeCd	= $("#hqOfficeCd").val();
+		    params.storeCd		= $("#storeCd").val();
+			$scope._broadcast('hqCurrDtlCtrl', params);
 		}
       }
     });
@@ -76,7 +80,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
 
   // 현재고현황 리스트 조회
   $scope.searchHqCurrList = function (isPageChk) {
@@ -89,7 +93,8 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.prodClassCd = $scope.prodClassCd;
     params.vendrCd = $("#hqCurrSelectVendrCd").val();
     params.isPageChk = isPageChk;
-    params.listScale = $scope.listScale;
+    params.listScale = $scope.listScaleCombo.text;
+    params.storageCd = $("#hqCurrSelectStorageCd").val();
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/curr/hqCurr/hqCurr/list.sb", params);
@@ -122,7 +127,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope.hqCurrSelectVendrShow = function () {
     $scope._broadcast('hqCurrSelectVendrCtrl');
   };
-  
+
   //상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -132,6 +137,13 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
 	  }
+  };
+
+  //창고선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.hqCurrSelectStorageShow = function () {
+    $scope._broadcast('hqCurrSelectStorageCtrl');
   };
 
   //엑셀 다운로드
@@ -149,7 +161,7 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         includeColumns      : function (column) {
           return column.visible;
         }
-      }, '재고현황_일자별수불현황_'+getToday()+'.xlsx', function () {
+      }, '재고현황_' + $(menuNm).selector + '_'+getToday()+'.xlsx', function () {
         $timeout(function () {
           $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         }, 10);

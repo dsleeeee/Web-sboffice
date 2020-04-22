@@ -11,6 +11,8 @@ public class StoreCurrVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 창고코드 */
     private String storageCd;
     /** 브랜드코드 */
@@ -93,6 +95,20 @@ public class StoreCurrVO extends PageVO {
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
+    
+    /**
+     * @return the arrStoreCd
+     */
+    public String[] getArrStoreCd() {
+		return arrStoreCd;
+	}
+
+    /**
+     * @param arrStoreCd the arrStoreCd to set
+     */
+	public void setArrStoreCd(String arrStoreCd[]) {
+		this.arrStoreCd = arrStoreCd;
+	}
 
     /**
      * @return the storageCd

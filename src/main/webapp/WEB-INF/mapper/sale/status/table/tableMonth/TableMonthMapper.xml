@@ -39,6 +39,39 @@
 		<include refid="CmmSQL.PagingTemplateBottom"/>
 	</select>
 
+    <select id="getTableMonthExcelList" parameterType="tableMonthVO" resultType="DefaultMap">
+        SELECT SALE_YM SALE_YM
+            , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+            , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
+            , NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
+            ${sQuery1}
+        FROM TB_SL_MONTHLY_TABLE TSDT
+        WHERE 1 = 1
+              <!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
+              <if test='arrTableCd != null and arrTableCd.length >= 0'>
+                AND STORE_CD||'||'||TBL_CD IN
+                <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+              </if>
+              <if test='startDate != null and startDate != ""'>
+                AND TSDT.SALE_YM <![CDATA[>= ]]> #{startDate}
+              </if>
+              <if test='endDate != null and endDate != ""'>
+                AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
+              </if>
+
+            <!--   AND TBL_CD in (${sQuery2})
+              <![CDATA[
+              AND TSDT.SALE_YM >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
+              AND TSDT.SALE_YM <= TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
+              ]]> -->
+        GROUP
+        BY    SALE_YM
+        ORDER
+        BY    SALE_YM DESC
+    </select>
+
 	<select id="getStoreTableList" parameterType="tableMonthVO" resultType="DefaultMap">
 
         SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD

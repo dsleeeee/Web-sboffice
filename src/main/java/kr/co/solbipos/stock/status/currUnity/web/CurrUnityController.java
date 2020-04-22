@@ -76,4 +76,40 @@ public class CurrUnityController {
 
 		return ReturnUtil.returnListJson(Status.OK, list, currUnityVO);
 	}
+	
+	/** 본사매장통합현재고 - 본사매장통합현재고 전체 엑셀 리스트 조회 */
+	@ResponseBody
+	@RequestMapping(value = "/prod/getCurrUnityExcelList.sb", method = RequestMethod.POST)
+	public Result getCurrUnityExcelList(HttpServletRequest request, HttpServletResponse response, CurrUnityVO currUnityVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = currUnityService.getCurrUnityExcelList(currUnityVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, currUnityVO);
+	}
+	
+	/** 본사매장통합현재고 - 본사매장통합현재고 본사 상세 전체 엑셀 리스트 조회 */
+	@ResponseBody
+	@RequestMapping(value = "/prod/getCurrUnityHqDtlExcelList.sb", method = RequestMethod.POST)
+	public Result getCurrUnityHqDtlExcelList(HttpServletRequest request, HttpServletResponse response, CurrUnityVO currUnityVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = currUnityService.getCurrUnityHqDtlExcelList(currUnityVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, currUnityVO);
+	}
+	
+	/** 본사매장통합현재고 - 본사매장통합현재고 매장 상세 전체 엑셀 리스트 조회 */
+	@ResponseBody
+	@RequestMapping(value = "/prod/getCurrUnityStoreDtlExcelList.sb", method = RequestMethod.POST)
+	public Result getCurrUnityStoreDtlExcelList(HttpServletRequest request, HttpServletResponse response, CurrUnityVO currUnityVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = currUnityService.getCurrUnityStoreDtlExcelList(currUnityVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, currUnityVO);
+	}
 }

@@ -36,6 +36,19 @@ public class TableMonthServiceImpl implements TableMonthService {
 		return tableMonthMapper.getTableMonthList(tableMonthVO);
 	}
 
+	/** 테이블별 매출 - 월별 엑셀 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getTableMonthExcelList(TableMonthVO tableMonthVO, SessionInfoVO sessionInfoVO) {
+
+		tableMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if(!StringUtil.getOrBlank(tableMonthVO.getStoreCd()).equals("")) {
+        	tableMonthVO.setArrStoreCd(tableMonthVO.getStoreCd().split(","));
+        }
+
+		return tableMonthMapper.getTableMonthExcelList(tableMonthVO);
+	}
+
 	/** 테이블별 매출 - 월별 테이블 콤보박스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStoreTableList(TableMonthVO tableMonthVO, SessionInfoVO sessionInfoVO) {

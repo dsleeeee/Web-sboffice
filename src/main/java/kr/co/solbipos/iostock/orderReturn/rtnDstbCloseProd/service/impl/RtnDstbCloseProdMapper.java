@@ -2,6 +2,8 @@ package kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO;
+import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseStore.service.RtnDstbCloseStoreVO;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -36,4 +38,10 @@ public interface RtnDstbCloseProdMapper {
 
     /** 반품마감 추가등록 분배등록 리스트 등록 */
     int insertRtnDstbCloseProdAddRegist(RtnDstbCloseProdVO rtnDstbCloseProdVO);
+    
+    /** 반품등록 PROD 등록 */
+    int savetRtnStoreOrderProd(RtnDstbCloseProdVO rtnDstbCloseProdVO);
+    
+    /** 반품등록 PROD 수정 */
+    int updateRtnStoreOrderProd(RtnDstbCloseProdVO rtnDstbCloseProdVO);
 }

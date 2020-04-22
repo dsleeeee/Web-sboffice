@@ -108,7 +108,6 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     params.gradeC = $("#abcGradeC").val();
     params.sortFg   = $scope.sortFg;
     params.storeCd = $("#abcSelectStoreCd").val();
-    params.listScale = $scope.listScale; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
     // 등록일자 '전체기간' 선택에 따른 params
@@ -118,7 +117,13 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     }
 
     if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+    	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+    
+    // 누적판매비율 validation check
+    if(!$scope.gradeValidation()){
+    	$scope._popMsg($scope.highGrade + messages["abc.rateMessage1"] + ' ' + $scope.lowGrade + messages["abc.rateMessage2"]);    	
    	 	return false;
     }
 
@@ -126,13 +131,33 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     $scope._inquiryMain("/sale/anals/abc/abc/abcList.sb", params);
 
   };
-
+  
+  $scope.gradeValidation = function(){
+	  var valCheck = true;
+	  
+	  if(Number($("#abcGradeA").val()) >= Number($("#abcGradeB").val())){
+		  $scope.highGrade = 'A';
+		  $scope.lowGrade = 'B';
+		  valCheck = false;
+	  } else if(Number($("#abcGradeA").val()) >= Number($("#abcGradeC").val())){
+		  $scope.highGrade = 'A';
+		  $scope.lowGrade = 'C';
+		  valCheck = false;
+	  } else if(Number($("#abcGradeB").val()) >= Number($("#abcGradeC").val())){
+		  $scope.highGrade = 'B';
+		  $scope.lowGrade = 'C';
+		  valCheck = false;
+	  }
+	  
+	  return valCheck;
+  }
+  
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchAbcStartDate.isReadOnly = $scope.isChecked;
     $scope.srchAbcEndDate.isReadOnly = $scope.isChecked;
   };
-  
+
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  var columns = $scope.flex.columns;
@@ -143,7 +168,7 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
 		  }
 	  }
   }
-  
+
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

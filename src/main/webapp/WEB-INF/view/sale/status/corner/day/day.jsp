@@ -88,8 +88,10 @@
             items-source="_getComboData('cornerDayListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="cornerDaySelectStoreStoreNum" ng-model="storeNum">
@@ -133,6 +135,29 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+    <%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="cornerDayExcelCtrl">
+      <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="cornrDayExcelGrid"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="true"
+          frozen-columns="4"
+          item-formatter="_itemFormatter">
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="corner.saleDate"/>"          binding="saleDate"          width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.totRealSaleAmt"/>"    binding="totRealSaleAmt"    width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="corner.totSaleQty"/>"        binding="totSaleQty"        width="80" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+      <%--//위즈모 테이블--%>
+    </div>
 </div>
 
 <script type="text/javascript">

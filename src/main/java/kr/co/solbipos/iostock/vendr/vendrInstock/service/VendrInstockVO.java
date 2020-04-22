@@ -70,6 +70,13 @@ public class VendrInstockVO extends PageVO {
     private Integer prevInEtcQty;
     /** 발주/반출수량합계 낱개 */
     private Integer prevInTotQty;
+    /** 기 입고/출고금액 */
+    private Long prevInAmt;
+    /** 기 입고/출고VAT */
+    private Long prevInVat;
+    /** 기 입고/출고합계금액 */
+    private Long prevInTot;    
+    
     /** 년월 */
     private String yymm;
     /** 조회일자구분 */
@@ -108,6 +115,9 @@ public class VendrInstockVO extends PageVO {
 
     /** 창고별 배열값-입고금액 합계 */
     private String  arrInTot;
+    
+    /** 권역별 창고 코드 */
+    private String  areaFg;
     
     /**
      * @return the hqOfficeCd
@@ -556,8 +566,33 @@ public class VendrInstockVO extends PageVO {
     public void setPrevInTotQty(Integer prevInTotQty) {
         this.prevInTotQty = prevInTotQty;
     }
+        
 
-    /**
+    public Long getPrevInAmt() {
+		return prevInAmt;
+	}
+
+	public void setPrevInAmt(Long prevInAmt) {
+		this.prevInAmt = prevInAmt;
+	}
+
+	public Long getPrevInVat() {
+		return prevInVat;
+	}
+
+	public void setPrevInVat(Long prevInVat) {
+		this.prevInVat = prevInVat;
+	}
+
+	public Long getPrevInTot() {
+		return prevInTot;
+	}
+
+	public void setPrevInTot(Long prevInTot) {
+		this.prevInTot = prevInTot;
+	}
+
+	/**
      * @return the yymm
      */
     public String getYymm() {
@@ -683,5 +718,15 @@ public class VendrInstockVO extends PageVO {
 	public void setOccrFg(String occrFg) {
 		this.occrFg = occrFg;
 	}
+
+	public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
+	
+	
 	
 }

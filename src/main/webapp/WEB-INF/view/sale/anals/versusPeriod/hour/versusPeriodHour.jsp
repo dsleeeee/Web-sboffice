@@ -118,24 +118,17 @@
 		</table>
 
 		<div class="mt40 oh sb-select dkbr">
-		    <%-- 페이지 스케일  --%>
-		    <wj-combo-box
-		      class="w100px fl"
-		      id="versusPeriodHourlistScaleBox"
-		      ng-model="listScale"
-		      control="listScaleCombo"
-		      items-source="_getComboData('versusPeriodHourlistScaleBox')"
-		      display-member-path="name"
-		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
-		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="versusPeriodHourSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
-		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
-		    </button>
+
+			<div class="fr">
+				<%-- 차트  --%>
+				<button class="btn_skyblue" ng-click="showChart()"><s:message code="cmm.chart" /></button>
+				<%-- 엑셀 다운로드 //TODO --%>
+			  <button class="btn_skyblue" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" /></button>
+		    </div>
+		  <div class="clearfix"></div>
 		</div>
 
 		<%--위즈모 테이블--%>
@@ -157,8 +150,8 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -169,9 +162,51 @@
 	      </div>
 	    </div>
 	    <%--//위즈모 테이블--%>
+
+	    <%--layer:For Center screen--%>
+		<div class="fullDimmed versusPeriodHourLayer" id="versusPeriodHourMask" style="display: none"></div>
+		<div class="layer versusPeriodHourLayer" id="versusPeriodHourLayer" style="display: none; z-index:1499;">
+		    <div class="layer_inner">
+
+		        <%--layerContent--%>
+		        <div class="title" style="width:980px; padding:0"  ng-controller="versusPeriodHourChartCtrl">
+		            <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
+		            <a href="#" class="btn_close _btnClose"></a>
+
+		            <%--위즈모 테이블--%>
+				    <div class="w100 mt10" id="wjWrapType1">
+							<!-- 막대 차트 샘플 -->
+							<div>
+								<wj-flex-chart
+									id="versusPeriodHourBarChart"
+									name="barChart1"
+									class="custom-flex-chart"
+									initialized="initChart(s,e)"
+									items-source="data"
+									binding-x="lv">
+
+									<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSrch"/>" binding="realSaleAmtA"></wj-flex-chart-series>
+									<wj-flex-chart-series name="<s:message code="pos.realSaleAmtVs"/>" binding="realSaleAmtB"></wj-flex-chart-series>
+								</wj-flex-chart>
+						</div>
+					</div>
+		               <%--//위즈모 테이블--%>
+		        </div>
+
+		    </div>
+		    <%--//layerContent--%>
+		</div>
+		<%--//layer:For Center screen--%>
 	</div>
 </div>
-<script type="text/javascript">
+<script>
+    $(document).ready(function() {
+
+        $("._btnClose").click(function(e) {
+            $("div.versusPeriodHourLayer").hide();
+        });
+
+    });
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/hour/versusPeriodHour.js?ver=20190125.02" charset="utf-8"></script>
 

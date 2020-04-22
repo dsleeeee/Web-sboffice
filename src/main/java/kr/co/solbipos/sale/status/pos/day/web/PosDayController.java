@@ -3,6 +3,7 @@ package kr.co.solbipos.sale.status.pos.day.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
+import kr.co.common.service.message.MessageService;
 
 import java.util.List;
 
@@ -45,11 +47,13 @@ import java.util.List;
 public class PosDayController {
     private final SessionService sessionService;
     private final PosDayService posDayService;
+    private final MessageService messageService;
 
     @Autowired
-    public PosDayController(SessionService sessionService, PosDayService posDayService) {
+    public PosDayController(SessionService sessionService, PosDayService posDayService, MessageService messageService) {
         this.sessionService = sessionService;
         this.posDayService = posDayService;
+        this.messageService = messageService;
     }
 
 
@@ -116,9 +120,71 @@ public class PosDayController {
 
         }
 
-        List<DefaultMap<String>> list = posDayService.getPosDayList(posDayVO, sessionInfoVO);
-        //System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
-        return ReturnUtil.returnListJson(Status.OK, list, posDayVO);
+        if (posDayVO.getArrStorePos() == null) {
+        	//throw new JsonException(Status.FAIL, messageService.get("prodsale.day.require.selectStore"));
+        	return ReturnUtil.returnListJson(Status.OK, null, posDayVO);
+        } else {
+        	List<DefaultMap<String>> list = posDayService.getPosDayList(posDayVO, sessionInfoVO);
+        	//System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
+        	return ReturnUtil.returnListJson(Status.OK, list, posDayVO);
+        }
+    }
+
+    /**
+     * 포스별매출 일자별 - 리스트 조회(엑셀)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posDaylVO
+     * @return  String
+     * @author  이승규
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosDayExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosDayVO posDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (posDayVO.getPosNo() != null && !"".equals(posDayVO.getPosNo())) {
+        	 String[] arrPosNo = posDayVO.getPosNo().split(",");
+             posDayVO.setArrPosNo(arrPosNo);
+             posDayVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = posDayVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			posDayVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = posDayService.getPosNmList(posDayVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                posDayVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        if (posDayVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posDayVO);
+        } else {
+        	List<DefaultMap<String>> list = posDayService.getPosDayExcelList(posDayVO, sessionInfoVO);
+            //System.out.println("list.size() :: "+posDayVO.getArrPosCd().length);
+            return ReturnUtil.returnListJson(Status.OK, list, posDayVO);
+        }
     }
 
 

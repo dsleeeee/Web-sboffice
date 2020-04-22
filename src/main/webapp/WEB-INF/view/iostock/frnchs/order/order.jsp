@@ -120,8 +120,10 @@
 	                items-source="_getComboData('orderMainListScaleBox')"
 	                display-member-path="name"
 	                selected-value-path="value"
-	                is-editable="false"
-	                initialized="initComboBox(s)">
+	                initialized="initComboBox(s)"
+	                control="conListScale"
+					is-editable="true"
+					text-changed="_checkValidation(s)">
 	        </wj-combo-box>
 	        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	            <input type="text" id="orderMainSelectStoreStoreNum" ng-model="storeNum">
@@ -153,7 +155,7 @@
               <wj-flex-grid-column header="<s:message code="orderStockInfo.slipNo"/>"               binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.outDate"/>"              binding="outDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.inDate"/>"               binding="inDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.prodCnt"/>"              binding="dtlCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.prodCnt"/>"              binding="dtlCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.qty"/>"                  binding="orderTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.totOrderAmt"/>"          binding="orderTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.qty"/>"                  binding="outTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -194,8 +196,10 @@
                   items-source="_getComboData('orderDtlListScaleBox')"
                   display-member-path="name"
                   selected-value-path="value"
-                  is-editable="false"
-                  initialized="initComboBox(s)">
+                  initialized="initComboBox(s)"
+                  control="conListScale"
+			      is-editable="true"
+			      text-changed="_checkValidation(s)">
           </wj-combo-box>
           
           <span class="fl bk lh30 ml10" id="dtlSlipNo"></span>
@@ -232,22 +236,22 @@
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.outSplyUprc"/>"      binding="splyUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.fg"/>"               binding="slipFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="orderTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="orderTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="orderAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="orderVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="orderTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="mdTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="mdTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="mdAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="mdVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="mdTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="outTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="outTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="outAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="outVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="outTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               
-              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="inTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="inTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="inAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="inVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="inTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

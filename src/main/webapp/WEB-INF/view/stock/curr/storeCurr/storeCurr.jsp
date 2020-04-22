@@ -60,20 +60,11 @@
       </td>
     </tr>
     <tr>
-      <%-- 거래처 --%>
-      <th><s:message code="storeCurr.vendrNm"/></th>
+      <th><s:message code="storeCurr.storeNm" /></th>
       <td>
-        <%-- 거래처선택 모듈 싱글 선택 사용시 include
-             param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                          displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                          modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                          closeFunc - 팝업 닫기시 호출할 함수
-        --%>
-        <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-          <jsp:param name="targetId" value="storeCurrSelectVendr"/>
-          <jsp:param name="displayNm" value="전체"/>
-        </jsp:include>
-        <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+      	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+      		<jsp:param name="targetId" value="storeCurrSelectStore"/>
+      	</jsp:include>
       </td>
       <%-- 분류 --%>
       <th><s:message code="storeCurr.prodClass"/></th>
@@ -109,31 +100,48 @@
         </div>
       </td>
       <c:choose>
-        <c:when test="${envst008 != null && envst008 != '00'}">
-          <%-- 상품구분 --%>
-          <th><s:message code="storeCurr.weightFg"/></th>
-          <td>
-            <div class="sb-select">
-              <span class="txtIn w150px">
-                <wj-combo-box
-                  id="srchWeightFg"
-                  ng-model="weightFg"
-                  items-source="_getComboData('srchWeightFg')"
-                  display-member-path="name"
-                  selected-value-path="value"
-                  is-editable="false"
-                  initialized="_initComboBox(s)">
-                </wj-combo-box>
-              </span>
-            </div>
-          </td>
-        </c:when>
-        <c:otherwise>
-          <th></th>
-          <td></td>
-        </c:otherwise>
-      </c:choose>
+    	<c:when test="${envst008 != null && envst008 != '00'}">
+    		<%-- 상품구분 --%>
+    			<th><s:message code="storeCurr.weightFg"/></th>
+    				<td colspan="3">
+    					<div class="sb-select">
+    						<span class="txtIn w150px">
+    							<wj-combo-box
+    								id="srchWeightFg"
+    								ng-model="weightFg"
+    								items-source="_getComboData('srchWeightFg')"
+    								display-member-path="name"
+    								selected-value-path="value"
+    								is-editable="false"
+    								initialized="_initComboBox(s)">
+    							</wj-combo-box>
+    						</span>
+    					</div>
+    				</td>
+    		</c:when>
+    	<c:otherwise>
+    		<th></th>
+    		<td></td>
+    	</c:otherwise>
+    	</c:choose>
     </tr>
+    	<tr>
+    	<%-- 거래처 --%>
+      		<th style="display:none"><s:message code="storeCurr.vendrNm"/></th>
+      		<td style="display:none">
+      		<%-- 거래처선택 모듈 싱글 선택 사용시 include
+      			param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+      						displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+      						modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+      						closeFunc - 팝업 닫기시 호출할 함수
+      		--%>
+      		<jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
+      			<jsp:param name="targetId" value="storeCurrSelectVendr"/>
+      			<jsp:param name="displayNm" value="전체"/>
+   	   		</jsp:include>
+      		<%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
+      		</td>
+    	</tr>
     </tbody>
   </table>
 
@@ -167,7 +175,7 @@
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.poUnitQty"/>" binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.vendrCd"/>" binding="vendrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeCurr.vendrNm"/>" binding="vendrNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeCurr.vendrNm"/>" binding="vendrNm" width="150" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.barcdNm"/>" binding="barcdNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.costUprc"/>" binding="costUprc" width="80" align="right" is-read-only="true" data-type="Number"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeCurr.safeStockQty"/>" binding="safeStockQty" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
@@ -214,5 +222,4 @@
 </c:import>
 
 <%-- 재고현황 팝업 --%>
-<c:import url="/WEB-INF/view/stock/com/popup/cmmStockStatus/cmmStockStatus.jsp">
-</c:import>
+<c:import url="/WEB-INF/view/stock/curr/hqCurr/hqCurrDtl.jsp"></c:import>

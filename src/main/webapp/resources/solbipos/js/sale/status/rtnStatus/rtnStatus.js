@@ -38,10 +38,10 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-	  
+
 	// picker 사용시 호출 : 미사용시 호출안함
 	s.refresh();
-	
+
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("rtnStatusDayMainCtrl");
 
@@ -61,7 +61,7 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       /* 머지된 헤더 셀 클릭시 정렬 비활성화
   	   * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
   	   * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -71,7 +71,7 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
       } else {
     	  s.allowSorting = true;
 	  }
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -169,9 +169,9 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
     // 파라미터
     var params       = {};
     params.storeCd   = $("#rtnStatusDaySelectStoreCd").val();
-    params.listScale = $scope.rtnStatusDayListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
-    
+
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -269,13 +269,13 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 	    s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	      var ht = s.hitTest(e);
-	      
+
 	      if(ht.cellType == 2 && ht.row < 1 && ht.col > 0) {
 	    	  s.allowSorting = false;
 	      } else {
 	    	  s.allowSorting = true;
 		  }
-	      
+
 	      if (ht.cellType === wijmo.grid.CellType.Cell) {
 	        var col         = ht.panel.columns[ht.col];
 	        var selectedRow = s.rows[ht.row].dataItem;
@@ -283,7 +283,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	        	params.storeCd   = $scope.storeCd;
 	        	params.saleDate  = selectedRow.saleDate;
 	        	params.isPageChk = false;
-	        	
+
 	        if (col.binding === "saleDate") { // 일자
 	            $scope._broadcast('rtnStatusPosDtlCtrlSrch', params);
 	        }else if(col.binding === "cntY"){
@@ -393,7 +393,7 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd   = $scope.storeCd;
 	    params.storeNm   = $scope.storeNm;
 	    params.isPageChk	= isPageChk;
-	    params.listScale = $scope.rtnStatusDayDtlListScale; //-페이지 스케일 갯수
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    $("#strNm").text($scope.storeNm);
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -451,7 +451,7 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 
 	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
 	  $scope.initGrid = function (s, e) {
-		  
+
 	    // picker 사용시 호출 : 미사용시 호출안함
 	    $scope._makePickColumns("rtnStatusPosDtlCtrl");
 
@@ -499,8 +499,8 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.storeCd      = $scope.storeCd;
 	    params.saleYn		= $scope.saleYn;
 	    params.isPageChk	= isPageChk;
-	    params.listScale    = $scope.rtnStatusPosDtlListScale; //-페이지 스케일 갯수
-	    
+	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+
 	    if(params.saleDate != null){
 	    	var saleDate	=$scope.saleDate;
 //		    var saleDate	=(""+$scope.saleDate).substring(0,4);

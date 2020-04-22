@@ -13,7 +13,7 @@ public interface RtnInstockConfmService {
     DefaultMap<String> getSlipNoInfo(RtnInstockConfmVO rtnInstockConfmVO);
 
     /** 반품본사입고 상세 리스트 조회 */
-    List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO);
+    List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO, SessionInfoVO sessionInfoVO);
 
     /** 반품본사입고 - 반품본사입고 상세 리스트 저장 */
     int saveRtnInstockConfmDtl(RtnInstockConfmVO[] rtnInstockConfmVOs, SessionInfoVO sessionInfoVO);

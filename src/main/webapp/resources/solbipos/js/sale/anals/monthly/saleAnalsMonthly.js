@@ -35,7 +35,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 	$scope.saleAnalsMonthlySelectStoreShow = function () {
 		$scope._broadcast('saleAnalsMonthlySelectStoreCtrl');
 	};
-
+	
 	// 리스트 조회
 	$scope.searchSaleAnalsMonthlyList = function () {
 
@@ -59,6 +59,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 			}
 			return day;
 		};
+		
 
 		// 파라미터
 
@@ -260,49 +261,77 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (sunData != null && sunData != "") {
 						var sunSplit = sunData.split('||');
-						htmlTxt += '	<td>' + sunSplit[1].format() + '</td>';
+						if(sunSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + sunSplit[0] + ')\"> ' + sunSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + sunSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (monData != null && monData != "") {
 						var monSplit = monData.split('||');
-						htmlTxt += '	<td>' + monSplit[1].format() + '</td>';
+						if(monSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + monSplit[0] + ')\"> ' + monSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + monSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (tueData != null && tueData != "") {
 						var tueSplit = tueData.split('||');
-						htmlTxt += '	<td>' + tueSplit[1].format() + '</td>';
+						if(tueSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + tueSplit[0] + ')\"> ' + tueSplit[1].format() + ' </a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + tueSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (wedData != null && wedData != "") {
 						var wedSplit = wedData.split('||');
-						htmlTxt += '	<td>' + wedSplit[1].format() + '</td>';
+						if(wedSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + wedSplit[0] + ')\"> ' + wedSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + wedSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (thuData != null && thuData != "") {
 						var thuSplit = thuData.split('||');
-						htmlTxt += '	<td>' + thuSplit[1].format() + '</td>';
+						if(thuSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + thuSplit[0] + ')\"> ' + thuSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + thuSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (friData != null && friData != "") {
 						var friSplit = friData.split('||');
-						htmlTxt += '	<td>' + friSplit[1].format() + '</td>';
+						if(friSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + friSplit[0] + ')\"> ' + friSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + friSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
 
 					if (satData != null && satData != "") {
 						var satSplit = satData.split('||');
-						htmlTxt += '	<td>' + satSplit[1].format() + '</td>';
+						if(satSplit[1] > 0){
+							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + satSplit[0] + ')\"> ' + satSplit[1].format() + '</a></td>';
+						}else{
+							htmlTxt += '	<td class="cal-txt">' + satSplit[1].format() + '</td>';
+						}
 					} else {
 						htmlTxt += '	<td></td>';
 					}
@@ -418,5 +447,14 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
     	  }
       });
 	};
-
 }]);
+
+function saleAnalsMonthlyPop(saleDate) {
+	var scope = angular.element(document.getElementById('payFgId')).scope();
+	scope.$apply(function() {	
+		var params       = {};
+		params.saleDate	= saleDate;
+		params.storeCd	= $("#saleAnalsMonthlySelectStoreCd").val();
+		scope._broadcast('saleAnalsMonthlyPayFgCtrl', params);
+	});
+};

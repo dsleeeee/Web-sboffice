@@ -12,6 +12,9 @@ public interface PosDayOfWeekService {
     /** 포스별매출요일별 - 리스트 조회 */
     List<DefaultMap<String>> getPosDayOfWeekList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO);
 
+	/** 포스별매출요일별 - 차트 조회 */
+    List<DefaultMap<String>> getPosDayOfWeekChartList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO);
+
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	List<DefaultMap<String>> getPosNmList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO);
 

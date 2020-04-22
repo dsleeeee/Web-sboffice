@@ -15,7 +15,7 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
 
-      <div class="w100 mt10 mb20">
+      <div class="wj-dialog-body sc2">
         <%--위즈모 테이블--%>
         <div class="wj-gridWrap" style="height: 200px;">
           <wj-flex-grid

@@ -149,7 +149,6 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 
       var unitQty     = parseInt(nvl(eval('item.arrInUnitQty_' + idx), 0)) * parseInt(item.poUnitQty);
       var etcQty      = parseInt(nvl(eval('item.arrInEtcQty_'  + idx), 0));
-      //console.log('unitQty: ' + unitQty);
       //console.log('etcQty : ' + etcQty );
       var totQty      = parseInt(unitQty + etcQty);
       var tempAmt     = Math.round(totQty * outSplyUprc / poUnitQty);
@@ -161,9 +160,6 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
       var outTot  		= parseInt(outAmt + outVat);      
 
       eval('item.arrInTotQty_'+ idx + ' = totQty;');	//총입고수량
-//      eval('item.arrInAmt_' 	+ idx + ' = inAmt;'	); 	//금액
-//      eval('item.arrInVat_' 	+ idx + ' = inVat;'	); 	//VAT
-//      eval('item.arrInTot_'	+ idx + ' = inTot;'	);	//합계
       eval('item.arrInAmt_' 	+ idx + ' = outAmt;'	); 	//금액
       eval('item.arrInVat_' 	+ idx + ' = outVat;'	); 	//VAT
       eval('item.arrInTot_'	+ idx + ' = outTot;'	);	//합계      
@@ -225,12 +221,12 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 	        item.inVat      = Math.round(          tempAmt * vat01 / (10 + envst0011));	//VAT
 	        item.inTot      = parseInt(item.inAmt + item.inVat);    					//합계
 	        */
-	        item.inUnitQty	= arrInUnitQty; //입고수량 - 단위
-	        item.inEtcQty   = arrInEtcQty;  //입고수량 - 나머지
-	        item.inTotQty   = arrInTotQty;  //총입고수량
-	        item.inAmt      = arrInAmt;		//금액
-	        item.inVat      = arrInVat;    	//VAT
-	        item.inTot      = arrInTot;    	//합계
+	        item.outUnitQty	 = arrInUnitQty; //입고수량 - 단위
+	        item.outEtcQty   = arrInEtcQty;  //입고수량 - 나머지
+	        item.outTotQty   = arrInTotQty;  //총입고수량
+	        item.outAmt      = arrInAmt;		//금액
+	        item.outVat      = arrInVat;    	//VAT
+	        item.outTot      = arrInTot;    	//합계
 
 	        //console.log(idx + ': ' +  item.outTotQty  + ' & ' +  item.inTotQty);
 	    //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - END
@@ -344,7 +340,18 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
       // "complete" code here
     });
   };
-
+ 
+  var arrProdCd		= new Array( new Array(), new Array() );
+  var arrStorageCd	= new Array( new Array(), new Array() );
+  var arrStorageNm	= new Array( new Array(), new Array() );
+//  var arrCurrQty		= new Array( new Array(), new Array() );
+  var arrInUnitQty	= new Array( new Array(), new Array() );
+  var arrInEtcQty		= new Array( new Array(), new Array() );
+  var arrInTotQty		= new Array( new Array(), new Array() );
+  var arrInAmt		= new Array( new Array(), new Array() );
+  var arrInVat		= new Array( new Array(), new Array() );
+  var arrInTot		= new Array( new Array(), new Array() );
+  
   // 출고확정 상세내역 리스트 조회
   $scope.searchOutstockConfmDtlList = function () {
     // 파라미터
@@ -361,23 +368,20 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
     	
     	global_storage_cnt	= 0;	//매장의 창고 갯수
 
-    	var arrProdCd		= new Array( new Array(), new Array() );
-        var arrStorageCd	= new Array( new Array(), new Array() );
-        var arrStorageNm	= new Array( new Array(), new Array() );
-//        var arrCurrQty		= new Array( new Array(), new Array() );
-        var arrInUnitQty	= new Array( new Array(), new Array() );
-        var arrInEtcQty		= new Array( new Array(), new Array() );
-        var arrInTotQty		= new Array( new Array(), new Array() );
-        var arrInAmt		= new Array( new Array(), new Array() );
-        var arrInVat		= new Array( new Array(), new Array() );
-        var arrInTot		= new Array( new Array(), new Array() );
-
+    	
         var grid 			= $scope.flex;
         var item;
-    	for(var i=0; i<grid.collectionView.items.length; i++){
-            item 			= grid.collectionView.items[i];
+        
+        var outUnitQty 	= new Array();
+        var outEtcQty	= new Array();
+    	
+        for(var i=0; i<grid.collectionView.items.length; i++){
+    		item 			= grid.collectionView.items[i];
 
-            arrProdCd   [i] = item.prodCd;
+    		outUnitQty	[i] = item.outUnitQty;
+            outEtcQty	[i] = item.outEtcQty;
+            
+    		arrProdCd   [i] = item.prodCd;
             arrStorageCd[i] = item.arrStorageCd .split("^");
             arrStorageNm[i] = item.arrStorageNm .split("^");
 //            arrCurrQty[i] 	= item.arrCurrQty   .split("^");	//현재고수량 - 주문딘위
@@ -395,11 +399,13 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 		  		grid.columns.removeAt(grid.columns.length-1);
 		  	}
 		  	*/
-		  	while(grid.columns.length > 28){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
+		  	while(grid.columns.length > 29){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
 		  		grid.columns.removeAt(grid.columns.length-1);
 		  	}
 
         for(var i=0; i<arrStorageCd.length; i++){
+        	$scope.flex.collectionView.editItem(item);
+        	
         	for(var j=0; j<arrStorageCd[i].length; j++){
         		/*
             	console.log(i + '-' + j +
@@ -435,12 +441,20 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
                 grid.columnHeaders.setCellData(0, 'arrInTot_'		+ j, arrStorageNm[i][j]);
 
 //                grid.setCellData(i, 'arrCurrQty_'	+ j,	arrCurrQty[i][j]);
-                grid.setCellData(i, 'arrInUnitQty_'	+ j,	arrInUnitQty[i][j]);
-                grid.setCellData(i, 'arrInEtcQty_'	+ j,	arrInEtcQty	[i][j]);
-                grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
-                grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
-                grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
-
+                
+                if(j == 0){
+                	if(arrInUnitQty[i][j] == null || arrInUnitQty[i][j] == 0) { arrInUnitQty[i][j] = outUnitQty[i]; }
+                	if(arrInEtcQty[i][j] == null || arrInEtcQty[i][j] == 0) { arrInEtcQty[i][j] = outEtcQty[i]; }
+                }
+                
+//            	grid.setCellData(i, 'arrInUnitQty_'		+ j,	arrInUnitQty	[i][j]);
+//            	grid.setCellData(i, 'arrInEtcQty_'		+ j,	arrInEtcQty	[i][j]);
+//                
+//                grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
+//                grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
+//                grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
+                
+                
         	}	//for(var j=0; j<arrStorageCd[i].length; j++){
 
             	/*
@@ -448,9 +462,19 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
             	[저장]이후 화면을 닫은 후 다시 화면을 열어 [확정]만 하는 경우에는  'inTotQty' 값이 setting이 되지않아서 문제가 생길 수 있음.
             	 고로 상세페이지 열리는 경우에 금액계산하는 부분 호출함.
             	*/
-            	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+            	//$scope.calcAmt($scope.flex.collectionView.items[i], i);
+            	
         }	//for(var i=0; i<arrStorageCd.length; i++){
-
+        
+        $scope.callDataSetting();
+        
+        for(var i=0; i<grid.collectionView.items.length; i++){
+        	
+    		//console.log('$scope.calcAmt - Before: ' + i);
+//        	$scope.calcAmt($scope.flex.collectionView.items[i], i);
+        	//console.log('$scope.calcAmt - After : ' + i);
+        }
+        
         /*
 		console.log('panel.cellType: ' + wijmo.grid.CellType.None			);	//0
 		console.log('panel.cellType: ' + wijmo.grid.CellType.Cell			);	//1
@@ -658,35 +682,57 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
     }
   };
 
+  $scope.callDataSetting = function(){
+	  var grid 			= $scope.flex;
+	  for(var i=0; i<arrStorageCd.length; i++){
+		  var item =  $scope.flex.collectionView.items[i];
+		  $scope.flex.collectionView.editItem(item);
+  	  	for(var j=0; j<arrStorageCd[i].length; j++){
+	    	  	grid.setCellData(i, 'arrInUnitQty_'		+ j,	arrInUnitQty	[i][j]);
+	    	  	grid.setCellData(i, 'arrInEtcQty_'		+ j,	arrInEtcQty	[i][j]);
+	    	  
+		    	grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
+		    	grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
+		    	grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
+  	  	}
+  	  	
+        $scope.calcAmt(item, 0);
+        $scope.flex.collectionView.commitEdit();
+  	  }
+  }
+  
 //출고내역으로 세팅		--------------------------------------------------------------------------------------------------------------------------
   $scope.setOutToIn = function () {
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
-
+      
       //데이터 처리중 팝업 띄우기위해 $timeout 사용.
       $timeout(function () {
-          for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
-          	var item =  $scope.flex.collectionView.items[i];
-
-              $scope.flex.collectionView.editItem(item);
-
-          	//창고부분 모두 0으로 setting
-  			for(var k=0; k<global_storage_cnt; k++){
-  				eval('item.arrInUnitQty_'	+ k + ' = 0;');
-  				eval('item.arrInEtcQty_'	+ k + ' = 0;');
-  				eval('item.arrInTotQty_'	+ k + ' = 0;');
-  				eval('item.arrInAmt_'		+ k + ' = 0;');
-  				eval('item.arrInVat_'		+ k + ' = 0;');
-  				eval('item.arrInTot_'		+ k + ' = 0;');
-  			}
-
-  			//첫번째 창고의 [입고수량]을 [출고수량] 값으로 setting
-              item.arrInUnitQty_0	= item.outUnitQty;
-              item.arrInEtcQty_0	= item.outEtcQty;
-
-              $scope.calcAmt(item, 0);
-
-              $scope.flex.collectionView.commitEdit();
-          }
+    	  $scope.callDataSetting();
+    	  
+    	  
+//          for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+//          	var item =  $scope.flex.collectionView.items[i];
+//
+//              $scope.flex.collectionView.editItem(item);
+//
+//          	//창고부분 모두 0으로 setting
+//  			for(var k=0; k<global_storage_cnt; k++){
+//  				eval('item.arrInUnitQty_'	+ k + ' = 0;');
+//  				eval('item.arrInEtcQty_'	+ k + ' = 0;');
+//  				eval('item.arrInTotQty_'	+ k + ' = 0;');
+//  				eval('item.arrInAmt_'		+ k + ' = 0;');
+//  				eval('item.arrInVat_'		+ k + ' = 0;');
+//  				eval('item.arrInTot_'		+ k + ' = 0;');
+//  			}
+//
+//  			//첫번째 창고의 [입고수량]을 [출고수량] 값으로 setting
+////              item.arrInUnitQty_0	= item.outUnitQty;
+////              item.arrInEtcQty_0	= item.outEtcQty;
+//
+//             $scope.calcAmt(item, 0);
+//
+//              $scope.flex.collectionView.commitEdit();
+//          }
 
           $scope.$broadcast('loadingPopupInactive');
       }, 100);

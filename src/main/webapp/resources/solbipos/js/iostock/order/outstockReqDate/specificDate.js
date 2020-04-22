@@ -49,6 +49,7 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params     = {};
     params.storeCd = $("#speSelectStoreCd").val();
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     // params.listScale = 15;
     // params.listScale = listScaleBoxSpecific.selectedValue;
     // params.curr = 1;

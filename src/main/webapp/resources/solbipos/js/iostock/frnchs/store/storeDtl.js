@@ -219,6 +219,8 @@ app.controller('frnchsStoreDtlCtrl', ['$scope', '$http', '$timeout', function ($
     // 거래명세표
     else if (reportFg === 'trans') {
       params.stmtAcctFg = $scope.stmtAcctFg;
+      params.startDate 	= $scope.startDate;
+      params.endDate 	= $scope.endDate;
       $scope._broadcast('transReportCtrl', params);
     }
     // 세금계산서

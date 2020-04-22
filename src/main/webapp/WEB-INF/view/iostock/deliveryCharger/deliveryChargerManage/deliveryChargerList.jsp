@@ -11,7 +11,9 @@
 <div class="subCon" ng-controller="dlvrChgrListCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('dlvrChgrListCtrl',1)"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -44,13 +46,7 @@
     </tr>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('dlvrChgrListCtrl',1)">
-      <s:message code="cmm.search"/></button>
-  </div>
-
+  
   <div id="grid" class="w100">
     <div class="mt20 oh sb-select dkbr">
       <%-- 페이지 스케일  --%>
@@ -61,8 +57,10 @@
         items-source="_getComboData('listScaleBox')"
         display-member-path="name"
         selected-value-path="value"
-        is-editable="false"
-        initialized="_initComboBox(s)">
+        initialized="_initComboBox(s)"
+        control="conListScale"
+		is-editable="true"
+		text-changed="_checkValidation(s)">
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
       <div class="tr">

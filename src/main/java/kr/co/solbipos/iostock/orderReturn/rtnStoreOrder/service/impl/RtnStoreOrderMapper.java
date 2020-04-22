@@ -31,6 +31,9 @@ public interface RtnStoreOrderMapper {
     /** 반품등록 PROD 등록 */
     int savetRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
     
+    /** 반품등록 PROD 수정 */
+    int updateRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
+    
     /** 반품등록 반품상품 삭제 */
     int deleteRtnStoreOrderDtl(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
     

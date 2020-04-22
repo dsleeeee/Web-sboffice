@@ -196,7 +196,7 @@ app.controller('apprCashCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.cornrCd   = $("#apprCashSelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprCashListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

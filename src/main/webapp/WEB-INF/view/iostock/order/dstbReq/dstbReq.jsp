@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="dstbReqCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dstbReqCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -59,11 +61,6 @@
     </tr>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbReqCtrl')"><s:message code="cmm.search"/></button>
-  </div>
 
   <div class="tr mt10">
     <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveDstbConfirm()"><s:message code="dstbReq.dstbConfirm"/></button><%--분배완료--%>

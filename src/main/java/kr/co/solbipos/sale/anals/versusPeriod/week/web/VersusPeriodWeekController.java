@@ -50,4 +50,26 @@ public class VersusPeriodWeekController {
 
         return ReturnUtil.returnListJson(Status.OK, list, versusPeriodWeekVO);
     }
+    
+    /**
+     * 대비기간매출분석 주간대비 - 차트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   versusPeriodWeekVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 14.
+     */
+    @RequestMapping(value = "/week/chartList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVersusPeriodWeekChartList(HttpServletRequest request, HttpServletResponse response, Model model, VersusPeriodWeekVO versusPeriodWeekVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = versusPeriodWeekService.getVersusPeriodWeekChartList(versusPeriodWeekVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, versusPeriodWeekVO);
+    }
+    
 }

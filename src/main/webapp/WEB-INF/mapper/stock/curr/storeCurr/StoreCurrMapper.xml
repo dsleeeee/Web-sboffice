@@ -115,6 +115,12 @@
         AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
         AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
         AND 	tmp.PROD_CLASS_CD = A.LV3_CD
+        <if test="storeCd != null and storeCd != ''">
+			AND TMP.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+				#{item}
+			</foreach>
+		</if>
         <if test='prodCd != null and prodCd != ""'>
             AND tsssc.PROD_CD = #{prodCd}
         </if>

@@ -54,8 +54,48 @@
     	<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <select id="getDcDcfgExcelList" parameterType="dcDcfgVO" resultType="DefaultMap">
+        SELECT STORE.STORE_NM
+             , TSDT.STORE_CD
+             , TSDT.SALE_DATE
+             , NMCODE.NMCODE_CD AS DC_CD
+             , NMCODE.NMCODE_NM AS DC_NM
+             , TSDD.TOT_SALE_QTY
+             , TSDT.TOT_SALE_AMT
+             , TSDD.TOT_DC_AMT AS DC_AMT
+             , TSDT.TOT_DC_AMT
+             , TSDD.REAL_SALE_AMT
+        FROM TB_SL_DAILY_TOTAL TSDT
+           , TB_SL_DAILY_DC TSDD
+           , TB_MS_STORE STORE
+           ,(SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE
+             WHERE PARENT_CD = '041') NMCODE
+        WHERE TSDT.STORE_CD = TSDD.STORE_CD
+          AND TSDT.SALE_DATE = TSDD.SALE_DATE
+          AND TSDT.STORE_CD = STORE.STORE_CD
+          AND TSDD.DC_CD = NMCODE.NMCODE_CD
+          <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND TSDT.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+          </if>
+          <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+            AND TSDT.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+          </if>
+          <if test='arrDcCd != null and arrDcCd.length >= 0'>
+            AND TSDD.DC_CD IN
+            <foreach collection="arrDcCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+          </if>
+          ORDER BY TSDT.SALE_DATE DESC, TSDT.STORE_CD, NMCODE.NMCODE_CD, TSDD.TOT_SALE_AMT DESC
+    </select>
+
     <select id="getDcDcfgDtlList" parameterType="dcDcfgVO" resultType="DefaultMap">
-	       SELECT A.LV1_NM
+	       SELECT A.STORE_NM
+             , A.SALE_DATE
+             , A.LV1_NM
 		     , A.LV2_NM
 		     , A.LV3_NM
 		     , A.PROD_CD
@@ -74,7 +114,9 @@
 		          , C.LV2_NM
 		          , C.LV3_NM
 		          , C.PROD_NM
-		          , TSSD.PROD_CD
+		          , TSSD.SALE_DATE
+                  , TSSD.PROD_CD
+                  , TMS.STORE_NM
 		          , TSSDD.DC_CD
 		          , (
 		                   SELECT  '(' || TSSDD.DC_CD || ')' || NMCODE_NM
@@ -107,6 +149,7 @@
 		           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
 		        FROM TB_SL_SALE_DTL TSSD
 		           , TB_SL_SALE_DTL_DC TSSDD
+		           , TB_MS_STORE TMS
 		         <choose>
 		         <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
 		           , (
@@ -217,6 +260,7 @@
 		         AND TSSD.BILL_NO      = TSSDD.BILL_NO
 		         AND TSSD.BILL_DTL_NO  = TSSDD.BILL_DTL_NO
 		         AND TSSD.PROD_CD      = C.PROD_CD
+		         AND TSSD.STORE_CD = TMS.STORE_CD
 		         <if test='storeCd != null and storeCd != ""'>
 		          AND TSSD.STORE_CD 	   = #{storeCd}
 		         </if>
@@ -226,9 +270,9 @@
                  <if test='dcCd != null and dcCd != ""'>
 		          AND TSSDD.DC_CD 	   = #{dcCd}
 		         </if>
-		       GROUP BY TSSD.PROD_CD, TSSDD.DC_CD, TSSDD.DC_REASON_CD, C.LV1_NM, C.LV2_NM, C.LV3_NM, C.PROD_NM
+		       GROUP BY TSSD.SALE_DATE, TMS.STORE_NM, TSSD.PROD_CD, TSSDD.DC_CD, TSSDD.DC_REASON_CD, C.LV1_NM, C.LV2_NM, C.LV3_NM, C.PROD_NM
 		      ) A
-		ORDER BY A.DC_REASON_CD, A.PROD_CD, A.DC_CD
+		ORDER BY A.SALE_DATE, A.STORE_NM, A.DC_REASON_CD, A.PROD_CD, A.DC_CD
     </select>
 
     <select id="getDcNmList" parameterType="dcDcfgVO" resultType="DefaultMap">

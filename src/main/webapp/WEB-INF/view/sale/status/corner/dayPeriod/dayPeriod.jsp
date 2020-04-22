@@ -51,7 +51,7 @@
 	              		</label>
 	            	</span>
 				</td>
-			</tr>		
+			</tr>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="hidden" id="cornerDayPeriodSelectStoreCd" value="" />
 				<tr>
@@ -92,7 +92,7 @@
 
 	<div id="gridRepresent" class="w50 fl" style="width: 49%;">
 		<%-- 코너별 --%>
-		<div class="w100 mt10" ng-controller="cornerDayPeriodMainCtrl">
+		<div class="w100 mt20" ng-controller="cornerDayPeriodMainCtrl">
 			<div class="oh sb-select mb10">
 				<%-- 페이지 스케일  --%>
 				<wj-combo-box
@@ -102,11 +102,13 @@
 					items-source="_getComboData('cornerDayPeriodListScaleBox')"
 					display-member-path="name"
 					selected-value-path="value"
-					is-editable="false"
-					initialized="initComboBox(s)">
+					initialized="initComboBox(s)"
+					control="listScaleCombo"
+                    is-editable="true"
+                    text-changed="_checkValidation(s)">
 				</wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="text" id="cornerDayPeriodSelectStoreStoreNum" ng-model="storeNum" />
+					<input type="text" id="cornerDayPeriodSelectStoreStoreNum" ng-model="storeNum" class="inputTxt" />
 				</c:if>
 
 				<%-- 코너별 매출 엑셀다운로드 --%>
@@ -116,7 +118,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 		    <div class="w100 mt10" id="wjWrapType1">
-		        <div class="wj-gridWrap">
+		        <div class="wj-gridWrap col2-t2">
 				<wj-flex-grid
 				    loaded-rows="loadedRows(s,e)"
 					autoGenerateColumns="false"
@@ -142,7 +144,7 @@
 			</div>
 			<%--//위즈모 테이블--%>
 			<%-- 페이지 리스트 --%>
-			<div class="pageNum mt20">
+			<div class="pageNum3 mt20">
 				<%-- id --%>
 				<ul id="cornerDayPeriodMainCtrlPager" data-size="10"></ul>
 			</div>
@@ -152,20 +154,24 @@
 
 	<div id="gridDetail" class="w50 fr" style="width: 49%;">
 		<%-- 코너별 --%>
-		<div class="w100 mt10" ng-controller="cornerDayPeriodDtlCtrl">
+		<div class="w100 mt20" ng-controller="cornerDayPeriodDtlCtrl">
 			<div class="oh sb-select mb10">
 				<%--          <span class="fl bk lh30"><s:message code='corner.SaleDtl'/></span> --%>
 				<%-- 페이지 스케일  --%>
-				<wj-combo-box class="w100px fl"
+				<wj-combo-box
+				    class="w100px fl"
 				    id="cornerDayPeriodDtlListScaleBox"
 					ng-model="cornerDayPeriodDtlListScale"
 					items-source="_getComboData('cornerDayPeriodDtlListScaleBox')"
 					display-member-path="name"
 					selected-value-path="value"
-					is-editable="false"
-					initialized="initComboBox(s)"> </wj-combo-box>
+					initialized="initComboBox(s)"
+					control="listScaleCombo"
+                    is-editable="true"
+                    text-changed="_checkValidation(s)">
+			    </wj-combo-box>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-					<input type="text" id="cornerDayPeriodDtlSelectStoreStoreNum" ng-model="storeNum">
+					<input type="text" id="cornerDayPeriodDtlSelectStoreStoreNum" ng-model="storeNum" class="inputTxt" />
 				</c:if>
 
 				<%-- 코너별 매출 상세 엑셀다운로드 --%>
@@ -175,7 +181,7 @@
 			</div>
 			<%--위즈모 테이블--%>
 		    <div class="w100 mt10" id="wjWrapType1">
-		        <div class="wj-gridWrap">
+		        <div class="wj-gridWrap col2-t2">
 				<wj-flex-grid
 				    autoGenerateColumns="false"
                     selection-mode="Row"
@@ -203,13 +209,60 @@
 			</div>
 			<%--//위즈모 테이블--%>
 			<%-- 페이지 리스트 --%>
-			<div class="pageNum mt20">
+			<div class="pageNum3 mt20">
 				<%-- id --%>
 				<ul id="cornerDayPeriodDtlCtrlPager" data-size="10"></ul>
 			</div>
 			<%--//페이지 리스트--%>
 		</div>
 	</div>
+	
+    <%--엑셀 리스트1--%>
+    <div class="w100 mt10" id="wjWrapType1" style="display: none" ng-controller="cornerDayPeriodExcelCtrl">
+        <div class="wj-gridWrap col2-t2">
+        <wj-flex-grid
+            id="cornerDayPeriodExcelGrid"
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="excelFlex"
+            initialized="initGrid(s,e)"
+            is-read-only="false"
+            item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="corner.cornr"/>" binding="cornrCd"    width="250" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.cornrNm"/>" binding="cornrNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+        </wj-flex-grid>
+     </div>
+    </div>
+    
+    <%--엑셀 리스트2--%>
+    <div class="w100 mt10" id="wjWrapType1" style="display: none" ng-controller="cornerDayPeriodDtlExcelCtrl">
+        <div class="wj-gridWrap col2-t2">
+        <wj-flex-grid
+            id="cornerDayPeriodDtlExcelGrid"
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="excelFlex"
+            initialized="initGrid(s,e)"
+            is-read-only="false"
+            item-formatter="_itemFormatter">
+
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.prodNm"/>" binding="prodNm" width="250" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.saleQty"/>" binding="totSaleQty" width="100" align="center" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="corner.realSaleAmt"/>" binding="realSaleAmt" width="150" align="right" is-read-only="true" aggregate="Sum" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+    </div>
 </div>
 
 <script type="text/javascript">

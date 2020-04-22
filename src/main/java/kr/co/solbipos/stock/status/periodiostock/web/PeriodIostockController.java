@@ -100,4 +100,22 @@ public class PeriodIostockController {
 		List<DefaultMap<String>> list = periodIostockService.getPeriodiostockProdDtlList(periodIostockVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, periodIostockVO);
 	}
+	
+	/**
+     * 기간수불현황 - 엑셀 다운로드 전체 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param	periodIostockVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 20.
+     */
+	@RequestMapping(value = "/prod/periodiostockExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getPeriodiostockExcelList(HttpServletRequest request, HttpServletResponse response, Model model, PeriodIostockVO periodIostockVO) {
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		List<DefaultMap<String>> list = periodIostockService.getPeriodIostockExcelList(periodIostockVO, sessionInfoVO);
+		return ReturnUtil.returnListJson(Status.OK, list, periodIostockVO);
+	}
 }

@@ -90,6 +90,8 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             }
 
             int 	slipFg    	= instockConfmVO.getSlipFg();
+            String 	slipKind	= instockConfmVO.getSlipKind();
+            
             int 	inUnitQty 	= (instockConfmVO.getInUnitQty() == null ? 0 : instockConfmVO.getInUnitQty()) * slipFg;
             int 	inEtcQty  	= (instockConfmVO.getInEtcQty()  == null ? 0 : instockConfmVO.getInEtcQty ()) * slipFg;
             int 	inTotQty  	= (instockConfmVO.getInTotQty()  == null ? 0 : instockConfmVO.getInTotQty ()) * slipFg;
@@ -167,9 +169,10 @@ public class InstockConfmServiceImpl implements InstockConfmService {
 	            	prodVO.setModDt			        (currentDt	);
 
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
-
-	            	result = instockConfmMapper.mergeInstockConfmProd(prodVO);
-	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	            	//if(!slipKind.equals("1")){		//물량오류시 매장 입고 막기 -> 현업 요청으로 해제
+	            		result = instockConfmMapper.mergeInstockConfmProd(prodVO);		            		            	
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	            	//}
 	            }
 	        //TB_PO_HQ_STORE_OUTSTOCK_PROD - END
         }

@@ -177,7 +177,7 @@ public class OutstockConfmController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = outstockConfmService.getOutstockConfmDtlList(outstockConfmVO);
+        List<DefaultMap<String>> list = outstockConfmService.getOutstockConfmDtlList(outstockConfmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, outstockConfmVO);
     }

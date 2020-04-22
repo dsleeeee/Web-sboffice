@@ -196,7 +196,7 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.cornrCd   = $("#apprMpaySelectCornerCd").val();
     params.saleFg	 = $scope.saleFg;
     params.apprProcFg = $scope.apprProcFg;
-    params.listScale = $scope.apprMpayListScale; //-페이지 스케일 갯수
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
     

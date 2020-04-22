@@ -116,4 +116,22 @@ public class StorePeriodController {
 		List<DefaultMap<String>> list = storePeriodService.getStorePeriodQtyDtlList(storePeriodVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, storePeriodVO);
 	}
+	
+	/**
+     * 매장기간수불 - 엑셀 다운로드 전체 리스트 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storePeriodVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 20.
+     */
+	@RequestMapping(value = "/storePeriod/storeperiodExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getStoreperiodExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StorePeriodVO storePeriodVO) {
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		List<DefaultMap<String>> list = storePeriodService.getStoreperiodExcelList(storePeriodVO, sessionInfoVO);
+		return ReturnUtil.returnListJson(Status.OK, list, storePeriodVO);
+	}
 }

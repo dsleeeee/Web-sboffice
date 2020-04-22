@@ -14,8 +14,11 @@ public interface TableDayMapper {
 
 	/** 테이블별 매출 - 일자별 리스트 조회 */
     List<DefaultMap<String>> getTableDayList(TableDayVO dayVO);
-    
+
+    /** 테이블별 매출 - 일자별 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getTableDayExcelList(TableDayVO dayVO);
+
     /** 테이블별 매출 - 일자별 테이블 콤보박스 목록 조회 */
     List<DefaultMap<String>> getStoreTableList(TableDayVO dayVO);
-   
+
 }

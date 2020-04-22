@@ -58,6 +58,16 @@ function RootController(ctrlName, $scope, $http, isPicker) {
         if (list.length === undefined || list.length === 0) {
           $scope.data = new wijmo.collections.CollectionView([]);
           if (isView && response.data.message) {
+
+              // 페이징 처리
+        	  $scope._setPagingInfo('ctrlName', $scope.name);
+              $scope._setPagingInfo('pageScale', 10);
+              $scope._setPagingInfo('curr', 1);
+              $scope._setPagingInfo('totCnt', 1);
+              $scope._setPagingInfo('totalPage', 1);
+
+              $scope._broadcast('drawPager');
+
             $scope._popMsg(response.data.message);
           }
           return false;
@@ -74,6 +84,8 @@ function RootController(ctrlName, $scope, $http, isPicker) {
           $scope._setPagingInfo('curr', pagingInfo.curr);
           $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
           $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+
+          console.log($scope.name);
 
           $scope._broadcast('drawPager');
         }
@@ -754,9 +766,11 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         var page_scale = $scope._getPagingInfo('pageScale');
         var page_end = page_scale === 10 ? 9 : 4;
         // 버튼 태그 동적 생성
+        var firstBtnTag = '<li class=\"btn_previous first\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageFirst(\'{ctrlName}\', 0);\"></a></li>';
         var prevBtnTag = '<li class=\"btn_previous\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pagePrev($event, \'{ctrlName}\', \'{prev}\');\"></a></li>';
         var pageBtnTag = '<li><a href=\"javascript:void(0);\" onclick="return false;" class=\"{cnm}\" ng-click=\"_pageView(\'{ctrlName}\', \'{i}\');\">{i}</a></li>';
         var nextBtnTag = '<li class=\"btn_next\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageNext($event, \'{ctrlName}\', \'{next}\');\"></a></li>';
+        var lastBtnTag = '<li class=\"btn_next last\"><a href=\"javascript:void(0);\" onclick="return false;" ng-click=\"_pageLast(\'{ctrlName}\', \'{totalPage}\');\"></a></li>';
         var pagerTag = '';
 
         var item = {};
@@ -768,6 +782,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         item.next = 0;
         item.start = 0;
         item.end = 0;
+
         // 페이징 계산
         var t = $scope._getPagingInfo('curr') / page_scale;
         if (t.toString().indexOf('.') === -1) {
@@ -780,7 +795,11 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         if (item.end > item.totalPage) {
           item.end = item.totalPage;
         }
+
         // 페이징 제작
+
+        pagerTag += wijmo.format(firstBtnTag, item);
+
         if ( item.curr > page_scale) {
           item.prev = item.start - 1;
           pagerTag += wijmo.format(prevBtnTag, item);
@@ -794,6 +813,9 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
           item.next = item.end + 1;
           pagerTag += wijmo.format(nextBtnTag, item);
         }
+
+        pagerTag += wijmo.format(lastBtnTag, item);
+
         var pager = $compile(pagerTag)($scope);
         var pagerName = item.ctrlName + 'Pager';
         angular.element(document.getElementById(pagerName)).children().remove();
@@ -818,11 +840,23 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         event.stopPropagation();
         _pageView(ctrlName, curr);
       };
+      // 처음 페이지
+      $scope._pageFirst = function (ctrlName, curr) {
+        _pageView(ctrlName, curr);
+      };
+      // 끝 페이지
+      $scope._pageLast = function (ctrlName, curr) {
+        _pageView(ctrlName, curr);
+      };
+
       // 페이지 이동
       function _pageView(ctrlName, curr) {
         $scope._setPagingInfo('curr', curr);
         $scope.$broadcast(ctrlName);
       }
+
+
+
       // 메시지 팝업
       $scope._popMsg = function (msg, callback) {
         var popUpMsg = function() {
@@ -902,6 +936,20 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
       $scope._getComboData = function (id) {
         return comboData.get(id);
       };
+      // 콤보박스 listScale 수기 입력시 숫자만 입력 받도록 함
+      $scope._checkValidation = function(s){
+
+    	  s.text = s.text.replace(/[^0-9]/g,"");
+
+    	  var str = s.text.split("");
+    	  if(str[0] == "0") {
+    		  s.text = s.text.replace(/(^0+)/,"");
+    	  }
+
+    	  if(parseInt(s.text) > 999) {
+    		  s.text = 999;
+    	  }
+      }
       // initMenu Data Setter
       $scope._setInitMenu = function (data) {
         initMenu.set(data);

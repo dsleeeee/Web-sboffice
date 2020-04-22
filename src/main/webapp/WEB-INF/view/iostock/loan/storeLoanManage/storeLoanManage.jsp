@@ -9,7 +9,9 @@
 
 <div class="subCon" ng-controller="storeLoanManageCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeLoanManageCtrlSrch')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -33,11 +35,6 @@
     </tr>
     </tbody>
   </table>
-
-  <%-- 조회 --%>
-  <div class="mt10 pdb20 oh bb">
-    <button class="btn_blue fr" id="btnSearch" ng-click="searchStoreLoanManage()"><s:message code="cmm.search"/></button>
-  </div>
 
   <ul class="txtSty2 mt10 pdb20 bb">
     <li class="red">
@@ -71,8 +68,10 @@
       items-source="_getComboData('listScaleBox')"
       display-member-path="name"
       selected-value-path="value"
-      is-editable="false"
-      initialized="_initComboBox(s)">
+      initialized="_initComboBox(s)"
+      control="conListScale"
+	  is-editable="true"
+	  text-changed="_checkValidation(s)">
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
     <%-- 엑셀 다운로드 --%>

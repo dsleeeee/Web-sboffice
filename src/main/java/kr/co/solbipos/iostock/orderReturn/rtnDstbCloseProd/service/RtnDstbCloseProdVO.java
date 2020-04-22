@@ -112,7 +112,48 @@ public class RtnDstbCloseProdVO extends PageVO {
     private String barcdCd;
     /** 상품분류코드 */
     private String prodClassCd;
+    
+    /** 창고 갯수 */
+    //private int	storageCnt;
 
+    /** 창고별 배열값-창고코드 */
+    private String  arrStorageCd;
+
+    /** 창고별 배열값-창고명 */
+    private String  arrStorageNm;
+
+    /** 창고별 배열값-입고수량 주문단위 */
+    private String  arrOrderUnitQty;
+
+    /** 창고별 배열값-입고수량 나머지 */
+    private String  arrOrderEtcQty;
+
+    /** 창고별 배열값-입고수량 합계 */
+    private String  arrOrderTotQty;
+
+    /** 창고별 배열값-입고금액 */
+    private String  arrOrderAmt;
+
+    /** 창고별 배열값-입고금액 부가세 */
+    private String  arrOrderVat;
+
+    /** 창고별 배열값-입고금액 합계 */
+    private String  arrOrderTot;
+    
+    /** 이전 주문수량(주문단위) */
+    private Integer prevOrderUnitQty;
+    /** 이전 주문수량(나머지) */
+    private Integer prevOrderEtcQty;
+    /** 이전 주문수량합계(낱개) */
+    private Integer prevOrderTotQty;
+    /** 주문수량(주문단위) */
+    /** HD 비고 */
+    private String hdRemark;
+    /** 발주최소수량 */
+    private String poMinQty;
+    /** 판매금액 */
+    private String saleUprc;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -854,4 +895,118 @@ public class RtnDstbCloseProdVO extends PageVO {
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
     }
+
+	public String getArrStorageCd() {
+		return arrStorageCd;
+	}
+
+	public void setArrStorageCd(String arrStorageCd) {
+		this.arrStorageCd = arrStorageCd;
+	}
+
+	public String getArrStorageNm() {
+		return arrStorageNm;
+	}
+
+	public void setArrStorageNm(String arrStorageNm) {
+		this.arrStorageNm = arrStorageNm;
+	}
+
+	public String getArrOrderUnitQty() {
+		return arrOrderUnitQty;
+	}
+
+	public void setArrOrderUnitQty(String arrOrderUnitQty) {
+		this.arrOrderUnitQty = arrOrderUnitQty;
+	}
+
+	public String getArrOrderEtcQty() {
+		return arrOrderEtcQty;
+	}
+
+	public void setArrOrderEtcQty(String arrOrderEtcQty) {
+		this.arrOrderEtcQty = arrOrderEtcQty;
+	}
+
+	public String getArrOrderTotQty() {
+		return arrOrderTotQty;
+	}
+
+	public void setArrOrderTotQty(String arrOrderTotQty) {
+		this.arrOrderTotQty = arrOrderTotQty;
+	}
+
+	public String getArrOrderAmt() {
+		return arrOrderAmt;
+	}
+
+	public void setArrOrderAmt(String arrOrderAmt) {
+		this.arrOrderAmt = arrOrderAmt;
+	}
+
+	public String getArrOrderVat() {
+		return arrOrderVat;
+	}
+
+	public void setArrOrderVat(String arrOrderVat) {
+		this.arrOrderVat = arrOrderVat;
+	}
+
+	public String getArrOrderTot() {
+		return arrOrderTot;
+	}
+
+	public void setArrOrderTot(String arrOrderTot) {
+		this.arrOrderTot = arrOrderTot;
+	}
+
+	public Integer getPrevOrderUnitQty() {
+		return prevOrderUnitQty;
+	}
+
+	public void setPrevOrderUnitQty(Integer prevOrderUnitQty) {
+		this.prevOrderUnitQty = prevOrderUnitQty;
+	}
+
+	public Integer getPrevOrderEtcQty() {
+		return prevOrderEtcQty;
+	}
+
+	public void setPrevOrderEtcQty(Integer prevOrderEtcQty) {
+		this.prevOrderEtcQty = prevOrderEtcQty;
+	}
+
+	public Integer getPrevOrderTotQty() {
+		return prevOrderTotQty;
+	}
+
+	public void setPrevOrderTotQty(Integer prevOrderTotQty) {
+		this.prevOrderTotQty = prevOrderTotQty;
+	}
+
+	public String getHdRemark() {
+		return hdRemark;
+	}
+
+	public void setHdRemark(String hdRemark) {
+		this.hdRemark = hdRemark;
+	}
+
+	public String getPoMinQty() {
+		return poMinQty;
+	}
+
+	public void setPoMinQty(String poMinQty) {
+		this.poMinQty = poMinQty;
+	}
+
+	public String getSaleUprc() {
+		return saleUprc;
+	}
+
+	public void setSaleUprc(String saleUprc) {
+		this.saleUprc = saleUprc;
+	}
+    
+    
 }

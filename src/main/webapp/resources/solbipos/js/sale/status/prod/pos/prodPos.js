@@ -12,18 +12,14 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope.srchPosProdStartDate = wcombo.genDateVal("#srchPosProdStartDate", getToday());
 	$scope.srchPosProdEndDate   = wcombo.genDateVal("#srchPosProdEndDate", getToday());
 	$scope.orgnFg = gvOrgnFg;
-	  
+
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
-	
+
 	var checkInt = true;
-	
+
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
-
-		var storeCd = $("#posProdSelectStoreCd").val();
-
-//		$scope.getRePosNmList(storeCd);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("prodPosCtrl");
@@ -88,7 +84,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			}
 		}
 		// <-- //그리드 헤더2줄 -->
-		
+
 		// 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
@@ -113,25 +109,25 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
 
-		$scope.getRePosNmList(storeCd, posCd);
+		$scope.getRePosNmList(storeCd, posCd, true);
 	});
-	
+
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosCtrlSrch", function (event, data) {
-		
+
 	    if( $("#posProdSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
-	    }  
-		
+	    }
+
 		$scope.searchPosProdList(false);
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
 
-		$scope.getRePosNmList(storeCd, posCd);
+		$scope.getRePosNmList(storeCd, posCd, true);
 	});
-	
+
 	// 포스별매출상품별 리스트 조회
 	$scope.searchPosProdList = function (isPageChk) {
 
@@ -139,7 +135,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		var params = {};
 		params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
-		params.listScale = $scope.posProdListScale; //-페이지 스케일 갯수
+		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 	    params.orgnFg    = $scope.orgnFg;
@@ -156,7 +152,20 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		}
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		$scope._inquiryMain("/sale/status/prod/prodPos/list.sb", params);
+		$scope._inquiryMain("/sale/status/prod/prodPos/list.sb", params, function() {
+
+			var flex = $scope.flex;
+			//row수가 0이면
+			if(flex.rows.length === 0){
+
+				var grid = wijmo.Control.getControl("#posProdGrid");
+				//컬럼 삭제
+				while(grid.columns.length > 6){
+			          grid.columns.removeAt(grid.columns.length-1);
+			    }
+			}
+
+		});
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -164,7 +173,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		$scope.srchPosProdStartDate.isReadOnly = $scope.isChecked;
 		$scope.srchPosProdEndDate.isReadOnly = $scope.isChecked;
 	};
-	
+
     // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
     $scope.isChkProdClassDisplay = function(){
   	  var columns = $scope.flex.columns;
@@ -175,7 +184,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   		  }
   	  }
     }
-	
+
 	//매장선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -221,11 +230,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 		var storeCd = $("#posProdSelectStoreCd").val();
 		var posCd = $("#posProdSelectPosCd").val();
-		$scope.getRePosNmList(storeCd,posCd)
+		$scope.getRePosNmList(storeCd,posCd,false)
 	};
 
 	//매장의 포스 리스트 재생성
-	$scope.getRePosNmList = function (storeCd, posCd) {
+	$scope.getRePosNmList = function (storeCd, posCd, gridSet) {
 		var url = "/sale/status/pos/pos/posNmList.sb";
 		var params = {};
 	    params.storeCd = storeCd;
@@ -254,12 +263,9 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
-
-//	    			if (!checkInt) {
+	    			if(gridSet){
 	    				$scope.makeDataGrid();
-//	    			} else {
-//	    				checkInt = false;
-//	    			}
+	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -313,7 +319,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
-				  
+
 			  }
 		  }
 

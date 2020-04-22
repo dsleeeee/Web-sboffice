@@ -40,6 +40,17 @@ public class PosDayOfWeekServiceImpl implements PosDayOfWeekService {
         return posDayOfWeekMapper.getPosDayOfWeekList(posDayOfWeekVO);
     }
 
+    /** 포스별매출요일별 - 차트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPosDayOfWeekChartList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO) {
+    	posDayOfWeekVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+//    	if (!StringUtil.getOrBlank(posDayOfWeekVO.getStoreCd()).equals("")) {
+//    		posDayOfWeekVO.setArrStoreCd(posDayOfWeekVO.getStoreCd().split(","));
+//		}
+        return posDayOfWeekMapper.getPosDayOfWeekChartList(posDayOfWeekVO);
+    }
+
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getPosNmList(PosDayOfWeekVO posDayOfWeekVO, SessionInfoVO sessionInfoVO) {
