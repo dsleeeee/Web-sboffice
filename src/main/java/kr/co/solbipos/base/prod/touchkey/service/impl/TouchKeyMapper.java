@@ -90,4 +90,6 @@ public interface TouchKeyMapper {
     /** 판매터치키 그룹 조회 */
     List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO);
 
+    /** 터치키 그룹코드 생성 */
+    String getTouchKeyGrpCd(DefaultMap<String> param);
 }

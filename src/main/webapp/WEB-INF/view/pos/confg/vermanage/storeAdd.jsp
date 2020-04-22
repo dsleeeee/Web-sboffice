@@ -68,10 +68,14 @@
               --%>
             </tr>
             <tr>
-              <%-- 매장코드 --%>
+              <%-- 매장코드(복수 검색 가능) --%>
               <th><s:message code="verManage.store.storeCd" /></th>
               <td>
-                <input type="text" id="srchStoreCd" class="sb-input w100" ng-value=""/>
+                <input type="text" id="srchStoreCd" class="sb-input w100" style="width:270px;" ng-value="" oninput="setText()"/>&nbsp;
+                <span class="chk ml10">
+                  <input type="checkbox" id="chkMulti" />
+                  <label for="chkMulti">복수검색</label>
+                </span>
               </td>
               <%-- 매장명 --%>
               <th><s:message code="verManage.store.storeNm" /></th>
@@ -153,4 +157,17 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20190122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20190123.09" charset="utf-8"></script>
+
+<script>
+  $(document).ready(function(){
+    $("#chkMulti").change(function(){
+      if($("#chkMulti").is(":checked")){
+        setText();
+      }else{
+        //alert("체크박스 체크 해제!");
+      }
+    });
+  });
+
+</script>
