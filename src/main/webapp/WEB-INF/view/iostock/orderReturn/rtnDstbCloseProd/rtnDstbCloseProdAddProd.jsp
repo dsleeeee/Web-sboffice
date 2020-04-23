@@ -34,7 +34,7 @@
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
           </td>
-          <td colspan="2"><p class="s14"><s:message code="rtnDstbCloseProd.add.txt1"/></p></td>
+<%--           <td colspan="2"><p class="s14"><s:message code="rtnDstbCloseProd.add.txt1"/></p></td> --%>
         </tr>
         <tr>
           <%-- 상품코드 --%>

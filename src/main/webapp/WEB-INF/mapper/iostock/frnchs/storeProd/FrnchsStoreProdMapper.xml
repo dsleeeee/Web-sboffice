@@ -62,6 +62,63 @@
            ]]>
           <include refid="CmmSQL.PagingTemplateBottom"/>
      </select>
+     
+    <!-- 매장 상품별 입출고내역 -  매장 상품별 입출고내역 엑셀리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT 
+        PARAM    : frnchsStoreProdVO
+        COMMENTS : 매장 상품별 입출고내역 -  매장 상품별 입출고내역 엑셀리스트를 조회한다.
+    -->
+    <select id="getFrnchsStoreProdExcelList" parameterType="frnchsStoreProdVO" resultType="DefaultMap">
+        /* USE : FrnchsStoreProdMapper.getFrnchsStoreProdExcelList */
+        <![CDATA[
+        SELECT A.STORE_CD
+             , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = A.STORE_CD) AS STORE_NM
+             , A.PROD_CD
+             , Z.PROD_NM
+             , A.PO_UNIT_FG
+             , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = A.HQ_OFFICE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 단위 */
+             , A.PO_UNIT_QTY                        /* 입수 */
+             , COUNT(*) AS OUT_CNT                  /* 출고횟수 */
+             , SUM(A.OUT_TOT_QTY)  AS OUT_TOT_QTY
+             , SUM(A.OUT_TOT)      AS OUT_TOT
+             , SUM(A.IN_TOT_QTY)   AS IN_TOT_QTY
+             , SUM(A.IN_TOT)       AS IN_TOT
+             , SUM(A.PENALTY_AMT)  AS PENALTY_AMT
+        ]]>
+        <![CDATA[     
+          FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
+             , TB_MS_PRODUCT Z
+         WHERE A.STORE_CD = Z.STORE_CD
+           AND A.PROD_CD = Z.PROD_CD
+           AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+           AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
+           <if test='prodClassCd != null and prodClassCd !=""'>
+              AND Z.PROD_CLASS_CD = #{prodClassCd}
+           </if> 
+           <if test='prodCd != null and prodCd !=""'>
+              AND Z.PROD_CD = #{prodCd}
+           </if>
+           <if test='prodNm != null and prodNm !=""'>
+              AND Z.PROD_NM = #{prodNm}
+           </if>
+           <if test='storeCd != null and storeCd !=""'>
+              AND A.STORE_CD IN
+              <foreach collection="arrStoreCd" item="item" open="(" separator="," close=")">
+                #{item}
+              </foreach>
+           </if>
+           <![CDATA[
+           GROUP BY A.HQ_OFFICE_CD
+               , A.STORE_CD
+               , A.PROD_CD
+               , Z.PROD_NM
+               , A.PO_UNIT_FG
+               , A.PO_UNIT_QTY
+           ORDER BY A.STORE_CD, A.PROD_CD
+           ]]>
+     </select>
 
     <!-- 매장 상품별 입출고내역 -  매장 상품별 입출고내역 상세리스트 조회 -->
     <!--

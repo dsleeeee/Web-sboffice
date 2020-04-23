@@ -61,4 +61,18 @@ public class FrnchsStoreServiceImpl implements FrnchsStoreService {
         return frnchsStoreMapper.getFrnchsStoreDtlList(frnchsStoreVO);
 	}
 
+
+	/** 매장별 입출고내역 - 매장별 입출고내역 엑셀리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getFrnchsStoreExcelList(FrnchsStoreVO frnchsStoreVO, SessionInfoVO sessionInfoVO) {
+
+    	frnchsStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(frnchsStoreVO.getStoreCd()).equals("")) {
+        	frnchsStoreVO.setArrStoreCd(frnchsStoreVO.getStoreCd().split(","));
+        }
+
+        return frnchsStoreMapper.getFrnchsStoreExcelList(frnchsStoreVO);
+	}
+
 }

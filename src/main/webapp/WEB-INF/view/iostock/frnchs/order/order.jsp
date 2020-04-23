@@ -31,7 +31,7 @@
                <span class="txtIn">
                     <wj-combo-box
                       id="srchOrderOutDateFgDisplay"
-                      ng-model="outDateFg"
+                      ng-model="outDateFgModel"
                       items-source="_getComboData('srchOrderOutDateFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
@@ -75,7 +75,7 @@
               <span class="txtIn">
                     <wj-combo-box
                       id="srchOrderSlipFgDisplay"
-                      ng-model="slipFg"
+                      ng-model="slipFgModel"
                       items-source="_getComboData('srchOrderSlipFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
@@ -94,7 +94,7 @@
               <span class="txtIn">
                     <wj-combo-box
                       id="srchOrderProcFgDisplay"
-                      ng-model="procFg"
+                      ng-model="procFgModel"
                       items-source="_getComboData('srchOrderProcFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
@@ -279,6 +279,87 @@
         <%--//페이지 리스트--%>
       </div>
     </div>
+  </div>
+  
+  
+  <%--엑셀 리스트1--%>
+  <div class="wj-gridWrap" style="display: none" ng-controller="orderExcelCtrl">
+    <wj-flex-grid
+      id="orderExcelGrid"
+      autoGenerateColumns="false"
+      selection-mode="Row"
+      items-source="data"
+      control="excelFlex"
+      initialized="initGrid(s,e)"
+      is-read-only="true"
+      item-formatter="_itemFormatter">
+
+      <!-- define columns -->
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.outstockResveDate"/>"    binding="reqDateFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <wj-flex-grid-column header="<s:message code="orderStockInfo.storeNm"/>"          binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+      </c:if>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.slipFg"/>"               binding="slipFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.procFg"/>"               binding="procFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.slipNo"/>"               binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.outDate"/>"              binding="outDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.inDate"/>"               binding="inDtFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.prodCnt"/>"              binding="dtlCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.qty"/>"                  binding="orderTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.totOrderAmt"/>"          binding="orderTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.qty"/>"                  binding="outTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.totOrderAmt"/>"          binding="outTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.qty"/>"                  binding="inTotQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.totOrderAmt"/>"          binding="inTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.penaltyAmt"/>"           binding="penaltyAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header=""    binding="reqDate" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header=""    binding="outDt" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header=""    binding="inDt" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+    </wj-flex-grid>
+  </div>
+  
+  <%--엑셀 리스트2--%>
+  <div class="wj-gridWrap" style="display: none" ng-controller="orderDtlExcelCtrl">
+    <wj-flex-grid
+      id="orderDtlExcelGrid"
+      autoGenerateColumns="false"
+      selection-mode="Row"
+      items-source="data"
+      control="excelFlex"
+      initialized="initGrid(s,e)"
+      is-read-only="true"
+      item-formatter="_itemFormatter">
+
+      <!-- define columns -->
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.outstockResveDate"/>"    binding="reqDateFm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodCd"/>"           binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodNm"/>"           binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.poUnitFg"/>"         binding="poUnitFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.poUnitQty"/>"        binding="poUnitQty" width="40" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.outSplyUprc"/>"      binding="splyUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.fg"/>"               binding="slipFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="orderTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="orderAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="orderVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="orderTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="mdTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="mdAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="mdVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="mdTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="outTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="outAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="outVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="outTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTotQty"/>"         binding="inTotQty" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inAmt"/>"            binding="inAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inVat"/>"            binding="inVat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inTot"/>"            binding="inTot" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.penaltyAmt"/>"       binding="penaltyAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.remark"/>"           binding="remark" width="80"></wj-flex-grid-column>
+      <wj-flex-grid-column header=""    binding="reqDate" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      <wj-flex-grid-column header=""    binding="poUnitFg" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+
+    </wj-flex-grid>
   </div>
 </div>
 

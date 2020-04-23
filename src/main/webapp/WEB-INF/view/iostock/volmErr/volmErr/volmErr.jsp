@@ -23,7 +23,7 @@
     <tr>
       <%-- 조회일자 --%>
       <th><s:message code="cmm.search.date"/></th>
-      <td colspan="3">
+      <td <c:if test="${sessionInfo.orgnFg == 'STORE'}"> colspan="3"</c:if> >
         <div class="sb-select">
           <span class="txtIn w150px">
             <wj-combo-box
@@ -41,17 +41,17 @@
           <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
         </div>
       </td>
-    </tr>
-    <tr>
-      <%-- 매장코드 --%>
-      <th><s:message code="volmErr.storeCd"/></th>
-      <td colspan="3">
-        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-          <jsp:param name="targetId" value="volmErrSelectStore"/>
-        </jsp:include>
-        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-      </td>
+      <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	      <%-- 매장코드 --%>
+	      <th><s:message code="volmErr.storeCd"/></th>
+	      <td colspan="3">
+	        <%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+	        <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+	          <jsp:param name="targetId" value="volmErrSelectStore"/>
+	        </jsp:include>
+	        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+	      </td>
+      </c:if>
     </tr>
     <tr>
       <%-- 구분 --%>

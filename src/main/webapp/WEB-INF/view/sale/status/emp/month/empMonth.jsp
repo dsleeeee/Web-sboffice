@@ -151,6 +151,29 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  <%-- 엑셀 리스트 --%>
+  <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="empMonthExcelCtrl">
+      <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="empMonthExcelGrid"
+          autoGenerateColumns="false"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          frozen-columns="4"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="empday.saleDate"/>" 		binding="saleDate" 			width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+  </div>
+  <%--//엑셀 리스트 --%>
 
 </div>
 

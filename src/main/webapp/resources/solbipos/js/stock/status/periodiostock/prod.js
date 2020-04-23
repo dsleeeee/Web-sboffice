@@ -253,7 +253,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		params.barcdCd 		= $("#srchBarcdCd").val(); // 바코드
 		params.vendrCd		= $("#periodIostockSelectVendrCd").val(); // 거래처
 		params.prodClassCd	= $scope.prodClassCd; // 분류
-		params.unitFg		= $("#srchUnitFg").val(); // 단위구분
+		params.unitFg		= $scope.unitFgModel; // 단위구분
 		params.srchOption	= $("#srchSrchOption").val(); // 조회옵션
 		params.isPageChk	= isPageChk;
 		params.listScale = $scope.listScaleCombo.text;
@@ -266,12 +266,11 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		$scope.excelBarcdCd 	= params.barcdCd; // 바코드
 		$scope.excelVendrCd		= params.vendrCd; // 거래처
 		$scope.excelProdClassCd	= params.prodClassCd; // 분류
-		$scope.excelUnitFg		= params.unitFg; // 단위구분
+		$scope.excelUnitFg		= $scope.unitFgModel; // 단위구분
 		$scope.excelSrchOption	= params.srchOption; // 조회옵션
 		$scope.excelListScale 	= params.listScale;
 		$scope.excelSrchOption	= $scope.srchOption;
-		
-		$scope.isSearch		= true;
+		$scope.isSearch			= true;
 
 		if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.

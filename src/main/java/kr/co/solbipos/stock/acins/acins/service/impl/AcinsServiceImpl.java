@@ -149,6 +149,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setAcinsTitle(acinsVO.getAcinsTitle());
                 acinsHdVO.setSeqNo(acinsVO.getSeqNo());
                 acinsHdVO.setProcFg("0");
+                acinsHdVO.setAdjStorageCd(acinsVO.getAdjStorageCd());
                 acinsHdVO.setStorageCd(acinsVO.getStorageCd());
                 acinsHdVO.setRegId(sessionInfoVO.getUserId());
                 acinsHdVO.setRegDt(currentDt);

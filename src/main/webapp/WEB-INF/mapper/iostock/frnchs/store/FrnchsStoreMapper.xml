@@ -59,6 +59,60 @@
 		ORDER BY TPHSO.STORE_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+    
+    <!-- 매장별 입출고내역 - 엑셀 리스트 조회 / 20200421 조동훤 -->
+    <select id="getFrnchsStoreExcelList" parameterType="frnchsStoreVO" resultType="DefaultMap">
+        /* USE : FrnchsStoreMapper.getFrnchsStoreExcelList */
+        SELECT TPHSO.STORE_CD <!-- 매장코드 -->
+                , TMS.STORE_NM <!-- 매장명 -->
+                , COUNT(*) SLIP_CNT <!-- 전표수 -->
+                , SUM(TPHSO.ORDER_TOT) AS ORDER_TOT <!-- 주문금액 -->
+                , SUM(TPHSO.MD_TOT) AS MD_TOT <!-- 분배금액 -->
+                , SUM(TPHSO.OUT_TOT) AS OUT_TOT <!-- 출고금액 -->
+                , SUM(TPHSO.IN_TOT) AS IN_TOT <!-- 입고금액 -->
+                , SUM(TPHSO.OUT_AMT) AS OUT_AMT <!-- 출고가액 -->
+                , SUM(TPHSO.OUT_VAT) AS OUT_VAT <!-- 출고부가세 -->
+                , TMS.BIZ_NO <!-- 사업자번호 -->
+                , TMS.BIZ_STORE_NM <!-- 상호 -->
+                , TMS.POST_NO <!-- 우편번호 -->
+                , TMS.ADDR || TMS.ADDR_DTL AS ADDR <!-- 주소 -->
+                , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '057' AND NMCODE_CD = TMS.STORE_TYPE) AS STORE_TYPE_NM <!-- 종목 -->
+                , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM <!-- 업태 -->
+                , TMS.EMAIL_ADDR <!-- Email -->
+                ,(SELECT LISTAGG(SLIP_NO, ',') WITHIN GROUP (ORDER BY STORE_CD) AS SLIP_NO FROM TB_PO_HQ_STORE_OUTSTOCK WHERE STORE_CD = TPHSO.STORE_CD) AS SLIP_NO <!-- 전표번호 -->
+            FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+                , TB_MS_STORE TMS
+            WHERE TPHSO.STORE_CD = TMS.STORE_CD
+            AND     TPHSO.HQ_OFFICE_CD  = #{hqOfficeCd} <!-- 본사코드 세션값 -->
+            <if test='startDate != null and startDate != ""'>
+                AND TPHSO.OUT_DATE >= #{startDate}
+            </if>
+            <if test='endDate != null and endDate != ""'>
+                AND TPHSO.OUT_DATE <![CDATA[<= ]]> #{endDate}
+            </if>
+            <if test='slipFg != null and slipFg != ""'>
+                AND TPHSO.SLIP_FG = #{slipFg}
+            </if>
+            <if test='storeCd != null and storeCd != ""'>
+                AND TPHSO.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="storeNm != null and storeNm != ''">
+                AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
+            </if>
+         GROUP BY TPHSO.STORE_CD
+                , TMS.STORE_NM
+                , TMS.BIZ_NO
+                , TMS.BIZ_STORE_NM
+                , TMS.POST_NO
+                , TMS.ADDR || TMS.ADDR_DTL
+                , TMS.STORE_TYPE
+                , TMS.CLS_FG
+                , TMS.EMAIL_ADDR
+        ORDER BY TPHSO.STORE_CD
+    </select>
 
     <!-- 매장-상품별 입출고내역 - 매장-상품별 입출고내역 상세 리스트 조회 -->
     <select id="getFrnchsStoreInfoList" parameterType="frnchsStoreVO" resultType="DefaultMap">

@@ -15,5 +15,7 @@ public interface FrnchsStoreProdMapper {
     List<DefaultMap<String>> getFrnchsStoreProdList(FrnchsStoreProdVO frnchsStoreProdVO);
     /** 매장-상품별 입출고내역 - 매장-상품별 입출고내역 상세 리스트 조회 */
     List<DefaultMap<String>> getFrnchsStoreProdDtlList(FrnchsStoreProdVO frnchsStoreProdVO);
+    /** 매장-상품별 입출고내역 - 매장-상품별 입출고내역 엑셀리스트 조회 */
+	List<DefaultMap<String>> getFrnchsStoreProdExcelList(FrnchsStoreProdVO frnchsStoreProdVO);
 
 }

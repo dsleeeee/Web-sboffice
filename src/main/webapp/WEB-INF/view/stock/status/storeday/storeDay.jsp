@@ -79,7 +79,7 @@
             <span class="txtIn">
                 <wj-combo-box
                   id="srchUnitFgDisplay"
-                  ng-model="unitFg"
+                  ng-model="unitFgModel"
                   items-source="_getComboData('srchUnitFgDisplay')"
                   display-member-path="name"
                   selected-value-path="value"
@@ -218,6 +218,57 @@
 		      </ul>
 		    </div>
 		    <%--//페이지 리스트--%>
+		    
+		    <%-- 엑셀 리스트 --%>
+		    <div class="wj-gridWrap" style="display:none;" ng-controller="storeDayExcelCtrl">
+	            <wj-flex-grid
+	              id="storeDayMainExcelGrid"
+	              loaded-rows="loadedRows(s,e)"
+	              autoGenerateColumns="false"
+	              selection-mode="Row"
+	              items-source="data"
+	              control="excelFlex"
+	              initialized="initGrid(s,e)"
+	              is-read-only="true"
+	              item-formatter="_itemFormatter"
+	              frozen-columns="5">
+
+	              <!-- define columns -->
+	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassLNm"/>"               binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassMNm"/>"               binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.prodClassSNm"/>"               binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+
+	              <wj-flex-grid-column header="<s:message code="storeDay.prodCd"/>"                     binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.prodNm"/>"                     binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.storeCd"/>"                    binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.storeNm"/>"                    binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitQty"/>"                  binding="poUnitQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitFg"/>"                   binding="poUnitFgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.barcdCd"/>"                    binding="barcdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInQty"/>"               binding="ioOccrQty03" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInAmt"/>"               binding="ioOccrTot03" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreOutQty"/>"              binding="ioOccrQty12" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreOutAmt"/>"              binding="ioOccrTot12" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accPurchsInQty"/>"              binding="ioOccrQty06" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accPurchsInAmt"/>"              binding="ioOccrTot06" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accPurchsOutQty"/>"             binding="ioOccrQty18" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accPurchsOutAmt"/>"             binding="ioOccrTot18" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreSaleQty"/>"             binding="ioOccrQty11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreSaleAmt"/>"             binding="ioOccrTot11" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveInQty"/>"                binding="ioOccrQty04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveInAmt"/>"                binding="ioOccrTot04" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveOutQty"/>"               binding="ioOccrQty14" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveOutAmt"/>"               binding="ioOccrTot14" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accDisuseQty"/>"                     binding="ioOccrQty17" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accDisuseAmt"/>"                     binding="ioOccrTot17" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accAdjQty"/>"                        binding="ioOccrQty21" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accAdjAmt"/>"                        binding="ioOccrTot21" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accSetInQty"/>"                      binding="ioOccrQty22" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accSetInAmt"/>"                      binding="ioOccrTot22" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	            </wj-flex-grid>
+	        </div>
 	    </div>
     </div>
 </div>

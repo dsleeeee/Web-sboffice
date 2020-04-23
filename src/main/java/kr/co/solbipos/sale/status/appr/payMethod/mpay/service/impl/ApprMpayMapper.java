@@ -11,6 +11,8 @@ import kr.co.solbipos.sale.status.appr.payMethod.mpay.service.ApprMpayVO;
 @Mapper
 @Repository
 public interface ApprMpayMapper {
-    /** 코너별매출 일자별 탭 - 리스트 조회 */
+    /** 승인현황 승인현황 모바일페이 탭 - 리스트 조회 */
     List<DefaultMap<String>> getApprMpayList(ApprMpayVO apprMpayVO);
+    /** 승인현황 승인현황 모바일페이 탭 - 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getApprMpayExcelList(ApprMpayVO apprMpayVO);
 }

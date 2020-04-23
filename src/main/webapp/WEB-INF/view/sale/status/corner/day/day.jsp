@@ -62,6 +62,8 @@
       </c:if>
                 <input type="hidden" id="cornerDaySelectCornerCd" value=""/>
                 <input type="hidden" id="cornerDaySelectCornerName" value=""/>
+                <input type="hidden" id="cornerDaySelectExcelCornerCd" value=""/>
+                <input type="hidden" id="cornerDaySelectExcelCornerName" value=""/>
       </tr>
 
       <tr>

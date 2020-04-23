@@ -62,6 +62,10 @@ public class AdjVO extends PageVO {
     private String prodBarcdCd;
     /** 조정구분 */
     private String adjFg;
+    /** 권역별 창고 코드 */
+    private String  areaFg;
+    /** 선택창고 */
+    private String adjStorageCd;
 
     /**
      * @return the hqOfficeCd
@@ -454,4 +458,21 @@ public class AdjVO extends PageVO {
     public void setAdjFg(String adjFg) {
         this.adjFg = adjFg;
     }
+
+	public String getAdjStorageCd() {
+		return adjStorageCd;
+	}
+
+	public void setAdjStorageCd(String adjStorageCd) {
+		this.adjStorageCd = adjStorageCd;
+	}
+
+	public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
+    
 }

@@ -12,7 +12,7 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
-
+  $scope.isSearch = false;
   // 콤보박스 데이터 Set
   $scope._setComboData('prodClasslistScaleBox', gvListScaleBoxData);
 
@@ -54,6 +54,14 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    
+    $scope.excelStoreCd		= params.storeCd;
+    $scope.excelProdCd		= params.prodCd;
+    $scope.excelProdNm		= params.prodNm;
+    $scope.excelOrgnFg		= params.orgnFg;
+    $scope.excelListScale	= params.listScale;
+    $scope.isSearch			= true;
+    
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -106,7 +114,7 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassCdNm = "";
-  }
+  };
 
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
@@ -117,22 +125,12 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
 			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 		  }
 	  }
-  }
+  };
 
   // 엑셀 다운로드
   $scope.excelDownloadClass = function () {
 	  
 	  var params       = {};
-	    params.storeCd   = $("#pordClassSelectStoreCd").val();
-	    params.prodCd    = $("#srchProdCd").val();
-	    params.prodNm    = $("#srchProdNm").val();
-	    params.orgnFg    = $scope.orgnFg;
-	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	    
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
     
     $scope._broadcast('prodClassExcelCtrl',params);
   };
@@ -166,18 +164,24 @@ app.controller('prodClassExcelCtrl', ['$scope', '$http', '$timeout', function ($
 				  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
 			  }
 		  }
-	  }
+	  };
 
 	  // 상품매출순위 리스트 조회
 	  $scope.searchProdClassExcelList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
-	    params.storeCd   = $("#pordClassSelectStoreCd").val();
+	    /*params.storeCd   = $("#pordClassSelectStoreCd").val();
 	    params.prodCd    = $("#srchProdCd").val();
 	    params.prodNm    = $("#srchProdNm").val();
 	    params.orgnFg    = $scope.orgnFg;
 	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	    params.isPageChk = isPageChk;
+	    params.isPageChk = isPageChk;*/
+	    params.storeCd 		= 	$scope.excelStoreCd;
+	    params.prodCd		=   $scope.excelProdCd;
+	    params.prodNm 		=   $scope.excelProdNm;
+	    params.orgnFg 		=	$scope.excelOrgnFg;
+	    params.listScale 	=	$scope.excelListScale;
+	    
 	    // 등록일자 '전체기간' 선택에 따른 params
 	    if(!$scope.isChecked){
 	      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');

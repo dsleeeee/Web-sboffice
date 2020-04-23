@@ -176,4 +176,12 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
 
         return returnResult;
     }
+
+    /** 분배마감 - 매장 마감여부 확인 */
+	@Override
+	public int getDstbCloseProdAddProdDstbList(DstbCloseProdVO dstbCloseProdVO) {
+		int result = 0;
+		result = dstbCloseProdMapper.getDstbCloseProdAddProdDstbList(dstbCloseProdVO);
+		return result;
+	}
 }

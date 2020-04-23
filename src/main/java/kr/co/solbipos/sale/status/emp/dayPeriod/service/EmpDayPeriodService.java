@@ -11,5 +11,7 @@ public interface EmpDayPeriodService {
 
     /** 판매자별 설정기간별 탭 - 리스트 상세 조회 */
 	List<DefaultMap<String>> getEmpDayPeriodDtlList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO);
+    /** 판매자별 설정기간별 탭 - 리스트 상세(엑셀) 조회 */
+	List<DefaultMap<String>> getEmpDayPeriodDtlExcelList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO);
 
 }

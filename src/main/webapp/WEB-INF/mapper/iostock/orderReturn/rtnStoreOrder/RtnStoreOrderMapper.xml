@@ -59,6 +59,7 @@
 	      ,      A.REQ_DATE
 	      ,      A.STORE_CD
 	      ,      A.SLIP_FG
+	      , 	 A.REMARK
 	      ,      A.VAT_FG01
 	      ,      A.ORDER_SPLY_UPRC
 	      ,      A.PO_MIN_QTY
@@ -87,6 +88,7 @@
 	               ,      A.REQ_DATE
 	               ,      A.STORE_CD
 	               ,      A.SLIP_FG
+	               , 	  A.REMARK
 	               ,      A.VAT_FG01
 	               ,      A.ORDER_SPLY_UPRC
 	               ,      A.PO_MIN_QTY
@@ -171,6 +173,7 @@
 		      ,      A.REQ_DATE
 		      ,      A.STORE_CD
 		      ,      A.SLIP_FG
+		      , 	 A.REMARK
 		      ,      A.VAT_FG01
 		      ,      A.ORDER_SPLY_UPRC
 		      ,      A.PO_MIN_QTY

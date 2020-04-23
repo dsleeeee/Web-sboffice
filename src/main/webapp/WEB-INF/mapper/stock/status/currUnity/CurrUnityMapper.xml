@@ -75,18 +75,18 @@
                          A.PROD_CLASS_NM     AS LV2_NM,
                          B.PROD_CLASS_CD     AS LV3_CD,
                          B.PROD_CLASS_NM     AS LV3_NM,
-                         (SELECT  SF_GET_PROD_CLASSES('H', 'A0001',    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
+                         (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
                  FROM    (
                              SELECT  HQ_OFFICE_CD,
                                    P_PROD_CLASS_CD,
                                    PROD_CLASS_CD,
                                    PROD_CLASS_NM
                              FROM    TB_HQ_PRODUCT_CLASS
-                             WHERE   HQ_OFFICE_CD    = 'A0001'
+                             WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                              AND     P_PROD_CLASS_CD IN (
                                                             SELECT  PROD_CLASS_CD
                                                             FROM    TB_HQ_PRODUCT_CLASS
-                                                            WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                             AND     P_PROD_CLASS_CD = '00000'
                                                          )
                          )                      A,
@@ -94,11 +94,11 @@
                  WHERE   B.P_PROD_CLASS_CD IN    (
                                                      SELECT  PROD_CLASS_CD
                                                      FROM    TB_HQ_PRODUCT_CLASS
-                                                     WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                      AND     P_PROD_CLASS_CD IN (
                                                                               SELECT  PROD_CLASS_CD
                                                                                     FROM    TB_HQ_PRODUCT_CLASS
-                                                                                    WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                                                     AND     P_PROD_CLASS_CD = '00000'
                                                                                  )
                                                  )
@@ -280,18 +280,18 @@
                          A.PROD_CLASS_NM     AS LV2_NM,
                          B.PROD_CLASS_CD     AS LV3_CD,
                          B.PROD_CLASS_NM     AS LV3_NM,
-                         (SELECT  SF_GET_PROD_CLASSES('H', 'A0001',    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
+                         (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM
                  FROM    (
                              SELECT  HQ_OFFICE_CD,
                                    P_PROD_CLASS_CD,
                                    PROD_CLASS_CD,
                                    PROD_CLASS_NM
                              FROM    TB_HQ_PRODUCT_CLASS
-                             WHERE   HQ_OFFICE_CD    = 'A0001'
+                             WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                              AND     P_PROD_CLASS_CD IN (
                                                             SELECT  PROD_CLASS_CD
                                                             FROM    TB_HQ_PRODUCT_CLASS
-                                                            WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                             AND     P_PROD_CLASS_CD = '00000'
                                                          )
                          )                      A,
@@ -299,11 +299,11 @@
                  WHERE   B.P_PROD_CLASS_CD IN    (
                                                      SELECT  PROD_CLASS_CD
                                                      FROM    TB_HQ_PRODUCT_CLASS
-                                                     WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                      AND     P_PROD_CLASS_CD IN (
                                                                               SELECT  PROD_CLASS_CD
                                                                                     FROM    TB_HQ_PRODUCT_CLASS
-                                                                                    WHERE   HQ_OFFICE_CD    = 'A0001'
+                                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                                                                                     AND     P_PROD_CLASS_CD = '00000'
                                                                                  )
                                                  )

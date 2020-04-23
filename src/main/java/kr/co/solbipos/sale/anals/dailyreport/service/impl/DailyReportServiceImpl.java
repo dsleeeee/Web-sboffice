@@ -164,10 +164,12 @@ public class DailyReportServiceImpl implements DailyReportService {
             	dailyReportVO.setStoreCd(sessionInfoVO.getOrgnCd());
             }
             */
-            dailyReportVO.setRegDt(currentDt				);
-            dailyReportVO.setRegId(sessionInfoVO.getUserId());
-            dailyReportVO.setModDt(currentDt				);
-            dailyReportVO.setModId(sessionInfoVO.getUserId());
+        	dailyReportVO.setOrgnFg	(sessionInfoVO.getOrgnFg().getCode());	//소속구분 (M:시스템, A:대리점, H:본사, S:매장,가맹점)
+            dailyReportVO.setRegDt	(currentDt							);
+            dailyReportVO.setRegId	(sessionInfoVO.getUserId()			);
+            dailyReportVO.setModDt	(currentDt							);
+            dailyReportVO.setModId	(sessionInfoVO.getUserId()			);
+            LOGGER.debug("### dailyReportVO orgnFg   : " + dailyReportVO.getOrgnFg());
 
             result += dailyReportMapper.mergeConfig(dailyReportVO);
         }
@@ -204,10 +206,11 @@ public class DailyReportServiceImpl implements DailyReportService {
             	dailyReportVO.setStoreCd(sessionInfoVO.getOrgnCd());
             }
             */
-            dailyReportVO.setRegDt(currentDt				);
-            dailyReportVO.setRegId(sessionInfoVO.getUserId());
-            dailyReportVO.setModDt(currentDt				);
-            dailyReportVO.setModId(sessionInfoVO.getUserId());
+        	dailyReportVO.setOrgnFg	(sessionInfoVO.getOrgnFg().getCode());	//소속구분 (M:시스템, A:대리점, H:본사, S:매장,가맹점)
+            dailyReportVO.setRegDt	(currentDt							);
+            dailyReportVO.setRegId	(sessionInfoVO.getUserId()			);
+            dailyReportVO.setModDt	(currentDt							);
+            dailyReportVO.setModId	(sessionInfoVO.getUserId()			);
 
             //result += dailyReportMapper.mergePayLineList(dailyReportVO);
             /*
@@ -220,7 +223,8 @@ public class DailyReportServiceImpl implements DailyReportService {
             */
             cfgStatus = StringUtils.defaultIfEmpty(dailyReportVO.getCfgStatus(), "");
             LOGGER.debug("### dailyReportVO          : " + dailyReportVO);
-            LOGGER.debug("### dailyReportVO cfgStatus: " + cfgStatus);
+            LOGGER.debug("### dailyReportVO cfgStatus: " + cfgStatus);            
+            LOGGER.debug("### dailyReportVO orgnFg   : " + dailyReportVO.getOrgnFg());
 
             if 		( cfgStatus.equals(GridDataFg.INSERT.getCode()) ) 	{	result += dailyReportMapper.insertPayLine(dailyReportVO);	}	//추가
             else if ( cfgStatus.equals(GridDataFg.DELETE.getCode()) ) 	{	result += dailyReportMapper.deletePayLine(dailyReportVO);	}	//삭제

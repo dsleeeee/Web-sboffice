@@ -57,6 +57,60 @@
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
+	    <!-- 상품별매출 - 판매자요일별 리스트(엑셀) 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_MS_EMPLOYEE
+        PARAM    : empDayOfWeekVO
+        COMMENTS : 판매자요일별상세현황 - 판매자요일별 리스트를 조회한다.
+    -->
+    <select id="getEmpMonthExcelList" parameterType="empMonthVO" resultType="DefaultMap">
+        /* USE : EmpMonthMapper.getEmpMonthList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+			SELECT A.SALE_DATE
+			    , A.STORE_CNT	
+				, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+				, SUM(A.BILL_CNT_TOT) AS TOT_BILL_CNT
+				${sQuery1}
+				<include refid="CmmSQL.PagingTemplateCount"/>
+			FROM
+			(
+				SELECT TO_CHAR(TO_DATE(TSDE.SALE_DATE), 'YYYY-MM') AS SALE_DATE 
+						, TSDE.STORE_CD
+						,( SELECT COUNT(TMS.STORE_CD)	  
+							FROM TB_MS_STORE TMS
+							WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+							<if test='storeCd != null and storeCd != ""'>
+							   AND TMS.STORE_CD	IN
+						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+			                        #{item}
+			                    </foreach>
+							</if>
+					     ) AS STORE_CNT
+						, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT    
+						, SUM(TSDE.BILL_CNT) AS BILL_CNT_TOT       					
+						${sQuery2}                                          
+				FROM TB_SL_DAILY_EMPLOYEE TSDE   
+				WHERE 1 = 1           	
+				<if test='storeCd != null and storeCd != ""'>
+				   AND TSDE.STORE_CD	IN
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+				</if>
+				<if test='startDate != null and startDate != ""'>
+				   AND TO_CHAR(TO_DATE(TSDE.SALE_DATE), 'YYYYMM') >= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+				   AND TO_CHAR(TO_DATE(TSDE.SALE_DATE), 'YYYYMM') <![CDATA[<= ]]> #{endDate}
+				</if>
+				GROUP BY TSDE.SALE_DATE, TSDE.EMP_NO, TSDE.STORE_CD   
+			) A 
+		WHERE 1 = 1
+		GROUP BY A.SALE_DATE, A.STORE_CNT
+		ORDER BY A.SALE_DATE DESC
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+	
 	<!-- 상품별매출 - 분류별 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD

@@ -159,7 +159,8 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.acinsFg     = $scope.acinsFg;
     params.vendrCd     = $("#acinsRegistSelectVendrCd").val();
     params.listScale   = $scope.listScale;
-
+    params.storageCd    = $("#registSelectStorageCd").val();
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/acins/acins/acinsRegist/list.sb", params);
   };
@@ -167,6 +168,11 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 조회버튼으로 조회시
   $scope.fnSearch = function () {
+	  	  
+	if($("#registSelectStorageCd").val() === ""){
+	  alert("창고를 선택하여 주십시요.");
+	  return false;
+	}
     if ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0) {
       var msg = messages["acins.reg.searchMsg"]; // 저장되지 않은 자료가 있습니다. 조회하시겠습니까?
       s_alert.popConf(msg, function () {
@@ -203,6 +209,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.acinsTitle = $scope.acinsTitle;
       item.storageCd  = "999";		//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.adjStorageCd = $("#registSelectStorageCd").val();
 
       params.push(item);
     }
@@ -222,10 +229,11 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.acinsTitle = $scope.acinsTitle;
       item.storageCd  = "999";	//001	->	999
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.adjStorageCd = $("#registSelectStorageCd").val();
 
       params.push(item);
     }
-
+    console.log(params);
     $scope._save("/stock/acins/acins/acinsRegist/save.sb", params, function () {
       $scope.saveRegistCallback()
     });
@@ -506,5 +514,11 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.acinsRegistSelectVendrShow = function () {
     $scope._broadcast('acinsRegistSelectVendrCtrl');
   };
-
+  
+  // 창고선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.registSelectStorageShow = function () {
+    $scope._broadcast('registSelectStorageCtrl');
+  };
 }]);

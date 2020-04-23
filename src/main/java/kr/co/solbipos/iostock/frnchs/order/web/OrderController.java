@@ -131,4 +131,50 @@ public class OrderController {
 
         return ReturnUtil.returnListJson(Status.OK, list, orderVO);
     }
+    
+    /**
+     * 주문대비 입고현황 - 주문대비 입고현황 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   orderStockInfoVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020.04.21.
+     */
+    @RequestMapping(value = "/ioStock/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOrderExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, OrderVO orderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = orderService.getOrderExcelList(orderVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, orderVO);
+    }
+
+
+    /**
+     * 주문대비 입고현황 - 주문대비 입고현황 상세 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   orderStockInfoVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020.04.21.
+     */
+    @RequestMapping(value = "/ioStockDtl/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOrderDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, OrderVO orderVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>>
+            list = orderService.getOrderDtlExcelList(orderVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, orderVO);
+    }
 }

@@ -17,8 +17,10 @@
         ,        TB_HQ_STORAGE thsin
         WHERE    tphm.HQ_OFFICE_CD  =       #{hqOfficeCd}
         AND      tphm.MOVE_DATE     BETWEEN #{startDate} AND #{endDate}
-        AND      thsout.STORAGE_CD    =   tphm.OUT_STORAGE_CD
-        AND      thsin.STORAGE_CD     =   tphm.IN_STORAGE_CD
+        AND      thsout.HQ_OFFICE_CD      =   tphm.HQ_OFFICE_CD
+        AND      thsout.STORAGE_CD      =   tphm.OUT_STORAGE_CD
+        AND      thsin.HQ_OFFICE_CD     =   tphm.HQ_OFFICE_CD
+        AND      thsin.STORAGE_CD       =   tphm.IN_STORAGE_CD
         ]]>
         <if test='dlvrFg != null and dlvrFg != ""'>
             AND tphm.DLVR_FG = #{dlvrFg}
@@ -56,8 +58,10 @@
         ,       TB_HQ_STORAGE thsin
         WHERE   tphm.HQ_OFFICE_CD =   #{hqOfficeCd}
         AND     tphm.SLIP_NO      =   #{slipNo}
-        AND     thsout.STORAGE_CD   =   tphm.OUT_STORAGE_CD
-        AND     thsin.STORAGE_CD    =   tphm.IN_STORAGE_CD
+        AND     thsout.HQ_OFFICE_CD    =   tphm.HQ_OFFICE_CD
+        AND     thsout.STORAGE_CD      =   tphm.OUT_STORAGE_CD
+        AND     thsin.HQ_OFFICE_CD     =   tphm.HQ_OFFICE_CD
+        AND     thsin.STORAGE_CD       =   tphm.IN_STORAGE_CD
         ]]>
     </select>
 

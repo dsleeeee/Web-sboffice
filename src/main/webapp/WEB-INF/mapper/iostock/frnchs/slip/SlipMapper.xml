@@ -133,6 +133,131 @@
            </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+    
+    
+    <!-- 전표별 입출고내역 - 전표별 입출고내역 엑셀리스트 조회 -->
+    <select id="getSlipExcelList" parameterType="slipVO" resultType="DefaultMap">
+        SELECT A.SLIP_NO
+             , A.STORE_CD
+             , B.STORE_NM
+             , DECODE(A.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM
+             , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '114' AND NMCODE_CD = A.SLIP_KIND) AS SLIP_KIND_NM
+             , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113' AND NMCODE_CD = A.PROC_FG) AS PROC_FG_NM
+             , TO_CHAR(TO_DATE(A.OUT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS OUT_DT
+             , TO_CHAR(TO_DATE(A.IN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS IN_DT
+             , A.DTL_CNT
+             , A.MD_TOT_QTY
+             , A.MD_TOT
+             , A.OUT_TOT_QTY
+             , A.OUT_TOT
+             , A.IN_TOT_QTY
+             , A.IN_TOT
+             , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND Z.SLIP_NO = A.SLIP_NO) AS PENALTY_AMT
+          FROM TB_PO_HQ_STORE_OUTSTOCK A
+             , TB_MS_STORE B
+         WHERE A.STORE_CD = B.STORE_CD
+         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+           AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+         </if>
+         <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND A.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+         </if>
+         <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+                AND A.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+              </if>
+         <if test='slipFg != null and slipFg != ""'>
+            AND A.SLIP_FG = #{slipFg}
+         </if>
+         <if test='slipKind != null and slipKind != ""'>
+            AND A.SLIP_KIND = #{slipKind}
+         </if>
+         <if test='procFg != null and procFg != ""'>
+            AND A.PROC_FG = #{procFg}
+         </if>
+<!--         <if test='prodClassCd != null and prodClassCd != ""'> -->
+<!--             AND EXISTS (SELECT * -->
+<!--                 FROM TB_PO_HQ_STORE_OUTSTOCK_DTL M -->
+<!--                   , TB_MS_PRODUCT Z -->
+<!--                WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD -->
+<!--                  AND M.SLIP_NO = A.SLIP_NO -->
+<!--                  AND M.STORE_CD = Z.STORE_CD -->
+<!--                  AND M.PROD_CD = Z.PROD_CD -->
+<!--                  AND Z.PROD_CLASS_CD = #{prodClassCd} ) -->
+<!--          </if> -->
+         <if test='prodClassCd != null and prodClassCd != ""'>
+         AND EXISTS (SELECT *
+                    FROM TB_PO_HQ_STORE_OUTSTOCK_DTL M
+                       , TB_MS_PRODUCT Z
+                   WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                     AND M.SLIP_NO = A.SLIP_NO
+                     AND M.STORE_CD = Z.STORE_CD
+                     AND M.PROD_CD = Z.PROD_CD
+                     AND     Z.PROD_CLASS_CD IN  (
+                                                   SELECT              PROD_CLASS_CD
+                                                   FROM                TB_HQ_PRODUCT_CLASS
+                                                   WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                   START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                                   AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                   CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                                   AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                 )
+                    )
+         </if>
+         <if test='prodCd != null and prodCd != ""'>
+            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK_DTL M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.PROD_CD = #{prodCd} )
+         </if>
+         <if test='prodNm != null and prodNm != ""'>
+            AND EXISTS (SELECT *
+                FROM TB_PO_HQ_STORE_OUTSTOCK_DTL M
+                  , TB_MS_PRODUCT Z
+               WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                 AND M.SLIP_NO = A.SLIP_NO
+                 AND M.STORE_CD = Z.STORE_CD
+                 AND M.PROD_CD = Z.PROD_CD
+                 AND Z.PROD_NM LIKE '%' || #{prodNm} || '%' )
+         </if>
+    </select>
+
+    <!-- 전표별 입출고내역 - 전표별 입출고내역 상세 엑셀리스트 조회 -->
+    <select id="getSlipDtlExcelList" parameterType="slipVO" resultType="DefaultMap">
+        SELECT A.PROD_CD
+             , Z.PROD_NM
+             , A.PO_UNIT_FG
+             <choose>
+                 <when test='orgnFg != null and orgnFg == "H"'>
+                     , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = A.HQ_OFFICE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM
+                 </when>
+                 <when test='orgnFg != null and orgnFg == "S"'>
+                     , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM
+                 </when>
+             </choose>
+             , A.PO_UNIT_QTY
+             , Z.SPLY_UPRC
+             , A.MD_TOT_QTY
+             , A.MD_AMT
+             , A.MD_VAT
+             , A.MD_TOT
+             , A.OUT_TOT_QTY
+             , A.OUT_AMT
+             , A.OUT_VAT
+             , A.OUT_TOT
+             , A.IN_TOT_QTY
+             , A.IN_AMT
+             , A.IN_VAT
+             , A.IN_TOT
+             , A.PENALTY_AMT
+             , A.REMARK
+          FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
+             , TB_MS_PRODUCT Z
+         WHERE A.STORE_CD = Z.STORE_CD
+           AND A.PROD_CD = Z.PROD_CD
+           <if test='slipNo != null and slipNo != ""'>
+               AND A.SLIP_NO = #{slipNo}
+           </if>
+    </select>
 
     <!-- 전표별 입출고내역 - 조회조건 전표구분 콤보 리스트 조회 -->
     <select id="getSrchSlipFgList" parameterType="slipVO" resultType="DefaultMap">

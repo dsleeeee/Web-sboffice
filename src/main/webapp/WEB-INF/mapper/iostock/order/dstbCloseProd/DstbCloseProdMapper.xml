@@ -373,6 +373,24 @@
             </foreach>
         </if>
     </select>
+    
+    
+    <!-- 분배마감 매장 마감여부 확인 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : dstbCloseProdVO
+        COMMENTS : 분배등록 추가등록 상품 리스트를 조회한다.
+    -->
+    <select id="getDstbCloseProdAddProdDstbList" parameterType="dstbCloseProdVO" resultType="Int">
+        /* USE : DstbCloseProdMapper.getDstbCloseProdAddProdDstbList */
+        SELECT  COUNT(STORE_CD)
+		FROM    TB_PO_HQ_STORE_DISTRIBUTE
+		WHERE   REQ_DATE    =   #{reqDate}   --PARAM 요청일자
+		AND     STORE_CD    =   #{storeCd}   --PARAM 선택클릭시 매장코드
+		AND     PROC_FG IN ('20','30')       --고정
+		AND     SLIP_FG     =   #{slipFg}    --PARAM 주문/반품구분
+    </select>
+
 
     <!--  분배마감 추가등록 분배등록 저장 -->
     <!--

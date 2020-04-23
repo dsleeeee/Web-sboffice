@@ -124,7 +124,8 @@
                     FROM    TB_ST_HQ_STOCK_CUR tshsc
                     ,       TB_ST_HQ_STOCK_MONTHLY tshsm
                     WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
-                    AND		tshsc.STORAGE_CD		=	'999'		
+                    /* AND		tshsc.STORAGE_CD		=	'999'	*/	
+                    AND		tshsc.STORAGE_CD IN (SELECT X.STORAGE_CD FROM TB_HQ_STORAGE X WHERE X.HQ_OFFICE_CD  =   #{hqOfficeCd} AND X.AREA_FG    =   #{areaFg})
                     AND     tshsm.IOSTOCK_YM  (+) 	=   SUBSTR(#{disuseDate}, 0, 6)
                     AND     tshsm.HQ_OFFICE_CD(+) 	=   tshsc.HQ_OFFICE_CD
                     AND     tshsm.PROD_CD     (+) 	=   tshsc.PROD_CD
@@ -220,7 +221,7 @@
                     FROM    TB_ST_STORE_STOCK_CUR tsssc
                     ,       TB_ST_STORE_STOCK_MONTHLY tsssm
                     WHERE   tsssc.STORE_CD        	=   #{storeCd}
-                    AND		tsssc.STORAGE_CD		=	'999'
+                    AND		tsssc.STORAGE_CD		=	#{storageCd}
                     AND     tsssm.IOSTOCK_YM  (+) 	=   SUBSTR(#{disuseDate}, 0, 6)
                     AND     tsssm.STORE_CD    (+) 	=   tsssc.STORE_CD
                     AND     tsssm.PROD_CD     (+) 	=   tsssc.PROD_CD
@@ -743,6 +744,7 @@
             SEQ_NO,
             DISUSE_TITLE,
             PROC_FG,
+            DISUSE_STORAGE_CD,
             DTL_CNT,
             TOT_DISUSE_AMT,
             REG_DT,
@@ -756,6 +758,7 @@
         ,       tssdd.SEQ_NO
         ,       #{disuseTitle}
         ,       #{procFg}
+        ,       #{disuseStorageCd}
         ,       COUNT(tssdd.PROD_CD)
         ,       SUM(tssdd.DISUSE_AMT)
         ,       #{regDt}

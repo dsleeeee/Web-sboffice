@@ -126,4 +126,27 @@ public class HqCurrController {
 
 		return ReturnUtil.returnListJson(Status.OK, list, hqCurrVO);
 	}
+	
+	/**
+     * 현재고현황 - 현재고현황 엑셀 전체 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   hqCurrVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 21
+     */
+    @RequestMapping(value = "/hqCurr/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqCurrExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, HqCurrVO hqCurrVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        hqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = hqCurrService.getHqCurrExcelList(hqCurrVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, hqCurrVO);
+    }
 }

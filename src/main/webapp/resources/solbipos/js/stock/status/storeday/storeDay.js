@@ -351,9 +351,22 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.storeCd 	   = $("#storeDaySelectStoreCd").val();
     params.vendrCd 	   = $("#storeDaySelectVendrCd").val();
     params.prodClassCd = $scope.prodClassCd;
-    params.unitFg 	   = $scope.unitFg;
+    params.unitFg 	   = $scope.unitFgModel;
     params.isPageChk   = isPageChk;
     params.listScale = $scope.listScaleCombo.text;
+    
+    $scope.excelStartDate	= params.startDate;
+    $scope.excelEndDate		= params.endDate;
+    $scope.excelProdCd		= params.prodCd;
+    $scope.excelProdNm		= params.prodNm;
+    $scope.excelBarcdCd		= params.barcdCd;
+    $scope.excelStoreCd		= params.storeCd;
+    $scope.excelVendrCd		= params.vendrCd;
+    $scope.excelProdClassCd	= params.prodClassCd;
+    $scope.excelUnitFg		= params.unitFg;
+    $scope.excelListScale	= params.listScale;
+    $scope.excelSrchOption	= $scope.srchOption;
+    $scope.isSearch			= true;
 
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -401,24 +414,194 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   //엑셀 다운로드
   $scope.excelDownloadStoreDay = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-    	includeColumnHeaders: true,
-	    includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      },  '재고관리_매장재고현황_매장일수불_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	  // 파라미터
+	  var params     = {};
+	  $scope._broadcast('storeDayExcelCtrl',params);
   };
+}]);
+
+app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('storeDayExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+	    // 헤더머지
+	    s.allowMerging = 2;
+	    s.columnHeaders.rows.push(new wijmo.grid.Row());
+	    s.columnHeaders.rows[0].dataItem = {
+		  lv1Nm					:messages["storeDay.prodClassLNm"],
+		  lv2Nm					:messages["storeDay.prodClassMNm"],
+		  lv3Nm					:messages["storeDay.prodClassSNm"],
+
+		  prodCd 				:messages["storeDay.prodCd"],
+		  prodNm 				:messages["storeDay.prodNm"],
+	      storeCd				:messages["storeDay.storeCd"],
+	      storeNm				:messages["storeDay.storeNm"],
+		  poUnitQty				:messages["storeDay.poUnitQty"],
+		  poUnitFgNm 			:messages["storeDay.poUnitFg"],
+		  barcdCd				:messages["storeDay.barcdCd"],
+
+		  ioOccrQty03			:messages["storeDay.accStoreIn"],
+		  ioOccrTot03			:messages["storeDay.accStoreIn"],
+		  ioOccrQty12			:messages["storeDay.accStoreOut"],
+		  ioOccrTot12			:messages["storeDay.accStoreOut"],
+		  ioOccrQty06			:messages["storeDay.accPurchsIn"],
+		  ioOccrTot06			:messages["storeDay.accPurchsIn"],
+		  ioOccrQty18			:messages["storeDay.accPurchsOut"],
+		  ioOccrTot18			:messages["storeDay.accPurchsOut"],
+		  ioOccrQty11			:messages["storeDay.accStoreSale"],
+		  ioOccrTot11			:messages["storeDay.accStoreSale"],
+		  ioOccrQty04			:messages["storeDay.accStoreMoveIn"],
+		  ioOccrTot04			:messages["storeDay.accStoreMoveIn"],
+	      ioOccrQty14			:messages["storeDay.accStoreMoveOut"],
+	      ioOccrTot14			:messages["storeDay.accStoreMoveOut"],
+	      ioOccrQty17			:messages["storeDay.accDisuse"],
+	      ioOccrTot17			:messages["storeDay.accDisuse"],
+	      ioOccrQty21 			:messages["storeDay.accAdj"],
+	      ioOccrTot21 			:messages["storeDay.accAdj"],
+	      ioOccrQty22			:messages["storeDay.accSetIn"],
+	      ioOccrTot22			:messages["storeDay.accSetIn"],
+	    };
+
+	    s.itemFormatter = function (panel, r, c, cell) {
+	      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+	        //align in center horizontally and vertically
+	        panel.rows[r].allowMerging    = true;
+	        panel.columns[c].allowMerging = true;
+	        wijmo.setCss(cell, {
+	          display    : 'table',
+	          tableLayout: 'fixed'
+	        });
+	        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+	        wijmo.setCss(cell.children[0], {
+	          display      : 'table-cell',
+	          verticalAlign: 'middle',
+	          textAlign    : 'center'
+	        });
+	      }
+	      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+	      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+	        // GroupRow 인 경우에는 표시하지 않는다.
+	        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+	          cell.textContent = '';
+	        } else {
+	          if (!isEmpty(panel._rows[r]._data.rnum)) {
+	            cell.textContent = (panel._rows[r]._data.rnum).toString();
+	          } else {
+	            cell.textContent = (r + 1).toString();
+	          }
+	        }
+	      }
+	      // readOnly 배경색 표시
+	      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+	        var col = panel.columns[c];
+	        if (col.isReadOnly) {
+	          wijmo.addClass(cell, 'wj-custom-readonly');
+	        }
+	      }
+	    }
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("storeDayExcelCtrl", function (event, data) {
+		if(data != undefined && $scope.isSearch) {
+			$scope.searchStoreDayExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+	});
+	
+	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
+	$scope.srchOptionView = function(){
+		var srchSrchOption = $scope.excelSrchOption;
+		var columns = $scope.excelFlex.columns;
+		var includeWord;
+		for(var i=0; i<columns.length; i++){
+			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
+			if(includeWord !== "" && includeWord !== "poUnitQty"){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
+				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+			}
+		}
+	};
+
+	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.excelFlex.columns;
+
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
+	
+	$scope.searchStoreDayExcelList = function (isPageChk) {
+	    $scope.searchedStartDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyyMMdd');
+
+	    // 파라미터
+	    var params         = {};
+	    params.startDate   = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyyMMdd');
+	    params.endDate     = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyyMMdd');
+	    params.prodCd	   = $scope.srchProdCd;
+	    params.prodNm	   = $scope.srchProdNm;
+	    params.barcdCd	   = $scope.srchBarcdCd;
+	    params.storeCd 	   = $("#storeDaySelectStoreCd").val();
+	    params.vendrCd 	   = $("#storeDaySelectVendrCd").val();
+	    params.prodClassCd = $scope.prodClassCd;
+	    params.unitFg 	   = $scope.unitFg;
+	    params.isPageChk   = isPageChk;
+	    params.listScale = $scope.listScaleCombo.text;
+	    
+	    params.startDate 	= $scope.excelStartDate; 
+	    params.endDate		= $scope.excelEndDate;
+	    params.prodCd		= $scope.excelProdCd; 
+	    params.prodNm		= $scope.excelProdNm; 
+	    params.barcdCd		= $scope.excelBarcdCd; 
+	    params.storeCd		= $scope.excelStoreCd; 
+	    params.vendrCd		= $scope.excelVendrCd; 
+	    params.prodClassCd	= $scope.excelProdClassCd;
+	    params.unitFg		= $scope.excelUnitFg;
+	    params.listScale	= $scope.excelListScale;
+	    
+	    $scope.srchOptionView();
+		$scope.isChkProdClassDisplay();
+
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+	    $scope._inquiryMain("/stock/status/storeDay/storeDay/viewExcelList.sb", params, function () {
+	    	if ($scope.flex.rows.length <= 0) {
+	    	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+	    	      return false;
+	    	    }
+
+	    	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+	    	    $timeout(function () {
+	    	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	    	    	includeColumnHeaders: true,
+	    		    includeCellStyles   : true,
+	    	        includeColumns      : function (column) {
+	    	          return column.visible;
+	    	        }
+	    	      },  '재고관리_매장재고현황_매장일수불_'+getToday()+'.xlsx', function () {
+	    	        $timeout(function () {
+	    	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+	    	        }, 10);
+	    	      });
+	    	    }, 10);
+	    });
+	};
+
 }]);

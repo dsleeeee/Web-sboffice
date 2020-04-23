@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.payMethod.mpay.service.ApprMpayVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -86,5 +86,26 @@ public class ApprMpayController {
         List<DefaultMap<String>> list = apprMpayService.getApprMpayList(apprMpayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprMpayVO);
     }
-    
+
+    /**
+     * 모바일페이 승인현황 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/mpay/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprMpayExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprMpayVO apprMpayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprMpayService.getApprMpayExcelList(apprMpayVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprMpayVO);
+    }
+
 }

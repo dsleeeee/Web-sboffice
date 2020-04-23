@@ -13,5 +13,7 @@ public interface PosExcclcService {
 
     /** POS정산내역 - POS정산내역 세부 리스트 조회 */
     DefaultMap<String> getPosExcclcDetailInfo(PosExcclcVO posExcclcVO);
-
+    
+    /** POS정산내역 - POS정산내역 전체 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getPosExcclcExcelList(PosExcclcVO posExcclcVO, SessionInfoVO sessionInfoVO);
 }

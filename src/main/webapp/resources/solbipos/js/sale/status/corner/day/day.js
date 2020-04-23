@@ -14,6 +14,8 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("cornerDayListScaleBox", gvListScaleBoxData);
 
+  $scope.excelFg = false;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -143,7 +145,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     var storeCd = $("#cornerDaySelectStoreCd").val();
 	var cornrCd = $("#cornerDaySelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd, true);
+	$scope.getReCornerNmList(storeCd, cornrCd, false);
   });
 
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
@@ -153,7 +155,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 	var storeCd = $("#cornerDaySelectStoreCd").val();
 	var cornrCd = $("#cornerDaySelectCornerCd").val();
-
+	
 	$scope.getReCornerNmList(storeCd, cornrCd, true);
 
   });
@@ -167,11 +169,17 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.cornrCd   = $("#cornerDaySelectCornerCd").val();
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-
+    
+    $scope.searchStoreCd = params.storeCd;
+    $scope.searchCornrCd = params.cornrCd;
+    $scope.searchChecked = $scope.isChecked;
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
 	  params.startDate = wijmo.Globalize.format($scope.srchCornerDayStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchCornerDayEndDate.value, 'yyyyMMdd');
+	  
+	  $scope.searchStartDate = params.startDate;
+	  $scope.searchEndDate = params.endDate;
 	}
 	if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -193,6 +201,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 	});
 
+	$scope.excelFg = true;
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -220,14 +229,14 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.excelDownloadDay = function () {
 	// 파라미터
 	var params = {};
-	params.storeCd   = $("#cornerDaySelectStoreCd").val();
-    params.cornrCd   = $("#cornerDaySelectCornerCd").val();
+	params.storeCd   = $scope.searchStoreCd;
+    params.cornrCd   = $scope.searchCornrCd;
+    params.excelFg   = $scope.excelFg;
 
-	if(!$scope.isChecked){
-		params.startDate = wijmo.Globalize.format($scope.srchCornerDayStartDate.value, 'yyyyMMdd');
-		params.endDate = wijmo.Globalize.format($scope.srchCornerDayEndDate.value, 'yyyyMMdd');
-	}
-
+    if(!$scope.searchChecked){
+    	params.startDate = $scope.searchStartDate;
+        params.endDate   = $scope.searchEndDate;
+    }
 	params.isPageChk = true;
 
 	$scope._broadcast('cornerDayExcelCtrl',params);
@@ -449,12 +458,9 @@ app.controller('cornerDayExcelCtrl', ['$scope', '$http', '$timeout', function ($
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerDayExcelCtrl", function (event, data) {
 	  
-    var storeCd = $("#cornerDaySelectStoreCd").val();
-	var cornrCd = $("#cornerDaySelectCornerCd").val();
-	if(data != undefined) {
+	if(data != undefined && data.excelFg) {
 
 		if(data.startDate > data.endDate){
-//		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 		}
 		
@@ -463,7 +469,9 @@ app.controller('cornerDayExcelCtrl', ['$scope', '$http', '$timeout', function ($
 		$scope.startDate = data.startDate;
 		$scope.endDate = data.endDate;
 		
-		$scope.getReCornerNmList(storeCd, cornrCd, true);
+		$scope.getReCornerNmList($scope.storeCd, $scope.cornrCd, true);
+	}else{
+		$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	}
 
   });
@@ -544,11 +552,11 @@ app.controller('cornerDayExcelCtrl', ['$scope', '$http', '$timeout', function ($
 	    				arrStoreCornrNm.push(list[i].storeNm + "||" + list[i].cornrNm);
 	    			}
 
-	    			$("#cornerDaySelectCornerCd").val(arrStoreCornr.join());
-	    			$("#cornerDaySelectCornerName").val(arrStoreCornrNm.join());
+	    			$("#cornerDaySelectExcelCornerCd").val(arrStoreCornr.join());
+	    			$("#cornerDaySelectExcelCornerName").val(arrStoreCornrNm.join());
 
-	    			storeCornrCd = $("#cornerDaySelectCornerCd").val();
-	    			storeCornrNm = $("#cornerDaySelectCornerName").val();
+	    			storeCornrCd = $("#cornerDaySelectExcelCornerCd").val();
+	    			storeCornrNm = $("#cornerDaySelectExcelCornerName").val();
 	    			if(gridSet){
 	    				$scope.makeDataGrid();
 	    			}

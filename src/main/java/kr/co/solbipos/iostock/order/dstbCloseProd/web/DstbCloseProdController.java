@@ -218,4 +218,28 @@ public class DstbCloseProdController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+    
+    
+    /**
+     * 분배마감 - 매장 마감여부 확인
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dstbCloseProdVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/dstbCloseProdAddProd/dstbList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDstbCloseProdAddProdDstbList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DstbCloseProdVO dstbCloseProdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        dstbCloseProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        int result = dstbCloseProdService.getDstbCloseProdAddProdDstbList(dstbCloseProdVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

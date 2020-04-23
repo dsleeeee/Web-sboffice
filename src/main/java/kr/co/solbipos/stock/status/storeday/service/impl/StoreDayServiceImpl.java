@@ -49,4 +49,30 @@ public class StoreDayServiceImpl implements StoreDayService {
 
 		return storeDayMapper.storeDayList(storeDayVO);
 	}
+
+	@Override
+	public List<DefaultMap<String>> storeDayExcelList(StoreDayVO storeDayVO, SessionInfoVO sessionInfoVO) {
+		storeDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		storeDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+		if (storeDayVO.getStoreCd() != null && !"".equals(storeDayVO.getStoreCd())) {
+    		String[] arrStoreCd = storeDayVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				storeDayVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+		}
+
+		if (storeDayVO.getVendrCd() != null && !"".equals(storeDayVO.getVendrCd())) {
+    		String[] arrVendrCd = storeDayVO.getVendrCd().split(",");
+    		if (arrVendrCd.length > 0) {
+    			if (arrVendrCd[0] != null && !"".equals(arrVendrCd[0])) {
+    				storeDayVO.setArrVendrCd(arrVendrCd);
+    			}
+    		}
+		}
+
+		return storeDayMapper.storeDayExcelList(storeDayVO);
+	}
 }

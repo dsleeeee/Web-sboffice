@@ -23,7 +23,7 @@ import kr.co.solbipos.iostock.frnchs.slip.service.SlipVO;
 
 /**
  * @Class Name : SlipController.java
- * @Description : 수불관리 > 거래처(매입)입출고관리 > 전표별 입출고내역
+ * @Description : 수불관리 > 본사-매장간 입출고관리 > 전표별 입출고내역
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -51,7 +51,7 @@ public class SlipController {
     }
 
     /**
-     * 거래처 전표별 입출고내역 - 페이지 이동
+     * 본사 전표별 입출고내역 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -66,7 +66,7 @@ public class SlipController {
 
 
     /**
-     * 거래처 전표별 입출고내역 - 전표별 입출고내역 리스트 조회
+     * 본사 전표별 입출고내역 - 전표별 입출고내역 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -89,7 +89,7 @@ public class SlipController {
 
 
     /**
-     * 거래처 전표별 입출고내역 - 전표별 입출고내역 상세 리스트 조회
+     * 본사 전표별 입출고내역 - 전표별 입출고내역 상세 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -107,6 +107,52 @@ public class SlipController {
 
         List<DefaultMap<String>>
             list = slipService.getSlipDtlList(slipVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, slipVO);
+    }
+    
+    /**
+     * 본사 전표별 입출고내역 - 전표별 입출고내역 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   slipVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/ioStock/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSlipExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, SlipVO slipVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = slipService.getSlipExcelList(slipVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, slipVO);
+    }
+
+
+    /**
+     * 본사 전표별 입출고내역 - 전표별 입출고내역 상세 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   slipVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/ioStockDtl/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSlipDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, SlipVO slipVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>>
+            list = slipService.getSlipDtlExcelList(slipVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, slipVO);
     }

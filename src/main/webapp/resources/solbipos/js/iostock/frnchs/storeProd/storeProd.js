@@ -12,6 +12,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
   $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
+  $scope.excelFg = false;
 
   // 콤보박스 데이터 Set
   $scope._setComboData('frnchsStoreProdlistScaleBox', gvListScaleBoxData);
@@ -151,12 +152,21 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     var params       = {};
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+    params.prodClassCd = $scope.prodClassCd;
     params.storeCd   = $("#frnchsStoreProdSelectStoreCd").val();
     params.prodCd    = $("#srchProdCd").val();
     params.prodNm    = $("#srchProdNm").val();
+    
     params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    
+    $scope.searchStartDate = params.startDate;
+    $scope.searchEndDate   = params.endDate;
+    $scope.searchedProdClassCd  = params.prodClassCd;
+    $scope.searchStoreCd   = params.storeCd;
+    $scope.searchProdCd    = params.prodCd;
+    $scope.searchProdNm    = params.prodNm;
 
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -165,6 +175,7 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/frnchs/storeprod/storeprod/frnchsStoreProdList.sb", params, function() {});
 
+    $scope.excelFg = true;
   };
 
   // 매장선택 모듈 팝업 사용시 정의
@@ -203,24 +214,171 @@ app.controller('frnchsStoreProdCtrl', ['$scope', '$http', '$timeout', function (
 
   // 엑셀 다운로드
   $scope.excelDownloadClass = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
+	// 파라미터
+	var params = {};
+	params.startDate = $scope.searchStartDate;
+	params.endDate   = $scope.searchEndDate;
+	params.prodClassCd 	= $scope.searchedProdClassCd;
+	params.storeCd   = $scope.searchStoreCd;
+	params.prodCd    = $scope.searchProdCd;
+	params.prodNm    = $scope.searchProdNm;
+  	params.excelFg   = $scope.excelFg;
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '본사매장간입출고내역_매장별입출고내역_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	$scope._broadcast('frnchsStoreProdExcelCtrl',params);
   };
 }]);
+
+
+/** 매장-상품별 입출고내역 엑셀 controller */
+app.controller('frnchsStoreProdExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('frnchsStoreProdExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 헤더머지
+    s.allowMerging = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+    // 첫째줄 헤더 생성
+    var dataItem         = {};
+    dataItem.storeCd  = messages["frnchsStore.storeCd"];
+    dataItem.storeNm  = messages["frnchsStore.storeNm"];
+    dataItem.lv1Nm  = messages["frnchsStoreProd.lv1Nm"];
+    dataItem.lv2Nm  = messages["frnchsStoreProd.lv2Nm"];
+    dataItem.lv3Nm  = messages["frnchsStoreProd.lv3Nm"];
+    dataItem.prodCd  = messages["frnchsStoreProd.prodCd"];
+    dataItem.prodNm  = messages["frnchsStoreProd.prodNm"];
+    dataItem.poUnitFgNm  = messages["frnchsStoreProd.poUnitFg"];
+    dataItem.poUnitQty       = messages["frnchsStoreProd.poUnitQty"];
+    dataItem.outCnt  = messages["frnchsStoreProd.outCnt"];
+    dataItem.outTotQty      = messages["frnchsStoreProd.in"];
+    dataItem.outTot   = messages["frnchsStoreProd.in"];
+    dataItem.inTotQty   = messages["frnchsStoreProd.out"];
+    dataItem.inTot   = messages["frnchsStoreProd.out"];
+    dataItem.penaltyAmt   = messages["frnchsStoreProd.penaltyAmt"];
+
+    s.columnHeaders.rows[0].dataItem = dataItem;
+
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
+
+    // 그리드 링크 효과
+	s.formatItem.addHandler(function (s, e) {
+		if (e.panel === s.cells) {
+			var col = s.columns[e.col];
+			if (col.binding === "prodCd"){ // 상품코드
+				wijmo.addClass(e.cell, 'wijLink');
+			}
+		}
+	});
+  };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("frnchsStoreProdExcelCtrl", function (event, data) {
+	  if(data != undefined && data.excelFg) {
+			if(data.startDate > data.endDate){
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			 	return false;
+			}
+			
+			$scope.startDate = data.startDate;
+			$scope.endDate   = data.endDate;
+			$scope.prodClassCd = data.prodClassCd;
+			$scope.storeCd   = data.storeCd;
+			$scope.prodCd    = data.prodCd;
+			$scope.prodNm    = data.prodNm;
+			
+			$scope.searchFrnchsStoreProdList(false);
+		}else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 매장-상품별입출고내역 리스트 조회
+  $scope.searchFrnchsStoreProdList = function (isPageChk) {
+
+    // 파라미터
+    var params       = {};
+    params.startDate = $scope.startDate
+	params.endDate   = $scope.endDate
+	params.prodClassCd = $scope.prodClassCd;
+	params.storeCd   = $scope.storeCd
+	params.prodCd    = $scope.prodCd
+	params.prodNm    = $scope.prodNm
+    params.orgnFg    = $scope.orgnFg;
+    params.isPageChk = isPageChk;
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/iostock/frnchs/storeprod/storeprod/frnchsStoreProdExcelList.sb", params, function() {
+
+		var flex = $scope.excelFlex;
+		//row수가 0이면
+		if (flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+		
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			}, '본사매장간입출고내역_매장별입출고내역_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+    });
+  };
+}]);
+
+

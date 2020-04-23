@@ -87,7 +87,7 @@
 	          		<span class="txtIn w150px">
 	            		<wj-combo-box
 	              			id="srchUnitFg"
-	              			ng-model="unitFg"
+	              			ng-model="unitFgModel"
 	              			items-source="_getComboData('srchUnitFg')"
 	              			display-member-path="name"
 	              			selected-value-path="value"

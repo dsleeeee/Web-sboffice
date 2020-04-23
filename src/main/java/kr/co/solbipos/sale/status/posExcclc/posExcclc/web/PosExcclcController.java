@@ -112,5 +112,26 @@ public class PosExcclcController {
 
         return returnJson(Status.OK, result);
     }
+    
+    /**
+     * POS 정산내역 - 전체 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posExcclclVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/posExcclc/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosExcclcExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosExcclcVO posExcclcVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = posExcclcService.getPosExcclcExcelList(posExcclcVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, posExcclcVO);
+    }
 
 }

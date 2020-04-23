@@ -18,6 +18,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.stock.com.popup.service.StockComPopupService;
 import kr.co.solbipos.stock.com.popup.service.StockComPopupVO;
 import kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO;
@@ -166,4 +167,24 @@ public class StockComPopupController {
 		
 		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewVO);
 	}
+	
+    /**
+     * 실사폐기조정 - 창고 선택모듈 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김진
+     * @since   2020.04.21
+     */
+    @RequestMapping(value = "/selectStorageList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectStorageList(HttpServletRequest request, HttpServletResponse response, Model model, StockManageViewVO stockManageViewVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = stockComPopupService.selectStorageList(stockManageViewVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, stockManageViewVO);
+    }
 }

@@ -57,7 +57,7 @@
         <span class="txtIn w120px">
           <wj-combo-box
             id="srchSlipFg"
-            ng-model="slipFg"
+            ng-model="slipFgModel"
             items-source="_getComboData('srchSlipFg')"
             display-member-path="name"
             selected-value-path="value"
@@ -74,7 +74,7 @@
         <span class="txtIn w120px">
           <wj-combo-box
             id="srchSlipKind"
-            ng-model="slipKind"
+            ng-model="slipKindModel"
             items-source="_getComboData('srchSlipKind')"
             display-member-path="name"
             selected-value-path="value"
@@ -93,7 +93,7 @@
         <span class="txtIn w120px">
           <wj-combo-box
             id="srchProcFg"
-            ng-model="procFg"
+            ng-model="procFgModel"
             items-source="_getComboData('srchProcFg')"
             display-member-path="name"
             selected-value-path="value"
@@ -116,12 +116,12 @@
       <%-- 상품코드 --%>
       <th><s:message code="slipStockInfo.prodCd"/></th>
       <td>
-        <input type="text" id="srchSlipProdCd" name="srchSlipProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchSlipProdCd" name="srchSlipProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="slipStockInfo.prodNm"/></th>
       <td>
-        <input type="text" id="srchSlipProdNm" name="srchSlipProdNm" ng-model="prodNm" class="sb-input w100" maxlength="16"/>
+        <input type="text" id="srchSlipProdNm" name="srchSlipProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16"/>
       </td>
     </tr>
     </tbody>
@@ -274,6 +274,73 @@
        </ul>
      </div>
      <%--//페이지 리스트--%>
+   </div>
+   
+   
+   <%--엑셀 리스트1--%>
+   <div class="wj-gridWrap" style="display: none;" ng-controller="slipExcelCtrl">
+     <wj-flex-grid
+       id="slipExcelGrid"
+       autoGenerateColumns="false"
+       selection-mode="Row"
+       items-source="data"
+       control="excelFlex"
+       initialized="initGrid(s,e)"
+       is-read-only="true"
+       item-formatter="_itemFormatter">
+
+       <!-- define columns -->
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.slipNo"/>"        binding="slipNo"        width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.storeNm"/>"       binding="storeNm"       width="150" align="center"  is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.slipFg"/>"        binding="slipFgNm"        width="80" align="center"   is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.slipKind"/>"      binding="slipKindNm"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.procFg"/>"        binding="procFgNm"        width="70" align="center" is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.outDate"/>"       binding="outDt"       width="100" align="center"  is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.instockDate"/>"   binding="inDt"   width="100" align="center"  is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtlCnt"/>"        binding="dtlCnt"        width="70" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.qty"/>"           binding="mdTotQty"          width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.inTot"/>"         binding="mdTot"        width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.qty"/>"           binding="outTotQty"          width="80" align="center"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.inTot"/>"         binding="outTot"        width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.qty"/>"           binding="inTotQty"          width="70" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.inTot"/>"         binding="inTot"        width="70" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.penaltyAmt"/>"    binding="penaltyAmt"    width="70" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+     </wj-flex-grid>
+   </div>
+   
+   <%--엑셀 리스트2--%>
+   <div class="wj-gridWrap" style="display: none;" ng-controller="slipDtlExcelCtrl">
+     <wj-flex-grid
+       id="slipDtlExcelGrid"
+       autoGenerateColumns="false"
+       selection-mode="Row"
+       items-source="data"
+       control="excelFlex"
+       initialized="initGrid(s,e)"
+       is-read-only="true"
+       item-formatter="_itemFormatter">
+
+       <!-- define columns -->
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.prodCd"/>"     binding="prodCd"    width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.prodNm"/>"     binding="prodNm"    width="150"  align="center"   is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitFg"/>"   binding="poUnitFgNm"  width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitQty"/>"  binding="poUnitQty" width="50" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.costUprc"/>"   binding="splyUprc"  width="70" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTotQty"/>"   binding="mdTotQty"  width="80" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inAmt"/>"      binding="mdAmt"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inVat"/>"      binding="mdVat"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTot"/>"      binding="mdTot"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTotQty"/>"   binding="outTotQty"  width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inAmt"/>"      binding="outAmt"     width="80" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inVat"/>"      binding="outVat"     width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTot"/>"      binding="outTot"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTotQty"/>"   binding="inTotQty"  width="80" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inAmt"/>"      binding="inAmt"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inVat"/>"      binding="inVat"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTot"/>"      binding="inTot"     width="80" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.penaltyAmt"/>" binding="penaltyAmt"width="70" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.remark"/>"     binding="remark"    width="70" align="center"  is-read-only="true"></wj-flex-grid-column>
+     </wj-flex-grid>
    </div>
 </div>
 

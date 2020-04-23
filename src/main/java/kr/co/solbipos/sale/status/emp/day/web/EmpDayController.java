@@ -99,6 +99,38 @@ public class EmpDayController {
     }
     
     /**
+     * 판매자별 매출 -일자별 리스트(엑셀) 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   empDayVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpDayExcelList(HttpServletRequest request, HttpServletResponse response, Model model, EmpDayVO empDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empDayService.getEmpDayExcelList(empDayVO, sessionInfoVO);
+        
+        List<DefaultMap<String>> empColList = empDayService.getEmpMebList(empDayVO, sessionInfoVO);
+        
+        // 판매자 코드를 , 로 연결하는 문자열 생성
+        String empCol = "";
+        for(int i=0; i < empColList.size(); i++) {
+            empCol += (empCol.equals("") ? "" : ",") + empColList.get(i).getStr("payCd");
+        }
+        model.addAttribute("empColList", empColList);
+        model.addAttribute("empCol", empCol);
+
+        return ReturnUtil.returnListJson(Status.OK, list, empDayVO);
+    }
+    
+    
+    /**
      * 판매자별 매출 -판매자 리스트 조회 
      * @param   request
      * @param   response

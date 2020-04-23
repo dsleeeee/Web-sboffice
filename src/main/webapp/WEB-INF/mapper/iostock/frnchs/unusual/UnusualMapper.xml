@@ -15,11 +15,12 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT TPHSOD.SLIP_NO
 		 , TPHSOD.STORE_CD		
+		 , TPHSOD.SLIP_FG
 		 , DECODE(TPHSOD.SLIP_FG,1,'주문',-1,'반품') AS SLIP_FG_NM /* 구분 */
 		 , (SELECT STORE_NM FROM TB_MS_STORE WHERE TPHSOD.STORE_CD = TB_MS_STORE.STORE_CD) AS STORE_NM
 		 , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113' AND NMCODE_CD = TPHSOD.PROC_FG) AS PROC_FG_NM
-		 , TO_CHAR(TO_DATE(TPHSO.OUT_DT, 'YYYY.MM.DD HH24:MI:SS'),'yyyy.mm.dd hh24:mi:ss') AS OUT_OT
-		 , TO_CHAR(TO_DATE(TPHSO.IN_DT, 'YYYY.MM.DD HH24:MI:SS'),'yyyy.mm.dd hh24:mi:ss') AS IN_OT
+		 , TO_CHAR(TO_DATE(TPHSO.OUT_DT, 'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS OUT_OT
+		 , TO_CHAR(TO_DATE(TPHSO.IN_DT, 'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS IN_OT
 		 , TPHSOD.PROD_CD
 		 , TMP.PROD_NM
 		 , TPHSOD.OUT_TOT_QTY
@@ -74,6 +75,77 @@
 	 		AND TPHSOD.SLIP_FG = #{slipFg}*1
 	 	 </if>	
 	 	 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    
+    <!-- 특이사항 입출고내역 - 엑셀 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : UnusualVO
+        COMMENTS : 특이사항 입출고내역 - 엑셀 리스트 조회 
+    -->
+    <select id="getUnusualExcelList" parameterType="UnusualVO" resultType="DefaultMap">
+        /* USE : UnusualMapper.getUnusualExcelList */
+        SELECT TPHSOD.SLIP_NO
+         , TPHSOD.STORE_CD      
+         , TPHSOD.SLIP_FG
+         , DECODE(TPHSOD.SLIP_FG,1,'주문',-1,'반품') AS SLIP_FG_NM /* 구분 */
+         , (SELECT STORE_NM FROM TB_MS_STORE WHERE TPHSOD.STORE_CD = TB_MS_STORE.STORE_CD) AS STORE_NM
+         , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113' AND NMCODE_CD = TPHSOD.PROC_FG) AS PROC_FG_NM
+         , TO_CHAR(TO_DATE(TPHSO.OUT_DT, 'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS OUT_OT
+         , TO_CHAR(TO_DATE(TPHSO.IN_DT, 'YYYYMMDDHH24MISS'),'YYYY-MM-DD') AS IN_OT
+         , TPHSOD.PROD_CD
+         , TMP.PROD_NM
+         , TPHSOD.OUT_TOT_QTY
+         , TPHSOD.OUT_TOT
+         , TPHSOD.IN_TOT_QTY
+         , TPHSOD.IN_TOT
+         , TPHSOD.REMARK
+      FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+         , TB_PO_HQ_STORE_OUTSTOCK_DTL TPHSOD
+         , TB_MS_PRODUCT TMP
+     WHERE TPHSO.HQ_OFFICE_CD = TPHSOD.HQ_OFFICE_CD
+       AND TPHSO.SLIP_NO = TPHSOD.SLIP_NO
+       AND TPHSOD.STORE_CD = TMP.STORE_CD
+       AND TPHSOD.PROD_CD = TMP.PROD_CD
+       AND TPHSO.HQ_OFFICE_CD = #{hqOfficeCd}
+       <if test='slipNo != null and slipNo != ""'>
+            AND TPHSO.SLIP_NO = #{slipNo}
+       </if>
+       <choose>     
+        <when test='outDateFg == "1"' >
+            <if test='startDate != null and startDate != ""'>
+                AND SUBSTR(TPHSO.OUT_DT, 1, 8) >= #{startDate}
+            </if>
+            <if test='endDate != null and endDate != ""'>
+                AND SUBSTR(TPHSO.OUT_DT, 1, 8) <![CDATA[<=]]>  #{endDate}
+            </if>   
+        </when>
+        <when test='outDateFg == "2"'>
+            <if test='startDate != null and startDate != ""'>
+                AND SUBSTR(TPHSO.IN_DT, 1, 8) >= #{startDate}
+            </if>
+            <if test='endDate != null and endDate != ""'>
+                AND SUBSTR(TPHSO.IN_DT, 1, 8)   <![CDATA[<=]]>  #{endDate}
+            </if>   
+         </when>
+        </choose> 
+       <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <if test='storeCd != null and storeCd != ""'>
+                    AND TPHSO.STORE_CD IN
+                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+                </if>
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                AND TPHSO.STORE_CD  = #{storeCd}
+            </when>
+         </choose>       
+         <if test='slipFg != null and slipFg != ""'>
+            AND TPHSOD.SLIP_FG = #{slipFg}*1
+         </if>  
     </select>
 
 </mapper>

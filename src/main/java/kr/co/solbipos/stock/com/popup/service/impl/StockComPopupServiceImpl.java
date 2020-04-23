@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.stock.com.popup.service.StockComPopupService;
 import kr.co.solbipos.stock.com.popup.service.StockComPopupVO;
 import kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO;
@@ -77,5 +78,11 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 			SessionInfoVO sessionInfoVO) {
 		return stockComPopupMapper.getCmmViewDtlList(stockManageViewVO);
 	}
-
+	
+    @Override
+    public List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO) {
+    	stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	stockManageViewVO.setStoreCd(sessionInfoVO.getStoreCd());
+        return stockComPopupMapper.selectStorageList(stockManageViewVO);
+    }
 }

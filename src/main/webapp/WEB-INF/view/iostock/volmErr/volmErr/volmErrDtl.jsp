@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/iostock/volmErr/volmErr/volmErrDtl/"/>
 
 <wj-popup id="wjVolmErrDtlLayer" control="wjVolmErrDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
@@ -97,7 +98,11 @@
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
             <s:message code="cmm.save"/></button>
           <%-- 엑셀 다운로드 --%>
-          <button                               class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+          <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+        </div>
+        <div id="volmErrBtnExcelLayer" style="display: none;">
+	        <%-- 엑셀 다운로드 --%>
+	        <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
         </div>
       </div>
       <div style="clear: both;"></div>

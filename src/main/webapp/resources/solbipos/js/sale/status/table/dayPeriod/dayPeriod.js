@@ -88,16 +88,22 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
-    if(params.startDate > params.endDate){
-   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-   	 	return false;
-    }
-
     //등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
 		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
 	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
 	}
+
+	if(params.startDate > params.endDate){
+   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+   	 	return false;
+    }
+
+	$scope.excelStartDate		= params.startDate;
+	$scope.excelEndDate 		= params.endDate;
+	$scope.excelStoreCd 		= params.storeCd; // 상품코드
+	$scope.excelHqOfficeCd		= params.hqOfficeCd;
+	$scope.isSearch				= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params);
@@ -121,14 +127,6 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.excelDownload = function () {
 	// 파라미터
 	var params = {};
-	params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
-
-	if(!$scope.isChecked){
-		params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
-	    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
-	}
-
-	params.isPageChk = true;
 
 	$scope._broadcast('tableDayPeriodExcelCtrl',params);
 };
@@ -155,21 +153,13 @@ app.controller('tableDayPeriodExcelCtrl', ['$scope', '$http', '$timeout', functi
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayPeriodExcelCtrl", function (event, data) {
 
-		var storeCd = $("#tableDayPeriodSelectStoreCd").val();
-
-		if(data != undefined) {
-
-			if(data.startDate > data.endDate){
-				$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-				return false;
-			}
-
-			$scope.storeCd = data.storeCd;
-			$scope.startDate = data.startDate;
-			$scope.endDate = data.endDate;
-
+		if(data != undefined && $scope.isSearch) {
 			$scope.searchTableDayPeriodList(true);
-
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
@@ -179,20 +169,15 @@ app.controller('tableDayPeriodExcelCtrl', ['$scope', '$http', '$timeout', functi
 
 	    // 파라미터
 	    var params       = {};
-	    params.hqOfficeCd = $("#hqOfficeCd").val();
-	    params.storeCd   = $("#tableDayPeriodSelectStoreCd").val();
-	    params.isPageChk = isPageChk;
+	    params.hqOfficeCd = $scope.excelHqOfficeCd;
+	    params.storeCd   = $scope.excelStoreCd;
+	    params.startDate 	= $scope.excelStartDate;
+	    params.endDate 		= $scope.excelEndDate;
 
 	    if(params.startDate > params.endDate){
 	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 	   	 	return false;
 	    }
-
-	    //등록일자 '전체기간' 선택에 따른 params
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
-		    params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
-		}
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquiryMain("/sale/status/table/dayperiod/excelList.sb", params, function() {

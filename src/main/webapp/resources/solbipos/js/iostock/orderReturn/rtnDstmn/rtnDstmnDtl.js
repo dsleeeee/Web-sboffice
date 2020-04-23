@@ -88,6 +88,8 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnDstmnDtlCtrl", function (event, data) {
+	$scope.startDate = data.startDate;
+	$scope.endDate = data.endDate;
     $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjRtnDstmnDtlLayer.show(true);
@@ -287,7 +289,9 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 거래명세표
   $scope.reportTrans = function () {
-    var params        = {};
+    var params        = {};    
+    params.startDate  = $scope.startDate;
+    params.endDate    = $scope.endDate;
     params.slipFg     = $scope.slipFg;
     params.strSlipNo  = $scope.slipNo;
     params.stmtAcctFg = $scope.dtlStmtAcctFg;

@@ -265,7 +265,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		params.barcdCd = $("#srchBarcdCd").val(); // 바코드
 		params.vendrCd = $("#storePeriodIostockSelectVendrCd").val(); // 거래처
 		params.prodClassCd	= $scope.prodClassCd; // 분류
-		params.unitFg = $("#srchUnitFg").val(); // 단위구분
+		params.unitFg = $scope.unitFgModel; // 단위구분
 		params.listScale = $scope.listScaleCombo.text;
 		params.isPageChk = isPageChk;
 		

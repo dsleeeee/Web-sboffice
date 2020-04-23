@@ -51,4 +51,21 @@ public class HqCurrServiceImpl implements HqCurrService {
 		}
 	}
 
+	@Override
+	public List<DefaultMap<String>> getHqCurrExcelList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
+		hqCurrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        // 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(hqCurrVO.getVendrCd()).equals("")) {
+            hqCurrVO.setArrVendrCd(hqCurrVO.getVendrCd().split(","));
+        }
+        List<DefaultMap<String>> list;
+        if(hqCurrVO.getOrgnFg() == "H" && hqCurrVO.getOrgnFg() != null) { // 본사권한
+			list = hqCurrMapper.getHqCurrExcelList(hqCurrVO);
+		}else { // 매장권한
+			hqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
+			list = hqCurrMapper.getHqStoreCurrExcelList(hqCurrVO);
+		}
+        return list;
+	}
+
 }

@@ -43,5 +43,12 @@ public class EmpDayPeriodServiceImpl implements EmpDayPeriodService {
 		empDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		return empDayPeriodMapper.getEmpDayPeriodDtlList(empDayPeriodVO);
 	}
+	
+    /** 코너별매출 - 상세 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getEmpDayPeriodDtlExcelList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO) {
+		empDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		return empDayPeriodMapper.getEmpDayPeriodDtlExcelList(empDayPeriodVO);
+	}
 
 }

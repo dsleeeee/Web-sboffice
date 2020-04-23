@@ -173,6 +173,7 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     }
 
     $scope._save("/iostock/order/outstockConfm/outstockConfm/saveOutstockConfirm.sb", params, function () {
+    
       $scope.getReqNoConfirmCnt()
     });
   };

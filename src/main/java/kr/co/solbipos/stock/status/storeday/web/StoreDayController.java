@@ -82,4 +82,23 @@ public class StoreDayController {
 		List<DefaultMap<String>> list = storeDayService.storeDayList(storeDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, storeDayVO);
 	}
+	
+	/**
+     * 매장일수불 - 엑셀 전체 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 22.
+     */
+	@RequestMapping(value = "/storeDay/viewExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result storeDayExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StoreDayVO storeDayVO) {
+		
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		
+		List<DefaultMap<String>> list = storeDayService.storeDayExcelList(storeDayVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, storeDayVO);
+	}
 }

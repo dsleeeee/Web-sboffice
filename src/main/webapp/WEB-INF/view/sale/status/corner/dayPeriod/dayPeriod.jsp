@@ -24,7 +24,7 @@
 			<tr>
 				<%-- 조회일자 --%>
 				<th><s:message code="cmm.search.date" /></th>
-				<td <c:if test="${sessionInfo.orgnFg == 'STORE'}">colspan="3"</c:if>>
+				<td>
 					<div class="sb-select">
 						<span class="txtIn">
 							<input id="srchCornerDayPeriodStartDate" class="w120px"/>

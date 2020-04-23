@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.payMethod.card.service.ApprCardVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -84,6 +84,17 @@ public class ApprCardController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = apprCardService.getApprCardList(apprCardVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprCardVO);
+    }
+
+    @RequestMapping(value = "/card/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprCardExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprCardVO apprCardVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprCardService.getApprCardExcelList(apprCardVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprCardVO);
     }
 }

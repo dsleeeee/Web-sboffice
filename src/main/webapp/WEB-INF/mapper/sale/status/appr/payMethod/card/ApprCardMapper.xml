@@ -6,7 +6,7 @@
 
     <!-- 신용카드 승인현왕 - 리스트 조회 -->
     <!--
-        TABLE    : 
+        TABLE    :
         PARAM    : apprCardVO
         COMMENTS : 신용카드 승인현왕 - 리스트를 조회한다.
     -->
@@ -21,7 +21,7 @@
        ]]>
        <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-        FROM TB_MS_STORE TMS 
+        FROM TB_MS_STORE TMS
         , (
         SELECT M.STORE_CD
              , SUM(M.CNT) AS CNT
@@ -116,7 +116,7 @@
            HAVING(M.SALE_FG = #{saleFg})
         </if>
 		<![CDATA[
-		         
+
 		        ) M
 		        WHERE M.STORE_CD = TMS.STORE_CD
 		GROUP BY M.STORE_CD, TMS.STORE_NM
@@ -124,5 +124,123 @@
 		]]>
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
+    <!-- 신용카드 승인현왕 신용카드 - 엑셀 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : apprCardVO
+        COMMENTS : 신용카드 승인현황 - 엑셀 리스트를 조회한다.
+    -->
+    <select id="getApprCardExcelList" parameterType="apprCardVO" resultType="DefaultMap">
+       <![CDATA[
+       SELECT M.STORE_CD
+             , TMS.STORE_NM
+             , SUM(M.CNT)   AS CNT,   SUM(M.SALE_AMT)   AS SALE_AMT,   SUM(M.APPR_AMT)   AS APPR_AMT    --전체
+             , SUM(M.CNT_A) AS CNT_A, SUM(M.SALE_AMT_A) AS SALE_AMT_A, SUM(M.APPR_AMT_A) AS APPR_AMT_A  --승인
+             , SUM(M.CNT_B) AS CNT_B, SUM(M.SALE_AMT_B) AS SALE_AMT_B, SUM(M.APPR_AMT_B) AS APPR_AMT_B  --취소
+       ]]>
+        <![CDATA[
+        FROM TB_MS_STORE TMS
+        , (
+        SELECT M.STORE_CD
+             , SUM(M.CNT) AS CNT
+             , SUM(M.SALE_AMT) AS SALE_AMT
+             , SUM(M.APPR_AMT) AS APPR_AMT
+             , DECODE(M.SALE_FG,1,SUM(M.CNT),0) AS CNT_A
+             , DECODE(M.SALE_FG,1,SUM(M.SALE_AMT),0) AS SALE_AMT_A
+             , DECODE(M.SALE_FG,1,SUM(M.APPR_AMT),0) AS APPR_AMT_A
+             , DECODE(M.SALE_FG,-1,SUM(M.CNT),0) AS CNT_B
+             , DECODE(M.SALE_FG,-1,SUM(M.SALE_AMT),0) AS SALE_AMT_B
+             , DECODE(M.SALE_FG,-1,SUM(M.APPR_AMT),0) AS APPR_AMT_B
+          FROM (
+                SELECT STORE_CD
+                     , SALE_FG
+                     , 1 AS CNT
+                     , SALE_AMT
+                     , APPR_AMT
+                  FROM TB_SL_SALE_PAY_CARD
+                 WHERE SALE_FG='1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+        UNION ALL
+                SELECT STORE_CD
+                     , SALE_FG
+                     , 1 AS CNT
+                     , SALE_AMT
+                     , APPR_AMT
+                  FROM TB_SL_SALE_PAY_CARD
+                 WHERE SALE_FG='-1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='cornrCd != null and cornrCd != ""'>
+            AND STORE_CD||'||'||CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND STORE_CD||'||'||POS_NO IN
+            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='apprProcFg != null and apprProcFg != ""'>
+            AND APPR_PROC_FG = #{apprProcFg}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+                )  M
+                 GROUP BY M.STORE_CD, M.SALE_FG
+        ]]>
+        <if test='saleFg != null and saleFg != ""'>
+           HAVING(M.SALE_FG = #{saleFg})
+        </if>
+        <![CDATA[
+
+                ) M
+                WHERE M.STORE_CD = TMS.STORE_CD
+        GROUP BY M.STORE_CD, TMS.STORE_NM
+        ORDER BY M.STORE_CD
+        ]]>
+    </select>
+
 </mapper>

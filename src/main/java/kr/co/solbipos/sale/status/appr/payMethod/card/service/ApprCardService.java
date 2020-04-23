@@ -8,4 +8,6 @@ import java.util.List;
 public interface ApprCardService {
     /** 신용카드 승인현황 - 리스트 조회 */
     List<DefaultMap<String>> getApprCardList(ApprCardVO apprCardVO, SessionInfoVO sessionInfoVO);
+    /** 신용카드 승인현황 - 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getApprCardExcelList(ApprCardVO apprCardVO, SessionInfoVO sessionInfoVO);
 }

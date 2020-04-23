@@ -11,6 +11,8 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("cornerMonthListScaleBox", gvListScaleBoxData);
 
+  $scope.excelFg = false;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -176,6 +178,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     
     $scope.storeCdForExcel   = params.storeCd;
     $scope.cornrCdForExcel   = params.cornrCd;
+    $scope.searchChecked = $scope.isChecked;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -206,7 +209,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		}
 	});
 
-
+	$scope.excelFg = true;
   };
 
   //전체기간 체크박스 클릭이벤트
@@ -236,8 +239,12 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 		var params = {};
 		params.storeCd   = $scope.storeCdForExcel;
 	    params.cornrCd   = $scope.cornrCdForExcel;
-	    params.startDate = $scope.startDateForExcel;
-	  	params.endDate 	 = $scope.endDateForExcel;
+	  	params.excelFg   = $scope.excelFg;
+	  	
+	  	if(!$scope.searchChecked){
+	  		params.startDate = $scope.startDateForExcel;
+		  	params.endDate 	 = $scope.endDateForExcel;
+	    }
 		params.isPageChk = true;
 
 		$scope._broadcast('cornerMonthExcelCtrl',params);
@@ -457,11 +464,7 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("cornerMonthExcelCtrl", function (event, data) {
-
-    var storeCd = $("#cornerMonthSelectStoreCd").val();
-	var cornrCd = $("#cornerMonthSelectCornerCd").val();
-
-	if(data != undefined) {
+	if(data != undefined && data.excelFg) {
 
 		if(data.startDate > data.endDate){
 		 	return false;
@@ -472,7 +475,9 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
 		$scope.startDate = data.startDate;
 		$scope.endDate = data.endDate;
 		
-		$scope.getReCornerNmList(storeCd, cornrCd, true);
+		$scope.getReCornerNmList($scope.storeCd, $scope.cornrCd, true);
+	}else{
+		$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	}
   });
 
@@ -485,7 +490,6 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
     params.cornrCd   = $scope.cornrCd;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
-    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -547,11 +551,11 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
 	    				arrStoreCornrNm.push(list[i].storeNm + "||" + list[i].cornrNm);
 	    			}
 
-	    			$("#cornerMonthSelectCornerCd").val(arrStoreCornr.join());
-	    			$("#cornerMonthSelectCornerName").val(arrStoreCornrNm.join());
+	    			$("#cornerMonthSelectExcelCornerCd").val(arrStoreCornr.join());
+	    			$("#cornerMonthSelectExcelCornerName").val(arrStoreCornrNm.join());
 
-	    			storeCornrCd = $("#cornerMonthSelectCornerCd").val();
-	    			storeCornrNm = $("#cornerMonthSelectCornerName").val();
+	    			storeCornrCd = $("#cornerMonthSelectExcelCornerCd").val();
+	    			storeCornrNm = $("#cornerMonthSelectExcelCornerName").val();
 
 	    			if(gridSet){
 	    				$scope.makeDataGrid();

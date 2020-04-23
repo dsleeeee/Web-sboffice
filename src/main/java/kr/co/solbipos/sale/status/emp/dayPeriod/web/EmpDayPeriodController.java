@@ -59,4 +59,15 @@ public class EmpDayPeriodController {
         List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodDtlList(empDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
+    
+    @RequestMapping(value = "/dayperiod/excelDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpDayPeriodDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, EmpDayPeriodVO empDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodDtlExcelList(empDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
+    }
 }

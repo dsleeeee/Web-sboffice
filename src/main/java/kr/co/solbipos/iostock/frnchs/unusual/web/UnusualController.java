@@ -87,4 +87,28 @@ public class UnusualController {
 
         return ReturnUtil.returnListJson(Status.OK, list, unusualVO);
     } 
+    
+    
+    /**
+     * 본사 특이사항 입출고내역 - 특이사항 입출고내역 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 23.
+     */
+    @RequestMapping(value = "/unUsual/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getUnusualExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, UnusualVO unusualVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>>
+            list = unusualService.getUnusualExcelList(unusualVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, unusualVO);
+    }
 }

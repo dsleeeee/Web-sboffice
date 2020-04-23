@@ -27,20 +27,32 @@ public class UnusualServiceImpl implements UnusualService {
     @Override
     public List<DefaultMap<String>> getUnusualList(UnusualVO unusualVO, SessionInfoVO sessionInfoVO) {
         unusualVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-//        unusualVO.setStoreCd(sessionInfoVO.getStoreCd());
         unusualVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         
-//        System.out.println("unusualVO.getOrgnFg :: "+unusualVO.getOrgnFg());
         
         if(!StringUtil.getOrBlank(unusualVO.getVendrCd()).equals("")) {
             unusualVO.setArrVendrCd(unusualVO.getVendrCd().split(","));
         }
          
-//        System.out.println("unusualVO.getStoreCd :: "+unusualVO.getStoreCd());
         if(!StringUtil.getOrBlank(unusualVO.getStoreCd()).equals("")) {
         	unusualVO.setArrStoreCd(unusualVO.getStoreCd().split(","));
         }
-//        System.out.println("unusualVO.getArrStoreCd :: "+unusualVO.getArrStoreCd());
         return unusualMapper.getUnusualList(unusualVO);
     }
+
+	@Override
+	public List<DefaultMap<String>> getUnusualExcelList(UnusualVO unusualVO, SessionInfoVO sessionInfoVO) {
+		unusualVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        unusualVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        
+        
+        if(!StringUtil.getOrBlank(unusualVO.getVendrCd()).equals("")) {
+            unusualVO.setArrVendrCd(unusualVO.getVendrCd().split(","));
+        }
+         
+        if(!StringUtil.getOrBlank(unusualVO.getStoreCd()).equals("")) {
+        	unusualVO.setArrStoreCd(unusualVO.getStoreCd().split(","));
+        }
+        return unusualMapper.getUnusualExcelList(unusualVO);
+	}
 }

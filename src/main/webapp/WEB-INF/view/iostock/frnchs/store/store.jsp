@@ -45,7 +45,7 @@
 	          <span class="txtIn w150px">
 	            <wj-combo-box
 	              id="srchSlipKind"
-	              ng-model="slipKind"
+	              ng-model="slipKindModel"
 	              items-source="_getComboData('srchSlipKind')"
 	              display-member-path="name"
 	              selected-value-path="value"
@@ -216,6 +216,33 @@
   </div>
   <%--//페이지 리스트--%>
 
+
+    <%--위즈모 테이블--%>
+    <div class="wj-gridWrap" style="display: none;" ng-controller="frnchsStoreExcelCtrl">
+      <wj-flex-grid
+        id="frnchsStoreExcelGrid"
+        autoGenerateColumns="false"
+        control="excelFlex"
+        initialized="initGrid(s,e)"
+        sticky-headers="true"
+        selection-mode="Row"
+        items-source="data"
+        item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                     binding="gChk" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header=""                                                binding="slipNo" width="40" align="center" visible="false" ng-model="silpNo"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.storeCd"/>"         binding="storeCd"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.storeNm"/>"         binding="storeNm"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.slipCnt"/>"         binding="slipCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.orderTot"/>"        binding="orderTot"        width="120" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.mdTot"/>"           binding="mdTot"       width="200" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.outTot"/>"          binding="outTot"       width="200" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.inTot"/>"           binding="inTot"    width="130" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.outAmt"/>"          binding="outAmt"    width="130" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.outVat"/>"          binding="outVat"       width="200" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
 </div>
 <script type="text/javascript">
 </script>

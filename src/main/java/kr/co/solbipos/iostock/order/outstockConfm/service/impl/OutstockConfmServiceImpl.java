@@ -218,12 +218,12 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 	            outstockConfmVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
 
 	            outstockConfmVO.setConfmYn				("Y"										);	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
-	            outstockConfmVO.setInUnitQty		    (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-	            outstockConfmVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-	            outstockConfmVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-	            outstockConfmVO.setInAmt			    (Long.parseLong		(storageInAmt		[k]));	//입고금액
-	            outstockConfmVO.setInVat			    (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-	            outstockConfmVO.setInTot			    (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+	            outstockConfmVO.setInUnitQty		    (slipKind.equals("1")	?	Integer.parseInt	(storageInUnitQty	[k]) * -1 : Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+	            outstockConfmVO.setInEtcQty		        (slipKind.equals("1")	?	Integer.parseInt	(storageInEtcQty	[k]) * -1 : Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+	            outstockConfmVO.setInTotQty		        (slipKind.equals("1")	?	Integer.parseInt	(storageInTotQty	[k]) * -1 : Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+	            outstockConfmVO.setInAmt			    (slipKind.equals("1")	?	Long.parseLong		(storageInAmt		[k]) * -1 : Long.parseLong		(storageInAmt		[k]));	//입고금액
+	            outstockConfmVO.setInVat			    (slipKind.equals("1")	?	Long.parseLong		(storageInVat		[k]) * -1 : Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+	            outstockConfmVO.setInTot			    (slipKind.equals("1")	?	Long.parseLong		(storageInTot		[k]) * -1 : Long.parseLong		(storageInTot		[k]));	//입고금액합계
 
 	            outstockConfmVO.setRegId			    (sessionInfoVO.getUserId()		);
 	            outstockConfmVO.setRegDt			    (currentDt	);

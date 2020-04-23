@@ -132,6 +132,8 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('orderMainCtrl', $scope, $http, true));
 
+  $scope.excelFg = false;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -182,7 +184,6 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
           var params       = {};
           params.slipNo    = selectedRow.slipNo;
           var item = s.rows[ht.row].dataItem;
-          console.log(item.slipNo);
       		if (item.slipNo !== "미생성") {
       			$scope._broadcast('orderDtlCtrlSrch', params);
       			$('#dtlSlipNo').text('상품상세 (전표번호 : '+selectedRow.slipNo+')');
@@ -282,10 +283,15 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.storeCd	 = $("#orderSelectStoreCd").val();
-    params.outDateFg = $scope.outDateFg;
-    params.saleFg 	 = $scope.saleFg;
-    params.procFg 	 = $scope.procFg;
+    params.outDateFg = $scope.outDateFgModel;
+    params.slipFg 	 = $scope.slipFgModel;
+    params.procFg 	 = $scope.procFgModel;
     paramsisPageChk  = isPageChk;
+    
+    $scope.searchedStoreCd    = params.storeCd;	
+    $scope.searchedOutDateFg  = params.outDateFg;
+    $scope.searchedslipFg     = params.slipFg; 	
+    $scope.searchedProcFg     = params.procFg; 	
     
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -312,29 +318,24 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 주문대비 입출고현황 그리드 조회 후 상세내역 그리드 초기화
     var orderDtlScope = agrid.getScope('orderDtlCtrl');
     orderDtlScope.dtlGridDefault();
+    
+    $scope.excelFg = true;
   };
   
   //엑셀 다운로드
   $scope.excelDownloadOrder = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '본사-매장간 입출고현황_주문대비 입출고현황_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	// 파라미터
+	var params = {};
+	
+    params.startDate   = $scope.searchedStartDate;
+    params.endDate     = $scope.searchedEndDate;
+    params.storeCd	   = $scope.searchedStoreCd;
+    params.outDateFg   = $scope.searchedOutDateFg;
+    params.slipFg 	   = $scope.searchedslipFg;
+    params.procFg 	   = $scope.searchedProcFg;
+    params.excelFg	   = $scope.excelFg;
+    
+    $scope._broadcast('orderExcelCtrl',params);
   };
 }]);
 
@@ -344,6 +345,8 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('orderDtlCtrl', $scope, $http, true));
 
+  $scope.excelFg = false;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -354,10 +357,6 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 //    s.formatItem.addHandler(function (s, e) {
 //      if (e.panel === s.cells) {
 //        var col = s.columns[e.col];
-//        if (col.binding.substring(col.binding.length, col.binding.length-6) === "TotQty") { // 입고수량
-//          wijmo.addClass(e.cell, 'wijLink');
-//          wijmo.addClass(e.cell, 'wj-custom-readonly');
-//        }
 //
 //        if (col.format === "date") {
 //          e.cell.innerHTML = getFormatDate(e.cell.innerText);
@@ -377,21 +376,6 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   	  		e.preventDefault();
   	  	}
   	  }      
-      
-//      if (ht.cellType === wijmo.grid.CellType.Cell) {
-//        var col         = ht.panel.columns[ht.col];
-//        var selectedRow = s.rows[ht.row].dataItem;
-//        if (col.binding.substring(col.binding.length, col.binding.length-6) === "TotQty") { // 입고수량 클릭
-//          var params       = {};
-//          params.prodCd    = selectedRow.prodCd;
-//          params.prodNm    = selectedRow.prodNm;
-//          params.slipNo    = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? '' : $scope.slipNo);    // 무발주가 아닌 경우 파라미터 세팅
-//          params.inSlipNo  = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.inSlipNo : '');  // 무발주인 경우 파라미터 세팅
-//          params.startDate = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.startDate : ''); // 무발주인 경우 파라미터 세팅
-//          params.endDate   = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.endDate : '');   // 무발주인 경우 파라미터 세팅
-//          $scope._broadcast('prodInstockInfoCtrl', params);
-//        }
-//      }
     }, true);
 
     // add the new GroupRow to the grid's 'columnFooters' panel
@@ -478,11 +462,6 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("orderDtlCtrl", function (event, data) {
-    $scope.slipNo    = data.slipNo;
-    $scope.inSlipNo  = data.inSlipNo;
-    $scope.startDate = data.startDate;
-    $scope.endDate   = data.endDate;
-
     $scope.searchOrderDtlList(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -537,6 +516,8 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/order/ioStockDtl/list.sb", params);
+    
+    $scope.excelFg = true;
   };
 
 
@@ -552,25 +533,363 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
   
   //엑셀 다운로드
   $scope.excelDownloadOrderDtl = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
+	// 파라미터
+	var params = {};
+	
+    params.startDate   = $scope.startDate;
+    params.endDate     = $scope.endDate;
+    params.slipNo      = $scope.slipNo;
+    params.inSlipNo    = $scope.inSlipNo;
+    params.checked	   = $('input[name=displayFg]:checked').val();
+    params.excelFg	   = $scope.excelFg;
+    
+    $scope._broadcast('orderDtlExcelCtrl',params);
+  };
+}]);
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
+
+
+/** 주문대비 입고현황 엑셀리스트 controller */
+app.controller('orderExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('orderExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        if (col.binding === "slipNo") { // 전표번호
+        	var item = s.rows[e.row].dataItem;
+        	if (item.slipNo !== "미생성") {
+        		wijmo.addClass(e.cell, 'wijLink');
+                wijmo.addClass(e.cell, 'wj-custom-readonly');
+              }
         }
-      }, '본사-매장간 입출고현황_주문대비 입출고현황 상세_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+        // 구분이 반출이면 글씨색을 red 로 변경한다.
+        if (col.binding === "slipFg") {
+          var item = s.rows[e.row].dataItem;
+          if (item.slipFg === -1) {
+            wijmo.addClass(e.cell, 'red');
+          }
+        }
+
+        if (col.format === "date") {
+          e.cell.innerHTML = getFormatDate(e.cell.innerText);
+        } else if (col.format === "dateTime") {
+          e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+        }
+      }
+    });
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 헤더머지
+    s.allowMerging = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    s.columnHeaders.rows[0].dataItem = {
+      reqDateFm    	: messages["orderStockInfo.outstockResveDate"],
+      storeNm 		: messages["orderStockInfo.storeNm"],
+      slipFgNm   	: messages["orderStockInfo.slipFg"],
+      procFgNm    	: messages["orderStockInfo.procFg"],
+      slipNo    	: messages["orderStockInfo.slipNo"],
+      outDtFm     	: messages["orderStockInfo.outDate"],
+      inDtFm    	: messages["orderStockInfo.inDate"],
+      dtlCnt		: messages["orderStockInfo.prodCnt"],
+      orderTotQty  	: messages["orderStockInfo.order2"],
+      orderTot  	: messages["orderStockInfo.order2"],
+      outTotQty  	: messages["orderStockInfo.out"],
+      outTot  		: messages["orderStockInfo.out"],
+      inTotQty     	: messages["orderStockInfo.in"],
+      inTot  		: messages["orderStockInfo.in"],
+      penaltyAmt  	: messages["orderStockInfo.penaltyAmt"],
+    };
+
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
   };
 
+
+  
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("orderExcelCtrl", function (event, data) {
+	  if(data != undefined && data.excelFg) {
+		  $scope.startDate   = data.startDate;
+		  $scope.endDate     = data.endDate;
+		  $scope.storeCd	 = data.storeCd;
+		  $scope.outDateFg   = data.outDateFg;
+		  $scope.slipFg 	 = data.slipFg;
+		  $scope.procFg 	 = data.procFg;
+		  $scope.excelFg     = data.excelFg;
+		  
+		  $scope.searchOrderList(false);
+	  }else{
+		  $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+		  return false;
+	  }
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 주문대비 입고현황 리스트 조회
+  $scope.searchOrderList = function (isPageChk) {
+    // 파라미터
+    var params       = {};
+    params.startDate = $scope.startDate;
+    params.endDate   = $scope.endDate;
+    params.storeCd	 = $scope.storeCd;
+    params.outDateFg = $scope.outDateFg;
+    params.slipFg 	 = $scope.slipFg;
+    params.procFg 	 = $scope.procFg;
+    paramsisPageChk  = isPageChk;
+    
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquirySub("/iostock/frnchs/order/ioStock/excelList.sb", params, function () {
+		var flex = $scope.excelFlex;
+		//row수가 0이면
+		if (flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+		
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			}, '본사-매장간 입출고현황_주문대비 입출고현황_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+    });
+  };
 }]);
+
+
+/** 주문대비 입고현황 상세 엑셀리스트 controller */
+app.controller('orderDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('orderDtlExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      
+  	  if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+  	  	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+  	  	if (rng && rng.columnSpan > 1) {
+  	  		e.preventDefault();
+  	  	}
+  	  }      
+    }, true);
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 헤더머지
+    s.allowMerging = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    s.columnHeaders.rows[0].dataItem = {
+      reqDateFm  : messages["orderStockInfo.outstockResveDate"],
+      prodCd     : messages["orderStockInfo.dtl.prodCd"],
+      prodNm     : messages["orderStockInfo.dtl.prodNm"],
+      poUnitFgNm : messages["orderStockInfo.dtl.poUnitFg"],
+      poUnitQty  : messages["orderStockInfo.dtl.poUnitQty"],
+      splyUprc   : messages["orderStockInfo.dtl.outSplyUprc"],
+      slipFgNm	 : messages["orderStockInfo.dtl.fg"],
+      
+      orderTotQty: messages["orderStockInfo.dtl.order2"],
+      orderAmt   : messages["orderStockInfo.dtl.order2"],
+      orderVat   : messages["orderStockInfo.dtl.order2"],
+      orderTot   : messages["orderStockInfo.dtl.order2"],
+      
+      mdTotQty   : messages["orderStockInfo.dtl.dstb"],
+      mdAmt      : messages["orderStockInfo.dtl.dstb"],
+      mdVat      : messages["orderStockInfo.dtl.dstb"],
+      mdTot  	 : messages["orderStockInfo.dtl.dstb"],
+      
+      outTotQty  : messages["orderStockInfo.dtl.out"],
+      outAmt     : messages["orderStockInfo.dtl.out"],
+      outVat     : messages["orderStockInfo.dtl.out"],
+      outTot  	 : messages["orderStockInfo.dtl.out"],
+      
+      inTotQty   : messages["orderStockInfo.dtl.in"],
+      inAmt      : messages["orderStockInfo.dtl.in"],
+      inVat      : messages["orderStockInfo.dtl.in"],
+      inTot  	 : messages["orderStockInfo.dtl.in"],
+      
+      penaltyAmt : messages["orderStockInfo.dtl.penaltyAmt"],
+      remark	 : messages["orderStockInfo.dtl.remark"],
+    };
+
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
+
+  };
+
+  //다른 컨트롤러의 broadcast 받기
+  $scope.$on("orderDtlExcelCtrl", function (event, data) {
+	  if(data != undefined && data.excelFg) {
+		  $scope.slipNo    = data.slipNo;
+		  $scope.inSlipNo  = data.inSlipNo;
+		  $scope.startDate = data.startDate;
+		  $scope.endDate   = data.endDate;
+		  $scope.checked   = data.checked
+		  $scope.excelFg   = data.excelFg;
+		  $scope.searchOrderDtlList(false);
+	  }else{
+		  $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+		  return false;
+	  }
+
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+  
+  $scope.displayChg = function () {
+	  var check = $scope.checked;
+	  var grid = wijmo.Control.getControl("#orderDtlExcelGrid");
+      var columns = grid.columns;
+      var length  = grid.columns.length;
+      
+      if(check == 'all'){
+    	  for(var i=0; i<length; i++){
+    		  if(columns[i].binding != 'poUnitFg' && columns[i].binding != 'reqDate'){
+    			  columns[i].visible = true;
+    		  }
+          }
+      }else if(check == 'cntSum'){
+    	  for(var i=0; i<length; i++){
+    		  var colLength = columns[i].binding.length;
+    		  if(columns[i].binding != 'penaltyAmt'){
+    			  if(columns[i].binding.substring(colLength,colLength-3) == 'Amt'||columns[i].binding.substring(colLength,colLength-3) == 'Vat'){
+        			  columns[i].visible = false;
+        		  }
+    		  }
+          }
+      }
+  }
+
+
+  // 주문대비 입고현황 상세 리스트 조회
+  $scope.searchOrderDtlList = function (isPageChk) {
+    // 파라미터
+    var params       = {};
+    params.slipNo    = $scope.slipNo;
+    params.inSlipNo  = $scope.inSlipNo;
+    params.startDate = $scope.startDate;
+    params.endDate   = $scope.endDate;
+    params.isPageChk = isPageChk;
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquirySub("/iostock/frnchs/order/ioStockDtl/excelList.sb", params, function () {
+		var flex = $scope.excelFlex;
+		//row수가 0이면
+		if (flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+		
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			}, '본사-매장간 입출고현황_주문대비 입출고현황 상세_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+    });
+    $scope.displayChg();
+  };
+}]);
+

@@ -2113,5 +2113,21 @@
 			</when>
 		</choose>
 	</sql>
-
+	
+	<!-- 창고선택 조회 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : iostockCmmVO
+        COMMENTS : 창고선택 리스트를 조회한다.
+    -->
+    <select id="selectStorageList" parameterType="stockManageViewVO" resultType="DefaultMap">
+        /* USE : IostockCmmMapper.selectStorageList */
+        SELECT  STORAGE_CD, STORAGE_NM
+		FROM    TB_MS_STORAGE
+		WHERE   STORE_CD      =   #{storeCd}
+		AND     USE_YN = 'Y'
+		AND     STORAGE_CD   >=   '000'
+		AND     STORAGE_CD   <![CDATA[<]]>    '999'    
+		ORDER BY STORE_CD
+    </select>
 </mapper>
