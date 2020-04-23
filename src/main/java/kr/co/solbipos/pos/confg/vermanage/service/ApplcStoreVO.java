@@ -55,6 +55,8 @@ public class ApplcStoreVO extends PageVO {
     private String searchSatus;
     /** 프로시져 결과 */
     private String result;
+    /** 복수검색여부 */
+    private String chkMulti;
 
 
     /**
@@ -263,5 +265,13 @@ public class ApplcStoreVO extends PageVO {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getChkMulti() {
+        return chkMulti;
+    }
+
+    public void setChkMulti(String chkMulti) {
+        this.chkMulti = chkMulti;
     }
 }

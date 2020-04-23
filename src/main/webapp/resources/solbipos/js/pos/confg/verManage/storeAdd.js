@@ -28,7 +28,7 @@ function search(){
 // 매장코드 입력양식 값 제어
 function setText(){
 
-  if ($("#chkNulti").prop("checked")) {
+  if ($("#chkMulti").prop("checked")) {
     var val = $("#srchStoreCd").val();
     var pattern = /[^a-zA-Z0-9]/gi;   // 특수문자, 공백, 한글 제거
 
@@ -177,6 +177,13 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = addStoreScope.getSelectedHqOffice();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
+
+    // 복수검색 기능 사용여부
+    if ($("#chkMulti").prop("checked")) {
+      params.chkMulti = "Y";
+    }else{
+      params.chkMulti = "N";
+    }
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
     }, false);

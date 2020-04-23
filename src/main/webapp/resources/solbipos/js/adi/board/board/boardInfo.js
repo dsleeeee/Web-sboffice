@@ -357,7 +357,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $('#summernote').summernote( {
             height: 200,
             toolbar: [
-                ['fontname', ['fontname']],
+                /*['fontname', ['fontname']],*/
                 ['fontsize', ['fontsize']],
                 ['color', ['color']],
                 ['para', ['paragraph']],

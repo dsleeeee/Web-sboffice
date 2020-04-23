@@ -252,10 +252,13 @@ public class VerManageServiceImpl implements VerManageService {
 
         // 매장코드 복수검색 추가(미적용매장 리스트 검색시에만 사용)
         if(applcStore.getSearchSatus() != null && "N".equals(applcStore.getSearchSatus())){
-            String[] arrStoreCd = applcStore.getStoreCd().split(",");
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    applcStore.setArrStoreCd(arrStoreCd);
+            if(applcStore.getChkMulti() != null && "Y".equals(applcStore.getChkMulti())){
+                String[] arrStoreCd = applcStore.getStoreCd().split(",");
+                if (arrStoreCd.length > 0) {
+                    if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+                        applcStore.setArrStoreCd(arrStoreCd);
+                        applcStore.setStoreCd("");
+                    }
                 }
             }
         }
