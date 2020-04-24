@@ -16,5 +16,7 @@ public interface PosExcclcMapper {
 
     /** 포스별매출 일자별 탭 - 리스트 조회 */
     DefaultMap<String> getPosExcclcDetailInfo(PosExcclcVO posExcclcVO);
-
+    
+    /** 포스별매출 일자별 탭 - 매장 및 포스 전체 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getPosExcclcExcelList(PosExcclcVO posExcclcVO);
 }

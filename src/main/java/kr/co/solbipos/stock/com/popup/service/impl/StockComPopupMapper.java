@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.stock.com.popup.service.StockComPopupVO;
 import kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO;
 import kr.co.solbipos.stock.manage.view.service.StockManageViewVO;
@@ -34,5 +35,6 @@ public interface StockComPopupMapper {
     List<DefaultMap<String>> getPeriodiostockProdQtyDtlList(PeriodIostockVO periodIostockVO);
     /** 실사/조정/폐기 상세 리스트 조회 */
     List<DefaultMap<String>> getCmmViewDtlList(StockManageViewVO stockManageViewVO);
-
+    /** 실사/조정/폐기  - 창고선택모듈 리스트 조회 */
+    List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO);
 }

@@ -11,6 +11,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 	/*$scope.srchTableMonthStartDate = wcombo.genDateVal("#srchTableMonthStartDate", gvStartDate);
 	$scope.srchTableMonthEndDate   = wcombo.genDateVal("#srchTableMonthEndDate", gvEndDate);*/
+	$scope.isSearch = false;
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("tableMonthListScaleBox", gvListScaleBoxData);
@@ -18,8 +19,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
-//		var storeCd = $("#tableMonthSelectStoreCd").val();;
-//		$scope.getReTableNmList(storeCd, "", false);
+		var storeCd = $("#tableMonthSelectStoreCd").val();
+		$scope.getReTableNmList(storeCd, "", false);
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("tableMonthCtrl");
@@ -185,6 +186,13 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 			return false;
 		}
 
+		$scope.excelStoreCd = params.storeCd;
+		$scope.excelTableCd = params.tableCd;
+		$scope.excelHqOfficeCd = params.hqOfficeCd;
+		$scope.excelStartDate = params.startDate;
+		$scope.excelEndDate = params.endDate;
+		$scope.isSearch		= true;
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/table/month/list.sb", params, function() {
 
@@ -226,16 +234,6 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	$scope.excelDownloadDay = function () {
 		// 파라미터
 		var params = {};
-		params.storeCd = $("#tableMonthSelectStoreCd").val();
-		params.tableCd = $("#tableMonthSelectTableCd").val();
-
-		//등록일자 '전체기간' 선택에 따른 params
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchTableMonthStartDate, 'yyyyMM');
-	    	params.endDate = wijmo.Globalize.format($scope.srchTableMonthEndDate, 'yyyyMM');
-		}
-
-		params.isPageChk = true;
 
 		$scope._broadcast('tableMonthExcelCtrl',params);
 	};
@@ -452,28 +450,16 @@ app.controller('tableMonthExcelCtrl', ['$scope', '$http', '$timeout', function (
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableMonthExcelCtrl", function (event, data) {
 
-		if( $("#tableMonthSelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	   	 	return false;
-	    }
+		var storeCd = $scope.excelStoreCd;
+		var tableCd = $scope.excelTableCd;
 
-		var storeCd = $("#tableMonthSelectStoreCd").val();
-		var tableCd = $("#tableMonthSelectTableCd").val();
-
-		if(data != undefined) {
-
-			if(data.startDate > data.endDate){
-				$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-				return false;
-			}
-
-			$scope.storeCd = data.storeCd;
-			$scope.tableCd = data.tableCd;
-			$scope.startDate = data.startDate;
-			$scope.endDate = data.endDate;
-
+		if(data != undefined && $scope.isSearch) {
 			$scope.getReTableNmList(storeCd, tableCd, true);
-
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
@@ -483,12 +469,10 @@ app.controller('tableMonthExcelCtrl', ['$scope', '$http', '$timeout', function (
 
 		// 파라미터
 		var params = {};
-		params.storeCd = $scope.storeCd;
-		params.tableCd = $scope.tableCd;
-		params.listScale = 0 //-페이지 스케일 갯수
-		params.isPageChk = isPageChk;
-	    params.startDate = $scope.startDate;
-		params.endDate = $scope.endDate;
+		params.storeCd = $scope.excelStoreCd;
+		params.tableCd = $scope.excelTableCd;
+	    params.startDate = $scope.excelStartDate;
+		params.endDate = $scope.excelEndDate;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/table/month/excelList.sb", params, function() {

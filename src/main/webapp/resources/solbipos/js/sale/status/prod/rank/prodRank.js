@@ -12,7 +12,8 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.srchStartDate = wcombo.genDateVal("#srchRankStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchRankEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
-
+  $scope.isSearch = false;
+  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodRanklistScaleBox', gvListScaleBoxData);
 
@@ -50,6 +51,10 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 파라미터
     var params       = {};
     params.storeCd   = $("#prodRankSelectStoreCd").val();
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	params.isPageChk = isPageChk;
+	params.orgnFg    = $scope.orgnFg;
+	
 
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -61,12 +66,16 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
-	params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	params.isPageChk = isPageChk;
-	params.orgnFg    = $scope.orgnFg;
+	
+    $scope.excelStartDate	=	params.startDate;
+    $scope.excelEndDate		=	params.endDate;
+    $scope.excelStoreCd		=	params.storeCd;
+	$scope.excelListScale	=	params.listScale;
+	$scope.excelOrgnFg		=	params.orgnFg;
+	$scope.isSearch			= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {}, false);
+    $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {});
 
     // 상품매출순위별 바 차트
     $scope._broadcast("prodRankChartCtrl", params);
@@ -100,8 +109,9 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 엑셀 다운로드
   $scope.excelDownloadRank = function () {
+	  var params       = {};
     /* 엑셀다운로드 */
-    $scope._broadcast('prodRankExcelCtrl');    
+    $scope._broadcast('prodRankExcelCtrl', params);    
   };
 }]);
 
@@ -245,8 +255,7 @@ app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	  // 다른 컨트롤러의 broadcast 받기
 	  $scope.$on("prodRankExcelCtrl", function (event, data) {
 	    $scope.searchProdRankExcelList(true);
-	    // 기능수행 종료 : 반드시 추가
-	    event.preventDefault();
+	  
 	  });
 	  
 	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
@@ -265,22 +274,15 @@ app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
 	    // 파라미터
 	    var params       = {};
-	    params.storeCd   = $("#prodRankSelectStoreCd").val();
-
-	    // 등록일자 '전체기간' 선택에 따른 params
-	    if(!$scope.isChecked){
-	      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-	    }
-
-	    if(params.startDate > params.endDate){
-	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-	   	 	return false;
-	    }
-		params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+	    
+	    params.startDate	=	$scope.excelStartDate;
+	    params.endDate		=	$scope.excelEndDate;	
+	    params.storeCd 	=	$scope.excelStoreCd;
+		params.listScale  =	 $scope.excelListScale;
 		params.isPageChk = isPageChk;
-		params.orgnFg    = $scope.orgnFg;
-
+		params.orgnFg    = $scope.excelOrgnFg;
+				
+		
 		$scope.isChkProdClassDisplay();
 		
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수

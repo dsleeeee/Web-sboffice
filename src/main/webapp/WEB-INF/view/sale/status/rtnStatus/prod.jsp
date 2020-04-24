@@ -153,6 +153,30 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+  <%-- 엑셀 리스트 --%>
+  <div class="wj-gridWrap2 mt20" style="display:none;" ng-controller="rtnStatusProdExcelCtrl">
+  		<wj-flex-grid
+  			id="rtnStatusProdExcelGrid"
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="excelFlex"
+            initialized="initGrid(s,e)"
+            is-read-only="true"
+            item-formatter="_itemFormatter">
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+   </div>
+   <%-- //엑셀 리스트 --%>
 </div>
 
 <script type="text/javascript">

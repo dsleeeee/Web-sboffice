@@ -436,34 +436,6 @@
 
                 	<%-- 미리보기 end --%>
 
-                    <%-- 위치
-                    <div class="touch-box mt10">
-                        <span class="bk lh30 s12">위치</span>
-                        <div class="touch-box mb10 s12">
-                            <div class="fl w45 mb5">
-                                <span class="txtIn bk lh30 s14 w30px">X</span>
-                                <input type="text" class="fr sb-input w50px tc" id="attrCellX" maxlength="4">
-                            </div>
-                            <div class="fr w45 mb5">
-                                <span class="txtIn bk lh30 s14 w30px">Y</span>
-                                <input type="text" class="fr sb-input w50px tc" id="attrCellY" maxlength="4">
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="fl w45">
-                                <span class="bk lh30 s12 w30px">
-                                    <s:message code="func.width" /></span>
-                                <input type="text" class="fr sb-input w50px tc" id="attrCellW" maxlength="4">
-                            </div>
-                            <div class="fr w45">
-                                <span class="bk lh30 s12 w30px">
-                                    <s:message code="func.height" /></span>
-                                <input type="text" class="fr sb-input w50px tc" id="attrCellH" maxlength="4">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    //위치 --%>
-
                     <%-- 상세 폰트 설정 Start --%>
                     <div id="divProdNavWrap" class="prodNavWrap t2">
                         <div class="keyStyleWrap">
@@ -514,6 +486,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <%-- //상세 폰트 설정 end --%>
+
                 </div>
                 <div class="clearfix"></div>
                 <%--//right --%>

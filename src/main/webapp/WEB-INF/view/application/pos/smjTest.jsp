@@ -5,7 +5,7 @@
 <f:form modelAttribute="sessionInfo" method="post" action="/application/pos/posLogin.sb">
     매장코드 : <input type="text" id="storeCd" name="storeCd" value="DS00001"/>
     <input type="text" id="userId" name="userId" value="ds00001"/>
-    <하드웨어인증키 : <input type="text" id="hwAuthKey" name="hwAuthKey" value="1234"/>
+    하드웨어인증키 : <input type="text" id="hwAuthKey" name="hwAuthKey" value="1234"/>
     요청url : <input type="text" id="url" name="url" value="simpleMemberJoin"/>
     <button type="submit" class="btn_skyblue">gogogogo</button>
 </f:form>

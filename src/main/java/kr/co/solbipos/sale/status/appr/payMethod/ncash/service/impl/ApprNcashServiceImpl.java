@@ -23,12 +23,12 @@ public class ApprNcashServiceImpl implements ApprNcashService {
     }
 
 
-    
-    /** 신용카드 승인현황 - 리스트 조회 */
+
+    /** 비매출현금 승인현황 탭 - 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprNcashList(ApprNcashVO apprNcashVO, SessionInfoVO sessionInfoVO) {
 		apprNcashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		
+
 		if (apprNcashVO.getPosNo() != null && !"".equals(apprNcashVO.getPosNo())) {
 			String[] arrPosNo = apprNcashVO.getPosNo().split(",");
 			if (arrPosNo.length > 0) {
@@ -45,7 +45,32 @@ public class ApprNcashServiceImpl implements ApprNcashService {
     			}
     		}
     	}
-		
+
 		return apprNcashMapper.getApprNcashList(apprNcashVO);
+	}
+
+	/** 비매출현금 승인현황 탭 - 엑셀 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getApprNcashExcelList(ApprNcashVO apprNcashVO, SessionInfoVO sessionInfoVO) {
+		apprNcashVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if (apprNcashVO.getPosNo() != null && !"".equals(apprNcashVO.getPosNo())) {
+			String[] arrPosNo = apprNcashVO.getPosNo().split(",");
+			if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				apprNcashVO.setArrPosNo(arrPosNo);
+//        				apprNcashVO.setArrStorePos(arrPosNo);
+    			}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprNcashVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprNcashVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+
+		return apprNcashMapper.getApprNcashExcelList(apprNcashVO);
 	}
 }

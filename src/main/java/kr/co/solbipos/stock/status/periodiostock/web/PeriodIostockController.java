@@ -114,6 +114,7 @@ public class PeriodIostockController {
 	@RequestMapping(value = "/prod/periodiostockExcelList.sb", method = RequestMethod.POST)
 	@ResponseBody
 	public Result getPeriodiostockExcelList(HttpServletRequest request, HttpServletResponse response, Model model, PeriodIostockVO periodIostockVO) {
+		System.out.println("테스트: " + periodIostockVO.getUnitFg());
 		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 		List<DefaultMap<String>> list = periodIostockService.getPeriodIostockExcelList(periodIostockVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, periodIostockVO);

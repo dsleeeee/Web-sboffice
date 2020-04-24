@@ -20,4 +20,10 @@ public interface HqCurrMapper {
     
     /** 현재고현황 - 매장 현재고현황 상세리스트 조회 */
     List<DefaultMap<String>> getStoreCurrDtlList(HqCurrVO hqCurrVO);
+    
+    /** 현재고현황 - 본사 현재고현황 엑셀 전체 리스트 조회 */
+    List<DefaultMap<String>> getHqCurrExcelList(HqCurrVO hqCurrVO);
+    
+    /** 현재고현황 - 매장 현재고현황 엑셀 전체 리스트 조회 */
+    List<DefaultMap<String>> getHqStoreCurrExcelList(HqCurrVO hqCurrVO);
 }

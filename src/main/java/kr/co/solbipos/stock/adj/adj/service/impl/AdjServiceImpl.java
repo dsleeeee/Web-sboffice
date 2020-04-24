@@ -117,6 +117,7 @@ public class AdjServiceImpl implements AdjService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            adjVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = adjMapper.getHqAdjRegistList(adjVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -153,6 +154,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setRegDt(currentDt);
                 adjHdVO.setModId(sessionInfoVO.getUserId());
                 adjHdVO.setModDt(currentDt);
+                adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
 
                 // 신규등록인 경우
                 if(seqNo.equals("")) {
@@ -261,6 +263,7 @@ public class AdjServiceImpl implements AdjService {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            adjVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = adjMapper.getHqAdjRegistList(adjVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장

@@ -47,7 +47,7 @@
 							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDayOfWeekSelectStore"/>
 								<jsp:param name="subTargetId" value="tableDayOfWeekSelectTable"/>
-								<jsp:param name="closeFunc" value="getTableNmList"/>
+								<jsp:param name="closeFunc" value="closeSelectStore"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -67,6 +67,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableDayOfWeekSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableDayOfWeekSelectStore"/>
+							<jsp:param name="closeFunc" value="closeSelectTable"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>

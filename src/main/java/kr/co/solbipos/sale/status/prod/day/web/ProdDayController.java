@@ -84,4 +84,26 @@ public class ProdDayController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodDayVO);
     }
+    
+    /**
+     * 상품별 매출 -일자별상품 엑셀 다운로드 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodDayVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdDayExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdDayVO prodDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodDayService.getProdDayExcelList(prodDayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodDayVO);
+    }
+    
 }

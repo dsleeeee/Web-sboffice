@@ -129,7 +129,8 @@ public class VolmErrServiceImpl implements VolmErrService {
                 result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             }
-
+                        
+        	
             //출고수량을 입고수량으로 수정
             result = volmErrMapper.updateOutToIn(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));

@@ -3,12 +3,12 @@
  */
 var app = agrid.getApp();
 var prodNoEnvFg = "";
-/** 분류별상품 상세현황 controller */
+/** 매장별 입출고내역 controller */
 app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('frnchsStoreCtrl', $scope, $http, true));
   $scope.slipFg = 1;
-
+  $scope.excelFg = false;
   // 조회일자 세팅
   $scope.srchStartDate = wcombo.genDateVal("#srchClassStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchClassEndDate", getToday());
@@ -127,10 +127,16 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
 
+    $scope.storeCdForExcel   = params.storeCd;
+    $scope.storeNmForExcel   = params.storeNm;
+    
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+      
+      $scope.startDateForExcel = params.startDate;
+      $scope.endDateForExcel   = params.endDate;
     }
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -140,6 +146,7 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
      $scope._inquiryMain("/iostock/frnchs/store/store/frnchsStoreList.sb", params, function() {});
     //$scope._inquiryMain("/sale/status/table/dayperiod/list.sb", params, function() {});
 
+     $scope.excelFg = true;
   };
 
   // 매장선택 모듈 팝업 사용시 정의
@@ -232,25 +239,16 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 엑셀 다운로드
   $scope.excelDownloadClass = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
+	// 파라미터
+	var params = {};
+	params.storeCd   = $scope.storeCdForExcel;
+    params.storeNm   = $scope.storeNmForExcel;
+    params.startDate = $scope.startDateForExcel;
+  	params.endDate 	 = $scope.endDateForExcel;
+  	params.orgnFg    = $scope.orgnFg;
+  	params.excelFg   = $scope.excelFg;
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '본사매장간입출고내역_매장별입출고내역_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	$scope._broadcast('frnchsStoreExcelCtrl',params);
   };
 
 //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
@@ -326,4 +324,94 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
   };
 
 
+}]);
+
+
+/** 매장별 입출고내역 엑셀리스트 controller */
+app.controller('frnchsStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('frnchsStoreExcelCtrl', $scope, $http, true));
+//  $scope.slipFg = 1;
+  $scope.orgnFg = gvOrgnFg;
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    // 그리드 링크 효과
+	s.formatItem.addHandler(function (s, e) {
+		if (e.panel === s.cells) {
+			var col = s.columns[e.col];
+			if (col.binding === "storeNm"){ // 매장명
+				wijmo.addClass(e.cell, 'wijLink');
+			}
+		}
+	});
+  };
+
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("frnchsStoreExcelCtrl", function (event, data) {
+	  if(data != undefined && data.excelFg) {
+			if(data.startDate > data.endDate){
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			 	return false;
+			}
+			
+			$scope.storeCd   = data.storeCd;
+			$scope.storeNm   = data.storeNm;
+			$scope.startDate = data.startDate;
+			$scope.endDate   = data.endDate;
+			
+			$scope.searchFrnchsStoreList(false);
+		}else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 매장별 입출고내역 리스트 조회
+  $scope.searchFrnchsStoreList = function (isPageChk) {
+    // 파라미터
+    var params       = {};
+    params.storeCd   = $scope.storeCd;
+    params.storeNm   = $scope.storeNm;
+    params.orgnFg    = $scope.orgnFg;
+    params.startDate = $scope.startDate;
+    params.endDate   = $scope.endDate;
+    params.isPageChk = isPageChk;
+    
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+     $scope._inquirySub("/iostock/frnchs/store/store/frnchsStoreExcelList.sb", params, function() {
+
+ 		var flex = $scope.excelFlex;
+ 		//row수가 0이면
+ 		if (flex.rows.length <= 0) {
+ 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+ 			return false;
+ 		}
+ 		
+ 		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+ 		$timeout(function () {
+ 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+ 				includeColumnHeaders: true,
+ 				includeCellStyles   : true,
+ 				includeColumns      : function (column) {
+ 					return column.visible;
+ 				}
+ 			}, '본사매장간입출고내역_매장별입출고내역_'+getToday()+'.xlsx', function () {
+ 				$timeout(function () {
+ 					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+ 				}, 10);
+ 			});
+ 		}, 10);
+     });
+  };
 }]);

@@ -111,6 +111,8 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
           $scope._broadcast('rtnDstmnDtlCtrl', params);
@@ -231,6 +233,8 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 거래명세표
     else if (reportFg === 'trans') {
       params.stmtAcctFg = $scope.stmtAcctFg;
+      params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+      params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
       $scope._broadcast('transReportCtrl', params);
     }
     // 세금계산서

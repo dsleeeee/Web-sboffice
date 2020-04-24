@@ -15,5 +15,7 @@ public interface ProdFrnchsMapper {
     List<DefaultMap<String>> getProdFrnchsList(ProdFrnchsVO prodFrnchsVO);
     /** 거래처 상품별 입출고내역 - 상품별 입출고내역 팝업 리스트 조회 */
 	List<DefaultMap<String>> getProdInOutstockInfoList(ProdFrnchsVO prodFrnchsVO);
+	/** 거래처 상품별 입출고내역 - 상품별 입출고내역 엑셀리스트 조회 */
+	List<DefaultMap<String>> getProdFrnchsExcelList(ProdFrnchsVO prodFrnchsVO);
 
 }

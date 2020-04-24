@@ -91,10 +91,33 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+    params.storeCd = $("#rtnDstbCloseProdAddProdSelectStoreCd").val();
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);
+    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
+	    var dstbFg = response.data.data;
+	    
+	    if(dstbFg < 1){ // 마감이 아닐때
+		    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		    $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);
+	    }else{
+	    	$scope._popMsg(messages["rtnDstbCloseStore.add.txt2"]); // 이미 마감된 매장입니다.
+	    	// 그리드 초기화
+		    var rtnDstbCloseProdAddProdScope = agrid.getScope('rtnDstbCloseProdAddProdCtrl');
+		    rtnDstbCloseProdAddProdScope.dtlGridDefault();
+	    }
+    });
+  };
+  
+  // 그리드 초기화
+  $scope.dtlGridDefault = function () {
+    $timeout(function () {
+      var cv          = new wijmo.collections.CollectionView([]);
+      cv.trackChanges = true;
+      $scope.data     = cv;
+      $scope.flex.refresh();
+    }, 10);
   };
 
   // 매장선택 모듈 팝업 사용시 정의

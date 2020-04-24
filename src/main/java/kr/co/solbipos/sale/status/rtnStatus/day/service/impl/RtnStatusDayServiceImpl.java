@@ -76,4 +76,57 @@ public class RtnStatusDayServiceImpl implements RtnStatusDayService {
         return rtnStatusDayMapper.getRtnStatusProdList(rtnStatusDayVO);
 	}
 
+
+	@Override
+	public List<DefaultMap<String>> getRtnstatusDayExcelList(RtnStatusDayVO rtnStatusDayVO,
+			SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+    	if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+        	
+        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+    	
+        return rtnStatusDayMapper.getRtnstatusDayExcelList(rtnStatusDayVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getRtnstatusDayDtlExcelList(RtnStatusDayVO rtnStatusDayVO,
+			SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return rtnStatusDayMapper.getRtnstatusDayDtlExcelList(rtnStatusDayVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getRtnStatusPosDtlExcelList(RtnStatusDayVO rtnStatusDayVO,
+			SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return rtnStatusDayMapper.getRtnStatusPosDtlExcelList(rtnStatusDayVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getRtnStatusProdExcelList(RtnStatusDayVO rtnStatusDayVO,
+			SessionInfoVO sessionInfoVO) {
+		rtnStatusDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		rtnStatusDayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		
+		if (rtnStatusDayVO.getStoreCd() != null && !"".equals(rtnStatusDayVO.getStoreCd())) {
+        	String[] arrStoreCd = rtnStatusDayVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				rtnStatusDayVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        return rtnStatusDayMapper.getRtnStatusProdExcelList(rtnStatusDayVO);
+	}
+
 }

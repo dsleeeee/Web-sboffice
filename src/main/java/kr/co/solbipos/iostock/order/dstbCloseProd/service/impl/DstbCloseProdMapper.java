@@ -37,4 +37,7 @@ public interface DstbCloseProdMapper {
     /** 분배마감 추가등록 분배등록 리스트 등록 */
     int insertDstbCloseProdAddRegist(DstbCloseProdVO dstbCloseProdVO);
 
+    /** 분배마감 - 매장 마감여부 확인 */
+    int getDstbCloseProdAddProdDstbList(DstbCloseProdVO dstbCloseProdVO);
+
 }

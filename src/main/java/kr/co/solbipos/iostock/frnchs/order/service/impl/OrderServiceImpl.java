@@ -60,4 +60,39 @@ public class OrderServiceImpl implements OrderService {
 	public List<DefaultMap<String>> getSrchOrderProcFgList(OrderVO orderVO, SessionInfoVO sessionInfoVO) {
 		return orderMapper.getSrchOrderProcFgList(orderVO);
 	}
+
+	/** 본사-매장간 입출고 내역 - 주문대비 입고현황 엑셀리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getOrderExcelList(OrderVO orderVO, SessionInfoVO sessionInfoVO) {
+        orderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        orderVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        
+        if(orderVO.getStoreCd() != null && !"".equals(orderVO.getStoreCd())) {
+        	String[] arrStoreCd = orderVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				orderVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+        }
+
+        return orderMapper.getOrderExcelList(orderVO);
+	}
+
+	/** 본사-매장간 입출고 내역 - 주문대비 입고현황 상세 엑셀리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getOrderDtlExcelList(OrderVO orderVO, SessionInfoVO sessionInfoVO) {
+    	orderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	orderVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
+
+        result = orderMapper.getOrderDtlList(orderVO);
+        
+        if(orderVO.getSlipNo() != null && !"".equals(orderVO.getSlipNo())) {
+        	result = orderMapper.getOrderDtlExcelList(orderVO);
+        }
+
+        return result;
+	}
 }

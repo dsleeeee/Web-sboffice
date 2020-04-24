@@ -172,6 +172,7 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
     
     $scope.storeCdForExcel     =   params.storeCd;
     $scope.cornrCdForExcel     =   params.cornrCd;
+    $scope.searchChecked       = $scope.isChecked;
     
     if(params.cornrCd == ""){ //-해당 매장의 코너가 없을시 조회x
     	params.cornrCd = -1;
@@ -230,8 +231,10 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 	var params = {};
 	params.storeCd   = $scope.storeCdForExcel;
     params.cornrCd   = $scope.cornrCdForExcel;
-    params.startDate = $scope.startDateForExcel;
-  	params.endDate 	 = $scope.endDateForExcel;
+  	if(!$scope.searchChecked){
+    	params.startDate = $scope.startDateForExcel;
+        params.endDate   = $scope.endDateForExcel;
+    }
   	params.excelFg   = $scope.excelFg;
 	
 	$scope._broadcast('cornerDayPeriodExcelCtrl',params);
@@ -384,6 +387,8 @@ app.controller('cornerDayPeriodExcelCtrl', ['$scope', '$http', '$timeout', funct
     var params       = {};
     params.storeCd   = $scope.storeCd;
     params.cornrCd   = $scope.cornrCd;
+    params.startDate = $scope.startDate;
+    params.endDate   = $scope.endDate;
     params.isPageChk = isPageChk; //-페이지 초기화 여부
 
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수

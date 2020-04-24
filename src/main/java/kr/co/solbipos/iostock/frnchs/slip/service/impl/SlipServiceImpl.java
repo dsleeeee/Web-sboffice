@@ -65,4 +65,28 @@ public class SlipServiceImpl implements SlipService {
 	public List<DefaultMap<String>> getSrchProcFgList(SlipVO slipVO, SessionInfoVO sessionInfoVO) {
 		return slipMapper.getSrchProcFgList(slipVO);
 	}
+
+	/** 본사 전표별 입출고내역 - 전표별 입출고내역 엑셀리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getSlipExcelList(SlipVO slipVO, SessionInfoVO sessionInfoVO) {
+		slipVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        slipVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        // 매장 멀티 선택
+        if(!StringUtil.getOrBlank(slipVO.getStoreCd()).equals("")) {
+            slipVO.setArrStoreCd(slipVO.getStoreCd().split(","));
+        }
+
+        return slipMapper.getSlipExcelList(slipVO);
+	}
+
+	/** 본사 전표별 입출고내역 - 전표별 입출고내역 상세 엑셀리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getSlipDtlExcelList(SlipVO slipVO, SessionInfoVO sessionInfoVO) {
+		slipVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        slipVO.setStoreCd(sessionInfoVO.getStoreCd());
+        slipVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        return slipMapper.getSlipDtlExcelList(slipVO);
+	}
 }

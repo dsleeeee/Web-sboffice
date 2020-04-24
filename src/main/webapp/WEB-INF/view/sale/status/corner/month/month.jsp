@@ -84,6 +84,8 @@
       </c:if>
                 <input type="hidden" id="cornerMonthSelectCornerCd" value=""/>
                 <input type="hidden" id="cornerMonthSelectCornerName" value=""/>
+                <input type="hidden" id="cornerMonthSelectExcelCornerCd" value=""/>
+                <input type="hidden" id="cornerMonthSelectExcelCornerName" value=""/>
       </tr>
 
       <tr>

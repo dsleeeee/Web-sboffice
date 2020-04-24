@@ -21,4 +21,10 @@ public interface SlipService {
     /** 전표별 입출고내역 - 조회조건 진행상태 콤보 리스트 조회  */
     List<DefaultMap<String>> getSrchProcFgList(SlipVO slipVO, SessionInfoVO sessionInfoVO);
 
+    /** 본사 매장간 입출고내역 - 전표별 입출고내역 엑셀리스트 조회 */
+	List<DefaultMap<String>> getSlipExcelList(SlipVO slipVO, SessionInfoVO sessionInfoVO);
+
+	/** 본사 매장간 입출고내역 - 전표별 입출고내역 상세 엑셀리스트 조회 */
+	List<DefaultMap<String>> getSlipDtlExcelList(SlipVO slipVO, SessionInfoVO sessionInfoVO);
+
 }

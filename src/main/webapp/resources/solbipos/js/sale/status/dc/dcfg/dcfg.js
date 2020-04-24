@@ -15,6 +15,8 @@ app.controller('dcDcfgCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope.srchDcDcfgEndDate   = wcombo.genDateVal("#srchDcDcfgEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
 
+  $scope.isSearch = false;
+
   // 리스트 콤보박스 데이터 Set
   $scope._setComboData("dcDcfgListScaleBox", gvListScaleBoxData);
   $scope._setComboData("dcDcfgDtlListScaleBox", gvListScaleBoxData);
@@ -137,10 +139,17 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
    	 	return false;
     }
 
+    $scope.excelStartDate		= params.startDate;
+	$scope.excelEndDate 		= params.endDate;
+	$scope.excelStoreCd 		= params.storeCd;
+	$scope.excelDcCd			= params.dcCd;
+	$scope.excelHqOfficeCd		= params.hqOfficeCd;
+	$scope.isSearch					= true;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/dc/dcfg/list.sb", params);
 
-    //메인그리드 조회후 상세그리드 조회.
+    //메인그리드 조회후 상세그리드 조회
 	$scope.loadedRows = function(sender, args){
 
 		var rows = sender.rows;
@@ -165,20 +174,17 @@ app.controller('dcDcfgMainCtrl', ['$scope', '$http', '$timeout', function ($scop
 
   //엑셀 다운로드
   $scope.excelDownload = function () {
-
 	// 파라미터
 	var params = {};
-	params.storeCd = $("#dcDcfgSelectStoreCd").val();
-	params.dcCd = $("#dcDcfgSelectDcfgCd").val();
 
-	if(!$scope.isChecked){
-		params.startDate = wijmo.Globalize.format($scope.srchDcDcfgStartDate.value, 'yyyyMMdd');
-    	params.endDate = wijmo.Globalize.format($scope.srchDcDcfgEndDate.value, 'yyyyMMdd');
-	}
+	params.startDate = $scope.excelStartDate;
+	params.endDate = $scope.excelEndDate;
+	params.storeCd = $scope.excelStoreCd;
+	params.dcCd = $scope.excelDcCd;
+	params.hqOfficeCd = $scope.excelHqOfficeCd;
+	params.isSearch = $scope.isSearch;
 
-	params.isPageChk = true;
-
-	$scope._broadcast('dcDcfgExcelCtrl',params);
+	$scope._broadcast('dcDcfgExcelCtrl', params);
 
   };
 
@@ -360,37 +366,32 @@ app.controller('dcDcfgExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("dcDcfgExcelCtrl", function (event, data) {
 
-		var storeCd = $("#dcDcfgSelectStoreCd").val();
-		var dcCd = $("#dcDcfgSelectDcCd").val();
+		$scope.excelStartDate   = data.startDate;
+		$scope.excelEndDate   = data.endDate;
+		$scope.excelStoreCd   = data.storeCd;
+		$scope.excelDcCd   = data.dcCd;
+		$scope.isSearch = data.isSearch;
 
-		if(data != undefined) {
-
-			if(data.startDate > data.endDate){
-				$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-				return false;
-			}
-
-			$scope.storeCd = data.storeCd;
-			$scope.dcCd = data.dcCd;
-			$scope.startDate = data.startDate;
-			$scope.endDate = data.endDate;
-
+		if(data != undefined && $scope.isSearch) {
 			$scope.searchDcDcfgExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
 
-	// 포스별매출일자별 리스트 조회
+	// 할인구분별 엑셀 리스트 조회
 	$scope.searchDcDcfgExcelList = function (isPageChk) {
 
 		// 파라미터
 		var params = {};
-		params.storeCd = $scope.storeCd;
-		params.dcCd = $scope.dcCd;
-		params.listScale = 0 //-페이지 스케일 갯수
-		params.isPageChk = isPageChk;
-	    params.startDate = $scope.startDate;
-		params.endDate = $scope.endDate;
+		params.storeCd = $scope.excelStoreCd;
+		params.dcCd = $scope.excelDcCd;
+	    params.startDate = $scope.excelStartDate;
+		params.endDate = $scope.excelEndDate;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/dc/dcfg/excelList.sb", params, function() {

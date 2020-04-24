@@ -45,6 +45,8 @@ app.controller('rtnInstockConfmCtrl', ['$scope', '$http', '$timeout', function (
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
           $scope._broadcast('rtnInstockConfmDtlCtrl', params);

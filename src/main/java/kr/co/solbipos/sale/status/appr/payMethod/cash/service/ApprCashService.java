@@ -8,4 +8,6 @@ import java.util.List;
 public interface ApprCashService {
     /** 현금 승인현황 - 리스트 조회 */
     List<DefaultMap<String>> getApprCashList(ApprCashVO apprCashVO, SessionInfoVO sessionInfoVO);
+    /** 현금 승인현황 - 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getApprCashExcelList(ApprCashVO apprCashVO, SessionInfoVO sessionInfoVO);
 }

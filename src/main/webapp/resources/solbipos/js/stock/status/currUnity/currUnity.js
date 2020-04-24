@@ -11,6 +11,9 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("currUnityListScaleBox", gvListScaleBoxData);
+  $scope.isMainSearch = false;
+  $scope.isHqSearch = false;
+  $scope.isStoreSearch = false;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -81,6 +84,15 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodClassCd = $scope.prodClassCd;
     params.isPageChk   = isPageChk;
     params.listScale = $scope.listScaleCombo.text;
+    
+    $scope.excelMainProdCd		= params.prodCd;
+    $scope.excelMainProdNm		= params.prodNm;
+    $scope.excelMainBarcdCd		= params.barcdCd;
+    $scope.excelMainVendrCd		= params.vendrCd;
+    $scope.excelMainProdClassCd	= params.prodClassCd;
+    $scope.excelMainListScale	= params.listScale;
+
+    $scope.isMainSearch = true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityList.sb", params);
@@ -151,13 +163,6 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.excelDownload = function () {
 	// 파라미터
 	var params     = {};
-	params.prodCd = $scope.prodCd;
-	params.prodNm = $scope.prodNm;
-	params.barcdCd = $scope.barcdCd;
-	params.vendrCd = $("#currUnitySelectVendrCd").val();
-	params.prodClassCd = $scope.prodClassCd;
-	params.isPageChk   = true;
-	params.listScale = $scope.listScaleCombo.text;
 	
 	$scope._broadcast('currUnityMainExcelCtrl',params);
   };
@@ -203,7 +208,12 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
     var params     = {};
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScaleCombo.text;
-    params.prodCd      =	$scope.srchProdCd
+    params.prodCd      =	$scope.srchProdCd;
+    
+    $scope.excelHqListScale	= params.listScale;
+    $scope.excelHqProdCd	= params.prodCd;
+    
+    $scope.isHqSearch = true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityHqDtlList.sb", params);
@@ -223,9 +233,6 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
   $scope.excelDownload = function () {	  
 	// 파라미터
 	var params     = {};
-	params.isPageChk = true;
-	params.listScale = $scope.listScaleCombo.text;
-	params.prodCd      =	$scope.srchProdCd;
 	
 	$scope._broadcast('currUnityHqDtlExcelCtrl',params);
   };
@@ -271,7 +278,12 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
     var params     = {};
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScale;
-    params.prodCd      =	$scope.srchProdCd
+    params.prodCd      =	$scope.srchProdCd;
+    
+    $scope.excelStoreListScale	= params.listScale;
+    $scope.excelStoreProdCd		= params.prodCd;
+    
+    $scope.isStoreSearch = true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityStoreDtlList.sb", params);
@@ -281,9 +293,6 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
   $scope.excelDownload = function () {
 	// 파라미터
 	var params     = {};
-	params.isPageChk = true;
-	params.listScale = $scope.listScale;
-	params.prodCd      =	$scope.srchProdCd;
 	
 	$scope._broadcast('currUnityStoreDtlExcelCtrl',params);
   };
@@ -308,19 +317,13 @@ app.controller('currUnityMainExcelCtrl', ['$scope', '$http', '$timeout', functio
 	
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("currUnityMainExcelCtrl", function (event, data) {
-		if(data != undefined) {			
-			$scope.prodCd = data.prodCd;
-			$scope.prodNm = data.prodNm;
-			$scope.barcdCd = data.barcdCd;
-			$scope.vendrCd = data.vendrCd;
-			$scope.prodClassCd = data.prodClassCd;
-			$scope.isPageChk = data.isPageChk;
-			$scope.listScale = data.listScale;
-
+		if(data != undefined && $scope.isMainSearch) {			
 			$scope.searchCurrUnityExcelList(true);
 			// 기능수행 종료 : 반드시 추가
 			event.preventDefault();
-
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
@@ -341,19 +344,18 @@ app.controller('currUnityMainExcelCtrl', ['$scope', '$http', '$timeout', functio
 		
 		// 파라미터
 	    var params     = {};
-	    params.prodCd = $scope.prodCd;
-	    params.prodNm = $scope.prodNm;
-	    params.barcdCd = $scope.barcdCd;
-	    params.vendrCd = $("#currUnitySelectVendrCd").val();
-	    params.prodClassCd = $scope.prodClassCd;
-	    params.isPageChk   = isPageChk;
-	    params.listScale = $scope.listScaleCombo.text;
+	    params.prodCd = $scope.excelMainProdCd;
+	    params.prodNm = $scope.excelMainProdNm;
+	    params.barcdCd = $scope.excelMainBarcdCd;
+	    params.vendrCd = $scope.excelMainVendrCd;
+	    params.prodClassCd = $scope.excelMainProdClassCd;
+	    params.listScale = $scope.excelMainListScale;
 
 		$scope.isChkProdClassDisplay();
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityExcelList.sb", params, function(){
-			if ($scope.mainExcelFlex.rows.length <= 0) {
+			if ($scope.mainExcelFlex.rows.length <= 0 || !$scope.isMainSearch) {
 			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			      return false;
 			    }
@@ -418,7 +420,7 @@ app.controller('currUnityHqDtlExcelCtrl', ['$scope', '$http', '$timeout', functi
 	    
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/stock/status/currUnity/prod/getCurrUnityHqDtlExcelList.sb", params, function(){
-			if ($scope.HqDtlExcelFlex.rows.length <= 0) {
+			if ($scope.HqDtlExcelFlex.rows.length <= 0 || !$scope.isHqSearch) {
 		        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 		        return false;
 		      }
@@ -483,7 +485,7 @@ app.controller('currUnityStoreDtlExcelCtrl', ['$scope', '$http', '$timeout', fun
 	    
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquirySub("/stock/status/currUnity/prod/getCurrUnityStoreDtlExcelList.sb", params, function(){
-			if ($scope.storeDtlExcelFlex.rows.length <= 0) {
+			if ($scope.storeDtlExcelFlex.rows.length <= 0 || !$scope.isStoreSearch) {
 			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			      return false;
 			    }

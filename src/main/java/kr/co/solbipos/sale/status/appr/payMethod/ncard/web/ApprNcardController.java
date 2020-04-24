@@ -23,14 +23,14 @@ import kr.co.solbipos.sale.status.appr.payMethod.ncard.service.ApprNcardVO;
 
 /**
  * @Class Name : ApprCardController.java
- * @Description : 매출관리 > 승인현황 > 신용카드 승인현황 탭
+ * @Description : 매출관리 > 승인현황 > 비매출카드 승인현황 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -52,7 +52,7 @@ public class ApprNcardController {
 
 
     /**
-     * 신용카드 승인현황 - 페이지 이동
+     * 비매출카드 승인현황 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -67,7 +67,7 @@ public class ApprNcardController {
 
 
     /**
-     * 신용카드 승인현황 - 리스트 조회
+     * 비매출카드 승인현황 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -82,9 +82,30 @@ public class ApprNcardController {
         Model model, ApprNcardVO apprNcardVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        
+
         List<DefaultMap<String>> list = apprNcardService.getApprNcardList(apprNcardVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprNcardVO);
     }
-    
+
+    /**
+     * 비매출카드 승인현황 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/ncard/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprNcardExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprNcardVO apprNcardVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprNcardService.getApprNcardExcelList(apprNcardVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprNcardVO);
+    }
+
 }

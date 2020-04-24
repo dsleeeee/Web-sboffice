@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.payMethod.mcoupon.service.ApprMcouponVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -86,5 +86,26 @@ public class ApprMcouponController {
         List<DefaultMap<String>> list = apprMcouponService.getApprMcouponList(apprMcouponVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprMcouponVO);
     }
-    
+
+    /**
+     * 모바일쿠폰 승인현황 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/mcoupon/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprMcouponExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprMcouponVO apprMcouponVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprMcouponService.getApprMcouponExcelList(apprMcouponVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprMcouponVO);
+    }
+
 }

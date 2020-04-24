@@ -23,14 +23,14 @@ import kr.co.solbipos.sale.status.appr.payMethod.ncash.service.ApprNcashVO;
 
 /**
  * @Class Name : ApprCardController.java
- * @Description : 매출관리 > 승인현황 > 신용카드 승인현황 탭
+ * @Description : 매출관리 > 승인현황 > 비매출현황 승인현황 탭
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -52,7 +52,7 @@ public class ApprNcashController {
 
 
     /**
-     * 신용카드 승인현황 - 페이지 이동
+     * 비매출현황 승인현황 - 페이지 이동
      * @param   request
      * @param   response
      * @param   model
@@ -67,7 +67,7 @@ public class ApprNcashController {
 
 
     /**
-     * 신용카드 승인현황 - 리스트 조회
+     * 비매출현황 승인현황 - 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -86,5 +86,26 @@ public class ApprNcashController {
         List<DefaultMap<String>> list = apprNcashService.getApprNcashList(apprNcashVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprNcashVO);
     }
-    
+
+    /**
+     * 비매출현황 승인현황 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/ncash/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprNcashExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprNcashVO apprNcashVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprNcashService.getApprNcashExcelList(apprNcashVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprNcashVO);
+    }
+
 }

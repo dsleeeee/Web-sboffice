@@ -91,6 +91,28 @@ public class FrnchsStoreController {
     }
 
     /**
+     * 매장별 입출고내역 - 매장별 입출고내역 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodRnakVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/store/frnchsStoreExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFrnchsStoreExcelList(HttpServletRequest request, HttpServletResponse response, Model model, FrnchsStoreVO frnchsStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = frnchsStoreService.getFrnchsStoreExcelList(frnchsStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, frnchsStoreVO);
+    }
+
+    
+    /**
      * 매장별 입출고내역 상세 레이어- 매장별 입출고내역 매장상세 조회
      * @param   request
      * @param   response

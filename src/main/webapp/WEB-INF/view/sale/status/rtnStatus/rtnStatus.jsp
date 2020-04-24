@@ -122,6 +122,29 @@
           </ul>
         </div>
         <%--//페이지 리스트--%>
+        
+        <div class="wj-gridWrap2 mt10" style="display:none;" ng-controller="rtnStatusDayExcelCtrl">
+		        <wj-flex-grid
+		          id="rtnStatusDayExcelGrid"
+		          loaded-rows="loadedRows(s,e)"
+		          autoGenerateColumns="false"
+		          selection-mode="Row"
+		          items-source="data"
+		          control="dayExcelflex"
+		          initialized="initGrid(s,e)"
+		          is-read-only="true"
+		          item-formatter="_itemFormatter">
+		          <!-- define columns -->
+		          <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"/>"    binding="storeNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntY"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtY"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+		          <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntN"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtN"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cnt"            width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"/>"    binding="storeCd"        width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+		        </wj-flex-grid>
+	    </div>
 	</div>
 	<!-- //contents end -->
 
@@ -184,6 +207,36 @@
 	             </ul>
 	           </div>
 	           <%--//페이지 리스트--%>
+	           
+	           <%-- 엑셀 리스트2 --%>
+	           <div class="wj-TblWrapBr2 mr10" style="display:none;" ng-controller="rtnStatusDayDtlExcelCtrl">
+	            	<div class="wj-gridWrap">
+                   <wj-flex-grid
+	                  id="rtnStatusDayDtlExcelGrid"
+	                  loaded-rows="loadedRows2(s,e)"
+	                  autoGenerateColumns="false"
+	                  selection-mode="Row"
+	                  items-source="data"
+	                  control="dayDtlExcelflex"
+	                  initialized="initGrid(s,e)"
+	                  is-read-only="true"
+	                  item-formatter="_itemFormatter">
+	                  <!-- define columns -->
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleDate"/>"   binding="saleDate"       width="*" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntY"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtY"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cntN"           width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmtN"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totCnt"/>"     binding="cnt"            width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                         <wj-flex-grid-column header="<s:message code="rtnStatus.totAmt"/>"     binding="realSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                </wj-flex-grid>
+	                <%-- ColumnPicker 사용시 include --%>
+	                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+	                  <jsp:param name="pickerTarget" value="rtnStatusDayDtlCtrl"/>
+	                </jsp:include>
+	                <%--// ColumnPicker 사용시 include --%>
+	              </div>
+	           </div>
         </div>
 
         <%-- right --%>
@@ -239,6 +292,29 @@
 			    </ul>
 			  </div>
 			  <%--//페이지 리스트--%>
+			  
+			  <!-- 엑셀 리스트3 -->
+			  <div class="wj-TblWrapBr1" style="display:none;" ng-controller="rtnStatusPosDtlExcelCtrl">
+	            	<div class="wj-gridWrap">
+                   <wj-flex-grid
+                      id="rtnStatusPosDtlExcelGrid"
+	                  autoGenerateColumns="false"
+	                  selection-mode="Row"
+	                  items-source="data"
+	                  control="posDtlExcelflex"
+	                  initialized="initGrid(s,e)"
+	                  is-read-only="true"
+	                  item-formatter="_itemFormatter">
+	                  <!-- define columns -->
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.posNo"/>"       binding="posNo"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.bill.no"/>"     binding="billNo"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.saleFg"/>"      binding="saleYn"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleAmt"/>"  binding="totSaleAmt"    width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.dcAmt"/>"       binding="totDcAmt"      width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                  <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>" binding="realSaleAmt"   width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	                </wj-flex-grid>
+	            </div>
+	           </div>
         </div>
     </div>
     <%-- //wj grid end --%>

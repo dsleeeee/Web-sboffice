@@ -116,6 +116,7 @@ public class DisuseServiceImpl implements DisuseService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            disuseVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = disuseMapper.getHqDisuseRegistList(disuseVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -147,6 +148,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setDisuseTitle(disuseVO.getDisuseTitle());
                 disuseHdVO.setSeqNo(disuseVO.getSeqNo());
                 disuseHdVO.setProcFg("0");
+                disuseHdVO.setDisuseStorageCd(disuseVO.getDisuseStorageCd());
                 disuseHdVO.setStorageCd(disuseVO.getStorageCd());
                 disuseHdVO.setRegId(sessionInfoVO.getUserId());
                 disuseHdVO.setRegDt(currentDt);
@@ -260,6 +262,7 @@ public class DisuseServiceImpl implements DisuseService {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            disuseVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = disuseMapper.getHqDisuseRegistList(disuseVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장

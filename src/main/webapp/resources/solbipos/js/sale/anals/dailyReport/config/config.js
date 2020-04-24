@@ -302,12 +302,13 @@ app.controller('configCtrl_1', ['$scope', '$http', function ($scope, $http) {
             if(item.gChk){
             	//현재 새로 추가된 행'만 tracking이 가능하다. 조회 후 변경/삭제 하는 것은 tracking이 안됨.
             	//removeAt을 사용하면 tracking이 안된다. tracking 가능한 함수 (editItem/commitEdit, addNew/commitNew, and remove)
-            	//	공토에서는 '행추가'인 경우 가능( _addRow > _gridAddRow > flex.collectionView.addNew() )
+            	//	공통에서는 '행추가'인 경우 가능( _addRow > _gridAddRow > flex.collectionView.addNew() )
             	//	https://www.grapecity.com/wijmo/api/classes/wijmo.collectionview.html#trackchanges
 
             	// --> remove를 사용해도 tracking 되지 않음. [삭제]만 하고 저장시 변경사항이 없는 것으로 인식함 ('변경 사항이 없습니다')
             	//		tracking되게 하려면 remove도 공통함수로 처리해야 하고, 그 함수 내에 'flex.collectionView.trackChanges = true;'를 해주어야 함.
-            	//		그래서 해당 삭제된 row를 보여주지 않는 식으로 처리하는것으로 개발함.
+            	// -->
+            	//		그래서  삭제된 row는 Grid상에서 실제로 삭제하지 않고, 단지 보여주지 않는(visible=false)형태로 개발함.
 
             	//$scope.flex.collectionView.remove(item);
 

@@ -45,14 +45,14 @@
       <%-- 상품코드 --%>
       <th><s:message code="prodStockInfo.prodCd"/></th>
       <td>
-        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
       </td>
     </tr>
     <tr>
       <%-- 상품명 --%>
       <th><s:message code="prodStockInfo.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="16"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="16"/>
       </td>
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <input type="hidden" id="prodSelectStoreCd" value="" />
@@ -138,6 +138,33 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+  
+  <%--엑셀 리스트--%>
+  <div class="wj-gridWrap" style="display: none;" ng-controller="prodExcelCtrl">
+    <wj-flex-grid
+      id="prodExcelGrid"
+      autoGenerateColumns="false"
+      selection-mode="Row"
+      items-source="data"
+      control="excelFlex"
+      initialized="initGrid(s,e)"
+      is-read-only="true"
+      item-formatter="_itemFormatter">
+
+      <!-- define columns -->
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.prodCd"/>"    binding="prodCd"        width="140" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.prodNm"/>"    binding="prodNm"        width="180" align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitFg"/>"  binding="poUnitFgNm"    width="80"  align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitQty"/>" binding="poUnitQty"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.outCnt"/>"    binding="outCnt"        width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.inTotQty"/>"  binding="outTotQty"     width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.inTot"/>"     binding="outTot"        width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.inTotQty"/>"  binding="inTotQty"      width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.inTot"/>"     binding="inTot"         width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="prodStockInfo.penaltyAmt"/>"binding="penaltyAmt"    width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+    </wj-flex-grid>
+  </div>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/prod/prod.js" charset="utf-8"></script>

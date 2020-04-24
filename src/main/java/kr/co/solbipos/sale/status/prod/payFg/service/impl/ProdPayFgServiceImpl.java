@@ -74,4 +74,41 @@ public class ProdPayFgServiceImpl implements ProdPayFgService {
 
         return prodPayFgMapper.getPayColList(prodPayFgVO);
     }
+    
+    /** 상품별 매출 - 결제수단 엑셀 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdPayFgExcelList(ProdPayFgVO prodPayFgVO, SessionInfoVO sessionInfoVO) {
+
+    	prodPayFgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	prodPayFgVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+    	if (prodPayFgVO.getStoreCd() == null || "".equals(prodPayFgVO.getStoreCd())) {
+    		prodPayFgVO.setStoreCd(sessionInfoVO.getStoreCd());
+    	}
+
+        if(!StringUtil.getOrBlank(prodPayFgVO.getStoreCd()).equals("")) {
+        	prodPayFgVO.setArrStoreCd(prodPayFgVO.getStoreCd().split(","));
+        }
+
+        // 결제수단별 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+        String sQuery3 = "";
+
+        List<DefaultMap<String>> payCd = prodPayFgMapper.getPayColList(prodPayFgVO);
+
+        for(int i = 0; i < payCd.size(); i++) {
+        	String j = payCd.get(i).get("payCd");
+        	sQuery1 +=", D.PAY" + j +  "\n";
+        	sQuery2 +=", NVL(SUM(D.PAY" + j +"),0) AS PAY" + j +  "\n";
+        	sQuery3 +=", CASE WHEN D.PAY_CD = "+ j + " THEN SUM(D.PAY_AMT) ELSE NULL END AS PAY" + j +  "\n";
+        }
+
+        prodPayFgVO.setsQuery1(sQuery1);
+        prodPayFgVO.setsQuery2(sQuery2);
+        prodPayFgVO.setsQuery3(sQuery3);
+
+        return prodPayFgMapper.getProdPayFgExcelList(prodPayFgVO);
+    }
+    
 }

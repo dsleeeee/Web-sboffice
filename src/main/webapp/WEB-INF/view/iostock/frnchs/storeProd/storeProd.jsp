@@ -67,10 +67,10 @@
         <tr>
             <%-- 상품명 --%>
             <th><s:message code="frnchsStoreProd.prodNm" /></th>
-            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
+            <td><input type="text" id="srchProdNm" class="sb-input w100" maxlength="100" ng-model="prodNmModel"/></td>
             <%-- 상품코드 --%>
             <th><s:message code="frnchsStoreProd.prodCd" /></th>
-            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" ng-model="prodCd"/></td>
+            <td><input type="text" id="srchProdCd" class="sb-input w100" maxlength="13" ng-model="prodCdModel"/></td>
         </tr>
         </tbody>
     </table>
@@ -115,7 +115,7 @@
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv1Nm"/>"         binding="lv1Nm"        width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv2Nm"/>"         binding="lv2Nm"        width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv3Nm"/>"         binding="lv3Nm"        width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodCd"/>"         binding="prodCd"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodCd"/>"         binding="prodCd"        width="120" align="center" format="d" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodNm"/>"         binding="prodNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitFg"/>"        binding="poUnitFgNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -146,6 +146,39 @@
   </div>
   <%--//페이지 리스트--%>
 
+
+    <%--위즈모 테이블--%>
+    <div class="wj-gridWrap" style="display: none;" ng-controller="frnchsStoreProdExcelCtrl">
+      <wj-flex-grid
+        id="frnchsStoreProdExcelGrid"
+        autoGenerateColumns="false"
+        control="excelFlex"
+        initialized="initGrid(s,e)"
+        sticky-headers="true"
+        selection-mode="Row"
+        items-source="data"
+        item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="frnchsStore.storeCd"/>"         binding="storeCd"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStore.storeNm"/>"         binding="storeNm"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv1Nm"/>"         binding="lv1Nm"        width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv2Nm"/>"         binding="lv2Nm"        width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.lv3Nm"/>"         binding="lv3Nm"        width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodCd"/>"         binding="prodCd"        width="120" align="center" format="d" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.prodNm"/>"         binding="prodNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitFg"/>"        binding="poUnitFgNm"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.poUnitQty"/>"     binding="poUnitQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.outCnt"/>"        binding="outCnt"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"     binding="outTotQty"    width="130" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.totAmt"/>"       binding="outTot"      width="140" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.cnt"/>"    binding="inTotQty"   width="145" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.totAmt"/>"       binding="inTot"   width="145" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="frnchsStoreProd.penaltyAmt"/>"    binding="penaltyAmt"   width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+        <wj-flex-grid-column header=""        binding="poUnitFg"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
 </div>
 <script type="text/javascript">
 </script>

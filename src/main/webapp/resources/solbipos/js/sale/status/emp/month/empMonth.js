@@ -7,7 +7,9 @@ var app = agrid.getApp();
 app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	// 상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('empMonthCtrl', $scope, $http, $timeout, true));
-         
+	
+	$scope.excelFg = false;   
+	
 	// 콤보박스 데이터 Set
 	$scope._setComboData('empMonthlistScaleBox', gvListScaleBoxData);
   
@@ -157,15 +159,26 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 파라미터
     var params       = {};
     params.storeCd   = $("#empMonthSelectStoreCd").val();
+    
+    $scope.excelStoreCd = params.storeCd;
+    $scope.excelIsChecked = $scope.isChecked;
+    
     if(!$scope.isChecked){
     	params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
     	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
+    	
+        $scope.excelStartDate = params.startDate;
+        $scope.excelEndDate = params.endDate;
     }
     
     if($scope.isCheckedEmpAll){
     	params.empChk = "Y";
+    	
+    	$scope.excelEmpChk = params.empChk;
     }else{
     	params.empChk = "N";
+    	
+    	$scope.excelEmpChk = params.empChk;
     }
 	params.isPageChk = isPageChk;
 	params.listScale = $scope.empMonthlistScale; //-페이지 스케일 갯수
@@ -182,6 +195,8 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		    }
 		}   
     });
+    
+    $scope.excelFg = true;
 
   }; 
   
@@ -284,25 +299,191 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
   
   // 엑셀 다운로드
   $scope.excelDownloadEmpMonth = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
+	// 파라미터
+	var params     = {};
+	$scope._broadcast('empMonthExcelCtrl',params);
+	 
+  };
+  
+}]);
+
+
+
+/** 판매자별(월별) 상세현황 엑셀 controller */
+app.controller('empMonthExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('empMonthExcelCtrl', $scope, $http, $timeout, true));
+         
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	    
+	    // <-- 그리드 헤더3줄 -->
+	    // 헤더머지
+	    s.allowMerging = 'ColumnHeaders';
+	    s.columnHeaders.rows.push(new wijmo.grid.Row());
+		s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+	    // 첫째줄 헤더 생성
+		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
+			s.columnHeaders.setCellData(i, "saleDate", messages["empday.saleDate"]);
+			s.columnHeaders.setCellData(i, "storeCnt", messages["empday.storeCnt"]);
+			s.columnHeaders.setCellData(i, "realSaleAmtTot", messages["empday.realSaleAmtTot"]);
+			s.columnHeaders.setCellData(i, "totBillCnt", messages["empday.totBillCnt"]);
+		}
+	
+	    s.itemFormatter = function (panel, r, c, cell) {
+	        if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+	            //align in center horizontally and vertically
+	            panel.rows[r].allowMerging    = true;
+	            panel.columns[c].allowMerging = true;
+	            wijmo.setCss(cell, {
+	                display    : 'table',
+	                tableLayout: 'fixed'
+	            });
+	            cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+	            wijmo.setCss(cell.children[0], {
+	                display      : 'table-cell',
+	                verticalAlign: 'middle',
+	                textAlign    : 'center'
+	            });
+	        }
+	        // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+	        else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+	            // GroupRow 인 경우에는 표시하지 않는다.
+	            if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+	                cell.textContent = '';
+	            } else {
+	                if (!isEmpty(panel._rows[r]._data.rnum)) {
+	                    cell.textContent = (panel._rows[r]._data.rnum).toString();
+	                } else {
+	                    cell.textContent = (r + 1).toString();
+	                }
+	            }
+	        }
+	        // readOnly 배경색 표시
+	        else if (panel.cellType === wijmo.grid.CellType.Cell) {
+	            var col = panel.columns[c];
+	            if (col.isReadOnly) {
+	                wijmo.addClass(cell, 'wj-custom-readonly');
+	            }
+	        }
+	    }
+	    // <-- //그리드 헤더2줄 -->
+    
+  };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("empMonthExcelCtrl", function (event, data) {
+
+	  if(data != undefined && $scope.excelFg) {
+			if($scope.excelStartDate > $scope.excelEndDate){
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+			 $scope.searchEmpMonthExcelList();   
+	    
+		}else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+	  // 기능수행 종료 : 반드시 추가
+	  event.preventDefault();
+	  
+  });
+  
+  // 판매자월별 리스트 조회
+  $scope.searchEmpMonthExcelList = function () {
+
+    // 파라미터
+    var params       = {};
+    params.storeCd   = $scope.excelStoreCd;
+    params.empChk    = $scope.excelEmpChk;
+    
+    if(!$scope.isChecked){
+        params.startDate   = $scope.excelStartDate;
+        params.endDate     = $scope.excelEndDate;
+        
     }
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '매출현황_판매자별_월별_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	$scope.getEmpNmList(false);
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/sale/status/emp/month/list.sb", params, function() {
+		var flex = $scope.excelFlex;
+		//row수가 0이면
+		if (flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+		
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			}, messages["day.dayTotal.saleInfo"]+'_'+messages["empsale.empsale"]+'_'+messages["empsale.month"]+'_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+    });
+
+  }; 
+  
+  //판매자 조회
+  $scope.getEmpNmList = function () {
+	  	$scope.excelFlex.refresh();
+	  	// 파라미터
+	  	var params       = {};	  	  	
+	    params.storeCd   = $scope.excelStoreCd;
+	  	
+	  	if(!$scope.excelIsChecked){
+		    params.startDate = $scope.excelStartDate;
+		    params.endDate = $scope.excelEndDate;
+	  	}
+	  
+	    params.empChk = $scope.excelEmpChk;
+	  
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+	    $scope._postJSONQuery.withOutPopUp("/sale/status/emp/month/empList.sb", params, function(response) {
+	    	
+		  var length = response.data.data.list.length;
+		  var grid = wijmo.Control.getControl("#empMonthExcelGrid");
+		  
+		  if(length != "" || length != null){
+	   	 		
+				while(grid.columns.length > 4){
+					grid.columns.removeAt(grid.columns.length-1);
+				}
+	   	 	
+			    //첫째줄 헤더 생성
+			   	for(var i=0; i<length; i++){
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.realSaleAmt"], binding: 'realSaleAmt'+i, align: "right" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columns.push(new wijmo.grid.Column({header: messages["empday.billCnt"], binding: 'billCnt'+i, align: "center" , isReadOnly: "true", aggregate: "Sum"}));
+			   		grid.columnHeaders.setCellData(0, 4+(i*2), response.data.data.list[i].storeNm);
+			   		grid.columnHeaders.setCellData(0, 5+(i*2), response.data.data.list[i].storeNm);
+			   		grid.columnHeaders.setCellData(1, 4+(i*2), response.data.data.list[i].nmcodeNm);
+			   		grid.columnHeaders.setCellData(1, 5+(i*2), response.data.data.list[i].nmcodeNm);		
+		    	    
+					grid.columnHeaders.rows[0].allowSorting = false;
+					grid.columnHeaders.rows[1].allowSorting = false;
+			   	}
+		   	
+	   	 	}
+	   	 	
+		    $scope.excelFlex.refresh();
+	    });
+	  
   };
   
 }]);

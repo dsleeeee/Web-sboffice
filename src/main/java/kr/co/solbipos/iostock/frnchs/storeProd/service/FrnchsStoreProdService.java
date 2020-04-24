@@ -10,5 +10,7 @@ public interface FrnchsStoreProdService {
     List<DefaultMap<String>> getFrnchsStoreProdList(FrnchsStoreProdVO FrnchsStoreProdVO, SessionInfoVO sessionInfoVO);
     /** 매장-상품별 입출고내역 - 매장-상품별 입출고내역 상세 리스트 조회 */
     List<DefaultMap<String>> getFrnchsStoreProdDtlList(FrnchsStoreProdVO FrnchsStoreProdVO, SessionInfoVO sessionInfoVO);
+    /** 매장-상품별 입출고내역 - 매장-상품별 입출고내역 엑셀리스트 조회 */
+	List<DefaultMap<String>> getFrnchsStoreProdExcelList(FrnchsStoreProdVO frnchsStoreProdVO, SessionInfoVO sessionInfoVO);
 
 }

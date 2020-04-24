@@ -72,7 +72,7 @@
 		             , TSSD.DTL_CNT
 		             , TSSD.DISUSE_TITLE AS TITLE
 		          FROM TB_ST_STORE_DISUSE TSSD
-		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = 'A0001' AND Z.STORE_CD = TSSD.STORE_CD)
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
 		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
 		               AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
 		           </if>

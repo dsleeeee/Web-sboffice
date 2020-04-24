@@ -175,7 +175,9 @@ app.controller('empDayPeriodMainCtrl', ['$scope', '$http', '$timeout', function 
 app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
 	 // 상위 객체 상속 : T/F 는 picker
 	  angular.extend(this, new RootController('empDayPeriodDtlCtrl', $scope, $http, $timeout, true));
-
+	  
+	  $scope.excelFg = false;
+	
 	  //조회조건 콤보박스 데이터 Set
 //	  $scope._setComboData("empDayPeriodDtlListScaleBox", gvListScaleBoxData);
 
@@ -262,32 +264,97 @@ app.controller('empDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function ($
 	    params.empNo     = $scope.empNo;
 //	    params.listScale = $scope.empDayPeriodDtlListScale;
 	    params.isPageChk = isPageChk;
+	    
+	    $scope.excelStartDate = params.startDate;
+	    $scope.excelEndDate   = params.endDate;
+	    $scope.excelStoreCd   = params.storeCd;
+	    $scope.excelEmpNo     = params.empNo;
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/emp/dayperiod/dtl.sb", params);
+	    
+	    $scope.excelFg = true;
 	  };
 
 	  //엑셀 다운로드
 	  $scope.excelDownloadDayPeriodDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
-	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-	      return false;
-	    }
+		// 파라미터
+		var params     = {};
+		$scope._broadcast('empDayPeriodDtlExcelCtrl',params);
+	  };
 
-	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-	        includeColumnHeaders: true,
-	        includeCellStyles   : true,
-	        includeColumns      : function (column) {
-	          return column.visible;
-	        }
-	      }, '매출현황_판매자별_설정기간별(상세)_'+getToday()+'.xlsx', function () {
-	        $timeout(function () {
-	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-	        }, 10);
-	      });
-	    }, 10);
+}]);
+
+
+/** 설정기간별매출(매출상세) 엑셀 controller */
+app.controller('empDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	 // 상위 객체 상속 : T/F 는 picker
+	  angular.extend(this, new RootController('empDayPeriodDtlExcelCtrl', $scope, $http, $timeout, true));
+
+	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+	  $scope.initGrid = function (s, e) {
+
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+	  }
+
+	  // 다른 컨트롤러의 broadcast 받기
+	  $scope.$on("empDayPeriodDtlExcelCtrl", function (event, data) {
+		  
+		  if(data != undefined && $scope.excelFg) {
+				if($scope.excelStartDate > $scope.excelEndDate){
+					$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+					return false;
+				}
+				 $scope.searchEmpDayPeriodDtlExcelList();   
+		    
+			}else{
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
+	  });
+
+	  // 코너별매출일자별 리스트 조회
+	  $scope.searchEmpDayPeriodDtlExcelList = function () {
+
+	    // 파라미터
+	    var params       = {};
+	    params.startDate = $scope.excelStartDate;
+	    params.endDate   = $scope.excelEndDate;
+	    params.storeCd   = $scope.excelStoreCd;
+	    params.empNo     = $scope.excelEmpNo;
+	    
+
+	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+	    $scope._inquirySub("/sale/status/emp/dayperiod/excelDtl.sb", params, function(){
+			var flex = $scope.excelFlex;
+			//row수가 0이면
+			if (flex.rows.length <= 0) {
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+			
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, messages["day.dayTotal.saleInfo"]+'_'+messages["empsale.empsale"]+'_'+messages["empsale.dayPeriod"]+'_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+	    });
 	  };
 
 }]);

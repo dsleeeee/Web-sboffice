@@ -11,6 +11,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	$scope.srchTableDayStartDate = wcombo.genDateVal("#srchTableDayStartDate", getToday());
 	$scope.srchTableDayEndDate   = wcombo.genDateVal("#srchTableDayEndDate", getToday());
+	$scope.isSearch = false;
 
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("tableDayListScaleBox", gvListScaleBoxData);
@@ -184,6 +185,14 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			return false;
 		}
 
+		$scope.excelStoreCd = params.storeCd;
+		$scope.excelTableCd = params.tableCd;
+		$scope.excelHqOfficeCd = params.hqOfficeCd;
+		$scope.excelStartDate = params.startDate;
+		$scope.excelEndDate = params.endDate;
+		$scope.isSearch		= true;
+
+
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/table/day/list.sb", params, function() {
 
@@ -225,16 +234,6 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	$scope.excelDownloadDay = function () {
 
 		var params = {};
-		params.storeCd = $("#tableDaySelectStoreCd").val();
-		params.tableCd = $("#tableDaySelectTableCd").val();
-		params.hqOfficeCd = $("#hqOfficeCd").val();
-
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchTableDayStartDate.value, 'yyyyMMdd');
-			params.endDate = wijmo.Globalize.format($scope.srchTableDayEndDate.value, 'yyyyMMdd');
-		}
-
-		params.isPageChk = true;
 
 		$scope._broadcast('tableDayExcelCtrl',params);
 	};
@@ -454,24 +453,16 @@ app.controller('tableDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayExcelCtrl", function (event, data) {
 
-		if( $("#tableDaySelectStoreCd").val() === ''){
-	    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	    	 return false;
-	    }
+		var storeCd = $scope.excelStoreCd;
+		var tableCd = $scope.excelTableCd;
 
-		var storeCd = $("#tableDaySelectStoreCd").val();
-		var tableCd = $("#tableDaySelectTableCd").val();
-
-		if(data != undefined) {
-
-			$scope.storeCd = data.storeCd;
-			$scope.tableCd = data.tableCd;
-			$scope.hqOfficeCd = data.hqOfficeCd;
-			$scope.startDate = data.startDate;
-			$scope.endDate = data.endDate;
-
+		if(data != undefined && $scope.isSearch) {
 			$scope.getReTableNmList(storeCd, tableCd, true);
-
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
@@ -481,13 +472,11 @@ app.controller('tableDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
 		// 파라미터
 		var params = {};
-		params.storeCd = $scope.storeCd;
-		params.tableCd = $scope.tableCd;
-		params.hqOfficeCd = $scope.hqOfficeCd;
-		params.listScale = 0; //-페이지 스케일 갯수
-		params.isPageChk = isPageChk;
-		params.startDate = $scope.startDate;
-		params.endDate = $scope.endDate;
+		params.storeCd = $scope.excelStoreCd;
+		params.tableCd = $scope.excelTableCd;
+		params.hqOfficeCd = $scope.excelHqOfficeCd;
+		params.startDate = $scope.excelStartDate;
+		params.endDate = $scope.excelEndDate;
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/table/day/excelList.sb", params, function() {

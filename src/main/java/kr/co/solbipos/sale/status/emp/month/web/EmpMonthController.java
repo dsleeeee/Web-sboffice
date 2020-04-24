@@ -91,6 +91,27 @@ public class EmpMonthController {
     }
     
     /**
+     * 판매자별 매출 - 월별 리스트(엑셀) 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   empMonthVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/month/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpMonthExcelList(HttpServletRequest request, HttpServletResponse response, Model model, EmpMonthVO empMonthVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empMonthService.getEmpMonthExcelList(empMonthVO, sessionInfoVO);
+        
+        return ReturnUtil.returnListJson(Status.OK, list, empMonthVO);
+    }
+    
+    /**
      * 판매자별 매출 -판매자 리스트 조회 
      * @param   request
      * @param   response

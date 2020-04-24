@@ -2,6 +2,7 @@
 
 # common
 alreadyUsed=사용여부
+alreadyShow=표시여부
 
 
 # tableAttr

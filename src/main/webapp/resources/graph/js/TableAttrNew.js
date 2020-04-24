@@ -32,7 +32,7 @@ TableAttr = function(themes) {
     this.graph = new GraphAttr(this.container, themes, this.preview);
 
     //왼쪽 속성명
-    this.comp = new SidebarAttr(this.graph);
+    this.comp = new SidebarAttr(this.graph, this.preview);
 
     //오른쪽 설정 영역 생성
     this.format = new FormatAttr(this);
@@ -83,8 +83,9 @@ TableAttr.prototype.initValue = function() {
 /**
  * 왼쪽 속성명 처리
  */
-SidebarAttr = function(graph) {
+SidebarAttr = function(graph, preview) {
     this.graph = graph;
+    this.preview = preview;
     this.init();
 }
 
@@ -104,15 +105,18 @@ SidebarAttr.prototype.init = function() {
         for (var i = 0; i < cells.length; i++) {
             var cell = cells[i];
             tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
+            tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', false);
         }
         cellsRemoved.apply(this, arguments);
     }
+
     //셀 추가 시 그리드에서 사용여부 체크 처리
     var cellsAdded = graph.cellsAdded;
     graph.cellsAdded = function(cells) {
         for (var i = 0; i < cells.length; i++) {
             var cell = cells[i];
             tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+            tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
         }
         cellsAdded.apply(this, arguments);
     }
@@ -128,6 +132,7 @@ SidebarAttr.prototype.init = function() {
             if ((model.isVertex(cand[i]) || model.isEdge(cand[i])) && graph.view.getState(cand[i]) != null) {
                 cells.push(cand[i]);
                 tblAttrGrid.setCellData(parseInt(cand[i].id) - 1, 'used', true);
+                tblAttrGrid.setCellData(parseInt(cand[i].id) - 1, 'show', true);
             }
         }
         graph.setSelectionCells(cells);
@@ -137,6 +142,7 @@ SidebarAttr.prototype.init = function() {
         for (var i = 0; i < removes.length; i++) {
             if ((model.isVertex(removes[i]) || model.isEdge(removes[i]))) {
                 tblAttrGrid.setCellData(parseInt(removes[i].id) - 1, 'used', false);
+                tblAttrGrid.setCellData(parseInt(removes[i].id) - 1, 'show', false);
             }
         }
     }
@@ -164,6 +170,7 @@ SidebarAttr.prototype.initUsed = function() {
     //모든 속성 사용여부 false로 초기화
     for (i = 0; i < tblAttrGrid.rows.length; i++) {
         tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'used', false);
+        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'show', false);
     }
 
     //그래픽 영역의 Object를 체크해 사용여부 true 처리
@@ -173,6 +180,7 @@ SidebarAttr.prototype.initUsed = function() {
     for (var i = 0; i < childCount; i++) {
         var cell = model.getChildAt(parent, i);
         tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+        tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
     }
 };
 
@@ -183,12 +191,13 @@ SidebarAttr.prototype.makeGrid = function() {
 
     //var sidebar = this;
     var graph = this.graph;
+    var preview = this.preview;
 
     //속성명 FlexGrid 생성
     var tblAttrGridTemp = new wijmo.grid.FlexGrid('#tblAttrGrid', {
         autoGenerateColumns: false,
         selectionMode: 'ListBox',
-        isReadOnly: true,
+        isReadOnly: false,
         itemsSource: getData(),
         columns:
         	[{
@@ -209,9 +218,12 @@ SidebarAttr.prototype.makeGrid = function() {
             },
             {
                 binding: 'used',
-                header: mxResources.get('alreadyUsed'),
-                width: 60,
-                isReadOnly: true
+                visible: false
+            },
+            {
+                binding: 'show',
+                header: mxResources.get('alreadyShow'),
+                width: 60
             },
             {
                 binding: 'rect',
@@ -227,6 +239,60 @@ SidebarAttr.prototype.makeGrid = function() {
         }
     });
 
+    // 그리드 체크박스 클릭 이벤트
+    tblAttrGridTemp.hostElement.addEventListener('mousedown', function(e) {
+
+    	var htInfo = tblAttrGridTemp.hitTest(e);
+
+    	if(e.target.type === 'checkbox') {
+
+    		var rowIndex=htInfo.row;
+
+    		console.log(rowIndex);
+
+    		//idx가져오기(0번째 항목)
+            var idx = tblAttrGridTemp.getCellData(rowIndex, 0, true);
+            var used = tblAttrGridTemp.getCellData(rowIndex, 3, true);
+            var show = tblAttrGridTemp.getCellData(rowIndex, 4, true);
+
+            //사용중일 경우만 선택 활성화
+            if (used) {
+                var cell = graph.getModel().getCell(idx);
+                graph.setSelectionCell(cell);
+
+                //맨앞으로 가져오기
+                graph.orderCells(false);
+                graph.container.focus();
+
+                if (show == 'true') {
+
+                    var cellsTemp = [];
+                    cellsTemp.push(cell);
+
+                    graph.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
+
+                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
+
+
+                } else {
+
+                	var cellsTemp = [];
+                    cellsTemp.push(cell);
+
+                    graph.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
+
+                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
+                }
+
+            }
+
+    	}
+    }, false);
+
     //RowHeader 없애기
     tblAttrGridTemp.rowHeaders.columns.splice(0, 1);
 
@@ -239,17 +305,17 @@ SidebarAttr.prototype.makeGrid = function() {
 
     //선택한 ROW가 바뀌었을 때 그래픽 영역에서 활성화
     tblAttrGridTemp.selectionChanged.addHandler(function(s, e) {
+
         //idx가져오기(0번째 항목)
         var idx = tblAttrGridTemp.getCellData(e.row, 0, true);
         var used = tblAttrGridTemp.getCellData(e.row, 3, true);
+
         //사용중일 경우만 선택 활성화
         if (used) {
             var cell = graph.getModel().getCell(idx);
             graph.setSelectionCell(cell);
 
         	var selectedCell = cell.geometry;
-
-        	currentCell = selectedCell;
 
         	$("#attrCellX").val(selectedCell.x);
         	$("#attrCellY").val(selectedCell.y);
@@ -259,6 +325,7 @@ SidebarAttr.prototype.makeGrid = function() {
             //맨앞으로 가져오기
             graph.orderCells(false);
             graph.container.focus();
+
         }
     });
 
@@ -345,6 +412,7 @@ SidebarAttr.prototype.makeGrid = function() {
                 name: TABLE_ATTR_ITEMS[i].nmcodeNm,
                 tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
                 used: false,
+                show: true,
                 rect: findPos(cd),
                 idx: cd
             });
@@ -534,7 +602,6 @@ GraphAttr.prototype.init = function() {
         	$("#attrCellY").val("");
         	$("#attrCellW").val("");
         	$("#attrCellH").val("");
-
     	}
 
     	graphHandlerMouseDown.apply(this, arguments);
@@ -943,6 +1010,8 @@ FormatAttr.prototype.setElementsValue = function(graph) {
     var initFontStyle;
     var initAlign;
     var initVAlign;
+    var initOpacity;
+
     for (var i = 0; i < currentCells.length; i++) {
         var cell = currentCells[i];
         var state = graph.view.getState(cell);
@@ -953,6 +1022,7 @@ FormatAttr.prototype.setElementsValue = function(graph) {
             initFontStyle = mxUtils.getValue(state.style, mxConstants.STYLE_FONTSTYLE, 0);
             initAlign = mxUtils.getValue(state.style, mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
             initVAlign = mxUtils.getValue(state.style, mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
+            initOpacity = mxUtils.getValue(state.style, mxConstants.STYLE_OPACITY, 100);
         }
     }
 

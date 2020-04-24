@@ -80,14 +80,42 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
 
   // 분배가능상품 리스트 조회
   $scope.searchDstbCloseProdAddProdList = function () {
+	if ($("#dstbCloseProdAddProdSelectStoreCd").val() === "") {
+	    $scope._popMsg(messages["rtnDstbCloseProd.add.require.selectStore"]); // 매장을 선택해 주세요.
+	    return false;
+	}
     // 파라미터
     var params     = {};
+    params.storeCd = $("#dstbCloseProdAddProdSelectStoreCd").val();
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);
+    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
+	    var dstbFg = response.data.data;
+	    
+	    
+	    if(dstbFg < 1){ // 마감이 아닐때
+	    	// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		    $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);
+	    }else{
+	    	$scope._popMsg(messages["rtnDstbCloseProd.add.txt2"]); // 이미 마감된 매장입니다.
+	    	// 그리드 초기화
+		    var dstbCloseProdAddProdScope = agrid.getScope('dstbCloseProdAddProdCtrl');
+		    dstbCloseProdAddProdScope.dtlGridDefault();
+	    }
+    });
+  };
+  
+  // 그리드 초기화
+  $scope.dtlGridDefault = function () {
+    $timeout(function () {
+      var cv          = new wijmo.collections.CollectionView([]);
+      cv.trackChanges = true;
+      $scope.data     = cv;
+      $scope.flex.refresh();
+    }, 10);
   };
 
   // 매장선택 모듈 팝업 사용시 정의

@@ -12,4 +12,6 @@ public interface FrnchsStoreService {
     List<DefaultMap<String>> getFrnchsStoreInfoList(FrnchsStoreVO frnchsStoreVO);
     /** 매장별 입출고내역 상세 레이어- 매장별 입출고내역 상세 리스트 조회 */
     List<DefaultMap<String>> getFrnchsStoreDtlList(FrnchsStoreVO frnchsStoreVO);
+    /** 매장별 입출고내역 - 매장별 입출고내역 엑셀리스트 조회 */
+	List<DefaultMap<String>> getFrnchsStoreExcelList(FrnchsStoreVO frnchsStoreVO, SessionInfoVO sessionInfoVO);
 }

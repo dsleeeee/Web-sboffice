@@ -11,10 +11,10 @@ import kr.co.solbipos.iostock.frnchs.slip.service.SlipVO;
 @Mapper
 @Repository
 public interface SlipMapper {
-    /** 거래처 전표별 입출고내역 - 전표별 입출고내역 리스트 조회 */
+    /** 본사 전표별 입출고내역 - 전표별 입출고내역 리스트 조회 */
     List<DefaultMap<String>> getSlipList(SlipVO slipVO);
 
-    /** 거래처 전표별 입출고내역 - 전표별 입출고내역 상세 리스트 조회 */
+    /** 본사 전표별 입출고내역 - 전표별 입출고내역 상세 리스트 조회 */
     List<DefaultMap<String>> getSlipDtlList(SlipVO slipVO);
 
     /** 전표별 입출고내역 - 조회조건 전표구분 콤보 리스트 조회  */
@@ -25,4 +25,10 @@ public interface SlipMapper {
 
     /** 전표별 입출고내역 - 조회조건 진행상태 콤보 리스트 조회  */
     List<DefaultMap<String>> getSrchProcFgList(SlipVO slipVO);
+
+    /** 본사 전표별 입출고내역 - 전표별 입출고내역  엑셀리스트 조회 */
+	List<DefaultMap<String>> getSlipExcelList(SlipVO slipVO);
+
+	/** 본사 전표별 입출고내역 - 전표별 입출고내역 상세 리스트 엑셀조회 */
+	List<DefaultMap<String>> getSlipDtlExcelList(SlipVO slipVO);
 }

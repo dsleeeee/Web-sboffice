@@ -24,7 +24,7 @@ import kr.co.solbipos.iostock.vendr.orderStockInfo.service.OrderStockInfoVO;
 
 /**
  * @Class Name : ProdController.java
- * @Description : 수불관리 > 거래처(매입)입출고관리 > 상품별 입출고내역
+ * @Description : 수불관리 > 본사-매장간 입출고관리 > 상품별 입출고내역
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -67,7 +67,7 @@ public class ProdFrnchsController {
 
 
     /**
-     * 거래처 상품별 입출고내역 - 상품별 입출고내역 리스트 조회
+     * 본사 상품별 입출고내역 - 상품별 입출고내역 엑셀리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -88,6 +88,31 @@ public class ProdFrnchsController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodFrnchsVO);
     }
+    
+    
+    /**
+     * 거래처 상품별 입출고내역 - 상품별 입출고내역 엑셀리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/prod/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdFrnchsExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ProdFrnchsVO prodFrnchsVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>>
+            list = prodFrnchsService.getProdFrnchsExcelList(prodFrnchsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodFrnchsVO);
+    }
+    
     
     /**
      * 거래처 발주대비 입고현황 - 상품 입고현황 리스트 조회
