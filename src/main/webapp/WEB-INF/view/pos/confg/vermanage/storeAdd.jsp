@@ -52,6 +52,22 @@
                   </wj-combo-box>
                 </div>
               </td>
+              <%-- 매장상태구분 --%>
+              <th><s:message code="verManage.store.sysStatFg" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchSysStatFg"
+                          ng-model="sysStatFg"
+                          items-source="_getComboData('sysStatFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          selected-index-changed="setSelectedSysStatFg(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
               <%-- 본사코드 --%>
               <%--
               <th><s:message code="verManage.store.hqOfficeCd" /></th>
@@ -157,7 +173,8 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20190123.11" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20200423.04" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){
@@ -169,4 +186,5 @@
     });
   });
 
+  var sysStatFgTotal = ${ccu.getCommCodeSelect("005")};
 </script>

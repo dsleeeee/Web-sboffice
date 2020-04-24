@@ -107,14 +107,17 @@
 
   <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="verRecvStoreCtrl">
     <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
-      <span><s:message code="verRecv.recvStore"/></span>
+      <%--<span><s:message code="verRecv.recvStore"/></span>--%>
       <div class="sb-select dkbr mb10 oh">
+        <s:message code="verRecv.recvStore"/>
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
       </div>
       <p class="s12 bk tl mb10 mt10" id="storeTit"></p>
 
       <%-- 버전등록매장 그리드 --%>
       <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+        <div class="wj-gridWrap" style="height:350px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
                   control="flex"
                   autoGenerateColumns="false"
@@ -143,5 +146,29 @@
       <%--//페이지 리스트--%>
     </div>
   </div>
+
+  <%-- 엑셀다운로드 그리드 --%>
+  <div class="w100 mt10 mb20" style="display:none;" ng-controller="verRecvStoreExcelCtrl">
+    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              control="excelFlex"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.storeCd"/>" binding="storeCd" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.posNo"/>" binding="posNo" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.regDt"/>" binding="regDt"  align="center" width="120" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verRecv.verRecvDt"/>" binding="verRecvDt"  align="center" width="120" is-read-only="true"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+  </div>
+
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=2019011002" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200423.07" charset="utf-8"></script>

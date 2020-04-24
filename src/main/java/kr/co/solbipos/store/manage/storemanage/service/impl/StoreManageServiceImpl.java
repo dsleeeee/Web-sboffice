@@ -91,6 +91,22 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getStoreList(storeManageVO);
     }
 
+    /** 매장 목록 엑셀조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.getStoreExcelList(storeManageVO);
+    }
+
     /** 매장정보 상세조회 */
     @Override
     public Map<String, Object> getStoreDetail(StoreManageVO storeManageVO) {

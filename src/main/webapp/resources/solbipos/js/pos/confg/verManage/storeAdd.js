@@ -86,6 +86,15 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     return $scope.selectedHqOffice;
   };
 
+  // 선택본사
+  $scope.selectedSysStatFg;
+  $scope.setSelectedSysStatFg = function(s) {
+    $scope.selectedSysStatFg = s.selectedValue;
+  };
+  $scope.getSelectedSysStatFg = function(){
+    return $scope.selectedSysStatFg;
+  };
+
   // 적용매장 목록 조회
   $scope.addStoreSearch = function(){
 
@@ -151,6 +160,9 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('allStoreCtrl', $scope, $http, false));
 
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("sysStatFg", sysStatFgTotal);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
@@ -163,7 +175,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
-  // 적용매장 목록 조회
+  // 미적용매장 목록 조회
   $scope.allStoreSearch = function(){
 
     var params = {};
@@ -177,6 +189,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = addStoreScope.getSelectedHqOffice();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
+    params.sysStatFg = addStoreScope.getSelectedSysStatFg();
 
     // 복수검색 기능 사용여부
     if ($("#chkMulti").prop("checked")) {

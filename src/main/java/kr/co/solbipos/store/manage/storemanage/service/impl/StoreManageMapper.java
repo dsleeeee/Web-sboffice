@@ -33,6 +33,9 @@ public interface StoreManageMapper {
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
+    /** 매장 목록 엑셀조회 */
+    List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO);
+
     /** 매장 상세 조회 */
     DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
 

@@ -278,7 +278,10 @@
         <if test='storeNm != null and storeNm != ""'>
            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
-         ORDER BY HQ_OFFICE_CD,  STORE_CD
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY HQ_OFFICE_CD, STORE_CD
     </select>
 
     <!-- 버전 적용 매장 등록   -->

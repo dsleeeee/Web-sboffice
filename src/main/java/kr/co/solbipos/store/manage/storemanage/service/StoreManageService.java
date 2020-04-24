@@ -28,6 +28,9 @@ public interface StoreManageService {
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 목록 엑셀조회 */
+    List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
     /** 매장정보 상세조회 */
     Map<String, Object> getStoreDetail(StoreManageVO storeManageVO);
 

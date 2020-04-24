@@ -41,6 +41,14 @@ public interface VerRecvMapper {
     List<DefaultMap<String>> selectStoreList(VerRecvVO verRecv);
 
     /**
+     * 버전별수신현황 - 매장 목록 엑셀조회
+     *
+     * @param verRecv
+     * @return
+     */
+    List<DefaultMap<String>> selectStoreExcelList(VerRecvVO verRecv);
+
+    /**
      * 매장별수신현황 - 수신매장 목록 조회
      *
      * @param verRecv

@@ -100,6 +100,28 @@ public class StoreManageController {
     }
 
     /**
+     * 매장 목록 - 엑셀조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2020.04.23
+     */
+    @RequestMapping(value = "storeManage/getStoreExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreExcelList(StoreManageVO storeManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreExcelList(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeManageVO);
+    }
+
+    /**
      * 매장 정보 상세 - 조회
      * @param storeManageVO
      * @param request
