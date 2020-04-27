@@ -51,10 +51,16 @@ public class HqCurrServiceImpl implements HqCurrService {
 //		}
 		hqCurrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 		if(hqCurrVO.getOrgnFg() == "H" && hqCurrVO.getOrgnFg() != null) { // 본사권한
-    		return hqCurrMapper.getHqCurrDtlList(hqCurrVO);    		
+			if( !StringUtil.getOrBlank(hqCurrVO.getHqOfficeCd()).equals("")) {
+				return hqCurrMapper.getHqCurrDtlList(hqCurrVO);    
+			} else {
+				return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
+			}
     	} else {
     		return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
     	}
+		
+		
 	}
 
 	@Override
