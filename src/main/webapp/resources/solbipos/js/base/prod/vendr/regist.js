@@ -151,20 +151,20 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
             var param = {};
 
-            param.vendrCd = $scope.rVendrCd;
-            param.vendrNm = $scope.rVendrNm;
-            param.ownerNm = $scope.rOwnerNm;
-            param.vendorFg = $scope.rVendorFg;
-            param.vatIncldYn = $scope.rVatIncldYn;
-            param.useYn = $scope.rUseYn;
-            param.bizNo = $scope.rBizNo1 + $scope.rBizNo2 + $scope.rBizNo3;
-            param.telNo = $scope.rTelNo;
-            param.emailAddr = $scope.rEmailAddr;
-            param.faxNo = $scope.rFaxNo;
-            param.postNo = $scope.rPostNo;
-            param.addr = $scope.rAddr;
-            param.addrDtl = $scope.rAddrDtl;
-            param.remark = $scope.rRemark;
+            param.vendrCd = $("#rVendrCd").val();
+            param.vendrNm = $("#rVendrNm").val();
+            param.ownerNm = $("#rOwnerNm").val();
+            param.vendorFg = $scope.vendorFg;
+            param.vatIncldYn = $scope.vatIncldYn;
+            param.useYn = $scope.useYn;
+            param.bizNo = $("#rBizNo1").val() + $("#rBizNo2").val() + $("#rBizNo3").val();
+            param.telNo = $("#rTelNo").val();
+            param.emailAddr = $("#rEmailAddr").val();
+            param.faxNo = $("#rFaxNo").val();
+            param.postNo = $("#rPostNo").val();
+            param.addr = $("#rAddr").val();
+            param.addrDtl = $("#rAddrDtl").val();
+            param.remark = $("#rRemark").val();
 
             // 저장
             $scope._postJSONSave.withPopUp(url, param, function () { $scope.close(); });

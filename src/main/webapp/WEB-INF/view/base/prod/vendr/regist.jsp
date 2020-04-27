@@ -51,7 +51,7 @@
                   <div class="sb-select">
                     <wj-combo-box
                             id="rVendorFg"
-                            ng-model="rVendorFg"
+                            ng-model="vendorFg"
                             items-source="_getComboData('rVendorFg')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -68,7 +68,7 @@
                   <div class="sb-select">
                     <wj-combo-box
                             id="rVatIncldYn"
-                            ng-model="rVatIncldYn"
+                            ng-model="vatIncldYn"
                             items-source="_getComboData('rVatIncldYn')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -83,7 +83,7 @@
                   <div class="sb-select">
                     <wj-combo-box
                             id="rUseYn"
-                            ng-model="rUseYn"
+                            ng-model="useYn"
                             items-source="_getComboData('rUseYn')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -150,4 +150,4 @@
   var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200423.45" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20200423.60" charset="utf-8"></script>
