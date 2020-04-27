@@ -35,7 +35,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("vendrRegistCtrl", function(event, data) {
 
         // 입력값 초기화
-        $scope.infoInit();
+        // $scope.infoInit();
 
         // 등록인지 수정인지 파악(탭 클릭 시 사용)
         valType = data.type;
@@ -173,7 +173,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 닫기
     $scope.close = function () {
-        $scope.infoInit();
+        // $scope.infoInit();
         $scope.wjVendrRegistLayer.hide();
 
         // 재조회
@@ -181,17 +181,17 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 입력값 초기화
-    $scope.infoInit = function(){
-
-        var inputArr = [
-            rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
-        ].forEach(function(element){element.value="";});
-
-        var selectArr = [
-            rVendorFg, rVatIncldYn, rUseYn
-        ].forEach(function(element){element.selectedIndex=0;});
-
-    };
+    // $scope.infoInit = function(){
+    //
+    //     var inputArr = [
+    //         rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
+    //     ].forEach(function(element){element.value="";});
+    //
+    //     var selectArr = [
+    //         rVendorFg, rVatIncldYn, rUseYn
+    //     ].forEach(function(element){element.selectedIndex=0;});
+    //
+    // };
 
     // 탭변경
     $scope.changeTab = function(val) {
