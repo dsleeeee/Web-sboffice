@@ -171,16 +171,22 @@ public class VendrController {
     public Result listTrtMnt(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        Map<String, Object> resultMap = new HashMap<String, Object>();
+        //Map<String, Object> resultMap = new HashMap<String, Object>();
+        List<DefaultMap<String>> dateSelList;
 
         /** 취급/미취급 상품 리스트 */
-        List<DefaultMap<String>> dateSelList1 = vendrService.vendrProdList(vendrVO, sessionInfoVO);
-        List<DefaultMap<String>> dateSelList2 = vendrService.prodList(vendrVO, sessionInfoVO);
+        if(vendrVO.getTrtmntYn() != null && "Y".equals(vendrVO.getTrtmntYn())){
+            dateSelList = vendrService.vendrProdList(vendrVO, sessionInfoVO);
+        }else{
+            dateSelList = vendrService.prodList(vendrVO, sessionInfoVO);
+        }
 
-        resultMap.put("dateSelList1", dateSelList1);
-        resultMap.put("dateSelList2", dateSelList2);
+        return returnListJson(Status.OK, dateSelList, vendrVO);
 
-        return returnJson(Status.OK, resultMap);
+        //resultMap.put("dateSelList1", dateSelList1);
+        //resultMap.put("dateSelList2", dateSelList2);
+
+        //return returnJson(Status.OK, dateSelList1, vendrVO);
     }
 
     /**

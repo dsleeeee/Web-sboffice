@@ -416,7 +416,8 @@
         FROM TB_HQ_VENDOR_PROD thvp,
         TB_HQ_PRODUCT thp
         WHERE 1=1
-        AND thvp.PROD_CD = thp.PROD_CD
+        AND thvp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thvp.PROD_CD (+)= thp.PROD_CD
         AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND thvp.VENDR_CD = #{vendrCd}
         AND thvp.USE_YN = 'Y'
@@ -444,7 +445,8 @@
         FROM TB_MS_VENDOR_PROD tmvp,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tmvp.PROD_CD = tmp.PROD_CD
+        AND tmvp.STORE_CD (+)= tmp.STORE_CD
+        AND tmvp.PROD_CD (+)= tmp.PROD_CD
         AND tmvp.STORE_CD = tmp.STORE_CD
         AND tmvp.STORE_CD = #{storeCd}
         AND tmvp.VENDR_CD = #{vendrCd}
@@ -480,6 +482,17 @@
         <if test="prodNm != null and prodNm != ''">
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' -- 상품명
         </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd}
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
         AND NOT EXISTS
         (
             SELECT 1
@@ -514,6 +527,17 @@
         </if>
         <if test="prodNm != null and prodNm != ''">
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' -- 상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd}
+                                        AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                        AND STORE_CD = #{storeCd}
+            )
         </if>
         AND NOT EXISTS
         (

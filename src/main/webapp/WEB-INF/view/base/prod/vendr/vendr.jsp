@@ -6,15 +6,15 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
-<div class="subCon">
+<div class="subCon" ng-controller="vendrCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="searchBtn">
-              <s:message code="cmm.search" />
+            <button class="btn_blue fr" ng-click="_pageView('vendrCtrl',1)">
+                <s:message code="cmm.search" />
             </button>
         </div>
     </div>
@@ -28,30 +28,26 @@
         <tbody>
             <tr>
                 <%-- 거래처코드 --%>
-                <th>
-                    <s:message code="vendr.vendrCd" />
-                </th>
-                <td>
-                    <div class="sb-select">
-                        <div id="vendrCd"></div>
-                    </div>
-                </td>
+                <th><s:message code="vendr.vendrCd" /></th>
+                <td><input type="text"  class="sb-input w100" id="vendrCd" ng-model="vendrCd" /></td>
                 <%-- 거래처명 --%>
-                <th>
-                    <s:message code="vendr.vendrNm" />
-                </th>
-                <td>
-                    <div class="sb-select">
-                        <div id="vendrNm"></div>
-                    </div>
-                </td>
+                <th><s:message code="vendr.vendrNm" /></th>
+                <td><input type="text"  class="sb-input w100" id="vendrNm" ng-model="vendrNm" /></td>
             </tr>
             <tr>
                 <%-- 거래처구분 --%>
                 <th><s:message code="vendr.vendorFg" /></th>
                 <td>
                     <div class="sb-select">
-                      <div id="vendorFg"></div>
+                        <wj-combo-box
+                                id="vendorFg"
+                                ng-model="vendorFg"
+                                items-source="_getComboData('vendorFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
                     </div>
                 </td>
                 <th></th>
@@ -61,134 +57,86 @@
     </table>
 
     <div class="mt20 oh sb-select dkbr">
-      <%-- 페이지 스케일  --%>
-      <div id="listScaleBox" class="w100px fl"></div>
+        <%-- 페이지 스케일  --%>
+        <wj-combo-box
+                class="w100px fl"
+                id="listScaleBox"
+                ng-model="listScaleBox"
+                items-source="_getComboData('listScaleBox')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="initComboBox(s)">
+        </wj-combo-box>
+        <%--// 페이지 스케일  --%>
+
       <%-- 거래처 등록 --%>
-      <button class="btn_skyblue fr" id="regVendr">
+      <button class="btn_skyblue fr" id="btnRegVendr" ng-click="regVendr()">
         <s:message code="vendr.reg" />
       </button>
     </div>
 
-    <%--위즈모 테이블--%>
-    <div class="wj-TblWrapBr mt10" style="height: 400px;">
-      <div id="theGrid" style="height:393px;"></div>
+    <%-- 그리드 --%>
+    <div class="w100 mt10 mb20">
+        <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    is-read-only="true">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="vendr.vendrCd"/>" binding="vendrCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.vendrNm"/>" binding="vendrNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.bizNo"/>" binding="bizNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap"  width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.ownerNm"/>" binding="ownerNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.telNo"/>" binding="telNo" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.addr"/>" binding="addr" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="vendr.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+
+                <%--팝업 조회시 필요
+                <wj-flex-grid-column header="<s:message code="board.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.boardSeqNo"/>" binding="boardSeqNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="vendrCtrl"/>
+            </jsp:include>
+        </div>
     </div>
-    <%--//위즈모 테이블--%>
 
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
-      <ul id="page1" data-size="10">
-      </ul>
+        <%-- id --%>
+        <ul id="vendrCtrlPager" data-size="10">
+        </ul>
     </div>
     <%--//페이지 리스트--%>
 
 </div>
 
-<script>
+<script type="text/javascript">
 
-  <%-- 선택된 거래처 --%>
-  var vendr;
-
-  <%-- 검색조건 및 dataMap 조회 --%>
-  var vendrCd  = wcombo.genInput("#vendrCd");
-  var vendrNm  = wcombo.genInput("#vendrNm");
-  var cdata    = ${ccu.getCommCodeSelect("011")};
-  var vendorFg = wcombo.genCommonBox("#vendorFg", cdata);
-  var ldata    = ${ccu.getListScale()};
-  var listScaleBox = wcombo.genCommonBox("#listScaleBox", ldata);
+  var vendorFg    = ${ccu.getCommCodeSelect("011")};
   var vendorFgNm = ${ccu.getCommCodeExcpAll("011")};
   var useYn      = ${ccu.getCommCodeExcpAll("067")};
-  var vendorFgDataMap = new wijmo.grid.DataMap(vendorFgNm, 'value', 'name');
-  var useYnDataMap    = new wijmo.grid.DataMap(useYn, 'value', 'name');
-
-  var rdata =
-  [
-    {binding:"rnum",header:"No",width:70,align: "center"},
-    {binding:"vendrCd",header:"<s:message code='vendr.vendrCd' />",width:100,align: "center"},
-    {binding:"vendrNm",header:"<s:message code='vendr.vendrNm' />",width:"*",align: "center"},
-    {binding:"bizNo",header:"<s:message code='vendr.bizNo' />",width:"*",align: "center"},
-    {binding:"vendorFg",header:"<s:message code='vendr.vendorFg' />",dataMap:vendorFgDataMap,width:100,align: "center"},
-    {binding:"ownerNm",header:"<s:message code='vendr.ownerNm' />",width:100,align: "center"},
-    {binding:"telNo",header:"<s:message code='vendr.telNo' />",width:"*",align: "center"},
-    {binding:"addr",header:"<s:message code='vendr.addr' />",width:"*",align: "center"},
-    {binding:"useYn",header:"<s:message code='vendr.useYn' />",dataMap:useYnDataMap,width:90,align: "center"}
-  ];
-
-  var grid = wgrid.genGrid( "#theGrid", rdata);
-
-  function search(index) {
-    var param = {};
-
-    param.vendrCd = vendrCd.text;
-    param.vendrNm = vendrNm.text;
-    param.vendorFg = vendorFg.selectedValue;
-    param.listScale = listScaleBox.selectedValue;
-    param.curr = index;
-
-    $.postJSON("/base/prod/vendr/vendr/list.sb", param, function(result) {
-      var list = result.data.list;
-
-      if(list.length == 0) {
-        s_alert.pop(result.message);
-      }
-
-      grid.itemsSource = list;
-      page.make("#page1", result.data.page.curr, result.data.page.totalPage);
-      },
-      function(result){
-        s_alert.pop(result.data.msg);
-      })
-      .fail(function(){
-        s_alert.pop("Ajax Fail");
-    });
-  }
-
-  <%-- 그리드 포맷 --%>
-  grid.formatItem.addHandler(function(s, e) {
-    if (e.panel == s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-      if( col.binding == "vendrCd" ) {
-        wijmo.addClass(e.cell, 'wijLink');
-      }
-    }
-  });
-
-  <%-- 그리드 선택 이벤트 --%>
-  grid.addEventListener(grid.hostElement, 'click', function(e) {
-    var ht = grid.hitTest(e);
-    if( ht.cellType == wijmo.grid.CellType.Cell) {
-        var col = ht.panel.columns[ht.col];
-        // 거래처코드
-        if( col.binding == "vendrCd" ) {
-            vendr = grid.rows[ht.row].dataItem;
-            openDtlLayer(vendr);
-        }
-      }
-  });
-
-  <%-- 리스트 조회 --%>
-  $("#searchBtn").click(function( e ){
-    search(1);
-  });
-
-  <%-- 페이징 --%>
-  $(document).on("click", ".page1", function() {
-    search($(this).data("value"));
-  });
-
-  <%-- 거래처등록 --%>
-  $("#regVendr").bind("click", function() {
-    vendr = null;
-    openRegistLayer("reg");
-  });
-
-  function hideVendr(){
-    $("#layerVendr").hide();
-    $("#dimVendr").hide();
-  }
 
 </script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20200423.22" charset="utf-8"></script>
+
+<%-- 거래처관리 상세 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/vendr/info.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
 <%-- 거래처관리 신규등록,수정 팝업 거래처등록탭 --%>
 <c:import url="/WEB-INF/view/base/prod/vendr/regist.jsp">
@@ -200,4 +148,8 @@
 <c:import url="/WEB-INF/view/base/prod/vendr/trtmnt.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>

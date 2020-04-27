@@ -79,7 +79,11 @@ public class VendrVO extends PageVO {
     private String modId;
     /** 거래처구분 */
     private VendorFg vendorFg;
-    
+    /** 취급여부 */
+    private String trtmntYn;
+    /** 상품분류코드 */
+    private String prodClassCd;
+
     /**
      * @return the hqBrandCd
      */
@@ -418,6 +422,20 @@ public class VendrVO extends PageVO {
     public void setVendorFg(VendorFg vendorFg) {
         this.vendorFg = vendorFg;
     }
-    
 
+    public String getTrtmntYn() {
+        return trtmntYn;
+    }
+
+    public void setTrtmntYn(String trtmntYn) {
+        this.trtmntYn = trtmntYn;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
 }
