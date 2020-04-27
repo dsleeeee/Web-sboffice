@@ -51,7 +51,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.storeCd  = data.storeCd;
     $scope.storeNm  = data.storeNm;
     $scope.hdRemark = data.hdRemark;
-
+   
     $scope.wjVolmErrDtlLayer.show(true);
     $("#spanDtlTitle").html(messages["volmErr.dtl.slipNo"] + ' : ' + $scope.slipNo + ', ' + messages["volmErr.dtl.store"] + ' : ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
         /*
@@ -75,34 +75,58 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         console.log('data.procFg ==     : ' + data.procFg === $scope.procFg );
         console.log('data.procFg ==     : ' + data.procFg ==  $scope.procFg );
         */
+    
     if ($scope.procFg === "0" && gvOrgnFg !=="S") {    //procFgMap(0:입력, 1:확정)
-      //console.log('000 $scope.procFg === "0"');
-      $("#volmErrBtnLayer").show();
-      $scope.volmErrConfirmFg   = true;
-      $scope.btnDtlSave         = true;
-    }else if($scope.procFg === "0" && gvOrgnFg ==="S"){
-    	$("#volmErrBtnExcelLayer").show();
-    }
-    else {
-      //console.log('000 else');
-      $("#volmErrBtnLayer").hide();
-      $scope.volmErrConfirmFg   = false;
-      $scope.btnDtlSave         = false;
-      
-      $("#volmErrBtnExcelLayer").hide();
-    }
+	      //console.log('000 $scope.procFg === "0"');
+	      $("#volmErrBtnLayer").show();
+	      $scope.volmErrConfirmFg   = true;
+	      $scope.btnDtlSave         = true;
+	    }else if($scope.procFg === "0" && gvOrgnFg ==="S"){
+	    	$("#volmErrBtnExcelLayer").show();
+	    	var flex = $scope.flex;
+	    	flex.formatItem.addHandler(function (s, e) {
+				if (e.panel === s.cells) {
+					var col = s.columns[e.col];
+					if (col.binding === "errFg") { // 실매출
+						wijmo.addClass(e.cell, 'wj-custom-readonly');
+						s.rows[e.row].isReadOnly = true;
+			        }
+				}
+			});
+	    }
+	    else {
+	      //console.log('000 else');
+	    	var flex = $scope.flex;
+	    	flex.formatItem.addHandler(function (s, e) {
+				if (e.panel === s.cells) {
+					var col = s.columns[e.col];
+					if (col.binding === "errFg") { // 실매출
+						wijmo.addClass(e.cell, 'wj-custom-readonly');
+						s.rows[e.row].isReadOnly = true;
+			        }
+				}
+			});
+	    	
+	      $("#volmErrBtnLayer").hide();
+	      $scope.volmErrConfirmFg   = false;
+	      $scope.btnDtlSave         = false;
+	      
+	      $("#volmErrBtnExcelLayer").hide();
+	    }
 
-    $("#volmErrConfirmFg"   ).prop("checked", false);
-    $("#divDtlOutDate"      ).hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
-
+	    $("#volmErrConfirmFg"   ).prop("checked", false);
+	    $("#divDtlOutDate"      ).hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
+   
     // 물량오류 처리구분 콤보박스 조회 및 생성. slipFg 가 있어야 하므로 상세페이지를 호출할때 조회하도록 함.
     var comboParams         = {};
         comboParams.nmcodeGrpCd = "089";
         comboParams.nmcodeItem1 = $scope.slipFg;
-    // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-    $scope._queryCombo("map", null, "errFgMap", "/iostock/cmm/iostockCmm/getCombo.sb", comboParams);
-
+        
+        // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+        $scope._queryCombo("map", null, "errFgMap", "/iostock/cmm/iostockCmm/getCombo.sb", comboParams);
+        
     $scope.searchVolmErrDtlList();
+    
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -112,22 +136,29 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 파라미터
     var params    = {};
         params.slipNo = $scope.slipNo;
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/iostock/volmErr/volmErr/volmErrDtl/list.sb", params, function () {
-    });
+      $scope._inquirySub("/iostock/volmErr/volmErr/volmErrDtl/list.sb", params, function () {});
   };
 
 
   // 저장
-  $scope.save = function () {
-    if (!$("#volmErrConfirmFg").is(":checked")) {
-      $scope._popMsg(messages["volmErr.dtl.require.confirmCheck"]); // 확정을 체크해 주세요.
-      return false;
-    }
-    
-    // 출고요청가능일인지 여부 체크
-    $scope.storeOrderDateCheck();
-    
+  $scope.save = function () { // IF : 확정 AND O2, O4 일때 마감 체크 ; // ELSE : 확정이 아니면 바로 SAVE; 확정 AND O1, O3, O5 일때 바로 SAVE; 
+	  for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
+          if(item.errFg === "O2" || item.errFg === "O4"){
+        	  $scope.errFgCk = true;
+        	  break;
+          }else{
+        	  $scope.errFgCk = false;
+          }
+	  }
+	  if(($("#volmErrConfirmFg").is(":checked") && $scope.errFgCk)){ // 확정체크 AND 처리구분 (02,04)
+    	// 출고요청가능일인지 여부 체크
+    	$scope.storeOrderDateCheck();
+      }else{ // 확정이 아니거나, 처리구분이 O1,O3,O5
+    	  console.log($("#volmErrConfirmFg").is(":checked"));
+    	// 물량오류 처리 함수
+    	$scope.saveVolmErr();
+      }
   };
 
   // 출고요청가능일인지 여부 체크
@@ -135,6 +166,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     var params     = {};
     params.reqDate = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
     params.slipFg  = $scope.slipFg;
+    params.storeCd = $scope.storeCd;
 
     //가상로그인 session 설정
 	    if(document.getElementsByName('sessionId')[0]){
@@ -220,6 +252,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     var params     = {};
     params.reqDate = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
     params.slipFg  = $scope.slipFg;
+    params.storeCd = $scope.storeCd;
 
     //가상로그인 session 설정
 	    if(document.getElementsByName('sessionId')[0]){
@@ -243,48 +276,8 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
           }
           $scope.regHdRemark = response.data.data.remark;
         }
-        
-        var params           = [];
-        var newSlipNoFg      = "N";
-        var hqNewAdjustFg    = "N";
-        var storeNewAdjustFg = "N";
-
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-          var item = $scope.flex.collectionView.itemsEdited[i];
-
-          if (item.errFg === null || item.errFg === "") {
-            $scope._popMsg(messages["volmErr.dtl.require.selectErrFg"]); // 처리구분을 선택해 주세요.
-            return false;
-          }
-          
-          if (newSlipNoFg       === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
-            newSlipNoFg = "Y";
-          }
-          if (hqNewAdjustFg     === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4")) {
-            hqNewAdjustFg = "Y";
-          }
-          if (storeNewAdjustFg  === "N" && item.errFg === "R2") {
-            storeNewAdjustFg = "Y";
-          }
-
-          item.status           = "U";
-          item.slipNo           = $scope.slipNo;
-          item.slipFg           = $scope.slipFg;
-          item.storeCd          = $scope.storeCd;
-          item.hdRemark         = $scope.hdRemark;
-          item.outDate          = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
-          item.confirmFg        = ($("#volmErrConfirmFg").is(":checked") ? $("#volmErrConfirmFg").val() : "");
-          item.procFg           = $scope.procFg;
-          item.newSlipNoFg      = newSlipNoFg;
-          item.hqNewAdjustFg    = hqNewAdjustFg;
-          item.storeNewAdjustFg = storeNewAdjustFg;
-
-          params.push(item);
-        }
-
-        $scope._save("/iostock/volmErr/volmErr/volmErrDtl/save.sb", params, function () {
-          $scope.saveVolmErrDtlCallback()
-        });
+        // 물량오류 처리 함수
+        $scope.saveVolmErr();        
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -333,6 +326,65 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     else {
       $("#divDtlOutDate").hide();
     }
+  };
+  
+  // 물량오류 처리 함수
+  $scope.saveVolmErr = function (){
+	  var params           = [];
+      var newSlipNoFg      = "N";
+      var hqNewAdjustFg    = "N";
+      var storeNewAdjustFg = "N";
+      
+      // 확정이 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
+  	if ($("#volmErrConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
+        var item = $scope.flex.collectionView.items[0];
+        if (item === null) return false;
+
+        $scope.flex.collectionView.editItem(item);
+        item.status = "U";
+        $scope.flex.collectionView.commitEdit();
+      }
+
+      for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        var item = $scope.flex.collectionView.itemsEdited[i];
+
+        if (item.errFg === null || item.errFg === "") {
+          $scope._popMsg(messages["volmErr.dtl.require.selectErrFg"]); // 처리구분을 선택해 주세요.
+          return false;
+        }
+        
+        if (newSlipNoFg       === "N" && (item.errFg === "O2" || item.errFg === "O4" || item.errFg === "R2")) {
+          newSlipNoFg = "Y";
+        }
+        if (hqNewAdjustFg     === "N" && (item.errFg === "O4" || item.errFg === "O5" || item.errFg === "R4")) {
+          hqNewAdjustFg = "Y";
+        }
+        if (storeNewAdjustFg  === "N" && item.errFg === "R2") {
+          storeNewAdjustFg = "Y";
+        }
+
+        if(wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd') < getToday()){ // 저장 날짜가 이전 날짜인경우.
+      	  $scope._popMsg(messages["volmErr.dtl.prevDateOrder"]); // 당일보다 이전일자로 등록 하실 수 없습니다.
+      	  return false;
+        }else{
+	        	item.status           = "U";
+//	        	item.errFg;
+	            item.slipNo           = $scope.slipNo;
+	            item.slipFg           = $scope.slipFg;
+	            item.storeCd          = $scope.storeCd;
+	            item.hdRemark         = $scope.hdRemark;
+	            item.outDate          = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
+	            item.confirmFg        = ($("#volmErrConfirmFg").is(":checked") ? $("#volmErrConfirmFg").val() : "");
+	            item.procFg           = $scope.procFg;
+	            item.newSlipNoFg      = newSlipNoFg;
+	            item.hqNewAdjustFg    = hqNewAdjustFg;
+	            item.storeNewAdjustFg = storeNewAdjustFg;
+	      }
+        params.push(item);
+      }
+      $scope._save("/iostock/volmErr/volmErr/volmErrDtl/save.sb", params, function () { // 확정 체크값 구분 못함(변경사항이 없습니다 alert 표시)
+        $scope.saveVolmErrDtlCallback()
+      });
   };
 
   // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.

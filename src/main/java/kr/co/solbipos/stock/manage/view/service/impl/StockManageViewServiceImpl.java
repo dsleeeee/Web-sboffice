@@ -34,4 +34,17 @@ public class StockManageViewServiceImpl implements StockManageViewService {
 		}
 	}
 
+	@Override
+	public List<DefaultMap<String>> getStockManageViewExcelList(StockManageViewVO stockManageViewVO,
+			SessionInfoVO sessionInfoVO) {
+		stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		stockManageViewVO.setStoreCd(sessionInfoVO.getStoreCd());
+		
+		if(sessionInfoVO.getOrgnFg() != null && sessionInfoVO.getOrgnFg().toString().equals("HQ")) {
+			return stockManageViewMapper.getStockManageViewExcelList(stockManageViewVO); // 본사권한
+		} else {
+			return stockManageViewMapper.getStockManageViewStoreExcelList(stockManageViewVO); // 매장권한
+		}
+	}
+
 }

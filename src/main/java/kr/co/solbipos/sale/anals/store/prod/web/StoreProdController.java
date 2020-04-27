@@ -89,4 +89,25 @@ public class StoreProdController {
         return ReturnUtil.returnListJson(Status.OK, list, storeProdVO);
     }
     
+
+    /**
+     * 매장상품순위 - 매장상품순위 리스트(엑셀) 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storeProdVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/prod/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StoreProdVO storeProdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeProdService.getStoreProdExcelList(storeProdVO, sessionInfoVO);
+        
+        return ReturnUtil.returnListJson(Status.OK, list, storeProdVO);
+    }
 }

@@ -526,28 +526,86 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	});
 	
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
-	$scope.srchOptionView = function(){
-		var srchSrchOption = $scope.excelSrchOption;
-		var columns = $scope.excelFlex.columns;
-		var includeWord;
-		for(var i=0; i<columns.length; i++){
-			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
-			if(includeWord !== "" && includeWord !== "poUnitQty"){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
-				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
-			}
-		}
-	};
+//	$scope.srchOptionView = function(){
+//		var srchSrchOption = $scope.excelSrchOption;
+//		var columns = $scope.excelFlex.columns;
+//		var includeWord;
+//		for(var i=0; i<columns.length; i++){
+//			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
+//			if(includeWord !== "" && includeWord !== "poUnitQty"){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
+//				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+//			}
+//		}
+//	};
+	
+	//조회옵션 함수
+	  $scope.srchOptionView = function () {
+		  var srchSrchOption = $scope.excelSrchOption;
+		  var check = srchSrchOption;
+		  var grid = wijmo.Control.getControl("#storeDayMainExcelGrid");
+	      var columns = grid.columns;
+	      var length  = grid.columns.length;
+
+	      if(check == '1'){ // 수량
+	    	  for(var i=0; i<length; i++){
+	    		  var colLength = columns[i].binding.length;
+				  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Tot'){
+	    			  columns[i].visible = false;
+	    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    			  columns[i].visible = true;
+	    		  }
+	          }
+	      }else if(check == '2'){ // 금액
+	    	  for(var i=0; i<length; i++){
+	    		  var colLength = columns[i].binding.length;
+	    		  if(columns[i].binding != 'poUnitQty'){
+					  if(columns[i].binding.substring(colLength-2,colLength-5) == 'Qty'){
+		    			  columns[i].visible = false;
+		    		  }else if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+		    			  columns[i].visible = true;
+		    		  }
+	    		  }
+	          }
+	      }else{ //수량 + 금액
+	    	  for(var i=0; i<length; i++){
+	    		  if(columns[i].binding != 'lv1Nm' && columns[i].binding != 'lv2Nm' && columns[i].binding != 'lv3Nm'){
+	    			  columns[i].visible = true;
+	    		  }
+	          }
+	      }
+	  };
 
 	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
-	$scope.isChkProdClassDisplay = function(){
-		var columns = $scope.excelFlex.columns;
-
-		for(var i=0; i<columns.length; i++){
-			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
-				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
-			}
-		}
-	};
+//	$scope.isChkProdClassDisplay = function(){
+//		var columns = $scope.excelFlex.columns;
+//
+//		for(var i=0; i<columns.length; i++){
+//			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+//				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+//			}
+//		}
+//	};
+	
+	  //상품분류 항목표시 함수
+	  $scope.isChkProdClassDisplay = function() {
+		  var grid = wijmo.Control.getControl("#storeDayMainExcelGrid");
+	      var columns = grid.columns;
+	      var length  = grid.columns.length;
+	      var isChecked = $scope.isChecked;
+		  if(isChecked){
+			  for(var i=0; i<length; i++){
+				  if(columns[i].binding.substring(0,2) == 'lv'){
+	    			  columns[i].visible = true;
+	    		  }
+	          }
+		  }else{
+			  for(var i=0; i<length; i++){
+				  if(columns[i].binding.substring(0,2) == 'lv'){
+	    			  columns[i].visible = false;
+	    		  }
+	          }
+		  }
+	  };
 	
 	$scope.searchStoreDayExcelList = function (isPageChk) {
 	    $scope.searchedStartDate = wijmo.Globalize.format($scope.srchStoreDayStartDate.value, 'yyyyMMdd');
@@ -582,14 +640,14 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquiryMain("/stock/status/storeDay/storeDay/viewExcelList.sb", params, function () {
-	    	if ($scope.flex.rows.length <= 0) {
+	    	if ($scope.excelFlex.rows.length <= 0) {
 	    	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 	    	      return false;
 	    	    }
 
 	    	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 	    	    $timeout(function () {
-	    	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+	    	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
 	    	    	includeColumnHeaders: true,
 	    		    includeCellStyles   : true,
 	    	        includeColumns      : function (column) {

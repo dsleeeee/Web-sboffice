@@ -34,9 +34,18 @@ public class ProdPosServiceImpl implements ProdPosService {
     public List<DefaultMap<String>> getProdPosList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
     	prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-//    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
-//    		posProdVO.setArrStoreCd(posProdVO.getStoreCd().split(","));
-//		}
+    	/*if (!StringUtil.getOrBlank(prodPosVO.getStoreCd()).equals("")) {
+    		posProdVO.setArrStorePos(posProdVO.getStoreCd().split(","));
+		}*/
+    	
+    	if (prodPosVO.getPosNo() != null && !"".equals(prodPosVO.getPosNo())) {
+			String[] arrPosNo = prodPosVO.getPosNo().split(",");
+			if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				prodPosVO.setArrPosNo(arrPosNo);
+    			}
+    		}
+		}
         return prodPosMapper.getProdPosList(prodPosVO);
     }
 
@@ -46,5 +55,26 @@ public class ProdPosServiceImpl implements ProdPosService {
 		prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		return prodPosMapper.getPosNmList(prodPosVO);
 	}
+	
+	/** 포스별매출상품별 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdPosExcelList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO) {
+    	prodPosVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+//    	if (!StringUtil.getOrBlank(posProdVO.getStoreCd()).equals("")) {
+//    		posProdVO.setArrStoreCd(posProdVO.getStoreCd().split(","));
+//		}
+    	
+    	if (prodPosVO.getPosNo() != null && !"".equals(prodPosVO.getPosNo())) {
+			String[] arrPosNo = prodPosVO.getPosNo().split(",");
+			if (arrPosNo.length > 0) {
+    			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+    				prodPosVO.setArrPosNo(arrPosNo);
+    			}
+    		}
+		}
+        return prodPosMapper.getProdPosExcelList(prodPosVO);
+    }
+
 
 }

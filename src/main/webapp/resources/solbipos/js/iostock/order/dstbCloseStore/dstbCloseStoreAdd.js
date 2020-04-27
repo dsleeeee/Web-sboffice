@@ -423,7 +423,12 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     params.storeCd = $("#dstbCloseStoreAddSelectStoreCd").val();
     params.slipFg  = $scope.slipFg;
     params.date    = $scope.reqDate;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({

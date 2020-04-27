@@ -321,7 +321,12 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
     params.slipFg   = $scope.slipFg;
     params.vendrCd  = $scope.vendrCd;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({

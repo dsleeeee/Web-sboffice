@@ -120,15 +120,15 @@
               <s:message code="rtnDstbCloseStore.add.txtOption2Sale"/></p>
           </td>
         </tr>
-        <tr>
-          <td colspan="4">
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="rtnDstbCloseStore.add.excelFormDownload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="rtnDstbCloseStore.add.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="rtnDstbCloseStore.add.textFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="rtnDstbCloseStore.add.excelFormUploadErrorInfo"/></a>
-          </td>
-        </tr>
+<!--         <tr> -->
+<!--           <td colspan="4"> -->
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="rtnDstbCloseStore.add.excelFormDownload"/></a> --%>
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="rtnDstbCloseStore.add.excelFormUpload"/></a> --%>
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="rtnDstbCloseStore.add.textFormUpload"/></a> --%>
+<%--             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a> --%>
+<%--             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="rtnDstbCloseStore.add.excelFormUploadErrorInfo"/></a> --%>
+<!--           </td> -->
+<!--         </tr> -->
         </tbody>
       </table>
 

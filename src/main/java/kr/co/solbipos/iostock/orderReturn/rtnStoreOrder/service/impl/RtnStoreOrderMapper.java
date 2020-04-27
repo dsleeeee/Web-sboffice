@@ -78,5 +78,10 @@ public interface RtnStoreOrderMapper {
 
     /** 반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
-
+    
+    /** 반품등록 PROD 등록 */
+    int insertExlRtnStoreOrderProd(ExcelUploadVO excelUploadVO);
+    
+    /** 반품등록 PROD 삭제 */
+    int deleteExlRtnStoreOrderProd(ExcelUploadVO excelUploadVO);
 }

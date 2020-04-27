@@ -117,6 +117,25 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+    <%-- 엑셀 리스트 --%>
+    <div class="wj-gridWrap2" style="display: none;" ng-controller="goalDayExcelCtrl">
+     <wj-flex-grid
+       id="goalDayExcelGrid"
+       autoGenerateColumns="false"
+       selection-mode="Row"
+       items-source="data"
+       control="excelFlex"
+       initialized="initGrid(s,e)"
+       is-read-only="true"
+       frozen-columns="2"
+       item-formatter="_itemFormatter">
+       <!-- define columns -->
+       <wj-flex-grid-column header="<s:message code="goal.goalDay.saleDate"/>"          binding="saleGoalDate"          width="200" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="goal.goalDay.yoil"/>"              binding="saleGoalDy"            width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+     </wj-flex-grid>
+   </div>
+   <%-- //엑셀 리스트 --%>
 </div>
 
 <script type="text/javascript">

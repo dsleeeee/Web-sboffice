@@ -57,6 +57,7 @@
                 <div class="sb-select fl w150px mr20">
                     <wj-combo-box
                             id="rowNum"
+                            ng-model ="rowNum"
                             control="conRowNum"
                             items-source="_getComboData('srchRowNumCombo')"
                             display-member-path="name"

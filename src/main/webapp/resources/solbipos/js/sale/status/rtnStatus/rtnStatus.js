@@ -219,12 +219,20 @@ app.controller('rtnStatusDayMainCtrl', ['$scope', '$http', '$timeout', function 
 		      params.startDate = wijmo.Globalize.format($scope.srchRtnStatusDayStartDate.value, 'yyyyMMdd');
 		      params.endDate = wijmo.Globalize.format($scope.srchRtnStatusDayEndDate.value, 'yyyyMMdd');
 		    }
+		    
+		    params.isDayDtlSearch	= true;
+		    
+		    $scope._broadcast("rtnStatusDayDtlCtrlSrch", params);
 		}else{
-			params.storeCd   = -1;
-			params.storeNm	 = "";
+			$scope.isDayDtlSearch	= false;
+			//$scope._broadcast("rtnStatusDayDtlCtrl", params);
+			// 바코드별 매출 그리드 조회 후 상세내역 그리드 초기화
+			var orderStockInfoDtlScope = agrid.getScope('rtnStatusDayDtlCtrl');
+		    orderStockInfoDtlScope.dtlGridDefault();
+			
 		}
 		// 코너별 매출현황 상세조회.
-	    $scope._broadcast("rtnStatusDayDtlCtrlSrch", params);
+	    
 	}
   };
 
@@ -413,13 +421,16 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 			if(rows.length > 0){
 			    params.storeCd   = $scope.storeCd;
 			    params.saleDate  = rows[0].dataItem.saleDate;
+			    $scope._broadcast("rtnStatusPosDtlCtrlSrch", params);
 			}else{
-				params.storeCd   = -1;
-				params.saleDate  = "";
+				//$scope._broadcast("rtnStatusDayDtlCtrl", params);
+				var orderStockInfoDtlScope = agrid.getScope('rtnStatusPosDtlCtrl');
+			    orderStockInfoDtlScope.dtlGridDefault();
+				
 			}
 			// 반품현황 포스별 상세조회.
 		    if(params.saleDate != "" || params.saleDate != null){
-		    	$scope._broadcast("rtnStatusPosDtlCtrlSrch", params);
+		    	
 		    }
 		}
 	  };
@@ -428,7 +439,19 @@ app.controller('rtnStatusDayDtlCtrl', ['$scope', '$http','$timeout', function ($
 	  $scope.excelDownloadDayDtlCtrl = function () {
 		  // 파라미터
 		  var params     = {};
+		  params.isDayDtlSearch	= $scope.isDayDtlSearch;
 		  $scope._broadcast('rtnStatusDayDtlExcelCtrl',params);
+	  };
+	  
+	// 상세 그리드 초기화
+	  $scope.dtlGridDefault = function () {
+	    $timeout(function () {
+	      var cv          = new wijmo.collections.CollectionView([]);
+	      cv.trackChanges = true;
+	      $scope.data     = cv;
+	      $scope.flex.refresh();
+	      $scope.isDayDtlSearch	= false;
+	    }, 10);
 	  };
 }]);
 
@@ -516,6 +539,17 @@ app.controller('rtnStatusPosDtlCtrl', ['$scope', '$http','$timeout', function ($
 	  $scope.excelDownloadPosDtlCtrl = function () {
 		  var params     = {};
 		  $scope._broadcast('rtnStatusPosDtlExcelCtrl',params);
+	  };
+	  
+	// 상세 그리드 초기화
+	  $scope.dtlGridDefault = function () {
+	    $timeout(function () {
+	      var cv          = new wijmo.collections.CollectionView([]);
+	      cv.trackChanges = true;
+	      $scope.data     = cv;
+	      $scope.flex.refresh();
+	      $scope.isPosDtlSearch	= false;
+	    }, 10);
 	  };
 }]);
 
@@ -615,7 +649,7 @@ app.controller('rtnStatusDayExcelCtrl', ['$scope', '$http', '$timeout', function
 		params.endDate = $scope.excelDayEndDate;
 
 		// 전체 엑셀 조회
-		$scope._inquiryMain("/sale/status/rtnStatus/day/excelList.sb", params, function(){
+		$scope._inquirySub("/sale/status/rtnStatus/day/excelList.sb", params, function(){
 			if ($scope.dayExcelflex.rows.length <= 0 || !$scope.isDaySearch) {
 			      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			      return false;

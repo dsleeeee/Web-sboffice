@@ -42,5 +42,24 @@ public class DayIostockServiceImpl implements DayIostockService {
 		}
 		return list;
 	}
+	
+	/** 일수불현황 리스트(엑셀) 조회 */
+	@Override
+	public List<DefaultMap<String>> dayIostockExcelList(DayIostockVO dayIostockVO, SessionInfoVO sessionInfoVO) {
+		dayIostockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dayIostockVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		// 거래처 멀티 선택
+        if(!StringUtil.getOrBlank(dayIostockVO.getVendrCd()).equals("")) {
+        	dayIostockVO.setArrVendrCd(dayIostockVO.getVendrCd().split(","));
+        }
+		List<DefaultMap<String>> list;
+		if(dayIostockVO.getOrgnFg() == "H" && dayIostockVO.getOrgnFg() != null) { // 본사권한
+			list = dayIostockMapper.hqDayIostockExcelList(dayIostockVO);
+		}else { // 매장권한
+			dayIostockVO.setStoreCd(sessionInfoVO.getStoreCd());
+			list = dayIostockMapper.storeDayIostockExcelList(dayIostockVO);
+		}
+		return list;
+	}
 
 }

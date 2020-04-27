@@ -43,12 +43,18 @@ public class HqCurrServiceImpl implements HqCurrService {
 	@Override
 	public List<DefaultMap<String>> gethqCurrDtlList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
 		//hqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	if( !StringUtil.getOrBlank(hqCurrVO.getHqOfficeCd()).equals("")) {
-			return hqCurrMapper.getHqCurrDtlList(hqCurrVO);
-		} else {
-			//hqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
-			return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
-		}
+//    	if( !StringUtil.getOrBlank(hqCurrVO.getHqOfficeCd()).equals("")) {
+//			return hqCurrMapper.getHqCurrDtlList(hqCurrVO);
+//		} else {
+//			//hqCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
+//			return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
+//		}
+		hqCurrVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		if(hqCurrVO.getOrgnFg() == "H" && hqCurrVO.getOrgnFg() != null) { // 본사권한
+    		return hqCurrMapper.getHqCurrDtlList(hqCurrVO);    		
+    	} else {
+    		return hqCurrMapper.getStoreCurrDtlList(hqCurrVO);
+    	}
 	}
 
 	@Override

@@ -82,4 +82,23 @@ public class DayIostockController {
 		List<DefaultMap<String>> list = dayIostockService.dayIostockList(dayIostockVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, dayIostockVO);
 	}
+	
+	/**
+     * 일수불현황 - 리스트 조회(엑셀)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 21.
+     */
+	@RequestMapping(value = "/prod/viewExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result dayIostockExcelList(HttpServletRequest request, HttpServletResponse response, Model model, DayIostockVO dayIostockVO) {
+		
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		
+		List<DefaultMap<String>> list = dayIostockService.dayIostockExcelList(dayIostockVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, dayIostockVO);
+	}
 }

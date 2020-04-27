@@ -455,7 +455,7 @@ public class AdjServiceImpl implements AdjService {
         adjHdVO.setAdjTitle(excelUploadVO.getTitle());
         adjHdVO.setSeqNo(Integer.parseInt(seqNo));
         adjHdVO.setProcFg("0");
-        adjHdVO.setStorageCd("000");
+        adjHdVO.setStorageCd("999");
         adjHdVO.setRegId(sessionInfoVO.getUserId());
         adjHdVO.setRegDt(currentDt);
         adjHdVO.setModId(sessionInfoVO.getUserId());
@@ -469,6 +469,7 @@ public class AdjServiceImpl implements AdjService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.insertStAdjHd(adjHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -480,6 +481,7 @@ public class AdjServiceImpl implements AdjService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.updateStAdjHd(adjHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

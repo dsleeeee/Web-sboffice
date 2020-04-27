@@ -588,7 +588,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
         excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
         excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
+//        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
         excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         excelUploadVO.setRegId(sessionInfoVO.getUserId());
         excelUploadVO.setRegDt(currentDt);
@@ -602,28 +602,20 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
         // 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
         result = rtnStoreOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
-
-        // 여신 체크
-//        DefaultMap<String> storeLoan = rtnStoreOrderMapper.storeLoanCheck(excelUploadVO);
-//        if(storeLoan.getStr("isExist").equals("Y")) {
-//            if (storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
-//                throw new JsonException(Status.SERVER_ERROR, messageService.get(
-//                    "storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
-//            }
-//        }
+        result = rtnStoreOrderMapper.deleteExlRtnStoreOrderProd(excelUploadVO);
 
         // 엑셀업로드 한 수량을 주문수량으로 입력
         result = rtnStoreOrderMapper.insertRtnStoreOrderToExcelUploadData(excelUploadVO);
-
-        // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = rtnStoreOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
-
+        
+        // 엑셀업로드 한 수량을 주문수량으로 PROD입력
+        result = rtnStoreOrderMapper.insertExlRtnStoreOrderProd(excelUploadVO);
+        
         // 엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
         int dtlCnt = 0;
         String hdExist = "N";
 
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
-        rtnStoreOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        rtnStoreOrderVO.setStoreCd(excelUploadVO.getStoreCd());
         rtnStoreOrderVO.setRegId(sessionInfoVO.getUserId());
         rtnStoreOrderVO.setRegDt(currentDt);
         rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
@@ -640,20 +632,25 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         // 상품건수가 없으면 HD 삭제
         if(dtlCnt == 0) {
             result = rtnStoreOrderMapper.deleteRtnStoreOrder(rtnStoreOrderVO);
+            result = rtnStoreOrderMapper.deleteExlRtnStoreOrderProd(excelUploadVO);
         }
         // 상품건수가 있는경우 HD 내용이 존재하는지 여부 조회
         else {
             hdExist = rtnStoreOrderMapper.getHdExist(rtnStoreOrderVO);
             // HD 내용이 존재하는 경우 update
             if(hdExist.equals("Y")) {
-                result = rtnStoreOrderMapper.updateRtnStoreOrder(rtnStoreOrderVO);
+                result = rtnStoreOrderMapper.updateRtnStoreOrder(rtnStoreOrderVO);              
+                
             }
             // HD 내용이 없는 경우 insert
             else if(hdExist.equals("N")) {
-                result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
+                result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);               
             }
         }
-
+        
+        // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
+        result = rtnStoreOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        
         return result;
     }
 }

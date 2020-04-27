@@ -56,10 +56,10 @@
 			<tr>
 	        <%-- 상품코드 --%>
 	        <th><s:message code="prodcalss.prodCd" /></th>
-	        <td><input type="text" id="srchDayProdCd" class="sb-input w100" maxlength="13" ng-model="prodCd"/></td>
+	        <td><input type="text" id="srchDayProdCd" class="sb-input w100" maxlength="13"/></td>
 	        <%-- 상품명 --%>
 	        <th><s:message code="prodcalss.prodNm" /></th>
-	        <td><input type="text" id="srchDayProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
+	        <td><input type="text" id="srchDayProdNm" class="sb-input w100" maxlength="100"/></td>
 	      	</tr>
 
 	        <tr>
@@ -73,7 +73,7 @@
 		        </c:if>
 		          <input type="text" class="sb-input w70" id="srchProdDayCd" ng-model="prodDayCdNm" ng-click="popUpProdDay()" style="float: left;"
 		                 placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-		          <input type="hidden" id="_prodDayCd" name="prodDayCd" ng-model="prodDayCd" disabled />
+		          <input type="hidden" id="_prodDayCd" name="prodDayCd" ng-model="prodDayCdModel" disabled />
 		          <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdDayCd" style="margin-left: 5px;" ng-click="delProdDay()"><s:message code="cmm.selectCancel"/></button>
 		        </td>
 	            <%-- 매장코드 --%>

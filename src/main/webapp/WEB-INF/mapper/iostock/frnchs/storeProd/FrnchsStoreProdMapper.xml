@@ -36,9 +36,17 @@
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
-           <if test='prodClassCd != null and prodClassCd !=""'>
-              AND Z.PROD_CLASS_CD = #{prodClassCd}
-           </if> 
+           <if test='prodClassCd != null and prodClassCd != ""'> 
+                AND Z.PROD_CLASS_CD IN  (
+                               SELECT              PROD_CLASS_CD
+                               FROM                TB_HQ_PRODUCT_CLASS
+                               WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
+                               START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                           )
+           </if>
            <if test='prodCd != null and prodCd !=""'>
               AND Z.PROD_CD = #{prodCd}
            </if>
@@ -94,9 +102,17 @@
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
-           <if test='prodClassCd != null and prodClassCd !=""'>
-              AND Z.PROD_CLASS_CD = #{prodClassCd}
-           </if> 
+           <if test='prodClassCd != null and prodClassCd != ""'> 
+                AND Z.PROD_CLASS_CD IN  (
+                               SELECT              PROD_CLASS_CD
+                               FROM                TB_HQ_PRODUCT_CLASS
+                               WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
+                               START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                               CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                               AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
+                           )
+           </if>
            <if test='prodCd != null and prodCd !=""'>
               AND Z.PROD_CD = #{prodCd}
            </if>

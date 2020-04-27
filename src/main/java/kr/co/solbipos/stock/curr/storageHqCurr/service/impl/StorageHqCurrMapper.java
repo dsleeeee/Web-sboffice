@@ -19,4 +19,8 @@ public interface StorageHqCurrMapper {
 	List<DefaultMap<String>> getStorageHqList(StorageHqCurrVO storageHqCurrVO);
 	/** 창고별현재고현황 - 매장 창고별현재고현황 매장창고 리스트 조회 */
 	List<DefaultMap<String>> getStorageStorageList(StorageHqCurrVO storageHqCurrVO);
+    /** 창고별현재고현황 - 본사 창고별현재고현황(엑셀) 리스트 조회 */
+    List<DefaultMap<String>> getStorageHqCurrExcelList(StorageHqCurrVO storageHqCurrVO);
+    /** 창고별현재고현황 - 매장 창고별현재고현황(엑셀) 리스트 조회 */
+    List<DefaultMap<String>> getStorageStorageCurrExcelList(StorageHqCurrVO storageHqCurrVO);
 }

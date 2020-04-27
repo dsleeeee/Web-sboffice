@@ -64,6 +64,8 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			params.prodNm = selectedRow.prodNm;
 			params.hqOfficeCd	= $("#hqOfficeCd").val();
 		    params.storeCd		= $("#storeCd").val();
+//		    params.orgnFg		= $("#orgnFg").val();	
+		    
 			$scope._broadcast('hqCurrDtlCtrl', params);
 		}
       }
@@ -87,9 +89,9 @@ app.controller('hqCurrCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope.searchHqCurrList = function (isPageChk) {
     // 파라미터
     var params     = {};
-    params.prodCd = $scope.prodCd;
-    params.prodNm = $scope.prodNm;
-    params.barcdCd = $scope.barcdCd;
+    params.prodCd = $scope.prodCdModel;
+    params.prodNm = $scope.prodNmModel;
+    params.barcdCd = $scope.barcdCdModel;
     params.unitFg = $scope.unitFgModel;
     params.prodClassCd = $scope.prodClassCd;
     params.vendrCd = $("#hqCurrSelectVendrCd").val();

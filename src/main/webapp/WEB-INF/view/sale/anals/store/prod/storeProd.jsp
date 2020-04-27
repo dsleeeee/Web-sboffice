@@ -60,7 +60,7 @@
 			    <td colspan="3">
 			        <input type="text" class="sb-input w50" id="srchStoreProdProdNm" ng-model="prodCdNm" ng-click="popUpProd()" style="float: left; width:200px;" placeholder="선택" readonly/>
 			        <input type="hidden" id="srchStoreProdProdCd" name="srchStoreProdProdCd" ng-model="prodCd" disabled />
-			        <input type="hidden" id="srchStoreProdProdClassCd" name="srchStoreProdProdClassCd" ng-model="prodCalssCd" disabled />
+			        <input type="hidden" id="srchStoreProdProdClassCd" name="srchStoreProdProdClassCd" ng-model="prodCalssCdModel" disabled />
 			        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
             	<span class="chk ml10 pst3">
                 	<input type="checkbox"  ng-model="isCheckedProdAll" ng-change="totalProd()" />
@@ -147,6 +147,35 @@
 	    </ul>
 	  </div>
 	<%--//페이지 리스트--%>
+	
+	<%-- 엑셀 리스트 --%>
+	<div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="storeProdExcelCtrl">
+      <div class="wj-gridWrap">
+	   <wj-flex-grid
+          id="storeProdExcelGrid"
+          autoGenerateColumns="false"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 		width="200" align="center"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center"  is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.prodCd"/>"			binding="prodCd" 		width="120" align="center"  is-read-only="true" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="store.prodNm"/>" 			binding="prodNm" 		width="120" align="center"  is-read-only="true" ></wj-flex-grid-column>
+ 		  <wj-flex-grid-column header="<s:message code="store.totSaleQty"/>" 		binding="totSaleQty" 	width="100" align="center"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+  		  <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 		binding="totSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+   		  <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 			binding="totDcAmt" 		width="100" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column> 
+   		  <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 		binding="realSaleAmt" 	width="120" align="right"   is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+	   </div>
+	</div>
+	<%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/prod/storeProd.js?ver=20190125.02" charset="utf-8"></script>

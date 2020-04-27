@@ -49,4 +49,14 @@ public class PosMonthServiceImpl implements PosMonthService {
 		return posMonthMapper.getPosNmList(posMonthVO);
 	}
 
+	@Override
+	public List<DefaultMap<String>> getPosMonthExcelList(PosMonthVO posMonthVO, SessionInfoVO sessionInfoVO) {
+		posMonthVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+//    	if (!StringUtil.getOrBlank(posMonthVO.getStoreCd()).equals("")) {
+//    		posMonthVO.setArrStoreCd(posMonthVO.getStoreCd().split(","));
+//		}
+        return posMonthMapper.getPosMonthExcelList(posMonthVO);
+	}
+
 }

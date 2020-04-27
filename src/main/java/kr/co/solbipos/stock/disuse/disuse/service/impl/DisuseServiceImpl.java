@@ -454,7 +454,7 @@ public class DisuseServiceImpl implements DisuseService {
         disuseHdVO.setDisuseTitle(excelUploadVO.getTitle());
         disuseHdVO.setSeqNo(Integer.parseInt(seqNo));
         disuseHdVO.setProcFg("0");
-        disuseHdVO.setStorageCd("000");
+        disuseHdVO.setStorageCd("999");
         disuseHdVO.setRegId(sessionInfoVO.getUserId());
         disuseHdVO.setRegDt(currentDt);
         disuseHdVO.setModId(sessionInfoVO.getUserId());
@@ -468,6 +468,7 @@ public class DisuseServiceImpl implements DisuseService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.insertStDisuseHd(disuseHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -479,6 +480,7 @@ public class DisuseServiceImpl implements DisuseService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.updateStDisuseHd(disuseHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

@@ -50,6 +50,18 @@ public class VersusPeriodClassServiceImpl implements VersusPeriodClassService {
 		return versusPeriodClassMapper.getVersusPeriodClassDtlList(versusPeriodClassVO);
 	}
 
+    /** 대비기간매출분석 - 분류상품별 리스트(엑셀) 상세 조회 */
+	@Override
+	public List<DefaultMap<String>> getVersusPeriodClassDtlExcelList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {
+
+		versusPeriodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(versusPeriodClassVO.getStoreCd()).equals("")) {
+        	versusPeriodClassVO.setArrStoreCd(versusPeriodClassVO.getStoreCd().split(","));
+        }
+
+		return versusPeriodClassMapper.getVersusPeriodClassDtlExcelList(versusPeriodClassVO);
+	}
 	/** 대비기간매출분석 - 분류상품별 리스트 상세 차트 조회 */
 	@Override
 	public List<DefaultMap<String>> getVersusPeriodClassDtlChartList(VersusPeriodClassVO versusPeriodClassVO, SessionInfoVO sessionInfoVO) {

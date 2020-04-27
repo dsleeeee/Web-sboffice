@@ -14,4 +14,13 @@ public interface ApprAcquireService {
     List<DefaultMap<String>> getApprAcquireMpayList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
     /** 승인현황 카드매입사별 탭 - 비매출카드 리스트 조회 */
     List<DefaultMap<String>> getApprAcquireNcardList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
+
+    /** 승인현황 카드매입사별 탭 - 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getApprAcquireExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
+    /** 승인현황 카드매입사별 탭 - 엑셀 모바일쿠폰 리스트 조회 */
+    List<DefaultMap<String>> getApprAcquireMcouponExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
+    /** 승인현황 카드매입사별 탭 - 엑셀 모바일페이 리스트 조회 */
+    List<DefaultMap<String>> getApprAcquireMpayExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
+    /** 승인현황 카드매입사별 탭 - 엑셀 비매출카드 리스트 조회 */
+    List<DefaultMap<String>> getApprAcquireNcardExcelList(ApprAcquireVO apprAcquireVO, SessionInfoVO sessionInfoVO);
 }

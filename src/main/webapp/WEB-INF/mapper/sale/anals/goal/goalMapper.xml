@@ -67,6 +67,44 @@
 			ORDER BY M.SALE_GOAL_DATE DESC
 			<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+    
+    <!-- 매출목표관리 - 일자별 목표대비 매출 엑셀리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 일자별 목표대비 매출 엑셀리스트 조회한다.
+    -->
+    <select id="getSaleGoalDayExcelList" parameterType="goalVO" resultType="DefaultMap">
+        SELECT TO_CHAR(TO_DATE(M.SALE_GOAL_DATE, 'YYYY-MM-DD'),'YYYY-MM-DD') SALE_GOAL_DATE
+               , M.SALE_GOAL_DY
+               ${sQuery1}
+            FROM (
+                  SELECT TSSGD.SALE_GOAL_DATE
+                         , TO_CHAR(TO_DATE(TSSGD.SALE_GOAL_DATE, 'YYYYMMDD'),'DY') AS SALE_GOAL_DY
+                         ${sQuery2}
+                    FROM TB_SL_SALE_GOAL_DAILY TSSGD
+                         , TB_SL_DAILY_TOTAL TSDT
+                   WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
+                     AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
+                     <if test='startDate != null and startDate != ""'>
+                       AND TSSGD.SALE_GOAL_YM = #{startDate}
+                     </if>
+                     <if test='arrStoreCd != null and arrStoreCd != ""'>
+                       AND TSSGD.STORE_CD IN
+                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                            #{item}
+                        </foreach>
+                     </if>
+                     <if test='storeCd == null or storeCd == ""'>
+                       AND 1 = 2
+                     </if>
+                   GROUP BY TSSGD.SALE_GOAL_DATE, TO_CHAR(TO_DATE(TSSGD.SALE_GOAL_DATE, 'YYYYMMDD'),'DY')
+                   ORDER BY TSSGD.SALE_GOAL_DATE DESC
+                  ) M
+            GROUP BY M.SALE_GOAL_DATE
+                  , M.SALE_GOAL_DY
+            ORDER BY M.SALE_GOAL_DATE DESC
+    </select>
 	
 	<!-- 매출목표관리 - 월별 목표대비 매출 리스트 조회 -->
     <!--
@@ -121,6 +159,58 @@
                  ORDER BY TSSGD.STORE_CD, SALE_GOAL_YM
                ) M
          <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 매출목표관리 - 월별 목표대비 매출 엑셀리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : goalVO
+        COMMENTS : 매출목표관리 - 월별 목표대비 매출 엑셀리스트 조회한다.
+    -->
+    <select id="getSaleGoalMonthExcelList" parameterType="goalVO" resultType="DefaultMap">
+        SELECT M.STORE_NM
+             , M.STORE_CD
+             , TO_CHAR(TO_DATE(M.SALE_GOAL_YM, 'YYYY-MM'),'YYYY-MM') SALE_GOAL_YM
+             , M.SALE_GOAL_DATE_CNT
+             , M.SALE_DATE_CNT
+             , M.SALE_GOAL_MONTHLY_AMT
+             , M.SALE_GOAL_AMT
+             , M.TOT_SALE_AMT
+             , ROUND((1+(NVL(M.TOT_SALE_AMT,0)-M.SALE_GOAL_MONTHLY_AMT)/ABS(M.SALE_GOAL_MONTHLY_AMT))*100,1) AS GOAL_ACHI_MONTHLY
+             , ROUND((1+(NVL(M.TOT_SALE_AMT,0)-M.SALE_GOAL_AMT)/ABS(M.SALE_GOAL_AMT))*100,1) AS GOAL_ACHI
+          FROM (
+                SELECT TMS.STORE_NM
+                     , TSSGD.STORE_CD
+                     , TSSGD.SALE_GOAL_YM
+                     , COUNT(TSSGD.SALE_GOAL_DATE) AS SALE_GOAL_DATE_CNT
+                     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL WHERE STORE_CD = TSSGD.STORE_CD AND SALE_DATE LIKE '201904%') AS SALE_DATE_CNT
+                     , (SELECT SUM(SALE_GOAL_AMT) FROM TB_SL_SALE_GOAL_MONTHLY WHERE STORE_CD = TSSGD.STORE_CD AND SALE_GOAL_YM = TSSGD.SALE_GOAL_YM) AS SALE_GOAL_MONTHLY_AMT
+                     , SUM(TSSGD.SALE_GOAL_AMT) AS SALE_GOAL_AMT
+                     , SUM(TSDT.TOT_SALE_AMT) AS TOT_SALE_AMT
+                  FROM TB_SL_SALE_GOAL_DAILY TSSGD
+                     , TB_SL_DAILY_TOTAL TSDT
+                     , TB_MS_STORE TMS
+                 WHERE TSSGD.STORE_CD = TSDT.STORE_CD(+)
+                   AND TSSGD.SALE_GOAL_DATE = TSDT.SALE_DATE(+)
+                   <if test='startDate != null and startDate != ""'>
+                     AND TSSGD.SALE_GOAL_YM >= #{startDate}
+                   </if>
+                   <if test='endDate != null and endDate != ""'>
+                     AND TSSGD.SALE_GOAL_YM <![CDATA[<=]]> #{endDate}
+                   </if>
+                   <if test='arrStoreCd != null and arrStoreCd != ""'>
+                     AND TSSGD.STORE_CD IN
+                      <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                          #{item}
+                      </foreach>
+                   </if>
+                   AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TSSGD.STORE_CD = TMS.STORE_CD
+                 GROUP BY TSSGD.STORE_CD
+                     , TMS.STORE_NM
+                     , TSSGD.SALE_GOAL_YM
+                 ORDER BY TSSGD.STORE_CD, SALE_GOAL_YM
+               ) M
     </select>
     
     <!-- 매출목표관리 - 매장 리스트 조회 -->

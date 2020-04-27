@@ -88,7 +88,7 @@ public class StorageHqCurrController {
 
         return ReturnUtil.returnListJson(Status.OK, list, storageHqCurrVO);
     }
-    
+
     /**
      * 창고별현재고현황 - 창고별현재고현황 창고 리스트 조회
      * @param   request
@@ -106,6 +106,30 @@ public class StorageHqCurrController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         List<DefaultMap<String>> list = storageHqCurrService.getStorageList(storageHqCurrVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storageHqCurrVO);
+    }
+    
+
+    /**
+     * 창고별현재고현황 - 창고별현재고현황 리스트 조회(엑셀)
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storageHqCurrVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/storageHqCurr/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStorageHqCurrExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, StorageHqCurrVO storageHqCurrVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storageHqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = storageHqCurrService.getStorageHqCurrExcelList(storageHqCurrVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storageHqCurrVO);
     }

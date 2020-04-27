@@ -54,10 +54,10 @@
 			<%-- 분류 --%>
             <th><s:message code="periodIostock.prodClass" /></th>
             <td>
-                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
-                        placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
+                 placeholder="<s:message code="cmm.all" />" readonly/>
+		        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
+		        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
 		</tr>
 		<tr>
@@ -223,7 +223,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
   <%--엑셀 리스트--%>
     <div id="wjGridWrap" class="w100 mt10" style="display:none;" ng-controller="periodiostockExcelCtrl">
       <div class="wj-gridWrap" style="height: 350px;">

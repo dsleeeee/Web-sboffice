@@ -7,13 +7,13 @@
 <c:set var="baseUrl" value="/stock/curr/hqCurr/hqCurr/"/>
 
 <div class="subCon" ng-controller="hqCurrCtrl">
-	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl">${menuNm}</a>
-		<%-- 조회 --%>
-		<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('hqCurrCtrl')">
-		  <s:message code="cmm.search" />
-		</button>
-	</div>
+    <div class="searchBar flddUnfld">
+        <a href="#" class="open fl">${menuNm}</a>
+        <%-- 조회 --%>
+        <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('hqCurrCtrl')">
+          <s:message code="cmm.search" />
+        </button>
+    </div>
 
   <table class="searchTbl">
     <colgroup>
@@ -27,19 +27,19 @@
       <%-- 상품코드 --%>
       <th><s:message code="hqCurr.prodCd"/></th>
       <td>
-        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="hqCurr.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50"/>
       </td>
     </tr>
     <tr>
       <%-- 바코드 --%>
       <th><s:message code="hqCurr.barcdNm"/></th>
       <td>
-        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40"/>
       </td>
       <%-- 단위구분 --%>
       <th><s:message code="hqCurr.unitFg"/></th>
@@ -65,7 +65,7 @@
       <td>
         <input type="text" class="sb-input w100" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()"
                placeholder="<s:message code="cmm.all" />" readonly/>
-        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
       </td>
       <%-- 안전재고 --%>
       <th><s:message code="hqCurr.safeStockFg"/></th>
@@ -83,10 +83,10 @@
             </wj-combo-box>
           </span>
           <span class="chk ml10">
-				<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
-	            <label for="chkDt">
-                	<s:message code="periodIostock.prodClassDisplay" />
-              	</label>
+                <input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+                <label for="chkDt">
+                    <s:message code="periodIostock.prodClassDisplay" />
+                </label>
           </span>
         </div>
       </td>
@@ -117,14 +117,14 @@
       </c:choose>
     </tr>
     <tr>
-    	<%-- 거래처 --%>
-    	<th style="display:none"><s:message code="hqCurr.vendrNm"/></th>
-    	<td style="display:none">
-    	<%-- 거래처선택 모듈 싱글 선택 사용시 include
-    		param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-    					displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-    					modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-    					closeFunc - 팝업 닫기시 호출할 함수
+        <%-- 거래처 --%>
+        <th style="display:none"><s:message code="hqCurr.vendrNm"/></th>
+        <td style="display:none">
+        <%-- 거래처선택 모듈 싱글 선택 사용시 include
+            param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                        displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                        modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                        closeFunc - 팝업 닫기시 호출할 함수
         --%>
         <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
           <jsp:param name="targetId" value="hqCurrSelectVendr"/>
@@ -138,6 +138,7 @@
 
   <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
   <input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
+<%--   <input type="hidden" id="orgnFg" value="${sessionInfo.orgnFg}"/> --%>
 
   <ul class="txtSty3 mt10">
     <li><s:message code="hqCurr.txt1"/></li>
@@ -178,12 +179,12 @@
         >
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFgNm" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.poUnitQty"/>" binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.vendrCd"/>" binding="vendrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.vendrNm"/>" binding="vendrNm" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -193,11 +194,11 @@
         <wj-flex-grid-column header="<s:message code="hqCurr.currQty"/>" binding="currQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.currAmt"/>" binding="currAmt" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accVendrInQty"/>" binding="accVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accVendrOutQty"/>" binding="accVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.hqOutQty"/>" binding="accHqOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.hqInQty"/>" binding="accHqInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accStoreMoveInQty"/>" binding="accStoreMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accVendrInQty"/>" binding="accVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accVendrOutQty"/>" binding="accVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.hqOutQty"/>" binding="accHqOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.hqInQty"/>" binding="accHqInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accStoreMoveInQty"/>" binding="accStoreMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqCurr.accStoreMoveOutQty"/>" binding="accStoreMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
@@ -209,19 +210,19 @@
             <wj-flex-grid-column header="<s:message code="hqCurr.accStoreMoveInQty"/>" binding="accMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqCurr.accStoreMoveOutQty"/>" binding="accMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         </c:if>
-        
+
         <wj-flex-grid-column header="<s:message code="hqCurr.accDisuseQty"/>" binding="accDisuseQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.accAdjQty"/>" binding="accAdjQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.accSetInQty"/>" binding="accSetInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrOutQty"/>" binding="accSaleVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrInQty"/>" binding="accSaleVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveOutQty"/>" binding="accHqMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveInQty"/>" binding="accHqMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.lastVendrInDate"/>" binding="lastVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.firstHqOutDate"/>" binding="firstHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.lastHqOutDate"/>" binding="lastHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrOutQty"/>" binding="accSaleVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrInQty"/>" binding="accSaleVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveOutQty"/>" binding="accHqMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveInQty"/>" binding="accHqMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.lastVendrInDate"/>" binding="lastVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.firstHqOutDate"/>" binding="firstHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.lastHqOutDate"/>" binding="lastHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
@@ -244,7 +245,7 @@
         </ul>
     </div>
     <%--//페이지 리스트--%>
-    
+
     <%--엑셀 리스트--%>
     <div class="wj-gridWrap" style="height: 350px; display:none;" ng-controller="hqCurrExcelCtrl">
       <wj-flex-grid
@@ -259,12 +260,12 @@
         >
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>"     binding="lv1Nm"         width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>"     binding="lv2Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>"     binding="lv3Nm"         width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFg" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="hqCurr.poUnitFg"/>" binding="poUnitFgNm" width="60" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.poUnitQty"/>" binding="poUnitQty" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.vendrCd"/>" binding="vendrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.vendrNm"/>" binding="vendrNm" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -274,10 +275,10 @@
         <wj-flex-grid-column header="<s:message code="hqCurr.currQty"/>" binding="currQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.currAmt"/>" binding="currAmt" width="80" align="right" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accVendrInQty"/>" binding="accVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accVendrOutQty"/>" binding="accVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.hqOutQty"/>" binding="hqOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.hqInQty"/>" binding="hqInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accVendrInQty"/>" binding="accVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accVendrOutQty"/>" binding="accVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.hqOutQty"/>" binding="hqOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.hqInQty"/>" binding="hqInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <wj-flex-grid-column header="<s:message code="hqCurr.accStoreInQty"/>" binding="accStoreInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
@@ -292,14 +293,14 @@
         <wj-flex-grid-column header="<s:message code="hqCurr.accAdjQty"/>" binding="accAdjQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="hqCurr.accSetInQty"/>" binding="accSetInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrOutQty"/>" binding="accSaleVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrInQty"/>" binding="accSaleVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveOutQty"/>" binding="accHqMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveInQty"/>" binding="accHqMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.lastVendrInDate"/>" binding="lastVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.firstHqOutDate"/>" binding="firstHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-	        <wj-flex-grid-column header="<s:message code="hqCurr.lastHqOutDate"/>" binding="lastHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrOutQty"/>" binding="accSaleVendrOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accSaleVendrInQty"/>" binding="accSaleVendrInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveOutQty"/>" binding="accHqMoveOutQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.accHqMoveInQty"/>" binding="accHqMoveInQty" width="80" align="center" is-read-only="true" data-type="Number" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.lastVendrInDate"/>" binding="lastVendrInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.firstHqOutDate"/>" binding="firstHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqCurr.lastHqOutDate"/>" binding="lastHqOutDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         </c:if>
         <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <wj-flex-grid-column header="<s:message code="hqCurr.firstVendrInDate"/>" binding="firstInDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>

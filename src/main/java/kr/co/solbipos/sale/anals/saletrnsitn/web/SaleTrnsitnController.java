@@ -101,5 +101,29 @@ public class SaleTrnsitnController {
         return result;
     }
 
+    
+    
+    /**
+	 * 매출추이분석(엑셀) 목록조회 (매출관리 > 매출분석 > 매출추이분석)
+	 * @param   saleTrnsitnVO
+	 * @param   request
+	 * @return  kr.co.common.data.structure.Result
+	 * @author  박지선
+	 * @since   2020. 04. 22
+	*/
+    @RequestMapping(value="excelList.sb", method=RequestMethod.POST)
+    @ResponseBody
+    public Result getSaletrnsitnExcelList(SaleTrnsitnVO saleTrnsitnVO, HttpServletRequest request) {
+    	System.out.println("### saleTrnsitnVO: " + saleTrnsitnVO);
+
+        SessionInfoVO 				sessionInfoVO 	= sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> 	list 			= saleTrnsitnService.getSaletrnsitnExcelList(saleTrnsitnVO, sessionInfoVO);
+        
+        //return returnListJson(Status.OK, list, saleTrnsitnVO);
+        
+        Result result = returnListJson(Status.OK, list, saleTrnsitnVO);
+        LOGGER.debug("### result.getData(): " + result.getData() );
+        return result;
+    }
 
 }

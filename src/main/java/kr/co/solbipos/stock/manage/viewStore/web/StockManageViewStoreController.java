@@ -74,4 +74,12 @@ public class StockManageViewStoreController {
 		List<DefaultMap<String>> list = stockManageViewStoreService.getStockManageViewStoreList(stockManageViewStoreVO, sessionInfoVO);
 		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewStoreVO);
 	}
+	
+	@RequestMapping(value = "/viewStore/getStockManageViewStoreExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getStockManageViewStoreExcelList(HttpServletRequest request, HttpServletResponse response, Model model, StockManageViewStoreVO stockManageViewStoreVO) {
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		List<DefaultMap<String>> list = stockManageViewStoreService.getStockManageViewStoreExcelList(stockManageViewStoreVO, sessionInfoVO);
+		return ReturnUtil.returnListJson(Status.OK, list, stockManageViewStoreVO);
+	}
 }

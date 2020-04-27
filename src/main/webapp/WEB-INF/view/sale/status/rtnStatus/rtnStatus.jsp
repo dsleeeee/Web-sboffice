@@ -126,7 +126,6 @@
         <div class="wj-gridWrap2 mt10" style="display:none;" ng-controller="rtnStatusDayExcelCtrl">
 		        <wj-flex-grid
 		          id="rtnStatusDayExcelGrid"
-		          loaded-rows="loadedRows(s,e)"
 		          autoGenerateColumns="false"
 		          selection-mode="Row"
 		          items-source="data"
@@ -213,7 +212,6 @@
 	            	<div class="wj-gridWrap">
                    <wj-flex-grid
 	                  id="rtnStatusDayDtlExcelGrid"
-	                  loaded-rows="loadedRows2(s,e)"
 	                  autoGenerateColumns="false"
 	                  selection-mode="Row"
 	                  items-source="data"

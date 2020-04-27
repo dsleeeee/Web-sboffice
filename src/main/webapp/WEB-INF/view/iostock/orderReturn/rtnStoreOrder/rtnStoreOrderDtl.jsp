@@ -60,8 +60,8 @@
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderSplyUprc"/>" 	binding="orderSplyUprc" 	width="70" 	align="right" 	is-read-only="true"  data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.prevOrderTotQty"/>" binding="prevOrderTotQty" 	width="70" 	align="right" 	is-read-only="true"  visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderUnitQty"/>" 	binding="orderUnitQty" 		width="50" 	align="right" 	is-read-only="true"  aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderEtcQty"/>" 	binding="orderEtcQty" 		width="50" 	align="right" 	is-read-only="true"  aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderTotQty"/>" 	binding="orderTotQty" 		width="0" 	align="right" 	is-read-only="true"  visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderUnitQty"/>" 	binding="orderEtcQty" 		width="50" 	align="right" 	is-read-only="true"  aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderUnitQty"/>" 	binding="orderTotQty" 		width="0" 	align="right" 	is-read-only="true"  visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderAmt"/>" 		binding="orderAmt" 			width="70" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderVat"/>" 		binding="orderVat" 			width="70" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnStoreOrder.dtl.orderTot"/>" 		binding="orderTot" 			width="70" 	align="right" 	is-read-only="true"  data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

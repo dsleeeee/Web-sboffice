@@ -43,8 +43,8 @@
 				<th><s:message code="store.prodFg" /></th>
 			    <td>
 			        <input type="text" class="sb-input w50" id="srchStoreFgProdNm" ng-model="prodCdNm" ng-click="popUpProd()" style="float: left;" placeholder="선택" readonly/>
-			        <input type="hidden" id="srchStoreFgProdCd" ng-model="prodCd" disabled />
-			        <input type="hidden" id="srchStoreFgProdClassCd" ng-model="prodCalssCd" disabled />
+			        <input type="hidden" id="srchStoreFgProdCd" name="srchStoreFgProdCd" ng-model="prodCd" disabled />
+			        <input type="hidden" id="srchStoreFgProdClassCd" name="srchStoreFgProdClassCd" ng-model="prodClassCd" disabled />
 			        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
 			    </td>
 			    <%-- 매장유형선택 --%>
@@ -122,3 +122,9 @@
 	</div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.02" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 상품정보 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

@@ -288,7 +288,9 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(storeOrderVO.getStoreCd() == null || storeOrderVO.getStoreCd() == ""){
+        	storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         DefaultMap<String> result = storeOrderService.getStoreOrderDateCheck(storeOrderVO);
 

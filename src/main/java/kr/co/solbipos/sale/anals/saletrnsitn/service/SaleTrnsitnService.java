@@ -33,6 +33,15 @@ public interface SaleTrnsitnService {
 	*/
     List<DefaultMap<String>> 	getSaletrnsitnList		(SaleTrnsitnVO saleTrnsitnVO, SessionInfoVO sessionInfoVO);
 
+	/**
+	 * 매출추이분석(엑셀) 목록조회 (매출관리 > 매출분석 > 매출추이분석)
+     * @param 	saleTrnsitnVO
+     * @param 	sessionInfoVO
+     * @return 	java.util.List<DefaultMap<String>> - XML_String
+	 * @author  박지선
+	 * @since   2020. 04. 22
+	*/
+    List<DefaultMap<String>> 	getSaletrnsitnExcelList		(SaleTrnsitnVO saleTrnsitnVO, SessionInfoVO sessionInfoVO);
 
 
 //	/**

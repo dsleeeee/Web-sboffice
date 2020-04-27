@@ -55,6 +55,17 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    params.prodDayCd	= $scope.prodDayCdModel;
+    
+    $scope.excelStartDate	=	"";
+    $scope.excelEndDate		=	"";
+    $scope.excelStoreCd		=	params.storeCd;
+    $scope.excelProdCd		=	params.prodCd;
+    $scope.excelProdNm		=	params.prodNm;
+    $scope.excelOrgnFg		=	params.orgnFg;
+	$scope.excelListScale	=	params.listScale;
+	$scope.excelProdDayCd	= $scope.prodDayCdModel;
+	$scope.isSearch			= true;
     
 
     // 등록일자 '전체기간' 선택에 따른 params
@@ -62,20 +73,15 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
-
+    
+    $scope.excelStartDate	=	params.startDate;
+    $scope.excelEndDate		=	params.endDate;
+    
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
     
-    $scope.excelStartDate	=	params.startDate;
-    $scope.excelEndDate		=	params.endDate;
-    $scope.excelStoreCd		=	params.storeCd;
-    $scope.excelProdCd		=	params.prodCd;
-    $scope.excelProdNm		=	params.prodNm;
-    $scope.excelOrgnFg		=	params.orgnFg;
-	$scope.excelListScale	=	params.listScale;
-	$scope.isSearch			= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/day/list.sb", params, function() {});
@@ -118,7 +124,7 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
           function(response){
-            $scope.prodDayCd = prodDayCd;
+            $scope.prodDayCdModel = prodDayCd;
             $scope.prodDayCdNm = response.data.data;
           }
         );
@@ -128,7 +134,7 @@ app.controller('prodDayCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 상품분류정보 선택취소
   $scope.delProdDay = function(){
-    $scope.prodDayCd = "";
+    $scope.prodDayCdModel = "";
     $scope.prodDayCdNm = "";
   }
 
@@ -176,7 +182,7 @@ app.controller('prodDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.orgnFg    = 	$scope.excelOrgnFg;
     params.listScale = 	$scope.excelListScale;
     params.isPageChk = isPageChk;
-
+    params.prodDayCd	=	$scope.excelProdDayCd;
     
     
     $scope.isChkProdClassDisplay();

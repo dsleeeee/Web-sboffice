@@ -209,7 +209,7 @@ public class RtnDstbCloseStoreController {
      * @author  안동관
      * @since   2018. 12. 14.
      */
-    @RequestMapping(value = "/dstbCloseStoreAdd/excelUpload.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/rtndstbCloseStoreAdd/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
         Model model, ExcelUploadVO excelUploadVO) {

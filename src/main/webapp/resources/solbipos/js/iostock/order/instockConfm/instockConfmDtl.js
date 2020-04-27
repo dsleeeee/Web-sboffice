@@ -278,6 +278,8 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
     $scope.$on("instockConfmDtlCtrl", function (event, data) {
         $scope.slipFg = data.slipFg;
         $scope.slipNo = data.slipNo;
+        $scope.startDate = data.startDate;
+        $scope.endDate = data.endDate;
         $scope.wjInstockConfmDtlLayer.show(true);
 
         $scope.getSlipNoInfo();
@@ -704,6 +706,8 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
     //거래명세표
     $scope.reportTrans = function () {
         var params          = {};
+        params.startDate 	= $scope.startDate;
+        params.endDate 		= $scope.endDate;
         params.slipFg       = $scope.slipFg;
         params.strSlipNo    = $scope.slipNo;
         params.stmtAcctFg   = $scope.stmtAcctFg;

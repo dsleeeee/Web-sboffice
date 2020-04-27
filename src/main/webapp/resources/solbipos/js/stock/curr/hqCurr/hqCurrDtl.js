@@ -45,7 +45,8 @@ app.controller('hqCurrDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.prodCd		= $scope.prodCd;
         params.hqOfficeCd	= $scope.hqOfficeCd;
         params.storeCd		= $scope.storeCd;
-
+//        params.orgnFg		= $("#orgnFg").val(); 
+        
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/curr/hqCurr/hqCurr/getHqCurrDtlList.sb", params);
   };

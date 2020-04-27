@@ -645,7 +645,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
 
   /** 엑셀업로드 관련 공통 함수 */
   $scope.excelTextUpload = function (prcsFg) {
-    if ($("#dstbCloseStoreAddSelectStoreCd").val() === '' && prcsFg !== 'excelFormDown') {
+    if ($("#rtnDstbCloseStoreAddSelectStoreCd").val() === '' && prcsFg !== 'excelFormDown') {
       $scope._popMsg(messages["dstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
       return false;
     }
@@ -687,12 +687,18 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
     params.slipFg   = $scope.slipFg;
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
-
+    params.storeCd  = $("#rtnDstbCloseStoreAddSelectStoreCd").val();
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({
       method : 'POST', //방식
-      url    : '/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd/excelUpload.sb', /* 통신할 URL */
+      url    : '/iostock/orderReturn/rtnDstbCloseStore/rtndstbCloseStoreAdd/excelUpload.sb', /* 통신할 URL */
       params : params, /* 파라메터로 보낼 데이터 */
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {

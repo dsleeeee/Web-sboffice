@@ -36,6 +36,17 @@ public class EmpDayPeriodServiceImpl implements EmpDayPeriodService {
         return empDayPeriodMapper.getEmpDayPeriodList(empDayPeriodVO);
     }
 
+    /** 코너별매출 - 리스트(엑셀) 조회 */
+    @Override
+    public List<DefaultMap<String>> getEmpDayPeriodExcelList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO) {
+    	empDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+    	if(!StringUtil.getOrBlank(empDayPeriodVO.getStoreCd()).equals("")) {
+        	empDayPeriodVO.setArrStoreCd(empDayPeriodVO.getStoreCd().split(","));
+        }
+    	
+        return empDayPeriodMapper.getEmpDayPeriodExcelList(empDayPeriodVO);
+    }
     
     /** 코너별매출 - 상세 리스트 조회 */
 	@Override
@@ -44,7 +55,7 @@ public class EmpDayPeriodServiceImpl implements EmpDayPeriodService {
 		return empDayPeriodMapper.getEmpDayPeriodDtlList(empDayPeriodVO);
 	}
 	
-    /** 코너별매출 - 상세 리스트 조회 */
+    /** 코너별매출 - 상세 리스트(엑셀) 조회 */
 	@Override
 	public List<DefaultMap<String>> getEmpDayPeriodDtlExcelList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO) {
 		empDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

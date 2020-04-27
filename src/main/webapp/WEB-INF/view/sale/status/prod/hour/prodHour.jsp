@@ -229,6 +229,113 @@
 	    </ul>
 	  </div>
 	  <%--//페이지 리스트--%>
+	  <%--엑셀 다운로드 테이블--%>
+        <div class="wj-gridWrap" style="display:none;" ng-controller="prodHourExcelCtrl"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    items-source="data"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    is-read-only="true"
+                    item-formatter="_itemFormatter"
+                    frozen-columns="5"
+                     id="wjGridListExcel">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.prodCd"/>" 			binding="prodCd" 		width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 			binding="prodNm"		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+
+                <%-- 시간대 컬럼 생성--%>
+                <c:forEach var="i" begin="0" end="24" step="1">
+                    <c:set var="time"><fmt:formatNumber value="${i}" pattern="0"/></c:set>
+                    <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty${time}" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                </c:forEach>
+
+                <%-- 시간대 '전체' 선택 시 보이는 컬럼 --%>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty1" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty2" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt2" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty3" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt3" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty4" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt4" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty5" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt5" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty6" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt6" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty7" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt7" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+   				<wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty8" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt8" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty9" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt9" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty10" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt10" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty11" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt11" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty12" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt12" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty13" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt13" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty14" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt14" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty15" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt15" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty16" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt16" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty17" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt17" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty18" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt18" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty19" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt19" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty20" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt20" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty21" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt21" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty22" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt22" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty23" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt23" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty24" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt24" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="prodHourCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
+        </div>
+        <%--//엑셀 다운로드 --%>
     </div>
 </div>
 

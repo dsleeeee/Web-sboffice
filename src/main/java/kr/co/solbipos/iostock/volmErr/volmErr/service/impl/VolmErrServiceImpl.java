@@ -17,10 +17,12 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.impl.OutstockConfmMapper;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrVO;
+import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 
 @Service("volmErrService")
 @Transactional
@@ -30,6 +32,7 @@ public class VolmErrServiceImpl implements VolmErrService {
     private final VolmErrMapper volmErrMapper;
     private final MessageService messageService;
     private final OutstockConfmMapper outstockConfmMapper;
+
 
     @Autowired
     public VolmErrServiceImpl(VolmErrMapper volmErrMapper, MessageService messageService, OutstockConfmMapper outstockConfmMapper) {
@@ -111,8 +114,62 @@ public class VolmErrServiceImpl implements VolmErrService {
 
         //확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {
-            String newSlipNo = "";
+        	//물량오류 로직 수정 START - 20200423
+        	
+            //출고수량을 입고수량으로 수정
+            result = volmErrMapper.updateOutToIn(volmErrHdVO);
+//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
+            //입고수량을 출고수량으로 수정
+            result = volmErrMapper.updateInToOut(volmErrHdVO);
+//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+            //출고정보 HD 집계 수정
+            result = volmErrMapper.updateVolmErrHdSum(volmErrHdVO);
+//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));        	
+        	
+        	
+            String errFg 		= "";            
+            String seqNo 		= "";
+            
+            if(hqNewAdjustFg.equals("Y")) {
+                // 신규 seq 조회
+            	VolmErrVO newSeqNoVO = new VolmErrVO();
+                newSeqNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                newSeqNoVO.setOutDate(volmErrHdVO.getOutDate());
+                
+                seqNo = volmErrMapper.getHqNewSeqNo(newSeqNoVO);                
+                	
+	            for(VolmErrVO tmpVO : volmErrVOs) {
+	            	LOGGER.debug("### volmErrVO.getProperties(): " + tmpVO.getProperties()	);
+	            	errFg = tmpVO.getErrFg();
+	            	
+	            	tmpVO.setSeqNo	(Integer.parseInt(seqNo)	);
+	            	tmpVO.setRegId	( volmErrHdVO.getRegId()	);
+	            	tmpVO.setRegDt	( volmErrHdVO.getRegDt()	);
+	            	tmpVO.setModId	( volmErrHdVO.getModId()	);
+	            	tmpVO.setModDt	( volmErrHdVO.getModDt()	);            	
+	            	
+	            	if(errFg.equals("O4") || errFg.equals("O5")) {
+	            		
+	                    result = volmErrMapper.insertVolmErrHqAdjustDtl(tmpVO);
+	                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            		            		
+	            	}            	
+	
+	            }
+                        
+                //본사 조정 HD 등록 (TB_ST_HQ_ADJUST)
+            	//if("".equals(volmErrHdVO.getHdRemark()))
+            	//	volmErrHdVO.setHdRemark("물량오류관리");
+            	volmErrHdVO.setHdRemark("물량오류관리");
+            	volmErrHdVO.setSeqNo(Integer.parseInt(seqNo));
+            	
+                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);                
+                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            	
+            }
+            
+        	//물량오류 로직 수정 END - 20200423        	        	
+            String newSlipNo 	= "";
             if(newSlipNoFg.equals("Y")) {
                 //전표번호 생성
                 String 		yymm 		= DateUtil.currentDateString().substring(2,6); //새로운 전표번호 생성을 위한 년월(YYMM)
@@ -132,15 +189,15 @@ public class VolmErrServiceImpl implements VolmErrService {
                         
         	
             //출고수량을 입고수량으로 수정
-            result = volmErrMapper.updateOutToIn(volmErrHdVO);
+//            result = volmErrMapper.updateOutToIn(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             //입고수량을 출고수량으로 수정
-            result = volmErrMapper.updateInToOut(volmErrHdVO);
+//            result = volmErrMapper.updateInToOut(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             //출고정보 HD 집계 수정
-            result = volmErrMapper.updateVolmErrHdSum(volmErrHdVO);
+//            result = volmErrMapper.updateVolmErrHdSum(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
             if(!newSlipNo.equals("")) {
@@ -201,34 +258,34 @@ public class VolmErrServiceImpl implements VolmErrService {
             */
 
 
-            if(hqNewAdjustFg.equals("Y")) {
-            	/* TB_ST_STORE_ADJUST_DTL.SEQ_NO 때문에 나눠서 INSERT 함.
-
-            	//본사 조정 DTL 등록 (TB_ST_HQ_ADJUST_DTL)
-                result = volmErrMapper.insertVolmErrHqAdjustDtl(volmErrHdVO);
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            	*/
-
-            	//본사 조정 DTL 등록 (TB_ST_HQ_ADJUST_DTL)
-            	for(VolmErrVO tmpVO : volmErrVOs) {
-                	LOGGER.debug("### volmErrVO.getProperties(): " + tmpVO.getProperties()	);
-
-                	tmpVO.setRegId	( volmErrHdVO.getRegId()	);
-                	tmpVO.setRegDt	( volmErrHdVO.getRegDt()	);
-                	tmpVO.setModId	( volmErrHdVO.getModId()	);
-                	tmpVO.setModDt	( volmErrHdVO.getModDt()	);
-
-                    result = volmErrMapper.insertVolmErrHqAdjustDtl(tmpVO);
-                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-                }
-
-                //본사 조정 HD 등록 (TB_ST_HQ_ADJUST)
-            	//if("".equals(volmErrHdVO.getHdRemark()))
-            	//	volmErrHdVO.setHdRemark("물량오류관리");
-            	volmErrHdVO.setHdRemark("물량오류관리");
-                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            }
+//            if(hqNewAdjustFg.equals("Y")) {
+//            	/* TB_ST_STORE_ADJUST_DTL.SEQ_NO 때문에 나눠서 INSERT 함.
+//
+//            	//본사 조정 DTL 등록 (TB_ST_HQ_ADJUST_DTL)
+//                result = volmErrMapper.insertVolmErrHqAdjustDtl(volmErrHdVO);
+//                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//            	*/
+//
+//            	//본사 조정 DTL 등록 (TB_ST_HQ_ADJUST_DTL)
+//            	for(VolmErrVO tmpVO : volmErrVOs) {
+//                	LOGGER.debug("### volmErrVO.getProperties(): " + tmpVO.getProperties()	);
+//
+//                	tmpVO.setRegId	( volmErrHdVO.getRegId()	);
+//                	tmpVO.setRegDt	( volmErrHdVO.getRegDt()	);
+//                	tmpVO.setModId	( volmErrHdVO.getModId()	);
+//                	tmpVO.setModDt	( volmErrHdVO.getModDt()	);
+//
+//                    result = volmErrMapper.insertVolmErrHqAdjustDtl(tmpVO);
+//                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                }
+//
+//                //본사 조정 HD 등록 (TB_ST_HQ_ADJUST)
+//            	//if("".equals(volmErrHdVO.getHdRemark()))
+//            	//	volmErrHdVO.setHdRemark("물량오류관리");
+//            	volmErrHdVO.setHdRemark("물량오류관리");
+//                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);
+//                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//            }
 
         }	//if(confirmFg.equals("Y"))
 

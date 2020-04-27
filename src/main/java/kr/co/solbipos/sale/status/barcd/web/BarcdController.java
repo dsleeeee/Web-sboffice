@@ -110,4 +110,46 @@ public class BarcdController {
         List<DefaultMap<String>> list = barcdService.getBarcdDtlList(barcdVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, barcdVO);
     }
+    
+    /**
+     * 코너별매출 일자별 - 엑셀 전체 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerDaylVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 23.
+     */
+    @RequestMapping(value = "/barcd/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBarcdExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, BarcdVO barcdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = barcdService.getBarcdExcelList(barcdVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, barcdVO);
+    }
+    
+    /**
+     * 코너별매출 일자별 - 엑셀 전체 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerDaylVO
+     * @return  String
+     * @author  박정은
+     * @since   2020. 04. 23.
+     */
+    @RequestMapping(value = "/barcdDtl/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBarcdDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, BarcdVO barcdVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = barcdService.getBarcdDtlExcelList(barcdVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, barcdVO);
+    }
 }

@@ -67,7 +67,7 @@
         <td>
           <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
                  placeholder="<s:message code="cmm.all" />" readonly/>
-          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+          <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
           <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         </td>
       </tr>
@@ -244,7 +244,7 @@
 	              <wj-flex-grid-column header="<s:message code="storeDay.storeNm"/>"                    binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitQty"/>"                  binding="poUnitQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.poUnitFg"/>"                   binding="poUnitFgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="storeDay.barcdCd"/>"                    binding="barcdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.barcdCd"/>"                    binding="barcdCd" width="100" align="center" format="d" is-read-only="true"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInQty"/>"               binding="ioOccrQty03" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreInAmt"/>"               binding="ioOccrTot03" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>

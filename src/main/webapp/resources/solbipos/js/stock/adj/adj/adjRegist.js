@@ -451,7 +451,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
-    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
     $http({

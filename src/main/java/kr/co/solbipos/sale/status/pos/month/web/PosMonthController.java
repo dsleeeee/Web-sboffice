@@ -124,5 +124,63 @@ public class PosMonthController {
         	return ReturnUtil.returnListJson(Status.OK, list, posMonthVO);
         }
     }
+    
+    
+    /**
+     * 포스별매출 월별 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   posMonthVO
+     * @return  String
+     * @author  이승규
+     * @since   2020. 01. 21.
+     */
+    @RequestMapping(value = "/month/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosMonthExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, PosMonthVO posMonthVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (posMonthVO.getPosNo() != null && !"".equals(posMonthVO.getPosNo())) {
+        	 String[] arrPosNo = posMonthVO.getPosNo().split(",");
+             posMonthVO.setArrPosNo(arrPosNo);
+             posMonthVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = posMonthVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			posMonthVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = posMonthService.getPosNmList(posMonthVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                posMonthVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        if (posMonthVO.getArrStorePos() == null) {
+        	return ReturnUtil.returnListJson(Status.OK, null, posMonthVO);
+        } else {
+        	List<DefaultMap<String>> list = posMonthService.getPosMonthExcelList(posMonthVO, sessionInfoVO);
+        	//System.out.println("list.size() :: "+posMonthVO.getArrPosCd().length);
+        	return ReturnUtil.returnListJson(Status.OK, list, posMonthVO);
+        }
+    }
 
 }

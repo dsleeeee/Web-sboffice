@@ -54,18 +54,25 @@ app.controller('prodClassCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.orgnFg    = $scope.orgnFg;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    params.prodClassCd	= $scope.prodClassCd;
     
+    $scope.excelStartDate	= "";
+    $scope.excelEndDate		= "";
     $scope.excelStoreCd		= params.storeCd;
     $scope.excelProdCd		= params.prodCd;
     $scope.excelProdNm		= params.prodNm;
     $scope.excelOrgnFg		= params.orgnFg;
     $scope.excelListScale	= params.listScale;
+    $scope.excelProdClassCd	= $scope.prodClassCd;
     $scope.isSearch			= true;
     
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+      
+      $scope.excelStartDate	= params.startDate;
+      $scope.excelEndDate	= params.endDate;
     }
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -170,27 +177,16 @@ app.controller('prodClassExcelCtrl', ['$scope', '$http', '$timeout', function ($
 	  $scope.searchProdClassExcelList = function (isPageChk) {
 	    // 파라미터
 	    var params       = {};
-	    /*params.storeCd   = $("#pordClassSelectStoreCd").val();
-	    params.prodCd    = $("#srchProdCd").val();
-	    params.prodNm    = $("#srchProdNm").val();
-	    params.orgnFg    = $scope.orgnFg;
-	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	    params.isPageChk = isPageChk;*/
+	    
+	    params.startDate	=	$scope.excelStartDate;
+	    params.endDate		=	$scope.excelEndDate;
 	    params.storeCd 		= 	$scope.excelStoreCd;
 	    params.prodCd		=   $scope.excelProdCd;
 	    params.prodNm 		=   $scope.excelProdNm;
 	    params.orgnFg 		=	$scope.excelOrgnFg;
 	    params.listScale 	=	$scope.excelListScale;
-	    
-	    // 등록일자 '전체기간' 선택에 따른 params
-	    if(!$scope.isChecked){
-	      params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	      params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-	    }
-	    if(params.startDate > params.endDate){
-	   	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-	   	 	return false;
-	    }
+	    params.prodClassCd	=	$scope.excelProdClassCd;
+
 	    
 	    $scope.isChkProdClassDisplay();
 	    

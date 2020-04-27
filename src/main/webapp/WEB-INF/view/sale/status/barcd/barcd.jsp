@@ -151,6 +151,36 @@
               </ul>
             </div>
             <%--//페이지 리스트--%>
+            <%-- 엑셀 리스트 --%>
+            <div class="wj-TblWrapBr1"  id="wjWrapType1" style="display:none;" ng-controller="barcdExcelCtrl">
+            		<div class="wj-gridWrap col2-t2">
+                   <wj-flex-grid
+                      id="barcdExcelGrid"
+                      autoGenerateColumns="false"
+                      selection-mode="Row"
+                      items-source="data"
+                      control="excelFlex"
+                      initialized="initGrid(s,e)"
+                      is-read-only="true"
+                      item-formatter="_itemFormatter">
+                      <!-- define columns -->
+                      <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"       binding="barcdCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="totSaleQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                      <jsp:param name="pickerTarget" value="barcdMainCtrl"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+              </div>
+            </div>
+            <%--// 엑셀 리스트 --%>
         </div>
       </div>
 
@@ -210,6 +240,30 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
+              
+              <div class="wj-TblWrapBr1" id="wjWrapType1" style="display:none;" ng-controller="barcdDtlExcelCtrl">
+                	<div class="wj-gridWrap col2-t2">
+                       <wj-flex-grid
+                          id="barcdDtlExcelGrid"
+                          autoGenerateColumns="false"
+                          selection-mode="Row"
+                          items-source="data"
+                          control="excelDtlFlex"
+                          initialized="initGrid(s,e)"
+                          is-read-only="true"
+                          item-formatter="_itemFormatter">
+                          <!-- define columns -->
+                          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>"   binding="saleDate"      width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="day.dayTotal.storeCd"/>"    binding="storeCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="day.dayTotal.storeNm"/>"    binding="storeNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.prodNm"/>" binding="prodNm"        width="100" align="right"  is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleQty"/>"binding="totSaleQty"    width="50" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.saleAmt"/>"binding="totSaleAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="barcd.totDcAmt"/>"          binding="totDcAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>"binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        </wj-flex-grid>
+                  </div>
+                </div>
         </div>
      </div>
     <%-- //wj grid end --%>

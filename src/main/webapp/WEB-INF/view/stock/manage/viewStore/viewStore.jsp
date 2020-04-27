@@ -43,7 +43,7 @@
                     <span class="txtIn w150px">
                         <wj-combo-box
                             id="srchStatusFg"
-                            ng-model="statusFg"
+                            ng-model="statusFgModel"
                             items-source="_getComboData('srchStatusFg')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -60,7 +60,7 @@
                     <span class="txtIn w150px">
                         <wj-combo-box
                             id="srchProcFg"
-                            ng-model="procFg"
+                            ng-model="procFgModel"
                             items-source="_getComboData('srchProcFg')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -103,7 +103,7 @@
             text-changed="_checkValidation(s)">
         </wj-combo-box>
         <%-- 엑셀 다운로드 //TODO --%>
-        <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+        <button class="btn_skyblue fr" ng-click="excelDownloadViewStore()"><s:message code="cmm.excel.down" /></button>
     </div>
 
     <%--위즈모 테이블 : 수정해야함--%>
@@ -148,6 +148,40 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+  
+	<%-- 엑셀 리스트 --%>
+	<div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="stockViewStoreExcelCtrl">
+      <div class="wj-gridWrap">
+          <wj-flex-grid
+			id="stockViewStoreExcelGrid"
+            autoGenerateColumns="false"
+            control="excelFlex"
+            initialized="initGrid(s,e)"
+            loaded-rows="loadedRows(s,e)"
+			is-read-only="true"
+            sticky-headers="true"
+            selection-mode="Row"
+            items-source="data"
+            item-formatter="_itemFormatter">
+				<!-- define columns -->
+          		<c:if test="${orgnFg == 'HQ'}">
+            		<wj-flex-grid-column header="<s:message code="viewStore.storeCd"/>"         binding="storeCd"        width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            		<wj-flex-grid-column header="<s:message code="viewStore.storeNm"/>"         binding="storeNm"        width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+          		</c:if>
+          		<!-- define columns -->
+         		<wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"         binding="hqGbn"        width="50" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="viewStore.statusFg"/>"         binding="hqGbnNm"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+         		<wj-flex-grid-column header="<s:message code="viewStore.saleDate"/>"         binding="totDate"        width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        		<wj-flex-grid-column header="<s:message code="viewStore.seqNo"/>"           binding="seqNo"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+       		    <wj-flex-grid-column header="<s:message code="viewStore.procFg"/>"        binding="procFgNm"        width="50" align="center" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="viewStore.title"/>"           binding="title"        width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="viewStore.prodQty"/>"        binding="dtlCnt"        width="90" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			</wj-flex-grid>
+		</div>
+	</div>
+	<%--//엑셀 리스트--%>
+
 
 </div>
 

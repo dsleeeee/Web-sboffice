@@ -77,9 +77,9 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.searchCurrUnityList = function (isPageChk) {
     // 파라미터
     var params     = {};
-    params.prodCd = $scope.prodCd;
-    params.prodNm = $scope.prodNm;
-    params.barcdCd = $scope.barcdCd;
+    params.prodCd = $("#srchProdCd").val();
+    params.prodNm = $("#srchProdNm").val();
+    params.barcdCd = $("#srchBarcdCd").val();
     params.vendrCd = $("#currUnitySelectVendrCd").val();
     params.prodClassCd = $scope.prodClassCd;
     params.isPageChk   = isPageChk;
@@ -104,13 +104,17 @@ app.controller('currUnityCtrl', ['$scope', '$http', '$timeout', function ($scope
         var params       = {};
         if(rows.length > 0){
 			params.prodCd   = rows[0].dataItem.prodCd;
+			$scope._broadcast("currUnityHqDtlSrchCtrl", params);
 			// 본사수량 상세조회.
-	        $scope._broadcast("currUnityHqDtlSrchCtrl", params);
+//	        $scope._broadcast("currUnityHqDtlSrchCtrl", params);
         } else{
         	// 메인그리드 조회 후 본사수량 상세조회 그리드 초기화
+        	//params.prodCd = -1;
             var orderDtlScope = agrid.getScope('currUnityHqDtlCtrl');
             orderDtlScope.dtlGridDefault();
         }
+        
+        
     }
   };
 
@@ -226,6 +230,7 @@ app.controller('currUnityHqDtlCtrl', ['$scope', '$http', '$timeout', function ($
       cv.trackChanges = true;
       $scope.data     = cv;
       $scope.flex.refresh();
+      $scope.isHqSearch = false;
     }, 10);
   };
 
@@ -295,6 +300,17 @@ app.controller('currUnityStoreDtlCtrl', ['$scope', '$http', '$timeout', function
 	var params     = {};
 	
 	$scope._broadcast('currUnityStoreDtlExcelCtrl',params);
+  };
+  
+//상세 그리드 초기화
+  $scope.dtlGridDefault = function () {
+    $timeout(function () {
+      var cv          = new wijmo.collections.CollectionView([]);
+      cv.trackChanges = true;
+      $scope.data     = cv;
+      $scope.flex.refresh();
+      $scope.isStoreSearch = false;
+    }, 10);
   };
 
 }]);

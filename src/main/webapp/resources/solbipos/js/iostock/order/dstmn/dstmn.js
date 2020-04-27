@@ -111,6 +111,9 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
           var params    = {};
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
+          params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+          
           $scope._broadcast('dstmnDtlCtrl', params);
         }
       }

@@ -62,7 +62,7 @@
               </wj-combo-box>
             </span>
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="vendrInstock.reg.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="vendrInstock.reg.textFormUpload"/></a>
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="vendrInstock.reg.textFormUpload"/></a> --%>
             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="vendrInstock.reg.excelFormUploadErrorInfo"/></a>
           </td>

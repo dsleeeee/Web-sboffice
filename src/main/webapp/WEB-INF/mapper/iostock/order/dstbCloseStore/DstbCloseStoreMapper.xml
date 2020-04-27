@@ -538,7 +538,7 @@
         )
         SELECT  #{hqOfficeCd}   ,   #{date}         ,   ${seq}+(ROWNUM-1)
         ,       #{storeCd}      ,   '0000'          ,   #{slipFg}
-        ,       '0'             ,   '001'           ,   '00'
+        ,       '0'             ,   '999'           ,   '00'
         ,       tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
         ,       tmp.SPLY_UPRC
         ,       tpte.UNIT_QTY * ${slipFg} AS MGR_UNIT_QTY

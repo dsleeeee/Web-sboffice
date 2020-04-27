@@ -27,19 +27,19 @@
       <%-- 상품코드 --%>
       <th><s:message code="hqCurr.prodCd"/></th>
       <td>
-        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+        <input type="text" id="srchProdCd" name="srchProdCd" class="sb-input w100" maxlength="13"/>
       </td>
       <%-- 상품명 --%>
       <th><s:message code="hqCurr.prodNm"/></th>
       <td>
-        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+        <input type="text" id="srchProdNm" name="srchProdNm" class="sb-input w100" maxlength="50"/>
       </td>
     </tr>
     <tr>
       <%-- 바코드 --%>
       <th><s:message code="hqCurr.barcdNm"/></th>
       <td>
-        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+        <input type="text" id="srchBarcdCd" name="srchBarcdCd" class="sb-input w100" maxlength="40"/>
       </td>
 
       <%-- 분류 --%>
@@ -47,7 +47,7 @@
       <td>
         <input type="text" class="sb-input w50" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
                placeholder="<s:message code="cmm.all" />" readonly/>
-        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+        <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
         <span class="chk ml10">
             <input type="checkbox" class="mt10" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
@@ -117,10 +117,10 @@
         <wj-flex-grid-column header="<s:message code="currUnity.lv1Nm"/>"          binding="lv1Nm" width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.lv2Nm"/>"          binding="lv2Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.lv3Nm"/>"          binding="lv3Nm" width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.prodCd"/>"         binding="prodCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.prodNm"/>"         binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.hqBarcdCd"/>"      binding="hBarcdCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="currUnity.storeBarcdCd"/>"   binding="mBarcdCd" width="130" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"   binding="hSafeStockQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.hqQty"/>"          binding="hCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="currUnity.storeQty"/>"       binding="mCurrQty" width="80" align="center" is-read-only="true"aggregate="Sum"></wj-flex-grid-column>
@@ -221,7 +221,7 @@
               <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -258,7 +258,7 @@
               <wj-flex-grid-column header="<s:message code="currUnity.iostockDate"/>"       binding="ioProcDate"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.iostockFg"/>"         binding="ioOccrFgNm"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="ioOccrQty"         width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.totQty"/>"            binding="totIoOccrQty"     width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -309,9 +309,9 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="currUnity.storeCd"/>"           binding="storeCd"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.storeNm"/>"           binding="storeNm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.outPrice"/>"          binding="splyUprc"      width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -346,9 +346,9 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="currUnity.storeCd"/>"           binding="storeCd"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.storeNm"/>"           binding="storeNm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.safeStockQty"/>"      binding="safeStockQty"  width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="currUnity.outPrice"/>"          binding="splyUprc"      width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="currUnity.qty"/>"               binding="currQty"       width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>

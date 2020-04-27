@@ -455,9 +455,14 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.disuseTitle;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
-
+    
     $http({
       method : 'POST', //방식
       url    : '/stock/disuse/disuse/disuseRegist/excelUpload.sb', /* 통신할 URL */

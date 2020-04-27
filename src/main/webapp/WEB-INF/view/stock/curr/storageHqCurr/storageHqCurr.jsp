@@ -29,19 +29,19 @@
 	      <%-- 상품코드 --%>
 	      <th><s:message code="storeCurr.prodCd"/></th>
 	      <td>
-	        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+	        <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCdModel" class="sb-input w100" maxlength="13"/>
 	      </td>
 	      <%-- 상품명 --%>
 	      <th><s:message code="storeCurr.prodNm"/></th>
 	      <td>
-	        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+	        <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNmModel" class="sb-input w100" maxlength="50"/>
 	      </td>
       </tr>
       <tr>
 	      <%-- 바코드 --%>
 	      <th><s:message code="storeCurr.barcdNm"/></th>
 	      <td>
-	        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCd" class="sb-input w100" maxlength="40"/>
+	        <input type="text" id="srchBarcdCd" name="srchBarcdCd" ng-model="barcdCdModel" class="sb-input w100" maxlength="40"/>
 	      </td>
 	      <%-- 단위구분 --%>
 	      <th><s:message code="storeCurr.unitFg"/></th>
@@ -50,7 +50,7 @@
 	          <span class="txtIn w150px">
 	            <wj-combo-box
 	              id="srchUnitFg"
-	              ng-model="unitFg"
+	              ng-model="unitFgModel"
 	              items-source="_getComboData('srchUnitFg')"
 	              display-member-path="name"
 	              selected-value-path="value"
@@ -67,7 +67,7 @@
 		<td>
 		  <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float:left"
 		         placeholder="<s:message code="cmm.all" />" readonly/>
-		  <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCd" disabled/>
+		  <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
 		  <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
 		</td>
 
@@ -78,7 +78,7 @@
             <span class="txtIn w150px">
               <wj-combo-box
                 id="srchSafeStockFg"
-                ng-model="safeStockFg"
+                ng-model="safeStockFgModel"
                 items-source="_getComboData('srchSafeStockFg')"
                 display-member-path="name"
                 selected-value-path="value"
@@ -115,8 +115,12 @@
       </tbody>
     </table>
 
-    <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
-    <input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
+    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	    <input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
+	</c:if>
+	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+	    <input type="hidden" id="storeCd" value="${sessionInfo.storeCd}"/>
+	</c:if>
 
     <input type="hidden" id="storageHqCurrSelectStorageCd" value="">
     <input type="hidden" id="storageHqCurrSelectStorageName" value="">
@@ -166,7 +170,7 @@
           <wj-flex-grid-column header="<s:message code="storageHqCurr.prodCd"/>"            binding="prodCd"            width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.prodNm"/>"            binding="prodNm"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitQty"/>"         binding="poUnitQty"         width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitFg"/>"          binding="poUnitFg"          width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitFg"/>"          binding="poUnitFgNm"          width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.vendrNm"/>"           binding="vendrNm"           width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.barcdNm"/>"           binding="barcdCd"           width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="storageHqCurr.costUprc"/>"          binding="costUprc"          width="80" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -205,6 +209,55 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
+  <%-- 엑셀 리스트 --%>
+  <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="storageHqCurrExcelCtrl">
+     <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="storageHqCurrExcelGrid"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="true"
+          item-formatter="_itemFormatter"
+          frozen-columns="5"
+          allow-dragging="None">
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv1Nm"/>"             binding="lv1Nm"             width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv2Nm"/>"             binding="lv2Nm"             width="140" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.lv3Nm"/>"             binding="lv3Nm"             width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.prodCd"/>"            binding="prodCd"            width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.prodNm"/>"            binding="prodNm"            width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitQty"/>"         binding="poUnitQty"         width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.poUnitFg"/>"          binding="poUnitFgNm"          width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.vendrNm"/>"           binding="vendrNm"           width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.barcdNm"/>"           binding="barcdCd"           width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.costUprc"/>"          binding="costUprc"          width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.safeStockQty"/>"      binding="safeStockQty"      width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="storageHqCurr.totCurrQty"/>"        binding="currQty"           width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <wj-flex-grid-column header="<s:message code="storageHqCurr.currQty000"/>"        binding="currQty000"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:if>
+          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"  binding="firstVendrInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"   binding="lastVendrInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstHqOutDate"/>"    binding="firstHqOutDate"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastHqOutDate"/>"     binding="lastHqOutDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.firstSaleDate"/>"     binding="firstSaleDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="storageHqCurr.lastSaleDate"/>"      binding="lastSaleDate"      width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          </c:if>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.firstVendrInDate"/>"       binding="firstInDate"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.lastVendrInDate"/>"        binding="lastInDate"   width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.firstSaleDate"/>"     binding="firstSaleDate"     width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="storageHqCurr.lastSaleDate"/>"      binding="lastSaleDate"      width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+          </c:if>
+        </wj-flex-grid>
+     </div>
+  </div>
+  <%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript">

@@ -182,11 +182,6 @@
 				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
-			<%-- ColumnPicker 사용시 include --%>
-			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-				<jsp:param name="pickerTarget" value="posProdCtrl"/>
-			</jsp:include>
-			<%--// ColumnPicker 사용시 include --%>
 		</div>
 	</div>
 	<%--//엑셀 리스트--%>

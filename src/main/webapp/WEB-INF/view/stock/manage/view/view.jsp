@@ -41,7 +41,7 @@
 	          		<span class="txtIn w150px">
 	            		<wj-combo-box
 	              			id="srchStatus"
-	              			ng-model="unitFg"
+	              			ng-model="hqGbnModel"
 	              			items-source="_getComboData('srchStatus')"
 	              			display-member-path="name"
 	              			selected-value-path="value"
@@ -58,7 +58,7 @@
 	          		<span class="txtIn w150px">
 	            		<wj-combo-box
 	              			id="srchProcFg"
-	              			ng-model="procFg"
+	              			ng-model="procFgModel"
 	              			items-source="_getComboData('srchProcFg')"
 	              			display-member-path="name"
 	              			selected-value-path="value"
@@ -132,6 +132,32 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+  <%--엑셀 리스트--%>
+    <div id="wjGridWrap" class="mt10" style="display:none;" ng-controller="stockManageViewExcelCtrl">
+      <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="stockManageViewExcelGrid"
+          autoGenerateColumns="false"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbn"        width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.hqGbn"/>"         binding="hqGbnNm"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.totDate"/>"         binding="totDate"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.seqNo"/>"       	binding="seqNo"        width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.procFg"/>"        binding="procFgNm"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.title"/>"       	binding="title"        width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="stockManageView.dtlCnt"/>"        binding="dtlCnt"        width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+    </div>
+    <%--//엑셀 리스트--%>
 
 
 </div>

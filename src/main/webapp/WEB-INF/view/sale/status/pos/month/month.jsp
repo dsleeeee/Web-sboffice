@@ -158,12 +158,38 @@
 	</div>
 
 	<%-- 페이지 리스트 --%>
-	<%-- <div class="pageNum mt20">
-	id
+	<div class="pageNum mt20">
 		<ul id="posMonthCtrlPager" data-size="10">
 		</ul>
-	</div> --%>
+	</div> 
 	<%--//페이지 리스트--%>
+	
+	
+	<%--엑셀 리스트--%>
+    <div class="w100 mt10" id="wjWrapType3" style="display: none;" ng-controller="posMonthExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="posMonthExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                loaded-rows="loadedRows(s,e)"
+                is-read-only="true"
+                frozen-columns="6"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="pos.yearMonth"/>"         binding="yearMonth" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.saleStore"/>"         binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"        binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"          binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"    binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"        binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+        <%--//엑셀 리스트--%>
+    </div>
 </div>
 
 <script type="text/javascript">

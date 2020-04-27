@@ -56,10 +56,10 @@
 			<tr>
 	        <%-- 상품코드 --%>
 	        <th><s:message code="prodcalss.prodCd" /></th>
-	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13" ng-model="prodCd"/></td>
+	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13"/></td>
 	        <%-- 상품명 --%>
 	        <th><s:message code="prodcalss.prodNm" /></th>
-	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
+	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100"/></td>
 	      	</tr>
       		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <tr>

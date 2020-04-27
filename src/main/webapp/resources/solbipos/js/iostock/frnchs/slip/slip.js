@@ -14,7 +14,7 @@ app.controller('slipCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   //페이지스케일 콤보박스 데이터 Set
   $scope._setComboData("slipMainListScaleBox", gvListScaleBoxData);
   $scope._setComboData("slipDtlListScaleBox", gvListScaleBoxData);
-  
+
   //매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -42,7 +42,7 @@ app.controller('slipCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       }
     });
   };
-  
+
   // 상품분류정보 선택취소
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
@@ -134,7 +134,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
   angular.extend(this, new RootController('slipMainCtrl', $scope, $http, true));
 
   $scope.excelFg = false;
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -167,14 +167,14 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
   	  if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   	  	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   	  	if (rng && rng.columnSpan > 1) {
   	  		e.preventDefault();
   	  	}
   	  }
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -183,6 +183,7 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
           params.slipNo    = selectedRow.slipNo;
           params.startDate = $scope.searchedStartDate;
           params.endDate   = $scope.searchedEndDate;
+          params.excelFg = true;
           $scope._broadcast('slipDtlCtrlSrch', params);
           $('#dtlSlipNo').text('상품상세 (전표번호 : '+selectedRow.slipNo+')');
         }
@@ -286,12 +287,15 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.procFg	 = $scope.procFgModel;
     params.prodCd	 = $scope.prodCdModel;
     params.prodNm	 = $scope.prodNmModel;
-    
+    params.prodClassCd = $scope.prodClassCd;
+
+    $scope.searchedSlipFg	 = params.slipFg;
     $scope.searchedSlipKind	 = params.slipKind;
     $scope.searchedProcFg	 = params.procFg;
     $scope.searchedProdCd	 = params.prodCd;
     $scope.searchedProdNm	 = params.prodNm;
     $scope.searchedStoreCd   = params.storeCd;
+    $scope.searchedProdClassCd   = params.prodClassCd;
     params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -305,31 +309,38 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var params       = {};
         if(rows.length > 0){
         	params.slipNo   = rows[0].dataItem.slipNo;
+        	params.excelFg = true;
     		// 코너별 매출현황 상세조회.
-        	$scope._broadcast("slipDtlCtrlSrch", params);
+        	//$scope._broadcast("slipDtlCtrlSrch", params);
         	$('#dtlSlipNo').text('상품상세 (전표번호 : '+rows[0].dataItem.slipNo+')');
         }else{
         	$('#dtlSlipNo').text('');
+        	params.slipNo = -1;
+        	params.excelFg = false;
         }
+
+        $scope._broadcast("slipDtlCtrlSrch", params);
     }
     // 상세 그리드 초기화
     var slipDtlScope = agrid.getScope('slipDtlCtrl');
     slipDtlScope.dtlGridDefault();
-    
+
     $scope.excelFg = true;
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownloadSlip = function () {
     // 파라미터
 	var params = {};
 	params.storeCd   = $scope.searchedStoreCd;
+	params.slipFg    = $scope.searchedSlipFg;
 	params.slipKind  = $scope.searchedSlipKind;
     params.procFg    = $scope.searchedProcFg;
     params.prodCd    = $scope.searchedProdCd;
     params.prodNm    = $scope.searchedProdNm;
     params.startDate = $scope.searchedStartDate;
   	params.endDate 	 = $scope.searchedEndDate;
+  	params.prodClassCd = $scope.searchedProdClassCd;
   	params.excelFg   = $scope.excelFg;
 
 	$scope._broadcast('slipExcelCtrl',params);
@@ -343,7 +354,7 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   angular.extend(this, new RootController('slipDtlCtrl', $scope, $http, true));
 
   $scope.excelFg = false;
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -366,7 +377,7 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
   	  if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   	  	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   	  	if (rng && rng.columnSpan > 1) {
@@ -374,7 +385,7 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   	  	}
   	  }
     }, true);
-    
+
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
@@ -457,6 +468,7 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.slipNo    = data.slipNo;
     $scope.startDate = data.startDate;
     $scope.endDate   = data.endDate;
+    $scope.excelFg = data.excelFg;
 
     $scope.searchSlipDtlList(false);
     // 기능수행 종료 : 반드시 추가
@@ -494,8 +506,8 @@ app.controller('slipDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/slip/ioStockDtl/list.sb", params);
-    
-    $scope.excelFg = true;
+
+    //$scope.excelFg = true;
   };
 
   //엑셀 다운로드
@@ -629,11 +641,20 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			 	return false;
 			}
+
 			
 			$scope.storeCd   = data.storeCd;
 			$scope.startDate = data.startDate;
 			$scope.endDate   = data.endDate;
+			$scope.slipFg    = data.slipFg;
+			$scope.slipKind  = data.slipKind;
+			$scope.procFg    = data.procFg;
+			$scope.prodCd    = data.prodCd;
+			$scope.prodNm    = data.prodNm;
+			$scope.prodClassCd = data.prodClassCd;
 			
+			$scope.excelFg     = data.excelFg;
+
 			$scope.searchSlipList(false);
 		}else{
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -648,9 +669,17 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.searchSlipList = function (isPageChk) {
     // 파라미터
     var params       = {};
+    
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
     params.storeCd   = $scope.storeCd;
+    params.slipFg    = $scope.slipFg;
+    params.slipKind  = $scope.slipKind;
+    params.procFg    = $scope.procFg;
+    params.prodCd    = $scope.prodCd;
+    params.prodNm    = $scope.prodNm;
+    params.prodClassCd   = $scope.prodClassCd;
+    
     params.isPageChk = isPageChk;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -662,7 +691,7 @@ app.controller('slipExcelCtrl', ['$scope', '$http', '$timeout', function ($scope
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
 		}
-		
+
 		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
@@ -779,13 +808,14 @@ app.controller('slipDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			 	return false;
 			}
-			
+
 			$scope.slipNo    = data.slipNo;
 			$scope.checked   = data.checked;
 		    $scope.startDate = data.startDate;
 		    $scope.endDate   = data.endDate;
-			
-			$scope.searchSlipDtlList(false);
+		    $scope.excelFg   = data.excelFg;
+
+			$scope.searchSlipDtlExcelList(false);
 		}else{
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
@@ -816,7 +846,7 @@ app.controller('slipDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
   }
 
   // 전표별 입출고내역 상세 리스트 조회
-  $scope.searchSlipDtlList = function (isPageChk) {
+  $scope.searchSlipDtlExcelList = function (isPageChk) {
     // 파라미터
     var params       = {};
     params.slipNo    = $scope.slipNo;
@@ -832,7 +862,7 @@ app.controller('slipDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
 		}
-		
+
 		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {

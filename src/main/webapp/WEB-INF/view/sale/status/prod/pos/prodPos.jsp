@@ -108,7 +108,7 @@
 			<input type="hidden" id="posProdSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
 		<%-- 엑셀 다운로드 //TODO --%>
-		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
+		<button class="btn_skyblue fr" ng-click="excelDownloadPos()">
 			<s:message code="cmm.excel.down" />
 		</button>
 	</div>
@@ -153,7 +153,41 @@
 		<ul id="prodPosCtrlPager" data-size="10">
 		</ul>
 	</div>
-	<%--//페이지 리스트--%>
+	
+	<%--//엑셀 다운로드--%>
+	<div id="wjWrapType3" class="w100 mt10"> <%-- 수정 사항 || head line 3 아이디 추가 :: id="wjWrapType3" --%>
+		<%--위즈모 테이블--%>
+		<div class="wj-gridWrap" style="display:none;" ng-controller="prodPosExcelCtrl"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
+			<wj-flex-grid
+				id="posProdExcelGrid"
+				autoGenerateColumns="false"
+				selection-mode="Row"
+				items-source="data"
+				control="excelFlex"
+				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
+				is-read-only="true"
+				frozen-columns="9"
+				item-formatter="_itemFormatter">
+				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			</wj-flex-grid>
+			<%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="prodPosCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
+		</div>
+		<%--//위즈모 테이블--%>
+	</div>
 </div>
 
 <script type="text/javascript">

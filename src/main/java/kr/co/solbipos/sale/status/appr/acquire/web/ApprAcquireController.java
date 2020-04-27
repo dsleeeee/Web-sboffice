@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.acquire.service.ApprAcquireVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -70,8 +70,8 @@ public class ApprAcquireController {
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
-    
-    
+
+
     /**
      * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
      * @param   request
@@ -92,8 +92,8 @@ public class ApprAcquireController {
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMcouponList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
-    
-    
+
+
     /**
      * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
      * @param   request
@@ -114,7 +114,7 @@ public class ApprAcquireController {
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMpayList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
-    
+
     /**
      * 카드매입사별 탭 - 모바일쿠폰 리스트 조회
      * @param   request
@@ -133,6 +133,92 @@ public class ApprAcquireController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = apprAcquireService.getApprAcquireNcardList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+
+    /**
+     * 카드매입사별 탭 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.23
+     */
+    @RequestMapping(value = "/acquireCard/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireExcelList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+
+
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.23
+     */
+    @RequestMapping(value = "/acquireMcoupon/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireMcouponExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMcouponExcelList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+
+
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.23
+     */
+    @RequestMapping(value = "/acquireMpay/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireMpayExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireMpayExcelList(apprAcquireVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
+    }
+
+    /**
+     * 카드매입사별 탭 - 모바일쿠폰 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprAcquireVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.23
+     */
+    @RequestMapping(value = "/acquireNcard/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprAcquireNcardExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprAcquireVO apprAcquireVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprAcquireService.getApprAcquireNcardExcelList(apprAcquireVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprAcquireVO);
     }
 }

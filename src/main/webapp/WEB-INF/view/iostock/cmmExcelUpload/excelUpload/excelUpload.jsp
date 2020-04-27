@@ -214,7 +214,7 @@
     $scope.excelFileChanged = function () {
       if ($('#excelUpFile')[0].files[0]) {
         // 엑셀업로드 전 현재 세션ID 와 동일한 자료를 삭제한다.
-        $scope.delete('excel');
+        $scope.deleteExl('excel');
       }
     };
 
@@ -223,18 +223,18 @@
     $scope.textFileChanged = function () {
       if ($('#textUpFile')[0].files[0]) {
         // 업로드 전 현재 세션ID 와 동일한 자료를 삭제한다.
-        $scope.delete('text');
+        $scope.deleteExl('text');
       }
     };
 
 
     // 현재 세션ID 와 동일한 데이터 삭제
-    $scope.delete = function (upFg) {
+    $scope.deleteExl = function (upFg) {
       var params = {};
       //가상로그인 session 설정
-	    if(document.getElementsByName('sessionId')[0]){
+	  if(document.getElementsByName('sessionId')[0]){
 	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
-	    }
+	  }
 
       $http({
         method : 'POST', //방식
@@ -384,7 +384,7 @@ return;
               else if 	(j % columnNum === 2)	item.etcQty 		= value;
             }
           }
-
+           console.log(teml);
           jsonData.push(item);
         }
       }

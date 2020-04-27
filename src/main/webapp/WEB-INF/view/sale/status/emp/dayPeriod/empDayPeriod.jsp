@@ -118,6 +118,29 @@
       	<ul id="empDayPeriodMainCtrlPager" data-size="10"></ul>
       </div>
       <%--//페이지 리스트--%>
+      <%-- 엑셀 리스트 --%>
+      <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="empDayPeriodExcelCtrl">
+        <div class="wj-gridWrap">
+          <wj-flex-grid
+          id="empDayPeriodExcelGrid"
+          loaded-rows="loadedRows(s,e)"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="false"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"              binding="storeNm"           width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empsale.emp"/>"              binding="empNm"             width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.billCnt"/>"           binding="billCnt"           width="150" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmt"/>"       binding="realSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+        </div>
+  	 </div>
+  	 <%--//엑셀 리스트 --%>    
      </div>
     </div>
 
@@ -147,6 +170,7 @@
     <div class="w100 mt10" id="wjWrapType1">
       <div class="wj-gridWrap col2-t2">
         <wj-flex-grid
+          id="empDayPeriodDtlGrid"
           autoGenerateColumns="false"
           selection-mode="Row"
           items-source="data"

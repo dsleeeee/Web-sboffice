@@ -86,5 +86,26 @@ public class DailyIoStockController {
 
 		return ReturnUtil.returnListJson(Status.OK, list, dailyIoStockVO);
 	}
+	
+
+	/**
+     * 일수불현황 - 일수불현황 리스트(엑셀) 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  박지선
+     * @since   2020.04.21
+     */
+	@RequestMapping(value = "/dailyIoStock/getDailyIoStockExcelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getDailyIoStockExcelList(HttpServletRequest request, HttpServletResponse response, DailyIoStockVO dailyIoStockVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+		List<DefaultMap<String>> list = dailyIoStockService.getDailyIoStockExcelList(dailyIoStockVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, dailyIoStockVO);
+	}
 
 }

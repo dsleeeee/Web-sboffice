@@ -156,6 +156,76 @@
         </ul>
     </div>
     <%--//페이지 리스트--%>
+    
+    <%-- 엑셀 리스트 --%>
+	<div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="dailyIoStockExcelCtrl">
+      <div class="wj-gridWrap">
+      <wj-flex-grid
+		id="dailyIoStockExcelGrid"
+        autoGenerateColumns="false"
+        selection-mode="Row"
+        items-source="data"
+        control="excelFlex"
+        initialized="initGrid(s,e)"
+        is-read-only="true"
+        item-formatter="_itemFormatter"
+        frozen-columns="1">
+
+          <!-- define columns -->
+          <c:if test="${orgnFg == 'HQ'}">
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrDt"/>"                binding="ioOccrDt"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"                binding="ioOccrQty01"        width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"             binding="ioOccrTot01"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"              binding="ioOccrQty16"        width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"               binding="ioOccrTot16"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"         binding="ioOccrQty13"       width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"         binding="ioOccrTot13"    width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"        binding="ioOccrQty02"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"        binding="ioOccrTot02"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"              binding="ioOccrQty04"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"              binding="ioOccrTot04"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"               binding="ioOccrQty14"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"               binding="ioOccrTot14"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"     binding="ioOccrQty17"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"     binding="ioOccrTot17"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"    binding="ioOccrQty21"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"    binding="ioOccrTot21"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"          binding="ioOccrQty22"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"        	binding="ioOccrTot22"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"             binding="ioOccrQty19"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"             binding="ioOccrTot19"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"           binding="ioOccrQty33"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"        	  binding="ioOccrTot33"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:if>
+          <c:if test="${orgnFg == 'STORE'}">
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrDt"/>"                binding="ioOccrDt"        width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"                binding="ioOccrQty03"        width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"             binding="ioOccrTot03"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"              binding="ioOccrQty12"        width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"               binding="ioOccrTot12"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"         binding="ioOccrQty06"       width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"         binding="ioOccrTot06"    width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"        binding="ioOccrQty18"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"        binding="ioOccrTot18"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"              binding="ioOccrQty11"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"              binding="ioOccrTot11"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"               binding="ioOccrQty04"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"               binding="ioOccrTot04"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"     binding="ioOccrQty14"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"     binding="ioOccrTot14"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"    binding="ioOccrQty01"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"    binding="ioOccrTot01"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"          binding="ioOccrQty02"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"          binding="ioOccrTot02"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrQty"/>"             binding="ioOccrQty05"    width="150" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"             binding="ioOccrTot05"       width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          </c:if>
+
+      </wj-flex-grid>
+      </div>
+	</div>
+	<%--//엑셀 리스트--%>
+    
 </div>
 
 

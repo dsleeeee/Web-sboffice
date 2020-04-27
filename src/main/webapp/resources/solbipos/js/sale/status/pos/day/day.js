@@ -16,6 +16,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	$scope._setComboData("posDayListScaleBox", gvListScaleBoxData);
 
 	var checkInt = true;
+	$scope.excelFg = true;
 
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
@@ -144,6 +145,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
 
+		$scope.searchStoreCd = params.storeCd;
+		$scope.searchPosNo = params.posNo;
+		$scope.searchArrPosCd = params.arrPosCd; //-포스정보
+		$scope.searchChecked = $scope.isChecked;
+		
 		/*if( params.arrPosCd == null || params.arrPosCd == undefined || params.arrPosCd == ""){
 	   	 	$scope._popMsg(messages["pos.require.arrPosCd"]); // 포스 정보가 존재하지 않습니다.
 	   	 	return false;
@@ -153,6 +159,9 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosDayStartDate.value, 'yyyyMMdd');
 			params.endDate = wijmo.Globalize.format($scope.srchPosDayEndDate.value, 'yyyyMMdd');
+			
+			$scope.searchStartDate = params.startDate;
+			$scope.searchEndDate   = params.endDate;
 		}
 
 		if(params.startDate > params.endDate){
@@ -175,6 +184,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			}
 
 		});
+		
+		$scope.excelFg = true;
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -201,17 +212,6 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	$scope.excelDownloadDay = function () {
 		// 파라미터
 		var params = {};
-		params.storeCd = $("#posDaySelectStoreCd").val();
-		params.posNo = $("#posDaySelectPosCd").val();
-		params.listScale = $scope.posDayListScale; //-페이지 스케일 갯수
-		params.arrPosCd = $scope.comboArray; //-포스정보
-
-		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.srchPosDayStartDate.value, 'yyyyMMdd');
-			params.endDate = wijmo.Globalize.format($scope.srchPosDayEndDate.value, 'yyyyMMdd');
-		}
-
-		params.isPageChk = true;
 
 		$scope._broadcast('posDayExcelCtrl',params);
 	};
@@ -515,31 +515,13 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayExcelCtrl", function (event, data) {
+		if(data != undefined && $scope.excelFg) {
 
-		if( $("#posDaySelectStoreCd").val() === ''){
-	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
-	   	 	return false;
-	    }
+			$scope.getRePosNmList($scope.searchStoreCd, $scope.searchPosNo);
 
-		var storeCd = $("#posDaySelectStoreCd").val();
-		var posCd = $("#posDaySelectPosCd").val();
-
-		if(data != undefined) {
-
-			if(data.startDate > data.endDate){
-				$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-				return false;
-			}
-
-			$scope.storeCd = data.storeCd;
-			$scope.posNo = data.posNo;
-			$scope.startDate = data.startDate;
-			$scope.endDate = data.endDate;
-			$scope.listScale = data.listScale;
-			$scope.arrPosCd = data.arrPosCd;
-
-			$scope.getRePosNmList(storeCd, posCd);
-
+		}else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
 		}
 
 	});
@@ -549,13 +531,17 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 		// 파라미터
 		var params = {};
-		params.storeCd = $scope.storeCd;
-		params.posNo = $scope.posNo;
-		params.listScale = 0 //-페이지 스케일 갯수
+		
+		params.storeCd   = $scope.searchStoreCd;
+		params.posNo     = storePosCd;
 		params.arrPosCd = $scope.arrPosCd; //-포스정보
 		params.isPageChk = isPageChk;
-	    params.startDate = $scope.startDate;
-		params.endDate = $scope.endDate;
+		
+		//등록일자 '전체기간' 선택에 따른 params
+		if(!$scope.searchChecked){
+	    	params.startDate = $scope.searchStartDate;
+	        params.endDate   = $scope.searchEndDate;
+	    }
 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/pos/day/excelList.sb", params, function() {
@@ -620,12 +606,12 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    				arrStorePos.push(list[i].posCd);
 	    				arrStorePosNm.push(list[i].storeNm + "||" + list[i].posNm);
 	    			}
+	    			
+	    			$scope.arrStorePosExcel   = arrStorePos.join();
+	    			$scope.arrStorePosNmExcel = arrStorePosNm.join();
 
-	    			$("#posDaySelectPosCd").val(arrStorePos.join());
-	    			$("#posDaySelectPosName").val(arrStorePosNm.join());
-
-	    			storePosCd = $("#posDaySelectPosCd").val();
-	    			storePosNm = $("#posDaySelectPosName").val();
+	    			storePosCd = $scope.arrStorePosExcel;
+	    			storePosNm = $scope.arrStorePosNmExcel;
 
 //	    			if (!checkInt) {
 	    				$scope.makeDataGrid();

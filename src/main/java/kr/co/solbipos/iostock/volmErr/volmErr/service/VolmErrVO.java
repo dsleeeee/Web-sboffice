@@ -107,7 +107,11 @@ public class VolmErrVO extends PageVO {
     private String storeNewAdjustFg;
     /** 전표번호 생성을 위한 YYMM 포맷 날짜 */
     private String yymm;
-
+    
+    /** 헤드 인덱스(DAY SEQUENCE) */
+    private Integer seqNo;
+    
+    
     public String getOrgnFg() {
 		return orgnFg;
 	}
@@ -758,5 +762,19 @@ public class VolmErrVO extends PageVO {
      */
     public void setYymm(String yymm) {
         this.yymm = yymm;
+    }
+    
+    /**
+     * @return the seqNo
+     */
+    public Integer getSeqNo() {
+        return seqNo;
+    }
+
+    /**
+     * @param seqNo the seqNo to set
+     */
+    public void setSeqNo(Integer seqNo) {
+        this.seqNo = seqNo;
     }
 }

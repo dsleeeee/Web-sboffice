@@ -55,24 +55,27 @@ app.controller('prodRankCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	params.isPageChk = isPageChk;
 	params.orgnFg    = $scope.orgnFg;
 	
+	$scope.excelStartDate	= "";
+    $scope.excelEndDate		= "";
+    $scope.excelStoreCd		=	params.storeCd;
+	$scope.excelListScale	=	params.listScale;
+	$scope.excelOrgnFg		=	params.orgnFg;
+	$scope.isSearch			= true;
 
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
-
+    
+    $scope.excelStartDate	=	params.startDate;
+    $scope.excelEndDate		=	params.endDate;
+    
     if(params.startDate > params.endDate){
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
 	
-    $scope.excelStartDate	=	params.startDate;
-    $scope.excelEndDate		=	params.endDate;
-    $scope.excelStoreCd		=	params.storeCd;
-	$scope.excelListScale	=	params.listScale;
-	$scope.excelOrgnFg		=	params.orgnFg;
-	$scope.isSearch			= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/rank/list.sb", params, function() {});

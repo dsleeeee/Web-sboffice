@@ -10,6 +10,9 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
   $scope.srchBarcdStartDate = wcombo.genDateVal("#srchBarcdStartDate", getToday());
   $scope.srchBarcdEndDate   = wcombo.genDateVal("#srchBarcdEndDate", getToday());
+  
+  $scope.isSearch		= false;
+  $scope.isDtlSearch	= false;
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("barcdListScaleBox", gvListScaleBoxData);
@@ -48,7 +51,6 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('barcdMainCtrl', $scope, $http, $timeout, true));
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -126,6 +128,15 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.barcdCd	 = $scope.searchBarCd;
     params.prodNm    = $scope.searchProdNm;
     params.orgnFg	 = $scope.orgnFg;
+    
+    $scope.excelListScale	= params.listScale;
+    $scope.excelStoreCd		= params.storeCd;
+    $scope.excelBarcdCd		= params.barcdCd;
+    $scope.excelProdNm		= params.prodNm;
+    $scope.excelOrgnFg		= params.orgnFg;
+    $scope.excelStartDate	= "";
+    $scope.excelEndDate		= "";
+    $scope.isSearch	= true;
 
 	//등록일자 '전체기간' 선택에 따른 params
 	if(!$scope.isChecked){
@@ -134,6 +145,8 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 	  params.startDate = wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyyMMdd');
+	  $scope.excelStartDate	= params.startDate;
+	  $scope.excelEndDate	= params.endDate;
 	}else{
     	$scope.startDateForDt = "";
     	$scope.endDateForDt = "";
@@ -151,14 +164,24 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         var params       = {};
         if(rows.length > 0){
         	params.prodCd    = rows[0].dataItem.prodCd;
-    	    params.storeCd	 = $("#barcdSelectStoreCd").val();
+    	    params.storeCd	 = $scope.storeCd;
 
     	    // 코너별 매출현황 상세조회.
     	    $scope._broadcast("barcdDtlCtrlSrch", params);
         }else{
-            // 바코드별 매출 그리드 조회 후 상세내역 그리드 초기화
-            var orderDtlScope = agrid.getScope('barcdDtlCtrl');
-            orderDtlScope.dtlGridDefault();
+        	// 엑셀 상세 그리드 초기화
+//        	$scope.isDtlSearch = false;
+//        	$scope._broadcast("barcdDtlCtrl", params);
+        	
+        	var orderStockInfoDtlScope = agrid.getScope('barcdDtlCtrl');
+		    orderStockInfoDtlScope.dtlGridDefault();
+        	
+        	// 바코드별 매출 그리드 조회 후 상세내역 그리드 초기화
+//        	var cv          = new wijmo.collections.CollectionView([]);
+//  	      	cv.trackChanges = true;
+//  	      	
+//  	      	params.cv = cv;
+//  	      	$scope._broadcast("barcdDtlCtrl", params);
         }
 	}
   };
@@ -166,25 +189,9 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   //엑셀 다운로드
   $scope.excelDownloadBarcd = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '매출현황_바코드별_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	  // 파라미터
+	  var params     = {};
+	  $scope._broadcast('barcdExcelCtrl',params);
   };
 }]);
 
@@ -215,6 +222,11 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 		  }
 
 	    $scope.searchBarcdDtlList(true);
+	    
+	    if(data.cv != null && data.cv != ''){
+	    	$scope.data     = data.cv;
+		    $scope.flex.refresh();
+	    }
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
@@ -239,6 +251,7 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	    var params          = {};
 	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.isPageChk	= isPageChk;
+
 	    // 등록일자 '전체기간' 선택에 따른 params
 	    if(!$scope.isChecked){
 	      params.startDate = wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyyMMdd');
@@ -246,31 +259,20 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	    }
 	    params.prodCd		= $scope.prodCd;
 	    params.storeCd		= $scope.storeCd;
+	    $scope.excelDtlProdCd	= params.prodCd;
+	    $scope.excelDtlStoreCd	= params.storeCd;
+	    $scope.excelDtlStartDate	= params.startDate;
+	    $scope.excelDtlEndDate		= params.endDate;
+	    $scope.isDtlSearch		= true;
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/status/barcd/barcdDtl/list.sb", params);
 	  };
 
-	//엑셀 다운로드
+	//엑셀 다운로드2
 	  $scope.excelDownloadBarcdDtl = function () {
-	    if ($scope.flex.rows.length <= 0) {
-	      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-	      return false;
-	    }
-
-	    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-	    $timeout(function () {
-	      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-	        includeColumnHeaders: true,
-	        includeCellStyles   : true,
-	        includeColumns      : function (column) {
-	          return column.visible;
-	        }
-	      }, '매출현황_바코드별(상세)_'+getToday()+'.xlsx', function () {
-	        $timeout(function () {
-	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-	        }, 10);
-	      });
-	    }, 10);
+		  // 파라미터
+		  var params     = {};
+		  $scope._broadcast('barcdDtlExcelCtrl',params);
 	  };
 
 	  // 상세 그리드 초기화
@@ -280,6 +282,149 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 	      cv.trackChanges = true;
 	      $scope.data     = cv;
 	      $scope.flex.refresh();
+	      $scope.isDtlSearch = false;
 	    }, 10);
 	  };
+}]);
+
+app.controller('barcdExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('barcdExcelCtrl', $scope, $http, $timeout, true));
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("barcdExcelCtrl", function (event, data) {
+		if(data != undefined && $scope.isSearch) {
+			$scope.searchBarcdExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+	});
+
+	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.excelFlex.columns;
+
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
+
+	// 전체 엑셀 리스트 조회
+	$scope.searchBarcdExcelList = function (isPageChk) {
+		// 파라미터
+		var params     = {};
+		params.listScale	= $scope.excelListScale;
+	    params.storeCd		= $scope.excelStoreCd;
+	    params.barcdCd		= $scope.excelBarcdCd;
+	    params.prodNm		= $scope.excelProdNm;
+	    params.orgnFg		= $scope.excelOrgnFg;
+	    params.startDate	= $scope.excelStartDate;
+	    params.endDate		= $scope.excelEndDate;
+
+		$scope.isChkProdClassDisplay();
+
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/sale/status/barcd/barcd/excelList.sb", params, function(){			    
+			if ($scope.excelFlex.rows.length <= 0) {
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, $(menuNm).selector + '_'+messages["barcd.barcd"]+'_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+		});
+	};
+}]);
+
+// 엑셀 컨트롤러2
+app.controller('barcdDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('barcdDtlExcelCtrl', $scope, $http, $timeout, true));
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+	    // add the new GroupRow to the grid's 'columnFooters' panel
+	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+	    // add a sigma to the header to show that this is a summary row
+	    s.bottomLeftCells.setCellData(0, 0, '합계');
+	};
+	
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("barcdDtlExcelCtrl", function (event, data) {
+		if(data != undefined && $scope.isDtlSearch) {
+			$scope.searchBarcdDtlExcelList(true);
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+	});
+
+	// 전체 엑셀 리스트 조회
+	$scope.searchBarcdDtlExcelList = function (isPageChk) {// 파라미터
+		
+		// 파라미터
+		var params     = {};
+		params.startDate	= $scope.excelDtlStartDate;
+		params.endDate		= $scope.excelDtlEndDate;
+	    params.prodCd		= $scope.excelDtlProdCd;
+	    params.storeCd		= $scope.excelDtlStoreCd;
+
+		if(params.startDate > params.endDate){
+		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+		 	return false;
+		}
+
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/sale/status/barcd/barcdDtl/excelList.sb", params, function(){
+			if ($scope.excelDtlFlex.rows.length <= 0) {
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelDtlFlex, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, '매출현황_바코드별(상세)_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+		});
+	};
+
 }]);

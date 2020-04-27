@@ -97,7 +97,7 @@
 	    <wj-combo-box
 	      class="w100px fl"
 	      id="empMonthlistScaleBox"
-	      ng-model="empMonthlistScale"
+	      ng-model="empMonthListScale"
 	      items-source="_getComboData('empMonthlistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"

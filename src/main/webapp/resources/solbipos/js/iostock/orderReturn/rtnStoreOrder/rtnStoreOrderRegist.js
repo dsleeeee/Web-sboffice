@@ -226,7 +226,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     var cv          = new wijmo.collections.CollectionView([]);
     cv.trackChanges = true;
     $scope.data     = cv;
-
+    
     if (!$.isEmptyObject(data)) {
       $scope.reqDate     = data.reqDate;
       $scope.slipFg      = data.slipFg;
@@ -657,6 +657,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg   = uploadFg;
+        excelUploadScope.storeCd    = $scope.storeCd;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
         excelUploadScope.parentCtrl = 'rtnStoreOrderRegistCtrl';
         // 엑셀 업로드
@@ -678,10 +679,16 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   $scope.uploadCallBack = function () {
     var params      = {};
     params.date     = $scope.reqDate;
+    params.storeCd  = $scope.storeCd;
     params.slipFg   = $scope.slipFg;
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({

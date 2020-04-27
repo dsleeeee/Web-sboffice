@@ -29,5 +29,17 @@ public class StockManageViewStoreServiceImpl implements StockManageViewStoreServ
 
         return StockManageViewStoreMapper.getStockManageViewStoreList(StockManageViewStoreVO);
 	}
+	
+	@Override
+	public List<DefaultMap<String>> getStockManageViewStoreExcelList(StockManageViewStoreVO StockManageViewStoreVO, SessionInfoVO sessionInfoVO) {
+
+		StockManageViewStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if(!StringUtil.getOrBlank(StockManageViewStoreVO.getStoreCd()).equals("")) {
+        	StockManageViewStoreVO.setArrStoreCd(StockManageViewStoreVO.getStoreCd().split(","));
+        }
+
+        return StockManageViewStoreMapper.getStockManageViewStoreExcelList(StockManageViewStoreVO);
+	}
 
 }

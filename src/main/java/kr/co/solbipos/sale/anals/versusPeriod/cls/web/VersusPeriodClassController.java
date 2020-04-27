@@ -80,6 +80,18 @@ public class VersusPeriodClassController {
         return ReturnUtil.returnListJson(Status.OK, list, versusPeriodClassVO);
     }
 
+    /** 대비기간매출분석 - 분류상품별 리스트(엑셀) 상세 조회 */
+    @RequestMapping(value = "/class/versusPeriodClassDtlExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVersusPeriodClassDtlExcelList(HttpServletRequest request, HttpServletResponse response, Model model, VersusPeriodClassVO versusPeriodClassVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = versusPeriodClassService.getVersusPeriodClassDtlExcelList(versusPeriodClassVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, versusPeriodClassVO);
+    }
+    
     /** 대비기간매출분석 - 분류상품별 리스트 상세 조회 */
     @RequestMapping(value = "/class/versusPeriodClassDtlChartList.sb", method = RequestMethod.POST)
     @ResponseBody

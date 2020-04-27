@@ -10,5 +10,7 @@ public interface StorageHqCurrService {
     List<DefaultMap<String>> getStorageHqCurrList(StorageHqCurrVO storageHqCurrVO, SessionInfoVO sessionInfoVO);
     /** 창고별현재고현황 - 창고별현재고현황 창고 리스트 조회 */
 	List<DefaultMap<String>> getStorageList(StorageHqCurrVO storageHqCurrVO, SessionInfoVO sessionInfoVO);
+    /** 창고별현재고현황 - 창고별현재고현황 리스트(엑셀) 조회 */
+    List<DefaultMap<String>> getStorageHqCurrExcelList(StorageHqCurrVO storageHqCurrVO, SessionInfoVO sessionInfoVO);
 
 }

@@ -258,7 +258,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		params.isPageChk	= isPageChk;
 		params.listScale = $scope.listScaleCombo.text;
 		params.orgnFg		= $scope.orgnFg;
-		
+
 		$scope.excelStartDate	= params.startDate;
 		$scope.excelEndDate 	= params.endDate;
 		$scope.excelProdCd 		= params.prodCd; // 상품코드
@@ -311,7 +311,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	$scope.excelDownload = function () {
 		// 파라미터
 		var params     = {};
-		
+
 		$scope._broadcast('periodiostockExcelCtrl',params);
 	};
 }]);
@@ -430,7 +430,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 	    }
 	    // <-- //그리드 헤더2줄 -->
 	};
-	
+
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("periodiostockExcelCtrl", function (event, data) {
 		if(data != undefined && $scope.isSearch) {
@@ -443,7 +443,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		}
 
 	});
-	
+
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
 		var srchSrchOption = $scope.excelSrchOption;
@@ -470,7 +470,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 
 	// 전체 엑셀 리스트 조회
 	$scope.searchPeriodIostockExcelList = function (isPageChk) {// 파라미터
-		
+
 		// 파라미터
 		var params     = {};
 		params.startDate 	= $scope.excelStartDate;
@@ -488,7 +488,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 		}
-		
+
 		$scope.srchOptionView();
 		$scope.isChkProdClassDisplay();
 

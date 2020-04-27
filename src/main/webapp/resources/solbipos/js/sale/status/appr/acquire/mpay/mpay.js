@@ -10,17 +10,18 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 
   $scope.srchApprAcquireMpayStartDate = wcombo.genDateVal("#srchApprAcquireMpayStartDate", getToday());
   $scope.srchApprAcquireMpayEndDate   = wcombo.genDateVal("#srchApprAcquireMpayEndDate", getToday());
+  $scope.isSearch = false;
 
   //조회조건 콤보박스 데이터 Set
   $scope._setComboData("apprAcquireMpayListScaleBox", gvListScaleBoxData);
-  
+
   //조회조건 승인구분 데이터 Set
   $scope._setComboData("srchAcquireMpaySaleFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["appr.approve"], "value": "1"},
     {"name": messages["cmm.cancel"], "value": "-1"}
   ]);
-  
+
   //조회조건 승인처리 데이터 Set
   $scope._setComboData("srchAcquireMpayApprProcFgDisplay", [
     {"name": messages["cmm.all"], "value": ""},
@@ -47,18 +48,18 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
         }
       }
     });
-    
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
       if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
 		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
 		if (rng && rng.columnSpan > 1) {
 			e.preventDefault();
 		}
 	  }
-      
+
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -113,13 +114,13 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
     var dataItem         = {};
     dataItem.storeCd			   	= messages["rtnStatus.storeCd"];
     dataItem.storeNm			   	= messages["rtnStatus.storeNm"];
-    
+
     dataItem.mpayCd			   	    = messages["appr.acquire.mpayCd"];
     dataItem.mpayNm			   	    = messages["appr.acquire.mpayNm"];
-    
+
     dataItem.cnt        			= messages["cmm.all"];
     dataItem.apprAmt         		= messages["cmm.all"];
-    
+
     dataItem.cntA       			= messages["appr.approve"];
     dataItem.apprAmtA        		= messages["appr.approve"];
 
@@ -173,17 +174,17 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("apprAcquireMpayCtrl", function (event, data) {
     $scope.searchApprAcquireMpayList(true);
-    
-    
+
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("apprAcquireMpayCtrlSrch", function (event, data) {
     $scope.searchApprAcquireMpayList(false);
-    
-    
+
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -197,12 +198,12 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
     params.storeCd   = $("#apprAcquireMpaySelectStoreCd").val();
     params.posNo  	 = $("#apprAcquireMpaySelectPosCd").val();
     params.cornrCd   = $("#apprAcquireMpaySelectCornerCd").val();
-    params.saleFg	 = $scope.saleFg;
-    params.apprProcFg = $scope.apprProcFg;
+    params.saleFg	 = $scope.saleFgModel;
+    params.apprProcFg = $scope.apprProcFgModel;
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     params.arrCornrCol  = [];
-    
+
     $scope.srchPosNo  	  = $("#apprAcquireMpaySelectPosCd").val();
     $scope.srchCornrCd    = $("#apprAcquireMpaySelectCornerCd").val();
     $scope.srchSaleFg	  = $scope.saleFg;
@@ -217,10 +218,19 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
 		 	return false;
 	}
-		
+
+	$scope.excelStartDate	= params.startDate;
+	$scope.excelEndDate 	= params.endDate;
+	$scope.excelStoreCd	= params.storeCd;
+	$scope.excelPosNo 	= params.posNo;
+	$scope.excelCornrCd	= params.cornrCd;
+	$scope.excelSaleFg 	= params.saleFg;
+	$scope.excelApprProcFg	= params.apprProcFg;
+	$scope.isSearch		= true;
+
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/status/appr/acquireMpay/list.sb", params);
-	
+
 	$scope.editDataGrid();
   };
 
@@ -250,30 +260,14 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 	$scope.apprAcquireMpaySelectCornerShow = function () {
 		$scope._broadcast('apprAcquireMpaySelectCornerCtrl');
 	};
-	
+
 //엑셀 다운로드
   $scope.excelDownloadMpay = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '승인현황_매입현황_Mpay_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	// 파라미터
+    var params       = {};
+    $scope._broadcast('apprAcquireMpayExcelCtrl',params);
   };
-  
+
   //매장의 포스(pos) 리스트 조회
 	$scope.getPosNmList = function () {
 		var url             = '/sale/status/pos/pos/posNmList.sb';
@@ -295,12 +289,12 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
 	$scope.editDataGrid = function () {
         var grid = wijmo.Control.getControl("#apprAcquireMpayGrid");
         var columns = grid.columns;
-        if($scope.saleFg == '1'){
+        if($scope.saleFgModel == '1'){
         	columns[6].visible = true;
         	columns[7].visible = true;
         	columns[8].visible = false;
         	columns[9].visible = false;
-        }else if($scope.saleFg == '-1'){
+        }else if($scope.saleFgModel == '-1'){
         	columns[6].visible = false;
         	columns[7].visible = false;
         	columns[8].visible = true;
@@ -312,5 +306,171 @@ app.controller('apprAcquireMpayCtrl', ['$scope', '$http', '$timeout', function (
         	columns[9].visible = true;
         }
 	}
-	
+
+}]);
+
+app.controller('apprAcquireMpayExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+	// 상위 객체 상속 : T/F 는 picker
+	angular.extend(this, new RootController('apprAcquireMpayExcelCtrl', $scope, $http, $timeout, true));
+
+	var checkInt = true;
+
+	// grid 초기화 : 생성되기전 초기화되면서 생성된다
+	$scope.initGrid = function (s, e) {
+
+		// add the new GroupRow to the grid's 'columnFooters' panel
+		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+		// add a sigma to the header to show that this is a summary row
+		s.bottomLeftCells.setCellData(0, 0, '합계');
+
+		// <-- 그리드 헤더2줄 -->
+		// 헤더머지
+		s.allowMerging = 'ColumnHeaders';
+
+		//헤더 생성
+		s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+		// 첫째줄 헤더 생성
+	    var dataItem             = {};
+	    dataItem.storeCd			   	= messages["rtnStatus.storeCd"];
+	    dataItem.storeNm			   	= messages["rtnStatus.storeNm"];
+
+	    dataItem.mpayCd			   	    = messages["appr.acquire.mpayCd"];
+	    dataItem.mpayNm			   	    = messages["appr.acquire.mpayNm"];
+
+	    dataItem.cnt        			= messages["cmm.all"];
+	    dataItem.apprAmt         		= messages["cmm.all"];
+
+	    dataItem.cntA       			= messages["appr.approve"];
+	    dataItem.apprAmtA        		= messages["appr.approve"];
+
+	    dataItem.cntB        			= messages["cmm.cancel"];
+	    dataItem.apprAmtB         		= messages["cmm.cancel"];
+
+
+	    s.columnHeaders.rows[0].dataItem = dataItem;
+
+		//그리드 아이템포멧 생성
+		s.itemFormatter = function (panel, r, c, cell) {
+			if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+				//align in center horizontally and vertically
+				panel.rows[r].allowMerging    = true;
+				panel.columns[c].allowMerging = true;
+				wijmo.setCss(cell, {
+					display    : 'table',
+					tableLayout: 'fixed'
+				});
+				cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+				wijmo.setCss(cell.children[0], {
+					display      : 'table-cell',
+					verticalAlign: 'middle',
+					textAlign    : 'center'
+				});
+			} else if (panel.cellType === wijmo.grid.CellType.RowHeader) { // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+				// GroupRow 인 경우에는 표시하지 않는다.
+				if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+					cell.textContent = '';
+				} else {
+					if (!isEmpty(panel._rows[r]._data.rnum)) {
+						cell.textContent = (panel._rows[r]._data.rnum).toString();
+					} else {
+						cell.textContent = (r + 1).toString();
+					}
+				}
+			} else if (panel.cellType === wijmo.grid.CellType.Cell) { // readOnly 배경색 표시
+				var col = panel.columns[c];
+				if (col.isReadOnly) {
+					wijmo.addClass(cell, 'wj-custom-readonly');
+				}
+			}
+		}
+
+		// <-- //그리드 헤더2줄 -->
+	};
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("apprAcquireMpayExcelCtrl", function (event, data) {
+
+		if(data != undefined && $scope.isSearch) {
+			$scope.searchApprAcquireMpayExcelList();
+			// 기능수행 종료 : 반드시 추가
+			event.preventDefault();
+		} else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+	});
+
+	// 신용카드 승인현황 리스트 조회
+	  $scope.searchApprAcquireMpayExcelList = function () {
+
+	    // 파라미터
+	    var params       = {};
+	    params.startDate = $scope.excelStartDate;
+		params.endDate = $scope.excelEndDate;
+		params.storeCd = $scope.excelStoreCd;
+		params.posNo = $scope.excelPosNo;
+		params.cornrCd = $scope.excelCornrCd;
+		params.saleFg = $scope.excelSaleFg;
+		params.apprProcFg = $scope.excelApprProcFg;
+
+		if(params.startDate > params.endDate){
+			 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+			 	return false;
+		}
+
+		// 조회 수행 : 조회URL, 파라미터, 콜백함수
+		$scope._inquiryMain("/sale/status/appr/acquireMpay/excelList.sb", params, function() {
+
+			var flex = $scope.excelFlex;
+
+			if (flex.rows.length <= 0) {
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+
+			$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+			$timeout(function () {
+				wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+					includeColumnHeaders: true,
+					includeCellStyles   : true,
+					includeColumns      : function (column) {
+						return column.visible;
+					}
+				}, messages["dailyReport.appr"]+'_'+messages["dailyReport.acquire"]+'_'+messages["dailyReport.apprMpay"]+'_'+getToday()+'.xlsx', function () {
+					$timeout(function () {
+						$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+					}, 10);
+				});
+			}, 10);
+
+		});
+
+		$scope.editDataGrid();
+	  };
+
+	// 선택한 승인구분에 따른 리스트 항목 visible
+		$scope.editDataGrid = function () {
+	        var grid = wijmo.Control.getControl("#apprAcquireMpayExcelGrid");
+	        var columns = grid.columns;
+	        if($scope.excelSaleFg == '1'){
+	        	columns[6].visible = true;
+	        	columns[7].visible = true;
+	        	columns[8].visible = false;
+	        	columns[9].visible = false;
+	        }else if($scope.excelSaleFg == '-1'){
+	        	columns[6].visible = false;
+	        	columns[7].visible = false;
+	        	columns[8].visible = true;
+	        	columns[9].visible = true;
+	        }else{
+	        	columns[6].visible = true;
+	        	columns[7].visible = true;
+	        	columns[8].visible = true;
+	        	columns[9].visible = true;
+	        }
+		}
+
 }]);

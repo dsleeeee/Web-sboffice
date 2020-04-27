@@ -322,8 +322,8 @@ app.controller('transReportExcelDownCtrl', ['$scope', '$http', '$timeout', funct
                 + '<td class="tr">' + addComma(item.outTotQty) + '</td>'
                 + '<td class="tr">' + addComma(item.outAmt) + '</td>'
                 + '<td class="tr">' + addComma(item.outVat) + '</td>'
-                // + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
-                + '<td class="tl"></td>'
+                 + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
+//                + '<td class="tl"></td>'
                 + '</tr>';
               pageTotAmt = parseInt(pageTotAmt) + parseInt(item.outAmt);
               pageTotVat = parseInt(pageTotVat) + parseInt(item.outVat);

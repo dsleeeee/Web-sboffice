@@ -99,6 +99,14 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
     
+    $scope.excelStartDate = "";
+    $scope.excelEndDate = "";
+    $scope.excelStoreCd	=	params.storeCd;
+    $scope.excelProdCd	=	params.prodCd;
+    $scope.excelProdNm	=	params.prodNm;
+    $scope.excelOrgnFg	=	params.orgnFg;
+    $scope.isSearch			= true;
+    
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -107,11 +115,6 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     
     $scope.excelStartDate = params.startDate;
     $scope.excelEndDate = params.endDate;
-    $scope.excelStoreCd	=	params.storeCd;
-    $scope.excelProdCd	=	params.prodCd;
-    $scope.excelProdNm	=	params.prodNm;
-    $scope.excelOrgnFg	=	params.orgnFg;
-    $scope.isSearch			= true;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/payFg/list.sb", params, function() {});

@@ -124,7 +124,7 @@
           <td colspan="4">
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="dstbCloseStore.add.excelFormDownload"/></a>
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="dstbCloseStore.add.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="dstbCloseStore.add.textFormUpload"/></a>
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="dstbCloseStore.add.textFormUpload"/></a> --%>
             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="dstbCloseStore.add.excelFormUploadErrorInfo"/></a>
           </td>

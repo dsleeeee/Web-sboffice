@@ -455,7 +455,7 @@ public class AcinsServiceImpl implements AcinsService {
         acinsHdVO.setAcinsTitle(excelUploadVO.getTitle());
         acinsHdVO.setSeqNo(Integer.parseInt(seqNo));
         acinsHdVO.setProcFg("0");
-        acinsHdVO.setStorageCd("000");
+        acinsHdVO.setStorageCd("999");
         acinsHdVO.setRegId(sessionInfoVO.getUserId());
         acinsHdVO.setRegDt(currentDt);
         acinsHdVO.setModId(sessionInfoVO.getUserId());
@@ -469,6 +469,7 @@ public class AcinsServiceImpl implements AcinsService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.insertStAcinsHd(acinsHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -480,6 +481,7 @@ public class AcinsServiceImpl implements AcinsService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.updateStAcinsHd(acinsHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

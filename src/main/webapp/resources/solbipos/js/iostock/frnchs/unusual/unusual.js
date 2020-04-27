@@ -7,20 +7,20 @@ var app = agrid.getApp();
 app.controller('unusualCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('unusualCtrl', $scope, $http, true));
-  
+
   $scope.srchStartDate = wcombo.genDateVal("#srchUnusualStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchUnusualEndDate", getToday());
-  
+
   //조회조건 콤보박스
   $scope._setComboData('unusualMainListScaleBox', gvListScaleBoxData);
   $scope._setComboData('unusualDtlListScaleBox', gvListScaleBoxData);
-  
+
   //조회조건 출고일자 데이터 Set
   $scope._setComboData("srchUnusualOutDateFgDisplay", [
     {"name": messages["unusualStockInfo.outDate"], "value": "1"}, // 출고일자
     {"name": messages["unusualStockInfo.inDate"], "value": "2"} // 입고일자
   ]);
-  
+
   //조회조건 전표구분 데이터 Set
   $scope._setComboData("srchUnusualSlipFgDisplay", [
     {"name": messages["cmm.all"], "value": ""}, // 전체
@@ -34,7 +34,7 @@ app.controller('unusualCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.unusualSelectStoreShow = function () {
 	  $scope._broadcast('unusualSelectStoreCtrl');
   };
-  
+
   //상품분류정보 팝업
   $scope.popUpProdClass = function () {
     var popUp = $scope.prodClassPopUpLayer;
@@ -63,7 +63,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
   angular.extend(this, new RootController('unusualMainCtrl', $scope, $http, true));
 
   $scope.excelFg = false;
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -112,6 +112,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
 //          params.unusualNm = selectedRow.unusualNm;
           params.startDate = $scope.searchedStartDate;
           params.endDate   = $scope.searchedEndDate;
+          params.excelFg = true;
           $scope._broadcast('unusualDtlCtrlSrch', params);
           $('#dtlSlipNo').text('상품상세 (전표번호 : '+selectedRow.slipNo+')');
         }
@@ -169,7 +170,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("unusualMainCtrlSrch", function (event, data) {
     $scope.searchUnusualList(false);
@@ -182,7 +183,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.searchUnusualList = function (isPageChk) {
     $scope.searchedStartDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
     $scope.searchedEndDate   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-    
+
     //상세그리드에 넘길 날짜 저장
     $scope.searchedStartDateForDtl = $scope.searchedStartDate;
     $scope.searchedEndDateForDtl   = $scope.searchedEndDate;
@@ -197,17 +198,17 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCd	 = $("#unusualSelectStoreCd").val();
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
-    
+
     $scope.startDate = params.startDate;
     $scope.endDate   = params.endDate;
     $scope.searchedSlipNo = params.slipNo;
     $scope.searchedSlipFg = params.slipFg;
     $scope.searchedOutDateFg = params.outDateFg;
     $scope.storeCd = params.storeCd;
-    
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/frnchs/unusual/unUsual/list.sb", params, function () {});
-    
+
     //메인그리드 조회후 상세그리드 조회.
 	$scope.loadedRows = function(sender, args){
         var rows = sender.rows;
@@ -216,18 +217,22 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
         	params.slipNo    = rows[0].dataItem.slipNo;
         	params.startDate = $scope.searchedStartDateForDtl;
         	params.endDate   = $scope.searchedEndDateForDtl;
-        	
+        	params.excelFg = true;
         	// 특이사항 임출고내역 상세조회.
-            $scope._broadcast("unusualDtlCtrlSrch", params);
+            // $scope._broadcast("unusualDtlCtrlSrch", params);
             $('#dtlSlipNo').text('상품상세 (전표번호 : '+rows[0].dataItem.slipNo+')');
         }else{
         	// 주문대비 입출고현황 상세내역 그리드 초기화
         	$('#dtlSlipNo').text('');
+        	params.slipNo = -1;
+        	params.excelFg = false;
             var unusualDtlScope = agrid.getScope('unusualDtlCtrl');
             unusualDtlScope.dtlGridDefault();
         }
+
+        $scope._broadcast("unusualDtlCtrlSrch", params);
     }
-	
+
 	$scope.excelFg = true;
   };
 
@@ -354,7 +359,7 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
 app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('unusualExcelCtrl', $scope, $http, true));
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -434,14 +439,15 @@ app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			 	return false;
 			}
-			
+
 			$scope.startDate 	= data.startDate;
 		    $scope.endDate   	= data.endDate;
 		    $scope.slipNo 		= data.slipNo;
 		    $scope.slipFg 		= data.slipFg;
 		    $scope.outDateFg 	= data.outDateFg;
 		    $scope.storeCd 		= data.storeCd;
-			
+		    $scope.excelFg     = data.excelFg;
+
 			$scope.searchUnusualList(false);
 		}else{
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -463,7 +469,7 @@ app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.outDateFg = $scope.outDateFg;
     params.storeCd	 = $scope.storeCd;
     params.isPageChk = isPageChk;
-    
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/frnchs/unusual/unUsual/excelList.sb", params, function() {
 		var flex = $scope.excelFlex;
@@ -472,7 +478,7 @@ app.controller('unusualExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
 		}
-		
+
 		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
@@ -623,7 +629,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   angular.extend(this, new RootController('unusualDtlCtrl', $scope, $http, true));
 
   $scope.excelFg = false;
-  
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
@@ -646,7 +652,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
-      
+
   	  if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
   	  	var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
   	  	if (rng && rng.columnSpan > 1) {
@@ -731,7 +737,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("unusualDtlCtrlSrch", function (event, data) {
     $scope.slipNo    = data.slipNo;
@@ -748,7 +754,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 	  var grid = wijmo.Control.getControl("#unusualDtlGrid");
       var columns = grid.columns;
       var length  = grid.columns.length;
-      
+
       if(check == 'all'){
     	  for(var i=0; i<length; i++){
     		  if(columns[i].binding != 'poUnitFg'){
@@ -778,7 +784,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/slip/ioStockDtl/list.sb", params);
-    
+
     $scope.excelFg = true;
   };
 
@@ -792,7 +798,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       $scope.flex.refresh();
     }, 10);
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownloadUnusualDtl = function () {
 	  // 파라미터
@@ -802,7 +808,7 @@ app.controller('unusualDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 	  params.startDate = $scope.startDate;
 	  params.endDate   = $scope.endDate;
 	  params.excelFg   = $scope.excelFg;
-	  
+
 	  $scope._broadcast('unusualDtlExcelCtrl',params);
   };
 
@@ -900,7 +906,7 @@ app.controller('unusualDtlExcelCtrl', ['$scope', '$http', '$timeout', function (
   };
 
 
-  
+
   //다른 컨트롤러의 broadcast 받기
   $scope.$on("unusualDtlExcelCtrl", function (event, data) {
 	  if(data != undefined && data.excelFg) {
@@ -908,12 +914,13 @@ app.controller('unusualDtlExcelCtrl', ['$scope', '$http', '$timeout', function (
 				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			 	return false;
 			}
-			
+
 			$scope.slipNo    = data.slipNo;
 			$scope.checked   = data.checked;
 		    $scope.startDate = data.startDate;
 		    $scope.endDate   = data.endDate;
-			
+		    $scope.excelFg   = data.excelFg;
+
 		    $scope.searchSlipDtlList(false);
 		}else{
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -928,7 +935,7 @@ app.controller('unusualDtlExcelCtrl', ['$scope', '$http', '$timeout', function (
 	  var grid = wijmo.Control.getControl("#unusualDtlExcelGrid");
       var columns = grid.columns;
       var length  = grid.columns.length;
-      
+
       if(check == 'all'){
     	  for(var i=0; i<length; i++){
     		  if(columns[i].binding != 'poUnitFg'){
@@ -964,7 +971,7 @@ app.controller('unusualDtlExcelCtrl', ['$scope', '$http', '$timeout', function (
 			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
 			return false;
 		}
-		
+
 		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 		$timeout(function () {
 			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {

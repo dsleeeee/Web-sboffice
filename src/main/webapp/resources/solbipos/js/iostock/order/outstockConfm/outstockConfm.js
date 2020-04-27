@@ -54,6 +54,8 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipNo = selectedRow.slipNo;
           params.slipFg = $scope.slipFg;
 
@@ -173,7 +175,6 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     }
 
     $scope._save("/iostock/order/outstockConfm/outstockConfm/saveOutstockConfirm.sb", params, function () {
-    
       $scope.getReqNoConfirmCnt()
     });
   };

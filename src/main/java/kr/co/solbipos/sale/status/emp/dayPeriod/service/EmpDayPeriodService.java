@@ -8,7 +8,8 @@ import java.util.List;
 public interface EmpDayPeriodService {
     /** 판매자별 설정기간별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getEmpDayPeriodList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO);
-
+    /** 판매자별 설정기간별 탭 - 리스트(엑셀) 조회 */
+    List<DefaultMap<String>> getEmpDayPeriodExcelList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO);
     /** 판매자별 설정기간별 탭 - 리스트 상세 조회 */
 	List<DefaultMap<String>> getEmpDayPeriodDtlList(EmpDayPeriodVO empDayPeriodVO, SessionInfoVO sessionInfoVO);
     /** 판매자별 설정기간별 탭 - 리스트 상세(엑셀) 조회 */

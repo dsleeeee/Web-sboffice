@@ -117,6 +117,27 @@ public class GoalController {
     }
     
     /**
+     * 매출목표관리 - 일자별 목표매출 엑셀리스트 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   saleGaolVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 24.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleGoalDayExcelList(HttpServletRequest request, HttpServletResponse response, Model model, GoalVO goalVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = goalService.getSaleGoalDayExcelList(goalVO, sessionInfoVO);
+        
+        return ReturnUtil.returnListJson(Status.OK, list, goalVO);
+    }
+    
+    /**
      * 매출목표관리 - 월별 목표매출 리스트 조회 
      * @param   request
      * @param   response
@@ -133,6 +154,27 @@ public class GoalController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = goalService.getSaleGoalMonthList(goalVO, sessionInfoVO);
+        
+        return ReturnUtil.returnListJson(Status.OK, list, goalVO);
+    }
+    
+    /**
+     * 매출목표관리 - 월별 목표매출 엑셀리스트 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   saleGaolVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 24.
+     */
+    @RequestMapping(value = "/month/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSaleGoalMonthExcelList(HttpServletRequest request, HttpServletResponse response, Model model, GoalVO goalVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = goalService.getSaleGoalMonthExcelList(goalVO, sessionInfoVO);
         
         return ReturnUtil.returnListJson(Status.OK, list, goalVO);
     }

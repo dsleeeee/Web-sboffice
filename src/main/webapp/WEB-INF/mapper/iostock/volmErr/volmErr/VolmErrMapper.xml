@@ -327,7 +327,7 @@
 
 
 
-    <insert id="insertVolmErrHqAdjustDtl" parameterType="volmErrVO">
+    <insert id="insertVolmErrHqAdjustDtl" parameterType="volmErrVO">        
         INSERT INTO TB_ST_HQ_ADJUST_DTL
         (
             HQ_OFFICE_CD,
@@ -347,7 +347,9 @@
             MOD_ID
         )
         SELECT	A.HQ_OFFICE_CD,
-	            TO_CHAR(SYSDATE,'YYYYMMDD'),
+	            #{outDate},					<!--  TO_CHAR(SYSDATE,'YYYYMMDD'), -->
+	            #{seqNo},
+	            /*
 	            (
 					SELECT  NVL(MAX(SEQ_NO), 0) + 1
 			        FROM    TB_ST_HQ_ADJUST_DTL
@@ -355,6 +357,7 @@
 			        AND     ADJ_DATE		= TO_CHAR(SYSDATE,'YYYYMMDD')
 			        AND		PROD_CD			= A.PROD_CD
 	            ),
+	            */
 				A.HQ_BRAND_CD,
 	            A.PROD_CD,
 				A.IN_SPLY_UPRC,
@@ -379,7 +382,7 @@
 		AND		A.SEQ           = #{seq}
     </insert>
 
-    <insert id="insertVolmErrHqAdjustHd" parameterType="volmErrVO">
+    <insert id="insertVolmErrHqAdjustHd" parameterType="volmErrVO">    	
         INSERT INTO TB_ST_HQ_ADJUST
         (
             HQ_OFFICE_CD,
@@ -400,16 +403,10 @@
         )
         SELECT  A.HQ_OFFICE_CD,
                 '999',														<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
-                A.ADJ_DATE,
-				(
-					SELECT	NVL(MAX(SEQ_NO), 0) + 1
-					FROM	TB_ST_HQ_ADJUST
-					WHERE	HQ_OFFICE_CD	= #{hqOfficeCd}
-					AND     STORAGE_CD		= '999'							<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
-					AND		ADJ_DATE		= TO_CHAR(SYSDATE,'YYYYMMDD')
-				),
+                #{outDate},  				<!-- A.ADJ_DATE -->
+                #{seqNo},               
                 #{hdRemark},
-                '0',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
+                '1',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
                 '1',						<!-- ADJ_FG - 조정구분 (0:조정 1:물량오류) -->
                 COUNT(A.PROD_CD),
                 SUM  (A.ADJ_AMT),
@@ -422,12 +419,14 @@
         FROM    TB_ST_HQ_ADJUST_DTL A
         WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     A.ADJ_DATE      = TO_CHAR(SYSDATE,'YYYYMMDD')
+        AND		A.SEQ_NO		= #{seqNo}
         GROUP BY
                 A.HQ_OFFICE_CD,
                 '999',
                 A.ADJ_DATE,
+                #{seqNo},
                 #{hdRemark},
-                '0',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
+                '1',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
                 '1',						<!-- ADJ_FG - 조정구분 (0:조정 1:물량오류) -->
                 TO_CHAR(SYSDATE,'YYYYMMDD'),<!-- CONFM_DATE -->
                 #{regId},                	<!-- CONFM_ID   -->
@@ -437,5 +436,21 @@
                 #{modId}
     </insert>
 
+
+    <!-- 조정관리 - 조정등록 신규 SEQ 조회(본사) -->
+    <!--
+        TABLE    : TB_ST_HQ_ADJUST
+        PARAM    : volmErrVO
+        COMMENTS : 조정관리 - 조정등록 신규 SEQ를 조회한다.
+    -->
+    <select id="getHqNewSeqNo" parameterType="volmErrVO" resultType="String">
+        /* USE : VolmErrMapper.getHqNewSeqNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tsha.SEQ_NO), 0)+1 AS SEQ_NO
+        FROM    TB_ST_HQ_ADJUST tsha
+        WHERE   tsha.HQ_OFFICE_CD  =  #{hqOfficeCd}
+        AND     tsha.ADJ_DATE      =  #{outDate}
+        ]]>
+    </select>
 
 </mapper>

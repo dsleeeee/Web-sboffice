@@ -237,6 +237,8 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("outstockConfmDtlCtrl", function (event, data) {
+    $scope.startDate = data.startDate;
+	$scope.endDate = data.endDate;
     $scope.slipNo = data.slipNo;
     $scope.slipFg = data.slipFg;
     $scope.wjOutstockConfmDtlLayer.show(true);
@@ -741,6 +743,8 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 거래명세표
   $scope.reportTrans = function () {
     var params        = {};
+    params.startDate  = $scope.startDate;
+    params.endDate    = $scope.endDate;
     params.slipFg     = $scope.slipFg;
     params.strSlipNo  = $scope.slipNo;
     params.stmtAcctFg = $scope.stmtAcctFg;

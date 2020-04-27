@@ -417,7 +417,7 @@ app.controller('empDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.storeCd   = $scope.excelStoreCd;
     params.empChk    = $scope.excelEmpChk;
     
-    if(!$scope.isChecked){
+    if(!$scope.excelIsChecked){
         params.startDate   = $scope.excelStartDate;
         params.endDate     = $scope.excelEndDate;
     }

@@ -108,7 +108,7 @@
                 <div class="sb-select fl w200px">
                     <wj-combo-box
                             id="brandCd"
-                            ng-model="brandCd"
+                            ng-model="brandCdModel"
                             items-source="_getComboData('brandCd')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -249,6 +249,32 @@
 	  </div>
 	  <%--//페이지 리스트--%>
 </div>
+
+	  <%-- 엑셀 리스트 --%>
+  	  <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="versusPeriodClassDtlExcelCtrl">
+         <div class="wj-gridWrap">
+	        <wj-flex-grid
+	          id="versusPeriodClassDtlExcelGrid"
+	          autoGenerateColumns="false"
+	          control="excelFlex"
+	          initialized="initGrid(s,e)"
+	          sticky-headers="true"
+	          selection-mode="Row"
+	          items-source="data"
+	          item-formatter="_itemFormatter">
+
+	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	        </wj-flex-grid>
+  		 </div>
+ 	  </div>
+	  <%--//엑셀 리스트--%>
 
 <%--layer:For Center screen--%>
 <div class="fullDimmed versusPeriodClassLayer" id="versusPeriodClassMask" style="display: none; z-index:4;"></div>

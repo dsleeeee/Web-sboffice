@@ -8,6 +8,8 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('stockViewStoreCtrl', $scope, $http, true));
 
+  $scope.excelFg = false;
+
   $scope.startDate = wcombo.genDateVal("#srchStartDate", getToday());
   $scope.endDate   = wcombo.genDateVal("#srchEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
@@ -88,10 +90,17 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
     var params     = {};
     params.startDate = $scope.startDate.text.replace(/-/g, '');
     params.endDate = $scope.endDate.text.replace(/-/g, '');
-    params.statusFg = $scope.statusFg;
-    params.procFg = $scope.procFg;
+    params.statusFg = $scope.statusFgModel;
+    params.procFg = $scope.procFgModel;
     params.storeCd = $("#stockViewStoreSelectStoreCd").val();
     params.listScale = $scope.listScaleCombo.text;
+    
+    $scope.excelStartDate = params.startDate;
+    $scope.excelEndDate   = params.endDate;
+    $scope.excelStatusFg  = params.statusFg;
+    $scope.excelProcFg    = params.procFg;
+    $scope.excelStoreCd   = params.storeCd;
+    
 
     if(params.startDate > params.endDate){
 		$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -100,6 +109,8 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/manage/viewStore/viewStore/getStockManageViewStoreList.sb", params);
+    
+    $scope.excelFg = true;
   };
 
 	//매장선택 모듈 팝업 사용시 정의
@@ -111,26 +122,99 @@ app.controller('stockViewStoreCtrl', ['$scope', '$http', '$timeout', function ($
 
 
   //엑셀 다운로드
-  $scope.excelDownload = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '재고현황_매장-실사/조정/폐기 조회_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+  $scope.excelDownloadViewStore = function () {
+	    // 파라미터
+	    var params     = {};
+		$scope._broadcast('stockViewStoreExcelCtrl',params);
   };
 
 }]);
+
+
+/** 매장 - 실사/조정/폐기 조회(엑셀) 그리드 controller */
+app.controller('stockViewStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('stockViewStoreExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+    
+  };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("stockViewStoreExcelCtrl", function (event, data) {
+	  if(data != undefined && $scope.excelFg) {
+			if($scope.excelStartDate > $scope.excelEndDate){
+				$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+				return false;
+			}
+			$scope.searchCurrUnityExcelList();
+	    
+		}else{
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+	  
+	  // 기능수행 종료 : 반드시 추가
+	  event.preventDefault();
+  });
+
+  // 매장 - 실사/조정/폐기 조회 리스트 조회
+  $scope.searchCurrUnityExcelList = function () {
+    // 파라미터
+    var params     = {};
+    
+    params.startDate = $scope.excelStartDate;
+    params.endDate   = $scope.excelEndDate;
+    params.statusFg  = $scope.excelStatusFg;
+    params.procFg    = $scope.excelProcFg;
+    params.storeCd   = $scope.excelStoreCd;
+//    params.listScale = $scope.excelListScale;
+
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/stock/manage/viewStore/viewStore/getStockManageViewStoreExcelList.sb", params, function(){
+    	
+		var flex = $scope.excelFlex;
+		//row수가 0이면
+		if(flex.rows.length === 0){
+
+			 var grid = wijmo.Control.getControl("#stockViewStoreExcelGrid")
+			//컬럼 삭제
+			while(grid.columns.length > 7){
+		          grid.columns.removeAt(grid.columns.length-1);
+		    }
+		}
+
+		if (flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			}, messages["cmmStockStatus.stockStatus"]+'-'+messages["currUnity.storeCd"]+'_'+messages["stockManageView.stockManageView"]+'_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+
+    	
+    });
+  };
+
+
+}]);
+

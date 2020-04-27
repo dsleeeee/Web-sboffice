@@ -33,5 +33,15 @@ public class DailyIoStockServiceImpl implements DailyIoStockService {
 
         return dailyIoStockMapper.getDailyIoStockList(dailyIoStockVO);
     }
+	
+
+	@Override
+	public List<DefaultMap<String>> getDailyIoStockExcelList(DailyIoStockVO dailyIoStockVO, SessionInfoVO sessionInfoVO) {
+
+		dailyIoStockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+		dailyIoStockVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return dailyIoStockMapper.getDailyIoStockExcelList(dailyIoStockVO);
+    }
 
 }

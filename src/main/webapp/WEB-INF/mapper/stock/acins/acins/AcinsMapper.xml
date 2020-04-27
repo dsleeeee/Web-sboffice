@@ -1064,6 +1064,7 @@
                             AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{date}, 0, 6)
                             AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
                             AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                            AND     tshsc.storage_cd = '999'
                         ) tshsc
                 WHERE   tshsc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
                 AND     tshsc.PROD_CD       (+) =   tpte.PROD_CD
@@ -1132,6 +1133,7 @@
                             AND     tsssm.IOSTOCK_YM(+) =   SUBSTR(#{date}, 0, 6)
                             AND     tsssm.STORE_CD  (+) =   tsssc.STORE_CD
                             AND     tsssm.PROD_CD   (+) =   tsssc.PROD_CD
+                            AND     tsssc.storage_cd = '999'
                         ) tsssc
                 WHERE   tsssc.STORE_CD  (+) =   tpte.STORE_CD
                 AND     tsssc.PROD_CD   (+) =   tpte.PROD_CD

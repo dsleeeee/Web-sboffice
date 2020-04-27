@@ -13,4 +13,9 @@ public interface DayIostockMapper {
 	/** 일수불현황 리스트 조회(본사권한) */
 	List<DefaultMap<String>> hqDayIostockList(DayIostockVO dayIostockVO);
 
+	/** 일수불현황 리스트 조회(매장권한) 엑셀 */
+	List<DefaultMap<String>> hqDayIostockExcelList(DayIostockVO dayIostockVO);
+
+	/** 일수불현황 리스트 조회(본사권한) 엑셀*/
+	List<DefaultMap<String>> storeDayIostockExcelList(DayIostockVO dayIostockVO);
 }
