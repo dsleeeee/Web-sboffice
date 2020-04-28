@@ -359,6 +359,7 @@
 			                AND     X.STORAGE_CD    =    Y.STORAGE_CD
 							AND     Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
 			                AND     Y.SLIP_NO       =	#{slipNo}
+			                AND     Y.OCCR_FG       =   '13'
 			                WHERE   X.HQ_OFFICE_CD  	= 	#{hqOfficeCd}
 				              AND     X.USE_YN    		= 	'Y'
 				              AND     X.AREA_FG       	=   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
