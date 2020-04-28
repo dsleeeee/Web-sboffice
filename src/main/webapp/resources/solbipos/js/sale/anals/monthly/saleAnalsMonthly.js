@@ -62,11 +62,11 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 		
 
 		// 파라미터
-
 		var params = {};
 		params.reqYearMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
 		params.storeCd = $("#saleAnalsMonthlySelectStoreCd").val();
-
+		params.hqOfficeCd = gvHqOfficeCd;
+		
 		var url = "/sale/anals/monthly/SaleAnalsMonthly/list.sb";
 
 		$http({
@@ -454,6 +454,7 @@ function saleAnalsMonthlyPop(saleDate) {
 	scope.$apply(function() {	
 		var params       = {};
 		params.saleDate	= saleDate;
+		params.hqOfficeCd = gvHqOfficeCd;
 		params.storeCd	= $("#saleAnalsMonthlySelectStoreCd").val();
 		scope._broadcast('saleAnalsMonthlyPayFgCtrl', params);
 	});

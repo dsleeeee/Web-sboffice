@@ -109,6 +109,7 @@
 	                      ) M
 	                ) C
 		  WHERE B.HQ_OFFICE_CD   = #{hqOfficeCd}
+		  	AND B.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
 			AND B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
             AND B.PROD_CD       = C.PROD_CD
           </when>

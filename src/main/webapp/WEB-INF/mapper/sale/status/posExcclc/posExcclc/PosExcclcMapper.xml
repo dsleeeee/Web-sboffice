@@ -12,7 +12,8 @@
     -->
     <select id="getPosExcclcList" parameterType="posExcclcVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT TPE.STORE_CD
+    	SELECT 	TPE.HQ_OFFICE_CD
+    	,		TPE.STORE_CD
 			     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
 			     , TPE.SALE_DATE
 			     , TPE.POS_NO
@@ -324,6 +325,7 @@
 		         AND TPE.SALE_DATE = TPES.SALE_DATE(+)
 		         AND TPE.POS_NO = TPES.POS_NO(+)
 		         AND TPE.REG_SEQ = TPES.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -361,7 +363,8 @@
 		         AND TPE.STORE_CD = TPEP.STORE_CD(+)
 		         AND TPE.SALE_DATE = TPEP.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEP.POS_NO(+)
-		         AND TPE.REG_SEQ = TPEP.REG_SEQ(+)		         
+		         AND TPE.REG_SEQ = TPEP.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}		         
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -388,6 +391,7 @@
 		         AND TPE.SALE_DATE = TPED.SALE_DATE(+)
 		         AND TPE.POS_NO = TPED.POS_NO(+)
 		         AND TPE.REG_SEQ = TPED.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -407,6 +411,7 @@
 		         AND TPE.SALE_DATE = TPEI.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEI.POS_NO(+)
 		         AND TPE.REG_SEQ = TPEI.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -434,6 +439,7 @@
 		         AND TPE.SALE_DATE = TPECT.SALE_DATE(+)
 		         AND TPE.POS_NO = TPECT.POS_NO(+)
 		         AND TPE.REG_SEQ = TPECT.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -455,6 +461,7 @@
 		         AND TPE.SALE_DATE = TPEL.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEL.POS_NO(+)
 		         AND TPE.REG_SEQ = TPEL.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -482,6 +489,7 @@
 	         AND TPE.SALE_DATE = TPEN.SALE_DATE(+)
 	         AND TPE.POS_NO = TPEN.POS_NO(+)
 	         AND TPE.REG_SEQ = TPEN.REG_SEQ(+)
+	         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -494,7 +502,8 @@
     </select>
     
     <select id="getPosExcclcExcelList" parameterType="posExcclcVO" resultType="DefaultMap">
-    	SELECT TPE.STORE_CD
+    	SELECT TPE.HQ_OFFICE_CD
+    	,		TPE.STORE_CD
 			     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
 			     , TPE.SALE_DATE
 			     , TPE.POS_NO

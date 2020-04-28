@@ -52,6 +52,7 @@ app.controller('saleAnalsMonthlyPayFgCtrl', ['$scope', '$http', '$timeout', func
 
 	$scope.storeCd  	= data.storeCd;
 	$scope.saleDate  	= data.saleDate;
+	$scope.hqOfficeCd  	= data.hqOfficeCd;
 	
     $scope.monthlyPayFgLayer.show(true);
     // 기능수행 종료 : 반드시 추가
@@ -67,6 +68,7 @@ app.controller('saleAnalsMonthlyPayFgCtrl', ['$scope', '$http', '$timeout', func
     var params       = {};
     params.storeCd   = $scope.storeCd;
     params.saleDate = $scope.saleDate;
+    params.hqOfficeCd = $scope.hqOfficeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수/sale/anals/monthly/SaleAnalsMonthly/list.sb
     $scope._inquiryMain("/sale/anals/monthly/monthlyPopup/payFg/view.sb", params);

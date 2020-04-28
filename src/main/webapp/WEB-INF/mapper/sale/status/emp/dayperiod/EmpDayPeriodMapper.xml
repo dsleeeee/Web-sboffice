@@ -36,7 +36,8 @@
 			    </if>
 			    GROUP BY TSDE.STORE_CD, TSDE.EMP_NO, TSDE.EMP_NM
 		       ) M
-		WHERE TMS.STORE_CD = M.STORE_CD
+		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND		TMS.STORE_CD = M.STORE_CD
 		ORDER BY M.REAL_SALE_AMT DESC
 	    <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -71,7 +72,8 @@
 			    </if>
 			    GROUP BY TSDE.STORE_CD, TSDE.EMP_NO, TSDE.EMP_NM
 		       ) M
-		WHERE TMS.STORE_CD = M.STORE_CD
+		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND		TMS.STORE_CD = M.STORE_CD
 		ORDER BY M.REAL_SALE_AMT DESC
     </select>
     
@@ -88,6 +90,7 @@
 	   <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_SL_SALE_HDR TSSH
 		 WHERE 1=1
+		 AND TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		 <if test='storeCd != null and storeCd != ""'>
 		 AND TSSH.STORE_CD = #{storeCd}
 		 </if>
@@ -113,6 +116,7 @@
 		     , TSSH.REAL_SALE_AMT
 		  FROM TB_SL_SALE_HDR TSSH
 		 WHERE 1=1
+		 AND TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		 <if test='storeCd != null and storeCd != ""'>
 		 AND TSSH.STORE_CD = #{storeCd}
 		 </if>

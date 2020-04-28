@@ -47,6 +47,7 @@
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND STORE_CD IN
@@ -86,6 +87,7 @@
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='-1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND STORE_CD IN
@@ -545,6 +547,7 @@
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND STORE_CD IN
@@ -584,6 +587,7 @@
                      , APPR_AMT
                   FROM TB_SL_SALE_PAY_CARD
                  WHERE SALE_FG='-1'
+                   AND HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='arrStoreCd != null and arrStoreCd != ""'>
             AND STORE_CD IN

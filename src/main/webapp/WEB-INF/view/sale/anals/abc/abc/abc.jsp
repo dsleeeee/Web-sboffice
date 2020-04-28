@@ -134,13 +134,6 @@
           </div>
         </div>
         <%--//위즈모 테이블--%>
-        <%-- 페이지 리스트 --%>
-	    <div class="pageNum mt20">
-	    <%-- id --%>
-	        <ul id="abcCtrlPager" data-size="10">
-	        </ul>
-	    </div>
-	    <%--//페이지 리스트--%>
 
     </div>
 

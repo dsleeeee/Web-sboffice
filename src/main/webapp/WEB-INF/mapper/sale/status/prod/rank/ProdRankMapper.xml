@@ -63,10 +63,11 @@
                      )                   A,
                      TB_HQ_PRODUCT       B,
                      TB_SL_DAILY_PROD    C
-             WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
-             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
-             AND     B.PROD_CD       = C.PROD_CD
-             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+             WHERE   B.HQ_OFFICE_CD   	= #{hqOfficeCd}
+             AND     B.PROD_CLASS_CD 	= A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD   	= C.HQ_OFFICE_CD
+             AND     B.PROD_CD       	= C.PROD_CD
+             AND     C.HQ_OFFICE_CD  	= #{hqOfficeCd}
 			<if test='storeCd != null and storeCd != ""'>
 			   AND C.STORE_CD IN
 				     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -113,7 +114,7 @@
                      TB_MS_PRODUCT       B,
                      TB_SL_DAILY_PROD    C
              WHERE   B.STORE_CD      = #{storeCd}
-             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)             
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
              AND     C.STORE_CD      = #{storeCd}
@@ -185,6 +186,7 @@
                      TB_SL_DAILY_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
              AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD   	= C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
 			<if test='storeCd != null and storeCd != ""'>
@@ -234,7 +236,6 @@
                      TB_SL_DAILY_PROD    C
              WHERE   B.STORE_CD      = #{storeCd}
              AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
-             AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
              AND     C.STORE_CD      = #{storeCd}
 			<if test='startDate != null and startDate != ""'>
@@ -311,6 +312,7 @@
                      TB_SL_DAILY_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
              AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD
+             AND	 B.HQ_OFFICE_CD	 = C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
 			<if test='storeCd != null and storeCd != ""'>

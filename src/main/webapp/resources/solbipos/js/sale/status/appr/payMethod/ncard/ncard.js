@@ -68,7 +68,7 @@ app.controller('apprNcardCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.posNo = new Array();
 	        params.saleYn = $scope.srchSaleYn;
 	        params.apprProcFg = $scope.srchApprProcFg;
-	        if(params.posNo == "" && params.cornrCd == ""){
+	        if(params.posNo == ""){
 	        	params.storeCd   = selectedRow.storeCd;
 	        }
 	    	if(!$scope.isChecked){

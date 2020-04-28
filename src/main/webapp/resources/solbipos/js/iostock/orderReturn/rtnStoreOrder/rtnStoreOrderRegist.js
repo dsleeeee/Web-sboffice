@@ -482,10 +482,6 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
-      if (item.orderTotQty !== null && item.orderTotQty !== "0" && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
-        $scope._popMsg(messages["rtnStoreOrder.dtl.not.minOrderQty"]); // 반품수량은 최소반품수량 이상 입력하셔야 합니다.
-        return false;
-      }
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
         $scope._popMsg(messages["rtnStoreOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
         return false;

@@ -26,7 +26,7 @@ public class TableDayPeriodServiceImple implements TableDayPeriodService {
 	/** 설정기간별 - 조회일자별 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getTableDayPeriodList(TableDayPeriodVO tableDayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+		tableDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
         	tableDayPeriodVO.setArrStoreCd(tableDayPeriodVO.getStoreCd().split(","));
         }
@@ -37,7 +37,7 @@ public class TableDayPeriodServiceImple implements TableDayPeriodService {
 	/** 설정기간별 - 조회일자별 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getTableDayPeriodExcelList(TableDayPeriodVO tableDayPeriodVO, SessionInfoVO sessionInfoVO) {
-
+		tableDayPeriodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		if(!StringUtil.getOrBlank(tableDayPeriodVO.getStoreCd()).equals("")) {
         	tableDayPeriodVO.setArrStoreCd(tableDayPeriodVO.getStoreCd().split(","));
         }

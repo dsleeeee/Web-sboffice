@@ -131,6 +131,7 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 	@Override
 	public List<DefaultMap<String>> getPayFgList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
 
+		saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {

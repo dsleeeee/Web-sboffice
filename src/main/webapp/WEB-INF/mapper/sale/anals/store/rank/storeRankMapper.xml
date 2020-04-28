@@ -33,6 +33,7 @@
 			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
 			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z
 			     	WHERE Z.STORE_CD = TSDT.STORE_CD
+			     	AND Z.HQ_OFFICE_CD = #{hqOfficeCd}
 			     	<if test='startDate != null and startDate != ""'>
 			     		AND Z.SALE_DATE >= #{startDate}
 			     	</if>
@@ -47,6 +48,8 @@
 			 WHERE TSDT.STORE_CD = TSDP.STORE_CD
 			   AND TSDT.SALE_DATE = TSDP.SALE_DATE
 			   AND TSDT.STORE_CD = TMS.STORE_CD
+            	AND TSDP.HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD
+         		AND TSDP.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
 			   AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDT.SALE_DATE >= #{startDate}

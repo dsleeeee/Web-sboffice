@@ -516,6 +516,8 @@
                       AND     Y.STORE_CD     =    #{storeCd}
                       WHERE   X.STORE_CD     =    #{storeCd}
                       AND     X.USE_YN    = 'Y'
+                      AND     X.STORAGE_CD   		>=    '001'
+                      AND     X.STORAGE_CD   		<![CDATA[ < ]]>   '999'
 		         )   B
 				 ON       A.REQ_DATE      =   B.REQ_DATE
                  AND      A.STORE_CD     =   B.STORE_CD

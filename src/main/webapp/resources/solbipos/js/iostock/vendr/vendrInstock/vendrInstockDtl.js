@@ -361,6 +361,15 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
   // 확정 및 확정취소
   $scope.confirm = function (procFg) {
     var msg = '';
+        
+    var inTotQty = $scope.slipInfo.inTotQty;
+    if(inTotQty <= 0 ){
+    	msg = messages["vendrInstock.dtl.confirmCheck"];
+    	$scope._popMsg(msg);
+    	return false;
+    }
+    
+    
     if (procFg === '1') {
       /** 확정처리 하시겠습니까? */
       msg = messages["vendrInstock.dtl.confirmMsg"];

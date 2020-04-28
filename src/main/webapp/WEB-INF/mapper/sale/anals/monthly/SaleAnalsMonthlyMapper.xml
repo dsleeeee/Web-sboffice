@@ -32,10 +32,8 @@
 										, SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
 								FROM	TB_SL_DAILY_PROD
 								WHERE	1=1
+								AND HQ_OFFICE_CD = #{hqOfficeCd}
 		]]>
-		<if test='hqOfficeCd != null and hqOfficeCd != ""'>
-		                        		AND HQ_OFFICE_CD = #{hqOfficeCd}
-		</if>
 		<if test='hqBrandCd != null and hqBrandCd != ""'>
 										AND HQ_BRAND_CD = #{hqBrandCd}
 		</if>
@@ -97,6 +95,7 @@
 		AND     TSSH.SALE_DATE = TSSDP.SALE_DATE
 		AND     TSSH.POS_NO = TSSDP.POS_NO
 		AND     TSSH.BILL_NO = TSSDP.BILL_NO
+	    AND     TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
 		    AND     TSSDP.STORE_CD  = #{storeCd}
 		</if>

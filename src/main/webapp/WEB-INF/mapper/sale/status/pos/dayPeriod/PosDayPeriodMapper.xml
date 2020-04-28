@@ -101,6 +101,7 @@
                      TB_SL_DAILY_POS_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
              AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD  = C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             </when>
@@ -265,6 +266,7 @@
                      TB_SL_DAILY_POS_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
              AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD  = C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             </when>

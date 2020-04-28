@@ -102,11 +102,11 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             if(rtnStoreOrderDtlVO.getPrevOrderTotQty() != null) {
                 insFg = "U";
                 // 기반품수량이 있으면서 반품수량이 0 이나 null 인 경우 삭제
-                int orderTotQty = (rtnStoreOrderDtlVO.getOrderTotQty() == null ? 0 : rtnStoreOrderDtlVO.getOrderTotQty());
+//                int orderTotQty = (rtnStoreOrderDtlVO.getOrderTotQty() == null ? 0 : rtnStoreOrderDtlVO.getOrderTotQty());
 
-                if(orderTotQty == 0 ) {
-                    insFg = "D";
-                }
+//                if(orderTotQty == 0 ) {
+//                    insFg = "D";
+//                }
             }
             else {
                 insFg = "I";

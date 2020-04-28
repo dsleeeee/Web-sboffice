@@ -69,6 +69,7 @@
 										     , SUM(SALE_CNT) AS SALE_CNT
 										  FROM TB_SL_DAILY_TOTAL TSDT
 										 WHERE 1=1
+										 AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 										 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 </if>
@@ -112,6 +113,7 @@
 										     , SUM(SALE_CNT) AS SALE_CNT
 										  FROM TB_SL_DAILY_TOTAL TSDT
 										 WHERE 1=1
+										 AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 										 <if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 										 	AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 </if>
@@ -205,6 +207,7 @@ ORDER BY LV.LV
                                                          , SUM(SALE_CNT)                                    AS SALE_CNT
                                                       FROM TB_SL_DAILY_TOTAL TSDT
                                                      WHERE 1=1
+                                                     AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 										 				<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{startDate}, '-', '') AND REPLACE(#{endDate}, '-', '')
 										 				</if>
@@ -248,6 +251,7 @@ ORDER BY LV.LV
                                                          , SUM(SALE_CNT) AS SALE_CNT
                                                       FROM TB_SL_DAILY_TOTAL TSDT
                                                      WHERE 1=1
+                                                     AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 										 				<if test="compStartDate != null and compStartDate != '' and compEndDate != null and compEndDate != ''">
 										 					AND TSDT.SALE_DATE BETWEEN REPLACE(#{compStartDate}, '-', '') AND REPLACE(#{compEndDate}, '-', '')
 										 				</if>

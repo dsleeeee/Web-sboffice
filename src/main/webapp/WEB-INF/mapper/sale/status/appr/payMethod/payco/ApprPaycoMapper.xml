@@ -110,7 +110,8 @@
         </if>
         <![CDATA[
 		        ) M
-		        WHERE M.STORE_CD = TMS.STORE_CD
+		        WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND M.STORE_CD = TMS.STORE_CD
 		GROUP BY M.STORE_CD, TMS.STORE_NM
 		ORDER BY M.STORE_CD
         ]]>
@@ -221,7 +222,8 @@
         </if>
         <![CDATA[
                 ) M
-                WHERE M.STORE_CD = TMS.STORE_CD
+                WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND M.STORE_CD = TMS.STORE_CD
         GROUP BY M.STORE_CD, TMS.STORE_NM
         ORDER BY M.STORE_CD
         ]]>

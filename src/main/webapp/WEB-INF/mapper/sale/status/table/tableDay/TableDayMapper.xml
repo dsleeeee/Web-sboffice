@@ -14,7 +14,7 @@
      	<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_SL_DAILY_TABLE TSDT
 		WHERE 1 = 1
-			  <!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
+			  AND HQ_OFFICE_CD = #{hqOfficeCd}
 			  <if test='arrTableCd != null and arrTableCd.length >= 0'>
 			  	AND STORE_CD||'||'||TBL_CD IN
 			  	<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">

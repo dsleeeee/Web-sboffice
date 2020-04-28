@@ -284,7 +284,6 @@
     -->
     <select id="getRtnDstbCloseProdAddRegistList" parameterType="rtnDstbCloseProdVO" resultMap="confirmListMap">
         /* USE : RtnDstbCloseProdMapper.getRtnDstbCloseProdAddRegistList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT   A.PROD_CD
 	      ,      A.PROD_NM
 	      ,      A.REQ_DATE
@@ -321,7 +320,6 @@
 	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_AMT
 	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_VAT
 	      ,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ORDER_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ORDER_TOT
-		<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM(
               SELECT  A.PROD_CD
                ,      A.PROD_NM
@@ -475,6 +473,8 @@
                       AND     Y.STORE_CD     =    #{storeCd}
                       WHERE   X.STORE_CD     =    #{storeCd}
                       AND     X.USE_YN    = 'Y'
+                      AND     X.STORAGE_CD   		>=    '001'
+                      AND     X.STORAGE_CD   		<![CDATA[ < ]]>   '999'
 		         )   B
 				 ON       A.REQ_DATE      =   B.REQ_DATE
                  AND      A.STORE_CD     =   B.STORE_CD
@@ -514,7 +514,6 @@
       ,      A.ORDER_TOT
       ORDER
       BY      A.PROD_CD
-      <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!--  반품마감 추가등록 분배등록 저장 -->

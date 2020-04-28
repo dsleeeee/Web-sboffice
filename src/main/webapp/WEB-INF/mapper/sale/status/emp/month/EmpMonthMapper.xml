@@ -36,7 +36,8 @@
 						, SUM(TSDE.BILL_CNT) AS BILL_CNT_TOT       					
 						${sQuery2}                                          
 				FROM TB_SL_DAILY_EMPLOYEE TSDE   
-				WHERE 1 = 1           	
+				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}         
+				AND TSDE.HQ_OFFICE_CD = #{hqOfficeCd}	
 				<if test='storeCd != null and storeCd != ""'>
 				   AND TSDE.STORE_CD	IN
 			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -88,7 +89,8 @@
 						, SUM(TSDE.BILL_CNT) AS BILL_CNT_TOT       					
 						${sQuery2}                                          
 				FROM TB_SL_DAILY_EMPLOYEE TSDE   
-				WHERE 1 = 1           	
+				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TSDE.HQ_OFFICE_CD = #{hqOfficeCd}         	
 				<if test='storeCd != null and storeCd != ""'>
 				   AND TSDE.STORE_CD	IN
 			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -132,7 +134,8 @@
           </if>
 		  <if test='empChk != "Y"'>
 	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
-	                  WHERE Z.store_cd = TME.STORE_CD 
+	                  WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} 
+	                  AND Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
 	                  <if test='storeCd != null and storeCd != ""'>
 	                  AND Z.STORE_CD IN

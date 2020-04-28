@@ -72,8 +72,8 @@
 				              , SUM(C.TOT_TIP_AMT) AS TOT_TIP_AMT
 				              , SUM(C.TOT_ETC_AMT) AS TOT_ETC_AMT
 				              , SUM(C.TOT_VAT_AMT) AS TOT_VAT_AMT
-				        FROM TB_SL_DAILY_PROD    C
-				        WHERE 1 = 1
+				        FROM 	TB_SL_DAILY_PROD    C
+				        WHERE	C.HQ_OFFICE_CD    =   #{hqOfficeCd}
 						<if test='storeCd != null and storeCd != ""'>
 						   AND C.STORE_CD IN
 					     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -97,8 +97,8 @@
 				                     , D.PAY_CD
 				                     , SUM(D.PAY_AMT) AS PAY_AMT
 				                     ${sQuery3}
-				                  FROM TB_SL_DAILY_PROD_PAY D
-				                 WHERE 1 = 1
+				               	FROM 	TB_SL_DAILY_PROD_PAY D
+								WHERE 	D.HQ_OFFICE_CD    =   #{hqOfficeCd}
 						        <if test='storeCd != null and storeCd != ""'>
 								   AND D.STORE_CD IN
 							     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -338,7 +338,7 @@
 				              , SUM(C.TOT_ETC_AMT) AS TOT_ETC_AMT
 				              , SUM(C.TOT_VAT_AMT) AS TOT_VAT_AMT
 				        FROM TB_SL_DAILY_PROD    C
-				        WHERE 1 = 1
+				        WHERE C.HQ_OFFICE_CD    =   #{hqOfficeCd}
 						<if test='storeCd != null and storeCd != ""'>
 						   AND C.STORE_CD IN
 					     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -363,7 +363,7 @@
 				                     , SUM(D.PAY_AMT) AS PAY_AMT
 				                     ${sQuery3}
 				                  FROM TB_SL_DAILY_PROD_PAY D
-				                 WHERE 1 = 1
+				                 WHERE D.HQ_OFFICE_CD    =   #{hqOfficeCd}
 						        <if test='storeCd != null and storeCd != ""'>
 								   AND D.STORE_CD IN
 							     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">

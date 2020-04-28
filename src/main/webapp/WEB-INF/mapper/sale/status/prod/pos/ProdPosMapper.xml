@@ -73,6 +73,7 @@
 		                     TB_HQ_PRODUCT       B
     				WHERE   B.HQ_OFFICE_CD   =  #{hqOfficeCd}
 				            AND B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+				            AND	B.HQ_OFFICE_CD  = TSDPP.HQ_OFFICE_CD
 				            AND B.PROD_CD       = TSDPP.PROD_CD
 				            AND TSDPP.HQ_OFFICE_CD  =  #{hqOfficeCd}
 				</when>
@@ -241,6 +242,7 @@
 		                     TB_HQ_PRODUCT       B
     				WHERE   B.HQ_OFFICE_CD   =  #{hqOfficeCd}
 				            AND B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+				            AND	B.HQ_OFFICE_CD  = TSDPP.HQ_OFFICE_CD
 				            AND B.PROD_CD       = TSDPP.PROD_CD
 				            AND TSDPP.HQ_OFFICE_CD  =  #{hqOfficeCd}
 				</when>

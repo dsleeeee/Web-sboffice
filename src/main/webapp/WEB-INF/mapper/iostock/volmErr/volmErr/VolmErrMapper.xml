@@ -418,7 +418,7 @@
                 #{modId}
         FROM    TB_ST_HQ_ADJUST_DTL A
         WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
-        AND     A.ADJ_DATE      = TO_CHAR(SYSDATE,'YYYYMMDD')
+        AND     A.ADJ_DATE      = #{outDate} <!--  TO_CHAR(SYSDATE,'YYYYMMDD') -->
         AND		A.SEQ_NO		= #{seqNo}
         GROUP BY
                 A.HQ_OFFICE_CD,

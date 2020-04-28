@@ -43,6 +43,7 @@
 								     , SUM(TSDT.SALE_CNT) AS SALE_CNT
 								  FROM TB_SL_DAILY_TIME TSDT
 								 WHERE 1=1
+								 AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 								 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    				   AND TSDT.STORE_CD IN
                     			   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -75,6 +76,7 @@
 								     , SUM(TSDT.SALE_CNT) AS SALE_CNT
 								  FROM TB_SL_DAILY_TIME TSDT
 								 WHERE 1=1
+								 AND	TSDT.HQ_OFFICE_CD = #{hqOfficeCd}
 								 <if test='arrStoreCd != null and arrStoreCd != ""'>
                    				   AND TSDT.STORE_CD IN
                     			   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
