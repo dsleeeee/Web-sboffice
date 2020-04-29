@@ -92,6 +92,7 @@ app.controller('vendrTrtmntCtrl', ['$scope', '$http', function ($scope, $http) {
         param.vendrCd = vendrScope.getVendrInfo().vendrCd;
         param.prodCd  = $("#sProdCd").val();
         param.prodNm  = $("#sProdNm").val();
+        param.prodClassCd = $("#sProdClassCd").val();
         param.trtmntYn = 'Y';
 
         $scope._inquirySub("/base/prod/vendr/trtMnt/list.sb", param, function() {
