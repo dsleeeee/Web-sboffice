@@ -50,13 +50,12 @@
                     </div>
                   </div>
                 </td>--%>
-
-                    <td colspan="3">
-                        <input type="text" class="sb-inpu" id="sProdClassNm" onClick="popUpProdClass()" style="float: left; width:250px;"
-                               placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                        <input type="hidden" id="sProdClassCd" name="sProdClassCd" ng-model="sProdClassCd" disabled />
-                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" onClick="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-                    </td>
+                  <td colspan="3">
+                      <input type="text" class="sb-inpu" id="sProdClassNm" onClick="popUpProdClass()" style="float: left; width:250px;"
+                             placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                      <input type="hidden" id="sProdClassCd" name="sProdClassCd" ng-model="sProdClassCd" disabled />
+                      <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" onClick="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                  </td>
               </tr>
             </tbody>
           </table>
@@ -137,4 +136,4 @@
 <script>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/trtmnt.js?ver=20200423.39" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/trtmnt.js?ver=20200423.41" charset="utf-8"></script>
