@@ -1014,4 +1014,292 @@
         </choose>
     </select>
 
+    <!-- 터치키 XML 데이터 복사 -->
+    <!--
+        TABLE    : TB_WB_HQ_CONFG_XML, TB_WB_STORE_CONFG_XML
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키 XML 데이터 복사
+    -->
+    <insert id="copyTouchKeyGrpXml" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.copyTouchKeyGrpXml */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_WB_HQ_CONFG_XML
+                (
+                HQ_OFFICE_CD,
+                CONFG_FG,
+                XML,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                GRP_CD
+                )
+                SELECT HQ_OFFICE_CD,
+                        CONFG_FG,
+                        XML,
+                        USE_YN,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_WB_HQ_CONFG_XML
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND CONFG_FG = '10'
+                    AND GRP_CD = #{copyTukeyGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_WB_STORE_CONFG_XML
+                (
+                STORE_CD,
+                CONFG_FG,
+                XML,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                GRP_CD
+                )
+                SELECT STORE_CD,
+                        CONFG_FG,
+                        XML,
+                        USE_YN,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_WB_STORE_CONFG_XML
+                 WHERE STORE_CD = #{storeCd}
+                   AND CONFG_FG = '10'
+                   AND GRP_CD = #{copyTukeyGrpCd}
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 터치키 CLASS 데이터 복사 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키 CLASS 데이터 복사
+    -->
+    <insert id="copyTouchKeyGrpClass" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.copyTouchKeyGrpClass */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_TOUCH_KEY_CLASS
+                (
+                HQ_OFFICE_CD,
+                TUKEY_GRP_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CLASS_NM,
+                PAGE_NO,
+                PAGE_ROWS,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                SELECT HQ_OFFICE_CD,
+                        #{tukeyGrpCd},
+                        TUKEY_CLASS_CD,
+                        TUKEY_CLASS_NM,
+                        PAGE_NO,
+                        PAGE_ROWS,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_HQ_TOUCH_KEY_CLASS
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_TOUCH_KEY_CLASS
+                (
+                STORE_CD,
+                TUKEY_GRP_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CLASS_NM,
+                PAGE_NO,
+                PAGE_ROWS,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                IN_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                )
+                SELECT STORE_CD,
+                        #{tukeyGrpCd},
+                        TUKEY_CLASS_CD,
+                        TUKEY_CLASS_NM,
+                        PAGE_NO,
+                        PAGE_ROWS,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        IN_FG,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                  FROM TB_MS_TOUCH_KEY_CLASS
+                 WHERE STORE_CD = #{storeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 터치키 데이터 복사 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 터치키 데이터 복사
+    -->
+    <insert id="copyTouchKeyGrp" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.copyTouchKeyGrp */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_TOUCH_KEY
+                (
+                HQ_OFFICE_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CD,
+                TUKEY_FG,
+                PROD_CD,
+                PAGE_NO,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                TUKEY_GRP_CD
+                )
+                SELECT HQ_OFFICE_CD,
+                        TUKEY_CLASS_CD,
+                        TUKEY_CD,
+                        TUKEY_FG,
+                        PROD_CD,
+                        PAGE_NO,
+                        X,
+                        Y,
+                        WIDTH,
+                        HEIGHT,
+                        STYLE_CD,
+                        FONT_SIZE,
+                        FONT_COLOR,
+                        FILL_COLOR,
+                        IMG_NM,
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId},
+                        #{tukeyGrpCd}
+                  FROM TB_HQ_TOUCH_KEY
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_TOUCH_KEY
+                (
+                STORE_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CD,
+                TUKEY_FG,
+                PROD_CD,
+                PAGE_NO,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                IN_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                TUKEY_GRP_CD
+                )
+                SELECT STORE_CD,
+                TUKEY_CLASS_CD,
+                TUKEY_CD,
+                TUKEY_FG,
+                PROD_CD,
+                PAGE_NO,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                STYLE_CD,
+                FONT_SIZE,
+                FONT_COLOR,
+                FILL_COLOR,
+                IMG_NM,
+                IN_FG,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{tukeyGrpCd}
+                FROM TB_MS_TOUCH_KEY
+                WHERE STORE_CD = #{storeCd}
+                AND TUKEY_GRP_CD = #{copyTukeyGrpCd}
+            </when>
+        </choose>
+    </insert>
+
 </mapper>
