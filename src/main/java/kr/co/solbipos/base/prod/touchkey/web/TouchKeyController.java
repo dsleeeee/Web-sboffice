@@ -296,4 +296,28 @@ public class TouchKeyController {
         return returnListJson(Status.OK, touchkeyService.getTouchKeyGrp(params, sessionInfoVO));
     }
 
+    /**
+     * 터치키그룹 복사
+     *
+     * @param touchKeyVO TouchKeyVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 이다솜
+     * @since 2020. 04. 29.
+     */
+    @RequestMapping(value = "/copyTouchKeyGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyTouchKeyGrp(@RequestBody TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response,
+                                      Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        Result result = new Result(Status.FAIL);
+
+        result = touchkeyService.copyTouchKeyGrp(touchKeyVO, sessionInfoVO);
+
+        return result;
+    }
+
 }

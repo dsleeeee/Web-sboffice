@@ -749,4 +749,47 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         return keyMapper.getTouchKeyGrp(touchKeyVO);
     }
 
+    /** 터치키그룹 복사 */
+    @Override
+    public Result copyTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        // 기본입력정보 설정
+        touchKeyVO.setRegDt(currentDt);
+        touchKeyVO.setRegId(sessionInfoVO.getUserId());
+        touchKeyVO.setModDt(currentDt);
+        touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+        // 새 터치키 그룹코드 조회하여 셋팅
+        DefaultMap<String> param = new DefaultMap<String>();
+        param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
+
+        String tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
+        touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
+
+        // 1. XML 복사
+        result += keyMapper.copyTouchKeyGrpXml(touchKeyVO);
+
+        // 2. 터치키 Class 복사
+        result += keyMapper.copyTouchKeyGrpClass(touchKeyVO);
+
+        // 3. 터치키 복사
+        result += keyMapper.copyTouchKeyGrp(touchKeyVO);
+
+        if ( result >= 0 ) {
+            return new Result(Status.OK, tukeyGrpCd);
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+    }
+
 }

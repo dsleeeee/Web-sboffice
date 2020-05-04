@@ -89,6 +89,9 @@ public class TouchKeyVO extends CmmVO {
     /** 용도구분  */
     private String clsFg;
 
+    /** 복사기준 터치키 그룹코드 */
+    private String copyTukeyGrpCd;
+
     /**
      * @return the orgnFg
      */
@@ -402,5 +405,13 @@ public class TouchKeyVO extends CmmVO {
 
     public void setClsFg(String clsFg) {
         this.clsFg = clsFg;
+    }
+
+    public String getCopyTukeyGrpCd() {
+        return copyTukeyGrpCd;
+    }
+
+    public void setCopyTukeyGrpCd(String copyTukeyGrpCd) {
+        this.copyTukeyGrpCd = copyTukeyGrpCd;
     }
 }

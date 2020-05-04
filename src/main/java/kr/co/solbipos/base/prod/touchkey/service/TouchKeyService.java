@@ -54,4 +54,7 @@ public interface TouchKeyService {
 
     /** 판매터치키 그룹 조회 */
     List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 터치키그룹 복사 */
+    Result copyTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 }

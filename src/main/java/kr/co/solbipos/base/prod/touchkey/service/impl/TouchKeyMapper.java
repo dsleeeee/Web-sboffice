@@ -92,4 +92,14 @@ public interface TouchKeyMapper {
 
     /** 터치키 그룹코드 생성 */
     String getTouchKeyGrpCd(DefaultMap<String> param);
+
+    /** 터치키 XML 데이터 복사 */
+    int copyTouchKeyGrpXml(TouchKeyVO touchKeyVO);
+
+    /** 터치키 CLASS 데이터 복사 */
+    int copyTouchKeyGrpClass(TouchKeyVO touchKeyVO);
+
+    /** 터치키 데이터 복사 */
+    int copyTouchKeyGrp(TouchKeyVO touchKeyVO);
+
 }
