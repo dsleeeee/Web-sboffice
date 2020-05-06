@@ -11,7 +11,7 @@
 
 <div id="empPosView" class="subCon" style="display: none;" ng-controller="empPosCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="empsale.month"/></a>
+		<a href="#" class="open fl"><s:message code="empsale.pos"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empPosCtrlSrch')">
     		<s:message code="cmm.search"/>

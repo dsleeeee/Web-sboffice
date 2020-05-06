@@ -15,6 +15,12 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+	  
+	// 그리드 초기화
+    var cv          = new wijmo.collections.CollectionView([]);
+    cv.trackChanges = true;
+    $scope.data     = cv;
+	  
     // 배송기사
     var comboParams             = {};
     var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
@@ -236,7 +242,12 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   //$scope.calcAmt		--------------------------------------------------------------------------------------------------------------------------  
 
   // 다른 컨트롤러의 broadcast 받기
-  $scope.$on("outstockConfmDtlCtrl", function (event, data) {
+  $scope.$on("outstockConfmDtlCtrl", function (event, data) {	  
+	// 그리드 초기화
+    var cv          = new wijmo.collections.CollectionView([]);
+    cv.trackChanges = true;
+    $scope.data     = cv;
+	  
     $scope.startDate = data.startDate;
 	$scope.endDate = data.endDate;
     $scope.slipNo = data.slipNo;
@@ -685,20 +696,23 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   };
 
   $scope.callDataSetting = function(){
+	    
 	  var grid 			= $scope.flex;
 	  for(var i=0; i<arrStorageCd.length; i++){
 		  var item =  $scope.flex.collectionView.items[i];
 		  $scope.flex.collectionView.editItem(item);
-  	  	for(var j=0; j<arrStorageCd[i].length; j++){
-	    	  	grid.setCellData(i, 'arrInUnitQty_'		+ j,	arrInUnitQty	[i][j]);
-	    	  	grid.setCellData(i, 'arrInEtcQty_'		+ j,	arrInEtcQty	[i][j]);
-	    	  
-		    	grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
-		    	grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
-		    	grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
-  	  	}
-  	  	
-        $scope.calcAmt(item, 0);
+		  
+		  if(item != undefined){
+	  	  	for(var j=0; j<arrStorageCd[i].length; j++){
+		    	  	grid.setCellData(i, 'arrInUnitQty_'		+ j,	arrInUnitQty	[i][j]);
+		    	  	grid.setCellData(i, 'arrInEtcQty_'		+ j,	arrInEtcQty	[i][j]);
+		    	  
+			    	grid.setCellData(i, 'arrInAmt_'		+ j,	arrInAmt	[i][j]);
+			    	grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
+			    	grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
+	  	  	}
+	  	  	$scope.calcAmt(item, i);
+		  }
         $scope.flex.collectionView.commitEdit();
   	  }
   }

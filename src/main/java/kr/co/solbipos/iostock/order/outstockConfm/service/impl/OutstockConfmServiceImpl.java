@@ -71,7 +71,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
             outstockConfmVO.setProcFg("10");
             outstockConfmVO.setUpdateProcFg("20");
-
+            
+            String slipKind	= outstockConfmVO.getSlipKind();
+            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
+            outstockConfmVO.setOccrFg(occrFg);
             // DTL의 진행구분 수정. 수주확정 -> 출고확정
             result = outstockConfmMapper.updateOutstockDtlConfirm(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -79,7 +83,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             // HD의 진행구분 수정. 수주확정 -> 출고확정
             result = outstockConfmMapper.updateOutstockConfirm(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+            
+            //PROD 수정. 수주확정 -> 출고확정
+            result = outstockConfmMapper.insertOutstockProdConfirm(outstockConfmVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            
             // 자동입고인 경우 입고로 수정
             if(StringUtil.getOrBlank(envst1043).equals("A")) {
                 outstockConfmVO.setProcFg("20");

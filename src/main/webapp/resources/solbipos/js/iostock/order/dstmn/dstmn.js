@@ -113,8 +113,13 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
           params.slipNo = selectedRow.slipNo;
           params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
           params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-          
+          if($scope.procFg < '20'){
+        	  params.reqDate = selectedRow.reqDate;
+          }else{
+        	  params.reqDate = selectedRow.outDate;
+          }         
           $scope._broadcast('dstmnDtlCtrl', params);
+
         }
       }
     });

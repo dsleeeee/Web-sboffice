@@ -22,7 +22,10 @@ public interface OutstockConfmMapper {
 
     /** 출고확정 - 출고확정시 HD 수정 */
     int updateOutstockConfirm(OutstockConfmVO outstockConfmVO);
-
+    
+    /** 출고확정 - 출고확정시 PROD 수정 */
+    int insertOutstockProdConfirm(OutstockConfmVO outstockConfmVO);
+    
     /** 출고확정 - 출고확정 자동입고 DTL 수정*/
     int updateAutoInstockDtl(OutstockConfmVO outstockConfmVO);
 

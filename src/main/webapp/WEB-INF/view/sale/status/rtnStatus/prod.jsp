@@ -8,7 +8,7 @@
 
 <div id="rtnStatusProdView" class="subCon3" style="display: none;" ng-controller="rtnStatusProdCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
+      <a href="#" class="open fl"><s:message code="rtnStatus.prod"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnRtnStatusProdSearch" ng-click="_broadcast('rtnStatusProdCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -153,7 +153,7 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
-  
+
   <%-- 엑셀 리스트 --%>
   <div class="wj-gridWrap2 mt20" style="display:none;" ng-controller="rtnStatusProdExcelCtrl">
   		<wj-flex-grid

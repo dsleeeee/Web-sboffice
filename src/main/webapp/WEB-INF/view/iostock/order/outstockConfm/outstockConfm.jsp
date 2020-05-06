@@ -124,8 +124,8 @@
       <span class="txtIn"><input id="outDate" class="w120px"></span>
     </div>
     <%-- 출고자료생성 --%>
-<!--     <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()"> -->
-<%--       <s:message code="outstockConfm.outstockConfirm"/></button> --%>
+    <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">
+      <s:message code="outstockConfm.outstockConfirm"/></button>
   </div>
   <div style="clear: both;"></div>
 

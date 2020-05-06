@@ -10,7 +10,7 @@
 
 <div id="posProdView" class="subCon" style="display: none;" ng-controller="posProdCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="pos.day"/></a>
+		<a href="#" class="open fl"><s:message code="pos.prod"/></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_broadcast('posProdCtrlSrch')">
 			<s:message code="cmm.search"/>

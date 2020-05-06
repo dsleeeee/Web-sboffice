@@ -334,6 +334,8 @@
 		                        AND             Y.SLIP_FG       = '1'
 		                        WHERE   X.STORE_CD  = #{storeCd}
 		                        AND     X.USE_YN    = 'Y'
+		                        AND		X.STORAGE_CD	<![CDATA[ >= ]]>	'001'			<!-- 고정 -->
+								AND		X.STORAGE_CD	<![CDATA[ < ]]>	'999'			<!-- 고정 -->
 		                    )   B
 		                    ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 		                    AND     A.SLIP_NO       = B.SLIP_NO

@@ -414,7 +414,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
-
+      
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
       if (item.inTotQty === 0) {
         continue;
@@ -427,6 +427,15 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
         $scope._popMsg(messages["vendrInstock.ord.not.overInTot"]); // 주문금액이 너무 큽니다.
         return false;
       }
+      
+      
+      
+      var orderTot = (parseInt(item.orderUnitQty)*item.poUnitQty+(item.orderEtcQty === null ? null : item.orderEtcQty) );
+      if(orderTot < item.inTotQty ) {
+    	  $scope._popMsg(messages["vendrInstock.ord.not.orderTotQty"]); 
+    	  return false;
+      }
+      
 
       item.status    = "U";
       item.slipNo    = $scope.slipNo;
