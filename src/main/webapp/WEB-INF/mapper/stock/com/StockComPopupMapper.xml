@@ -2100,11 +2100,27 @@
     <select id="selectStorageList" parameterType="stockManageViewVO" resultType="DefaultMap">
         /* USE : IostockCmmMapper.selectStorageList */
         SELECT  STORAGE_CD, STORAGE_NM
-		FROM    TB_MS_STORAGE
-		WHERE   STORE_CD      =   #{storeCd}
-		AND     USE_YN = 'Y'
-		AND     STORAGE_CD   >=   '000'
-		AND     STORAGE_CD   <![CDATA[<]]>    '999'    
-		ORDER BY STORE_CD
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+            	FROM    TB_HQ_STORAGE
+		        WHERE   1 = 1
+	              AND   HQ_OFFICE_CD      =   #{hqOfficeCd}
+	              AND   USE_YN = 'Y'
+	              AND   STORAGE_CD   >   '000'
+				  AND   STORAGE_CD   <![CDATA[<]]>    '999'    
+	         	ORDER BY STORAGE_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+				FROM    TB_MS_STORAGE
+				WHERE   1 = 1
+				AND     STORE_CD      =   #{storeCd}
+				AND     USE_YN = 'Y'
+				AND     STORAGE_CD   >=   '000'
+				AND     STORAGE_CD   <![CDATA[<]]>    '999'    
+				ORDER BY STORE_CD
+		    </when>
+        </choose>
     </select>
 </mapper>
