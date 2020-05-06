@@ -129,13 +129,24 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
             }else{
                 $scope.wjVendrInfoLayer.hide();
-                $scope.wjVendrTrtmntLayer.show();
+                $scope.wjVendrTrtmntLayer.show(true);
 
-                $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
+                // $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
                 event.preventDefault();
 
             }
         }
     };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 취급상품 팝업 핸들러 추가
+        $scope.wjVendrTrtmntLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
+            }, 50)
+        });
+    });
 
 }]);
