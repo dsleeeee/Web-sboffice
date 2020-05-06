@@ -126,6 +126,6 @@
 <script>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20200423.13" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20200506.13" charset="utf-8"></script>
 
 

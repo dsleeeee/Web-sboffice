@@ -49,7 +49,7 @@ app.controller('vendrTrtmntCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.initGrid = function (s, e) {};
 
     // 해당 scope 호출
-    $scope.$on("vendrTrtmntCtrl", function(event, vendrCd) {;
+    $scope.$on("vendrTrtmntCtrl", function(event, vendrCd) {
         $scope.vendrTrtmntList();
         event.preventDefault();
     });
