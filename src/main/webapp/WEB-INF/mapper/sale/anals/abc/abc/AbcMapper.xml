@@ -95,6 +95,7 @@
 	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_TOT_SALE_QTY
 	                                  FROM TB_SL_DAILY_PROD TSDP
 	                                 WHERE 1=1
+	                                 AND	HQ_OFFICE_CD    =   #{hqOfficeCd}
 	                                      <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
 	                                          AND     TSDP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 	                                      </if>

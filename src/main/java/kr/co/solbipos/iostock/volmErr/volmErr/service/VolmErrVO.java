@@ -107,6 +107,8 @@ public class VolmErrVO extends PageVO {
     private String storeNewAdjustFg;
     /** 전표번호 생성을 위한 YYMM 포맷 날짜 */
     private String yymm;
+    /** 권역별 창고 코드 */
+    private String  areaFg;
     
     /** 헤드 인덱스(DAY SEQUENCE) */
     private Integer seqNo;
@@ -777,4 +779,12 @@ public class VolmErrVO extends PageVO {
     public void setSeqNo(Integer seqNo) {
         this.seqNo = seqNo;
     }
+    
+    public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
 }

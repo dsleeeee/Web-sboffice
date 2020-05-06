@@ -255,6 +255,7 @@
         ,       TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY)
         ,       MOD  ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY)
         ,       (OUT_TOT_QTY - IN_TOT_QTY)
+        /*
         ,       DECODE(OUT_VAT,0,ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)),CEIL (ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 * 10))
         ,       DECODE(OUT_VAT,0,                                                        0,FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11     ))
         ,       ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))
@@ -265,6 +266,17 @@
         ,       DECODE(OUT_VAT,0,ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)),CEIL (ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 * 10))
         ,       DECODE(OUT_VAT,0,                                                        0,FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11     ))
         ,       ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))
+        */
+        ,DECODE(OUT_VAT, 0, ROUND(OUT_TOT / DECODE( OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))), CEIL (ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 * 10))
+       ,DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 )) 
+      , ROUND(OUT_TOT / DECODE( OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) 
+       ,OUT_SPLY_UPRC 
+       ,TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY) 
+      , MOD ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY) 
+       ,(OUT_TOT_QTY - IN_TOT_QTY) 
+      , DECODE(OUT_VAT, 0, ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))), CEIL (ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 * 10)) 
+      , DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 )) 
+      , ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)))
         ,       #{regDt}
         ,       #{regId}
         ,       #{modDt}
@@ -399,7 +411,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ADJ_STORAGE_CD
         )
         SELECT  A.HQ_OFFICE_CD,
                 '999',														<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
@@ -415,9 +428,12 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                THS.STORAGE_CD
         FROM    TB_ST_HQ_ADJUST_DTL A
-        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        ,		(SELECT HQ_OFFICE_CD, STORAGE_CD FROM TB_HQ_STORAGE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND AREA_FG = #{areaFg} AND ROWNUM = 1) THS
+        WHERE   A.HQ_OFFICE_CD	=	THS.HQ_OFFICE_CD
+        AND		A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     A.ADJ_DATE      = #{outDate} <!--  TO_CHAR(SYSDATE,'YYYYMMDD') -->
         AND		A.SEQ_NO		= #{seqNo}
         GROUP BY
@@ -433,7 +449,8 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                THS.STORAGE_CD
     </insert>
 
 
