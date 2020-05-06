@@ -169,7 +169,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             // 저장
             $scope._postJSONSave.withPopUp(url, param, function () { $scope.close(); });
         }
-    }
+    };
 
     // 닫기
     $scope.close = function () {
