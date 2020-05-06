@@ -79,15 +79,34 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 수정
     $scope.modifyInfo = function(){
 
+        // $scope.wjVendrInfoLayer.hide();
+        // $scope.wjVendrRegistLayer.show();
+        //
+        // var data = {};
+        // data.type = "mod";
+        // data.vendrCd = valVendrCd;
+        //
+        // $scope._broadcast('vendrRegistCtrl', data);
+        // event.preventDefault();
+
         $scope.wjVendrInfoLayer.hide();
-        $scope.wjVendrRegistLayer.show();
+        $scope.wjVendrRegistLayer.show(true);
+        event.preventDefault();
 
         var data = {};
         data.type = "mod";
         data.vendrCd = valVendrCd;
 
-        $scope._broadcast('vendrRegistCtrl', data);
-        event.preventDefault();
+        $scope.setVendrInfoInfo(data);
+    };
+
+    // 거래처 상세 정보
+    $scope.vendrInfoInfo = {};
+    $scope.setVendrInfoInfo = function(data){
+        $scope.vendrInfoInfo = data;
+    };
+    $scope.getVendrInfo = function(){
+        return $scope.vendrInfo;
     };
 
     // 닫기
@@ -145,6 +164,13 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.wjVendrTrtmntLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
+            }, 50)
+        });
+
+        // 거래처관리 신규등록,수정 팝업 핸들러 추가
+        $scope.wjVendrRegistLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('vendrRegistCtrl', $scope.getVendrInfoInfo());
             }, 50)
         });
     });
