@@ -437,9 +437,10 @@
         COMMENTS : 출고확정 - 출고확정시 DTL의 진행구분을 수정한다.
     -->
     <update id="updateOutstockDtlConfirm" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+        /* USE : OutstockConfmMapper.updateOutstockDtlConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
+        		REQ_DATE        = #{outDate},
                 MOD_DT          = #{modDt},
                 MOD_ID          = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}

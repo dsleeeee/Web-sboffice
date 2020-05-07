@@ -17,9 +17,9 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   $scope.initGrid = function (s, e) {
 	  
 	// 그리드 초기화
-    var cv          = new wijmo.collections.CollectionView([]);
-    cv.trackChanges = true;
-    $scope.data     = cv;
+//    var cv          = new wijmo.collections.CollectionView([]);
+//    cv.trackChanges = true;
+//    $scope.data     = cv;
 	  
     // 배송기사
     var comboParams             = {};
@@ -244,9 +244,9 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("outstockConfmDtlCtrl", function (event, data) {	  
 	// 그리드 초기화
-    var cv          = new wijmo.collections.CollectionView([]);
-    cv.trackChanges = true;
-    $scope.data     = cv;
+//    var cv          = new wijmo.collections.CollectionView([]);
+//    cv.trackChanges = true;
+//    $scope.data     = cv;
 	  
     $scope.startDate = data.startDate;
 	$scope.endDate = data.endDate;
@@ -711,7 +711,7 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 			    	grid.setCellData(i, 'arrInVat_'		+ j,	arrInVat	[i][j]);
 			    	grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
 	  	  	}
-	  	  	$scope.calcAmt(item, i);
+	  	  	$scope.calcAmt(item, 0);
 		  }
         $scope.flex.collectionView.commitEdit();
   	  }

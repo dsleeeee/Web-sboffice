@@ -209,6 +209,7 @@
                                     </foreach>
                                   )
         </if>
+        ORDER BY A.PROD_CD
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -246,7 +247,12 @@
         ,   C.LV3_CD
         ,   C.LV3_NM
         ,   B.STORE_CD
-        ,   B.CURR_QTY_000      --매대
+        <if test='unitFg == "0"'>
+        ,	SF_ZERO_TO_NULL((B.CURR_QTY_000 / A.PO_UNIT_QTY))	AS CURR_QTY_000
+        </if>
+        <if test='unitFg == "1"'>
+        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
+        </if>        
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -415,6 +421,7 @@
                                     </foreach>
                                   )
         </if>
+        ORDER BY A.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
@@ -659,6 +666,7 @@
                                     </foreach>
                                   )
         </if>
+        ORDER BY A.PROD_CD
     </select>
 
     <select id="getStorageStorageCurrExcelList" parameterType="storageHqCurrVO" resultType="DefaultMap">
@@ -694,7 +702,12 @@
         ,   C.LV3_CD
         ,   C.LV3_NM
         ,   B.STORE_CD
-        ,   B.CURR_QTY_000      --매대
+		<if test='unitFg == "0"'>
+        ,	SF_ZERO_TO_NULL((B.CURR_QTY_000 / A.PO_UNIT_QTY))	AS CURR_QTY_000
+        </if>
+        <if test='unitFg == "1"'>
+        ,   SF_ZERO_TO_NULL(B.CURR_QTY_000)	AS CURR_QTY_000      --매대
+        </if>        
         /*   동적 START */
         ${sQuery1}
         /*   동적 END */
@@ -862,5 +875,6 @@
                                     </foreach>
                                   )
         </if>
+        ORDER BY A.PROD_CD
     </select>
 </mapper>

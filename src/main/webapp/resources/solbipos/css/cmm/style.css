@@ -2091,7 +2091,6 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 .pageNum ul li.btn_next.last a,.pageNum2 ul li.btn_next.last a,.pageNum3 ul li.btn_next.last a {background:url(../img/ic_pagenum2.png) center center no-repeat;}
 .pageNum ul li.btn_next.last a:hover,.pageNum2 ul li.btn_next.last a:hover,.pageNum3 ul li.btn_next.last a:hover {background:url(../img/ic_pagenum2_hover.png) #ccc center center no-repeat;}
 
-
 /* grid headers/footer >> total text align */
 .wj-colheaders .wj-header {font-weight:bold !important}
 .wj-colfooters .wj-align-left {text-align:left !important}
@@ -2122,7 +2121,7 @@ textarea.sb-input {border:1px solid #e8e8e8; padding:0 10px; font-size:1em;}
 /* 터치키 등록 관련 */
 .touch-box {}
 .touch-box:after {display:block; clear:both; content:''}
-.w125px {width:125px}
+.w155px {width:155px}
 .touchKeyWrap.t2 {height:650px; overflow:hidden; margin-top:10px}
 .touch-inner {width:100%; height:610px; border:1px solid #e8e8e8}
 .touchKeyWrap.t3 {width:250px; height:650px; padding:10px; border:1px solid #e8e8e8}
@@ -2135,9 +2134,6 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .prodNavWrap.t2 .wj-input-group .wj-btn-default {width:34px}
 .tch-inner {float:left; width:230px; height:605px; margin:26px 0 0 10px; padding:10px; border:1px solid #dbdbdb}
 .tch-inner.t2 {width:495px}
-.frGroupWrap.t2 {height:60px; padding:10px 10px 0; text-align:left}
-.frGroupWrap.t2 span {display:inline-block; }
-.frGroupWrap.t2 span a {width:auto; padding:10px; margin:0 3px}
 .prev1.t2 svg {min-width:auto !important; min-height:auto !important}
 .tablethum {padding:20px; border-bottom:1px solid #ddd}
 .tablethum .thumarea {position:relative; width:150px; height:150px; text-align:center; margin:0 auto}
@@ -2243,8 +2239,9 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 
 /* 외식테이블 폰터 색상 변경에 땨른 추가 css */
 .linkArea a {color:#222}
-.userLayer ul li a,.tabType1 ul li a,.pageNum ul li a,.pageNum2 ul li a,.pageNum3 ul li a {color:#888}
+.userLayer ul li a,.tabType1 ul li a,.pageNum ul li a,.pageNum2 ul li a,.pageNum3 ul li a,.subTab li a {color:#888}
 .wj-control .wj-input-group .wj-form-control,.wj-input-group-btn > .wj-btn.wj-btn-default,.wj-listbox-item {color:#888 !important}
+
 
 /* 차트 관련 수정  2020-04-20 */
 .custom-flex-chart.wj-flexchart {font-size:14px; font-weight:normal; color:#000; padding:20px 30px 20px 20px; border:0}
@@ -2254,6 +2251,24 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 
 /* col2 select 영역 input text 관련 수정 */
 .inputTxt {max-width:180px; padding:5px 0 0 5px}
+
+/* 외식테이블 레이아웃 변경 관련 2020-05-07 */
+.posWrap.t2 {width:780px; overflow:scroll; white-space:nowrap}
+
+.posBtnWrap {width:1150px; margin:0 20px 20px 0; white-space:nowrap; overflow-x:auto; overflow-y:hidden}
+.posBtnWrap .frGroupWrap {height:60px; text-align:left; padding:5px; margin-right:10px; overflow-y:hidden}
+.posBtnWrap .frGroupWrap span {display:inline-block; padding:0; margin:0}
+.posBtnWrap .frGroupWrap a {width:133px; height:50px; margin:0 1px; padding:0; font-size:14px; padding:10px; text-align:left; color:#888}
+.posBtnWrap .frGroupWrap a.on {border-color:#e8e8e8; color:#fff}
+
+.posBtnWrap .frGroupWrap::-webkit-scrollbar {width: 10px; height:10px}
+.posBtnWrap .frGroupWrap::-webkit-scrollbar-track {background: #f1f1f1; width:10px; height:10px}
+.posBtnWrap .frGroupWrap::-webkit-scrollbar-thumb {background: #c1c1c1}
+.posBtnWrap .frGroupWrap::-webkit-scrollbar-thumb:hover {background: #a8a8a8}
+
+.tbLayoutWrap {}
+.tbLayoutWrap .table-l {display:inline-block; width:900px; height:900px;}
+.tbLayoutWrap .table-r {display:inline-block; width:228px; margin-left:6px; vertical-align:top}
 
 
 /* tab type 추가 및  con padding 재정의
