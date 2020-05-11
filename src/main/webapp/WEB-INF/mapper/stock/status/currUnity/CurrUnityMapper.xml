@@ -18,9 +18,9 @@
 	    ,      H.BARCD_CD  AS   H_BARCD_CD
 	    ,      M.BARCD_CD  AS   M_BARCD_CD
 	    ,      H.CURR_QTY   AS   H_CURR_QTY
-	    ,      M.CURR_QTY   AS   M_CURR_QTY
+	    ,      NVL(M.CURR_QTY,0)   AS   M_CURR_QTY
 	    ,      H.SAFE_STOCK_QTY   AS   H_SAFE_STOCK_QTY
-	    ,      H.CURR_QTY+M.CURR_QTY   AS   TOT_CURR_QTY
+	    ,      H.CURR_QTY+NVL(M.CURR_QTY,0)   AS   TOT_CURR_QTY
 	    <include refid="CmmSQL.PagingTemplateCount"/>
 	    FROM   (
 	          SELECT    TSHSC.PROD_CD
@@ -57,6 +57,7 @@
 	           ,       TB_MS_PRODUCT TMP
 	           ,       TB_MS_PRODUCT_BARCD TMPB
 	          WHERE   TSSSC.STORAGE_CD      =   '999'
+	          AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 	          AND      TMP.STORE_CD            =   TSSSC.STORE_CD
 	           AND     TMP.PROD_CD              =   TSSSC.PROD_CD
 	           AND     TMP.STOCK_PROD_YN        =   'Y'
@@ -101,8 +102,8 @@
 		
 	    		]]>
               )   A 
-	    WHERE   H.PROD_CD    =    M.PROD_CD
-	    AND      H.PROD_NM   =   M.PROD_NM
+	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
+	    AND      H.PROD_NM   =   M.PROD_NM	(+)
 	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
         <if test='prodCd != null and prodCd != ""'>
            AND H.PROD_CD  = #{prodCd}
@@ -212,6 +213,7 @@
 		,      TB_ST_STORE_STOCK_CUR   TSSSC
 		,      TB_MS_STORE            TMS
 		WHERE   TSSSC.STORAGE_CD   =   '999'
+		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 		<if test='prodCd != null and prodCd != ""'>
            AND TSSSC.PROD_CD  = #{prodCd}
         </if>
@@ -236,9 +238,9 @@
 	    ,      H.BARCD_CD  AS   H_BARCD_CD
 	    ,      M.BARCD_CD  AS   M_BARCD_CD
 	    ,      H.CURR_QTY   AS   H_CURR_QTY
-	    ,      M.CURR_QTY   AS   M_CURR_QTY
+	    ,      NVL(M.CURR_QTY,0)   AS   M_CURR_QTY
 	    ,      H.SAFE_STOCK_QTY   AS   H_SAFE_STOCK_QTY
-	    ,      H.CURR_QTY+M.CURR_QTY   AS   TOT_CURR_QTY
+	    ,      H.CURR_QTY+NVL(M.CURR_QTY,0)   AS   TOT_CURR_QTY
 	    FROM   (
 	          SELECT    TSHSC.PROD_CD
 	          ,      THP.PROD_CLASS_CD 
@@ -274,6 +276,7 @@
 	           ,       TB_MS_PRODUCT TMP
 	           ,       TB_MS_PRODUCT_BARCD TMPB
 	          WHERE   TSSSC.STORAGE_CD      =   '999'
+	          AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 	          AND      TMP.STORE_CD            =   TSSSC.STORE_CD
 	           AND     TMP.PROD_CD              =   TSSSC.PROD_CD
 	           AND     TMP.STOCK_PROD_YN        =   'Y'
@@ -318,8 +321,8 @@
 		
 	    		]]>
               )   A 
-	    WHERE   H.PROD_CD    =    M.PROD_CD
-	    AND      H.PROD_NM   =   M.PROD_NM
+	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
+	    AND      H.PROD_NM   =   M.PROD_NM	(+)
 	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
         <if test='prodCd != null and prodCd != ""'>
            AND H.PROD_CD  = #{prodCd}
@@ -421,6 +424,7 @@
 		,      TB_ST_STORE_STOCK_CUR   TSSSC
 		,      TB_MS_STORE            TMS
 		WHERE   TSSSC.STORAGE_CD   =   '999'
+		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
 		<if test='prodCd != null and prodCd != ""'>
            AND TSSSC.PROD_CD  = #{prodCd}
         </if>

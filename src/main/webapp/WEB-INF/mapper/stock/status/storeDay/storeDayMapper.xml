@@ -103,7 +103,7 @@
                    AND TPSS.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSS.PROD_CD      = TMPB.PROD_CD(+)
                    <if test='startDate != null and startDate != ""'>
-                      AND SUBSTR(TPSS.IO_OCCR_DT, 1, 8)  = #{startDate}
+                      AND TPSS.IO_PROC_DATE  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}
@@ -156,6 +156,7 @@
                  ORDER BY TPSS.PROD_CD
                         , TPSS.STORE_CD
             ) A
+            
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
@@ -249,7 +250,7 @@
                    AND TPSS.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSS.PROD_CD      = TMPB.PROD_CD(+)
                    <if test='startDate != null and startDate != ""'>
-                      AND SUBSTR(TPSS.IO_OCCR_DT, 1, 8)  = #{startDate}
+                      AND TPSS.IO_PROC_DATE  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
                       AND TMP.PROD_CD  = #{prodCd}

@@ -554,7 +554,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 outstockDataVO.setVendrCd(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+                
+                outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -562,7 +563,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 // TB_PO_HQ_STORE_OUTSTOCK 자료입력
                 outstockDataVO.setDlvrCd(dlvrCd);
                 outstockDataVO.setSlipKind("0"); // 전표종류 TB_CM_NMCODE(NMCODE_GRP_CD=') 0:일반 1:물량오류 2:이동
-                outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
+//                outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 outstockDataVO.setRemark	(rtnStoreOrderVO.getRemark ());	//비고
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

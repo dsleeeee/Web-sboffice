@@ -92,185 +92,185 @@
 <div class="subCon2" ng-controller="tbLayoutCtrl">
 
     <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
-    <div class="posWrap oh">
+    <div class="posWrap t2">
+    
+      <%--그룹--%>
+      <div class="posBtnWrap">
+          <h2 class="h2_tit2 fl">
+              <s:message code="tableLayout.group" />
+          </h2>
+          <div class="fr mr10">
+              <%-- 버튼 --%>
+              <div class="updownSet oh mb5 fl">
+                  <button class="btn_skyblue fl ml10" id="btnfloorConfig"><s:message code="tableLayout.tableLayout" /></button>
+                  <button class="btn_skyblue fl ml10" id="btnInitLayout"><s:message code="cmm.init" /></button>
+                  <button class="btn_skyblue fl ml10" id="btnSaveLayout"><s:message code="cmm.save" /></button>
+              </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="frGroupWrap" id="divLayers">
+              <%--<span><a href="#" class="on">2층</a></span> --%>
+          </div>
+      </div>
+      <%--//그룹--%>    
+    
+    	<div class="tbLayoutWrap">
+        
         <%-- left --%>
-        <div class="w70 fl">
-            <%--그룹--%>
-            <div class="mr10 mb20">
-                <h2 class="h2_tit2 fl">
-                    <s:message code="tableLayout.group" />
-                </h2>
-                <div class="fr">
-                    <%-- 버튼 --%>
-                    <div class="updownSet oh mb5 fl">
-                        <button class="btn_skyblue fl ml10" id="btnfloorConfig"><s:message code="tableLayout.tableLayout" /></button>
-                        <button class="btn_skyblue fl ml10" id="btnInitLayout"><s:message code="cmm.init" /></button>
-                        <button class="btn_skyblue fl ml10" id="btnSaveLayout"><s:message code="cmm.save" /></button>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <div class="frGroupWrap t2" id="divLayers">
-                    <%--<span><a href="#" class="on">2층</a></span> --%>
-                </div>
-            </div>
-            <%--//그룹--%>
+        <div class="table-l">
+					<%--구성요소--%>
+					<div class="fl w110px" style="display: none;">
+						<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
+						<div class="cfgWrap" style="height:495px">
+							<ul class="tableImg" id="divCompos">
+					    	<%--<li><a href="#"><img src="img/img_table2.png" alt="" /></a></li>--%>
+					    </ul>
+					  </div>
+					</div>
+					<%--//구성요소--%>
 
-            <%--구성요소--%>
-            <div class="fl w110px" style="display: none;">
-                <h2 class="h2_tit2" style="margin-bottom:px">
-                    <s:message code="tableLayout.component" />
-                </h2>
-                <div class="cfgWrap" style="height:495px">
-                    <ul class="tableImg" id="divCompos">
-                        <%--<li><a href="#"><img src="img/img_table2.png" alt="" /></a></li>--%>
-                    </ul>
-                </div>
-            </div>
-            <%--//구성요소--%>
-
-            <%-- 미리보기 --%>
-            <div class="fl" style="width:520px;">
-                <div class="prev1 patternBg t2" id="contentLayout" tabindex="-1" style="width:520px; height:520px">
-                    <%--점 패턴 background classname : "patternBg"--%>
-                    <%--510 * 510 pixel 입니다.--%>
-                </div>
-            </div>
-            <%-- //미리보기 --%>
-
+					<%-- 미리보기 --%>
+					<div style="width:900px;">
+						<div class="prev1 patternBg t2" id="contentLayout" tabindex="-1" style="width:900px; height:900px">
+							<%--점 패턴 background classname : "patternBg"--%>
+							<%--510 * 510 pixel 입니다.--%>
+					  </div>
+					</div>
+					<%-- //미리보기 --%>
         </div>
         <%-- //left --%>
 
-        <%--right--%>
-        <div class="w30 fr">
-            <h2 class="h2_tit2">
-                <s:message code="tableLayout.component" />
-            </h2>
+				<%--right--%>
+				<div class="table-r">
+					<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
+				
+					<%--구성요소--%>
+					<div class="cfgWrap pd10" style="height:874px">
+					
+						<%-- 테이블명 --%>
+						<div class="touch-box">
+					    <div class="bk lh30 s12"><s:message code="todayDtl.dtl.tblNm" /></div>
+							<div class="mb5 s12">
+					    	<input type="text" class="sb-input w155px" id="tableName">
+					    	<button class="btn_skyblue ml5" id="btnTblAddLayer"><s:message code="cmm.add" /></button>
+					    </div>
+						</div>
+						
+						<%-- 테이블자리수/유형 --%>
+						<div class="touch-box mt10">
+					    <%-- 테이블자리수 --%>
+							<div class="fl w45">
+					    	<span class="bk lh30 s12"><s:message code="tableAttr.tableSeatCnt" /></span>
+								<%-- 셀렉트 --%>
+								<div class="sb-select">
+					    		<span class="txtIn">
+										<wj-combo-box
+											id="tblSeatCntComboBox"
+											ng-hide="true"
+											text="_tblSeatCntComboBox"
+											items-source="combobox2"
+											display-member-path="name"
+											selected-value-path="value"
+											is-editable="false">
+										</wj-combo-box>
+									</span>
+					    	</div>
+							</div>
 
-            <%--구성요소--%>
-            <div class="cfgWrap pd10" style="height:608px">
-                <%-- 테이블명 --%>
-                <div class="touch-box">
-                    <div class="bk lh30 s12"><s:message code="todayDtl.dtl.tblNm" /></div>
-                    <div class="mb5 s12">
-                        <input type="text" class="sb-input w125px" id="tableName">
-                        <button class="btn_skyblue ml5" id="btnTblAddLayer"><s:message code="cmm.add" /></button>
-                    </div>
-                </div>
-
-                <%-- 테이블자리수/유형 --%>
-                <div class="touch-box mt10">
-                    <%-- 테이블자리수 --%>
-                    <div class="fl w45">
-                        <span class="bk lh30 s12"><s:message code="tableAttr.tableSeatCnt" /></span>
-                        <%-- 셀렉트 --%>
-                        <div class="sb-select">
-                            <span class="txtIn">
-                                <wj-combo-box
-                                	id="tblSeatCntComboBox"
-                                	ng-hide="true"
-                                	text="_tblSeatCntComboBox"
-                                	items-source="combobox2"
-                                	display-member-path="name"
-                                	selected-value-path="value"
-                                	is-editable="false">
-                                </wj-combo-box>
-                            </span>
-                        </div>
-                    </div>
-
-                    <%-- 테이블유형 --%>
-                    <div class="fr w45">
-                        <span class="bk lh30 s12"><s:message code="tableAttr.tableType" /></span>
-                        <%-- 셀렉트 --%>
-                        <div class="sb-select">
-                            <span class="txtIn">
-                                <wj-combo-box
-                                	id="tblTypeFgComboBox"
-                                	ng-hide="true"
-                                	text="_tblTypeFg"
-                                	items-source="_getComboData('tblTypeFgComboData')"
-                                	display-member-path="name"
-                                	selected-value-path="value"
-                                	is-editable="false">
-                                </wj-combo-box>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <%-- //테이블자리수/유형 --%>
-
-                <%-- 위치 --%>
-                <div class="touch-box mt10">
-                    <span class="bk lh30 s12"><s:message code="posFunc.pos"/></span>
-                    <div class="touch-box mb10 s12">
-                        <div class="fl w45 mb5">
-                            <span class="txtIn bk lh30 s14 w30px">X</span>
-                            <input type="text" class="fr sb-input w50px tc" id="cellX" maxlength="4">
-                        </div>
-                        <div class="fr w45 mb5">
-                            <span class="txtIn bk lh30 s14 w30px">Y</span>
-                            <input type="text" class="fr sb-input w50px tc" id="cellY" maxlength="4">
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="fl w45">
-                            <span class="bk lh30 s12 w30px"><s:message code="func.width"/></span>
-                            <input type="text" class="fr sb-input w50px tc" id="cellH" maxlength="4">
-                        </div>
-                        <div class="fr w45">
-                            <span class="bk lh30 s12 w30px"><s:message code="func.height"/></span>
-                            <input type="text" class="fr sb-input w50px tc" id="cellW" maxlength="4">
-                        </div>
-                    </div>
-
-                    <div>
-                        <div class="oh mt10">
-                            <span class="s12 fl lh30 bk mr10" style="display: none;">
-                                <s:message code="tableLayout.bgColor" /></span>
-                            <div class="sb-select fl txtIn w100 mb10" style="display: none;">
-                                <div id="bgColor"></div>
-                            </div>
-                            <span class="s12 fl lh30 bk mr10">
-                                <s:message code="tableLayout.bgImg" /></span>
-                            <div class="txtIn fl bgfile w100" style="position:relative">
-                                <input type="file" id="btnBgFile" style="width:100% !important" accept="image/x-png, image/gif, image/jpeg" />
-                                <a href="#" class="btn_grayS" id="btnDelBgImg" style="position:absolute; top:-28px; right:0; padding:0 15px; line-height:24px">
-                                    <s:message code="cmm.delete" /></a>
-                            </div>
-                        </div>
-                        <div class="oh mt10" id="cellImage" style="display: none;">
-                            <span class="s12 fl lh30 bk mr10">
-                                <s:message code="tableLayout.cellImg" /></span>
-                            <div class="txtIn fl bgfile w100" style="position:relative">
-                                <input type="file" id="btnCellBgFile" style="width:100% !important" accept="image/x-png, image/gif, image/jpeg" />
-                                <a href="#" class="btn_grayS" id="btnDelCellImg" style="position:absolute; top:-28px; right:0; padding:0 15px; line-height:24px">
-                                    <s:message code="cmm.delete" /></a>
-                            </div>
-                        </div>
-
-                        <div class="mt10" id="tableAlign" style="display:none; position:relative; height:70px">
-                            <span class="s12 lh30 bk"><s:message code="tableLayout.align" /></span>
-                            <span class="align" style="position:absolute; top:30px; left:0">
-                                <a href="#" class="btn_objleft" id="btnLeft"></a>
-                                <a href="#" class="btn_objcenter" id="btnCenter"></a>
-                                <a href="#" class="btn_objright" id="btnRight"></a>
-                            </span>
-                            <span class="align" style="position:absolute; top:30px; right:0">
-                                <a href="#" class="btn_objtop" id="btnTop"></a>
-                                <a href="#" class="btn_objmiddle" id="btnMiddle"></a>
-                                <a href="#" class="btn_objbottom" id="btnBottom"></a>
-                            </span>
-                        </div>
-
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-                <%-- //위치 --%>
-                <button class="btn_skyblue w100 mt20" id="btnTblAttConfig" style="display: none;">테이블속성 설정</button>
-                <input type="hidden" id="tableSelectStoreCd" value="${sessionInfo.storeCd}"/>
-            </div>
-            <%--//구성요소--%>
-        </div>
-        <%--//right--%>
+							<%-- 테이블유형 --%>
+							<div class="fr w45">
+					    	<span class="bk lh30 s12"><s:message code="tableAttr.tableType" /></span>
+								<%-- 셀렉트 --%>
+								<div class="sb-select">
+								  <span class="txtIn">
+										<wj-combo-box
+											id="tblTypeFgComboBox"
+											ng-hide="true"
+											text="_tblTypeFg"
+											items-source="_getComboData('tblTypeFgComboData')"
+											display-member-path="name"
+											selected-value-path="value"
+											is-editable="false">
+										</wj-combo-box>
+									</span>
+								</div>
+							</div>
+						</div>
+						<%-- //테이블자리수/유형 --%>
+						
+						<%-- 위치 --%>
+						<div class="touch-box mt10">
+						  <span class="bk lh30 s12"><s:message code="posFunc.pos"/></span>
+							<div class="touch-box mb10 s12">
+						    <div class="fl w45 mb5">
+						      <span class="txtIn bk lh30 s14 w30px">X</span>
+						    	<input type="text" class="fr sb-input w50px tc" id="cellX" maxlength="4">
+								</div>
+								<div class="fr w45 mb5">
+								  <span class="txtIn bk lh30 s14 w30px">Y</span>
+								  <input type="text" class="fr sb-input w50px tc" id="cellY" maxlength="4">
+								</div>
+								<div class="clearfix"></div>
+								<div class="fl w45">
+								  <span class="bk lh30 s12 w30px"><s:message code="func.width"/></span>
+								  <input type="text" class="fr sb-input w50px tc" id="cellH" maxlength="4">
+								</div>
+								<div class="fr w45">
+								    <span class="bk lh30 s12 w30px"><s:message code="func.height"/></span>
+								    <input type="text" class="fr sb-input w50px tc" id="cellW" maxlength="4">
+								</div>
+							</div>
+							
+							<div>
+						    <div class="oh mt10">
+						      <span class="s12 fl lh30 bk mr10" style="display: none;"><s:message code="tableLayout.bgColor" /></span>
+									<div class="sb-select fl txtIn w100 mb10" style="display: none;">
+						    		<div id="bgColor"></div>
+						    	</div>
+									<span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.bgImg" /></span>
+									<div class="txtIn fl bgfile w100" style="position:relative">
+										<input type="file" id="btnBgFile" style="width:100% !important" accept="image/x-png, image/gif, image/jpeg" />
+										<a href="#" class="btn_grayS" id="btnDelBgImg" style="position:absolute; top:-24px; right:0; padding:0 10px; line-height:21px; font-size:12px">
+											<s:message code="cmm.delete" />
+										</a>
+					    		</div>
+								</div>
+								
+								<div class="oh mt10" id="cellImage" style="display: none;">
+									<span class="s12 fl lh30 bk mr10"><s:message code="tableLayout.cellImg" /></span>
+									<div class="txtIn fl bgfile w100" style="position:relative">
+										<input type="file" id="btnCellBgFile" style="width:100% !important" accept="image/x-png, image/gif, image/jpeg" />
+										<a href="#" class="btn_grayS" id="btnDelCellImg" style="position:absolute; top:-24px; right:0; padding:0 10px; line-height:21px; font-size:12px">
+											<s:message code="cmm.delete" />
+										</a>
+								  </div>
+								</div>
+						
+								<div class="mt10" id="tableAlign" style="display:none; position:relative; height:70px">
+									<span class="s12 lh30 bk"><s:message code="tableLayout.align" /></span>
+									<span class="align" style="position:absolute; top:30px; left:0">
+										<a href="#" class="btn_objleft" id="btnLeft"></a>
+										<a href="#" class="btn_objcenter" id="btnCenter"></a>
+										<a href="#" class="btn_objright" id="btnRight"></a>
+									</span>
+									<span class="align" style="position:absolute; top:30px; right:0">
+										<a href="#" class="btn_objtop" id="btnTop"></a>
+										<a href="#" class="btn_objmiddle" id="btnMiddle"></a>
+										<a href="#" class="btn_objbottom" id="btnBottom"></a>
+									</span>
+								</div>
+						
+						  </div>
+						  <div class="clearfix"></div>
+						</div>
+						<button class="btn_skyblue w100 mt20" id="btnTblAttConfig">테이블속성 설정</button>
+						<input type="hidden" id="tableSelectStoreCd" value="${sessionInfo.storeCd}"/>
+					</div>
+					<%--//구성요소--%>
+				</div>
+				<%--//right--%>
+	  	</div>
+	  	
     </div>
     <%--// posWrap end --%>
 

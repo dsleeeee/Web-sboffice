@@ -225,7 +225,7 @@
         )
         SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       ROWNUM          ,       STORE_CD        ,       SLIP_FG
         ,       '10'            ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
-        ,       REMARK          ,       REQ_DATE
+        ,       REMARK          ,       #{outDate}
         ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
         ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
         ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
@@ -234,7 +234,7 @@
         ,       #{modDt}        ,       #{modId}
         FROM    (   SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       STORE_CD        ,       SLIP_FG
                     ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
-                    ,       REMARK          ,       REQ_DATE
+                    ,       REMARK          ,       #{outDate}	
                     ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
                     ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
                     ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT

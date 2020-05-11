@@ -11,12 +11,14 @@ import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO;
 import kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.RtnOutstockDataService;
 import kr.co.solbipos.iostock.orderReturn.rtnOutstockData.service.RtnOutstockDataVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("rtnOutstockData")
+@Transactional
 public class RtnOutstockDataServiceImpl implements RtnOutstockDataService {
     private final RtnOutstockDataMapper rtnOutstockDataMapper;
     private final MessageService messageService;

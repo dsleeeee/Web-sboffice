@@ -710,7 +710,7 @@ app.controller('dstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
 		    	grid.setCellData(i, 'arrInTot_'		+ j,	arrInTot	[i][j]);
   	  	}
   	 
-        $scope.calcAmt(item, i);
+        $scope.calcAmt(item, 0);
      	}        
         $scope.flex.collectionView.commitEdit();
   	  }

@@ -16,9 +16,9 @@ app.controller('rtnDstmnDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	  $scope.initGrid = function (s, e) {
 		  
 		// 그리드 초기화
-	    var cv          = new wijmo.collections.CollectionView([]);
-	    cv.trackChanges = true;
-	    $scope.data     = cv;
+//	    var cv          = new wijmo.collections.CollectionView([]);
+//	    cv.trackChanges = true;
+//	    $scope.data     = cv;
 		    
 	    // 배송기사
 	    var comboParams             = {};

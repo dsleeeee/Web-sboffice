@@ -14,7 +14,7 @@
     /* TableLayoutMapper.mergeTableGroupByStore */
     MERGE INTO TB_MS_TABLE_GROUP A
     USING (SELECT #{storeCd} STORE_CD,
-                  LPAD(#{tblGrpCd}, 5, '0') TBL_GRP_CD
+                  LPAD(#{tblGrpCd}, 2, '0') TBL_GRP_CD
              FROM DUAL
           ) ORG
        ON (A.STORE_CD = ORG.STORE_CD
@@ -47,7 +47,7 @@
     )
     VALUES (
         #{storeCd},
-        LPAD(#{tblGrpCd}, 5, '0'),
+        LPAD(#{tblGrpCd}, 2, '0'),
         #{tblGrpNm},
         #{tblGrpFg},
         #{bgImgNm},
@@ -81,7 +81,7 @@
      WHEN MATCHED THEN
     UPDATE
        SET A.TBL_NM = #{tblNm},
-           A.TBL_GRP_CD = LPAD(#{tblGrpCd}, 5, '0'),
+           A.TBL_GRP_CD = LPAD(#{tblGrpCd}, 2, '0'),
            A.TBL_SEAT_CNT = #{tblSeatCnt},
            A.X = #{x},
            A.Y = #{y},
@@ -115,7 +115,7 @@
         #{storeCd},
         LPAD(#{tblCd}, 2, '0'),
         #{tblNm},
-        LPAD(#{tblGrpCd}, 5, '0'),
+        LPAD(#{tblGrpCd}, 2, '0'),
         #{tblSeatCnt},
         #{x},
         #{y},

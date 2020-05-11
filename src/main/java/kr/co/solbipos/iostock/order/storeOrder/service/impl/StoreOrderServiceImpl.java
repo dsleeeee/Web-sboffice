@@ -356,7 +356,8 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 outstockDataVO.setVendrCd		(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-
+                
+                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 //TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);	//TB_PO_HQ_STORE_DISTRIBUTE의 '전표수거(PROC_FG='30')인 자료를, TB_PO_HQ_STORE_OUTSTOCK_DTL에 Insert
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -364,7 +365,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 //TB_PO_HQ_STORE_OUTSTOCK 자료입력
                 outstockDataVO.setDlvrCd	(dlvrCd);
                 outstockDataVO.setSlipKind	("0");							//전표종류	0:일반 1:물량오류 2:이동
-                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
+//                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 outstockDataVO.setRemark	(storeOrderVO.getRemark ());	//비고
               //outstockDataVO.setHqRemark	();								//본사비고 (매장은 열람불가)
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);		//TB_PO_HQ_STORE_OUTSTOCK_DTL SUM값등을 Insert

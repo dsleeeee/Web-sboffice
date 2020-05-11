@@ -97,13 +97,14 @@
 	        , TB_PO_HQ_STOCK TPHS
      		, TB_HQ_PRODUCT THP
      		, TB_HQ_PRODUCT_BARCD THPB
- 		WHERE TPHS.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+ 		WHERE TPHS.HQ_OFFICE_CD    =   #{hqOfficeCd}
+ 			AND TPHS.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
    			AND TPHS.PROD_CD      = THP.PROD_CD
    			AND TPHS.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
    			AND TPHS.PROD_CD      = THPB.PROD_CD(+)
    			AND THP.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
    			<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
- 				AND SUBSTR(TPHS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 				AND TPHS.IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			</if>
 			<if test="prodCd != null and prodCd != ''">
 				AND THP.PROD_CD = #{prodCd}
@@ -152,6 +153,8 @@
      		, THP.PO_UNIT_QTY
 		    , THP.PO_UNIT_FG
 		    , THPB.BARCD_CD
+		ORDER BY
+			TPHS.PROD_CD
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
@@ -244,7 +247,7 @@
    			AND TPSS.PROD_CD     = TMPB.PROD_CD(+)
    			AND TMP.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
    			<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
- 				AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 				AND TPSS.IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			</if>
 			<if test="prodCd != null and prodCd != ''">
 				AND TMP.PROD_CD = #{prodCd}
@@ -287,13 +290,14 @@
      			 , TMP.PO_UNIT_QTY
      			 , TMP.PO_UNIT_FG
      			 , TMPB.BARCD_CD
+		ORDER BY TPSS.PROD_CD     			 
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
     <select id="getPeriodiostockProdDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodiostockProdDtlList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT SUBSTR(TPHS.IO_OCCR_DT,1,8) AS IO_OCCR_DT
+		SELECT IO_PROC_DATE AS IO_OCCR_DT
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_01 /* 본사입고 수량*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '01', TPHS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_01 /* 본사입고 금액*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPHS.IO_OCCR_FG, '16', TPHS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_16 /* 업체반출 수량*/
@@ -320,17 +324,17 @@
   		FROM TB_PO_HQ_STOCK TPHS
  		WHERE TPHS.HQ_OFFICE_CD = #{hqOfficeCd}
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
- 			  AND SUBSTR(TPHS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 			  AND IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			  AND TPHS.PROD_CD = #{prodCd}
- 		GROUP BY SUBSTR(TPHS.IO_OCCR_DT,1,8)
- 		ORDER BY SUBSTR(TPHS.IO_OCCR_DT,1,8) DESC
+ 		GROUP BY IO_PROC_DATE
+ 		ORDER BY IO_PROC_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
     <select id="getPeriodiostockProdStoreDtlList" parameterType="periodIostockVO" resultType="DefaultMap">
     	/* USE : PeriodIostockMapper.getPeriodiostockProdStoreDtlList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT SUBSTR(TPSS.IO_OCCR_DT,1,8) AS IO_OCCR_DT
+		SELECT TPSS.IO_PROC_DATE AS IO_OCCR_DT
 			 , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_03 /* 매장입고 수량*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '03', TPSS.IO_OCCR_TOT, 0))) AS IO_OCCR_TOT_03 /* 매장입고 금액*/
 		     , SF_ZERO_TO_NULL(SUM(DECODE(TPSS.IO_OCCR_FG, '12', TPSS.IO_OCCR_QTY, 0))) AS IO_OCCR_QTY_12 /* 매장반품 수량*/
@@ -355,10 +359,10 @@
   		FROM TB_PO_STORE_STOCK TPSS
  		WHERE TPSS.STORE_CD 	= #{storeCd}
  			 <!-- !!!!!!!!!!!!!!!!!!! 날짜랑 상품코드 조건은 '업무쿼리'에 없었는데 직접 추가함. 물어보고 빼든지 말든지 하기!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
- 			  AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 			  AND TPSS.IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			  AND TPSS.PROD_CD = #{prodCd}
- 		GROUP BY SUBSTR(TPSS.IO_OCCR_DT,1,8)
- 		ORDER BY SUBSTR(TPSS.IO_OCCR_DT,1,8) DESC
+ 		GROUP BY TPSS.IO_PROC_DATE
+ 		ORDER BY TPSS.IO_PROC_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
@@ -447,13 +451,14 @@
 	        , TB_PO_HQ_STOCK TPHS
      		, TB_HQ_PRODUCT THP
      		, TB_HQ_PRODUCT_BARCD THPB
- 		WHERE TPHS.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+ 		WHERE TPHS.HQ_OFFICE_CD    =   #{hqOfficeCd}
+ 			AND TPHS.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
    			AND TPHS.PROD_CD      = THP.PROD_CD
    			AND TPHS.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
    			AND TPHS.PROD_CD      = THPB.PROD_CD(+)
    			AND THP.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
    			<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
- 				AND SUBSTR(TPHS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 				AND TPHS.IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			</if>
 			<if test="prodCd != null and prodCd != ''">
 				AND THP.PROD_CD = #{prodCd}
@@ -502,6 +507,8 @@
      		, THP.PO_UNIT_QTY
 		    , THP.PO_UNIT_FG
 		    , THPB.BARCD_CD
+		ORDER BY
+			TPHS.PROD_CD		    
     </select>
     
     <select id="getPeriodIostockStoreExcelList" parameterType="periodIostockVO" resultType="DefaultMap">
@@ -591,7 +598,7 @@
    			AND TPSS.PROD_CD     = TMPB.PROD_CD(+)
    			AND TMP.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
    			<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
- 				AND SUBSTR(TPSS.IO_OCCR_DT,1,8) BETWEEN #{startDate} AND #{endDate}
+ 				AND TPSS.IO_PROC_DATE BETWEEN #{startDate} AND #{endDate}
 			</if>
 			<if test="prodCd != null and prodCd != ''">
 				AND TMP.PROD_CD = #{prodCd}
@@ -634,5 +641,6 @@
      			 , TMP.PO_UNIT_QTY
      			 , TMP.PO_UNIT_FG
      			 , TMPB.BARCD_CD
+		ORDER BY TPSS.PROD_CD     			 
     </select>
 </mapper>

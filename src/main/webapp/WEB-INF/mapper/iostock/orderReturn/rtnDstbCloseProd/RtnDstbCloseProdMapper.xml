@@ -247,7 +247,7 @@
         WHERE   thp.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     thpb.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
         AND     thpb.PROD_CD     (+)=   thp.PROD_CD        
-        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
+        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = -1)
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD = #{prodCd}
