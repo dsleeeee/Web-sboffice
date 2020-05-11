@@ -673,6 +673,7 @@
     COMMENTS : [매출]헤더_회원, [회원]회원-거래처 매핑
     -->
     <select id="registPoslinkPtn" statementType="CALLABLE"  parameterType="registVO" resultType="DefaultMap">
+    /* RegistMapper.registPoslinkPtn */
     {
         CALL VITIS.SP_NEOE_POSLINK_RTN
         (
@@ -690,6 +691,7 @@
     COMMENTS : [비매출]HEADER, [회원]회원-거래처 매핑
     -->
     <select id="registSposBillPtn" statementType="CALLABLE"  parameterType="registVO" resultType="DefaultMap">
+   /* RegistMapper.registSposBillPtn */
     {
         CALL VITIS.SP_NEOE_SPOS_BILL_PTN
         (
