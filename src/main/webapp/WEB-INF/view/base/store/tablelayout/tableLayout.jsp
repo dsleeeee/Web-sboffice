@@ -90,70 +90,72 @@
 
     <%--테이블속성, 테이블관리, 판매터치키 page에만 쓰임--%>
     <div class="posWrap t2">
-
-      <%--그룹--%>
-      <div class="posBtnWrap">
-          <h2 class="h2_tit2 fl">
-              <s:message code="tableLayout.group" />
-          </h2>
-          <div class="fr mr10">
-              <%-- 버튼 --%>
-              <div class="updownSet oh mb5 fl">
-                  <button class="btn_skyblue fl ml10" id="btnfloorConfig"><s:message code="tableLayout.tableLayout" /></button>
-                  <button class="btn_skyblue fl ml10" id="btnInitLayout"><s:message code="cmm.init" /></button>
-                  <button class="btn_skyblue fl ml10" id="btnSaveLayout"><s:message code="cmm.save" /></button>
-              </div>
-          </div>
-          <div class="clearfix"></div>
-          <div class="frGroupWrap" id="divLayers">
-              <%--<span><a href="#" class="on">2층</a></span> --%>
-          </div>
-      </div>
-      <%--//그룹--%>
-        
+    
     	<div class="tbLayoutWrap">
-        
+    		<div class="t-btn-wrap">
+	          <h2 class="h2_tit2 fl">
+	              <s:message code="tableLayout.group" />
+	          </h2>
+	          <div class="fr">
+	              <%-- 버튼 --%>
+	              <div class="updownSet oh mb5 fl">
+	              	   <button class="btn_skyblue fl ml5" id="btnInitLayout"><s:message code="cmm.init" /></button>
+	                  <button class="btn_skyblue fl ml5" id="btnfloorConfig"><s:message code="tableLayout.tableLayout" /></button>
+				    	<button class="btn_skyblue fl ml5" id="btnTblAddLayer"><%-- <s:message code="cmm.add" /> --%>테이블추가</button>
+	                  <button class="btn_skyblue fl ml5" id="btnSaveLayout"><s:message code="cmm.save" /></button>
+	              </div>
+	          </div>
+	         </div>
+	          <div class="clearfix"></div>        
         <%-- left --%>
         <div class="table-l">
-					<%--구성요소--%>
-					<div class="fl w110px" style="display: none;">
-						<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
-						<div class="cfgWrap" style="height:495px">
-							<ul class="tableImg" id="divCompos">
-					    	<%--<li><a href="#"><img src="img/img_table2.png" alt="" /></a></li>--%>
-					    </ul>
-					  </div>
-					</div>
-					<%--//구성요소--%>
-					
-					<%-- 미리보기 --%>
-					<div style="width:900px;">
-						<div class="prev1 patternBg t2" id="contentLayout" tabindex="-1" style="width:900px; height:900px">
-							<%--점 패턴 background classname : "patternBg"--%>
-							<%--510 * 510 pixel 입니다.--%>
-					  </div>
-					</div>
-					<%-- //미리보기 --%>
-					
-				</div>
-				<%-- //left --%>
+    
+	      <%--그룹--%>
+	      <div class="posBtnWrap">
 
-				<%--right--%>
-				<div class="table-r">
-					<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
-				
-					<%--구성요소--%>
-					<div class="cfgWrap pd10" style="height:874px">
-					
-						<%-- 테이블명 --%>
-						<div class="touch-box">
+
+	          <div class="frGroupWrap" id="divLayers">
+	              <%--<span><a href="#" class="on">2층</a></span> --%>
+	          </div>
+	      </div>
+	      <%--//그룹--%>     
+	      
+			<%--구성요소--%>
+			<div class="fl w110px" style="display: none;">
+				<h2 class="h2_tit2"><s:message code="tableLayout.component" /></h2>
+				<div class="cfgWrap" style="height:495px">
+					<ul class="tableImg" id="divCompos">
+			    	<%--<li><a href="#"><img src="img/img_table2.png" alt="" /></a></li>--%>
+			    </ul>
+			  </div>
+			</div>
+			<%--//구성요소--%>
+	
+			<%-- 미리보기 --%>
+			<div style="width:850px;">
+				<div class="prev1 patternBg t2" id="contentLayout" tabindex="-1" style="width:886px; height:636px">
+					<%--점 패턴 background classname : "patternBg"--%>
+					<%--510 * 510 pixel 입니다.--%>
+			  </div>
+			</div>
+			<%-- //미리보기 --%>
+        </div>
+        <%-- //left --%>
+
+			<%--right--%>
+			<div class="table-r">					
+			
+				<%--구성요소--%>
+				<div class="cfgWrap pd10" style="height:716px">
+					<h2 class="h2_tit2 mt10 mb20" style="padding-bottom:10px; border-bottom:1px solid #ddd"><s:message code="tableLayout.component" /></h2>
+					<%-- 테이블명 --%>
+					<div class="touch-box">
 					    <div class="bk lh30 s12"><s:message code="todayDtl.dtl.tblNm" /></div>
-							<div class="mb5 s12">
-					    	<input type="text" class="sb-input w155px" id="tableName">
-					    	<button class="btn_skyblue ml5" id="btnTblAddLayer"><s:message code="cmm.add" /></button>
+							<div class="mb5">
+					    	<input type="text" class="sb-input" style="width:100%" id="tableName">
+	
 					    </div>
-						</div>
-					
+					</div>		
 						<%-- 테이블자리수/유형 --%>
 						<div class="touch-box mt10">
 					    <%-- 테이블자리수 --%>

@@ -2255,8 +2255,8 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 /* 외식테이블 레이아웃 변경 관련 2020-05-07 */
 .posWrap.t2 {width:780px; overflow:scroll; white-space:nowrap}
 
-.posBtnWrap {width:1150px; margin:0 20px 20px 0; white-space:nowrap; overflow-x:auto; overflow-y:hidden}
-.posBtnWrap .frGroupWrap {height:60px; text-align:left; padding:5px; margin-right:10px; overflow-y:hidden}
+.posBtnWrap {width:886px; margin-bottom:20px; white-space:nowrap; overflow-x:auto; overflow-y:hidden}
+.posBtnWrap .frGroupWrap {height:60px; text-align:left; padding:5px; overflow-y:hidden}
 .posBtnWrap .frGroupWrap span {display:inline-block; padding:0; margin:0}
 .posBtnWrap .frGroupWrap a {width:133px; height:50px; margin:0 1px; padding:0; font-size:14px; padding:10px; text-align:left; color:#888}
 .posBtnWrap .frGroupWrap a.on {border-color:#e8e8e8; color:#fff}
@@ -2266,10 +2266,14 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 .posBtnWrap .frGroupWrap::-webkit-scrollbar-thumb {background: #c1c1c1}
 .posBtnWrap .frGroupWrap::-webkit-scrollbar-thumb:hover {background: #a8a8a8}
 
+.t-btn-wrap {width:1125px}
 .tbLayoutWrap {}
-.tbLayoutWrap .table-l {display:inline-block; width:900px; height:900px;}
+.tbLayoutWrap .table-l {display:inline-block; width:886px; height:636px;}
 .tbLayoutWrap .table-r {display:inline-block; width:228px; margin-left:6px; vertical-align:top}
 
+@media all and (min-width:1029px){
+	.posWrap.t2 {width:auto; height:auto; overflow:hidden}
+}
 
 /* tab type 추가 및  con padding 재정의
 .con {padding:20px 20px 0}
