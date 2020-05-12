@@ -354,12 +354,31 @@
 							FROM   TB_HQ_STORAGE                     X
 							LEFT
 			                OUTER
-			                JOIN    TB_PO_HQ_STORE_OUTSTOCK_PROD          Y
+			                JOIN    (
+			                
+			                 SELECT  Y.HQ_OFFICE_CD
+                                ,       Y.PROD_CD
+                                ,       Y.STORAGE_CD
+                                ,		NVL(Y.SLIP_FG,1)			AS	SLIP_FG
+                                ,		NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_UNIT_QTY,'62',Y.IN_UNIT_QTY * -1,Y.IN_UNIT_QTY)),0)	AS	IN_UNIT_QTY
+                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_ETC_QTY,'62',Y.IN_ETC_QTY * -1,Y.IN_ETC_QTY)),0)		AS	IN_ETC_QTY
+                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_TOT_QTY,'62',Y.IN_TOT_QTY * -1,Y.IN_TOT_QTY)),0)		AS	IN_TOT_QTY
+                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_AMT,'62',Y.IN_AMT * -1,Y.IN_AMT)),0)		            AS	IN_AMT
+                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_VAT,'62',Y.IN_VAT * -1,Y.IN_VAT)),0)		            AS	IN_VAT
+                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_TOT,'62',Y.IN_TOT * -1,Y.IN_TOT)),0)		            AS	IN_TOT
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK_PROD    Y                                
+                                WHERE   Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
+                                AND     Y.SLIP_NO       =	#{slipNo}
+                                AND     Y.OCCR_FG       IN   ('13', '61', '62')
+                                GROUP
+                                BY      Y.HQ_OFFICE_CD
+                                ,       Y.SLIP_FG
+                                ,       Y.PROD_CD
+                                ,       Y.STORAGE_CD 
+			                
+			                )	Y
 			                ON      X.HQ_OFFICE_CD  =   Y.HQ_OFFICE_CD
 			                AND     X.STORAGE_CD    =    Y.STORAGE_CD
-							AND     Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
-			                AND     Y.SLIP_NO       =	#{slipNo}
-			                AND     Y.OCCR_FG       =   '13'
 			                WHERE   X.HQ_OFFICE_CD  	= 	#{hqOfficeCd}
 				              AND     X.USE_YN    		= 	'Y'
 				              AND     X.AREA_FG       	=   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
@@ -418,9 +437,10 @@
         COMMENTS : 출고확정 - 출고확정시 DTL의 진행구분을 수정한다.
     -->
     <update id="updateOutstockDtlConfirm" parameterType="outstockConfmVO">
-        /* USE : OutstockConfmMapper.updateOutstockConfirm */
+        /* USE : OutstockConfmMapper.updateOutstockDtlConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
+        		REQ_DATE        = #{outDate},
                 MOD_DT          = #{modDt},
                 MOD_ID          = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -445,7 +465,60 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
-
+	
+	<!-- 출고확정 - 출고확정 PROD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 PROD를 수정한다.
+    -->
+    <update id="insertOutstockProdConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.insertOutstockProdConfirm */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_PROD
+        (
+			HQ_OFFICE_CD,
+			SLIP_NO,
+			PROD_CD,
+			STORAGE_CD,
+			OCCR_FG,
+			STORE_CD,
+			SLIP_FG,
+			CONFM_YN,
+			IN_UNIT_QTY,
+			IN_ETC_QTY,
+			IN_TOT_QTY,
+			IN_AMT,
+			IN_VAT,
+			IN_TOT,
+			REG_DT,
+			REG_ID,
+			MOD_DT,
+			MOD_ID
+         )
+		SELECT 
+		    #{hqOfficeCd}
+			, SLIP_NO
+			, PROD_CD
+			, (SELECT STORAGE_CD FROM TB_HQ_STORAGE WHERE HQ_OFFICE_CD = 'DS005' AND AREA_FG = #{areaFg} AND ROWNUM = 1)
+			, #{occrFg}	
+			, STORE_CD
+			, '1'
+			, 'Y'
+			, OUT_UNIT_QTY
+			, OUT_ETC_QTY
+			, OUT_TOT_QTY
+			, OUT_AMT
+			, OUT_VAT
+			, OUT_TOT
+            , #{regDt}
+            , #{regId}
+            , #{modDt}
+            , #{modId}
+        FROM TB_PO_HQ_STORE_OUTSTOCK_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+	
     <!-- 출고확정 - 출고확정 자동입고 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL

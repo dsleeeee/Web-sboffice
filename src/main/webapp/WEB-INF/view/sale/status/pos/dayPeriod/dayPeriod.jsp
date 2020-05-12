@@ -10,7 +10,7 @@
 
 <div id="posDayPeriodView" class="subCon" style="display: none;" ng-controller="posDayPeriodCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="barcd.barcd"/></a>
+      <a href="#" class="open fl"><s:message code="pos.dayPeriod"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodMainCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -133,7 +133,7 @@
               </ul>
             </div>
             <%--//페이지 리스트--%>
-            
+
             <div class="w50 fl" ng-controller="posDayPeriodMainExcelCtrl" style="display:none;">
             <%--엑셀 리스트--%>
               <div class="wj-gridWrap">
@@ -209,7 +209,7 @@
                 </ul>
               </div>
               <%--//페이지 리스트--%>
-              
+
               <div class="w50 fr" ng-controller="posDayPeriodDtlExcelCtrl" style="display:none;">
                <%--엑셀 리스트--%>
               <div class="w100 mt10" id="wjWrapType1">

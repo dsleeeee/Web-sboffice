@@ -425,6 +425,7 @@
         /* USE : RtnOutstockConfmMapper.updateOutstockConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
+        		REQ_DATE        = #{outDate},
                 MOD_DT          = #{modDt},
                 MOD_ID          = #{modId}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}

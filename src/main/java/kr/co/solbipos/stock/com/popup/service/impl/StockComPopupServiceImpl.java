@@ -83,6 +83,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
     public List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO) {
     	stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     	stockManageViewVO.setStoreCd(sessionInfoVO.getStoreCd());
+    	stockManageViewVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         return stockComPopupMapper.selectStorageList(stockManageViewVO);
     }
 }

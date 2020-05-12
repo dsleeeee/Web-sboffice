@@ -111,7 +111,7 @@
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TPHS.HQ_OFFICE_CD = #{hqOfficeCd}
 			   <if test='startDate != null and startDate != ""'>
-		          AND SUBSTR(TPHS.IO_OCCR_DT, 1, 8)  = #{startDate}
+		          AND TPHS.IO_PROC_DATE = #{startDate}
 		       </if>
 		       <if test='prodCd != null and prodCd != ""'>
 	              AND THP.PROD_CD  = #{prodCd}
@@ -165,6 +165,7 @@
 				     , THP.PO_UNIT_FG
 				     , THPB.BARCD_CD
             ) A
+            ORDER BY A.PROD_CD
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
     
@@ -269,7 +270,7 @@
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TPSS.STORE_CD    = #{storeCd}
 			   <if test='startDate != null and startDate != ""'>
-	              AND SUBSTR(TPSS.IO_OCCR_DT, 1, 8)  = #{startDate}
+	              AND TPSS.IO_PROC_DATE  = #{startDate}
 	           </if>
 	           <if test='prodCd != null and prodCd != ""'>
 	              AND TMP.PROD_CD  = #{prodCd}
@@ -317,7 +318,8 @@
 				     , TMP.PO_UNIT_QTY
 				     , TMP.PO_UNIT_FG
 				     , TMPB.BARCD_CD
-            ) A			 
+            ) A	
+            ORDER BY A.PROD_CD		 
          <include refid="CmmSQL.PagingTemplateBottom"/>    
     </select>
     
@@ -426,7 +428,7 @@
 			     , TB_HQ_PRODUCT_BARCD THPB
 			 WHERE TPHS.HQ_OFFICE_CD = #{hqOfficeCd}
 			   <if test='startDate != null and startDate != ""'>
-		          AND SUBSTR(TPHS.IO_OCCR_DT, 1, 8)  = #{startDate}
+		          AND TPHS.IO_PROC_DATE  = #{startDate}
 		       </if>
 		       <if test='prodCd != null and prodCd != ""'>
 	              AND THP.PROD_CD  = #{prodCd}
@@ -480,6 +482,7 @@
 				     , THP.PO_UNIT_FG
 				     , THPB.BARCD_CD
             ) A
+            ORDER BY A.PROD_CD
     </select>
     
     <!-- 일수불현황 - 매장 리스트 조회(엑셀) -->  
@@ -581,7 +584,7 @@
 			     , TB_MS_PRODUCT_BARCD TMPB
 			 WHERE TPSS.STORE_CD    = #{storeCd}
 			   <if test='startDate != null and startDate != ""'>
-	              AND SUBSTR(TPSS.IO_OCCR_DT, 1, 8)  = #{startDate}
+	              AND TPSS.IO_PROC_DATE  = #{startDate}
 	           </if>
 	           <if test='prodCd != null and prodCd != ""'>
 	              AND TMP.PROD_CD  = #{prodCd}
@@ -629,6 +632,7 @@
 				     , TMP.PO_UNIT_QTY
 				     , TMP.PO_UNIT_FG
 				     , TMPB.BARCD_CD
-            ) A			   
+            ) A	
+            ORDER BY A.PROD_CD		   
     </select>
 </mapper>

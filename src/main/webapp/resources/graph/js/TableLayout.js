@@ -512,8 +512,8 @@ GraphLayout.prototype.defaultVertexStyle = {};
 GraphLayout.prototype.defaultThemeName = 'tablelayout';
 
 // 그래픽 영역 사이즈
-GraphLayout.prototype.minimumGraphSize = new mxRectangle(0, 0, 510, 510);
-GraphLayout.prototype.maximumGraphBounds = new mxRectangle(0, 0, 510, 510);
+GraphLayout.prototype.minimumGraphSize = new mxRectangle(0, 0, 886, 636);
+GraphLayout.prototype.maximumGraphBounds = new mxRectangle(0, 0, 886, 636);
 
 // DnD에서 생성되는 크기
 GraphLayout.prototype.defaultTableSize = {
@@ -996,8 +996,8 @@ FormatLayout.prototype.initElements = function() {
     // 테이블 추가 버튼
     addClickHandler(document.getElementById('btnAddTbl'), function() {
 
-    	var layoutWidth = 518;
-    	var layoutHeight = 518;
+    	var layoutWidth = 891;
+    	var layoutHeight = 641;
 
     	var tableWidthSum = 0;
     	var tableHeightSum = 0;

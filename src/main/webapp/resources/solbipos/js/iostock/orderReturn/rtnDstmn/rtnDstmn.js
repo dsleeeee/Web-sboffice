@@ -115,6 +115,12 @@ app.controller('rtnDstmnCtrl', ['$scope', '$http', '$timeout', function ($scope,
           params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
+          if(selectedRow.procFg < '20'){
+        	  params.reqDate = selectedRow.reqDate;
+          }else{
+        	  params.reqDate = selectedRow.outDate;
+          }         
+          console.log(params);
           $scope._broadcast('rtnDstmnDtlCtrl', params);
         }
       }

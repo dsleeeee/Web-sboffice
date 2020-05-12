@@ -55,8 +55,12 @@ app.controller('rtnOutstockConfmCtrl', ['$scope', '$http', '$timeout', function 
           params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
           params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipNo = selectedRow.slipNo;
-          params.storeCd = selectedRow.storeCd;
-          params.reqDate = selectedRow.reqDate;
+          params.storeCd = selectedRow.storeCd;          
+          if(selectedRow.procFg < '20'){
+        	  params.reqDate = selectedRow.reqDate;  
+          }else{
+        	  params.reqDate = selectedRow.outDate;  
+          }          
           $scope._broadcast('rtnOutstockConfmDtlCtrl', params);
         }
       }

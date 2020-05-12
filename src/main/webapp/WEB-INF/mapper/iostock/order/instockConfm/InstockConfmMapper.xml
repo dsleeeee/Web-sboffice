@@ -314,11 +314,9 @@
 		                        SELECT  X.STORE_CD,
 		                                X.STORAGE_CD,
 		                                X.STORAGE_NM,
-		                                --Y.HQ_OFFICE_CD,
 		                                #{hqOfficeCd}			AS HQ_OFFICE_CD,
 		                                #{slipNo}				AS SLIP_NO,
-		                                Y.PROD_CD,
-		                                --Y.STORAGE_CD,
+		                                Y.PROD_CD,	                               
 		                                NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
 		                                NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
 		                                NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
@@ -326,14 +324,38 @@
 		                                NVL(Y.IN_VAT,       0)  AS IN_VAT,
 		                                NVL(Y.IN_TOT,       0)  AS IN_TOT
 		                        FROM            TB_MS_STORAGE                   X
-		                        LEFT OUTER JOIN TB_PO_HQ_STORE_OUTSTOCK_PROD    Y
-		                        ON              X.STORE_CD      = Y.STORE_CD
-		                        AND             X.STORAGE_CD    = Y.STORAGE_CD
-		                        AND             Y.HQ_OFFICE_CD  = #{hqOfficeCd}
-		                        AND             Y.SLIP_NO       = #{slipNo}
-		                        AND             Y.SLIP_FG       = '1'
-		                        WHERE   X.STORE_CD  = #{storeCd}
+		                        LEFT 
+		                        OUTER 
+		                        JOIN	(
+										SELECT  Y.HQ_OFFICE_CD
+										,		Y.STORE_CD
+                                		,       Y.PROD_CD
+		                                ,       Y.STORAGE_CD
+		                                ,		NVL(Y.SLIP_FG,1)			AS	SLIP_FG
+		                                ,		NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_UNIT_QTY,'64',Y.IN_UNIT_QTY * -1,Y.IN_UNIT_QTY)),0)	AS	IN_UNIT_QTY
+		                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_ETC_QTY,'64',Y.IN_ETC_QTY * -1,Y.IN_ETC_QTY)),0)		AS	IN_ETC_QTY
+		                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_TOT_QTY,'64',Y.IN_TOT_QTY * -1,Y.IN_TOT_QTY)),0)		AS	IN_TOT_QTY
+		                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_AMT,'64',Y.IN_AMT * -1,Y.IN_AMT)),0)		            AS	IN_AMT
+		                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_VAT,'64',Y.IN_VAT * -1,Y.IN_VAT)),0)		            AS	IN_VAT
+		                                ,       NVL(SUM(DECODE(Y.OCCR_FG,'63',Y.IN_TOT,'64',Y.IN_TOT * -1,Y.IN_TOT)),0)		            AS	IN_TOT
+		                                FROM    TB_PO_HQ_STORE_OUTSTOCK_PROD    Y                                
+		                                WHERE   Y.HQ_OFFICE_CD  = 	#{hqOfficeCd}
+		                                AND		Y.STORE_CD		=	#{storeCd}
+		                                AND     Y.SLIP_NO       =	#{slipNo}
+		                                AND     Y.OCCR_FG       IN   ('03', '63', '64')
+		                                GROUP
+		                                BY      Y.HQ_OFFICE_CD
+		                                ,		Y.STORE_CD
+		                                ,       Y.SLIP_FG
+		                                ,       Y.PROD_CD
+		                                ,       Y.STORAGE_CD 		                        		                        
+		                        )	Y
+		                         ON              X.STORE_CD      = Y.STORE_CD
+		                        AND             X.STORAGE_CD    = Y.STORAGE_CD		                       
+		                        WHERE	X.STORE_CD  = #{storeCd}
 		                        AND     X.USE_YN    = 'Y'
+		                        AND		X.STORAGE_CD	<![CDATA[ >= ]]>	'001'			<!-- 고정 -->
+								AND		X.STORAGE_CD	<![CDATA[ < ]]>	'999'			<!-- 고정 -->
 		                    )   B
 		                    ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 		                    AND     A.SLIP_NO       = B.SLIP_NO

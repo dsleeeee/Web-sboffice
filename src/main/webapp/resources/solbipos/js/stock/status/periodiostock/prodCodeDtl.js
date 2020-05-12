@@ -157,6 +157,11 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 		  	  params.storeCd	= $scope.storeCd;
 		  	  params.hqOfficeCd = $scope.hqOfficeCd;
 		  
+		      //가상로그인 session 설정
+		      if(document.getElementsByName('sessionId')[0]){
+		      	params.sid = document.getElementsByName('sessionId')[0].value;
+		      }	
+		  	  
 		  $scope._inquirySub("/stock/com/popup/cmmQtyDtl/getCmmProdCodeDtlList.sb", params);
 	  }
 	  

@@ -171,6 +171,7 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
             rtnOutstockConfmVO.setModId(sessionInfoVO.getUserId());
             rtnOutstockConfmVO.setModDt(currentDt);
             rtnOutstockConfmVO.setPoUnitQty(rtnOutstockConfmVO.getOrderTotQty());
+            
             // DTL 수정
             result = rtnOutstockConfmMapper.updateRtnOutstockConfmDtl(rtnOutstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -185,11 +186,11 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
         
         // PROD 삭제
         result = rtnOutstockConfmMapper.deleteOrderProd(rtnOutstockConfmHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         
         // PROD 삭제
         result = rtnOutstockConfmMapper.deleteOutStockProd(rtnOutstockConfmHdVO);
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 
         // 출고확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {

@@ -63,7 +63,6 @@
             </td>
           </tr>
           <tr>
-          	 <c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	         <%-- 출고창고 --%>
 	         <th><s:message code="hqMove.outStorage"/></th>
 	         <td>
@@ -78,7 +77,6 @@
 	            </jsp:include>
 	            <%--// 창고선택 모듈 멀티 선택 사용시 include --%>
 	        </td>
-	        </c:if>
             <%-- 폐기구분 --%>
             <th><s:message code="disuse.reg.disuseFg"/></th>
             <td>

@@ -126,7 +126,7 @@
                     FROM    TB_ST_HQ_STOCK_CUR tshsc
                     ,       TB_ST_HQ_STOCK_MONTHLY tshsm
                     WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
-                    /* AND		tshsc.STORAGE_CD	  	=	'999' */
+                     AND		tshsc.STORAGE_CD	=	#{storageCd}
                     AND		tshsc.STORAGE_CD IN (SELECT X.STORAGE_CD FROM TB_HQ_STORAGE X WHERE X.HQ_OFFICE_CD  =   #{hqOfficeCd} AND X.AREA_FG    =   #{areaFg})	
                     AND     tshsm.IOSTOCK_YM  (+) 	=   SUBSTR(#{acinsDate}, 0, 6)
                     AND     tshsm.HQ_OFFICE_CD(+) 	=   tshsc.HQ_OFFICE_CD
@@ -711,6 +711,7 @@
             SEQ_NO,
             ACINS_TITLE,
             PROC_FG,
+            ADJ_STORAGE_CD,
             DTL_CNT,
             ADJ_CNT,
             TOT_ACINS_AMT,
@@ -725,6 +726,7 @@
         ,		tshaid.SEQ_NO
         ,		#{acinsTitle}
         ,		#{procFg}
+        ,       #{adjStorageCd}
         ,		COUNT(tshaid.PROD_CD)
         ,		SUM(DECODE(tshaid.ADJ_QTY, 0, 0, 1))
         ,		SUM(tshaid.ACINS_AMT)

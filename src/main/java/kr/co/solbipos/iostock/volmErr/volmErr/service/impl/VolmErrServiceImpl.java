@@ -128,6 +128,11 @@ public class VolmErrServiceImpl implements VolmErrService {
             result = volmErrMapper.updateVolmErrHdSum(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));        	
         	
+            volmErrHdVO.setUpdateProcFg	("1");			//처리구분 (0:입력, 1:확정)
+            
+            result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
+//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            
         	
             String errFg 		= "";            
             String seqNo 		= "";
@@ -163,6 +168,8 @@ public class VolmErrServiceImpl implements VolmErrService {
             	//	volmErrHdVO.setHdRemark("물량오류관리");
             	volmErrHdVO.setHdRemark("물량오류관리");
             	volmErrHdVO.setSeqNo(Integer.parseInt(seqNo));
+            	volmErrHdVO.setAreaFg(sessionInfoVO.getAreaFg());
+            	
             	
                 result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);                
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            	
@@ -184,7 +191,7 @@ public class VolmErrServiceImpl implements VolmErrService {
                 volmErrHdVO.setUpdateProcFg	("1");			//처리구분 (0:입력, 1:확정)
 
                 result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             }
                         
         	

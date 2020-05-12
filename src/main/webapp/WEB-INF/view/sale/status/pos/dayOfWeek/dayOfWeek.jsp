@@ -8,7 +8,7 @@
 
 <div id="posDayOfWeekView" class="subCon" style="display: none;" ng-controller="posDayOfWeekCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="pos.day"/></a>
+		<a href="#" class="open fl"><s:message code="pos.dayOfWeek"/></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnPosDayOfWeekSearch" ng-click="_broadcast('posDayOfWeekCtrlSrch')">
 			<s:message code="cmm.search"/>
@@ -151,7 +151,7 @@
         <div class="title" style="width:980px; padding:0">
             <p class="tit" id="tblAttrTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
             <a href="#" class="btn_close _btnClose"></a>
-            
+
             <%--위즈모 테이블--%>
 		    <div class="w100" id="wjWrapType1" ng-controller="posDayOfWeekChartCtrl">
 		    	<div class="wj-gridWrap" style="display:none;" >

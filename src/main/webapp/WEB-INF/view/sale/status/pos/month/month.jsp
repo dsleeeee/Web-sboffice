@@ -8,7 +8,7 @@
 
 <div id="posMonthView" class="subCon" style="display: none;" ng-controller="posMonthCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="pos.day"/></a>
+		<a href="#" class="open fl"><s:message code="pos.month"/></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnPosMonthSearch" ng-click="_broadcast('posMonthCtrlSrch')">
 			<s:message code="cmm.search"/>
@@ -161,10 +161,10 @@
 	<div class="pageNum mt20">
 		<ul id="posMonthCtrlPager" data-size="10">
 		</ul>
-	</div> 
+	</div>
 	<%--//페이지 리스트--%>
-	
-	
+
+
 	<%--엑셀 리스트--%>
     <div class="w100 mt10" id="wjWrapType3" style="display: none;" ng-controller="posMonthExcelCtrl">
       <div class="wj-gridWrap">

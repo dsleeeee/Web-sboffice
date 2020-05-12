@@ -402,14 +402,24 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                     
                     int unitQty      = (vendrInstockVO.getInUnitQty()     == null ? 0 : Math.abs(vendrInstockVO.getInUnitQty()));
                     int etcQty       = (vendrInstockVO.getInEtcQty()      == null ? 0 : Math.abs(vendrInstockVO.getInEtcQty()));
-                                        
+                    
+                    /*                     
                     int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                     int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
                     int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
                     Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : prevAmt	+	Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
                     Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : prevVat	+	Math.abs(vendrInstockVO.getInVat()))    * slipFg;
                     Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : prevTot	+	Math.abs(vendrInstockVO.getInTot()))    * slipFg;
-                  
+                    */
+                    
+                    int orderUnitQty = (unitQty + Integer.valueOf(etcQty) / poUnitQty) * slipFg;
+                    int orderEtcQty  = Integer.valueOf(etcQty % poUnitQty) * slipFg;
+                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
+                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
+                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
+                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
+                    
+                    
                     
                     vendrInstockVO.setPrevInUnitQty(prevUnitQty);
                     vendrInstockVO.setPrevInEtcQty(prevEtcQty);

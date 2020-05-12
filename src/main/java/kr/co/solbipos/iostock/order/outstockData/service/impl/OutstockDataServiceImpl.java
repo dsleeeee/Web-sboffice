@@ -10,12 +10,14 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataService;
 import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("outstockDataService")
+@Transactional
 public class OutstockDataServiceImpl implements OutstockDataService {
     private final OutstockDataMapper outstockDataMapper;
     private final MessageService messageService;
