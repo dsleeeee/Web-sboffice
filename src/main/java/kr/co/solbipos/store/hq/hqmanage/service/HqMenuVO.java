@@ -30,6 +30,8 @@ public class HqMenuVO extends PageVO {
     private String resrceCd;
     /** 포함 제외 여부 */
     private IncldExcldFg incldExcldFg;
+    /** 사용여부 */
+    private String useYn;
     
     
     /**
@@ -80,5 +82,12 @@ public class HqMenuVO extends PageVO {
     public void setIncldExcldFg(IncldExcldFg incldExcldFg) {
         this.incldExcldFg = incldExcldFg;
     }
-    
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 }

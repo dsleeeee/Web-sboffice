@@ -282,20 +282,45 @@ public class HqManageServiceImpl implements HqManageService{
         // hqOfficeCd : 복사 대상이 되는 본사
         // copyHqOfficeCd : 복사할 기준이 되는 본사
 
-        // 권한 복사
+        // 1. 메뉴 권한 복사
         int authGrpCopy = mapper.copyAuth(hqMenuVO);
-        int authExpCopy = mapper.copyAuthExcp(hqMenuVO);
-
         if(authGrpCopy <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(authExpCopy <= 0) {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        mapper.removeAuthAll(hqMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = mapper.exceptMenu(hqMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                hqMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    hqMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    hqMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                hqMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = mapper.copyAuthExcp(hqMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
         }
+
         return (authGrpCopy+authExpCopy);
     }
 
-    /** 메뉴 권한 추가 */
+    /** 사용메뉴 등록 */
     @Override
     public int addAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
@@ -304,18 +329,27 @@ public class HqManageServiceImpl implements HqManageService{
 
         for(HqMenuVO hqMenu : hqMenus){
 
-            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
             hqMenu.setRegDt(insertDt);
             hqMenu.setRegId(sessionInfoVO.getUserId());
             hqMenu.setModDt(insertDt);
             hqMenu.setModId(sessionInfoVO.getUserId());
 
-            procCnt = mapper.addAuth(hqMenu);
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(hqMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(hqMenu);
+            }
+
+            /*// 권한 추가 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            procCnt = mapper.addAuth(hqMenu);*/
         }
         return procCnt;
     }
 
-    /** 메뉴 권한 삭제 */
+    /** 미사용메뉴 등록 */
     @Override
     public int removeAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
@@ -334,16 +368,12 @@ public class HqManageServiceImpl implements HqManageService{
 
             if(isAuth > 0) {
                 procCnt = mapper.removeAuth(hqMenu);
-            }else {
-
-                hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
-                hqMenu.setRegDt(insertDt);
-                hqMenu.setRegId(sessionInfoVO.getUserId());
-                hqMenu.setModDt(insertDt);
-                hqMenu.setModId(sessionInfoVO.getUserId());
-
-                procCnt = mapper.addAuth(hqMenu);
             }
+
+            // 권한 삭제 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = mapper.addAuth(hqMenu);
+
         }
         return procCnt;
     }

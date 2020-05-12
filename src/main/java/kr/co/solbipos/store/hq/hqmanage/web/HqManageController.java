@@ -247,8 +247,8 @@ public class HqManageController {
         List<DefaultMap<String>> beUseMenu = service.beUseMenu(hqManage);
 
         resultMap.put("authHqList", authHqList);
-        resultMap.put("avlblMenu", avlblMenu);
-        resultMap.put("beUseMenu", beUseMenu);
+        resultMap.put("avlblMenu", avlblMenu);    // 사용메뉴
+        resultMap.put("beUseMenu", beUseMenu);    // 미사용메뉴
 
         return returnJson(Status.OK, resultMap);
     }
