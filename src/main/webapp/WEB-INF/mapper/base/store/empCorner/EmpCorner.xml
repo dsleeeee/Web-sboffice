@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpCorner.xml
+    사원별코너관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.05.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.empCorner.service.impl.EmpCornerMapper">
+
+    <!-- 사원별탭 - 사원정보 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원 정보, [매장]사원_관리코너
+    -->
+    <select id="getEmpCornerEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getEmpCornerEmpList */
+        SELECT
+        tme.EMP_NO,
+        tme.EMP_NM,
+        tme.SERVICE_FG,
+        COUNT(tmec.CORNR_CD) AS CORNR_CNT
+        FROM TB_MS_EMPLOYEE tme,
+        TB_MS_EMPLOYEE_CORNR tmec
+        WHERE 1=1
+        AND tmec.STORE_CD (+)= tme.STORE_CD
+        AND tmec.USER_ID (+)= tme.USER_ID
+        AND tme.STORE_CD = #{storeCd}
+        AND tme.USE_YN = 'Y'
+        GROUP BY tme.EMP_NO, tme.EMP_NM, tme.SERVICE_FG
+        ORDER BY tme.EMP_NO
+    </select>
+
+    <!-- 사원별탭 - 관리코너 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR, TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE
+        COMMENTS : [매장]사원_관리코너, [매장]코너, [매장]매장 정보, [매장]사원 정보
+    -->
+    <select id="getEmpManageCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getEmpManageCornerList */
+        SELECT
+        tmec.STORE_CD,
+        tms.STORE_NM,
+        tmec.CORNR_CD,
+        tmc.CORNR_NM,
+        tme.EMP_NO,
+        tme.USER_ID
+        FROM TB_MS_EMPLOYEE_CORNR tmec,
+        TB_MS_CORNER tmc,
+        TB_MS_STORE tms,
+        TB_MS_EMPLOYEE tme
+        WHERE 1=1
+        AND tmc.STORE_CD (+)= tmec.STORE_CD
+        AND tmc.CORNR_CD (+)= tmec.CORNR_CD
+        AND tms.STORE_CD (+)= tmec.STORE_CD
+        AND tme.STORE_CD (+)= tmec.STORE_CD
+        AND tme.USER_ID (+)= tmec.USER_ID
+        AND tmec.STORE_CD = #{storeCd}
+        AND tme.EMP_NO = #{empNo}
+        ORDER BY tmec.STORE_CD, tmec.CORNR_CD
+    </select>
+
+    <!-- 사원별탭 - 미관리코너 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]코너, [매장]매장 정보, [매장]사원 정보, [매장]사원_관리코너
+    -->
+    <select id="getEmpNoManageCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getEmpNoManageCornerList */
+        SELECT
+        tmc.STORE_CD,
+        tms.STORE_NM,
+        tmc.CORNR_CD,
+        tmc.CORNR_NM,
+        tme.EMP_NO,
+        tme.USER_ID
+        FROM TB_MS_CORNER tmc,
+        TB_MS_STORE tms,
+        TB_MS_EMPLOYEE tme
+        WHERE 1=1
+        AND tms.STORE_CD (+)= tmc.STORE_CD
+        AND tme.STORE_CD (+)= tmc.STORE_CD
+        AND tmc.STORE_CD = #{storeCd}
+        AND tme.EMP_NO = #{empNo}
+        AND NOT EXISTS
+        (
+            SELECT *
+            FROM
+            (
+                SELECT *
+                FROM TB_MS_EMPLOYEE_CORNR tmec,
+                TB_MS_EMPLOYEE tme
+                WHERE 1=1
+                AND tme.STORE_CD (+)= tmec.STORE_CD
+                AND tme.USER_ID (+)= tmec.USER_ID
+                AND tmec.STORE_CD = #{storeCd}
+                AND tme.EMP_NO = #{empNo}
+            ) A
+            WHERE 1=1
+            AND A.CORNR_CD = tmc.CORNR_CD
+        )
+        ORDER BY tmc.STORE_CD, tmc.CORNR_CD
+    </select>
+
+    <!-- 사원별탭 - 관리코너 추가 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <insert id="getEmpManageCornerSave" parameterType="EmpCornerVO">
+        /* EmpCornerMapper.getEmpManageCornerSave */
+        INSERT INTO TB_MS_EMPLOYEE_CORNR
+        (
+            USER_ID,
+            STORE_CD,
+            CORNR_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{userId},
+            #{storeCd},
+            #{cornrCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 사원별탭 - 관리코너 삭제 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <delete id="getEmpManageCornerDelete" parameterType="EmpCornerVO">
+        /* EmpCornerMapper.getEmpManageCornerDelete */
+        DELETE TB_MS_EMPLOYEE_CORNR
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND CORNR_CD = #{cornrCd}
+        AND USER_ID = #{userId}
+    </delete>
+
+    <!-- 코너별탭 - 코너정보 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]코너, [매장]매장 정보, [매장]사원_관리코너
+    -->
+    <select id="getEmpCornerCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getEmpCornerCornerList */
+        SELECT
+        tmc.STORE_CD,
+        tms.STORE_NM,
+        tmc.CORNR_CD,
+        tmc.CORNR_NM,
+        tms.SYS_STAT_FG,
+        COUNT(tmec.USER_ID) AS EMP_CNT
+        FROM TB_MS_CORNER tmc,
+        TB_MS_STORE tms,
+        TB_MS_EMPLOYEE_CORNR tmec
+        WHERE 1=1
+        AND tms.STORE_CD (+)= tmc.STORE_CD
+        AND tmec.STORE_CD (+)= tmc.STORE_CD
+        AND tmec.CORNR_CD (+)= tmc.CORNR_CD
+        AND tmc.STORE_CD = #{storeCd}
+        AND tmc.USE_YN = 'Y'
+        GROUP BY tmc.STORE_CD, tms.STORE_NM, tmc.CORNR_CD, tmc.CORNR_NM, tms.SYS_STAT_FG
+        ORDER BY tmc.STORE_CD, tmc.CORNR_CD
+    </select>
+
+    <!-- 코너별탭 - 관리사원 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR, TB_MS_EMPLOYEE
+        COMMENTS : [매장]사원_관리코너, [매장]사원 정보
+    -->
+    <select id="getCornerManageEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getCornerManageEmpList */
+        SELECT
+        tmec.STORE_CD,
+        tmec.CORNR_CD,
+        tme.EMP_NO,
+        tme.EMP_NM,
+        tme.SERVICE_FG,
+        tmec.USER_ID
+        FROM TB_MS_EMPLOYEE_CORNR tmec,
+        TB_MS_EMPLOYEE tme
+        WHERE 1=1
+        AND tme.STORE_CD (+)= tmec.STORE_CD
+        AND tme.USER_ID (+)= tmec.USER_ID
+        AND tmec.STORE_CD = #{storeCd}
+        AND tmec.CORNR_CD = #{cornrCd}
+        ORDER BY tme.EMP_NO
+    </select>
+
+    <!-- 코너별탭 - 비관리사원 조회 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE, TB_MS_CORNER, TB_MS_EMPLOYEE_CORNR,
+        COMMENTS : [매장]사원 정보, [매장]코너, [매장]사원_관리코너,
+    -->
+    <select id="getCornerNoManageEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+        /* EmpCornerMapper.getCornerNoManageEmpList */
+        SELECT
+        tme.STORE_CD,
+        tmc.CORNR_CD,
+        tme.EMP_NO,
+        tme.EMP_NM,
+        tme.SERVICE_FG,
+        tme.USER_ID
+        FROM TB_MS_EMPLOYEE tme,
+        TB_MS_CORNER tmc
+        WHERE 1=1
+        AND tmc.STORE_CD (+)= tme.STORE_CD
+        AND tme.STORE_CD = #{storeCd}
+        AND tmc.CORNR_CD = #{cornrCd}
+        AND NOT EXISTS
+        (
+            SELECT *
+            FROM TB_MS_EMPLOYEE_CORNR tmec
+            WHERE 1=1
+            AND tmec.USER_ID = tme.USER_ID
+            AND tmec.STORE_CD = #{storeCd}
+            AND tmec.CORNR_CD = #{cornrCd}
+        )
+        ORDER BY tme.EMP_NO
+    </select>
+
+    <!-- 코너별탭 - 관리사원 추가 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <insert id="getCornerManageEmpSave" parameterType="EmpCornerVO">
+        /* EmpCornerMapper.getCornerManageEmpSave */
+        INSERT INTO TB_MS_EMPLOYEE_CORNR
+        (
+            USER_ID,
+            STORE_CD,
+            CORNR_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{userId},
+            #{storeCd},
+            #{cornrCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 코너별탭 - 관리사원 삭제 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE_CORNR
+        COMMENTS : [매장]사원_관리코너
+    -->
+    <delete id="getCornerManageEmpDelete" parameterType="EmpCornerVO">
+        /* EmpCornerMapper.getCornerManageEmpDelete */
+        DELETE TB_MS_EMPLOYEE_CORNR
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND CORNR_CD = #{cornrCd}
+        AND USER_ID = #{userId}
+    </delete>
+
+</mapper>

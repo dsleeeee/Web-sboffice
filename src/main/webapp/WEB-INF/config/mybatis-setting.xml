@@ -187,10 +187,12 @@
     <typeAlias alias="storePosVO" type="kr.co.solbipos.store.manage.storemanage.service.StorePosVO"/>
     <typeAlias alias="storeTerminalVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO"/>
     <typeAlias alias="storeCornerVO" type="kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO"/>
+
+
+    <typeAlias alias="empStoreVO" type="kr.co.solbipos.base.store.empStore.service.EmpStoreVO"/>
+    <typeAlias alias="empCornerVO" type="kr.co.solbipos.base.store.empCorner.service.EmpCornerVO"/>
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
-    <typeAlias alias="empStoreVO" type="kr.co.solbipos.base.store.empstore.service.EmpStoreVO"/>
-    <typeAlias alias="empCornerVO" type="kr.co.solbipos.base.store.empcorner.service.EmpCornerVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>
     <typeAlias alias="empZoneVO" type="kr.co.solbipos.base.store.empzone.service.EmpZoneVO"/>
     <typeAlias alias="vanConerVO" type="kr.co.solbipos.base.store.vanconer.service.VanConerVO"/>
