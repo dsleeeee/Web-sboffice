@@ -41,47 +41,47 @@
               <col class="w55" />
             </colgroup>
             <tbody>
-              <tr>
-                <%-- 메뉴권한복사 --%>
-                <th><s:message code="hqManage.copy.authorExcept" /></th>
-                <td colspan="3">
-                  <div class="sb-select fl w40 mr10">
-                    <span id="authCombo"></span>
-                  </div>
-                  <%-- 메뉴권한복사 버튼  --%>
-                  <div class="fl">
-                    <a href="#" class="btn_grayS" id="btnCopyAuth"><s:message code="hqManage.copy.auth" /></a>
-                  </div>
-                </td>
-              </tr>
+            <tr>
+              <%-- 메뉴권한복사 --%>
+              <th><s:message code="hqManage.copy.authorExcept" /></th>
+              <td colspan="3">
+                <div class="sb-select fl w40 mr10">
+                  <span id="authCombo"></span>
+                </div>
+                <%-- 메뉴권한복사 버튼  --%>
+                <div class="fl">
+                  <a href="#" class="btn_grayS" id="btnCopyAuth"><s:message code="hqManage.copy.auth" /></a>
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
-          <%-- 사용가능한 메뉴 --%>
-          <div class="oh mt10">
+          <%-- 사용 메뉴 --%>
+          <div class="oh mt10" style="padding-bottom: 25px;">
             <div class="wj-TblWrap mr10" style="height:200px;">
               <div class="oh mb10">
-                <span class="fl bk lh20 s14"><s:message code="hqManage.usable.menu" /> </span>
-                <%-- 추가버튼 --%>
-                <span class="fr"><a id="btnAddMenu" href="#" class="btn_grayS2"><s:message code="cmm.add" /></a></span>
+                <span class="fl bk lh20 s14"><s:message code="hqManage.use.menu" /> </span>
+                <%-- 미사용등록 버튼 --%>
+                <span class="fr"><a id="btnRemoveMenu" href="#" class="btn_grayS2"><s:message code="hqManage.exceptReg" /></a></span>
               </div>
               <%-- 위즈모 --%>
               <div id="avlblMenuGrid" style="height:160px;"></div>
             </div>
           </div>
 
-          <%-- 사용중인 메뉴 --%>
+          <%-- 미사용 메뉴 --%>
           <div class="oh mt10">
             <div class="wj-TblWrap mr10" style="height:200px;">
               <div class="oh mb10">
-                <span class="fl bk lh20 s14"><s:message code="hqManage.inUse.menu" /> </span>
-                <%-- 삭제버튼 --%>
-                <span class="fr"><a id="btnRemoveMenu" href="#" class="btn_grayS2"><s:message code="cmm.delete" /></a></span>
+                <span class="fl bk lh20 s14"><s:message code="hqManage.except.menu" /> </span>
+                <%-- 사용등록 버튼 --%>
+                <span class="fr"><a id="btnAddMenu" href="#" class="btn_grayS2"><s:message code="hqManage.useReg" /></a></span>
               </div>
               <%-- 위즈모 --%>
               <div id="beUseMenuGrid" style="height:160px;"></div>
             </div>
           </div>
-          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -89,30 +89,30 @@
 <script>
 
 
-var avlblMenuGrid;
-var beUseMenuGrid;
-var authCombo;
+  var avlblMenuGrid;
+  var beUseMenuGrid;
+  var authCombo;
 
   var avlblMenuGridData = [
     {"binding":"resrceCdLarge", "header":"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:"*"},
+    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:90},
     //{"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
     {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:"*"},
-    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:90},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:60},
     {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", visible:false, width:"*"},
-    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:"*"}
+    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:230}
   ];
 
   var beUseMenuGridData = [
     {"binding":"resrceCdLarge", "header":"<s:message code='hqManage.lMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:"*"},
+    {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:90},
     //{"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
     {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:"*"},
-    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType: wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:90},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType: wijmo.DataType.Boolean, isReadOnly:false, width:60},
     {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", visible:false, width:"*"},
-    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:"*"}
+    {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:230 }
   ];
 
   avlblMenuGrid = wgrid.genGrid("#avlblMenuGrid", avlblMenuGridData, "${menuCd}", 2, ${clo.getColumnLayout(2)});
@@ -133,7 +133,7 @@ var authCombo;
       }
        */
       if( col.binding == "menuChkSmall") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
+        e.cell.innerHTML = '<input type="checkbox" name="chkAvlbl" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
       }
     }
   });
@@ -148,7 +148,7 @@ var authCombo;
       }
        */
       if( col.binding == "menuChkSmall") {
-        e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
+        e.cell.innerHTML = '<input type="checkbox" name="chkBeUse" class="wj-cell-check"' + (item.menuChkSmall == true || item.menuChkSmall == "Y" ? 'checked' : '') + '>';
       }
     }
   });
@@ -172,9 +172,9 @@ var authCombo;
 
       if(col.binding == "menuChkSmall") {
         avlblMenuGrid.beginUpdate();
-        if(avlblMenuGrid.cells.getCellData(ht.row, ht.col, true)){
+        if(avlblMenuGrid.cells.getCellData(ht.row, ht.col, true) == "true"){
           avlblMenuGrid.cells.setCellData(ht.row, ht.col, false);
-        } else {
+        }else {
           avlblMenuGrid.cells.setCellData(ht.row, ht.col, true);
         }
         avlblMenuGrid.endUpdate();
@@ -202,7 +202,7 @@ var authCombo;
 
       if( col.binding == "menuChkSmall") {
         beUseMenuGrid.beginUpdate();
-        if(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true)){
+        if(beUseMenuGrid.cells.getCellData(ht.row, ht.col, true) == "true"){
           beUseMenuGrid.cells.setCellData(ht.row, ht.col, false);
         } else {
           beUseMenuGrid.cells.setCellData(ht.row, ht.col, true);
@@ -214,11 +214,11 @@ var authCombo;
   });
 
   <%-- 전체 체크가능한 체크박스 생성 --%>
-  avlblMenuGrid.formatItem.addHandler(function(s, e) { //TODO 왜 체크가 안되는것인가 //TODO checkbox merge
+  /*avlblMenuGrid.formatItem.addHandler(function(s, e) { //TODO 왜 체크가 안되는것인가 //TODO checkbox merge
     if (e.panel == s.columnHeaders) {
       var html = e.cell.innerHTML;
       if(html == "<s:message code='hqManage.chk.menu' />") {
-        e.cell.innerHTML = "<input type='checkbox' class='wj-cell-check'>";
+        e.cell.innerHTML = "<input type='checkbox' id='chkAllAvlbl' class='wj-cell-check' onclick='chkAll(1);'>";
       }
     }
   });
@@ -227,21 +227,15 @@ var authCombo;
     if (e.panel == s.columnHeaders) {
       var html = e.cell.innerHTML;
       if(html == "<s:message code='hqManage.chk.menu' />") {
-        e.cell.innerHTML = "<input type='checkbox' class='wj-cell-check'>";
+        e.cell.innerHTML = "<input type='checkbox' id='chkAllBeUse' class='wj-cell-check' onclick='chkAll(2);'>";
       }
     }
-  });
+  });*/
 
 
   <%-- 권한 복사 버튼 클릭 --%>
   $("#btnCopyAuth").click(function(e){
-    s_alert.pop("준비중인 서비스입니다.");
-    return false;
 
-
-    //TODO 테스트
-
-    
     var param = {};
     param.hqOfficeCd      = selectedHq.hqOfficeCd;
     param.copyHqOfficeCd  = authCombo.selectedValue;
@@ -249,56 +243,22 @@ var authCombo;
     console.log(param);
 
     $.postJSONSave("/store/hq/hqManage/authorExcept/copyAuth.sb", param, function(result) {
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.copySucc' />");
-        openAuthLayer();
-      }
-    },
-      function (result) {
-        s_alert.pop(result.message);
+              var res = result.data;
+              if(res > 0) {
+                s_alert.pop("<s:message code='cmm.copySucc' />");
+                openAuthLayer();
+              }
+            },
+            function (result) {
+              s_alert.pop(result.message);
 
-      }
+            }
     );
   });
 
   <%-- 추가 버튼 클릭 --%>
   $("#btnAddMenu").click(function(e){
 
-    var paramArr = [];
-    for(var i=0; i<avlblMenuGrid.collectionView.items.length; i++){
-      var avlblMenu = avlblMenuGrid.collectionView.items[i];
-      /*
-      if(avlblMenu.menuChkSmall || avlblMenu.menuChkMid) {
-        avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
-        avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
-        paramArr.push(avlblMenu);
-      }
-      */
-      if(avlblMenu.menuChkSmall) {
-        avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
-        avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
-        paramArr.push(avlblMenu);
-      }
-    }
-
-    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.saveSucc' />");
-        openAuthLayer();
-      }
-    },
-      function (result) {
-        s_alert.pop(result.message);
-
-      }
-    );
-
-  });
-
-  <%-- 삭제 버튼 클릭 --%>
-  $("#btnRemoveMenu").click(function(e){
     var paramArr = [];
     for(var i=0; i<beUseMenuGrid.collectionView.items.length; i++){
       var beUseMenu = beUseMenuGrid.collectionView.items[i];
@@ -316,17 +276,61 @@ var authCombo;
       }
     }
 
-    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", paramArr, function(result) {
-      var res = result.data;
-      if(res > 0) {
-        s_alert.pop("<s:message code='cmm.delSucc' />");
-        openAuthLayer();
-      }
-    },
-      function (result) {
-        s_alert.pop(result.message);
+    if(paramArr.length < 1){
+      s_alert.pop("사용할 메뉴를 선택하세요.");
+      return;
+    }
 
+    $.postJSONArray("/store/hq/hqManage/authorExcept/addAuth.sb", paramArr, function(result) {
+              var res = result.data;
+              if(res > 0) {
+                s_alert.pop("<s:message code='cmm.saveSucc' />");
+                openAuthLayer();
+              }
+            },
+            function (result) {
+              s_alert.pop(result.message);
+
+            }
+    );
+
+  });
+
+  <%-- 삭제 버튼 클릭 --%>
+  $("#btnRemoveMenu").click(function(e){
+    var paramArr = [];
+    for(var i=0; i<avlblMenuGrid.collectionView.items.length; i++){
+      var avlblMenu = avlblMenuGrid.collectionView.items[i];
+      /*
+      if(avlblMenu.menuChkSmall || avlblMenu.menuChkMid) {
+        avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
+        avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
+        paramArr.push(avlblMenu);
       }
+      */
+      if(avlblMenu.menuChkSmall) {
+        avlblMenu.hqOfficeCd = selectedHq.hqOfficeCd;
+        avlblMenu.resrceCd = avlblMenu.resrceCdSmall;
+        paramArr.push(avlblMenu);
+      }
+    }
+
+    if(paramArr.length < 1){
+      s_alert.pop("미사용할 메뉴를 선택하세요.");
+      return;
+    }
+
+    $.postJSONArray("/store/hq/hqManage/authorExcept/removeAuth.sb", paramArr, function(result) {
+              var res = result.data;
+              if(res > 0) {
+                s_alert.pop("<s:message code='cmm.delSucc' />");
+                openAuthLayer();
+              }
+            },
+            function (result) {
+              s_alert.pop(result.message);
+
+            }
     );
   });
 
@@ -341,14 +345,14 @@ var authCombo;
     var param = selectedHq;
 
     $.postJSON("/store/hq/hqManage/authorExcept/getAuthHqList.sb", param, function(result) {
-      authCombo.itemsSource = result.data.authHqList;
-      avlblMenuGrid.itemsSource = result.data.avlblMenu;
-      beUseMenuGrid.itemsSource = result.data.beUseMenu;
-    },
-      function (result) {
-        s_alert.pop(result.message);
+              authCombo.itemsSource = result.data.authHqList;
+              avlblMenuGrid.itemsSource = result.data.avlblMenu;
+              beUseMenuGrid.itemsSource = result.data.beUseMenu;
+            },
+            function (result) {
+              s_alert.pop(result.message);
 
-      }
+            }
     );
   }
 
@@ -385,5 +389,28 @@ var authCombo;
     $("#munuAuthLayer").hide();
     $("#munuAuthDim").hide();
   }
+
+  /*function chkAll(val){
+    //$('input[name=chkBeUse]').prop("checked", true);
+    if (val == "1"){
+      if($("input:checkbox[id='chkAllAvlbl']").is(":checked")){
+        $("input:checkbox[id='chkAllAvlbl']").prop("checked", true);
+        $("input:checkbox[name='chkAvlbl']").prop("checked", true);
+      }else{
+        $("input:checkbox[id='chkAllAvlbl']").prop("checked", false);
+        $("input:checkbox[name='chkAvlbl']").prop("checked", false);
+      }
+
+    }else{
+      if($("input:checkbox[id='chkAllBeUse']").is(":checked")){
+        //$("input:checkbox[id='chkAllBeUse']").prop("checked", true);
+        $("input:checkbox[name='chkBeUse']").prop("checked", true);
+      }else{
+        //$("input:checkbox[id='chkAllBeUse']").prop("checked", false);
+        $("input:checkbox[name='chkBeUse']").prop("checked", false);
+      }
+    }
+
+  }*/
 
 </script>

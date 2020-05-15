@@ -273,7 +273,7 @@ public class TableLayoutServiceImpl implements TableLayoutService {
             tableVO.setHeight((long)geo.getHeight());
 
             //TODO 원탁의 경우가 생기면 XML의 STYLE에 셋팅하고 여기서 저장
-            tableVO.setTblTypeFg(TblTypeFg.SQUARE);
+//            tableVO.setTblTypeFg(TblTypeFg.SQUARE);            
             tableVO.setUseYn(tableGroupVO.getUseYn());
             tableVO.setRegDt(tableGroupVO.getRegDt());
 

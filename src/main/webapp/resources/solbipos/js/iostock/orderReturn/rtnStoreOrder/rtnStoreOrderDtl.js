@@ -463,7 +463,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchRtnStoreOrderDtlList();
-
+    $scope.wjRtnStoreOrderDtlLayer.hide(true);
     var rtnStoreOrderScope = agrid.getScope('rtnStoreOrderCtrl');
     rtnStoreOrderScope.searchRtnStoreOrderList();
   };
