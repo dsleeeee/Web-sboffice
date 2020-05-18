@@ -106,4 +106,24 @@ public interface StoreManageService {
     /** 매장코드 중복체크 */
     int getStoreCdCnt(StoreManageVO storeManageVO);
 
+    /** 권한그룹복사를 위한 본사목록 조회 */
+    List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO);
+
+    /** 권한그룹복사를 위한 매장목록 조회 */
+    List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO);
+
+    /** 사용 메뉴 */
+    List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO);
+
+    /** 미사용 메뉴 */
+    List<DefaultMap<String>> beUseMenu(StoreManageVO storeManageVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 추가 */
+    int addAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 삭제 */
+    int removeAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
 }

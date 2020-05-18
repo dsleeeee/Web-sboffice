@@ -21,7 +21,9 @@
         <%-- 매장정보 --%>
         <li><a id="storeInfo" href="#" class="on"><s:message code="storeManage.storeInfo" /></a></li>
         <%-- 매장환경 --%>
-        <li><a id="storeEnv" href="#" ng-click="changeTab();"><s:message code="storeManage.storeEnv" /></a></li>
+        <li><a id="storeEnv" href="#" ng-click="changeEnvTab();"><s:message code="storeManage.storeEnv" /></a></li>
+        <%-- 메뉴권한 --%>
+        <li><a id="storeAuth" href="#" ng-click="changeAuthTab();"><s:message code="storeManage.auth" /></a></li>
       </ul>
 
       <div style="height:400px; overflow-y: auto;">
@@ -359,7 +361,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110702.47" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703 charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

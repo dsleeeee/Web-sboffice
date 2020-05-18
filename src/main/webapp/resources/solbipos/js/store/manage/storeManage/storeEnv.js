@@ -46,7 +46,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   /*********************************************************
    * 매장정보 탭 클릭
    * *******************************************************/
-  $scope.changeTab = function(){
+  $scope.changeInfoTab = function(){
     $scope.storeEnvLayer.hide();
 
     var infoPopup = $scope.storeInfoLayer;
@@ -60,6 +60,34 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 닫을때
     infoPopup.show(true, function (s) {
+    });
+  };
+
+  /*********************************************************
+   * 메뉴권한 탭 클릭
+   * *******************************************************/
+  $scope.changeAuthTab = function(){
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    if($.isEmptyObject(storeScope.getSelectedStore()) ) {
+      $scope._popMsg(messages["storeManage.require.regist.store1"]);
+      return false;
+    }
+
+    $scope.storeEnvLayer.hide();
+
+    var authPopup = $scope.storeAuthLayer;
+
+    // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+    authPopup.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('storeAuthCtrl');
+      }, 50)
+    });
+
+    // 팝업 닫을때
+    authPopup.show(true, function (s) {
     });
   };
 

@@ -45,7 +45,7 @@
               <%-- 메뉴권한복사 --%>
               <th><s:message code="hqManage.copy.authorExcept" /></th>
               <td colspan="3">
-                <div class="sb-select fl w40 mr10">
+                <div class="sb-select fl w60 mr10">
                   <span id="authCombo"></span>
                 </div>
                 <%-- 메뉴권한복사 버튼  --%>
@@ -277,7 +277,7 @@
     }
 
     if(paramArr.length < 1){
-      s_alert.pop("사용할 메뉴를 선택하세요.");
+      s_alert.pop(messages["storeManage.require.chkUseMenu"]);
       return;
     }
 
@@ -316,7 +316,7 @@
     }
 
     if(paramArr.length < 1){
-      s_alert.pop("미사용할 메뉴를 선택하세요.");
+      s_alert.pop(messages["storeManage.require.chkNotUseMenu"]);
       return;
     }
 

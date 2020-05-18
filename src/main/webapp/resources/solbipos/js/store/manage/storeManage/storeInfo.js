@@ -104,6 +104,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.getStoreInfo();
     }
 
+    // 팝업오픈 시, 메뉴권한Tab > 웹 사이트메뉴 > 메뉴권한복사 매장콤보박스 셋팅 
+    var menuScope = agrid.getScope('webMenuCtrl');
+    menuScope.setStoreCdCombo(menuScope.hqOfficeCd, storeScope.getSelectedStore().storeCd);
+
     event.preventDefault();
   });
 
@@ -587,7 +591,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   /*********************************************************
    * 매장환경 탭 클릭
    * *******************************************************/
-  $scope.changeTab = function(){
+  $scope.changeEnvTab = function(){
 
     var storeScope = agrid.getScope('storeManageCtrl');
 
@@ -609,6 +613,34 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 닫을때
     envPopup.show(true, function (s) {
+    });
+  };
+
+  /*********************************************************
+   * 메뉴권한 탭 클릭
+   * *******************************************************/
+  $scope.changeAuthTab = function(){
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    if($.isEmptyObject(storeScope.getSelectedStore()) ) {
+      $scope._popMsg(messages["storeManage.require.regist.store1"]);
+      return false;
+    }
+
+    $scope.storeInfoLayer.hide();
+
+    var authPopup = $scope.storeAuthLayer;
+
+    // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
+    authPopup.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('storeAuthCtrl');
+      }, 50)
+    });
+
+    // 팝업 닫을때
+    authPopup.show(true, function (s) {
     });
   };
 
