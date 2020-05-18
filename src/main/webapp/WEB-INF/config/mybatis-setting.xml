@@ -120,6 +120,8 @@
     <typeAlias alias="storeFnkeyVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreFnkeyVO"/>
     <typeAlias alias="posFnkeyVO" type="kr.co.solbipos.store.manage.storemanage.service.PosFnkeyVO"/>
     <typeAlias alias="storeStatusVO" type="kr.co.solbipos.store.manage.status.service.StoreStatusVO"/>
+    <typeAlias alias="storeMenuVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreMenuVO"/>
+
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>

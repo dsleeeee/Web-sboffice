@@ -11,6 +11,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
+<c:set var="authHqList" value="${authHqList}" />
 
 <div class="subCon" ng-controller="storeManageCtrl">
   <div class="searchBar flddUnfld">
@@ -184,6 +185,7 @@ var orgnFg = "${orgnFg}";
 var orgnCd = "${orgnCd}";
 var orgnNm = "${orgnNm}";
 var pAgencyCd = "${pAgencyCd}";
+var authHqList = ${authHqList};
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.07" charset="utf-8"></script>
@@ -196,6 +198,12 @@ var pAgencyCd = "${pAgencyCd}";
 
 <%-- 환경변수 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeEnv.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 메뉴권한 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeAuth.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
