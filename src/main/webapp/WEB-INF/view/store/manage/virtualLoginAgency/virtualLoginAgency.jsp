@@ -34,14 +34,14 @@
                     <s:message code="virtualLoginAgency.agencyCd" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w200" id="srchAgencyCd" ng-model="agencyCd" />
+                    <input type="text" class="sb-input w100" id="srchAgencyCd" ng-model="agencyCd" />
                 </td>
                 <%-- 대리점명 --%>
                 <th>
                     <s:message code="virtualLoginAgency.agencyNm" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w200" id="srchAgencyNm" ng-model="agencyNm" />
+                    <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" />
                 </td>
             </tr>
             <tr>
@@ -50,7 +50,7 @@
                     <s:message code="virtualLoginAgency.userId" />
                 </th>
                 <td>
-                    <input type="text" class="sb-input w200" id="srchUserId" ng-model="userId" />
+                    <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" />
                 </td>
                 <th>
                 </th>

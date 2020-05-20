@@ -42,7 +42,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=2018121701" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=2018102701" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=2018100401" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=2020052001" charset="utf-8"></script>
 <%-- wijmo DragAndDrop ColumnPicker --%>
 <script type="text/javascript" src="/resource/solbipos/js/common/ColumnPicker.min.js?ver=2018091501" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/DragDropTouch.min.js?ver=2018091501" charset="utf-8"></script>

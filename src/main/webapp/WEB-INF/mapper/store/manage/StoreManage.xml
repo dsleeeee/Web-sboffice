@@ -1189,7 +1189,8 @@
                #{regDt},
                #{regId},
                #{modDt},
-               #{modId}
+               #{modId},
+               twscx.GRP_CD
           FROM TB_WB_STORE_CONFG_XML twscx
          WHERE twscx.STORE_CD = #{copyStoreCd}
            AND twscx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
@@ -1287,7 +1288,8 @@
                #{regDt},
                #{regId},
                #{modDt},
-               #{modId}
+               #{modId},
+               tmtk.TUKEY_GRP_CD
           FROM TB_MS_TOUCH_KEY tmtk
          WHERE tmtk.STORE_CD = #{copyStoreCd}
         ]]>
