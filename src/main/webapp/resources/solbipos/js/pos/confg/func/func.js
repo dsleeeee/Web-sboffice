@@ -316,7 +316,8 @@ app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
       if (list.length === undefined || list.length === 0) {
         $scope.data = new wijmo.collections.CollectionView([]);
         if (response.data.message) {
-          $scope._popMsg(response.data.message);
+          s_alert.pop(response.data.message);
+          // $scope._popMsg(response.data.message);
         }
         return false;
       }
