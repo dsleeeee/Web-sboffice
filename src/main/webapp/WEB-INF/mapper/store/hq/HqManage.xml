@@ -561,20 +561,20 @@
         /* USE : HqManageMapper.authHqList */
         <![CDATA[
         SELECT HQ_OFFICE_CD AS VALUE,
-               HQ_OFFICE_NM AS NAME
+               '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
           FROM TB_HQ_OFFICE
          WHERE HQ_OFFICE_CD != #{hqOfficeCd}
-           AND SYS_OPEN_DATE <> '2'
+           AND SYS_STAT_FG = '1'
            AND SYS_CLOSURE_DATE > SYSDATE
-           AND CLS_FG = #{clsFg}
+     ORDER BY HQ_OFFICE_CD
         ]]>
     </select>
 
-    <!-- 사용가능 메뉴 조회 -->
+    <!-- 사용 메뉴 조회 -->
     <!--
         TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
         PARAM    : hqManageVO
-        COMMENTS : 사용가능한 메뉴를 조회한다.
+        COMMENTS : 사용 메뉴를 조회한다.
     -->
     <select id="avlblMenu" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.avlblMenu */
@@ -624,11 +624,11 @@
        WHERE the.RESRCE_CD = twr.RESRCE_CD_SMALL
     </select>
 
-    <!-- 사용중인 메뉴 조회 -->
+    <!-- 미사용 메뉴 조회 -->
     <!--
         TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
         PARAM    : hqManageVO
-        COMMENTS : 사용가능한 메뉴를 조회한다.
+        COMMENTS : 미사용 메뉴를 조회한다.
     -->
     <select id="beUseMenu" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.beUseMenu */
@@ -671,7 +671,7 @@
     <!-- 메뉴권한복사-->
     <!--
         TABLE    : TB_WB_USER_INFO, TB_HQ_EMPLOYEE
-        PARAM    : hqManageVO
+        PARAM    : hqMenuVO
         COMMENTS : 메뉴권한을 복사한다.
     -->
     <update id="copyAuth" parameterType="hqMenuVO" >
@@ -696,7 +696,7 @@
     <!-- 권한예외 복사-->
     <!--
         TABLE    : TB_WB_AUTHOR_EXCEPT, TB_HQ_EMPLOYEE, TB_WB_USER_INFO
-        PARAM    : hqManageVO
+        PARAM    : hqMenuVO
         COMMENTS : 예외 권한을 복사한다.
     -->
     <insert id="copyAuthExcp" parameterType="hqMenuVO" >

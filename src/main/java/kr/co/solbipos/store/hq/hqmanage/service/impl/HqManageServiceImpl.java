@@ -256,13 +256,13 @@ public class HqManageServiceImpl implements HqManageService{
         return mapper.authHqList(hqManage);
     }
 
-    /** 사용가능한 메뉴 */
+    /** 사용 메뉴 */
     @Override
     public List<DefaultMap<String>> avlblMenu(HqManageVO hqManage) {
         return mapper.avlblMenu(hqManage);
     }
 
-    /** 사용중인 메뉴 */
+    /** 미사용 메뉴 */
     @Override
     public List<DefaultMap<String>> beUseMenu(HqManageVO hqManage) {
         return mapper.beUseMenu(hqManage);

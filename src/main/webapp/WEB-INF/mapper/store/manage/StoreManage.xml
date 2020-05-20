@@ -21,56 +21,56 @@
     <select id="getStoreList" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-            SELECT '[' || tho.HQ_OFFICE_CD || '] ' || tho.HQ_OFFICE_NM AS HQ_OFFICE_CD_NM,
-                   tho.HQ_OFFICE_CD,
-                   tho.HQ_OFFICE_NM,
-                   tms.STORE_CD,
-                   tms.STORE_NM,
-                   SUBSTR(tms.BIZ_NO,0,3)||'-'||SUBSTR(tms.BIZ_NO,4,2)||'-'||SUBSTR(tms.BIZ_NO,6,5) AS BIZ_NO,
-                   tms.AREA_CD,
-                   NVL(tms.CLS_FG, tho.CLS_FG) AS CLS_FG,
-                   NVL(tms.SYS_STAT_FG,  tho.SYS_STAT_FG) AS SYS_STAT_FG,
-                   tho.SYS_STAT_FG AS HQ_SYS_STAT_FG,
-                   TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
-                   tms.VAN_CD,
-                   tcvc.VAN_NM,
-                   tms.AGENCY_CD,
-                   tca.AGENCY_NM
-           <include refid="CmmSQL.PagingTemplateCount"/>
-              FROM TB_HQ_OFFICE tho,
-                   TB_MS_STORE tms,
-                   TB_CM_VAN_CMPNY tcvc,
-                   TB_CM_AGENCY tca
-             WHERE tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
-               AND tms.STORE_CD is not null
-               AND tcvc.VAN_CD = tms.VAN_CD
-               AND tcvc.VAN_FG = '01'
-               AND tca.AGENCY_CD = tms.AGENCY_CD
-            <if test='orgnFg != null and orgnFg == "A"'>
-                AND tms.AGENCY_CD = #{agencyCd}
-            </if>
-            <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-               AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
-            </if>
-            <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-               AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
-            </if>
-            <if test='storeCd != null and storeCd != ""'>
-               AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
-            </if>
-            <if test='storeNm != null and storeNm != ""'>
-               AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-            </if>
-            <if test='bizNo != null and bizNo != ""'>
-               AND tms.BIZ_NO LIKE '%'||#{bizNo}||'%'
-            </if>
-            <if test='clsFg != null and clsFg.toString() != ""'>
-               AND tms.CLS_FG = #{clsFg, jdbcType=VARCHAR}
-            </if>
-            <if test='sysStatFg != null and sysStatFg.toString() != ""'>
-               AND tms.SYS_STAT_FG = #{sysStatFg, jdbcType=VARCHAR}
-            </if>
-             ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD, tms.SYS_OPEN_DATE ASC
+        SELECT '[' || tho.HQ_OFFICE_CD || '] ' || tho.HQ_OFFICE_NM AS HQ_OFFICE_CD_NM,
+        tho.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        SUBSTR(tms.BIZ_NO,0,3)||'-'||SUBSTR(tms.BIZ_NO,4,2)||'-'||SUBSTR(tms.BIZ_NO,6,5) AS BIZ_NO,
+        tms.AREA_CD,
+        NVL(tms.CLS_FG, tho.CLS_FG) AS CLS_FG,
+        NVL(tms.SYS_STAT_FG,  tho.SYS_STAT_FG) AS SYS_STAT_FG,
+        tho.SYS_STAT_FG AS HQ_SYS_STAT_FG,
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+        tms.VAN_CD,
+        tcvc.VAN_NM,
+        tms.AGENCY_CD,
+        tca.AGENCY_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_OFFICE tho,
+        TB_MS_STORE tms,
+        TB_CM_VAN_CMPNY tcvc,
+        TB_CM_AGENCY tca
+        WHERE tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND tms.STORE_CD is not null
+        AND tcvc.VAN_CD = tms.VAN_CD
+        AND tcvc.VAN_FG = '01'
+        AND tca.AGENCY_CD = tms.AGENCY_CD
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND tms.AGENCY_CD = #{agencyCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='bizNo != null and bizNo != ""'>
+            AND tms.BIZ_NO LIKE '%'||#{bizNo}||'%'
+        </if>
+        <if test='clsFg != null and clsFg.toString() != ""'>
+            AND tms.CLS_FG = #{clsFg, jdbcType=VARCHAR}
+        </if>
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg, jdbcType=VARCHAR}
+        </if>
+        ORDER BY tho.HQ_OFFICE_CD, tms.STORE_CD, tms.SYS_OPEN_DATE ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -279,14 +279,14 @@
         /* USE : StoreManageMapper.getStoreCd */
         <if test='sysStatFg.toString() == "DEMO"'>
             SELECT 'DS'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 3, 6)), 0) + 1), 5, '0') AS STORE_CD
-              FROM TB_MS_STORE
-             WHERE SYS_STAT_FG = '9'
+            FROM TB_MS_STORE
+            WHERE SYS_STAT_FG = '9'
         </if>
         <if test='sysStatFg.toString() != "DEMO"'>
             SELECT 'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
-              FROM TB_MS_STORE
-             WHERE SYS_STAT_FG != '9'
-               AND STORE_CD NOT LIKE 'DS%'
+            FROM TB_MS_STORE
+            WHERE SYS_STAT_FG != '9'
+            AND STORE_CD NOT LIKE 'DS%'
         </if>
     </select>
 
@@ -1149,27 +1149,27 @@
         /* USE : StoreManageMapper.copyPosFnkey */
         INSERT INTO TB_MS_POS_FNKEY
         SELECT #{storeCd} AS STORE_CD,
-               tmpf.POS_NO,
-               tmpf.FNKEY_NO,
-	             tmpf.FNKEY_FG,
-	             tmpf.DISP_SEQ,
-	             tmpf.X,
-	             tmpf.Y,
-	             tmpf.WIDTH,
-	             tmpf.HEIGHT,
-	             tmpf.STYLE_CD,
-	             tmpf.IMG_NM,
-	             tmpf.USE_YN,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_MS_POS_FNKEY tmpf
-         WHERE tmpf.STORE_CD = #{copyStoreCd}
-           AND tmpf.POS_NO IN
-      <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
-          LPAD(#{item}, 2, '0')
-      </foreach>
+        tmpf.POS_NO,
+        tmpf.FNKEY_NO,
+        tmpf.FNKEY_FG,
+        tmpf.DISP_SEQ,
+        tmpf.X,
+        tmpf.Y,
+        tmpf.WIDTH,
+        tmpf.HEIGHT,
+        tmpf.STYLE_CD,
+        tmpf.IMG_NM,
+        tmpf.USE_YN,
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+        FROM TB_MS_POS_FNKEY tmpf
+        WHERE tmpf.STORE_CD = #{copyStoreCd}
+        AND tmpf.POS_NO IN
+        <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
+            LPAD(#{item}, 2, '0')
+        </foreach>
     </insert>
 
     <!-- 매장설정 XML 복사 -->
@@ -1206,21 +1206,21 @@
         /* USE : StoreManageMapper.copyPosConfXml */
         INSERT INTO TB_WB_POS_CONFG_XML
         SELECT #{storeCd} AS STORE_CD,
-               twpcx.POS_NO,
-               twpcx.CONFG_FG,
-               twpcx.XML,
-               twpcx.USE_YN,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_WB_POS_CONFG_XML twpcx
-         WHERE twpcx.STORE_CD = #{copyStoreCd}
-           AND twpcx.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
-               LPAD(#{item}, 2, '0')
-           </foreach>
-           AND twpcx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
+        twpcx.POS_NO,
+        twpcx.CONFG_FG,
+        twpcx.XML,
+        twpcx.USE_YN,
+        #{regDt},
+        #{regId},
+        #{modDt},
+        #{modId}
+        FROM TB_WB_POS_CONFG_XML twpcx
+        WHERE twpcx.STORE_CD = #{copyStoreCd}
+        AND twpcx.POS_NO IN
+        <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
+            LPAD(#{item}, 2, '0')
+        </foreach>
+        AND twpcx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
     </insert>
 
     <!-- 터치키 분류 복사 -->
@@ -2098,58 +2098,58 @@
     -->
     <select id="getProdClass" parameterType="storeProductVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getProdClass */
-            SELECT tmpc.P_PROD_CLASS_CD ,
-                   tmpc.PROD_CLASS_CD ,
-                   tmpc.PROD_CLASS_NM
-              FROM TB_MS_PRODUCT_CLASS tmpc,
-                   (
-              SELECT tmp.STORE_CD,
-                     tmp.PROD_CLASS_CD,
-                     COUNT(tmp.PROD_CD) AS PROD_CD_CNT
-                FROM TB_MS_PRODUCT_CLASS tmpc,
-                     TB_MS_PRODUCT tmp
-               WHERE tmp.STORE_CD = #{storeCd}
-                 AND tmp.STORE_CD = tmpc.STORE_CD
-      <if test='printYn != null and printYn.toString() == "Y"'>
-                 AND tmp.PROD_CD IN (SELECT PROD_CD
-                                       FROM TB_MS_PRINTER_PROD
-                                      WHERE STORE_CD = #{storeCd}
-                                        AND PRTER_NO = #{prterNo})
-                 AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-                 AND tmp.USE_YN = 'Y'
-          <if test='arrProdClassCd != null and arrProdClassCd != ""'>
-              AND tmpc.PROD_CLASS_CD IN
-              <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
-                  #{item}
-              </foreach>
-          </if>
-               GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
-      </if>
-      <if test='printYn != null and printYn.toString() != "Y"'>
-                 AND tmp.PROD_CD NOT IN (SELECT PROD_CD
-                                           FROM TB_MS_PRINTER_PROD
-                                          WHERE STORE_CD = #{storeCd}
-                                            AND PRTER_NO = #{prterNo})
-                 AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
-                 AND tmp.USE_YN = 'Y'
+        SELECT tmpc.P_PROD_CLASS_CD ,
+        tmpc.PROD_CLASS_CD ,
+        tmpc.PROD_CLASS_NM
+        FROM TB_MS_PRODUCT_CLASS tmpc,
+        (
+        SELECT tmp.STORE_CD,
+        tmp.PROD_CLASS_CD,
+        COUNT(tmp.PROD_CD) AS PROD_CD_CNT
+        FROM TB_MS_PRODUCT_CLASS tmpc,
+        TB_MS_PRODUCT tmp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND tmp.STORE_CD = tmpc.STORE_CD
+        <if test='printYn != null and printYn.toString() == "Y"'>
+            AND tmp.PROD_CD IN (SELECT PROD_CD
+            FROM TB_MS_PRINTER_PROD
+            WHERE STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo})
+            AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+            AND tmp.USE_YN = 'Y'
             <if test='arrProdClassCd != null and arrProdClassCd != ""'>
-                 AND tmpc.PROD_CLASS_CD IN
-                  <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
-                      #{item}
-                  </foreach>
+                AND tmpc.PROD_CLASS_CD IN
+                <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
             </if>
-               GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
-      </if>
-                   ) tmp
-             WHERE tmpc.store_cd = #{storeCd}
-               AND tmp.STORE_CD = tmpc.STORE_CD
-             START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
-           CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
-               AND tmpc.STORE_CD = #{storeCd}
-               AND tmpc.P_PROD_CLASS_CD IS NOT NULL
-             GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
-             HAVING tmpc.PROD_CLASS_CD != '00000'
-             ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
+            GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
+        </if>
+        <if test='printYn != null and printYn.toString() != "Y"'>
+            AND tmp.PROD_CD NOT IN (SELECT PROD_CD
+            FROM TB_MS_PRINTER_PROD
+            WHERE STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo})
+            AND tmp.PROD_CLASS_CD = tmpc.PROD_CLASS_CD
+            AND tmp.USE_YN = 'Y'
+            <if test='arrProdClassCd != null and arrProdClassCd != ""'>
+                AND tmpc.PROD_CLASS_CD IN
+                <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY tmp.STORE_CD , tmp.PROD_CLASS_CD
+        </if>
+        ) tmp
+        WHERE tmpc.store_cd = #{storeCd}
+        AND tmp.STORE_CD = tmpc.STORE_CD
+        START WITH tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
+        CONNECT BY tmpc.PROD_CLASS_CD = PRIOR tmpc.P_PROD_CLASS_CD
+        AND tmpc.STORE_CD = #{storeCd}
+        AND tmpc.P_PROD_CLASS_CD IS NOT NULL
+        GROUP BY tmpc.P_PROD_CLASS_CD, tmpc.PROD_CLASS_CD, tmpc.PROD_CLASS_NM
+        HAVING tmpc.PROD_CLASS_CD != '00000'
+        ORDER BY P_PROD_CLASS_CD, PROD_CLASS_CD
     </select>
 
 
@@ -2162,27 +2162,27 @@
     <select id="getPrintProductInfo" parameterType="storeProductVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getPrintProductInfo */
         SELECT STORE_CD,
-               PROD_CD,
-               PROD_NM,
-               PROD_CLASS_CD,
-               #{prterNo} AS PRTER_NO
-          FROM TB_MS_PRODUCT
-         WHERE STORE_CD = #{storeCd}
-           AND USE_YN = 'Y'
-         <if test='printYn != null and printYn.toString() == "Y"'>
-           AND PROD_CD IN (SELECT PROD_CD
-                             FROM TB_MS_PRINTER_PROD
-                            WHERE STORE_CD = #{storeCd}
-                              AND PRTER_NO = #{prterNo})
-         </if>
-         <if test='printYn != null and printYn.toString() != "Y"'>
-         AND PROD_CD NOT IN (SELECT PROD_CD
-                               FROM TB_MS_PRINTER_PROD
-                              WHERE STORE_CD = #{storeCd}
-                                AND PRTER_NO = #{prterNo})
-         </if>
+        PROD_CD,
+        PROD_NM,
+        PROD_CLASS_CD,
+        #{prterNo} AS PRTER_NO
+        FROM TB_MS_PRODUCT
+        WHERE STORE_CD = #{storeCd}
+        AND USE_YN = 'Y'
+        <if test='printYn != null and printYn.toString() == "Y"'>
+            AND PROD_CD IN (SELECT PROD_CD
+            FROM TB_MS_PRINTER_PROD
+            WHERE STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo})
+        </if>
+        <if test='printYn != null and printYn.toString() != "Y"'>
+            AND PROD_CD NOT IN (SELECT PROD_CD
+            FROM TB_MS_PRINTER_PROD
+            WHERE STORE_CD = #{storeCd}
+            AND PRTER_NO = #{prterNo})
+        </if>
         <if test='prodNm != null and prodNm != ""'>
-          AND PROD_NM LIKE '%'|| #{prodNm} ||'%'
+            AND PROD_NM LIKE '%'|| #{prodNm} ||'%'
         </if>
     </select>
 
@@ -2351,6 +2351,315 @@
          WHERE STORE_CD = #{storeCd}
     </select>
 
+    <!-- 권한그룹복사를 위한 본사목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        PARAM    : storeManageVO
+        COMMENTS : 권한그룹복사를 위한 본사목록을 조회한다.
+    -->
+    <select id="authHqList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.authHqList */
+        <![CDATA[
+        SELECT HQ_OFFICE_CD AS VALUE,
+               '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
+          FROM TB_HQ_OFFICE
+         WHERE 1=1
+           AND SYS_STAT_FG = '1'
+           AND SYS_CLOSURE_DATE > SYSDATE
+     ORDER BY HQ_OFFICE_CD
+        ]]>
+    </select>
+
+    <!-- 권한그룹복사를 위한 매장목록 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : storeManageVO
+        COMMENTS : 권한그룹복사를 위한 매장목록을 조회한다.
+    -->
+    <select id="authStoreList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.authStoreList */
+        <![CDATA[
+        SELECT STORE_CD AS VALUE,
+               '[' || STORE_CD || '] ' || STORE_NM AS NAME
+          FROM TB_MS_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND STORE_CD != #{storeCd}
+           AND SYS_STAT_FG = '1'
+     ORDER BY STORE_CD
+        ]]>
+    </select>
+
+    <!-- 사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeManageVO
+        COMMENTS : 사용 메뉴를 조회한다.
+    -->
+    <select id="avlblMenu" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.avlblMenu */
+        SELECT twr.*
+          FROM (
+          SELECT twr.RESRCE_CD AS RESRCE_CD_LARGE,
+                 twr.RESRCE_NM AS RESRCE_NM_LARGE,
+                 twri.RESRCE_CD AS RESRCE_CD_MID,
+                 twri.RESRCE_NM AS RESRCE_NM_MID,
+                 twrif.RESRCE_CD AS RESRCE_CD_SMALL,
+                 twrif.RESRCE_NM AS RESRCE_NM_SMALL
+            FROM TB_WB_RESRCE_INFO twr,
+                 TB_WB_RESRCE_INFO twri,
+                 TB_WB_RESRCE_INFO twrif
+           WHERE 1=1
+             AND twr.USE_YN = 'Y'
+             AND twri.USE_YN = 'Y'
+             AND twrif.USE_YN = 'Y'
+             AND twri.P_RESRCE = twr.RESRCE_CD
+             AND twrif.P_RESRCE = twri.RESRCE_CD
+             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+             AND twrif.DISP_LEVEL = '3'
+           ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
+              ) twr,
+              (
+          SELECT twa.RESRCE_CD
+            FROM TB_MS_EMPLOYEE tme,
+                 TB_WB_USER_INFO twu,
+                 TB_WB_AUTHOR_GRP_RESRCE twa
+           WHERE tme.STORE_CD = #{storeCd}
+             AND tme.EMP_NO = '0000'
+             AND twu.USER_ID = tme.USER_ID
+             AND twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
+             AND twa.USE_YN = 'Y'
+           MINUS
+          SELECT twa.RESRCE_CD
+          FROM TB_MS_EMPLOYEE tme,
+               TB_WB_USER_INFO twu,
+               TB_WB_AUTHOR_EXCEPT twa
+         WHERE tme.STORE_CD = #{storeCd}
+           AND tme.EMP_NO = '0000'
+           AND twu.USER_ID = tme.USER_ID
+           AND twa.USER_ID = twu.USER_ID
+           AND twa.INCLD_EXCLD_FG = 'E'
+           AND twa.USE_YN = 'Y'
+               ) tme
+       WHERE tme.RESRCE_CD = twr.RESRCE_CD_SMALL
+    </select>
+
+    <!-- 미사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeManageVO
+        COMMENTS : 미사용 메뉴를 조회한다.
+    -->
+    <select id="beUseMenu" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.beUseMenu */
+        SELECT twr.*
+          FROM (
+          SELECT twr.RESRCE_CD AS RESRCE_CD_LARGE,
+                 twr.RESRCE_NM AS RESRCE_NM_LARGE,
+                 twri.RESRCE_CD AS RESRCE_CD_MID,
+                 twri.RESRCE_NM AS RESRCE_NM_MID,
+                 twrif.RESRCE_CD AS RESRCE_CD_SMALL,
+                 twrif.RESRCE_NM AS RESRCE_NM_SMALL
+            FROM TB_WB_RESRCE_INFO twr,
+                 TB_WB_RESRCE_INFO twri,
+                 TB_WB_RESRCE_INFO twrif
+           WHERE 1=1
+             AND twr.USE_YN = 'Y'
+             AND twri.USE_YN = 'Y'
+             AND twrif.USE_YN = 'Y'
+             AND twri.P_RESRCE = twr.RESRCE_CD
+             AND twrif.P_RESRCE = twri.RESRCE_CD
+             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+             AND twrif.DISP_LEVEL = '3'
+           ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
+               ) twr,
+               (
+          SELECT twa.RESRCE_CD
+            FROM TB_MS_EMPLOYEE tme,
+                 TB_WB_USER_INFO twu,
+                 TB_WB_AUTHOR_EXCEPT twa
+           WHERE tme.STORE_CD = #{storeCd}
+             AND tme.EMP_NO = '0000'
+             AND twu.USER_ID = tme.USER_ID
+             AND twa.USER_ID = twu.USER_ID
+             AND twa.INCLD_EXCLD_FG = 'E'
+             AND twa.USE_YN = 'Y'
+               ) tme
+         WHERE tme.RESRCE_CD = twr.RESRCE_CD_SMALL
+    </select>
+
+    <!-- 메뉴권한복사-->
+    <!--
+        TABLE    : TB_WB_USER_INFO, TB_MS_EMPLOYEE
+        PARAM    : storeMenuVO
+        COMMENTS : 메뉴권한을 복사한다.
+    -->
+    <update id="copyAuth" parameterType="storeMenuVO" >
+        /* USE : StoreManageMapper.copyAuth */
+        UPDATE TB_WB_USER_INFO
+           SET AUTH_GRP_CD = (SELECT twu.AUTH_GRP_CD
+                                FROM TB_MS_EMPLOYEE tme,
+                                     TB_WB_USER_INFO twu
+                               WHERE tme.STORE_CD = #{copyStoreCd}
+                                 AND tme.EMP_NO = '0000'
+                                 AND twu.USER_ID = tme.USER_ID
+                              )
+         WHERE USER_ID = (SELECT tme.USER_ID
+                            FROM TB_MS_EMPLOYEE tme,
+                                 TB_WB_USER_INFO twu
+                           WHERE tme.STORE_CD = #{storeCd}
+                             AND tme.EMP_NO = '0000'
+                             AND twu.USER_ID = tme.USER_ID
+                          )
+    </update>
+
+    <!-- 권한예외 복사-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT, TB_MS_EMPLOYEE, TB_WB_USER_INFO
+        PARAM    : storeMenuVO
+        COMMENTS : 예외 권한을 복사한다.
+    -->
+    <insert id="copyAuthExcp" parameterType="storeMenuVO" >
+        /* USE : StoreManageMapper.copyAuthExcp */
+        <![CDATA[
+        MERGE INTO TB_WB_AUTHOR_EXCEPT twa
+        USING DUAL
+         ON (
+              twa.USER_ID = ( SELECT tme.USER_ID
+                                FROM TB_MS_EMPLOYEE tme,
+                                      TB_WB_USER_INFO twu
+                               WHERE tme.STORE_CD = #{storeCd}
+                                 AND tme.EMP_NO = '0000'
+                                 AND twu.USER_ID = tme.USER_ID)
+              AND twa.RESRCE_CD = #{resrceCd}
+             )
+         WHEN MATCHED THEN
+         UPDATE
+            SET twa.INCLD_EXCLD_FG = #{incldExcldFg},
+                twa.USE_YN = #{useYn},
+                twa.MOD_DT = #{modDt},
+                twa.MOD_ID = #{modId}
+         WHEN NOT MATCHED THEN
+         INSERT (USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN, REG_DT, REG_ID)
+         VALUES (
+                  (SELECT tme.USER_ID FROM TB_MS_EMPLOYEE tme, TB_WB_USER_INFO twu WHERE tme.STORE_CD = #{storeCd} AND tme.EMP_NO = '0000' AND twu.USER_ID = tme.USER_ID),
+                  #{resrceCd},
+                  #{incldExcldFg},
+                  #{useYn},
+                  #{regDt},
+                  #{regId}
+                )
+        ]]>
+    </insert>
+
+    <!-- 메뉴권한 추가-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 예외 권한을 복사한다.
+    -->
+    <insert id="addAuth" parameterType="DefaultMap">
+        /* USE : StoreManageMapper.addAuth */
+        INSERT INTO TB_WB_AUTHOR_EXCEPT
+        (
+            USER_ID,
+            RESRCE_CD,
+            INCLD_EXCLD_FG,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            (SELECT tme.USER_ID FROM TB_MS_EMPLOYEE tme, TB_WB_USER_INFO twu WHERE tme.STORE_CD = #{storeCd} AND tme.EMP_NO = '0000' AND twu.USER_ID = tme.USER_ID),
+            #{resrceCd},
+            #{incldExcldFg},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 메뉴권한 확인-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 메뉴권한을 확인한다.
+    -->
+    <select id="isAuth" parameterType="DefaultMap" resultType="Integer">
+        /* USE : StoreManageMapper.isAuth */
+        SELECT COUNT(RESRCE_CD) AS CNT
+          FROM TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                             FROM TB_MS_EMPLOYEE tme,
+                                   TB_WB_USER_INFO twu
+                            WHERE tme.STORE_CD = #{storeCd}
+                              AND tme.EMP_NO = '0000'
+                              AND twu.USER_ID = tme.USER_ID)
+           AND RESRCE_CD = #{resrceCd}
+           AND USE_YN = 'Y'
+    </select>
+
+    <!-- 메뉴권한 삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 메뉴권한을 삭제한다.
+    -->
+    <delete id="removeAuth" parameterType="DefaultMap">
+        /* StoreManageMapper.removeAuth */
+        DELETE TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                             FROM TB_MS_EMPLOYEE tme,
+                                   TB_WB_USER_INFO twu
+                            WHERE tme.STORE_CD = #{storeCd}
+                              AND tme.EMP_NO = '0000'
+                              AND twu.USER_ID = tme.USER_ID)
+           AND RESRCE_CD = #{resrceCd}
+    </delete>
+
+    <!-- 권한예외 복사 시, 복사기준매장의 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 권한예외 복사 시, 복사기준매장의 권한예외 값을 조회한다.
+    -->
+    <select id="exceptMenu" parameterType="storeMenuVO" resultType="DefaultMap">
+       /* USE : StoreManageMapper.exceptMenu */
+        SELECT USER_ID,
+   	            RESRCE_CD,
+	            INCLD_EXCLD_FG,
+	            USE_YN
+          FROM TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                             FROM TB_MS_EMPLOYEE tme,
+                                   TB_WB_USER_INFO twu
+                            WHERE tme.STORE_CD = #{copyStoreCd}
+                               AND tme.EMP_NO = '0000'
+                               AND twu.USER_ID = tme.USER_ID)
+           AND USE_YN = 'Y'
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 해당 본사의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeAuthAll" parameterType="DefaultMap">
+        /* HqManageMapper.removeAuthAll */
+        DELETE TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                            FROM TB_MS_EMPLOYEE tme,
+                                 TB_WB_USER_INFO twu
+                           WHERE tme.STORE_CD = #{storeCd}
+                             AND tme.EMP_NO = '0000'
+                             AND twu.USER_ID = tme.USER_ID)
+    </delete>
+
     <!-- 코너별 승인 목록 조회 -->
     <!--
       TABLE    : TB_MS_CORNER
@@ -2385,27 +2694,27 @@
     </select>
     -->
 
-  <!-- 포스별 승인 목록 조회 -->
-  <!--
-  <select id="getPosApproveList" parameterType="DefaultMap" resultType="DefaultMap">
-    /* USE : StoreManageMapper.getPosApproveList */
-    <![CDATA[
-     SELECT tmp.STORE_CD,
-            tmp.POS_NO,
-            tmp.POS_NM,
-            tmp.HW_AUTH_KEY,
-            tmp.POS_VER_NO,
-            tmp.VAN_CERT_YN,
-            tmp.VAN_CD,
-            tmp.VAN_TERMNL_NO,
-            tmp.VAN_SER_NO,
-            tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO,
-            TO_CHAR(TO_DATE(tmp.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_START_DATE,
-            TO_CHAR(TO_DATE(tmp.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_END_DATE
-       FROM TB_MS_POS tmp
-      WHERE tmp.STORE_CD = #{storeCd}
-      ORDER BY tmp.POS_NO
-      ]]>
-  </select>
-  -->
+    <!-- 포스별 승인 목록 조회 -->
+    <!--
+    <select id="getPosApproveList" parameterType="DefaultMap" resultType="DefaultMap">
+      /* USE : StoreManageMapper.getPosApproveList */
+      <![CDATA[
+       SELECT tmp.STORE_CD,
+              tmp.POS_NO,
+              tmp.POS_NM,
+              tmp.HW_AUTH_KEY,
+              tmp.POS_VER_NO,
+              tmp.VAN_CERT_YN,
+              tmp.VAN_CD,
+              tmp.VAN_TERMNL_NO,
+              tmp.VAN_SER_NO,
+              tmp.VAN_TERMNL_NO AS BEFORE_VAN_TERMNL_NO,
+              TO_CHAR(TO_DATE(tmp.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_START_DATE,
+              TO_CHAR(TO_DATE(tmp.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY.MM.DD') VAN_CERT_END_DATE
+         FROM TB_MS_POS tmp
+        WHERE tmp.STORE_CD = #{storeCd}
+        ORDER BY tmp.POS_NO
+        ]]>
+    </select>
+    -->
 </mapper>
