@@ -174,6 +174,7 @@ public class PosFuncServiceImpl implements PosFuncService{
     public String getFuncKeyXml(PosFuncVO posFuncVO) {
 
         String result = "";
+
         // XML 조회 : 판매터치키 구성정보
         DefaultMap<String> param = new DefaultMap<String>();
         param.put("storeCd", posFuncVO.getStoreCd());
@@ -184,12 +185,15 @@ public class PosFuncServiceImpl implements PosFuncService{
         // 포스기능키 : 우측
         } else if ("6021".equals(posFuncVO.getFnkeyFg())) {
             param.put("confgFg", ConfgFg.FUNC_KEY_RIGHT.getCode());
+        // 포스기능키 : 배달메뉴
+        } else if ("6022".equals(posFuncVO.getFnkeyFg())) {
+            param.put("confgFg", ConfgFg.FUNC_KEY_DELIVERY.getCode());
         }
+
         // 터치키 구성정보가 저장되어있는 XML
         result = mapper.getFuncKeyXml(param);
 
         return result;
-
     }
 
     /** 포스기능키 저장 */

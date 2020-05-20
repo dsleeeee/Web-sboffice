@@ -200,8 +200,8 @@
           $("#btnAutoPosition").hide();
         }
 
-        <%-- 결제메뉴(좌/우)의 경우에는 오른쪽 div에 기능키 영역이 들어감 --%>
-        if (selectedRow.fnkeyFg === "6020" || selectedRow.fnkeyFg === "6021") {
+        <%-- 결제메뉴(좌/우), 배달메뉴 의 경우에는 오른쪽 div에 기능키 영역이 들어감 --%>
+        if (selectedRow.fnkeyFg === "6020" || selectedRow.fnkeyFg === "6021"|| selectedRow.fnkeyFg === "6022") {
           // 포스기능 키 목록 조회
           var scope = agrid.getScope("funcKeyCtrl");
           scope._broadcast('funcKeyCtrl');
