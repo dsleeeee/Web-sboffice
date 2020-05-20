@@ -62,7 +62,7 @@
         <%-- 페이지리스트 --%>
         <div class="pageNum2 mt20">
           <%-- id --%>
-          <ul id="page" data-size="5">
+          <ul id="page" data-size="15">
           </ul>
         </div>
 
