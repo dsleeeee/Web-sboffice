@@ -356,27 +356,28 @@ public class StoreManageServiceImpl implements StoreManageService{
                         confgXmlVO.setModDt(dt);
                         confgXmlVO.setModId(sessionInfoVO.getUserId());
 
+                        LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
-                        procCnt += mapper.copyStoreConfXml(confgXmlVO);
+                        //procCnt += mapper.copyStoreConfXml(confgXmlVO);
 
 //                    for(int p=0; p<installPosCnt; p++){
 //                        confgXmlVO.setPosNo(String.valueOf(p+i));
 //                    }
-
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
-
                         confgXmlVO.setArrPosNo(posNoStr.split(","));
-
                         procCnt += mapper.copyPosConfXml(confgXmlVO); //todo
 
+
+                        LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
-                        procCnt += mapper.copyStoreConfXml(confgXmlVO);
+                        //procCnt += mapper.copyStoreConfXml(confgXmlVO);
 
 //                    for(int p=0; p<installPosCnt; p++){
 //                        confgXmlVO.setPosNo(String.valueOf(p+i));
 //                    }
+                        procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
 
-                        LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
+                        LOGGER.info(">>>>>>>>>>>>>>>>>> DELIVERY >>>>>>>>>>>>>>>");
+                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
                         procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
 
                     }
@@ -403,9 +404,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 //                        confgXmlVO.setPosNo(String.valueOf(p+i));
 //                    }
 
-                        confgXmlVO.setArrPosNo(posNoStr.split(","));
+                        //confgXmlVO.setArrPosNo(posNoStr.split(","));
 
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                        //procCnt += mapper.copyPosConfXml(confgXmlVO);
 
                         // 터치키 분류 복사
                         TouchKeyClassVO touchkeyClassVO = new TouchKeyClassVO();
