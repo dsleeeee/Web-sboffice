@@ -1182,6 +1182,17 @@
         /* USE : StoreManageMapper.copyStoreConfXml */
         <![CDATA[
         INSERT INTO TB_WB_STORE_CONFG_XML
+        (
+        	STORE_CD,
+			CONFG_FG,
+			XML,
+			USE_YN,
+			REG_DT,
+			REG_ID,
+			MOD_DT,
+			MOD_ID,
+			GRP_CD
+        )
         SELECT #{storeCd} AS STORE_CD,
                twscx.CONFG_FG,
                twscx.XML,
