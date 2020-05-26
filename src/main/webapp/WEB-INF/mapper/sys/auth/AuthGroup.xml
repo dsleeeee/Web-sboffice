@@ -140,6 +140,7 @@
                     A.FUNC_FG
                FROM TB_WB_RESRCE_INFO A
               WHERE A.USE_YN = 'Y'
+                AND A.RESRCE_FG = 'M'
               START WITH A.P_RESRCE = '000000'
             CONNECT BY PRIOR A.RESRCE_CD = A.P_RESRCE
               ORDER SIBLINGS BY A.DISP_IDX ASC,
