@@ -205,15 +205,19 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112102" charset="utf-8"></script>
 
-<%-- 사원상세 팝업 --%>
+<%-- 사원기초정보 상세 Tab 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">
 </c:import>
 
-<%-- 사원신규등록/수정 레이어 팝업 --%>
+<%-- 사원기초정보 등록/수정 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpSave.jsp">
 </c:import>
 
 <%-- 패스워드 변경 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/changePassword.jsp">
+</c:import>
+
+<%-- 메뉴권한 Tab 팝업--%>
+<c:import url="/WEB-INF/view/base/store/emp/hqEmpAuth.jsp">
 </c:import>
 

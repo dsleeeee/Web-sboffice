@@ -51,6 +51,28 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   };
 
+  // 탭변경
+  $scope.changeTab = function(val) {
+
+    if(val ==  "1"){ // 사원기초정보 Tab 클릭 시
+
+    }else{ // 메뉴권한 Tab 클릭 시
+
+      /*if(valVendrCd == ""){
+        s_alert.pop(messages["vendr.request.regist.vendr"]);
+        return false;
+
+      }else{*/
+        $scope.hqEmpDetailLayer.hide();
+        $scope.hqEmpAuthLayer.show(true);
+
+        // $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
+        event.preventDefault();
+
+      /*}*/
+    }
+  };
+
   // 닫기버튼 클릭
   $scope.close = function(){
     $scope.hqEmpDetailLayer.hide();
