@@ -145,12 +145,13 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
-                            id="wjGridMenuBaseList">
+                            id="wjGridMenuBaseList"
+                            allow-merging="Cells">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="menuBase.level1Nm"/>" binding="level1Nm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level2Nm"/>" binding="level2Nm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level3Nm"/>" binding="level3Nm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="menuBase.level1Nm"/>" binding="level1Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="menuBase.level2Nm"/>" binding="level2Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="menuBase.level3Nm"/>" binding="level3Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="menuBase.useCnt"/>" binding="useCnt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                             <%--상세 조회시 필요--%>
