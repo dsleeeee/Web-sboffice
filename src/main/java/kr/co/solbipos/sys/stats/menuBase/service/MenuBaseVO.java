@@ -1,0 +1,147 @@
+package kr.co.solbipos.sys.stats.menuBase.service;
+
+import kr.co.solbipos.application.common.service.PageVO;
+
+/**
+ * @Class Name : MenuBaseVO.java
+ * @Description : 시스템관리 > 통계 > 메뉴기준 사용현황
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.05.22  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2020.05.22
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public class MenuBaseVO extends PageVO {
+
+    private static final long serialVersionUID = 4567094904301269212L;
+
+    /** 메뉴명 */
+    private String resrceNm;
+
+    /** 사용환경 */
+    private String useEnv;
+
+    /** 사용자ID */
+    private String userId;
+
+    /** 사용자명 */
+    private String userNm;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+
+    /** 본사명 */
+    private String hqOfficeNm;
+
+    /** 매장코드 */
+    private String storeCd;
+
+    /** 매장명 */
+    private String storeNm;
+
+    /** 리소스코드 */
+    private String resrceCd;
+
+    /** 대,중,소메뉴 */
+    private String level;
+//    /** 대메뉴 */
+//    private String level1;
+//    /** 중메뉴 */
+//    private String level2;
+//    /** 소메뉴 */
+//    private String level3;
+
+    public String getResrceNm() { return resrceNm; }
+
+    public void setResrceNm(String resrceNm) { this.resrceNm = resrceNm; }
+
+    public String getUseEnv() { return useEnv; }
+
+    public void setUseEnv(String useEnv) { this.useEnv = useEnv; }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getUserNm() { return userNm; }
+
+    public void setUserNm(String userNm) { this.userNm = userNm; }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
+
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getResrceCd() {
+        return resrceCd;
+    }
+
+    public void setResrceCd(String resrceCd) {
+        this.resrceCd = resrceCd;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+//    public String getLevel1() {
+//        return level1;
+//    }
+//
+//    public void setLevel1(String level1) {
+//        this.level1 = level1;
+//    }
+//
+//    public String getLevel2() {
+//        return level2;
+//    }
+//
+//    public void setLevel2(String level2) {
+//        this.level2 = level2;
+//    }
+//
+//    public String getLevel3() {
+//        return level3;
+//    }
+//
+//    public void setLevel3(String level3) {
+//        this.level3 = level3;
+//    }
+}

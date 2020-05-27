@@ -162,8 +162,8 @@
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
+    <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menuBase.service.MenuBaseVO"/>
 <!--
-    <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menubase.service.MenuBaseVO"/>
     <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userbase.service.UserBaseVO"/>
     <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.weblogin.service.WebLoginVO"/>
     <typeAlias alias="storeTrnsitnVO" type="kr.co.solbipos.sys.stats.storetrnsitn.service.StoreTrnsitnVO"/>
