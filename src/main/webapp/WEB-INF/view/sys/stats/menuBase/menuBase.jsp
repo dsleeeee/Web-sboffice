@@ -120,7 +120,6 @@
         </table>
 
         <div class="mt40 oh sb-select dkbr">
-            <%-- 대,중,소메뉴  --%>
             <wj-combo-box
                 class="w180px fl"
                 id="level"

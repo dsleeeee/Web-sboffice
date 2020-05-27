@@ -2,17 +2,13 @@ package kr.co.solbipos.sys.stats.menuBase.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sys.stats.menuBase.service.MenuBaseService;
 import kr.co.solbipos.sys.stats.menuBase.service.MenuBaseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : MenuBaseServiceImpl.java
@@ -42,7 +38,6 @@ public class MenuBaseServiceImpl implements MenuBaseService {
     public MenuBaseServiceImpl(MenuBaseMapper menuBaseMapper) {
         this.menuBaseMapper = menuBaseMapper;
     }
-
 
     /** 메뉴기준 사용현황 조회 */
     @Override
