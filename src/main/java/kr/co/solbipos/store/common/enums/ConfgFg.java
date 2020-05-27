@@ -23,7 +23,9 @@ public enum ConfgFg implements CodeEnum {
     /** 포스기능키(좌) */
     POS_FN_LEFT("6020"),
     /** 포스기능키(우) */
-    POS_FN_RIGHT("6021");
+    POS_FN_RIGHT("6021"),
+    /** 배달메뉴 */
+    POS_FN_DELIVERY ("6022");
 
     private String code;
 
