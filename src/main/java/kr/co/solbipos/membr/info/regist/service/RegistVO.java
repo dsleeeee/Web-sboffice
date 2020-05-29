@@ -110,6 +110,9 @@ public class RegistVO extends PageVO {
     private String cdCompany;
     /** 회원 거래처 매핑코드 (거래처코드)*/
     private String cdPartner;
+    /** 프로시져 결과 */
+    private String result;
+
     /**
      * @return the orgnFg
      */
@@ -649,4 +652,8 @@ public class RegistVO extends PageVO {
     public void setCdPartner(String cdPartner) {
         this.cdPartner = cdPartner;
     }
+
+    public String getResult() { return result; }
+
+    public void setResult(String result) { this.result = result; }
 }
