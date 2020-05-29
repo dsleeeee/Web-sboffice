@@ -8,20 +8,19 @@
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="storeManage.storeInfo" />
-            <span id="storeAuthTitle" class="ml20"></span>
+            <s:message code="hqEmp.hqEmpInfo"/><span><label id="empInfo"></label></span>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
 
         <%-- body --%>
         <div class="wj-dialog-body">
             <%-- 탭 --%>
-            <div ng-controller="storeAuthCtrl">
+            <div ng-controller="hqEmpAuthCtrl">
                 <ul class="subTab">
                     <%-- 매장정보 --%>
-                    <li><a id="hqEmpInfo" href="#" ng-click="changeInfoTab();"><s:message code="storeManage.storeInfo" /></a></li>
+                    <li><a id="hqEmpInfo" href="#" ng-click="changeTab()"><s:message code="hqEmp.hqEmpInfo" /></a></li>
                     <%-- 메뉴권한 --%>
-                    <li><a id="hqEmpAuth" href="#" class="on"><s:message code="storeManage.auth" /></a></li>
+                    <li><a id="hqEmpAuth" href="#" class="on"><s:message code="hqEmp.menuSetting" /></a></li>
                 </ul>
             </div>
 
@@ -35,4 +34,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpAuth.js?ver=20200526.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpAuth.js?ver=20200526.14" charset="utf-8"></script>

@@ -220,4 +220,13 @@ public class HqEmpServiceImpl implements HqEmpService {
         return EmpResult.SUCCESS;
     }
 
+    /** 권한복사를 위한 본사 사원 리스트 조회 */
+    public List<DefaultMap<String>> authHqEmpList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO){
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return hqEmpMapper.authHqEmpList(hqEmpVO);
+    }
+
+
 }

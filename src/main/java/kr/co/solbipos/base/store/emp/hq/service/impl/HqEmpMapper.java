@@ -59,5 +59,7 @@ public interface HqEmpMapper {
     /** 현재 패스워드 조회 */
     String getHqEmpPassword(HqEmpVO hqEmpVO);
 
+    /** 권한복사를 위한 본사 사원 리스트 조회 */
+    List<DefaultMap<String>> authHqEmpList(HqEmpVO hqEmpVO);
 
 }
