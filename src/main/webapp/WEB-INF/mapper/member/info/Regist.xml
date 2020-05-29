@@ -678,7 +678,7 @@
         CALL VITIS.SP_NEOE_POSLINK_RTN
         (
             #{membrOrgnCd},
-            #{storeCd},
+            #{regStoreCd},
             #{membrNo},
             #{result, mode=OUT, jdbcType=VARCHAR}
         )

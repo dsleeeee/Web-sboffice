@@ -170,7 +170,7 @@ public class RegistServiceImpl implements RegistService {
         }
 
 //        System.out.println("test1111");
-        LOGGER.info("회원등록 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
+        LOGGER.info("회원등록 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
         if(("A0007").equals(registVO.getMembrOrgnCd())) {
 
@@ -223,7 +223,7 @@ public class RegistServiceImpl implements RegistService {
         }
 
 //        System.out.println("test1111");
-        LOGGER.info("회원수정 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
+        LOGGER.info("회원수정 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
         if(("A0007").equals(registVO.getMembrOrgnCd())) {
 
