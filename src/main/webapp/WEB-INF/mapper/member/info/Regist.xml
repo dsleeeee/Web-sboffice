@@ -675,7 +675,7 @@
     <select id="registPoslinkPtn" statementType="CALLABLE"  parameterType="registVO" resultType="DefaultMap">
     /* RegistMapper.registPoslinkPtn */
     {
-        CALL VITIS.SP_NEOE_POSLINK_RTN
+        CALL VITIS.SP_NEOE_POSLINK_PTN
         (
             #{membrOrgnCd},
             #{regStoreCd},

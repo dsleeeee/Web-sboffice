@@ -174,10 +174,10 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 등록,수정시 본사코드 A0007만
         if(("A0007").equals(registVO.getMembrOrgnCd())) {
 
-            LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_RTN 호출 : " + dt);
+            LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
             result = mapper.registPoslinkPtn(registVO);
             if(result <= 0) {
-                LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_RTN Fail : " + dt);
+                LOGGER.info("회원등록 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
@@ -227,10 +227,10 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 등록,수정시 본사코드 A0007만
         if(("A0007").equals(registVO.getMembrOrgnCd())) {
 
-            LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_RTN 호출 : " + dt);
+            LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN 호출 : " + dt);
             result = mapper.registPoslinkPtn(registVO);
             if(result <= 0) {
-                LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_RTN Fail : " + dt);
+                LOGGER.info("회원수정 >>> SP_NEOE_POSLINK_PTN Fail : " + dt);
                 throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
 
