@@ -139,10 +139,12 @@
     <typeAlias alias="confgBatchVO" type="kr.co.solbipos.store.manage.confgbatch.service.ConfgBatchVO"/>
     <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
 -->
+    <!-- 기초관리 > 가상로그인  -->
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
-    <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
-
+    <!-- 기초관리 > 총판/대리점 가상로그인  -->
     <typeAlias alias="virtualLoginAgencyVO" type="kr.co.solbipos.store.manage.virtualLoginAgency.service.VirtualLoginAgencyVO"/>
+
+    <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
 <!--
     <typeAlias alias="modifyReqVO" type="kr.co.solbipos.store.manage.modifyreq.service.ModifyReqVO"/>
     시스템관리
@@ -162,16 +164,19 @@
     <typeAlias alias="itemVO" type="kr.co.solbipos.sys.bill.item.service.ItemVO"/>
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
+
+    <!-- 시스템관리 > 통계 > 메뉴기준 사용현황  -->
     <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menuBase.service.MenuBaseVO"/>
+    <!-- 시스템관리 > 통계 > 사용자기준 사용현황  -->
+    <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userBase.service.UserBaseVO"/>
 <!--
-    <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userbase.service.UserBaseVO"/>
     <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.weblogin.service.WebLoginVO"/>
     <typeAlias alias="storeTrnsitnVO" type="kr.co.solbipos.sys.stats.storetrnsitn.service.StoreTrnsitnVO"/>
     <typeAlias alias="userVO" type="kr.co.solbipos.sys.admin.user.service.UserVO"/>
     <typeAlias alias="dataRemoveVO" type="kr.co.solbipos.sys.admin.dataremove.service.DataRemoveVO"/>
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logsend.service.LogSendVO"/>
 -->
-    <!--게시판관리 -->
+    <!-- 시스템관리 > 게시판관리 > 게시판관리 -->
     <typeAlias alias="boardMasterVO" type="kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO"/>
 
     <typeAlias alias="myInfoVO" type="kr.co.solbipos.base.store.myinfo.service.MyInfoVO"/>
@@ -450,8 +455,9 @@
     <!-- 환율관리 -->
     <typeAlias alias="ehgtVO" type="kr.co.solbipos.adi.etc.ehgt.service.EhgtVO"/>
     <typeAlias alias="crncyCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO"/>
-    <!-- 게시판 -->
+    <!-- 부가서비스 > 게시판 > 게시판 -->
     <typeAlias alias="boardVO" type="kr.co.solbipos.adi.board.board.service.BoardVO"/>
+    <!-- 부가서비스 > 자료실 > 자료실 -->
     <typeAlias alias="libraryVO" type="kr.co.solbipos.adi.board.library.service.LibraryVO"/>
 <!--
     <typeAlias alias="dlvrZoneVO" type="kr.co.solbipos.adi.etc.dlvrzone.service.DlvrZoneVO"/>
