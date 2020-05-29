@@ -43,4 +43,7 @@ public interface HqEmpService {
     /** 본사 사원번호 패스워드변경*/
     EmpResult modifyPassword(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
+    /** 권한복사를 위한 본사 사원 리스트 조회 */
+    List<DefaultMap<String>> authHqEmpList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
 }

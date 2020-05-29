@@ -317,4 +317,23 @@
             #{regId}
         )
     </insert>
+
+    <!-- 권한복사를 위한 본사 사원 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_EMPLOYEE
+          PARAM    : hqEmpVO
+          COMMENTS : 본사 사원을 조회한다.
+    -->
+    <select id="authHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
+        /* USE : HqEmpMapper.authHqEmpList */
+        SELECT EMP_NO AS VALUE,
+               '[' || EMP_NO || '] ' || EMP_NM AS NAME
+          FROM TB_HQ_EMPLOYEE
+         WHERE USE_YN = 'Y'
+           AND HQ_OFFICE_CD = #{hqOfficeCd}
+         ORDER BY EMP_NO
+    </select>
+
+
+
 </mapper>

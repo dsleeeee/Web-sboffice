@@ -24,6 +24,7 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 
 /**
@@ -64,7 +65,14 @@ public class HqEmpController {
      * @return the string
      */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
-    public String view(Model model) {
+    public String view(HttpServletRequest request, HqEmpVO hqEmpVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 메뉴권한 복사할 본사 사원 목록 조회
+        List<DefaultMap<String>> authHqEmpList = hqEmpService.authHqEmpList(hqEmpVO, sessionInfoVO);
+        model.addAttribute("authHqEmpList", convertToJson(authHqEmpList));
+
         return "base/store/emp/hqEmp";
     }
 
