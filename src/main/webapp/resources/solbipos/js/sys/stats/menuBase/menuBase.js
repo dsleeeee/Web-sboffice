@@ -57,30 +57,6 @@ app.controller('menuBaseCtrl', ['$scope', '$http', function ($scope, $http) {
                 if (col.binding === "useCnt") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
-
-                // if (col.binding === "useCnt") {
-                //     var item = s.rows[e.row].dataItem;
-                //
-                //     if($scope.level === "1") {
-                //         // 값이 있으면 링크 효과
-                //         if (nvl(item[("level1")], '') !== '') {
-                //             wijmo.addClass(e.cell, 'wijLink');
-                //             wijmo.addClass(e.cell, 'wj-custom-readonly');
-                //         }
-                //     } else if($scope.level === "2") {
-                //         // 값이 있으면 링크 효과
-                //         if (nvl(item[("level2")], '') !== '') {
-                //             wijmo.addClass(e.cell, 'wijLink');
-                //             wijmo.addClass(e.cell, 'wj-custom-readonly');
-                //         }
-                //     } else if($scope.level === "3") {
-                //         // 값이 있으면 링크 효과
-                //         if (nvl(item[("level3")], '') !== '') {
-                //             wijmo.addClass(e.cell, 'wijLink');
-                //             wijmo.addClass(e.cell, 'wj-custom-readonly');
-                //         }
-                //     }
-                // }
             }
         });
 

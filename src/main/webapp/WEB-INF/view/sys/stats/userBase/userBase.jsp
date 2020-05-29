@@ -10,13 +10,13 @@
 
 <div class="subCon">
 
-    <div ng-controller="menuBaseCtrl">
+    <div ng-controller="userBaseCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('menuBaseCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('userBaseCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -32,7 +32,7 @@
                 <tr>
                     <%-- 조회일자 --%>
                     <th>
-                        <s:message code="menuBase.date" />
+                        <s:message code="userBase.date" />
                     </th>
                     <td colspan="3">
                         <div class="sb-select">
@@ -45,14 +45,14 @@
                 <tr>
                     <%-- 메뉴명 --%>
                     <th>
-                        <s:message code="menuBase.resrceNm" />
+                        <s:message code="userBase.resrceNm" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchResrceNm" ng-model="resrceNm" />
                     </td>
                     <%-- 사용환경 --%>
                     <th>
-                        <s:message code="menuBase.useEnv" />
+                        <s:message code="userBase.useEnv" />
                     </th>
                     <td>
                         <div class="sb-select fl w200px">
@@ -71,14 +71,14 @@
                 <tr>
                     <%-- 사용자ID --%>
                     <th>
-                        <s:message code="menuBase.userId" />
+                        <s:message code="userBase.userId" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" />
                     </td>
                     <%-- 사용자명 --%>
                     <th>
-                        <s:message code="menuBase.userNm" />
+                        <s:message code="userBase.userNm" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" />
@@ -87,14 +87,14 @@
                 <tr>
                     <%-- 본사코드 --%>
                     <th>
-                        <s:message code="menuBase.hqOfficeCd" />
+                        <s:message code="userBase.hqOfficeCd" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
                     </td>
                     <%-- 본사명 --%>
                     <th>
-                        <s:message code="menuBase.hqOfficeNm" />
+                        <s:message code="userBase.hqOfficeNm" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
@@ -103,14 +103,14 @@
                 <tr>
                     <%-- 매장코드 --%>
                     <th>
-                        <s:message code="menuBase.storeCd" />
+                        <s:message code="userBase.storeCd" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
                     </td>
                     <%-- 매장명 --%>
                     <th>
-                        <s:message code="menuBase.storeNm" />
+                        <s:message code="userBase.storeNm" />
                     </th>
                     <td>
                         <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
@@ -133,7 +133,7 @@
         </div>
 
         <%--left--%>
-        <div class="wj-TblWrap mt20 mb20 w40 fl">
+        <div class="wj-TblWrap mt20 mb20 w50 fl">
             <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
@@ -144,19 +144,18 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
-                            id="wjGridMenuBaseList"
-                            allow-merging="Cells">
+                            id="wjGridUserBaseList">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="menuBase.level1Nm"/>" binding="level1Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level2Nm"/>" binding="level2Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level3Nm"/>" binding="level3Nm" width="*" is-read-only="true" align="center" allow-merging="true"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.useCnt"/>" binding="useCnt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.hqOfficeCd"/>" binding="hqOfficeCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.hqOfficeNm"/>" binding="hqOfficeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.storeCd"/>" binding="storeCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.storeNm"/>" binding="storeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.userNm"/>" binding="userNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.useCnt"/>" binding="useCnt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                             <%--상세 조회시 필요--%>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level1"/>" binding="level1" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level2"/>" binding="level2" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="menuBase.level3"/>" binding="level3" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                         </wj-flex-grid>
                     </div>
@@ -167,30 +166,17 @@
     </div>
 
     <%--right--%>
-    <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="menuBaseDetailCtrl">
+    <div class="wj-TblWrap mt20 mb20 w50 fr">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
-                    <wj-flex-grid
-                        autoGenerateColumns="false"
-                        control="flex"
-                        initialized="initGrid(s,e)"
-                        selection-mode="Row"
-                        items-source="data"
-                        item-formatter="_itemFormatter">
 
-                        <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="menuBase.hqOfficeCd"/>" binding="hqOfficeCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.hqOfficeNm"/>" binding="hqOfficeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.storeNm"/>" binding="storeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.orgnFg"/>" binding="orgnFg" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.userId"/>" binding="userId" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.userNm"/>" binding="userNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="menuBase.useCnt"/>" binding="useCnt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <%-- 사용자 팝업 레이어 --%>
+                <c:import url="/WEB-INF/view/sys/stats/userBase/user.jsp">
+                </c:import>
+                <%-- 사용메뉴 팝업 레이어 --%>
+                <c:import url="/WEB-INF/view/sys/stats/userBase/useMenu.jsp">
+                </c:import>
 
-                    </wj-flex-grid>
-                </div>
             </div>
         </div>
     </div>
@@ -198,4 +184,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/menuBase/menuBase.js?ver=20200527.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/userBase/userBase.js?ver=20200529.22" charset="utf-8"></script>

@@ -1,23 +1,23 @@
-package kr.co.solbipos.sys.stats.menuBase.service;
+package kr.co.solbipos.sys.stats.userBase.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : MenuBaseVO.java
- * @Description : 시스템관리 > 통계 > 메뉴기준 사용현황
+ * @Class Name : UserBaseVO.java
+ * @Description : 시스템관리 > 통계 > 사용자기준 사용현황
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2020.05.22  김설아      최초생성
+ * @ 2020.05.27  김설아      최초생성
  *
  * @author 솔비포스 개발본부 백엔드PT 김설아
- * @since 2020.05.22
+ * @since 2020.05.27
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class MenuBaseVO extends PageVO {
+public class UserBaseVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
