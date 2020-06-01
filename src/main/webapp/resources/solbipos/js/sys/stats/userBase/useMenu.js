@@ -28,7 +28,6 @@ app.controller('useMenuCtrl', ['$scope', '$http', function ($scope, $http) {
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
-
     };
 
     // <-- 검색 호출 -->
