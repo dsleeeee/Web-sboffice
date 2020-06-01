@@ -324,7 +324,7 @@ app.controller('versusPeriodHourChartCtrl', ['$scope', '$http','$timeout', funct
 		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
 		var widthMax = new Array();
 
-        labels.forEach((value, key, parent) => {
+        labels.forEach(function(value, key, parent) {
 
         	var x = +value.getAttribute('x');
             var y = +value.getAttribute('y');
@@ -333,7 +333,7 @@ app.controller('versusPeriodHourChartCtrl', ['$scope', '$http','$timeout', funct
 
             widthMax[key] = new Array();
 
-            text.forEach((item, index) => {
+            text.forEach(function(item, index) {
 
                 var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
                 //e.setAttribute("x", (x + 0).toString());
@@ -355,7 +355,7 @@ app.controller('versusPeriodHourChartCtrl', ['$scope', '$http','$timeout', funct
             });
         });
 
-        labels.forEach((value, key, parent) => {
+        labels.forEach(function(value, key, parent) {
 
         	var children = value.childNodes;
 

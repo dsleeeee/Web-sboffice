@@ -190,7 +190,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
 		var widthMax = new Array();
 
-	    labels.forEach((value, key, parent) => {
+	    labels.forEach(function(value, key, parent) {
 
 	    	var x = +value.getAttribute('x');
 	        var y = +value.getAttribute('y');
@@ -199,7 +199,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 
 	        widthMax[key] = new Array();
 
-	        text.forEach((item, index) => {
+	        text.forEach(function(item, index) {
 
 	            var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
 	            //e.setAttribute("x", (x + 0).toString());
@@ -219,7 +219,7 @@ app.controller('prodRankChartCtrl', ['$scope', '$http','$timeout', function ($sc
 	        });
 	    });
 
-	    labels.forEach((value, key, parent) => {
+	    labels.forEach(function(value, key, parent) {
 
 	    	var children = value.childNodes;
 
@@ -313,5 +313,8 @@ app.controller('prodRankExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 
 
 	  };
+	  
+	  
+		
 	  	
 	}]);
