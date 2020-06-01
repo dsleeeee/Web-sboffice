@@ -13,8 +13,6 @@
 
     <!-- 메뉴기준 사용현황 조회 -->
     <!--
-        TABLE    : TB_WB_BOARD_MASTER
-        COMMENTS : 게시판 마스터
         TABLE    : TB_WB_MENU_USE_HIST, TB_WB_RESRCE_INFO,
                    TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
                    TB_MS_EMPLOYEE, TB_MS_STORE,
@@ -250,8 +248,6 @@
 
     <!-- 메뉴기준 사용현황 상세조회 -->
     <!--
-        TABLE    : TB_WB_BOARD_MASTER
-        COMMENTS : 게시판 마스터
         TABLE    : TB_WB_MENU_USE_HIST, TB_WB_RESRCE_INFO,
                    TB_HQ_EMPLOYEE, TB_HQ_OFFICE,
                    TB_MS_EMPLOYEE, TB_MS_STORE,
@@ -309,8 +305,8 @@
             tce.STORE_NM,
             (CASE WHEN tce.ORGN_FG = 'H' THEN '본사'
                   WHEN tce.ORGN_FG = 'S' THEN '매장'
-                  WHEN tce.ORGN_FG ='M' THEN '관리자'
-                  WHEN tce.ORGN_FG ='A' THEN '총판'
+                  WHEN tce.ORGN_FG = 'M' THEN '관리자'
+                  WHEN tce.ORGN_FG = 'A' THEN '총판'
                   ELSE null END
             ) AS ORGN_FG,
             twmu.USER_ID,
