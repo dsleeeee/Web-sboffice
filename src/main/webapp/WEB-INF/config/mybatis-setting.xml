@@ -131,6 +131,7 @@
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
     <typeAlias alias="copyStoreEnvVO" type="kr.co.solbipos.base.store.view.service.CopyStoreEnvVO"/>
+    <typeAlias alias="hqEmpMenuVO" type="kr.co.solbipos.base.store.emp.hq.service.HqEmpMenuVO"/>
     <!-- 기초관리 -> 창고관리 -->
     <typeAlias alias="storageVO" type="kr.co.solbipos.base.store.storage.service.StorageVO"/>
 <!--

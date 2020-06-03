@@ -19,7 +19,7 @@
           <%-- 사원기초정보 탭 --%>
           <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
           <%-- 메뉴권한 탭 --%>
-          <%--<li><a id="hqEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="hqEmp.menuSetting" /></a></li>--%>
+          <li><a id="hqEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="hqEmp.menuSetting" /></a></li>
         </ul>
       </div>
 
@@ -97,4 +97,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20181121.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20181121.10" charset="utf-8"></script>
