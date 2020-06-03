@@ -16,7 +16,7 @@
     </div>
 
     <%-- 웹사이트 메뉴 --%>
-    <div id="webArea" ng-controller="webMenuCtrl">
+    <div id="webArea" ng-controller="hqEmpWebMenuCtrl">
             <%-- 권한복사 영역 --%>
             <table class="tblType01 moreDark mb10 mt10">
                 <colgroup>
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-    <div id="webArea2" ng-controller="notUseWebMenuCtrl">
+    <div id="webArea2" ng-controller="notUseHqEmpWebMenuCtrl">
             <%-- 미사용 메뉴 --%>
             <div class="oh mt10">
                 <div class="wj-TblWrap mr10" style="height:200px;">
@@ -120,4 +120,4 @@
 <script>
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.16" charset="utf-8"></script>

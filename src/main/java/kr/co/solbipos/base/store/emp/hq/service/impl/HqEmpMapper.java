@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.store.emp.hq.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.base.store.emp.hq.service.HqEmpMenuVO;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -61,5 +62,32 @@ public interface HqEmpMapper {
 
     /** 권한복사를 위한 본사 사원 리스트 조회 */
     List<DefaultMap<String>> authHqEmpList(HqEmpVO hqEmpVO);
+
+    /** 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMenu(HqEmpVO hqEmpVO);
+
+    /** 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMenu(HqEmpVO hqEmpVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(HqEmpMenuVO hqEmpMenuVO);
+
+    /** 권한예외 복사 시, 복사기준본사의 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMenu(HqEmpMenuVO hqEmpMenuVO);
+
+    /** 권한예외 복사 */
+    int copyAuthExcp(HqEmpMenuVO hqEmpMenuVO);
+
+    /** 권한확인 */
+    int isAuth(HqEmpMenuVO hqEmpMenus);
+
+    /** 메뉴권한 추가*/
+    int addAuth(HqEmpMenuVO hqEmpMenus);
+
+    /** 권한 삭제 */
+    int removeAuth(HqEmpMenuVO hqEmpMenus);
+
+    /** 권한 전체 삭제 */
+    int removeAuthAll(HqEmpMenuVO hqEmpMenus);
 
 }

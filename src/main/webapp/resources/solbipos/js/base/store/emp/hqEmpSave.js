@@ -218,5 +218,11 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   });
 
+  // 탭변경
+  $scope.changeTab = function() {
+    s_alert.pop(messages["hqEmp.request.regist.hqEmpInfo"]);
+    return;
+  };
+
 
 }]);

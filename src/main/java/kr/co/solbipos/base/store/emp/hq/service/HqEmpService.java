@@ -46,4 +46,19 @@ public interface HqEmpService {
     /** 권한복사를 위한 본사 사원 리스트 조회 */
     List<DefaultMap<String>> authHqEmpList(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
 
+    /** 사용 메뉴 */
+    List<DefaultMap<String>> avlblMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 미사용 메뉴 */
+    List<DefaultMap<String>> beUseMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(HqEmpMenuVO hqEmpMenu, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 추가 */
+    int addAuth(HqEmpMenuVO[] hqEmpMenu, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 삭제 */
+    int removeAuth(HqEmpMenuVO[] hqEmpMenu, SessionInfoVO sessionInfoVO);
+
 }

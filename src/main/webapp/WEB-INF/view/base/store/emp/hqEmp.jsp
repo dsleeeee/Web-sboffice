@@ -5,7 +5,6 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="authHqEmpList" value="${authHqEmpList}" />
 
 <div class="subCon" ng-controller="hqEmpCtrl">
   <div class="searchBar flddUnfld">
@@ -202,7 +201,6 @@
   var serviceFg  = ${ccu.getCommCode("007")};
   var webUseYn   = ${ccu.getCommCode("067")};
   var smsRecvYn  = ${ccu.getCommCode("072")};
-  var authHqEmpList = ${authHqEmpList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=2018112102" charset="utf-8"></script>

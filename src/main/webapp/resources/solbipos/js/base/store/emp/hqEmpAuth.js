@@ -19,6 +19,9 @@ app.controller('hqEmpAuthCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 제목
         $("#empInfo").text(" [" + data.empNo + "]" + data.empNm );
+
+        $scope._broadcast('hqEmpWebMenuCtrl', data);
+
     });
 
     // 탭변경
@@ -27,7 +30,6 @@ app.controller('hqEmpAuthCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.hqEmpDetailLayer.show(true);
         $scope.hqEmpAuthLayer.hide();
 
-        // $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
         event.preventDefault();
     };
 

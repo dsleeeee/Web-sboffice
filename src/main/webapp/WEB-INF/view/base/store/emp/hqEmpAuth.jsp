@@ -34,4 +34,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpAuth.js?ver=20200526.14" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpAuth.js?ver=20200526.19" charset="utf-8"></script>
