@@ -26,19 +26,24 @@ reportSelectStoreShow = function () {
 //매장선택 모듈 팝업 사용시 정의			----------------------------------------------------------------------------------------------------------------------
 */
 
-
 //reportCtrl		START	############################################################################################################################################################################
 app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 /*
 app.controller('reportCtrl', ['$scope', '$http',             function ($scope, $http) {
 app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-*/
-
+*/	
+		
 	//상위 객체 상속 : T/F 는 picker
 	angular.extend(this, new RootController('reportCtrl', $scope, $http, true));
 
 	$scope.orgnFg = gvOrgnFg;
-
+	
+	$scope.init            = function () {
+		$scope.configCtrlList();        
+        event.preventDefault();	//기능수행 종료 (반드시 추가해야 함)
+	};
+	
+	
     //검색조건에 조회기간
 		/*
 		[안됨]
@@ -58,9 +63,7 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 		var startDate 	= wcombo.genDateVal("#startDate", gvStartDate	);
 		var endDate 	= wcombo.genDateVal("#endDate",   gvEndDate		);
 		*/
-
-
-
+	
     //[조회] - START			--------------------------------------------------------------------------------------------------------------------------
     $scope.$on("reportCtrl", function(event, data) {	//판매추이분석 Grid 조회
         
@@ -70,7 +73,80 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         
 	});	//$scope.$on("reportCtrl", function(event, data) {
 
+    $scope.configCtrlList = function(data){
 
+            ///*
+    	    var params = {};
+            	params.searchStoreCd   	= $("#reportSelectStoreCd").val();
+
+            //$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);	//cmm.progress=데이터 처리 중입니다.
+    	    $scope._postJSONQuery.withOutPopUp	(	"/sale/anals/dailyReportNew/config/list.sb",	//영업일보 구성 조회
+    					        					params,
+    					        					function(response)	{
+    																		//데이터 setting
+    															            var configCtrl_1	= agrid.getScope('configCtrl_1');
+    															            var configCtrl_2 	= agrid.getScope('configCtrl_2');
+    															            configCtrl_1.flex.itemsSource = response.data.data.payline;	//결재라인
+    															            configCtrl_2.flex.itemsSource = response.data.data.cfg;		//영업일보 구성
+
+    															          //[영업일보 구성] check-box setting
+    															            for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+    															                var item = configCtrl_2.flex.collectionView.items[i];															                
+    															                //console.log('item:' + item);
+
+    															                if(item.cfgCd    == "SL"){
+    															                	item.cfgSelYn	= "Y";	//[매출종합]은 무조건 'checked' (처음 접속 or '영업일보 구성'을 저장하지 않은 매장의 경우 '영업일보 구성'에서 선택된 것이 없기에, [매출종합]은 선택되어 보여지게 함)
+//    																				item.cfgDispSeq = 1;
+    															                }
+//    															                //item.gChkDispSeq = false;	//순번 check-box는 모두 미선택 상태로
+    															                
+    															            	if(item.cfgSelYn == "Y"){
+    															            		item.gChk = true;
+//    															            		console.log("item.cfgCd")
+                                                                                  //eval( '$(".div_'  + item.cfgCd + '").show();' );
+                                                                                    eval( '$("#div_'  + item.cfgCd + '").show();' );
+                                                                                    eval( '$("#span_' + item.cfgCd + '").show();' );
+
+    															            	}else{
+                                                                                  //eval( '$(".div_'  + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
+                                                                                    eval( '$("#div_'  + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
+                                                                                    eval( '$("#span_' + item.cfgCd + '").hide();' );
+                                                                                }
+    															            	
+    															            	arrDispSeq[i] = new Array(item.cfgCd, item.cfgDispSeq, item.cfgSelYn);	//[영업일보 구성] 정렬 순서 ([i][0]:cfgCd, [i][1]:cfgDispSeq, [i][2]:cfgSelYn)
+    															            	
+    															            	//console.log('Before: ' + item.cfgCd + ' & ' +  item.cfgDispSeq +   ' & ' + eval( '$("#div_sort_id_' + item.cfgCd + '").data("sort");' )   );
+    															            	//eval( '$("#div_sort_id_' + item.cfgCd + '").data(' + '"sort",' + item.cfgDispSeq + ');' );
+    															            	//console.log('After : ' + item.cfgCd + ' & ' +  item.cfgDispSeq +   ' & ' + eval( '$("#div_sort_id_' + item.cfgCd + '").data("sort");' )   );
+    															            	eval( '$("#div_sort_id_' + item.cfgCd + '").data(' + '"sort",' + item.cfgDispSeq + ');' );
+
+    															            }	//for(var i=0; i<configCtrl_2.flex.collectionView.items.length; i++){
+
+    															            //'영업일보(0000-00-00 ~ 0000-00-00)' 문구 setting
+    															            var reportCtrl_excel = agrid.getScope('reportCtrl_excel');
+    															            reportCtrl_excel.span_startDate	= wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd');
+    															            reportCtrl_excel.span_endDate	= wijmo.Globalize.format(endDate  .value, 'yyyy-MM-dd');
+
+    															            //2020.02.24 - '본사'인 경우에도 [결제라인] [영업일보] button 보이기
+    															            if($scope.orgnFg == "H") {	//H:본사, S:가맹점, M:?? -> 매장이 'M'으로 보이는 경우도 있음
+    																    	    $("#btnAdd"		).show();
+    																    	    $("#btnDel"		).show();
+    																    	    $("#btnSave"	).show();
+
+    																    		$("#btnSave2"	).show();
+    																    		$("#btnUp"	 	).show();
+    																    		$("#btnDown"	).show();																    		
+    															    		}
+
+    															            sortByDataItem("reportView");	//화면의 Grid 정렬 변경
+
+    															            //$scope.$broadcast('loadingPopupInactive');
+    																	},	//callBack function
+    												false);    		
+    };	//$scope.reportCtrlList = function(data){
+    //[조회] - END			--------------------------------------------------------------------------------------------------------------------------
+
+    
     $scope.reportCtrlList = function(data){
     	console.log("scope.orgnFg : " + $scope.orgnFg					);
     	console.log("매장                 : " + $("#reportSelectStoreCd").val()	);
@@ -145,6 +221,7 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 															                
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
+															            		console.log("item.cfgCd")
                                                                               //eval( '$(".div_'  + item.cfgCd + '").show();' );
                                                                                 eval( '$("#div_'  + item.cfgCd + '").show();' );
                                                                                 eval( '$("#span_' + item.cfgCd + '").show();' );
@@ -279,6 +356,7 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 	angular.extend(this, new RootController('reportCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 	$scope.initGrid = function (s, e) {
+		
         $scope._makePickColumns("reportCtrl_sl");   	        //picker 사용시 호출
 
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel

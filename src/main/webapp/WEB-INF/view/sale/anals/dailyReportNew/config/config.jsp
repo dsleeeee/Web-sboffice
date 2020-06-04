@@ -11,7 +11,7 @@
 <%--
 <div id="configView" class="subCon" ng-controller="configCtrl">
 --%>
-<div id="configView" class="subCon">
+<div id="configView" class="subCon" style="display: none;">
 
 	<%--
     <div class="searchBar flddUnfld">
@@ -46,7 +46,7 @@
 							        --%>
 						<wj-flex-grid-column header="<s:message code="dailyReport.cfgChk"			/>"		binding="gChk" 					width="30"	is-read-only="false" 	align="center"	                ></wj-flex-grid-column>
 						<wj-flex-grid-column header="<s:message code="dailyReport.cfgPayLineSeq"	/>"		binding="cfgPayLineSeq"			width="40"	is-read-only="true" 	align="center"	                ></wj-flex-grid-column>
-						<wj-flex-grid-column header="<s:message code="dailyReport.cfgPayLineNm"  	/>"		binding="cfgPayLineNm"			width="173"	is-read-only="false" 	align="left"	max-length=10	></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="dailyReport.cfgPayLineNm"  	/>"		binding="cfgPayLineNm"			width="123"	is-read-only="false" 	align="left"	max-length=10	></wj-flex-grid-column>
 
 						<wj-flex-grid-column header=""														binding="cfgHqOfficeCd"			width="50"	is-read-only="true" 	align="center"	visible="false"	></wj-flex-grid-column>
 						<wj-flex-grid-column header=""														binding="cfgHqBrandCd"      	width="50"	is-read-only="true" 	align="center"	visible="false"	></wj-flex-grid-column>
@@ -111,7 +111,7 @@
 					<wj-flex-grid-column header="<s:message code="dailyReport.cfgDispSeq"			/>"	binding="gChkDispSeq" 			width="80"	is-read-only="false"	align="center"	format="checkBoxText"	></wj-flex-grid-column>
 
 
-					<wj-flex-grid-column header="<s:message code="dailyReport.cfgSaleDailyReportNm"	/>"	binding="cfgSaleDailyReportNm"	width="300"	is-read-only="true"		align="left"	                		></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dailyReport.cfgSaleDailyReportNm"	/>"	binding="cfgSaleDailyReportNm"	width="250"	is-read-only="true"		align="left"	                		></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dailyReport.cfgChk"				/>"	binding="gChk" 					width="40"	is-read-only="false"	align="center"	                		></wj-flex-grid-column>
 
 					<wj-flex-grid-column header=""														binding="cfgHqOfficeCd"			width="50"	is-read-only="true" 	align="center"	visible="false"			></wj-flex-grid-column>
