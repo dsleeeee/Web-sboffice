@@ -2,7 +2,6 @@ package kr.co.solbipos.sys.stats.userBase.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sys.stats.menuBase.service.MenuBaseVO;
 import kr.co.solbipos.sys.stats.userBase.service.UserBaseService;
 import kr.co.solbipos.sys.stats.userBase.service.UserBaseVO;
 import org.springframework.beans.factory.annotation.Autowired;

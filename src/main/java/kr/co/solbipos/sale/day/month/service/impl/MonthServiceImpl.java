@@ -244,13 +244,15 @@ public class MonthServiceImpl implements MonthService {
     @Override
     public List<DefaultMap<Object>> getMonthCornerList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
+//        System.out.println("test1111");
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
         // 코너구분
-        if(monthVO.getStoreCd() == null)
+        // 매장일때
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             // 코너구분 array 값 세팅
             monthVO.setArrCornerCol(monthVO.getCornerCol().split(","));
@@ -262,13 +264,29 @@ public class MonthServiceImpl implements MonthService {
             }
             monthVO.setPivotCornerCol(pivotCornerCol);
         }
+        // 본사일때 전체매장선택시
+        else if(monthVO.getStoreCd() == null)
+        {
+            // 코너구분 array 값 세팅
+            monthVO.setArrCornerCol(monthVO.getCornerCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "";
+            String arrCornerCol[] = monthVO.getCornerCol().split(",");
+            for(int i=0; i < arrCornerCol.length; i++) {
+                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
+            }
+            monthVO.setPivotCornerCol(pivotCornerCol);
+        }
+        // 본사일때 특정매장선택시
         else
         {
-            // 외식테이블구분 array 값 세팅
-            monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "'"+monthVO.getStoreCornerCd()+"'"+" AS CORNR_"+monthVO.getStoreCornerCd();
-            monthVO.setPivotCornerCol(pivotCornerCol);
+            if(monthVO.getStoreCornerCd() != null) {
+                // 코너구분 array 값 세팅
+                monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(","));
+                // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+                String pivotCornerCol = "'" + monthVO.getStoreCornerCd() + "'" + " AS CORNR_" + monthVO.getStoreCornerCd();
+                monthVO.setPivotCornerCol(pivotCornerCol);
+            }
         }
 
         return monthMapper.getMonthCornerList(monthVO);

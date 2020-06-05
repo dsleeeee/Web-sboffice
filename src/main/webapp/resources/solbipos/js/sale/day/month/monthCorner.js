@@ -197,7 +197,7 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         // 전체매장
         if ($("#monthCornerStoreCd").val() == "") {
             params.storeCd = null;
-            //매장 선택시
+        //매장 선택시
         } else {
             params.storeCd = $("#monthCornerStoreCd").val();
 

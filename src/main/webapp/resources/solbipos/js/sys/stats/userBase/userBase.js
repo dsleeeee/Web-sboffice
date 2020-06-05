@@ -89,9 +89,6 @@ app.controller('userBaseCtrl', ['$scope', '$http', function ($scope, $http) {
                         params.storeCd = selectedRow.storeCd;
                     }
 
-                    // $("#userLayer").show();
-                    // $("#useMenuLayer").hide();
-
                     var storeScope = agrid.getScope('userCtrl');
                     storeScope._broadcast('userCtrl', params);
                     var storeScope2 = agrid.getScope('useMenuCtrl');
