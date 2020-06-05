@@ -41,8 +41,10 @@ public class ProdInfoServiceImpl implements ProdInfoService {
         // 기간별매출 > 일자별 탭 > 상품분류별 탭
         // 기간별매출 > 월별 탭 > 상품분류별 탭
         if(("dayProdClass").equals(prodInfoVO.getGubun()) || ("monthProdClass").equals(prodInfoVO.getGubun())) {
-            // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
-            prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
+            if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
+                // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+                prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
+            }
         }
 
         return prodInfoMapper.getProdSaleDtlList(prodInfoVO);
