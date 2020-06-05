@@ -20,7 +20,7 @@
                    [매장]상품, [매장]상품_분류
     -->
     <select id="getProdSaleDtlList" parameterType="ProdInfoVO" resultType="DefaultMap">
-        /* ProdInfoMapper.ProdInfoMapper */
+        /* ProdInfoMapper.getProdSaleDtlList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>

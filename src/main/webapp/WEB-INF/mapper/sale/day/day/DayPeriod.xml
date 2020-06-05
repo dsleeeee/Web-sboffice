@@ -511,7 +511,7 @@
         AND tmg.GIFT_CD (+)= tsspgd.GIFT_CD
         AND tmpmc.STORE_CD (+)= tmg.STORE_CD
         AND tmpmc.PAY_CLASS_CD (+)= tmg.PAY_CLASS_CD
-        GROUP BY tsspgd.STORE_CD, tmg.PAY_CLASS_CD
+        GROUP BY tsspgd.STORE_CD, tmg.PAY_CLASS_CD, tmpmc.PAY_CLASS_NM, tsspgd.GIFT_PROC_FG
         ORDER BY tsspgd.STORE_CD, tmg.PAY_CLASS_CD
     </select>
 

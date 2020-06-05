@@ -348,7 +348,8 @@ public class DayServiceImpl implements DayService {
         }
 
         // 코너구분
-        if(dayVO.getStoreCd() == null)
+        // 매장일때
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             // 코너구분 array 값 세팅
             dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
@@ -360,6 +361,20 @@ public class DayServiceImpl implements DayService {
             }
             dayVO.setPivotCornerCol(pivotCornerCol);
         }
+        // 본사일때 전체매장선택시
+        else if(dayVO.getStoreCd() == null)
+        {
+            // 코너구분 array 값 세팅
+            dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "";
+            String arrCornerCol[] = dayVO.getCornerCol().split(",");
+            for(int i=0; i < arrCornerCol.length; i++) {
+                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
+            }
+            dayVO.setPivotCornerCol(pivotCornerCol);
+        }
+        // 본사일때 특정매장선택시
         else
         {
             // 외식테이블구분 array 값 세팅
@@ -433,6 +448,9 @@ public class DayServiceImpl implements DayService {
     public List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
             dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));

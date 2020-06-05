@@ -251,7 +251,8 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         }
 
         // 코너구분
-        if(dayOfWeekVO.getStoreCd() == null)
+        // 매장일때
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             // 코너구분 array 값 세팅
             dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getCornerCol().split(","));
@@ -263,6 +264,20 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
             }
             dayOfWeekVO.setPivotCornerCol(pivotCornerCol);
         }
+        // 본사일때 전체매장선택시
+        else if(dayOfWeekVO.getStoreCd() == null)
+        {
+            // 코너구분 array 값 세팅
+            dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getCornerCol().split(","));
+            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+            String pivotCornerCol = "";
+            String arrCornerCol[] = dayOfWeekVO.getCornerCol().split(",");
+            for(int i=0; i < arrCornerCol.length; i++) {
+                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
+            }
+            dayOfWeekVO.setPivotCornerCol(pivotCornerCol);
+        }
+        // 본사일때 특정매장선택시
         else
         {
             // 외식테이블구분 array 값 세팅
