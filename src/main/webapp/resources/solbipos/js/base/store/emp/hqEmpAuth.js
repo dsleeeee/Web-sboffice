@@ -16,8 +16,22 @@ app.controller('hqEmpAuthCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 팝업 오픈시 사원메뉴권한 조회
     $scope.$on("hqEmpAuthCtrl", function(event, data) {
-        
+
+        // 제목
+        $("#empInfo").text(" [" + data.empNo + "]" + data.empNm );
+
+        $scope._broadcast('hqEmpWebMenuCtrl', data);
+
     });
+
+    // 탭변경
+    $scope.changeTab = function() {
+
+        $scope.hqEmpDetailLayer.show(true);
+        $scope.hqEmpAuthLayer.hide();
+
+        event.preventDefault();
+    };
 
 
 }]);

@@ -60,7 +60,7 @@
                             is-read-only="true">
 
                        <!-- define columns -->
-                       <wj-flex-grid-column header="<s:message code="prod.hqOfficeCd"/>" binding="hqOfficeCd" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                       <wj-flex-grid-column header="<s:message code="prod.hqOfficeCd"/>" binding="hqOfficeCd" is-read-only="true" align="center"></wj-flex-grid-column>
                        <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                        <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="350"is-read-only="true"></wj-flex-grid-column>
 

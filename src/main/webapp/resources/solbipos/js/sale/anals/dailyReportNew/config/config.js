@@ -471,10 +471,17 @@ app.controller('configCtrl_2', ['$scope', '$http', function ($scope, $http) {
 
         	params.push( $scope.flex.collectionView.items[i] );
         }
-
+        
+        
+        if( $("#reportSelectStoreCd").val() == "" ){        	
+//        	$scope._save("/sale/anals/dailyReportNew/config/save.sb", params, agrid.getScope('reportCtrl').configCtrlList() );													//저장(URL, parameter, callback function)
+        	$scope._save("/sale/anals/dailyReportNew/config/save.sb", params,function(){$scope.getConfigList()});													//저장(URL, parameter, callback function)        	
+        }else{
+        	$scope._save("/sale/anals/dailyReportNew/config/save.sb", params, agrid.getScope('reportCtrl').reportCtrlList()	);	//저장(URL, parameter, callback function) - [영업일보 구성]저장 후, [영업일보]내역 재조회 되게 변경        	
+        }
       //DEBUG	console.log("params: " + JSON.stringify(params));
       //$scope._save("/sale/anals/dailyReportNew/config/save.sb", params);													//저장(URL, parameter, callback function)
-        $scope._save("/sale/anals/dailyReportNew/config/save.sb", params, agrid.getScope('reportCtrl').reportCtrlList()	);	//저장(URL, parameter, callback function) - [영업일보 구성]저장 후, [영업일보]내역 재조회 되게 변경
+//        $scope._save("/sale/anals/dailyReportNew/config/save.sb", params, agrid.getScope('reportCtrl').reportCtrlList()	);	//저장(URL, parameter, callback function) - [영업일보 구성]저장 후, [영업일보]내역 재조회 되게 변경
     }
     //Grid 저장   END     --------------------------------------------------------------------------------------------------------------------------
 

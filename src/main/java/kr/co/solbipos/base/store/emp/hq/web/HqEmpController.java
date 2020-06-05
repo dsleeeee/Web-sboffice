@@ -8,6 +8,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpService;
 import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
+import kr.co.solbipos.base.store.emp.hq.service.HqEmpMenuVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,6 +180,139 @@ public class HqEmpController {
         EmpResult empResult = hqEmpService.modifyPassword(hqEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, empResult);
+    }
+
+    /**
+     * 권한복사를 위한 본사 사원 리스트 조회
+     * @param hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/authHqEmpList.sb", method = RequestMethod.POST)
+    public Result authHqEmpList(HqEmpVO hqEmpVO, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 메뉴권한 복사할 본사 사원 목록 조회
+        List<DefaultMap<String>> authHqEmpList = hqEmpService.authHqEmpList(hqEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, authHqEmpList);
+    }
+
+    /**
+     * 사용메뉴 조회
+     * @param hqEmpVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.06.01
+     */
+    @RequestMapping(value = "/avlblMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMenu(HqEmpVO hqEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMenu = hqEmpService.avlblMenu(hqEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, avlblMenu);
+    }
+
+    /**
+     * 미사용메뉴 조회
+     * @param hqEmpVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.06.01
+     */
+    @RequestMapping(value = "/beUseMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMenu(HqEmpVO hqEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMenu = hqEmpService.beUseMenu(hqEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, beUseMenu);
+    }
+
+    /**
+     * 메뉴권한복사
+     * @param   hqEmpMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.01
+     */
+    @RequestMapping(value = "/copyAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyAuth(@RequestBody HqEmpMenuVO hqEmpMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.copyAuth(hqEmpMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 추가
+     * @param   hqEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.01
+     */
+    @RequestMapping(value = "/addAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addAuth(@RequestBody HqEmpMenuVO[] hqEmpMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.addAuth(hqEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 삭제
+     * @param   hqEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.01
+     */
+    @RequestMapping(value = "/removeAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeAuth(@RequestBody HqEmpMenuVO[] hqEmpMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.removeAuth(hqEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
     }
 
 }

@@ -10,10 +10,10 @@
         <ul>
             <li>
                 <a id="reportTab"	href="#" ng-click="reportShow()"	class="on"	><s:message code="dailyReport.report"/></a>			<%-- [영업일보]     Tab --%>
-            </li>
+            </li>              
             <li>
                 <a id="configTab" 	href="#" ng-click="configShow()"				><s:message code="dailyReport.reportConfig"/></a>	<%-- [영업일보 구성] Tab --%>
-            </li>
+            </li>            
         </ul>
     </div>
 </div>

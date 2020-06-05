@@ -24,9 +24,9 @@
 <div id="reportView" class="subCon">
     <div class="searchBar flddUnfld" ng-controller="reportCtrl">
 --%>
-<div id="reportView" class="subCon">
+<div id="reportView" class="subCon"  style="display: none;">
 	<div class="div_sort_class" data-sort="0">
-	    <div class="searchBar flddUnfld" ng-controller="reportCtrl">
+	    <div class="searchBar flddUnfld" ng-controller="reportCtrl" ng-init="init()">
 	        <a href="#" class="open fl">${menuNm}</a>
 	        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;"><%-- [조회] --%>
 	        	<button class="btn_blue fr" ng-click="_broadcast('reportCtrl')"><s:message code="cmm.search" /></button>
@@ -58,7 +58,7 @@
 	            <tr>
 	                <th><s:message code="dailyReport.store"/></th>	<%-- 매장코드 --%>
 	                <td>
-	                    <%-- 매장선택 모듈 멀티 선택 사용 시 include
+	                    <%-- 매장선택 모듈 멀티 선택 사용 시 include 
 	                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 	                        <jsp:param name="targetId" value="reportSelectStore"/>
 	                    </jsp:include>
@@ -72,6 +72,7 @@
 	                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 	                        <jsp:param name="targetId" value="reportSelectStore"/>
 	                    </jsp:include>
+	                    
 	                </td>
 	            </tr>
 	            </c:if>
@@ -153,7 +154,7 @@
 
 
 	<%-- 결제수단 --%>
-	<div id="div_sort_id_PAY" class="div_sort_class" data-sort="2">
+	<div id="div_sort_id_PAY" class="div_sort_class" data-sort="2" >
 		<div><br></div>
 	    <div class="w100 mt10 flddUnfld_pay" ng-controller="reportCtrl_pay">
 			<div class="oh mb10">

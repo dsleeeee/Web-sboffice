@@ -146,8 +146,8 @@ public interface RegistMapper {
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    int registPoslinkPtn(RegistVO registVO);
+    String registPoslinkPtn(RegistVO registVO);
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
-    int registSposBillPtn(RegistVO registVO);
+    String registSposBillPtn(RegistVO registVO);
 }

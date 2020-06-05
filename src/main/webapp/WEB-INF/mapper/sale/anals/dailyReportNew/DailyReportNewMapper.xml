@@ -1242,13 +1242,21 @@
 	            USE_YN          AS CFG_USE_YN
 	    FROM    TB_SL_SALE_PAY_LINE
 	    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-	    AND     STORE_CD        = #{searchStoreCd}
-	    AND     HQ_BRAND_CD     = (
+	    <choose>
+			<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+ 			AND		STORE_CD		= '0000000'
+	    	AND		HQ_BRAND_CD		= '0000000'		            
+		   	</when>
+		    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+			AND     STORE_CD        = #{searchStoreCd}	    
+	    	AND     HQ_BRAND_CD     = (
 		    						SELECT  HQ_BRAND_CD
 		                          	FROM    TB_MS_STORE
 		                           	WHERE   HQ_OFFICE_CD= #{hqOfficeCd}
 		                          	AND     STORE_CD	= #{searchStoreCd}
-								  )
+								  )    
+		    </when>
+		</choose>								  
 		AND		USE_YN			= 'Y'
 	    ORDER BY CFG_PAY_LINE_SEQ
 	    <!--
@@ -1284,32 +1292,52 @@
 <!--<select id="getCfgList" parameterType="dailyReportNewVO" resultType="DefaultMap">-->
     <select id="getCfgList" parameterType="dailyReportNewVO" resultMap="customMap">
 	    SELECT  NVL(B.HQ_OFFICE_CD, #{hqOfficeCd}	)                           AS CFG_HQ_OFFICE_CD,
-	            NVL(B.HQ_BRAND_CD,  C.HQ_BRAND_CD   )                           AS CFG_HQ_BRAND_CD,
-	            NVL(B.STORE_CD,     #{searchStoreCd})                           AS CFG_STORE_CD,
+			    <choose>
+					<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+		 			NVL(B.HQ_BRAND_CD,  '0000000'   )                           AS CFG_HQ_BRAND_CD,
+	            	NVL(B.STORE_CD,     '0000000'	)                           AS CFG_STORE_CD,            
+				   	</when>
+				    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+					NVL(B.HQ_BRAND_CD,  C.HQ_BRAND_CD   )                           AS CFG_HQ_BRAND_CD,
+	            	NVL(B.STORE_CD,     #{searchStoreCd})                           AS CFG_STORE_CD, 
+				    </when>
+				</choose>	    
 	            DECODE(B.SALE_DAILY_REPORT_CD, NULL, A.NMCODE_CD,
 	                                                 B.SALE_DAILY_REPORT_CD)    AS CFG_SALE_DAILY_REPORT_CD,
 	            A.NMCODE_NM                                                     AS CFG_SALE_DAILY_REPORT_NM,
-	            NVL(B.SEL_YN, 'N')                                              AS CFG_SEL_YN,
-	            B.DISP_SEQ														AS CFG_DISP_SEQ,
+<!-- 	            NVL(B.SEL_YN, 'N')                                              AS CFG_SEL_YN, -->
+	            DECODE(A.NMCODE_ITEM_1, 'SL', 'Y', NVL(B.SEL_YN, 'N'))			AS CFG_SEL_YN,
+	            NVL(B.DISP_SEQ,DECODE(B.SALE_DAILY_REPORT_CD, NULL, A.NMCODE_CD,
+	                                                 B.SALE_DAILY_REPORT_CD))	AS CFG_DISP_SEQ,
 	        	'N'																AS G_CHK_DISP_SEQ,
 	            A.NMCODE_ITEM_1                                                 AS CFG_CD
 	    FROM                    TB_CM_NMCODE                A
 	            LEFT OUTER JOIN TB_SL_SALE_DAILY_REPORT_MNG B
 	            ON              A.NMCODE_CD     = B.SALE_DAILY_REPORT_CD
 	            AND             B.HQ_OFFICE_CD  = #{hqOfficeCd}
-	            AND             B.STORE_CD      = #{searchStoreCd}
-	            AND             B.HQ_BRAND_CD   = (
-	            									SELECT  HQ_BRAND_CD
-	                                                FROM    TB_MS_STORE
-	                                                WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
-	                                                AND     STORE_CD    	= #{searchStoreCd}
-	                                              )
-	            INNER JOIN      TB_MS_STORE                 C
-	            ON              C.HQ_OFFICE_CD	= #{hqOfficeCd}
-	            AND             C.STORE_CD    	= #{searchStoreCd}
+	            <choose>
+					<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+		 			AND             B.STORE_CD      = '0000000'
+	            	AND             B.HQ_BRAND_CD   = '0000000'            
+				   	</when>
+				    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+					AND             B.STORE_CD      = #{searchStoreCd}
+		            AND             B.HQ_BRAND_CD   = (
+		            									SELECT  HQ_BRAND_CD
+		                                                FROM    TB_MS_STORE
+		                                                WHERE   HQ_OFFICE_CD	= #{hqOfficeCd}
+		                                                AND     STORE_CD    	= #{searchStoreCd}
+		                                              )
+		            INNER JOIN      TB_MS_STORE                 C
+		            ON              C.HQ_OFFICE_CD	= #{hqOfficeCd}
+		            AND             C.STORE_CD    	= #{searchStoreCd} 
+				    </when>
+				</choose>	            
 	    WHERE   A.NMCODE_GRP_CD = '200'											<!-- TB_CM_NMCODE 영업일보 구성 코드 -->
 	  --ORDER BY CFG_SALE_DAILY_REPORT_CD
-	    ORDER BY CFG_DISP_SEQ, CFG_SALE_DAILY_REPORT_CD
+	  --ORDER BY CFG_DISP_SEQ, CFG_SALE_DAILY_REPORT_CD
+	  	ORDER BY NVL(B.DISP_SEQ,DECODE(B.SALE_DAILY_REPORT_CD, NULL, A.NMCODE_CD,
+	                                                 B.SALE_DAILY_REPORT_CD))
     	<!--
 	    SELECT  B.HQ_OFFICE_CD                                                  AS CFG_HQ_OFFICE_CD,
 	            B.HQ_BRAND_CD                                                   AS CFG_HQ_BRAND_CD,
@@ -1367,13 +1395,21 @@
 	                                    )
 	                            VALUES  (
 	                                        #{cfgHqOfficeCd},
-	            							(
-           										SELECT  HQ_BRAND_CD
-												FROM    TB_MS_STORE
-                                               	WHERE   HQ_OFFICE_CD= #{cfgHqOfficeCd}
-                                               	AND     STORE_CD	= #{cfgStoreCd}
-	                                      	),
-	                                        #{cfgStoreCd},
+	                                        <choose>
+												<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+									 			'0000000',
+	                                        	'0000000',            
+											   	</when>
+											    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+												(
+	           										SELECT  HQ_BRAND_CD
+													FROM    TB_MS_STORE
+	                                               	WHERE   HQ_OFFICE_CD= #{cfgHqOfficeCd}
+	                                               	AND     STORE_CD	= #{cfgStoreCd}
+		                                      	),
+		                                        #{cfgStoreCd}, 
+											    </when>
+											</choose>
 	                                        #{cfgSaleDailyReportCd},
 	                                        #{cfgSelYn},
 	                                        #{cfgDispSeq},
@@ -1408,14 +1444,30 @@
 	                                    )
 	                            VALUES  (
 	                                        #{cfgHqOfficeCd},
-	                                        #{cfgHqBrandCd},
-	                                        #{cfgStoreCd},
+	                                        <choose>
+												<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+									 			'0000000',
+	                                        	'0000000',            
+											   	</when>
+											    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+												#{cfgHqBrandCd},
+	                                        	#{cfgStoreCd},	       
+											    </when>
+											</choose>	                                        
 											(
 											    SELECT  NVL(MAX(PAY_LINE_NO),0) + 1
 											    FROM    TB_SL_SALE_PAY_LINE
 											    WHERE   HQ_OFFICE_CD    = #{cfgHqOfficeCd}
-											    AND     HQ_BRAND_CD     = #{cfgHqBrandCd}
-											    AND     STORE_CD        = #{cfgStoreCd}
+											    <choose>
+													<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+										 			AND     HQ_BRAND_CD     = '0000000'
+											    	AND     STORE_CD        = '0000000'		            
+												   	</when>
+												    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+													AND     HQ_BRAND_CD     = #{cfgHqBrandCd}
+											    	AND     STORE_CD        = #{cfgStoreCd}	       
+												    </when>
+												</choose>
 										    ),
 	                            			#{cfgPayLineSeq},
 	                            			#{cfgPayLineNm},
@@ -1442,8 +1494,16 @@
                 MOD_DT    		= #{modDt},
                 MOD_ID    		= #{modId}
 		WHERE	HQ_OFFICE_CD	= #{cfgHqOfficeCd}
-		AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
-		AND 	STORE_CD        = #{cfgStoreCd}
+		<choose>
+			<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+ 			AND 	HQ_BRAND_CD     = '0000000'
+			AND 	STORE_CD        = '0000000'		            
+		   	</when>
+		    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+			AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
+			AND 	STORE_CD        = #{cfgStoreCd}		      
+		    </when>
+		</choose>
 		AND 	PAY_LINE_NO  	= #{cfgPayLineNo}
 	</update>
 
@@ -1460,8 +1520,16 @@
                 MOD_DT    		= #{modDt},
                 MOD_ID    		= #{modId}
 		WHERE	HQ_OFFICE_CD	= #{cfgHqOfficeCd}
-		AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
-		AND 	STORE_CD        = #{cfgStoreCd}
+		<choose>
+			<when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+ 			AND 	HQ_BRAND_CD     = '0000000'
+			AND 	STORE_CD        = '0000000'		            
+		   	</when>
+		    <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+			AND 	HQ_BRAND_CD     = #{cfgHqBrandCd}
+			AND 	STORE_CD        = #{cfgStoreCd}		      
+		    </when>
+		</choose>
 		AND 	PAY_LINE_NO  	= #{cfgPayLineNo}
 	</update>
 
