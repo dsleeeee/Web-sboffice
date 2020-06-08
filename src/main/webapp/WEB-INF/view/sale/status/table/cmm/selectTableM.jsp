@@ -104,25 +104,30 @@
     $scope.tableSelected = function () {
       var flex       = agrid.getScope(targetId + 'Ctrl').data.sourceCollection;
       // var flex = $scope.tableGridM;
-
+	
       var arrTableCd = [];
+      var arrTableCdOrg = [];
       var arrTableNm = [];
       var strTableCd = "";
+      var strTableCdOrg = "";
       var strStoreNm = "";
       var strTableNm = "";
       var cnt        = 0;
 
       $("#" + targetId + "Cd").val("");
       $("#" + targetId + "Name").val("");
+      $("#" + targetId + "CdOrg").val("");
 
       for (var i = 0; i < flex.length; i++) {
         if (flex[i].gChk) {
           if (cnt == 0) {
             strTableCd = flex[i].tableCd;
+            strTableCdOrg = flex[i].tableCdOrg;
             strStoreNm = flex[i].storeNm;
             strTableNm = flex[i].tableNm;
           }
           arrTableCd.push(flex[i].tableCd);
+          arrTableCdOrg.push(flex[i].tableCdOrg);
           arrTableNm.push(flex[i].storeNm + "||" + flex[i].tableNm);
           cnt++;
         }
@@ -130,7 +135,8 @@
 
       $("#" + targetId + "Cd").val(arrTableCd.join());
       $("#" + targetId + "Name").val(arrTableNm.join());
-
+      $("#" + targetId + "CdOrg").val(arrTableCdOrg.join());
+      
       if (cnt == 0) {
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }

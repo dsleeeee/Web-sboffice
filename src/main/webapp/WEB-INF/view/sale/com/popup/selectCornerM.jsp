@@ -105,23 +105,28 @@
       // var flex = $scope.posGridM;
 
       var arrCornrCd = [];
+      var arrCornrCdOrg = [];
       var arrCornrNm = [];
       var strCornrCd = "";
+      var strCornrCdOrg = "";
       var strStoreNm = "";
       var strCornrNm = "";
       var cnt        = 0;
       
       $("#" + targetId + "Cd").val("");
       $("#" + targetId + "Name").val("");
+      $("#" + targetId + "CdOrg").val("");
 
       for (var i = 0; i < flex.length; i++) {
         if (flex[i].gChk) {
           if (cnt == 0) {
             strCornrCd = flex[i].cornrCd;
+            strCornrCdOrg = flex[i].cornrCdOrg;
             strStoreNm = flex[i].storeNm;
             strCornrNm = flex[i].cornrNm;
           }
           arrCornrCd.push(flex[i].cornrCd);
+          arrCornrCdOrg.push(flex[i].cornrCdOrg);
           arrCornrNm.push(flex[i].storeNm + "||" + flex[i].cornrNm);
           cnt++;
         }
@@ -129,6 +134,8 @@
 
       $("#" + targetId + "Cd").val(arrCornrCd.join());
       $("#" + targetId + "Name").val(arrCornrNm.join());
+      $("#" + targetId + "CdOrg").val(arrCornrCdOrg.join());
+      
       if (cnt == 0) {
 //     	$("#" + targetId + "Cd").val(arrCornrCd.join());
         $("#" + targetId + "Nm").val(messages["cmm.all"]);

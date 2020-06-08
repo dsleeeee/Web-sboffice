@@ -61,6 +61,7 @@
 
 				<input type="hidden" id="tableDaySelectTableCd" value=""/>
 				<input type="hidden" id="tableDaySelectTableName" value=""/>
+				<input type="hidden" id="tableDaySelectTableCdOrg" value=""/>
 				<tr>
 					<%-- 테이블선택 --%>
 					<th><s:message code="tableDay.table" /></th>

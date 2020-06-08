@@ -59,6 +59,7 @@
 
 				<input type="hidden" id="tableDayOfWeekSelectTableCd" value=""/>
 				<input type="hidden" id="tableDayOfWeekSelectTableName" value=""/>
+				<input type="hidden" id="tableDayOfWeekSelectTableCdOrg" value=""/>
 				<tr>
 					<%-- 테이블선택 --%>
 					<th><s:message code="tableDay.table" /></th>
