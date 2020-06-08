@@ -77,6 +77,7 @@
 
 				<input type="hidden" id="tableMonthSelectTableCd" value=""/>
 				<input type="hidden" id="tableMonthSelectTableName" value=""/>
+				<input type="hidden" id="tableMonthSelectTableCdOrg" value=""/>
 				<tr>
 					<%-- 테이블선택 --%>
 					<th><s:message code="tableDay.table" /></th>

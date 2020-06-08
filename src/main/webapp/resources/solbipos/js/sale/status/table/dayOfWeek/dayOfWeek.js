@@ -118,6 +118,8 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    		params.chkPop   = "tablePop";
 
 	    		var storeTable   = $("#tableDayOfWeekSelectTableCd").val().split(",");
+	    		var storeTableOrg   = 	$("#tableDayOfWeekSelectTableCdOrg").val().split(",");
+	    		var storeCd			=	$("#tableDayOfWeekSelectStoreCd").val();
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			var arrStore= [];
@@ -129,10 +131,15 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		    		}
 
 		    		//params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
-		    		params.tblCd   = arrStore[Math.floor(ht.col/3) - 1] + '||' + arrTbl[Math.floor(ht.col/3) - 1];
+//		    		params.tblCd   = arrStore[Math.floor(ht.col/3) - 1] + '||' + arrTbl[Math.floor(ht.col/3) - 1];
+		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+		    		params.storeCd	=	storeCd;
+		    		
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
-        			params.tblCd	 = storeTable.join(",");
+//        			params.tblCd	 = storeTable.join(",");
+        			params.tblCd	= storeTableOrg.join(",");
+        			params.storeCd	=	storeCd;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}

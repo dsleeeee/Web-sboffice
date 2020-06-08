@@ -108,9 +108,3 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTable.js?ver=20200108.08" charset="utf-8"></script>
-
-<%-- 상품매출 상세내역 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayProdSaleDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

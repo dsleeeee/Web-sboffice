@@ -99,9 +99,3 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.07" charset="utf-8"></script>
-
-<%-- 상품매출 상세 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

@@ -161,6 +161,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.saleDate 	= $scope.saleDate;
         params.saleDay     	= $scope.saleDay;
     }
+        
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/table/view.sb", params);
   };

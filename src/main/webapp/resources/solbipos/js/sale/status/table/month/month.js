@@ -116,7 +116,10 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    		params.chkPop   = "tablePop";
 	    		params.gubun   = "month";
 	    		var storeTable   = $("#tableMonthSelectTableCd").val().split(",");;
-
+	    		var storeTableOrg   = 	$("#tableMonthSelectTableCdOrg").val().split(",");
+	    		var storeCd			=	$("#tableMonthSelectStoreCd").val();
+	    		
+	    		
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			var arrStore= [];
 		    		var arrTbl= [];
@@ -127,10 +130,15 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 		    		}
 
 		    		//params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
-		    		params.tblCd   = arrStore[Math.floor(ht.col/3) - 1] + '||' + arrTbl[Math.floor(ht.col/3) - 1];
+//		    		params.tblCd   = arrStore[Math.floor(ht.col/3) - 1] + '||' + arrTbl[Math.floor(ht.col/3) - 1];
+		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+		    		params.storeCd	=	storeCd;
+		    		
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
-        			params.tblCd	 = storeTable.join(",");;
+//        			params.tblCd	 = storeTable.join(",");
+	    			params.tblCd	= storeTableOrg.join(",");
+        			params.storeCd	=	storeCd;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}
