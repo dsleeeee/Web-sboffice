@@ -117,21 +117,3 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTotal.js?ver=20191219.19" charset="utf-8"></script>
-
-<%-- 매장별 매출현황 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayStoreDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 매장별 할인내역 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayStoreDc.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 매장별 영수건수 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/dayBillInfo/dayStoreBill.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

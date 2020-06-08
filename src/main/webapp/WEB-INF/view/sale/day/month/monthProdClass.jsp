@@ -164,13 +164,3 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthProdClass.js?ver=20200324.08" charset="utf-8"></script>
-
-<%-- 상품분류 팝업 --%>
-<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
-<%--</c:import>--%>
-
-<%-- 상품매출 상세 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
