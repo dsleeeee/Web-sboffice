@@ -211,6 +211,7 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 
 	          params.startDate = wijmo.Globalize.format($scope.srchCornerDayPeriodStartDate.value, 'yyyyMMdd');
 	          params.endDate = wijmo.Globalize.format($scope.srchCornerDayPeriodEndDate.value, 'yyyyMMdd');
+
 	        }else{
 	            $scope.startDateForDt = "";
 	            $scope.endDateForDt = "";
@@ -292,8 +293,21 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 
 	  // 코너별매출일자별 리스트 조회
 	  $scope.searchCornerDayPeriodDtlList = function (isPageChk) {
-	    // 파라미터
+
+		  // 파라미터
 	    var params       = {};
+		  // 등록일자 '전체기간' 선택에 따른 params
+	        if(!$scope.isChecked){
+	          $scope.startDateForDt = wijmo.Globalize.format($scope.srchCornerDayPeriodStartDate.value, 'yyyyMMdd');
+	          $scope.endDateForDt = wijmo.Globalize.format($scope.srchCornerDayPeriodEndDate.value, 'yyyyMMdd');
+
+	          params.startDate = wijmo.Globalize.format($scope.srchCornerDayPeriodStartDate.value, 'yyyyMMdd');
+	          params.endDate = wijmo.Globalize.format($scope.srchCornerDayPeriodEndDate.value, 'yyyyMMdd');
+	        }else{
+	            $scope.startDateForDt = "";
+	            $scope.endDateForDt = "";
+	        }		  
+	    
 	    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 	    params.startDate = $scope.startDateForDt;
 	    params.endDate   = $scope.endDateForDt;
