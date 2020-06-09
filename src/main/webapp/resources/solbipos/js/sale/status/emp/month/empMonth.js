@@ -283,7 +283,8 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 			   		params.chkPop	= "empPop";
 			   		params.empNo    = empNoCd;
-			   		params.storeCd   = storeCd;
+//			   		params.storeCd   = storeCd;
+			   		params.storeCd   = $("#empMonthSelectStoreCd").val();
 			   		params.saleMonth   = selectedRow.saleDate;
 
 			   		if (col.binding.substring(0, 7) === "billCnt") { //영수건수 클릭

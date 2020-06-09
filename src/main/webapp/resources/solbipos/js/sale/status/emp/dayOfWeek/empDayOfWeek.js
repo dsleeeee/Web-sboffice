@@ -282,7 +282,8 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 				   		
 				   		params.chkPop	= "empPop";
 				   		params.empNo    = empNoCd;
-				   		params.storeCd   = storeCd;
+//				   		params.storeCd   = storeCd;
+				   		params.storeCd   = $("#empDayOfWeekSelectStoreCd").val();
 				   		if(!$scope.isChecked){
 				   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
 				   			params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');

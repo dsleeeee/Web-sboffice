@@ -295,7 +295,8 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http, $timeo
 
 			   		params.chkPop	= "empPop";
 			   		params.empNo    = empNoCd;
-			   		params.storeCd  = storeCd;
+//			   		params.storeCd  = storeCd;
+			   		params.storeCd   = $("#empPosSelectStoreCd").val();
 			   		params.posNo	= selectedRow.posNo;
 			   		if(!$scope.isChecked){
 			   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');

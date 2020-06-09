@@ -51,6 +51,7 @@
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="empDaySelectStoreCd" valaue=""/>
       	<tr>
            <%-- 매장코드 --%>
          	<th><s:message code="todayBillSaleDtl.store"/></th>
