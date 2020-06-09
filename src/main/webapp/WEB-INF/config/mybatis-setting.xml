@@ -166,12 +166,13 @@
     <typeAlias alias="kindVO" type="kr.co.solbipos.sys.bill.kind.service.KindVO"/>
     <typeAlias alias="templateVO" type="kr.co.solbipos.sys.bill.template.service.TemplateVO"/>
 
-    <!-- 시스템관리 > 통계 > 메뉴기준 사용현황  -->
+    <!-- 시스템관리 > 통계 > 메뉴기준 사용현황 -->
     <typeAlias alias="menuBaseVO" type="kr.co.solbipos.sys.stats.menuBase.service.MenuBaseVO"/>
-    <!-- 시스템관리 > 통계 > 사용자기준 사용현황  -->
+    <!-- 시스템관리 > 통계 > 사용자기준 사용현황 -->
     <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userBase.service.UserBaseVO"/>
+    <!-- 시스템관리 > 통계 > 웹로그인 현황 -->
+    <!--<typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.webLogin.service.WebLoginVO"/>-->
 <!--
-    <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.weblogin.service.WebLoginVO"/>
     <typeAlias alias="storeTrnsitnVO" type="kr.co.solbipos.sys.stats.storetrnsitn.service.StoreTrnsitnVO"/>
     <typeAlias alias="userVO" type="kr.co.solbipos.sys.admin.user.service.UserVO"/>
     <typeAlias alias="dataRemoveVO" type="kr.co.solbipos.sys.admin.dataremove.service.DataRemoveVO"/>

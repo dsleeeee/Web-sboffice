@@ -42,6 +42,7 @@ public class DayServiceImpl implements DayService {
     @Override
     public List<DefaultMap<String>> getCornerColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
