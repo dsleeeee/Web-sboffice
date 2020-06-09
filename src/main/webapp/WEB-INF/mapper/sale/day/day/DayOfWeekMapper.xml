@@ -556,7 +556,6 @@
                         AND tssd.STORE_CD = #{storeCd}
                     ]]>
                 </if>
-                AND tssd.CORNR_CD != '00'
                 GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
             )
             PIVOT

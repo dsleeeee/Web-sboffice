@@ -446,7 +446,6 @@
             </foreach>
         </if>
         AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tssd.CORNR_CD != '00'
         AND tms.HQ_OFFICE_CD (+)= tssd.HQ_OFFICE_CD
         AND tms.STORE_CD (+)= tssd.STORE_CD
         AND tmc.STORE_CD (+)= tssd.STORE_CD
