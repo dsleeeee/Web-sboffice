@@ -16,8 +16,10 @@
             , TSSH.SALE_DATE 
 		    , TSSH.POS_NO
 			, TSSH.BILL_NO
-		    , TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
-		    , DECODE(TSSH.SALE_FG, '1', '판매', '-1', '반품') AS SALE_FG
+<!-- 		    , TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT -->
+		    , TSSH.BILL_DT		    
+<!-- 		    , DECODE(TSSH.SALE_FG, '1', '판매', '-1', '반품') AS SALE_FG -->
+		    , TSSH.SALE_FG
 		    , SUM(TSSH.TOT_SALE_AMT) AS TOT_SALE_AMT
 		    , SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
 		    , SUM(TSSH.NET_SALE_AMT) AS NET_SALE_AMT
@@ -32,7 +34,44 @@
 		    , SUM(A.GUEST_CNT_3) AS GUEST_CNT_3
 		    , SUM(A.GUEST_CNT_4) AS GUEST_CNT_4
 		    , (SUM(TSSH.TOT_SALE_AMT) / SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4)) GUEST_AMT
-		FROM TB_SL_SALE_HDR TSSH
+		FROM 
+<!-- 		TB_SL_SALE_HDR TSSH -->
+			  (
+			  	SELECT	TSSH.HQ_OFFICE_CD
+			  	,		TSSH.STORE_CD
+		        , 		TSSH.SALE_DATE 
+				, 		TSSH.POS_NO
+				, 		TSSH.BILL_NO
+				,		TSSH.TBL_CD
+				, 		TO_CHAR(TO_DATE(TSSH.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT
+				, 		DECODE(TSSH.SALE_FG, '1', '판매', '-1', '반품') AS SALE_FG
+				,		TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'YYYYMMDD'),'DY')	AS	SALE_DATE_DY
+				,		TSSH.TOT_SALE_AMT
+				,		TSSH.REAL_SALE_AMT
+				,		TSSH.NET_SALE_AMT
+				,		TSSH.VAT_AMT
+			  	FROM	TB_SL_SALE_HDR	TSSH
+			  	WHERE	TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+			  	<if test='storeCd != null and storeCd != ""'>
+					AND TSSH.STORE_CD = #{storeCd}
+				</if>	
+				<if test='startDate != null and startDate != ""'>
+					AND TSSH.SALE_DATE 	>= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+					AND TSSH.SALE_DATE 	 <![CDATA[<=]]>  #{endDate}
+				</if>
+			  	<if test='saleDate != null and saleDate != ""'>
+			  		AND TSSH.SALE_DATE =   #{saleDate}
+			  	</if>
+				<if test='tblCd != null and tblCd != ""'>
+					AND TSSH.TBL_CD = #{tblCd}
+				</if>
+				<if test='saleYm != null and saleYm != ""'>
+		<!-- 			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE),'YYYYMM') =   #{saleYm} -->
+					AND TSSH.SALE_DATE LIKE  #{saleYm}||'%'
+				</if>				
+			  ) TSSH			  
           	, (SELECT TSSHP.STORE_CD
                 ,TSSHP.BILL_NO
                 ,TSSHP.POS_NO
@@ -92,25 +131,26 @@
 <!--                 #{item} -->
 <!--             </foreach> -->
 <!--         </if> -->
-		<if test='startDate != null and startDate != ""'>
-			AND TSSH.SALE_DATE 	>= #{startDate}
-		</if>
-		<if test='endDate != null and endDate != ""'>
-			AND TSSH.SALE_DATE 	 <![CDATA[<=]]>  #{endDate}
-		</if>
-	  	<if test='saleDate != null and saleDate != ""'>
-	  		AND TSSH.SALE_DATE =   #{saleDate}
-	  	</if>
-		<if test='tblCd != null and tblCd != ""'>
-			AND TSSH.TBL_CD = #{tblCd}
-		</if>
+<!-- 		<if test='startDate != null and startDate != ""'> -->
+<!-- 			AND TSSH.SALE_DATE 	>= #{startDate} -->
+<!-- 		</if> -->
+<!-- 		<if test='endDate != null and endDate != ""'> -->
+<!-- 			AND TSSH.SALE_DATE 	 <![CDATA[<=]]>  #{endDate} -->
+<!-- 		</if> -->
+<!-- 	  	<if test='saleDate != null and saleDate != ""'> -->
+<!-- 	  		AND TSSH.SALE_DATE =   #{saleDate} -->
+<!-- 	  	</if> -->
+<!-- 		<if test='tblCd != null and tblCd != ""'> -->
+<!-- 			AND TSSH.TBL_CD = #{tblCd} -->
+<!-- 		</if> -->
 		<if test='saleDay != null and saleDay != ""'>
-			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'YYYYMMDD'),'DY') =   #{saleDay}
+<!-- 			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE, 'YYYYMMDD'),'DY') =   #{saleDay} -->
+			AND	TSSH.SALE_DATE_DY	=	#{saleDay}
 		</if>
-		<if test='saleYm != null and saleYm != ""'>
+<!-- 		<if test='saleYm != null and saleYm != ""'> -->
 <!-- 			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE),'YYYYMM') =   #{saleYm} -->
-			AND TSSH.SALE_DATE LIKE  #{saleYm}||'%'
-		</if>
+<!-- 			AND TSSH.SALE_DATE LIKE  #{saleYm}||'%' -->
+<!-- 		</if> -->
 		GROUP BY TSSH.POS_NO,TSSH.BILL_NO,TSSH.BILL_DT, TSSH.SALE_FG, A.PAY_CD, TSSH.STORE_CD, TSSH.SALE_DATE
 		ORDER BY TSSH.POS_NO, TSSH.BILL_NO ASC
     </select>
@@ -286,7 +326,28 @@
 		                     WHERE   B.STORE_CD      = #{storeCd}
 		                     AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
 		                 ) A,
-		                 TB_SL_DAILY_CORNR_PROD    B
+		                 (
+                            SELECT  HQ_OFFICE_CD
+                            ,       STORE_CD
+                            ,       PROD_CD
+                            ,       SALE_DATE
+                            ,       CORNR_CD
+                            ,       STORE_CD||'||'||CORNR_CD    AS STORE_CORNR_CD
+                            <if test='yoil != null and yoil != ""'>
+                            ,       TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'),'DY')  AS  SALE_DATE_DY
+                            </if>                            
+                            ,       TOT_SALE_QTY
+                            ,       REAL_SALE_AMT
+                            FROM    TB_SL_DAILY_CORNR_PROD    B
+                            WHERE   B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                           	<if test='startDate != null and startDate != ""'>
+								AND B.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
+							</if>
+							<if test='endDate != null and endDate != ""'>
+								AND B.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
+							</if>							
+                        ) B	
+<!-- 		                 TB_SL_DAILY_CORNR_PROD    B -->
              WHERE   B.PROD_CD       = A.PROD_CD(+)
              AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
@@ -295,12 +356,12 @@
                    					#{item}
                		</foreach>
 			</if>
-			<if test='startDate != null and startDate != ""'>
-				AND B.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
-			</if>
-			<if test='endDate != null and endDate != ""'>
-				AND B.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '')
-			</if>
+<!-- 			<if test='startDate != null and startDate != ""'> -->
+<!-- 				AND B.SALE_DATE	>= REPLACE(#{startDate}, '-', '') -->
+<!-- 			</if> -->
+<!-- 			<if test='endDate != null and endDate != ""'> -->
+<!-- 				AND B.SALE_DATE	<![CDATA[ <= ]]> REPLACE(#{endDate}, '-', '') -->
+<!-- 			</if> -->
 			<if test='saleDate != null and saleDate != ""'>
 				AND B.SALE_DATE	=  REPLACE(#{saleDate}, '-', '')
 			</if>
@@ -311,7 +372,8 @@
                     </foreach>
             </if>
             <if test='arrStoreCornr != null and arrStoreCornr != ""'>
-                AND B.STORE_CD||'||'||B.CORNR_CD  IN
+<!--                 AND B.STORE_CD||'||'||B.CORNR_CD  IN -->
+                AND B.STORE_CORNR_CD  IN
                     <foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
                                     #{item}
                     </foreach>
@@ -320,10 +382,12 @@
 				AND B.PROD_CD = #{prodCd}
 			</if>
 			<if test='saleMonth != null and saleMonth != ""'>
-				AND TO_CHAR(TO_DATE(B.SALE_DATE), 'YYYYMM') = REPLACE(#{saleMonth}, '-', '')
+<!-- 				AND TO_CHAR(TO_DATE(B.SALE_DATE), 'YYYYMM') = REPLACE(#{saleMonth}, '-', '') -->
+				AND B.SALE_DATE	LIKE	REPLACE(#{saleMonth}, '-', '')||'%'
 			</if>
 			<if test='yoil != null and yoil != ""'>
-				AND TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil}
+<!-- 				AND TO_CHAR(TO_DATE(B.SALE_DATE, 'YYYYMMDD'),'DY') = #{yoil} -->
+				AND B.SALE_DATE_DY	=	#{yoil}
 			</if>
 			<if test='saleHour != null and saleHour != ""'>
 				AND B.SALE_HOUR = #{saleHour}
