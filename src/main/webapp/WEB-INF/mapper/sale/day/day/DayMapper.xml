@@ -56,7 +56,7 @@
         FROM TB_MS_CORNER tmc,
         TB_MS_STORE tms
         WHERE 1=1
-        AND tms.HQ_OFFICE_CD = 'A0001'
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
                 AND tmc.STORE_CD = #{storeCd}
