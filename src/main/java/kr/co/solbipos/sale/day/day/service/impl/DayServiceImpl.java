@@ -344,46 +344,15 @@ public class DayServiceImpl implements DayService {
     public List<DefaultMap<Object>> getDayCornerList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
+        dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
 
-        // 코너구분
-        // 매장일때
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
-        {
-            // 코너구분 array 값 세팅
-            dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "";
-            String arrCornerCol[] = dayVO.getCornerCol().split(",");
-            for(int i=0; i < arrCornerCol.length; i++) {
-                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
-            }
-            dayVO.setPivotCornerCol(pivotCornerCol);
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotCornerCol = "";
+        String arrCornerCol[] = dayVO.getStoreCornerCd().split(",");
+        for(int i=0; i < arrCornerCol.length; i++) {
+            pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
         }
-        // 본사일때 전체매장선택시
-        else if(dayVO.getStoreCd() == null)
-        {
-            // 코너구분 array 값 세팅
-            dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "";
-            String arrCornerCol[] = dayVO.getCornerCol().split(",");
-            for(int i=0; i < arrCornerCol.length; i++) {
-                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
-            }
-            dayVO.setPivotCornerCol(pivotCornerCol);
-        }
-        // 본사일때 특정매장선택시
-        else
-        {
-            // 외식테이블구분 array 값 세팅
-            dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "'"+dayVO.getStoreCornerCd()+"'"+" AS CORNR_"+dayVO.getStoreCornerCd();
-            dayVO.setPivotCornerCol(pivotCornerCol);
-        }
+        dayVO.setPivotCornerCol(pivotCornerCol);
 
         return dayMapper.getDayCornerList(dayVO);
     }

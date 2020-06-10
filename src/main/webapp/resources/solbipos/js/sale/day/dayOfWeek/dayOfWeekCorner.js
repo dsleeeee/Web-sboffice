@@ -122,26 +122,44 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
     });
 
     $scope.searchDayOfWeekCorner = function() {
+
+        //조회할 코너 Key값 셋팅을 위해
+        var storeCornerCd = "";
+
+        // 매장권한 로그인 시
+        if(orgnFg != null && orgnFg == 'STORE') {
+
+            // 본인 매장것만 조회
+            $("#dayofweekCornerStoreCd").val(storeCd);
+
+            // 매장권한의 경우, 이미 자기의 코너 값을 가져왔음.
+            storeCornerCd = cornerCol;
+        }
+
+        // 본사권한 로그인 시
+        if(orgnFg != null && orgnFg == 'HQ') {
+
+            // 매장코드 값 필수
+            if ($("#dayofweekCornerStoreCd").val() == "") {
+                s_alert.pop("매장을 선택해주세요.");
+                return;
+            }
+
+            // 해당 본사의 전체 코너에서 조회할 매장의 코너만 추려내기
+            for (var i = 0; i < cornerColList.length; i++) {
+                if (cornerColList[i].storeCd === $("#dayofweekCornerStoreCd").val()) {
+                    storeCornerCd += "," + arrCornerCol[i];
+                }
+            }
+
+            storeCornerCd = storeCornerCd.substring(1, storeCornerCd.length)
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.cornerCol = cornerCol;
-        // 전체매장
-        if ($("#dayofweekCornerStoreCd").val() == "") {
-            params.storeCd = null;
-        //매장 선택시
-        } else {
-            params.storeCd = $("#dayofweekCornerStoreCd").val();
-
-            // 선택시 매장의 storeCornrCd 가져오기
-            var storeCornerCd = "";
-            for (var i = 0; i < cornerColList.length; i++) {
-                if (cornerColList[i].storeCd === $("#dayofweekCornerStoreCd").val()) {
-                    storeCornerCd = arrCornerCol[i];
-                }
-            }
-            params.storeCornerCd = storeCornerCd;
-        }
+        params.storeCd = $("#dayofweekCornerStoreCd").val();
+        params.storeCornerCd = storeCornerCd;
 
         $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekCornerList.sb", params, function() {}, false);
 
