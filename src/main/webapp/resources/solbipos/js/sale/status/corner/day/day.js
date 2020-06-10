@@ -150,7 +150,12 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   //다른 컨트롤러의 broadcast 받기(페이징 초기화)
   $scope.$on("cornerDayCtrlSrch", function (event, data) {
-
+	  
+	if( $("#cornerDaySelectStoreCd").val() === ''){
+    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+    	 return false;
+    }
+		
     $scope.searchCornerDayList(false);
 
 	var storeCd = $("#cornerDaySelectStoreCd").val();
@@ -244,11 +249,24 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 
   	//매장의 코너(corner) 리스트 조회
-	$scope.getCornerNmList = function () {
+//	$scope.getCornerNmList = function () {
+//		var storeCd = $("#cornerDaySelectStoreCd").val();
+//		var cornrCd = $("#cornerDaySelectCornerCd").val();
+//		$scope.getReCornerNmList(storeCd, cornrCd, false);
+//	};
+	
+	// 조회조건 매장 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectStore = function () {
 		var storeCd = $("#cornerDaySelectStoreCd").val();
-		var cornrCd = $("#cornerDaySelectCornerCd").val();
-		$scope.getReCornerNmList(storeCd, cornrCd, false);
+		$scope.getReCornerNmList(storeCd, "",  false);
 	};
+
+	// 조회조건 코너 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectCorner = function () {
+		var storeCd = $("#cornerDaySelectStoreCd").val();
+		var tableCd = $("#cornerDaySelectCornerCd").val();
+		$scope.getReCornerNmList(storeCd, tableCd,  false);
+	};	
 
 	//매장의 코너 리스트 재생성
 	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
