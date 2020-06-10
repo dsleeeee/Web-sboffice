@@ -147,8 +147,19 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
+        var lvcd;
         var params = $scope.params;
-        params.prodClassCd = selectedRow.lv3Cd;
+
+        if(selectedRow.lv3Cd !== null) {
+        	lvcd = selectedRow.lv3Cd 
+        }else if(selectedRow.lv2Cd !== null) {
+        	lvcd = selectedRow.lv2Cd 
+        }else{
+        	lvcd = selectedRow.lv1Cd 
+        }
+        
+//        params.prodClassCd = selectedRow.lv3Cd;
+        params.prodClassCd = lvcd;
         $scope.srchProdClassCd = selectedRow.lv3Cd;
 
         // groupRow 펼치기
@@ -159,10 +170,12 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
         }
 
         // 클릭시 상세 그리드 조회
-        if (col.binding === "lv3Nm") { // 3단계 분류
-          $scope._broadcast('versusPeriodClassDtlCtrlSrch', params);
+        if((s.rows[ht.row].level !== 1 && s.rows[ht.row].level !== 2)){        	        
+	        if (col.binding === "lv1Nm" || col.binding === "lv2Nm" ||col.binding === "lv3Nm") { // 3단계 분류
+	//        	if (col.binding === "lv3Nm") { // 3단계 분류	
+	          $scope._broadcast('versusPeriodClassDtlCtrlSrch', params);
+	        }
         }
-
       }
     }, true);
   };
@@ -224,7 +237,10 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 //   	 	$scope._popMsg(messages["versusPeriod.dateDiff"]);
 //   	 	return false;
 //    }
-
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }  
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
 
@@ -275,12 +291,12 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 						row.isCollapsed = true;
 					}
 				}
+				
     		}
     	});
-
-    	// 그리드 링크 효과, 정렬 효과
-
+    	
       if (e.panel === s.cells) {
+    	  
         var col = s.columns[e.col];
         if (col.binding === "lv3Nm") { // 3단계 분류
           	wijmo.addClass(e.cell, 'wijLink');
