@@ -267,4 +267,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20190125.05" charset="utf-8"></script>

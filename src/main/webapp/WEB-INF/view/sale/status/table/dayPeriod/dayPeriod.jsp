@@ -168,7 +168,7 @@
 </div>
 
 <script type="text/javascript"
-	src="/resource/solbipos/js/sale/status/table/dayPeriod/dayPeriod.js?ver=20190122.05"
+	src="/resource/solbipos/js/sale/status/table/dayPeriod/dayPeriod.js?ver=20190122.06"
 	charset="utf-8">
 </script>
 

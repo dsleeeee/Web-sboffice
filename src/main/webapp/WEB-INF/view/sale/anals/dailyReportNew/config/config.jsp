@@ -137,4 +137,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/config/config.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/config/config.js?ver=20200610.01" charset="utf-8"></script>

@@ -63,7 +63,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.02" charset="utf-8"></script>
 <%-- 영수증 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/billSalePop.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
