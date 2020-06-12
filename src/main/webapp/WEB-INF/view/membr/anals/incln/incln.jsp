@@ -5,6 +5,8 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="inclnCtrl">
 
@@ -29,7 +31,7 @@
     <tr>
       <%-- 조회기간 --%>
       <th>
-        <s:message code="membrPoint.srchDate"/>
+        <s:message code="incln.srchDate"/>
       </th>
       <td colspan="3">
         <div class="sb-select">
@@ -56,26 +58,26 @@
               is-read-only="true">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="membrPoint.storeNm"/>" binding="storeNm" width="115"
+        <wj-flex-grid-column header="<s:message code="incln.group"/>" binding="group" width="130"
                              is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.regDt"/>" binding="regDt" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrNo"/>" binding="membrNo" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrNm"/>" binding="membrNm" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrClassNm"/>" binding="membrClassNm" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrSavePoint"/>" binding="membrSavePoint" width="115"
+        <wj-flex-grid-column header="<s:message code="incln.allGroup"/>" binding="allGroup" width="115"
                              is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrUsePoint"/>" binding="membrUsePoint" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.saleAmt"/>" binding="saleAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.dcAmt"/>" binding="dcAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.realSaleAmt"/>" binding="realSaleAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.gendrF"/>" binding="gendrF" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.gendrG"/>" binding="gendrG" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupOne"/>" binding="ageGroupOne" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupTwo"/>" binding="ageGroupTwo" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupThree"/>" binding="ageGroupThree" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupFour"/>" binding="ageGroupFour" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupFive"/>" binding="ageGroupFive" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="incln.ageGroupSix"/>" binding="ageGroupSix" width="115"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -83,9 +85,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPoint/membrPoint.js?ver=2019052801.11"
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/incln/incln.js?ver=2019052801.11"
         charset="utf-8"></script>
-
-<%-- 매장 선택 --%>
-<c:import url="/WEB-INF/view/application/layer/store.jsp">
-</c:import>
