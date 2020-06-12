@@ -127,11 +127,6 @@
                 AND tce..USER_NM LIKE '%'||#{userNm}||'%'
             ]]>
         </if>
-        <if test='statCd != null and statCd != ""'>
-            <![CDATA[
-
-            ]]>
-        </if>
         <choose>
             <when test='statCd != null and statCd != ""'>
                 <!-- 성공 -->
