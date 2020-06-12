@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="cornerDayView" class="subCon" ng-controller="cornerDayCtrl">
+<div id="cornerDayView" class="subCon" ng-controller="cornerDayCtrl" style="display: none;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.day"/></a>
       <%-- 조회 --%>
@@ -50,10 +50,10 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDaySelectStore"/>
                 <jsp:param name="targetCornerId" value="cornerDaySelectCorner"/>
-                <jsp:param name="closeFunc" value="getCornerNmList"/>
+                <jsp:param name="closeFunc" value="closeSelectStore"/>
             </jsp:include>
         </td>
       </c:if>
@@ -73,7 +73,7 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDaySelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerDaySelectStore"/>
-                <jsp:param name="closeFunc" value="getCornerNmList"/>
+                <jsp:param name="closeFunc" value="closeSelectCorner"/>
             </jsp:include>
         </td>
       </tr>
@@ -164,4 +164,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20190125.04" charset="utf-8"></script>

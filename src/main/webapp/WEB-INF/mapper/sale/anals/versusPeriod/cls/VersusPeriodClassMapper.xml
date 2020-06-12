@@ -130,9 +130,9 @@
 				</when>
     			</choose>
 		       		  		, (
-							  SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+							  SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 							  FROM (
-								   SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+								   SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 									 FROM TB_MS_PRODUCT B
 									WHERE 1=1
 									AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -147,7 +147,8 @@
                                     </if>
 								   ) B
 								   , (
-									  SELECT C.PROD_CD
+									  SELECT C.STORE_CD
+									  	   , C.PROD_CD
 										   , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 								 	 	   , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 									    FROM TB_SL_DAILY_PROD C
@@ -164,9 +165,12 @@
 										 <if test='brandCd != null and brandCd != ""'>
                                             AND C.HQ_BRAND_CD = #{brandCd}
                                          </if>
-									GROUP BY C.PROD_CD
+									GROUP BY C.STORE_CD
+									  	   , C.PROD_CD
 									  ) C
-							  WHERE  B.PROD_CD = C.PROD_CD(+)
+							  WHERE B.STORE_CD = C.STORE_CD(+) 
+							  AND	B.PROD_CD = C.PROD_CD(+)
+							  GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 							  ) B
 		       		   WHERE B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
 		       		   GROUP BY A.LV1_CD,
@@ -269,9 +273,9 @@
 				</when>
     			</choose>
 						   , (
-							   SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+							   SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 								 FROM (
-									  SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+									  SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 									    FROM TB_MS_PRODUCT B
 									   WHERE 1=1
 									   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -286,7 +290,8 @@
                                        </if>
 								       ) B
 									 , (
-									     SELECT C.PROD_CD
+									     SELECT C.STORE_CD
+									     	  , C.PROD_CD
 									          , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											  , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 										   FROM TB_SL_DAILY_PROD C
@@ -303,9 +308,12 @@
 									   	  <if test='brandCd != null and brandCd != ""'>
                                              AND C.HQ_BRAND_CD = #{brandCd}
                                           </if>
-									   GROUP BY C.PROD_CD
+									   GROUP BY C.STORE_CD
+									   ,		C.PROD_CD
 									    ) C
-								WHERE  B.PROD_CD = C.PROD_CD(+)
+								WHERE  	B.STORE_CD = C.STORE_CD(+)
+								AND		B.PROD_CD = C.PROD_CD(+)
+								GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 							  ) B
 		       		    WHERE B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
 					 GROUP BY A.LV1_CD,
@@ -353,9 +361,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -373,7 +381,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -391,9 +400,11 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
                                                 AND C.HQ_BRAND_CD = #{brandCd}
                                              </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD
+											 ,		  C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -404,6 +415,7 @@
 	                                     </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM
@@ -414,9 +426,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -434,7 +446,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -451,9 +464,10 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
 										 	    AND C.HQ_BRAND_CD = #{brandCd}
 										 	 </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD, C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -464,6 +478,7 @@
 	                                     </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM
@@ -498,9 +513,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -518,7 +533,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -535,9 +551,10 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
                                                 AND C.HQ_BRAND_CD = #{brandCd}
                                              </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD, C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -548,6 +565,7 @@
 	                                     </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM
@@ -558,9 +576,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -578,7 +596,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -595,9 +614,10 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
 										 	    AND C.HQ_BRAND_CD = #{brandCd}
 										 	 </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD, C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -608,6 +628,7 @@
 	                                     </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM
@@ -641,9 +662,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -661,7 +682,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -678,9 +700,10 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
                                                 AND C.HQ_BRAND_CD = #{brandCd}
                                              </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD, C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 									   	 <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -691,6 +714,7 @@
 	                                     </if>
 									   AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM
@@ -701,9 +725,9 @@
 						     ,  SUM(B.REAL_SALE_AMT)    AS REAL_SALE_AMT
 						     ,  SUM(B.TOT_SALE_QTY)     AS TOT_SALE_QTY
 						  FROM  (
-									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, NVL(C.REAL_SALE_AMT,0) AS REAL_SALE_AMT, NVL(C.TOT_SALE_QTY,0) AS TOT_SALE_QTY
+									SELECT B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM, SUM(NVL(C.REAL_SALE_AMT,0)) AS REAL_SALE_AMT, SUM(NVL(C.TOT_SALE_QTY,0)) AS TOT_SALE_QTY
 									  FROM (
-											SELECT B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
+											SELECT B.STORE_CD, B.PROD_CD, B.PROD_NM, B.PROD_CLASS_CD
 											  FROM TB_MS_PRODUCT       B
 											 WHERE 1=1
 											 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = B.STORE_CD)
@@ -721,7 +745,8 @@
                                              </if>
 									       ) B
 									     , (
-											SELECT C.PROD_CD
+											SELECT C.STORE_CD
+												 , C.PROD_CD
 											     , SUM(C.REAL_SALE_AMT)    AS REAL_SALE_AMT
 											     , SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY
 											  FROM TB_SL_DAILY_PROD    C
@@ -738,9 +763,10 @@
 										 	 <if test='brandCd != null and brandCd != ""'>
 										 	    AND C.HQ_BRAND_CD = #{brandCd}
 										 	 </if>
-											 GROUP BY C.PROD_CD
+											 GROUP BY C.STORE_CD, C.PROD_CD
 									       ) C
-									 WHERE  B.PROD_CD = C.PROD_CD(+)
+									 WHERE  B.STORE_CD = C.STORE_CD(+)
+									 AND	B.PROD_CD = C.PROD_CD(+)
 									 <if test='storeCd != null and storeCd != "" and prodClassCd != null and prodClassCd != ""'>
 									   AND EXISTS (SELECT * FROM TB_MS_PRODUCT_CLASS Z
 							             <if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -751,6 +777,7 @@
 	                                     </if>
 									   		AND Z.PROD_CLASS_CD = B.PROD_CLASS_CD)
 									 </if>
+									 GROUP BY B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
 						         ) B
 						  GROUP BY B.PROD_CD
 								 , B.PROD_NM

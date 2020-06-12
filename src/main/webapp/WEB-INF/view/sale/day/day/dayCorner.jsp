@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/sale/day/day/dayCorner/"/>
 
 <div id="dayCornerView" name="dayView" class="subCon" style="display: none;" ng-controller="dayCornerCtrl">
@@ -96,6 +97,7 @@
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
+    var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCorner.js?ver=20200121.20" charset="utf-8"></script>

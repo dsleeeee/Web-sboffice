@@ -42,10 +42,23 @@ app.controller('cornerDayPeriodCtrl', ['$scope', '$http', '$timeout', function (
 	}
 
 	//매장의 코너(corner) 리스트 조회
-	$scope.getCornerNmList = function () {
+//	$scope.getCornerNmList = function () {
+//		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
+//		var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
+//		$scope.getReCornerNmList(storeCd, cornrCd);
+//	};
+	
+	// 조회조건 매장 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectStore = function () {
+		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
+		$scope.getReCornerNmList(storeCd, "",  false);
+	};
+
+	// 조회조건 코너 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectCorner = function () {
 		var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
 		var cornrCd = $("#cornerDayPeriodSelectCornerCd").val();
-		$scope.getReCornerNmList(storeCd, cornrCd);
+		$scope.getReCornerNmList(storeCd, cornrCd,  false);
 	};
 
 	//매장의 코너 리스트 재생성
@@ -106,7 +119,7 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
     $scope._makePickColumns("cornerDayPeriodMainCtrl");
 
     var storeCd = $("#cornerDayPeriodSelectStoreCd").val();
-	$scope.getReCornerNmList(storeCd);
+	$scope.getReCornerNmList(storeCd, "", false);
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -165,11 +178,17 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 
   // 코너별매출 설정기간별 리스트 조회
   $scope.searchCornerDayPeriodList = function (isPageChk) {
+	  
+	  if( $("#cornerDayPeriodSelectStoreCd").val() === ''){
+	    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+	    	 return false;
+	    }
+	  
     // 파라미터
     var params       = {};
     params.storeCd   = $("#cornerDayPeriodSelectStoreCd").val();
     params.cornrCd   = $("#cornerDayPeriodSelectCornerCd").val();
-    
+    console.log("paramsstoreCd :::"+params.storeCd)
     $scope.storeCdForExcel     =   params.storeCd;
     $scope.cornrCdForExcel     =   params.cornrCd;
     $scope.searchChecked       = $scope.isChecked;
@@ -282,7 +301,8 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	  });
 
 	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
-	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {
+	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {		  
+		  
 		$scope.storeCd   = data.storeCd;
 		$scope.cornrCd   = data.cornrCd;
 

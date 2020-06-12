@@ -883,7 +883,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/report/report.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/report/report.js?ver=20200610.01" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
 	/*
