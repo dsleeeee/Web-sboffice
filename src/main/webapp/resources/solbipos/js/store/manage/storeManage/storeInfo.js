@@ -183,6 +183,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.clsFgCombo.selectedValue     = storeDetailInfo.clsFg;
       $scope.sysStatFgCombo.selectedValue = storeDetailInfo.sysStatFg;
 
+      $scope.directManageYn               = storeDetailInfo.directManageYn;
+
       $scope.readOnlyStatus                  = true;
       $scope.sysOpenDateCombo.isReadOnly     = true;
       $scope.store.installPosCnt.isReadOnly = true;
