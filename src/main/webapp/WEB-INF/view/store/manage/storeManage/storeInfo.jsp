@@ -167,9 +167,9 @@
               <%-- 사업자번호 --%>
               <th><s:message code="storeManage.bizNo" /><em class="imp">*</em></th>
               <td colspan="3">
-                <input type="text" id="bizNo1" ng-model="store.bizNo1" class="sb-input w10" maxlength="3"/>-
-                <input type="text" id="bizNo2" ng-model="store.bizNo2" class="sb-input w10" maxlength="2"/>-
-                <input type="text" id="bizNo3" ng-model="store.bizNo3" class="sb-input w15" maxlength="5"/>
+                <input type="text" id="bizNo1" ng-model="store.bizNo1" class="sb-input w10" maxlength="3" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>-
+                <input type="text" id="bizNo2" ng-model="store.bizNo2" class="sb-input w10" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>-
+                <input type="text" id="bizNo3" ng-model="store.bizNo3" class="sb-input w15" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <input type="hidden" ng-model="store.beforeBizNo" />
                 <a id="btnChkBizNo" href="#" class="btn_grayS ml5" ng-click="chkBizNo()"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
@@ -204,13 +204,13 @@
               <%-- 주소 //TODO 주소검색 추가 필요 --%>
               <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
               <td colspan="3">
-                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w30" maxlength="5"/>
+                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w30" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                   <s:message code="storeManage.srchAddr" />
                 </a>
                 <br>
-                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60"/>
-                <input type="text" id="addrDtl" ng-model="store.addrDtl" class="sb-input w100" maxlength="60"/>
+                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60" placeholder="주소1"/>
+                <input type="text" id="addrDtl" ng-model="store.addrDtl" class="sb-input w100" maxlength="60" placeholder="주소2"/>
               </td>
             </tr>
             <tr>

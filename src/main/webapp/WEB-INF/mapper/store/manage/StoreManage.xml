@@ -170,7 +170,8 @@
                tms.CLS_FG,
                tms.REMARK,
                tms.SYS_REMARK,
-               tms.HD_REMARK
+               tms.HD_REMARK,
+               tms.DIRECT_MANAGE_YN
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -339,6 +340,7 @@
             REMARK,
             SYS_REMARK,
             HD_REMARK,
+            DIRECT_MANAGE_YN,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -369,6 +371,7 @@
             #{remark},
             #{sysRemark},
             #{hdRemark},
+            #{directManageYn},
             #{regDt},
             #{regId},
             #{modDt},
@@ -406,6 +409,7 @@
                REMARK = #{remark},
                SYS_REMARK = #{sysRemark},
                HD_REMARK = #{hdRemark},
+               DIRECT_MANAGE_YN = #{directManageYn},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
