@@ -20,6 +20,7 @@
         /* VirtualLoginAgencyMapper.getVirtualLoginAgencyrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
+        CASE WHEN tca.P_AGENCY_CD = '00000' THEN 'P' ELSE 'C' END AS AGENCY_FG,
         tca.AGENCY_CD,
         tca.AGENCY_NM,
         tca.OWNER_NM,

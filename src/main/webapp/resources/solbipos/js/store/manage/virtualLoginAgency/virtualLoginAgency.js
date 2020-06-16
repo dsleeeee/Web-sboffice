@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 업체구분
+var vAgencyCd = [
+    {"name":"총판","value":"P"},
+    {"name":"대리점","value":"C"}
+];
+
 /**
  *  총판/대리점 가상로그인 그리드 생성
  */
@@ -27,6 +33,9 @@ app.controller('virtualLoginAgencyCtrl', ['$scope', '$http', function ($scope, $
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // 그리드 DataMap 설정
+        $scope.agencyFgDataMap = new wijmo.grid.DataMap(vAgencyCd, 'value', 'name');
+
         // picker 사용시 호출 : 미사용시 호출안함
         $scope._makePickColumns("virtualLoginAgencyCtrl");
 
@@ -35,8 +44,8 @@ app.controller('virtualLoginAgencyCtrl', ['$scope', '$http', function ($scope, $
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                // 대리점코드
-                if (col.binding === "agencyCd") {
+                // 사용자아이디
+                if (col.binding === "userId") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }
@@ -48,8 +57,8 @@ app.controller('virtualLoginAgencyCtrl', ['$scope', '$http', function ($scope, $
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
 
-                //  대리점코드 클릭시 상세정보 조회
-                if ( col.binding === "agencyCd") {
+                //  사용자아이디 클릭시 상세정보 조회
+                if ( col.binding === "userId") {
                     var selectedRow = s.rows[ht.row].dataItem;
 
                     $scope.vLoginProcess(selectedRow.userId);
