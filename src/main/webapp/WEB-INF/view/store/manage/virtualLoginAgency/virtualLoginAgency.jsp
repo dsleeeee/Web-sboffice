@@ -89,11 +89,12 @@
                 is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.agencyCd"/>" binding="agencyCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.agencyNm"/>" binding="agencyNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.ownerNm"/>" binding="ownerNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.agencyFg"/>" binding="agencyFg" data-map="agencyFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.agencyCd"/>" binding="agencyCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.agencyNm"/>" binding="agencyNm" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.ownerNm"/>" binding="ownerNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="virtualLoginAgency.userId"/>" binding="userId" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.empNm"/>" binding="empNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="virtualLoginAgency.empNm"/>" binding="empNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="virtualLoginAgency.telNo"/>" binding="telNo" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="virtualLoginAgency.mpNo"/>" binding="mpNo" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
 
@@ -118,4 +119,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLoginAgency/virtualLoginAgency.js?ver=20200231.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLoginAgency/virtualLoginAgency.js?ver=20200231.06" charset="utf-8"></script>
