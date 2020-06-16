@@ -182,9 +182,9 @@
                     <div class="impWrap"><s:message code="hqManage.bizNo" /><em class="imp">*</em></div>
                   </th>
                   <td colspan="3">
-                    <input type="text" id="rBizNo1" maxlength="3" style="width:50px;"/>
-                    <input type="text" id="rBizNo2" maxlength="2" style="width:40px;"/>
-                    <input type="text" id="rBizNo3" maxlength="5" style="width:110px;"/>
+                    <input type="text" id="rBizNo1" maxlength="3" style="width:50px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                    <input type="text" id="rBizNo2" maxlength="2" style="width:40px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
+                    <input type="text" id="rBizNo3" maxlength="5" style="width:110px;" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     <a href="#" class="btn_grayS" id="btnChkBizNo"><s:message code="hqManage.chk.duplicate.bizNo" /></a>
                   </td>
                 </tr>
@@ -246,11 +246,11 @@
                     <div class="impWrap"><s:message code="hqManage.addr" /><em class="imp">*</em></div>
                   </th>
                   <td colspan="3">
-                    <input type="text" id="rPostNo" style="width:60px"/>
+                    <input type="text" id="rPostNo" style="width:80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     <a href="#" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
                     <br/>
-                    <input type="text" id="rAddr" />
-                    <input type="text" id="rAddrDtl" />
+                    <input type="text" id="rAddr" placeholder="주소1"/>
+                    <input type="text" id="rAddrDtl" placeholder="주소2"/>
                   </td>
                 </tr>
                 <tr>
