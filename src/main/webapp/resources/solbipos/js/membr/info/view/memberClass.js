@@ -9,11 +9,11 @@
  *
  * **************************************************************/
 var app = agrid.getApp();
+var selectedPoint;
 app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberClassCtrl', $scope, $http, false));
-
 
 
     // 조회조건 콤보박스 데이터 Set
@@ -23,7 +23,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._getComboDataQuery('067', 'useYn', '');
     $scope._getComboDataQuery('067', 'membrDcYn', '');
     $scope._getComboDataQuery('067', 'defaultYn', '');
-    $scope._getComboDataQuery('054', 'membrPointYn', '');
+    $scope._getComboDataQuery('067', 'membrPointYn', '');
+    $scope._getComboDataQuery('054', 'pointSaveFg', '');
     $scope._getComboDataQuery('032', 'membrAnvsrYn', '');
 
     // 선택 회원
@@ -87,7 +88,6 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.classSave = function () {
         var params = $scope.detailData;
         $scope._postJSONSave.withOutPopUp("/membr/info/grade/grade/classRegist.sb", params, function (response) {
-            console.log(response);
             if (response.data.status == 'OK') {
                 $scope._popMsg(messages["cmm.saveSucc"]);
             } else {
@@ -97,22 +97,24 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
     // 등급 삭제
-    $scope.classDel = function(){
+    $scope.classDel = function () {
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].gChk) {
+            if ($scope.flex.collectionView.items[i].gChk) {
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
-        console.log(params);
         // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/membr/info/grade/grade/remove.sb", params, function(){ $scope.getMember() });
+        $scope._save("/membr/info/grade/grade/remove.sb", params, function () {
+            $scope.getMember()
+        });
 
     };
-    $scope.getMember = function() {
+    $scope.getMember = function () {
         $scope.data = new wijmo.collections.CollectionView(result);
     }
 }]);
+
 
 app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -126,10 +128,9 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
+        $scope.payCdDataMap = new wijmo.grid.DataMap(payCd, 'value', 'name');
         // bindColumnGroup 생성
         // bindColumnGroups(s, dataHeader);
 
@@ -148,7 +149,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         $scope.getClassList();
         event.preventDefault();
     });
-    // 기능 목록 조회
+    // 상세 조회
     $scope.getClassList = function () {
 
         var params = {};
@@ -167,12 +168,15 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
             $scope.$broadcast('loadingPopupInactive');
             var list = response.data.data.list.mcp;
             var detail = response.data.data.list.mcd;
+            $scope.classData = detail;
+            $scope.initData = list;
             if (list.length === undefined || list.length === 0) {
                 $scope.data = new wijmo.collections.CollectionView([]);
             } else {
                 var data = new wijmo.collections.CollectionView(list);
                 data.trackChanges = true;
                 $scope.data = data;
+
             }
             var classScope = agrid.getScope('memberClassCtrl');
             classScope._broadcast('memberClassCtrl', $scope.getSelectedMember(detail));
@@ -199,6 +203,118 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         });
     };
 
+    // 포인트 적립옵션 추가
+    $scope.pointAdd = function () {
+        var gridRepresent = agrid.getScope("memberClassCtrl");
+        var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+        // 파라미터 설정
+        var params = {};
+        params.status = "I";
+        params.gChk = true;
+        params.accRate = 0;
+        params.payCd = "01";
+        params.membrOrgnCd = selectedRow.membrOrgnCd;
+        params.membrClassCd = selectedRow.membrClassCd;
+
+        // 추가 row
+        $scope._addRow(params);
+    };
+
+    // 일괄등록 버튼
+    $scope.pointTotal = async function () {
+        $scope.data = await new wijmo.collections.CollectionView([]);
+        await $scope.getTotalAdd();
+    };
+    // 추가 row
+    $scope.getTotalAdd = async function () {
+        var gridRepresent = agrid.getScope("memberClassCtrl");
+        var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+        var params = {};
+        for (var i = 0; i < payCd.length + 1; i++) {
+            if ($scope.classData === undefined) {
+                if (i > 0) {
+                    params.gChk = true;
+                    params.accRate = $scope.membrTotal;
+                    params.payCd = payCd[i - 1].value;
+                    params.membrOrgnCd = selectedRow.membrOrgnCd;
+                    params.membrClassCd = selectedRow.membrClassCd;
+                    $scope._addRow(params);
+                }
+            } else {
+                if (i > 0) {
+                    params.gChk = true;
+                    params.accRate = $scope.membrTotal;
+                    params.payCd = payCd[i - 1].value;
+                    params.membrOrgnCd = selectedRow.membrOrgnCd;
+                    params.membrClassCd = selectedRow.membrClassCd;
+                    $scope._addRow(params);
+                } else {
+                    $scope._addRow({});
+                }
+            }
+        }
+
+        // await payCd.forEach((e, i) => {
+        //     console.log(i);
+        //     params.gChk = true;
+        //     params.accRate = $scope.membrTotal;
+        //     params.payCd = e.value;
+        //     params.membrOrgnCd = selectedRow.membrOrgnCd;
+        //     params.membrClassCd = selectedRow.membrClassCd;
+        //     $scope._addRow(params);
+        // });
+
+    }
+
+    // 저장
+    $scope.pointSave = function () {
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            $scope.flex.collectionView.itemsEdited[i].status = "U";
+            params.push($scope.flex.collectionView.itemsEdited[i]);
+        }
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            $scope.flex.collectionView.itemsAdded[i].status = "I";
+            params.push($scope.flex.collectionView.itemsAdded[i]);
+        }
+        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+            $scope.flex.collectionView.itemsRemoved[i].status = "D";
+            params.push($scope.flex.collectionView.itemsRemoved[i]);
+        }
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $.postJSONArray("/membr/info/grade/grade/getMemberClassPointSave.sb", params, function (result) {
+            $scope.data = new wijmo.collections.CollectionView([]);
+        });
+    };
+
+    // 삭제
+    $scope.pointDel = function () {
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.gChk) {
+                $scope.flex.collectionView.removeAt(i);
+            }
+        }
+    };
+
+
+    // 초기값
+    var beginVal;
+    $scope.beginningEdit = function (s, e) {
+        beginVal = s.rows[e.row].dataItem.payCd;
+    };
+    // 수정값
+    var editVal;
+    $scope.cellEditEnded = function (s, e) {
+        editVal = s.rows[e.row].dataItem.payCd;
+        s.rows.forEach((val, i) => {
+            if (e.row !== i && val.dataItem.payCd === editVal) {
+                $scope._popMsg(messages["cmm.require.duplicate.select"]);
+                s.setCellData(e.row, e.col, beginVal);
+            }
+        });
+    }
     // // 위로 옮기기
     // $scope.up = function(){
     //     var movedRows = 0;

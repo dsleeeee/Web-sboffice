@@ -302,6 +302,7 @@
     <!-- 회원관리 -->
     <typeAlias alias="registVO" type="kr.co.solbipos.membr.info.regist.service.RegistVO"/>
     <typeAlias alias="membrClassVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassVO"/>
+    <typeAlias alias="membrClassPointVO" type="kr.co.solbipos.membr.info.grade.service.MembrClassPointVO"/>
     <typeAlias alias="memberMappingVO" type="kr.co.solbipos.membr.info.regist.service.MemberMappingVO"/>
     <typeAlias alias="taxBillVO" type="kr.co.solbipos.membr.anals.taxBill.service.TaxBillVO"/>
     <typeAlias alias="postpaidStoreVO" type="kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO"/>

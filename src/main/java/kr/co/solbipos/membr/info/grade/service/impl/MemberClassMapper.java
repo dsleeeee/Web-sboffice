@@ -1,6 +1,7 @@
 package kr.co.solbipos.membr.info.grade.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,12 @@ public interface MemberClassMapper {
     int updateClassInfo(MembrClassVO membrClassVO);
 
     int deleteClassInfo(MembrClassVO membrClassVO);
+
+    int classPointInfoChk(MembrClassPointVO membrClassPointVO);
+
+    int updateClassPointInfo(MembrClassPointVO membrClassPointVO);
+
+    int insertClassPointInfo(MembrClassPointVO membrClassPointVO);
+
+    int deleteClassPointInfo(MembrClassPointVO membrClassPointVO);
 }

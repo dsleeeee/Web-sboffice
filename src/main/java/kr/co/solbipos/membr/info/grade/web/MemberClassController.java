@@ -12,17 +12,12 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.store.emp.enums.EmpResult;
-import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
-import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MemberClassService;
+import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
-import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
-import kr.co.solbipos.membr.info.regist.service.MemberMappingVO;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
-import kr.co.solbipos.membr.info.regist.service.RegistVO;
-import kr.co.solbipos.membr.info.regist.validate.Regist;
 import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,5 +171,24 @@ public class MemberClassController {
         int result = classService.deleteClassInfo(membrClassVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 등급포인트 적립 저장
+     * @param membrClassPointVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     *
+     */
+    @ResponseBody
+    @RequestMapping(value = "grade/getMemberClassPointSave.sb", method = RequestMethod.POST)
+    public Result memberClassSave(@RequestBody MembrClassPointVO[] membrClassPointVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        int result = classService.saveClassPointList(membrClassPointVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

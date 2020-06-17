@@ -106,9 +106,9 @@
                     <div class="sb-select">
                         <wj-combo-box
                                 id="membrPointYn"
-                                ng-model="detailData.pointSaveFg"
+                                ng-model="detailData.membrDcYn"
                                 control="membrPointYnCombo"
-                                items-source="_getComboData('membrPointYn')"
+                                items-source="_getComboData('membrDcYn')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
@@ -124,7 +124,7 @@
                     <div class="sb-select">
                         <wj-combo-box
                                 id="membrDcYn"
-                                ng-model="membrDcYn"
+                                ng-model="detailData.membrDcYn"
                                 control="membrDcYnCombo"
                                 items-source="_getComboData('membrDcYn')"
                                 display-member-path="name"
@@ -143,11 +143,11 @@
             <tr>
                 <%-- 기념일 적립 여부 --%>
                 <th><s:message code="grade.membr.anvsr.point.save.fg"/></th>
-                <td colspan="3">
-                    <div class="sb-select w20 fl mr10">
+                <td>
+                    <div class="sb-select w50 fl mr10">
                         <wj-combo-box
                                 id="membrAnvsrYn"
-                                ng-model="membrAnvsrYn"
+                                ng-model="detailData.membrAnvsrYn"
                                 control="membrAnvsrYnCombo"
                                 items-source="_getComboData('membrAnvsrYn')"
                                 display-member-path="name"
@@ -159,11 +159,29 @@
                     <input type="text" id="membrAnvsr" class="sb-input w10 fl " ng-model="membrAnvsr"
                            maxlength="15"/><span class="txtIn mt10">% 적립</span>
                 </td>
+                <%-- 포인트 사용 구분 --%>
+                <th><s:message code="grade.membr.point.save.fg"/></th>
+                <td ng-switch on="detailData.pointSaveFg">
+                    <div class="sb-select w50 fl" >
+                        <wj-combo-box
+                                id="pointSaveFg"
+                                ng-model="detailData.pointSaveFg"
+                                control="pointSaveFgCombo"
+                                items-source="_getComboData('pointSaveFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                    <span class="txtIn mt10" ng-switch-when="1"> % 적립</span>
+                    <span class="txtIn mt10" ng-switch-when="2"> 원당 1Point</span>
+                </td>
             </tr>
             </tbody>
         </table>
 
-        <div class="w50 fl mt40" style="width: 70%">
+        <div class="w50 fl mt40" style="width: 55%">
             <%--위즈모 테이블--%>
             <div class="wj-TblWrapBr mr10 pd20" style="height: 480px;">
                 <div class="updownSet oh mb10">
@@ -245,16 +263,33 @@
             </div>
         </div>
     </div>
-    <div class="w50 fr mt40 mb20" style="width: 30%" ng-controller="memberClassDetailCtrl">
+    <div class="w50 fr mt40 mb20" style="width: 45%" ng-controller="memberClassDetailCtrl">
         <%--위즈모 테이블--%>
-        <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;">
-            <div class="updownSet oh mb10">
-                <span class="fl bk lh30 mr10"><s:message code='grade.membr.point.list'/></span>
-                <button class="btn_skyblue fr ml10" id="membrTotalbtn" ng-click="_pageView('memberClassCtrl', 1)">
+        <div class="wj-TblWrapBr ml10 pd20" style="height: 480px;" >
+            <div class="updownSet oh mb10" ng-switch="classData.pointSaveFg">
+                <span class="fl bk lh30 mr10" ng-switch-default><s:message code='grade.membr.point.list.rate'/></span>
+                <span class="fl bk lh30 mr10" ng-switch-when="1"><s:message code='grade.membr.point.list.rate'/></span>
+                <span class="fl bk lh30 mr10" ng-switch-when="2"><s:message code='grade.membr.point.list.amt'/></span>
+
+                <button class="btn_skyblue fr ml0" id="membrPointSave" ng-click="pointSave()">
+                    <s:message code="cmm.save"/>
+                </button>
+                <button class="btn_skyblue fr ml0" id="membrPointDel" ng-click="pointDel()">
+                    <s:message code="cmm.del"/>
+                </button>
+                <button class="btn_skyblue fr ml0" id="membrPointAdd" ng-click="pointAdd()">
+                    <s:message code="cmm.add"/>
+                </button>
+                <input type="text" class="sb-input fl w20"
+                       ng-attr-placeholder="{{classData.pointSaveFg === '2' ? '원당1Point' : '%적립'}}"
+                       style="font-size: 0.8rem !important;"
+                       ng-attr-maxlength="{{classData.pointSaveFg === '2' ? '5' : '3'}}"
+                       ng-model="membrTotal" />
+                <button class="btn_skyblue fl ml10" id="membrTotalbtn" ng-click="pointTotal()">
                     <s:message code="grade.membr.total.button"/>
                 </button>
-                <input type="text" id="membrTotal" class="sb-input fr w10" ng-model="membrTotal" maxlength="15"/>
             </div>
+
             <%-- 개발시 높이 조절해서 사용--%>
             <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
             <div class="wj-gridWrap" style="height:370px; overflow-y: hidden;">
@@ -262,20 +297,27 @@
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
+                            beginning-edit="beginningEdit(s,e)"
+                            cell-edit-ended="cellEditEnded(s,e)"
                             initialized="initGrid(s,e)"
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
-                            frozen-columns="2"
-                            sorted-column="toggleFreeze(false)">
+                    <%--                            frozen-columns="2"--%>
+                    <%--                            sorted-column="toggleFreeze(false)"--%>
+                    >
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="systemCd.chk"/>" binding="gChk"
                                              width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
-                                             binding="membrClassCd" is-read-only="true"></wj-flex-grid-column>
+                                             binding="membrClassCd" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.class.cd"/>"
+                                             binding="initPayCd" is-read-only="true" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="grade.membr.orgn.cd"/>"
+                                             binding="membrOrgnCd" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.pay.code"/>"
-                                             binding="payCd" is-read-only="true"></wj-flex-grid-column>
+                                             binding="payCd"  data-map="payCdDataMap" ></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>"
                                              binding="accRate"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -313,8 +355,12 @@
     <%--조회기간--%>
     var weddingDataMap = ${ccu.getCommCodeExcpAll("076")};
     <%--결혼유무--%>
+
+    <%--var payCdDataMap = ${ccu.getCommCodeExcpAll("024")};--%>
+    var payCd = ${ccu.getCommCodeExcpAll("024")};
     var result = ${result};
     var memberClassList = ${memberClassList};
+
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberClass.js?ver=20200609.01"
