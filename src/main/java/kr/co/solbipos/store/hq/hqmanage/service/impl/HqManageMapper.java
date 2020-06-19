@@ -118,4 +118,7 @@ public interface HqManageMapper {
     /** 권한 전체 삭제 */
     int removeAuthAll(HqMenuVO hqMenus);
 
+    /** 업체 목록 조회 */
+    List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage);
+
 }

@@ -76,8 +76,10 @@ public class StoreManageController {
     public String list(StoreManageVO storeManageVO, HttpServletRequest request, HttpServletResponse response,
             Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
         // 메뉴권한 복사할 본사목록 조회
-        List<DefaultMap<String>> authHqList = service.authHqList(storeManageVO);
+        List<DefaultMap<String>> authHqList = service.authHqList(storeManageVO, sessionInfoVO);
         model.addAttribute("authHqList", convertToJson(authHqList));
 
         return "store/manage/storeManage/storeManage";
@@ -160,7 +162,9 @@ public class StoreManageController {
     public Result getStoreComboList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getStoreComboList(storeManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreComboList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list);
     }
@@ -653,8 +657,10 @@ public class StoreManageController {
     public Result getAuthStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         // 메뉴권한 복사할 본사목록 조회
-        List<DefaultMap<String>> getAuthStoreList = service.authStoreList(storeManageVO);
+        List<DefaultMap<String>> getAuthStoreList = service.authStoreList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, getAuthStoreList);
     }

@@ -209,9 +209,9 @@
                     GROUP BY SALE_DATE
                 ) tsshp
         ,       (   SELECT	tssd.SALE_DATE
-                    ,       DECODE(tssd.DLVR_PACK_FG, '1', SUM(tssd.REAL_SALE_AMT), 0) AS GEN_REAL_SALE_AMT
-                    ,       DECODE(tssd.DLVR_PACK_FG, '2', SUM(tssd.REAL_SALE_AMT), 0) AS DLVR_REAL_SALE_AMT
-                    ,       DECODE(tssd.DLVR_PACK_FG, '3', SUM(tssd.REAL_SALE_AMT), 0) AS PACK_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '1' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '2' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    , SUM(CASE WHEN tssd.DLVR_PACK_FG = '3' THEN tssd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM	TB_SL_SALE_DTL tssd
                     WHERE	tssd.HQ_OFFICE_CD	=	#{hqOfficeCd}
         ]]>
@@ -224,7 +224,7 @@
         <![CDATA[
                     AND     tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     GROUP
-                    BY      tssd.SALE_DATE, tssd.DLVR_PACK_FG
+                    BY      tssd.SALE_DATE
                 ) tssddp
         WHERE   tsshp.SALE_DATE  (+) = tssh.SALE_DATE
         AND     tssddp.SALE_DATE (+) = tssh.SALE_DATE

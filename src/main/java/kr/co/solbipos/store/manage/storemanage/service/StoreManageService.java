@@ -35,7 +35,7 @@ public interface StoreManageService {
     Map<String, Object> getStoreDetail(StoreManageVO storeManageVO);
 
     /** 매장 콤보 리스트 조회 */
-    List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 매장환경조회 팝업 데이터 조회 */
     Map<String, Object> getStoreEnvInfo(StoreManageVO storeManageVO);
@@ -107,10 +107,10 @@ public interface StoreManageService {
     int getStoreCdCnt(StoreManageVO storeManageVO);
 
     /** 권한그룹복사를 위한 본사목록 조회 */
-    List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 권한그룹복사를 위한 매장목록 조회 */
-    List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 사용 메뉴 */
     List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO);

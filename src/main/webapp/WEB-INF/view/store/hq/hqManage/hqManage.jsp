@@ -5,6 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="agencyList" value="${agencyList}" />
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
@@ -96,7 +97,9 @@
   var selectedHq = "";
 
   <%-- 검색조건 및 dataMap 조회 --%>
-  var agencyList        = ${ccu.getAgencyList()};
+  //공통에서 가져오던거 변경 >> 총판/대리점은 공통 못쓰고 자신이 관리하는 업체만 나와야 하기 때문
+  //var agencyList = ${ccu.getAgencyList()};
+  var agencyList = ${agencyList};
   var areaCd            = ${ccu.getCommCodeSelect("061")};
   var clsFg             = ${ccu.getCommCodeSelect("001")};
   var sysStatFg         = ${ccu.getCommCodeSelect("005")};
