@@ -92,7 +92,9 @@ public class PopupController {
     public Result getAgencyList(AgencyVO agencyVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = popupService.getAgencyList(agencyVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = popupService.getAgencyList(agencyVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, agencyVO);
     }
@@ -112,7 +114,9 @@ public class PopupController {
     public Result getHqList(HqOfficeVO hqOfficeVO, HttpServletRequest request,
         HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = popupService.getHqList(hqOfficeVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = popupService.getHqList(hqOfficeVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, hqOfficeVO);
     }

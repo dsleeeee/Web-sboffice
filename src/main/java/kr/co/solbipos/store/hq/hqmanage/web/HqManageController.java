@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
@@ -66,8 +67,16 @@ public class HqManageController {
      * @since   2018. 06. 08.
      */
     @RequestMapping(value = "hqManage/list.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response,
+    public String view(HqManageVO hqManage, HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 관리업체 코드조회
+        List<DefaultMap<String>> agencyList = service.getAgencyCd(hqManage, sessionInfoVO);
+
+        model.addAttribute("agencyList", convertToJson(agencyList));
+
         return "store/hq/hqManage/hqManage";
     }
 
@@ -235,10 +244,11 @@ public class HqManageController {
     public Result authHqList(HqManageVO hqManage, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         Map<String, Object> resultMap = new HashMap<String, Object>();
 
         // 복사할 본사 조회
-        List<DefaultMap<String>> authHqList = service.authHqList(hqManage);
+        List<DefaultMap<String>> authHqList = service.authHqList(hqManage, sessionInfoVO);
 
         // 사용가능한 메뉴 조회
         List<DefaultMap<String>> avlblMenu = service.avlblMenu(hqManage);

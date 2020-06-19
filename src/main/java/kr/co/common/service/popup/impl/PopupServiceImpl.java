@@ -61,13 +61,27 @@ public class PopupServiceImpl implements PopupService{
 
     /** 대리점 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO) {
+    public List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            agencyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            agencyVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return popupMapper.getAgencyList(agencyVO);
     }
 
     /** 본사 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO) {
+    public List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            hqOfficeVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            hqOfficeVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return popupMapper.getHqList(hqOfficeVO);
     }
 

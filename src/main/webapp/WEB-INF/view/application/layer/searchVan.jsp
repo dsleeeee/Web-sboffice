@@ -39,7 +39,7 @@
 
         <%--- 벤사 그리드 --%>
         <div class="w100">
-          <div class="wj-TblWrap mr10" style="height:150px; overflow-y: hidden;">
+          <div class="wj-TblWrap mr10" style="height:270px; overflow-y: hidden;">
             <div id="vanGrid" style="height: 270px;">
               <wj-flex-grid
                       autoGenerateColumns="false"

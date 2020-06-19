@@ -559,15 +559,16 @@
     -->
     <select id="authHqList" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.authHqList */
-        <![CDATA[
         SELECT HQ_OFFICE_CD AS VALUE,
                '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
           FROM TB_HQ_OFFICE
          WHERE HQ_OFFICE_CD != #{hqOfficeCd}
-           AND SYS_STAT_FG = '1'
+           <!-- AND SYS_STAT_FG = '1' -->
            AND SYS_CLOSURE_DATE > SYSDATE
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (AGENCY_CD = #{agencyCd} OR HQ_OFFICE_CD = '00000')
+        </if>
      ORDER BY HQ_OFFICE_CD
-        ]]>
     </select>
 
     <!-- 사용 메뉴 조회 -->
@@ -956,5 +957,23 @@
                              AND the.EMP_NO = '0000'
                              AND twu.USER_ID = the.USER_ID)
     </delete>
+
+    <!-- 업체 목록 조회 -->
+    <!--
+      TABLE    : TB_CM_AGENCY
+      COMMENTS : 업체 목록을 조회한다.
+    -->
+    <select id="getAgencyCd" parameterType="hqManageVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.selectAgencyList */
+          SELECT AGENCY_CD AS VALUE,
+                  '[' || AGENCY_CD || '] ' || AGENCY_NM AS NAME
+            FROM TB_CM_AGENCY
+            WHERE 1=1
+              AND AGENCY_CD != '00000'
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+        </if>
+        ORDER BY AGENCY_CD ASC
+    </select>
 
 </mapper>

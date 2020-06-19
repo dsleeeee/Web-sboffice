@@ -252,7 +252,14 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 권한그룹 목록 조회 */
     @Override
-    public List<DefaultMap<String>> authHqList(HqManageVO hqManage) {
+    public List<DefaultMap<String>> authHqList(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            hqManage.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.authHqList(hqManage);
     }
 
@@ -413,6 +420,19 @@ public class HqManageServiceImpl implements HqManageService{
             }
         }
         return procCnt;
+    }
+
+    /** 업체 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            hqManage.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.getAgencyCd(hqManage);
     }
 
 

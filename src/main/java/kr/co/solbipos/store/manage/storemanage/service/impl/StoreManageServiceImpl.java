@@ -128,7 +128,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장 콤보리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO) {
+    public List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.getStoreComboList(storeManageVO);
     }
 
@@ -960,10 +967,28 @@ public class StoreManageServiceImpl implements StoreManageService{
     }
 
     /** 권한그룹복사를 위한 본사목록 조회 */
-    public List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO) { return mapper.authHqList(storeManageVO); }
+    public List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.authHqList(storeManageVO);
+    }
 
     /** 권한그룹복사를 위한 매장목록 조회 */
-    public List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO) { return mapper.authStoreList(storeManageVO); }
+    public List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.authStoreList(storeManageVO);
+    }
 
     /** 사용 메뉴 */
     @Override

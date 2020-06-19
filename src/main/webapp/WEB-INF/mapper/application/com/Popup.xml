@@ -50,11 +50,18 @@
              AGENCY_NM
         FROM TB_CM_AGENCY
        WHERE P_AGENCY_CD IS NOT NULL
-        <if test='agencyCd != null and agencyCd != ""'>
-         AND AGENCY_CD LIKE '%'||#{agencyCd}||'%'
+        <choose>
+            <when test='orgnFg != null and orgnFg == "A"'>
+                AND (AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+            AND AGENCY_CD LIKE '%'||#{srchAgencyCd}||'%'
         </if>
-        <if test='agencyNm != null and agencyNm != ""'>
-         AND AGENCY_NM LIKE '%'||#{agencyNm}||'%'
+        <if test='srchAgencyNm != null and srchAgencyNm != ""'>
+            AND AGENCY_NM LIKE '%'||#{srchAgencyNm}||'%'
         </if>
        ORDER BY AGENCY_CD ASC
     </select>
@@ -90,6 +97,9 @@
          <if test='hqOfficeNm != null and hqOfficeNm != ""'>
            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
          </if>
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (tho.AGENCY_CD = #{agencyCd} OR tho.HQ_OFFICE_CD = '00000')
+        </if>
          ORDER BY tho.HQ_OFFICE_CD ASC
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

@@ -34,6 +34,16 @@ public class HqOfficeVO extends PageVO {
     private String sysStatFg;
     /** 본사코드 */
     private String clsFg;
+    /** 업체코드 */
+    private String agencyCd;
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
 
 
     /**
@@ -124,5 +134,21 @@ public class HqOfficeVO extends PageVO {
      */
     public void setClsFg(String clsFg) {
         this.clsFg = clsFg;
+    }
+
+    public String getAgencyCd() {
+        return agencyCd;
+    }
+
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }

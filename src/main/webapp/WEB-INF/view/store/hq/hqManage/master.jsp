@@ -153,7 +153,7 @@
                         <input type="radio" name="rHqOfficeCdType" id="rHqOfficeCdr1" value='<s:message code="hqManage.hqType.comm" />' checked style="width:17px; height:17px; margin-right: 1px;"/>
                         <label for="rHqOfficeCdr1"><s:message code="hqManage.comm" /></label>
                       </span>
-                      <span class="sb-radio">
+                      <span class="sb-radio" <c:if test="${orgnFg eq 'AGENCY'}">style="visibility: hidden"</c:if>>
                         <input type="radio" name="rHqOfficeCdType" id="rHqOfficeCdr2" value='<s:message code="hqManage.hqType.demo" />' style="width:17px; height:17px; margin-right: 1px;"/>
                         <label for="rHqOfficeCdr2"><s:message code="hqManage.demo" /></label>
                       </span>
@@ -347,6 +347,7 @@
 
     if(orgnFg === "AGENCY"){
       rAgency.selectedValue = orgnCd;
+      // 대리점은 수정불가
       if(pAgencyCd !== "00000"){
         rAgency.isReadOnly = true;
       }

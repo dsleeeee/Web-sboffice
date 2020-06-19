@@ -18,7 +18,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("clsFg", clsFg);
   $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("areaCd", areaCd);
-  $scope._setComboData("envHqOfficeCd", hqList);
+
+  // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
+  if(orgnFg === "AGENCY") {
+    $scope._setComboData("envHqOfficeCd", authHqList);
+  }else{
+    $scope._setComboData("envHqOfficeCd", hqList);
+  }
 
   // 사업자번호 중복체크 여부
   $scope.isBizChk = false;

@@ -25,7 +25,7 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 public interface HqManageService {
 
     /** 본사 목록 조회 */
-    List<DefaultMap<String>> list(HqManageVO hqManave, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> list(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
 
     /** 본사 상세정보 조회 */
     DefaultMap<String> dtlInfo(HqManageVO hqManage);
@@ -46,7 +46,7 @@ public interface HqManageService {
     int modify(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
 
     /** 권한그룹 목록 조회 */
-    List<DefaultMap<String>> authHqList(HqManageVO hqManage);
+    List<DefaultMap<String>> authHqList(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
 
     /** 사용가능한 메뉴 */
     List<DefaultMap<String>> avlblMenu(HqManageVO hqManage);
@@ -68,4 +68,7 @@ public interface HqManageService {
 
     /** 환경설정 저장 */
     int saveConfig(HqEnvstVO[] hqEnvsts, SessionInfoVO sessionInfoVO);
+
+    /** 업체 목록 조회 */
+    List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
 }
