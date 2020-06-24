@@ -215,5 +215,10 @@
 <c:import url="/WEB-INF/view/base/store/emp/changePassword.jsp">
 </c:import>
 
+<%-- 메뉴권한 Tab 팝업--%>
+<c:import url="/WEB-INF/view/base/store/emp/storeEmpAuth.jsp">
+</c:import>
+
+
 
 

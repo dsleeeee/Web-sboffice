@@ -139,18 +139,45 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
 
     // 파라미터 설정
     var params        = {};
-    params.status     = "I";
     params.gChk       = true;
     params.posNo      ="01";
-    params.prterKind  ="0";
-    params.prterPort  = "0";
-    params.prterSpeed = "0";
+    params.prterKindFg  ="00";
+    params.prterPortFg  = "00";
+    params.prterSpeedFg = "0";
+    params.prterOutputQty = "1";
     params.prterCheckYn = "N";
     params.useYn        = "Y";
 
+
+    //프린터 코드 값 셋팅을 위한
+    var vPrterCd = '';
+    if($scope.flex.collectionView.items.length == 0){
+      vPrterCd = '01';
+    }else{
+      for(var i = 0; i < $scope.flex.collectionView.items.length; i++ ){
+        var item = $scope.flex.collectionView.items[i];
+
+        if(vPrterCd == ''){
+          vPrterCd = item.prterNo;
+        }else{
+          if(parseInt(item.prterNo) > parseInt(vPrterCd)){
+            vPrterCd = item.prterNo;
+          }
+        }
+      }
+
+      if(10 > (parseInt(vPrterCd) + 1)){
+        vPrterCd = "0" + String((parseInt(vPrterCd) + 1));
+      }else{
+        vPrterCd =  String((parseInt(vPrterCd) + 1));
+      }
+    }
+
+    params.prterNo = vPrterCd;
+
     // 추가기능 수행 : 파라미터
     $scope._addRow(params);
-  };
+  }
 
   /*********************************************************
    * 주방프린터 삭제

@@ -29,6 +29,17 @@ app.controller('hqEmpWebMenuCtrl', ['$scope', '$http', function ($scope, $http) 
         // 선택한 사원정보 데이터
         selData = data;
 
+        // 본사마스터 계정(사원번호 0000)은 수정불가(관리자에서 해야함)
+        if(selData.empNo == "0000"){
+            $("#btnCopyAuth").css("display", "none");
+            $("#btnRemoveMenu").css("display", "none");
+            $("#btnAddMenu").css("display", "none");
+        }else{
+            $("#btnCopyAuth").css("display", "");
+            $("#btnRemoveMenu").css("display", "");
+            $("#btnAddMenu").css("display", "");
+        }
+
         // 메뉴권한복사 콤보박스 데이터 조회 및 셋팅
         var params= {};
         params.empNo = selData.empNo;

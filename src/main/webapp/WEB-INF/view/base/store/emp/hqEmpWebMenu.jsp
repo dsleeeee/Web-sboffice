@@ -120,4 +120,4 @@
 <script>
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.18" charset="utf-8"></script>

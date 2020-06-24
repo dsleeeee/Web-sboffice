@@ -7,9 +7,9 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
+import kr.co.solbipos.base.store.emp.store.service.StoreEmpMenuVO;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpService;
 import kr.co.solbipos.base.store.emp.store.service.StoreEmpVO;
-import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -186,5 +186,138 @@ public class StoreEmpController {
         EmpResult empResult = storeEmpService.modifyPassword(storeEmpVO,sessionInfoVO);
 
         return returnJson(Status.OK, empResult);
+    }
+
+    /**
+     * 권한복사를 위한 매장 사원 리스트 조회
+     * @param storeEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/authStoreEmpList.sb", method = RequestMethod.POST)
+    public Result authHqEmpList(StoreEmpVO storeEmpVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 메뉴권한 복사할 매장 사원 목록 조회
+        List<DefaultMap<String>> authStoreEmpList = storeEmpService.authStoreEmpList(storeEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, authStoreEmpList);
+    }
+
+    /**
+     * 사용메뉴 조회
+     * @param storeEmpVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.06.22
+     */
+    @RequestMapping(value = "/avlblMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMenu(StoreEmpVO storeEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMenu = storeEmpService.avlblMenu(storeEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, avlblMenu);
+    }
+
+    /**
+     * 미사용메뉴 조회
+     * @param storeEmpVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.06.22
+     */
+    @RequestMapping(value = "/beUseMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMenu(StoreEmpVO storeEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMenu = storeEmpService.beUseMenu(storeEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, beUseMenu);
+    }
+
+    /**
+     * 메뉴권한복사
+     * @param   storeEmpMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.22
+     */
+    @RequestMapping(value = "/copyAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyAuth(@RequestBody StoreEmpMenuVO storeEmpMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.copyAuth(storeEmpMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 추가
+     * @param   storeEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.22
+     */
+    @RequestMapping(value = "/addAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addAuth(@RequestBody StoreEmpMenuVO[] storeEmpMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.addAuth(storeEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 삭제
+     * @param   storeEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020.06.22
+     */
+    @RequestMapping(value = "/removeAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeAuth(@RequestBody StoreEmpMenuVO[] storeEmpMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.removeAuth(storeEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
     }
 }

@@ -43,4 +43,21 @@ public interface StoreEmpService
     /** 매장 사원번호 패스워드변경*/
     EmpResult modifyPassword(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
 
+    /** 권한복사를 위한 매장 사원 리스트 조회 */
+    List<DefaultMap<String>> authStoreEmpList(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 사용 메뉴 */
+    List<DefaultMap<String>> avlblMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 미사용 메뉴 */
+    List<DefaultMap<String>> beUseMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(StoreEmpMenuVO storeEmpMenu, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 추가 */
+    int addAuth(StoreEmpMenuVO[] storeEmpMenu, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 삭제 */
+    int removeAuth(StoreEmpMenuVO[] storeEmpMenu, SessionInfoVO sessionInfoVO);
 }
