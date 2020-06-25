@@ -92,7 +92,6 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
      * 회원정보 조회
      * *******************************************************/
     $scope.$on("getCardList", function () {
-        console.log($scope.membrNo);
         var params = {};
         params.membrNo = $scope.membrNo;
         // params.membrOrgnCd = $scope.card.data.data.membrOrgnCd;

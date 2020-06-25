@@ -26,9 +26,7 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
 
     // 카드 탭 보이기
     $scope.cardShow = function () {
-        console.log($scope.saveMode);
         if ($scope.insertMembrNo === undefined || $scope.saveMode !== "MOD") {
-            console.log("111111");
             $scope._popMsg(messages["cmm.base.info.save"]);
         } else {
             $("#basicView").hide();
