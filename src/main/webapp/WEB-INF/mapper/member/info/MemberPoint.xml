@@ -18,35 +18,58 @@
           TB_MB_MEMBER_POINT
   </select>
 
+<!--  <insert id="adjustAllBackUp" parameterType="DefaultMap">-->
+<!--    INSERT INTO-->
+<!--      TB_MB_MEMBER_POINT_HIST-->
+<!--        (MEMBR_ORGN_CD,-->
+<!--        MEMBR_NO,-->
+<!--        CHG_DATE,-->
+<!--        CHG_SEQ,-->
+<!--        POINT_CHG_FG,-->
+<!--        CHG_POINT,-->
+<!--        REMARK,-->
+<!--        ORGN_APPR_NO,-->
+<!--        REG_DT,-->
+<!--        REG_ID,-->
+<!--        MOD_DT,-->
+<!--        MOD_ID)-->
+<!--    VALUES (-->
+<!--        #{membrOrgnCd},-->
+<!--        #{membrNo},-->
+<!--        #{chgDate},-->
+<!--        #{chgSeq},-->
+<!--        3,-->
+<!--        #{totAjdPoint},-->
+<!--        #{adjustPartRemark},-->
+<!--        #{orgnApprNo},-->
+<!--        #{regDt},-->
+<!--        #{regId},-->
+<!--        #{modDt},-->
+<!--        #{modId}-->
+<!--    )-->
+<!--  </insert>-->
+
   <insert id="adjustAll" parameterType="DefaultMap">
     INSERT INTO
-      TB_MB_MEMBER_POINT_HIST
-        (MEMBR_ORGN_CD,
-        MEMBR_NO,
-        CHG_DATE,
-        CHG_SEQ,
-        POINT_CHG_FG,
-        CHG_POINT,
-        REMARK,
-        ORGN_APPR_NO,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID)
-    VALUES (
-        #{membrOrgnCd},
-        #{membrNo},
+	    TB_MB_MEMBER_POINT_HIST ( MEMBR_ORGN_CD , MEMBR_NO , CHG_DATE , CHG_SEQ , POINT_CHG_FG , CHG_POINT , REMARK , REG_DT , REG_ID, MOD_DT , MOD_ID )
+    SELECT
+        tmmp.MEMBR_ORGN_CD,
+        tmmp.MEMBR_NO,
         #{chgDate},
-        #{chgSeq},
-        3,
-        #{totAjdPoint},
-        #{adjustPartRemark},
-        #{orgnApprNo},
+        SQ_TB_MEMBER_POINT_HIST.NEXTVAL,
+        '3',
+        #{totAjdPoint} - tmmp.AVABL_POINT,
+        #{remark},
         #{regDt},
         #{regId},
         #{modDt},
         #{modId}
-    )
+    FROM
+        TB_MB_MEMBER_POINT tmmp
+    WHERE
+        MEMBR_ORGN_CD = #{orgnFg}
+
+--         AND MEMBR_NO = '0000000002';
   </insert>
 
 </mapper>

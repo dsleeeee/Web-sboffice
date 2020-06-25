@@ -20,11 +20,11 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('memberPointCtrl', $scope, $http, true));
 
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
-    // 그리드 DataMap 설정
-    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
-  };
+  // // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  // $scope.initGrid = function (s, e) {
+  //   // 그리드 DataMap 설정
+  //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
+  // };
 
   $scope.adjustAll = function () {
     let param = $scope.changeAll

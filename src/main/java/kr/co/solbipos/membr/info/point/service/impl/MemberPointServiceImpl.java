@@ -56,7 +56,7 @@ public class MemberPointServiceImpl implements MemberPointService {
       re.put("regId", sessionInfoVO.getUserId());
       re.put("modDt", dt);
       re.put("modId", sessionInfoVO.getUserId());
-      re.put("totAjdPoint", (totAjdPoint + re.getInt("avablPoint") * (-1)));
+      re.put("totAjdPoint", totAjdPoint);
 
       //insert
       result += memberPointMapper.adjustAll(re);
