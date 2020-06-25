@@ -696,6 +696,24 @@
     <insert id="insertMemberClass" parameterType="memberClassVO" >
         /* USE : StoreManageMapper.insertMemberClass */
         INSERT INTO TB_MB_MEMBER_CLASS
+        (
+           MEMBR_ORGN_CD,
+           MEMBR_CLASS_CD,
+           MEMBR_CLASS_NM,
+           DC_RATE,
+           POINT_SAVE_FG,
+           DEFLT_YN,
+           NEW_JOIN_SAVE_POINT,
+           FIRST_SALE_SAVE_POINT,
+           MIN_USE_POINT,
+           ANVSR_POINT_SAVE_FG,
+           ANVSR_SAVE_POINT,
+           USE_YN,
+           REG_DT,
+           REG_ID,
+           MOD_DT,
+           MOD_ID
+        )
         SELECT #{membrOrgnCd},
                MEMBR_CLASS_CD,
                MEMBR_CLASS_NM,
@@ -887,7 +905,7 @@
                #{modId}
           FROM TB_MS_POS_ENVST
          WHERE STORE_CD = #{copyStoreCd}
-           AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd})
+           AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
     </insert>
 
     <!-- 포스 기능키 등록 -->
