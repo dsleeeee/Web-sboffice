@@ -110,6 +110,44 @@ public class RegistVO extends PageVO {
     private String cdCompany;
     /** 회원 거래처 매핑코드 (거래처코드)*/
     private String cdPartner;
+    /** 적립매출 start */
+    private String startSaveSale;
+    /** 적립매출 end */
+    private String endSaveSale;
+    /** 가용포인트 start */
+    private String startAvablPoint;
+    /** 가용포인트 end */
+    private String endAvablPoint;
+    /** 핸드폰번호*/
+    private String phoneNo;
+    /** 적립포인트*/
+    private String totSavePoint;
+    /** 사용포인트*/
+    private String totUsePoint;
+    /** 조정포인트*/
+    private String avablPoint;
+    /** 가용포인트*/
+    private String totAdjPoint;
+    /** 최초방문일*/
+    private String firstSaleDate;
+    /** 최종방문일*/
+    private String lastSaleDate;
+    /** 가입일*/
+    private String regDt;
+
+    /** 고객카드상태구분*/
+    private String cstCardStatFg;
+    /** 이전고객카드번호*/
+    private String oldCstCardNo;
+    /** 고객카드발급구분*/
+    private String cstCardIssFg;
+    /** 발급비고*/
+    private String issRemark;
+    /** 발급소속코드*/
+    private String issOrgnCd;
+    /** 발급일자*/
+   private String issDate;
+
     /**
      * @return the orgnFg
      */
@@ -648,5 +686,256 @@ public class RegistVO extends PageVO {
      */
     public void setCdPartner(String cdPartner) {
         this.cdPartner = cdPartner;
+    }
+
+    /**
+     * @return the startSaveSale
+     */
+    public String getStartSaveSale() {
+        return startSaveSale;
+    }
+
+    /**
+     * @param startSaveSale the startSaveSale to set
+     */
+    public void setStartSaveSale(String startSaveSale) {
+        this.startSaveSale = startSaveSale;
+    }
+
+    /**
+     * @return the endSaveSale
+     */
+    public String getEndSaveSale() {
+        return endSaveSale;
+    }
+
+    /**
+     * @param endSaveSale the endSaveSale to set
+     */
+    public void setEndSaveSale(String endSaveSale) {
+        this.endSaveSale = endSaveSale;
+    }
+
+    /**
+     * @return the startAvablPoint
+     */
+    public String getStartAvablPoint() {
+        return startAvablPoint;
+    }
+
+    /**
+     * @param startAvablPoint the startAvablPoint to set
+     */
+    public void setStartAvablPoint(String startAvablPoint) {
+        this.startAvablPoint = startAvablPoint;
+    }
+
+    /**
+     * @return the endAvablPoint
+     */
+    public String getEndAvablPoint() {
+        return endAvablPoint;
+    }
+
+    /**
+     * @param endAvablPoint the endAvablPoint to set
+     */
+    public void setEndAvablPoint(String endAvablPoint) {
+        this.endAvablPoint = endAvablPoint;
+    }
+
+    /**
+     * @return the getPhoneNo
+     */
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    /**
+     * @param phoneNo the phoneNo to set
+     */
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    /**
+     * @return the totSavePoint
+     */
+    public String getTotSavePoint() {
+        return totSavePoint;
+    }
+    /**
+     * @param totSavePoint the totSavePoint to set
+     */
+    public void setTotSavePoint(String totSavePoint) {
+        this.totSavePoint = totSavePoint;
+    }
+
+    /**
+     * @return the totUsePoint
+     */
+    public String getTotUsePoint() {
+        return totUsePoint;
+    }
+
+    /**
+     * @param totUsePoint the totUsePoint to set
+     */
+    public void setTotUsePoint(String totUsePoint) {
+        this.totUsePoint = totUsePoint;
+    }
+
+    /**
+     * @return the avablPoint
+     */
+    public String getAvablPoint() {
+        return avablPoint;
+    }
+
+    /**
+     * @param avablPoint the avablPoint to set
+     */
+    public void setAvablPoint(String avablPoint) {
+        this.avablPoint = avablPoint;
+    }
+
+    /**
+     * @return the cdtotAdjPointPartner
+     */
+    public String getTotAdjPoint() {
+        return totAdjPoint;
+    }
+
+    /**
+     * @param totAdjPoint the totAdjPoint to set
+     */
+    public void setTotAdjPoint(String totAdjPoint) {
+        this.totAdjPoint = totAdjPoint;
+    }
+
+    /**
+     * @return the firstSaleDate
+     */
+    public String getFirstSaleDate() {
+        return firstSaleDate;
+    }
+
+    /**
+     * @param firstSaleDate the firstSaleDate to set
+     */
+    public void setFirstSaleDate(String firstSaleDate) {
+        this.firstSaleDate = firstSaleDate;
+    }
+
+    /**
+     * @return the lastSaleDate
+     */
+    public String getLastSaleDate() {
+        return lastSaleDate;
+    }
+
+    /**
+     * @param lastSaleDate the lastSaleDate to set
+     */
+    public void setLastSaleDate(String lastSaleDate) {
+        this.lastSaleDate = lastSaleDate;
+    }
+
+    /**
+     * @return the regDt
+     */
+    public String getRegDt() {
+        return regDt;
+    }
+
+    /**
+     * @param regDt the regDt to set
+     */
+    public void setRegDt(String regDt) {
+        this.regDt = regDt;
+    }
+
+    /**
+     * @return the cstCardStatFg
+     */
+    public String getCstCardStatFg() {
+        return cstCardStatFg;
+    }
+
+    /**
+     * @param cstCardStatFg the cstCardStatFg to set
+     */
+    public void setCstCardStatFg(String cstCardStatFg) {
+        this.cstCardStatFg = cstCardStatFg;
+    }
+
+    /**
+     * @return the oldCstCardNo
+     */
+    public String getOldCstCardNo() {
+        return oldCstCardNo;
+    }
+
+    /**
+     * @param oldCstCardNo the oldCstCardNo to set
+     */
+    public void setOldCstCardNo(String oldCstCardNo) {
+        this.oldCstCardNo = oldCstCardNo;
+    }
+
+    /**
+     * @return the cstCardIssFg
+     */
+    public String getCstCardIssFg() {
+        return cstCardIssFg;
+    }
+
+    /**
+     * @param cstCardIssFg the cstCardIssFg to set
+     */
+    public void setCstCardIssFg(String cstCardIssFg) {
+        this.cstCardIssFg = cstCardIssFg;
+    }
+
+    /**
+     * @return the issRemark
+     */
+    public String getIssRemark() {
+        return issRemark;
+    }
+
+    /**
+     * @param issRemark the issRemark to set
+     */
+    public void setIssRemark(String issRemark) {
+        this.issRemark = issRemark;
+    }
+
+    /**
+     * @return the issOrgnCd
+     */
+    public String getIssOrgnCd() {
+        return issOrgnCd;
+    }
+
+    /**
+     * @param issOrgnCd the issOrgnCd to set
+     */
+    public void setIssOrgnCd(String issOrgnCd) {
+        this.issOrgnCd = issOrgnCd;
+    }
+
+    /**
+     * @return the issDate
+     */
+    public String getIssDate() {
+        return issDate;
+    }
+
+    /**
+     * @param issDate the issDate to set
+     */
+    public void setIssDate(String issDate) {
+        this.issDate = issDate;
     }
 }

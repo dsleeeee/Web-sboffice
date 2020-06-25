@@ -83,27 +83,17 @@ public class MemberClassController {
     @RequestMapping(value = "grade/list.sb", method = RequestMethod.GET)
     public String memberClassController(MembrClassVO membrClassVO, HttpServletRequest request, HttpServletResponse response, Model model) {
 
-//        ReturnUtil returnUtil = new ReturnUtil();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        // 회원등급 리스트 조회
+
+        // 회원등급 조회
         String result = classService.getMemberClassList(sessionInfoVO);
 
+        // 회원등급 리스트 조회
         List membrClassList = registService.getMembrClassList(sessionInfoVO);
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
-        // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
-        // [보나비]의 경우 기본매장코드를 사용하여
-        // 회원등록 매장이 기본매장일 경우 후불회원 적용매장을 등록한다.
-        String defaultStoreCd = "";
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
-            defaultStoreCd.replace("*", "");
-        }
-
-        model.addAttribute("memberClassList", membrClassListAll);
         model.addAttribute("result",  result);
-        model.addAttribute("defaultStoreCd", defaultStoreCd);
-
+        model.addAttribute("membrClassList",  membrClassListAll);
         return "membr/info/view/memberClass";
     }
 

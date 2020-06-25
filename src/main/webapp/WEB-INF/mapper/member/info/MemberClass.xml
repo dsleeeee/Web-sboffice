@@ -14,7 +14,7 @@
         SELECT MEMBR_ORGN_CD
               , MEMBR_CLASS_CD
               , MEMBR_CLASS_NM
-              , CONCAT(CONCAT('[', CONCAT(MEMBR_CLASS_CD, ']')), MEMBR_CLASS_NM) AS MEMBR_CLASS_TYPE
+              , CONCAT(CONCAT('[', CONCAT(MEMBR_CLASS_CD, '] ')), MEMBR_CLASS_NM) AS MEMBR_CLASS_TYPE
               , DC_RATE
               , POINT_SAVE_FG
               , CASE WHEN POINT_SAVE_FG = 1 THEN '%' ELSE '금액' END AS POINT_SAVE_FG_NM
@@ -74,20 +74,27 @@
     -->
     <select id="getMemberClassPoint" parameterType="membrClassVO" resultType="DefaultMap">
         /* MemberClassMapper.getMemberClassDetail */
-        SELECT MEMBR_ORGN_CD
-              , MEMBR_CLASS_CD
-              , PAY_CD
-              , PAY_CD AS INIT_PAY_CD
-              , ACC_RATE
-              , REMARK
-              , REG_DT
-              , REG_ID
-              , MOD_DT
-              , MOD_ID
-          FROM TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
-          WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-            AND MEMBR_CLASS_CD = #{membrClassCd}
-         ORDER BY PAY_CD DESC
+        SELECT
+            	tmmcpr.MEMBR_ORGN_CD ,
+            	tmmcpr.MEMBR_CLASS_CD ,
+            	tmmc.MEMBR_CLASS_NM,
+            	CONCAT(CONCAT('[', CONCAT(tmmcpr.MEMBR_CLASS_CD, '] ')), tmmc.MEMBR_CLASS_NM) AS MEMBR_CLASS_TYPE,
+            	tmmcpr.PAY_CD ,
+            	tmmcpr.PAY_CD AS INIT_PAY_CD ,
+            	tmmcpr.ACC_RATE ,
+            	tmmcpr.REMARK ,
+            	tmmcpr.REG_DT ,
+            	tmmcpr.REG_ID ,
+            	tmmcpr.MOD_DT ,
+            	tmmcpr.MOD_ID
+            FROM
+            	TB_MB_MEMBER_CLASS_PAY_RATE tmmcpr
+            LEFT OUTER JOIN TB_MB_MEMBER_CLASS tmmc
+            ON tmmc.MEMBR_ORGN_CD = tmmcpr.MEMBR_ORGN_CD
+	        AND tmmc.MEMBR_CLASS_CD = tmmcpr.MEMBR_CLASS_CD
+          WHERE tmmcpr.MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND tmmcpr.MEMBR_CLASS_CD = #{membrClassCd}
+         ORDER BY tmmcpr.PAY_CD DESC
     </select>
 
     <!-- 회원등급 중복여부-->

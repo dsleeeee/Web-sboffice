@@ -87,8 +87,13 @@ public class MemberClassServiceImpl implements MemberClassService {
     @Override
     public DefaultMap<Object> classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
+        String dt = currentDateTimeString();
         int classChk = mapper.classInfoChk(membrClassVO);
         int classResult;
+        membrClassVO.setRegDt(dt);
+        membrClassVO.setRegId(sessionInfoVO.getUserId());
+        membrClassVO.setModDt(dt);
+        membrClassVO.setModId(sessionInfoVO.getUserId());
         if (classChk > 0) {
             classResult = mapper.updateClassInfo(membrClassVO);
         } else {
@@ -173,6 +178,7 @@ public class MemberClassServiceImpl implements MemberClassService {
             membrClassPointVO.setModDt(dt);
             membrClassPointVO.setModId(sessionInfoVO.getUserId());
             membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
 
             if (membrClassPointVO.getStatus() == GridDataFg.INSERT) {
                 result = mapper.insertClassPointInfo(membrClassPointVO);
@@ -180,7 +186,7 @@ public class MemberClassServiceImpl implements MemberClassService {
             } else if (membrClassPointVO.getStatus() == GridDataFg.UPDATE) {
                 result = mapper.updateClassPointInfo(membrClassPointVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+            } else {
                 result = mapper.deleteClassPointInfo(membrClassPointVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
