@@ -61,7 +61,7 @@ public interface RegistService {
      * @param registVO
      * @return
      */
-    int registMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO);
+    String registMemberInfo(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     /**
      * 회원정보 수정
@@ -110,4 +110,8 @@ public interface RegistService {
 
     /** 회원 거래처 매핑 팝업 - 회원 거래처 매핑 조회 */
     List<DefaultMap<String>> getMemberVendorMappingList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    List<DefaultMap<String>> getCardList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    int registCardInfo(RegistVO registVO, SessionInfoVO si);
 }

@@ -173,6 +173,8 @@ public class RegistController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // TODO: 2020-06-22 권한(매장 / 본사)별 검색조건 추가 
+
         // 입력값 에러 처리
         if (bindingResult.hasErrors()) {
             return returnJsonBindingFieldError(bindingResult);
@@ -190,7 +192,7 @@ public class RegistController {
         }
 
         // 회원 등록
-        int result = registService.registMemberInfo(registVO, sessionInfoVO);
+        String result = registService.registMemberInfo(registVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -359,5 +361,46 @@ public class RegistController {
         List<DefaultMap<String>> result = registService.getMemberVendorMappingList(registVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
+     * 카드정보 리스트 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getCardlist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCardlist(RegistVO registVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getCardList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /***
+     * 카드정보 등록
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/registCardInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registCardInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.registCardInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
     }
 }

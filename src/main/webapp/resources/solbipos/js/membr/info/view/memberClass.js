@@ -15,15 +15,19 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberClassCtrl', $scope, $http, false));
 
+    // 기본 회원등급
+    if (membrClassList.length == 0) {
+        membrClassList = [{value: "", name: "선택"}, {value: "001", name: "기본등급"}];
+    }
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
-    $scope._setComboData("memberClass", memberClassList);
+    // $scope._setComboData("defaultYn", membrClassList);
 
     $scope._getComboDataQuery('067', 'useYn', '');
     $scope._getComboDataQuery('067', 'membrDcYn', '');
-    $scope._getComboDataQuery('067', 'defaultYn', '');
     $scope._getComboDataQuery('067', 'membrPointYn', '');
+    $scope._getComboDataQuery('067', 'defaultYn', '');
     $scope._getComboDataQuery('054', 'pointSaveFg', '');
     $scope._getComboDataQuery('032', 'membrAnvsrYn', '');
 
@@ -35,12 +39,19 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
-
+    $scope.userUseYn = false;
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.$apply(function () {
             $scope.data = new wijmo.collections.CollectionView(result);
         });
+
+        if (gvHqOfficeCd === '00000') { // 단독매장
+            $scope.userUseYn = true;
+        } else { // 프랜차이즈는 본사만 추가 가능
+            if (gvStoreCd === '') $scope.userUseYn = true;
+        }
+
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -86,6 +97,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // 저장
     $scope.classSave = function () {
+        $scope.detailData.useYn = 'Y';
         var params = $scope.detailData;
         $scope._postJSONSave.withOutPopUp("/membr/info/grade/grade/classRegist.sb", params, function (response) {
             if (response.data.status == 'OK') {
@@ -119,7 +131,6 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
 app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('memberClassDetailCtrl', $scope, $http, true));
-
     // 선택 기능 구분
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
@@ -128,21 +139,29 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
+    $scope.userUseYn = false;
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.payCdDataMap = new wijmo.grid.DataMap(payCd, 'value', 'name');
+        if (gvHqOfficeCd === '00000') { // 단독매장
+            $scope.userUseYn = true;
+        } else { // 프랜차이즈는 본사만 추가 가능
+            if (gvStoreCd === '') $scope.userUseYn = true;
+        }
         // bindColumnGroup 생성
         // bindColumnGroups(s, dataHeader);
 
-        // ReadOnly 효과설정
-        // s.formatItem.addHandler(function (s, e) {
-        //     if (e.panel === s.cells) {
-        //         var col = s.columns[e.col];
-        //         if (col.binding === "fnkeyNo") {
-        //             wijmo.addClass(e.cell, 'wijLink');
-        //         }
-        //     }
-        // });
+        if ($scope.userUseYn === false) {
+            // ReadOnly 효과설정
+            s.formatItem.addHandler(function (s, e) {
+                if (e.panel === s.cells) {
+                    var col = s.columns[e.col];
+                    if (col.binding === "payCd" || col.binding === "membrOrgnCd" || col.binding === "accRate") {
+                        col.isReadOnly = true;
+                    }
+                }
+            });
+        }
     };
     $scope.$on("memberClassDetailCtrl", function (event, data) {
         $scope.setSelectedMember(data);
@@ -209,26 +228,37 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
         // 파라미터 설정
         var params = {};
-        params.status = "I";
-        params.gChk = true;
-        params.accRate = 0;
-        params.payCd = "01";
-        params.membrOrgnCd = selectedRow.membrOrgnCd;
-        params.membrClassCd = selectedRow.membrClassCd;
 
-        // 추가 row
-        $scope._addRow(params);
+        if ($scope.initData === undefined || $scope.initData === null) {
+            $scope._popMsg(messages["grade.membr.add.message"]);
+        } else {
+            params.status = "I";
+            params.gChk = true;
+            params.accRate = 0;
+            params.payCd = "선택";
+            params.membrOrgnCd = selectedRow.membrOrgnCd;
+            params.membrClassCd = selectedRow.membrClassCd;
+            params.membrClassType = selectedRow.membrClassType;
+            // 추가 row
+            $scope._addRow(params);
+        }
+
     };
 
     // 일괄등록 버튼
     $scope.pointTotal = async function () {
-        $scope.data = await new wijmo.collections.CollectionView([]);
-        await $scope.getTotalAdd();
+        if ($scope.initData === undefined || $scope.initData === null) {
+            $scope._popMsg(messages["grade.membr.add.message"]);
+        } else {
+            $scope.data = await new wijmo.collections.CollectionView([]);
+            await $scope.getTotalAdd();
+        }
     };
     // 추가 row
     $scope.getTotalAdd = async function () {
         var gridRepresent = agrid.getScope("memberClassCtrl");
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
+        console.log(selectedRow);
         var params = {};
         for (var i = 0; i < payCd.length + 1; i++) {
             if ($scope.classData === undefined) {
@@ -238,6 +268,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
                     params.payCd = payCd[i - 1].value;
                     params.membrOrgnCd = selectedRow.membrOrgnCd;
                     params.membrClassCd = selectedRow.membrClassCd;
+                    params.membrClassType = selectedRow.membrClassType;
                     $scope._addRow(params);
                 }
             } else {
@@ -247,23 +278,13 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
                     params.payCd = payCd[i - 1].value;
                     params.membrOrgnCd = selectedRow.membrOrgnCd;
                     params.membrClassCd = selectedRow.membrClassCd;
+                    params.membrClassType = selectedRow.membrClassType;
                     $scope._addRow(params);
                 } else {
                     $scope._addRow({});
                 }
             }
         }
-
-        // await payCd.forEach((e, i) => {
-        //     console.log(i);
-        //     params.gChk = true;
-        //     params.accRate = $scope.membrTotal;
-        //     params.payCd = e.value;
-        //     params.membrOrgnCd = selectedRow.membrOrgnCd;
-        //     params.membrClassCd = selectedRow.membrClassCd;
-        //     $scope._addRow(params);
-        // });
-
     }
 
     // 저장
