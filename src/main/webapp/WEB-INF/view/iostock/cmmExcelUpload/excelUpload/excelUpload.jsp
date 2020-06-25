@@ -20,23 +20,31 @@
   <%--위즈모 테이블--%>
   <div class="wj-gridWrap" style="height: 350px;">
     <wj-flex-grid
-      autoGenerateColumns="false"
-      selection-mode="Row"
-      items-source="data"
-      control="flex"
-      initialized="initGrid(s,e)"
-      is-read-only="true"
-      item-formatter="itemFormatter">
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="flex"
+            initialized="initGrid(s,e)"
+            is-read-only="true"
+            item-formatter="itemFormatter">
 
       <!-- define columns -->
-      <wj-flex-grid-column header="<s:message code="excelUpload.prodBarcdCd"/>" binding="prodBarcdCd" width="100" align="center" data-type="String" visible="{{prodBarcdCdVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.prodCd"/>" binding="prodCd" width="100" align="center" visible="{{prodCdVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.barcdCd"/>" binding="barcdCd" width="100" align="center" visible="{{barcdCdVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.unitQty"/>" binding="unitQty" width="70" align="right" data-type="Number" format="n0" visible="{{unitQtyVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.etcQty"/>" binding="etcQty" width="70" align="right" data-type="Number" format="n0" visible="{{etcQtyVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.qty"/>" binding="qty" width="70" align="right" data-type="Number" format="n0" visible="{{qtyVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.uprc"/>" binding="uprc" width="70" align="right" visible="{{uprcVisibleFg}}"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="excelUpload.remark"/>" binding="remark" width="70" align="left" data-type="String" visible="{{remarkVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.prodBarcdCd"/>" binding="prodBarcdCd" width="100"
+                           align="center" data-type="String" visible="{{prodBarcdCdVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.prodCd"/>" binding="prodCd" width="100" align="center"
+                           visible="{{prodCdVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.barcdCd"/>" binding="barcdCd" width="100" align="center"
+                           visible="{{barcdCdVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.unitQty"/>" binding="unitQty" width="70" align="right"
+                           data-type="Number" format="n0" visible="{{unitQtyVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.etcQty"/>" binding="etcQty" width="70" align="right"
+                           data-type="Number" format="n0" visible="{{etcQtyVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.qty"/>" binding="qty" width="70" align="right"
+                           data-type="Number" format="n0" visible="{{qtyVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.uprc"/>" binding="uprc" width="70" align="right"
+                           visible="{{uprcVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="excelUpload.remark"/>" binding="remark" width="70" align="left"
+                           data-type="String" visible="{{remarkVisibleFg}}"></wj-flex-grid-column>
 
     </wj-flex-grid>
   </div>
@@ -61,7 +69,7 @@
       // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
       $scope.colHeaderBind = {};
       for (var i = 0; i < $scope.flex.columns.length; i++) {
-        var col                          = $scope.flex.columns[i];
+        var col = $scope.flex.columns[i];
         $scope.colHeaderBind[col.header] = col.binding;
       }
     };
@@ -75,7 +83,7 @@
         }
       }
 
-      var flex   = panel.grid;
+      var flex = panel.grid;
       var column = flex.columns[c];
 
       if (column) {
@@ -83,7 +91,7 @@
           // create and initialize checkbox
           if (column.format === 'checkBoxText') {
             cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
-              + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
           } else {
             cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
           }
@@ -95,13 +103,13 @@
     // 그리드 컬럼 visible 초기화
     $scope.gridVisibleDefault = function () {
       $scope.prodBarcdCdVisibleFg = true; // 상품코드/바코드
-      $scope.prodCdVisibleFg      = true; // 상품코드
-      $scope.barcdCdVisibleFg     = true; // 바코드
-      $scope.unitQtyVisibleFg     = true; // 단위수량
-      $scope.etcQtyVisibleFg      = true; // 낱개수량
-      $scope.qtyVisibleFg         = true; // 수량
-      $scope.uprcVisibleFg        = true; // 단가
-      $scope.remarkVisibleFg      = true; // 비고
+      $scope.prodCdVisibleFg = true; // 상품코드
+      $scope.barcdCdVisibleFg = true; // 바코드
+      $scope.unitQtyVisibleFg = true; // 단위수량
+      $scope.etcQtyVisibleFg = true; // 낱개수량
+      $scope.qtyVisibleFg = true; // 수량
+      $scope.uprcVisibleFg = true; // 단가
+      $scope.remarkVisibleFg = true; // 비고
     };
 
 
@@ -122,8 +130,8 @@
       $timeout(function () {
         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
           includeColumnHeaders: true,
-          includeCellStyles   : true,
-          includeColumns      : function (column) {
+          includeCellStyles: true,
+          includeColumns: function (column) {
             return column.visible;
           }
         }, 'excelForm.xlsx');
@@ -134,71 +142,71 @@
     // 엑셀 양식 다운로드시 1줄 생성하여 어떤값 넣어야할지 양식생성.
     $scope.addRow = function () {
       // 그리드 초기화
-      var flex                         = $scope.flex;
-      flex.itemsSource                 = new wijmo.collections.CollectionView();
+      var flex = $scope.flex;
+      flex.itemsSource = new wijmo.collections.CollectionView();
       flex.collectionView.trackChanges = true;
 
       var params = {};
       // 주문등록, 반품등록
       if ($scope.uploadFg === 'order') {
         $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
-        $scope.prodCdVisibleFg      = false; // 상품코드
-        $scope.barcdCdVisibleFg     = false; // 바코드
-        $scope.unitQtyVisibleFg     = true;  // 단위수량
-        $scope.etcQtyVisibleFg      = true;  // 낱개수량
-        $scope.qtyVisibleFg         = false; // 수량
-        $scope.uprcVisibleFg        = false; // 단가
-        $scope.remarkVisibleFg      = false; // 비고
+        $scope.prodCdVisibleFg = false; // 상품코드
+        $scope.barcdCdVisibleFg = false; // 바코드
+        $scope.unitQtyVisibleFg = true;  // 단위수량
+        $scope.etcQtyVisibleFg = true;  // 낱개수량
+        $scope.qtyVisibleFg = false; // 수량
+        $scope.uprcVisibleFg = false; // 단가
+        $scope.remarkVisibleFg = false; // 비고
 
         params.prodBarcdCd = '상품코드입력';
-        params.unitQty     = 0;
-        params.etcQty      = 0;
+        params.unitQty = 0;
+        params.etcQty = 0;
       }
       // 분배마감, 반품마감
       else if ($scope.uploadFg === 'dstbCloseStore') {
         $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
-        $scope.prodCdVisibleFg      = false; // 상품코드
-        $scope.barcdCdVisibleFg     = false; // 바코드
-        $scope.unitQtyVisibleFg     = true;  // 단위수량
-        $scope.etcQtyVisibleFg      = true;  // 낱개수량
-        $scope.qtyVisibleFg         = false; // 수량
-        $scope.uprcVisibleFg        = true;  // 단가
-        $scope.remarkVisibleFg      = false; // 비고
+        $scope.prodCdVisibleFg = false; // 상품코드
+        $scope.barcdCdVisibleFg = false; // 바코드
+        $scope.unitQtyVisibleFg = true;  // 단위수량
+        $scope.etcQtyVisibleFg = true;  // 낱개수량
+        $scope.qtyVisibleFg = false; // 수량
+        $scope.uprcVisibleFg = true;  // 단가
+        $scope.remarkVisibleFg = false; // 비고
 
         params.prodBarcdCd = '상품코드입력';
-        params.unitQty     = 0;
-        params.etcQty      = 0;
-        params.uprc        = 0;
+        params.unitQty = 0;
+        params.etcQty = 0;
+        params.uprc = 0;
       }
       // 실사,조정,폐기
       else if ($scope.uploadFg === 'acins' || $scope.uploadFg === 'adj' || $scope.uploadFg === 'disuse') {
         $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
-        $scope.prodCdVisibleFg      = false; // 상품코드
-        $scope.barcdCdVisibleFg     = false; // 바코드
-        $scope.unitQtyVisibleFg     = false; // 단위수량
-        $scope.etcQtyVisibleFg      = false; // 낱개수량
-        $scope.qtyVisibleFg         = true;  // 수량
-        $scope.uprcVisibleFg        = false; // 단가
-        $scope.remarkVisibleFg      = true;  // 비고
+        $scope.prodCdVisibleFg = false; // 상품코드
+        $scope.barcdCdVisibleFg = false; // 바코드
+        $scope.unitQtyVisibleFg = false; // 단위수량
+        $scope.etcQtyVisibleFg = false; // 낱개수량
+        $scope.qtyVisibleFg = true;  // 수량
+        $scope.uprcVisibleFg = false; // 단가
+        $scope.remarkVisibleFg = true;  // 비고
 
         params.prodBarcdCd = '상품코드입력';
-        params.qty         = 0;
+        params.qty = 0;
       }
       // 거래처 발주, 거래처 입고
       else if ($scope.uploadFg === 'vendr') {
         $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
-        $scope.prodCdVisibleFg      = false; // 상품코드
-        $scope.barcdCdVisibleFg     = false; // 바코드
-        $scope.unitQtyVisibleFg     = true;  // 단위수량
-        $scope.etcQtyVisibleFg      = true;  // 낱개수량
-        $scope.qtyVisibleFg         = false; // 수량
-        $scope.uprcVisibleFg        = true;  // 단가
-        $scope.remarkVisibleFg      = false; // 비고
+        $scope.prodCdVisibleFg = false; // 상품코드
+        $scope.barcdCdVisibleFg = false; // 바코드
+        $scope.unitQtyVisibleFg = true;  // 단위수량
+        $scope.etcQtyVisibleFg = true;  // 낱개수량
+        $scope.qtyVisibleFg = false; // 수량
+        $scope.uprcVisibleFg = true;  // 단가
+        $scope.remarkVisibleFg = false; // 비고
 
         params.prodBarcdCd = '상품코드입력';
-        params.unitQty     = 0;
-        params.etcQty      = 0;
-        params.uprc        = 0;
+        params.unitQty = 0;
+        params.etcQty = 0;
+        params.uprc = 0;
       }
 
       var newRow = flex.collectionView.addNew();
@@ -232,9 +240,9 @@
     $scope.delete = function (upFg) {
       var params = {};
       $http({
-        method : 'POST', //방식
-        url    : "/iostock/cmmExcelUpload/excelUpload/excelUpload/delete.sb", /* 통신할 URL */
-        params : params, /* 파라메터로 보낼 데이터 */
+        method: 'POST', //방식
+        url: "/iostock/cmmExcelUpload/excelUpload/excelUpload/delete.sb", /* 통신할 URL */
+        params: params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
@@ -259,13 +267,13 @@
     $scope.textUpload = function () {
       $scope.excelTextFg = 'text';
       // 업로드 progress 관련 기본값 세팅
-      $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
+      $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
       $scope.progressCnt = 0;   // 처리된 숫자
 
       // 선택한 파일이 있을 경우
       if ($('#textUpFile')[0].files[0]) {
-        var file          = $('#textUpFile')[0].files[0];
-        var fileName      = file.name;
+        var file = $('#textUpFile')[0].files[0];
+        var fileName = file.name;
         var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
         // 확장자 체크. 확장자가 txt가 아닌 경우 오류메시지
@@ -282,8 +290,8 @@
           $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
           $timeout(function () {
             var uploadData = '';
-            var bytes      = new Uint8Array(e.target.result);
-            var length     = bytes.byteLength;
+            var bytes = new Uint8Array(e.target.result);
+            var length = bytes.byteLength;
             for (var i = 0; i < length; i++) {
               // 값이 스페이스인 경우 건너뜀.
               if (bytes[i] === 32) {
@@ -333,22 +341,22 @@
 
     // 텍스트 업로드 한 데이터를 JSON 형태로 변경한다.
     $scope.textUploadToJsonConvert = function (uploadData) {
-      var uploadDataArr       = uploadData.split(String.fromCharCode(13));
+      var uploadDataArr = uploadData.split(String.fromCharCode(13));
       // var uploadDataArr       = uploadData.split('\n');
       var uploadDataArrLength = uploadDataArr.length;
-      var jsonData            = [];
-      var item                = {};
-      var columnNum           = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
+      var jsonData = [];
+      var item = {};
+      var columnNum = 2; // 텍스트 업로드시 1줄의 JSON 데이터 컬럼 수 설정
 
       for (var i = 0; i < uploadDataArrLength; i++) {
         // String.fromCharCode(13) 으로 replace 를 하면 제대로 되지 않음..그래서 \n으로 replace 함..
         if (nvl(uploadDataArr[i].replace(/\n/gi, ''), '') !== '') {
           // if (nvl(uploadDataArr[i].replace(/String.fromCharCode(13)/gi, ''), '') !== '') {
           // var data          = uploadDataArr[i].replace(/String.fromCharCode(13)/gi, '');
-          var data          = uploadDataArr[i].replace(/\n/gi, '').trim();
-          var dataArr       = data.split(',');
+          var data = uploadDataArr[i].replace(/\n/gi, '').trim();
+          var dataArr = data.split(',');
           var dataArrLength = dataArr.length;
-          item              = {};
+          item = {};
 
           // 1줄의 데이터를 , 로 split 한 자료의 길이가 columnNum 보다 작은 경우 수량 없음 오류 메시지
           if (dataArrLength < columnNum) {
@@ -383,13 +391,13 @@
     $scope.excelUpload = function () {
       $scope.excelTextFg = 'excel';
       // 업로드 progress 관련 기본값 세팅
-      $scope.stepCnt     = 100; // 한번에 DB에 저장할 숫자 세팅
+      $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
       $scope.progressCnt = 0;   // 처리된 숫자
 
       // 선택한 파일이 있으면
       if ($('#excelUpFile')[0].files[0]) {
-        var file          = $('#excelUpFile')[0].files[0];
-        var fileName      = file.name;
+        var file = $('#excelUpFile')[0].files[0];
+        var fileName = file.name;
         var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
         // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
@@ -399,11 +407,11 @@
           $timeout(function () {
             var flex = $scope.flex;
             wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
-              , function (workbook) {
-                $timeout(function () {
-                  $scope.excelUploadToJsonConvert();
-                }, 10);
-              }
+                , function (workbook) {
+                  $timeout(function () {
+                    $scope.excelUploadToJsonConvert();
+                  }, 10);
+                }
             );
           }, 10);
         } else {
@@ -417,8 +425,8 @@
 
     // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
     $scope.excelUploadToJsonConvert = function () {
-      var jsonData  = [];
-      var item      = {};
+      var jsonData = [];
+      var item = {};
       var rowLength = $scope.flex.rows.length;
 
       if (rowLength === 0) {
@@ -432,7 +440,7 @@
         for (var c = 0; c < $scope.flex.columns.length; c++) {
           if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
             var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
-            var cellValue  = $scope.flex.getCellData(r, c, false) + '';
+            var cellValue = $scope.flex.getCellData(r, c, false) + '';
 
             item[colBinding] = cellValue;
           }
@@ -452,8 +460,8 @@
     // DB에 저장
     $scope.save = function (jsonData) {
       $scope.totalRows = jsonData.length;
-      var params       = [];
-      var msg          = '';
+      var params = [];
+      var msg = '';
 
       // 저장 시작이면 업로드 중 팝업 오픈
       if ($scope.progressCnt === 0) {
@@ -526,7 +534,7 @@
         // 낱개수량 값 체크
         if (nvl(item.etcQty, '') !== '') {
           // 최대크기
-          if(parseInt(nvl(item.etcQty, 0)) > 99999999) {
+          if (parseInt(nvl(item.etcQty, 0)) > 99999999) {
             msg = messages["excelUpload.etcQty"] + messages["excelUpload.overSize"] + " 99999999"; // 낱개수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
             $scope.valueCheckErrPopup(msg);
             return false;
@@ -543,7 +551,7 @@
         // 수량 값 체크
         if (nvl(item.qty, '') !== '') {
           // 최대크기
-          if(parseInt(nvl(item.qty, 0)) > 99999999) {
+          if (parseInt(nvl(item.qty, 0)) > 99999999) {
             msg = messages["excelUpload.qty"] + messages["excelUpload.overSize"] + " 99999999"; // 수량의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 99999999
             $scope.valueCheckErrPopup(msg);
             return false;
@@ -560,7 +568,7 @@
         // 단가 값 체크
         if (nvl(item.uprc, '') !== '') {
           // 최대크기
-          if(parseInt(nvl(item.uprc, 0)) > 9999999999) {
+          if (parseInt(nvl(item.uprc, 0)) > 9999999999) {
             msg = messages["excelUpload.uprc"] + messages["excelUpload.overSize"] + " 9999999999"; // 단가의 데이터 중 크기가 너무 큰 데이터가 있습니다. 최대 : 9999999999
             $scope.valueCheckErrPopup(msg);
             return false;
@@ -592,9 +600,9 @@
 
       // ajax 통신 설정
       $http({
-        method : 'POST', //방식
-        url    : '/iostock/cmmExcelUpload/excelUpload/excelUpload/save.sb', /* 통신할 URL */
-        data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+        method: 'POST', //방식
+        url: '/iostock/cmmExcelUpload/excelUpload/excelUpload/save.sb', /* 통신할 URL */
+        data: params, /* 파라메터로 보낼 데이터 : @requestBody */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
@@ -626,14 +634,14 @@
     // 엑셀업로드 된 데이터를 기반으로 상품코드 업데이트
     // 업데이트 완료 후 callback 호출 함.
     $scope.saveUpdateProdCd = function () {
-      var params      = {};
+      var params = {};
       params.uploadFg = $scope.uploadFg;
 
       // ajax 통신 설정
       $http({
-        method : 'POST', //방식
-        url    : '/iostock/cmmExcelUpload/excelUpload/excelUpload/saveUpdateProdCd.sb', /* 통신할 URL */
-        params : params, /* 파라메터로 보낼 데이터 */
+        method: 'POST', //방식
+        url: '/iostock/cmmExcelUpload/excelUpload/excelUpload/saveUpdateProdCd.sb', /* 통신할 URL */
+        params: params, /* 파라메터로 보낼 데이터 */
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
