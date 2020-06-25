@@ -99,7 +99,7 @@ app.controller('inclnCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
     // <-- //그리드 헤더2줄 -->
-  };
+  };a
 
   // <-- 검색 호출 -->
   $scope.$on("membrPossesnCtrl", function (event, data) {

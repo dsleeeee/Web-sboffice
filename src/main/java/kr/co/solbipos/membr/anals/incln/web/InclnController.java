@@ -44,11 +44,6 @@ public class InclnController {
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-    System.out.println("-*********************************************-");
-    System.out.println("-*********************************************-");
-    System.out.println(sessionInfoVO);
-    System.out.println("-*********************************************-");
-    System.out.println("-*********************************************-");
 
     return "membr/anals/incln/incln";
   }
