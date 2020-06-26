@@ -90,6 +90,7 @@ public class MemberClassServiceImpl implements MemberClassService {
         String dt = currentDateTimeString();
         int classChk = mapper.classInfoChk(membrClassVO);
         int classResult;
+        membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         membrClassVO.setRegDt(dt);
         membrClassVO.setRegId(sessionInfoVO.getUserId());
         membrClassVO.setModDt(dt);

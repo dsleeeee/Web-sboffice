@@ -98,14 +98,11 @@ public class RegistServiceImpl implements RegistService {
 
         // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
         if (resultList.size() == 0) {
-
             DefaultMap<String> tmpList = new DefaultMap<String>();
             tmpList.put("value", "000");
             tmpList.put("name", "기본등급");
-
             resultList.add(tmpList);
         }
-
         return resultList;
     }
 

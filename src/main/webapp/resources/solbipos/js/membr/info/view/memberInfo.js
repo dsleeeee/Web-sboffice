@@ -21,6 +21,11 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('memberCtrl', $scope, $http, true));
 
+  // 기본 회원등급
+  // if (membrClassList.length == 0) {
+  //   membrClassList = [{value: "", name: "선택"}, {value: "001", name: "기본등급"}];
+  // }
+
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
@@ -233,6 +238,8 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     params.weddingYn = $scope.weddingYn;
     params.memberClass = $scope.memberClass;
     params.phoneNo = $scope.phoneNo;
+
+    params.listScale = $scope.listScale;
 
     params.membrNo = $("#memberNo").val();
     params.membrNm = $("#memberNm").val();

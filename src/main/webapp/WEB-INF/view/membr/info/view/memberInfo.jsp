@@ -323,7 +323,18 @@
             <%-- 회원등급 --%>
             <th><s:message code="regist.memberClass"/></th>
             <td>
-                <input type="text" id="memberClass" class="sb-input w100" ng-model="memberClass" maxlength="15"/>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="rMemberClass"
+                            ng-model="member.membrClassCd"
+                            control="memberClassCombo"
+                            items-source="_getComboData('rMemberClass')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
             </td>
             <%--<th></th>--%>
             <td></td>
