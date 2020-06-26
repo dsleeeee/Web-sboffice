@@ -258,7 +258,6 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     $scope.getTotalAdd = async function () {
         var gridRepresent = agrid.getScope("memberClassCtrl");
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
-        console.log(selectedRow);
         var params = {};
         for (var i = 0; i < payCd.length + 1; i++) {
             if ($scope.classData === undefined) {
