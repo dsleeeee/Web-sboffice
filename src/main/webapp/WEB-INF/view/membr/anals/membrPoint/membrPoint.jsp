@@ -31,12 +31,16 @@
       <th>
         <s:message code="membrPoint.srchDate"/>
       </th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
           <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>
           <span class="rg">~</span>
           <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
         </div>
+      </td>
+      <td>
+        <button class="btn_blk sb-input w50" style="margin-left: 5px" ng-click="excelDownload()"><s:message
+                code="member.excel"/></button>
       </td>
     </tr>
     <tr>
