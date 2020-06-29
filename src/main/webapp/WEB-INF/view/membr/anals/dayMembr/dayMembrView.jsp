@@ -42,7 +42,7 @@
       </td>
       <td>
         <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
-                code="member.excel.download"/></button>
+                code="member.excel"/></button>
       </td>
       <td></td>
     </tr>
