@@ -43,20 +43,17 @@
       <tr class="brt">
         <%-- 양식다운로드 --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-controller="excelUploadCtrl"
-                  ng-click="excelForm('downLoad')">
-            <s:message
-                    code="member.excel.upload"/></button>
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelTextUpload('excelFormDown')">
+            <s:message code="member.excel.upload"/></button>
         </td>
         <%-- 양식업로드  --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-controller="excelUploadCtrl"
-                  ng-click="excelUpload()"><s:message
-                  code="member.excel.download"/></button>
+          <a href="#" class="btn_blk sb-input w100" ng-click="excelTextUpload()"><s:message
+                  code="acins.reg.excelFormUpload"/></a>
         </td>
         <%-- 편집화면다운로드  --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click=""><s:message
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
                   code="member.excel.pageDownload"/></button>
         </td>
         <%-- 성공내역, 실페내역  --%>
@@ -77,7 +74,7 @@
         </td>
         <%-- 저장  --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click=""><s:message
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="save()"><s:message
                   code="cmm.save"/></button>
         </td>
       </tr>

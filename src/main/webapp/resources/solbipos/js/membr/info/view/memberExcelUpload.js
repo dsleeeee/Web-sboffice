@@ -37,68 +37,88 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $h
   //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
   // };
 
-  // 엑셀 양식 다운로드
-  $scope.excelForm = function (fg) {
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
-    var uploadFg = 'memberExcel'
-
-    if (fg === 'downLoad') {
-      excelUploadScope.excelFormDownload(uploadFg);
+  // 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
     }
 
-    // $scope.uploadFg = uploadFg;
-
-    // $scope.addRow();
-    //
-    // $timeout(function () {
-    //   wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-    //     includeColumnHeaders: true,
-    //     includeCellStyles: true,
-    //     includeColumns: function (column) {
-    //       return column.visible;
-    //     }
-    //   }, 'excelForm.xlsx');
-    // }, 10);
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: false,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      }, 'excel.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
   };
 
-  $scope.adjustAll = function () {
-    // $http({
-    //   method: 'POST', //방식
-    //   url: "/membr/info/point/point/adjustAll.sb", /* 통신할 URL */
-    //   params: param, /* 파라메터로 보낼 데이터 */
-    //   headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    // }).then(function successCallback(response) {
-    // }, function errorCallback(response) {
-    //   // 로딩바 hide
-    //   $scope.$broadcast('loadingPopupInactive');
-    //   // called asynchronously if an error occurs
-    //   // or server returns response with an error status.
-    //   if (response.data.message) {
-    //     $scope._popMsg(response.data.message);
-    //   } else {
-    //     $scope._popMsg(messages['cmm.error']);
-    //   }
-    //   return false;
-    // }).then(function () {
-    //   // 'complete' code here
-    //   if (typeof callback === 'function') {
-    //     setTimeout(function () {
-    //       callback();
-    //     }, 10);
-    //   }
-    // });
-  }
 
-// $scope.$on("memberExcelUploadCtrl", function (event, data) {
-//   $scope.searchMemberPointList();
-//   event.preventDefault();
-// });
+  /** 엑셀업로드 관련 공통 함수 */
+  $scope.excelTextUpload = function (prcsFg) {
 
-// // 후불회원 그리드 조회
-// $scope.searchMemberPointList = function () {
-//   var params = {};
-//   $scope._inquiryMain("membr/info/point/point/getMemberPointList.sb", params, function () {
-//   }, false);
-// };
-}])
-;
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
+    var uploadFg = 'memberExcel';
+
+    // 엑셀 양식다운로드
+    if (prcsFg === 'excelFormDown') {
+      excelUploadScope.excelFormDownload(uploadFg);
+    } else {
+      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      s_alert.popConf(msg, function () {
+        excelUploadScope.uploadFg = uploadFg;
+        /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+        excelUploadScope.parentCtrl = 'memberExcelUploadCtrl';
+        // 엑셀 업로드
+        $("#excelUpFile").val('');
+        $("#excelUpFile").trigger('click');
+      });
+    }
+  };
+
+  /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
+  $scope.save = function () {
+    var params = {};
+    params.date = $scope.acinsDate;
+    params.seqNo = $scope.seqNo;
+    params.title = $scope.acinsTitle;
+    params.addQtyFg = $scope.addQtyFg;
+
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+
+    $http({
+      method: 'POST', //방식
+      url: '/stock/acins/acins/acinsRegist/excelUpload.sb', /* 통신할 URL */
+      params: params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        // 엑셀 에러내역 팝업 호출
+        $scope.excelUploadErrInfo();
+
+        // 등록 그리드, 부모 그리드 조회
+        $scope.saveRegistCallback();
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg(response.data.message);
+      return false;
+    }).then(function () {
+      excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+    });
+  };
+
+  // 에러내역 팝업 호출
+  $scope.excelUploadErrInfo = function () {
+    var params = {};
+    params.uploadFg = 'acins';
+    $scope._broadcast('excelUploadErrInfoCtrl', params);
+  };
+}]);

@@ -59,38 +59,42 @@
     <table class="searchTbl">
       <colgroup>
         <col class="w1"/>
-        <col class="w25"/>
         <col class="w10"/>
-        <col class="w20"/>
+        <col class="w10"/>
+        <col class="w15"/>
         <col class="w5"/>
         <col class="w5"/>
         <col class="w25"/>
         <col class="w5"/>
         <col class="w5"/>
         <col class="w15"/>
-        <col class="w10"/>
-        <col class="w40"/>
-        <col class="w40"/>
       </colgroup>
       <tbody>
       <tr class="brt">
         <th></th>
+        <%-- 양식다운로드 --%>
         <td>
-          <input type="button" class="sb-input w30" value="양식다운로드" id=""/>
-          <input type="button" class="sb-input w30" value="양식업로드" id=""/>
-          <input type="button" class="sb-input w30" value="편집화면다운로드" id=""/>
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelTextUpload('excelFormDown')">
+            <s:message code="member.excel.upload"/></button>
+        </td>
+        <%-- 양식업로드  --%>
+        <td>
+          <a href="#" class="btn_blk sb-input w100" ng-click="excelTextUpload()"><s:message
+                  code="acins.reg.excelFormUpload"/></a>
+        </td>
+        <%-- 편집화면다운로드  --%>
+        <td>
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
+                  code="member.excel.pageDownload"/></button>
         </td>
         <td>
-          <select class="sb-select w100">
-            <option value="all">전체</option>
-            <option value="success">성공내역</option>
-            <option value="error">오류내역</option>
+          <select type="text" class="sb-select w100" ng-model="statu" id=""
+                  ng-options="item.name for item in statuList">
           </select>
         </td>
-        <td colspan="4">
-          <button class="btn_blk sb-input w50" ng-click=""><s:message code="member.excel.check"/></button>
+        <td colspan="5">
+          <button class="btn_blk sb-input w100" ng-click=""><s:message code="member.excel.check"/></button>
         </td>
-        <td></td>
         <th><s:message code="memberPoint.remark"/></th>
         <td>
           <input type="text" class="sb-input w100" id=""/>
@@ -108,7 +112,7 @@
             <s:message code="memberPoint.excelDescriptionOne"/>
           </h2>
         </td>
-        <td colspan="7">
+        <td colspan="9">
           <h2 class="h2 lh30">
             <s:message code="memberPoint.excelDescriptionTwo"/>
           </h2>
@@ -123,7 +127,7 @@
             <s:message code="memberPoint.excelDescriptionThree"/>
           </h2>
         </td>
-        <td colspan="8">
+        <td colspan="10">
           <h2 class="h2 lh30">
             <s:message code="memberPoint.excelDescriptionFour"/>
           </h2>
@@ -137,7 +141,7 @@
             <s:message code="memberPoint.excelDescriptionFive"/>
           </h2>
         </td>
-        <td colspan="8">
+        <td colspan="10">
           <h2 class="h2 lh30">
             <s:message code="memberPoint.excelDescriptionSix"/>
           </h2>
@@ -162,10 +166,11 @@
     </wj-combo-box>
   </div>
   <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+    <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h4 oh lh30">
         <s:message code="memberPoint.title.delete"/>
-        <button class="btn_skyblue sb-input w5" style="margin: 5px 15px" ng-click=""><s:message code="cmm.delete"/></button>
+        <button class="btn_skyblue sb-input w5" style="margin: 5px 15px" ng-click=""><s:message
+                code="cmm.delete"/></button>
       </h2>
       <h2 class="h4 oh lh30">
       </h2>

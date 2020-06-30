@@ -20,6 +20,14 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('memberPointCtrl', $scope, $http, true));
 
+  // 성공내역, 실페내역
+  $scope.statuList = [
+    {value: '1', name: '전체'},
+    {value: '2', name: '성공내역'},
+    {value: '3', name: '오류내역'}
+  ]
+  $scope.statu = $scope.statuList[0]
+
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
