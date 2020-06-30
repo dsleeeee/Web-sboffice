@@ -1,5 +1,6 @@
 package kr.co.solbipos.membr.info.point.web;
 
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -47,7 +48,6 @@ public class MemberPointController {
    */
   @RequestMapping(value = "/point/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
-
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
     return "membr/info/view/memberPoint";

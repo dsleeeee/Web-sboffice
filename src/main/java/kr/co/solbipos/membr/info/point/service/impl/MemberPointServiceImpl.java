@@ -3,6 +3,7 @@ package kr.co.solbipos.membr.info.point.service.impl;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static org.apache.commons.lang3.time.DateUtils.isSameLocalTime;
 
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.info.point.service.MemberPointService;
@@ -38,6 +39,19 @@ public class MemberPointServiceImpl implements MemberPointService {
   @Override
   public int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request) {
 
+    String membr_orgn_cd = sessionInfoVO.getOrgnGrpCd();
+    String auth_grp_cd = sessionInfoVO.getAuthGrpCd();
+    String grp_ogn_nm = sessionInfoVO.getOrgnNm();
+    String grp_cd = sessionInfoVO.getOrgnCd();
+    System.out.println("=============================");
+    System.out.println("=============================");
+    System.out.println("membr_orgn_cd" + membr_orgn_cd);
+    System.out.println("auth_grp+cd" + auth_grp_cd);
+    System.out.println("grp_ogn_nm" + grp_ogn_nm);
+    System.out.println("grp_cd" + grp_cd);
+    System.out.println("=============================");
+    System.out.println("=============================");
+
     List<DefaultMap<Object>> resultList = memberPointMapper.getMemberPointList(memberPointVO);
 
     int totAjdPoint = Integer.parseInt(request.getParameter("totAjdPoint"));
@@ -69,11 +83,6 @@ public class MemberPointServiceImpl implements MemberPointService {
     int res = 0;
     for (MemberPointVO member : memberPointVOs) {
       for (Object re : result) {
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        System.out.println(re);
-        System.out.println(member);
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
-        System.out.println("+++++++++++++++++++++++++++++++++++++");
       }
 //      result += memberPointMapper.adjustAll(member);
     }

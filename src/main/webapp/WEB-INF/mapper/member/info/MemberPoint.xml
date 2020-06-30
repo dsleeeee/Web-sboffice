@@ -67,8 +67,7 @@
     FROM
         TB_MB_MEMBER_POINT tmmp
     WHERE
-        MEMBR_ORGN_CD = #{orgnFg}
-
+        MEMBR_ORGN_CD = 'A0001'
 --         AND MEMBR_NO = '0000000002';
   </insert>
 
