@@ -37,6 +37,53 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
   //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
   // };
 
+  // 엑셀 다운로드
+  $scope.excelDownload = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: false,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      }, 'excel.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  };
+
+
+  /** 엑셀업로드 관련 공통 함수 */
+  $scope.excelTextUpload = function (prcsFg) {
+
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
+    var uploadFg = 'memberPoint';
+
+    // 엑셀 양식다운로드
+    if (prcsFg === 'excelFormDown') {
+      excelUploadScope.excelFormDownload(uploadFg);
+    } else {
+      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      s_alert.popConf(msg, function () {
+        excelUploadScope.uploadFg = uploadFg;
+        /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+        excelUploadScope.parentCtrl = 'memberPointCtrl';
+        // 엑셀 업로드
+        $("#excelUpFile").val('');
+        $("#excelUpFile").trigger('click');
+      });
+    }
+  };
+
   $scope.adjustAll = function () {
     let param = $scope.changeAll
     param.totAjdPoint = param.totAjdPoint * 1
