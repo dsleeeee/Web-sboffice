@@ -622,6 +622,9 @@
     <typeAlias type="kr.co.common.data.handler.CustomBooleanTypeHandler" alias="CustomBooleanTypeHandler" />
     <typeAlias type="kr.co.common.data.handler.CustomDateTypeHandler" alias="CustomDateTypeHandler" />
 
+    <!-- 배달관리 > 배달정보 > 배달지등록 -->
+    <typeAlias alias="dlvrRegistVO" type="kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO"/>
+
   </typeAliases>
 
 

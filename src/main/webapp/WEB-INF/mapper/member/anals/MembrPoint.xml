@@ -18,6 +18,7 @@
     -->
     <select id="getMembrPointList"  parameterType="membrPointVO" resultType="DefaultMap">
         /* MembrPointMapper.getMembrPointList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD) AS STORE_NM,
         TO_CHAR(TO_DATE(tssd.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
@@ -29,6 +30,7 @@
         SUM(tssd.SALE_AMT) AS SALE_AMT,
         SUM(tssd.DC_AMT) AS DC_AMT,
         SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_SALE_HDR_MEMBR tsshm,
         TB_SL_SALE_DTL tssd,
         TB_MB_MEMBER tmm
@@ -97,6 +99,7 @@
                 ORDER BY tssd.REG_DT, tsshm.MEMBR_NO, tssd.STORE_CD
             ]]>
         </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>
