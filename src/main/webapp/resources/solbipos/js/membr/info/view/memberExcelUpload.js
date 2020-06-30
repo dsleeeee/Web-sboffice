@@ -28,19 +28,21 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $h
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('memberExcelUploadCtrl', $scope, $http, true));
 
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
   // // grid 초기화 : 생성되기전 초기화되면서 생성된다
   // $scope.initGrid = function (s, e) {
   //   // 그리드 DataMap 설정
   //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
   // };
 
-  // 엑셀양식 다운로드
+  // 엑셀 양식 다운로드
   $scope.excelForm = function (fg) {
-    console.log('11111111')
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
-    var uploadFg = 'vendr'
+    var uploadFg = 'memberExcel'
 
-    if (fg === 'excelFormDown') {
+    if (fg === 'downLoad') {
       excelUploadScope.excelFormDownload(uploadFg);
     }
 

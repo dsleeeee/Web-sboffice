@@ -13,6 +13,11 @@
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
+        <s:message code="cmm.search"/>
+      </button>
+    </div>
   </div>
 
   <%-- 상단 타이틀 --%>
@@ -54,12 +59,8 @@
           </select>
         </td>
         <%-- 검색줄수  --%>
-        <th><s:message code="dlvr.membr.rowNm"/></th>
-        <td>
-          <input type="text" class="sb-input w25" ng-model="inputData.rowNm" id="rowNm"/>
-          <button class="btn_blk sb-input w30" style="margin-left: 5px" ng-click=""><s:message
-                  code="cmm.search"/></button>
-        </td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -171,17 +172,31 @@
   </div>
 
   <%-- 그리드 left --%>
+  <%-- 페이지 스케일  --%>
+  <div class="mt20 oh sb-select dkbr">
+    <%-- 페이지 스케일  --%>
+    <wj-combo-box
+            class="w100px fl"
+            id="listScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('listScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
+  </div>
   <div class="w50 fl" style="width:55%;">
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.adressList"/>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.save"/>
         </button>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.delete"/>
         </button>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>
@@ -218,13 +233,13 @@
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.phoneNumberList"/>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.save"/>
         </button>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.delete"/>
         </button>
-        <button class="btn_blk sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>

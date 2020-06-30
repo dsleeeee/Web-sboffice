@@ -60,6 +60,9 @@ app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
   //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
   // };
 
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
   $scope.adjustAll = function () {
     // $http({
     //   method: 'POST', //방식

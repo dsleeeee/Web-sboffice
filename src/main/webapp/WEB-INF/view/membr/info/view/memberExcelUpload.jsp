@@ -15,6 +15,11 @@
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
+        <s:message code="cmm.search"/>
+      </button>
+    </div>
   </div>
 
   <%-- 상단 타이틀 --%>
@@ -38,13 +43,15 @@
       <tr class="brt">
         <%-- 양식다운로드 --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelForm('excelFormDown')">
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-controller="excelUploadCtrl"
+                  ng-click="excelForm('downLoad')">
             <s:message
                     code="member.excel.upload"/></button>
         </td>
         <%-- 양식업로드  --%>
         <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelUpload"><s:message
+          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-controller="excelUploadCtrl"
+                  ng-click="excelUpload()"><s:message
                   code="member.excel.download"/></button>
         </td>
         <%-- 편집화면다운로드  --%>
@@ -59,14 +66,9 @@
           </select>
         </td>
         <%-- 검색줄수  --%>
-        <th><s:message code="dlvr.membr.rowNm"/></th>
-        <td>
-          <input type="text" class="sb-input w100" ng-model="rowNm" id="rowNm"/>
-        </td>
-        <td>
-          <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click=""><s:message
-                  code="cmm.search"/></button>
-        </td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <%-- 양식검증  --%>
         <td>
@@ -84,6 +86,19 @@
   </div>
 
   <%-- 그리드 top --%>
+  <div class="mt20 oh sb-select dkbr">
+    <%-- 페이지 스케일  --%>
+    <wj-combo-box
+            class="w100px fl"
+            id="listScaleBox"
+            ng-model="listScale"
+            items-source="_getComboData('listScaleBox')"
+            display-member-path="name"
+            selected-value-path="value"
+            is-editable="false"
+            initialized="initComboBox(s)">
+    </wj-combo-box>
+  </div>
   <div class="w100" style="margin-bottom: 5px">
     <div class="wj-gridWrap">
       <h2 class="h2 oh lh30">
@@ -123,7 +138,9 @@
   <div class="w100">
     <div class="wj-gridWrap">
       <h2 class="h2 oh lh30">
-        <s:message code="member.excel.combo.list"/>
+        <s:message code="member.excel.memberInfo"/>
+        <button class="btn_skyblue sb-input w5" style="margin: 5px 15px" ng-click=""><s:message
+                code="cmm.delete"/></button>
       </h2>
     </div>
     <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">

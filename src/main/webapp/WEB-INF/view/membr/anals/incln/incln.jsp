@@ -22,10 +22,10 @@
   </div>
   <table class="searchTbl">
     <colgroup>
+      <col class="w5"/>
       <col class="w15"/>
-      <col class="w35"/>
-      <col class="w15"/>
-      <col class="w35"/>
+      <col class="w5"/>
+      <col class="w25"/>
     </colgroup>
     <tbody>
     <tr>
@@ -33,13 +33,18 @@
       <th>
         <s:message code="incln.srchDate"/>
       </th>
-      <td colspan="3">
+      <td>
         <div class="sb-select">
           <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>
           <span class="rg">~</span>
           <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
         </div>
       </td>
+      <td>
+        <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
+                code="member.excel"/></button>
+      </td>
+      <td></td>
     </tr>
     </tbody>
   </table>

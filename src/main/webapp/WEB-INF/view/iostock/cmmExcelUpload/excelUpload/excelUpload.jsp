@@ -45,6 +45,66 @@
                            visible="{{uprcVisibleFg}}"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="excelUpload.remark"/>" binding="remark" width="70" align="left"
                            data-type="String" visible="{{remarkVisibleFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrKrNm" width="100" align="left"
+                           data-type="String" visible="{{membrKrNm}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.nm.en"/>" binding="membrEnNm" width="100" align="left"
+                           data-type="String" visible="{{membrEnNm}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd" width="100"
+                           align="left"
+                           data-type="String" visible="{{membrClassCd}}"></wj-flex-grid-column>
+
+      <wj-flex-grid-column header="<s:message code="member.excel.store"/>" binding="membrStore" width="100" align="left"
+                           data-type="String" visible="{{membrStore}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="gendrFg" width="100" align="left"
+                           data-type="String" visible="{{gendrFg}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.membrCardNo"/>" binding="membrCardNo" width="100"
+                           align="left"
+                           data-type="String" visible="{{membrCardNo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.birthday"/>" binding="birthday" width="100"
+                           align="left"
+                           data-type="String" visible="{{birthday}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.weddingYn"/>" binding="weddingYn" width="100"
+                           align="left"
+                           data-type="String" visible="{{weddingYn}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.weddingday"/>" binding="weddingday" width="100"
+                           align="left"
+                           data-type="String" visible="{{weddingday}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.telNo"/>" binding="telNo" width="100" align="left"
+                           data-type="String" visible="{{telNo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.phonneNo"/>" binding="phonneNo" width="100"
+                           align="left"
+                           data-type="String" visible="{{phonneNo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.shortNo"/>" binding="shortNo" width="100" align="left"
+                           data-type="String" visible="{{shortNo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.email"/>" binding="email" width="100" align="left"
+                           data-type="String" visible="{{email}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.postNo"/>" binding="postNo" width="100" align="left"
+                           data-type="String" visible="{{postNo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.addr"/>" binding="addr" width="100" align="left"
+                           data-type="String" visible="{{addr}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.addrDtl"/>" binding="addrDtl" width="100" align="left"
+                           data-type="String" visible="{{addrDtl}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.emailRecvYn"/>" binding="emailRecvYn" width="100"
+                           align="left"
+                           data-type="String" visible="{{emailRecvYn}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.smsRecvYn"/>" binding="smsRecvYn" width="100"
+                           align="left"
+                           data-type="String" visible="{{smsRecvYn}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.avablPoint"/>" binding="avablPoint" width="100"
+                           align="left"
+                           data-type="String" visible="{{avablPoint}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.totPoint"/>" binding="totPoint" width="100"
+                           align="left"
+                           data-type="String" visible="{{totPoint}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.dlAddrOne"/>" binding="dlAddrOne" width="100"
+                           align="left"
+                           data-type="String" visible="{{dlAddrOne}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="dlAddrTwo" width="100"
+                           align="left"
+                           data-type="String" visible="{{dlAddrTwo}}"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="member.excel.dlAddrDtl"/>" binding="dlAddrDtl" width="100"
+                           align="left"
+                           data-type="String" visible="{{dlAddrDtl}}"></wj-flex-grid-column>
 
     </wj-flex-grid>
   </div>
@@ -208,6 +268,47 @@
         params.etcQty = 0;
         params.uprc = 0;
       }
+      // 회월excel업로드
+      else if ($scope.uploadFg === 'memberExcel') {
+        $scope.prodBarcdCdVisibleFg = false;  // 상품코드/바코드
+        $scope.prodCdVisibleFg = false; // 상품코드
+        $scope.barcdCdVisibleFg = false; // 바코드
+        $scope.unitQtyVisibleFg = false;  // 단위수량
+        $scope.etcQtyVisibleFg = false;  // 낱개수량
+        $scope.qtyVisibleFg = false; // 수량
+        $scope.uprcVisibleFg = false;  // 단가
+        $scope.remarkVisibleFg = false; // 비고
+        $scope.remarkVisibleFg = false; // 비고
+        $scope.membrClassCd = true; // 회원등급분류
+        $scope.membrKrNm = true; // 회원명(한글)
+        $scope.membrEnNm = true; // 회원명(영문)
+        $scope.membrStore = true;
+        $scope.gendrFg = true;
+        $scope.membrCardNo = true;
+        $scope.birthday = true;
+        $scope.weddingYn = true;
+        $scope.weddingday = true;
+        $scope.telNo = true;
+        $scope.phonneNo = true;
+        $scope.shortNo = true;
+        $scope.email = true;
+        $scope.postNo = true;
+        $scope.addr = true;
+        $scope.addrDtl = true;
+        $scope.emailRecvYn = true;
+        $scope.smsRecvYn = true;
+        $scope.avablPoint = true;
+        $scope.totPoint = true;
+        $scope.dlAddrOne = true;
+        $scope.dlAddrTwo = true;
+        $scope.dlAddrDtl = true;
+
+        // params.membrClassCd = '회원등급분류';
+        // params.unitQty = 0;
+        // params.etcQty = 0;
+        // params.uprc = 0;
+      }
+
 
       var newRow = flex.collectionView.addNew();
       for (var prop in params) {
