@@ -98,6 +98,11 @@ console.log('storeParams',storeParams);
       return false;
     }
 
+    if(storeParams.originalStoreCd == storeParams.targetStoreCd) {
+      $scope._popMsg("기준매장과 적용대상매장이 같을 수 없습니다.");
+      return false;
+    }
+
     var msg = "(" + $("#originalStoreNm").val() + ")의 환경설정값을 ("  + $("#targetStoreNm").val() + ")에 적용하시겠습니까?";
     s_alert.popConf(msg, function(){
 

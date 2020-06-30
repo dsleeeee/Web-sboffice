@@ -138,6 +138,9 @@ public interface StoreManageMapper {
     /** 포스설정 XML정보 복사 */
     int copyPosConfXml(ConfgXmlVO confgXmlVO);
 
+    /** 포스기능키별 적용매장 등록 */
+    int registPosFnkeyStore(StoreFnkeyVO storeFnkeyVO);
+
     /** 터치키 분류 복사 TODO */
     int copyFnkeyClassCopy(TouchKeyClassVO touchkeyClassVO);
 

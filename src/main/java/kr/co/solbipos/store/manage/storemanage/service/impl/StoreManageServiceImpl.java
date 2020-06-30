@@ -365,27 +365,20 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                         LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
-                        //procCnt += mapper.copyStoreConfXml(confgXmlVO);
-
-//                    for(int p=0; p<installPosCnt; p++){
-//                        confgXmlVO.setPosNo(String.valueOf(p+i));
-//                    }
                         confgXmlVO.setArrPosNo(posNoStr.split(","));
-                        procCnt += mapper.copyPosConfXml(confgXmlVO); //todo
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
 
 
                         LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
-                        //procCnt += mapper.copyStoreConfXml(confgXmlVO);
-
-//                    for(int p=0; p<installPosCnt; p++){
-//                        confgXmlVO.setPosNo(String.valueOf(p+i));
-//                    }
-                        procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
 
                         LOGGER.info(">>>>>>>>>>>>>>>>>> DELIVERY >>>>>>>>>>>>>>>");
                         confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
-                        procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+
+                        // 포스기능키별 적용매장 등록(TB_CM_POS_FNKEY_STORE)
+                        procCnt += mapper.registPosFnkeyStore(storeFnkeyVO);
 
                     }
 

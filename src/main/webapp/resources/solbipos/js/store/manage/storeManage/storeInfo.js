@@ -147,6 +147,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#storeCd").attr("readonly",true);
     $("#storeCd").css("width", "100%");
     $("#btnChkStoreCd").css("display", "none");
+    $("#additionalArea").css("display", "");
 
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
@@ -207,6 +208,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#storeCd").attr("readonly",true);
       $("#storeCd").css("width", "100%");
       $("#btnChkStoreCd").css("display", "none");
+      $("#additionalArea").css("display", "none");
     });
   };
 

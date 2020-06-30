@@ -263,7 +263,7 @@
             </tbody>
           </table>
           <%-- 추가설정 (매장등록시에만 보여줌) --%>
-          <div id="additionalArea" ng-if="readOnlyStatus == false"> <!--todo 왜 조회했다가 신규등록하려면 안보이냐 이자식아 -->
+          <div id="additionalArea"> <!--todo 왜 조회했다가 신규등록하려면 안보이냐 이자식아 -->
             <h3 class="h3_tbl"><s:message code="storeManage.additionalSetting" /></h3>
             <table class="searchTbl">
               <colgroup>
@@ -361,7 +361,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703.04 charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703.07" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

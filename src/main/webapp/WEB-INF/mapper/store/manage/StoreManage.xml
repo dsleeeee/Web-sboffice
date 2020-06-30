@@ -1258,6 +1258,53 @@
         AND twpcx.CONFG_FG = #{confgFg, jdbcType=VARCHAR}
     </insert>
 
+    <!-- 포스기능키별 적용매장 등록  -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_STORE
+        COMMENTS : 매장의 포스기능키 사용을 등록한다.
+                   (원래는 복사대상매장꺼를 그대로 Copy 하지만, 이전에 TB_CM_POS_FNKEY_STORE 제대로 관리가 안되어서 새 매장의 TB_MS_STORE_FNKEY를(이전단계에서 INSERT 한) 조회해서 넣어준다.)
+    -->
+    <update id="registPosFnkeyStore" parameterType="storeFnkeyVO">
+    /* USE : StoreManageMapper.registPosFnkeyStore */
+    MERGE INTO TB_CM_POS_FNKEY_STORE tcpfs
+    USING (
+              SELECT tmsf.FNKEY_NO,
+       		 		  tmsf.FNKEY_FG,
+       		 		  tmsf.STORE_CD
+	    		FROM TB_MS_STORE_FNKEY tmsf,
+	    		      TB_CM_POS_FNKEY tcpf
+                WHERE tcpf.FNKEY_NO = tmsf.FNKEY_NO
+                  AND tcpf.FNKEY_FG = tmsf.FNKEY_FG
+                  AND tmsf.STORE_CD = #{storeCd}
+           ) tmsf
+        ON(
+                   tcpfs.FNKEY_NO = tmsf.FNKEY_NO
+               AND tcpfs.FNKEY_FG = tmsf.FNKEY_FG
+               AND tcpfs.STORE_CD = tmsf.STORE_CD
+          )
+     WHEN NOT MATCHED THEN
+          INSERT
+          (
+            FNKEY_NO,
+            FNKEY_FG,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+          )
+          VALUES
+          (
+            tmsf.FNKEY_NO,
+            tmsf.FNKEY_FG,
+            tmsf.STORE_CD,
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+          )
+  </update>
+
     <!-- 터치키 분류 복사 -->
     <!--
         TABLE    : TB_WB_STORE_CONFG_XML
