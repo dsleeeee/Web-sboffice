@@ -55,7 +55,9 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         int result = 0;
         String dt = currentDateTimeString();
 
-        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
+//        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
+        // 단독매장일때 MEMBR_ORGN_CD에 매장코드가 들어가 생기는 문제수정
+        memberVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());  //회원소속코드
 
         // 회원정보 중복체크
         List<DefaultMap<String>> memberInfo = mapper.chkDuplicateMember(memberVO);

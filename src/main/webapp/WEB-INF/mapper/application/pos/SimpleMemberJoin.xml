@@ -47,6 +47,11 @@
       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
         AND MEMBR_NM = #{membrNm}
         AND TEL_NO = #{telNo}
+      <if test='membrOrgnCd == "00000"'>
+        <![CDATA[
+          AND REG_STORE_CD = #{regStoreCd}
+        ]]>
+      </if>
   </select>
 
     <!-- 신규회원번호 조회 -->
@@ -59,7 +64,13 @@
         /* USE : SimpleMemberJoinMapper.getNewMembrNo */
       SELECT LPAD(NVL(MAX(tmm.MEMBR_NO), '0')+1, 10, '0')
         FROM TB_MB_MEMBER tmm
-       WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+--        WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+       WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
+      <if test='hqOfficeCd == "00000"'>
+        <![CDATA[
+          AND REG_STORE_CD = #{orgnCd}
+        ]]>
+      </if>
   </select>
 
     <!-- 신규 회원 저장 -->

@@ -182,7 +182,7 @@
             </tr>
             <tr>
               <%-- 거래처 매핑코드 --%>
-              <th><s:message code="regist.membr.mappingCd" /></th>
+              <th><s:message code="regist.membr.mappingCd" /><em class="imp">*</em></th>
               <td>
                 <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
                 <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
