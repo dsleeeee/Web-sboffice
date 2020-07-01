@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.membr.info.excelUpload.service.impl.MemberExcelMapper">
+
+  <!-- 회원 엑셀 업로드 -->
+  <!--
+      TABLE    : TB_MB_MEMBER
+      COMMENTS : 회원 엑셀 업로드
+  -->
+  <select id="getMemberExcelList" parameterType="excelUploadVO" resultType="DefaultMap">
+        -- 회원엑셀 조회
+      SELECT tmm.MEMBR_NM, tmm.MEMBER_ENG_NM, tmm.MEMBR_CLASS_CD, tmm.REG_STORE_CD, tmm.GENDR_FG, tmm.MEMBR_CARD_NO, tmm.BIRTHDAY, tmm.WEDDING_YN, tmm.WEDDINGDAY, tmm.MEMBR_NO
+      FROM TB_MB_MEMBER tmm
+  </select>
+
+  <delete id="deleteMemberExcel" paramterType="excelUploadVO" resultType="DefaultMap">
+          -- 회원엑셀 삭제
+      DELETE FROM TB_MB_MEMBER tmm
+      WHERE MEMBR_NO = ''
+--       WHERE MEMBR_NO = #{membrNo}
+  </delete>
+
+
+</mapper>

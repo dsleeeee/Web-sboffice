@@ -3,10 +3,10 @@
 
 <mapper namespace="kr.co.solbipos.membr.info.point.service.impl.MemberPointMapper">
 
-  <!-- 회원등급 리스트 조회-->
+  <!-- 회원 포인트 리스트 조회-->
   <!--
-      TABLE    : TB_MB_MEMBER_CLASS
-      COMMENTS : 회원등급목록 조회
+      TABLE    : TB_MB_MEMBER_POINT
+      COMMENTS : 회원 포인트 조회
   -->
   <select id="getMemberPointList" parameterType="memberPointVO" resultType="DefaultMap">
       /* MemberClassMapper.getMemberClassList */
