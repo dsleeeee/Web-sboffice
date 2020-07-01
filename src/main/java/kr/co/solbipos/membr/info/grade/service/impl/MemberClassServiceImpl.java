@@ -72,6 +72,14 @@ public class MemberClassServiceImpl implements MemberClassService {
     @Override
     public String getMemberClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
+        LOGGER.debug("getOrgnCd {}", sessionInfoVO.getOrgnCd());
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        } else {
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+        }
         List<DefaultMap<String>> classList = mapper.getMemberClassList(membrClassVO);
         return convertToJson(classList);
     }
@@ -163,20 +171,20 @@ public class MemberClassServiceImpl implements MemberClassService {
         String storeCd = sessionInfoVO.getStoreCd();
         String dt = currentDateTimeString();
 
-
-        /*
-         * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
-         *          단독매장의 경우 무조건 매장에서 등록
-         */
-
         for (MembrClassPointVO membrClassPointVO : membrClassPointVOs) {
+
+            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else {
+                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            }
 
             membrClassPointVO.setRegDt(dt);
             membrClassPointVO.setRegId(sessionInfoVO.getUserId());
             membrClassPointVO.setModDt(dt);
             membrClassPointVO.setModId(sessionInfoVO.getUserId());
-            membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-            membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
 
             if (membrClassPointVO.getStatus() == GridDataFg.INSERT) {
                 result = mapper.insertClassPointInfo(membrClassPointVO);

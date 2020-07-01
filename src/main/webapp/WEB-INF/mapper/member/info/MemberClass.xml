@@ -35,6 +35,7 @@
               , DC_LIMIT_AMT
               , USE_ACC_POINT_YN
           FROM TB_MB_MEMBER_CLASS
+          WHERE MEMBR_ORGN_CD = #{membrClassCd}
          ORDER BY DEFLT_YN DESC
     </select>
 
