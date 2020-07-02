@@ -4,7 +4,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.info.point.service.MemberPointService;
+import kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadService;
 import kr.co.solbipos.membr.info.point.service.MemberPointVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,11 @@ public class MemberExcelUploadController {
   private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
   private final SessionService sessionService;
-//  private final MemberPointService memberPointService;
+  private final MemberExcelUploadService memberExcelUploadService;
 
   @Autowired
-//  public DlvrController(MemberPointService memberPointService, SessionService sessionService) {
-  public MemberExcelUploadController(SessionService sessionService) {
-//    this.memberPointService = memberPointService;
+  public MemberExcelUploadController(MemberExcelUploadService memberExcelUploadService, SessionService sessionService) {
+    this.memberExcelUploadService = memberExcelUploadService;
     this.sessionService = sessionService;
   }
 

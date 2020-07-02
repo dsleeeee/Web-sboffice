@@ -7,7 +7,9 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.incln.service.InclnService;
-import kr.co.solbipos.membr.anals.membrPoint.service.MembrPointVO;
+import kr.co.solbipos.membr.anals.incln.service.InclnVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,18 +21,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+
+/**
+ * @Class Name : InclnController.java
+ * @Description : 회원관리 > 회원분석 > 구매성향 분석
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.07.01  Daniel      최초생성
+ *
+ * @author 두어시스템 개발본부 백엔드 Daniel
+ * @since 2020.07.01
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by DOASYS CORP. All right reserved.
+ */
 @Controller
-@RequestMapping("/membr/anals/incln")
+@RequestMapping(value = "/membr/anals/incln")
 public class InclnController {
 
+  private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+  private final InclnService inclnService;
   private final SessionService sessionService;
-//  private final InclnService inclnService;
 
   @Autowired
-//  public InclnController(SessionService sessionService, InclnService inclnService) {
-  public InclnController(SessionService sessionService) {
+  public InclnController(InclnService inclnService, SessionService sessionService) {
+    this.inclnService = inclnService;
     this.sessionService = sessionService;
-//    this.inclnService = inclnService;
   }
 
   /**
@@ -39,7 +60,7 @@ public class InclnController {
    * @param request
    * @param response
    * @param model
-   * */
+   */
   @RequestMapping(value = "/incln/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
@@ -48,7 +69,15 @@ public class InclnController {
     return "membr/anals/incln/incln";
   }
 
+  @RequestMapping(value = "inclin/getInclinList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getDayMembrList(InclnVO inclinVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
 
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+    List<DefaultMap<Object>> result = inclnService.getInclnList(inclinVO, sessionInfoVO);
 
+    return ReturnUtil.returnListJson(Status.OK, result, inclinVO);
+  }
 }

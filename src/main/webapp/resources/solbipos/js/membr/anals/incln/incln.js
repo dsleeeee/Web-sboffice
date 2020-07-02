@@ -33,6 +33,23 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
   var endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
+  // <-- 검색 호출 -->
+  $scope.$on("inclnCtrl", function (event, data) {
+    $scope.searchIncln();
+    event.preventDefault();
+  });
+
+  // 일자별회원 구매내역 그리드 조회
+  $scope.searchIncln = function () {
+
+    var params = {};
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
+    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+
+    $scope._inquiryMain("/membr/anals/incln//incln/list.sb", params, function () {
+    }, false);
+  };
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 합계

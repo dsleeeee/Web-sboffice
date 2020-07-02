@@ -1,12 +1,13 @@
 package kr.co.solbipos.membr.info.dlvr.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.info.point.service.MemberPointService;
-import kr.co.solbipos.membr.info.point.service.MemberPointVO;
+import kr.co.solbipos.membr.info.dlvr.service.DlvrVO;
+import kr.co.solbipos.membr.info.dlvr.service.DlvrService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/membr/info/dlvr")
@@ -26,13 +28,12 @@ public class DlvrController {
   private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
   private final SessionService sessionService;
-//  private final MemberPointService memberPointService;
+  private final DlvrService dlvrService;
 
   @Autowired
-//  public DlvrController(MemberPointService memberPointService, SessionService sessionService) {
-  public DlvrController(SessionService sessionService) {
-//    this.memberPointService = memberPointService;
+  public DlvrController(SessionService sessionService, DlvrService dlvrService) {
     this.sessionService = sessionService;
+    this.dlvrService = dlvrService;
   }
 
   /**
@@ -42,7 +43,7 @@ public class DlvrController {
    * @param response
    * @param model
    */
-  @RequestMapping(value = "/dlvr/list.sb", method = RequestMethod.GET)
+  @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -50,7 +51,7 @@ public class DlvrController {
     return "membr/info/view/dlvr";
   }
 
-//  /**
+  //  /**
 //   * 회원 포인트 조정
 //   *
 //   * @param request
@@ -58,14 +59,13 @@ public class DlvrController {
 //   * @param model
 //   * @return
 //   */
-//  @RequestMapping(value = "/point/adjustAll.sb", method = RequestMethod.POST)
-//  @ResponseBody
-//  public Result memberPointList(MemberPointVO memberPointVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-//    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-//
-//    int result = memberPointService.getMemberPointSave(memberPointVO, sessionInfoVO, request);
-//
-//    return ReturnUtil.returnListJson(Status.OK, result, memberPointVO);
-//  }
+  @RequestMapping(value = "/dlvr/getDlvrList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result memberPointList(DlvrVO dlvrVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+    List<DefaultMap<Object>> result = dlvrService.getDlvrList(dlvrVO, sessionInfoVO);
+
+    return ReturnUtil.returnListJson(Status.OK, result, dlvrVO);
+  }
 }

@@ -17,14 +17,14 @@
 --       WHERE tmm.MEMBR_NO = #{membrNo}OR tmm.MEMBR_NM = #{membrNm} OR tmm.MEMBR_CLASS_CD=#{membrClassCd}
   </select>
 
-    <delete id="deleteDlvr" arameterType="dlvrVO" resultType="DefaultMap">
+    <delete id="deleteDlvr" parameterType="dlvrVO" >
       -- 배달주소지 삭제
       DELETE FROM TB_MB_MEMBER_DLVR_ADDR tmmda
       WHERE MEMBR_NO = ''
 --       WHERE MEMBR_NO = #{membrNo}
   </delete>
 
-  <update id="updateDlvr" parameterType="dlvrVO" resultType="DefaultMap">
+  <update id="updateDlvr" parameterType="dlvrVO" >
       -- 배달지주소 저장
       UPDATE TB_MB_MEMBER_DLVR_ADDR
       SET ADDR = #{addr}, ADDR_DTL = #{addrDtl}, USE_YN = #{userYn}, LAST_DLVR_DATE = #{lastDlvrDate}
@@ -39,14 +39,14 @@
       LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmdt.MEMBR_NO
   </select>
 
-  <delete id="deleteDlvrTel" parameterType="dlvrVO" resultType="DefaultMap">
+  <delete id="deleteDlvrTel" parameterType="dlvrVO" >
       -- 배달전화 삭제
       DELETE FROM TB_MB_MEMBER_DLVR_TEL tmmdt
       WHERE MEMBR_NO = ''
 --       WHERE MEMBR_NO = #{membrNo}
   </delete>
 
-  <update id="updateDlvrTel" parameterType="dlvrVO" resultType="DefaultMap">
+  <update id="updateDlvrTel" parameterType="dlvrVO" >
           -- 배달전화 저장
       UPDATE TB_MB_MEMBER_DLVR_TEL
       SET TEL_NO = #{telNo}, USE_YN = #{userYn}

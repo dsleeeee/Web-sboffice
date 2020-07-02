@@ -14,7 +14,7 @@
       FROM TB_MB_MEMBER tmm
   </select>
 
-  <delete id="deleteMemberExcel" paramterType="excelUploadVO" resultType="DefaultMap">
+  <delete id="deleteMemberExcel" parameterType="excelUploadVO" >
           -- 회원엑셀 삭제
       DELETE FROM TB_MB_MEMBER tmm
       WHERE MEMBR_NO = ''

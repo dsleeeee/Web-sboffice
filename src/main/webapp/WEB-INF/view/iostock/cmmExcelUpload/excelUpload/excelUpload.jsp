@@ -224,7 +224,7 @@
       }
       // 분배마감, 반품마감
       else if ($scope.uploadFg === 'dstbCloseStore') {
-        $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
+        $scope.prodBarcdCdVisibleFg = true;  // 상품코드1바코드
         $scope.prodCdVisibleFg = false; // 상품코드
         $scope.barcdCdVisibleFg = false; // 바코드
         $scope.unitQtyVisibleFg = true;  // 단위수량
