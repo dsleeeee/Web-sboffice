@@ -87,7 +87,7 @@
         </tr>
         </thead>
         <tbody>
-      ach var="item" items="${hqCrncys}">
+      <c:forEach var="item" items="${hqCrncys}">
         <tr>
           <td class="tc">${item.nmcodeItem2}</td>
           <td class="tr">${item.nmcodeItem1} &nbsp; ${item.nmcodeNm}</td>
