@@ -72,15 +72,18 @@ public class MemberClassServiceImpl implements MemberClassService {
     @Override
     public String getMemberClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
+        List<DefaultMap<String>> classList;
         LOGGER.debug("getOrgnCd {}", sessionInfoVO.getOrgnCd());
-        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            classList = mapper.getMemberClassList(membrClassVO);
         } else {
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            classList = mapper.getMemberClassList(membrClassVO);
         }
-        List<DefaultMap<String>> classList = mapper.getMemberClassList(membrClassVO);
+
         return convertToJson(classList);
     }
 
@@ -108,28 +111,6 @@ public class MemberClassServiceImpl implements MemberClassService {
         result.put("classResult", classResult);
         return result;
     }
-
-//    /**
-//     * 회원등급 등록
-//     *
-//     * @return
-//     */
-//    @Override
-//    public int insertClassInfo(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
-//        int classInsert = mapper.insertClassInfo(membrClassVO);
-//        return classInsert;
-//    }
-//
-//    /**
-//     * 회원등급 수정
-//     *
-//     * @return
-//     */
-//    @Override
-//    public int updateClassInfo(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
-//        int classUpdate = mapper.updateClassInfo(membrClassVO);
-//        return classUpdate;
-//    }
 
     /**
      * 회원등급 삭제
@@ -173,7 +154,7 @@ public class MemberClassServiceImpl implements MemberClassService {
 
         for (MembrClassPointVO membrClassPointVO : membrClassPointVOs) {
 
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                 membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
                 membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             } else {

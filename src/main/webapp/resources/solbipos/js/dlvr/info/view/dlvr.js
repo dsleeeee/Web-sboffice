@@ -23,7 +23,6 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.data = new wijmo.collections.CollectionView(dlvrFirstList);
         });
 
-        // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
@@ -57,14 +56,42 @@ app.controller('dlvrManageCtrl', ['$scope', '$http', function ($scope, $http) {
         }
     };
 
-    // up
-    $scope.dlvrAreaUp = function () {
-        console.log($scope.flex.collectionView);
-        $scope.flex.collectionView.items[1] = $scope.flex.collectionView.items[0];
+    // 위로 옮기기
+    $scope.up = function(){
+        var movedRows = 0;
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (i > 0 && item.gChk) {
+                if (!$scope.flex.collectionView.items[i - 1].gChk) {
+                    movedRows = i - 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
     };
-    // dn
-    $scope.dlvrAreaDn = function () {
 
+    // 아래로 옮기기
+    $scope.dn = function(){
+        var movedRows = 0;
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+            if ((i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+                if (!$scope.flex.collectionView.items[i + 1].gChk) {
+                    movedRows = i + 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
     };
 
     /*********************************************************
