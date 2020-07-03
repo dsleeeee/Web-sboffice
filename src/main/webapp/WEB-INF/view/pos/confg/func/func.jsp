@@ -15,6 +15,9 @@
       <div class="wj-TblWrapBr mr10 pd20" >
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='func.funFg' /></span>
+          <button class="btn_skyblue" id="btnDefaultFunc" ng-click="defaultFunc()">
+            <s:message code="func.defaultFunc" />
+          </button>
         </div>
 
         <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
@@ -86,7 +89,7 @@
   var posFg       = ${ccu.getCommCodeExcpAll("027")};
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.06" charset="utf-8"></script>
 
 
 <%-- 매장선택 --%>
@@ -95,5 +98,9 @@
   <c:param name="menuNm" value="${menuNm}"/>
   <c:param name="orgnFg" value="${orgnFg}"/>
   <c:param name="baseUrl" value="${baseUrl}"/>
+</c:import>
+
+<%-- 기본기능적용 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/defaultFunc.jsp">
 </c:import>
 

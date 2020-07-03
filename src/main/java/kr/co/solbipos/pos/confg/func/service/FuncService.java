@@ -4,7 +4,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Class Name : FuncService.java
@@ -55,4 +54,22 @@ public interface FuncService {
      * @return
      */
     int saveFuncStore(FuncStoreVO[] funcStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 매장리스트
+     *
+     * @param funcStoreVO
+     * @param sessionInfoVO
+     * @return
+     */
+    List<DefaultMap<String>> selectStoreList(FuncStoreVO funcStoreVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 매장 기본 기능키 셋팅
+     *
+     * @param funcStoreVO
+     * @param sessionInfoVO
+     * @return
+     */
+    int saveDefaultFunc(FuncStoreVO funcStoreVO, SessionInfoVO sessionInfoVO);
 }

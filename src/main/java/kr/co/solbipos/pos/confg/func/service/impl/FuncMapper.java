@@ -1,12 +1,12 @@
 package kr.co.solbipos.pos.confg.func.service.impl;
 
-import java.util.List;
-
-import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
-import org.apache.ibatis.annotations.Mapper;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
 import kr.co.solbipos.pos.confg.func.service.FuncVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : FuncStoreVO.java
@@ -134,4 +134,53 @@ public interface FuncMapper {
      * @return
      */
     String updateStoreFuncKey(FuncVO funcVO);
+
+    /***
+     * 매장리스트
+     * @param funcStoreVO
+     * @return
+     */
+    List<DefaultMap<String>> selectStoreList(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스기능키 매장정보 삭제 (적용매장 정보)
+     * @param funcStoreVO
+     * @return
+     */
+    int delPosFnkeyStore(FuncStoreVO funcStoreVO);
+
+    /**
+     * 매장별 포스기능키 삭제
+     * @param funcStoreVO
+     * @return
+     */
+    int delStoreFnkey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스별 포스기능키 삭제
+     * @param funcStoreVO
+     * @return
+     */
+    int delPosFnkey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 기본 포스기능키 등록 (적용매장 정보 등록)
+     * @param funcStoreVO
+     * @return
+     */
+    int regDefaultFuncStore(FuncStoreVO funcStoreVO);
+
+    /**
+     * 기본 포스기능키 등록 (매장별 포스기능키 등록)
+     * @param funcStoreVO
+     * @return
+     */
+    int regDefaultFuncStoreFnkey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 기본 포스기능키 등록 포스별 포스기능키 등록)
+     * @param funcStoreVO
+     * @return
+     */
+    int regDefaultFuncPosFnkey(FuncStoreVO funcStoreVO);
 }

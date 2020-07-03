@@ -1,14 +1,5 @@
 package kr.co.solbipos.pos.confg.func.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -16,7 +7,14 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.func.service.FuncService;
+import kr.co.solbipos.pos.confg.func.service.FuncStoreVO;
 import kr.co.solbipos.pos.confg.func.service.FuncVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : FuncServiceImpl.java
@@ -148,6 +146,45 @@ public class FuncServiceImpl implements FuncService {
                 funcPos.setResult(posResult);
             }
         }
+        return procCnt;
+    }
+
+    /** 매장리스트 */
+    @Override
+    public List<DefaultMap<String>> selectStoreList(FuncStoreVO funcStoreVO, SessionInfoVO sessionInfoVO) {
+        return mapper.selectStoreList(funcStoreVO);
+    }
+
+    /** 매장 기본 기능키 셋팅 */
+    @Override
+    public int saveDefaultFunc(FuncStoreVO funcStoreVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        funcStoreVO.setRegDt(dt);
+        funcStoreVO.setRegId(sessionInfoVO.getUserId());
+        funcStoreVO.setModDt(dt);
+        funcStoreVO.setModId(sessionInfoVO.getUserId());
+
+        // 1-1. 기존 포스기능키 적용매장 정보 삭제
+        mapper.delPosFnkeyStore(funcStoreVO);
+        // 1-2.기본 포스기능키 등록 (적용매장 정보 등록)
+        procCnt += mapper.regDefaultFuncStore(funcStoreVO);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 2-1. 기존 매장별 포스기능키 정보 삭제
+        mapper.delStoreFnkey(funcStoreVO);
+        // 2-2.기본 포스기능키 등록 (매장별 포스기능키 등록)
+        procCnt += mapper.regDefaultFuncStoreFnkey(funcStoreVO);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 3-1. 기존 포스별 포스기능키 정보 삭제
+        mapper.delPosFnkey(funcStoreVO);
+        // 3-2.기본 포스기능키 등록 포스별 포스기능키 등록)
+        procCnt += mapper.regDefaultFuncPosFnkey(funcStoreVO);
+        if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         return procCnt;
     }
 }

@@ -20,6 +20,11 @@ function search(){
   scope._pageView('regStoreCtrl', 1);
 }
 
+function closePop(){
+  var scope = agrid.getScope("regStoreCtrl");
+  scope.close();
+}
+
 /**********************************************************************
  *  적용매장 그리드
  **********************************************************************/
@@ -99,6 +104,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       addStoreScope._broadcast('noRegStoreCtrl');
     });
   };
+
+  $scope.close= function () {
+    $("#srchStoreCd").val("");
+    $("#srchStoreNm").val("");
+    $scope.hqOfficeCombo.selectedIndex = 0;
+    //document.getElementById('srchHqOffice').value = '';​​​​​​​​​​
+  }
 
 }]);
 
