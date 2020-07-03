@@ -43,7 +43,7 @@ public class DlvrController {
    * @param response
    * @param model
    */
-  @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
+  @RequestMapping(value = "/dlvr/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
 
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -52,7 +52,7 @@ public class DlvrController {
   }
 
   //  /**
-//   * 회원 포인트 조정
+//   * 배달지 조회 및 변경
 //   *
 //   * @param request
 //   * @param response
@@ -61,7 +61,7 @@ public class DlvrController {
 //   */
   @RequestMapping(value = "/dlvr/getDlvrList.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result memberPointList(DlvrVO dlvrVO, HttpServletRequest request) {
+  public Result getDlvrList(DlvrVO dlvrVO, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
     List<DefaultMap<Object>> result = dlvrService.getDlvrList(dlvrVO, sessionInfoVO);

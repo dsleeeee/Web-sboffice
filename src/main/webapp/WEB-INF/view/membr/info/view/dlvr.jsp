@@ -14,7 +14,7 @@
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('dlvrCtrl', 1)">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -59,13 +59,7 @@
           </select>
         </td>
         <%-- 검색줄수  --%>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colspan="7"></td>
       </tr>
 
       <%-- Second Row--%>
@@ -98,7 +92,7 @@
         <%-- 전화  --%>
         <th><s:message code="dlvr.membr.phone"/></th>
         <td colspan="2">
-          <input type="text" class="sb-input w28" ng-model="inputData.phone" id=""/> -
+          <input type="text" class="sb-input w28" ng-model="telNo" id=""/> -
           <input type="text" class="sb-input w28" ng-model="inputData.phone" id=""/> -
           <input type="text" class="sb-input w28" ng-model="inputData.phone" id=""/>
         </td>
@@ -109,9 +103,7 @@
                   ng-options="item.name for item in phoneUseYnList">
           </select>
         </td>
-        <td>
-        </td>
-        <td>
+        <td colspan="2">
         </td>
       </tr>
 
@@ -120,11 +112,11 @@
         <%-- 배달구역 --%>
         <th><s:message code="dlvr.membr.area"/></th>
         <td>
-          <select type="text" style="border:1px solid #e8e8e8" class="w45" ng-model="dlArea" id="areaOne"
+          <select type="text" style="border:1px solid #e8e8e8" class="w45" ng-model="addr" id="addr"
                   ng_options="item.name for item in areaList">
           </select>
           ~
-          <select type="text" style="border:1px solid #e8e8e8" class="w45" ng-model="dlArea" id="areaTwo"
+          <select type="text" style="border:1px solid #e8e8e8" class="w45" ng-model="addrDtl" id="addrDtl"
                   ng_options="item.name for item in areaList">
           </select>
         </td>
@@ -134,12 +126,12 @@
         <%-- 상세주소  --%>
         <th><s:message code="dlvr.membr.areaDetail"/></th>
         <td>
-          <input type="text" class="sb-input w100" ng-model="inputData.areaDetail" id=""/>
+          <input type="text" class="sb-input w100" ng-model="addrDtl" id=""/>
         </td>
         <%-- 배달지사용  --%>
         <th><s:message code="dlvr.membr.areaUseYn"/></th>
         <td>
-          <select type="text" class="sb-select w100" ng-model="useYn" id=""
+          <select type="text" class="sb-select w100" ng-model="dlvrUseYn" id="dlvrUseYn
                   ng-options="item.name for item in useYnList">
           </select>
         </td>
@@ -156,7 +148,7 @@
         <%-- 전화사용  --%>
         <th><s:message code="dlvr.membr.phoneUseYn"/></th>
         <td>
-          <select type="text" class="sb-select w100" ng-model="phoneUseYn" id=""
+          <select type="text" class="sb-select w100" ng-model="dlvrTeluseYn" id="dlvrTeluseYn"
                   ng-options="item.name for item in phoneUseYnList">
           </select>
         </td>

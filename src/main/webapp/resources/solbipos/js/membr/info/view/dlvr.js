@@ -63,44 +63,24 @@ app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
-  $scope.adjustAll = function () {
-    // $http({
-    //   method: 'POST', //방식
-    //   url: "/membr/info/point/point/adjustAll.sb", /* 통신할 URL */
-    //   params: param, /* 파라메터로 보낼 데이터 */
-    //   headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    // }).then(function successCallback(response) {
-    // }, function errorCallback(response) {
-    //   // 로딩바 hide
-    //   $scope.$broadcast('loadingPopupInactive');
-    //   // called asynchronously if an error occurs
-    //   // or server returns response with an error status.
-    //   if (response.data.message) {
-    //     $scope._popMsg(response.data.message);
-    //   } else {
-    //     $scope._popMsg(messages['cmm.error']);
-    //   }
-    //   return false;
-    // }).then(function () {
-    //   // 'complete' code here
-    //   if (typeof callback === 'function') {
-    //     setTimeout(function () {
-    //       callback();
-    //     }, 10);
-    //   }
-    // });
-  }
+// grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 합계
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+  };
 
-// $scope.$on("dlvrCtrl", function (event, data) {
-//   $scope.searchMemberPointList();
-//   event.preventDefault();
-// });
+  $scope.$on("dlvrCtrl", function (event, data) {
+    $scope.searchDlvrList();
+    event.preventDefault();
+  });
 
-// // 후불회원 그리드 조회
-// $scope.searchMemberPointList = function () {
-//   var params = {};
-//   $scope._inquiryMain("membr/info/point/point/getMemberPointList.sb", params, function () {
-//   }, false);
-// };
-}])
-;
+// 후불회원 그리드 조회
+  $scope.searchDlvrList = function () {
+    var params = {};
+    $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
+    }, false);
+  };
+}]);
