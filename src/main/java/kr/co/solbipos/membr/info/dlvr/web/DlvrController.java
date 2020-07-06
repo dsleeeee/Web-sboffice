@@ -51,7 +51,7 @@ public class DlvrController {
     return "membr/info/view/dlvr";
   }
 
-  //  /**
+//  /**
 //   * 배달지 조회 및 변경
 //   *
 //   * @param request
@@ -65,6 +65,16 @@ public class DlvrController {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
     List<DefaultMap<Object>> result = dlvrService.getDlvrList(dlvrVO, sessionInfoVO);
+
+    return ReturnUtil.returnListJson(Status.OK, result, dlvrVO);
+  }
+
+  @RequestMapping(value = "/dlvr/getDlvrTelList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getDlvrTelList(DlvrVO dlvrVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+    List<DefaultMap<Object>> result = dlvrService.getDlvrTelList(dlvrVO, sessionInfoVO);
 
     return ReturnUtil.returnListJson(Status.OK, result, dlvrVO);
   }

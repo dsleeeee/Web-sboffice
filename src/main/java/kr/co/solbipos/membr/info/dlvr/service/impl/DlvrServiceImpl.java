@@ -25,4 +25,9 @@ public class DlvrServiceImpl implements DlvrService {
     return dlvrMapper.getDlvrList(dlvrVO);
   }
 
+  @Override
+  public List<DefaultMap<Object>> getDlvrTelList(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
+    return dlvrMapper.getDlvrTelList(dlvrVO);
+  }
+
 }

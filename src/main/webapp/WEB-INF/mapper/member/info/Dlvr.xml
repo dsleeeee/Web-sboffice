@@ -11,7 +11,7 @@
   <select id="getDlvrList" parameterType="dlvrVO" resultType="DefaultMap">
     /*DlvrMapper.getDlvrList*/
     <include refid="CmmSQL.PagingTemplateHeader"/>
-    -- 배달주소지 조회
+    /*달주소지 조회*/
     SELECT tmm.MEMBR_NM, tmmda.ADDR, tmmda.ADDR_DTL, tmmda.USE_YN AS DLVR_USE_YN, tmmda.LAST_DLVR_DATE, tmm.MEMBR_NO
     <include refid="CmmSQL.PagingTemplateCount"/>
     FROM TB_MB_MEMBER_DLVR_ADDR tmmda
@@ -20,40 +20,36 @@
   </select>
 
   <delete id="deleteDlvr" parameterType="dlvrVO">
-      -- 배달주소지 삭제
+      /*배달주소지 삭제*/
       DELETE FROM TB_MB_MEMBER_DLVR_ADDR tmmda
       WHERE MEMBR_NO = ''
---       WHERE MEMBR_NO = #{membrNo}
   </delete>
 
   <update id="updateDlvr" parameterType="dlvrVO">
-      -- 배달지주소 저장
+      /*배달지주소 저장*/
       UPDATE TB_MB_MEMBER_DLVR_ADDR
       SET ADDR = #{addr}, ADDR_DTL = #{addrDtl}, USE_YN = #{userYn}, LAST_DLVR_DATE = #{lastDlvrDate}
       WHERE MEMBR_NO = ''
---       WHERE MEMBR_NO = #{membrNo}
   </update>
 
   <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
-      -- 배달전화번호 조회
+      /*배달전화번호 조회*/
       SELECT tmm.MEMBR_NM, tmmdt.TEL_NO, tmmdt.USE_YN, tmmdt.REG_DT, tmmdt.MOD_DT, tmm.MEMBR_NO
       FROM TB_MB_MEMBER_DLVR_TEL tmmdt
       LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmdt.MEMBR_NO
   </select>
 
   <delete id="deleteDlvrTel" parameterType="dlvrVO">
-      -- 배달전화 삭제
+      /*배달전화 삭제*/
       DELETE FROM TB_MB_MEMBER_DLVR_TEL tmmdt
       WHERE MEMBR_NO = ''
---       WHERE MEMBR_NO = #{membrNo}
   </delete>
 
   <update id="updateDlvrTel" parameterType="dlvrVO">
-          -- 배달전화 저장
+      /*배달전화 저장*/
       UPDATE TB_MB_MEMBER_DLVR_TEL
       SET TEL_NO = #{telNo}, USE_YN = #{userYn}
       WHERE MEMBR_NO = ''
---       WHERE MEMBR_NO = #{membrNo}
   </update>
 
 </mapper>

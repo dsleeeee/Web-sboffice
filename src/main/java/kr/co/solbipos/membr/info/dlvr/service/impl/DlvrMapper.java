@@ -13,6 +13,5 @@ public interface DlvrMapper {
 
   List<DefaultMap<Object>> getDlvrList(DlvrVO dlvrVO);
 
+  List<DefaultMap<Object>> getDlvrTelList(DlvrVO dlvrVO);
 }
-
-

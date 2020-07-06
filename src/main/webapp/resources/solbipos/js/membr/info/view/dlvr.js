@@ -73,14 +73,22 @@ app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   $scope.$on("dlvrCtrl", function (event, data) {
-    $scope.searchDlvrList();
+    // $scope.searchDlvrList();
+    $scope.searchDlvrTelList();
     event.preventDefault();
   });
 
-// 후불회원 그리드 조회
+//
   $scope.searchDlvrList = function () {
     var params = {};
     $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
+    }, false);
+  };
+
+//
+  $scope.searchDlvrTelList = function () {
+    var params = {};
+    $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
     }, false);
   };
 }]);

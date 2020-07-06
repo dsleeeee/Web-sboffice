@@ -21,7 +21,6 @@ import java.util.List;
  * @ 2020.06.17  Daniel      최초생성
  * @since 2020.06.17
  */
-@Service
 public interface MemberExcelUploadService {
 
 }
