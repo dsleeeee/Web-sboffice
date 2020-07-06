@@ -67,7 +67,7 @@
 
         <%-- 등록 매장 그리드 --%>
         <div class="oh mt40 w50 fl"  >
-          <div class="wj-TblWrap mr10" style="height:380px; overflow-y: hidden; overflow-x: hidden" >
+          <div class="wj-TblWrap mr10" style="height:410px; overflow-y: hidden; overflow-x: hidden" >
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.regStore" /></span>
                 <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreDel" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -97,7 +97,7 @@
       <%-- 미등록매장 그리드 --%>
       <div class="oh mt40 w50">
         <div class=" "  ng-controller="noRegStoreCtrl" >
-          <div class="wj-TblWrap ml10" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
+          <div class="wj-TblWrap ml10" style="height:410px; overflow-y: hidden; overflow-x: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.noRegStore" /></span>
                 <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreReg" ng-click="regist()"><s:message code="func.regist" /></a></span>

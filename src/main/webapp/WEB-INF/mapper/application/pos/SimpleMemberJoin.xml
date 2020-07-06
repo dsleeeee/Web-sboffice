@@ -64,7 +64,6 @@
         /* USE : SimpleMemberJoinMapper.getNewMembrNo */
       SELECT LPAD(NVL(MAX(tmm.MEMBR_NO), '0')+1, 10, '0')
         FROM TB_MB_MEMBER tmm
---        WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
        WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
       <if test='hqOfficeCd == "00000"'>
         <![CDATA[
