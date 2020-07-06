@@ -153,7 +153,7 @@
               <th><s:message code="storeManage.directManage" /><em class="imp">*</em></th>
               <td>
                 <div class="sb-input">
-                  <input type="radio" ng-model="store.directManageYn" value="Y"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
+                  <input type="radio" ng-model="store.directManageYn" value="Y" checked="checked"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
                   <input type="radio" ng-model="store.directManageYn" value="N"><label><s:message code="storeManage.merchantStore" /></label>
                 </div>
               </td>
@@ -361,7 +361,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703.18" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

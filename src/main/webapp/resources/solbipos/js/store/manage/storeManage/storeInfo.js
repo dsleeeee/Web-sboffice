@@ -152,6 +152,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
     if(orgnFg === "AGENCY"){
+      $scope.store.agencyCd = orgnCd;
+      $scope.store.agencyNm = orgnNm;
       $("#agencyCd").val(orgnCd);
       $("#agencyNm").val(orgnNm);
     }
