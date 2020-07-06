@@ -1,5 +1,6 @@
 package kr.co.common.service.code;
 
+import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.CustomComboVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -82,7 +83,7 @@ public interface CmmCodeService {
     /**
      * 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)
      */
-    <E> List<E> getHqOfficeListChkAgency(String agencyCd);
+    <E> List<E> getHqOfficeListChkAgency(AgencyVO agencyVO);
 
     /** 커스텀 콤보박스 데이터 조회 */
     List<CustomComboVO> getCustomCombo(CustomComboVO customComboVO, SessionInfoVO sessionInfoVO);

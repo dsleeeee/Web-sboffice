@@ -135,7 +135,7 @@
   if(orgnFg === "MASTER"){
     hqList = ${ccu.getHqOfficeList()};
   }else{
-    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd)};
+    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd, "A")};
    }
 
 

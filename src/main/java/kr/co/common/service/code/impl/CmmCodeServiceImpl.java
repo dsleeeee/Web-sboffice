@@ -1,5 +1,6 @@
 package kr.co.common.service.code.impl;
 
+import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.CustomComboVO;
 import kr.co.common.service.code.CmmCodeService;
@@ -137,8 +138,8 @@ public class CmmCodeServiceImpl implements CmmCodeService {
 
     /** 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)*/
     @Override
-    public <E> List<E> getHqOfficeListChkAgency(String agencyCd) {
-        return cmmCodeMapper.getHqOfficeListChkAgency(agencyCd);
+    public <E> List<E> getHqOfficeListChkAgency(AgencyVO agencyVO) {
+        return cmmCodeMapper.getHqOfficeListChkAgency(agencyVO);
     }
 
     /** 커스텀 콤보박스 데이터 조회 */

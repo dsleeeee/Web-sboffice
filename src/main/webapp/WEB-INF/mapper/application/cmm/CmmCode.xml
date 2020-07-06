@@ -116,7 +116,7 @@
       TABLE    : TB_HQ_OFFICE
       COMMENTS : 벤사 목록을 조회한다.
     -->
-    <select id="getHqOfficeListChkAgency" parameterType="String" resultType="DefaultMap">
+    <select id="getHqOfficeListChkAgency" parameterType="agencyVO" resultType="DefaultMap">
         /* USE : CmmCodeMapper.getHqOfficeListChkAgency */
         SELECT
             HQ_OFFICE_CD,
@@ -124,7 +124,14 @@
         FROM
             TB_HQ_OFFICE
         WHERE 1=1
-          AND AGENCY_CD = #{agencyCd}
+         <choose>
+            <when test='srchType != null and srchType == "A"'>
+                AND (AGENCY_CD = #{agencyCd} OR HQ_OFFICE_CD = '00000')
+            </when>
+            <otherwise>
+                AND AGENCY_CD = #{agencyCd}
+            </otherwise>
+        </choose>
         ORDER BY HQ_OFFICE_CD NULLS FIRST
     </select>
 

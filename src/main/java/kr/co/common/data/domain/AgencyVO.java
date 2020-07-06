@@ -36,6 +36,13 @@ public class AgencyVO extends CmmVO {
     /** 업체코드 */
     private String agencyCd;
 
+    /**
+     * 본사코드만 가져올지, 본사코드 + 단독매장 코드 까지 가져올지 파악하기 위해
+     * H : 본사코드만
+     * A : 본사코드 + 단독매장
+     */
+    private String srchType;
+
     public String getSrchAgencyCd() {
         return srchAgencyCd;
     }
@@ -66,5 +73,13 @@ public class AgencyVO extends CmmVO {
 
     public void setAgencyCd(String agencyCd) {
         this.agencyCd = agencyCd;
+    }
+
+    public String getSrchType() {
+        return srchType;
+    }
+
+    public void setSrchType(String srchType) {
+        this.srchType = srchType;
     }
 }
