@@ -71,7 +71,7 @@
 			 ORDER BY SUM(TSDT.TOT_SALE_AMT) ASC
 			</if>
 		 ) M
-		 <if test='rowNum != null and rowNum != ""'>
+		 <if test='rowNum != null and rowNum != "" and chkRank == "N"'>
             WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}
 	     </if>
     </select>

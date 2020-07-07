@@ -16,6 +16,8 @@ public class StoreRankVO extends PageVO {
     private String chkSort;
     /** 결제수단전체 */
     private String chkPay;
+    /** 순위전체 */
+    private String chkRank;
     /** 정렬숫자 */
     private String rowNum;
     /** 판매자별, 동적 컬럼 생성을 위한 쿼리 문자열*/
@@ -66,6 +68,14 @@ public class StoreRankVO extends PageVO {
 
 	public void setChkPay(String chkPay) {
 		this.chkPay = chkPay;
+	}
+	
+	public String getChkRank() {
+		return chkRank;
+	}
+
+	public void setChkRank(String chkRank) {
+		this.chkRank = chkRank;
 	}
 	
 	public String getRowNum() {

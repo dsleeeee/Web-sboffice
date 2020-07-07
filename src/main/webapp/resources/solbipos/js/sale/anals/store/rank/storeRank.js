@@ -152,9 +152,14 @@ app.controller('storeRankCtrl', ['$scope', '$http', '$timeout', function ($scope
 	}else{
 		params.chkPay = "N";
 	}
+	
 	if(!$scope.isCheckedRankAll){
+		params.chkRank = "N";
 		params.rowNum = $scope.conRowNum.selectedValue;
+	}else{
+		params.chkRank = "Y";
 	}
+	
 	params.chkSort = $scope.isCheckedSort;
 	params.hqOfficeCd = $("#hqOfficeCd").val();
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
