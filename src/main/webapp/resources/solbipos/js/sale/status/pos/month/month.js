@@ -141,8 +141,10 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
-			params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM') + "01";
-	    	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM') + "31";
+//			params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM') + "01";
+//	    	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM') + "31";
+	    	params.startDate = wijmo.Globalize.format($scope.startDate, 'yyyyMM');
+	    	params.endDate = wijmo.Globalize.format($scope.endDate, 'yyyyMM');
 	    	
 	    	$scope.searchStartDate = params.startDate;
 	        $scope.searchEndDate   = params.endDate;

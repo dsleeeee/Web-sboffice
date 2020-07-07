@@ -21,13 +21,13 @@
     			, B.*
     	<include refid="CmmSQL.PagingTemplateCount"/>
     	FROM	(
-    				SELECT	TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH
+    				SELECT	TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH
     						, COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
     						, SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
     						, SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
     						, SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
     						, SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
-		            FROM	TB_SL_DAILY_POS TSDP
+		            FROM	TB_SL_MONTHLY_POS TSDP
 		            WHERE	1 = 1
 		            		AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 		            	<if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -37,23 +37,23 @@
                         	</foreach>
                     	</if>
 		            	<if test='startDate != null and startDate != ""'>
-		            		AND TSDP.SALE_DATE >= #{startDate}
+		            		AND TSDP.SALE_YM <![CDATA[>= ]]>#{startDate}
 		            	</if>
 		            	<if test='endDate != null and endDate != ""'>
-		            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+		            		AND TSDP.SALE_YM <![CDATA[<= ]]> #{endDate}
 		            	</if>
-		            GROUP BY TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM')
+		            GROUP BY TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM')
 				) A,
 				(
 					WITH T AS
 					(
 						SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
-								, TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH_TEMP
+								, TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH_TEMP
 		                        , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
                                 , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
                                 , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
                                 , SUM(TSDP.SALE_CNT) AS SALE_CNT
-		                FROM    TB_SL_DAILY_POS TSDP
+		                FROM    TB_SL_MONTHLY_POS TSDP
 		                WHERE   1 = 1
 		                        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 							<if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -63,12 +63,12 @@
 	                        	</foreach>
 	                    	</if>
 							<if test='startDate != null and startDate != ""'>
-								AND TSDP.SALE_DATE >= #{startDate}
+								AND TSDP.SALE_YM <![CDATA[>=]]> #{startDate}
 							</if>
 							<if test='endDate != null and endDate != ""'>
-								AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+								AND TSDP.SALE_YM <![CDATA[<= ]]> #{endDate}
 							</if>
-						GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM')
+						GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM')
 		            )
 		            SELECT  *
 		            FROM    T
@@ -88,12 +88,12 @@
 
     <select id="getStorePosList" parameterType="posMonthVO" resultType="DefaultMap">
     	SELECT	DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
-    	FROM	TB_SL_DAILY_POS TSDP
-    			, TB_SL_DAILY_POS_PROD TSDPP
+    	FROM	TB_SL_MONTHLY_POS TSDP
+    			, TB_SL_MONTHLY_POS_PROD TSDPP
     	WHERE	TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
     			AND TSDP.HQ_BRAND_CD = TSDPP.HQ_BRAND_CD
     			AND TSDP.STORE_CD = TSDPP.STORE_CD
-    			AND TSDP.SALE_DATE = TSDPP.SALE_DATE
+    			AND TSDP.SALE_YM = TSDPP.SALE_YM
     			AND TSDP.POS_NO = TSDPP.POS_NO
     			AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
     		<if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -109,10 +109,10 @@
                	</foreach>
            	</if>
 			<if test='startDate != null and startDate != ""'>
-				AND TSDP.SALE_DATE >= #{startDate}
+				AND TSDP.SALE_YM <![CDATA[>=]]> #{startDate}
 			</if>
 			<if test='endDate != null and endDate != ""'>
-				AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+				AND TSDP.SALE_YM <![CDATA[<= ]]> #{endDate}
 			</if>
 		ORDER BY TSDP.STORE_CD||'||'||TSDP.POS_NO
     </select>
@@ -152,13 +152,13 @@
                 , A.TOT_SALE_CNT
                 , B.*
         FROM    (
-                    SELECT  TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH
+                    SELECT  TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH
                             , COUNT(DISTINCT TSDP.STORE_CD) AS SALE_STORE_CNT
                             , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
                             , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                             , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
                             , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
-                    FROM    TB_SL_DAILY_POS TSDP
+                    FROM    TB_SL_MONTHLY_POS TSDP
                     WHERE   1 = 1
                             AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
                         <if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -168,23 +168,23 @@
                             </foreach>
                         </if>
                         <if test='startDate != null and startDate != ""'>
-                            AND TSDP.SALE_DATE >= #{startDate}
+                            AND TSDP.SALE_YM <![CDATA[>= ]]>#{startDate}
                         </if>
                         <if test='endDate != null and endDate != ""'>
-                            AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                            AND TSDP.SALE_YM <![CDATA[<= ]]> #{endDate}
                         </if>
-                    GROUP BY TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM')
+                    GROUP BY TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM')
                 ) A,
                 (
                     WITH T AS
                     (
                         SELECT  DISTINCT TSDP.STORE_CD || '||' || TSDP.POS_NO AS STORE_CD
-                                , TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH_TEMP
+                                , TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH_TEMP
                                 , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
                                 , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
                                 , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
                                 , SUM(TSDP.SALE_CNT) AS SALE_CNT
-                        FROM    TB_SL_DAILY_POS TSDP
+                        FROM    TB_SL_MONTHLY_POS TSDP
                         WHERE   1 = 1
                                 AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
                             <if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -194,12 +194,12 @@
                                 </foreach>
                             </if>
                             <if test='startDate != null and startDate != ""'>
-                                AND TSDP.SALE_DATE >= #{startDate}
+                                AND TSDP.SALE_YM <![CDATA[>=]]> #{startDate}
                             </if>
                             <if test='endDate != null and endDate != ""'>
-                                AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                                AND TSDP.SALE_YM <![CDATA[<= ]]> #{endDate}
                             </if>
-                        GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TO_CHAR(TO_DATE(SUBSTR(TSDP.SALE_DATE,1,6), 'YYYY-MM'),'YYYY-MM')
+                        GROUP BY TSDP.STORE_CD || '||' || TSDP.POS_NO, TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM')
                     )
                     SELECT  *
                     FROM    T
