@@ -32,4 +32,6 @@ public interface MemberClassMapper {
     int insertClassPointInfo(MembrClassPointVO membrClassPointVO);
 
     int deleteClassPointInfo(MembrClassPointVO membrClassPointVO);
+
+    int defaultUpdateClassInfo(MembrClassVO membrClassVO);
 }

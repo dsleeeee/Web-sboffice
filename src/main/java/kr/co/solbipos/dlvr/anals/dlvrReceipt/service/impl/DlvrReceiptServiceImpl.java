@@ -37,12 +37,15 @@ public class DlvrReceiptServiceImpl implements DlvrReceiptService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+
+    /** 배달지별 -조회*/
     @Override
     public List<DefaultMap<String>> getDlvrReceiptList(DlvrReceiptVO dlvrReceiptVO, SessionInfoVO sessionInfoVO) {
         dlvrReceiptVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getDlvrReceiptList(dlvrReceiptVO);
     }
 
+    /** 배달지발 - 상세조회*/
     @Override
     public List<DefaultMap<String>> getDlvrReceiptDetailList(DlvrReceiptVO dlvrReceiptVO, SessionInfoVO sessionInfoVO) {
 //        dlvrReceiptVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

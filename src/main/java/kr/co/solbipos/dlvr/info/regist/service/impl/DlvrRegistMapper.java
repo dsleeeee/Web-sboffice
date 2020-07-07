@@ -19,4 +19,16 @@ public interface DlvrRegistMapper {
     int updateDlvrRegistInfo(DlvrRegistVO dlvrRegistVO);
 
     int deleteDlvrRegistInfo(DlvrRegistVO dlvrRegistVO);
+
+    String getEmpNoSelect(DlvrRegistVO dlvrRegistVO);
+
+    List<DefaultMap<String>> dlvrDetailList(DlvrRegistVO dlvrRegistVO);
+
+    int insertDlvrDetailRegistInfo(DlvrRegistVO dlvrRegistVO);
+
+    int updateDlvrDetailRegistInfo(DlvrRegistVO dlvrRegistVO);
+
+    int deleteDlvrDetailRegistInfo(DlvrRegistVO dlvrRegistVO);
+
+    String getNewDlvrMzoneCd(DlvrRegistVO dlvrRegistVO);
 }

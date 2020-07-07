@@ -9,6 +9,12 @@ public class DlvrRegistVO extends PageVO {
     private String dlvrLzoneCd;
     /** 배달대분류구역명 */
     private String dlvrLzoneNm;
+    /** 배달중분류구역코드 */
+    private String dlvrMzoneCd;
+    /** 배달중분류구역명 */
+    private String dlvrMzoneNm;
+    /** 배달주소*/
+    private String dlvrAddr;
     /** 페이지번호 */
     private String pageNo;
     /** 사원번호 */
@@ -40,6 +46,30 @@ public class DlvrRegistVO extends PageVO {
 
     public void setDlvrLzoneNm(String dlvrLzoneNm) {
         this.dlvrLzoneNm = dlvrLzoneNm;
+    }
+
+    public String getDlvrMzoneCd() {
+        return dlvrMzoneCd;
+    }
+
+    public void setDlvrMzoneCd(String dlvrMzoneCd) {
+        this.dlvrMzoneCd = dlvrMzoneCd;
+    }
+
+    public String getDlvrMzoneNm() {
+        return dlvrMzoneNm;
+    }
+
+    public void setDlvrMzoneNm(String dlvrMzoneNm) {
+        this.dlvrMzoneNm = dlvrMzoneNm;
+    }
+
+    public String getDlvrAddr() {
+        return dlvrAddr;
+    }
+
+    public void setDlvrAddr(String dlvrAddr) {
+        this.dlvrAddr = dlvrAddr;
     }
 
     public String getPageNo() {

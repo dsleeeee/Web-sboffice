@@ -96,6 +96,20 @@ public class MemberClassController {
         model.addAttribute("membrClassList",  membrClassListAll);
         return "membr/info/view/memberClass";
     }
+    /**
+     * 회원등급설정 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "view/getMemberClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMemberClassList(MembrClassVO membrClassVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        List<DefaultMap<String>> result = classService.getMemberClassGridList(sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
 
     /**
      * 회원등급 상세조회

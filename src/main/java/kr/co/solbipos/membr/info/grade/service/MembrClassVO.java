@@ -32,6 +32,10 @@ public class MembrClassVO extends CmmVO {
      */
     private String membrClassCd;
     /**
+     * [회원소속분류코드]
+     */
+    private String membrOrgnClassCd;
+    /**
      * [회원분류명]
      */
     private String membrClassNm;
@@ -145,6 +149,18 @@ public class MembrClassVO extends CmmVO {
      */
     public void setMembrClassCd(String membrClassCd) {
         this.membrClassCd = membrClassCd;
+    }
+
+    public String getMembrOrgnClassCd() {
+        return membrOrgnClassCd;
+    }
+
+    public void setMembrOrgnClassCd(String membrOrgnClassCd) {
+        this.membrOrgnClassCd = membrOrgnClassCd;
+    }
+
+    public String getMembrClassType() {
+        return membrClassType;
     }
 
     /**

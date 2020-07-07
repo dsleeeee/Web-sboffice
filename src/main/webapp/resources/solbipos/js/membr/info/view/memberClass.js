@@ -24,8 +24,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("membrClass", membrClass);
 
     $scope._getComboDataQuery('067', 'useYn', '');
-    $scope._getComboDataQuery('067', 'membrDcYn', '');
-    $scope._getComboDataQuery('067', 'membrPointYn', '');
+    $scope._getComboDataQuery('067', 'membrDcYn', 'S');
+    $scope._getComboDataQuery('067', 'membrPointYn', 'S');
     $scope._getComboDataQuery('067', 'defaultYn', '');
     $scope._getComboDataQuery('054', 'pointSaveFg', '');
     $scope._getComboDataQuery('032', 'membrAnvsrYn', 'S');
@@ -88,11 +88,9 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("memberClassCtrl", function (event, data) {
         $scope.setSelectedMember(data);
         $scope.detailData = data;
-        if ($scope.detailData.defltYn = 'Y') {
-            console.log('$scope.detailData: ', $scope.detailData);
+        if ($scope.detailData.defltYn === 'Y') {
             $scope.detailData.membrClass = "001";
         } else {
-            console.log('$scope.detailData: ', $scope.detailData);
             $scope.detailData.membrClass = "002";
         }
         event.preventDefault();
@@ -103,7 +101,6 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // 저장
     $scope.classSave = function () {
-
         if (!$scope.valueCheck()) return false;
 
         $scope.detailData.useYn = 'Y';
@@ -116,6 +113,9 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._postJSONSave.withOutPopUp("/membr/info/grade/grade/classRegist.sb", params, function (response) {
             if (response.data.status == 'OK') {
                 $scope._popMsg(messages["cmm.saveSucc"]);
+                $scope.getMember();
+                var scope = agrid.getScope('memberClassDetailCtrl');
+                scope._broadcast('memberClassDetailInit');
             } else {
                 $scope._popMsg(messages["cmm.saveFail"]);
                 return false;
@@ -137,7 +137,9 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     };
     $scope.getMember = function () {
-        $scope.data = new wijmo.collections.CollectionView(result);
+        var params = {}
+        $scope._inquiryMain("/membr/info/grade/view/getMemberClassList.sb", params, function () {
+        });
     };
 
     /*********************************************************
@@ -147,12 +149,20 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
         //if( $.isEmptyObject($scope.selectedMember) ){
 
-        // 등급코드 입력해주세요.
-        var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.select"];
+        // 등급코드을 입력하세요.
+        var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.text"];
         if (isNull($scope.detailData.membrClassCd)) {
             $scope._popMsg(msg);
             return false;
         }
+        // 등급코드 숫자영문.
+        var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.number.en"];
+        var numChkregexp = /^[A-za-z0-9]$/g;
+        if (numChkregexp.test($scope.detailData.membrClassCd)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 등급명을 입력하세요.
         var msg = messages["grade.membr.grade.nm"] + messages["cmm.require.text"];
         if (isNull($scope.detailData.membrClassNm)) {
@@ -160,9 +170,15 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
         // 할인를 입력하세요.
-        var msg = messages["grade.membr.dc.rate"] + messages["cmm.require.number"];
+        var msg = messages["grade.membr.dc.rate"] + messages["cmm.require.text"];
+        if (isNull($scope.detailData.dcRate)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        // 할인를 최소 0 최대 100.
+        var msg = messages["grade.membr.dc.rate"] + messages["grade.membr.dc.message"];
         var numChkregexp = /[^0-9]/g;
-        if (numChkregexp.test($scope.detailData.dcRate)) {
+        if (numChkregexp.test($scope.detailData.dcRate) || $scope.detailData.dcRate < 0 || $scope.detailData.dcRate > 100) {
             $scope._popMsg(msg);
             return false;
         }
@@ -188,13 +204,13 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 최대사용포인트 입력하세요.
         var msg = messages["grade.membr.max.use.point"] + messages["cmm.require.text"];
-        if (numChkregexp.test($scope.detailData.membrMaxPoint)) {
+        if (numChkregexp.test($scope.detailData.maxUsePoint)) {
             $scope._popMsg(msg);
             return false;
         }
         // 할인한도액 입력하세요.
         var msg = messages["grade.membr.dc.max"] + messages["cmm.require.text"];
-        if (isNull($scope.detailData.membrDcMax)) {
+        if (isNull($scope.detailData.dcLimitAmt)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -206,7 +222,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 기념일포인트 선택하세요.
         var msg = messages["grade.membr.anvsr.save.point"] + messages["cmm.require.text"];
-        if( isNull( $scope.membrAnvsrYnCombo.selectedValue )) {
+        if (isNull($scope.membrAnvsrYnCombo.selectedValue)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -268,6 +284,9 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         $scope.getClassList();
         event.preventDefault();
     });
+    $scope.$on("memberClassDetailInit", function () {
+        $scope.data = new wijmo.collections.CollectionView([]);
+    })
     // 상세 조회
     $scope.getClassList = function () {
 
@@ -395,6 +414,11 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            var item = $scope.flex.collectionView.itemsAdded[i];
+            if(item.payCd === "선택" || item.payCd === null){
+                $scope._popMsg(messages["grade.membr.pay.code"] + messages["cmm.require.select"]);
+                return false;
+            }
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
@@ -408,9 +432,11 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         });
     };
 
+    // $scope.valueCheck = function () {
+
     // 삭제
     $scope.pointDel = function () {
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = $scope.flex.collectionView.items.length-1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 $scope.flex.collectionView.removeAt(i);

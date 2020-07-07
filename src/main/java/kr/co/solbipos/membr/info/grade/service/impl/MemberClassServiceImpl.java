@@ -73,7 +73,6 @@ public class MemberClassServiceImpl implements MemberClassService {
     public String getMemberClassList(SessionInfoVO sessionInfoVO) {
         MembrClassVO membrClassVO = new MembrClassVO();
         List<DefaultMap<String>> classList;
-        LOGGER.debug("getOrgnCd {}", sessionInfoVO.getOrgnCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
             membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
@@ -87,6 +86,24 @@ public class MemberClassServiceImpl implements MemberClassService {
         return convertToJson(classList);
     }
 
+    @Override
+    public List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO) {
+        MembrClassVO membrClassVO = new MembrClassVO();
+        List<DefaultMap<String>> classList;
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            classList = mapper.getMemberClassList(membrClassVO);
+        } else {
+            membrClassVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+            membrClassVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            classList = mapper.getMemberClassList(membrClassVO);
+        }
+        return classList;
+    }
+
+
+
     /**
      * 회원등급 check
      *
@@ -96,6 +113,8 @@ public class MemberClassServiceImpl implements MemberClassService {
     public DefaultMap<Object> classInfoChk(MembrClassVO membrClassVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
         String dt = currentDateTimeString();
+        String defltYn = membrClassVO.getDefltYn();
+
         int classChk = mapper.classInfoChk(membrClassVO);
         int classResult;
         membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
@@ -103,10 +122,19 @@ public class MemberClassServiceImpl implements MemberClassService {
         membrClassVO.setRegId(sessionInfoVO.getUserId());
         membrClassVO.setModDt(dt);
         membrClassVO.setModId(sessionInfoVO.getUserId());
+        membrClassVO.setMembrOrgnClassCd(membrClassVO.getMembrOrgnCd() + membrClassVO.getMembrClassCd());
         if (classChk > 0) {
             classResult = mapper.updateClassInfo(membrClassVO);
+            if (classResult > 0 && "Y".equals(defltYn)) {
+                membrClassVO.setDefltYn("N");
+                classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+            }
         } else {
             classResult = mapper.insertClassInfo(membrClassVO);
+            if (classResult > 0 && "Y".equals(defltYn)) {
+                membrClassVO.setDefltYn("N");
+                classResult = mapper.defaultUpdateClassInfo(membrClassVO);
+            }
         }
         result.put("classResult", classResult);
         return result;
@@ -200,4 +228,7 @@ public class MemberClassServiceImpl implements MemberClassService {
         }
         return result;
     }
+
+
+
 }

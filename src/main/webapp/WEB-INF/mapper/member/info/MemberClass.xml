@@ -168,6 +168,12 @@
     -->
     <update id="updateClassInfo" parameterType="membrClassVO">
         /* MemberClassMapper.updateClassInfo */
+<!--        <selectKey keyProperty="DEFLT_YN" resultType="String" order="AFTER">-->
+<!--            SELECT DEFLT_YN-->
+<!--            FROM TB_MB_MEMBER_CLASS-->
+<!--            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}-->
+<!--            AND MEMBR_CLASS_CD = #{membrClassCd}-->
+<!--        </selectKey>-->
        UPDATE TB_MB_MEMBER_CLASS
           SET MEMBR_CLASS_NM = #{membrClassNm}
 	          , DC_RATE = #{dcRate}
@@ -190,6 +196,15 @@
 	    WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
 	      AND MEMBR_CLASS_CD = #{membrClassCd}
     </update>
+
+    <update id="defaultUpdateClassInfo" parameterType="membrClassVO">
+        /* MemberClassMapper.defaultUpdateClassInfo */
+       UPDATE TB_MB_MEMBER_CLASS
+          SET DEFLT_YN = #{defltYn}
+	    WHERE  MEMBR_ORGN_CD || MEMBR_CLASS_CD != #{membrOrgnClassCd}
+    </update>
+
+
 
     <!-- 회원등급 삭제 -->
     <!--

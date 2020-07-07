@@ -2,9 +2,11 @@ package kr.co.solbipos.dlvr.info.regist.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -13,6 +15,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistService;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
+import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +84,44 @@ public class DlvrRegistController {
                        HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         int result = dlvrRegistService.saveDlvrRegistList(dlvrRegistVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상세조회
+     *
+     * @param dlvrRegistVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "dlvrZone/dlvrDetail.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result dlvrDetailList(DlvrRegistVO dlvrRegistVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = dlvrRegistService.dlvrDetailList(dlvrRegistVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 배달지등록 - 중분류
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @ResponseBody
+    @RequestMapping(value = "dlvrZone/detailRegist.sb", method = RequestMethod.POST)
+    public Result DetailSave(@RequestBody DlvrRegistVO[] dlvrRegistVOs, HttpServletRequest request,
+                       HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        int result = dlvrRegistService.saveDlvrDetailRegistList(dlvrRegistVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

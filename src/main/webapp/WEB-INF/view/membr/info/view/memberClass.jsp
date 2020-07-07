@@ -103,7 +103,7 @@
                 <%-- 최대 사용 포인트 --%>
                 <th><s:message code="grade.membr.max.use.point"/></th>
                 <td>
-                    <input type="text" id="membrMaxPoint" class="sb-input w50" ng-model="detailData.membrMaxPoint"
+                    <input type="text" id="membrMaxPoint" class="sb-input w50" ng-model="detailData.maxUsePoint"
                            maxlength="15"/>
                     <s:message code="grade.membr.max.use.point.message"/>
                 </td>
@@ -113,7 +113,7 @@
                     <div class="sb-select">
                         <wj-combo-box
                                 id="membrPointYn"
-                                ng-model="detailData.membrDcYn"
+                                ng-model="detailData.useAccPointYn"
                                 control="membrPointYnCombo"
                                 items-source="_getComboData('membrDcYn')"
                                 display-member-path="name"
@@ -131,7 +131,7 @@
                     <div class="sb-select">
                         <wj-combo-box
                                 id="membrDcYn"
-                                ng-model="detailData.membrDcYn"
+                                ng-model="detailData.dcAccPointYn"
                                 control="membrDcYnCombo"
                                 items-source="_getComboData('membrDcYn')"
                                 display-member-path="name"
@@ -144,7 +144,7 @@
                 <%-- 할인한도액 --%>
                 <th><s:message code="grade.membr.dc.max"/></th>
                 <td>
-                    <input type="text" id="membrDcMax" class="sb-input w100" ng-model="detailData.membrDcMax" maxlength="15"/>
+                    <input type="text" id="membrDcMax" class="sb-input w100" ng-model="detailData.dcLimitAmt" maxlength="15"/>
                 </td>
             </tr>
             <tr>

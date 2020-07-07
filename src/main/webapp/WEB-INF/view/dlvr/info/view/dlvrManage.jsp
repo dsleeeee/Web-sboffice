@@ -42,7 +42,8 @@
                             autoGenerateColumns="false"
                             control="flex"
                             initialized="initGrid(s,e)"
-                            sticky-headers="true"
+                            cell-edit-ended="cellEditEnded(s,e)"
+<%--                            sticky-headers="true"--%>
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter">
@@ -78,19 +79,19 @@
             <h2 class="h2_tit oh lh30">
                 <s:message code="dlvrManage.area"/> - <s:message code="dlvrManage.secend"/>
 
-                <button class="btn_skyblue mr5 mt5 fr">
+                <button class="btn_skyblue mr5 mt5 fr" ng-click="dlvrDetailAreaDn()">
                     <s:message code="dlvrManage.dn"/>
                 </button>
-                <button class="btn_skyblue mr5 mt5 fr">
+                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaUp()">
                     <s:message code="dlvrManage.up"/>
                 </button>
-                <button class="btn_skyblue mr5 mt5 fr">
+                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaDel()">
                     <s:message code="cmm.delete"/>
                 </button>
-                <button class="btn_skyblue mr5 mt5 fr">
+                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaSave()">
                     <s:message code="cmm.save"/>
                 </button>
-                <button class="btn_skyblue mr5 mt5 fr">
+                <button class="btn_skyblue mr5 mt5 fr " ng-click="dlvrDetailAreaAdd()">
                     <s:message code="dlvrManage.new"/>
                 </button>
             </h2>
@@ -104,21 +105,28 @@
                             selection-mode="Row"
                             items-source="data"
                             item-formatter="_itemFormatter"
-                            is-read-only="true">
+<%--                            is-read-only="true"--%>
+                    >
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"
                                              align="center"
                                              is-read-only="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrManage.cd"/>" binding="memberClassNm"
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.areaNm"/>" binding="pageNo"
+                                             width="230"
+                                             is-read-only="false" align="right"  visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.cd"/>" binding="dlvrMzoneCd"
                                              width="220"
                                              is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrManage.areaNm"/>" binding="memberNo"
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.areaNm"/>" binding="dlvrMzoneNm"
                                              width="230"
+                                             is-read-only="false" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.areaNm"/>" binding="dlvrAddr"
+                                             width="230"  visible="false"
                                              is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrManage.useYn"/>" binding="memberNm"
-                                             width="115"
-                                             is-read-only="true" align="right"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="memberCardNo"
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.useYn"/>" binding="useYn"
+                                             width="115" data-map="useYnDataMap"
+                                             is-read-only="false" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrManage.input"/>" binding="inFg"
                                              width="120"
                                              is-read-only="true" align="right"></wj-flex-grid-column>
                     </wj-flex-grid>

@@ -10,7 +10,6 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistService;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO;
-import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,42 +41,42 @@ public class DlvrRegistServiceImpl implements DlvrRegistService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+    /** 배달구역 -대분류 조회 */
     @Override
     public String getDlvrManageList(SessionInfoVO sessionInfoVO) {
         DlvrRegistVO dlvrRegistVO = new DlvrRegistVO();
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        } else {
+            dlvrRegistVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         List<DefaultMap<String>> dlvrManageList = mapper.getDlvrManageList(dlvrRegistVO);
         return convertToJson(dlvrManageList);
     }
 
+    /** 배달구역 -대분류 저장*/
     @Override
     public int saveDlvrRegistList(DlvrRegistVO[] dlvrRegistVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
-        String procResult = "";
 
-        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
-        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
-        String storeCd = sessionInfoVO.getStoreCd();
         String dt = currentDateTimeString();
 
-        /*
-         * 상품권은 프랜차이즈의 경우 무조건 본사에서 등록
-         *          단독매장의 경우 무조건 매장에서 등록
-         */
-
         for (DlvrRegistVO dlvrRegistVO : dlvrRegistVOs) {
+
+            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            } else {
+                dlvrRegistVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
             dlvrRegistVO.setRegDt(dt);
             dlvrRegistVO.setRegId(sessionInfoVO.getUserId());
             dlvrRegistVO.setModDt(dt);
             dlvrRegistVO.setModId(sessionInfoVO.getUserId());
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
-                dlvrRegistVO.setDlvrLzoneCd(mapper.getNewDlvrLzoneCd(dlvrRegistVO));
-            } else {
-                dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
-                dlvrRegistVO.setDlvrLzoneCd(mapper.getNewDlvrLzoneCd(dlvrRegistVO));
-            }
+            dlvrRegistVO.setEmpNo(sessionInfoVO.getEmpNo());
 
             if (dlvrRegistVO.getStatus() == GridDataFg.INSERT) {
+                dlvrRegistVO.setDlvrLzoneCd(mapper.getNewDlvrLzoneCd(dlvrRegistVO));
                 result = mapper.insertDlvrRegistInfo(dlvrRegistVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             } else if (dlvrRegistVO.getStatus() == GridDataFg.UPDATE) {
@@ -90,4 +89,48 @@ public class DlvrRegistServiceImpl implements DlvrRegistService {
         }
         return result;
     }
+
+    /** 배달구역 -중분류 조회*/
+    @Override
+    public List<DefaultMap<String>> dlvrDetailList(DlvrRegistVO dlvrRegistVO, SessionInfoVO sessionInfoVO) {
+        return mapper.dlvrDetailList(dlvrRegistVO);
+    }
+
+    /** 배달구역 -중분류 저장*/
+    @Override
+    public int saveDlvrDetailRegistList(DlvrRegistVO[] dlvrRegistVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        String dt = currentDateTimeString();
+
+        for (DlvrRegistVO dlvrRegistVO : dlvrRegistVOs) {
+
+            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+                dlvrRegistVO.setStoreCd(sessionInfoVO.getOrgnCd());
+            } else {
+                dlvrRegistVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            dlvrRegistVO.setRegDt(dt);
+            dlvrRegistVO.setRegId(sessionInfoVO.getUserId());
+            dlvrRegistVO.setModDt(dt);
+            dlvrRegistVO.setModId(sessionInfoVO.getUserId());
+            dlvrRegistVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+            if (dlvrRegistVO.getStatus() == GridDataFg.INSERT) {
+                dlvrRegistVO.setDlvrMzoneCd(mapper.getNewDlvrMzoneCd(dlvrRegistVO));
+                result = mapper.insertDlvrDetailRegistInfo(dlvrRegistVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else if (dlvrRegistVO.getStatus() == GridDataFg.UPDATE) {
+                result = mapper.updateDlvrDetailRegistInfo(dlvrRegistVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else {
+                result = mapper.deleteDlvrDetailRegistInfo(dlvrRegistVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+        }
+        return result;
+    }
+
+
 }
