@@ -28,8 +28,9 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="" 		binding="storeCd" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="" 		binding="saleDate" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.storeCd"/>" 		binding="storeCd" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.storeNm"/>" 		binding="storeNm" 		width="100" 	align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.saleDate"/>" 	binding="saleDate" 		width="100" 	align="center" is-read-only="true" visible="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.posNo"/>" 		binding="posNo" 		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billNo"/>" 		binding="billNo"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.billDt"/>" 		binding="billDt"		width="100" 	align="center" is-read-only="true"></wj-flex-grid-column>
@@ -37,7 +38,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.netSaleAmt"/>" 	binding="netSaleAmt" 	width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.taxSaleAmt"/>" 	binding="vatAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.vatAmt"/>" 		binding="vatAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.payTot"/>" 		binding="payTot"		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.pay01"/>" 		binding="pay01" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.pay02"/>" 		binding="pay02" 		width="100" 	align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -63,7 +64,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/table.js?ver=20190207.01" charset="utf-8"></script>
 <%-- 영수증 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/billSalePop.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

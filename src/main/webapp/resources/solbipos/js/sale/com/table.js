@@ -62,6 +62,9 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
 
     // 첫째줄 헤더 생성
     var dataItem         	= {};
+    dataItem.storeCd      	= messages["saleComPopup.storeCd"];
+    dataItem.storeNm      	= messages["saleComPopup.storeNm"];
+    dataItem.saleDate      	= messages["saleComPopup.saleDate"];    
     dataItem.posNo      	= messages["saleComPopup.posNo"];
     dataItem.billNo  		= messages["saleComPopup.billNo"];
     dataItem.billDt    		= messages["saleComPopup.billDt"];
@@ -69,7 +72,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     dataItem.totSaleAmt     = messages["saleComPopup.totSaleAmt"];
     dataItem.realSaleAmt    = messages["saleComPopup.realSaleAmt"];
     dataItem.netSaleAmt   	= messages["saleComPopup.netSaleAmt"];
-    dataItem.taxSaleAmt   	= messages["saleComPopup.taxSaleAmt"];
+    dataItem.vatAmt   		= messages["saleComPopup.vatAmt"];
     dataItem.payTot     	= messages["saleComPopup.payChoice"];
     dataItem.pay01     		= messages["saleComPopup.payChoice"];
     dataItem.pay02     		= messages["saleComPopup.payChoice"];
