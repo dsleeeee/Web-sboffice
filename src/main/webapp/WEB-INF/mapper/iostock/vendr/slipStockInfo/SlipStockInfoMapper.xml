@@ -23,7 +23,6 @@
                 ,       TB_HQ_VENDOR thv
                 WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
                 AND     tphvi.PROC_FG         = '1'
-                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
                 AND     thv.HQ_OFFICE_CD      = tphvi.HQ_OFFICE_CD
                 AND     thv.VENDR_CD          = tphvi.VENDR_CD
                 ]]>
@@ -33,12 +32,18 @@
                 <if test='orderSlipNo != null and orderSlipNo != ""'>
                     AND tphvi.ORDER_SLIP_NO = #{orderSlipNo}
                 </if>
-                <if test='arrVendrCd != null and arrVendrCd != ""'>
-                    AND tphvi.VENDR_CD IN
-                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
+                <if test='(slipNo == null or slipNo == "") and (orderSlipNo == null or orderSlipNo == "")'>
+                	AND tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}	
+                	<if test='slipFg != null and slipFg != ""'>
+	                    AND tphvi.SLIP_FG = #{slipFg}
+	                </if>
+	                <if test='arrVendrCd != null and arrVendrCd != ""'>
+	                    AND tphvi.VENDR_CD IN
+	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+	                </if>                
+                </if>                
                 <![CDATA[
                 AND     tphvi.SLIP_NO         IN  ( SELECT  tphvid.SLIP_NO
                                                     FROM    TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
@@ -80,7 +85,6 @@
                 ,       TB_MS_VENDOR tmv
                 WHERE   tpsvi.STORE_CD        = #{storeCd}
                 AND     tpsvi.PROC_FG         = '1'
-                AND     tpsvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
                 AND     tmv.STORE_CD          = tpsvi.STORE_CD
                 AND     tmv.VENDR_CD          = tpsvi.VENDR_CD
                 ]]>
@@ -90,12 +94,18 @@
                 <if test='orderSlipNo != null and orderSlipNo != ""'>
                     AND tpsvi.ORDER_SLIP_NO = #{orderSlipNo}
                 </if>
-                <if test='arrVendrCd != null and arrVendrCd != ""'>
-                    AND tpsvi.VENDR_CD IN
-                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
+                <if test='(slipNo == null or slipNo == "") and (orderSlipNo == null or orderSlipNo == "")'>
+                	AND tpsvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}	
+                	<if test='slipFg != null and slipFg != ""'>
+	                    AND tpsvi.SLIP_FG = #{slipFg}
+	                </if>
+	                <if test='arrVendrCd != null and arrVendrCd != ""'>
+	                    AND tpsvi.VENDR_CD IN
+	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+	                </if>                
+                </if>                
                 <![CDATA[
                 AND     tpsvi.SLIP_NO         IN  ( SELECT  tpsvid.SLIP_NO
                                                     FROM    TB_PO_STORE_VENDR_INSTOCK_DTL tpsvid
