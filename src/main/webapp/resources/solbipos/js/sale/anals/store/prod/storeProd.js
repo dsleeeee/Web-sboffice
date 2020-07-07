@@ -117,8 +117,9 @@ app.controller('storeProdCtrl', ['$scope', '$http', '$timeout', function ($scope
   };
 
   // 상품분류정보 선택취소
-  $scope.delProd = function(){
+  $scope.delProd = function(){  
 	$("#srchStoreProdProdCd").val("");
+	$("#srchStoreProdProdNm").val("");
     // $scope.prodCd = "";
     $scope.prodCdNm = "";
     $scope.prodCalssCd = "";

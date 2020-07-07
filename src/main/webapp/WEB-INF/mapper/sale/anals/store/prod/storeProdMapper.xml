@@ -96,9 +96,12 @@
 				                     TB_HQ_PRODUCT       B
 				             WHERE TSDP.STORE_CD = TMS.STORE_CD
                              AND B.HQ_OFFICE_CD   = #{hqOfficeCd}
+                             AND B.HQ_OFFICE_CD	 = A.HQ_OFFICE_CD(+)
                              AND B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+                             AND B.HQ_OFFICE_CD	 = TSDP.HQ_OFFICE_CD
                              AND B.PROD_CD       = TSDP.PROD_CD
                              AND TSDP.HQ_OFFICE_CD  = #{hqOfficeCd}
+                             AND TSDP.STORE_CD	 = TMS.STORE_CD
 							</when>
 							<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
 	         				         <![CDATA[
@@ -131,10 +134,13 @@
 			                     )                   A,
 			                     TB_MS_PRODUCT       B
 			             WHERE   B.STORE_CD      = #{storeCd}
+			             AND	 B.STORE_CD		 = A.STORE_CD(+)
 			             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+			             AND	 B.STORE_CD		 = TSDP.STORE_CD
 			             AND     B.PROD_CD       = TSDP.PROD_CD
 			             AND     TSDP.HQ_OFFICE_CD  = #{hqOfficeCd}
 			             AND     TSDP.STORE_CD      = #{storeCd}
+			             AND     TSDP.STORE_CD  =   TMS.STORE_CD
 			            </when>
 	      				</choose>
                         <if test='startDate != null and startDate != ""'>
@@ -256,9 +262,12 @@
 				                     TB_HQ_PRODUCT       B
 				             WHERE TSDP.STORE_CD = TMS.STORE_CD
                              AND B.HQ_OFFICE_CD   = #{hqOfficeCd}
+                             AND B.HQ_OFFICE_CD	 = A.HQ_OFFICE_CD(+)
                              AND B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+                             AND B.HQ_OFFICE_CD	 = TSDP.HQ_OFFICE_CD
                              AND B.PROD_CD       = TSDP.PROD_CD
                              AND TSDP.HQ_OFFICE_CD  = #{hqOfficeCd}
+                             AND TSDP.STORE_CD	 = TMS.STORE_CD
 							</when>
 							<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
 	         				         <![CDATA[
@@ -291,10 +300,13 @@
 			                     )                   A,
 			                     TB_MS_PRODUCT       B
 			             WHERE   B.STORE_CD      = #{storeCd}
+			             AND	 B.STORE_CD		 = A.STORE_CD(+)
 			             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+			             AND	 B.STORE_CD		 = TSDP.STORE_CD
 			             AND     B.PROD_CD       = TSDP.PROD_CD
 			             AND     TSDP.HQ_OFFICE_CD  = #{hqOfficeCd}
 			             AND     TSDP.STORE_CD      = #{storeCd}
+			             AND     TSDP.STORE_CD  =   TMS.STORE_CD
 			            </when>
 	      				</choose>
                         <if test='startDate != null and startDate != ""'>
