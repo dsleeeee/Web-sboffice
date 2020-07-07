@@ -53,6 +53,7 @@
 		             , NULL   AS PENALTY_AMT
 		          FROM TB_PO_HQ_STORE_ORDER A
 		         WHERE A.PROC_FG = '00'
+		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
 		           <if test='storeCd != null and storeCd != ""'>
                        AND A.STORE_CD IN
                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -259,6 +260,7 @@
                      , NULL   AS PENALTY_AMT
                   FROM TB_PO_HQ_STORE_ORDER A
                  WHERE A.PROC_FG = '00'
+                 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
                    <if test='storeCd != null and storeCd != ""'>
                        AND A.STORE_CD IN
                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
@@ -396,8 +398,9 @@
               , A.REMARK
            FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
               , TB_MS_PRODUCT Z
-          WHERE A.SLIP_NO = #{slipNo}
-            AND A.STORE_CD = Z.STORE_CD
-            AND A.PROD_CD = Z.PROD_CD
+          WHERE A.HQ_OFFICE_CD	=	#{hqOfficeCd}
+		  	AND	A.SLIP_NO 		= 	#{slipNo}
+            AND A.STORE_CD 		= 	Z.STORE_CD
+            AND A.PROD_CD 		= 	Z.PROD_CD
     </select>
 </mapper>
