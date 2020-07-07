@@ -255,14 +255,40 @@
 		            FROM    TB_MS_EMPLOYEE
 		            WHERE   STORE_CD    = #{searchStoreCd}
 		            AND     EMP_NO      = A.EMP_NO)     AS EMP_NM,
-		        0										AS EMP_CANCEL_CNT		<!-- 주문취소건수: 현재 데이터 없기에 '0'으로 보여줌 -->
+		        <!-- 0										AS EMP_CANCEL_CNT		주문취소건수: 현재 데이터 없기에 '0'으로 보여줌 -->
+		        (	SELECT 	COUNT(*) 
+		        	FROM	TB_OD_ORDER_HDR
+		        	WHERE	STORE_CD	= 	#{searchStoreCd}
+		        	AND		SALE_DATE		BETWEEN #{startDate}
+					                        AND     #{endDate}
+					AND		EMP_NO		=	A.EMP_NO
+		        	)									AS EMP_CANCEL_CNT
+		        
+		        
 		FROM    (
 		            SELECT  A.EMP_NO,
-		                    COUNT(*)                                        AS CNT,
+		                    A.CNT,
 		                    SUM( DECODE(B.PAY_CD,'01',B.PAY_AMT,0) )        AS TOTAL_CARD,  /* 결제수단구분(01:신용카드, 02:현금, ....) - 공통코드 NMCODE_GRP_CD='024' */
 		                    SUM( DECODE(B.PAY_CD,'02',B.PAY_AMT,0) )        AS TOTAL_CASH,
 		                    SUM( DECODE(B.PAY_CD,'01',0,'02',0,B.PAY_AMT) ) AS TOTAL_ETC
-		            FROM    TB_SL_SALE_HDR      A,
+		            FROM    (
+					            SELECT  Z.HQ_OFFICE_CD
+					            ,       Z.HQ_BRAND_CD 
+					            ,       Z.STORE_CD    
+					            ,       Z.SALE_DATE   
+					            ,       Z.POS_NO      
+					            ,       Z.BILL_NO
+					            ,       Z.SALE_FG
+					            ,       Z.REG_SEQ
+					            ,       Z.EMP_NO
+					            ,       COUNT(*) OVER(PARTITION BY Z.EMP_NO) AS CNT
+					            FROM    TB_SL_SALE_HDR Z 
+					            WHERE   Z.HQ_OFFICE_CD 	= #{hqOfficeCd}
+					            AND     Z.STORE_CD 		= #{searchStoreCd}
+					            AND     Z.SALE_DATE     BETWEEN #{startDate}
+					                                    AND     #{endDate}
+					            AND     Z.SALE_FG       = '1'
+					        )      A,
 		                    TB_SL_SALE_HDR_PAY  B
 		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
 		            AND     A.STORE_CD      = #{searchStoreCd}
@@ -277,16 +303,33 @@
 		            AND     A.BILL_NO       = B.BILL_NO
 		            AND     A.REG_SEQ       = B.REG_SEQ
 		            AND     A.SALE_FG       = B.SALE_FG
-		            GROUP BY A.EMP_NO
+		            GROUP BY A.EMP_NO, A.CNT
 		        ) A
 		        LEFT OUTER JOIN
 		        (
 		            SELECT  A.EMP_NO,
-		                    COUNT(*)                                        AS CNT,
+		                    A.CNT,
 		                    SUM( DECODE(B.PAY_CD,'01',B.PAY_AMT,0) )        AS TOTAL_CARD,  /* 결제수단구분(01:신용카드, 02:현금, ....) - 공통코드 NMCODE_GRP_CD='024' */
 		                    SUM( DECODE(B.PAY_CD,'02',B.PAY_AMT,0) )        AS TOTAL_CASH,
 		                    SUM( DECODE(B.PAY_CD,'01',0,'02',0,B.PAY_AMT) ) AS TOTAL_ETC
-		            FROM    TB_SL_SALE_HDR      A,
+		            FROM    (
+					            SELECT  Z.HQ_OFFICE_CD
+					            ,       Z.HQ_BRAND_CD 
+					            ,       Z.STORE_CD    
+					            ,       Z.SALE_DATE   
+					            ,       Z.POS_NO      
+					            ,       Z.BILL_NO
+					            ,       Z.SALE_FG
+					            ,       Z.REG_SEQ
+					            ,       Z.EMP_NO
+					            ,       COUNT(*) OVER(PARTITION BY Z.EMP_NO) AS CNT
+					            FROM    TB_SL_SALE_HDR Z 
+					            WHERE   Z.HQ_OFFICE_CD 	= #{hqOfficeCd}
+					            AND     Z.STORE_CD 		= #{searchStoreCd}
+					            AND     Z.SALE_DATE     BETWEEN #{startDate}
+					                                    AND     #{endDate}
+					            AND     Z.SALE_FG       = '-1'
+					        )      A,
 		                    TB_SL_SALE_HDR_PAY  B
 		            WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
 		            AND     A.STORE_CD      = #{searchStoreCd}
@@ -301,7 +344,7 @@
 		            AND     A.BILL_NO       = B.BILL_NO
 		            AND     A.REG_SEQ       = B.REG_SEQ
 		            AND     A.SALE_FG       = B.SALE_FG
-		            GROUP BY A.EMP_NO
+		            GROUP BY A.EMP_NO, A.CNT
 		        ) B
 		        ON A.EMP_NO = B.EMP_NO
 		ORDER BY EMP_NO
