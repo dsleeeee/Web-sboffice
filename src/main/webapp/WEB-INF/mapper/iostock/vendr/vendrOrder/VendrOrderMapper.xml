@@ -350,6 +350,7 @@
                 AND     thp.HQ_OFFICE_CD      	=   #{hqOfficeCd}
                 AND     thp.PROD_CD           	=   thvp.PROD_CD
                 AND     thp.USE_YN            	=   'Y'
+                AND     thp.PO_PROD_FG    		IN  ('1','2')
                 AND		tshsc.STORAGE_CD	(+)	=	'999'
                 AND     tshsc.HQ_OFFICE_CD(+) 	=   thp.HQ_OFFICE_CD
                 AND     tshsc.PROD_CD     (+) 	=   thp.PROD_CD
