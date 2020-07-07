@@ -33,9 +33,17 @@
 		             	<![CDATA[	    			 
 						SELECT  A.HQ_OFFICE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
 						             	)  AS  LV1_NM
@@ -48,7 +56,7 @@
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
 						             	)  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_HQ_PRODUCT_CLASS				
@@ -86,9 +94,17 @@
                          <![CDATA[
         				SELECT  A.STORE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2))  AS  LV1_NM
 						,       DECODE(A.LV ,1  ,NULL
@@ -99,7 +115,7 @@
 						                    ,2  ,NULL
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_MS_PRODUCT_CLASS						
@@ -154,9 +170,17 @@
 		             	<![CDATA[	    			 
 						SELECT  A.HQ_OFFICE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
 						             	)  AS  LV1_NM
@@ -169,7 +193,7 @@
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
 						             	)  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_HQ_PRODUCT_CLASS				
@@ -207,9 +231,17 @@
                          <![CDATA[
         				SELECT  A.STORE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2))  AS  LV1_NM
 						,       DECODE(A.LV ,1  ,NULL
@@ -220,7 +252,7 @@
 						                    ,2  ,NULL
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_MS_PRODUCT_CLASS						
@@ -280,9 +312,17 @@
 		                <![CDATA[	    			 
 						SELECT  A.HQ_OFFICE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
 						             	)  AS  LV1_NM
@@ -295,7 +335,7 @@
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
 						             	)  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_HQ_PRODUCT_CLASS				
@@ -311,7 +351,7 @@
                      TB_HQ_PRODUCT       B,
                      TB_SL_DAILY_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
-             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
              AND	 B.HQ_OFFICE_CD	 = C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
@@ -333,9 +373,17 @@
                          <![CDATA[
         				SELECT  A.STORE_CD
 						,       A.PROD_CLASS_CD
-						,		NULL	LV1_CD
-						,		NULL	LV2_CD
-						,		NULL	LV3_CD
+						,       DECODE	(A.LV ,1  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,LENGTH(A.ACD))
+							                    ,    SUBSTR(A.ACD,INSTR(A.ACD,'^',1,1)+1,INSTR(A.ACD,'^',2,1)-2)
+							             	)  AS  LV1_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',2,1)+1,LENGTH(A.ACD))
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,2)+1,(INSTR(A.ACD,'^',1,3)-1)-INSTR(A.ACD,'^',1,2))
+						              	)  AS  LV2_CD
+						,       DECODE	(A.LV ,1  ,NULL
+						                    ,2  ,NULL
+						                    ,3  ,SUBSTR(A.ACD,INSTR(A.ACD,'^',1,3)+1)
+						             	)  AS  LV3_CD
 						,       DECODE(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
 						                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2))  AS  LV1_NM
 						,       DECODE(A.LV ,1  ,NULL
@@ -346,7 +394,7 @@
 						                    ,2  ,NULL
 						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
 						FROM    (
-						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC,   SYS_CONNECT_BY_PATH(PROD_CLASS_CD, '^')  AS ACD
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
 						                    FROM    TB_MS_PRODUCT_CLASS						
