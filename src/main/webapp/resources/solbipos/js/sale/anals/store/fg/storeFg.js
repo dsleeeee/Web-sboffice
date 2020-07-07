@@ -5,7 +5,8 @@ var app = agrid.getApp();
 
 var vSortFg = [
 //	{"name":"매장형태","value":"1"}
-    {"name":"매장용도","value":"2"}
+	{"name":"직영구분","value":"1"}
+    ,{"name":"매장용도","value":"2"}
 ];
 
 /** 할인구분별(매출리스트) controller */
