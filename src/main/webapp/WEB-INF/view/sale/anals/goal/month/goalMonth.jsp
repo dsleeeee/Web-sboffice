@@ -121,8 +121,8 @@
           <wj-flex-grid-column header="<s:message code="goal.goalDay.monthGoalAmt"/>"        binding="saleGoalMonthlyAmt" width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTotSale"/>"        binding="saleGoalAmt"        width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.realSaleAmt"/>"       binding="totSaleAmt"         width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -159,8 +159,8 @@
         <wj-flex-grid-column header="<s:message code="goal.goalDay.monthGoalAmt"/>"        binding="saleGoalMonthlyAmt" width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTotSale"/>"        binding="saleGoalAmt"        width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="goal.goalMonth.realSaleAmt"/>"       binding="totSaleAmt"         width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
     <%--//위즈모 테이블--%>
