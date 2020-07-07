@@ -71,6 +71,7 @@
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
                 WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate} 
                 AND     tphvi.PROC_FG         = '1'
                 AND     tphvi.ORDER_SLIP_NO   IS NULL
                 AND     thv.HQ_OFFICE_CD   (+)= tphvi.HQ_OFFICE_CD
@@ -147,6 +148,7 @@
                 FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
                 ,       TB_MS_VENDOR thv		/* HQ -> MS 수정 */
                 WHERE   tpsvi.STORE_CD      = #{storeCd}
+                AND     tpsvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
                 AND     tpsvi.PROC_FG       = '1'
                 AND     tpsvi.ORDER_SLIP_NO IS NULL
                 AND     thv.STORE_CD    (+) = tpsvi.STORE_CD
