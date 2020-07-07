@@ -16,7 +16,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope._setComboData("posHourListScaleBox", gvListScaleBoxData);
 
 	var checkInt = true;
-
+	var sltSaleCnt; 
+	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -31,7 +32,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
 	        var col = s.columns[e.col];
-
+	        
 	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt" && s.cells.getCellData(e.row, e.col,false) != null) { // 수량합계
 	        	var item = s.rows[e.row].dataItem;
 	          	wijmo.addClass(e.cell, 'wijLink');
@@ -329,8 +330,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		    			params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
 		    		}
 		    		params.saleHour   = selectedRow.saleHour;
-		    		
-		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt" && grid.getCellData(ht.row,ht.col,true) != "") { 
 			    		params.storeCd   = storeCd;
 			    		params.posNo	 = posNo;			    			    	    
 		    			$scope._broadcast('saleComProdHourCtrl', params); // 수량
