@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprMcouponView" class="subCon3"  ng-controller="apprMcouponCtrl">
+<div id="apprMcouponView" class="subCon3"  ng-controller="apprMcouponCtrl" style="display: none;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="dailyReport.apprMcoupn"/></a>
       <%-- 조회 --%>

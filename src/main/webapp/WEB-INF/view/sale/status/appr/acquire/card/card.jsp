@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprAcquireCardView" class="subCon3"  ng-controller="apprAcquireCardCtrl">
+<div id="apprAcquireCardView" class="subCon3"  ng-controller="apprAcquireCardCtrl" style="display: none;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="store.pay1"/></a>
       <%-- 조회 --%>
