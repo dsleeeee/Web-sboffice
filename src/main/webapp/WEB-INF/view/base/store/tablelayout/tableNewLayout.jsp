@@ -216,11 +216,11 @@
 							<div class="clearfix"></div>
 							<div class="fl w45">
 							  <span class="bk lh30 s12 w30px"><s:message code="func.width"/></span>
-							  <input type="text" class="fr sb-input w50px tc" id="cellH" maxlength="4">
+							  <input type="text" class="fr sb-input w50px tc" id="cellW" maxlength="4">
 							</div>
 							<div class="fr w45">
 							    <span class="bk lh30 s12 w30px"><s:message code="func.height"/></span>
-							    <input type="text" class="fr sb-input w50px tc" id="cellW" maxlength="4">
+							    <input type="text" class="fr sb-input w50px tc" id="cellH" maxlength="4">
 							</div>
 						</div>
 						
