@@ -95,7 +95,6 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
         //Grid Header 2줄 - START	----------------------------------------------------------------
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
-
         //첫째줄 Header 생성
         var dataItem         = {};
 	        dataItem.prodCd    			= messages["saleTrnsitn.prodCd"];
@@ -119,12 +118,18 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 
 	        dataItem.twoWeekTot			= messages["saleTrnsitn.twoWeekTot"];
 	        dataItem.twoWeekAvr			= messages["saleTrnsitn.twoWeekAvr"];
-
-	        dataItem.inWhCarryOut		= messages["saleTrnsitn.sum"];
-			dataItem.outWhCarryIn		= messages["saleTrnsitn.sum"];
-			dataItem.hqCurrentStk		= messages["saleTrnsitn.sum"];
-			dataItem.sale				= messages["saleTrnsitn.sum"];
-			dataItem.storeTotStk		= messages["saleTrnsitn.sum"];
+	        
+	        if(gvOrgnFg === 'H'){
+	        	dataItem.inWhCarryOut		= messages["saleTrnsitn.sum"];
+				dataItem.outWhCarryIn		= messages["saleTrnsitn.sum"];
+				dataItem.hqCurrentStk		= messages["saleTrnsitn.sum"];
+				dataItem.sale				= messages["saleTrnsitn.sum"];
+				dataItem.storeTotStk		= messages["saleTrnsitn.sum"];	
+	        }else if(gvOrgnFg !== 'H'){
+	        	dataItem.inWh				= messages["saleTrnsitn.sum"];
+				dataItem.storeCurrentStk	= messages["saleTrnsitn.sum"];
+				dataItem.sale				= messages["saleTrnsitn.sum"];
+	        }
 
 			dataItem.saleRatio			= messages["saleTrnsitn.saleRatio"];
 			dataItem.firstSaleDate		= messages["saleTrnsitn.firstSaleDate"];
@@ -407,12 +412,18 @@ app.controller('saleTrnsitnExcelCtrl', ['$scope', '$http', '$timeout', function 
 		        dataItem.twoWeekTot			= messages["saleTrnsitn.twoWeekTot"];
 		        dataItem.twoWeekAvr			= messages["saleTrnsitn.twoWeekAvr"];
 
-		        dataItem.inWhCarryOut		= messages["saleTrnsitn.sum"];
-				dataItem.outWhCarryIn		= messages["saleTrnsitn.sum"];
-				dataItem.hqCurrentStk		= messages["saleTrnsitn.sum"];
-				dataItem.sale				= messages["saleTrnsitn.sum"];
-				dataItem.storeTotStk		= messages["saleTrnsitn.sum"];
-
+		        if(gvOrgnFg === 'H'){
+		        	dataItem.inWhCarryOut		= messages["saleTrnsitn.sum"];
+					dataItem.outWhCarryIn		= messages["saleTrnsitn.sum"];
+					dataItem.hqCurrentStk		= messages["saleTrnsitn.sum"];
+					dataItem.sale				= messages["saleTrnsitn.sum"];
+					dataItem.storeTotStk		= messages["saleTrnsitn.sum"];	
+		        }else if(gvOrgnFg !== 'H'){
+		        	dataItem.inWh				= messages["saleTrnsitn.sum"];
+					dataItem.storeCurrentStk	= messages["saleTrnsitn.sum"];
+					dataItem.sale				= messages["saleTrnsitn.sum"];
+		        }
+		        
 				dataItem.saleRatio			= messages["saleTrnsitn.saleRatio"];
 				dataItem.firstSaleDate		= messages["saleTrnsitn.firstSaleDate"];
 				dataItem.lastSaleDate		= messages["saleTrnsitn.lastSaleDate"];

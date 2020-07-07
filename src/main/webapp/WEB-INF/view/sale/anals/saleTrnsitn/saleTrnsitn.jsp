@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="gvOrgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon3" ng-controller="saleTrnsitnCtrl">
 
@@ -144,19 +145,31 @@
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekTot"/>" 		binding="twoWeekTot" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekAvr"/>" 		binding="twoWeekAvr" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
 
-
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.inWhCarryOut"/>" 		binding="inWhCarryOut" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.outWhCarryIn"/>" 		binding="outWhCarryIn" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.hqCurrentStk"/>" 		binding="hqCurrentStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeTotStk"/>" 		binding="storeTotStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
-
+				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.inWhCarryOut"/>" 		binding="inWhCarryOut" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.outWhCarryIn"/>" 		binding="outWhCarryIn" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.hqCurrentStk"/>" 		binding="hqCurrentStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeTotStk"/>" 		binding="storeTotStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+				</c:if>
+				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+					<wj-flex-grid-column header="<s:message code="saleTrnsitn.inWh"/>" 				binding="inWh" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeCurrentStk"/>" 	binding="storeCurrentStk" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+				</c:if>
+				
 				<%-- Header의 날짜 setting을 위한 값들 --%>
 				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 				<wj-flex-grid-column header="" binding="dateBefore12" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -225,18 +238,30 @@
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekTot"/>" 		binding="twoWeekTot" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekAvr"/>" 		binding="twoWeekAvr" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
 
-
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.inWhCarryOut"/>" 		binding="inWhCarryOut" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.outWhCarryIn"/>" 		binding="outWhCarryIn" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.hqCurrentStk"/>" 		binding="hqCurrentStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeTotStk"/>" 		binding="storeTotStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.inWhCarryOut"/>" 		binding="inWhCarryOut" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.outWhCarryIn"/>" 		binding="outWhCarryIn" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.hqCurrentStk"/>" 		binding="hqCurrentStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeTotStk"/>" 		binding="storeTotStk" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+				</c:if>
+				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
+					<wj-flex-grid-column header="<s:message code="saleTrnsitn.inWh"/>" 				binding="inWh" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.storeCurrentStk"/>" 	binding="storeCurrentStk" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.sale"/>" 				binding="sale" 				width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleRatio"/>" 		binding="saleRatio" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.firstSaleDate"/>" 	binding="firstSaleDate" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.lastSaleDate"/>" 		binding="lastSaleDate" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.saleNumberOfDays"/>" 	binding="saleNumberOfDays" 	width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
+	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
+				</c:if>
 
 				<%-- Header의 날짜 setting을 위한 값들 --%>
 				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
