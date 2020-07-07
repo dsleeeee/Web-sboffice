@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/sale/anals/monthly/monthlyPop/"/>
 
-<wj-popup id="monthlyPayFgLayer" control="monthlyPayFgLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
+<wj-popup id="monthlyPayFgLayer" control="monthlyPayFgLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleAnalsMonthlyPayFgCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <span id="spanDtlTitle"><s:message code="saleAnalsMonthly.saleAnalsMonthly" /></span>
@@ -30,12 +30,14 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.saleDate"/>" 		binding="saleDate" 		width="0" 	align="center"	visible="false"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.posNo"/>" 			binding="posNo" 		width="150" align="center"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billNo"/>" 		binding="billNo" 		width="150" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.storeCd"/>" 		binding="storeCd" 		width="100" align="center" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.storeNm"/>" 		binding="storeNm" 		width="160" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.saleDate"/>" 		binding="saleDate" 		width="100" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.posNo"/>" 			binding="posNo" 		width="70" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billNo"/>" 		binding="billNo" 		width="100" align="center"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.payCd"/>" 			binding="payCd" 		width="0" 	align="center"	visible="false"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.payCdNm"/>" 		binding="payCdNm" 		width="140" align="center"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.payAmt"/>" 		binding="payAmt" 		width="130" align="right" aggregate="Sum"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.payCdNm"/>" 		binding="payCdNm" 		width="130" align="center"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.payAmt"/>" 		binding="payAmt" 		width="110" align="right" aggregate="Sum"></wj-flex-grid-column>
 	      </div>
 	      <%-- ColumnPicker 사용시 include --%>
           <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

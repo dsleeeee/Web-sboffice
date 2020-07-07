@@ -261,7 +261,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (sunData != null && sunData != "") {
 						var sunSplit = sunData.split('||');
-						if(sunSplit[1] > 0){
+						if(sunSplit[1] > 0 || sunSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + sunSplit[0] + ')\"> ' + sunSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + sunSplit[1].format() + '</td>';
@@ -272,7 +272,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (monData != null && monData != "") {
 						var monSplit = monData.split('||');
-						if(monSplit[1] > 0){
+						if(monSplit[1] > 0 || monSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + monSplit[0] + ')\"> ' + monSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + monSplit[1].format() + '</td>';
@@ -283,7 +283,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (tueData != null && tueData != "") {
 						var tueSplit = tueData.split('||');
-						if(tueSplit[1] > 0){
+						if(tueSplit[1] > 0 || tueSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + tueSplit[0] + ')\"> ' + tueSplit[1].format() + ' </a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + tueSplit[1].format() + '</td>';
@@ -294,7 +294,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (wedData != null && wedData != "") {
 						var wedSplit = wedData.split('||');
-						if(wedSplit[1] > 0){
+						if(wedSplit[1] > 0 || wedSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + wedSplit[0] + ')\"> ' + wedSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + wedSplit[1].format() + '</td>';
@@ -305,7 +305,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (thuData != null && thuData != "") {
 						var thuSplit = thuData.split('||');
-						if(thuSplit[1] > 0){
+						if(thuSplit[1] > 0 || thuSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + thuSplit[0] + ')\"> ' + thuSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + thuSplit[1].format() + '</td>';
@@ -316,7 +316,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (friData != null && friData != "") {
 						var friSplit = friData.split('||');
-						if(friSplit[1] > 0){
+						if(friSplit[1] > 0 || friSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + friSplit[0] + ')\"> ' + friSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + friSplit[1].format() + '</td>';
@@ -327,7 +327,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 
 					if (satData != null && satData != "") {
 						var satSplit = satData.split('||');
-						if(satSplit[1] > 0){
+						if(satSplit[1] > 0 || satSplit[1] < 0){
 							htmlTxt += '	<td class="cal-txt"><a class="wijLink" id=\"payFgId\" onClick=\"saleAnalsMonthlyPop(' + satSplit[0] + ')\"> ' + satSplit[1].format() + '</a></td>';
 						}else{
 							htmlTxt += '	<td class="cal-txt">' + satSplit[1].format() + '</td>';

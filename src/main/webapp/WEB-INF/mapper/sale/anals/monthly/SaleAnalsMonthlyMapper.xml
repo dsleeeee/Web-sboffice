@@ -15,7 +15,7 @@
         <![CDATA[
         SELECT	SUN, MON, TUE, WED, THU, FRI, SAT
 		FROM	(
-					SELECT	A.DT ||'||'|| NVL(B.TOT_SALE_AMT,0)||'||'||NVL(C.HOLIDAYYN,'N') AS DT, A.DW, A.WEEK
+					SELECT	A.DT ||'||'|| NVL(B.REAL_SALE_AMT,0)||'||'||NVL(C.HOLIDAYYN,'N') AS DT, A.DW, A.WEEK
 					FROM	(
 								SELECT	TRUNC(DT + LEVEL-1, 'D') AS WEEK
 										, TO_CHAR(DT + LEVEL-1, 'D') AS DW
@@ -29,8 +29,8 @@
 							) A
 							LEFT OUTER JOIN (
 								SELECT	SALE_DATE AS DT
-										, SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
-								FROM	TB_SL_DAILY_PROD
+										, SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+								FROM	TB_SL_DAILY_TOTAL
 								WHERE	1=1
 								AND HQ_OFFICE_CD = #{hqOfficeCd}
 		]]>
@@ -77,7 +77,9 @@
         COMMENTS : 월력판매분석 - 결제수단 상세 팝업 리스트를 조회한다.
     -->
     <select id="getSaleAnalsMonthlyPopupList" parameterType="saleAnalsMonthlyVO" resultType="DefaultMap">
-		SELECT  TSSDP.SALE_DATE
+		SELECT  TSSDP.STORE_CD
+		,		TMS.STORE_NM
+		,		TO_CHAR(TO_DATE(TSSDP.SALE_DATE),'YYYY-MM-DD')	AS SALE_DATE
 		,       TSSDP.POS_NO
 		,       TSSDP.BILL_NO
 		,       TSSDP.PAY_CD
@@ -89,6 +91,7 @@
 		,       SUM(TSSDP.PAY_AMT)  AS PAY_AMT
 		FROM    TB_SL_SALE_HDR TSSH
 		,       TB_SL_SALE_DTL_PAY TSSDP
+		,		TB_MS_STORE	TMS
 		WHERE   TSSH.HQ_OFFICE_CD = TSSDP.HQ_OFFICE_CD
 		AND     TSSH.HQ_BRAND_CD = TSSDP.HQ_BRAND_CD
 		AND     TSSH.STORE_CD = TSSDP.STORE_CD
@@ -96,6 +99,9 @@
 		AND     TSSH.POS_NO = TSSDP.POS_NO
 		AND     TSSH.BILL_NO = TSSDP.BILL_NO
 	    AND     TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+	    AND		TSSH.HQ_OFFICE_CD	=	TMS.HQ_OFFICE_CD
+	    AND		TSSH.STORE_CD		=	TMS.STORE_CD
+	    
 		<if test='storeCd != null and storeCd != ""'>
 		    AND     TSSDP.STORE_CD  = #{storeCd}
 		</if>
@@ -103,10 +109,12 @@
             AND     TSSDP.SALE_DATE = #{saleDate}
         </if>
 		GROUP
-		BY      TSSDP.SALE_DATE
+		BY      TSSDP.STORE_CD
+		,		TMS.STORE_NM
+		,		TO_CHAR(TO_DATE(TSSDP.SALE_DATE),'YYYY-MM-DD')
 		,       TSSDP.POS_NO
 		,       TSSDP.BILL_NO
 		,       TSSDP.PAY_CD
-		ORDER BY TSSDP.POS_NO, TSSDP.BILL_NO,   TSSDP.PAY_CD
+		ORDER BY TO_CHAR(TO_DATE(TSSDP.SALE_DATE),'YYYY-MM-DD') DESC, TSSDP.POS_NO, TSSDP.BILL_NO,   TSSDP.PAY_CD
     </select>
 </mapper>
