@@ -15,18 +15,25 @@
        <![CDATA[
        SELECT M.STORE_CD
              , M.STORE_NM
-		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
-		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
-		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
-		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
-		     , SUM(M.CNT) AS CNT
-		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+             , M.CNT_Y
+             , M.REAL_SALE_AMT_Y
+             , M.CNT_N
+             , M.REAL_SALE_AMT_N
+             , M.CNT
+             , M.REAL_SALE_AMT
        ]]>
        <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM (
-             SELECT TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN, SUM(TSSH.REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
-               FROM TB_SL_SALE_HDR TSSH, TB_MS_STORE TMS
+             SELECT TSSH.STORE_CD
+             , 		TMS.STORE_NM
+             ,		SUM(TSSH.SALE_CNT) AS CNT_Y
+             ,		SUM(TSSH.REAL_SALE_AMT - TSSH.RTN_REAL_SALE_AMT) AS REAL_SALE_AMT_Y
+             ,		SUM(TSSH.RTN_SALE_CNT)	AS CNT_N
+             ,		SUM(TSSH.RTN_REAL_SALE_AMT)	AS REAL_SALE_AMT_N
+             ,		SUM(TSSH.REAL_SALE_CNT)	AS CNT
+             ,		SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
+               FROM TB_SL_DAILY_TOTAL TSSH, TB_MS_STORE TMS
               WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
@@ -43,9 +50,8 @@
            AND TSSH.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-	         GROUP BY TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN
+	         GROUP BY TSSH.STORE_CD, TMS.STORE_NM
 	            ) M
-        GROUP BY M.STORE_CD, M.STORE_NM
         ORDER BY M.STORE_CD
         ]]>
        <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -63,18 +69,25 @@
        <![CDATA[
        SELECT M.STORE_CD
 		     , TO_CHAR(TO_DATE(M.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE
-		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
-		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
-		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
-		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
-		     , SUM(M.CNT) AS CNT
-		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+		     , M.CNT_Y
+             , M.REAL_SALE_AMT_Y
+             , M.CNT_N
+             , M.REAL_SALE_AMT_N
+             , M.CNT
+             , M.REAL_SALE_AMT             
        ]]>
        <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
         FROM (
-	        SELECT STORE_CD, SALE_YN, SALE_DATE, SUM(REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
-	          FROM TB_SL_SALE_HDR TSSH 
+	        SELECT TSSH.STORE_CD
+             , 		TSSH.SALE_DATE
+             ,		SUM(TSSH.SALE_CNT) AS CNT_Y
+             ,		SUM(TSSH.REAL_SALE_AMT - TSSH.RTN_REAL_SALE_AMT) AS REAL_SALE_AMT_Y
+             ,		SUM(TSSH.RTN_SALE_CNT)	AS CNT_N
+             ,		SUM(TSSH.RTN_REAL_SALE_AMT)	AS REAL_SALE_AMT_N
+             ,		SUM(TSSH.REAL_SALE_CNT)	AS CNT
+             ,		SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
+	          FROM TB_SL_DAILY_TOTAL TSSH 
 	         WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='startDate != null and startDate != ""'>
@@ -87,9 +100,8 @@
            AND TSSH.STORE_CD = #{storeCd}
         </if>
         <![CDATA[
-             GROUP BY STORE_CD, SALE_YN, SALE_DATE
+             GROUP BY TSSH.STORE_CD, TSSH.SALE_DATE
 		       ) M
-		 GROUP BY M.STORE_CD, M.SALE_DATE
 		 ORDER BY M.STORE_CD, M.SALE_DATE DESC
         ]]>
        <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -266,17 +278,24 @@
        <![CDATA[
        SELECT M.STORE_CD
              , M.STORE_NM
-		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
-		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
-		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
-		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
-		     , SUM(M.CNT) AS CNT
-		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+		     , M.CNT_Y
+             , M.REAL_SALE_AMT_Y
+             , M.CNT_N
+             , M.REAL_SALE_AMT_N
+             , M.CNT
+             , M.REAL_SALE_AMT
        ]]>
         <![CDATA[
         FROM (
-             SELECT TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN, SUM(TSSH.REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
-               FROM TB_SL_SALE_HDR TSSH, TB_MS_STORE TMS
+             SELECT TSSH.STORE_CD
+             , 		TMS.STORE_NM
+             ,		SUM(TSSH.SALE_CNT) AS CNT_Y
+             ,		SUM(TSSH.REAL_SALE_AMT - TSSH.RTN_REAL_SALE_AMT) AS REAL_SALE_AMT_Y
+             ,		SUM(TSSH.RTN_SALE_CNT)	AS CNT_N
+             ,		SUM(TSSH.RTN_REAL_SALE_AMT)	AS REAL_SALE_AMT_N
+             ,		SUM(TSSH.REAL_SALE_CNT)	AS CNT
+             ,		SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
+               FROM TB_SL_DAILY_TOTAL TSSH, TB_MS_STORE TMS
               WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND TSSH.STORE_CD = TMS.STORE_CD
         ]]>
@@ -293,9 +312,8 @@
            AND TSSH.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-	         GROUP BY TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_YN
+	         GROUP BY TSSH.STORE_CD, TMS.STORE_NM
 	            ) M
-        GROUP BY M.STORE_CD, M.STORE_NM
         ORDER BY M.STORE_CD
         ]]>
     </select>
@@ -304,17 +322,24 @@
        <![CDATA[
        SELECT M.STORE_CD
 		     , TO_CHAR(TO_DATE(M.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE
-		     , SUM(DECODE(M.SALE_YN,'Y', M.CNT, 0)) AS CNT_Y
-		     , SUM(DECODE(M.SALE_YN,'Y', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_Y
-		     , SUM(DECODE(M.SALE_YN,'N', M.CNT, 0)) AS CNT_N
-		     , SUM(DECODE(M.SALE_YN,'N', M.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_N
-		     , SUM(M.CNT) AS CNT
-		     , SUM(M.REAL_SALE_AMT) AS REAL_SALE_AMT
+		     , M.CNT_Y
+             , M.REAL_SALE_AMT_Y
+             , M.CNT_N
+             , M.REAL_SALE_AMT_N
+             , M.CNT
+             , M.REAL_SALE_AMT
        ]]>
         <![CDATA[
         FROM (
-	        SELECT STORE_CD, SALE_YN, SALE_DATE, SUM(REAL_SALE_AMT) REAL_SALE_AMT, COUNT(*) CNT
-	          FROM TB_SL_SALE_HDR TSSH 
+	        SELECT TSSH.STORE_CD
+             , 		TSSH.SALE_DATE
+             ,		SUM(TSSH.SALE_CNT) AS CNT_Y
+             ,		SUM(TSSH.REAL_SALE_AMT - TSSH.RTN_REAL_SALE_AMT) AS REAL_SALE_AMT_Y
+             ,		SUM(TSSH.RTN_SALE_CNT)	AS CNT_N
+             ,		SUM(TSSH.RTN_REAL_SALE_AMT)	AS REAL_SALE_AMT_N
+             ,		SUM(TSSH.REAL_SALE_CNT)	AS CNT
+             ,		SUM(TSSH.REAL_SALE_AMT) AS REAL_SALE_AMT
+	          FROM TB_SL_DAILY_TOTAL TSSH
 	         WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
         <if test='startDate != null and startDate != ""'>
@@ -327,9 +352,8 @@
            AND TSSH.STORE_CD = #{storeCd}
         </if>
         <![CDATA[
-             GROUP BY STORE_CD, SALE_YN, SALE_DATE
+             GROUP BY STORE_CD, SALE_DATE
 		       ) M
-		 GROUP BY M.STORE_CD, M.SALE_DATE
 		 ORDER BY M.STORE_CD, M.SALE_DATE DESC
         ]]>
     </select>
