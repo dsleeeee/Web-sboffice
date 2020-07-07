@@ -67,11 +67,12 @@
 	                SELECT M.PROD_CD
 	                     , M.REAL_SALE_AMT
 	                     , M.TOT_SALE_QTY
-	                     , M.RAT
-	                     , M.ACC_RAT
+	                     , ROUND(M.RAT,2) AS RAT
+	                     , ROUND(M.ACC_RAT,2) AS ACC_RAT
 	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
 	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<= #{gradeB} ]]> THEN 'B'
-	                            ELSE 'C'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeB} ]]> AND M.ACC_RAT <![CDATA[<= #{gradeC} ]]> THEN 'C'
+	                            ELSE 'Z'
 	                        END AS GRADE
 	                  FROM (
 	                        SELECT M.PROD_CD
@@ -91,8 +92,8 @@
 	                                SELECT TSDP.PROD_CD
 	                                     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
 	                                     , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
-	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER(), 2) *100 AS RAT_REAL_SALE_AMT
-	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_TOT_SALE_QTY
+	                                     , RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() * 100 AS RAT_REAL_SALE_AMT
+	                                     , RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() * 100 AS RAT_TOT_SALE_QTY
 	                                  FROM TB_SL_DAILY_PROD TSDP
 	                                 WHERE 1=1
 	                                 AND	HQ_OFFICE_CD    =   #{hqOfficeCd}
@@ -151,11 +152,12 @@
 	                     , M.PROD_CD
 	                     , M.REAL_SALE_AMT
 	                     , M.TOT_SALE_QTY
-	                     , M.RAT
-	                     , M.ACC_RAT
+	                     , ROUND(M.RAT,2) AS RAT
+	                     , ROUND(M.ACC_RAT,2) AS ACC_RAT	                     
 	                      , CASE WHEN M.ACC_RAT <![CDATA[<= #{gradeA} ]]> THEN 'A'
 	                            WHEN M.ACC_RAT <![CDATA[> #{gradeA} ]]> AND M.ACC_RAT <![CDATA[<=  #{gradeB} ]]> THEN 'B'
-	                            ELSE 'C'
+	                            WHEN M.ACC_RAT <![CDATA[> #{gradeB} ]]> AND M.ACC_RAT <![CDATA[<= #{gradeC} ]]> THEN 'C'
+	                            ELSE 'Z'
 	                        END AS GRADE
 	                  FROM (
 	                        SELECT M.STORE_CD
@@ -179,8 +181,8 @@
 	                                     , TSDP.PROD_CD
 	                                     , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
 	                                     , SUM(TSDP.TOT_SALE_QTY) AS TOT_SALE_QTY
-	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER(), 2) *100 AS RAT_REAL_SALE_AMT
-	                                     , ROUND(RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER(), 2) *100 AS RAT_TOT_SALE_QTY
+	                                     , RATIO_TO_REPORT(SUM(TSDP.REAL_SALE_AMT)) OVER() *100 AS RAT_REAL_SALE_AMT
+	                                     , RATIO_TO_REPORT(SUM(TSDP.TOT_SALE_QTY)) OVER() *100 AS RAT_TOT_SALE_QTY
 	                                  FROM TB_MS_STORE TMS
 	                                     , TB_SL_DAILY_PROD TSDP
 	                                 WHERE TMS.STORE_CD = TSDP.STORE_CD

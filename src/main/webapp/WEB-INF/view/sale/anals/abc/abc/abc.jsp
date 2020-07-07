@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%>
+  <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -63,6 +63,7 @@
                     <span class="txtIn" style="width:32%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
                     <span class="txtIn" style="width:32%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
                     <span class="txtIn" style="width:32%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
+                    <span class="txtIn" style="width:32%;">그외 Z등급</span>
                 </td>
 	            <%-- 조회옵션 --%>
 				<th><s:message code="periodIostock.srchOption" /></th>
