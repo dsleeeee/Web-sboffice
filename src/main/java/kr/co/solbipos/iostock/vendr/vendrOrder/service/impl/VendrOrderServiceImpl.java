@@ -184,7 +184,14 @@ public class VendrOrderServiceImpl implements VendrOrderService {
 
             // regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅
             vendrOrderVO = setSessionValue(vendrOrderVO, sessionInfoVO, currentDt);
-
+            
+            String vendrChkProcFg = "N";
+            vendrChkProcFg = vendrOrderMapper.getChkProcFg(vendrOrderVO);
+            if(vendrChkProcFg.equals("Y")) {
+                String errMsg = messageService.get("vendrOrder.dtl.procFgChkMsg");
+                throw new JsonException(Status.SERVER_ERROR, errMsg);
+            }
+            
             String insFg = "";
             int orderTotQty  = vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty();
             
