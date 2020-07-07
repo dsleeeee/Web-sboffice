@@ -61,14 +61,14 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.fnkeyNo = scope.getSelectedFunc().fnkeyNo;
     params.hqOfficeCd = '';
     params.hqOfficeNm = '';
-    params.storeCd = '';
-    params.storeNm = '';
+    params.storeCd = $("#srchStoreCd").val();
+    params.storeNm = $("#srchStoreNm").val();
     params.regYn = 'Y';
     params.orgnFg = orgnFg;
     params.pAgencyCd = pAgencyCd;
     params.agencyCd = orgnCd;
 
-    $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
+    $scope._inquirySub("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("noRegStoreCtrl");
       allStoreScope._pageView('noRegStoreCtrl', 1);
@@ -152,7 +152,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // console.log('params' , params);
 
-    $scope._inquiryMain("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
+    $scope._inquirySub("/pos/confg/func/func/getFuncStoreList.sb", params, function() {
     }, false);
   };
 
