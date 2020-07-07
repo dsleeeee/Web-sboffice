@@ -13,6 +13,7 @@
     <select id="getTablePopList" parameterType="saleComPopupVO" resultType="DefaultMap">
         /* USE : SaleComPopupMapper.getTablePopList */
 		SELECT TSSH.STORE_CD
+			, TMS.STORE_NM
             , TSSH.SALE_DATE 
 		    , TSSH.POS_NO
 			, TSSH.BILL_NO
@@ -33,7 +34,7 @@
 		    , SUM(A.GUEST_CNT_2) AS GUEST_CNT_2
 		    , SUM(A.GUEST_CNT_3) AS GUEST_CNT_3
 		    , SUM(A.GUEST_CNT_4) AS GUEST_CNT_4
-		    , (SUM(TSSH.TOT_SALE_AMT) / SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4)) GUEST_AMT
+		    , (SUM(TSSH.REAL_SALE_AMT) / SUM(A.GUEST_CNT_1 + A.GUEST_CNT_2 + A.GUEST_CNT_3 + A.GUEST_CNT_4)) GUEST_AMT
 		FROM 
 <!-- 		TB_SL_SALE_HDR TSSH -->
 			  (
@@ -110,6 +111,7 @@
               AND 	TSSHP.POS_NO		= TSSHG.POS_NO
               AND 	TSSHP.SALE_DATE   	= TSSHG.SALE_DATE
             ) A
+          	, TB_MS_STORE TMS
 		WHERE TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='storeCd != null and storeCd != ""'>
 			AND TSSH.STORE_CD = #{storeCd}
@@ -118,7 +120,10 @@
       	AND TSSH.BILL_NO 	= A.BILL_NO(+)
 		AND TSSH.POS_NO 	= A.POS_NO(+)
 		AND TSSH.SALE_DATE  = A.SALE_DATE(+)
-		AND TSSH.REAL_SALE_AMT  = A.PAY_AMT(+)		
+<!-- 		AND TSSH.REAL_SALE_AMT  = A.PAY_AMT(+) -->
+		AND	TSSH.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
+		AND TSSH.STORE_CD	=	TMS.STORE_CD
+				
 		<if test='arrStoreTbl != null and arrStoreTbl.length >= 0'>
             AND TSSH.TBL_CD IN
             <foreach collection="arrStoreTbl" item="item" open="(" close=")" separator=",">
@@ -151,8 +156,8 @@
 <!-- 			AND TO_CHAR(TO_DATE(TSSH.SALE_DATE),'YYYYMM') =   #{saleYm} -->
 <!-- 			AND TSSH.SALE_DATE LIKE  #{saleYm}||'%' -->
 <!-- 		</if> -->
-		GROUP BY TSSH.POS_NO,TSSH.BILL_NO,TSSH.BILL_DT, TSSH.SALE_FG, A.PAY_CD, TSSH.STORE_CD, TSSH.SALE_DATE
-		ORDER BY TSSH.POS_NO, TSSH.BILL_NO ASC
+		GROUP BY TSSH.POS_NO,TSSH.BILL_NO,TSSH.BILL_DT, TSSH.SALE_FG, A.PAY_CD, TSSH.STORE_CD, TMS.STORE_NM, TSSH.SALE_DATE
+		ORDER BY TSSH.STORE_CD, TSSH.SALE_DATE DESC, TSSH.POS_NO, TSSH.BILL_NO ASC
     </select>
 
 	<!-- 매출공통팝업 - 상품매출내역 팝업 -->
