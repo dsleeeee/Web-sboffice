@@ -161,6 +161,8 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
         }
       }
     }
+    
+    $scope.displayChg();
   };
 
 
@@ -351,7 +353,30 @@ app.controller('unusualMainCtrl', ['$scope', '$http', '$timeout', function ($sco
       }
     });
   };
+  
+  $scope.displayChg = function () {
+	  var check = $('input[name=displayFg]:checked').val();
+	  var grid = wijmo.Control.getControl("#unusualDtlGrid");
+      var columns = grid.columns;
+      var length  = grid.columns.length;
 
+      if(check == 'all'){
+    	  for(var i=0; i<length; i++){
+    		  if(columns[i].binding != 'poUnitFg'){
+    			  columns[i].visible = true;
+    		  }
+          }
+      }else if(check == 'cntSum'){
+    	  for(var i=0; i<length; i++){
+    		  var colLength = columns[i].binding.length;
+    		  if(columns[i].binding != 'penaltyAmt'){
+	    		  if(columns[i].binding.substring(colLength,colLength-3) == 'Amt'||columns[i].binding.substring(colLength,colLength-3) == 'Vat'){
+	    			  columns[i].visible = false;
+	    		  }
+    		  }
+          }
+      }
+  }
 }]);
 
 

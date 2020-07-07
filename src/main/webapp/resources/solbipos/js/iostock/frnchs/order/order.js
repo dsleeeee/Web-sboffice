@@ -256,6 +256,8 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
       }
     }
+    
+    $scope.displayChg();
   };
 
 
@@ -343,6 +345,30 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     $scope._broadcast('orderExcelCtrl',params);
   };
+  
+  $scope.displayChg = function () {
+	  var check = $('input[name=displayFg]:checked').val();
+	  var grid = wijmo.Control.getControl("#orderDtlGrid");
+      var columns = grid.columns;
+      var length  = grid.columns.length;
+
+      if(check == 'all'){
+    	  for(var i=0; i<length; i++){
+    		  if(columns[i].binding != 'poUnitFg' && columns[i].binding != 'reqDate'){
+    			  columns[i].visible = true;
+    		  }
+          }
+      }else if(check == 'cntSum'){
+    	  for(var i=0; i<length; i++){
+    		  var colLength = columns[i].binding.length;
+    		  if(columns[i].binding != 'penaltyAmt'){
+    			  if(columns[i].binding.substring(colLength,colLength-3) == 'Amt'||columns[i].binding.substring(colLength,colLength-3) == 'Vat'){
+        			  columns[i].visible = false;
+        		  }
+    		  }
+          }
+      }
+  }
 }]);
 
 
@@ -525,7 +551,7 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/order/ioStockDtl/list.sb", params);
-
+    
     //$scope.excelFg = true;
   };
 

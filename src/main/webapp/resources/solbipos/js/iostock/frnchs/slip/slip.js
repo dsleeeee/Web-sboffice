@@ -253,6 +253,8 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }
       }
     }
+    
+    $scope.displayChg();
   };
 
 
@@ -345,6 +347,26 @@ app.controller('slipMainCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 	$scope._broadcast('slipExcelCtrl',params);
   };
+  
+  $scope.displayChg = function () {
+  	  var check = $('input[name=displayFg]:checked').val();
+  	  var grid = wijmo.Control.getControl("#slipDtlGrid");
+        var columns = grid.columns;
+        var length  = grid.columns.length;
+
+        if(check == 'all'){
+      	  for(var i=0; i<length; i++){
+      		  columns[i].visible = true;
+            }
+        }else if(check == 'cntSum'){
+      	  for(var i=0; i<length; i++){
+      		  var binding = columns[i].binding;
+      		  if(binding.substring(binding.length,binding.length-3) === 'Amt' || binding.substring(binding.length,binding.length-3) === 'Vat'){
+      			  columns[i].visible = false;
+      		  }
+            }
+        }
+    }
 }]);
 
 

@@ -221,8 +221,8 @@
        </button>
 
        <span class="fr bk sb-radio mt10">
-           <label><input type="radio" name="displayFg" id="displayAll" value="all" checked="checked" ng-click="displayChg()"><s:message code="cmm.all" /></label>
-           <label><input type="radio" name="displayFg" id="displayCntSum" value="cntSum" ng-click="displayChg()"><s:message code="orderStockInfo.dtl.inTotQty+inTot" /></label>
+           <label><input type="radio" name="displayFg" id="displayAll" value="all"  ng-click="displayChg()"><s:message code="cmm.all" /></label>
+           <label><input type="radio" name="displayFg" id="displayCntSum" value="cntSum" checked="checked" ng-click="displayChg()"><s:message code="orderStockInfo.dtl.inTotQty+inTot" /></label>
        </span>
      </div>
      <div id="wjWrapType2" class="w100 mt10">
