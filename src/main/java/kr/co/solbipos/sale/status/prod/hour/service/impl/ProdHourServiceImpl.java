@@ -43,7 +43,7 @@ public class ProdHourServiceImpl implements ProdHourService {
         
         // 시간대 '전체' 선택 시
         if(prodHourVO.getSaleTime().equals("")){
-        	for(int i = 1; i < 25; i++) {
+        	for(int i = 0; i < 24; i++) {
         		sQuery1 +=", SUM(M.TOT_SALE_QTY"+ i +") AS TOT_SALE_QTY" + i + "\n";
         		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ i +") AS TOT_SALE_AMT" + i + "\n";
         		sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ i +",C.SALE_CNT,0)) AS TOT_SALE_QTY" + i + "\n";
@@ -51,8 +51,10 @@ public class ProdHourServiceImpl implements ProdHourService {
         	}
         }else {
         	// 매출 시간대 설정
-        	if(prodHourVO.getSaleTime().equals("1")){
-        		isSaleHour = "1";
+        	if(prodHourVO.getSaleTime().equals("0")){
+        		isSaleHour = "0";
+            }else if(prodHourVO.getSaleTime().equals("1")){
+            	isSaleHour = "1";
             }else if(prodHourVO.getSaleTime().equals("2")){
             	isSaleHour = "2";
             }else if(prodHourVO.getSaleTime().equals("3")){
@@ -95,10 +97,8 @@ public class ProdHourServiceImpl implements ProdHourService {
             	isSaleHour = "21";
             }else if(prodHourVO.getSaleTime().equals("22")){
             	isSaleHour = "22";
-            }else if(prodHourVO.getSaleTime().equals("23")){
-            	isSaleHour = "23";
-		    }else if(prodHourVO.getSaleTime().equals("24")){
-		    	isSaleHour = "24";
+		    }else if(prodHourVO.getSaleTime().equals("23")){
+		    	isSaleHour = "23";
 		    }
         	sQuery1 +=", SUM(M.TOT_SALE_QTY"+ isSaleHour +") AS TOT_SALE_QTY"+ isSaleHour +"" + "\n";
     		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ isSaleHour +") AS TOT_SALE_AMT"+ isSaleHour +"" + "\n";
@@ -130,7 +130,7 @@ public class ProdHourServiceImpl implements ProdHourService {
         
         // 시간대 '전체' 선택 시
         if(prodHourVO.getSaleTime().equals("")){
-        	for(int i = 1; i < 25; i++) {
+        	for(int i = 0; i < 24; i++) {
         		sQuery1 +=", SUM(M.TOT_SALE_QTY"+ i +") AS TOT_SALE_QTY" + i + "\n";
         		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ i +") AS TOT_SALE_AMT" + i + "\n";
         		sQuery2 +=", SUM(DECODE(C.SALE_HOUR,"+ i +",C.SALE_CNT,0)) AS TOT_SALE_QTY" + i + "\n";
@@ -138,8 +138,10 @@ public class ProdHourServiceImpl implements ProdHourService {
         	}
         }else {
         	// 매출 시간대 설정
-        	if(prodHourVO.getSaleTime().equals("1")){
-        		isSaleHour = "1";
+        	if(prodHourVO.getSaleTime().equals("0")){
+        		isSaleHour = "0";
+            }else if(prodHourVO.getSaleTime().equals("1")){
+            	isSaleHour = "1";
             }else if(prodHourVO.getSaleTime().equals("2")){
             	isSaleHour = "2";
             }else if(prodHourVO.getSaleTime().equals("3")){
@@ -182,10 +184,8 @@ public class ProdHourServiceImpl implements ProdHourService {
             	isSaleHour = "21";
             }else if(prodHourVO.getSaleTime().equals("22")){
             	isSaleHour = "22";
-            }else if(prodHourVO.getSaleTime().equals("23")){
-            	isSaleHour = "23";
-		    }else if(prodHourVO.getSaleTime().equals("24")){
-		    	isSaleHour = "24";
+		    }else if(prodHourVO.getSaleTime().equals("23")){
+		    	isSaleHour = "23";
 		    }
         	sQuery1 +=", SUM(M.TOT_SALE_QTY"+ isSaleHour +") AS TOT_SALE_QTY"+ isSaleHour +"" + "\n";
     		sQuery1 +=", SUM(M.TOT_SALE_AMT"+ isSaleHour +") AS TOT_SALE_AMT"+ isSaleHour +"" + "\n";

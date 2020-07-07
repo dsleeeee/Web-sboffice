@@ -6,6 +6,7 @@ var app = agrid.getApp();
 // 시간대 DropBoxDataMap
 var vSaleTime = [
     {"name":"전체","value":""},
+    {"name":"00시","value":"0"},
     {"name":"01시","value":"1"},
     {"name":"02시","value":"2"},
     {"name":"03시","value":"3"},
@@ -28,8 +29,7 @@ var vSaleTime = [
     {"name":"20시","value":"20"},
     {"name":"21시","value":"21"},
     {"name":"22시","value":"22"},
-    {"name":"23시","value":"23"},
-    {"name":"24시","value":"24"}
+    {"name":"23시","value":"23"}
 ];
 
 /** 과세면별 controller */
@@ -70,8 +70,7 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.prodNm    = messages["prodhour.prodNm"];
 
         // 시간대별 컬럼 생성
-        for (var i = 1; i < 25; i++) {
-
+        for (var i = 0; i < 24; i++) {        	
             if(i<10){
                 dataItem['totSaleQty' + i] = i + "시";
                 dataItem['totSaleAmt' + i] = i + "시";
@@ -214,94 +213,95 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var columns = grid.columns;
         var start = 0;
         var end = 0;
-
-        if($scope.saleTime === "1"){
-            start = 6;
-            end = 7;
+        
+        if($scope.saleTime === "0"){
+            start = 5;
+            end = 6;
+        }else if($scope.saleTime  === "1"){
+            start = 7;
+            end = 8;
         }else if($scope.saleTime  === "2"){
-            start = 8;
-            end = 9;
+            start = 9;
+            end = 10;
         }else if($scope.saleTime  === "3"){
-            start = 10;
-            end = 11;
+            start = 11;
+            end = 12;
         }else if($scope.saleTime  === "4"){
-            start = 12;
-            end = 13;
+            start = 13;
+            end = 14;
         }else if($scope.saleTime  === "5"){
-            start = 14;
-            end = 15;
+            start = 15;
+            end = 16;
         }else if($scope.saleTime  === "6"){
-            start = 16;
-            end = 17;
+            start = 17;
+            end = 18;
         }else if($scope.saleTime  === "7"){
-            start = 18;
-            end = 19;
+            start = 19;
+            end = 20;
         }else if($scope.saleTime  === "8"){
-            start = 20;
-            end = 21;
+            start = 21;
+            end = 22;
         }else if($scope.saleTime  === "9"){
-            start = 22;
-            end = 23;
+            start = 23;
+            end = 24;
         }else if($scope.saleTime  === "10"){
-            start = 24;
-            end = 25;
+            start = 25;
+            end = 26;
         }else if($scope.saleTime  === "11"){
-            start = 26;
-            end = 27;
+            start = 27;
+            end = 28;
         }else if($scope.saleTime  === "12"){
-            start = 28;
-            end = 29;
+            start = 29;
+            end = 30;
         }else if($scope.saleTime  === "13"){
-            start = 30;
-            end = 31;
+            start = 31;
+            end = 32;
         }else if($scope.saleTime  === "14"){
-            start = 32;
-            end = 33;
+            start = 33;
+            end = 34;
         }else if($scope.saleTime  === "15"){
-            start = 34;
-            end = 35;
+            start = 35;
+            end = 36;
         }else if($scope.saleTime  === "16"){
-            start = 36;
-            end = 37;
+            start = 37;
+            end = 38;
         }else if($scope.saleTime  === "17"){
-            start = 38;
-            end = 39;
+            start = 39;
+            end = 40;
         }else if($scope.saleTime  === "18"){
-            start = 40;
-            end = 41;
+            start = 41;
+            end = 42;
         }else if($scope.saleTime  === "19"){
-            start = 42;
-            end = 43;
+            start = 43;
+            end = 44;
         }else if($scope.saleTime  === "20"){
-            start = 44;
-            end = 45;
+            start = 45;
+            end = 46;
         }else if($scope.saleTime  === "21"){
-            start = 46;
-            end = 47;
+            start = 47;
+            end = 48;
         }else if($scope.saleTime  === "22"){
-            start = 48;
-            end = 49;
+            start = 49;
+            end = 50;
         }else if($scope.saleTime  === "23"){
-            start = 50;
-            end = 51;
-        }else if($scope.saleTime  === "24"){
-            start = 52;
-            end = 53;
+            start = 51;
+            end = 52;
         }else if($scope.saleTime === ""){ //전체
-            start = 6;
-            end = 53;
+            start = 5;
+            end = 52;
         }
-
-        start++;
-        end++;
-
-        for(var i = 6; i <= 77; i++){
+        
+        for(var i = 5; i <= 76; i++){        	
             if(i >= start && i <= end){
                 columns[i].visible = true;
             }else{
                 columns[i].visible = false;
             }
         }
+        	
+//        start++;
+//        end++;
+
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -345,7 +345,7 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.prodNm    = messages["prodhour.prodNm"];
 
         // 시간대별 컬럼 생성
-        for (var i = 1; i < 25; i++) {
+        for (var i = 0; i < 24; i++) {
 
             if(i<10){
                 dataItem['totSaleQty' + i] = i + "시";
@@ -408,7 +408,7 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     });
 
     // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
-    $scope.isChkProdClassDisplay = function(){
+    $scope.isChkProdClassDisplay = function(){    	
   	  var columns = $scope.excelFlex.columns;
 
   	  for(var i=0; i<columns.length; i++){
@@ -462,93 +462,93 @@ app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         var start = 0;
         var end = 0;
 
-        if($scope.saleTime === "1"){
-            start = 6;
-            end = 7;
+        if($scope.saleTime === "0"){
+            start = 5;
+            end = 6;
+        }else if($scope.saleTime  === "1"){
+            start = 7;
+            end = 8;
         }else if($scope.saleTime  === "2"){
-            start = 8;
-            end = 9;
+            start = 9;
+            end = 10;
         }else if($scope.saleTime  === "3"){
-            start = 10;
-            end = 11;
+            start = 11;
+            end = 12;
         }else if($scope.saleTime  === "4"){
-            start = 12;
-            end = 13;
+            start = 13;
+            end = 14;
         }else if($scope.saleTime  === "5"){
-            start = 14;
-            end = 15;
+            start = 15;
+            end = 16;
         }else if($scope.saleTime  === "6"){
-            start = 16;
-            end = 17;
+            start = 17;
+            end = 18;
         }else if($scope.saleTime  === "7"){
-            start = 18;
-            end = 19;
+            start = 19;
+            end = 20;
         }else if($scope.saleTime  === "8"){
-            start = 20;
-            end = 21;
+            start = 21;
+            end = 22;
         }else if($scope.saleTime  === "9"){
-            start = 22;
-            end = 23;
+            start = 23;
+            end = 24;
         }else if($scope.saleTime  === "10"){
-            start = 24;
-            end = 25;
+            start = 25;
+            end = 26;
         }else if($scope.saleTime  === "11"){
-            start = 26;
-            end = 27;
+            start = 27;
+            end = 28;
         }else if($scope.saleTime  === "12"){
-            start = 28;
-            end = 29;
+            start = 29;
+            end = 30;
         }else if($scope.saleTime  === "13"){
-            start = 30;
-            end = 31;
+            start = 31;
+            end = 32;
         }else if($scope.saleTime  === "14"){
-            start = 32;
-            end = 33;
+            start = 33;
+            end = 34;
         }else if($scope.saleTime  === "15"){
-            start = 34;
-            end = 35;
+            start = 35;
+            end = 36;
         }else if($scope.saleTime  === "16"){
-            start = 36;
-            end = 37;
+            start = 37;
+            end = 38;
         }else if($scope.saleTime  === "17"){
-            start = 38;
-            end = 39;
+            start = 39;
+            end = 40;
         }else if($scope.saleTime  === "18"){
-            start = 40;
-            end = 41;
+            start = 41;
+            end = 42;
         }else if($scope.saleTime  === "19"){
-            start = 42;
-            end = 43;
+            start = 43;
+            end = 44;
         }else if($scope.saleTime  === "20"){
-            start = 44;
-            end = 45;
+            start = 45;
+            end = 46;
         }else if($scope.saleTime  === "21"){
-            start = 46;
-            end = 47;
+            start = 47;
+            end = 48;
         }else if($scope.saleTime  === "22"){
-            start = 48;
-            end = 49;
+            start = 49;
+            end = 50;
         }else if($scope.saleTime  === "23"){
-            start = 50;
-            end = 51;
-        }else if($scope.saleTime  === "24"){
-            start = 52;
-            end = 53;
+            start = 51;
+            end = 52;
         }else if($scope.saleTime === ""){ //전체
-            start = 6;
-            end = 53;
+            start = 5;
+            end = 52;
         }
-
-        start++;
-        end++;
-
-        for(var i = 6; i <= 77; i++){
+        
+        for(var i = 5; i <= 76; i++){        	
             if(i >= start && i <= end){
                 columns[i].visible = true;
             }else{
                 columns[i].visible = false;
             }
         }
+        	
+//        start++;
+//        end++;
     };
 
 }]);

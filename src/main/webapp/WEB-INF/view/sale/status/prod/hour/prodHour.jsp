@@ -135,13 +135,16 @@
                 <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 			binding="prodNm"		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 <%-- 시간대 컬럼 생성--%>
-                <c:forEach var="i" begin="0" end="24" step="1">
+                <c:forEach var="i" begin="0" end="23" step="1">
                     <c:set var="time"><fmt:formatNumber value="${i}" pattern="0"/></c:set>
                     <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty${time}" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
 
                 <%-- 시간대 '전체' 선택 시 보이는 컬럼 --%>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty0" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt0" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty1" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
@@ -160,10 +163,10 @@
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty6" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt6" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty7" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+   				<wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty7" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt7" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-   				<wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty8" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty8" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt8" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty9" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
@@ -210,9 +213,6 @@
 
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty23" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt23" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty24" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt24" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -250,13 +250,16 @@
                 <wj-flex-grid-column header="<s:message code="prodhour.prodNm"/>" 			binding="prodNm"		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 <%-- 시간대 컬럼 생성--%>
-                <c:forEach var="i" begin="0" end="24" step="1">
+                <c:forEach var="i" begin="0" end="23" step="1">
                     <c:set var="time"><fmt:formatNumber value="${i}" pattern="0"/></c:set>
                     <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty${time}" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt${time}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 </c:forEach>
 
                 <%-- 시간대 '전체' 선택 시 보이는 컬럼 --%>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty0" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt0" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty1" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt1" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
@@ -275,10 +278,10 @@
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty6" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt6" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty7" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+   				<wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty7" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt7" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-   				<wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty8" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty8" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt8" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty9" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
@@ -325,9 +328,6 @@
 
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty23" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt23" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleQty"/>" binding="totSaleQty24" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodhour.totSaleAmt"/>" binding="totSaleAmt24" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -342,4 +342,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20190622" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=2019062201" charset="utf-8"></script>
