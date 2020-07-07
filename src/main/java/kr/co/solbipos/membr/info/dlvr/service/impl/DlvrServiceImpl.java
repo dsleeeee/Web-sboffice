@@ -30,4 +30,14 @@ public class DlvrServiceImpl implements DlvrService {
     return dlvrMapper.getDlvrTelList(dlvrVO);
   }
 
+  @Override
+  public int deleteDlvr(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
+    return dlvrMapper.deleteDlvr(dlvrVO);
+  }
+
+  @Override
+  public int deleteDlvrTel(DlvrVO dlvrVO, SessionInfoVO sessionInfoVO) {
+    return dlvrMapper.deleteDlvrTel(dlvrVO);
+  }
+
 }

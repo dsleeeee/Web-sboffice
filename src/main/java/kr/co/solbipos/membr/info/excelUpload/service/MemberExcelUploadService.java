@@ -2,9 +2,7 @@ package kr.co.solbipos.membr.info.excelUpload.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -23,4 +21,5 @@ import java.util.List;
  */
 public interface MemberExcelUploadService {
 
+  List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO, SessionInfoVO sessionInfoVO);
 }

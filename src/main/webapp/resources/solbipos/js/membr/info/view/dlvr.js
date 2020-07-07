@@ -16,7 +16,7 @@ var app = agrid.getApp();
 /**
  *  세금계산서 요청목록 그리드 생성
  */
-app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 회월 듣급
 
   $scope.classList = [
@@ -55,10 +55,10 @@ app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('dlvrCtrl', $scope, $http, true));
 
   // // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  // $scope.initGrid = function (s, e) {
-  //   // 그리드 DataMap 설정
-  //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
-  // };
+  $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
+  };
 
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -91,4 +91,66 @@ app.controller('dlvrCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
     }, false);
   };
+
+  // 엑셀 다운로드
+  $scope.excelDownload = function () {
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles: true,
+        includeColumns: function (column) {
+          return column.visible;
+        }
+      }, 'excelForm' + getToday() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  }
+
+  $scope.infoDelete = function (option) {
+    let param
+    let goUrl
+    if (option === 'tel') {
+      goUrl = "/membr/info/dlvr/dlvr/deleteDlvrTel" /* 통신할 URL */
+    } else {
+      goUrl = "/membr/info/dlvr/dlvr/deleteDlvr" /* 통신할 URL */
+    }
+    console.log('goUrl', goUrl);
+    $http({
+      method: 'POST', //방식
+      url: goUrl, /* 통신할 URL */
+      params: param, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback() {
+    }, function errorCallback(response) {
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.error']);
+      }
+      return false;
+    }).then(function () {
+      // 'complete' code here
+      if (typeof callback === 'function') {
+        setTimeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+
+  }
+
 }]);

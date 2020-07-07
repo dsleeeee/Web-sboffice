@@ -16,7 +16,7 @@ var app = agrid.getApp();
 /**
  *  세금계산서 요청목록 그리드 생성
  */
-app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 성공내역, 실페내역
   $scope.statuList = [
     {value: '1', name: '전체'},
@@ -31,11 +31,34 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $h
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
-  // // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  // $scope.initGrid = function (s, e) {
-  //   // 그리드 DataMap 설정
-  //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
-  // };
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
+  };
+
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
+// grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 합계
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+  };
+
+  $scope.$on("memberExcelUploadCtrl", function (event, data) {
+    $scope.searchMemberExcelList();
+    event.preventDefault();
+  });
+
+  $scope.searchMemberExcelList = function () {
+    var params = {};
+    $scope._inquiryMain("/membr/info/upload/excel/getMemberExcelList.sb", params, function () {
+    }, false);
+  };
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
@@ -64,7 +87,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $h
   /** 엑셀업로드 관련 공통 함수 */
   $scope.excelTextUpload = function (prcsFg) {
 
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('memberExcelUploadCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'memberExcel';
 
@@ -78,10 +101,79 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', function ($scope, $h
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
         excelUploadScope.parentCtrl = 'memberExcelUploadCtrl';
         // 엑셀 업로드
-        $("#excelUpFile").val('');
-        $("#excelUpFile").trigger('click');
+        $("#memberExcelUpload").val('');
+        $("#memberExcelUpload").trigger('click')
       });
     }
+  };
+
+  // 엑셀 업로드
+  $scope.excelUpload = function () {
+    $scope.excelTextFg = 'excel';
+    // 업로드 progress 관련 기본값 세팅
+    $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
+    $scope.progressCnt = 0;   // 처리된 숫자
+
+    // 선택한 파일이 있으면
+    if ($('#memberExcelUpload')[0].files[0]) {
+      var file = $('#memberExcelUpload')[0].files[0];
+      var fileName = file.name;
+      var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+
+
+      // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
+      if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+          var flex = $scope.flex;
+          wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberExcelUpload')[0].files[0], {includeColumnHeaders: true}
+              , function (workbook) {
+                $timeout(function () {
+                  $scope.excelUploadToJsonConvert();
+                }, 10);
+              }
+          );
+        }, 10);
+      } else {
+        $("#memberExcelUpload").val('');
+        $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+        return false;
+      }
+    }
+  };
+
+  // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+  $scope.excelUploadToJsonConvert = function () {
+    var jsonData = [];
+    var item = {};
+    var rowLength = $scope.flex.rows.length;
+
+    if (rowLength === 0) {
+      $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+      return false;
+    }
+
+    // 업로드 된 데이터 JSON 형태로 생성
+    for (var r = 0; r < rowLength; r++) {
+      item = {};
+      for (var c = 0; c < $scope.flex.columns.length; c++) {
+        if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
+          var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
+          var cellValue = $scope.flex.getCellData(r, c, false) + '';
+
+          item[colBinding] = cellValue;
+        }
+      }
+
+      // item.uploadFg = $scope.uploadFg;
+      jsonData.push(item);
+    }
+
+    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+    let data = new wijmo.collections.CollectionView(jsonData);
+    data.trackChanges = true;
+    $scope.data = data;
+    console.log('data', $scope.data)
   };
 
   /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */

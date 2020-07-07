@@ -12,6 +12,12 @@
          onchange="angular.element(this).scope().excelFileChanged()"
          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
+  <input type="file" class="form-control" id="memberExcelUpload"
+         ng-model="memberExcelUpload"
+         ng-controller="memberExcelUploadCtrl"
+         onchange="angular.element(this).scope().excelUpload()"
+         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
+
   <input type="file" class="form-control" id="textUpFile"
          ng-model="textUpFile"
          onchange="angular.element(this).scope().textFileChanged()"

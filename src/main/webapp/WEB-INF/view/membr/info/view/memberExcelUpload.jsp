@@ -16,7 +16,7 @@
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberExcelUploadCtrl', 1)">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -64,10 +64,7 @@
           </select>
         </td>
         <%-- 검색줄수  --%>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colspan="4"></td>
         <%-- 양식검증  --%>
         <td>
           <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click=""><s:message
@@ -103,7 +100,7 @@
         <s:message code="member.excel.combo.list"/>
       </h2>
     </div>
-    <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+    <div class="wj-gridWrap" style="height:100px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -152,27 +149,33 @@
               item-formatter="_itemFormatter"
               is-read-only="true">
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
-                             is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="searchResult"
-                             width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.membr.nm.eng"/>" binding="memberClassNm" width="210"
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" is-read-only="false"
+                             align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrKrNm" width="115"
                              is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dayMembrDetail.membrClassCd"/>" binding="memberNo" width="115"
+        <wj-flex-grid-column header="<s:message code="member.excel.nm.en"/>" binding="membrEnNm" width="115"
+                             is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd" width="115"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="prod.regStore"/>" binding="memberNm" width="140"
+        <wj-flex-grid-column header="<s:message code="member.excel.store"/>" binding="membrStore" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="memberCardNo" width="140"
+        <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="gendrFg" width="100"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.membr.card.no"/>" binding="memberCardNo" width="140"
+        <wj-flex-grid-column header="<s:message code="regist.membr.card.no"/>" binding="membrCardNo" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="application.pos.simpleMemberJoin.birthday"/>"
-                             binding="memberCardNo"
-                             width="140"
+        <wj-flex-grid-column header="<s:message code="member.excel.birthday"/>" binding="memberBithday" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.wedding"/>" binding="memberCardNo" width="140"
+        <wj-flex-grid-column header="<s:message code="member.excel.telNo"/>" binding="memberTelNo" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="regist.weddingDay"/>" binding="memberCardNo" width="140"
+        <wj-flex-grid-column header="<s:message code="member.excel.shortNo"/>" binding="memebrShortNo" width="140"
+                             is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.email"/>" binding="memberEmail" width="140"
+                             is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.postNo"/>" binding="memberPostNo" width="140"
+                             is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.addr"/>" binding="memberAddr" width="140"
+                             is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="member.excel.addrDtl"/>" binding="memberAddrDtl" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>

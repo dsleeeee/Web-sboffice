@@ -132,7 +132,7 @@
         <th><s:message code="dlvr.membr.areaUseYn"/></th>
         <td>
           <select type="text" class="sb-select w100" ng-model="dlvrUseYn" id="dlvrUseYn
-                  ng-options="item.name for item in useYnList">
+                  ng-options=" item.name for item in useYnList">
           </select>
         </td>
         <%-- 전화  --%>
@@ -182,13 +182,13 @@
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.adressList"/>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
-          <s:message code="cmm.save"/>
-        </button>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%" ng-click="infoDelete('addr')">
           <s:message code="cmm.delete"/>
         </button>
         <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+          <s:message code="cmm.save"/>
+        </button>
+        <button class="btn_skyblue sb-input" ng-click="excelDownload()" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>
@@ -203,18 +203,18 @@
               is-read-only="true">
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="searchResult"
-                             width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                             width="90" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                              is-read-only="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dlvr.membr.addr"/>" binding="memberClassNm" width="220"
                              is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.areaDetail"/>" binding="memberNo" width="230"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.areaDetail"/>" binding="memberNo" width="200"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="memberNm" width="115"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="memberNm" width="90"
                              is-read-only="true" align="right"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>" binding="memberCardNo" width="120"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.time"/>" binding="avablPoint" width="115"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.time"/>" binding="avablPoint" width="110"
                              is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
@@ -225,13 +225,13 @@
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.phoneNumberList"/>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
-          <s:message code="cmm.save"/>
-        </button>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%" ng-click="infoDelete('tel')">
           <s:message code="cmm.delete"/>
         </button>
         <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
+          <s:message code="cmm.save"/>
+        </button>
+        <button class="btn_skyblue sb-input" ng-click="excelDownload()" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>
@@ -245,17 +245,17 @@
               item-formatter="_itemFormatter"
               is-read-only="true">
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="searchResult"
-                             width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="membrNm"
+                             width="90" is-read-only="true" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                              is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.phoneNumber"/>" binding="memberClassNm" width="210"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.phoneNumber"/>" binding="telNo" width="180"
                              is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="memberNo" width="115"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="useYn" width="90"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalInputDate"/>" binding="memberNm" width="140"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalInputDate"/>" binding="regDt" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalUpdateDate"/>" binding="memberCardNo" width="140"
+        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalUpdateDate"/>" binding="modDt" width="140"
                              is-read-only="true" align="right"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
