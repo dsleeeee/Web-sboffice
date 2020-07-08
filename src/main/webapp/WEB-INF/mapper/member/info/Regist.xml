@@ -50,7 +50,7 @@
         /* RegistMapper.getMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -59,9 +59,9 @@
         tmm.REG_STORE_CD,
         tms.STORE_NM AS REG_STORE_NM,
         tmm.POST_NO,
-        tmm.ADDR,
-        tmm.ADDR_DTL,
-        tmm.TEL_NO,
+        SBPENC.D(tmm.ADDR) AS ADDR,
+        SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
         tmm.EMAIL_ADDR,
         tmm.EMAIL_RECV_YN,
         TO_CHAR(TO_DATE(tmm.BIRTHDAY), 'YYYY-MM-DD') AS BIRTHDAY,
@@ -110,10 +110,10 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test='membrNm != null and membrNm != ""'>
-            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test='telNo != null and telNo != ""'>
-            AND tmm.TEL_NO LIKE '%'||#{telNo}||'%'
+            AND SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
         </if>
         <if test='emailAddr != null and emailAddr.toString() != ""'>
             AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
@@ -167,18 +167,18 @@
         /* RegistMapper.getMemberInfo */
         SELECT tmm.MEMBR_ORGN_CD,
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_NICKNM,
         tmm.MEMBR_CLASS_CD,
         tmm.MEMBR_CARD_NO,
         tmm.REG_STORE_CD,
         tmm.POST_NO,
-        tmm.ADDR,
-        tmm.ADDR_DTL,
+        SBPENC.D(tmm.ADDR) AS ADDR,
+        SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
         tmm.LUNAR_YN,
         tmm.BIRTHDAY,
         tmm.GENDR_FG,
-        tmm.TEL_NO,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
         tmm.SHORT_NO,
         tmm.WEDDING_YN,
         tmm.WEDDINGDAY,
@@ -268,20 +268,20 @@
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
-            #{membrNm},
+            SBPENC.E(#{membrNm}),
             #{membrNicknm},
             #{membrClassCd},
             #{membrCardNo},
             #{regStoreCd},
             #{postNo},
-            #{addr},
-            #{addrDtl},
+            SBPENC.E(#{addr}),
+            SBPENC.E(#{addrDtl}),
             #{birthday},
             #{lunarYn},
             #{gendrFg},
             #{emailAddr},
             #{shortNo},
-            #{telNo},
+            SBPENC.E(#{telNo)},
             #{weddingYn},
             #{weddingday},
             #{emailRecvYn},
@@ -347,20 +347,20 @@
     <update id="updateMemberInfo" parameterType="registVO">
         /* RegistMapper.updateMemberInfo */
         UPDATE TB_MB_MEMBER tmm
-           SET tmm.MEMBR_NM = #{membrNm},
+           SET tmm.MEMBR_NM = SBPENC.E(#{membrNm}),
                tmm.MEMBR_NICKNM = #{membrNicknm},
                tmm.MEMBR_CLASS_CD = #{membrClassCd},
                tmm.MEMBR_CARD_NO = #{membrCardNo},
                tmm.REG_STORE_CD = #{regStoreCd},
                tmm.POST_NO = #{postNo},
-               tmm.ADDR = #{addr},
-               tmm.ADDR_DTL = #{addrDtl},
+               tmm.ADDR = SBPENC.E(#{addr}),
+               tmm.ADDR_DTL = SBPENC.E(#{addrDtl}),
                tmm.BIRTHDAY = #{birthday},
                tmm.LUNAR_YN = #{lunarYn},
                tmm.GENDR_FG = #{gendrFg},
                tmm.EMAIL_ADDR = #{emailAddr},
                tmm.SHORT_NO = #{shortNo},
-               tmm.TEL_NO = #{telNo},
+               tmm.TEL_NO = SBPENC.E(#{telNo}),
                tmm.WEDDING_YN = #{weddingYn},
                tmm.WEDDINGDAY = #{weddingday},
                tmm.EMAIL_RECV_YN = #{emailRecvYn},
@@ -595,7 +595,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -604,9 +604,9 @@
         tmm.REG_STORE_CD,
         tms.STORE_NM AS REG_STORE_NM,
         tmm.POST_NO,
-        tmm.ADDR,
-        tmm.ADDR_DTL,
-        tmm.TEL_NO,
+        SBPENC.D(tmm.ADDR) AS ADDR,
+        SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
         tmm.EMAIL_ADDR,
         tmm.EMAIL_RECV_YN,
         tmm.BIRTHDAY,
@@ -653,7 +653,7 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test='membrNm != null and membrNm != ""'>
-            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
         AND tmmp.CD_PARTNER IS NULL
         ORDER BY tmm.MEMBR_NO

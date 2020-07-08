@@ -216,7 +216,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._postJSONSave.withPopUp("/membr/info/view/base/registMemberInfo.sb", params, function (result ) {
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 // console.log(result.data.data)
-                $scope.$emit("responseGet", result.data.data);
+                $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                 // $scope.memberRegistLayer.hide();
                 // memberInfoScope.getMemberList();
             });
