@@ -77,10 +77,12 @@ public class HqMoveServiceImpl implements HqMoveService {
 
             // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
             int outEtcQty = (hqMoveVO.getOutEtcQty() == null ? 0 : hqMoveVO.getOutEtcQty());
+            int outUnitQty = (hqMoveVO.getOutUnitQty() == null ? 0 : hqMoveVO.getOutUnitQty());
 
             hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            hqMoveVO.setOutUnitQty(outUnitQty);
             hqMoveVO.setOutEtcQty(outEtcQty);
-            hqMoveVO.setInUnitQty(hqMoveVO.getOutUnitQty());
+            hqMoveVO.setInUnitQty(outUnitQty);
             hqMoveVO.setInEtcQty(outEtcQty);
             hqMoveVO.setInTotQty(hqMoveVO.getOutTotQty());
             hqMoveVO.setRegId(sessionInfoVO.getUserId());

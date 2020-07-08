@@ -190,11 +190,14 @@ public class HqStoreMoveServiceImpl implements HqStoreMoveService {
 
             // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
             int outEtcQty = (hqStoreMoveVO.getOutEtcQty() == null ? 0 : hqStoreMoveVO.getOutEtcQty());
+            int outUnitQty = (hqStoreMoveVO.getOutUnitQty() == null ? 0 : hqStoreMoveVO.getOutUnitQty());
+            
 
             hqStoreMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             hqStoreMoveVO.setSlipNo(newSlipNo);
+            hqStoreMoveVO.setOutUnitQty(outUnitQty);
             hqStoreMoveVO.setOutEtcQty(outEtcQty);
-            hqStoreMoveVO.setInUnitQty(hqStoreMoveVO.getOutUnitQty());
+            hqStoreMoveVO.setInUnitQty(outUnitQty);
             hqStoreMoveVO.setInEtcQty(outEtcQty);
             hqStoreMoveVO.setInTotQty(hqStoreMoveVO.getOutTotQty());
             hqStoreMoveVO.setRegFg(sessionInfoVO.getOrgnFg());
