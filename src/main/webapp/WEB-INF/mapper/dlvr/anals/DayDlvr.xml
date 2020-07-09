@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.dlvr.anals.dayDlvr.service.impl.DayDlvrMapper">
+
+  <!-- 배달지 조회 및 변경 -->
+  <!--
+      TABLE    : TB_MB_MEMBER_DLVR_ADDR & TB_MB_MEMBER_DLVR_TEL
+      COMMENTS : 배달지 조회 및 변경@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨
+  -->
+  <select id="getDayDlvrList" parameterType="dayDlvrVO" resultType="DefaultMap">
+    /*DlvrMapper.getDlvrList*/
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    /*달주소지 조회*/
+    SELECT SBPENC.D(tmm.MEMBR_NM)AS MEMBR_NM, tmmda.ADDR, tmmda.ADDR_DTL, tmmda.USE_YN AS DLVR_USE_YN, tmmda.LAST_DLVR_DATE, tmm.MEMBR_NO
+    <include refid="CmmSQL.PagingTemplateCount"/>
+    FROM TB_MB_MEMBER_DLVR_ADDR tmmda
+    LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmda.MEMBR_NO
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+
+
+</mapper>

@@ -627,6 +627,7 @@
     <!-- 배달관리 > 배달정보 > 배달지등록 -->
     <typeAlias alias="dlvrRegistVO" type="kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO"/>
     <typeAlias alias="dlvrInfoVO" type="kr.co.solbipos.dlvr.anals.dlvrInfo.service.DlvrInfoVO"/>
+    <typeAlias alias="dayDlvrVO" type="kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrVO"/>
 
     <!-- 배달관리 > 배달현황 > 배달지별 내역 -->
     <typeAlias alias="dlvrReceiptVO" type="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.DlvrReceiptVO"/>
