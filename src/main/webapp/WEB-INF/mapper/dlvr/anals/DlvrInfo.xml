@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.dlvr.anals.dlvrInfo.service.impl.DlvrInfoMapper">
+
+  <select id="getDlvrInfoList" parameterType="dlvrInfoVO" resultType="DefaultMap">
+    /*DlvrMapper.getDlvrInfoList*/
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    /*배달내역 조회*/
+    SELECT tssh.SALE_DATE, tssh.POS_NO, tssh.BILL_NO, tssh.REAL_SALE_AMT, tsshd.DLVR_ADDR, tsshd.DLVR_TEL_NO, SBPENC.D(tsshm.MEMBR_NM)AS MEMBR_NM, tssh.BILL_DT, (CASE WHEN tme.EMP_NM IS NULL THEN '배달원' ELSE tme.EMP_NM END) AS EMP_NM
+    <include refid="CmmSQL.PagingTemplateCount"/>
+    FROM TB_SL_SALE_HDR_DLVR tsshd
+    LEFT JOIN TB_SL_SALE_HDR tssh ON tssh.BILL_NO = tsshd.BILL_NO AND tssh.POS_NO = tsshd.POS_NO AND tssh.STORE_CD = tsshd.STORE_CD AND tssh.SALE_DATE = tsshd.SALE_DATE AND tssh.HQ_OFFICE_CD = tsshd.HQ_OFFICE_CD
+    LEFT JOIN TB_SL_SALE_HDR_MEMBR tsshm ON tsshm.BILL_NO = tssh.BILL_NO AND tsshm.POS_NO = tsshd.POS_NO AND tsshm.STORE_CD = tssh.STORE_CD AND tsshm.SALE_DATE = tssh.SALE_DATE AND tsshm.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+    LEFT JOIN TB_MS_EMPLOYEE tme ON tme.EMP_NO = tsshd.DLVR_EMP_NO AND tme.STORE_CD = tsshd.STORE_CD
+    WHERE tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+    <if test='membrNm != null and membrNm !=""'>
+        AND SBPENC.D(tsshm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+    </if>
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+
+</mapper>
