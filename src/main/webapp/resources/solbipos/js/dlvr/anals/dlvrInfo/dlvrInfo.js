@@ -39,7 +39,7 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
-    $scope.saleFgDataMap = new wijmo.grid.DataMap(saleFgData, 'value', 'name'); //판매구분
+    // $scope.saleFgDataMap = new wijmo.grid.DataMap(saleFgData, 'value', 'name'); //판매구분
 
     // 합계
     // add the new GroupRow to the grid's 'columnFooters' panel

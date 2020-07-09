@@ -12,7 +12,7 @@
     /*DlvrMapper.getDlvrList*/
     <include refid="CmmSQL.PagingTemplateHeader"/>
     /*달주소지 조회*/
-    SELECT tmm.MEMBR_NM, tmmda.ADDR, tmmda.ADDR_DTL, tmmda.USE_YN AS DLVR_USE_YN, tmmda.LAST_DLVR_DATE, tmm.MEMBR_NO
+    SELECT SBPENC.D(tmm.MEMBR_NM)AS MEMBR_NM, tmmda.ADDR, tmmda.ADDR_DTL, tmmda.USE_YN AS DLVR_USE_YN, tmmda.LAST_DLVR_DATE, tmm.MEMBR_NO
     <include refid="CmmSQL.PagingTemplateCount"/>
     FROM TB_MB_MEMBER_DLVR_ADDR tmmda
     LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmda.MEMBR_NO
@@ -34,7 +34,7 @@
 
   <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
       /*배달전화번호 조회*/
-      SELECT tmm.MEMBR_NM, tmmdt.TEL_NO, tmmdt.USE_YN, tmmdt.REG_DT, tmmdt.MOD_DT, tmm.MEMBR_NO
+      SELECT SBPENC.D(tmm.MEMBR_NM)AS MEMBR_NM, tmmdt.TEL_NO, tmmdt.USE_YN, tmmdt.REG_DT, tmmdt.MOD_DT, tmm.MEMBR_NO
       FROM TB_MB_MEMBER_DLVR_TEL tmmdt
       LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmdt.MEMBR_NO
   </select>
