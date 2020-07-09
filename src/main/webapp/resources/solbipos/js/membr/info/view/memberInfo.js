@@ -17,9 +17,9 @@ var app = agrid.getApp();
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
-app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('memberCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('memberCtrl', $scope, $http, $timeout, true));
 
   // 기본 회원등급
   // if (membrClassList.length == 0) {
@@ -310,6 +310,29 @@ app.controller('memberCtrl', ['$scope', '$http', function ($scope, $http) {
     // 회원 사용여부 '미사용'으로 변경 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/membr/info/view/base/remove.sb", params, function(){ $scope.getMemberList() });
 
+  };
+
+  // 엑셀 다운로드
+  $scope.excelDownloadInfo = function () {
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          return column.visible;
+        }
+      }, '회원정보_'+getToday()+'.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
   };
 
   // 회원 거래처 매핑

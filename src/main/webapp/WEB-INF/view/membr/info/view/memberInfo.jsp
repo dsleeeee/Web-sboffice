@@ -143,10 +143,10 @@
 
         </tr>
         <tr>
-<%--            todo--%>
-<%--            우리매장 등록회원--%>
-<%--            우리매장 방문회원--%>
-        <%-- 등록매장 --%>
+            <%--            todo--%>
+            <%--            우리매장 등록회원--%>
+            <%--            우리매장 방문회원--%>
+            <%-- 등록매장 --%>
             <th><s:message code="regist.reg.store.cd"/></th>
             <td>
                 <%--
@@ -369,6 +369,9 @@
         </wj-combo-box>
 
         <%-- 신규 회원 등록 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/>
+        </button>
+        <%-- 신규 회원 등록 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="registMember()">
             <s:message code="webMenu.new"/>
         </button>
@@ -413,14 +416,15 @@
 
                 <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="100" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100"
+                                     align="center"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
                                      align="center" is-read-only="true"></wj-flex-grid-column>
-<%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd"--%>
-<%--                                     visible="false"></wj-flex-grid-column>--%>
-<%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNm" width="*"--%>
-<%--                                     align="center" is-read-only="true"></wj-flex-grid-column>--%>
+                <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreCd"--%>
+                <%--                                     visible="false"></wj-flex-grid-column>--%>
+                <%--                <wj-flex-grid-column header="<s:message code="regist.membr.regStore"/>" binding="regStoreNm" width="*"--%>
+                <%--                                     align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn"
                                      data-map="emailRecvDataMap" width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
@@ -433,23 +437,32 @@
                     <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="totSavePoint" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.add"/>" binding="totSavePoint"
+                                     width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.point.use"/>" binding="totUsePoint" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.use"/>" binding="totUsePoint"
+                                     width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.point.adj"/>" binding="totAdjPoint" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.adj"/>" binding="totAdjPoint"
+                                     width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.point.ava"/>" binding="avablPoint" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.point.ava"/>" binding="avablPoint" width="75"
+                                     align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.cnt"/>" binding="saveCnt" width="75"
+                                     align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="saveAmt" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.save.amt"/>" binding="saveAmt" width="75"
+                                     align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>" binding="firstSaleDate" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.start"/>" binding="firstSaleDate"
+                                     width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.visit.end"/>" binding="lastSaleDate"
+                                     width="75" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.membr.day"/>" binding="regDt" width="75" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.membr.day"/>" binding="regDt" width="75"
+                                     align="center"
                                      is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>

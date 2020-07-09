@@ -26,7 +26,8 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
 
     // 카드 탭 보이기
     $scope.cardShow = function () {
-        if ($scope.insertMembrNo === undefined || $scope.saveMode !== "MOD") {
+        console.log($scope.insertMembrNo, $scope.saveMode);
+        if ($scope.insertMembrNo === undefined || $scope.saveMode !== "REG") {
             $scope._popMsg(messages["cmm.base.info.save"]);
         } else {
             $("#basicView").hide();
@@ -51,12 +52,15 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         $("#deliTab").addClass("on");
     };
 
-    $scope.$on("responseGet", function (event, params) {
-        $scope.insertMembrNo = params
+    $scope.$on("responseGet", function (event, params, mode) {
+        console.log('123123123');
+        $scope.insertMembrNo = params;
+        $scope.saveMode = mode;
         $scope.$broadcast("paramsCard", params);
     });
 
     $scope.$on("modMember", function (event, data) {
+        console.log('90909009900990');
         $scope.saveMode = data;
         // event.preventDefault();
     });
