@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.kds.anals.day.service.implKdsDayMapper">
+    <select id="getKdsDay" parameterType="ChgBatchVO" resultType="DefaultMap">
+        /* KdsDayMapper.getKdsDay */
+        SELECT toohkd.STORE_CD
+             , tms.STORE_NM
+             , toohkd.SALE_DATE
+             , toohkd.ORDER_CNT
+             , toohkd.S_CK_TO_E_CK
+             , toohkd.AVG_S_CK_TO_E_CK
+             , toohkd.L_OD_TO_E_CK
+             , toohkd.AVG_L_OD_TO_E_CK
+             , toohkd.S_OD_TO_E_PK
+             , toohkd.AVG_S_OD_TO_E_PK
+             , toohkd.E_CK_TO_E_PK
+             , toohkd.AVG_E_CK_TO_E_PK
+             , toohkd.REG_DT
+             , toohkd.REG_ID
+             , toohkd.MOD_DT
+             , toohkd.MOD_ID
+        FROM TB_OD_ORDER_HDR_KDS_DAILY toohkd
+             , TB_MS_STORE tms
+        WHERE toohkd.STORE_CD(+) = tms.STORE_CD
+    </select>
+</mapper>

@@ -1,7 +1,6 @@
 package kr.co.solbipos.dlvr.info.regist.web;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
@@ -9,13 +8,9 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistService;
 import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistVO;
-import kr.co.solbipos.membr.info.grade.service.MembrClassPointVO;
-import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
