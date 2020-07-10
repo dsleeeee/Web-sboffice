@@ -4,7 +4,6 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrService;
 import kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrVO;
-import kr.co.solbipos.membr.info.dlvr.service.impl.DlvrMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,12 @@ public class DayDlvrServiceImpl implements DayDlvrService {
 
 
   @Override
-  public List<DefaultMap<Object>> getDayDlvrList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
-    return dayDlvrMapper.getDayDlvrList(dayDlvrVO);
+  public List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
+    return dayDlvrMapper.getDayDlvrSaleList(dayDlvrVO);
+  }
+
+  @Override
+  public List<DefaultMap<Object>> getDayNonDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
+    return dayDlvrMapper.getDayNonDlvrSaleList(dayDlvrVO);
   }
 }

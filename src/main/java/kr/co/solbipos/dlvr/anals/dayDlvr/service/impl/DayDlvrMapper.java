@@ -10,5 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface DayDlvrMapper {
-  List<DefaultMap<Object>> getDayDlvrList(DayDlvrVO dayDlvrVO);
+  List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO);
+
+  List<DefaultMap<Object>> getDayNonDlvrSaleList(DayDlvrVO dayDlvrVO);
 }

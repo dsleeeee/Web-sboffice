@@ -67,11 +67,15 @@
             initialized="initComboBox(s)">
     </wj-combo-box>
 
-    <%-- 엑셀 --%>
+    <%-- 엑셀G 버튼 --%>
     <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
-      <s:message code="cmm.excel"/>
+      <s:message code="dayDlvr.leftExcelDownload"/>
+    </button>
+    <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
+      <s:message code="dayDlvr.rightExcelDownload"/>
     </button>
   </div>
+
   <div class="w100 mt10 mb20">
     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
@@ -83,30 +87,27 @@
               items-source="data"
               item-formatter="_itemFormatter"
               is-read-only="true">
+
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.date"/>" binding="saleDate" width="110" align="center"
+        <wj-flex-grid-column header="<s:message code="dayDlvr.saleDate"/>" binding="nonDlvrSaleDate" width="110"
+                             align="center"
                              is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.billNo"/>" binding="billNo" width="100" align="center"
-                             is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.realSaleAmt"/>" binding="realSaleAmt" width="200"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrAddr"/>" binding="dlvrAddr" width="150"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrTelNo"/>" binding="dlvrTelNo" width="200"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.membrNm"/>" binding="membrNm" width="200"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.billDt"/>" binding="billDt" width="150"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dlvrInfo.empNm"/>" binding="empNm" width="200"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntDlvrBillNo" width="150"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumDlvrRealSaleAmt"
+                             width="200"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntBillNo" width="150"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumRealSaleAmt" width="200"
+                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="memberChgBatchCtrlPager" data-size="10">
+    <ul id="dayDlvrCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>

@@ -6,5 +6,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 public interface DayDlvrService {
-  List<DefaultMap<Object>> getDayDlvrList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO);
+  List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO);
+
+  List<DefaultMap<Object>> getDayNonDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO);
 }

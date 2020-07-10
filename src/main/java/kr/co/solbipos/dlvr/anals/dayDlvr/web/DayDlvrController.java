@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -51,10 +52,15 @@ public class DayDlvrController {
 
   @RequestMapping(value = "/dayDlvr/getDayDlvrList.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result getDayDlvrList(DayDlvrVO dayDlvrVO, HttpServletRequest request) {
+  public Result getDayDlvrSaleList(DayDlvrVO dayDlvrVO, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-    List<DefaultMap<Object>> result = dayDlvrService.getDayDlvrList(dayDlvrVO, sessionInfoVO);
-    return ReturnUtil.returnListJson(Status.OK, result, dayDlvrVO);
-  }
+    HashMap<String, Object> result = new HashMap<>();
 
+    List<DefaultMap<Object>> DayDlvrSale = dayDlvrService.getDayDlvrSaleList(dayDlvrVO, sessionInfoVO);
+//    List<DefaultMap<Object>> DayNonDlvrSale = dayDlvrService.getDayNonDlvrSaleList(dayDlvrVO, sessionInfoVO);
+
+//    DayDlvrSale.addAll(DayNonDlvrSale);
+
+    return ReturnUtil.returnListJson(Status.OK, DayDlvrSale, dayDlvrVO);
+  }
 }

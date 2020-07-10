@@ -4,6 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 public class DayDlvrVO extends PageVO {
   private String saleDate;
+  private String nonDlvrSaleDate;
   private String posNo;
   private String billNo;
   private int realSaleAmt;
@@ -14,6 +15,10 @@ public class DayDlvrVO extends PageVO {
   private String empNm;
   private String startDate;
   private String endDate;
+  private int sumDlvrRealSaleAmt;
+  private int cntDlvrBillNo;
+  private int sumRealSaleAmt;
+  private int cntBillNo;
 
   public String getSaleDate() {
     return saleDate;
@@ -101,5 +106,45 @@ public class DayDlvrVO extends PageVO {
 
   public void setEndDate(String endDate) {
     this.endDate = endDate;
+  }
+
+  public int getSumDlvrRealSaleAmt() {
+    return sumDlvrRealSaleAmt;
+  }
+
+  public void setSumDlvrRealSaleAmt(int sumDlvrRealSaleAmt) {
+    this.sumDlvrRealSaleAmt = sumDlvrRealSaleAmt;
+  }
+
+  public int getCntDlvrBillNo() {
+    return cntDlvrBillNo;
+  }
+
+  public void setCntDlvrBillNo(int cntDlvrBillNo) {
+    this.cntDlvrBillNo = cntDlvrBillNo;
+  }
+
+  public int getSumRealSaleAmt() {
+    return sumRealSaleAmt;
+  }
+
+  public void setSumRealSaleAmt(int sumRealSaleAmt) {
+    this.sumRealSaleAmt = sumRealSaleAmt;
+  }
+
+  public int getCntBillNo() {
+    return cntBillNo;
+  }
+
+  public String getNonDlvrSaleDate() {
+    return nonDlvrSaleDate;
+  }
+
+  public void setNonDlvrSaleDate(String nonDlvrSaleDate) {
+    this.nonDlvrSaleDate = nonDlvrSaleDate;
+  }
+
+  public void setCntBillNo(int cntBillNo) {
+    this.cntBillNo = cntBillNo;
   }
 }
