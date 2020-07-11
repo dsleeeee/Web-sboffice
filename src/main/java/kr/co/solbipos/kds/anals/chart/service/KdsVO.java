@@ -1,8 +1,8 @@
-package kr.co.solbipos.kds.anals.day.service;
+package kr.co.solbipos.kds.anals.chart.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class KdsDayVO extends PageVO {
+public class KdsVO extends PageVO {
     private String storeCd;
     private String saleDate;
     private Integer orderCnt;
@@ -17,6 +17,8 @@ public class KdsDayVO extends PageVO {
     private String prodCd;
     private Integer salePty;
     private Integer lOdToDCk;
+    private String kdsDayStartDate;
+    private String kdsDayEndDate;
 
     public String getStoreCd() {
         return storeCd;
@@ -128,5 +130,21 @@ public class KdsDayVO extends PageVO {
 
     public void setlOdToDCk(Integer lOdToDCk) {
         this.lOdToDCk = lOdToDCk;
+    }
+
+    public String getKdsDayStartDate() {
+        return kdsDayStartDate;
+    }
+
+    public void setKdsDayStartDate(String kdsDayStartDate) {
+        this.kdsDayStartDate = kdsDayStartDate;
+    }
+
+    public String getKdsDayEndDate() {
+        return kdsDayEndDate;
+    }
+
+    public void setKdsDayEndDate(String kdsDayEndDate) {
+        this.kdsDayEndDate = kdsDayEndDate;
     }
 }

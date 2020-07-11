@@ -8,14 +8,14 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<div class="subCon" ng-controller="kdsDayCtrl">
+<div class="subCon" ng-controller="kdsDayProdTimeCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('kdsDayList')">
+            <button class="btn_blue fr" ng-click="_broadcast('kdsDayProdTimeList')">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -41,7 +41,7 @@
                                 value="kdsDayStartDate"
                                 ng-model="kdsDayStartDate"
                                 control="kdsDayStartDateCombo"
-                                format="yyyy-MM-dd"
+                                format="yyyy/MM/dd"
                                 min="2000-01-01"
                                 max="2099-12-31"
                                 initialized="_initDateBox(s)">
@@ -55,7 +55,7 @@
                               value="kdsDayEndDate"
                               ng-model="kdsDayEndDate"
                               control="kdsDayEndDateCombo"
-                              format="yyyy-MM-dd"
+                              format="yyyy/MM/dd"
                               min="2000-01-01"
                               max="2099-12-31"
                               initialized="_initDateBox(s)">
@@ -64,14 +64,49 @@
                     </span>
                 </div>
             </td>
-            <c:if test="${orgnFg == 'HQ'}">
-                <th><s:message code="kds.store"/></th>
-                <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="regStore"/>
-                    </jsp:include>
-                </td>
-            </c:if>
+            <th>
+                <s:message code="kds.time"/>
+            </th>
+            <td>
+                <div class="sb-select fl w20 mr10">
+                    <wj-combo-box
+                            id="timeZone"
+                            ng-model="timeZone"
+                            control="timeZoneCombo"
+                            items-source="kdsTimeZone"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                    <%--                    <wj-input-date-time--%>
+                    <%--                            id="timeZone"--%>
+                    <%--                            ng-model="timeZone"--%>
+                    <%--                            control="timeZoneCombo"--%>
+                    <%--                            items-source="kdsTimeZone"--%>
+                    <%--                            is-editable="false"--%>
+                    <%--                            showDropDownButton=false--%>
+                    <%--                            format="HH 시"--%>
+                    <%--                            timeStep="30"--%>
+                    <%--                            min="2000-01-01"--%>
+                    <%--                            max="2099-12-31"--%>
+                    <%--                            initialized="_initComboBox(s)">--%>
+                    <%--                    </wj-input-date-time>--%>
+                </div>
+
+                <div class="sb-select fl w20 mr10">
+                    <wj-combo-box
+                            id="timeZoneSec"
+                            ng-model="timeZoneSec"
+                            control="timeZoneSecCombo"
+                            items-source="kdsTimeZone"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         <tr>
             <th>
@@ -133,34 +168,33 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <c:if test="${orgnFg == 'HQ'}">
+                <th><s:message code="kds.store"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                </td>
+                <td></td>
+                <td></td>
+            </c:if>
+        </tr>
         </tbody>
     </table>
+
+
     <div class="mt20 oh sb-select dkbr">
+
+
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+            <s:message code="cmm.excel.down"/>
+        </button>
         <%-- 차트 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
             <s:message code="kds.chart"/>
         </button>
-        <%-- 픽업시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				<s:message code="kds.picDate"/>
-			</label>
-		</span>
-        <%-- 제조시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				 <s:message code="kds.makeDate"/>
-			</label>
-		</span>
-        <%-- 건수 --%>
-        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-        <%--			<label for="chkDt">--%>
-        <%--				<s:message code="kds.cnt"/>--%>
-        <%--			</label>--%>
-        <%--		</span>--%>
     </div>
     <div class="w100 mt40 mb20 ">
         <%--위즈모 차트--%>
@@ -170,14 +204,8 @@
         <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
 
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-            <s:message code="cmm.excel.down"/>
-        </button>
-    </div>
     <%-- 그리드 --%>
-    <div class="w100 mt20">
+    <div class="w100 mt40">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -199,12 +227,7 @@
                 <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="membrCardNo"
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.totalOrderCnt"/>" binding="saleCount" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="saleAmt" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="dcAmt" width="*"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
     </div>
@@ -218,9 +241,10 @@
 
     var kdsPicDateSec = ${ccu.getCommCodeExcpAll("403")};
     var regstrStoreList = ${regstrStoreList};
+    <%--var kdsTimeZone = ${kdsTimeZone};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.08"
         charset="utf-8"></script>
 
-
+<%-- 후불적용매장등록 --%>

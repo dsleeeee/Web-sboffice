@@ -8,14 +8,14 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<div class="subCon" ng-controller="kdsDayCtrl">
+<div class="subCon" ng-controller="kdsMonthCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('kdsDayList')">
+            <button class="btn_blue fr" ng-click="_broadcast('kdsMonthList')">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -133,43 +133,43 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <th><s:message code="kds.prodCd"/></th>
+            <td>
+                <input type="text" id="prodCd" class="sb-input w50" ng-model="prodCd"
+                       maxlength="15"/>
+            </td>
+            <th><s:message code="kds.prodNm"/></th>
+            <td>
+                <input type="text" id="prodNm" class="sb-input w50" ng-model="prodNm"
+                       maxlength="15"/>
+            </td>
+        </tr>
+        <tr>
+            <%-- 분류조회 --%>
+            <th><s:message code="kds.prodClass"/></th>
+            <td>
+                <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm"
+                       ng-click="popUpProdClass()" style="float: left;"
+                       placeholder="<s:message code="prodCorner.prodClass" /> 선택" readonly/>
+                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
+                        ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
         </tbody>
     </table>
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-            <s:message code="kds.chart"/>
-        </button>
-        <%-- 픽업시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				<s:message code="kds.picDate"/>
-			</label>
-		</span>
-        <%-- 제조시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				 <s:message code="kds.makeDate"/>
-			</label>
-		</span>
-        <%-- 건수 --%>
-        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-        <%--			<label for="chkDt">--%>
-        <%--				<s:message code="kds.cnt"/>--%>
-        <%--			</label>--%>
-        <%--		</span>--%>
-    </div>
+
+
     <div class="w100 mt40 mb20 ">
         <%--위즈모 차트--%>
         <h2>
             <div class="circle"><span class="blue"></span><span class="sky"></span></div>
         </h2>
-        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
+        <div class="wizWrap" id="chart1" style="width:100%; height:300px;"></div>
     </div>
-
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
@@ -199,9 +199,25 @@
                 <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="membrCardNo"
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.totalOrderCnt"/>" binding="saleCount" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.lClassCd"/>" binding="saleCount" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="saleAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.lClassNm"/>" binding="saleAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.mClassCd"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.mClassNm"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.sClassCd"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.sClassNm"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.prodNm"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.amt"/>" binding="dcAmt" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="dcAmt" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="dcAmt" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
@@ -220,7 +236,7 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsMonth.js?ver=2020070801.08"
         charset="utf-8"></script>
 
 
