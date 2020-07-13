@@ -415,8 +415,8 @@
                         <div class="btn_int tc" id="format">
                             <button class="btn_blue" style="display: none;" id="btnChangeAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
-                            <button class="btn_blue" id="btnSaveAttr"><s:message code="cmm.save" /></button>
-                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.typeSave" /></button>
+                            <button class="btn_blue" style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
+                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.save" /></button>
                         </div>
                     </div>
                     <%--//설정--%>
