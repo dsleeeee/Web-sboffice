@@ -187,4 +187,50 @@ public class FuncServiceImpl implements FuncService {
 
         return procCnt;
     }
+
+    /** 포스기능 등록/미등록 기능키 조회 */
+    @Override
+    public List<DefaultMap<String>> getFuncKeyList(FuncStoreVO funcStoreVO) {
+        return mapper.getFuncKeyList(funcStoreVO);
+    }
+
+    /** 포스기능 기능키 등록 및 삭제 */
+    @Override
+    public int saveFuncKey(FuncStoreVO[] funcStoreVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        for(FuncStoreVO funcStoreVO : funcStoreVOs) {
+
+            funcStoreVO.setRegDt(dt);
+            funcStoreVO.setRegId(sessionInfoVO.getUserId());
+            funcStoreVO.setModDt(dt);
+            funcStoreVO.setModId(sessionInfoVO.getUserId());
+
+            if(funcStoreVO.getStatus() == GridDataFg.INSERT) {
+                procCnt += mapper.insertFuncStore(funcStoreVO);
+
+                FuncStoreVO funStore = new FuncStoreVO();
+                String storeResult = mapper.insertStoreFuncKey(funcStoreVO);
+                funStore.setResult(storeResult);
+
+                FuncStoreVO funcPos = new FuncStoreVO();
+                String posResult = mapper.insertPosFuncKey(funcStoreVO);
+                funcPos.setResult(posResult);
+
+            } else if(funcStoreVO.getStatus() == GridDataFg.DELETE) {
+                procCnt += mapper.deleteFuncStore(funcStoreVO);
+
+                FuncStoreVO funStore = new FuncStoreVO();
+                String storeResult = mapper.deleteStoreFuncKey(funcStoreVO);
+                funStore.setResult(storeResult);
+
+                FuncStoreVO funcPos = new FuncStoreVO();
+                String posResult = mapper.deletePosFuncKey(funcStoreVO);
+                funcPos.setResult(posResult);
+            }
+        }
+        return procCnt;
+    }
 }

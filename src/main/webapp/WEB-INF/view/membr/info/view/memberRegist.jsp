@@ -3,6 +3,10 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <wj-popup id="memberRegistLayer" control="memberRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:570px;">
   <div class="wj-dialog wj-dialog-columns title" ng-controller="memberRegistCtrl">
 
@@ -202,13 +206,13 @@
               <%-- 주소 //TODO 주소검색 추가 필요 --%>
               <th><s:message code="regist.addr" /></th>
               <td colspan="3">
-                <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w30" maxlength="5"/>
+                <input type="text" id="rPostNo" name="postNo" ng-model="member.postNo" class="sb-input w30" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                   <s:message code="regist.srchAddr" />
                 </a>
                 <br>
-                <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" maxlength="60"/>
-                <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60"/>
+                <input type="text" id="rAddr" name="addr" ng-model="member.addr" class="sb-input w100" maxlength="60" placeholder="주소1"/>
+                <input type="text" id="rAddrDtl" name="addrDtl" ng-model="member.addrDtl" class="sb-input w100" maxlength="60" placeholder="주소2"/>
               </td>
             </tr>
             <tr>
@@ -253,6 +257,8 @@
               </td>
             </tr>
             </tbody>
+              <%-- 회원소속코드 --%>
+            <input type="hidden" ng-model="member.membrOrgnCd">
           </table>
 
         </f:form>
@@ -264,4 +270,11 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberRegist.js?ver=20191223.17 charset="utf-8"></script>
+
+<script>
+  var orgnFg = "${orgnFg}";
+  var orgnCd = "${orgnCd}";
+  var hqOfficeCd = "${hqOfficeCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberRegist.js?ver=20191223.30 charset="utf-8"></script>

@@ -140,5 +140,5 @@
 
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.21" charset="utf-8"></script>
 

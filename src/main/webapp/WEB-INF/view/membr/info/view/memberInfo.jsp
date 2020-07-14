@@ -299,6 +299,7 @@
         <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="regist.membr.membrOrgnCd"/>" binding="membrOrgnCd" width="75" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
       <c:if test="${orgnFg == 'HQ'}">
         <wj-flex-grid-column header="<s:message code="regist.membr.store"/>" binding="postpaidStore" is-read-only="true" align="center" ></wj-flex-grid-column>
       </c:if>
@@ -328,15 +329,15 @@ var regstrStoreList = ${regstrStoreList};
 var memberClassList = ${memberClassList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191224.06" charset="utf-8"></script>
 
-<%-- 매장 정보조회 --%>
+<%-- 회원 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장 등록/수정 --%>
+<%-- 회원 등록/수정 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

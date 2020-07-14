@@ -219,4 +219,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoDetail.js?ver=2018110901" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfoDetail.js?ver=20181110.02" charset="utf-8"></script>

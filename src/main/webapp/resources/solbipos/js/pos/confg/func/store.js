@@ -56,10 +56,11 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params = {};
     var scope  = agrid.getScope('funcCtrl');
+    var regStoreScope  = agrid.getScope('regStoreCtrl');
 
     params.fnkeyFg = scope.getSelectedFunc().fnkeyFg;
     params.fnkeyNo = scope.getSelectedFunc().fnkeyNo;
-    params.hqOfficeCd = '';
+    params.hqOfficeCd = regStoreScope.getSelectedHqOffice();
     params.hqOfficeNm = '';
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
