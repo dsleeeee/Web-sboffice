@@ -127,7 +127,7 @@
         /* RecpOriginMapper.getRecpOriginDetailList */
         SELECT
         REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
-        (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM,
+        (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
         REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
         (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
         REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
