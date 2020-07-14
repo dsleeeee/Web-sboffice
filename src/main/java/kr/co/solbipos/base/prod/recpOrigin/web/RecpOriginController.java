@@ -144,7 +144,7 @@ public class RecpOriginController {
     }
 
     /**
-     * 재료-상품 저장
+     * 재료-상품 등록 팝업 - 재료-상품 저장
      *
      * @param recpOriginVOs
      * @param request

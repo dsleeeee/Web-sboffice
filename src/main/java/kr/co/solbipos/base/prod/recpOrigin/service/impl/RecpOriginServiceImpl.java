@@ -128,7 +128,6 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         String currentDt = currentDateTimeString();
 
         for(RecpOriginVO recpOriginVO : recpOriginVOs) {
-
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
