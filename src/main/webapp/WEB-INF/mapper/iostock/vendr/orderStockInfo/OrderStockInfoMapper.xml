@@ -30,7 +30,7 @@
                 ,       TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
                 WHERE   tphvo.HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     tphvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                
                 AND     tphvo.PROC_FG         IN ('1', '4', '5')
                 AND     tphvo.SLIP_FG         = '1'
                 AND     tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
@@ -42,12 +42,16 @@
                 <if test='slipNo != null and slipNo != ""'>
                     AND tphvo.SLIP_NO = #{slipNo}
                 </if>
-                <if test='arrVendrCd != null and arrVendrCd != ""'>
-                    AND tphvo.VENDR_CD IN
-                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
+                <if test='slipNo == null or slipNo == ""'>                	
+                	AND     tphvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                	<if test='arrVendrCd != null and arrVendrCd != ""'>
+	                    AND tphvo.VENDR_CD IN
+	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+	                </if>
                 </if>
+                
                 <![CDATA[
                 GROUP BY NVL(tphvo.SLIP_NO,'무발주'), tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
                 ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
@@ -71,6 +75,7 @@
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 ,       TB_HQ_VENDOR thv
                 WHERE   tphvi.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     tphvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate} 
                 AND     tphvi.PROC_FG         = '1'
                 AND     tphvi.ORDER_SLIP_NO   IS NULL
                 AND     thv.HQ_OFFICE_CD   (+)= tphvi.HQ_OFFICE_CD
@@ -106,7 +111,6 @@
                 ,       TB_PO_STORE_VENDR_INSTOCK tpsvi
                 ,       TB_MS_VENDOR thv     /* HQ -> MS 수정 */
                 WHERE   tpsvo.STORE_CD        = #{storeCd}
-                AND     tpsvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
                 AND     tpsvo.PROC_FG         IN ('1', '4', '5')
                 AND     tpsvo.SLIP_FG         = '1'
                 AND     tpsvi.STORE_CD     (+)= tpsvo.STORE_CD
@@ -118,12 +122,15 @@
                 <if test='slipNo != null and slipNo != ""'>
                     AND tpsvo.SLIP_NO = #{slipNo}
                 </if>
-                <if test='arrVendrCd != null and arrVendrCd != ""'>
-                    AND tpsvo.VENDR_CD IN
-                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
-                        #{item}
-                    </foreach>
-                </if>
+                <if test='slipNo == null or slipNo == ""'>                	
+                	AND     tpsvo.ORDER_DATE      BETWEEN #{startDate} AND #{endDate}
+                	<if test='arrVendrCd != null and arrVendrCd != ""'>
+	                    AND tpsvo.VENDR_CD IN
+	                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+	                </if>
+                </if>                
                 <![CDATA[
                 GROUP BY NVL(tpsvo.SLIP_NO,'무발주'), tpsvo.ORDER_DATE, tpsvo.VENDR_CD, thv.VENDR_NM
                 ,       tpsvo.PROC_FG, tpsvo.SLIP_FG, tpsvo.DTL_CNT
@@ -147,6 +154,7 @@
                 FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
                 ,       TB_MS_VENDOR thv		/* HQ -> MS 수정 */
                 WHERE   tpsvi.STORE_CD      = #{storeCd}
+                AND     tpsvi.INSTOCK_DATE    BETWEEN #{startDate} AND #{endDate}
                 AND     tpsvi.PROC_FG       = '1'
                 AND     tpsvi.ORDER_SLIP_NO IS NULL
                 AND     thv.STORE_CD    (+) = tpsvi.STORE_CD

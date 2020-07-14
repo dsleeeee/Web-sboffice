@@ -103,11 +103,13 @@ public class StandMoveServiceImpl implements StandMoveService {
 
             // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
             int outEtcQty = (standMoveVO.getOutEtcQty() == null ? 0 : standMoveVO.getOutEtcQty());
+            int outUnitQty = (standMoveVO.getOutUnitQty() == null ? 0 : standMoveVO.getOutUnitQty());
 
             standMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             standMoveVO.setSlipNo(standMoveVO.getSlipNo());
+            standMoveVO.setOutUnitQty(outUnitQty);
             standMoveVO.setOutEtcQty(outEtcQty);
-            standMoveVO.setInUnitQty(standMoveVO.getOutUnitQty());
+            standMoveVO.setInUnitQty(outUnitQty);
             standMoveVO.setInEtcQty(outEtcQty);
             standMoveVO.setInTotQty(standMoveVO.getOutTotQty());
             standMoveVO.setRegFg(sessionInfoVO.getOrgnFg());

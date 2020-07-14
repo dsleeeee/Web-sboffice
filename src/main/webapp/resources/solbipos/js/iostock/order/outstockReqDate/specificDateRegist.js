@@ -32,6 +32,11 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
     // 매장 선택 모듈의 매장코드값 파라미터 세팅
     $scope.speDate.storeCd      = $("#speDateRegistStoreCd").val();
 
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	$scope.speDate.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/order/outstockReqDate/specificDate/saveNew.sb", /* 통신할 URL */

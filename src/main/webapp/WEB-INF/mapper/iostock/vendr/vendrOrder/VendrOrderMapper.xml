@@ -185,6 +185,38 @@
             </when>
         </choose>
     </select>
+    
+
+    <!-- 거래처 발주등록 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+                   TB_PO_STORE_VENDR_ORDER
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 진행상태를 조회한다.
+    -->
+    <select id="getChkProcFg" parameterType="vendrOrderVO" resultType="String">
+        /* USE : VendrOrderMapper.getChkProcFg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[                    
+    			SELECT  DECODE(tphvo.PROC_FG,'0','N','Y')	AS	CHK_PROC_FG
+                FROM    TB_PO_HQ_VENDR_ORDER tphvo
+                WHERE   tphvo.HQ_OFFICE_CD  =   #{hqOfficeCd}
+				AND     tphvo.SLIP_NO 		=	#{slipNo}
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  DECODE(tpsvo.PROC_FG,'0','N','Y')	AS	CHK_PROC_FG
+                FROM    TB_PO_STORE_VENDR_ORDER tpsvo
+                WHERE   tpsvo.STORE_CD  	=   #{storeCd}
+				AND     tpsvo.SLIP_NO 		=	#{slipNo}
+                ]]>
+            </when>
+        </choose>
+    </select>
 
 
     <!-- 거래처 발주등록 - 발주상품 리스트 조회 -->
@@ -520,10 +552,10 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  DECODE(COUNT(tphvi.SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
+                SELECT  DECODE(COUNT(tphvi.ORDER_SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 WHERE   tphvi.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     tphvi.SLIP_NO      = #{slipNo}
+                AND     tphvi.ORDER_SLIP_NO      = #{slipNo}
                 ]]>
                 <if test='procFg != null and procFg != ""'>
                     AND tphvi.PROC_FG = #{procFg}
@@ -532,10 +564,10 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  DECODE(COUNT(tpsvi.SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
+                SELECT  DECODE(COUNT(tpsvi.ORDER_SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
                 FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
                 WHERE   tpsvi.STORE_CD  = #{storeCd}
-                AND     tpsvi.SLIP_NO   = #{slipNo}
+                AND     tpsvi.ORDER_SLIP_NO   = #{slipNo}
                 ]]>
                 <if test='procFg != null and procFg != ""'>
                     AND tpsvi.PROC_FG = #{procFg}

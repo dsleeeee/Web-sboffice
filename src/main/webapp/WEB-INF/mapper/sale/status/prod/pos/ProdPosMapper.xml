@@ -163,9 +163,11 @@
 		            PIVOT	(
 		                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
 		                        FOR STORE_CD IN (
+		                        <if test='arrStorePos != null and arrStorePos.length >= 0'>
 		                        	<foreach collection="arrStorePos" item="item" separator=",">
 										'${item}'
 									</foreach>
+								</if>
 	                        	)
 		            		)
 		        ) B
@@ -332,9 +334,11 @@
 		            PIVOT	(
 		                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
 		                        FOR STORE_CD IN (
+		                        <if test='arrStorePos != null and arrStorePos.length >= 0'>
 		                        	<foreach collection="arrStorePos" item="item" separator=",">
 										'${item}'
 									</foreach>
+								</if>
 	                        	)
 		            		)
 		        ) B
