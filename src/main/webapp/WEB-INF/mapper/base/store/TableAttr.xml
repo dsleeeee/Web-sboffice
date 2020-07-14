@@ -291,7 +291,7 @@
     )
     VALUES (
         #{storeCd},
-        LPAD(#{tblCd}, 2, '0'),
+        LPAD(#{tblCd}, 3, '0'),
         LPAD(#{attrCd}, 2, '0'),
         #{attrNm},
         #{x},
