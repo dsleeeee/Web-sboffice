@@ -72,4 +72,20 @@ public interface FuncService {
      * @return
      */
     int saveDefaultFunc(FuncStoreVO funcStoreVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 포스기능 등록/미등록 기능키 조회
+     *
+     * @param funcStoreVO
+     * @return
+     */
+    List<DefaultMap<String>> getFuncKeyList(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스기능 기능키 등록 및 삭제
+     *
+     * @param funcStoreVOs
+     * @return
+     */
+    int saveFuncKey(FuncStoreVO[] funcStoreVOs, SessionInfoVO sessionInfoVO);
 }

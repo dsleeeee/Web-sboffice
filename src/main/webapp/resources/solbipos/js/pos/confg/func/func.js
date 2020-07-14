@@ -36,7 +36,8 @@ app.controller('funcFgCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$apply(function() {
       $scope.data = new wijmo.collections.CollectionView(funcFgList);
       //$("button").hide();
-      $("#btnDefaultFunc").show(); // 기본기능 적용은 항상 보이도록
+      $("#btnDefaultFunc").show(); // 기본기능적용은 항상 보이도록
+      $("#btnBatchStore").show();   // 일괄기능적용은 항상 보이도록
     });
 
     // ReadOnly 효과설정
@@ -80,6 +81,19 @@ app.controller('funcFgCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.defaultFuncLayer.show(true, function(){
 
       var regScope  = agrid.getScope('defaultFuncCtrl');
+      regScope._gridDataInit();
+    });
+
+    event.preventDefault();
+  };
+
+  // 일괄기능적용
+  $scope.batchStore = function(){
+
+    // 레이어팝업 오픈
+    $scope.batchStoreLayer.show(true, function(){
+
+      var regScope  = agrid.getScope('batchStoreCtrl');
       regScope._gridDataInit();
     });
 

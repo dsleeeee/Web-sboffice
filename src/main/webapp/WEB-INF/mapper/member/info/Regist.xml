@@ -77,15 +77,16 @@
                '후불적용매장등록' AS POSTPAID_STORE
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_MB_MEMBER tmm,
-               TB_MB_MEMBER_CLASS tmmc,
-               TB_MS_STORE tms
-         WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
-        <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                TB_MB_MEMBER_CLASS tmmc,
+                TB_MS_STORE tms
+         WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND tmmc.MEMBR_ORGN_CD (+)= #{membrOrgnCd}
+        <!-- <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
            AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
         </if>
         <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
            AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
-        </if>
+        </if> -->
            AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = tmm.REG_STORE_CD

@@ -681,6 +681,49 @@
             )
     </update>
 
+    <!-- 포스기능 등록/미등록 기능키 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY
+        PARAM    : funcVO
+        COMMENTS : 매장의 등록/미등록 된 기능키 목록을 조회한다.
+    -->
+    <select id="getFuncKeyList" parameterType="funcStoreVO" resultMap="funcListMap">
+        /* USE : FuncMapper.getFuncKeyList */
+        SELECT tcpf.FNKEY_FG,
+                tcpf.FNKEY_NO,
+                tcpf.FNKEY_NM,
+                tcn.NMCODE_NM AS FNKEY_FG_NM
+          FROM TB_CM_POS_FNKEY tcpf,
+                (   SELECT STORE_CD,
+                            FNKEY_FG,
+                            FNKEY_NO
+                     FROM TB_CM_POS_FNKEY_STORE
+                    WHERE STORE_CD = #{storeCd}  )tcpfs,
+                (	SELECT NMCODE_CD,
+                            NMCODE_NM
+                      FROM TB_CM_NMCODE
+                     WHERE NMCODE_GRP_CD = '026') tcn
+         WHERE tcpfs.FNKEY_FG (+)= tcpf.FNKEY_FG
+           AND tcpfs.FNKEY_NO (+)= tcpf.FNKEY_NO
+           AND tcn.NMCODE_CD (+)= tcpf.FNKEY_FG
+        <if test='regYn != null and regYn == "Y"'>
+            AND tcpfS.FNKEY_NO IS NOT NULL
+        </if>
+        <if test='regYn != null and regYn == "N"'>
+            AND tcpfS.FNKEY_NO IS NULL
+        </if>
+        <if test='fnkeyFg != null and fnkeyFg != ""'>
+            AND tcpf.FNKEY_FG = #{fnkeyFg}
+        </if>
+        <if test='fnkeyNo != null and fnkeyNo != ""'>
+            AND tcpf.FNKEY_NO LIKE '%'||#{fnkeyNo}||'%'
+        </if>
+        <if test='fnkeyNm != null and fnkeyNm != ""'>
+            AND tcpf.FNKEY_NM LIKE '%'||#{fnkeyNm}||'%'
+        </if>
+     ORDER BY tcpf.FNKEY_FG, tcpf.FNKEY_NO
+    </select>
+
 </mapper>
 
 

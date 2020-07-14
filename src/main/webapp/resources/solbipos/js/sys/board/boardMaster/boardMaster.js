@@ -72,7 +72,7 @@ app.controller('boardMasterCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             var item = $scope.flex.collectionView.items[i];
 
             if(item.gChk) {
