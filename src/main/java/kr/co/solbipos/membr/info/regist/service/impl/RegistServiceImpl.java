@@ -121,6 +121,7 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -139,7 +140,7 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
 
         // 회원단축번호 추가_2019.08.02 추가 이다솜
@@ -260,8 +261,6 @@ public class RegistServiceImpl implements RegistService {
         int registCnt = 0;
 
         for(RegistVO registVO : registVOs) {
-            //registVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
-            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             registVO.setModId(sessionInfoVO.getUserId());
             registVO.setModDt(DateUtil.currentDateTimeString());
 

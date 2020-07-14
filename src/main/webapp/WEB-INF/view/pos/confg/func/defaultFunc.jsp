@@ -6,7 +6,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<wj-popup control="defaultFuncLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:730px";>
+<wj-popup control="defaultFuncLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:730px">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="defaultFuncCtrl">
 
         <%-- header --%>
@@ -38,7 +38,7 @@
                 <tr>
                     <th><s:message code="func.hqOffice" /></th>
                     <td colspan="3">
-                        <div class="sb-select" class='wj-content' style="width:200px;">
+                        <div class="sb-select w50">
                             <wj-combo-box
                                     id="dfHqOfficeCd"
                                     ng-model="hqOfficeCd"

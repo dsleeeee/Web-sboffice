@@ -196,4 +196,43 @@ public class FuncController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 포스기능 등록/미등록 기능키 조회
+     *
+     * @param funcStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getFuncKeyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFuncKeyList(FuncStoreVO funcStoreVO, HttpServletRequest request,
+                       HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> list = service.getFuncKeyList(funcStoreVO);
+
+        return returnListJson(Status.OK, list, funcStoreVO);
+    }
+
+    /**
+     * 포스기능 기능키 등록 및 삭제
+     *
+     * @param funcStoreVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "saveFuncKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveFuncKey(@RequestBody FuncStoreVO[] funcStoreVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int regCnt = service.saveFuncKey(funcStoreVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, regCnt);
+    }
 }

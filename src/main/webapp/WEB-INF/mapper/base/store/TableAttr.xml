@@ -167,7 +167,7 @@
     MERGE INTO TB_MS_TABLE_ATTR A
     USING (SELECT #{storeCd} STORE_CD,
                   #{tblTypeFg} TBL_TYPE_FG,
-                  LPAD(#{attrCd}, 3, '0') ATTR_CD
+                  LPAD(#{attrCd}, 2, '0') ATTR_CD
              FROM DUAL
           ) ORG
     ON (  A.STORE_CD = ORG.STORE_CD
@@ -217,7 +217,7 @@
     VALUES (
         #{storeCd},
         #{tblTypeFg},
-        LPAD(#{attrCd}, 3, '0'),
+        LPAD(#{attrCd}, 2, '0'),
         #{attrNm},
         #{x},
         #{y},
@@ -241,8 +241,8 @@
     /* TableAttrMapper.mergeStoreTableNumAttr */
     MERGE INTO TB_MS_TABLE_ATTR_NEW A
     USING (SELECT #{storeCd} STORE_CD,
-                  #{tblCd} TBL_CD,
-                  LPAD(#{attrCd}, 3, '0') ATTR_CD
+                  LPAD(#{tblCd}, 3, '0') TBL_CD,
+                  LPAD(#{attrCd}, 2, '0') ATTR_CD
              FROM DUAL
           ) ORG
     ON (  A.STORE_CD = ORG.STORE_CD
@@ -291,8 +291,8 @@
     )
     VALUES (
         #{storeCd},
-        #{tblCd},
-        LPAD(#{attrCd}, 3, '0'),
+        LPAD(#{tblCd}, 2, '0'),
+        LPAD(#{attrCd}, 2, '0'),
         #{attrNm},
         #{x},
         #{y},
@@ -312,6 +312,3 @@
     )
   </update>
 </mapper>
-
-
-

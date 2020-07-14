@@ -55,10 +55,7 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         int result = 0;
         String dt = currentDateTimeString();
 
-//        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
-        // 단독매장일때 MEMBR_ORGN_CD에 매장코드가 들어가 생기는 문제수정
-        memberVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());  //회원소속코드
-        memberVO.setRegStoreCd(sessionInfoVO.getOrgnCd());      //등록매장코드
+        memberVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());  //회원소속코드
 
         // 회원정보 중복체크
         List<DefaultMap<String>> memberInfo = mapper.chkDuplicateMember(memberVO);
@@ -79,6 +76,7 @@ public class SimpleMemberJoinServiceImpl implements SimpleMemberJoinService{
         //TODO 2018.08.14 안동관. 현재는 회원분류코드를 하드코딩으로 넣고 있으나 나중에는 화면에서 받아서 처리해야함.
         memberVO.setMembrClassCd("000");                        //회원분류코드
         memberVO.setMembrCardNo(memberVO.getTelNo());           //회원카드번호
+        memberVO.setRegStoreCd(sessionInfoVO.getOrgnCd());      //등록매장코드
         memberVO.setLunarYn("Y");                               //음력여부 Y:음력 N:양력
         memberVO.setShortNo(memberVO.getTelNo().substring(memberVO.getTelNo().length()-4, memberVO.getTelNo().length()));
         memberVO.setWeddingYn("N");                             //결혼여부 기혼:Y 미혼:N

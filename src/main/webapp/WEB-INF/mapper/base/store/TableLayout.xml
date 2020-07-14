@@ -71,7 +71,7 @@
     /* TableLayoutMapper.mergeTableByStore */
     MERGE INTO TB_MS_TABLE A
     USING (SELECT #{storeCd} STORE_CD,
-                  LPAD(#{tblCd}, 2, '0') TBL_CD
+                  LPAD(#{tblCd}, 3, '0') TBL_CD
              FROM DUAL
           ) ORG
        ON (A.STORE_CD = ORG.STORE_CD
@@ -113,7 +113,7 @@
     )
     VALUES (
         #{storeCd},
-        LPAD(#{tblCd}, 2, '0'),
+        LPAD(#{tblCd}, 3, '0'),
         #{tblNm},
         LPAD(#{tblGrpCd}, 2, '0'),
         #{tblSeatCnt},
@@ -132,6 +132,3 @@
   </update>
 
 </mapper>
-
-
-
