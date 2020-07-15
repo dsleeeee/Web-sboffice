@@ -633,7 +633,7 @@
     <typeAlias alias="dlvrReceiptVO" type="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.DlvrReceiptVO"/>
 
     <!-- KDS -->
-    <typeAlias alias="kdsDayVO" type="kr.co.solbipos.kds.anals.day.service.KdsDayVO"/>
+    <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>
 
   </typeAliases>
 

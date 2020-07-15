@@ -157,7 +157,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 등급코드 숫자영문.
         var msg = messages["grade.membr.grade.cd"] + messages["cmm.require.number.en"];
-        var numChkregexp = /^[A-za-z0-9]$/g;
+        var numChkregexp = /[^A-za-z0-9]/g;
         if (numChkregexp.test($scope.detailData.membrClassCd)) {
             $scope._popMsg(msg);
             return false;
@@ -183,7 +183,7 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
         // 신규가입적립 point 입력하세요.
-        var msg = messages["grade.membr.new.join.save.poin"] + messages["cmm.require.text"];
+        var msg = messages["grade.membr.new.join.save.point"] + messages["cmm.require.text"];
         var numChkregexp = /[^0-9]/g;
         if (numChkregexp.test($scope.detailData.newJoinSavePoint)) {
             $scope._popMsg(msg);

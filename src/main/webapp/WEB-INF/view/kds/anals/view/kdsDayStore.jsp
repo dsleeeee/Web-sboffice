@@ -8,20 +8,22 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
-<div class="subCon" ng-controller="kdsDayCtrl">
+<div class="subCon" ng-controller="kdsDayStoreCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('kdsDayList')">
+            <button class="btn_blue fr" ng-click="_broadcast('kdsDayStoreList')">
                 <s:message code="cmm.search"/>
             </button>
         </div>
     </div>
     <table class="searchTbl">
         <colgroup>
+            <col class="w5"/>
+            <col class="w15"/>
             <col class="w5"/>
             <col class="w15"/>
             <col class="w5"/>
@@ -65,7 +67,15 @@
                 </div>
             </td>
             <c:if test="${orgnFg == 'HQ'}">
-                <th><s:message code="kds.store"/></th>
+                <th><s:message code="kds.store.search"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                </td>
+            </c:if>
+            <c:if test="${orgnFg == 'HQ'}">
+                <th><s:message code="kds.store.contrast"/></th>
                 <td>
                     <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
                         <jsp:param name="targetId" value="regStore"/>
@@ -106,7 +116,7 @@
             <th>
                 <s:message code="kds.picDate.setting"/>
             </th>
-            <td>
+            <td colspan="3">
                 <div class="sb-select fl w20 mr10">
                     <wj-combo-box
                             id="picDate"
@@ -133,35 +143,31 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <th><s:message code="kds.prodCd"/></th>
+            <td>
+                <input type="text" id="prodCd" class="sb-input w50" ng-model="prodCd"
+                       maxlength="15"/>
+            </td>
+            <th><s:message code="kds.prodNm"/></th>
+            <td>
+                <input type="text" id="prodNm" class="sb-input w50" ng-model="prodNm"
+                       maxlength="15"/>
+            </td>
+            <%-- 분류조회 --%>
+            <th><s:message code="kds.prodClass"/></th>
+            <td>
+                <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm"
+                       ng-click="popUpProdClass()" style="float: left;"
+                       placeholder="<s:message code="prodCorner.prodClass" /> 선택" readonly/>
+                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
+                        ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+            </td>
+        </tr>
         </tbody>
     </table>
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-            <s:message code="kds.chart"/>
-        </button>
-        <%-- 픽업시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				<s:message code="kds.picDate"/>
-			</label>
-		</span>
-        <%-- 제조시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				 <s:message code="kds.makeDate"/>
-			</label>
-		</span>
-        <%-- 건수 --%>
-        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-        <%--			<label for="chkDt">--%>
-        <%--				<s:message code="kds.cnt"/>--%>
-        <%--			</label>--%>
-        <%--		</span>--%>
-    </div>
+
     <div class="w100 mt40 mb20 ">
         <%--위즈모 차트--%>
         <h2>
@@ -170,14 +176,8 @@
         <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
 
-    <div class="mt20 oh sb-select dkbr">
-        <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
-            <s:message code="cmm.excel.down"/>
-        </button>
-    </div>
     <%-- 그리드 --%>
-    <div class="w100 mt20">
+    <div class="w100 mt40">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -220,7 +220,7 @@
     var regstrStoreList = ${regstrStoreList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070801.08"
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=2020070801.08"
         charset="utf-8"></script>
 
 
