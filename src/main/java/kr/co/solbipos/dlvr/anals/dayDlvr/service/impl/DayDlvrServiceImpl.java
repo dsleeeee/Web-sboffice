@@ -30,4 +30,9 @@ public class DayDlvrServiceImpl implements DayDlvrService {
   public List<DefaultMap<Object>> getDayNonDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
     return dayDlvrMapper.getDayNonDlvrSaleList(dayDlvrVO);
   }
+
+  @Override
+  public List<DefaultMap<Object>> getDaySaleDtlList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
+    return dayDlvrMapper.getDaySaleDtlList(dayDlvrVO);
+  }
 }

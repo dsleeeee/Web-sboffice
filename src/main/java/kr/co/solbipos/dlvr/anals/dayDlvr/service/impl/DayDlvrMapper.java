@@ -13,4 +13,6 @@ public interface DayDlvrMapper {
   List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO);
 
   List<DefaultMap<Object>> getDayNonDlvrSaleList(DayDlvrVO dayDlvrVO);
+
+  List<DefaultMap<Object>> getDaySaleDtlList(DayDlvrVO dayDlvrVO);
 }

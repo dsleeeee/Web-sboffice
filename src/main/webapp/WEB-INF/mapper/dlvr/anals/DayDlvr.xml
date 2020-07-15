@@ -8,113 +8,280 @@
       TABLE    : TB_SL_SALE_HDR_DLVR & TB_SL_SALE_HDR
       COMMENTS :
   -->
-  <!--  <select id="getDayDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">-->
-  <!--    /*배달매출 조회*/-->
-  <!--    /*DlvrMapper.getDlvrList*/-->
-  <!--    <include refid="CmmSQL.PagingTemplateHeader"/>-->
-  <!--    SELECT tssh.SALE_DATE, SUM(tssh.REAL_SALE_AMT) AS SUM_DLVR_REAL_SALE_AMT, count(tssh.BILL_NO) AS CNT_DLVR_BILL_NO-->
-  <!--    <include refid="CmmSQL.PagingTemplateCount"/>-->
-  <!--    FROM TB_SL_SALE_HDR_DLVR tsshd-->
-  <!--    INNER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO AND tsshd.POS_NO = tssh.POS_NO AND tsshd.STORE_CD = tssh.STORE_CD AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND tsshd.SALE_DATE = tssh.SALE_DATE AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD-->
-  <!--    WHERE tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
-  <!--    GROUP BY tssh.SALE_DATE-->
-  <!--    <include refid="CmmSQL.PagingTemplateBottom"/>-->
+<!--    <select id="getDayDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">-->
+<!--      /*배달매출 조회*/-->
+<!--      /*DlvrMapper.getDlvrList*/-->
+<!--      <include refid="CmmSQL.PagingTemplateHeader"/>-->
+<!--      SELECT tssh.SALE_DATE, SUM(tssh.REAL_SALE_AMT) AS SUM_DLVR_REAL_SALE_AMT, count(tssh.BILL_NO) AS CNT_DLVR_BILL_NO-->
+<!--      <include refid="CmmSQL.PagingTemplateCount"/>-->
+<!--      FROM TB_SL_SALE_HDR_DLVR tsshd-->
+<!--      INNER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO AND tsshd.POS_NO = tssh.POS_NO AND tsshd.STORE_CD = tssh.STORE_CD AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND tsshd.SALE_DATE = tssh.SALE_DATE AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD-->
+<!--      WHERE tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
+<!--      GROUP BY tssh.SALE_DATE-->
+<!--      <include refid="CmmSQL.PagingTemplateBottom"/>-->
+<!--    </select>-->
+
+<!--    <select id="getDayNonDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">-->
+<!--      /*배달외매출 조회*/-->
+<!--      /*DlvrMapper.getDlvrList*/-->
+<!--      <include refid="CmmSQL.PagingTemplateHeader"/>-->
+<!--      SELECT tssh.SALE_DATE, SUM(tssh.REAL_SALE_AMT) AS SUM_REAL_SALE_AMT, count(tssh.BILL_NO) AS CNT_BILL_NO-->
+<!--      <include refid="CmmSQL.PagingTemplateCount"/>-->
+<!--      FROM TB_SL_SALE_HDR_DLVR tsshd-->
+<!--      FULL OUTER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO AND tsshd.POS_NO = tssh.POS_NO AND tsshd.STORE_CD = tssh.STORE_CD AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND tsshd.SALE_DATE = tssh.SALE_DATE AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD-->
+<!--      WHERE tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
+<!--      AND tsshd.BILL_NO IS NULL OR tssh.BILL_NO IS NULL-->
+<!--      AND tsshd.POS_NO IS NULL OR tssh.POS_NO IS NULL-->
+<!--      AND tsshd.STORE_CD IS NULL OR tssh.STORE_CD IS NULL-->
+<!--      AND tsshd.HQ_OFFICE_CD IS NULL OR tssh.HQ_OFFICE_CD IS NULL-->
+<!--      AND tsshd.SALE_DATE IS NULL OR tssh.SALE_DATE IS NULL-->
+<!--      AND tsshd.HQ_BRAND_CD IS NULL OR tssh.HQ_BRAND_CD IS NULL-->
+<!--      GROUP BY tssh.SALE_DATE-->
+<!--      <include refid="CmmSQL.PagingTemplateBottom"/>-->
   <!--  </select>-->
 
-  <!--  <select id="getDayNonDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">-->
-  <!--    /*배달외매출 조회*/-->
-  <!--    /*DlvrMapper.getDlvrList*/-->
-  <!--    <include refid="CmmSQL.PagingTemplateHeader"/>-->
-  <!--    SELECT tssh.SALE_DATE, SUM(tssh.REAL_SALE_AMT) AS SUM_REAL_SALE_AMT, count(tssh.BILL_NO) AS CNT_BILL_NO-->
-  <!--    <include refid="CmmSQL.PagingTemplateCount"/>-->
-  <!--    FROM TB_SL_SALE_HDR_DLVR tsshd-->
-  <!--    FULL OUTER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO AND tsshd.POS_NO = tssh.POS_NO AND tsshd.STORE_CD = tssh.STORE_CD AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD AND tsshd.SALE_DATE = tssh.SALE_DATE AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD-->
-  <!--    WHERE tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}-->
-  <!--    AND tsshd.BILL_NO IS NULL OR tssh.BILL_NO IS NULL-->
-  <!--    AND tsshd.POS_NO IS NULL OR tssh.POS_NO IS NULL-->
-  <!--    AND tsshd.STORE_CD IS NULL OR tssh.STORE_CD IS NULL-->
-  <!--    AND tsshd.HQ_OFFICE_CD IS NULL OR tssh.HQ_OFFICE_CD IS NULL-->
-  <!--    AND tsshd.SALE_DATE IS NULL OR tssh.SALE_DATE IS NULL-->
-  <!--    AND tsshd.HQ_BRAND_CD IS NULL OR tssh.HQ_BRAND_CD IS NULL-->
-  <!--    GROUP BY tssh.SALE_DATE-->
-  <!--    <include refid="CmmSQL.PagingTemplateBottom"/>-->
-  <!--  </select>-->
-
-  <select id="getDayDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">
+  <select id="getDayDlvrSaleList_paging" parameterType="dayDlvrVO" resultType="DefaultMap">
     /*배달매출 조회*/
     /*DlvrMapper.getDlvrList*/
     <include refid="CmmSQL.PagingTemplateHeader"/>
     SELECT
-    A.SALE_DATE AS DLVR_SALE_DATE,
-    B.SALE_DATE AS NON_DLVR_SALE_DATE,
-    CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
-    0 ELSE A.SUM_DLVR_REAL_SALE_AMT
-    END AS SUM_DLVR_REAL_SALE_AMT,
-    CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
-    0 ELSE A.CNT_DLVR_BILL_NO
-    END AS CNT_DLVR_BILL_NO,
-    B.SUM_REAL_SALE_AMT,
-    B.CNT_BILL_NO
+        A.SALE_DATE AS DLVR_SALE_DATE,
+        B.SALE_DATE AS NON_DLVR_SALE_DATE,
+        CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
+        0 ELSE A.SUM_DLVR_REAL_SALE_AMT
+        END AS SUM_DLVR_REAL_SALE_AMT,
+        CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
+        0 ELSE A.CNT_DLVR_BILL_NO
+        END AS CNT_DLVR_BILL_NO,
+        B.SUM_REAL_SALE_AMT,
+        B.CNT_BILL_NO,
+        A.HQ_OFFICE_CD,
+        A.HQ_BRAND_CD,
+        A.STORE_CD,
+        A.POS_NO,
+        A.BILL_NO
     <include refid="CmmSQL.PagingTemplateCount"/>
     FROM
-    (
-    SELECT
-    tssh.SALE_DATE,
-    SUM( tssh.REAL_SALE_AMT ) AS SUM_DLVR_REAL_SALE_AMT,
-    count( tssh.BILL_NO ) AS CNT_DLVR_BILL_NO
-    FROM
-    TB_SL_SALE_HDR_DLVR tsshd
-    INNER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
-    AND tsshd.POS_NO = tssh.POS_NO
-    AND tsshd.STORE_CD = tssh.STORE_CD
-    AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-    AND tsshd.SALE_DATE = tssh.SALE_DATE
-    AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+      (
+        SELECT
+            tssh.SALE_DATE,
+            SUM( tssh.REAL_SALE_AMT ) AS SUM_DLVR_REAL_SALE_AMT,
+            count( tssh.BILL_NO ) AS CNT_DLVR_BILL_NO,
+            tsshd.BILL_NO,
+            tsshd.POS_NO,
+            tsshd.STORE_CD,
+            tsshd.HQ_BRAND_CD,
+            tsshd.HQ_OFFICE_CD
+        FROM
+            TB_SL_SALE_HDR_DLVR tsshd
+            INNER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
+            AND tsshd.POS_NO = tssh.POS_NO
+            AND tsshd.STORE_CD = tssh.STORE_CD
+            AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND tsshd.SALE_DATE = tssh.SALE_DATE
+            AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+        WHERE
+            tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+            tssh.SALE_DATE,
+            tsshd.BILL_NO,
+            tsshd.POS_NO,
+            tsshd.STORE_CD,
+            tsshd.HQ_OFFICE_CD,
+            tsshd.HQ_BRAND_CD
+            ) A,
+            (
+        SELECT
+            tssh.SALE_DATE,
+            SUM( tssh.REAL_SALE_AMT ) AS SUM_REAL_SALE_AMT,
+            count( tssh.BILL_NO ) AS CNT_BILL_NO
+        FROM
+             TB_SL_SALE_HDR_DLVR tsshd FULL OUTER
+        JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
+        AND tsshd.POS_NO = tssh.POS_NO
+        AND tsshd.STORE_CD = tssh.STORE_CD
+        AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND tsshd.SALE_DATE = tssh.SALE_DATE
+        AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
     WHERE
-    tssh.SALE_DATE BETWEEN #{startDate}
-    AND #{endDate}
+        tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsshd.BILL_NO IS NULL
+        OR tssh.BILL_NO IS NULL
+        AND tsshd.POS_NO IS NULL
+        OR tssh.POS_NO IS NULL
+        AND tsshd.STORE_CD IS NULL
+        OR tssh.STORE_CD IS NULL
+        AND tsshd.HQ_OFFICE_CD IS NULL
+        OR tssh.HQ_OFFICE_CD IS NULL
+        AND tsshd.SALE_DATE IS NULL
+        OR tssh.SALE_DATE IS NULL
+        AND tsshd.HQ_BRAND_CD IS NULL
+        OR tssh.HQ_BRAND_CD IS NULL
     GROUP BY
-    tssh.SALE_DATE
-    ) A,
-    (
-    SELECT
-    tssh.SALE_DATE,
-    SUM( tssh.REAL_SALE_AMT ) AS SUM_REAL_SALE_AMT,
-    count( tssh.BILL_NO ) AS CNT_BILL_NO
-    FROM
-    TB_SL_SALE_HDR_DLVR tsshd FULL OUTER
-    JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
-    AND tsshd.POS_NO = tssh.POS_NO
-    AND tsshd.STORE_CD = tssh.STORE_CD
-    AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-    AND tsshd.SALE_DATE = tssh.SALE_DATE
-    AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
-    WHERE
-    tssh.SALE_DATE BETWEEN #{startDate}
-    AND #{endDate}
-    AND tsshd.BILL_NO IS NULL
-    OR tssh.BILL_NO IS NULL
-    AND tsshd.POS_NO IS NULL
-    OR tssh.POS_NO IS NULL
-    AND tsshd.STORE_CD IS NULL
-    OR tssh.STORE_CD IS NULL
-    AND tsshd.HQ_OFFICE_CD IS NULL
-    OR tssh.HQ_OFFICE_CD IS NULL
-    AND tsshd.SALE_DATE IS NULL
-    OR tssh.SALE_DATE IS NULL
-    AND tsshd.HQ_BRAND_CD IS NULL
-    OR tssh.HQ_BRAND_CD IS NULL
-    GROUP BY
-    tssh.SALE_DATE
+        tssh.SALE_DATE
     ) B
-    GROUP BY
-    A.SALE_DATE,
-    A.SUM_DLVR_REAL_SALE_AMT,
-    A.CNT_DLVR_BILL_NO,
-    B.SUM_REAL_SALE_AMT,
-    B.CNT_BILL_NO,
-    B.SALE_DATE
     <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+
+  <select id="getDaySaleDtlList_paging" parameterType="dayDlvrVO" resultType="DefaultMap">
+    <include refid="CmmSQL.PagingTemplateHeader"/>
+    SELECT
+        A.PROD_CLASS_NM,
+        A.PROD_CD,
+        A.PROD_NM,
+        SUM(A.SUM_SAEL_QTY) AS SUM_SALE_QTY,
+        SUM(A.SUM_REAL_SALE_AMT) AS SUM_REAL_AMT
+    <include refid="CmmSQL.PagingTemplateCount"/>
+    FROM
+        (
+        SELECT
+            thpc.PROD_CLASS_NM, thp.PROD_CD, thp.PROD_NM, SUM(tssd.SALE_QTY) AS SUM_SAEL_QTY, SUM(tssd.REAL_SALE_AMT) AS SUM_REAL_SALE_AMT, tssd.SALE_DATE
+        FROM
+            TB_SL_SALE_HDR tssh, TB_SL_SALE_DTL tssd, TB_HQ_PRODUCT thp, TB_HQ_PRODUCT_CLASS thpc
+        WHERE
+            1 = 1
+            AND thp.PROD_CD = tssd.PROD_CD
+            AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+            AND tssd.BILL_NO = tssh.BILL_NO
+            AND tssd.POS_NO = tssd.POS_NO
+            AND tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND tssd.STORE_CD = tssh.STORE_CD
+            AND tssd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+            AND tssd.SALE_DATE = #{searchDate}
+            AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tssd.HQ_BRAND_CD = #{hqBrandCd}
+            AND tssd.POS_NO = #{posNo}
+            AND tssd.BILL_NO = #{billNo}
+        GROUP BY
+            tssd.SALE_DATE , thp.PROD_CD , thp.PROD_NM , thpc.PROD_CLASS_NM, tssd.HQ_OFFICE_CD, tssd.STORE_CD, tssd.HQ_BRAND_CD, tssd.POS_NO, tssd.BILL_NO
+        ORDER BY
+            thp.PROD_CD) A
+    GROUP BY
+        A.PROD_CLASS_NM,
+        A.PROD_CD,
+        A.PROD_NM
+    <include refid="CmmSQL.PagingTemplateBottom"/>
+  </select>
+
+  <select id="getDayDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">
+    /*배달매출 조회*/
+    /*DlvrMapper.getDlvrList*/
+    SELECT
+        A.SALE_DATE AS DLVR_SALE_DATE,
+        B.SALE_DATE AS NON_DLVR_SALE_DATE,
+        CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
+        0 ELSE A.SUM_DLVR_REAL_SALE_AMT
+        END AS SUM_DLVR_REAL_SALE_AMT,
+        CASE WHEN A.SALE_DATE != B.SALE_DATE THEN
+        0 ELSE A.CNT_DLVR_BILL_NO
+        END AS CNT_DLVR_BILL_NO,
+        B.SUM_REAL_SALE_AMT,
+        B.CNT_BILL_NO,
+        A.HQ_OFFICE_CD,
+        A.HQ_BRAND_CD,
+        A.STORE_CD,
+        A.POS_NO,
+        A.BILL_NO
+    FROM
+      (
+        SELECT
+            tssh.SALE_DATE,
+            SUM( tssh.REAL_SALE_AMT ) AS SUM_DLVR_REAL_SALE_AMT,
+            count( tssh.BILL_NO ) AS CNT_DLVR_BILL_NO,
+            tsshd.BILL_NO,
+            tsshd.POS_NO,
+            tsshd.STORE_CD,
+            tsshd.HQ_BRAND_CD,
+            tsshd.HQ_OFFICE_CD
+        FROM
+            TB_SL_SALE_HDR_DLVR tsshd
+            INNER JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
+            AND tsshd.POS_NO = tssh.POS_NO
+            AND tsshd.STORE_CD = tssh.STORE_CD
+            AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND tsshd.SALE_DATE = tssh.SALE_DATE
+            AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+        WHERE
+            tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+            tssh.SALE_DATE,
+            tsshd.BILL_NO,
+            tsshd.POS_NO,
+            tsshd.STORE_CD,
+            tsshd.HQ_OFFICE_CD,
+            tsshd.HQ_BRAND_CD
+            ) A,
+            (
+        SELECT
+            tssh.SALE_DATE,
+            SUM( tssh.REAL_SALE_AMT ) AS SUM_REAL_SALE_AMT,
+            count( tssh.BILL_NO ) AS CNT_BILL_NO
+        FROM
+             TB_SL_SALE_HDR_DLVR tsshd FULL OUTER
+        JOIN TB_SL_SALE_HDR tssh ON tsshd.BILL_NO = tssh.BILL_NO
+        AND tsshd.POS_NO = tssh.POS_NO
+        AND tsshd.STORE_CD = tssh.STORE_CD
+        AND tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND tsshd.SALE_DATE = tssh.SALE_DATE
+        AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+    WHERE
+        tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsshd.BILL_NO IS NULL
+        OR tssh.BILL_NO IS NULL
+        AND tsshd.POS_NO IS NULL
+        OR tssh.POS_NO IS NULL
+        AND tsshd.STORE_CD IS NULL
+        OR tssh.STORE_CD IS NULL
+        AND tsshd.HQ_OFFICE_CD IS NULL
+        OR tssh.HQ_OFFICE_CD IS NULL
+        AND tsshd.SALE_DATE IS NULL
+        OR tssh.SALE_DATE IS NULL
+        AND tsshd.HQ_BRAND_CD IS NULL
+        OR tssh.HQ_BRAND_CD IS NULL
+    GROUP BY
+        tssh.SALE_DATE
+    ORDER BY
+        tssh.SALE_DATE DESC
+    ) B
+  </select>
+
+  <select id="getDaySaleDtlList" parameterType="dayDlvrVO" resultType="DefaultMap">
+    SELECT
+        A.PROD_CLASS_NM,
+        A.PROD_CD,
+        A.PROD_NM,
+        SUM(A.SUM_SAEL_QTY) AS SUM_SALE_QTY,
+        SUM(A.SUM_REAL_SALE_AMT) AS SUM_REAL_SALE_AMT
+    FROM
+        (
+        SELECT
+            thpc.PROD_CLASS_NM, thp.PROD_CD, thp.PROD_NM, SUM(tssd.SALE_QTY) AS SUM_SAEL_QTY, SUM(tssd.REAL_SALE_AMT) AS SUM_REAL_SALE_AMT, tssd.SALE_DATE
+        FROM
+            TB_SL_SALE_HDR tssh, TB_SL_SALE_DTL tssd, TB_HQ_PRODUCT thp, TB_HQ_PRODUCT_CLASS thpc
+        WHERE
+            1 = 1
+            AND thp.PROD_CD = tssd.PROD_CD
+            AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+            AND tssd.BILL_NO = tssh.BILL_NO
+            AND tssd.POS_NO = tssd.POS_NO
+            AND tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+            AND tssd.STORE_CD = tssh.STORE_CD
+            AND tssd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+            AND tssd.SALE_DATE = #{searchDate}
+            AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tssd.HQ_BRAND_CD = #{hqBrandCd}
+            AND tssd.POS_NO = #{posNo}
+            AND tssd.BILL_NO = #{billNo}
+        GROUP BY
+            tssd.SALE_DATE , thp.PROD_CD , thp.PROD_NM , thpc.PROD_CLASS_NM, tssd.HQ_OFFICE_CD, tssd.STORE_CD, tssd.HQ_BRAND_CD, tssd.POS_NO, tssd.BILL_NO
+        ORDER BY
+            thp.PROD_CD) A
+    GROUP BY
+        A.PROD_CLASS_NM,
+        A.PROD_CD,
+        A.PROD_NM
+    ORDER BY
+        A.PROD_CLASS_NM
   </select>
 
 </mapper>

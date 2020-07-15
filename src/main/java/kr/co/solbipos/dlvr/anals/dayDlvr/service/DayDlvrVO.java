@@ -4,6 +4,8 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 public class DayDlvrVO extends PageVO {
   private String saleDate;
+  private String hqOfficeCd;
+  private String hqBrandCd;
   private String nonDlvrSaleDate;
   private String posNo;
   private String billNo;
@@ -19,6 +21,7 @@ public class DayDlvrVO extends PageVO {
   private int cntDlvrBillNo;
   private int sumRealSaleAmt;
   private int cntBillNo;
+  private String searchDate;
 
   public String getSaleDate() {
     return saleDate;
@@ -146,5 +149,29 @@ public class DayDlvrVO extends PageVO {
 
   public void setCntBillNo(int cntBillNo) {
     this.cntBillNo = cntBillNo;
+  }
+
+  public String getHqOfficeCd() {
+    return hqOfficeCd;
+  }
+
+  public void setHqOfficeCd(String hqOfficeCd) {
+    this.hqOfficeCd = hqOfficeCd;
+  }
+
+  public String getHqBrandCd() {
+    return hqBrandCd;
+  }
+
+  public void setHqBrandCd(String hqBrandCd) {
+    this.hqBrandCd = hqBrandCd;
+  }
+
+  public String getSearchDate() {
+    return searchDate;
+  }
+
+  public void setSearchDate(String searchDate) {
+    this.searchDate = searchDate;
   }
 }

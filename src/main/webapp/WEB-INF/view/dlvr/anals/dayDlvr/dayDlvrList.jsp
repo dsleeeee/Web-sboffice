@@ -52,65 +52,121 @@
     </tbody>
   </table>
 
-  <%-- 그리드 --%>
-  <%-- 페이지 스케일  --%>
-  <div class="mt20 oh sb-select dkbr">
-    <%-- 페이지 스케일  --%>
-    <wj-combo-box
-            class="w100px fl"
-            id="listScaleBox"
-            ng-model="listScale"
-            items-source="_getComboData('listScaleBox')"
-            display-member-path="name"
-            selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
-    </wj-combo-box>
+  <%-- 그리드 left --%>
+  <div class="w50 fl mt40 mb20" style="width: 38%">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
+      <div class="oh sb-select dkbr">
+        <%--        &lt;%&ndash; 페이지 스케일  &ndash;%&gt;--%>
+        <%--        <wj-combo-box--%>
+        <%--                class="w100px fl"--%>
+        <%--                id="listScaleBox"--%>
+        <%--                ng-model="listScale"--%>
+        <%--                items-source="_getComboData('listScaleBox')"--%>
+        <%--                display-member-path="name"--%>
+        <%--                selected-value-path="value"--%>
+        <%--                is-editable="false"--%>
+        <%--                initialized="initComboBox(s)">--%>
+        <%--        </wj-combo-box>--%>
+        <%-- 엑셀G 버튼 --%>
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="leftExcelDownload()">
+          <s:message code="dayDlvr.leftExcelDownload"/>
+        </button>
+      </div>
+      <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
+        <div class="row">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter">
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="dayDlvr.saleDate"/>" binding="nonDlvrSaleDate" width="110"
+                                 align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntDlvrBillNo" width="80"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumDlvrRealSaleAmt"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntBillNo" width="80"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumRealSaleAmt"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
-    <%-- 엑셀G 버튼 --%>
-    <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
-      <s:message code="dayDlvr.leftExcelDownload"/>
-    </button>
-    <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
-      <s:message code="dayDlvr.rightExcelDownload"/>
-    </button>
-  </div>
-
-  <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter"
-              is-read-only="true">
-
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="dayDlvr.saleDate"/>" binding="nonDlvrSaleDate" width="110"
-                             align="center"
-                             is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntDlvrBillNo" width="150"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumDlvrRealSaleAmt"
-                             width="200"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dayDlvr.cntBillNo"/>" binding="cntBillNo" width="150"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumRealSaleAmt" width="200"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-      </wj-flex-grid>
+          </wj-flex-grid>
+        </div>
+      </div>
     </div>
+    <%--    &lt;%&ndash; 페이지 리스트 &ndash;%&gt;--%>
+    <%--    <div class="pageNum">--%>
+    <%--      &lt;%&ndash; id &ndash;%&gt;--%>
+    <%--      <ul id="dayDlvrCtrlPager" data-size="10">--%>
+    <%--      </ul>--%>
+    <%--    </div>--%>
+    <%--    &lt;%&ndash;//페이지 리스트&ndash;%&gt;--%>
   </div>
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
-    <ul id="dayDlvrCtrlPager" data-size="10">
-    </ul>
+</div>
+
+<div ng-controller="dayDlvrDtlCtrl">
+  <%--right--%>
+  <%-- 그리드 right --%>
+  <div class="w50 fl mb20" style="width: 60%">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
+      <div class="oh sb-select dkbr">
+        <%--        &lt;%&ndash; 페이지 스케일  &ndash;%&gt;--%>
+        <%--        <wj-combo-box--%>
+        <%--                class="w100px fl"--%>
+        <%--                id="listScaleBox"--%>
+        <%--                ng-model="listScale"--%>
+        <%--                items-source="_getComboData('listScaleBox')"--%>
+        <%--                display-member-path="name"--%>
+        <%--                selected-value-path="value"--%>
+        <%--                is-editable="false"--%>
+        <%--                initialized="initComboBox(s)">--%>
+        <%--        </wj-combo-box>--%>
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="rightExcelDownload()">
+          <s:message code="dayDlvr.rightExcelDownload"/>
+        </button>
+      </div>
+      <div class="wj-gridWrap" style="height:480px; overflow-y: hidden;">
+        <div class="row">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter"
+                  is-read-only="true">
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="dayDlvr.prodClassNm"/>" binding="prodClassNm" width="150"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.prodDd"/>" binding="prodDd" width="100"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.prodNm"/>" binding="prodNm" width="150"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="sumDlvrSaleQty" width="150"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumDlvrRealSaleAmt"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="sumSaleQty" width="100"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="sumRealSaleAmt"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+          </wj-flex-grid>
+        </div>
+      </div>
+    </div>
+    <%--    &lt;%&ndash; 페이지 리스트 &ndash;%&gt;--%>
+    <%--    <div class="pageNum mt10">--%>
+    <%--      &lt;%&ndash; id &ndash;%&gt;--%>
+    <%--      <ul id="dayDlvrDtlCtrlPager" data-size="10">--%>
+    <%--      </ul>--%>
+    <%--    </div>--%>
+    <%--  &lt;%&ndash;//페이지 리스트&ndash;%&gt;--%>
   </div>
-  <%--//페이지 리스트--%>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dayDlvr/dayDlvr.js?ver=2019052801.11"

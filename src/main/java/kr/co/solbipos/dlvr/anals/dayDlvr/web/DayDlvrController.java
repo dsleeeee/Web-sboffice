@@ -63,4 +63,18 @@ public class DayDlvrController {
 
     return ReturnUtil.returnListJson(Status.OK, DayDlvrSale, dayDlvrVO);
   }
+
+  @RequestMapping(value = "/dayDlvr/getDaySaleDtlList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getDaySaleDtlList(DayDlvrVO dayDlvrVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    HashMap<String, Object> result = new HashMap<>();
+
+    List<DefaultMap<Object>> DayDlvrSale = dayDlvrService.getDaySaleDtlList(dayDlvrVO, sessionInfoVO);
+//    List<DefaultMap<Object>> DayNonDlvrSale = dayDlvrService.getDayNonDlvrSaleList(dayDlvrVO, sessionInfoVO);
+
+//    DayDlvrSale.addAll(DayNonDlvrSale);
+
+    return ReturnUtil.returnListJson(Status.OK, DayDlvrSale, dayDlvrVO);
+  }
 }
