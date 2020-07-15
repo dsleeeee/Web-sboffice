@@ -9,7 +9,9 @@
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="recpProd.info"/>
-            <label id="lblRecipesCd" style="display: none;"></label>
+            <label id="lblRecpProdRecipesCd" style="display: none;"></label>
+            <label id="lblRecpProdRecipesNm" style="display: none;"></label>
+            <label id="lblRecpProdOrgplceNm" style="display: none;"></label>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
@@ -20,7 +22,7 @@
                 <a href="#" class="open fl"></a>
                 <%-- 조회 --%>
                 <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                    <button class="btn_blue fr" ng-click="_broadcast('recpProdCtrl',1)">
+                    <button class="btn_blue fr" ng-click="_broadcast('recpProdCtrl', 1)">
                         <s:message code="cmm.search" />
                     </button>
                 </div>
@@ -83,7 +85,7 @@
                         <wj-flex-grid-column header="<s:message code="recpProd.level3Nm"/>" binding="level3Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpProd.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpProd.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="recpProd.lastCostUprc"/>" binding="lastCostUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="recpProd.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -102,7 +104,7 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20200713.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpProd.js?ver=20200715.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -129,13 +129,9 @@ public class MonthVO extends PageVO {
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 
-    public String getMembrOrgnCd() {
-        return membrOrgnCd;
-    }
+    public String getMembrOrgnCd() { return membrOrgnCd; }
 
-    public void setMembrOrgnCd(String membrOrgnCd) {
-        this.membrOrgnCd = membrOrgnCd;
-    }
+    public void setMembrOrgnCd(String membrOrgnCd) { this.membrOrgnCd = membrOrgnCd; }
 
     public String[] getStoreCdList() {
         return storeCdList;

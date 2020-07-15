@@ -28,14 +28,17 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 검색 호출 -->
     $scope.$on("recpProdCtrl", function(event, data) {
-        $("#lblRecipesCd").text(data.recipesCd);
+        // label에 담은 이유 : 분류조회 후 검색시, 데이터가 날라가버림 / 검색에 1을 빼자니 저장클릭 안됨
+        $("#lblRecpProdRecipesCd").text(data.recipesCd);
+        $("#lblRecpProdRecipesNm").text(data.recipesNm);
+        $("#lblRecpProdOrgplceNm").text(data.orgplceNm);
         $scope.searchRecpProd();
         event.preventDefault();
     });
 
     $scope.searchRecpProd = function(){
         var params = {};
-        params.recipesCd = $("#lblRecipesCd").text();
+        params.recipesCd = $("#lblRecpProdRecipesCd").text();
 
         $scope._inquiryMain("/base/prod/recpOrigin/recpProd/getRecpProdList.sb", params, function() {}, false);
     };
@@ -75,7 +78,7 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].status = "I";
-                $scope.flex.collectionView.items[i].recipesCd = $("#lblRecipesCd").text();
+                $scope.flex.collectionView.items[i].recipesCd = $("#lblRecpProdRecipesCd").text();
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -88,7 +91,12 @@ app.controller('recpProdCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.close = function(){
         $scope.wjRecpProdLayer.hide();
 
+        var params = {};
+        params.recipesCd = $("#lblRecpProdRecipesCd").text();
+        params.recipesNm = $("#lblRecpProdRecipesNm").text();
+        params.orgplceNm = $("#lblRecpProdOrgplceNm").text();
+
         // 저장기능 수행후 재조회
-        $scope._broadcast('recpOriginCtrl');
+        $scope._broadcast('recpOriginDetailCtrl', params);
     };
 }]);

@@ -13,251 +13,524 @@
 
     <!-- 원산지관리 조회 -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <select id="getRecpOriginList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpOriginList */
-        SELECT
-        tmpro.RECIPES_CD,
-        tmpro.RECIPES_NM,
-        tmpro.ORGPLCE_NM
-        FROM TB_MS_PRODUCT_RECP_ORIGIN tmpro
-        WHERE 1=1
-        AND tmpro.STORE_CD = #{storeCd}
-        ORDER BY tmpro.RECIPES_CD
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thpro.RECIPES_CD,
+                thpro.RECIPES_NM,
+                thpro.ORGPLCE_NM
+                FROM TB_HQ_PRODUCT_RECP_ORIGIN thpro
+                WHERE 1=1
+                AND thpro.HQ_OFFICE_CD = #{membrOrgnCd}
+                ORDER BY thpro.RECIPES_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmpro.RECIPES_CD,
+                tmpro.RECIPES_NM,
+                tmpro.ORGPLCE_NM
+                FROM TB_MS_PRODUCT_RECP_ORIGIN tmpro
+                WHERE 1=1
+                AND tmpro.STORE_CD = #{storeCd}
+                ORDER BY tmpro.RECIPES_CD
+            </when>
+        </choose>
     </select>
 
     <!-- 재료코드(자동채번) -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
+        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
     -->
     <select id="getRecpOriginRecipesCd" parameterType="RecpOriginVO" resultType="String">
         /* RecpOriginMapper.getRecpOriginRecipesCd */
-        SELECT
-        LPAD(NVL(MAX(tmpro.RECIPES_CD), 0) + 1, 4, '0')
-        FROM TB_MS_PRODUCT_RECP_ORIGIN tmpro
-        WHERE 1=1
-        AND tmpro.STORE_CD = #{storeCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                LPAD(NVL(MAX(thpro.RECIPES_CD), 0) + 1, 4, '0')
+                FROM TB_HQ_PRODUCT_RECP_ORIGIN thpro
+                WHERE 1=1
+                AND thpro.HQ_OFFICE_CD = #{membrOrgnCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                LPAD(NVL(MAX(tmpro.RECIPES_CD), 0) + 1, 4, '0')
+                FROM TB_MS_PRODUCT_RECP_ORIGIN tmpro
+                WHERE 1=1
+                AND tmpro.STORE_CD = #{storeCd}
+            </when>
+        </choose>
     </select>
 
     <!-- 원산지관리 저장 insert -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <insert id="getRecpOriginSaveInsert" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpOriginSaveInsert */
-        INSERT INTO TB_MS_PRODUCT_RECP_ORIGIN
-        (
-            STORE_CD,
-            RECIPES_CD,
-            RECIPES_NM,
-            ORGPLCE_NM,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{storeCd},
-            #{recipesCd},
-            #{recipesNm},
-            #{orgplceNm},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_RECP_ORIGIN
+                (
+                    HQ_OFFICE_CD,
+                    RECIPES_CD,
+                    RECIPES_NM,
+                    ORGPLCE_NM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{membrOrgnCd},
+                    #{recipesCd},
+                    #{recipesNm},
+                    #{orgplceNm},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_RECP_ORIGIN
+                (
+                    STORE_CD,
+                    RECIPES_CD,
+                    RECIPES_NM,
+                    ORGPLCE_NM,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{recipesCd},
+                    #{recipesNm},
+                    #{orgplceNm},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
     </insert>
 
     <!-- 원산지관리 저장 update -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <update id="getRecpOriginSaveUpdate" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpOriginSaveUpdate */
-        UPDATE
-        TB_MS_PRODUCT_RECP_ORIGIN
-        SET
-        RECIPES_NM = #{recipesNm},
-        ORGPLCE_NM = #{orgplceNm},
-        MOD_DT = #{modDt},
-        MOD_ID = #{modId}
-        WHERE 1=1
-        AND STORE_CD = #{storeCd}
-        AND RECIPES_CD = #{recipesCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_PRODUCT_RECP_ORIGIN
+                SET
+                RECIPES_NM = #{recipesNm},
+                ORGPLCE_NM = #{orgplceNm},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_PRODUCT_RECP_ORIGIN
+                SET
+                RECIPES_NM = #{recipesNm},
+                ORGPLCE_NM = #{orgplceNm},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+        </choose>
     </update>
 
     <!-- 원산지관리 저장 delete -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_ORIGIN
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <delete id="getRecpOriginSaveDelete" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpOriginSaveDelete */
-        DELETE
-        TB_MS_PRODUCT_RECP_ORIGIN
-        WHERE 1=1
-        AND STORE_CD = #{storeCd}
-        AND RECIPES_CD = #{recipesCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                TB_HQ_PRODUCT_RECP_ORIGIN
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                TB_MS_PRODUCT_RECP_ORIGIN
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+        </choose>
     </delete>
 
     <!-- 원산지관리 저장 delete 시, 재료-상품 저장 delete -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
+        COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
     <delete id="getRecpProdSaveDeleteAll" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveDeleteAll */
-        DELETE
-        TB_MS_PRODUCT_RECP_PROD
-        WHERE 1=1
-        AND STORE_CD = #{storeCd}
-        AND RECIPES_CD = #{recipesCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                TB_HQ_PRODUCT_RECP_PROD
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                TB_MS_PRODUCT_RECP_PROD
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND RECIPES_CD = #{recipesCd}
+            </when>
+        </choose>
     </delete>
 
     <!-- 재료-상품 조회 -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
-        COMMENTS : [매장]재료-원산지정보, [매장]상품, [매장]상품_분류
+        TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_SALE_PRICE_V99,
+                   TB_MS_PRODUCT_RECP_PROD, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_SALE_PRICE_V99
+        COMMENTS : [본사]재료-원산지정보, [본사]상품, [본사]상품_분류,
+                   [매장]재료-원산지정보, [매장]상품, [매장]상품_분류
     -->
     <select id="getRecpOriginDetailList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpOriginDetailList */
-        SELECT
-        REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
-        (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
-        REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
-        (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
-        REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
-        (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
-        tmprp.PROD_CD,
-        tmp.PROD_NM,
-        tmp.LAST_COST_UPRC
-        FROM TB_MS_PRODUCT_RECP_PROD tmprp,
-        TB_MS_PRODUCT tmp,
-        (
-            SELECT
-            STORE_CD,
-            PROD_CLASS_CD,
-            SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
-            FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd})
-            WHERE 1=1
-            START WITH P_PROD_CLASS_CD = '00000'
-            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
-        ) tmpc_p
-        WHERE 1=1
-        AND tmprp.STORE_CD = tmp.STORE_CD
-        AND tmprp.PROD_CD = tmp.PROD_CD
-        AND tmp.STORE_CD = tmpc_p.STORE_CD
-        AND tmp.PROD_CLASS_CD = tmpc_p.PROD_CLASS_CD
-        AND tmprp.STORE_CD = #{storeCd}
-        AND tmprp.RECIPES_CD = #{recipesCd}
-        ORDER BY tmprp.PROD_CD
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                REPLACE(SUBSTR(thpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
+                (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
+                REPLACE(SUBSTR(thpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
+                (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
+                REPLACE(SUBSTR(thpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
+                (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
+                thprp.PROD_CD,
+                thp.PROD_NM,
+                NVL(thpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                FROM TB_HQ_PRODUCT_RECP_PROD thprp,
+                TB_HQ_PRODUCT thp,
+                (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CLASS_CD,
+                    SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{membrOrgnCd}
+                    START WITH P_PROD_CLASS_CD = '00000'
+                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                ) thpc_p,
+                TB_HQ_PRODUCT_SALE_PRICE_V99 thpspv99 --view
+                WHERE 1=1
+                AND thprp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thprp.PROD_CD = thp.PROD_CD
+                AND thp.HQ_OFFICE_CD = thpc_p.HQ_OFFICE_CD
+                AND thp.PROD_CLASS_CD = thpc_p.PROD_CLASS_CD
+                AND thprp.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND thprp.RECIPES_CD = #{recipesCd}
+                AND thpspv99.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpspv99.PROD_CD = thp.PROD_CD
+                <![CDATA[
+                    AND thpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND thpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+                ORDER BY thprp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
+                (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
+                REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
+                (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
+                REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
+                (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
+                tmprp.PROD_CD,
+                tmp.PROD_NM,
+                NVL(tmpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                FROM TB_MS_PRODUCT_RECP_PROD tmprp,
+                TB_MS_PRODUCT tmp,
+                (
+                    SELECT
+                    STORE_CD,
+                    PROD_CLASS_CD,
+                    SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
+                    FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd})
+                    WHERE 1=1
+                    START WITH P_PROD_CLASS_CD = '00000'
+                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                ) tmpc_p,
+                TB_MS_PRODUCT_SALE_PRICE_V99 tmpspv99 --view
+                WHERE 1=1
+                AND tmprp.STORE_CD = tmp.STORE_CD
+                AND tmprp.PROD_CD = tmp.PROD_CD
+                AND tmp.STORE_CD = tmpc_p.STORE_CD
+                AND tmp.PROD_CLASS_CD = tmpc_p.PROD_CLASS_CD
+                AND tmprp.STORE_CD = #{storeCd}
+                AND tmprp.RECIPES_CD = #{recipesCd}
+                AND tmpspv99.STORE_CD = tmp.STORE_CD
+                AND tmpspv99.PROD_CD = tmp.PROD_CD
+                <![CDATA[
+                    AND tmpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND tmpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+                ORDER BY tmprp.PROD_CD
+            </when>
+        </choose>
     </select>
 
     <!-- 재료-상품 조회 -->
     <!--
-        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
-        COMMENTS : [매장]상품, [매장]상품_분류
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_RECP_PROD, TB_HQ_PRODUCT_SALE_PRICE_V99,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_RECP_PROD, TB_MS_PRODUCT_SALE_PRICE_V99
+        COMMENTS : [본사]상품, [본사]상품_분류, [본사]재료-상품맵핑정보,
+                   [매장]상품, [매장]상품_분류, [매장]재료-상품맵핑정보
     -->
     <select id="getRecpProdList"  parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpProdList */
-        SELECT *
-        FROM
-        (
-            SELECT
-            REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
-            (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
-            REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
-            (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
-            REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
-            (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
-            tmp.PROD_CD,
-            tmp.PROD_NM,
-            tmp.LAST_COST_UPRC
-            FROM TB_MS_PRODUCT tmp,
-            (
-                SELECT
-                STORE_CD,
-                PROD_CLASS_CD,
-                SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
-                FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd})
-                WHERE 1=1
-                START WITH P_PROD_CLASS_CD = '00000'
-                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
-            ) tmpc_p
-            WHERE 1=1
-            AND tmp.STORE_CD = tmpc_p.STORE_CD
-            AND tmp.PROD_CLASS_CD = tmpc_p.PROD_CLASS_CD
-            AND tmp.STORE_CD = #{storeCd}
-            <if test="prodCd != null and prodCd != ''">
-                AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
-            </if>
-            <if test="prodNm != null and prodNm != ''">
-                AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
-            </if>
-            AND NOT EXISTS
-            (
-                SELECT 1
-                FROM TB_MS_PRODUCT_RECP_PROD tmprp
-                WHERE 1=1
-                AND tmprp.STORE_CD = tmp.STORE_CD
-                AND tmprp.PROD_CD = tmp.PROD_CD
-                AND tmprp.RECIPES_CD = #{recipesCd}
-            )
-        )
-        WHERE 1=1
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND (      LEVEL1 = #{prodClassCd}
-                    OR LEVEL2 = #{prodClassCd}
-                    OR LEVEL3 = #{prodClassCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT *
+                FROM
+                (
+                    SELECT
+                    REPLACE(SUBSTR(thpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
+                    (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
+                    REPLACE(SUBSTR(thpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
+                    (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
+                    REPLACE(SUBSTR(thpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
+                    (SELECT PROD_CLASS_NM FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(thpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
+                    thp.PROD_CD,
+                    thp.PROD_NM,
+                    NVL(thpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                    FROM TB_HQ_PRODUCT thp,
+                    (
+                        SELECT
+                        HQ_OFFICE_CD,
+                        PROD_CLASS_CD,
+                        SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
+                        FROM TB_HQ_PRODUCT_CLASS
+                        WHERE 1=1
+                        AND HQ_OFFICE_CD = #{membrOrgnCd}
+                        START WITH P_PROD_CLASS_CD = '00000'
+                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                    ) thpc_p,
+                    TB_HQ_PRODUCT_SALE_PRICE_V99 thpspv99 --view
+                    WHERE 1=1
+                    AND thp.HQ_OFFICE_CD = thpc_p.HQ_OFFICE_CD
+                    AND thp.PROD_CLASS_CD = thpc_p.PROD_CLASS_CD
+                    AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
+                    <if test="prodCd != null and prodCd != ''">
+                        AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                        AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                    </if>
+                    AND thpspv99.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpspv99.PROD_CD = thp.PROD_CD
+                    <![CDATA[
+                            AND thpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND thpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND NOT EXISTS
+                    (
+                        SELECT 1
+                        FROM TB_HQ_PRODUCT_RECP_PROD thprp
+                        WHERE 1=1
+                        AND thprp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                        AND thprp.PROD_CD = thp.PROD_CD
+                        AND thprp.RECIPES_CD = #{recipesCd}
+                    )
                 )
-        </if>
-        ORDER BY PROD_CD
+                WHERE 1=1
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND (      LEVEL1 = #{prodClassCd}
+                            OR LEVEL2 = #{prodClassCd}
+                            OR LEVEL3 = #{prodClassCd}
+                    )
+                </if>
+                ORDER BY PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT *
+                FROM
+                (
+                    SELECT
+                    REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/','') AS LEVEL1,
+                    (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 0, 6) ,'/',''))) AS LEVEL1_NM,
+                    REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/','') AS LEVEL2,
+                    (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 7, 6) ,'/',''))) AS LEVEL2_NM,
+                    REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/','') AS LEVEL3,
+                    (SELECT PROD_CLASS_NM FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd} AND PROD_CLASS_CD=(REPLACE(SUBSTR(tmpc_p.PATH, 13, 6) ,'/',''))) AS LEVEL3_NM,
+                    tmp.PROD_CD,
+                    tmp.PROD_NM,
+                    NVL(tmpspv99.SALE_UPRC, 0) AS SALE_UPRC
+                    FROM TB_MS_PRODUCT tmp,
+                    (
+                        SELECT
+                        STORE_CD,
+                        PROD_CLASS_CD,
+                        SYS_CONNECT_BY_PATH (PROD_CLASS_CD, '/') PATH
+                        FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd})
+                        WHERE 1=1
+                        START WITH P_PROD_CLASS_CD = '00000'
+                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                    ) tmpc_p,
+                    TB_MS_PRODUCT_SALE_PRICE_V99 tmpspv99 --view
+                    WHERE 1=1
+                    AND tmp.STORE_CD = tmpc_p.STORE_CD
+                    AND tmp.PROD_CLASS_CD = tmpc_p.PROD_CLASS_CD
+                    AND tmp.STORE_CD = #{storeCd}
+                    <if test="prodCd != null and prodCd != ''">
+                        AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                        AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                    </if>
+                    AND tmpspv99.STORE_CD = tmp.STORE_CD
+                    AND tmpspv99.PROD_CD = tmp.PROD_CD
+                    <![CDATA[
+                        AND tmpspv99.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        AND tmpspv99.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    ]]>
+                    AND NOT EXISTS
+                    (
+                        SELECT 1
+                        FROM TB_MS_PRODUCT_RECP_PROD tmprp
+                        WHERE 1=1
+                        AND tmprp.STORE_CD = tmp.STORE_CD
+                        AND tmprp.PROD_CD = tmp.PROD_CD
+                        AND tmprp.RECIPES_CD = #{recipesCd}
+                    )
+                )
+                WHERE 1=1
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND (      LEVEL1 = #{prodClassCd}
+                            OR LEVEL2 = #{prodClassCd}
+                            OR LEVEL3 = #{prodClassCd}
+                        )
+                </if>
+                ORDER BY PROD_CD
+            </when>
+        </choose>
     </select>
 
     <!-- 재료-상품 저장 insert -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
+        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
     -->
     <insert id="getRecpProdSaveInsert" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveInsert */
-        INSERT INTO TB_MS_PRODUCT_RECP_PROD
-        (
-            STORE_CD,
-            RECIPES_CD,
-            PROD_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{storeCd},
-            #{recipesCd},
-            #{prodCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_RECP_PROD
+                (
+                    HQ_OFFICE_CD,
+                    RECIPES_CD,
+                    PROD_CD,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{membrOrgnCd},
+                    #{recipesCd},
+                    #{prodCd},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_RECP_PROD
+                (
+                    STORE_CD,
+                    RECIPES_CD,
+                    PROD_CD,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{recipesCd},
+                    #{prodCd},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
     </insert>
 
     <!-- 재료-상품 저장 delete -->
     <!--
-        TABLE    : TB_MS_PRODUCT_RECP_PROD
-        COMMENTS : [매장]재료-원산지정보
+        TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
+        COMMENTS : [매장]재료-원산지정보, [본사]재료-원산지정보
     -->
     <delete id="getRecpProdSaveDelete" parameterType="RecpOriginVO">
         /* RecpOriginMapper.getRecpProdSaveDelete */
-        DELETE
-        TB_MS_PRODUCT_RECP_PROD
-        WHERE 1=1
-        AND STORE_CD = #{storeCd}
-        AND RECIPES_CD = #{recipesCd}
-        AND PROD_CD = #{prodCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                TB_HQ_PRODUCT_RECP_PROD
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND RECIPES_CD = #{recipesCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                TB_MS_PRODUCT_RECP_PROD
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND RECIPES_CD = #{recipesCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
     </delete>
 
 </mapper>

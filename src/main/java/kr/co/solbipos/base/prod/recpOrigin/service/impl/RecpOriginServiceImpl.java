@@ -50,6 +50,8 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     @Override
     public List<DefaultMap<Object>> getRecpOriginList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -67,6 +69,8 @@ public class RecpOriginServiceImpl implements RecpOriginService {
 
         for(RecpOriginVO recpOriginVO : recpOriginVOs) {
 
+            recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
@@ -101,6 +105,8 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     @Override
     public List<DefaultMap<Object>> getRecpOriginDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -112,6 +118,8 @@ public class RecpOriginServiceImpl implements RecpOriginService {
     @Override
     public List<DefaultMap<Object>> getRecpProdList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
 
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -128,6 +136,8 @@ public class RecpOriginServiceImpl implements RecpOriginService {
         String currentDt = currentDateTimeString();
 
         for(RecpOriginVO recpOriginVO : recpOriginVOs) {
+            recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            recpOriginVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
             }

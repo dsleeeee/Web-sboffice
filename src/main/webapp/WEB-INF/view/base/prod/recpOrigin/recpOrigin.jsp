@@ -28,8 +28,8 @@
                 <s:message code="recpOrigin.recpOrigin"/>
                 <div class="updownSet oh mb10">
                     <button class="btn_skyblue" id="btnRecpOriginAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-                    <button class="btn_skyblue" id="btnRecpOriginDel" ng-click="del()"><s:message code='cmm.del' /></button>
                     <button class="btn_skyblue" id="btnRecpOriginSave" ng-click="save()"><s:message code='cmm.save' /></button>
+                    <button class="btn_skyblue" id="btnRecpOriginDel" ng-click="del()"><s:message code='cmm.del' /></button>
                 </div>
                 <div class="w100 mt10 mb20">
                     <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -62,6 +62,9 @@
     <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="recpOriginDetailCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
             <s:message code="recpOrigin.recpProd"/>
+            <label id="lblRecipesCd"></label>
+            <label id="lblRecipesNm"></label>
+            <label id="lblOrgplceNm"></label>
             <div class="updownSet oh mb10">
                 <button class="btn_skyblue" id="btnRecpOriginProdAdd" ng-click="add()"><s:message code='cmm.add' /></button>
                 <button class="btn_skyblue" id="btnRecpOriginProdDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -83,7 +86,7 @@
                         <wj-flex-grid-column header="<s:message code="recpOrigin.level3Nm"/>" binding="level3Nm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOrigin.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOrigin.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="recpOrigin.lastCostUprc"/>" binding="lastCostUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="recpOrigin.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -94,7 +97,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20200713.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOrigin.js?ver=20200715.01" charset="utf-8"></script>
 
 <%-- 재료-상품 등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpProd.jsp">
