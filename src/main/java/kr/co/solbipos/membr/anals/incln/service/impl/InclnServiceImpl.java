@@ -12,17 +12,17 @@ import java.util.List;
 
 @Service("InclnService")
 @Transactional
-public class InclnServiceImpl implements InclnService{
-  private final InclnMapper mapper;
+public class InclnServiceImpl implements InclnService {
+  private final InclnMapper inclnMapper;
 
   @Autowired
-  public InclnServiceImpl(InclnMapper mapper) {
-    this.mapper = mapper;
+  public InclnServiceImpl(InclnMapper inclnMapper) {
+    this.inclnMapper = inclnMapper;
   }
 
-  public List<DefaultMap<Object>> getInclnList(InclnVO inclnVo,
-                                               SessionInfoVO sessionInfoVO) {
-    return mapper.getInclnList(inclnVo);
+  @Override
+  public List<DefaultMap<Object>> getInclnList(InclnVO inclnVo, SessionInfoVO sessionInfoVO) {
+    return inclnMapper.getInclnList(inclnVo);
 
   }
 }

@@ -320,6 +320,7 @@
     <typeAlias alias="MembrPossesnVO" type="kr.co.solbipos.membr.anals.membrPossesn.service.MembrPossesnVO"/>
     <typeAlias alias="MembrPointVO" type="kr.co.solbipos.membr.anals.membrPoint.service.MembrPointVO"/>
     <typeAlias alias="MembrNonBilClctVO" type="kr.co.solbipos.membr.anals.membrNonBilClct.service.MembrNonBilClctVO"/>
+    <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
 
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>

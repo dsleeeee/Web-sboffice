@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.membr.anals.incln.service.impl.InclnMapper">
+
+  <select id="getInclnList" parameterType="InclnVO" resultType="DefaultMap">
+      SELECT
+          thp.PROD_CLASS_CD AS LV3_CD
+          ,thpc.PROD_CLASS_NM AS LV3_NM
+          ,tssd.PROD_CD
+          ,thp.PROD_NM
+          ,tmm.MEMBR_NO
+          ,SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM
+          ,TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 ) AS AGE
+          ,(SELECT tcm.NMCODE_NM FROM TB_CM_NMCODE tcm WHERE tcm.NMCODE_CD = tmm.GENDR_FG AND tcm.NMCODE_GRP_CD = '055') AS GENDR_FG
+          ,SUM(tssd.SALE_QTY) AS SUM_SALE_QTY
+          ,SUM(tssd.SALE_AMT) AS SUM_SALE_AMT
+      FROM
+          TB_MB_MEMBER_POINT_HIST tmmph
+      LEFT JOIN TB_SL_SALE_DTL tssd ON
+          tssd.STORE_CD = tmmph.STORE_CD
+          AND tssd.BILL_NO = tmmph.BILL_NO
+          AND tssd.POS_NO = tmmph.POS_NO
+      LEFT JOIN TB_HQ_PRODUCT thp ON thp.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+          AND thp.HQ_BRAND_CD = tssd.HQ_BRAND_CD
+          AND thp.PROD_CD = tssd.PROD_CD
+      LEFT JOIN TB_HQ_PRODUCT_CLASS thpc ON thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+          AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+      LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmph.MEMBR_NO
+          AND tmm.MEMBR_ORGN_CD = tmmph.MEMBR_ORGN_CD
+      WHERE
+          tmmph.POINT_CHG_FG IN ('4', '6')
+          AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+      GROUP BY
+          thpc.PROD_CLASS_CD
+          ,tssd.PROD_CD
+          ,thp.PROD_NM
+          ,tmm.MEMBR_NO
+          ,tmm.MEMBR_NM
+          ,tmm.GENDR_FG
+          ,thp.PROD_CLASS_CD
+          ,thpc.PROD_CLASS_NM
+          ,TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
+  </select>
+
+</mapper>

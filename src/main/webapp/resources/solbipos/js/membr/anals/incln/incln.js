@@ -35,18 +35,17 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
   // <-- 검색 호출 -->
   $scope.$on("inclnCtrl", function (event, data) {
-    $scope.searchIncln();
+    $scope.searchInclnList();
     event.preventDefault();
   });
 
   // 일자별회원 구매내역 그리드 조회
-  $scope.searchIncln = function () {
-
+  $scope.searchInclnList = function () {
     var params = {};
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-
-    $scope._inquiryMain("/membr/anals/incln//incln/list.sb", params, function () {
+    console.log('params', params)
+    $scope._inquiryMain("/membr/anals/incln/inclin/getInclinList.sb", params, function () {
     }, false);
   };
 
@@ -65,8 +64,11 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 첫째줄 헤더 생성
     var dataItem = {};
-    dataItem.group = messages["incln.group"];
-    dataItem.allGroup = messages["incln.allGroup"];
+    dataItem.lv1Nm = messages["incln.lvNm"];
+    dataItem.lv2Nm = messages["incln.lvNm"];
+    dataItem.lv3Nm = messages["incln.lvNm"];
+    dataItem.sumSaleQty = messages["incln.sumSale"];
+    dataItem.sumSaleAmt = messages["incln.sumSale"];
     dataItem.gendrF = messages["incln.gendrFg"];
     dataItem.gendrG = messages["incln.gendrFg"];
     dataItem.ageGroupOne = messages["incln.ageGroup"];

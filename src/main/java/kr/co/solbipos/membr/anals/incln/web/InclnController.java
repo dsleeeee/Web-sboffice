@@ -24,20 +24,18 @@ import java.util.List;
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
+ * @author 두어시스템 개발본부 백엔드 Daniel
+ * @version 1.0
  * @Class Name : InclnController.java
  * @Description : 회원관리 > 회원분석 > 구매성향 분석
  * @Modification Information
  * @
- * @  수정일      수정자              수정내용
+ * @ 수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2020.07.01  Daniel      최초생성
- *
- * @author 두어시스템 개발본부 백엔드 Daniel
- * @since 2020.07.01
- * @version 1.0
- * @see
- *
  * @Copyright (C) by DOASYS CORP. All right reserved.
+ * @see
+ * @since 2020.07.01
  */
 @Controller
 @RequestMapping(value = "/membr/anals/incln")
@@ -63,20 +61,21 @@ public class InclnController {
    */
   @RequestMapping(value = "/incln/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
-
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
     return "membr/anals/incln/incln";
   }
 
-  @RequestMapping(value = "inclin/getInclinList.sb", method = RequestMethod.POST)
+  @RequestMapping(value = "/inclin/getInclinList.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result getDayMembrList(InclnVO inclinVO, HttpServletRequest request,
-                                HttpServletResponse response, Model model) {
-
+  public Result getInclinList(InclnVO inclinVO, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
     List<DefaultMap<Object>> result = inclnService.getInclnList(inclinVO, sessionInfoVO);
+
+    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+    System.out.println(result);
+    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+    System.out.println("+++++++++++++++++++++++++++++++++++++++");
 
     return ReturnUtil.returnListJson(Status.OK, result, inclinVO);
   }
