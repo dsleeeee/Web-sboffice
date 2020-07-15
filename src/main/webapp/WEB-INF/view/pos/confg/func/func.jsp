@@ -18,6 +18,9 @@
           <button class="btn_skyblue" id="btnDefaultFunc" ng-click="defaultFunc()">
             <s:message code="func.defaultFunc" />
           </button>
+          <button class="btn_skyblue" id="btnBatchStore" ng-click="batchStore()">
+            <s:message code="func.batch" />
+          </button>
         </div>
 
         <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
@@ -89,7 +92,7 @@
   var posFg       = ${ccu.getCommCodeExcpAll("027")};
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.07" charset="utf-8"></script>
 
 
 <%-- 매장선택 --%>
@@ -103,4 +106,13 @@
 <%-- 기본기능적용 팝업 --%>
 <c:import url="/WEB-INF/view/pos/confg/func/defaultFunc.jsp">
 </c:import>
+
+<%-- 일괄기능적용 매장리스트 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/batchStore.jsp">
+</c:import>
+
+<%-- 일괄기능적용 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/func/batchFunc.jsp">
+</c:import>
+
 

@@ -183,4 +183,11 @@ public interface FuncMapper {
      * @return
      */
     int regDefaultFuncPosFnkey(FuncStoreVO funcStoreVO);
+
+    /**
+     * 포스기능 등록/미등록 기능키 조회
+     * @param funcStoreVO
+     * @return
+     */
+    List<DefaultMap<String>> getFuncKeyList(FuncStoreVO funcStoreVO);
 }

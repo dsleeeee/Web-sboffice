@@ -104,6 +104,16 @@ app.controller('memberRegistCtrl', ['$scope', '$http', function ($scope, $http) 
       $scope.emailRecvYnCombo.selectedIndex = 0;
       $scope.smsRecvYnCombo.selectedIndex   = 0;
       $scope.member.remark = '';
+
+      // 매장권한이면 본인 매장으로 셋팅, 단독매장이면 다른매장으로 변경 불가 추가
+      if(orgnFg == "STORE"){
+        $scope.member.regStoreCd = orgnCd;
+        if(hqOfficeCd == "00000"){
+          $scope.regStoreCdCombo.isReadOnly = true;
+        }else{
+          $scope.regStoreCdCombo.isReadOnly = false;
+        }
+      }
       
     });
   };
