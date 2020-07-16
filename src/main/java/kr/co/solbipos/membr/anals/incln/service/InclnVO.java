@@ -12,10 +12,19 @@ public class InclnVO extends PageVO {
   private String prodNm;
   private String membrNo;
   private String membrNm;
+  private String sumSale;
   private String sumSaleQty;
   private String sumSaleAmt;
   private String startDate;
   private String endDate;
+  private String sumGendrF;
+  private String sumGendrG;
+  private String sumAgeteens;
+  private String sumAgetwenties;
+  private String sumAgethirties;
+  private String sumAgeforties;
+  private String sumAgefifties;
+  private String option;
 
   public String getGendrFg() {
     return gendrFg;
@@ -119,5 +128,77 @@ public class InclnVO extends PageVO {
 
   public void setEndDate(String endDate) {
     this.endDate = endDate;
+  }
+
+  public String getSumGendrF() {
+    return sumGendrF;
+  }
+
+  public void setSumGendrF(String sumGendrF) {
+    this.sumGendrF = sumGendrF;
+  }
+
+  public String getSumGendrG() {
+    return sumGendrG;
+  }
+
+  public void setSumGendrG(String sumGendrG) {
+    this.sumGendrG = sumGendrG;
+  }
+
+  public String getSumAgeteens() {
+    return sumAgeteens;
+  }
+
+  public void setSumAgeteens(String sumAgeteens) {
+    this.sumAgeteens = sumAgeteens;
+  }
+
+  public String getSumAgetwenties() {
+    return sumAgetwenties;
+  }
+
+  public void setSumAgetwenties(String sumAgetwenties) {
+    this.sumAgetwenties = sumAgetwenties;
+  }
+
+  public String getSumAgethirties() {
+    return sumAgethirties;
+  }
+
+  public void setSumAgethirties(String sumAgethirties) {
+    this.sumAgethirties = sumAgethirties;
+  }
+
+  public String getSumAgeforties() {
+    return sumAgeforties;
+  }
+
+  public void setSumAgeforties(String sumAgeforties) {
+    this.sumAgeforties = sumAgeforties;
+  }
+
+  public String getSumAgefifties() {
+    return sumAgefifties;
+  }
+
+  public void setSumAgefifties(String sumAgefifties) {
+    this.sumAgefifties = sumAgefifties;
+  }
+
+  public String getOption() {
+    return option;
+  }
+
+  public void setOption(String option) {
+    this.option = option;
+  }
+
+  public String getSumSale() {
+    return sumSale;
+  }
+
+  public void setSumSale(String sumSale) {
+    this.sumSale = sumSale;
   }
 }

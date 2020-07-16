@@ -23,7 +23,7 @@
     <table class="searchTbl">
       <colgroup>
         <col class="w5"/>
-        <col class="w30"/>
+        <col class="w15"/>
         <col class="w5"/>
         <col class="w25"/>
       </colgroup>
@@ -40,6 +40,15 @@
             <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
           </div>
         </td>
+        <td>
+          <div class="sb-input">
+            <input type="radio" name="lunarYn" ng-model="searchOption" value="QTY"
+                   checked="checked">
+            <label><s:message code="incln.sum.qty"/></label>
+            <input type="radio" name="lunarYn" ng-model="searchOption" value="AMT">
+            <label class="mr5"><s:message code="incln.sum.amt"/></label>
+          </div>
+        </td>
         <td></td>
       </tr>
       </tbody>
@@ -49,7 +58,7 @@
   <div class="w50 fl mt40 mb20" style="width: 90%">
     <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
       <div class="oh sb-select dkbr">
-        <button class="btn_skyblue ml5" id="save" ng-click="excelDownload()">
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
           <s:message code="member.excel"/>
         </button>
       </div>
@@ -70,25 +79,23 @@
                                  is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="incln.lv3Nm"/>" binding="lv3Nm" width="130"
                                  is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.sumSaleQty"/>" binding="sumSaleQty" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.sumSale"/>" binding="sumSale" width="130"
                                  is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.sumSaleAmt"/>" binding="sumSaleAmt" width="115"
-                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.gendrF"/>" binding="gendrF" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.gendrF"/>" binding="sumGendrF" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.gendrG"/>" binding="gendrG" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.gendrG"/>" binding="sumGendrG" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupOne"/>" binding="ageGroupOne" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageTeens"/>" binding="sumAgeTeens" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupTwo"/>" binding="ageGroupTwo" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageTwenties"/>" binding="sumAgeTwenties" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupThree"/>" binding="ageGroupThree" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageThirties"/>" binding="sumAgeThirties" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupFour"/>" binding="ageGroupFour" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageForties"/>" binding="sumAgeForties" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupFive"/>" binding="ageGroupFive" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageFifties"/>" binding="sumAgeFifties" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.ageGroupSix"/>" binding="ageGroupSix" width="115"
+            <wj-flex-grid-column header="<s:message code="incln.ageSixties"/>" binding="sumAgeSixties" width="115"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>

@@ -81,6 +81,8 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 //
   $scope.searchDlvrList = function () {
     var params = {};
+    params.membrNo = $scope.membrNo
+    params.membrNm = $scope.membrNm
     $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
     }, false);
   };
@@ -88,6 +90,8 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 //
   $scope.searchDlvrTelList = function () {
     var params = {};
+    params.membrNo = $scope.membrNo
+    params.membrNm = $scope.membrNm
     $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
     }, false);
   };

@@ -42,10 +42,10 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   // 일자별회원 구매내역 그리드 조회
   $scope.searchInclnList = function () {
     var params = {};
+    params.option = $scope.searchOption
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-    console.log('params', params)
-    $scope._inquiryMain("/membr/anals/incln/inclin/getInclinList.sb", params, function () {
+    $scope._inquiryMain("/membr/anals/incln/incln/getInclnList.sb", params, function () {
     }, false);
   };
 
@@ -67,16 +67,15 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     dataItem.lv1Nm = messages["incln.lvNm"];
     dataItem.lv2Nm = messages["incln.lvNm"];
     dataItem.lv3Nm = messages["incln.lvNm"];
-    dataItem.sumSaleQty = messages["incln.sumSale"];
-    dataItem.sumSaleAmt = messages["incln.sumSale"];
-    dataItem.gendrF = messages["incln.gendrFg"];
-    dataItem.gendrG = messages["incln.gendrFg"];
-    dataItem.ageGroupOne = messages["incln.ageGroup"];
-    dataItem.ageGroupTwo = messages["incln.ageGroup"];
-    dataItem.ageGroupThree = messages["incln.ageGroup"];
-    dataItem.ageGroupFour = messages["incln.ageGroup"];
-    dataItem.ageGroupFive = messages["incln.ageGroup"];
-    dataItem.ageGroupSix = messages["incln.ageGroup"];
+    dataItem.sumSale = messages["incln.sumSale"];
+    dataItem.sumGendrF = messages["incln.gendrFg"];
+    dataItem.sumGendrG = messages["incln.gendrFg"];
+    dataItem.sumAgeTeens = messages["incln.ageGroup"];
+    dataItem.sumAgeTwenties = messages["incln.ageGroup"];
+    dataItem.sumAgeThirties = messages["incln.ageGroup"];
+    dataItem.sumAgeForties = messages["incln.ageGroup"];
+    dataItem.sumAgeFifties = messages["incln.ageGroup"];
+    dataItem.sumAgeSixties = messages["incln.ageGroup"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -119,25 +118,6 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     }
     // <-- //그리드 헤더2줄 -->
   };
-
-  // <-- 검색 호출 -->
-  $scope.$on("membrPossesnCtrl", function (event, data) {
-    $scope.searchMembrPossesn();
-    event.preventDefault();
-  });
-
-  // 회원매출점유 그리드 조회
-  $scope.searchMembrPossesn = function () {
-
-    var params = {};
-    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-
-    $scope._inquiryMain("/membr/anals/incln/incln/getInclnList.sb", params, function () {
-    }, false);
-  };
-  // <-- //검색 호출 -->
-
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {

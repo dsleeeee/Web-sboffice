@@ -22,6 +22,11 @@ public class InclnServiceImpl implements InclnService {
 
   @Override
   public List<DefaultMap<Object>> getInclnList(InclnVO inclnVo, SessionInfoVO sessionInfoVO) {
+    System.out.println("++++++++++++++++++++++++++++++++++");
+    System.out.println("++++++++++++++++++++++++++++++++++");
+    System.out.println(inclnVo.getOption());
+    System.out.println("++++++++++++++++++++++++++++++++++");
+    System.out.println("++++++++++++++++++++++++++++++++++");
     return inclnMapper.getInclnList(inclnVo);
 
   }

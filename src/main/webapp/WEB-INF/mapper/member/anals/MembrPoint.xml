@@ -23,7 +23,7 @@
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD) AS STORE_NM,
         TO_CHAR(TO_DATE(tssd.REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd') AS REG_DT,
         tsshm.MEMBR_NO,
-        tsshm.MEMBR_NM,
+        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
         (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.REG_STORE_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_NM,
         SUM(tssd.MEMBR_SAVE_POINT) AS MEMBR_SAVE_POINT,
         SUM(tssd.MEMBR_USE_POINT) AS MEMBR_USE_POINT,
@@ -55,7 +55,7 @@
         </if>
         <if test='membrNm != null and membrNm != ""'>
             <![CDATA[
-                AND tsshm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+                AND SBPENC.D ( tsshm.MEMBR_NM ) LIKE '%'||#{membrNm}||'%'
             ]]>
         </if>
         AND tsshm.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD

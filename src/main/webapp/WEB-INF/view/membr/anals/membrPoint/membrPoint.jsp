@@ -38,10 +38,7 @@
           <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
         </div>
       </td>
-      <td>
-        <button class="btn_blk sb-input w50" style="margin-left: 5px" ng-click="excelDownload()"><s:message
-                code="member.excel"/></button>
-      </td>
+      <td></td>
     </tr>
     <tr>
       <%-- 매장 --%>
@@ -93,44 +90,55 @@
   </table>
 
   <%-- 그리드 --%>
-  <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter"
-              is-read-only="true">
+  <div class="w50 fl mt40 mb20" style="width: 90%">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
+      <div class="oh sb-select dkbr">
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
+          <s:message code="member.excel"/>
+        </button>
+      </div>
+      <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="row">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter"
+                  is-read-only="true">
 
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="membrPoint.storeNm"/>" binding="storeNm" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.regDt"/>" binding="regDt" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrNo"/>" binding="membrNo" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrNm"/>" binding="membrNm" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrClassNm"/>" binding="membrClassNm" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrSavePoint"/>" binding="membrSavePoint" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.membrUsePoint"/>" binding="membrUsePoint" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.saleAmt"/>" binding="saleAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.dcAmt"/>" binding="dcAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPoint.realSaleAmt"/>" binding="realSaleAmt" width="115"
-                             is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="membrPoint.storeNm"/>" binding="storeNm" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.regDt"/>" binding="regDt" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.membrNo"/>" binding="membrNo" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.membrNm"/>" binding="membrNm" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.membrClassNm"/>" binding="membrClassNm" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.membrSavePoint"/>" binding="membrSavePoint"
+                                 width="115"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.membrUsePoint"/>" binding="membrUsePoint"
+                                 width="115"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.saleAmt"/>" binding="saleAmt" width="115"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.dcAmt"/>" binding="dcAmt" width="115"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPoint.realSaleAmt"/>" binding="realSaleAmt" width="115"
+                                 is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
-      </wj-flex-grid>
+          </wj-flex-grid>
+        </div>
+      </div>
     </div>
   </div>
-
+</div>
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrPoint/membrPoint.js?ver=2019052801.11"

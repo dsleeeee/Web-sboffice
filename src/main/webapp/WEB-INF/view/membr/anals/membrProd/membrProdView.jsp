@@ -41,8 +41,6 @@
         </div>
       </td>
       <td>
-        <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
-                code="member.excel"/></button>
       </td>
       <td></td>
     </tr>
@@ -59,40 +57,48 @@
   </table>
 
   <%-- 그리드 --%>
-  <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter"
-              is-read-only="true">
+  <div class="w50 fl mt40 mb20" style="width: 60%">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
+      <div class="oh sb-select dkbr">
+        <button class="btn_skyblue sb-input mr40 fr" style="margin-left: 5px" ng-click="excelDownload()">
+          <s:message code="member.excel"/>
+        </button>
+      </div>
+      <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="row">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter"
+                  is-read-only="true">
 
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="membrProd.membrNo"/>" binding="membrNo" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.membrNm"/>" binding="membrNm" width="150"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.prodCd"/>" binding="prodCd" width="115"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.prodNm"/>" binding="prodNm" width="150"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.saleQty"/>" binding="saleQty" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.saleAmt"/>" binding="saleAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.dcAmt"/>" binding="dcAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrProd.realSaleAmt"/>" binding="realSaleAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="membrProd.membrNo"/>" binding="membrNo" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.membrNm"/>" binding="membrNm" width="150"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.prodCd"/>" binding="prodCd" width="115"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.prodNm"/>" binding="prodNm" width="150"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.saleQty"/>" binding="saleQty" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.saleAmt"/>" binding="saleAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.dcAmt"/>" binding="dcAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrProd.realSaleAmt"/>" binding="realSaleAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
-      </wj-flex-grid>
+          </wj-flex-grid>
+        </div>
+      </div>
     </div>
   </div>
-
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrProd/membrProd.js?ver=2019052801.05"

@@ -20,7 +20,7 @@
         /* MembrProdMapper.getMembrProdList */
         SELECT
         tsshm.MEMBR_NO,
-        tsshm.MEMBR_NM,
+        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
         tssd.PROD_CD,
         tmp.PROD_NM,
         SUM(tssd.SALE_QTY) AS SALE_QTY,
@@ -38,7 +38,7 @@
             ]]>
         </if>
         AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tsshm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+        AND SBPENC.D ( tsshm.MEMBR_NM ) LIKE '%'|| #{membrNm} ||'%'
         AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
         AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
         AND tssd.STORE_CD = tsshm.STORE_CD
