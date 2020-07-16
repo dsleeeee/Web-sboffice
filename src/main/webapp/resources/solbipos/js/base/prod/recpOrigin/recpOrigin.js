@@ -59,6 +59,9 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         });
+
+        // 조회
+        $scope.searchRecpOrigin();
     };
 
     // <-- 검색 호출 -->
@@ -115,6 +118,17 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 저장 -->
     $scope.save = function() {
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].recipesNm === "") {
+                $scope._popMsg(messages["recpOrigin.recipesNmBlank"]);
+                return false;
+            }
+            if($scope.flex.collectionView.items[i].orgplceNm === "") {
+                $scope._popMsg(messages["recpOrigin.orgplceNmBlank"]);
+                return false;
+            }
+        }
+
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -165,7 +179,7 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
             $("#lblRecipesCd").text(" ( [ " + $scope.selectedStore.recipesCd + " ]");
             $("#lblRecipesNm").text($scope.selectedStore.recipesNm + " / ");
             $("#lblOrgplceNm").text($scope.selectedStore.orgplceNm + " )");
-        } else if(addSelected === "N" ) {
+        } else if(addSelected === "N") {
             $("#lblRecipesCd").text("");
             $("#lblRecipesNm").text("");
             $("#lblOrgplceNm").text("");
