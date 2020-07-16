@@ -169,16 +169,39 @@
             </td>
         </tr>
         <tr>
-            <c:if test="${orgnFg == 'HQ'}">
-                <th><s:message code="kds.store"/></th>
-                <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="regStore"/>
-                    </jsp:include>
-                </td>
-                <td></td>
-                <td></td>
-            </c:if>
+            <th>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="prodCdType"
+                            ng-model="prodCdType"
+                            control="prodCdTypeCombo"
+                            items-source="_getComboData('prodCdType')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
+            </th>
+            <td>
+                <c:if test="${prodCdType == 'HQ'}">
+                    <input type="text" id="prodCd" class="sb-input w50" ng-model="prodCd"
+                           maxlength="15"/>
+                </c:if>
+                <c:if test="${prodCdType == 'MM'}">
+                    <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm"
+                           ng-click="popUpProdClass()" style="float: left;"
+                           placeholder="<s:message code="prodCorner.prodClass" /> 선택" readonly/>
+                    <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled/>
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
+                            ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                </c:if>
+            </td>
+            <th><s:message code="kds.prodNm"/></th>
+            <td>
+                <input type="text" id="prodNm" class="sb-input w50" ng-model="prodNm"
+                       maxlength="15"/>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -246,5 +269,3 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayProdTime.js?ver=2020070801.08"
         charset="utf-8"></script>
-
-<%-- 후불적용매장등록 --%>

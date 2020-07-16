@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.kds.anals.chart.service.impl.KdsMapper">
+    <select id="getKdsDayTime" parameterType="KdsVO" resultType="DefaultMap">
+        /* KdsMapper.getKdsDayTime */
+        SELECT
+        A.STORE_CD,
+        tms.STORE_NM,
+        A.SALE_DATE,
+        SUM(A.CNT_HH_00) AS CNT_HH_00,
+        AVG(A.MAKE_HH_00) AS MAKE_HH_00,
+        AVG(A.PIC_HH_00) AS PIC_HH_00,
+        SUM(A.CNT_HH_01) AS CNT_HH_01,
+        AVG(A.MAKE_HH_01) AS MAKE_HH_01,
+        AVG(A.PIC_HH_01) AS PIC_HH_01,
+        SUM(A.CNT_HH_02) AS CNT_HH_02,
+        AVG(A.MAKE_HH_02) AS MAKE_HH_02,
+        AVG(A.PIC_HH_02) AS PIC_HH_02,
+        SUM(A.CNT_HH_03) AS CNT_HH_03,
+        AVG(A.MAKE_HH_03) AS MAKE_HH_03,
+        AVG(A.PIC_HH_03) AS PIC_HH_03,
+        SUM(A.CNT_HH_04) AS CNT_HH_04,
+        AVG(A.MAKE_HH_04) AS MAKE_HH_04,
+        AVG(A.PIC_HH_04) AS PIC_HH_04,
+        SUM(A.CNT_HH_05) AS CNT_HH_05,
+        AVG(A.MAKE_HH_05) AS MAKE_HH_05,
+        AVG(A.PIC_HH_05) AS PIC_HH_05,
+        SUM(A.CNT_HH_06) AS CNT_HH_06,
+        AVG(A.MAKE_HH_06) AS MAKE_HH_06,
+        AVG(A.PIC_HH_06) AS PIC_HH_06,
+        SUM(A.CNT_HH_07) AS CNT_HH_07,
+        AVG(A.MAKE_HH_07) AS MAKE_HH_07,
+        AVG(A.PIC_HH_07) AS PIC_HH_07,
+        SUM(A.CNT_HH_08) AS CNT_HH_08,
+        AVG(A.MAKE_HH_08) AS MAKE_HH_08,
+        AVG(A.PIC_HH_08) AS PIC_HH_08,
+        SUM(A.CNT_HH_09) AS CNT_HH_09,
+        AVG(A.MAKE_HH_09) AS MAKE_HH_09,
+        AVG(A.PIC_HH_09) AS PIC_HH_09,
+        SUM(A.CNT_HH_10) AS CNT_HH_10,
+        AVG(A.MAKE_HH_10) AS MAKE_HH_10,
+        AVG(A.PIC_HH_10) AS PIC_HH_10,
+        SUM(A.CNT_HH_11) AS CNT_HH_11,
+        AVG(A.MAKE_HH_11) AS MAKE_HH_11,
+        AVG(A.PIC_HH_11) AS PIC_HH_11,
+        SUM(A.CNT_HH_12) AS CNT_HH_12,
+        AVG(A.MAKE_HH_12) AS MAKE_HH_12,
+        AVG(A.PIC_HH_12) AS PIC_HH_12,
+        SUM(A.CNT_HH_13) AS CNT_HH_13,
+        AVG(A.MAKE_HH_13) AS MAKE_HH_13,
+        AVG(A.PIC_HH_13) AS PIC_HH_13,
+        SUM(A.CNT_HH_14) AS CNT_HH_14,
+        AVG(A.MAKE_HH_14) AS MAKE_HH_14,
+        AVG(A.PIC_HH_14) AS PIC_HH_14,
+        SUM(A.CNT_HH_15) AS CNT_HH_15,
+        AVG(A.MAKE_HH_15) AS MAKE_HH_15,
+        AVG(A.PIC_HH_15) AS PIC_HH_15,
+        SUM(A.CNT_HH_16) AS CNT_HH_16,
+        AVG(A.MAKE_HH_16) AS MAKE_HH_16,
+        AVG(A.PIC_HH_16) AS PIC_HH_16,
+        SUM(A.CNT_HH_17) AS CNT_HH_17,
+        AVG(A.MAKE_HH_17) AS MAKE_HH_17,
+        AVG(A.PIC_HH_17) AS PIC_HH_17,
+        SUM(A.CNT_HH_18) AS CNT_HH_18,
+        AVG(A.MAKE_HH_18) AS MAKE_HH_18,
+        AVG(A.PIC_HH_18) AS PIC_HH_18,
+        SUM(A.CNT_HH_19) AS CNT_HH_19,
+        AVG(A.MAKE_HH_19) AS MAKE_HH_19,
+        AVG(A.PIC_HH_19) AS PIC_HH_19,
+        SUM(A.CNT_HH_20) AS CNT_HH_20,
+        AVG(A.MAKE_HH_20) AS MAKE_HH_20,
+        AVG(A.PIC_HH_20) AS PIC_HH_20,
+        SUM(A.CNT_HH_21) AS CNT_HH_21,
+        AVG(A.MAKE_HH_21) AS MAKE_HH_21,
+        AVG(A.PIC_HH_21) AS PIC_HH_21,
+        SUM(A.CNT_HH_22) AS CNT_HH_22,
+        AVG(A.MAKE_HH_22) AS MAKE_HH_22,
+        AVG(A.PIC_HH_22) AS PIC_HH_22,
+        SUM(A.CNT_HH_23) AS CNT_HH_23,
+        AVG(A.MAKE_HH_23) AS MAKE_HH_23,
+        AVG(A.PIC_HH_23) AS PIC_HH_23
+        FROM
+        (
+        SELECT
+        DISTINCT tookdt.STORE_CD,
+        tookdt.SALE_DATE,
+        tookdt.SALE_HH ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookdt.SALE_HH, #{i}, sum(tookdt.ORDER_CNT)) AS"CNT_HH_${i}"
+        </foreach>
+        ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookdt.SALE_HH, #{i}, sum(
+            <if test='makeDate == 0'>
+                tookdt.AVG_S_CK_TO_E_CK)) AS "MAKE_HH_${i}"
+            </if>
+            <if test="makeDate == 1">
+                tookdt.AVG_L_OD_TO_E_CK)) AS"MAKE_HH_${i}"
+            </if>
+        </foreach>
+        ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookdt.SALE_HH, #{i}, sum(
+            <if test='picDate == 0'>
+                tookdt.AVG_S_OD_TO_E_PK)) AS "PIC_HH_${i}"
+            </if>
+            <if test="picDate == 1">
+                tookdt.AVG_E_CK_TO_E_PK)) AS "PIC_HH_${i}"
+            </if>
+        </foreach>
+        FROM
+        TB_OD_ORDER_KDS_DAILY_TIME tookdt
+        WHERE
+        tookdt.STORE_CD = #{storeCd}
+        AND tookdt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        AND tookdt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+        GROUP BY
+        tookdt.STORE_CD , tookdt.SALE_DATE, tookdt.SALE_HH ) A
+        , TB_MS_STORE tms
+        WHERE A.STORE_CD = tms.STORE_CD(+)
+        GROUP BY
+        A.STORE_CD,
+        A.SALE_DATE,
+        tms.STORE_NM
+    </select>
+    <select id="getKdsDayTimeChart" parameterType="KdsVO" resultType="DefaultMap">
+        SELECT
+        tookdt.STORE_CD
+        , tookdt.SALE_HH||'시' AS SALE_HH
+        , sum(tookdt.ORDER_CNT) AS ORDER_CNT
+        <if test='makeDate == 0'>
+            , avg(tookdt.AVG_S_CK_TO_E_CK) AS AVG_MAKE
+        </if>
+        <if test="makeDate == 1">
+            , avg(tookdt.AVG_L_OD_TO_E_CK) AS AVG_MAKE
+        </if>
+        <if test='picDate == 0'>
+            , avg(tookdt.AVG_S_OD_TO_E_PK) AS AVG_PIC
+        </if>
+        <if test="picDate == 1">
+            , avg(tookdt.AVG_E_CK_TO_E_PK) AS AVG_PIC
+        </if>
+        FROM
+        TB_OD_ORDER_KDS_DAILY_TIME tookdt
+        WHERE
+        tookdt.STORE_CD = #{storeCd}
+        AND tookdt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        AND tookdt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+        GROUP BY
+        tookdt.STORE_CD ,
+        tookdt.SALE_HH
+        ORDER BY
+        tookdt.SALE_HH
+    </select>
+</mapper>

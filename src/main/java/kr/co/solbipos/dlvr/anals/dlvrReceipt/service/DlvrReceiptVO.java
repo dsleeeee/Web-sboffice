@@ -42,6 +42,7 @@ public class DlvrReceiptVO extends PageVO {
     private Integer totGuestCnt;
     private String tblCd;
     private String empNo;
+    private String membrNm;
     private String orderNo;
     private String pagerNo;
     private String dlvrYn;
@@ -216,6 +217,14 @@ public class DlvrReceiptVO extends PageVO {
 
     public void setDlvrEmpNo(String dlvrEmpNo) {
         this.dlvrEmpNo = dlvrEmpNo;
+    }
+
+    public String getMembrNm() {
+        return membrNm;
+    }
+
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
     }
 
     public String getDlvrStartDt() {

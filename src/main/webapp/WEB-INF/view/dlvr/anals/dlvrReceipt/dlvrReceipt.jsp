@@ -114,19 +114,20 @@
                     </div>
                 </div>
             </div>
+            <%-- 페이지 리스트 --%>
+            <div class="pageNum">
+                <%-- id --%>
+                <ul id="dlvrReceiptCtrlPager" data-size="1">
+                </ul>
+            </div>
+            <%--//페이지 리스트--%>
         </div>
-        <%-- 페이지 리스트 --%>
-        <div class="pageNum">
-            <%-- id --%>
-            <ul id="memberCtrlPager" data-size="1">
-            </ul>
-        </div>
-        <%--//페이지 리스트--%>
+
     </div>
 
-    <div  ng-controller="dlvrReceiptDetailCtrl">
+    <div ng-controller="dlvrReceiptDetailCtrl">
         <%-- 그리드 right --%>
-        <div class="w50 fl mb20" style="width: 60%">
+        <div class="w50 mt40 fl mb20" style="width: 60%">
             <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
                 <div class="oh sb-select dkbr">
                     <%-- 페이지 스케일  --%>
@@ -169,24 +170,24 @@
                                                  binding="realSaleAmt"
                                                  width="120"
                                                  is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.member.nm"/>" binding="memberNm"
+                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.member.nm"/>" binding="membrNm"
                                                  width="120"
                                                  is-read-only="true" align="right"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.dlvr.nm"/>" binding="dlvrNm"
+                            <wj-flex-grid-column header="<s:message code="dlvrReceipt.dlvr.nm"/>" binding="empNm"
                                                  width="120"
                                                  is-read-only="true" align="right"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
             </div>
+            <%-- 페이지 리스트 --%>
+            <div class="pageNum mt10">
+                <%-- id --%>
+                <ul id="dlvrReceiptDetailCtrlPager" data-size="10">
+                </ul>
+            </div>
+            <%--//페이지 리스트--%>
         </div>
-        <%-- 페이지 리스트 --%>
-        <div class="pageNum mt10">
-            <%-- id --%>
-            <ul id="memberCtrlPager" data-size="10">
-            </ul>
-        </div>
-        <%--//페이지 리스트--%>
     </div>
 </div>
 <script>

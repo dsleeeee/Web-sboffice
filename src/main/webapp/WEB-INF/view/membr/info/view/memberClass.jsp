@@ -322,14 +322,14 @@
                         <wj-flex-grid-column header="<s:message code="grade.membr.pay.code"/>"
                                              binding="payCd" data-map="payCdDataMap" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>"
-                                             ng-switch-default
+                                             ng-switch-default  max-length="3"
                                              binding="accRate" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.acc_rate"/>"
-                                             ng-switch-when="1"
+                                             ng-switch-when="1" max-length="3"
                                              binding="accRate" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.point.list.amt"/>"
                                              ng-switch-when="2"
-                                             binding="accRate" width="*"></wj-flex-grid-column>
+                                             binding="accRate" width="*" max-length="6"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

@@ -139,11 +139,30 @@ public class KdsController {
     @RequestMapping(value = "dayTime/getKdsDayTime.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getKdsDayTime(KdsVO kdsVO, HttpServletRequest request,
-                            HttpServletResponse response, Model model) {
+                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = kdsService.getKdsDay(kdsVO, sessionInfoVO);
+        List<DefaultMap<String>> result = kdsService.getKdsDayTime(kdsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 차트조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "dayTime/getKdsDayTimeChart.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKdsDayTimeChart(KdsVO kdsVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kdsService.getKdsDayTimeChart(kdsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }

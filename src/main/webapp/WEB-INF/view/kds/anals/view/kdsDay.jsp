@@ -67,7 +67,7 @@
             <c:if test="${orgnFg == 'HQ'}">
                 <th><s:message code="kds.store"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
                 </td>
@@ -137,23 +137,21 @@
     </table>
     <div class="mt20 oh sb-select dkbr">
         <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
             <s:message code="kds.chart"/>
         </button>
-        <%-- 픽업시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				<s:message code="kds.picDate"/>
-			</label>
-		</span>
-        <%-- 제조시간 --%>
-        <span class="btn_skyblue ml5 mt5 fr">
-			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>
-			<label for="chkDt">
-				 <s:message code="kds.makeDate"/>
-			</label>
-		</span>
+        <div class="sb-select mt10 fr">
+            <span class="chk ml10">
+                <%-- 제조시간 --%>
+                <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
+                <label for="makeChecked"><s:message code='kds.makeDate'/></label>
+            </span>
+            <span class="chk ml10">
+                <%-- 픽업시간 --%>
+                <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
+                <label for="picChecked"><s:message code='kds.picDate'/></label>
+            </span>
+        </div>
         <%-- 건수 --%>
         <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
         <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
@@ -165,14 +163,21 @@
     <div class="w100 mt40 mb20 ">
         <%--위즈모 차트--%>
         <h2>
-            <div class="circle"><span class="blue"></span><span class="sky"></span></div>
+            <div class="circle">
+                <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
+                    <s:message code="kds.makeDate"/>
+                </span>
+                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                    <s:message code="kds.picDate"/>
+                </span>
+            </div>
         </h2>
         <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
 
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
@@ -191,19 +196,19 @@
 
                 <!-- define columns -->
                 <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="membrNo" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="*"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="membrNm" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="*"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="membrCardNo"
+                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate"
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.totalOrderCnt"/>" binding="saleCount" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.totalOrderCnt"/>" binding="orderCnt" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="saleAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -219,6 +224,31 @@
     var kdsPicDateSec = ${ccu.getCommCodeExcpAll("403")};
     var regstrStoreList = ${regstrStoreList};
 </script>
+<style>
+    .circle span.orange:before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: #ff9d39;
+        border: 1px solid #ff9d39;
+        position: absolute;
+        left: 0px;
+        top: 4px;
+    }
+
+    .circle span.green:before {
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background: #00ba8b;
+        border: 1px solid #00ba8b;
+        position: absolute;
+        left: 0px;
+        top: 4px;
+    }
+</style>
 
 <script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDay.js?ver=2020070801.08"
         charset="utf-8"></script>

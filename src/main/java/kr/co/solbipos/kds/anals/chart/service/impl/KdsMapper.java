@@ -11,4 +11,8 @@ import java.util.List;
 @Repository
 public interface KdsMapper {
     List<DefaultMap<String>> getKdsDay(KdsVO kdsVO);
+
+    List<DefaultMap<String>> getKdsDayTime(KdsVO kdsVO);
+
+    List<DefaultMap<String>> getKdsDayTimeChart(KdsVO kdsVO);
 }

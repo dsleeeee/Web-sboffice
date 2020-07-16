@@ -37,4 +37,29 @@ public class KdsServiceImpl implements KdsService {
     public List<DefaultMap<String>> getKdsDay(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         return mapper.getKdsDay(kdsVO);
     }
+
+    @Override
+    public List<DefaultMap<String>> getKdsDayTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<String>> kdsTimeList = mapper.getKdsDayTime(kdsVO);
+
+        for(int i=0; i < kdsTimeList.size();i++){
+            for(int j = 0; j < kdsVO.getKdsTimeList().size() ; j++){
+                String c = kdsTimeList.get(i).getStr("cntHh"+kdsVO.getKdsTimeList().get(j));
+                String p = kdsTimeList.get(i).getStr("picHh"+kdsVO.getKdsTimeList().get(j));
+                String m = kdsTimeList.get(i).getStr("makeHh"+kdsVO.getKdsTimeList().get(j));
+                if(c.equals("") && p.equals("") && m.equals("")){
+                    kdsTimeList.get(i).remove("cntHh"+kdsVO.getKdsTimeList().get(j));
+                    kdsTimeList.get(i).remove("picHh"+kdsVO.getKdsTimeList().get(j));
+                    kdsTimeList.get(i).remove("makeHh"+kdsVO.getKdsTimeList().get(j));
+                }
+            }
+        }
+
+        return kdsTimeList;
+    }
+
+    @Override
+    public List<DefaultMap<String>> getKdsDayTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        return  mapper.getKdsDayTimeChart(kdsVO);
+    }
 }
