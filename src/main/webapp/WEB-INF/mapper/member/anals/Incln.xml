@@ -6,7 +6,11 @@
   <select id="getInclnList" parameterType="InclnVO" resultType="DefaultMap">
 
     SELECT
-        A.LV3_CD
+        C.LV1_CD
+        ,C.LV1_NM
+        ,C.LV2_CD
+        ,C.LV2_NM
+        ,A.LV3_CD
         ,A.LV3_NM
         <if test='option == ("AMT")'>
         <![CDATA[
@@ -71,8 +75,40 @@
             thpc.PROD_CLASS_NM,
             tmmph.SALE_DATE,
             TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
-        ) A
+        ) A,
+        (SELECT
+            A.P_PROD_CLASS_CD AS LV1_CD,
+            ( SELECT SF_GET_PROD_CLASSES ( 'H', #{hqOfficeCd}, A.P_PROD_CLASS_CD ) FROM DUAL ) AS LV1_NM,
+            A.PROD_CLASS_CD AS LV2_CD,
+            A.PROD_CLASS_NM AS LV2_NM,
+            B.PROD_CLASS_CD AS LV3_CD,
+            B.PROD_CLASS_NM AS LV3_NM
+        FROM
+        (
+            SELECT
+                HQ_OFFICE_CD,
+                P_PROD_CLASS_CD,
+                PROD_CLASS_CD,
+                PROD_CLASS_NM
+                FROM
+                TB_HQ_PRODUCT_CLASS
+            WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD = '00000' )
+            ) A,
+                TB_HQ_PRODUCT_CLASS B
+            WHERE
+                B.P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD = '00000' ) )
+                AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+        ) C
+    WHERE
+        C.LV3_CD = A.LV3_CD
     GROUP BY
+        C.LV1_CD,
+        C.LV1_NM,
+        C.LV2_CD,
+        C.LV2_NM,
         A.LV3_CD,
         A.LV3_NM,
         SUM_SALE_QTY,

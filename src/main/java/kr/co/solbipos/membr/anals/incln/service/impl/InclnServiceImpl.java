@@ -22,6 +22,7 @@ public class InclnServiceImpl implements InclnService {
 
   @Override
   public List<DefaultMap<Object>> getInclnList(InclnVO inclnVo, SessionInfoVO sessionInfoVO) {
+    inclnVo.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     return inclnMapper.getInclnList(inclnVo);
   }
 }

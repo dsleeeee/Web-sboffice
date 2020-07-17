@@ -25,6 +25,15 @@ public class InclnVO extends PageVO {
   private String sumAgeforties;
   private String sumAgefifties;
   private String option;
+  private String hqOfficeCd;
+
+  public String getHqOfficeCd() {
+    return hqOfficeCd;
+  }
+
+  public void setHqOfficeCd(String hqOfficeCd) {
+    this.hqOfficeCd = hqOfficeCd;
+  }
 
   public String getGendrFg() {
     return gendrFg;

@@ -55,7 +55,7 @@
   </table>
 
   <%-- 그리드 --%>
-  <div class="w50 fl mt40 mb20" style="width: 90%">
+  <div class="w50 fl mt40 mb20" style="width: 100%">
     <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
       <div class="oh sb-select dkbr">
         <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
@@ -75,9 +75,9 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="incln.lv1Nm"/>" binding="lv1Nm" width="130"
                                  is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.lv2Nm"/>" binding="lv2Nm" width="130"
+            <wj-flex-grid-column header="<s:message code="incln.lv2Nm"/>" binding="lv2Nm" width="150"
                                  is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="incln.lv3Nm"/>" binding="lv3Nm" width="130"
+            <wj-flex-grid-column header="<s:message code="incln.lv3Nm"/>" binding="lv3Nm" width="150"
                                  is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="incln.sumSale"/>" binding="sumSale" width="130"
                                  is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
