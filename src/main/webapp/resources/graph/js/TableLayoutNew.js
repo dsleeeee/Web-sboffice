@@ -456,8 +456,10 @@ Floor.prototype.visibleLayer = function(layer) {
     var styles = graph.getCellStyle(layer);
 
     // 백그라운드컬러
-    graph.container.style.backgroundColor = styles[mxConstants.STYLE_FILLCOLOR];
-    backgroundColor.value = styles[mxConstants.STYLE_FILLCOLOR];
+//    graph.container.style.backgroundColor = styles[mxConstants.STYLE_FILLCOLOR];
+//    backgroundColor.value = styles[mxConstants.STYLE_FILLCOLOR];
+    graph.container.style.backgroundColor = '#CCCCCC' 
+    backgroundColor.value = '#CCCCCC';
 
     // 백그라운드이미지
     if (styles[mxConstants.STYLE_IMAGE] != null) {
