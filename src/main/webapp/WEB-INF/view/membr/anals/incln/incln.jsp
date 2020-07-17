@@ -20,39 +20,39 @@
       </button>
     </div>
   </div>
-    <table class="searchTbl">
-      <colgroup>
-        <col class="w5"/>
-        <col class="w15"/>
-        <col class="w5"/>
-        <col class="w25"/>
-      </colgroup>
-      <tbody>
-      <tr>
-        <%-- 조회기간 --%>
-        <th>
-          <s:message code="dlvrInfo.srchDate"/>
-        </th>
-        <td>
-          <div class="sb-select">
-            <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>
-            <span class="rg">~</span>
-            <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
-          </div>
-        </td>
-        <td>
-          <div class="sb-input">
-            <input type="radio" name="lunarYn" ng-model="searchOption" value="QTY"
-                   checked="checked">
-            <label><s:message code="incln.sum.qty"/></label>
-            <input type="radio" name="lunarYn" ng-model="searchOption" value="AMT">
-            <label class="mr5"><s:message code="incln.sum.amt"/></label>
-          </div>
-        </td>
-        <td></td>
-      </tr>
-      </tbody>
-    </table>
+  <table class="searchTbl">
+    <colgroup>
+      <col class="w5"/>
+      <col class="w15"/>
+      <col class="w5"/>
+      <col class="w25"/>
+    </colgroup>
+    <tbody>
+    <tr>
+      <%-- 조회기간 --%>
+      <th>
+        <s:message code="dlvrInfo.srchDate"/>
+      </th>
+      <td>
+        <div class="sb-select">
+          <span class="txtIn"> <input id="startDate" name="startDate" class="w200px"/></span>
+          <span class="rg">~</span>
+          <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
+        </div>
+      </td>
+      <td>
+        <div class="sb-input">
+          <input type="radio" name="searchOption" ng-model="searchOption" value="AMT" ng-checked="true"
+                 checked="checked">
+          <label class="mr5"><s:message code="incln.sum.amt"/></label>
+          <input type="radio" name="searchOption" ng-model="searchOption" value="QTY">
+          <label><s:message code="incln.sum.qty"/></label>
+        </div>
+      </td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
 
   <%-- 그리드 --%>
   <div class="w50 fl mt40 mb20" style="width: 90%">

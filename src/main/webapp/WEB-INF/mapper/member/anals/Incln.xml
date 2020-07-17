@@ -8,10 +8,9 @@
     SELECT
         A.LV3_CD
         ,A.LV3_NM
-        ,SUM_SALE_QTY
-        ,SUM_SALE_AMT
         <if test='option == ("AMT")'>
         <![CDATA[
+        ,SUM_SALE_AMT AS SUM_SALE
         ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_F"
         ,SUM( CASE WHEN GENDR_FG = 'G' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_G"
         ,SUM( CASE WHEN AGE > 10 AND AGE < 21 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETEENS"
@@ -24,6 +23,7 @@
         </if>
         <if test='option == "QTY"'>
         <![CDATA[
+        ,SUM_SALE_QTY AS SUM_SALE
         ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_F"
         ,SUM( CASE WHEN GENDR_FG = 'G' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_G"
         ,SUM( CASE WHEN AGE > 10 AND AGE < 21 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETEENS"

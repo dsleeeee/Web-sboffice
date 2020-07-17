@@ -42,7 +42,8 @@ app.controller('inclnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   // 일자별회원 구매내역 그리드 조회
   $scope.searchInclnList = function () {
     var params = {};
-    params.option = $scope.searchOption
+    params.option = $(":input:radio[name=searchOption]:checked").val()
+    console.log('params', params)
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
     $scope._inquiryMain("/membr/anals/incln/incln/getInclnList.sb", params, function () {
