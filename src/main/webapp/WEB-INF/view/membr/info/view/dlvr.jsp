@@ -182,13 +182,15 @@
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.adressList"/>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%" ng-click="infoDelete('addr')">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%"
+                ng-click="infoDelete('addr')">
           <s:message code="cmm.delete"/>
         </button>
         <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.save"/>
         </button>
-        <button class="btn_skyblue sb-input" ng-click="excelDownload()" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" ng-click="excelDownload()"
+                style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>
@@ -225,13 +227,15 @@
     <div class="wj-gridWrap" style="height:600px; overflow-y: hidden; overflow-x: hidden;">
       <h2 class="h2_tit oh lh30">
         <s:message code="dlvr.membr.phoneNumberList"/>
-        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%" ng-click="infoDelete('tel')">
+        <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%"
+                ng-click="infoDelete('tel')">
           <s:message code="cmm.delete"/>
         </button>
         <button class="btn_skyblue sb-input" style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.save"/>
         </button>
-        <button class="btn_skyblue sb-input" ng-click="excelDownload()" style="float: right; margin-top: 1%; margin-right: 1%">
+        <button class="btn_skyblue sb-input" ng-click="excelDownload()"
+                style="float: right; margin-top: 1%; margin-right: 1%">
           <s:message code="cmm.excel"/>
         </button>
       </h2>

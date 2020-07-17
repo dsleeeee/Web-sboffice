@@ -17,9 +17,6 @@ var app = agrid.getApp();
  *  세금계산서 요청목록 그리드 생성
  */
 app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('memberPointCtrl', $scope, $http, true));
-
   // 성공내역, 실페내역
   $scope.statuList = [
     {value: '1', name: '전체'},
@@ -28,14 +25,29 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
   ]
   $scope.statu = $scope.statuList[0]
 
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('memberPointCtrl', $scope, $http, true));
+
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
-  // // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  // $scope.initGrid = function (s, e) {
-  //   // 그리드 DataMap 설정
-  //   $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
-  // };
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.statusFgDataMap = new wijmo.grid.DataMap(statusDataFg, 'value', 'name');
+  };
+
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
+// grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 합계
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+  };
 
   // 엑셀 다운로드
   $scope.excelDownload = function () {
@@ -60,26 +72,51 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
     }, 10);
   };
 
+  // $scope.excelFileDownload = function () {
+  //   let excelUploadScope = agrid.getScope('excelUploadCtrl');
+  //   console.log('excelUploadScope', excelUploadScope)
+  //   let uploadFg = 'memberPoint';
+  //   excelUploadScope.excelFormDownload(uploadFg);
+  // }
+  //
+  // /** 엑셀업로드 관련 공통 함수 */
+  // $scope.excelTextUpload = function () {
+  //   let excelUploadScope = agrid.getScope('memberPointCtrl');
+  //   console.log('excelUploadScope', excelUploadScope)
+  //   /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
+  //   let uploadFg = 'memberPoint';
+  //
+  //   // 엑셀 양식다운로드
+  //   let msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+  //   s_alert.popConf(msg, function () {
+  //     excelUploadScope.uploadFg = uploadFg;
+  //     /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+  //     excelUploadScope.parentCtrl = 'memberPointCtrl';
+  //     // 엑셀 업로드
+  //     $("#excelUpFile").val('');
+  //     $("#excelUpFile").trigger('click');
+  //   });
+  // };
 
-  /** 엑셀업로드 관련 공통 함수 */
+  /** test test test */
   $scope.excelTextUpload = function (prcsFg) {
 
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    let excelUploadScope = agrid.getScope('excelUploadCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
-    var uploadFg = 'memberPoint';
+    let uploadFg = 'memberExcel';
 
     // 엑셀 양식다운로드
     if (prcsFg === 'excelFormDown') {
       excelUploadScope.excelFormDownload(uploadFg);
     } else {
-      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      let msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg = uploadFg;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
-        excelUploadScope.parentCtrl = 'memberPointCtrl';
+        excelUploadScope.parentCtrl = 'memberExcelUploadCtrl';
         // 엑셀 업로드
-        $("#excelUpFile").val('');
-        $("#excelUpFile").trigger('click');
+        $("#memberExcelUpload").val('');
+        $("#memberExcelUpload").trigger('click')
       });
     }
   };

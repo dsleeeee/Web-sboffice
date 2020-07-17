@@ -65,18 +65,11 @@ public class InclnController {
     return "membr/anals/incln/incln";
   }
 
-  @RequestMapping(value = "/inclin/getInclinList.sb", method = RequestMethod.POST)
+  @RequestMapping(value = "/incln/getInclnList.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result getInclinList(InclnVO inclinVO, HttpServletRequest request) {
+  public Result getInclnList(InclnVO inclnVO, HttpServletRequest request) {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-    List<DefaultMap<Object>> result = inclnService.getInclnList(inclinVO, sessionInfoVO);
-
-    System.out.println("+++++++++++++++++++++++++++++++++++++++");
-    System.out.println("+++++++++++++++++++++++++++++++++++++++");
-    System.out.println(result);
-    System.out.println("+++++++++++++++++++++++++++++++++++++++");
-    System.out.println("+++++++++++++++++++++++++++++++++++++++");
-
-    return ReturnUtil.returnListJson(Status.OK, result, inclinVO);
+    List<DefaultMap<Object>> result = inclnService.getInclnList(inclnVO, sessionInfoVO);
+    return ReturnUtil.returnListJson(Status.OK, result, inclnVO);
   }
 }

@@ -7,13 +7,14 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp"></c:import>
 
 <div class="subCon" ng-controller="memberPointCtrl">
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberCtrl', 1)">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('memberPointCtrl', 1)">
         <s:message code="cmm.search"/>
       </button>
     </div>
@@ -75,12 +76,12 @@
         <%-- 양식다운로드 --%>
         <td>
           <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelTextUpload('excelFormDown')">
-            <s:message code="member.excel.upload"/></button>
+            <s:message code="member.excel.download"/></button>
         </td>
         <%-- 양식업로드  --%>
         <td>
           <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelTextUpload()">
-            <s:message code="acins.reg.excelFormUpload"/>
+            <s:message code="member.excel.upload"/>
           </button>
         </td>
         <%-- 편집화면다운로드  --%>

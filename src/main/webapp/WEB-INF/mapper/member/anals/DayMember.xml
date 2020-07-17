@@ -20,7 +20,7 @@
         /* DayMembrMapper.getDayMembrList */
         SELECT tsshm.SALE_DATE,
         tsshm.SALE_FG,
-        tsshm.MEMBR_NM,
+        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
         tsshm.MEMBR_NO,
         tsshm.MEMBR_CARD_NO,
         SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT,
@@ -179,7 +179,7 @@
         /* DayMembrMapper.getDayMembrDetail */
         SELECT
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
         TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
         TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmm.REG_STORE_CD AND HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD) AS STORE_NM,

@@ -40,51 +40,58 @@
           <span class="txtIn"> <input id="endDate" name="endDate" class="w200px"/></span>
         </div>
       </td>
-      <td>
-        <button class="btn_blk sb-input w100" style="margin-left: 5px" ng-click="excelDownload()"><s:message
-                code="member.excel"/></button>
-      </td>
+      <td></td>
       <td></td>
     </tr>
     </tbody>
   </table>
 
   <%-- 그리드 --%>
-  <div class="w100 mt10 mb20">
-    <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-      <wj-flex-grid
-              autoGenerateColumns="false"
-              control="flex"
-              initialized="initGrid(s,e)"
-              sticky-headers="true"
-              selection-mode="Row"
-              items-source="data"
-              item-formatter="_itemFormatter"
-              is-read-only="true">
+  <div class="w50 fl mt40 mb20" style="width: 90%">
+    <div class="wj-TblWrapBr ml10 pd20" style="height: 600px;">
+      <div class="oh sb-select dkbr">
+        <button class="btn_skyblue ml5 fr" id="save" ng-click="excelDownload()">
+          <s:message code="member.excel"/>
+        </button>
+      </div>
+      <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="row">
+          <wj-flex-grid
+                  autoGenerateColumns="false"
+                  control="flex"
+                  initialized="initGrid(s,e)"
+                  sticky-headers="true"
+                  selection-mode="Row"
+                  items-source="data"
+                  item-formatter="_itemFormatter"
+                  is-read-only="true">
 
-        <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="membrPossesn.storeNm"/>" binding="storeNm" width="130"
-                             is-read-only="true" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.totCnt"/>" binding="totCnt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.totAmt"/>" binding="totAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemCnt"/>" binding="totMemCnt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.totMemAmt"/>" binding="totMemAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt" width="115"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt" width="115"
-                             is-read-only="true" align="right"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt" width="115"
-                             is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="membrPossesn.storeNm"/>" binding="storeNm" width="130"
+                                 is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.totCnt"/>" binding="totCnt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.totAmt"/>" binding="totAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.totMemCnt"/>" binding="totMemCnt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.totMemAmt"/>" binding="totMemAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.perMemCnt"/>" binding="perMemCnt" width="115"
+                                 is-read-only="true" align="right"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.perMemAmt"/>" binding="perMemAmt" width="115"
+                                 is-read-only="true" align="right"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.perCnt"/>" binding="perCnt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="membrPossesn.perAmt"/>" binding="perAmt" width="115"
+                                 is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
-      </wj-flex-grid>
+          </wj-flex-grid>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
 </div>
 
