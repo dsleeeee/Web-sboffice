@@ -65,7 +65,7 @@
                            closeFunc - 팝업 닫기시 호출할 함수            --%>
                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 						<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
-						<jsp:param name="targetCornerId" value="cornerDayPeriodSelectCorner" />
+						<jsp:param name="subTargetId" value="cornerDayPeriodSelectCorner" />
 						<jsp:param name="closeFunc" value="closeSelectStore" />
 					</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 				</td>
