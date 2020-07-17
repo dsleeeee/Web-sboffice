@@ -2163,7 +2163,7 @@ label.rdo-po {font-size:14px; position:relative; top:-2px}
 }
 @media all and (min-width:1029px){
 	#wjWrapType1 .wj-gridWrap, #wjWrapType2 .wj-gridWrap, #wjWrapType3 .wj-gridWrap {height:auto; min-height:257px; border-bottom-color:#eee}
-	#wjWrapType1 .wj-gridWrap.col2-t2,	#wjWrapType1 .wj-gridWrap.col2-t2 #dcfgDtlGrid {max-height:408px; min-height:408px}
+	#wjWrapType1 .wj-gridWrap.col2-t2,	#wjWrapType1 .wj-gridWrap.col2-t2 #dcfgDtlGrid {max-height:408px; min-height:408px; height:408px}
 	.wj-gridWrap #rtnStatusPosDtlGrid,.wj-gridWrap #rtnStatusDayDtlGrid{height:442px}
 		
 	/* paging type 3 >> 2 col */
