@@ -95,12 +95,22 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 content: '건수: {orderCnt}',
                 position: 'Top',
                 rendering: function (s, e) {
-                    if (e.hitTestInfo.item.avgMake >= e.hitTestInfo.item.avgPic) {
-                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
+                    if ($scope.picChecked && $scope.makeChecked) {
+                        if (e.hitTestInfo.item.avgMake >= e.hitTestInfo.item.avgPic) {
+                            if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
+                                e.text = '';
+                            }
+                        } else {
+                            if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line' || e.hitTestInfo.name == '픽업시간') {
+                                e.text = '';
+                            }
+                        }
+                    } else if (!$scope.picChecked && $scope.makeChecked) {
+                        if (e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
                             e.text = '';
                         }
-                    } else {
-                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line' || e.hitTestInfo.name == '픽업시간') {
+                    } else if ($scope.picChecked && !$scope.makeChecked) {
+                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line') {
                             e.text = '';
                         }
                     }

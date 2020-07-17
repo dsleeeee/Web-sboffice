@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KdsVO extends PageVO {
+    private String hqOfficeCd;
     private String storeCd;
     private String saleDate;
     private String startDate;
@@ -34,6 +35,14 @@ public class KdsVO extends PageVO {
 //    private List<Map<String, Object>> kdsTimeList;
     private List<String> kdsTimeList;
 
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     public String getStoreCd() {
         return storeCd;

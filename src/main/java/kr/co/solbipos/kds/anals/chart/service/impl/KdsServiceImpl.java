@@ -60,6 +60,17 @@ public class KdsServiceImpl implements KdsService {
 
     @Override
     public List<DefaultMap<String>> getKdsDayTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        return  mapper.getKdsDayTimeChart(kdsVO);
+        return mapper.getKdsDayTimeChart(kdsVO);
+    }
+
+    @Override
+    public List<DefaultMap<String>> getKdsDayProd(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        LOGGER.debug("getHqOfficeCd {} ", sessionInfoVO.getHqOfficeCd());
+        LOGGER.debug("getStoreCd {} ", sessionInfoVO.getStoreCd());
+        LOGGER.debug("getSessionId {} ", sessionInfoVO.getSessionId());
+        LOGGER.debug("getOrgnFg {} ", sessionInfoVO.getOrgnFg());
+        LOGGER.debug("getOrgnCd {} ", sessionInfoVO.getOrgnCd());
+        kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return mapper.getKdsDayProd(kdsVO);
     }
 }

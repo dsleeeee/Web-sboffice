@@ -208,7 +208,7 @@ public class KdsController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = kdsService.getKdsDay(kdsVO, sessionInfoVO);
+        List<DefaultMap<String>> result = kdsService.getKdsDayProd(kdsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }

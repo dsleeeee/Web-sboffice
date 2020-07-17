@@ -265,12 +265,22 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 content: '건수: {orderCnt}',
                 position: 'Top',
                 rendering: function (s, e) {
-                    if (e.hitTestInfo.item.avgMake >= e.hitTestInfo.item.avgPic) {
-                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
+                    if ($scope.picChecked && $scope.makeChecked) {
+                        if (e.hitTestInfo.item.avgMake >= e.hitTestInfo.item.avgPic) {
+                            if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
+                                e.text = '';
+                            }
+                        } else {
+                            if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line' || e.hitTestInfo.name == '픽업시간') {
+                                e.text = '';
+                            }
+                        }
+                    } else if (!$scope.picChecked && $scope.makeChecked) {
+                        if (e.hitTestInfo.name == '픽업시간' || e.hitTestInfo.name == '픽업시간Line') {
                             e.text = '';
                         }
-                    } else {
-                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line' || e.hitTestInfo.name == '픽업시간') {
+                    } else if ($scope.picChecked && !$scope.makeChecked) {
+                        if (e.hitTestInfo.name == '제조시간' || e.hitTestInfo.name == '제조시간Line') {
                             e.text = '';
                         }
                     }
@@ -283,6 +293,13 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
     var list = [];
     // 조회
     $scope.$on("kdsDayTimeList", function () {
+        var date1 = new Date($scope.kdsDayStartDate);
+        var date2 = new Date($scope.kdsDayEndDate);
+        var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
+        if (diffDay > 30) {
+            $scope._popMsg(messages['kds.date.error']);
+            return false;
+        }
         // if (!$scope.valueCheck()) return false;
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
@@ -364,6 +381,13 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 // 차트
     $scope.chartKds = function () {
+        var date1 = new Date($scope.kdsDayStartDate);
+        var date2 = new Date($scope.kdsDayEndDate);
+        var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
+        if (diffDay > 30) {
+            $scope._popMsg(messages['kds.date.error']);
+            return false;
+        }
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
