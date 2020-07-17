@@ -13,7 +13,7 @@
  */
 var app = agrid.getApp();
 
-// 재료-상품 등록에 추가버튼, '재료코드' 미선택시 막을려고
+// 재료-상품 등록에 추가버튼, '재료코드' 미선택시 막을려고 ("V":선택, "N":미선택)
 var addSelected = "N";
 
 /**
@@ -50,6 +50,8 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.recipesCd = selectedRow.recipesCd;
+                    params.recipesNm = selectedRow.recipesNm;
+                    params.orgplceNm = selectedRow.orgplceNm;
 
                     var storeScope = agrid.getScope('recpOriginDetailCtrl');
                     storeScope._broadcast('recpOriginDetailCtrl', params);
@@ -57,6 +59,9 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
         });
+
+        // 조회
+        $scope.searchRecpOrigin();
     };
 
     // <-- 검색 호출 -->
@@ -79,15 +84,6 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // <-- //검색 호출 -->
 
-    // 선택 매장
-    $scope.selectedStore;
-    $scope.setSelectedStore = function(store) {
-        $scope.selectedStore = store;
-    };
-    $scope.getSelectedStore = function(){
-        return $scope.selectedStore;
-    };
-
     // <-- 그리드 행 추가 -->
     $scope.addRow = function() {
         // 파라미터 설정
@@ -105,18 +101,34 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
+        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
 
-            if(item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+                if(item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
-        }
+
+            // 저장
+            $scope.save();
+        });
     };
     // <-- //그리드 행 삭제 -->
 
     // <-- 그리드 저장 -->
     $scope.save = function() {
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].recipesNm === "") {
+                $scope._popMsg(messages["recpOrigin.recipesNmBlank"]);
+                return false;
+            }
+            if($scope.flex.collectionView.items[i].orgplceNm === "") {
+                $scope._popMsg(messages["recpOrigin.orgplceNmBlank"]);
+                return false;
+            }
+        }
+
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -159,6 +171,20 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
     // <-- 검색 호출 -->
     $scope.$on("recpOriginDetailCtrl", function(event, data) {
         $scope.setSelectedStore(data);
+
+        if(!$.isEmptyObject($scope.selectedStore) ) {
+            addSelected = "Y";
+        }
+        if(addSelected === "Y") {
+            $("#lblRecipesCd").text(" ( [ " + $scope.selectedStore.recipesCd + " ]");
+            $("#lblRecipesNm").text($scope.selectedStore.recipesNm + " / ");
+            $("#lblOrgplceNm").text($scope.selectedStore.orgplceNm + " )");
+        } else if(addSelected === "N") {
+            $("#lblRecipesCd").text("");
+            $("#lblRecipesNm").text("");
+            $("#lblOrgplceNm").text("");
+        }
+
         $scope.searchRecpOriginDetail();
         event.preventDefault();
     });
@@ -209,16 +235,18 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
+        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
+            for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+                var item = $scope.flex.collectionView.items[i];
 
-            if(item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+                if(item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
-        }
 
-        // 저장
-        $scope.save();
+            // 저장
+            $scope.save();
+        });
     };
     // <-- //그리드 행 삭제 -->
 

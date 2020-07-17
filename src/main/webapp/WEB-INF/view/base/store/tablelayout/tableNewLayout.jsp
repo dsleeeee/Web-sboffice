@@ -96,10 +96,7 @@
     
     	<div class="tbLayoutWrap">
     		<div class="t-btn-wrap">
-	          <h2 class="h2_tit2 fl">
-	              <s:message code="tableLayout.group" />
-	          </h2>
-	          <div class="fr">
+	          <div class="flr">
 	              <%-- 버튼 --%>
 	              <div class="updownSet oh mb5 fl">
 	              	   <button class="btn_skyblue fl ml5" id="btnInitLayout"><s:message code="cmm.init" /></button>
@@ -343,7 +340,7 @@
 					  				</div>
 					  			</td> -->
 					  		</tr>
-					  		<tr>
+					  		<tr style="display: none;">
 					  			<th class="tc"><s:message code="tableLayout.size" /></th>
 					  			<td>
 					  				<span class="bk lh30 s12 w50px"><s:message code="func.width" /></span>
@@ -415,8 +412,8 @@
                         <div class="btn_int tc" id="format">
                             <button class="btn_blue" style="display: none;" id="btnChangeAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
-                            <button class="btn_blue" style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
-                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.save" /></button>
+                            <button class="btn_blue"  id="btnSaveAttr" ><s:message code="cmm.save" /></button>
+                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.typeSave" /></button>
                         </div>
                     </div>
                     <%--//설정--%>

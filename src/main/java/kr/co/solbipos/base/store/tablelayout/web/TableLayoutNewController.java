@@ -5,6 +5,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrNewService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
@@ -260,8 +261,12 @@ public class TableLayoutNewController {
     	SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
     	//this.path = request.getRequestURI();
-    	String uploadPath = request.getSession().getServletContext().getRealPath("/resources/graph/upload");
-
+    	// 파일서버 대응 경로 지정 (로컬)
+//    	String uploadPath = request.getSession().getServletContext().getRealPath("/resources/graph/upload");
+        // 파일서버 대응 경로 지정 (운영)
+        String uploadPath = BaseEnv.FILE_UPLOAD_DIR + "table_img/";
+    	
+    	
     	LOGGER.debug("path : " + uploadPath);
     	LOGGER.debug("originalName : "+file.getOriginalFilename());
     	LOGGER.debug("size : "+file.getSize());
