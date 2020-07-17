@@ -181,19 +181,22 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                             continue;
                         }
                         LOGGER.debug(styleKeyValue[0]);
-                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                            case TBL_GRP_FG:
-                                tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
-                                break;
-                            case BG_COLOR:
-                                tableGroupVO.setBgColor(styleKeyValue[1]);
-                                break;
-                            case BG_IMG_NM:
-                                tableGroupVO.setBgImgNm(styleKeyValue[1]);
-                            break;
-                            default:
-                                break;
+                        if (TouchKeyStyle.getEnum(styleKeyValue[0]) != null) {
+                        	switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
+	                            case TBL_GRP_FG:
+	                                tableGroupVO.setTblGrpFg(TblGrpFg.getEnum(styleKeyValue[1]));
+	                                break;
+	                            case BG_COLOR:
+	                                tableGroupVO.setBgColor(styleKeyValue[1]);
+	                                break;
+	                            case BG_IMG_NM:
+	                                tableGroupVO.setBgImgNm(styleKeyValue[1]);
+	                            break;
+	                            default:
+	                                break;
+	                        }
                         }
+                        
                     }
                 }
 

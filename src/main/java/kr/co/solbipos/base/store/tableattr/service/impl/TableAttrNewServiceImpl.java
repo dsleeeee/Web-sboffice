@@ -245,7 +245,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                 tableAttrVO.setHeight((long)geo.getHeight());
 
                 //스타일
-                String styleStr = cell.getStyle();
+                String styleStr = cell.getStyle();                
                 if(styleStr != null) {
                     String[] styles = styleStr.split(";");
                     for(String style : styles) {
@@ -255,31 +255,35 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                             continue;
                         }
                         //LOGGER.debug(styleKeyValue[0]);
-                        switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
-                            case FONT_COLOR:
-                                tableAttrVO.setFontColor(styleKeyValue[1]);
-                                break;
-                            case FONT_NM:
-                                tableAttrVO.setFontNm(styleKeyValue[1]);
-                                break;
-                            case FONT_SIZE:
-                                tableAttrVO.setFontSize(Long.parseLong(styleKeyValue[1]));
-                                break;
-                            case FONT_STYLE_FG:
-                                tableAttrVO.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
-                                break;
-                            case ALIGN:
-                                tableAttrVO.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
-                                break;
-                            case VERTICAL_ALIGN:
-                                tableAttrVO.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
-                                break;
-                            case TBL_TYPE_FG:
-                                tableAttrVO.setTblTypeFg(styleKeyValue[1]);
-                                break;
-                            default:
-                                break;
+                        
+                        if (TouchKeyStyle.getEnum(styleKeyValue[0]) != null) {
+                        	switch(TouchKeyStyle.getEnum(styleKeyValue[0])) {
+	                            case FONT_COLOR:
+	                                tableAttrVO.setFontColor(styleKeyValue[1]);
+	                                break;
+	                            case FONT_NM:
+	                                tableAttrVO.setFontNm(styleKeyValue[1]);
+	                                break;
+	                            case FONT_SIZE:
+	                                tableAttrVO.setFontSize(Long.parseLong(styleKeyValue[1]));
+	                                break;
+	                            case FONT_STYLE_FG:
+	                                tableAttrVO.setFontStyleFg(StringUtils.leftPad(Integer.toBinaryString(Integer.parseInt(styleKeyValue[1])), 3, "0"));
+	                                break;
+	                            case ALIGN:
+	                                tableAttrVO.setTextalignFg(TextalignFg.getEnum(styleKeyValue[1]));
+	                                break;
+	                            case VERTICAL_ALIGN:
+	                                tableAttrVO.setTextvalignFg(TextvalignFg.getEnum(styleKeyValue[1]));
+	                                break;
+	                            case TBL_TYPE_FG:
+	                                tableAttrVO.setTblTypeFg(styleKeyValue[1]);
+	                                break;
+	                            default:
+	                                break;
+	                        }
                         }
+                        
                     }
                 }
                 tableAttrVO.setUseYn("Y");
