@@ -207,7 +207,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // main.sb 호출 시, 로그인한 사람의 권한에 따라 다른 메인 URL redirect
-        if(("/application/main/content/").equals(url.substring(0, 26))){
+        if(url.contains("/application/main/content/")){
 
             // 관리자
             if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER){
