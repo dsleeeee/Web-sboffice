@@ -1745,6 +1745,19 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
     display: none;
 }
 
+/* [260] 기초관리 상품관리 상품분류정보관리 화면 색 설정, 추가 요청시 원하는 색으로 변경예정 */
+.theTreeAll_cls.wj-treeview .wj-nodelist .wj-node:hover .wj-node-text { /* hover 상태의 text 컬러*/
+    color: #0000FF;
+}
+.theTreeAll_cls.wj-treeview .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*1차 depth on상태의 text 컬러*/
+    color: #5F00FF;
+}
+.theTreeAll_cls.wj-treeview .wj-nodelist .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*2차 depth on상태의 text 컬러*/
+    color: #5F00FF;
+}
+.theTreeAll_cls.wj-treeview .wj-nodelist .wj-nodelist .wj-nodelist .wj-node.wj-state-selected > .wj-node-text { /*3차 depth on상태의 text 컬러*/
+    color: #5F00FF;
+}
 /*on상태 유지*/
 .type_Blue .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #1e88e5; color:#fff;}
 .type_Orange .theTreeAll.wj-treeview > .wj-nodelist > .wj-node.on {background: #ff9d39; color:#fff;}

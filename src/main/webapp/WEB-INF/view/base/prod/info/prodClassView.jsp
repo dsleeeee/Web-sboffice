@@ -41,7 +41,7 @@
           </div>
         </div>
         <%--위즈모 트리--%>
-        <div id="clsTree" class="mt20" style="height:380px;"></div>
+        <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:380px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
