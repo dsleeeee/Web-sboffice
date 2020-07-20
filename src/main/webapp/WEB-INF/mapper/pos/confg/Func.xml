@@ -624,7 +624,7 @@
                 ,       NVL(TCPF.HEIGHT, 0)               AS HEIGHT
                 ,       '01'                             AS STYLE_CD
                 ,       ''                               AS IMG_NM       <!-- TCPF.IMG_FILE_NM_1(전준모님 확인 필요) -->
-                ,       'N'                              AS USE_YN       <!-- 사용여부 우선 'N' 기본값으로 -->
+                ,       TCPF.USE_YN                      AS USE_YN       <!-- 사용여부 우선 'N' 기본값으로 -->
                 ,        #{regDt}                        AS REG_DT
                 ,        #{regId}                        AS REG_ID
                 ,        #{modDt}                        AS MOD_DT
