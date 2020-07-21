@@ -208,4 +208,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMappingInfo.js?ver=20200221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMappingInfo.js?ver=20200221.03" charset="utf-8"></script>
