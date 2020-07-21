@@ -122,6 +122,8 @@
     <typeAlias alias="storeStatusVO" type="kr.co.solbipos.store.manage.status.service.StoreStatusVO"/>
     <typeAlias alias="storeMenuVO" type="kr.co.solbipos.store.manage.storemanage.service.StoreMenuVO"/>
 
+    <!-- 기초관리 > 매장정보관리 > OKPOS-KCP 데이터 이관 -->
+    <typeAlias alias="migDataMappingVO" type="kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO"/>
 
     <!-- 기초관리 -->
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
@@ -141,9 +143,9 @@
     <typeAlias alias="confgBatchVO" type="kr.co.solbipos.store.manage.confgbatch.service.ConfgBatchVO"/>
     <typeAlias alias="statusVO" type="kr.co.solbipos.store.manage.status.service.StatusVO"/>
 -->
-    <!-- 기초관리 > 가상로그인  -->
+    <!-- 기초관리 > 가상로그인 -->
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
-    <!-- 기초관리 > 총판/대리점 가상로그인  -->
+    <!-- 기초관리 > 총판/대리점 가상로그인 -->
     <typeAlias alias="virtualLoginAgencyVO" type="kr.co.solbipos.store.manage.virtualLoginAgency.service.VirtualLoginAgencyVO"/>
 
     <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
