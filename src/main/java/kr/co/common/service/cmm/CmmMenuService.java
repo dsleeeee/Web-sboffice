@@ -65,6 +65,9 @@ public interface CmmMenuService {
     /** 고정 메뉴를 세션에서 삭제. 디비에서 삭제 하는건 아님 */
     void deleteFixMenu(String resrceCd, SessionInfoVO sessionInfoVO);
 
+    /** 유효 메뉴 여부 확인 */
+    int menuResrceChk(String url);
+
 }
 
 

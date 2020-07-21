@@ -52,7 +52,7 @@
             --%>
             <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDaySelectStore"/>
-                <jsp:param name="targetCornerId" value="cornerDaySelectCorner"/>
+                <jsp:param name="subTargetId" value="cornerDaySelectCorner"/>
                 <jsp:param name="closeFunc" value="closeSelectStore"/>
             </jsp:include>
         </td>

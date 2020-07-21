@@ -50,13 +50,13 @@
             AND tms.AGENCY_CD = #{agencyCd}
         </if>
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-            AND tho.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+            AND UPPER(tho.HQ_OFFICE_CD) LIKE '%'|| UPPER(#{hqOfficeCd})||'%'
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
             AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
         </if>
         <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+            AND UPPER(tms.STORE_CD) LIKE '%'|| UPPER(#{storeCd})||'%'
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'

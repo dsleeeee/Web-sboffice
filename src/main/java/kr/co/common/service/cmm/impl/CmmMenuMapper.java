@@ -64,4 +64,7 @@ public interface CmmMenuMapper {
     /** 권한이 있는 즐겨찾기 조회 */
     List<DefaultMap<String>> getAuthedBkmk(DefaultMap<String> map);
 
+    /** 유효 메뉴 여부 확인 */
+    int menuResrceChk(String url);
+
 }

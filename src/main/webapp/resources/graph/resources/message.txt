@@ -40,4 +40,6 @@ saved=저장 되었습니다.
 errorSavingFile=저장 중 오류가 발생하였습니다.
 opened=저장된 설정으로 조회 되었습니다.
 drawingTooLarge=요소가 너무 많습니다.
+invaildTblNm=테이블명은 필수 입니다.
+maxTblCnt=테이블은 최대 100개까지 생성할 수 있습니다.
 

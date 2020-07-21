@@ -72,7 +72,7 @@
         <if test='orgnFg != null and orgnFg != "H"'>
             <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                 <![CDATA[
-                AND tho.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+                AND UPPER(tho.HQ_OFFICE_CD) LIKE '%' || UPPER(#{hqOfficeCd}) || '%'
                 ]]>
             </if>
         </if>
@@ -82,7 +82,7 @@
             ]]>
         </if>
         <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD LIKE '%' || #{storeCd} || '%'
+            AND UPPER(tms.STORE_CD) LIKE '%' || UPPER(#{storeCd}) || '%'
         </if>
         <if test='storeNm != null and storeNm != ""'>
             <![CDATA[

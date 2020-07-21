@@ -77,7 +77,8 @@
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
         if ('${param.closeFunc}' !== '') {
-          eval('$scope.${param.closeFunc}()');
+        	$scope.cornerSelected();
+//           eval('$scope.${param.closeFunc}()');
         }
       });
 
