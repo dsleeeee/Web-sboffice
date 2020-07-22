@@ -300,10 +300,30 @@ public class KdsController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = kdsService.getKdsDay(kdsVO, sessionInfoVO);
+        List<DefaultMap<String>> result = kdsService.getKdsDayProdTime(kdsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
+
+    /**
+     * 차트조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "dayProdTime/getKdsDayProdTimeChart.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKdsDayProdTimeChart(KdsVO kdsVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kdsService.getKdsDayProdTimeChart(kdsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
     /**
      * 페이지 이동
      *

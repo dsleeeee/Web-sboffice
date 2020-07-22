@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.kds.anals.chart.service.impl.KdsMapper">
+    <select id="getKdsDayProdTime" parameterType="KdsVO" resultType="DefaultMap">
+        /* KdsMapper.getKdsDayProdTime */
+        SELECT
+        A.STORE_CD,
+        tms.STORE_NM,
+        A.SALE_DATE,
+        A.PROD_CD,
+        NVL(SUM(A.QTY_HH_00), 0) AS QTY_HH_00,
+        NVL(AVG(A.MAKE_HH_00), 0) AS MAKE_HH_00,
+        NVL(AVG(A.PIC_HH_00), 0) AS PIC_HH_00,
+        NVL(SUM(A.QTY_HH_01), 0) AS QTY_HH_01,
+        NVL(AVG(A.MAKE_HH_01), 0) AS MAKE_HH_01,
+        NVL(AVG(A.PIC_HH_01), 0) AS PIC_HH_01,
+        NVL(SUM(A.QTY_HH_02), 0) AS QTY_HH_02,
+        NVL(AVG(A.MAKE_HH_02), 0) AS MAKE_HH_02,
+        NVL(AVG(A.PIC_HH_02), 0) AS PIC_HH_02,
+        NVL(SUM(A.QTY_HH_03), 0) AS QTY_HH_03,
+        NVL(AVG(A.MAKE_HH_03), 0) AS MAKE_HH_03,
+        NVL(AVG(A.PIC_HH_03), 0) AS PIC_HH_03,
+        NVL(SUM(A.QTY_HH_04), 0) AS QTY_HH_04,
+        NVL(AVG(A.MAKE_HH_04), 0) AS MAKE_HH_04,
+        NVL(AVG(A.PIC_HH_04), 0) AS PIC_HH_04,
+        NVL(SUM(A.QTY_HH_05), 0) AS QTY_HH_05,
+        NVL(AVG(A.MAKE_HH_05), 0) AS MAKE_HH_05,
+        NVL(AVG(A.PIC_HH_05), 0) AS PIC_HH_05,
+        NVL(SUM(A.QTY_HH_06), 0) AS QTY_HH_06,
+        NVL(AVG(A.MAKE_HH_06), 0) AS MAKE_HH_06,
+        NVL(AVG(A.PIC_HH_06), 0) AS PIC_HH_06,
+        NVL(SUM(A.QTY_HH_07), 0) AS QTY_HH_07,
+        NVL(AVG(A.MAKE_HH_07), 0) AS MAKE_HH_07,
+        NVL(AVG(A.PIC_HH_07), 0) AS PIC_HH_07,
+        NVL(SUM(A.QTY_HH_08), 0) AS QTY_HH_08,
+        NVL(AVG(A.MAKE_HH_08), 0) AS MAKE_HH_08,
+        NVL(AVG(A.PIC_HH_08), 0) AS PIC_HH_08,
+        NVL(SUM(A.QTY_HH_09), 0) AS QTY_HH_09,
+        NVL(AVG(A.MAKE_HH_09), 0) AS MAKE_HH_09,
+        NVL(AVG(A.PIC_HH_09), 0) AS PIC_HH_09,
+        NVL(SUM(A.QTY_HH_10), 0) AS QTY_HH_10,
+        NVL(AVG(A.MAKE_HH_10), 0) AS MAKE_HH_10,
+        NVL(AVG(A.PIC_HH_10), 0) AS PIC_HH_10,
+        NVL(SUM(A.QTY_HH_11), 0) AS QTY_HH_11,
+        NVL(AVG(A.MAKE_HH_11), 0) AS MAKE_HH_11,
+        NVL(AVG(A.PIC_HH_11), 0) AS PIC_HH_11,
+        NVL(SUM(A.QTY_HH_12), 0) AS QTY_HH_12,
+        NVL(AVG(A.MAKE_HH_12), 0) AS MAKE_HH_12,
+        NVL(AVG(A.PIC_HH_12), 0) AS PIC_HH_12,
+        NVL(SUM(A.QTY_HH_13), 0) AS QTY_HH_13,
+        NVL(AVG(A.MAKE_HH_13), 0) AS MAKE_HH_13,
+        NVL(AVG(A.PIC_HH_13), 0) AS PIC_HH_13,
+        NVL(SUM(A.QTY_HH_14), 0) AS QTY_HH_14,
+        NVL(AVG(A.MAKE_HH_14), 0) AS MAKE_HH_14,
+        NVL(AVG(A.PIC_HH_14), 0) AS PIC_HH_14,
+        NVL(SUM(A.QTY_HH_15), 0) AS QTY_HH_15,
+        NVL(AVG(A.MAKE_HH_15), 0) AS MAKE_HH_15,
+        NVL(AVG(A.PIC_HH_15), 0) AS PIC_HH_15,
+        NVL(SUM(A.QTY_HH_16), 0) AS QTY_HH_16,
+        NVL(AVG(A.MAKE_HH_16), 0) AS MAKE_HH_16,
+        NVL(AVG(A.PIC_HH_16), 0) AS PIC_HH_16,
+        NVL(SUM(A.QTY_HH_17), 0) AS QTY_HH_17,
+        NVL(AVG(A.MAKE_HH_17), 0) AS MAKE_HH_17,
+        NVL(AVG(A.PIC_HH_17), 0) AS PIC_HH_17,
+        NVL(SUM(A.QTY_HH_18), 0) AS QTY_HH_18,
+        NVL(AVG(A.MAKE_HH_18), 0) AS MAKE_HH_18,
+        NVL(AVG(A.PIC_HH_18), 0) AS PIC_HH_18,
+        NVL(SUM(A.QTY_HH_19), 0) AS QTY_HH_19,
+        NVL(AVG(A.MAKE_HH_19), 0) AS MAKE_HH_19,
+        NVL(AVG(A.PIC_HH_19), 0) AS PIC_HH_19,
+        NVL(SUM(A.QTY_HH_20), 0) AS QTY_HH_20,
+        NVL(AVG(A.MAKE_HH_20), 0) AS MAKE_HH_20,
+        NVL(AVG(A.PIC_HH_20), 0) AS PIC_HH_20,
+        NVL(SUM(A.QTY_HH_21), 0) AS QTY_HH_21,
+        NVL(AVG(A.MAKE_HH_21), 0) AS MAKE_HH_21,
+        NVL(AVG(A.PIC_HH_21), 0) AS PIC_HH_21,
+        NVL(SUM(A.QTY_HH_22), 0) AS QTY_HH_22,
+        NVL(AVG(A.MAKE_HH_22), 0) AS MAKE_HH_22,
+        NVL(AVG(A.PIC_HH_22), 0) AS PIC_HH_22,
+        NVL(SUM(A.QTY_HH_23), 0) AS QTY_HH_23,
+        NVL(AVG(A.MAKE_HH_23), 0) AS MAKE_HH_23,
+        NVL(AVG(A.PIC_HH_23), 0) AS PIC_HH_23
+        FROM
+        (
+        SELECT
+        DISTINCT tookddt.STORE_CD, tookddt.SALE_DATE, tookddt.PROD_CD, tookddt.SALE_HH ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookddt.SALE_HH, #{i}, sum(tookddt.SALE_QTY)) AS"QTY_HH_${i}"
+        </foreach>
+        ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookddt.SALE_HH, #{i}, sum(
+            <if test='makeDate == 0'>
+                tookddt.AVG_S_CK_TO_E_CK)) AS "MAKE_HH_${i}"
+            </if>
+            <if test="makeDate == 1">
+                tookddt.AVG_L_OD_TO_E_CK)) AS"MAKE_HH_${i}"
+            </if>
+        </foreach>
+        ,
+        <foreach collection="kdsTimeList" item="i" separator=",">
+            DECODE(tookddt.SALE_HH, #{i}, sum(
+            <if test='picDate == 0'>
+                tookddt.AVG_S_OD_TO_E_PK)) AS "PIC_HH_${i}"
+            </if>
+            <if test="picDate == 1">
+                tookddt.AVG_E_CK_TO_E_PK)) AS "PIC_HH_${i}"
+            </if>
+        </foreach>
+        FROM
+        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt
+        WHERE
+        tookddt.STORE_CD = 'A000001'
+        AND tookddt.SALE_DATE BETWEEN '20200701' AND '20200722'
+        AND tookddt.SALE_HH BETWEEN '00' AND '06'
+        GROUP BY
+        tookddt.STORE_CD , tookddt.SALE_DATE, tookddt.SALE_HH, tookddt.PROD_CD) A ,
+        TB_MS_STORE tms
+        WHERE
+        A.STORE_CD = tms.STORE_CD(+)
+        GROUP BY
+        A.STORE_CD,
+        A.SALE_DATE,
+        tms.STORE_NM,
+        A.PROD_CD
+        ORDER BY
+        A.SALE_DATE
+    </select>
+    <select id="getKdsDayProdTimeChart" parameterType="KdsVO" resultType="DefaultMap">
+        /* KdsMapper.getKdsDayProdTimeChart */
+        SELECT
+        tookddt.STORE_CD
+        , tookddt.SALE_HH||'시' AS SALE_HH
+        , sum(tookddt.SALE_QTY) AS SALE_QTY
+        <if test='makeDate == 0'>
+            , avg(tookddt.AVG_S_CK_TO_E_CK) AS AVG_MAKE
+        </if>
+        <if test="makeDate == 1">
+            , avg(tookddt.AVG_L_OD_TO_E_CK) AS AVG_MAKE
+        </if>
+        <if test='picDate == 0'>
+            , avg(tookddt.AVG_S_OD_TO_E_PK) AS AVG_PIC
+        </if>
+        <if test="picDate == 1">
+            , avg(tookddt.AVG_E_CK_TO_E_PK) AS AVG_PIC
+        </if>
+        FROM
+        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt
+        WHERE
+        tookddt.STORE_CD = #{storeCd}
+        AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+        GROUP BY
+        tookddt.STORE_CD ,
+        tookddt.SALE_HH
+        ORDER BY
+        tookddt.SALE_HH
+    </select>
+</mapper>

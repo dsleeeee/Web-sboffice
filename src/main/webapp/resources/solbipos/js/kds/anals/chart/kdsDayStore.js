@@ -189,14 +189,8 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     var list = [];
     // 조회
     $scope.$on("kdsDayStoreList", function () {
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
-        var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
-        if (diffDay > 30) {
-            $scope._popMsg(messages['kds.date.error']);
-            return false;
-        }
-        // if (!$scope.valueCheck()) return false;
+
+        if (!$scope.valueCheck()) return false;
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
@@ -415,6 +409,49 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 대비 매장
     $scope.conRegStoreShow = function () {
         $scope._broadcast('conRegStoreCtrl');
+    };
+
+    // 체크
+    $scope.valueCheck = function () {
+        var date1 = new Date($scope.kdsDayStartDate);
+        var date2 = new Date($scope.kdsDayEndDate);
+        var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
+        if (diffDay > 30) {
+            $scope._popMsg(messages['kds.date.error']);
+            return false;
+        }
+        var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
+        if (isNull($scope.makeDateCombo.selectedValue)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
+        if (isNull($scope.makeDateSecCombo.selectedValue)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        var msg = messages["kds.picDate.setting"] + messages["cmm.require.text"];
+        if (isNull($scope.picDateCombo.selectedValue)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        var msg = messages["kds.picDate.setting"] + messages["cmm.require.text"];
+        if (isNull($scope.picDateSecCombo.selectedValue)) {
+            $scope._popMsg(msg);
+            return false;
+        }
+
+        var msg = messages["kds.store"] + messages["cmm.require.text"];
+        if (isNull($("#regStoreCd").val())) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        var msg = messages["kds.store"] + messages["cmm.require.text"];
+        if (isNull($("#conRegStoreCd").val())) {
+            $scope._popMsg(msg);
+            return false;
+        }
+        return true;
     };
 
     // 엑셀 다운로드

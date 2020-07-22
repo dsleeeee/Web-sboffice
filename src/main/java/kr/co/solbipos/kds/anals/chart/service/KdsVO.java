@@ -33,6 +33,8 @@ public class KdsVO extends PageVO {
     private String makeDateSec;
     private String picDate;
     private String picDateSec;
+    private String prodClassCd;
+
 //    private List<Map<String, Object>> kdsTimeList;
     private List<String> kdsTimeList;
 
@@ -264,6 +266,15 @@ public class KdsVO extends PageVO {
 //    public void setKdsTimeList(List<Map<String, Object>> kdsTimeList) {
 //        this.kdsTimeList = kdsTimeList;
 //    }
+
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
 
     public List<String> getKdsTimeList() {
         return kdsTimeList;

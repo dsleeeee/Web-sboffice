@@ -123,7 +123,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     var list = [];
     // 조회
     $scope.$on("kdsDayProdList", function () {
-        // if (!$scope.valueCheck()) return false;
+        if (!$scope.valueCheck()) return false;
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
@@ -201,9 +201,9 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }, 10);
             }
         });
-        $scope._inquiryMain("/kds/anals/chart/dayProd/getKdsDayProd.sb", params, function (res) {
-            console.log(res);
-        });
+        // $scope._inquiryMain("/kds/anals/chart/dayProd/getKdsDayProd.sb", params, function (res) {
+        //     console.log(res);
+        // });
     };
 
     $scope.regStoreShow = function () {
@@ -260,7 +260,6 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages['kds.date.error']);
             return false;
         }
-
         var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
         if (isNull($scope.makeDateCombo.selectedValue)) {
             $scope._popMsg(msg);
@@ -287,6 +286,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(msg);
             return false;
         }
+        return true;
     };
 
 // 엑셀 다운로드

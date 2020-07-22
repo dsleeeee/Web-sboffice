@@ -34,11 +34,17 @@ public class KdsServiceImpl implements KdsService {
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
+    /**
+     * 주문 단위 - 일자별
+     */
     @Override
     public List<DefaultMap<String>> getKdsDay(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         return mapper.getKdsDay(kdsVO);
     }
 
+    /**
+     * 시간대별
+     */
     @Override
     public List<DefaultMap<String>> getKdsDayTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         List<DefaultMap<String>> kdsTimeList = mapper.getKdsDayTime(kdsVO);
@@ -59,23 +65,35 @@ public class KdsServiceImpl implements KdsService {
         return kdsTimeList;
     }
 
+    /**
+     * 시간대별 - 차트
+     */
     @Override
     public List<DefaultMap<String>> getKdsDayTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         return mapper.getKdsDayTimeChart(kdsVO);
     }
 
+    /**
+     * 일별 - 상품별
+     */
     @Override
     public List<DefaultMap<String>> getKdsDayProd(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getKdsDayProd(kdsVO);
     }
 
+    /**
+     * 월별 - 상품별
+     */
     @Override
     public List<DefaultMap<String>> getKdsMonth(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return mapper.getKdsMonth(kdsVO);
     }
 
+    /**
+     * 매장대비
+     */
     @Override
     public List<DefaultMap<String>> getKdsStore(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -88,5 +106,21 @@ public class KdsServiceImpl implements KdsService {
             result = mapper.getKdsStoreProd(kdsVO);
         }
         return result;
+    }
+
+    /**
+     * 일 - 상품 시간대별
+     */
+    @Override
+    public List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        return mapper.getKdsDayProdTime(kdsVO);
+    }
+
+    /**
+     * 일 - 상품 시간대별 차트
+     */
+    @Override
+    public List<DefaultMap<String>> getKdsDayProdTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        return mapper.getKdsDayProdTimeChart(kdsVO);
     }
 }

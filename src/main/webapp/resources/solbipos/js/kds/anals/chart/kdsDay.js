@@ -123,7 +123,9 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     var list = [];
     // 조회
     $scope.$on("kdsDayList", function () {
-        // if (!$scope.valueCheck()) return false;
+        if (!$scope.valueCheck()) {
+            return false;
+        }
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
@@ -243,14 +245,14 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 // 체크
     $scope.valueCheck = function () {
+        var msg = messages['kds.date.error'];
         var date1 = new Date($scope.kdsDayStartDate);
         var date2 = new Date($scope.kdsDayEndDate);
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         if (diffDay > 30) {
-            $scope._popMsg(messages['kds.date.error']);
+            $scope._popMsg(msg);
             return false;
         }
-
         var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
         if (isNull($scope.makeDateCombo.selectedValue)) {
             $scope._popMsg(msg);
@@ -277,6 +279,7 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             $scope._popMsg(msg);
             return false;
         }
+        return true;
     };
 
 // 엑셀 다운로드

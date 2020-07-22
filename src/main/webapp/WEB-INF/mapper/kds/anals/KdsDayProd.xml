@@ -94,6 +94,9 @@
 		<if test='prodCd != null and prodCd != ""'>
 			AND C.PROD_CD	= #{prodCd}
 		</if>
+		<if test='prodClassCd != null and prodClassCd != ""'>
+			AND B.PROD_CLASS_CD	= #{prodClassCd}
+		</if>
 		AND C.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
 	GROUP BY
 		A.LV1_CD,

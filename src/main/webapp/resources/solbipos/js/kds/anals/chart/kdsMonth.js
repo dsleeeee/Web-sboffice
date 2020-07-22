@@ -125,15 +125,8 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var list = [];
     // 조회
     $scope.$on("kdsMonthList", function () {
-        // if (!$scope.valueCheck()) return false;
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
-        date2.setFullYear(date2.getFullYear() -1)
-        var diff = date2;
-        if (diff > date1) {
-            $scope._popMsg(messages['kds.date.year.error']);
-            return false;
-        }
+        if (!$scope.valueCheck()) return false;
+
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
@@ -267,6 +260,7 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 // 체크
     $scope.valueCheck = function () {
+
         var date1 = new Date($scope.kdsDayStartDate);
         var date2 = new Date($scope.kdsDayEndDate);
         date2.setFullYear(date2.getFullYear() -1)
