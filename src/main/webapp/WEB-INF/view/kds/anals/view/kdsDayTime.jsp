@@ -64,6 +64,7 @@
                     </span>
                 </div>
             </td>
+                <%-- 시간대 --%>
             <th>
                 <s:message code="kds.time"/>
             </th>
@@ -224,13 +225,11 @@
         <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
     <div class="mt20 oh sb-select dkbr">
-
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="excelDownloadInfo()">
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
-    ${kdsDayTimeList}
     <%-- 그리드 --%>
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">

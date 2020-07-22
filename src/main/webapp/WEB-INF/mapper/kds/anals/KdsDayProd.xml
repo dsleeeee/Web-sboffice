@@ -91,6 +91,9 @@
 		AND C.STORE_CD = D.STORE_CD(+)
 		AND B.HQ_OFFICE_CD = #{hqOfficeCd}
 		AND C.STORE_CD = #{storeCd}
+		<if test='prodCd != null and prodCd != ""'>
+			AND C.PROD_CD	= #{prodCd}
+		</if>
 		AND C.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
 	GROUP BY
 		A.LV1_CD,

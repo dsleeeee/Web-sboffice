@@ -29,9 +29,9 @@
         </colgroup>
         <tbody>
         <tr>
-            <%-- 영업일자 --%>
+            <%-- 영업월 --%>
             <th>
-                <s:message code="kds.saleDate"/>
+                <s:message code="kds.saleMonth"/>
             </th>
             <td>
                 <div class="sb-select">
@@ -41,7 +41,8 @@
                                 value="kdsDayStartDate"
                                 ng-model="kdsDayStartDate"
                                 control="kdsDayStartDateCombo"
-                                format="yyyy-MM-dd"
+                                format="yyyy-MM"
+                                selection-mode="Month"
                                 min="2000-01-01"
                                 max="2099-12-31"
                                 initialized="_initDateBox(s)">
@@ -55,7 +56,8 @@
                               value="kdsDayEndDate"
                               ng-model="kdsDayEndDate"
                               control="kdsDayEndDateCombo"
-                              format="yyyy-MM-dd"
+                              format="yyyy-MM"
+                              selection-mode="Month"
                               min="2000-01-01"
                               max="2099-12-31"
                               initialized="_initDateBox(s)">
@@ -64,14 +66,8 @@
                     </span>
                 </div>
             </td>
-            <c:if test="${orgnFg == 'HQ'}">
-                <th><s:message code="kds.store"/></th>
-                <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="regStore"/>
-                    </jsp:include>
-                </td>
-            </c:if>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <th>
@@ -146,6 +142,15 @@
             </td>
         </tr>
         <tr>
+            <%-- 매장 --%>
+            <c:if test="${orgnFg == 'HQ'}">
+                <th><s:message code="kds.store"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                        <jsp:param name="targetId" value="regStore"/>
+                    </jsp:include>
+                </td>
+            </c:if>
             <%-- 분류조회 --%>
             <th><s:message code="kds.prodClass"/></th>
             <td>
@@ -156,23 +161,54 @@
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
                         ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <td></td>
-            <td></td>
         </tr>
         </tbody>
     </table>
 
 
+    <div class="mt20 oh sb-select dkbr">
+        <%-- 차트 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
+            <s:message code="kds.chart"/>
+        </button>
+        <div class="sb-select mt10 fr">
+            <span class="chk ml10">
+                <%-- 제조시간 --%>
+                <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
+                <label for="makeChecked"><s:message code='kds.makeDate'/></label>
+            </span>
+            <span class="chk ml10">
+                <%-- 픽업시간 --%>
+                <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
+                <label for="picChecked"><s:message code='kds.picDate'/></label>
+            </span>
+        </div>
+        <%-- 건수 --%>
+        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
+        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
+        <%--			<label for="chkDt">--%>
+        <%--				<s:message code="kds.cnt"/>--%>
+        <%--			</label>--%>
+        <%--		</span>--%>
+    </div>
     <div class="w100 mt40 mb20 ">
         <%--위즈모 차트--%>
         <h2>
-            <div class="circle"><span class="blue"></span><span class="sky"></span></div>
+            <div class="circle">
+                <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
+                    <s:message code="kds.makeDate"/>
+                </span>
+                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                    <s:message code="kds.picDate"/>
+                </span>
+            </div>
         </h2>
-        <div class="wizWrap" id="chart1" style="width:100%; height:300px;"></div>
+        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
+
     <div class="mt20 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="memberVendorMapping()">
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
             <s:message code="cmm.excel.down"/>
         </button>
     </div>
@@ -191,36 +227,37 @@
 
                 <!-- define columns -->
                 <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="membrNo" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="storeCd" width="*"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="membrNm" width="*"
+                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="storeNm" width="*"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="membrCardNo"
+                <wj-flex-grid-column header="<s:message code="kds.saleMonth"/>" binding="saleMon"
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.lClassCd"/>" binding="saleCount" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.lClassCd"/>" binding="lv1Cd" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.lClassNm"/>" binding="saleAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.lClassNm"/>" binding="lv1Nm" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.mClassCd"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.mClassCd"/>" binding="lv2Cd" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.mClassNm"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.mClassNm"/>" binding="lv2Nm" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.sClassCd"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.sClassCd"/>" binding="lv3Cd" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.sClassNm"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.sClassNm"/>" binding="lv3Nm" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.prodCd"/>" binding="prodCd" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.prodNm"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.prodNm"/>" binding="prodNm" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.amt"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.amt"/>" binding="saleQty" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="dcAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
     </div>
@@ -238,5 +275,10 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsMonth.js?ver=2020070801.08"
         charset="utf-8"></script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
+
 
 

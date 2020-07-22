@@ -8,6 +8,7 @@ import java.util.Map;
 public class KdsVO extends PageVO {
     private String hqOfficeCd;
     private String storeCd;
+    private String conStoreCd;
     private String saleDate;
     private String startDate;
     private String endDate;
@@ -50,6 +51,14 @@ public class KdsVO extends PageVO {
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getConStoreCd() {
+        return conStoreCd;
+    }
+
+    public void setConStoreCd(String conStoreCd) {
+        this.conStoreCd = conStoreCd;
     }
 
     public String getSaleDate() {

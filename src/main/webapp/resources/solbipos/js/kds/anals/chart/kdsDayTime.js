@@ -300,6 +300,12 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(messages['kds.date.error']);
             return false;
         }
+
+        if($scope.timeZone > $scope.timeZoneSec) {
+            $scope._popMsg(messages['kds.date.hour.error']);
+            return false;
+        }
+
         // if (!$scope.valueCheck()) return false;
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');

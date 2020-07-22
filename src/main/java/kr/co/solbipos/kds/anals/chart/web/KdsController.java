@@ -254,7 +254,7 @@ public class KdsController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = kdsService.getKdsDay(kdsVO, sessionInfoVO);
+        List<DefaultMap<String>> result = kdsService.getKdsMonth(kdsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
@@ -346,7 +346,7 @@ public class KdsController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = kdsService.getKdsDay(kdsVO, sessionInfoVO);
+        List<DefaultMap<String>> result = kdsService.getKdsStore(kdsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }

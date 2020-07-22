@@ -69,7 +69,7 @@
             <c:if test="${orgnFg == 'HQ'}">
                 <th><s:message code="kds.store.search"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
                 </td>
@@ -77,8 +77,8 @@
             <c:if test="${orgnFg == 'HQ'}">
                 <th><s:message code="kds.store.contrast"/></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="regStore"/>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">
+                        <jsp:param name="targetId" value="conRegStore"/>
                     </jsp:include>
                 </td>
             </c:if>
@@ -168,17 +168,27 @@
         </tbody>
     </table>
 
-    <div class="w100 mt40 mb20 ">
+    <div class="w50 mt40 mb20 fl ">
         <%--위즈모 차트--%>
         <h2>
-            <div class="circle"><span class="blue"></span><span class="sky"></span></div>
+            <div class="circle">
+                <s:message code="kds.makeDate.standard"/>
+            </div>
         </h2>
         <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
     </div>
-
+    <div class="w50 mt40 mb20 fl">
+        <%--위즈모 차트--%>
+        <h2>
+            <div class="circle">
+                    <s:message code="kds.picDate.standard"/>
+            </div>
+        </h2>
+        <div class="wizWrap" id="chart2" style="width:100%; height:370px;"></div>
+    </div>
     <%-- 그리드 --%>
     <div class="w100 mt40">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" ng-switch="!!prodChk" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -190,20 +200,70 @@
                     is-read-only="true">
 
                 <!-- define columns -->
-                <c:if test="${orgnFg == 'HQ'}">
-                    <wj-flex-grid-column header="<s:message code="kds.storeCd"/>" binding="membrNo" width="*"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="kds.storeNm"/>" binding="membrNm" width="*"
-                                         is-read-only="true" align="center"></wj-flex-grid-column>
-                </c:if>
-                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="membrCardNo"
+                <wj-flex-grid-column header="<s:message code="kds.saleDate"/>" binding="saleDate"
                                      width="*"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.totalOrderCnt"/>" binding="saleCount" width="*"
+
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="prodCd"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="prodNm"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="saleQty"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>"
+                                     binding="orderCnt" width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="prodCd"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="prodNm"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="saleQty"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>"
+                                     binding="orderCnt" width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="avgMake" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="saleAmt" width="*"
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="avgPic" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="dcAmt" width="*"
+
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodCd"/>" binding="conProdCd"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.prodNm"/>" binding="conProdNm"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.amt"/>" binding="conSaleQty"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="false" header="<s:message code="kds.totalOrderCnt"/>"
+                                     binding="conOrderCnt" width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodCd"/>" binding="conProdCd"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.prodNm"/>" binding="conProdNm"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.amt"/>" binding="conSaleQty"
+                                     width="*"
+                                     is-read-only="true" align="right" visible="true"></wj-flex-grid-column>
+                <wj-flex-grid-column ng-switch-when="true" header="<s:message code="kds.totalOrderCnt"/>"
+                                     binding="conOrderCnt" width="*"
+                                     is-read-only="true" align="right" visible="false"></wj-flex-grid-column>
+
+                <wj-flex-grid-column header="<s:message code="kds.avgMakeDate"/>" binding="conAvgMake" width="*"
+                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kds.avgPicDate"/>" binding="conAvgPic" width="*"
                                      is-read-only="true" align="right"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
@@ -222,5 +282,9 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=2020070801.08"
         charset="utf-8"></script>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
+</c:import>
 
 
