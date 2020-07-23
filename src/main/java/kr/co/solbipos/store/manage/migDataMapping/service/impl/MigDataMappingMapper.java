@@ -38,4 +38,7 @@ public interface MigDataMappingMapper {
 
     /** OKPOS-KCP 데이터 이관 저장 */
     int getMigDataMappingInfoSaveInsert(MigDataMappingVO migDataMappingVO);
+
+    /** SOLBI 매장코드 조회 */
+    DefaultMap<String> getMigDataMappingSolbiStoreCdList(MigDataMappingVO migDataMappingVO);
 }

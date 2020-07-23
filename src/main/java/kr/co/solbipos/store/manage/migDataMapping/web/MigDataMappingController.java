@@ -8,6 +8,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingService;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 @Controller
 @RequestMapping("/store/manage/migDataMapping")
@@ -28,14 +31,16 @@ public class MigDataMappingController {
 
     private final SessionService sessionService;
     private final MigDataMappingService migDataMappingService;
+    private final StoreManageService storeManageService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MigDataMappingController(SessionService sessionService, MigDataMappingService migDataMappingService) {
+    public MigDataMappingController(SessionService sessionService, MigDataMappingService migDataMappingService, StoreManageService storeManageService) {
         this.sessionService = sessionService;
         this.migDataMappingService = migDataMappingService;
+        this.storeManageService = storeManageService;
     }
 
     /**
@@ -46,7 +51,13 @@ public class MigDataMappingController {
      * @param model
      */
     @RequestMapping(value = "/migDataMapping/list.sb", method = RequestMethod.GET)
-    public String migDataMappingView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String migDataMappingView(HttpServletRequest request, HttpServletResponse response, Model model, StoreManageVO storeManageVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 메뉴권한 복사할 본사목록 조회
+        List<DefaultMap<String>> authHqList = storeManageService.authHqList(storeManageVO, sessionInfoVO);
+        model.addAttribute("authHqList", convertToJson(authHqList));
 
         return "store/manage/migDataMapping/migDataMapping";
     }
@@ -145,5 +156,32 @@ public class MigDataMappingController {
         int result = migDataMappingService.getMigDataMappingInfoSave(migDataMappingVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * SOLBI 매장코드 조회
+     *
+     * @param migDataMappingVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 07. 22.
+     */
+    @RequestMapping(value = "/migDataMappingInfo/getMigDataMappingSolbiStoreCdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMigDataMappingSolbiStoreCdList(MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = migDataMappingService.getMigDataMappingSolbiStoreCdList(migDataMappingVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+//        System.out.println("test1111" + result);
+
+        return returnJson(Status.OK, resultMap);
     }
 }

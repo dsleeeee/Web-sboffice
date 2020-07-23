@@ -43,6 +43,11 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
     @Override
     public List<DefaultMap<Object>> getMigDataMappingList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
 
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        migDataMappingVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+        migDataMappingVO.setUserId(sessionInfoVO.getUserId());
+
         return migDataMappingMapper.getMigDataMappingList(migDataMappingVO);
     }
 
@@ -78,8 +83,20 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
         migDataMappingVO.setModId(sessionInfoVO.getUserId());
         migDataMappingVO.setDate(currentDate);
 
+//        System.out.println("test1111" + migDataMappingVO.getSolbiStoreCd());
         procCnt = migDataMappingMapper.getMigDataMappingInfoSaveInsert(migDataMappingVO);
 
         return procCnt;
+    }
+
+    /** SOLBI 매장코드 조회 */
+    @Override
+    public DefaultMap<String> getMigDataMappingSolbiStoreCdList(MigDataMappingVO migDataMappingVO,  SessionInfoVO sessionInfoVO) {
+
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+
+        resultMap = migDataMappingMapper.getMigDataMappingSolbiStoreCdList(migDataMappingVO);
+
+        return resultMap;
     }
 }

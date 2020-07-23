@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="authHqList" value="${authHqList}" />
 
 <div class="subCon" ng-controller="migDataMappingCtrl">
 
@@ -85,10 +86,10 @@
                 is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreCd"/>" binding="okposStoreCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreNm"/>" binding="okposStoreNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>" binding="solbiStoreCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>" binding="solbiStoreNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreCd"/>" binding="okposStoreCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreNm"/>" binding="okposStoreNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>" binding="solbiStoreCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>" binding="solbiStoreNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.migYn"/>" binding="migYn" data-map="migYnDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.migPosMstCnt"/>" binding="migPosMstCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.migProdClsCnt"/>" binding="migProdClsCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -101,6 +102,10 @@
     </div>
 
 </div>
+
+<script>
+    var authHqList = ${authHqList};
+</script>
 
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200220.01" charset="utf-8"></script>
 

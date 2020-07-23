@@ -23,7 +23,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
     // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
     if(orgnFg === "AGENCY") {
-        // $scope._setComboData("envHqOfficeCd", authHqList);
+        $scope._setComboData("envHqOfficeCd", authHqList);
     } else {
         $scope._setComboData("envHqOfficeCd", hqList);
     }
@@ -122,6 +122,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
     };
     // <-- //검색 호출 -->
 
+    // <-- 저장 -->
     // 저장
     $("#funcSave").click(function(e){
         if (isNull($scope.userId)) {
@@ -149,11 +150,46 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
             }
         }
 
+        var params = {};
+        // 매장코드(자동채번)
+        $scope._postJSONQuery.withOutPopUp( "/store/manage/migDataMapping/migDataMappingInfo/getMigDataMappingSolbiStoreCdList.sb", params, function(response){
+            if($.isEmptyObject(response.data.data.result) ) {
+                $scope._popMsg(messages["migDataMappingInfo.userFail"]);
+                return false;
+            }
+
+            var migDataMappingSolbiStoreCd = response.data.data.result;
+            $scope.migDataMappingSolbiStoreCd = migDataMappingSolbiStoreCd;
+
+            params.storeCd = $scope.migDataMappingSolbiStoreCd.storeCd;
+
+            // 매장 신규 등록
+            $scope.saveSolbiStore(params);
+        });
+    });
+
+    // 매장 신규 등록
+    $scope.saveSolbiStore = function(data){
+
+        function lpad(s, padLength, padString) {
+            s = '' + s;
+            while (s.length < padLength)
+                s = padString + s;
+            return s;
+        }
+
         $scope._popConfirm(messages["migDataMappingInfo.saveConfirm"], function() {
+            var j = 0;
             // 파라미터 설정
             var params = {};
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
+
+                    // OKPOS-KCP 데이터 이관시 매장코드는 F로 시작하게 순차적으로 채번한다. (F000001, F000002...)
+                    params.storeCd = "F" + lpad(parseInt(data.storeCd) + j, 6, "0");
+                    j++;
+                    // 매장 신규 등록을 호출시 매장을 자동채번하기 때문에 수동으로 넣는다고 정의
+                    params.storeCdInputType = "1";
 
                     params.orgnFg = "S";
                     params.pAgencyCd = pAgencyCd;
@@ -172,10 +208,11 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                     params.postNo = nvl($scope.flex.collectionView.items[i].postNo, " ");
                     params.addr = nvl($scope.flex.collectionView.items[i].addr, " ");
                     params.addrDtl = nvl($scope.flex.collectionView.items[i].addrDtl, " ");
-                    params.areaCd =  nvl($scope.flex.collectionView.items[i].areaCd, " ");
-                    params.clsFg =  nvl($scope.flex.collectionView.items[i].clsFg, " ");
+                    params.areaCd = nvl($scope.flex.collectionView.items[i].areaCd, " ");
+                    params.clsFg = nvl($scope.flex.collectionView.items[i].clsFg, " ");
                     params.sysStatFg = nvl($scope.flex.collectionView.items[i].sysStatFg, " ");
                     params.sysOpenDate = nvl($scope.flex.collectionView.items[i].sysOpenDate, " ");
+                    params.sysClosureDate = "99991231";
                     params.vanCd = "001"; // KCP
                     params.agencyCd = orgnCd;
                     params.sysRemark = "OKPOS 매장 데이터 이관";
@@ -196,16 +233,22 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                     params.storeType =  "02";
                     params.directManageYn =  "Y";
 
-                    params.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;
+                    params.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;$scope._postJSONSave.withPopUp
                     params.okposHqOfficeNm = $scope.flex.collectionView.items[i].hqOfficeNm;
                     params.okposStoreCd = $scope.flex.collectionView.items[i].storeCd;
                     params.okposStoreNm = $scope.flex.collectionView.items[i].storeNm;
 
+                    // 매장 신규 등록
                     // $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
                     //     var result = response.data.data;
-                    //     params.solbiStoreCd = result;
+                    //     // params.solbiStoreCd = result;
+                    //     alert(result);
+                    //     alert(result.length);
+                    //
+                    //     // TB_MIG_DATA_MAPPING 저장
                     //     $scope.saveMigDataMapping(params);
                     // });
+
                     $.ajax({
                         type: "POST",
                         url: "/store/manage/storeManage/storeManage/saveStoreInfo.sb",
@@ -214,7 +257,8 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                             // alert(result.status);
                             // alert(result.data);
                             if (result.status === "OK") {
-                                params.solbiStoreCd = result.data;
+
+                                // TB_MIG_DATA_MAPPING 저장
                                 $scope.saveMigDataMapping(params);
 
                                 $scope._popMsg("저장되었습니다.");
@@ -241,13 +285,13 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
                 }
             }
-            // $scope.close();
         });
-    });
+    };
 
+    // TB_MIG_DATA_MAPPING 저장
     $scope.saveMigDataMapping = function(data){
         var params = {};
-        params.solbiStoreCd = data.solbiStoreCd;
+        params.solbiStoreCd = data.storeCd;
         params.okposHqOfficeCd = data.okposHqOfficeCd;
         params.okposHqOfficeNm = data.okposHqOfficeNm;
         params.okposStoreCd = data.okposStoreCd;
@@ -256,6 +300,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/store/manage/migDataMapping/migDataMappingInfo/getMigDataMappingInfoSave.sb", params, function(){ });
     };
+    // <-- //저장 -->
 
     // 팝업 닫기
     $scope.close = function(){

@@ -38,6 +38,16 @@
         <if test="okposStoreNm != null and okposStoreNm != ''">
             AND tmdm.OKPOS_STORE_NM LIKE '%'|| #{okposStoreNm} ||'%'
         </if>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND tmdm.REG_ID = #{userId}
+                    ]]>
+                </if>
+            </when>
+        </choose>
         ORDER BY tmdm.SOLBI_STORE_CD
     </select>
 
@@ -196,5 +206,19 @@
             ,'N'
         )
     </insert>
+
+    <!-- SOLBI 매장코드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMigDataMappingSolbiStoreCdList" parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getMigDataMappingSolbiStoreCdList */
+        SELECT LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
+--         'F'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
+        FROM TB_MS_STORE
+        WHERE 1=1
+        AND STORE_CD LIKE 'F%'
+    </select>
 
 </mapper>

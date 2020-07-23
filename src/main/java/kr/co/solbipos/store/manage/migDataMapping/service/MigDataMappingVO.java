@@ -111,6 +111,9 @@ public class MigDataMappingVO extends PageVO {
     /** 시스템오픈일자 */
     private String sysOpenDate;
 
+    /** 시스템폐점일자 */
+    private String sysClosureDate;
+
     /** 밴사코드 */
     private String vanCd;
 
@@ -152,6 +155,9 @@ public class MigDataMappingVO extends PageVO {
 
     /**  직영구분 */
     private String directManageYn;
+
+    /** 매장코드 채번방식 */
+    private String storeCdInputType;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -291,6 +297,10 @@ public class MigDataMappingVO extends PageVO {
 
     public void setSysOpenDate(String sysOpenDate) { this.sysOpenDate = sysOpenDate; }
 
+    public String getSysClosureDate() { return sysClosureDate; }
+
+    public void setSysClosureDate(String sysClosureDate) { this.sysClosureDate = sysClosureDate; }
+
     public String getVanCd() { return vanCd; }
 
     public void setVanCd(String vanCd) { this.vanCd = vanCd; }
@@ -346,4 +356,12 @@ public class MigDataMappingVO extends PageVO {
     public String getDirectManageYn() { return directManageYn; }
 
     public void setDirectManageYn(String directManageYn) { this.directManageYn = directManageYn; }
+
+    public String getStoreCdInputType() {
+        return storeCdInputType;
+    }
+
+    public void setStoreCdInputType(String storeCdInputType) {
+        this.storeCdInputType = storeCdInputType;
+    }
 }
