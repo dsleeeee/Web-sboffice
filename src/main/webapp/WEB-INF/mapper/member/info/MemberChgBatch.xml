@@ -20,7 +20,7 @@
         /* ChgBatchMapper.getMembrChgBatchList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmm.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         tmm.MEMBR_CLASS_CD,
         tmmc.MEMBR_CLASS_NM,
         tmm.MEMBR_CARD_NO,
@@ -31,7 +31,7 @@
         tmm.POST_NO,
         tmm.ADDR,
         tmm.ADDR_DTL,
-        tmm.TEL_NO,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
         tmm.EMAIL_ADDR,
         tmm.EMAIL_RECV_YN,
         TO_CHAR(TO_DATE(tmm.BIRTHDAY), 'YYYY-MM-DD') AS BIRTHDAY,
@@ -79,10 +79,10 @@
             AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
         </if>
         <if test='membrNm != null and membrNm != ""'>
-            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+            AND SBPENC.D ( tmm.MEMBR_NM  ) LIKE '%'||#{membrNm}||'%'
         </if>
         <if test='telNo != null and telNo != ""'>
-            AND tmm.TEL_NO LIKE '%'||#{telNo}||'%'
+            AND  SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
         </if>
         <if test='emailAddr != null and emailAddr.toString() != ""'>
             AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
@@ -135,7 +135,7 @@
     <update id="updateChgBatchInfo" parameterType="ChgBatchVO">
         /* ChgBatchMapper.updateChgBatchInfo */
        UPDATE TB_MB_MEMBER tmm
-           SET tmm.MEMBR_NM = #{membrNm},
+           SET SBPENC.D (tmm.MEMBR_NM) = #{membrNm},
                tmm.MEMBR_NICKNM = #{membrNicknm},
                tmm.MEMBR_CLASS_CD = #{membrClassCd},
                tmm.MEMBR_CARD_NO = #{membrCardNo},
@@ -148,7 +148,7 @@
                tmm.GENDR_FG = #{gendrFg},
                tmm.EMAIL_ADDR = #{emailAddr},
                tmm.SHORT_NO = #{shortNo},
-               tmm.TEL_NO = #{telNo},
+                SBPENC.D(tmm.TEL_NO) = #{telNo},
                tmm.WEDDING_YN = #{weddingYn},
                tmm.WEDDINGDAY = #{weddingday},
                tmm.EMAIL_RECV_YN = #{emailRecvYn},

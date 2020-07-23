@@ -400,5 +400,69 @@ public class RegistServiceImpl implements RegistService {
         }
         return result;
     }
+
+    @Override
+    public DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        DefaultMap<Object> result = new DefaultMap<>();
+
+        LOGGER.debug("regStoreCd: {}", registVO.getRegStoreCd());
+
+        List dlvrList = mapper.getDlvrList(registVO);
+        List lZoneList = mapper.getMembrLzoneList(registVO);
+        result.put("dlvrList", dlvrList);
+        result.put("lZoneList", lZoneList);
+        return result;
+    }
+    @Override
+    public DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        DefaultMap<Object> result = new DefaultMap<>();
+        List mZoneList = mapper.getDlvrMzoneList(registVO);
+        result.put("mZoneList", mZoneList);
+        return result;
+    }
+
+    @Override
+    public List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        return mapper.getDlvrTelList(registVO);
+    }
+
+
+
+    @Override
+    public int registDlvrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        // 회원카드 등록
+        int result = mapper.insertMembrDlvr(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
+    @Override
+    public int registDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setRegDt(dt);
+        registVO.setRegId(sessionInfoVO.getUserId());
+        registVO.setModDt(dt);
+        registVO.setModId(sessionInfoVO.getUserId());
+
+        // 회원카드 등록
+        int result = mapper.insertMembrDlvrTel(registVO);
+        if (result <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
+
 }
 

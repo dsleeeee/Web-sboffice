@@ -146,7 +146,9 @@ public class RegistVO extends PageVO {
     /** 발급소속코드*/
     private String issOrgnCd;
     /** 발급일자*/
-   private String issDate;
+    private String issDate;
+    /** 발급일자*/
+    private String dlvrLzoneCd;
 
     /**
      * @return the orgnFg
@@ -937,5 +939,13 @@ public class RegistVO extends PageVO {
      */
     public void setIssDate(String issDate) {
         this.issDate = issDate;
+    }
+
+    public String getDlvrLzoneCd() {
+        return dlvrLzoneCd;
+    }
+
+    public void setDlvrLzoneCd(String dlvrLzoneCd) {
+        this.dlvrLzoneCd = dlvrLzoneCd;
     }
 }

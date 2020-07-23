@@ -163,7 +163,7 @@
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
                     </div>
-                    <input type="text" id="membrAnvsr" class="sb-input w10 fl " ng-model="detailData.anvsrSavePoint"
+                    <input type="text" id="membrAnvsr" ng-readonly="detailData.anvsrPointSaveFg === ''" class="sb-input w10 fl " ng-model="detailData.anvsrSavePoint"
                            maxlength="3"/><span class="txtIn mt10"> <s:message code="grade.membr.per"/> <s:message code="grade.membr.plus"/></span>
                 </td>
                 <%-- 포인트 사용 구분 --%>

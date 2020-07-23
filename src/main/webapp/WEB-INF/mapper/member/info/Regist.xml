@@ -191,27 +191,27 @@
         tmm.REG_ID,
         tmm.MOD_DT,
         tmm.MOD_ID
---         tmmp.CD_COMPANY,
---         tmmp.CD_PARTNER,
---         tnsp.LN_PARTNER,
---         tnsp.NO_COMPANY,
---         tnsp.NM_CEO
+        -- tmmp.CD_COMPANY,
+        -- tmmp.CD_PARTNER,
+        -- tnsp.LN_PARTNER,
+        -- tnsp.NO_COMPANY,
+        -- tnsp.NM_CEO
         FROM TB_MB_MEMBER tmm
---         TB_MB_MEMBER_PTN tmmp,
-<!--        <choose>-->
-<!--            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>-->
-<!--                VITIS.TB_NEOE_SPOS_PTN tnsp-->
-<!--            </when>-->
-<!--            <otherwise>-->
-<!--                TB_NEOE_SPOS_PTN tnsp-->
-<!--            </otherwise>-->
-<!--        </choose>-->
+        -- TB_MB_MEMBER_PTN tmmp,
+        <!--        <choose>-->
+        <!--            <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>-->
+        <!--                VITIS.TB_NEOE_SPOS_PTN tnsp-->
+        <!--            </when>-->
+        <!--            <otherwise>-->
+        <!--                TB_NEOE_SPOS_PTN tnsp-->
+        <!--            </otherwise>-->
+        <!--        </choose>-->
         WHERE tmm.MEMBR_NO = #{membrNo}
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
---         AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
---         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
---         AND tnsp.CD_COMPANY (+)= tmmp.CD_COMPANY
---         AND tnsp.CD_PARTNER (+)= tmmp.CD_PARTNER
+        -- AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
+        -- AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
+        -- AND tnsp.CD_COMPANY (+)= tmmp.CD_COMPANY
+        -- AND tnsp.CD_PARTNER (+)= tmmp.CD_PARTNER
     </select>
 
     <!-- 회원정보 조회 -->
@@ -232,7 +232,7 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : 회원정보 등록
     -->
-    <insert id="registMemberInfo" parameterType="registVO" >
+    <insert id="registMemberInfo" parameterType="registVO">
         /* RegistMapper.registMemberInfo */
         <selectKey keyProperty="membrNo" resultType="String" order="AFTER">
             select MEMBR_NO FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
@@ -387,7 +387,6 @@
        WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
          AND tmm.MEMBR_NO = #{membrNo}
     </delete>
-
 
 
     <!-- 회원카드정보 수정 -->
@@ -759,5 +758,131 @@
             #{modId},
             #{modDt})
     </insert>
+
+    <!-- 배달정보 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_DLVR_ADDR,
+        COMMENTS : 배달정보 조회
+    -->
+    <select id="getDlvrList" parameterType="registVO" resultType="DefaultMap">
+ /* RegistMapper.getDlvrList */
+       SELECT *
+        FROM TB_MB_MEMBER_DLVR_ADDR tmmda
+    </select>
+
+    <!-- 배달정보 추가 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_ADDR
+        COMMENTS : 배달정보 등록
+    -->
+    <insert id="insertMembrDlvr" parameterType="registVO">
+        /* RegistMapper.insertMembrDlvr */
+        INSERT INTO TB_MB_MEMBER_CARD tmmc (
+            tmmc.MEMBR_CARD_NO,
+            tmmc.MEMBR_ORGN_CD,
+            tmmc.MEMBR_NO,
+            tmmc.CST_CARD_STAT_FG,
+            tmmc.OLD_CST_CARD_NO,
+            tmmc.CST_CARD_ISS_FG,
+            tmmc.ISS_REMARK,
+            tmmc.ISS_ORGN_CD,
+            tmmc.ISS_DATE,
+            tmmc.REG_ID,
+            tmmc.REG_DT,
+            tmmc.MOD_ID,
+            tmmc.MOD_DT)
+        VALUES (
+            #{membrCardNo},
+            #{membrOrgnCd},
+            #{membrNo},
+            #{cstCardStatFg},
+            #{oldCstCardNo},
+            #{cstCardIssFg},
+            #{issRemark},
+            #{issOrgnCd},
+            #{issDate},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt})
+    </insert>
+    <!-- 배달전화정보 조회 -->
+    <!--
+        TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_DLVR_TEL,
+        COMMENTS : 배달전화정보
+    -->
+    <select id="getDlvrTelList" parameterType="registVO" resultType="DefaultMap">
+ /* RegistMapper.getDlvrTelList */
+       SELECT
+        	*
+        FROM
+        	TB_MB_MEMBER_CARD tmmc
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_NO = #{membrNo}
+    </select>
+
+    <!-- 배달전화정보 추가 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_TEL
+        COMMENTS : 배달전화정보 등록
+    -->
+    <insert id="insertMembrDlvrTel" parameterType="registVO">
+        /* RegistMapper.insertMembrDlvrTel */
+        INSERT INTO TB_MB_MEMBER_CARD tmmc (
+            tmmc.MEMBR_CARD_NO,
+            tmmc.MEMBR_ORGN_CD,
+            tmmc.MEMBR_NO,
+            tmmc.CST_CARD_STAT_FG,
+            tmmc.OLD_CST_CARD_NO,
+            tmmc.CST_CARD_ISS_FG,
+            tmmc.ISS_REMARK,
+            tmmc.ISS_ORGN_CD,
+            tmmc.ISS_DATE,
+            tmmc.REG_ID,
+            tmmc.REG_DT,
+            tmmc.MOD_ID,
+            tmmc.MOD_DT)
+        VALUES (
+            #{membrCardNo},
+            #{membrOrgnCd},
+            #{membrNo},
+            #{cstCardStatFg},
+            #{oldCstCardNo},
+            #{cstCardIssFg},
+            #{issRemark},
+            #{issOrgnCd},
+            #{issDate},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt})
+    </insert>
+
+    <!-- 배달구역 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_DELIVERY_LZONE
+    -->
+    <select id="getMembrLzoneList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getMembrLzoneList */
+        SELECT tmdl.DLVR_LZONE_CD AS VALUE,
+               tmdl.DLVR_LZONE_NM AS NAME
+        FROM TB_MS_DELIVERY_LZONE tmdl
+        WHERE tmdl.STORE_CD = #{regStoreCd}
+        ORDER BY DLVR_LZONE_CD ASC
+    </select>
+
+    <!-- 배달구역 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_DELIVERY_LZONE
+    -->
+    <select id="getDlvrMzoneList" parameterType="registVO" resultType="DefaultMap">
+        /* RegistMapper.getDlvrMzoneList */
+        SELECT tmdm.DLVR_MZONE_CD AS VALUE,
+               tmdm.DLVR_MZONE_NM AS NAME
+        FROM TB_MS_DELIVERY_MZONE tmdm
+        WHERE tmdm.DLVR_LZONE_CD = #{dlvrLzoneCd}
+        AND tmdm.STORE_CD = #{regStoreCd}
+        ORDER BY DLVR_MZONE_CD ASC
+    </select>
 
 </mapper>

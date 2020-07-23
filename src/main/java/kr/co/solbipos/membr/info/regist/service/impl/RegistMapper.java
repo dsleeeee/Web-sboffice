@@ -1,6 +1,7 @@
 package kr.co.solbipos.membr.info.regist.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidStoreVO;
 import kr.co.solbipos.membr.info.grade.service.MembrClassVO;
 import kr.co.solbipos.membr.info.regist.service.MemberMappingVO;
@@ -154,4 +155,16 @@ public interface RegistMapper {
     DefaultMap<String> getMemberSelect(RegistVO registVO);
 
     List<DefaultMap<String>> getCardList(RegistVO registVO);
+
+    int insertMembrDlvr(RegistVO registVO);
+
+    int insertMembrDlvrTel(RegistVO registVO);
+
+    List<DefaultMap<String>> getDlvrList(RegistVO registVO);
+
+    List<DefaultMap<String>> getDlvrTelList(RegistVO registVO);
+
+    List getMembrLzoneList(RegistVO registVO);
+
+    List getDlvrMzoneList(RegistVO registVO);
 }

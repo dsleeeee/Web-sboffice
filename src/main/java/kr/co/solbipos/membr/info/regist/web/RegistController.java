@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnJsonBindingFieldError;
 
 /**
@@ -400,6 +401,109 @@ public class RegistController {
         SessionInfoVO si = sessionService.getSessionInfo(request);
 
         int result = registService.registCardInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+    /**
+     * 배달정보 리스트 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getDlvrList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrList(RegistVO registVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = registService.getDlvrList(registVO, sessionInfoVO);
+
+//        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 중분류 리스트 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getDlvrMzoneList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrMzoneList(RegistVO registVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = registService.getDlvrMzoneList(registVO, sessionInfoVO);
+
+//        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 배달전화번호정보 리스트 조회
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "view/getDlvrTelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrTelList(RegistVO registVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = registService.getDlvrTelList(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /***
+     * 배달정보 등록
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/registDlvrInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registDlvrInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.registDlvrInfo(registVO, si);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+    /***
+     * 배달전화번호정보 등록
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "base/registDlvrTelInfo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registDlvrTelInfo(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO si = sessionService.getSessionInfo(request);
+
+        int result = registService.registDlvrTelInfo(registVO, si);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

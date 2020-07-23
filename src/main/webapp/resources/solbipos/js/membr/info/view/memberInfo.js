@@ -74,6 +74,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         if ( col.binding === "membrNo" ||  col.binding === "membrNm") {
           var selectedData = s.rows[ht.row].dataItem;
           $scope.setSelectedMember(selectedData);
+          $scope._broadcast('responseGet', selectedData);
           $scope.memberRegistLayer.show(true);
           // $scope.memberInfoDetailLayer.show(true);
           event.preventDefault();

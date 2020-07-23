@@ -114,4 +114,14 @@ public interface RegistService {
     List<DefaultMap<String>> getCardList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     int registCardInfo(RegistVO registVO, SessionInfoVO si);
+
+    DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    int registDlvrInfo(RegistVO registVO, SessionInfoVO si);
+
+    int registDlvrTelInfo(RegistVO registVO, SessionInfoVO si);
+
+    List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

@@ -214,6 +214,14 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(msg);
             return false;
         }
+        // 할인한도액은 숫자만 입력가능합니다.
+        var msg = messages["grade.membr.dc.max"] + messages["cmm.require.number"];
+        var numChkregexp = /[^0-9]/g;
+        if(numChkregexp.test( $scope.detailData.dcLimitAmt )) {
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 기념일포인트 입력하세요.
         var msg = messages["grade.membr.anvsr.save.point"] + messages["cmm.require.text"];
         if (isNull($scope.detailData.anvsrSavePoint)) {
@@ -227,12 +235,8 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
-        // var msg = messages["regist.tel"]+messages["cmm.require.number"];
-        // var numChkregexp = /[^0-9]/g;
-        // if(numChkregexp.test( $scope.member.telNo )) {
-        //     $scope._popMsg(msg);
-        //     return false;
-        // }
+
+
         // var msg = messages["grade.membr.grade.cd"]+messages["cmm.require.select"];
         // if( isNull( $scope.regStoreCdCombo.selectedValue )) {
         //     $scope._popMsg(msg);
@@ -240,6 +244,12 @@ app.controller('memberClassCtrl', ['$scope', '$http', function ($scope, $http) {
         // }
         return true;
     };
+
+    $scope.$watch('detailData.anvsrPointSaveFg', function () {
+       if($scope.detailData.anvsrPointSaveFg === '') {
+           $scope.detailData.anvsrSavePoint = '';
+       }
+    });
 
 }]);
 

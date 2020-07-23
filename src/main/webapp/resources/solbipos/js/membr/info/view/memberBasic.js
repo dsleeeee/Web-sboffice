@@ -115,7 +115,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             var memberDetailInfo = response.data.data;
             $scope.saveMode = "MOD";
-            $scope.$emit("modMember", $scope.saveMode);
+            $scope.$emit("modMember", $scope.saveMode, memberDetailInfo);
 
             $("#memberInfoTitle").text("[" + memberDetailInfo.membrNo + "] " + memberDetailInfo.membrNm);
 
@@ -223,8 +223,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 수정
         else if($scope.saveMode === "MOD"){
-            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function () {
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
                 $scope._popMsg(messages["cmm.saveSucc"]);
+                $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                 // $scope.memberRegistLayer.hide();
                 // $scope.memberInfoDetailLayer.hide();
                 // memberInfoScope.getMemberList();

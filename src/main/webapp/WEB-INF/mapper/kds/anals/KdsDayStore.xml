@@ -8,6 +8,7 @@
         A.STORE_CD
         , A.STORE_NM
         , NVL(A.SALE_DATE, B.SALE_DATE) AS SALE_DATE
+        , NVL(SUBSTR(A.SALE_DATE, 5, 4), (SUBSTR(B.SALE_DATE, 3, 4))) AS SALE_DATE_SEC
         , NVL(SUM(A.ORDER_CNT),0) AS ORDER_CNT
         <if test='makeDate == 0'>
             , NVL(SUM(A.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE

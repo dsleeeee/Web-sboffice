@@ -27,9 +27,9 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
     // 카드 탭 보이기
     $scope.cardShow = function () {
         console.log($scope.insertMembrNo, $scope.saveMode);
-        if ($scope.insertMembrNo === undefined || $scope.saveMode !== "REG") {
+        if ($scope.saveMode === 'REG' && $scope.insertMembrNo === undefined) {
             $scope._popMsg(messages["cmm.base.info.save"]);
-        } else {
+        } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
             $("#basicView").hide();
             $("#cardView").show();
             $("#deliView").hide();
@@ -38,6 +38,17 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
             $("#cardTab").addClass("on");
             $("#deliTab").removeClass("on");
             $scope.$broadcast("getCardList");
+        } else if ($scope.saveMode === 'MOD') {
+            $("#basicView").hide();
+            $("#cardView").show();
+            $("#deliView").hide();
+
+            $("#basicTab").removeClass("on");
+            $("#cardTab").addClass("on");
+            $("#deliTab").removeClass("on");
+            $scope.$broadcast("getCardList");
+        } else {
+            $scope._popMsg(messages["cmm.base.info.save"]);
         }
     };
 
@@ -50,18 +61,21 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         $("#basicTab").removeClass("on");
         $("#cardTab").removeClass("on");
         $("#deliTab").addClass("on");
-    };
 
+        console.log($scope.insertMembrNo);
+        $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
+        $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+    };
     $scope.$on("responseGet", function (event, params, mode) {
-        console.log('123123123');
+        console.log(params);
         $scope.insertMembrNo = params;
         $scope.saveMode = mode;
         $scope.$broadcast("paramsCard", params);
     });
 
-    $scope.$on("modMember", function (event, data) {
-        console.log('90909009900990');
-        $scope.saveMode = data;
+    $scope.$on("modMember", function (event, mode,  data) {
+        $scope.saveMode = mode;
+        $scope.updateMembrNo = data;
         // event.preventDefault();
     });
 
