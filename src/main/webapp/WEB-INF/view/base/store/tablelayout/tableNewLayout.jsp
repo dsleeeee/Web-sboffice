@@ -85,8 +85,8 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200722.01" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2" ng-controller="tbLayoutCtrl">
@@ -263,7 +263,7 @@
 					  </div>
 					  <div class="clearfix"></div>
 					</div>
-					<button class="btn_skyblue w100 mt20" id="btnTblAttConfig">테이블속성 설정</button>
+					<button class="btn_skyblue w100 mt20" id="btnTblAttConfig" style="display:none;" >테이블속성 설정</button>
 					<input type="hidden" id="tableSelectStoreCd" value="${sessionInfo.storeCd}"/>
 				</div>
 				<%--//구성요소--%>
