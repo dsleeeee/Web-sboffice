@@ -209,8 +209,8 @@
 
     <!-- SOLBI 매장코드 조회 -->
     <!--
-        TABLE    :
-        COMMENTS :
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
     -->
     <select id="getMigDataMappingSolbiStoreCdList" parameterType="MigDataMappingVO" resultType="DefaultMap">
         /* MigDataMappingMapper.getMigDataMappingSolbiStoreCdList */

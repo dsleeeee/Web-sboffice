@@ -77,6 +77,15 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
     // <-- 검색 호출 -->
     $scope.$on("migDataMappingInfoCtrl", function(event, data) {
+        if(data === "clear") {
+            $scope.$apply(function() {
+                var dtlScope = agrid.getScope('migDataMappingInfoCtrl');
+                dtlScope._gridDataInit();
+            });
+            return false;
+        }
+
+        // OKPOS-KCP 사용자정보 조회
         $scope.searchMigDataMappingInfoCheck();
         event.preventDefault();
     });
@@ -97,9 +106,8 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
         params.userPwd = $scope.userPwd;
         params.corpCd = "";
 
-        // OKPOS-KCP 사용자정보 조회
         $scope._postJSONQuery.withOutPopUp( "/store/manage/migDataMapping/migDataMappingInfo/getOkposUserInfoList.sb", params, function(response){
-            if($.isEmptyObject(response.data.data.result) ) {
+            if($.isEmptyObject(response.data.data.result)) {
                 $scope._popMsg(messages["migDataMappingInfo.userFail"]);
                 return false;
             }
@@ -109,6 +117,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
             params.corpCd = $scope.okposUserInfo.corpCd;
 
+            // OKPOS-KCP 매장 조회
             $scope.searchMigDataMappingInfo(params);
         });
     };
@@ -153,7 +162,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
         var params = {};
         // 매장코드(자동채번)
         $scope._postJSONQuery.withOutPopUp( "/store/manage/migDataMapping/migDataMappingInfo/getMigDataMappingSolbiStoreCdList.sb", params, function(response){
-            if($.isEmptyObject(response.data.data.result) ) {
+            if($.isEmptyObject(response.data.data.result)) {
                 $scope._popMsg(messages["migDataMappingInfo.userFail"]);
                 return false;
             }
@@ -233,21 +242,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                     params.storeType =  "02";
                     params.directManageYn =  "Y";
 
-                    params.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;$scope._postJSONSave.withPopUp
-                    params.okposHqOfficeNm = $scope.flex.collectionView.items[i].hqOfficeNm;
-                    params.okposStoreCd = $scope.flex.collectionView.items[i].storeCd;
-                    params.okposStoreNm = $scope.flex.collectionView.items[i].storeNm;
-
-                    // 매장 신규 등록
-                    // $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
-                    //     var result = response.data.data;
-                    //     // params.solbiStoreCd = result;
-                    //     alert(result);
-                    //     alert(result.length);
-                    //
-                    //     // TB_MIG_DATA_MAPPING 저장
-                    //     $scope.saveMigDataMapping(params);
-                    // });
+                    $scope.flex.collectionView.items[i].newSoibiStoreCd = params.storeCd;
 
                     $.ajax({
                         type: "POST",
@@ -257,9 +252,20 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                             // alert(result.status);
                             // alert(result.data);
                             if (result.status === "OK") {
+                                var params_mapping = {};
+                                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                                    if($scope.flex.collectionView.items[i].newSoibiStoreCd === result.data) {
+                                        params_mapping.solbiStoreCd = $scope.flex.collectionView.items[i].newSoibiStoreCd;
+                                        params_mapping.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;
+                                        params_mapping.okposHqOfficeNm = $scope.flex.collectionView.items[i].hqOfficeNm;
+                                        params_mapping.okposStoreCd = $scope.flex.collectionView.items[i].storeCd;
+                                        params_mapping.okposStoreNm = $scope.flex.collectionView.items[i].storeNm;
+                                        break;
+                                    }
+                                }
 
                                 // TB_MIG_DATA_MAPPING 저장
-                                $scope.saveMigDataMapping(params);
+                                $scope.saveMigDataMapping(params_mapping);
 
                                 $scope._popMsg("저장되었습니다.");
                                 $scope.close();
@@ -282,7 +288,6 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                         dataType: "json",
                         contentType : 'application/json'
                     });
-
                 }
             }
         });
@@ -291,7 +296,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
     // TB_MIG_DATA_MAPPING 저장
     $scope.saveMigDataMapping = function(data){
         var params = {};
-        params.solbiStoreCd = data.storeCd;
+        params.solbiStoreCd = data.solbiStoreCd;
         params.okposHqOfficeCd = data.okposHqOfficeCd;
         params.okposHqOfficeNm = data.okposHqOfficeNm;
         params.okposStoreCd = data.okposStoreCd;
@@ -314,8 +319,8 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
         $scope.envStoreCdCombo.selectedIndex = 0;
         $("input:checkbox[name='copyChk']:checked").prop("checked", false);
 
-        var storeScope = agrid.getScope('migDataMappingInfoCtrl');
-        storeScope._gridDataInit();
+        // var storeScope = agrid.getScope('migDataMappingInfoCtrl');
+        // storeScope._gridDataInit();
 
         // 저장기능 수행후 재조회
         $scope._broadcast('migDataMappingCtrl');

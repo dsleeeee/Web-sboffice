@@ -107,7 +107,7 @@
     var authHqList = ${authHqList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200224.01" charset="utf-8"></script>
 
 <%-- OKPOS-KCP 데이터 이관 신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/migDataMapping/migDataMappingInfo.jsp">

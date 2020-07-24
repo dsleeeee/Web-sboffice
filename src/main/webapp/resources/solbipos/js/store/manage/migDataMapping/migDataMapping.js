@@ -126,7 +126,7 @@ app.controller('migDataMappingCtrl', ['$scope', '$http', function ($scope, $http
         // OKPOS-KCP 데이터 이관 신규등록 팝업 핸들러 추가
         $scope.wjMigDataMappingInfoLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                // $scope._broadcast('migDataMappingInfoCtrl', null);
+                $scope._broadcast('migDataMappingInfoCtrl', "clear");
             }, 50)
         });
     });

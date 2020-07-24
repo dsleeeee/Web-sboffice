@@ -96,7 +96,7 @@
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.address"/>" binding="address" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.lastSaleDate"/>" binding="lastSaleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
 
-                        <%--팝업 조회시 필요--%>
+                        <%--저장시 필요--%>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.hqOfficeCd"/>" binding="hqOfficeCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.hqOfficeNm"/>" binding="hqOfficeNm" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.ownerNm"/>" binding="ownerNm" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -110,6 +110,8 @@
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.sysRemark"/>" binding="sysRemark" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.installPosCnt"/>" binding="installPosCnt" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="migDataMappingInfo.posNo"/>" binding="posNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
+                        <wj-flex-grid-column header="<s:message code="migDataMappingInfo.newSoibiStoreCd"/>" binding="newSoibiStoreCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -208,4 +210,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMappingInfo.js?ver=20200223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMappingInfo.js?ver=20200224.23" charset="utf-8"></script>
