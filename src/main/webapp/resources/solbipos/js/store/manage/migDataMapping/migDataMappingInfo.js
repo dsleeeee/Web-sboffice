@@ -189,9 +189,9 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
         $scope._popConfirm(messages["migDataMappingInfo.saveConfirm"], function() {
             var j = 0;
-            // 파라미터 설정
-            var params = {};
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                // 파라미터 설정
+                var params = {};
                 if($scope.flex.collectionView.items[i].gChk) {
 
                     // OKPOS-KCP 데이터 이관시 매장코드는 F로 시작하게 순차적으로 채번한다. (F000001, F000002...)
@@ -244,49 +244,26 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
 
                     $scope.flex.collectionView.items[i].newSoibiStoreCd = params.storeCd;
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/store/manage/storeManage/storeManage/saveStoreInfo.sb",
-                        data:  JSON.stringify(params),
-                        success: function(result){
-                            // alert(result.status);
-                            // alert(result.data);
-                            if (result.status === "OK") {
-                                var params_mapping = {};
-                                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                                    if($scope.flex.collectionView.items[i].newSoibiStoreCd === result.data) {
-                                        params_mapping.solbiStoreCd = $scope.flex.collectionView.items[i].newSoibiStoreCd;
-                                        params_mapping.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;
-                                        params_mapping.okposHqOfficeNm = $scope.flex.collectionView.items[i].hqOfficeNm;
-                                        params_mapping.okposStoreCd = $scope.flex.collectionView.items[i].storeCd;
-                                        params_mapping.okposStoreNm = $scope.flex.collectionView.items[i].storeNm;
-                                        break;
-                                    }
-                                }
+                    $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
+                        var result = response.data.data;
+                        // params.solbiStoreCd = result;
 
-                                // TB_MIG_DATA_MAPPING 저장
-                                $scope.saveMigDataMapping(params_mapping);
+                        var params_mapping = {};
+                        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                            if($scope.flex.collectionView.items[i].newSoibiStoreCd === result) {
+                                params_mapping.solbiStoreCd = $scope.flex.collectionView.items[i].newSoibiStoreCd;
+                                params_mapping.okposHqOfficeCd = $scope.flex.collectionView.items[i].hqOfficeCd;
+                                params_mapping.okposHqOfficeNm = $scope.flex.collectionView.items[i].hqOfficeNm;
+                                params_mapping.okposStoreCd = $scope.flex.collectionView.items[i].storeCd;
+                                params_mapping.okposStoreNm = $scope.flex.collectionView.items[i].storeNm;
+                                break;
+                            }
+                        }
+                        // TB_MIG_DATA_MAPPING 저장
+                        $scope.saveMigDataMapping(params_mapping);
 
-                                $scope._popMsg("저장되었습니다.");
-                                $scope.close();
-                            }
-                            else if (result.status === "FAIL") {
-                                $scope._popMsg('Ajax Fail By HTTP Request');
-                                $scope.$broadcast('loadingPopupInactive');
-                            }
-                            else if (result.status === "SERVER_ERROR") {
-                                $scope._popMsg(result.message);
-                                $scope.$broadcast('loadingPopupInactive');
-                            }
-                            else {
-                                var msg = result.status + " : " + result.message;
-                                $scope._popMsg(msg);
-                                $scope.$broadcast('loadingPopupInactive');
-                            }
-                        },
-                        cache: false,
-                        dataType: "json",
-                        contentType : 'application/json'
+                        $scope._popMsg("저장되었습니다.");
+                        $scope.close();
                     });
                 }
             }
