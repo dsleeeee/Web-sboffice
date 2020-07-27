@@ -46,6 +46,8 @@ public class TableVO extends CmmVO {
     private TblTypeFg tblTypeFg;
     /** 사용여부 */
     private String useYn;
+    
+    private String xml;
 
 
     /**
@@ -192,5 +194,11 @@ public class TableVO extends CmmVO {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
+	public String getXml() {
+		return xml;
+	}
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
 
 }

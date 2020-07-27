@@ -10,6 +10,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrNewService;
 import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
+import kr.co.solbipos.base.store.tablelayout.service.TableVO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,23 +156,44 @@ public class TableLayoutNewController {
      */
     @RequestMapping(value = "/saveLayout.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveLayout(HttpServletRequest request, HttpSession session, Model model) {
+    public Result saveLayout(HttpServletRequest request, HttpSession session, Model model, TableVO tableVO) {
 
-        String xml = "";
+//        String xml = "";
+//        Result result = new Result(Status.FAIL);
+//
+//        //LOGGER.debug( XssPreventer.unescape(request.getParameter("xml")) );
+//        xml = XssPreventer.unescape(request.getParameter("xml"));
+//
+//        LOGGER.debug(xml);
+//        //LOGGER.debug(XssPreventer.unescape(xml));
+//
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//        //LOGGER.debug(sessionInfoVO.toString());
+//
+//        result = tableLayoutService.setTableLayout(sessionInfoVO, xml);
+//        LOGGER.debug(result.toString());
+//        return result;
+    	String xml = "";
         Result result = new Result(Status.FAIL);
+        
+	try {
+		   
+        LOGGER.debug(tableVO.getXml());
 
-        //LOGGER.debug( XssPreventer.unescape(request.getParameter("xml")) );
-        xml = XssPreventer.unescape(request.getParameter("xml"));
+    	xml = URLDecoder.decode(tableVO.getXml(), "UTF-8").replace("\n", "&#xa;");
 
-        LOGGER.debug(xml);
-        //LOGGER.debug(XssPreventer.unescape(xml));
+    	LOGGER.debug(XssPreventer.unescape(xml));
 
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        //LOGGER.debug(sessionInfoVO.toString());
+    	SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    	LOGGER.debug(sessionInfoVO.toString());
 
-        result = tableLayoutService.setTableLayout(sessionInfoVO, xml);
-        LOGGER.debug(result.toString());
-        return result;
+    	result = tableLayoutService.setTableLayout(sessionInfoVO, XssPreventer.unescape(xml));
+    	LOGGER.debug(result.toString());
+    } catch (UnsupportedEncodingException e) {
+    	e.printStackTrace();
+    }
+
+    	return result;
     }
 
     /**

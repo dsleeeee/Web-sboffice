@@ -838,14 +838,19 @@ FormatAttr.prototype.refresh = function() {
     //this.setElementsValue(graph);
 
     //선택된 셀이 있을 때만 활성화 되는 부분
-    document.getElementById('fontStyle').style.display = 'none';
-    document.getElementById('textAlign').style.display = 'none';
-    if (currentCells.length > 0) {
-        //폰트 설정
-        document.getElementById('fontStyle').style.display = 'block';
-        //정렬 옵션
-        document.getElementById('textAlign').style.display = 'block';
-    }
+//    document.getElementById('fontStyle').style.display = 'none';
+//    document.getElementById('textAlign').style.display = 'none';
+//    if (currentCells.length > 0) {
+//        //폰트 설정
+//        document.getElementById('fontStyle').style.display = 'block';
+//        //정렬 옵션
+//        document.getElementById('textAlign').style.display = 'block';
+//    }
+    
+    //폰트 설정
+    document.getElementById('fontStyle').style.display = 'block';
+    //정렬 옵션
+    document.getElementById('textAlign').style.display = 'block';
 
     this.previewDraw();
 };
@@ -968,28 +973,28 @@ FormatAttr.prototype.initElements = function() {
     /**
      * 텍스트 위치(왼쪽/중앙/오른쪽, TOP/MIDDLE/BOTTOM)
      */
-    addClickHandler(document.getElementById('btnLeft'), function() {
+    addClickHandler(document.getElementById('btnAttrLeft'), function() {
         graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
         preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_LEFT);
     });
-    addClickHandler(document.getElementById('btnCenter'), function() {
+    addClickHandler(document.getElementById('btnAttrCenter'), function() {
         graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
         preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
     });
-    addClickHandler(document.getElementById('btnRight'), function() {
+    addClickHandler(document.getElementById('btnAttrRight'), function() {
         graph.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
         preview.setCellStyles(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_RIGHT);
     });
 
-    addClickHandler(document.getElementById('btnTop'), function() {
+    addClickHandler(document.getElementById('btnAttrTop'), function() {
         graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
         preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_TOP);
     });
-    addClickHandler(document.getElementById('btnMiddle'), function() {
+    addClickHandler(document.getElementById('btnAttrMiddle'), function() {
         graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
         preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
     });
-    addClickHandler(document.getElementById('btnBottom'), function() {
+    addClickHandler(document.getElementById('btnAttrBottom'), function() {
         graph.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
         preview.setCellStyles(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_BOTTOM);
     });
@@ -1034,13 +1039,13 @@ FormatAttr.prototype.setElementsValue = function(graph) {
     this.setSelected(document.getElementById('btnItalic'), 'on', (initFontStyle & mxConstants.FONT_ITALIC) == mxConstants.FONT_ITALIC);
     this.setSelected(document.getElementById('btnUnderline'), 'on', (initFontStyle & mxConstants.FONT_UNDERLINE) == mxConstants.FONT_UNDERLINE);
 
-    this.setSelected(document.getElementById('btnLeft'), 'on', initAlign == mxConstants.ALIGN_LEFT);
-    this.setSelected(document.getElementById('btnCenter'), 'on', initAlign == mxConstants.ALIGN_CENTER);
-    this.setSelected(document.getElementById('btnRight'), 'on', initAlign == mxConstants.ALIGN_RIGHT);
+    this.setSelected(document.getElementById('btnAttrLeft'), 'on', initAlign == mxConstants.ALIGN_LEFT);
+    this.setSelected(document.getElementById('btnAttrCenter'), 'on', initAlign == mxConstants.ALIGN_CENTER);
+    this.setSelected(document.getElementById('btnAttrRight'), 'on', initAlign == mxConstants.ALIGN_RIGHT);
 
-    this.setSelected(document.getElementById('btnTop'), 'on', initVAlign == mxConstants.ALIGN_TOP);
-    this.setSelected(document.getElementById('btnMiddle'), 'on', initVAlign == mxConstants.ALIGN_MIDDLE);
-    this.setSelected(document.getElementById('btnBottom'), 'on', initVAlign == mxConstants.ALIGN_BOTTOM);
+    this.setSelected(document.getElementById('btnAttrTop'), 'on', initVAlign == mxConstants.ALIGN_TOP);
+    this.setSelected(document.getElementById('btnAttrMiddle'), 'on', initVAlign == mxConstants.ALIGN_MIDDLE);
+    this.setSelected(document.getElementById('btnAttrBottom'), 'on', initVAlign == mxConstants.ALIGN_BOTTOM);
 };
 
 /**

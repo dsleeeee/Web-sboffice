@@ -85,8 +85,8 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200722.01" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200727.01" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2" ng-controller="tbLayoutCtrl">
@@ -412,8 +412,8 @@
                         <div class="btn_int tc" id="format">
                             <button class="btn_blue" style="display: none;" id="btnChangeAttr"><s:message code="cmm.init" /></button>
                             <button class="btn_gray" id="btnInitAttr"><s:message code="cmm.init" /></button>
-                            <button class="btn_blue"  id="btnSaveAttr" ><s:message code="cmm.save" /></button>
-                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.typeSave" /></button>
+                            <button class="btn_blue"  style="display: none;" id="btnSaveAttr" ><s:message code="cmm.save" /></button>
+                            <button class="btn_blue" id="btnSaveTypeAttr"><s:message code="cmm.save" /></button> <%--typeSave-> save --%>
                         </div>
                     </div>
                     <%--//설정--%>
@@ -474,14 +474,14 @@
                         <span class="bk lh30 s12">
                             <s:message code="tableAttr.align" /></span>
                         <div class="align" style="position:absolute; top:30px; left:0;">
-                            <a href="#" class="btn_left" id="btnLeft" title="왼쪽 맞춤"></a>
-                            <a href="#" class="btn_center" id="btnCenter" title="가운데 맞춤"></a>
-                            <a href="#" class="btn_right" id="btnRight" title="오른쪽 맞춤"></a>
+                            <a href="#" class="btn_left" id="btnAttrLeft" title="왼쪽 맞춤"></a>
+                            <a href="#" class="btn_center" id="btnAttrCenter" title="가운데 맞춤"></a>
+                            <a href="#" class="btn_right" id="btnAttrRight" title="오른쪽 맞춤"></a>
                         </div>
                         <div class="align" style="position:absolute; top:30px; right:0;">
-                            <a href="#" class="btn_top" id="btnTop" title="위쪽 맞춤"></a>
-                            <a href="#" class="btn_middle" id="btnMiddle" title="가운데 맞춤"></a>
-                            <a href="#" class="btn_bottom" id="btnBottom" title="아래쪽 맞춤"></a>
+                            <a href="#" class="btn_top" id="btnAttrTop" title="위쪽 맞춤"></a>
+                            <a href="#" class="btn_middle" id="btnAttrMiddle" title="가운데 맞춤"></a>
+                            <a href="#" class="btn_bottom" id="btnAttrBottom" title="아래쪽 맞춤"></a>
                         </div>
                         <div class="clearfix"></div>
                     </div>
