@@ -215,12 +215,14 @@ Floor.prototype.init = function() {
         }, // 일반
         {
             id: '2',
-            name: mxResources.get('tblGrpFgTogo')
-        }, // 포장
-        {
-            id: '3',
+//            name: mxResources.get('tblGrpFgTogo')
             name: mxResources.get('tblGrpFgDelivery')
         } // 배달
+//        , // 포장 
+//        {
+//            id: '3',
+//            name: mxResources.get('tblGrpFgDelivery')
+//        } // 배달
     ];
     var tblGrpFgMap = new wijmo.grid.DataMap(tblGrpFg, 'id', 'name');
 
@@ -375,6 +377,8 @@ Floor.prototype.initValue = function() {
             });
         }))(model.getChildAt(model.root, i));
     }
+    
+    graph.container.style.backgroundColor = '#CCCCCC'    
 
     // 데이터 생성, 변경사항 추적하도록 설정
     floorGrid.itemsSource = new wijmo.collections.CollectionView(data, {
@@ -960,7 +964,7 @@ FormatLayout.prototype.refresh = function() {
         // 셀 이미지
         document.getElementById('cellImage').style.display = 'block';
         
-      $("#btnTblAttConfig").show();
+//      $("#btnTblAttConfig").show();
     }
 
     if (vertexCnt > 1) {
@@ -969,7 +973,7 @@ FormatLayout.prototype.refresh = function() {
         // 테이블 정렬
         document.getElementById('tableAlign').style.display = 'block';
         
-        $("#btnTblAttConfig").show();
+//        $("#btnTblAttConfig").show();
         
     }
 
@@ -1282,11 +1286,8 @@ FormatLayout.prototype.initElements = function() {
     		if (e.target.value != undefined && e.target.value != "") {
     			currentCell.value = e.target.value;
         		graph.refresh();
-    		}else{
-    			mxUtils.alert(mxResources.get('invaildTblNm'));
-    			$("#tableName").val(currentCell.value);
-    			
-        	}
+        		graph.container.focus();
+    		}
     	}
     });    
 
@@ -1307,8 +1308,7 @@ FormatLayout.prototype.initElements = function() {
     	var model = graph.getModel();
     	
 		for (var i = 0; i < cells.length; i++) {
-            if (model.isVertex(cells[i])) {
-            	
+            if (model.isVertex(cells[i])) {            	
             	var tblTypeFgComboBox = wijmo.Control.getControl("#tblTypeFgComboBox");
             	var cellImage = "";
             	var styleTemp = "";
@@ -1325,8 +1325,7 @@ FormatLayout.prototype.initElements = function() {
             	    default :
             	    	cellImage = STENCIL_PATH + "/img_squere.png";
             	}
-                graph.setCellStyles(mxConstants.STYLE_IMAGE, cellImage, [cells[i]]);
-                
+                graph.setCellStyles(mxConstants.STYLE_IMAGE, cellImage, [cells[i]]);                
                 graph.refresh();
             }
         }
@@ -1602,7 +1601,7 @@ function saveXml(data, graph) {
     if (graph.isEditing()) {
         graph.stopEditing();
     }
-
+    graph.stopEditing(false);
     var layer = graph.getDefaultParent();
 
 	if (data != "") {
@@ -1633,10 +1632,51 @@ function saveXml(data, graph) {
 //    mxLog.write(xmlPretty);
     	
     var xml = encodeURIComponent(mxUtils.getXml(node));
+    
+    var params = {};
+    params.sid = sid;
+    params.xml = xml;
+
+    //console.log(params);
+
+    if (xml.length < MAX_REQUEST_SIZE) {
+
+    	$.ajaxSettings.traditional = true;
+
+    	// ajax 통신 설정
+    	$.ajax({
+    	    type: "POST",
+    	    url : TABLELAYOUT_SAVE_URL,
+    	    data : params,
+            contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+    	    success : function(data) {
+    	    	if(data.status == 'TBLNM_FAIL'){
+    	    		// TBLNM_FAIL시
+    	    		mxUtils.alert(mxResources.get('invaildTblNm'));
+    	    	}else {
+        	        // Sucess시, 처리
+        	    	mxUtils.alert(mxResources.get('saved'));	
+    	    	}
+    	    	graph.container.focus();
+    	    },
+    	    error : function(xhr, textStatus, errorThrown){
+    	    	mxUtils.alert(mxResources.get('errorSavingFile'));
+    	    }
+    	});
+
+    } else {
+        mxUtils.alert(mxResources.get('drawingTooLarge'));
+    }
+    
+    
+    /*
+   
     try {
         if (xml.length < MAX_REQUEST_SIZE) {
             var onload = function(req) {
-                mxUtils.alert(mxResources.get('saved')); 
+            	alert("req::"+JSON.stringify(req))
+                mxUtils.alert(mxResources.get('saved'));
+                graph.container.focus();
             }
             var onerror = function(req) {
                 mxUtils.alert('Error');
@@ -1651,6 +1691,8 @@ function saveXml(data, graph) {
     	console.log(e);
         mxUtils.alert(mxResources.get('errorSavingFile'));
     }
+    
+    */
 
 }
 

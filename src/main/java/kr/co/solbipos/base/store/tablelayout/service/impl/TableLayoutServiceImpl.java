@@ -10,12 +10,14 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.exception.BizException;
+import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.common.enums.ConfgFg;
 import kr.co.solbipos.base.store.tableattr.enums.TblGrpFg;
 import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
 import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
+import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
 import kr.co.solbipos.base.store.tableattr.service.impl.TableAttrMapper;
 import kr.co.solbipos.base.store.tablelayout.service.TableGroupVO;
 import kr.co.solbipos.base.store.tablelayout.service.TableLayoutService;
@@ -110,11 +112,14 @@ public class TableLayoutServiceImpl implements TableLayoutService {
         //XML 분석, TableGroup, Table Domain 생성
         //테이블속성 TABLE(TB_MS_TABLE_GROUP, TB_MS_TABLE)
         List<TableGroupVO> tableGroupVOs = parseXML(xml);
-
+        
         //매장의 현재 설정정보 삭제
         mapper.deleteTableGroupByStore(sessionInfoVO.getStoreCd());
         mapper.deleteTableByStore(sessionInfoVO.getStoreCd());
-
+        
+        //For TEST
+        //if(1==1)	throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+        
         //리스트의 아이템을 DB에 Merge
         for(TableGroupVO tableGroupVO : tableGroupVOs) {
             //테이블 그룹 저장
@@ -125,7 +130,11 @@ public class TableLayoutServiceImpl implements TableLayoutService {
                 throw new BizException( messageService.get("cmm.saveFail") );
             }
             //테이블 저장
-            for(TableVO tableVO : tableGroupVO.getTables()) {
+            for(TableVO tableVO : tableGroupVO.getTables()) {	
+            	
+        		  if (tableVO.getTblNm().equals("")) {
+        			return new Result(Status.TBLNM_FAIL);
+            	}
                 tableVO.setStoreCd(sessionInfoVO.getStoreCd());
                 tableVO.setRegId(sessionInfoVO.getUserId());
                 if( mapper.mergeTableByStore(tableVO) != 1 ) {

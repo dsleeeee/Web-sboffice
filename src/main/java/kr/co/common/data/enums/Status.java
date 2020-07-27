@@ -12,6 +12,8 @@ public enum Status {
     OK("OK"),
     /** 실패 */
     FAIL("FAIL"),
+    /** 테이블명실패 */
+    TBLNM_FAIL("TBLNM_FAIL"),
     /** 세션 종료 */
     SESSION_EXFIRE("SESSION_EXFIRE"),
     /** 서버 에러 */
