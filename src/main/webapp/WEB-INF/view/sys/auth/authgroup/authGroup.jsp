@@ -91,7 +91,7 @@
         </div>
         <%--위즈모 트리  // todo height 조정--%>
         <%--<div id="treeResrce" style="height:430px; "></div>--%>
-        <div id="treeResrce" style="height:auto;overflow: hidden; "></div>
+        <div class="theTreeAll_cls" id="treeResrce" style="height:auto;overflow: hidden; "></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -123,7 +123,7 @@
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     grid.isReadOnly  = false;
     var grpNm        = wcombo.genInput("#grpNm");
-    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
+    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("067")});
     var availCombo   = wcombo.genCommonBox("#availCombo", ${availAuthGrp});
     var userId       = wcombo.genInput("#userId");
 

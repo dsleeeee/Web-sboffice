@@ -52,6 +52,7 @@
           </button>
         </div>
         <wj-tree-view
+          class="theTreeAll_cls"
           control="regProductTreeCtrl"
           items-source="items"
           display-member-path="'prodNm'"
@@ -73,6 +74,7 @@
           </button>
         </div>
         <wj-tree-view
+          class="theTreeAll_cls"
           control="noRegProductTreeCtrl"
           items-source="items"
           display-member-path="'prodNm'"
