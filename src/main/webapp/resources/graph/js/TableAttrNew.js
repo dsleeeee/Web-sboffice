@@ -169,8 +169,8 @@ SidebarAttr.prototype.initUsed = function() {
 
     //모든 속성 사용여부 false로 초기화
     for (i = 0; i < tblAttrGrid.rows.length; i++) {
-        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'used', false);
-        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'show', false);
+        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'used', true);
+        tblAttrGrid.setCellData(tblAttrGrid.rows[i].index, 'show', true);
     }
 
     //그래픽 영역의 Object를 체크해 사용여부 true 처리
@@ -179,8 +179,39 @@ SidebarAttr.prototype.initUsed = function() {
     var childCount = model.getChildCount(parent);
     for (var i = 0; i < childCount; i++) {
         var cell = model.getChildAt(parent, i);
-        tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
-        tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
+        
+        var styleObjArr = new Array;
+
+    	if (cell.style != null && cell.style != undefined) {
+
+    		var styleArr = cell.style.split(";");
+
+    		styleArr.forEach(function (str) {
+    		    var strArr = str.split("=");
+    		    if (strArr[0] != "") {
+    		    	var styleObj = new Object();
+    	    	    styleObj[strArr[0]] = strArr[1];
+    	    	    styleObjArr.push(styleObj);
+    		    }
+    		});
+    	}
+
+    	if (styleObjArr[7].useYn != null && styleObjArr[7].useYn != undefined) {
+    		if(styleObjArr[7].useYn == "Y"){    		
+        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+        	}else{
+        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
+        	}
+    	}
+    	
+    	if (styleObjArr[8].opacity != null && styleObjArr[8].opacity != undefined) {
+    		if(styleObjArr[8].opacity == "100"){    		
+        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
+        	}else{
+        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', false);
+        	}
+    	}
+    	    	
     }
 };
 
@@ -218,7 +249,8 @@ SidebarAttr.prototype.makeGrid = function() {
             },
             {
                 binding: 'used',
-                visible: false
+                header: mxResources.get('alreadyUsed'),
+                width: 60
             },
             {
                 binding: 'show',
@@ -264,10 +296,9 @@ SidebarAttr.prototype.makeGrid = function() {
                 graph.orderCells(false);
                 graph.container.focus();
 
+                var cellsTemp = [];
+                cellsTemp.push(cell);
                 if (show == 'true') {
-
-                    var cellsTemp = [];
-                    cellsTemp.push(cell);
 
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
@@ -278,18 +309,23 @@ SidebarAttr.prototype.makeGrid = function() {
 
                 } else {
 
-                	var cellsTemp = [];
-                    cellsTemp.push(cell);
-
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
 
                     graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
                 }
-
-            }
-
+                
+                if (used == 'true') {
+                	graph.setCellStyles('useYn', 'Y', cellsTemp);
+                    preview.setCellStyles('useYn', 'Y', cellsTemp);
+                } else {
+                	graph.setCellStyles('useYn', 'N', cellsTemp);
+                    preview.setCellStyles('useYn', 'N', cellsTemp);
+                }
+                
+            } 
+            
     	}
     }, false);
 
@@ -411,7 +447,7 @@ SidebarAttr.prototype.makeGrid = function() {
             data.push({
                 name: TABLE_ATTR_ITEMS[i].nmcodeNm,
                 tag: TABLE_ATTR_ITEMS[i].nmcodeItem1,
-                used: false,
+                used: true,
                 show: true,
                 rect: findPos(cd),
                 idx: cd
@@ -1146,7 +1182,7 @@ FormatAttr.prototype.open = function(isLoad) {
                 var xmlStr = jsonStr.data;
 
                 if (xmlStr != null) {
-                    try {
+//                    try {
                         var xml = mxUtils.parseXml(xmlStr);
                         this.setGraphXml(graph, xml.documentElement, graph.container.offsetWidth, graph.container.offsetHeight);
                         this.setGraphXml(preview, xml.documentElement, currentWidth, currentHeight);
@@ -1157,9 +1193,9 @@ FormatAttr.prototype.open = function(isLoad) {
                             mxUtils.alert(mxResources.get('opened'));
                         }
 
-                    } catch (e) {
-                        mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
-                    }
+//                    } catch (e) {
+//                        mxUtils.alert(mxResources.get('invalidOrMissingFile') + ': ' + e.message);
+//                    }
                 }
 
             } else {

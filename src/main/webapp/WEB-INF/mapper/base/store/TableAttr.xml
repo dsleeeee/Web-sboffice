@@ -73,7 +73,8 @@
             FONT_NM,
             FONT_SIZE,
             FONT_STYLE_FG,
-            FONT_COLOR
+            FONT_COLOR,
+            USE_YN
        FROM TB_CM_TABLE_ATTR A
             , (
             	SELECT NMCODE_CD
@@ -187,7 +188,7 @@
            A.FONT_SIZE = #{fontSize},
            A.FONT_STYLE_FG = #{fontStyleFg},
            A.FONT_COLOR = #{fontColor},
-           A.USE_YN = #{useYn},
+           A.USE_YN = nvl(#{useYn},'Y'),
 
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}

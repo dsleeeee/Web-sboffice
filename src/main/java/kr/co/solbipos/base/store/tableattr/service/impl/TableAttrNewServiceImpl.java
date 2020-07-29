@@ -279,6 +279,9 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
 	                            case TBL_TYPE_FG:
 	                                tableAttrVO.setTblTypeFg(styleKeyValue[1]);
 	                                break;
+	                            case USE_YN:
+	                            	tableAttrVO.setUseYn(styleKeyValue[1]);
+	                                break;
 	                            default:
 	                                break;
 	                        }
@@ -286,7 +289,7 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                         
                     }
                 }
-                tableAttrVO.setUseYn("Y");
+//                tableAttrVO.setUseYn("Y");
                 tableAttrVO.setRegDt(currentDateTimeString());
                 tableAttrVOs.add(tableAttrVO);
                 //LOGGER.debug(tableAttr.toString());
@@ -332,6 +335,8 @@ public class TableAttrNewServiceImpl implements TableAttrNewService {
                 styleStr += tableAttrVO.getFontColor() != null ? (SM + TouchKeyStyle.FONT_COLOR.getCode() +EQ+ tableAttrVO.getFontColor()):"";
                 styleStr += tableAttrVO.getTextalignFg() != null ? (SM + TouchKeyStyle.ALIGN.getCode() +EQ+ tableAttrVO.getTextalignFg().getDesc()):"";
                 styleStr += tableAttrVO.getTextvalignFg() != null ? (SM + TouchKeyStyle.VERTICAL_ALIGN.getCode() +EQ+ tableAttrVO.getTextvalignFg().getDesc()):"";
+                styleStr += tableAttrVO.getUseYn() != null ? (SM + TouchKeyStyle.USE_YN.getCode() +EQ+ tableAttrVO.getUseYn()):"";
+                
                 cell.setStyle(styleStr);
             }
             mxCodec codec = new mxCodec();

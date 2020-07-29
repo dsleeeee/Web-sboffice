@@ -74,7 +74,11 @@ public enum TouchKeyStyle implements CodeEnum {
     /** 백그라운드이미지-custom */
     IMG_WIDTH("imageWidth"),
     /** 백그라운드이미지-custom */
-    IMG_HEIGHT("imageHeight");
+    IMG_HEIGHT("imageHeight"),
+    
+    /** 사용여부 */
+    USE_YN("useYn") 
+    ;
 
 
     private String code;
