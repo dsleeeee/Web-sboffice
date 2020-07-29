@@ -78,11 +78,17 @@ public interface StoreManageMapper {
     /** 매장 웹 사용자 등록 */
     int insertStoreWebUser(StoreManageVO storeManageVO);
 
-    /** 포스 출력물 마스터 등록 (단독) */
+    /** 포스 출력물 템플릿 등록 (단독) */
     int insertDefaultPrintTemplete(StoreManageVO storeManageVO);
 
-    /** 포스 출력물 마스터 등록(프랜차이즈) */
+    /** 포스 실제출력물 등록 (단독) */
+    int insertDefaultPrint(StoreManageVO storeManageVO);
+
+    /** 포스 출력물 템플릿 등록 (프랜차이즈) */
     int insertHqPrintTemplete(StoreManageVO storeManageVO);
+
+    /** 포스 실제출력물 등록 (프랜차이즈) */
+    int insertHqPrint(StoreManageVO storeManageVO);
 
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);

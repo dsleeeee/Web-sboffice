@@ -255,7 +255,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
                   function (response) {
-
+                    // 저장 후 재조회
+                    $scope._broadcast('templateCtrl');
                   }
                 );
               }

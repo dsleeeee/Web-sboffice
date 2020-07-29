@@ -209,17 +209,9 @@ public class HqManageServiceImpl implements HqManageService{
 //        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
 //        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
 
-        // 포스 출력물 등록 TODO
-//        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
-//
-//        printTempVO.setHqOfficeCd(hqOfficeCd);
-//        printTempVO.setRegDt(dt);
-//        printTempVO.setRegId(sessionInfoVO.getUserId());
-//        printTempVO.setModDt(dt);
-//        printTempVO.setModId(sessionInfoVO.getUserId());
-
-//        int printTempReg = mapper.hqPrintTempReg(printTempVO);
-//        procCnt += printTempReg;
+        // 포스 템플릿 등록
+        result += mapper.hqPrintTempReg(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
     }
