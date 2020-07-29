@@ -557,11 +557,11 @@
         )
     </insert>
 
-    <!-- 포스 출력물 마스터 등록 (단독매장) -->
+    <!-- 포스 출력물 템플릿 등록 (단독매장) -->
     <!--
-        TABLE    : TB_MS_PRINT
+        TABLE    : TB_MS_PRINT_TEMPL
         PARAM    : storeManageVO
-        COMMENTS : 포스출력물의 기본 템플릿을 저장한다.
+        COMMENTS : 포스출력물의 템플릿을 저장한다.
     -->
     <insert id="insertDefaultPrintTemplete" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertDefaultPrintTemplete */
@@ -580,7 +580,7 @@
         )
         SELECT #{storeCd},
                PRT_CLASS_CD,
-               'S' AS TEMPLT_REG_FG,
+               'C' AS TEMPLT_REG_FG,
                TEMPLT_CD,
                TEMPLT_NM,
                PRT_FORM,
@@ -591,7 +591,40 @@
           FROM TB_CM_PRINT_TEMPL
     </insert>
 
-    <!-- 포스 출력물 마스터 등록 (프랜차이즈) -->
+    <!-- 포스 실제출력물 등록 (단독매장) -->
+    <!--
+        TABLE    : TB_MS_PRINT
+        PARAM    : storeManageVO
+        COMMENTS : 포스 템플릿 중, 실제로 사용할 템플릿(001) 하나를 등록한다.
+    -->
+    <insert id="insertDefaultPrint" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertDefaultPrint */
+        INSERT INTO TB_MS_PRINT
+        (
+            STORE_CD,
+            PRT_CLASS_CD,
+            TEMPLT_REG_FG,
+            TEMPLT_CD,
+            PRT_FORM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{storeCd},
+               PRT_CLASS_CD,
+               'C' AS TEMPLT_REG_FG,
+               TEMPLT_CD,
+               PRT_FORM,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_CM_PRINT_TEMPL
+         WHERE TEMPLT_CD = '001'
+    </insert>
+
+    <!-- 포스 출력물 템플릿 등록 (프랜차이즈) -->
     <!--
         TABLE    : TB_MS_PRINT
         PARAM    : storeManageVO
@@ -624,6 +657,46 @@
                #{modId}
           FROM TB_HQ_PRINT_TEMPL
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </insert>
+
+    <!-- 포스 실제출력물 등록 (프랜차이즈) -->
+    <!--
+        TABLE    : TB_MS_PRINT
+        PARAM    : storeManageVO
+        COMMENTS : 포스 템플릿 중, 실제로 사용할 템플릿(001) 하나를 등록한다.
+    -->
+    <insert id="insertHqPrint" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertHqPrint */
+        INSERT INTO TB_MS_PRINT
+        (
+            STORE_CD,
+            PRT_CLASS_CD,
+            TEMPLT_REG_FG,
+            TEMPLT_CD,
+            PRT_FORM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{storeCd},
+               PRT_CLASS_CD,
+               TEMPLT_REG_FG,
+               TEMPLT_CD,
+               PRT_FORM,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_HQ_PRINT_TEMPL
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND TEMPLT_CD = '001'
+           AND ( TEMPLT_REG_FG = 'C' OR (
+                  TEMPLT_REG_FG = 'H' AND PRT_CLASS_CD NOT IN ( SELECT PRT_CLASS_CD
+                                                                    FROM TB_HQ_PRINT_TEMPL
+                                                                   WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                     AND TEMPLT_CD = '001'
+                                                                     AND TEMPLT_REG_FG = 'C')))
     </insert>
 
     <!-- 포스 마스터 생성 -->

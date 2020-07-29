@@ -70,8 +70,8 @@ public interface HqManageMapper {
 //    /** 공통코드 복사 */
 //    int copyCmmCode(HqNmcodeVO nmcodeVO);
 
-    /** 본사 포스 출력물 등록 */
-    int hqPrintTempReg(HqPrintTemplVO printTempVO);
+    /** 포스 출력물 템플릿 등록 (본사) */
+    int hqPrintTempReg(HqManageVO hqManage);
 
     /** 본사 수정 */
     int modify(HqManageVO hqManage);

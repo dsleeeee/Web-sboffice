@@ -217,9 +217,20 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // 포스 출력물 마스터 등록 (단독, 프랜차이즈)
             if(EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) {
+
+                // 포스 템플릿 등록
                 procCnt += mapper.insertDefaultPrintTemplete(storeManageVO);
+
+                //포스 실제출력물 등록
+                procCnt += mapper.insertDefaultPrint(storeManageVO);
+
             } else {
+
+                // 포스 템플릿 등록
                 procCnt += mapper.insertHqPrintTemplete(storeManageVO);
+
+                //포스 실제출력물 등록
+                procCnt += mapper.insertHqPrint(storeManageVO);
             }
 
             // 포스 마스터 생성 (설치포수 개수만큼 포스 마스터 생성)
