@@ -12,7 +12,7 @@
             <a href="#" class="btn_close"></a>
             <form name="empForm">
                 <div class="con">
-                    <table class="tblType01 mt10" style="border-top: 1px solid #CCCCCC;">
+                    <table class="tblType01" style="border-top: 1px solid #CCCCCC;">
                         <colgroup>
                             <col class="w15" />
                             <col class="w35" />
@@ -24,12 +24,12 @@
                             <%--사원명--%>
                             <th><s:message code="instlAgency.empNm" /></th>
                             <td>
-                                <input type="text" id="emr_empNm" name="emr_empNm" class="sb-input w100" maxlength="50"/>
+                                <input type="text" id="emr_empNm" name="emr_empNm" maxlength="50"/>
                             </td>
                             <%-- 사용여부 --%>
                             <th><s:message code="instlAgency.useYn" /></th>
                             <td>
-                                <select id="emr_useYn">
+                                <select class="sb-select" id="emr_useYn">
                                     <option value="N"><s:message code="instlAgency.ynN"/></option>
                                     <option value="Y"><s:message code="instlAgency.ynY"/></option>
                                 </select>
@@ -39,12 +39,12 @@
                             <%--실제사원번호--%>
                             <th><s:message code="instlAgency.realEmpNo" /></th>
                             <td>
-                                <input type="text" id="emr_empNo" name="emr_empNo" class="sb-input w100" maxlength="50" readonly/>
+                                <input type="text" id="emr_empNo" name="emr_empNo" maxlength="50" readonly/>
                             </td>
                             <%-- 재직여부 --%>
                             <th><s:message code="instlAgency.serviceFg" /></th>
                             <td>
-                                <select id="emr_serviceFg">
+                                <select class="sb-select" id="emr_serviceFg">
                                 </select>
                             </td>
                         </tr>
@@ -52,7 +52,7 @@
                             <%--웹사용여부--%>
                             <th><s:message code="instlAgency.webUseYn" /></th>
                             <td colspan="3">
-                                <select id="emr_webUseYn" style="width:20%;" onchange="hideWebInfo();">
+                                <select class="sb-select" id="emr_webUseYn" style="width:20%;" onchange="hideWebInfo();">
                                     <option value="N"><s:message code="instlAgency.ynN"/></option>
                                     <option value="Y"><s:message code="instlAgency.ynY"/></option>
                                 </select>
@@ -62,7 +62,7 @@
                             <%--웹사용자ID--%>
                             <th><s:message code="instlAgency.userId" /></th>
                             <td colspan="3">
-                                <input type="text" id="emr_userId" name="emr_userId" class="sb-input w30" maxlength="50" style="width: 20%"/>
+                                <input type="text" id="emr_userId" name="emr_userId" maxlength="50" style="width: 20%"/>
                                 <input type="hidden" id="duplicationChkFg"/>
                                 <%-- 중복체크 --%>
                                 <span class="txtIn" id="spanCheckDuplicate">
@@ -73,8 +73,8 @@
                         <tr id="trUserPwd">
                             <th><s:message code="instlAgency.userPwd" /></th>
                             <td colspan="3">
-                                <input type="password" id="emr_userPwd" name="emr_userPwd" class="sb-input w30" style="width: 20%">
-                                <input type="password" id="emr_userPwdCfm" name="emr_userPwdCfm" class="sb-input ml10 w30" style="width: 20%"/>
+                                <input type="password" id="emr_userPwd" name="emr_userPwd" style="width: 20%">
+                                <input type="password" id="emr_userPwdCfm" name="emr_userPwdCfm" style="width: 20%"/>
                             </td>
                         </tr>
                         <tr>
@@ -82,7 +82,7 @@
                             <td><input type="text" id="emr_mapEmpNo" name="emr_mapEmpNo"></td>
                             <th><s:message code="instlAgency.adminFg" /></th>
                             <td>
-                                <select id="emr_adminFg">
+                                <select class="sb-select" id="emr_adminFg">
                                 </select>
                             </td>
                         </tr>
@@ -90,12 +90,12 @@
                             <%--휴대폰번호--%>
                             <th><s:message code="instlAgency.mpNo" /></th>
                             <td>
-                                <input type="text" id="emr_mpNo" name="emr_mpNo" class="sb-input w100" maxlength="50"/>
+                                <input type="text" id="emr_mpNo" name="emr_mpNo" maxlength="50"/>
                             </td>
                             <%-- SMS수신여부 --%>
                             <th><s:message code="instlAgency.smsRecvYn" /></th>
                             <td>
-                                <select id="emr_smsRecvYn">
+                                <select class="sb-select" id="emr_smsRecvYn">
                                     <option value="N"><s:message code="instlAgency.smsN"/></option>
                                     <option value="Y"><s:message code="instlAgency.smsY"/></option>
                                 </select>
@@ -105,7 +105,7 @@
                             <%-- 비고 --%>
                             <th><s:message code="instlAgency.remark" /></th>
                             <td colspan="3">
-                                <input type="text" id="emr_remark" name="emr_remark" class="sb-input w100" maxlength="50"/>
+                                <input type="text" id="emr_remark" name="emr_remark" maxlength="50"/>
                             </td>
                         </tr>
                         </tbody>

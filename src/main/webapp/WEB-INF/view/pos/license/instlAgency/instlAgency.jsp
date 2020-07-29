@@ -59,7 +59,7 @@
 
         <!-- Left List -->
         <div class="w25 fl" style="overflow-x: visible">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:650px;">
                 <div class="sb-select dkbr mb10 oh">
                     <div class="fr">
                     </div>
@@ -70,7 +70,7 @@
 
         <!-- Right List -->
         <div class="w75 fr">
-            <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+            <div class="wj-TblWrapBr ml10 pd20" style="height:650px;">
                 <%-- 업체정보--%>
                 <c:import url="/WEB-INF/view/pos/license/instlAgency/agencyInfo.jsp">
                     <c:param name="menuCd" value="${menuCd}"/>

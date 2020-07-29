@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="agencyPurchsLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;height:500px;" fade-in="false" fade-out="false">
+<wj-popup control="agencyPurchsLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:560px;height:500px;" fade-in="false" fade-out="false">
     <div ng-controller="agencyPurchsCtrl">
 
         <%-- header --%>
@@ -34,7 +34,7 @@
                         <wj-flex-grid-column header="<s:message code="instl.storeCd"/>" binding="storeCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.storeNm"/>" binding="storeNm" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="instl.maxSaleDate"/>" binding="maxSaleDate" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="instl.posCnt"/>" binding="posCnt" width="115" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="instl.posCnt"/>" binding="posCnt" width="105" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>

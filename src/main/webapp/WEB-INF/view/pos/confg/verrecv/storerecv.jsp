@@ -36,24 +36,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="verRecv.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input" size="50">
+          <input type="text" id="hqOfficeCd" name="hqOfficeCd" ng-model="hqOfficeCd" class="sb-input w100" size="50">
         </td>
         <%-- 본사명 --%>
         <th><s:message code="verRecv.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="hqOfficeNm" name="hqOfficeNm" ng-model="hqOfficeNm" class="sb-input" size="50">
+          <input type="text" id="hqOfficeNm" name="hqOfficeNm" ng-model="hqOfficeNm" class="sb-input w100" size="50">
         </td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="verRecv.storeCd" /></th>
         <td>
-          <input type="text" id="storeCd" name="storeCd" ng-model="storeCd" class="sb-input" size="50">
+          <input type="text" id="storeCd" name="storeCd" ng-model="storeCd" class="sb-input w100" size="50">
         </td>
         <%-- 매장명 --%>
         <th><s:message code="verRecv.storeNm" /></th>
         <td>
-          <input type="text" id="storeNm" name="storeNm" ng-model="storeNm" class="sb-input" size="50">
+          <input type="text" id="storeNm" name="storeNm" ng-model="storeNm" class="sb-input w100" size="50">
         </td>
       </tr>
     </tbody>

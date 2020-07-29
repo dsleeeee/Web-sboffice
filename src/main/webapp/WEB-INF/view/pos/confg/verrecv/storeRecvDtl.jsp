@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="storeRecvDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:850px;">
+<wj-popup control="storeRecvDtlLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:820px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>

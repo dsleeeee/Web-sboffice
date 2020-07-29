@@ -87,16 +87,14 @@
               <%-- 매장코드(복수 검색 가능) --%>
               <th><s:message code="verManage.store.storeCd" /></th>
               <td>
-                <input type="text" id="srchStoreCd" class="sb-input w100" style="width:270px;" ng-value="" oninput="setText()"/>&nbsp;
-                <span class="chk ml10">
+                <input type="text" id="srchStoreCd" style="width:270px;" ng-value="" oninput="setText()"/>&nbsp;
                   <input type="checkbox" id="chkMulti" />
                   <label for="chkMulti">복수검색</label>
-                </span>
               </td>
               <%-- 매장명 --%>
               <th><s:message code="verManage.store.storeNm" /></th>
               <td>
-                <input type="text" id="srchStoreNm" class="sb-input w100" ng-value=""/>
+                <input type="text" id="srchStoreNm" ng-value=""/>
               </td>
             </tr>
             </tbody>
@@ -109,7 +107,7 @@
 
         <%-- 등록매장 그리드 --%>
         <div class="oh mt40 w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;">
+          <div class="wj-TblWrap mr10" style="height:405px; overflow-y: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.registed"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -125,7 +123,7 @@
                       item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
@@ -142,7 +140,7 @@
       <%--- 미등록매장 그리드 --%>
       <div class="oh mt40 w50 ">
         <div class=" ">
-          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="allStoreCtrl">
+          <div class="wj-TblWrap ml10" style="height:405px; overflow-y: hidden;" ng-controller="allStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.noRegisted" /></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="save()" ><s:message code="verManage.regist.new" /></a></span>
@@ -158,7 +156,7 @@
                       item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>

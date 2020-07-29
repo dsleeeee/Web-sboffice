@@ -41,7 +41,7 @@
                                         initialized="_initComboBox(s)">
                                 </wj-combo-box>--%>
                             <%--</div>--%>
-                            <select id="bfFnkeyFg"></select>
+                            <select class="sb-select" id="bfFnkeyFg"></select>
                         </td>
                     </tr>
                     <tr>
