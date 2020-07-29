@@ -104,7 +104,7 @@
         #{confgFg},
         #{confgSubFg},
         #{xml:CLOB},
-        #{useYn},
+        NVL(#{useYn}, 'Y'),
         #{regDt},
         #{regId}
     )
@@ -114,7 +114,7 @@
     /* TableAttrMapper.updateStoreConfgXml */
     UPDATE TB_WB_STORE_TABLE_CONFG_XML A
        SET A.XML = #{xml:CLOB},
-           A.USE_YN = #{useYn},
+           A.USE_YN = NVL(#{useYn}, 'Y'),
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
      WHERE STORE_CD = #{storeCd}
@@ -138,7 +138,7 @@
     WHEN MATCHED THEN
     UPDATE
        SET A.XML = #{xml:CLOB},
-           A.USE_YN = #{useYn},
+           A.USE_YN = NVL(#{useYn}, 'Y'),
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
 
@@ -157,7 +157,7 @@
         #{confgFg},
         #{confgSubFg},
         #{xml:CLOB},
-        #{useYn},
+        NVL(#{useYn}, 'Y'),
         #{regDt},
         #{regId}
     )

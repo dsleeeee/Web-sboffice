@@ -142,9 +142,9 @@
               <%--판매단가--%>
               <th><s:message code="prod.saleUprc"/></th>
               <td>
-                <input type="text" id="_saleUprc" name="saleUprc" class="sb-input w100"
+                <input type="text" id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.saleUprc"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.saleUprc.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -390,9 +390,9 @@
               <%--공급단가--%>
               <th><s:message code="prod.splyUprc"/></th>
               <td>
-                <input type="text" id="_splyUprc" name="splyUprc" class="sb-input w100"
+                <input type="text" id="prodModifySplyUprc" name="splyUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.splyUprc"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.splyUprc.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -421,9 +421,9 @@
               <%--원가단가--%>
               <th><s:message code="prod.costUprc"/></th>
               <td>
-                <input type="text" id="_costUprc" name="costUprc" class="sb-input w100"
+                <input type="text" id="prodModifyCostUprc" name="costUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.costUprc"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.costUprc.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -432,9 +432,9 @@
               <%--최종판매단가--%>
               <th><s:message code="prod.lastCostUprc"/></th>
               <td>
-                <input type="text" id="_lastCostUprc" name="lastCostUprc" class="sb-input w100"
+                <input type="text" id="prodModifyLastCostUprc" name="lastCostUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.lastCostUprc"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.lastCostUprc.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -485,9 +485,9 @@
               <%--발주단위수량--%>
               <th><s:message code="prod.poUnitQty"/></th>
               <td>
-                <input type="text" id="_poUnitQty" name="poUnitQty" class="sb-input w100"
+                <input type="text" id="prodModifyPoUnitQty" name="poUnitQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poUnitQty"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.poUnitQty.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -496,9 +496,9 @@
               <%--최소발주--%>
               <th><s:message code="prod.poMinQty"/></th>
               <td>
-                <input type="text" id="_poMinQty" name="poMinQty" class="sb-input w100"
+                <input type="text" id="prodModifyPoMinQty" name="poMinQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poMinQty"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.poMinQty.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -509,9 +509,9 @@
               <%--초기재고 //TODO --%>
               <th><s:message code="prod.defaultStock"/></th>
               <td>
-                <input type="text" id="_defaultStock" name="defaultStock" class="sb-input w100"
+                <input type="text" id="prodModifyDefaultStock" name="defaultStock" class="sb-input w100"
                        ng-model="prodModifyInfo.defaultStock"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.defaultStock.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -520,9 +520,9 @@
               <%--안전재고--%>
               <th><s:message code="prod.safeStockQty"/></th>
               <td>
-                <input type="text" id="_safeStockQty" name="safeStockQty" class="sb-input w100"
+                <input type="text" id="prodModifySafeStockQty" name="safeStockQty" class="sb-input w100"
                        ng-model="prodModifyInfo.safeStockQty"
-                       required
+                       <%--required--%>
                        popover-enable="myForm.safeStockQty.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -601,7 +601,7 @@
     </form>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20181120.64" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200729.30" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

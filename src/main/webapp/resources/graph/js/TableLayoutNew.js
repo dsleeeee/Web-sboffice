@@ -562,15 +562,14 @@ GraphLayout.prototype.init = function() {
     };
 
     mxGraphHandler.prototype.getCells = function(initialCell) {
-        if (this.graph.getSelectionCells().includes(initialCell)) {
+        if (this.graph.getSelectionCells()) {
             return this.graph.getMovableCells(this.graph.getSelectionCells());
         }
         return this.graph.getMovableCells([initialCell]);
     };
-    
-    
+
     mxDragSource.prototype.getDropTarget = function (graph, x, y) {
-        let cell = graph.getCellAt(x, y);
+        var cell = graph.getCellAt(x, y);
         return cell && cell._type == 'phase' ? cell : null;
     };
         
