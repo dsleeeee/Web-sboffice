@@ -302,21 +302,24 @@ SidebarAttr.prototype.makeGrid = function() {
                 var cellsTemp = [];
                 cellsTemp.push(cell);
                 if (show == 'true') {
-
+                
+                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
+                    
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 100, cellsTemp);
 
-                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
-                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 100, cellsTemp);
+
 
 
                 } else {
-
+                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
+                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
+                    
                     graph.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
                     preview.setCellStyles(mxConstants.STYLE_OPACITY, 0, cellsTemp);
 
-                    graph.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
-                    preview.setCellStyles(mxConstants.STYLE_TEXT_OPACITY, 0, cellsTemp);
+                    
                 }
                 
                 if (used == 'true') {

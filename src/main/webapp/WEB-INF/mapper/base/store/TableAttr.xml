@@ -230,7 +230,7 @@
         #{fontSize},
         #{fontStyleFg},
         #{fontColor},
-        #{useYn},
+        nvl(#{useYn},'Y'),
         #{regDt},
         #{regId},
         #{regDt},
