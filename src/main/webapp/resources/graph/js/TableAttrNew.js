@@ -177,6 +177,10 @@ SidebarAttr.prototype.initUsed = function() {
     var parent = graph.getDefaultParent();
     var model = graph.getModel();
     var childCount = model.getChildCount(parent);
+    
+    var fontFamilyComboBox 	= wijmo.Control.getControl("#fontFamily");
+    var fontColorComboBox 	= wijmo.Control.getControl("#fontColor");
+    
     for (var i = 0; i < childCount; i++) {
         var cell = model.getChildAt(parent, i);
         
@@ -196,6 +200,12 @@ SidebarAttr.prototype.initUsed = function() {
     		});
     	}
 
+    	if( cell.id == "01" ){
+        	fontFamilyComboBox.text 	= styleObjArr[2].fontFamily;
+        	fontColorComboBox.text 		= styleObjArr[5].fontColor;
+        	$("#fontSize .wj-numeric").val(styleObjArr[4].fontSize);
+    	}
+    	
     	styleObjArr.forEach(function(value){
   		  var obj_key = Object.keys(value); 
   		  var obj_value = value[obj_key]; 
@@ -351,19 +361,29 @@ SidebarAttr.prototype.makeGrid = function() {
         //idx가져오기(0번째 항목)
         var idx = tblAttrGridTemp.getCellData(e.row, 0, true);
         var used = tblAttrGridTemp.getCellData(e.row, 3, true);
-
+        
+        var fontFamilyComboBox 	= wijmo.Control.getControl("#fontFamily");
+        var fontColorComboBox 	= wijmo.Control.getControl("#fontColor");
+        
         //사용중일 경우만 선택 활성화
         if (used) {
             var cell = graph.getModel().getCell(idx);
             graph.setSelectionCell(cell);
 
         	var selectedCell = cell.geometry;
-
+        	var cellStyle = cell.style;
+        	var styleObjArr = getCellStyle(cellStyle);
+        	
         	$("#attrCellX").val(selectedCell.x);
         	$("#attrCellY").val(selectedCell.y);
         	$("#attrCellW").val(selectedCell.width);
         	$("#attrCellH").val(selectedCell.height);
-
+        	        	
+        	fontFamilyComboBox.text 	= styleObjArr[2].fontFamily;
+        	fontColorComboBox.text 		= styleObjArr[5].fontColor;
+        	$("#fontSize .wj-numeric").val(styleObjArr[4].fontSize);
+        	
+        	
             //맨앞으로 가져오기
             graph.orderCells(false);
             graph.container.focus();
