@@ -563,6 +563,7 @@ GraphLayout.prototype.init = function() {
 
     mxGraphHandler.prototype.getCells = function(initialCell) {
         if (this.graph.getSelectionCells()) {
+            graph.container.focus();
             return this.graph.getMovableCells(this.graph.getSelectionCells());
         }
         return this.graph.getMovableCells([initialCell]);
@@ -1285,7 +1286,7 @@ FormatLayout.prototype.initElements = function() {
     		if (e.target.value != undefined && e.target.value != "") {
     			currentCell.value = e.target.value;
         		graph.refresh();
-        		graph.container.focus();
+        		//graph.container.focus();
     		}
     	}
     });    
