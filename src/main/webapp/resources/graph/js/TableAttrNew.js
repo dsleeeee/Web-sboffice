@@ -196,21 +196,24 @@ SidebarAttr.prototype.initUsed = function() {
     		});
     	}
 
-    	if (styleObjArr[7].useYn != null && styleObjArr[7].useYn != undefined) {
-    		if(styleObjArr[7].useYn == "Y"){    		
-        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
-        	}else{
-        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
-        	}
-    	}
-    	
-    	if (styleObjArr[8].opacity != null && styleObjArr[8].opacity != undefined) {
-    		if(styleObjArr[8].opacity == "100"){    		
-        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
-        	}else{
-        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', false);
-        	}
-    	}
+    	styleObjArr.forEach(function(value){
+  		  var obj_key = Object.keys(value); 
+  		  var obj_value = value[obj_key]; 
+
+  		  if(obj_key == "useYn"){
+  			    if(obj_value == "Y"){    		
+  				  tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', true);
+  	        	}else{
+  	        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'used', false);
+  	        	}			  
+  		  }else if(obj_key == "opacity"){
+  			  if(obj_value == "100"){    		
+  				  tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', true);
+  	        	}else{
+  	        		tblAttrGrid.setCellData((parseInt(cell.getId()) - 1), 'show', false);
+  	        	}
+  		  }
+  		});
     	    	
     }
 };
