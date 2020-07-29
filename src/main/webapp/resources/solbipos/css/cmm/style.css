@@ -129,7 +129,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 .pdt5 {padding-top:5px;} .pdt10 {padding-top:10px;} .pdt20 {padding-top:20px;} .pdt30 {padding-top:30px;} .pdt40 {padding-top:40px;}
 .pdb5 {padding-bottom:5px;} .pdb10 {padding-bottom:10px;} .pdb20 {padding-bottom:20px;} .pdb30 {padding-bottom:30px;} .pdb40 {padding-bottom:40px;}
 
-button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:22px; padding:0 22px; font-size:1em; transition:all 0.2s;}
+button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:25px; padding:0 25px; font-size:1em; transition:all 0.2s;}
 button.btn_blue:hover {background:#174291; transition:all 0.2s;}
 
 button.btn_skyblue {background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; padding:0 10px; font-size:0.75em; transition:all 0.2s;}
@@ -562,25 +562,25 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 /* **************************************** *
  * fixedMenu
  * **************************************** */
-.type_Blue .fixedMenu {background:#1e88e5; height:30px; border-top:1px solid #2b94f0; border-bottom:1px solid #127bd8; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
+.type_Blue .fixedMenu {background:#1e88e5; height:35px; border-top:1px solid #2b94f0; border-bottom:1px solid #127bd8; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
 p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
-.fixedMenu ul {height:30px; overflow:hidden; margin-top:-1px; padding-top:1px;}
-.type_Blue .fixedMenu ul li {float:left; height:28px; border-right:1px solid #127bd8; position:relative; transition:all 0.3s; margin-bottom:2px;}
+.fixedMenu ul {height:35px; overflow:hidden; margin-top:-1px; padding-top:1px;}
+.type_Blue .fixedMenu ul li {float:left; height:33px; border-right:1px solid #127bd8; position:relative; transition:all 0.3s; margin-bottom:2px;}
 .type_Blue .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#127bd8; width:1px; height:1px;}
-.type_Blue .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:28px; line-height:28px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #2b94f0;}
+.type_Blue .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:33px; line-height:33px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #2b94f0;}
 .type_Blue .fixedMenu ul li:hover {background:#2b94f0; transition:all 0.3s;}
 .type_Blue .fixedMenu ul li a:first-child.on {background:#174291;}
 .type_Blue .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #0d2c67; box-sizing:content-box;}
-.fixedMenu ul li a.btn_close {position:absolute; background:url(../img/fixedMenu_close_off.png) no-repeat; width:19px; height:18px; top:5px; right:20px;}
+.fixedMenu ul li a.btn_close {position:absolute; background:url(../img/fixedMenu_close_off.png) no-repeat; width:19px; height:18px; top:9px; right:20px;}
 .fixedMenu ul li a:first-child.on+a.btn_close {background:url(../img/fixedMenu_close_on.png) no-repeat;}
 .fixedMenu ul li a.btn_close:hover {background:url(../img/fixedMenu_close_on.png) no-repeat;}
 
 
-.moveBtn {position:relative; position:absolute; right:0px; top:-1px; height:30px; width:98px; overflow:hidden;}
-.type_Blue .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:30px; background:#127bd8; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
+.moveBtn {position:relative; position:absolute; right:0px; top:-1px; height:35px; width:98px; overflow:hidden;}
+.type_Blue .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:35px; background:#127bd8; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .moveBtn a {display:inline-block; width:19px; height:18px; border:1px solid #fff;}
-.moveBtn a.mL {background:url(../img/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:6px;}
-.moveBtn a.mR {background:url(../img/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:6px;}
+.moveBtn a.mL {background:url(../img/menu_bullet.png) center no-repeat; transform: rotate(180deg); position:absolute; left:30px; top:9px;}
+.moveBtn a.mR {background:url(../img/menu_bullet.png) center no-repeat; position:absolute; left:59px; top:9px;}
 .type_Blue .moveBtn a.mL:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Blue .moveBtn a.mR:hover {background:url(../img/menu_bullet_blue.png) #fff center no-repeat; transition:all 0.3s;}
 
@@ -751,11 +751,11 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .elseCon .lgTxt {font-size:1.875em; line-height:1.5em; color:#222; font-weight:bold;}
 .elseCon .smTxt {font-size:1em; line-height:1.5em;}
 
-.searchBar {position:relative; border:1px solid #93cbfc; height:30px; background:#ebf5ff;}
+.searchBar {position:relative; border:1px solid #93cbfc; height:40px; background:#ebf5ff;}
 /*.searchBar a {display:block; width:100%; height:100%; line-height:45px; color:#337dde;  padding:0 15px; font-size:0.875em; position:relative;}*/
-.searchBar a {display:block; height:100%; line-height:30px; color:#337dde;  padding:0 0 0 30px; font-size:0.875em; position:relative;}
+.searchBar a {display:block; height:100%; line-height:40px; color:#337dde;  padding:0 0 0 30px; font-size:0.875em; position:relative;}
 /*.searchBar a:before {content:''; position:absolute; right:15px; top:17px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}*/
-.searchBar a:before {content:''; position:absolute; left:15px; top:10px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.searchBar a:before {content:''; position:absolute; left:15px; top:17px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
 .searchBar a.open:before {transform:rotate(-90deg);}
 .searchBar a.close:before {transform:rotate(90deg);}
 
@@ -1337,14 +1337,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .type_Purple .userNotice {border-right:1px solid #bf84fe; background:url(../img/ic_notice.png) center no-repeat; width:60px;}
 .type_Purple .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#6b1ce0; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Purple .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Purple .fixedMenu {background:#ae63ff; height:30px; border-top:1px solid #bf84fe; border-bottom:1px solid #8c38e6; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Purple .fixedMenu ul li {float:left; height:28px; border-right:1px solid #8c38e6; position:relative; transition:all 0.3s; margin-bottom:2px;}
+.type_Purple .fixedMenu {background:#ae63ff; height:35px; border-top:1px solid #bf84fe; border-bottom:1px solid #8c38e6; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
+.type_Purple .fixedMenu ul li {float:left; height:33px; border-right:1px solid #8c38e6; position:relative; transition:all 0.3s; margin-bottom:2px;}
 .type_Purple .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#8c38e6; width:1px; height:1px;}
-.type_Purple .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:28px; line-height:28px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #bf84fe;}
+.type_Purple .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:33px; line-height:33px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #bf84fe;}
 .type_Purple .fixedMenu ul li a:first-child.on {background:#6b1ce0;}
 .type_Purple .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #270089; box-sizing:content-box;}
 .type_Purple .fixedMenu ul li:hover {background:#bf84fe; transition:all 0.3s;}
-.type_Purple .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:30px; background:#8c38e6; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
+.type_Purple .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:35px; background:#8c38e6; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .type_Purple .moveBtn a.mL:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Purple .moveBtn a.mR:hover {background:url(../img/menu_bullet_purple.png) #fff center no-repeat; transition:all 0.3s;}
 
@@ -1399,14 +1399,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .type_Green .userNotice {border-right:1px solid #0ed3a1; background:url(../img/ic_notice.png) center no-repeat; width:60px;}
 .type_Green .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#008866; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Green .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Green .fixedMenu {background:#00ba8b; height:30px; border-top:1px solid #0ed3a1; border-bottom:1px solid #00a279; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Green .fixedMenu ul li {float:left; height:28px; border-right:1px solid #00a279; transition:all 0.3s; position:relative; margin-bottom:2px;}
+.type_Green .fixedMenu {background:#00ba8b; height:35px; border-top:1px solid #0ed3a1; border-bottom:1px solid #00a279; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
+.type_Green .fixedMenu ul li {float:left; height:33px; border-right:1px solid #00a279; transition:all 0.3s; position:relative; margin-bottom:2px;}
 .type_Green .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#00a279; width:1px; height:1px;}
-.type_Green .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:28px; line-height:28px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #0ed3a1;}
+.type_Green .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:33px; line-height:33px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #0ed3a1;}
 .type_Green .fixedMenu ul li a:first-child.on {background:#008866;}
 .type_Green .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #006f52; box-sizing:content-box;}
 .type_Green .fixedMenu ul li:hover {background:#0ed3a1; transition:all 0.3s;}
-.type_Green .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:30px; background:#00a279; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
+.type_Green .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:35px; background:#00a279; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .type_Green .moveBtn a.mL:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Green .moveBtn a.mR:hover {background:url(../img/menu_bullet_green.png) #fff center no-repeat; transition:all 0.3s;}
 
@@ -1461,14 +1461,14 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 .type_Orange .userNotice {border-right:1px solid #ffae39; background:url(../img/ic_notice.png) center no-repeat; width:60px;}
 .type_Orange .userNotice:after {content:''; position:absolute; left:-120px; top:-125px; width:300px; height:300px; background:#b96209; z-index:-1; opacity:0; transition:all 1.5s;}
 .type_Orange .userNotice:active:after {left:50%; top:50%; width:0px; height:0px; border-radius:50px; opacity:0.5; transition:0s;}
-.type_Orange .fixedMenu {background:#ff9d39; height:30px; border-top:1px solid #ffae39; border-bottom:1px solid #ee8418; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
-.type_Orange .fixedMenu ul li {float:left; height:28px; border-right:1px solid #ee8418; transition:all 0.3s; position:relative; margin-bottom:2px;}
+.type_Orange .fixedMenu {background:#ff9d39; height:35px; border-top:1px solid #ffae39; border-bottom:1px solid #ee8418; box-shadow:0 0 5px 0 #000; position:relative; z-index:800;}
+.type_Orange .fixedMenu ul li {float:left; height:33px; border-right:1px solid #ee8418; transition:all 0.3s; position:relative; margin-bottom:2px;}
 .type_Orange .fixedMenu ul li:after {content:''; position:absolute; top:-1px; right:-1px; background:#ee8418; width:1px; height:1px;}
-.type_Orange .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:28px; line-height:28px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #ffae39;}
+.type_Orange .fixedMenu ul li a:first-child {position:relative; color:#fff; display:inline-block; height:33px; line-height:33px; padding:0 50px 0 20px; font-size:14px; text-decoration:none; border-right:1px solid #ffae39;}
 .type_Orange .fixedMenu ul li a:first-child.on {background:#b96209;}
 .type_Orange .fixedMenu ul li a:first-child.on:before {content:''; position:absolute; width:100%; height:100%; background:none; left:-1px; top:-1px; border:1px solid #83470a; box-sizing:content-box;}
 .type_Orange .fixedMenu ul li:hover {background:#ffae39; transition:all 0.3s;}
-.type_Orange .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:30px; background:#ee8418; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
+.type_Orange .moveBtn:before {content:''; position:absolute; left:10px; top:0px; width:88px; height:35px; background:#ee8418; box-shadow:-2px 0 4px 0 RGBA(0,0,0,0.3);}
 .type_Orange .moveBtn a.mL:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
 .type_Orange .moveBtn a.mR:hover {background:url(../img/menu_bullet_orange.png) #fff center no-repeat; transition:all 0.3s;}
 

@@ -6,9 +6,9 @@
 <%-- favicon 요청시 404 에러를 피하기 위한 설정 : TODO 추후 favicon 등록할것 --%>
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20200528.84" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20200729.02" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=520183550"/>
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181120.21"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181121"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=470" />
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
