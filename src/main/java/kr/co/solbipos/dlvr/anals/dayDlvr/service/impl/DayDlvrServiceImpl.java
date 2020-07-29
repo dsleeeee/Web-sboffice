@@ -23,6 +23,7 @@ public class DayDlvrServiceImpl implements DayDlvrService {
 
   @Override
   public List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
+    dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     return dayDlvrMapper.getDayDlvrSaleList(dayDlvrVO);
   }
 
@@ -33,6 +34,7 @@ public class DayDlvrServiceImpl implements DayDlvrService {
 
   @Override
   public List<DefaultMap<Object>> getDaySaleDtlList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
+    dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
     return dayDlvrMapper.getDaySaleDtlList(dayDlvrVO);
   }
 }

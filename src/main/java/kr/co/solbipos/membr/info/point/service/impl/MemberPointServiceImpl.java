@@ -39,19 +39,6 @@ public class MemberPointServiceImpl implements MemberPointService {
   @Override
   public int getMemberPointSave(MemberPointVO memberPointVO, SessionInfoVO sessionInfoVO, HttpServletRequest request) {
 
-    String membr_orgn_cd = sessionInfoVO.getOrgnGrpCd();
-    String auth_grp_cd = sessionInfoVO.getAuthGrpCd();
-    String grp_ogn_nm = sessionInfoVO.getOrgnNm();
-    String grp_cd = sessionInfoVO.getOrgnCd();
-    System.out.println("=============================");
-    System.out.println("=============================");
-    System.out.println("membr_orgn_cd" + membr_orgn_cd);
-    System.out.println("auth_grp+cd" + auth_grp_cd);
-    System.out.println("grp_ogn_nm" + grp_ogn_nm);
-    System.out.println("grp_cd" + grp_cd);
-    System.out.println("=============================");
-    System.out.println("=============================");
-
     List<DefaultMap<Object>> resultList = memberPointMapper.getMemberPointList(memberPointVO);
 
     int totAjdPoint = Integer.parseInt(request.getParameter("totAjdPoint"));

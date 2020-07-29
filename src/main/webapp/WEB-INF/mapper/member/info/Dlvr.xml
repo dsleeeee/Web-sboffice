@@ -3,97 +3,176 @@
 
 <mapper namespace="kr.co.solbipos.membr.info.dlvr.service.impl.DlvrMapper">
 
-  <!-- 배달지 조회 및 변경 -->
-  <!--
-      TABLE    : TB_MB_MEMBER_DLVR_ADDR & TB_MB_MEMBER_DLVR_TEL
-      COMMENTS : 배달지 조회 및 변경@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨
-  -->
-  <select id="getDlvrList" parameterType="dlvrVO" resultType="DefaultMap">
-    /*DlvrMapper.getDlvrList*/
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    /*달주소지 조회*/
-    -- SEARCH DLVR LIST
-    SELECT
-        SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM,
-        tmmda.ADDR,
-        tmmda.ADDR_DTL,
-        tmmda.USE_YN AS DLVR_USE_YN,
-        tmmda.LAST_DLVR_DATE,
-        tmm.MEMBR_NO
-    <include refid="CmmSQL.PagingTemplateCount"/>
-    FROM
-        TB_MB_MEMBER_DLVR_ADDR tmmda
-        LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmda.MEMBR_NO
-        LEFT JOIN TB_MB_MEMBER_CLASS tmmc ON tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
-        AND tmmc.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
-    WHERE
-        1 = 1
-    <if test='membrNm != null and membrNm !=""'>
-        AND SBPENC.D ( tmm.MEMBR_NM ) LIKE '%'||#{membrNm}||'%'
-    </if>
-    <if test='membrClassCd != null and membrClassCd !=""'>
-        AND tmm.MEMBR_CLASS_CD = #{membrClassNo}
-    </if>
-    <if test='membrNo != null and membrNo !=""'>
-        AND tmm.MEMBR_NO = #{membrNo}
-    </if>
-    <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+    <!-- 회원등급 리스트 조회-->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_HQ_BRAND, TB_MS_STORE
+        COMMENTS : 회원정보 등록시 등록매장 콤보박스 내용 조회
+    -->
+    <select id="getMemberClassList" parameterType="membrClassVO" resultType="DefaultMap">
+        /* DlvrMapper.getMemberClassList */
+        SELECT MEMBR_CLASS_CD AS VALUE,
+               MEMBR_CLASS_NM AS NAME
+          FROM TB_MB_MEMBER_CLASS
+         WHERE USE_YN = 'Y'
+           AND MEMBR_ORGN_CD = #{membrOrgnCd}
+         ORDER BY DEFLT_YN DESC
+    </select>
 
-  <delete id="deleteDlvr" parameterType="dlvrVO">
+    <!-- 배달구역 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_DELIVERY_LZONE
+    -->
+    <select id="getDlvrLzoneList" parameterType="dlvrVO" resultType="DefaultMap">
+        /* DlvrMapper.getDlvrLzoneList */
+        SELECT tmdl.DLVR_LZONE_CD AS VALUE,
+        tmdl.DLVR_LZONE_NM AS NAME
+        FROM TB_MS_DELIVERY_LZONE tmdl
+        WHERE 1 = 1
+        <if test='regStoreCd != null and regStoreCd !=""'>
+            AND tmdl.STORE_CD = #{regStoreCd}
+        </if>
+        ORDER BY DLVR_LZONE_CD ASC
+    </select>
+
+    <!-- 배달구역 리스트 조회-->
+    <!--
+        TABLE    : TB_MS_DELIVERY_MZONE
+    -->
+    <select id="getDlvrMzoneList" parameterType="dlvrVO" resultType="DefaultMap">
+        /* DlvrMapper.getDlvrMzoneList */
+        SELECT tmdm.DLVR_MZONE_CD AS VALUE,
+        tmdm.DLVR_MZONE_NM AS NAME
+        FROM TB_MS_DELIVERY_MZONE tmdm
+        WHERE tmdm.DLVR_LZONE_CD = #{dlvrLzoneCd}
+        <if test='regStoreCd != null and regStoreCd !=""'>
+            AND tmdm.STORE_CD = #{regStoreCd}
+        </if>
+        ORDER BY DLVR_MZONE_CD ASC
+    </select>
+
+    <!-- 배달지 조회 및 변경 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_ADDR & TB_MB_MEMBER_DLVR_TEL
+        COMMENTS : 배달지 조회 및 변경@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨@param map 조회한 결과의 컬럼이 key=value 타입의 {@code DefaultMap}. key 가 다국어 처리됨
+    -->
+    <select id="getDlvrList" parameterType="dlvrVO" resultType="DefaultMap">
+        /*DlvrMapper.getDlvrList*/
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmmda.MEMBR_ORGN_CD
+        , tmmda.MEMBR_NO
+        , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        , tmmda.DLVR_ADDR_SEQ
+        , tmmda.DLVR_STORE_CD
+        , tmmda.DLVR_LZONE_CD
+        , tmmda.DLVR_MZONE_CD
+        , tmmda.ADDR
+        , tmmda.ADDR_DTL
+        , tmmda.LAST_DLVR_DATE
+        , tmmda.TOT_DLVR_CNT
+        , tmmda.USE_YN
+        , tmmda.REG_DT
+        , tmmda.REG_ID
+        , tmmda.MOD_DT
+        , tmmda.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER_DLVR_ADDR tmmda,
+        TB_MB_MEMBER tmm
+        WHERE tmmda.MEMBR_NO = tmm.MEMBR_NO
+        <if test='membrNo != null and membrNo !=""'>
+            AND tmmda.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test='membrNm != null and membrNm !=""'>
+            AND SBPENC.D(tmm.MEMBR_NM ) LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test='membrClassCd != null and membrClassCd !=""'>
+            AND tmm.MEMBR_CLASS_CD LIKE '%'|| #{membrClassCd}||'%'
+        </if>
+        <if test='dlvrLzoneCd != null and dlvrLzoneCd !=""'>
+            AND tmmda.DLVR_LZONE_CD LIKE '%'|| #{dlvrLzoneCd}||'%'
+        </if>
+        <if test='dlvrMzoneCd != null and dlvrMzoneCd !=""'>
+            AND tmmda.DLVR_MZONE_CD LIKE '%'|| #{dlvrMzoneCd}||'%'
+        </if>
+        AND tmmda.USE_YN = 'Y'
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <delete id="deleteDlvr" parameterType="dlvrVO">
       /*배달주소지 삭제*/
-      DELETE FROM TB_MB_MEMBER_DLVR_ADDR tmmda
-      WHERE MEMBR_NO = ''
+      DELETE FROM  TB_MB_MEMBER_DLVR_ADDR tmmda
+      WHERE tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND tmmda.MEMBR_NO = #{membrNo}
   </delete>
 
-  <update id="updateDlvr" parameterType="dlvrVO">
+    <update id="updateDlvr" parameterType="dlvrVO">
       /*배달지주소 저장*/
       UPDATE TB_MB_MEMBER_DLVR_ADDR
-      SET ADDR = #{addr}, ADDR_DTL = #{addrDtl}, USE_YN = #{userYn}, LAST_DLVR_DATE = #{lastDlvrDate}
-      WHERE MEMBR_NO = ''
+      SET tmmda.ADDR = #{addr}
+      , tmmda.ADDR_DTL = #{addrDtl}
+      , tmmda.USE_YN = #{useYn}
+      , tmmda.LAST_DLVR_DATE = #{lastDlvrDate}
+      , tmmda.DLVR_STORE_CD = #{dlvrStoreCd}
+      , tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
+      , tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
+      , tmmda.TOT_DLVR_CNT = #{totDlvrCnt}
+      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND MEMBR_NO = #{membrNo}
   </update>
 
-  <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
-      /*배달전화번호 조회*/
-    <include refid="CmmSQL.PagingTemplateHeader"/>
-    SELECT
-        SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM,
-        tmmdt.TEL_NO,
-        tmmdt.USE_YN,
-        tmmdt.REG_DT,
-        tmmdt.MOD_DT,
-        tmm.MEMBR_NO
-    <include refid="CmmSQL.PagingTemplateCount"/>
-    FROM
-        TB_MB_MEMBER_DLVR_TEL tmmdt
-        LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmdt.MEMBR_NO
-        LEFT JOIN TB_MB_MEMBER_CLASS tmmc ON tmmc.MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD
-        AND tmmc.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
-    WHERE
-        1 = 1
-    <if test='membrNm != null and membrNm !=""'>
-        AND SBPENC.D ( tmm.MEMBR_NM ) LIKE '%'||#{membrNm}||'%'
-    </if>
-    <if test='membrClassCd != null and membrClassCd !=""'>
-        AND tmm.MEMBR_CLASS_CD = #{membrClassNo}
-    </if>
-    <if test='membrNo != null and membrNo !=""'>
-    	AND tmm.MEMBR_NO = #{membrNo}
-    </if>
-    <include refid="CmmSQL.PagingTemplateBottom"/>
-  </select>
+    <select id="getDlvrTelList" parameterType="dlvrVO" resultType="DefaultMap">
+        /*배달전화번호 조회*/
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmmdt.MEMBR_ORGN_CD
+        , tmmdt.MEMBR_NO
+        , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
+        , tmmdt.DLVR_TEL_SEQ
+        , tmmdt.DLVR_STORE_CD
+        , tmmdt.TEL_NO
+        , tmmdt.SHORT_NO
+        , tmmdt.USE_YN
+        , tmmdt.REG_DT
+        , tmmdt.REG_ID
+        , tmmdt.MOD_DT
+        , tmmdt.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER_DLVR_TEL tmmdt,
+        TB_MB_MEMBER tmm
+        WHERE tmmdt.MEMBR_NO = tmm.MEMBR_NO
+        <if test='membrNo != null and membrNo !=""'>
+            AND tmmdt.MEMBR_NO = #{membrNo}
+        </if>
+        <if test='membrNm != null and membrNm !=""'>
+            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test='membrClassCd != null and membrClassCd !=""'>
+            AND tmm.MEMBR_CLASS_CD LIKE '%'|| #{membrClassNo}||'%'
+        </if>
+        <if test='telNo != null and telNo !=""'>
+            AND tmmdt.TEL_NO LIKE '%'|| #{telNo}||'%'
+        </if>
+        <if test='shortNo != null and shortNo !=""'>
+            AND tmmdt.SHORT_NO LIKE '%'|| #{shortNo}||'%'
+        </if>
+        AND tmmdt.USE_YN = 'Y'
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
-  <delete id="deleteDlvrTel" parameterType="dlvrVO">
+    <delete id="deleteDlvrTel" parameterType="dlvrVO">
       /*배달전화 삭제*/
       DELETE FROM TB_MB_MEMBER_DLVR_TEL tmmdt
-      WHERE MEMBR_NO = #{membrNo}
+      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND MEMBR_NO = #{membrNo}
   </delete>
 
-  <update id="updateDlvrTel" parameterType="dlvrVO">
+    <update id="updateDlvrTel" parameterType="dlvrVO">
       /*배달전화 저장*/
-      UPDATE TB_MB_MEMBER_DLVR_TEL
-      SET TEL_NO = #{telNo}, USE_YN = #{userYn}
-      WHERE MEMBR_NO = ''
+      UPDATE TB_MB_MEMBER_DLVR_TEL tmmdt
+      SET tmmdt.DLVR_STORE_CD = #{dlvrStoreCd}
+      , tmmdt.TEL_NO = #{telNo}
+      , tmmdt.SHORT_NO = #{shortNo}
+      , tmmdt.USE_YN = #{useYn}
+      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+      AND MEMBR_NO = #{membrNo}
   </update>
 
 </mapper>

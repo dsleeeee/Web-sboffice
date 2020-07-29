@@ -159,7 +159,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         chart2 = new wijmo.chart.FlexChart('#chart2', {
             itemsSource: getData(list),
-            bindingX: "saleDate",
+            bindingX: "saleDateSec",
             legend: {
                 // position: wijmo.chart.Position.Top
                 position: wijmo.chart.Position.None

@@ -54,6 +54,10 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         chart1 = new wijmo.chart.FlexChart('#chart1', {
             itemsSource: getData(list),
             bindingX: 'saleDate',
+            axisY: {
+                min: 0,
+                max: 3000
+            },
             legend: {
                 position: wijmo.chart.Position.None
             },

@@ -1,159 +1,170 @@
 package kr.co.solbipos.membr.info.dlvr.service;
 
+import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 
 public class DlvrVO extends PageVO {
-  private String membrOrgnCd;
-  private String membrNo;
-  private String membrNm;
-  private String membrClassCd;
-  private int dlvrAddrSeq;
-  private String dlvrStoreCd;
-  private String dlvrLzoneCd;
-  private String dlvrMzoneCd;
-  private String addr;
-  private String addrDtl;
-  private String lastDlvrDate;
-  private int totDlvrCnt;
-  private String dlvrUseYn;
-  private int dlvrTelSeq;
-  private String telNo;
-  private String shortNo;
-  private String dlvrTeluseYn;
+    private OrgnFg orgnFg;
+    private String membrOrgnCd;
+    private String membrNo;
+    private String membrNm;
+    private String membrClassCd;
+    private Integer dlvrAddrSeq;
+    private String dlvrStoreCd;
+    private String dlvrLzoneCd;
+    private String dlvrMzoneCd;
+    private String addr;
+    private String addrDtl;
+    private String lastDlvrDate;
+    private Integer totDlvrCnt;
+    private String useYn;
+    private Integer dlvrTelSeq;
+    private String telNo;
+    private String shortNo;
+    private String regStoreCd;
 
-  public String getMembrOrgnCd() {
-    return membrOrgnCd;
-  }
+    public OrgnFg getOrgnFg() {
+        return orgnFg;
+    }
 
-  public String getMembrClassCd() {
-    return membrClassCd;
-  }
+    public void setOrgnFg(OrgnFg orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
-  public void setMembrClassCd(String membrClassCd) {
-    this.membrClassCd = membrClassCd;
-  }
+    public String getMembrOrgnCd() {
+        return membrOrgnCd;
+    }
 
-  public String getMembrNm() {
-    return membrNm;
-  }
+    public void setMembrOrgnCd(String membrOrgnCd) {
+        this.membrOrgnCd = membrOrgnCd;
+    }
 
-  public void setMembrNm(String membrNm) {
-    this.membrNm = membrNm;
-  }
+    public String getMembrNo() {
+        return membrNo;
+    }
 
-  public void setMembrOrgnCd(String membrOrgnCd) {
-    this.membrOrgnCd = membrOrgnCd;
-  }
+    public void setMembrNo(String membrNo) {
+        this.membrNo = membrNo;
+    }
 
-  public String getMembrNo() {
-    return membrNo;
-  }
+    public String getMembrNm() {
+        return membrNm;
+    }
 
-  public void setMembrNo(String membrNo) {
-    this.membrNo = membrNo;
-  }
+    public void setMembrNm(String membrNm) {
+        this.membrNm = membrNm;
+    }
 
-  public int getDlvrAddrSeq() {
-    return dlvrAddrSeq;
-  }
+    public String getMembrClassCd() {
+        return membrClassCd;
+    }
 
-  public void setDlvrAddrSeq(int dlvrAddrSeq) {
-    this.dlvrAddrSeq = dlvrAddrSeq;
-  }
+    public void setMembrClassCd(String membrClassCd) {
+        this.membrClassCd = membrClassCd;
+    }
 
-  public String getDlvrStoreCd() {
-    return dlvrStoreCd;
-  }
+    public Integer getDlvrAddrSeq() {
+        return dlvrAddrSeq;
+    }
 
-  public void setDlvrStoreCd(String dlvrStoreCd) {
-    this.dlvrStoreCd = dlvrStoreCd;
-  }
+    public void setDlvrAddrSeq(Integer dlvrAddrSeq) {
+        this.dlvrAddrSeq = dlvrAddrSeq;
+    }
 
-  public String getDlvrLzoneCd() {
-    return dlvrLzoneCd;
-  }
+    public String getDlvrStoreCd() {
+        return dlvrStoreCd;
+    }
 
-  public void setDlvrLzoneCd(String dlvrLzoneCd) {
-    this.dlvrLzoneCd = dlvrLzoneCd;
-  }
+    public void setDlvrStoreCd(String dlvrStoreCd) {
+        this.dlvrStoreCd = dlvrStoreCd;
+    }
 
-  public String getDlvrMzoneCd() {
-    return dlvrMzoneCd;
-  }
+    public String getDlvrLzoneCd() {
+        return dlvrLzoneCd;
+    }
 
-  public void setDlvrMzoneCd(String dlvrMzoneCd) {
-    this.dlvrMzoneCd = dlvrMzoneCd;
-  }
+    public void setDlvrLzoneCd(String dlvrLzoneCd) {
+        this.dlvrLzoneCd = dlvrLzoneCd;
+    }
 
-  public String getAddr() {
-    return addr;
-  }
+    public String getDlvrMzoneCd() {
+        return dlvrMzoneCd;
+    }
 
-  public void setAddr(String addr) {
-    this.addr = addr;
-  }
+    public void setDlvrMzoneCd(String dlvrMzoneCd) {
+        this.dlvrMzoneCd = dlvrMzoneCd;
+    }
 
-  public String getAddrDtl() {
-    return addrDtl;
-  }
+    public String getAddr() {
+        return addr;
+    }
 
-  public void setAddrDtl(String addrDtl) {
-    this.addrDtl = addrDtl;
-  }
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
 
-  public String getLastDlvrDate() {
-    return lastDlvrDate;
-  }
+    public String getAddrDtl() {
+        return addrDtl;
+    }
 
-  public void setLastDlvrDate(String lastDlvrDate) {
-    this.lastDlvrDate = lastDlvrDate;
-  }
+    public void setAddrDtl(String addrDtl) {
+        this.addrDtl = addrDtl;
+    }
 
-  public int getTotDlvrCnt() {
-    return totDlvrCnt;
-  }
+    public String getLastDlvrDate() {
+        return lastDlvrDate;
+    }
 
-  public void setTotDlvrCnt(int totDlvrCnt) {
-    this.totDlvrCnt = totDlvrCnt;
-  }
+    public void setLastDlvrDate(String lastDlvrDate) {
+        this.lastDlvrDate = lastDlvrDate;
+    }
 
-  public String getDlvrUseYn() {
-    return dlvrUseYn;
-  }
+    public Integer getTotDlvrCnt() {
+        return totDlvrCnt;
+    }
 
-  public void setDlvrUseYn(String dlvrUseYn) {
-    this.dlvrUseYn = dlvrUseYn;
-  }
+    public void setTotDlvrCnt(Integer totDlvrCnt) {
+        this.totDlvrCnt = totDlvrCnt;
+    }
 
-  public int getDlvrTelSeq() {
-    return dlvrTelSeq;
-  }
+    public String getUseYn() {
+        return useYn;
+    }
 
-  public void setDlvrTelSeq(int dlvrTelSeq) {
-    this.dlvrTelSeq = dlvrTelSeq;
-  }
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 
-  public String getTelNo() {
-    return telNo;
-  }
+    public Integer getDlvrTelSeq() {
+        return dlvrTelSeq;
+    }
 
-  public void setTelNo(String telNo) {
-    this.telNo = telNo;
-  }
+    public void setDlvrTelSeq(Integer dlvrTelSeq) {
+        this.dlvrTelSeq = dlvrTelSeq;
+    }
 
-  public String getShortNo() {
-    return shortNo;
-  }
+    public String getTelNo() {
+        return telNo;
+    }
 
-  public void setShortNo(String shortNo) {
-    this.shortNo = shortNo;
-  }
+    public void setTelNo(String telNo) {
+        this.telNo = telNo;
+    }
 
-  public String getDlvrTeluseYn() {
-    return dlvrTeluseYn;
-  }
+    public String getShortNo() {
+        return shortNo;
+    }
 
-  public void setDlvrTeluseYn(String dlvrTeluseYn) {
-    this.dlvrTeluseYn = dlvrTeluseYn;
-  }
+    public void setShortNo(String shortNo) {
+        this.shortNo = shortNo;
+    }
+
+    public String getRegStoreCd() {
+        return regStoreCd;
+    }
+
+    public void setRegStoreCd(String regStoreCd) {
+        this.regStoreCd = regStoreCd;
+    }
 }

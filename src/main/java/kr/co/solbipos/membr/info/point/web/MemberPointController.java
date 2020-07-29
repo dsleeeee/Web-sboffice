@@ -68,6 +68,6 @@ public class MemberPointController {
 
     int result = memberPointService.getMemberPointSave(memberPointVO, sessionInfoVO, request);
 
-    return ReturnUtil.returnListJson(Status.OK, result, memberPointVO);
+    return ReturnUtil.returnJson(Status.OK, result);
   }
 }

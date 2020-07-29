@@ -219,12 +219,33 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
         return view;
     }
 
+    function testList() {
+        var testList = [
+            {avgMake: 1100, avgPic: 20, orderCnt: 20, saleHh: '00시'},
+            {avgMake: 100, avgPic: 500, orderCnt: 20, saleHh: '01시'},
+            {avgMake: 6, avgPic: 400, orderCnt: 20, saleHh: '02시'},
+            {avgMake: 600, avgPic: 100, orderCnt: 20, saleHh: '03시'},
+            {avgMake: 200, avgPic: 16, orderCnt: 20, saleHh: '04시'},
+            {avgMake: 2000, avgPic: 90, orderCnt: 20, saleHh: '05시'},
+            {avgMake: 400, avgPic: 800, orderCnt: 20, saleHh: '06시'},
+            {avgMake: 500, avgPic: 300, orderCnt: 20, saleHh: '07시'},
+            {avgMake: 500, avgPic: 200, orderCnt: 20, saleHh: '08시'},
+            {avgMake: 300, avgPic: 900, orderCnt: 20, saleHh: '09시'},
+            {avgMake: 800, avgPic: 800, orderCnt: 20, saleHh: '10시'},
+            {avgMake: 1300, avgPic: 1200, orderCnt: 20, saleHh: '11시'}
+
+        ];
+        console.log(testList);
+        return testList
+    }
+
     var chart1 = ''
 
     function chartList(list) {
         // create the Pareto chart
         chart1 = new wijmo.chart.FlexChart('#chart1', {
-            itemsSource: getData(list),
+            // itemsSource: getData(list),
+            itemsSource: testList(),
             bindingX: "saleHh",
             legend: {
                 position: wijmo.chart.Position.None
@@ -408,7 +429,8 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (chart1 === '') {
                     chartList(list);
                 } else {
-                    chart1.itemsSource = getData(list);
+                    // chart1.itemsSource = getData(list);
+                    chart1.itemsSource = testList();
                 }
             }
         }, function errorCallback(response) {
@@ -478,7 +500,7 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._popMsg(msg);
             return false;
         }
-        if($scope.timeZone > $scope.timeZoneSec) {
+        if ($scope.timeZone > $scope.timeZoneSec) {
             $scope._popMsg(messages['kds.date.hour.error']);
             return false;
         }

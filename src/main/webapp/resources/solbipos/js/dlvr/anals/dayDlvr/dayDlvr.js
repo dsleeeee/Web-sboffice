@@ -35,7 +35,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "nonDlvrSaleDate") {
+        if (col.binding === "saleDate") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -46,7 +46,7 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
         // 회원코드 클릭시 해당 기능 목록 조회
-        if (col.binding === "nonDlvrSaleDate") {
+        if (col.binding === "saleDate") {
           var selectedData = s.rows[ht.row].dataItem
           selectedData.periodStartDate = dateToDaystring($scope.periodStartDate).replaceAll('-', '');
           selectedData.periodEndDate = dateToDaystring($scope.periodEndDate).replaceAll('-', '');
@@ -77,11 +77,11 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 첫째줄 헤더 생성
     var dataItem = {};
-    dataItem.nonDlvrSaleDate = messages["dayDlvr.saleDate"];
-    dataItem.cntDlvrBillNo = messages["dayDlvr.dlvrSale"];
-    dataItem.sumDlvrRealSaleAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.cntBillNo = messages["dayDlvr.nonDlvrSale"];
-    dataItem.sumRealSaleAmt = messages["dayDlvr.nonDlvrSale"];
+    dataItem.saleDate = messages["dayDlvr.saleDate"];
+    dataItem.dlvrBillCnt = messages["dayDlvr.dlvrSale"];
+    dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
+    dataItem.nonCntBill = messages["dayDlvr.nonDlvrSale"];
+    dataItem.nonDlvrAmt = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -192,13 +192,18 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 첫째줄 헤더 생성
     var dataItem = {};
-    dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
-    dataItem.prodDd = messages["dayDlvr.prodDd"];
+
+    // dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
+    // dataItem.lv1Cd = messages["dayDlvr.prodClassNm"];
+    dataItem.lv1Nm = messages["dayDlvr.prodClassNm"];
+    // dataItem.lv2Cd = messages["dayDlvr.prodLV2"];
+    dataItem.lv2Nm = messages["dayDlvr.prodLV2"];
+    dataItem.prodCd = messages["dayDlvr.prodDd"];
     dataItem.prodNm = messages["dayDlvr.prodNm"];
-    dataItem.sumDlvrSaleQty = messages["dayDlvr.dlvrSale"];
-    dataItem.sumDlvrRealSaleAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.sumSaleQty = messages["dayDlvr.nonDlvrSale"];
-    dataItem.sumRealSaleAmt = messages["dayDlvr.nonDlvrSale"];
+    dataItem.dlvrCntQty = messages["dayDlvr.dlvrSale"];
+    dataItem.dlvrDtlAmt = messages["dayDlvr.dlvrSale"];
+    dataItem.nonDlvrCntQty = messages["dayDlvr.nonDlvrSale"];
+    dataItem.nonDlvrDtlAmt = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -250,7 +255,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   $scope.searchDlvrDtlInfo = function (data) {
     var params = {};
     // params.listScale = 10;
-    params.searchDate = data.nonDlvrSaleDate;
+    params.searchDate = data.saleDate;
     params.hqOfficeCd = data.hqOfficeCd;
     params.hqBrandCd = data.hqBrandCd;
     params.posNo = data.posNo;

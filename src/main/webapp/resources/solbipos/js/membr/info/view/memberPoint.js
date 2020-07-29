@@ -106,22 +106,23 @@ app.controller('memberPointCtrl', ['$scope', '$http', function ($scope, $http) {
     let uploadFg = 'memberExcel';
 
     // 엑셀 양식다운로드
-    if (prcsFg === 'excelFormDown') {
-      excelUploadScope.excelFormDownload(uploadFg);
-    } else {
-      let msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
-      s_alert.popConf(msg, function () {
-        excelUploadScope.uploadFg = uploadFg;
-        /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
-        excelUploadScope.parentCtrl = 'memberExcelUploadCtrl';
-        // 엑셀 업로드
-        $("#memberExcelUpload").val('');
-        $("#memberExcelUpload").trigger('click')
-      });
-    }
+    // if (prcsFg === 'excelFormDown') {
+    //   excelUploadScope.excelFormDownload(uploadFg);
+    // } else {
+    //   let msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+    //   s_alert.popConf(msg, function () {
+    //     excelUploadScope.uploadFg = uploadFg;
+    //     /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
+    //     excelUploadScope.parentCtrl = 'memberExcelUploadCtrl';
+    //     // 엑셀 업로드
+    //     $("#memberExcelUpload").val('');
+    //     $("#memberExcelUpload").trigger('click')
+    //   });
+    // }
   };
 
   $scope.adjustAll = function () {
+    console.log('1212121');
     let param = $scope.changeAll
     param.totAjdPoint = param.totAjdPoint * 1
     $http({
