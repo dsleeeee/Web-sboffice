@@ -5,27 +5,25 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="baseUrl" value="/sale/cmmSalePopup/billInfo/billInfo/"/>
 
 <wj-popup id="wjBillInfoLayer" control="wjBillInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="billInfoLayer" class="wj-dialog wj-dialog-columns" ng-controller="billInfoCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <span id="spanDtlTitle"></span>
+      <span id="billSubTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 600px;">
-      <p class="s16 bk mb5" id="billSubTitle"></p>
       <%-- 영수증내역 --%>
       <div class="w100">
         <%-- 종합내역 --%>
-        <div class="fl" style="width:40%;">
+        <div class="fl" style="width:25%;">
           <div class="oh sb-select mb10">
             <span class="fl bk lh30"><s:message code='billInfo.totalInfo'/></span>
           </div>
           <table class="tblType01">
             <colgroup>
-              <col class="w25"/>
-              <col class="w25"/>
               <col class="w25"/>
               <col class="w25"/>
             </colgroup>
@@ -34,6 +32,8 @@
               <%-- 총매출액 --%>
               <th><s:message code="billInfo.saleAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.totSaleAmt"></td>
+            </tr>
+            <tr>
               <%-- 총할인액 --%>
               <th><s:message code="billInfo.dcAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.totDcAmt"></td>
@@ -42,6 +42,8 @@
               <%-- 실매출액 --%>
               <th><s:message code="billInfo.realSaleAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.realSaleAmt"></td>
+            </tr>
+            <tr>
               <%-- 순매출액 --%>
               <th><s:message code="billInfo.netSaleAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.netSaleAmt"></td>
@@ -50,6 +52,8 @@
               <%-- 면세매출액 --%>
               <th><s:message code="billInfo.noTaxSaleAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.noTaxSaleAmt"></td>
+            </tr>
+            <tr>
               <%-- 과세매출액 --%>
               <th><s:message code="billInfo.taxSaleAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.taxSaleAmt"></td>
@@ -58,6 +62,8 @@
               <%-- 부가세액 --%>
               <th><s:message code="billInfo.vatAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.vatAmt"></td>
+            </tr>
+            <tr>
               <%-- 봉사료 --%>
               <th><s:message code="billInfo.totTipAmt"/></th>
               <td class="tr" ng-bind-html="billInfo.totTipAmt"></td>
@@ -67,7 +73,7 @@
         </div>
 
         <%-- 결제내역 --%>
-        <div class="fl ml5" style="width:44%;">
+        <div class="fl ml5" style="width:56%;">
           <div class="oh sb-select mb10">
             <span class="fl bk lh30"><s:message code='billInfo.payInfo'/></span>
           </div>
@@ -99,7 +105,7 @@
         </div>
 
         <%-- 방문인원 --%>
-        <div class="fr" style="width:15%;">
+        <div class="fr" style="width:18%;">
           <div class="oh sb-select mb10">
             <span class="fl bk lh30"><s:message code='billInfo.guestInfo'/></span>
           </div>
@@ -121,11 +127,11 @@
         </div>
       </div>
 
-      <div style="clear: both;"></div>
+      <div style="clear: both; "></div>
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 250px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -244,7 +250,7 @@
 
         <div class="w100 mt10">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 300px;">
+          <div class="wj-gridWrap" style="height: 200px;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -282,6 +288,7 @@
 </wj-popup>
 <script>
     var orgnCd = "${orgnCd}";
+    var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.10" charset="utf-8"></script>
