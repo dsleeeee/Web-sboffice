@@ -142,7 +142,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.$broadcast('loadingPopupActive');
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -159,7 +159,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
         if (!$.isEmptyObject(response.data.data)) {
           var data = response.data.data;
 
-          $("#billSubTitle").html('매장 : '+'['+data.storeCd+']'+ data.storeNm+' , 매출일자 : '+getFormatDate($scope.saleDate)+' , 포스번호 : '+$scope.posNo+' , 영수번호 : '+$scope.billNo);
+          $("#billSubTitle").html('매장 : '+'['+data.storeCd+']'+ data.storeNm+'  |  매출일자 : '+getFormatDate($scope.saleDate)+'  |  포스번호 : '+$scope.posNo+'  |  영수번호 : '+$scope.billNo);
 
           data.totSaleAmt   = addComma(data.totSaleAmt);
           data.totDcAmt     = addComma(data.totDcAmt);
@@ -180,6 +180,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
           $scope.billInfo = data; // view 종합내역에 조회한 값 세팅
           $scope.getBillPayInfo(); // 결제내역 조회
         }
+        $scope.$broadcast('loadingPopupInactive');
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -202,7 +203,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillPayInfo = function () {
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -250,7 +251,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillGuestInfo = function () {
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -300,7 +301,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchBillInfoProdList = function () {
     // 파라미터
     var params       = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd   = $scope.storeCd;
     params.saleDate  = $scope.saleDate;
     params.posNo     = $scope.posNo;
