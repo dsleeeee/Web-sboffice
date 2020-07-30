@@ -89,7 +89,7 @@
               </td>
             </tr>
             <tr>
-              <%--상품분류--%>
+              <%--분류조회--%>
               <th><s:message code="prod.prodClass"/></th>
               <td>
                 <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input w100"
@@ -601,7 +601,7 @@
     </form>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200729.30" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200801" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
