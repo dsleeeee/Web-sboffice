@@ -215,10 +215,10 @@
     <select id="getMigDataMappingSolbiStoreCdList" parameterType="MigDataMappingVO" resultType="DefaultMap">
         /* MigDataMappingMapper.getMigDataMappingSolbiStoreCdList */
         SELECT LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
---         'F'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
+--         'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
         FROM TB_MS_STORE
         WHERE 1=1
-        AND STORE_CD LIKE 'F%'
+        AND STORE_CD LIKE 'S%'
     </select>
 
 </mapper>

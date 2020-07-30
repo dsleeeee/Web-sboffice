@@ -195,7 +195,7 @@ app.controller('migDataMappingInfoCtrl', ['$scope', '$http', function ($scope, $
                 if($scope.flex.collectionView.items[i].gChk) {
 
                     // OKPOS-KCP 데이터 이관시 매장코드는 F로 시작하게 순차적으로 채번한다. (F000001, F000002...)
-                    params.storeCd = "F" + lpad(parseInt(data.storeCd) + j, 6, "0");
+                    params.storeCd = "S" + lpad(parseInt(data.storeCd) + j, 6, "0");
                     j++;
                     // 매장 신규 등록을 호출시 매장을 자동채번하기 때문에 수동으로 넣는다고 정의
                     params.storeCdInputType = "1";
