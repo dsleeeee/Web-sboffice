@@ -33,6 +33,24 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.chkSaveMode(data);
     // 상품정보 set
     $scope.setProdModifyInfo(data);
+
+    // 수정 모드 시
+    if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){
+
+    // 신규 모드 시
+    }else {
+      var params = {};
+      params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
+      params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
+      params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
+      params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
+      params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
+      params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
+      params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고
+      params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
+      $scope.setProdModifyInfo(params);
+    }
+
     // 메시지창 닫기
     setTimeout(function() {
       $scope.$broadcast('loadingPopupInactive');
