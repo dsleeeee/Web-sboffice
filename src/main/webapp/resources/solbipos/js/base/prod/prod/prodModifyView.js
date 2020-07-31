@@ -125,7 +125,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
             params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
-            params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고
+            params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고 -> 현재 저장,조회 로직 빠져있음
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
 
             // 저장수행
@@ -170,44 +170,57 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
+        // 분류조회
+        if ($scope.prodModifyInfo.prodClassCd === undefined) {
+            $scope._popMsg(messages["prod.prodClassCdNmChk.msg"]);
+            return false;
+        }
         // 판매단가
         if (isNull($("#prodModifySaleUprc").val())) {
           $scope._popMsg(messages["prod.saleUprcChk.msg"]);
+          $("#prodModifySaleUprc").focus();
           return false;
         }
         // 공급단가
         if (isNull($("#prodModifySplyUprc").val())) {
           $scope._popMsg(messages["prod.splyUprcChk.msg"]);
+          $("#prodModifySplyUprc").focus();
           return false;
         }
         // 원가단가
         if (isNull($("#prodModifyCostUprc").val())) {
           $scope._popMsg(messages["prod.costUprcChk.msg"]);
+          $("#prodModifyCostUprc").focus();
           return false;
         }
         // 최종판매단가
         if (isNull($("#prodModifyLastCostUprc").val())) {
           $scope._popMsg(messages["prod.lastCostUprcChk.msg"]);
+          $("#prodModifyLastCostUprc").focus();
           return false;
         }
         // 발주단위수량
         if (isNull($("#prodModifyPoUnitQty").val())) {
           $scope._popMsg(messages["prod.poUnitQtyChk.msg"]);
+          $("#prodModifyPoUnitQty").focus();
           return false;
         }
         // 최소발주수량
         if (isNull($("#prodModifyPoMinQty").val())) {
           $scope._popMsg(messages["prod.poMinQtyChk.msg"]);
+          $("#prodModifyPoMinQty").focus();
           return false;
         }
         // 초기재고
         if (isNull($("#prodModifyDefaultStock").val())) {
           $scope._popMsg(messages["prod.defaultStockChk.msg"]);
+          $("#prodModifyDefaultStock").focus();
           return false;
         }
         // 안전재고
         if (isNull($("#prodModifySafeStockQty").val())) {
           $scope._popMsg(messages["prod.safeStockQtyChk.msg"]);
+          $("#prodModifySafeStockQty").focus();
           return false;
         }
 

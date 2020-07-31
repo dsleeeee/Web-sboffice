@@ -733,7 +733,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                   SET SALE_UPRC = #{lastCostUprc},
+                   SET SALE_UPRC = #{saleUprc},
                        MOD_DT = #{modDt},
                        MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
@@ -777,7 +777,7 @@
                 )
                 WHEN MATCHED THEN
                 UPDATE
-                   SET SALE_UPRC = #{lastCostUprc},
+                   SET SALE_UPRC = #{saleUprc},
                        MOD_DT = #{modDt},
                        MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
