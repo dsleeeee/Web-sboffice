@@ -40,7 +40,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 신규 모드 시
     }else {
       var params = {};
-      params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
+      // params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
       params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
       params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
       params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
@@ -258,7 +258,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
               document.getElementById("prodCd").placeholder = "상품코드는 자동생성 됩니다.";
           }
 
-          $("#prodModifySaleUprc").val("0"); // 판매단가
+          // $("#prodModifySaleUprc").val("0"); // 판매단가
           $("#prodModifySplyUprc").val("0"); // 공급단가
           $("#prodModifyCostUprc").val("0"); // 원가단가
           $("#prodModifyLastCostUprc").val("0"); // 최종판매단가
