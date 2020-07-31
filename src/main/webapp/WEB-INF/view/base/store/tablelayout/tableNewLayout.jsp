@@ -85,8 +85,8 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.js" charset="utf-8"></script>
 <!--script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"></script-->
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200729.03" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200729.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableLayoutNew.js?ver=20200729.013" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/graph/js/TableAttrNew.js?ver=20200729.013" charset="utf-8"></script>
 
 <%--서브컨텐츠--%>
 <div class="subCon2" ng-controller="tbLayoutCtrl">
@@ -146,7 +146,7 @@
 			<div class="table-r">					
 			
 				<%--구성요소--%>
-				<div class="cfgWrap pd10" style="height:716px">
+				<div class="cfgWrap pd10" style="height:716px; width: 230px;">
 					<h2 class="h2_tit2 mt10 mb20" style="padding-bottom:10px; border-bottom:1px solid #ddd"><s:message code="tableLayout.component" /></h2>
 					<%-- 테이블명 --%>
 					<div class="touch-box">
@@ -187,7 +187,7 @@
 										id="tblTypeFgComboBox"
 										ng-hide="true"
 										text="_tblTypeFg"
-										items-source="_getComboData('tblTypeFgComboData')"
+										items-source="combobox3"
 										display-member-path="name"
 										selected-value-path="value"
 										is-editable="false">
@@ -648,8 +648,10 @@
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('tbLayoutCtrl', $scope, $http, true));
 
-    	// 테이블형태 콤보박스
-        $scope._getComboDataQuery('035', 'tblTypeFgComboData');
+		// 테이블형태 콤보박스
+		//$scope._getComboDataQuery('035', 'tblTypeFgComboData');
+		// 테이블형태 콤보박스 원형 제거, 시스템 명칭관리에서 코드제거 오류상태라 우선 코딩함
+		$scope.combobox3 = [{"name":"사각","value":"1"},{"name":"구조물","value":"3"}];
 
         $scope.combobox1 = ['1층', '2층', '테라스'];
         $scope.combobox2 = [{"name":"없음","value":"0"},{"name":"2","value":"2"},{"name":"4","value":"4"}];
