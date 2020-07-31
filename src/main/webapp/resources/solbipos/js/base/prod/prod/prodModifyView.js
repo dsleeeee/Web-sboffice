@@ -40,6 +40,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 신규 모드 시
     }else {
       var params = {};
+      params.saleProdYn = $scope.prodModifyInfo.saleProdYn = "Y"; // 판매상품여부
       // params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
       params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
       params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
@@ -258,6 +259,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
               document.getElementById("prodCd").placeholder = "상품코드는 자동생성 됩니다.";
           }
 
+          $scope.prodModifyInfo.saleProdYn = "Y"; // 판매상품여부
           // $("#prodModifySaleUprc").val("0"); // 판매단가
           $("#prodModifySplyUprc").val("0"); // 공급단가
           $("#prodModifyCostUprc").val("0"); // 원가단가
