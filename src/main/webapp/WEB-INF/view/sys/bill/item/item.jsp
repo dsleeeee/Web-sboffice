@@ -10,12 +10,13 @@
 <div class="subCon" ng-controller="printCodeCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
-  </div>
-
-  <%-- 조회 --%>
-  <div class="mt10 oh">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')"><s:message code="cmm.search" /></button>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('printCodeCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
   <div class="w100 fl mt40 mb20">
@@ -49,7 +50,7 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.prtCd"/>" binding="prtCd" width="200"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.prtNm"/>" binding="prtNm" width="200"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="60"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="80"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="item.content"/>" binding="content" width="*"></wj-flex-grid-column>
 
         </wj-flex-grid>

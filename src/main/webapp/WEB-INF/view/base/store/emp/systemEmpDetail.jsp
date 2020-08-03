@@ -27,7 +27,7 @@
       --%>
 
       <%-- 상세 --%>
-      <div style="height: 295px; overflow-y: auto;">
+      <div style="height: 200px; overflow-y: auto;">
         <table class="tblType01">
           <colgroup>
             <col class="w25" />

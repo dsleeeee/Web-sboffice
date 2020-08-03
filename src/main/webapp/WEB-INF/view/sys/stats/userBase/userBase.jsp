@@ -55,7 +55,7 @@
                         <s:message code="userBase.useEnv" />
                     </th>
                     <td>
-                        <div class="sb-select fl w200px">
+                        <div class="sb-select fl w100">
                             <wj-combo-box
                                 id="srchUseEnv"
                                 ng-model="useEnv"
@@ -147,11 +147,11 @@
                             id="wjGridUserBaseList">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="userBase.hqOfficeCd"/>" binding="hqOfficeCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.hqOfficeCd"/>" binding="hqOfficeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="userBase.hqOfficeNm"/>" binding="hqOfficeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="userBase.storeCd"/>" binding="storeCd" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="userBase.storeNm"/>" binding="storeNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="userBase.userNm"/>" binding="userNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="userBase.userNm"/>" binding="userNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="userBase.useCnt"/>" binding="useCnt" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                             <%--상세 조회시 필요--%>

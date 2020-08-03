@@ -15,7 +15,7 @@
       <h3 class="h3_tbl brt"><s:message code="systemEmp.systemEmpInfo"/></h3>
 
       <%-- 상세 --%>
-      <div id="dtlArea" style="height: 405px; overflow-y: auto;">
+      <div id="dtlArea" style="height: 300px; overflow-y: auto;">
 
         <table class="tblType01">
           <colgroup>
