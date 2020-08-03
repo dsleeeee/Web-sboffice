@@ -1406,6 +1406,7 @@ function deleteClassCell(format) {
     }
     // 셀 속성지정 감추기
     document.getElementById('keyStyle').classList.add("hideNav");
+    document.getElementById('keyStyleAd').classList.add("hideNav");
   }
 }
 
@@ -1438,9 +1439,11 @@ function deleteProdCell(format) {
           if (select.length > 0) {
             graph.setSelectionCells(select);
             document.getElementById('keyStyle').classList.remove("hideNav");
+            document.getElementById('keyStyleAd').classList.remove("hideNav");
             document.getElementById('colorStyleWrap').classList.remove("hideNav");
           } else {
             document.getElementById('keyStyle').classList.add("hideNav");
+            document.getElementById('keyStyleAd').classList.add("hideNav");
           }
         }
       }
@@ -2477,7 +2480,8 @@ Graph.prototype.initClassArea = function (prodArea) {
         //상품영역 스크롤했던 것 초기화
         prodArea.initProdPaging();
       }
-      document.getElementById('keyStyle').classList.remove("hideNav");
+        document.getElementById('keyStyle').classList.remove("hideNav");
+        document.getElementById('keyStyleAd').classList.remove("hideNav");
     },
     mouseMove: function (sender, me) {
     },
@@ -2668,10 +2672,12 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
       // 클릭 영역에 셀이 있는 경우에만...
       if (me.state !== null) {
         // 버튼속성 뷰 활성화
-        document.getElementById('keyStyle').classList.remove("hideNav");
+          document.getElementById('keyStyle').classList.remove("hideNav");
+          document.getElementById('keyStyleAd').classList.remove("hideNav");
       } else {
         graph.getSelectionModel().clear();
-        document.getElementById('keyStyle').classList.add("hideNav");
+          document.getElementById('keyStyle').classList.add("hideNav");
+          document.getElementById('keyStyleAd').classList.add("hideNav");
       }
     },
     mouseMove: function (sender, me) {

@@ -140,14 +140,21 @@
     <%--right--%>
     <div class="fl ml10" style="width: 502px;">
       <%--미리보기 영역 시작--%>
+      <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(스타일적용, 저장)--%>
       <div class="updownSet oh mb10">
-        <span class="fl bk lh30"><s:message code="touchKey.preview"/></span>
-        <div class="txtIn">
-          <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>>
+        <div class="fl txtIn">
+          <div class="sb-select dkbr fl w120px" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
             <div id="selectStyle" ng-model="selectStyle"></div>
           </div>
           <button class="btn_skyblue fl ml5" id="btnApplyStyle" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="touchKey.applyStyle"/></button>
           <button class="btn_skyblue fl ml20" id="btnSave" <c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2'}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose>><s:message code="cmm.save"/></button>
+          <%--포스에서 1024*768 사이즈에 보이지 않아 위치변경함(초기화, 삭제)--%>
+          <div id="keyStyleAd" class="fl hideNav" style="margin-left : 4px;">
+              <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')">
+                  <s:message code="touchKey.reset"/></button>
+              <button class="btn_skyblue" id="btnDelete" ng-click="$broadcast('btnDelete')">
+                  <s:message code="touchKey.delete"/></button>
+          </div>
         </div>
       </div>
       <div id="touchArea" class="prev2 fl">
@@ -209,12 +216,6 @@
               <%-- 채우기 --%>
               <div id="fillColor"></div>
             </div>
-          </div>
-          <div class="fl">
-            <button class="btn_skyblue mb5" id="btnReset" ng-click="$broadcast('btnReset')">
-              <s:message code="touchKey.reset"/></button>
-            <button class="btn_skyblue" id="btnDelete" ng-click="$broadcast('btnDelete')">
-              <s:message code="touchKey.delete"/></button>
           </div>
         </div>
         <div class="prodPageNoWrap">
