@@ -55,7 +55,7 @@
                         <s:message code="menuBase.useEnv" />
                     </th>
                     <td>
-                        <div class="sb-select fl w200px">
+                        <div class="sb-select fl w100">
                             <wj-combo-box
                                 id="srchUseEnv"
                                 ng-model="useEnv"
@@ -180,7 +180,7 @@
                         item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="menuBase.hqOfficeCd"/>" binding="hqOfficeCd" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="menuBase.hqOfficeCd"/>" binding="hqOfficeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="menuBase.hqOfficeNm"/>" binding="hqOfficeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="menuBase.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="menuBase.storeNm"/>" binding="storeNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>

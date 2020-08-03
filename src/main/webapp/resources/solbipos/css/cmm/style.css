@@ -132,7 +132,7 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 button.btn_blue {background:#1e88e5; border:1px solid #1e88e5; color:#fff; border-radius:4px; line-height:25px; padding:0 25px; font-size:1em; transition:all 0.2s;}
 button.btn_blue:hover {background:#174291; transition:all 0.2s;}
 
-button.btn_skyblue {background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; padding:0 10px; font-size:0.75em; transition:all 0.2s;}
+button.btn_skyblue {background:#ebf5ff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; padding:0 10px; font-size:0.75em; transition:all 0.2s;}
 button.btn_skyblue:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
 
 button.btn_blk {background:#fff; border:1px solid #2e333f; color:#2e333f; border-radius:4px; line-height:30px; padding:0 20px; font-size:1em; transition:all 0.2s;}
@@ -141,7 +141,7 @@ button.btn_blk:hover {background:#e8e8e8; color:#2e333f; transition:all 0.2s;}
 button.btn_gray {background:#aeaeae; color:#fff; border-radius:4px; line-height:30px; padding:0 30px; font-size:1em; transition:all 0.2s;}
 button.btn_gray:hover {background:#777; transition:all 0.2s;}
 
-a.btn_grayS {background:#888; color:#fff; display:inline-block; line-height:30px; padding:0 15px; font-size:1em; transition:all 0.2s;}
+a.btn_grayS {background:#888; color:#fff; display:inline-block; line-height:26px; padding:0 15px; font-size:1em; transition:all 0.2s;}
 a.btn_grayS:hover {background:#777; transition:all 0.2s;}
 
 a.btn_grayS2 {background:#222; color:#fff; border-radius:4px; display:inline-block; line-height:25px; padding:0 15px; font-size:0.8125em; transition:all 0.2s;}
@@ -156,15 +156,15 @@ a.btn_green:hover {background:#289643; transition:all 0.2s;}
 
 .updownSet {display:block; height:30px; text-align:right; position:relative;}
 
-button.btn_up {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; height:30px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
+button.btn_up {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_up:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
-button.btn_up:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
-button.btn_up:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
+button.btn_up:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
+button.btn_up:hover:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(-90deg);}
 
-button.btn_down {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:28px; height:30px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
+button.btn_down {position:relative; top:-5px; background:#fff; border:1px solid #93cbfc; color:#337dde; border-radius:4px; line-height:23px; height:25px; padding:0 10px; font-size:0px; transition:all 0.2s; display:inline;}
 button.btn_down:hover {background:#93cbfc; color:#fff; transition:all 0.2s;}
-button.btn_down:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
-button.btn_down:hover:before {content:''; position:absolute; left:7px; top:9px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
+button.btn_down:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet_blue.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
+button.btn_down:hover:before {content:''; position:absolute; left:7px; top:6px; background:url(../img/menu_bullet.png) no-repeat; width:6px; height:10px; transform:rotate(90deg);}
 
 
 /* **************************************** *
@@ -330,7 +330,7 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
  * **************************************** */
 /*common*/
 .menuOpen, .menuClose {background:#2e333f; border-right:1px solid #1b202b; box-shadow:0 0 5px 0 #000; transition:all 0.2s cubic-bezier(.13, 1.09, .78, 1); z-index:999; position:relative;}
-.menuTab {height:50px; border-bottom:1px solid #3e4452;}
+.menuTab {height:35px; border-bottom:1px solid #3e4452;}
 .menuOpen h1, .menuClose h1 {height:50px; border-bottom:1px solid #3e4452;}
 
 /*open*/
@@ -338,12 +338,12 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 .menuOpen h1 a {display:inline-block; width:125px; height:25px; position:absolute; left:20px; top:12px;}
 .menuOpen h1 a img {max-height:100%; max-width:100%;  position:absolute; bottom:0px;}
 .menuOpen .menuTab {display:table; width:100%;}
-.menuOpen .menuTab p {display:table-cell; width:50%; height:50px; vertical-align: middle; text-align:center; position:relative;}
+.menuOpen .menuTab p {display:table-cell; width:50%; height:35px; vertical-align: middle; text-align:center; position:relative;}
 .menuOpen .menuTab p:first-child {border-right:1px solid #3e4452;}
 .menuOpen .menuTab p a {color:#888fa4; display:block; height:100%; position:relative;}
-.menuOpen .menuTab p a span {position:absolute; color:#888fa4; left:0px; width:100%; font-size:0.875em; line-height:49px; transition:all 0.5s;}
-.menuOpen .menuTab p a:after {content:''; position:absolute; left:55px; top:47px; width:0px; height:3px; border-radius:2px; background:#fff; transition:all 0.3s;}
-.menuOpen .menuTab p a.on:after {content:''; position:absolute; left:25px; top:47px; width:60px; height:3px; border-radius:2px; background:#fff;}
+.menuOpen .menuTab p a span {position:absolute; color:#888fa4; left:0px; width:100%; font-size:0.875em; line-height:34px; transition:all 0.5s;}
+.menuOpen .menuTab p a:after {content:''; position:absolute; left:55px; top:32px; width:0px; height:3px; border-radius:2px; background:#fff; transition:all 0.3s;}
+.menuOpen .menuTab p a.on:after {content:''; position:absolute; left:25px; top:32px; width:60px; height:3px; border-radius:2px; background:#fff;}
 .menuOpen .menuTab p a.on span {color:#fff; background:#212633;}
 .menuOpen .menuTab p a:hover span, .menuOpen .menuTab p a:focus span {color:#fff; transition:all 0.5s;}
 .menuOpen .menuTab p a:focus:after {left:25px; width:60px; transition:all 0.3s;}
@@ -365,10 +365,10 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:964px; padding-l
 
 .menuClose .menuTab {position:relative;}
 /*.menuClose .menuTab p.all {display:none;}*/
-.menuClose .menuTab p.favorite a, .menuClose .menuTab p.all a {position:absolute; left:0px; top:0px; width:60px; height:49px;}
-.menuClose .menuTab p.favorite span, .menuClose .menuTab p.all span {text-indent:-70px; font-size:0.875em; display:inline-block; line-height:49px;}
-.menuClose .menuTab p.favorite a span:before {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) -20px 0 no-repeat; opacity:1;}
-.menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:14px; width:20px; height:22px; background:url(../img/menu.png) #1b202b no-repeat; opacity:0;}
+.menuClose .menuTab p.favorite a, .menuClose .menuTab p.all a {position:absolute; left:0px; top:0px; width:60px; height:34px;}
+.menuClose .menuTab p.favorite span, .menuClose .menuTab p.all span {text-indent:-70px; font-size:0.875em; display:inline-block; line-height:34px;}
+.menuClose .menuTab p.favorite a span:before {content:''; position:absolute; left:20px; top:6px; width:20px; height:22px; background:url(../img/menu.png) -20px 0 no-repeat; opacity:1;}
+.menuClose .menuTab p.favorite a span:after {content:''; position:absolute; left:20px; top:6px; width:20px; height:22px; background:url(../img/menu.png) #1b202b no-repeat; opacity:0;}
 .menuClose .menuTab p.favorite a:hover span:before {transition:all 0.3s;}
 .menuClose .menuTab p.favorite a:hover span:after {opacity:1; transition:all 0.3s;}
 .menuClose .menuTab p.favorite a {transition:all 0.3s;}
@@ -774,7 +774,7 @@ p.empty {font-size:0.875em; color:#fff; line-height:50px; padding-left:20px;}
 .searchTbl th {background:#f6f6f6; color:#222; font-size:0.75em; text-align:left; padding:7px; padding-left:15px;}
 .searchTbl td {color:#888; font-size:0.75em; padding:3px 5px;}
 .searchTbl td span {font-size:1em;}
-.searchTbl td input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:30px; font-size:1em;}
+.searchTbl td input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:25px; font-size:1em;}
 .searchTbl td span.sb-radio {margin-right:10px;}
 .searchTbl td span.sb-radio input {width:17px; height:17px; position:relative; top:1px;}
 .searchTbl td span.sb-radio label {font-size:1em; position:relative; top:-3px; margin-left:3px;}
@@ -1795,7 +1795,7 @@ select.sb-select {display:block!important; border:1px solid #e8e8e8; height:25px
  * 20180927 추가
  * 테이블이 아닌 div 에서도 sb-input 스타일 적용
  */
-div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:30px; line-height:30px; font-size:1em;}
+div input.sb-input {border:1px solid #e8e8e8; padding:0 10px; height:25px; line-height:25px; font-size:1em;}
 
 
 /**

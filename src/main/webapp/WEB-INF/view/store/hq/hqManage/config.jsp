@@ -98,9 +98,9 @@ function getConfigList(){
             envHtml += "      <td>";
 
             if(list[j].dirctInYn == "Y"){
-              envHtml += "        <input type='text' name='envstValCd' id='env" + list[j].envstCd + "' >";
+              envHtml += "        <input type='text' class='sb-input' name='envstValCd' id='env" + list[j].envstCd + "' >";
             } else {
-              envHtml += "        <select name='envstValCd' id='env" + list[j].envstCd + "' />";
+              envHtml += "        <select class='sb-select' name='envstValCd' id='env" + list[j].envstCd + "' />";
             }
 
             envHtml += "        <input type='hidden' name='status'    value='"+ (list[j].existFg =="N" ? "I":"U") +"'>";

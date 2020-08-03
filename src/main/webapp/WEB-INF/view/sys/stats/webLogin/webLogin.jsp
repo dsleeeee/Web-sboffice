@@ -64,7 +64,7 @@
                         <s:message code="webLogin.statCd" />
                     </th>
                     <td>
-                        <div class="sb-select fl w200px">
+                        <div class="sb-select fl w100">
                             <wj-combo-box
                                 id="srchStatCd"
                                 ng-model="statCd"
@@ -81,7 +81,7 @@
                         <s:message code="webLogin.loginOrgn" />
                     </th>
                     <td>
-                        <div class="sb-select fl w200px">
+                        <div class="sb-select fl w100">
                             <wj-combo-box
                                 id="srchLoginOrgn"
                                 ng-model="loginOrgn"

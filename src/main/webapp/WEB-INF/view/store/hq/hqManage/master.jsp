@@ -40,7 +40,7 @@
 
         <%-- 조회 --%>
 
-        <div id="viewArea" class="mt20 sc" style="height:350px;">
+        <div id="viewArea" class="mt20 sc" style="height:217px;">
           <table class="tblType01">
             <colgroup>
               <col class="w15" />
@@ -249,7 +249,7 @@
                     <input type="text" id="rPostNo" style="width:80px" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                     <a href="#" class="btn_grayS" id="btnFindAddr"><s:message code="hqManage.findAddr" /></a>
                     <br/>
-                    <input type="text" id="rAddr" placeholder="주소1"/>
+                    <input type="text" id="rAddr" placeholder="주소1" style="margin:4px 0px;"/>
                     <input type="text" id="rAddrDtl" placeholder="주소2"/>
                   </td>
                 </tr>
