@@ -156,7 +156,9 @@ public class InstockConfmVO extends PageVO {
     private String penaltyCd;
     /** 패널티금액 반품시 */
     private Integer penaltyAmt;
-
+    /** 입고창고코드 */
+    private String inStorageCd;
+    
 
     /** 창고 갯수 */
     //private int	storageCnt;
@@ -1222,4 +1224,12 @@ public class InstockConfmVO extends PageVO {
 	public void setArrInTot(String arrInTot) {
 		this.arrInTot = arrInTot;
 	}
+	public String getInStorageCd() {
+		return inStorageCd;
+	}
+	public void setInStorageCd(String inStorageCd) {
+		this.inStorageCd = inStorageCd;
+	}
+	
+	
 }

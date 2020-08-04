@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
