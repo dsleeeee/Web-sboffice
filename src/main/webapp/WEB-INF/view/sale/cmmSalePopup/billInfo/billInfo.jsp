@@ -131,7 +131,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 250px;">
+        <div class="wj-gridWrap" style="height: 200px;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -165,85 +165,115 @@
       <%-- 원거래영수증 내역 --%>
       <div class="w100 mt20" ng-if="saleYn == 'N'" ng-controller="orgBillInfoCtrl">
         <p class="s16 bk mb5" id="orgBillSubTitle"></p>
-        <%-- 종합내역 --%>
-        <div class="fl" style="width:50%;">
-          <div class="oh sb-select mb10">
-            <span class="fl bk lh30"><s:message code='billInfo.totalInfo'/></span>
+        <div class="w100">
+          <%-- 종합내역 --%>
+          <div class="fl" style="width:25%;">
+            <div class="oh sb-select mb10">
+              <span class="fl bk lh30"><s:message code='billInfo.totalInfo'/></span>
+            </div>
+            <table class="tblType01">
+              <colgroup>
+                <col class="w25"/>
+                <col class="w25"/>
+              </colgroup>
+              <tbody>
+              <tr>
+                <%-- 총매출액 --%>
+                <th><s:message code="billInfo.saleAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.totSaleAmt"></td>
+              </tr>
+              <tr>
+                <%-- 총할인액 --%>
+                <th><s:message code="billInfo.dcAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.totDcAmt"></td>
+              </tr>
+              <tr>
+                <%-- 실매출액 --%>
+                <th><s:message code="billInfo.realSaleAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.realSaleAmt"></td>
+              </tr>
+              <tr>
+                <%-- 순매출액 --%>
+                <th><s:message code="billInfo.netSaleAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.netSaleAmt"></td>
+              </tr>
+              <tr>
+                <%-- 면세매출액 --%>
+                <th><s:message code="billInfo.noTaxSaleAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.noTaxSaleAmt"></td>
+              </tr>
+              <tr>
+                <%-- 과세매출액 --%>
+                <th><s:message code="billInfo.taxSaleAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.taxSaleAmt"></td>
+              </tr>
+              <tr>
+                <%-- 부가세액 --%>
+                <th><s:message code="billInfo.vatAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.vatAmt"></td>
+              </tr>
+              <tr>
+                <%-- 봉사료 --%>
+                <th><s:message code="billInfo.totTipAmt"/></th>
+                <td class="tr" ng-bind-html="orgBillInfo.totTipAmt"></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
-          <table class="tblType01">
-            <colgroup>
-              <col class="w25"/>
-              <col class="w25"/>
-              <col class="w25"/>
-              <col class="w25"/>
-            </colgroup>
-            <tbody>
-            <tr>
-              <%-- 총매출액 --%>
-              <th><s:message code="billInfo.saleAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.totSaleAmt"></td>
-              <%-- 총할인액 --%>
-              <th><s:message code="billInfo.dcAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.totDcAmt"></td>
-            </tr>
-            <tr>
-              <%-- 실매출액 --%>
-              <th><s:message code="billInfo.realSaleAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.realSaleAmt"></td>
-              <%-- 순매출액 --%>
-              <th><s:message code="billInfo.netSaleAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.netSaleAmt"></td>
-            </tr>
-            <tr>
-              <%-- 면세매출액 --%>
-              <th><s:message code="billInfo.noTaxSaleAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.noTaxSaleAmt"></td>
-              <%-- 과세매출액 --%>
-              <th><s:message code="billInfo.taxSaleAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.taxSaleAmt"></td>
-            </tr>
-            <tr>
-              <%-- 부가세액 --%>
-              <th><s:message code="billInfo.vatAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.vatAmt"></td>
-              <%-- 봉사료 --%>
-              <th><s:message code="billInfo.totTipAmt"/></th>
-              <td class="tr" ng-bind-html="orgBillInfo.totTipAmt"></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
 
-        <%-- 결제내역 --%>
-        <div class="fr ml5" style="width:49%;">
-          <div class="oh sb-select mb10">
-            <span class="fl bk lh30"><s:message code='billInfo.payInfo'/></span>
-          </div>
-          <table class="tblType01">
-            <colgroup>
-              <col class="w25"/>
-              <col class="w25"/>
-              <col class="w25"/>
-              <col class="w25"/>
-            </colgroup>
-            <tbody>
-            <%-- 결제수단 생성--%>
-            <c:forEach var="payCol" items="${payColList}" varStatus="status">
-              <c:if test="${(status.count%2) != 0}">
-                <tr>
-              </c:if>
-              <th>${payCol.payNm}</th>
-              <td class="tr" ng-bind-html="orgBillPayInfo.pay${payCol.payCd}"></td>
-              <c:if test="${(status.count%2) == 0 || status.last}">
-                <c:if test="${(status.count%2) != 0 && status.last}">
-                  <th></th>
-                  <td></td>
+          <%-- 결제내역 --%>
+          <div class="fl ml5" style="width:56%;">
+            <div class="oh sb-select mb10">
+              <span class="fl bk lh30"><s:message code='billInfo.payInfo'/></span>
+            </div>
+            <table class="tblType01">
+              <colgroup>
+                <col class="w25"/>
+                <col class="w25"/>
+                <col class="w25"/>
+                <col class="w25"/>
+              </colgroup>
+              <tbody>
+              <%-- 결제수단 생성--%>
+              <c:forEach var="payCol" items="${payColList}" varStatus="status">
+                <c:if test="${(status.count%2) != 0}">
+                  <tr>
                 </c:if>
+                <th>${payCol.payNm}</th>
+                <td class="tr" ng-bind-html="orgBillPayInfo.pay${payCol.payCd}"></td>
+                <c:if test="${(status.count%2) == 0 || status.last}">
+                  <c:if test="${(status.count%2) != 0 && status.last}">
+                    <th></th>
+                    <td></td>
+                  </c:if>
+                  </tr>
+                </c:if>
+              </c:forEach>
+              </tbody>
+            </table>
+          </div>
+
+          <%-- 방문인원 --%>
+          <div class="fr" style="width:18%;">
+            <div class="oh sb-select mb10">
+              <span class="fl bk lh30"><s:message code='billInfo.guestInfo'/></span>
+            </div>
+            <table class="tblType01">
+              <colgroup>
+                <col class="w40"/>
+                <col class="w60"/>
+              </colgroup>
+              <tbody>
+              <%-- 객수 생성--%>
+              <c:forEach var="guestCol" items="${guestColList}">
+                <tr>
+                  <th>${guestCol.guestNm}</th>
+                  <td class="tr" ng-bind-html="orgBillGuestInfo.guest${guestCol.guestCd}"></td>
                 </tr>
-              </c:if>
-            </c:forEach>
-            </tbody>
-          </table>
+              </c:forEach>
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <div style="clear: both;"></div>
@@ -282,7 +312,6 @@
       </div>
       <%-- 원거래영수증 내역 --%>
     </div>
-
   </div>
 
 </wj-popup>
@@ -291,4 +320,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.10" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/billInfo/billInfo.js?ver=20190130.13" charset="utf-8"></script>
