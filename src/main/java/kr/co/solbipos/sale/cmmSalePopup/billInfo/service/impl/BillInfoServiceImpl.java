@@ -34,6 +34,14 @@ public class BillInfoServiceImpl implements BillInfoService {
         // 결제수단 array 값 세팅
         billInfoVO.setArrPayCol(billInfoVO.getPayCol().split(","));
 
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = billInfoVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+        }
+        billInfoVO.setPivotPayCol(pivotPayCol);
+
         return billInfoMapper.getBillPayInfo(billInfoVO);
     }
 

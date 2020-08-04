@@ -26,6 +26,8 @@ public class BillInfoVO extends PageVO {
     private String arrDcCol[];
     /** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
     private String pivotDcCol;
+    /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+    private String pivotPayCol;
 
     /**
      * @return the hqOfficeCd
@@ -165,5 +167,13 @@ public class BillInfoVO extends PageVO {
      */
     public void setPivotDcCol(String pivotDcCol) {
         this.pivotDcCol = pivotDcCol;
+    }
+
+    public String getPivotPayCol() {
+        return pivotPayCol;
+    }
+
+    public void setPivotPayCol(String pivotPayCol) {
+        this.pivotPayCol = pivotPayCol;
     }
 }

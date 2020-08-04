@@ -279,9 +279,8 @@
                 SELECT
                 PROD_CD,
                 PROD_NM,
-                SALE_QTY,
-                REAL_SALE_AMT,
-                Level1
+                SUM(SALE_QTY) AS SALE_QTY,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
                 FROM
                 (
                     SELECT
@@ -322,6 +321,7 @@
                 )
                 WHERE 1=1
                 AND Level1 = #{prodClassCd}
+                GROUP BY PROD_CD,PROD_NM
                 ORDER BY PROD_CD
             </when>
             <!-- 매장 -->
@@ -329,9 +329,8 @@
                 SELECT
                 PROD_CD,
                 PROD_NM,
-                SALE_QTY,
-                REAL_SALE_AMT,
-                Level1
+                SUM(SALE_QTY) AS SALE_QTY,
+                SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
                 FROM
                 (
                     SELECT
@@ -350,7 +349,7 @@
                         SELECT
                         tmpc.PROD_CLASS_CD,
                         SYS_CONNECT_BY_PATH (tmpc.PROD_CLASS_CD, '/') PATH
-                        FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = 'A000033') tmpc
+                        FROM (SELECT * FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = #{storeCd}) tmpc
                         WHERE 1=1
                         START WITH tmpc.P_PROD_CLASS_CD = '00000'
                         CONNECT BY tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
@@ -369,6 +368,7 @@
                 )
                 WHERE 1=1
                 AND Level1 = #{prodClassCd}
+                GROUP BY PROD_CD,PROD_NM
                 ORDER BY PROD_CD
             </when>
         </choose>
