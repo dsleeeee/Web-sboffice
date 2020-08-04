@@ -15,6 +15,7 @@ import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO;
 import kr.co.solbipos.iostock.order.outstockData.service.impl.OutstockDataMapper;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
+import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderService;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
 
@@ -71,15 +72,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         int result = 0;
         String currentDt = currentDateTimeString();
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
-        
-        String[] storageCd;
-        String[] storageNm;
-        String[] storageOrderUnitQty;
-        String[] storageOrderEtcQty;
-        String[] storageOrderTotQty;
-        String[] storageOrderAmt;
-        String[] storageOrderVat;
-        String[] storageOrderTot;
+        RtnStoreOrderProdVO	prodVO;
+                
         
         int i = 0;
         for (RtnStoreOrderDtlVO rtnStoreOrderDtlVO : rtnStoreOrderDtlVOs) {
@@ -90,7 +84,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setStoreCd(rtnStoreOrderDtlVO.getStoreCd());
                 rtnStoreOrderVO.setEmpNo("0000");
                 rtnStoreOrderVO.setProcFg("00");
-                rtnStoreOrderVO.setRemark(rtnStoreOrderDtlVO.getHdRemark());
+//                rtnStoreOrderVO.setRemark(rtnStoreOrderDtlVO.getHdRemark());
+                rtnStoreOrderVO.setRemark(rtnStoreOrderDtlVO.getRemark());
                 rtnStoreOrderVO.setRegId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setRegDt(currentDt);
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
@@ -115,6 +110,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             if(!insFg.equals("D")) {
                 int slipFg       = rtnStoreOrderDtlVO.getSlipFg();
                 int poUnitQty    = rtnStoreOrderDtlVO.getPoUnitQty();
+                int orderSplyUprc    = rtnStoreOrderDtlVO.getOrderSplyUprc();
                 int prevUnitQty  = (rtnStoreOrderDtlVO.getPrevOrderUnitQty() == null ? 0 : rtnStoreOrderDtlVO.getPrevOrderUnitQty());
                 int prevEtcQty   = (rtnStoreOrderDtlVO.getPrevOrderEtcQty()  == null ? 0 : rtnStoreOrderDtlVO.getPrevOrderEtcQty());
                 int unitQty      = (rtnStoreOrderDtlVO.getOrderUnitQty()     == null ? 0 : rtnStoreOrderDtlVO.getOrderUnitQty());
@@ -143,94 +139,68 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             if(insFg.equals("I")) {
             	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.insertRtnStoreOrderDtl(rtnStoreOrderDtlVO);
+	                
+	                prodVO = new RtnStoreOrderProdVO();
 
-	                //TB_PO_HQ_STORE_ORDER_PROD - START
-	            	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-		            storageCd           	= rtnStoreOrderDtlVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-		            storageNm           	= rtnStoreOrderDtlVO.getArrStorageNm().split("\\^");
-		            storageOrderUnitQty    = rtnStoreOrderDtlVO.getArrOrderUnitQty().split("\\^");
-		            storageOrderEtcQty     = rtnStoreOrderDtlVO.getArrOrderEtcQty().split("\\^");
-		            storageOrderTotQty     = rtnStoreOrderDtlVO.getArrOrderTotQty().split("\\^");
-		            storageOrderAmt        = rtnStoreOrderDtlVO.getArrOrderAmt().split("\\^");
-		            storageOrderVat        = rtnStoreOrderDtlVO.getArrOrderVat().split("\\^");
-		            storageOrderTot        = rtnStoreOrderDtlVO.getArrOrderTot().split("\\^");
-	
-		            for(int k=0; k<storageCd.length; k++) {
-			            LOGGER.debug("### storageInUnitQty: " + storageOrderUnitQty[k]	);
-			            LOGGER.debug("### storageInEtcQty : " + storageOrderEtcQty	[k]	);
-			            LOGGER.debug("### storageInTotQty : " + storageOrderTotQty	[k]	);
-			            LOGGER.debug("### storageInAmt    : " + storageOrderAmt	[k]	);
-			            LOGGER.debug("### storageInVat    : " + storageOrderVat	[k]	);
-			            LOGGER.debug("### storageInTot    : " + storageOrderTot	[k]	);
-	
-			            rtnStoreOrderDtlVO.setStorageCd				(storageCd[k]					);	//창고코드
-			            rtnStoreOrderDtlVO.setSlipFg		        (1								);	//전표구분 1:주문 -1:반품
-	
-			            rtnStoreOrderDtlVO.setOrderUnitQty		        (Integer.parseInt	(storageOrderUnitQty	[k]));	//입고수량 주문단위
-			            rtnStoreOrderDtlVO.setOrderEtcQty		        (Integer.parseInt	(storageOrderEtcQty		[k]));	//입고수량 나머지
-			            rtnStoreOrderDtlVO.setOrderTotQty		        (Integer.parseInt	(storageOrderTotQty		[k]));	//입고수량합계 낱개
-			            rtnStoreOrderDtlVO.setOrderAmt			        (Long.parseLong		(storageOrderAmt		[k]));	//입고금액
-			            rtnStoreOrderDtlVO.setOrderVat			        (Long.parseLong		(storageOrderVat		[k]));	//입고금액VAT
-			            rtnStoreOrderDtlVO.setOrderTot			        (Long.parseLong		(storageOrderTot		[k]));	//입고금액합계
-	
-			            rtnStoreOrderDtlVO.setRegId			        (sessionInfoVO.getUserId());
-			            rtnStoreOrderDtlVO.setRegDt			        (currentDt	);
-		            	rtnStoreOrderDtlVO.setModId			        (sessionInfoVO.getUserId());
-		            	rtnStoreOrderDtlVO.setModDt			        (currentDt	);
-	
-		            	LOGGER.debug("### getProperties: " + rtnStoreOrderDtlVO.getProperties() );
-	
-		            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(rtnStoreOrderDtlVO);
-		                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-		            }
-	            }
-	        //TB_PO_HQ_STORE_ORDER_PROD - END                      
+	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
+	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
+	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
+	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
+	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
+	                prodVO.setPoUnitQty				(rtnStoreOrderDtlVO	.getPoUnitQty		()		);
+	                prodVO.setOrderSplyUprc			(rtnStoreOrderDtlVO	.getOrderSplyUprc	()		);
+	                prodVO.setOrderUnitQty	        (rtnStoreOrderDtlVO .getOrderUnitQty	()		);	//입고수량 주문단위
+	                prodVO.setOrderEtcQty		    (rtnStoreOrderDtlVO .getOrderEtcQty		()		);		//입고수량 나머지
+	                prodVO.setOrderTotQty		    (rtnStoreOrderDtlVO .getOrderTotQty		()		);		//입고수량합계 낱개
+	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
+	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
+	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+
+	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setRegDt			        (currentDt	);
+	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setModDt			        (currentDt	);
+	                
+	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
+	            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(prodVO);
+	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+	                
+	            }	                           
             }
             // 수정
             else if(insFg.equals("U")) {
             	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.updateRtnStoreOrderDtl(rtnStoreOrderDtlVO);
 	                
-	                //TB_PO_HQ_STORE_ORDER_PROD - START
-	            	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-		            storageCd           	= rtnStoreOrderDtlVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-		            storageNm           	= rtnStoreOrderDtlVO.getArrStorageNm().split("\\^");
-		            storageOrderUnitQty    = rtnStoreOrderDtlVO.getArrOrderUnitQty().split("\\^");
-		            storageOrderEtcQty     = rtnStoreOrderDtlVO.getArrOrderEtcQty().split("\\^");
-		            storageOrderTotQty     = rtnStoreOrderDtlVO.getArrOrderTotQty().split("\\^");
-		            storageOrderAmt        = rtnStoreOrderDtlVO.getArrOrderAmt().split("\\^");
-		            storageOrderVat        = rtnStoreOrderDtlVO.getArrOrderVat().split("\\^");
-		            storageOrderTot        = rtnStoreOrderDtlVO.getArrOrderTot().split("\\^");
+	                prodVO = new RtnStoreOrderProdVO();
 
-		            for(int k=0; k<storageCd.length; k++) {
-			            LOGGER.debug("### storageInUnitQty: " + storageOrderUnitQty[k]	);
-			            LOGGER.debug("### storageInEtcQty : " + storageOrderEtcQty	[k]	);
-			            LOGGER.debug("### storageInTotQty : " + storageOrderTotQty	[k]	);
-			            LOGGER.debug("### storageInAmt    : " + storageOrderAmt	[k]	);
-			            LOGGER.debug("### storageInVat    : " + storageOrderVat	[k]	);
-			            LOGGER.debug("### storageInTot    : " + storageOrderTot	[k]	);
-	
-			            rtnStoreOrderDtlVO.setStorageCd				(storageCd[k]					);	//창고코드
-			            rtnStoreOrderDtlVO.setSlipFg		        (1								);	//전표구분 1:주문 -1:반품
-	
-			            rtnStoreOrderDtlVO.setOrderUnitQty		        (Integer.parseInt	(storageOrderUnitQty	[k]));	//입고수량 주문단위
-			            rtnStoreOrderDtlVO.setOrderEtcQty		        (Integer.parseInt	(storageOrderEtcQty		[k]));	//입고수량 나머지
-			            rtnStoreOrderDtlVO.setOrderTotQty		        (Integer.parseInt	(storageOrderTotQty		[k]));	//입고수량합계 낱개
-			            rtnStoreOrderDtlVO.setOrderAmt			        (Long.parseLong		(storageOrderAmt		[k]));	//입고금액
-			            rtnStoreOrderDtlVO.setOrderVat			        (Long.parseLong		(storageOrderVat		[k]));	//입고금액VAT
-			            rtnStoreOrderDtlVO.setOrderTot			        (Long.parseLong		(storageOrderTot		[k]));	//입고금액합계
-	
-			            rtnStoreOrderDtlVO.setRegId			        (sessionInfoVO.getUserId());
-			            rtnStoreOrderDtlVO.setRegDt			        (currentDt	);
-		            	rtnStoreOrderDtlVO.setModId			        (sessionInfoVO.getUserId());
-		            	rtnStoreOrderDtlVO.setModDt			        (currentDt	);
-	
-		            	LOGGER.debug("### getProperties: " + rtnStoreOrderDtlVO.getProperties() );
-	
-		            	result = rtnStoreOrderMapper.updateRtnStoreOrderProd(rtnStoreOrderDtlVO);
-		                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-		            }
-		            //TB_PO_HQ_STORE_ORDER_PROD - END
+	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
+	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
+	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
+	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
+	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
+	                prodVO.setPoUnitQty				(rtnStoreOrderDtlVO	.getPoUnitQty		()		);
+	                prodVO.setOrderSplyUprc			(rtnStoreOrderDtlVO	.getOrderSplyUprc	()		);
+	                prodVO.setOrderUnitQty	        (rtnStoreOrderDtlVO .getOrderUnitQty	()		);	//입고수량 주문단위
+	                prodVO.setOrderEtcQty		    (rtnStoreOrderDtlVO .getOrderEtcQty		()		);		//입고수량 나머지
+	                prodVO.setOrderTotQty		    (rtnStoreOrderDtlVO .getOrderTotQty		()		);		//입고수량합계 낱개
+	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
+	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
+	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+
+	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setRegDt			        (currentDt	);
+	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setModDt			        (currentDt	);
+	                
+	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
+	            	result = rtnStoreOrderMapper.updateRtnStoreOrderProd(prodVO);
+	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	                
+	                
             	}
             }
             // 삭제
@@ -278,15 +248,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         int result = 0;
         String currentDt = currentDateTimeString();
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
-        
-        String[] storageCd;
-        String[] storageNm;
-        String[] storageOrderUnitQty;
-        String[] storageOrderEtcQty;
-        String[] storageOrderTotQty;
-        String[] storageOrderAmt;
-        String[] storageOrderVat;
-        String[] storageOrderTot;
+        RtnStoreOrderProdVO	prodVO;
         
         int i = 0;
         
@@ -349,46 +311,32 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	        	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.updateRtnStoreOrderDtl(rtnStoreOrderDtlVO);
 	                
-	                //TB_PO_HQ_STORE_ORDER_PROD - START
-	            	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-		            storageCd           	= rtnStoreOrderDtlVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-		            storageNm           	= rtnStoreOrderDtlVO.getArrStorageNm().split("\\^");
-		            storageOrderUnitQty    = rtnStoreOrderDtlVO.getArrOrderUnitQty().split("\\^");
-		            storageOrderEtcQty     = rtnStoreOrderDtlVO.getArrOrderEtcQty().split("\\^");
-		            storageOrderTotQty     = rtnStoreOrderDtlVO.getArrOrderTotQty().split("\\^");
-		            storageOrderAmt        = rtnStoreOrderDtlVO.getArrOrderAmt().split("\\^");
-		            storageOrderVat        = rtnStoreOrderDtlVO.getArrOrderVat().split("\\^");
-		            storageOrderTot        = rtnStoreOrderDtlVO.getArrOrderTot().split("\\^");
-	
-		            for(int k=0; k<storageCd.length; k++) {
-			            LOGGER.debug("### storageInUnitQty: " + storageOrderUnitQty[k]	);
-			            LOGGER.debug("### storageInEtcQty : " + storageOrderEtcQty	[k]	);
-			            LOGGER.debug("### storageInTotQty : " + storageOrderTotQty	[k]	);
-			            LOGGER.debug("### storageInAmt    : " + storageOrderAmt	[k]	);
-			            LOGGER.debug("### storageInVat    : " + storageOrderVat	[k]	);
-			            LOGGER.debug("### storageInTot    : " + storageOrderTot	[k]	);
-	
-			            rtnStoreOrderDtlVO.setStorageCd				(storageCd[k]					);	//창고코드
-			            rtnStoreOrderDtlVO.setSlipFg		        (1								);	//전표구분 1:주문 -1:반품
-	
-			            rtnStoreOrderDtlVO.setOrderUnitQty		        (Integer.parseInt	(storageOrderUnitQty	[k]));	//입고수량 주문단위
-			            rtnStoreOrderDtlVO.setOrderEtcQty		        (Integer.parseInt	(storageOrderEtcQty		[k]));	//입고수량 나머지
-			            rtnStoreOrderDtlVO.setOrderTotQty		        (Integer.parseInt	(storageOrderTotQty		[k]));	//입고수량합계 낱개
-			            rtnStoreOrderDtlVO.setOrderAmt			        (Long.parseLong		(storageOrderAmt		[k]));	//입고금액
-			            rtnStoreOrderDtlVO.setOrderVat			        (Long.parseLong		(storageOrderVat		[k]));	//입고금액VAT
-			            rtnStoreOrderDtlVO.setOrderTot			        (Long.parseLong		(storageOrderTot		[k]));	//입고금액합계
-	
-			            rtnStoreOrderDtlVO.setRegId			        (sessionInfoVO.getUserId());
-			            rtnStoreOrderDtlVO.setRegDt			        (currentDt	);
-		            	rtnStoreOrderDtlVO.setModId			        (sessionInfoVO.getUserId());
-		            	rtnStoreOrderDtlVO.setModDt			        (currentDt	);
-	
-		            	LOGGER.debug("### getProperties: " + rtnStoreOrderDtlVO.getProperties() );
-	
-		            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(rtnStoreOrderDtlVO);
-		                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-		            }
-		            //TB_PO_HQ_STORE_ORDER_PROD - END
+	                prodVO = new RtnStoreOrderProdVO();
+
+	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
+	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
+	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
+	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
+	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
+	                prodVO.setPoUnitQty				(rtnStoreOrderDtlVO	.getPoUnitQty		()		);
+	                prodVO.setOrderSplyUprc			(rtnStoreOrderDtlVO	.getOrderSplyUprc	()		);
+	                prodVO.setOrderUnitQty	        (rtnStoreOrderDtlVO .getOrderUnitQty	()		);	//입고수량 주문단위
+	                prodVO.setOrderEtcQty		    (rtnStoreOrderDtlVO .getOrderEtcQty		()		);		//입고수량 나머지
+	                prodVO.setOrderTotQty		    (rtnStoreOrderDtlVO .getOrderTotQty		()		);		//입고수량합계 낱개
+	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
+	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
+	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+
+	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setRegDt			        (currentDt	);
+	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
+	            	prodVO.setModDt			        (currentDt	);
+	                
+	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
+	            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(prodVO);
+	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	                	                
 	        	}
             }else if(insFg.equals("D")) {
                 result = rtnStoreOrderMapper.deleteRtnStoreOrderDtl(rtnStoreOrderDtlVO);
