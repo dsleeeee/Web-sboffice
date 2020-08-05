@@ -49,7 +49,7 @@
         </tr>
         <tr>
           <%-- 수신구분 --%>
-          <th><s:message code="verRecv.verRecvYn" /></th>
+          <th><s:message code="verRecv.verRecvYnM" /></th>
           <td>
             <div class="sb-select w100">
               <wj-combo-box
@@ -90,7 +90,7 @@
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNo"/>" binding="verSerNo" align="center" width="140" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.verSerNm"/>" binding="fileDesc" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="verRecv.regCnt"/>" binding="regCnt" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="verRecv.recvCnt"/>" binding="recvCnt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="verRecv.recvCntM"/>" binding="recvCnt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
         </div>
@@ -171,4 +171,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200423.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verRecv/verRecv.js?ver=20200805.08" charset="utf-8"></script>
