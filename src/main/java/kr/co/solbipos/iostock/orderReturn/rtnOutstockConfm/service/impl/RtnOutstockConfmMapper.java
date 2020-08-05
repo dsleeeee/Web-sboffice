@@ -1,6 +1,7 @@
 package kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.RtnOutstockConfmVO;
 import org.apache.ibatis.annotations.Mapper;

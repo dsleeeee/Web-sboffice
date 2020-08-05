@@ -181,6 +181,12 @@ public class RtnOutstockConfmVO extends PageVO {
     /** 창고별 배열값-입고금액 합계 */
     private String  arrOrderTot;
     
+    /** 출고창고 */
+    private String outStorageCd;
+    /** 확정여부 */
+    private String confmYn;
+    
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1263,6 +1269,22 @@ public class RtnOutstockConfmVO extends PageVO {
 
 	public void setPoUnitFg(String poUnitFg) {
 		this.poUnitFg = poUnitFg;
+	}
+
+	public String getOutStorageCd() {
+		return outStorageCd;
+	}
+
+	public void setOutStorageCd(String outStorageCd) {
+		this.outStorageCd = outStorageCd;
+	}
+
+	public String getConfmYn() {
+		return confmYn;
+	}
+
+	public void setConfmYn(String confmYn) {
+		this.confmYn = confmYn;
 	}
     
     
