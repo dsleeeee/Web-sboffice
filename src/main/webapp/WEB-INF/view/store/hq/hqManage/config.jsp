@@ -93,7 +93,7 @@ function getConfigList(){
 
             if(envCnt == 0 || envCnt % 2 == 0) envHtml += "<tr>";
 
-            envHtml += "      <th>" + list[j].envstCd + "</th>";
+            envHtml += "      <th>" + list[j].envstCd + (list[j].existFg === "N" ? "<em><span style=\"color:red;\">*</span></em> " : "") + '</th>';
             envHtml += "      <td>" + list[j].envstNm + "</td>";
             envHtml += "      <td>";
 
@@ -171,12 +171,21 @@ function getConfigList(){
         }
 
       } else {
-
-        if(list[i].selEnvstVal === ""  || list[i].selEnvstVal  === null){
-          $("#env"+list[i].envstCd).val("*");
-
-        }else {
+        if(list[i].selEnvstVal === "" || list[i].selEnvstVal  === null){
+          if(list[i].remark !== "" && list[i].remark  !== null){ // 직접입력값 중, 기본값(Remark)이 있으면 셋팅, 없으면 * 로 표시
+            $("#env" + list[i].envstCd).val(list[i].remark);
+          }else{
+            $("#env" + list[i].envstCd).val("*");
+          }
+        }else{
           $("#env"+list[i].envstCd).val(list[i].selEnvstVal);
+        }
+
+        // '기본값으로 셋팅' 클릭시 자동으로 직접입력 기본값 셋팅
+        if(list[i].remark !== "" && list[i].remark  !== null){
+          $("#env"+list[i].envstCd).attr("defaultVal", list[i].remark);
+        }else{
+          $("#env"+list[i].envstCd).attr("defaultVal", "*");
         }
       }
     }

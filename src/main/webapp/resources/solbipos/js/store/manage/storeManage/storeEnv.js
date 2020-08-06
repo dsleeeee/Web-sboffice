@@ -243,9 +243,20 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       } else {
         if(list[s].selEnvstVal === "" || list[s].selEnvstVal == null ) {
-          $("#env"+list[s].envstCd).val("*");
-        } else{
+          if(list[s].remark !== "" && list[s].remark != null){ // 직접입력값 중, 기본값(Remark)이 있으면 셋팅, 없으면 * 로 표시
+            $("#env" + list[s].envstCd).val(list[s].remark);
+          }else{
+            $("#env" + list[s].envstCd).val("*");
+          }
+        }else{
           $("#env"+list[s].envstCd).val(list[s].selEnvstVal);
+        }
+
+        // '기본값으로 셋팅' 클릭시 자동으로 직접입력 기본값 셋팅
+        if(list[s].remark !== "" && list[s].remark != null){
+            $("#env"+list[s].envstCd).attr("defaultVal", list[s].remark);
+        }else{
+            $("#env"+list[s].envstCd).attr("defaultVal", "*");
         }
       }
     }
