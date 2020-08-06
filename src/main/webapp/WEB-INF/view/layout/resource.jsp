@@ -32,6 +32,7 @@
 <script type="text/javascript" src="/resource/vendor/jszip/js/jszip.min.js?ver=315 " charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.min.js?ver=520183550" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.animation.min.js?ver=520183550" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/vendor/wijmo/js/chart/wijmo.chart.interaction.js" charset="utf-8"></script>
 <%-- wijmo-angularJS plug-in --%>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/wijmo.angular.min.js?ver=520183550" charset="utf-8"></script>
 <%-- solbi plug-in --%>

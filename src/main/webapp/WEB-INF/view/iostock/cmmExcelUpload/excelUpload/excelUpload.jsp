@@ -18,6 +18,12 @@
            onchange="angular.element(this).scope().memberExcelUpload()"
            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
+    <input type="file" class="form-control" id="memberPointUpload"
+           ng-model="memberPointUpload"
+           ng-controller="memberPointCtrl"
+           onchange="angular.element(this).scope().memberPointUpload()"
+           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
+
     <input type="file" class="form-control" id="textUpFile"
            ng-model="textUpFile"
            onchange="angular.element(this).scope().textFileChanged()"
@@ -59,17 +65,23 @@
                                  data-type="String" visible="{{remarkVisibleFg}}"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                                  data-type="Boolean" is-read-only="false" visible="{{gChk}}"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrKrNm" width="100"
+            <wj-flex-grid-column header="<s:message code="member.excel.check.result"/>" binding="result" width="115"
+                                 is-read-only="true" align="center" visible="{{result}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.check.result"/>" binding="memberResult"
+                                 width="115"
+                                 is-read-only="true" align="center" visible="{{memberResult}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrNm" width="100"
                                  align="left"
-                                 data-type="String" visible="{{membrKrNm}}"></wj-flex-grid-column>
+                                 data-type="String" visible="{{membrNm}}"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.nm.en"/>" binding="membrEnNm" width="100"
                                  align="left"
                                  data-type="String" visible="{{membrEnNm}}"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd"
-                                 width="100"
-                                 align="left"
+                                 width="100" align="left"
                                  data-type="String" visible="{{membrClassCd}}"></wj-flex-grid-column>
-
+            <wj-flex-grid-column header="<s:message code="member.excel.membrNo"/>" binding="membrNo"
+                                 width="100" align="left"
+                                 data-type="String" visible="{{membrNo}}"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="member.excel.store"/>" binding="membrStore" width="100"
                                  align="left"
                                  data-type="String" visible="{{membrStore}}"></wj-flex-grid-column>
@@ -120,15 +132,19 @@
             <wj-flex-grid-column header="<s:message code="member.excel.totPoint"/>" binding="totPoint" width="100"
                                  align="left"
                                  data-type="String" visible="{{totPoint}}"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="member.excel.dlAddrOne"/>" binding="dlAddrOne" width="100"
+            <wj-flex-grid-column header="<s:message code="member.excel.dlAddrOne"/>" binding="dlvrLzoneCd" width="100"
                                  align="left"
-                                 data-type="String" visible="{{dlAddrOne}}"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="dlAddrTwo" width="100"
+                                 data-type="String" visible="{{dlvrLzoneCd}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="dlvrMzoneCd" width="100"
                                  align="left"
-                                 data-type="String" visible="{{dlAddrTwo}}"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="member.excel.dlAddrDtl"/>" binding="dlAddrDtl" width="100"
+                                 data-type="String" visible="{{dlvrMzoneCd}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPoint"/>" binding="totAdjPoint" width="100"
                                  align="left"
-                                 data-type="String" visible="{{dlAddrDtl}}"></wj-flex-grid-column>
+                                 data-type="String" visible="{{totAdjPoint}}"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="memberPoint.totAdjPointAfter"/>" binding="totAdjPointAfter"
+                                 width="100"
+                                 align="left"
+                                 data-type="String" visible="{{totAdjPointAfter}}"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
@@ -140,11 +156,15 @@
      * get application
      */
     var app = agrid.getApp();
+    app.config(['$qProvider', function ($qProvider) {
+        $qProvider.errorOnUnhandledRejections(false);
+    }]);
 
     /** 엑셀업로드 그리드 controller */
     app.controller('excelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
         // 상위 객체 상속 : T/F 는 picker
         angular.extend(this, new RootController('excelUploadCtrl', $scope, $http, true));
+
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
@@ -304,8 +324,9 @@
                 $scope.uprcVisibleFg = false; // 단가
                 $scope.remarkVisibleFg = false; // 비고
                 $scope.gChk = false;
+                $scope.result = false;
                 $scope.membrClassCd = true; // 회원등급분류
-                $scope.membrKrNm = true; // 회원명(한글)
+                $scope.membrNm = true; // 회원명(한글)
                 $scope.membrEnNm = true; // 회원명(영문)
                 $scope.membrStore = true;
                 $scope.gendrFg = true;
@@ -324,25 +345,40 @@
                 $scope.smsRecvYn = true;
                 $scope.avablPoint = true;
                 $scope.totPoint = true;
-                $scope.dlAddrOne = true;
-                $scope.dlAddrTwo = true;
-                $scope.dlAddrDtl = true;
+                $scope.dlvrLzoneCd = true;
+                $scope.dlvrMzoneCd = true;
 
                 // params.membrClassCd = '회원등급분류';
                 // params.unitQty = 0;
                 // params.etcQty = 0;
                 // params.uprc = 0;
             }
-
-
+            // 회원포인트조정
+            else if ($scope.uploadFg === 'memberPoint') {
+                $scope.prodBarcdCdVisibleFg = false; // 상품코드/바코드
+                $scope.prodCdVisibleFg = false; // 상품코드
+                $scope.barcdCdVisibleFg = false; // 바코드
+                $scope.unitQtyVisibleFg = false; // 단위수량
+                $scope.etcQtyVisibleFg = false; // 낱개수량
+                $scope.qtyVisibleFg = false; // 수량
+                $scope.uprcVisibleFg = false; // 단가
+                $scope.remarkVisibleFg = false; // 비고
+                $scope.gChk = false;
+                $scope.memberResult = false;
+                $scope.membrClassCd = false;
+                $scope.membrNo = true;
+                $scope.membrNm = true;
+                $scope.membrCardNo = true;
+                $scope.avablPoint = false;
+                $scope.totAdjPoint = true;
+                $scope.totAdjPointAfter = false;
+            }
             var newRow = flex.collectionView.addNew();
             for (var prop in params) {
                 newRow[prop] = params[prop];
             }
             flex.collectionView.commitNew();
-
         };
-
 
         // 엑셀파일이 변경된 경우
         $scope.excelFileChanged = function () {
@@ -513,6 +549,7 @@
         };
 
 
+        // 회원엑셀업로드
         $scope.memberExcelUpload = function () {
             // 선택한 파일이 있으면
             if ($('#memberExcelUpload')[0].files[0]) {
@@ -543,10 +580,10 @@
 
         // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
         $scope.memberExcelUploadToJsonConvert = function () {
+            var scope = agrid.getScope('memberExcelUploadCtrl');
             var jsonData = [];
             var item = {};
             var rowLength = $scope.flex.rows.length;
-            var scope = agrid.getScope('memberExcelUploadCtrl');
             if (rowLength === 0) {
                 $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
                 return false;
@@ -565,19 +602,537 @@
                 }
                 // item.uploadFg = $scope.uploadFg;
                 jsonData.push(item);
+
             }
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-            $timeout(function () {
-
-                $scope.$broadcast("valChk", jsonData);
-                scope.data = new wijmo.collections.CollectionView(jsonData);
-
+            $timeout(async function () {
+                if ($scope.valChk(jsonData)) {
+                    scope.data = new wijmo.collections.CollectionView(jsonData);
+                } else {
+                    scope.data = new wijmo.collections.CollectionView(jsonData);
+                }
             }, 10);
         };
 
-        $scope.valChk = function () {
+        //회원 엑셀 값체크
+        $scope.valChk = function (jsonData) {
+            $scope.totalRows = jsonData.length;
+            var scope = agrid.getScope('memberExcelUploadCtrl');
+            var params = [];
+            var msg = '';
+            for (var i = 0; i < $scope.totalRows; i++) {
+                var item = jsonData[i];
 
-        }
+                // 필수값 및 길이 체크
+                // 회원명(한글)
+                if (nvl(item.membrNm, '') === '') {
+                    msg = messages["member.excel.nm.kr"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원명 최대길이 체크
+                if (nvl(item.membrNm, '') !== '' && nvl(item.membrNm + '', '').getByteLengthForOracle() > 100) {
+                    msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원명 한글
+                var numChkexp = /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
+                if (numChkexp.test(item.membrNm)) {
+                    msg = messages["member.excel.nm.kr"] + messages["cmm.require.kr"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원명(영문)
+                if (nvl(item.membrEnNm, '') === '') {
+                    msg = messages["member.excel.nm.en"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원명 최대길이 체크
+                if (nvl(item.membrEnNm, '') !== '' && nvl(item.membrEnNm + '', '').getByteLengthForOracle() > 100) {
+                    msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원명 영문
+                var numChkexp = /[^a-z]/gi;
+                if (numChkexp.test(item.membrEnNm)) {
+                    msg = messages["member.excel.nm.en"] + messages["cmm.require.en"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원등급분류 콤보박스
+                if (!$scope.comboboxChk(item.membrClassCd, "class")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+                // 회원등급분류
+                if (nvl(item.membrClassCd, '') === '') {
+                    msg = messages["member.excel.membrClassCd"] + messages["excelUpload.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
+                    item.result = msg;
+                    return false;
+                }
+
+
+                // 등록매장 콤보박스
+                if (!$scope.comboboxChk(item.membrStore, "store")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+                // 등록매장
+                if (nvl(item.membrStore, '') === '') {
+                    msg = messages["member.excel.store"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 성별구분 콤보박스
+                if (!$scope.comboboxChk(item.gendrFg, "gender")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+                // 성별구분
+                if (nvl(item.gendrFg, '') === '') {
+                    msg = messages["member.excel.gendrFg"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원카드번호
+                if (nvl(item.membrCardNo, '') === '') {
+                    msg = messages["member.excel.membrCardNo"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 회원카드번호 최대길이 체크
+                if (nvl(item.membrCardNo, '') !== '' && nvl(item.membrCardNo + '', '').getByteLengthForOracle() > 40) {
+                    msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 생년월일
+                if (nvl(item.birthday, '') === '') {
+                    msg = messages["member.excel.birthday"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 생년월일 최대길이 체크
+                if (nvl(item.birthday, '') !== '' && nvl(item.birthday + '', '').getByteLengthForOracle() > 8) {
+                    msg = messages["member.excel.birthday"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+                // 결혼여부
+                if (nvl(item.weddingYn, '') === '') {
+                    msg = messages["member.excel.weddingYn"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+                // 결혼여부 콤보박스
+                if (!$scope.comboboxChk(item.weddingYn, "wedding")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+
+                // 전화번호 최대길이 체크
+                if (nvl(item.telNo, '') !== '' && nvl(item.telNo + '', '').getByteLengthForOracle() > 200) {
+                    msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 단축번호 최대길이 체크
+                if (nvl(item.shortNo, '') !== '' && nvl(item.shortNo + '', '').getByteLengthForOracle() > 4) {
+                    msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // E-MAIL 최대길이 체크
+                if (nvl(item.email, '') !== '' && nvl(item.email + '', '').getByteLengthForOracle() > 8) {
+                    msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 우편번호 최대길이 체크
+                if (nvl(item.postNo, '') !== '' && nvl(item.postNo + '', '').getByteLengthForOracle() > 5) {
+                    msg = messages["member.excel.postNo"] + messages["excelUpload.overLength"] + " 5 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 주소 최대길이 체크
+                if (nvl(item.addr, '') !== '' && nvl(item.addr + '', '').getByteLengthForOracle() > 200) {
+                    msg = messages["member.excel.addr"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 상세주소 최대길이 체크
+                if (nvl(item.addrDtl, '') !== '' && nvl(item.addrDtl + '', '').getByteLengthForOracle() > 200) {
+                    msg = messages["member.excel.addrDtl"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+                // 이메일수신
+                if (nvl(item.emailRecvYn, '') === '') {
+                    msg = messages["member.excel.emailRecvYn"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+                // 이메일수신 콤보박스
+                if (!$scope.comboboxChk(item.emailRecvYn, "email")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+                // SMS수신
+                if (nvl(item.smsRecvYn, '') === '') {
+                    msg = messages["member.excel.smsRecvYn"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+                // SMS수신 콤보박스
+                if (!$scope.comboboxChk(item.smsRecvYn, "sms")) {
+                    item.result = $scope.comboErrMsg;
+                    return false;
+                }
+
+                // 가용포인트
+                if (nvl(item.avablPoint, '') === '') {
+                    msg = messages["member.excel.avablPoint"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 가용포인트 숫자가 아닌 값
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(item.avablPoint, 0))) {
+                    msg = messages["excelUpload.avablPoint"] + messages["excelUpload.not.numberData"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 누적포인트
+                if (nvl(item.totPoint, '') === '') {
+                    msg = messages["member.excel.totPoint"] + messages["excelUpload.require.data"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 누적포인트 숫자가 아닌 값
+                var numChkexp = /[^0-9]/g;
+                if (numChkexp.test(nvl(item.totPoint, 0))) {
+                    msg = messages["excelUpload.totPoint"] + messages["excelUpload.not.numberData"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 배달구역(대) 최대길이 체크
+                if (nvl(item.dlAddrOne, '') !== '' && nvl(item.dlAddrOne + '', '').getByteLengthForOracle() > 3) {
+                    msg = messages["member.excel.dlAddrOne"] + messages["excelUpload.overLength"] + " 3 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 배달구역(중) 최대길이 체크
+                if (nvl(item.dlAddrTwo, '') !== '' && nvl(item.dlAddrTwo + '', '').getByteLengthForOracle() > 5) {
+                    msg = messages["member.excel.dlAddrTwo"] + messages["excelUpload.overLength"] + " 5 " + messages["excelUpload.bateLengthInfo"];
+                    item.result = msg;
+                    return false;
+                }
+
+                // 배달구역(상세주소)
+                // if (nvl(item.dlAddrDtl, '') === '') {
+                //     msg = messages["member.excel.dlAddrDtl"] + messages["excelUpload.require.data"];
+                //     item.result = msg;
+                //     return false;
+                // }
+                // 배달구역(상세주소) 최대길이 체크
+                // if (nvl(item.dlAddrDtl, '') !== '' && nvl(item.dlAddrDtl + '', '').getByteLengthForOracle() > 200) {
+                //     msg = messages["member.excel.dlAddrDtl"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
+                //     item.result = msg;
+                //     return false;
+                // }
+                item.result = "검증성공";
+            }
+            scope.data = new wijmo.collections.CollectionView(jsonData);
+            return true;
+        };
+
+        // 콤보박스 검증
+        $scope.comboboxChk = function (comboData, fg) {
+            $scope.comboErrMsg = '';
+            var filter = [];
+            if (fg === "class") {
+                filter = memberClassList.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.membrClassCd"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            } else if (fg === "store") {
+                filter = regstrStoreList.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.store"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            } else if (fg === "gender") {
+                filter = genderDataMap.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.gendrFg"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            } else if (fg === "wedding") {
+                filter = weddingDataMap.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.weddingYn"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            } else if (fg === "email") {
+                filter = recvDataMap.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.emailRecvYn"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            } else if (fg === "sms") {
+                filter = recvDataMap.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["member.excel.smsRecvYn"] + "의 " + messages["cmm.input.fail"];
+                    return false;
+                }
+            }
+            $scope.comboErrMsg = '성공';
+            return true;
+        };
+
+        // 회원포인트업로드
+        $scope.memberPointUpload = function () {
+            // 선택한 파일이 있으면
+            if ($('#memberPointUpload')[0].files[0]) {
+                var file = $('#memberPointUpload')[0].files[0];
+                var fileName = file.name;
+                var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+
+                // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
+                if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
+                    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+                    $timeout(function () {
+                        var flex = $scope.flex;
+                        wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#memberPointUpload')[0].files[0], {includeColumnHeaders: true}
+                            , function (workbook) {
+                                $timeout(function () {
+                                    $scope.memberPointUploadToJsonConvert();
+                                }, 10);
+                            }
+                        );
+                    }, 10);
+                } else {
+                    $("#memberPointUpload").val('');
+                    $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+                    return false;
+                }
+            }
+        };
+
+        // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+        $scope.memberPointUploadToJsonConvert = function () {
+            var scope = agrid.getScope('memberPointCtrl');
+            var jsonData = [];
+
+            var item = {};
+            var rowLength = $scope.flex.rows.length;
+            if (rowLength === 0) {
+                $scope._popMsg(messages['excelUpload.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+                return false;
+            }
+
+            // 업로드 된 데이터 JSON 형태로 생성
+            for (var r = 0; r < rowLength; r++) {
+                item = {};
+                for (var c = 0; c < $scope.flex.columns.length; c++) {
+                    if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
+                        var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
+                        var cellValue = $scope.flex.getCellData(r, c, false) + '';
+                        item[colBinding] = cellValue;
+                        item["gChk"] = false;
+                    }
+                }
+                // item.uploadFg = $scope.uploadFg;
+                jsonData.push(item);
+
+            }
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            $scope.ajaxChk(jsonData)
+            // $timeout(function () {
+            // if ($scope.valPointChk(jsonData)) {
+            // 로딩바 show
+            // 가상로그인 대응한 session id 설정
+
+            // if ($scope.valPointChk(resultList)) {
+            //     scope.data = new wijmo.collections.CollectionView(resultList);
+            // } else {
+            //     scope.data = new wijmo.collections.CollectionView(resultList);
+            // }
+            // $.postJSONArray("/membr/info/point/point/getMemberPointList.sb", params, function (result) {
+            // }, function (err) {
+            //     s_alert.pop(err.message);
+            // });
+            // if ($scope.valPointChk(jsonData)) {
+            // }
+            // else {
+            //     scope.data = new wijmo.collections.CollectionView(jsonData);
+            // }
+            // }, 10);
+        };
+        $scope.ajaxChk = function (jsonData) {
+            var scope = agrid.getScope('memberPointCtrl');
+            var resultList = [];
+            if (document.getElementsByName('sessionId')[0]) {
+                jsonData['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+            scope.$broadcast('loadingPopupActive');
+            $.ajax({
+                type: "POST",
+                url: "/membr/info/point/point/getMemberPointListChk.sb",
+                data: JSON.stringify(jsonData),
+                cache: false,
+                async: false,
+                dataType: "json",
+                contentType: 'application/json',
+                processData: false,
+                success: function (result) {
+                    if (result.status === "OK") {
+                        resultList = result.data;
+                        if ($scope.valPointChk(resultList)) {
+                            console.log(resultList);
+                            scope.data = new wijmo.collections.CollectionView(resultList);
+                        } else {
+                            scope.data = new wijmo.collections.CollectionView(resultList);
+                        }
+                    } else if (result.status === "SERVER_ERROR") {
+                        s_alert.pop(result.message);
+                    } else {
+                        var msg = result.status + " : " + result.message;
+                        //alert(msg);
+                    }
+                }
+            }).fail(function () {
+            });
+            scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        };
+        //회원 포인트조정 값체크
+        $scope.valPointChk = function (resultList) {
+            var params = new Array();
+            var scope = agrid.getScope('memberPointCtrl');
+            var msg = '';
+            if (document.getElementsByName('sessionId')[0]) {
+                resultList['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+            $scope.totalRows = resultList.length;
+            for (var i = 0; i < $scope.totalRows; i++) {
+                var item = resultList[i];
+                // 필수값 및 길이 체크
+                // 회원명(한글
+                item.memberResult = "";
+                // 회원등급분류 콤보박스
+                if (!$scope.comboboxPointChk(item.membrClassCd, "class")) {
+                    item.memberResult = $scope.comboErrMsg;
+                    // return false;
+                }
+                // 회원등급분류
+                if (nvl(item.membrClassCd, '') === '') {
+                    msg = messages["cmm.excel.result"];
+                    item.memberResult = msg;
+                    // return false;
+                }
+                if (item.memberResult != messages["cmm.excel.result"]) {
+                    item.memberResult = "검증성공";
+                    item.totAdjPointAfter = Number(item.avablPoint) + Number(item.totAdjPoint);
+                }
+            }
+            return true;
+        };
+
+        // 콤보박스 검증
+        $scope.comboboxPointChk = function (comboData, fg) {
+            $scope.comboErrMsg = '';
+            var filter = [];
+            if (fg === "class") {
+                filter = memberClassList.filter(e => {
+                    if (e.name == comboData) {
+                        return e.name == comboData;
+                    } else {
+                        if (e.value == comboData) {
+                            return e.value == comboData;
+                        }
+                    }
+                });
+                if (filter.length == 0) {
+                    $scope.comboErrMsg = messages["cmm.excel.result"];
+                    return false;
+                }
+            }
+            $scope.comboErrMsg = '성공';
+            return true;
+        };
 
         // 엑셀 업로드
         $scope.excelUpload = function () {
@@ -633,15 +1188,12 @@
                     if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
                         var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
                         var cellValue = $scope.flex.getCellData(r, c, false) + '';
-
                         item[colBinding] = cellValue;
                     }
                 }
-
                 // item.uploadFg = $scope.uploadFg;
                 jsonData.push(item);
             }
-
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             $timeout(function () {
                 $scope.save(jsonData);
@@ -880,7 +1432,8 @@
             });
         };
 
-    }]);
+    }])
+    ;
 </script>
 
 <%-- 수불 엑셀업로드 에러내역 공통 팝업 --%>

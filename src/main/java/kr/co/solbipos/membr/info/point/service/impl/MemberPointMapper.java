@@ -28,7 +28,13 @@ public interface MemberPointMapper {
   /**
    * 회원 포인트 리그트
    */
-  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO);
+  
 
   int adjustAll(DefaultMap<Object> memberPointVO);
+
+  List<DefaultMap<Object>> getMemberPointList(MemberPointVO memberPointVO);
+
+  DefaultMap<Object> getMemberPointListChk(MemberPointVO memberPointVO);
+
+    int updateMemberPoint(MemberPointVO memberPointVO);
 }

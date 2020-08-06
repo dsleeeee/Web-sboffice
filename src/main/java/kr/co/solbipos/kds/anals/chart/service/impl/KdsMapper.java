@@ -27,4 +27,6 @@ public interface KdsMapper {
     List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO);
 
     List<DefaultMap<String>> getKdsDayProdTimeChart(KdsVO kdsVO);
+
+    List<DefaultMap<String>> getKdsServiceTime(KdsVO kdsVO);
 }

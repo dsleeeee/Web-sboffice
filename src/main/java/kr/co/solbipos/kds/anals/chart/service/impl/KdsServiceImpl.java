@@ -123,4 +123,12 @@ public class KdsServiceImpl implements KdsService {
     public List<DefaultMap<String>> getKdsDayProdTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
         return mapper.getKdsDayProdTimeChart(kdsVO);
     }
+
+    /**
+     * 일별-SERVICE TIME 구간별 영수증 수
+     */
+    @Override
+    public List<DefaultMap<String>> getKdsServiceTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        return mapper.getKdsServiceTime(kdsVO);
+    }
 }

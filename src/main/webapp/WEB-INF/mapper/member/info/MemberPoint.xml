@@ -3,13 +3,13 @@
 
 <mapper namespace="kr.co.solbipos.membr.info.point.service.impl.MemberPointMapper">
 
-  <!-- 회원 포인트 리스트 조회-->
-  <!--
-      TABLE    : TB_MB_MEMBER_POINT
-      COMMENTS : 회원 포인트 조회
-  -->
-  <select id="getMemberPointList" parameterType="memberPointVO" resultType="DefaultMap">
-      /* MemberClassMapper.getMemberClassList */
+    <!-- 회원 포인트 리스트 조회-->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT
+        COMMENTS : 회원 포인트 조회
+    -->
+    <select id="getMemberPointList" parameterType="memberPointVO" resultType="DefaultMap">
+      /* MemberPointMapper.getMemberClassList */
       SELECT
           MEMBR_ORGN_CD
           ,MEMBR_NO
@@ -18,38 +18,38 @@
           TB_MB_MEMBER_POINT
   </select>
 
-<!--  <insert id="adjustAllBackUp" parameterType="DefaultMap">-->
-<!--    INSERT INTO-->
-<!--      TB_MB_MEMBER_POINT_HIST-->
-<!--        (MEMBR_ORGN_CD,-->
-<!--        MEMBR_NO,-->
-<!--        CHG_DATE,-->
-<!--        CHG_SEQ,-->
-<!--        POINT_CHG_FG,-->
-<!--        CHG_POINT,-->
-<!--        REMARK,-->
-<!--        ORGN_APPR_NO,-->
-<!--        REG_DT,-->
-<!--        REG_ID,-->
-<!--        MOD_DT,-->
-<!--        MOD_ID)-->
-<!--    VALUES (-->
-<!--        #{membrOrgnCd},-->
-<!--        #{membrNo},-->
-<!--        #{chgDate},-->
-<!--        #{chgSeq},-->
-<!--        3,-->
-<!--        #{totAjdPoint},-->
-<!--        #{adjustPartRemark},-->
-<!--        #{orgnApprNo},-->
-<!--        #{regDt},-->
-<!--        #{regId},-->
-<!--        #{modDt},-->
-<!--        #{modId}-->
-<!--    )-->
-<!--  </insert>-->
+    <!--  <insert id="adjustAllBackUp" parameterType="DefaultMap">-->
+    <!--    INSERT INTO-->
+    <!--      TB_MB_MEMBER_POINT_HIST-->
+    <!--        (MEMBR_ORGN_CD,-->
+    <!--        MEMBR_NO,-->
+    <!--        CHG_DATE,-->
+    <!--        CHG_SEQ,-->
+    <!--        POINT_CHG_FG,-->
+    <!--        CHG_POINT,-->
+    <!--        REMARK,-->
+    <!--        ORGN_APPR_NO,-->
+    <!--        REG_DT,-->
+    <!--        REG_ID,-->
+    <!--        MOD_DT,-->
+    <!--        MOD_ID)-->
+    <!--    VALUES (-->
+    <!--        #{membrOrgnCd},-->
+    <!--        #{membrNo},-->
+    <!--        #{chgDate},-->
+    <!--        #{chgSeq},-->
+    <!--        3,-->
+    <!--        #{totAjdPoint},-->
+    <!--        #{adjustPartRemark},-->
+    <!--        #{orgnApprNo},-->
+    <!--        #{regDt},-->
+    <!--        #{regId},-->
+    <!--        #{modDt},-->
+    <!--        #{modId}-->
+    <!--    )-->
+    <!--  </insert>-->
 
-  <insert id="adjustAll" parameterType="DefaultMap">
+    <insert id="adjustAll" parameterType="DefaultMap">
     INSERT INTO
 	    TB_MB_MEMBER_POINT_HIST ( MEMBR_ORGN_CD , MEMBR_NO , CHG_DATE , CHG_SEQ , POINT_CHG_FG , CHG_POINT , REMARK , REG_DT , REG_ID, MOD_DT , MOD_ID )
     SELECT
@@ -69,6 +69,50 @@
     WHERE
         MEMBR_ORGN_CD = 'A0001'
 --         AND MEMBR_NO = '0000000002';
-  </insert>
+    </insert>
+
+    <select id="getMemberPointListChk" parameterType="memberPointVO" resultType="DefaultMap">
+      /* MemberPointMapper.getMemberPointListChk */
+        SELECT
+	       tmm.MEMBR_CLASS_CD ,
+	       SBPENC.D (tmm.MEMBR_NM) AS MEMBR_NM,
+	       tmm.MEMBR_CARD_NO,
+	       tmmp.MEMBR_ORGN_CD ,
+	       tmmp.MEMBR_NO ,
+	       tmmp.AVABL_POINT
+        FROM
+	       TB_MB_MEMBER_POINT tmmp,
+	       TB_MB_MEMBER tmm
+        WHERE
+	       tmmp.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
+	    AND tmmp.MEMBR_NO = tmm.MEMBR_NO
+	    AND tmmp.MEMBR_ORGN_CD = 'A0001'
+	    AND tmmp.MEMBR_NO = #{membrNo}
+  </select>
+<!-- AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}-->
+
+    <!-- 회원포인트조정 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_POINT
+        COMMENTS : 회원포인트조정 수정
+    -->
+    <update id="updateMemberPoint" parameterType="memberPointVO">
+        /* MemberPointMapper.updateMemberPoint */
+        UPDATE
+        	TB_MB_MEMBER_POINT
+        SET
+        	TOT_SALE_CNT = 0,
+        	TOT_SALE_AMT = 0,
+        	TOT_DC_AMT = 0,
+        	TOT_SAVE_POINT = 0,
+        	TOT_USE_POINT = 0,
+        	AVABL_POINT = #{avablPoint},
+        	TOT_ADJ_POINT = #{totAdjPoint},
+        	MOD_DT = #{modDt},
+        	MOD_ID = #{modId}
+        WHERE
+        	MEMBR_ORGN_CD = #{membrOrgnCd}
+        	AND MEMBR_NO = #{membrNo}
+    </update>
 
 </mapper>

@@ -52,7 +52,49 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         $scope.memberClassList = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
         $scope.genderDataMap = new wijmo.grid.DataMap(genderDataMap, 'value', 'name');
         $scope.weddingDataMap = new wijmo.grid.DataMap(weddingDataMap, 'value', 'name');
+        $scope.dlvrLzoneList = new wijmo.grid.DataMap(dlvrLzoneList, 'value', 'name');
     };
+
+    $scope.initGrid1 = function (s, e) {
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
+        $scope.recvDataMap = new wijmo.grid.DataMap(recvDataMap, 'value', 'name');
+        $scope.regstrStoreList = new wijmo.grid.DataMap(regstrStoreList, 'value', 'name');
+        $scope.memberClassList = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
+        $scope.genderDataMap = new wijmo.grid.DataMap(genderDataMap, 'value', 'name');
+        $scope.weddingDataMap = new wijmo.grid.DataMap(weddingDataMap, 'value', 'name');
+        $scope.dlvrLzoneList = new wijmo.grid.DataMap(dlvrLzoneList, 'value', 'name');
+        $scope.rMembrcardList = new wijmo.grid.DataMap(rMembrcardList, 'value', 'name');
+
+
+        // row 추가
+        var flex1 = $scope.flex1;
+        if (!flex1.collectionView) {
+            flex1.itemsSource = new wijmo.collections.CollectionView();
+        }
+        var newRow = flex1.collectionView.addNew();
+        // 파라미터 설정
+        var params = {};
+        params.comboClass = '001';
+        params.comboStore = '';
+        params.comboGendr = 'N';
+        params.comboWedding = 'N';
+        params.comboCardUse = '1';
+        params.comboEmail = 'N';
+        params.comboSms = 'N';
+        params.comboLzone = '001';
+        params.comboMzone = '';
+
+        // $scope._addRow(params);
+
+        newRow.status = 'I';
+        newRow.gChk = true;
+        for (var prop in params) {
+            newRow[prop] = params[prop];
+        }
+        $scope.flex1.collectionView.trackChanges = true;
+        $scope.flex1.collectionView.commitNew();
+    };
+
 
     $scope.$on("memberExcelUploadCtrl", function (event, data) {
         $scope.searchMemberExcelList();
@@ -65,7 +107,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
         }, false);
     };
 
-    // 엑셀 다운로드
+// 엑셀 다운로드
     $scope.excelDownload = function () {
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -79,7 +121,7 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, 'excel.xlsx', function () {
+            }, '회원엑셀업로드_' + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
@@ -110,305 +152,14 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
 
     // 양식검증
     $scope.formChk = function () {
-        console.log($scope.flex1);
-    };
-    $scope.$on("valChk", function (event, jsonData, mode) {
-        $scope.totalRows = jsonData.length;
-        var params = [];
-        var msg = '';
-        for (var i = 0; i < $scope.totalRows; i++) {
-            var item = jsonData[i];
-            if(!$scope.comboboxChk(item.membrClassCd, "class")) {return false}
-
-            // 필수값 및 길이 체크
-            // 회원등급분류
-            if (nvl(item.membrClassCd, '') === '') {
-                msg = messages["member.excel.membrClassCd"] + messages["excelUpload.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명(한글)
-            if (nvl(item.membrKrNm, '') === '') {
-                msg = messages["member.excel.nm.kr"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명 최대길이 체크
-            if (nvl(item.membrKrNm, '') !== '' && nvl(item.membrKrNm + '', '').getByteLengthForOracle() > 100) {
-                msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명 한글
-            var numChkexp =  /[a-z0-9]|[ \[\]{}()<>?|`~!@#$%^&*-_+=,.;:\"'\\]/g;
-            if (numChkexp.test(nvl(item.membrKrNm, 0))) {
-                msg = messages["member.excel.nm.kr"] + messages["cmm.require.kr"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명(영문)
-            if (nvl(item.membrEnNm, '') === '') {
-                msg = messages["member.excel.nm.en"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명 최대길이 체크
-            if (nvl(item.membrEnNm, '') !== '' && nvl(item.membrEnNm + '', '').getByteLengthForOracle() > 100) {
-                msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원명 영문
-            var numChkexp =  /^[A-za-z]/g;
-            if (numChkexp.test(nvl(item.membrEnNm, 0))) {
-                msg = messages["member.excel.nm.en"] + messages["cmm.require.en"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 등록매장
-            if (nvl(item.membrStore, '') === '') {
-                msg = messages["member.excel.store"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 등록매장 최대길이 체크
-            if (nvl(item.membrStore, '') !== '' && nvl(item.membrStore + '', '').getByteLengthForOracle() > 7) {
-                msg = messages["member.excel.store"] + messages["excelUpload.overLength"] + " 7 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 성별구분
-            if (nvl(item.gendrFg, '') === '') {
-                msg = messages["member.excel.gendrFg"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 성별구분 최대길이 체크
-            if (nvl(item.gendrFg, '') !== '' && nvl(item.gendrFg + '', '').getByteLengthForOracle() > 1) {
-                msg = messages["member.excel.gendrFg"] + messages["excelUpload.overLength"] + " 1 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // 성별구분 값체크
-            if (nvl(item.gendrFg, '') === '남자' || nvl(item.gendrFg, '') === '여자' ) {
-                msg = messages["member.excel.gendrFg"] + messages["cmm.input.fail"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원카드번호
-            if (nvl(item.membrCardNo, '') === '') {
-                msg = messages["member.excel.membrCardNo"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 회원카드번호 최대길이 체크
-            if (nvl(item.membrCardNo, '') !== '' && nvl(item.membrCardNo + '', '').getByteLengthForOracle() > 40) {
-                msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 생년월일
-            if (nvl(item.birthday, '') === '') {
-                msg = messages["member.excel.birthday"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 생년월일 최대길이 체크
-            if (nvl(item.birthday, '') !== '' && nvl(item.birthday + '', '').getByteLengthForOracle() > 8) {
-                msg = messages["member.excel.birthday"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 결혼여부
-            if (nvl(item.weddingYn, '') === '') {
-                msg = messages["member.excel.weddingYn"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 결혼여부 최대길이 체크
-            if (nvl(item.weddingYn, '') !== '' && nvl(item.weddingYn + '', '').getByteLengthForOracle() > 8) {
-                msg = messages["member.excel.weddingYn"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // 결혼여부 값체크
-            if (nvl(item.weddingYn, '') === '미혼' || nvl(item.weddingYn, '') === '기혼' ) {
-                msg = messages["member.excel.weddingYn"] + messages["cmm.input.fail"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 전화번호 최대길이 체크
-            if (nvl(item.telNo, '') !== '' && nvl(item.telNo + '', '').getByteLengthForOracle() > 200) {
-                msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 단축번호 최대길이 체크
-            if (nvl(item.shortNo, '') !== '' && nvl(item.shortNo + '', '').getByteLengthForOracle() > 4) {
-                msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // E-MAIL 최대길이 체크
-            if (nvl(item.email, '') !== '' && nvl(item.email + '', '').getByteLengthForOracle() > 8) {
-                msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 우편번호 최대길이 체크
-            if (nvl(item.postNo, '') !== '' && nvl(item.postNo + '', '').getByteLengthForOracle() > 5) {
-                msg = messages["member.excel.postNo"] + messages["excelUpload.overLength"] + " 5 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 주소 최대길이 체크
-            if (nvl(item.addr, '') !== '' && nvl(item.addr + '', '').getByteLengthForOracle() > 200) {
-                msg = messages["member.excel.addr"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 상세주소 최대길이 체크
-            if (nvl(item.addrDtl, '') !== '' && nvl(item.addrDtl + '', '').getByteLengthForOracle() > 200) {
-                msg = messages["member.excel.addrDtl"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // 이메일수신
-            if (nvl(item.emailRecvYn, '') === '') {
-                msg = messages["member.excel.emailRecvYn"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // 이메일수신 값체크
-            if (nvl(item.emailRecvYn, '') === 'Y' || nvl(item.emailRecvYn, '') === 'N' ) {
-                msg = messages["member.excel.emailRecvYn"] + messages["cmm.input.fail"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 이메일수신 최대길이 체크
-            if (nvl(item.emailRecvYn, '') !== '' && nvl(item.emailRecvYn + '', '').getByteLengthForOracle() > 1) {
-                msg = messages["member.excel.emailRecvYn"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // SMS수신
-            if (nvl(item.smsRecvYn, '') === '') {
-                msg = messages["member.excel.smsRecvYn"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // SMS수신 값체크
-            if (nvl(item.smsRecvYn, '') === 'Y' || nvl(item.smsRecvYn, '') === 'N' ) {
-                msg = messages["member.excel.smsRecvYn"] + messages["cmm.input.fail"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // SMS수신 최대길이 체크
-            if (nvl(item.smsRecvYn, '') !== '' && nvl(item.smsRecvYn + '', '').getByteLengthForOracle() > 1) {
-                msg = messages["member.excel.weddingYn"] + messages["excelUpload.overLength"] + " 1 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 가용포인트
-            if (nvl(item.avablPoint, '') === '') {
-                msg = messages["member.excel.avablPoint"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 가용포인트 숫자가 아닌 값
-            var numChkexp = /[^0-9]/g;
-            if (numChkexp.test(nvl(item.avablPoint, 0))) {
-                msg = messages["excelUpload.avablPoint"] + messages["excelUpload.not.numberData"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 누적포인트
-            if (nvl(item.totPoint, '') === '') {
-                msg = messages["member.excel.totPoint"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 누적포인트 숫자가 아닌 값
-            var numChkexp = /[^0-9]/g;
-            if (numChkexp.test(nvl(item.totPoint, 0))) {
-                msg = messages["excelUpload.totPoint"] + messages["excelUpload.not.numberData"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 배달구역(대) 최대길이 체크
-            if (nvl(item.dlAddrOne, '') !== '' && nvl(item.dlAddrOne + '', '').getByteLengthForOracle() > 3) {
-                msg = messages["member.excel.dlAddrOne"] + messages["excelUpload.overLength"] + " 3 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 배달구역(중) 최대길이 체크
-            if (nvl(item.dlAddrTwo, '') !== '' && nvl(item.dlAddrTwo + '', '').getByteLengthForOracle() > 5) {
-                msg = messages["member.excel.dlAddrTwo"] + messages["excelUpload.overLength"] + " 5 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 배달구역(상세주소)
-            if (nvl(item.totPdlAddrDtloint, '') === '') {
-                msg = messages["member.excel.dlAddrDtl"] + messages["excelUpload.require.data"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            // 배달구역(상세주소) 최대길이 체크
-            if (nvl(item.dlAddrDtl, '') !== '' && nvl(item.dlAddrDtl + '', '').getByteLengthForOracle() > 200) {
-                msg = messages["member.excel.dlAddrDtl"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-        }
-        return true;
-    });
-
-    $scope.comboboxChk = function (comboData, fg) {
-        var filter = [];
-        if(fg === "class") {
-            filter = memberClassList.filter(e => {
-                e.name === comboData;
-            });
-            if(filter.length == 0){
-                $scope._popMsg(messages["cmm.input.fail"]);
-                return false;
-            }
-        }
-        return true;
+        var scope = agrid.getScope('excelUploadCtrl');
+        var jsonData = $scope.flex.collectionView.items;
+        scope.valChk(jsonData);
+        $scope.flex.collectionView.refresh();
     };
 
-    // 삭제
+
+// 삭제
     $scope.deleteUpload = function () {
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
@@ -417,4 +168,60 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
             }
         }
     };
-}]);
+
+    // 저장
+    $scope.save = function () {
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.result !== "검증성공" || item.result === null) {
+                $scope._popMsg(messages["cmm.excel.result"]);
+                return false;
+            }
+            memberClassList.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].membrClassCd) {
+                    $scope.flex.collectionView.items[i].membrClassCd = e.value;
+                }
+            });
+            regstrStoreList.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].membrStore) {
+                    $scope.flex.collectionView.items[i].membrStore = e.value;
+                    $scope.flex.collectionView.items[i].regStoreCd = e.value;
+                }
+            });
+            genderDataMap.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].gendrFg) {
+                    $scope.flex.collectionView.items[i].gendrFg = e.value;
+                }
+            });
+            weddingDataMap.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].weddingYn) {
+                    $scope.flex.collectionView.items[i].weddingYn = e.value;
+                }
+            });
+            recvDataMap.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].smsRecvYn) {
+                    $scope.flex.collectionView.items[i].smsRecvYn = e.value;
+                }
+            });
+            recvDataMap.find(e => {
+                if(e.name === $scope.flex.collectionView.items[i].emailRecvYn) {
+                    $scope.flex.collectionView.items[i].emailRecvYn = e.value;
+                }
+            });
+            $scope.flex.collectionView.items[i].status = "I";
+            params.push($scope.flex.collectionView.items[i]);
+        }
+        try {
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $.postJSONArray("/membr/info/upload/excel/memberExcelSave.sb", params, function (result) {
+            }, function (err) {
+                s_alert.pop(err.message);
+            });
+        } catch (err) {
+
+        }
+    };
+
+}])
+;

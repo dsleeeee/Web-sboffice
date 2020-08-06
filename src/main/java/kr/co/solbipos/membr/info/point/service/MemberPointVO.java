@@ -20,6 +20,10 @@ public class MemberPointVO extends PageVO {
   private Integer chgPoint;
   private String adjustPartRemark;
   private String orgnApprNo;
+  private String memberResult;
+  private String membrClassCd;
+  private String membrCardNo;
+  private String membrNm;
 
   public String getMembrOrgnCd() {
     return membrOrgnCd;
@@ -99,5 +103,37 @@ public class MemberPointVO extends PageVO {
 
   public void setOrgnApprNo(String orgnApprNo) {
     this.orgnApprNo = orgnApprNo;
+  }
+
+  public String getMemberResult() {
+    return memberResult;
+  }
+
+  public void setMemberResult(String memberResult) {
+    this.memberResult = memberResult;
+  }
+
+  public String getMembrClassCd() {
+    return membrClassCd;
+  }
+
+  public void setMembrClassCd(String membrClassCd) {
+    this.membrClassCd = membrClassCd;
+  }
+
+  public String getMembrCardNo() {
+    return membrCardNo;
+  }
+
+  public void setMembrCardNo(String membrCardNo) {
+    this.membrCardNo = membrCardNo;
+  }
+
+  public String getMembrNm() {
+    return membrNm;
+  }
+
+  public void setMembrNm(String membrNm) {
+    this.membrNm = membrNm;
   }
 }

@@ -121,31 +121,37 @@
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex1"
-                    initialized="initGrid(s,e)"
+                    initialized="initGrid1(s,e)"
                     sticky-headers="true"
                     selection-mode="Row"
                     items-source="data1"
                     item-formatter="_itemFormatter"
-                    is-read-only="true">
+                    is-read-only="false">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="dayMembrDetail.membrClassCd"/>" binding="searchResult"
-                                     width="115" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prod.regStore"/>" binding="" width="115" align="center"
-                                     is-read-only="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="memberClassNm"
-                                     width="220"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.wedding"/>" binding="memberNo" width="230"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="member.excel.cardUseType"/>" binding="memberNo"
-                                     width="230"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dayMembrDetail.emailRecvYn"/>" binding="memberNm"
-                                     width="115"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dayMembrDetail.smsRecvYn"/>" binding="memberCardNo"
-                                     width="120"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembrDetail.membrClassCd"/>" binding="comboClass"
+                                     width="115" is-read-only="false" align="center" data-map="memberClassList" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.regStore"/>" binding="comboStore" width="115" align="center"
+                                     is-read-only="false" data-map="regstrStoreList"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="comboGendr"
+                                     width="220" data-map="genderDataMap"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.wedding"/>" binding="comboWedding" width="230"
+                                     is-read-only="false" align="center" data-map="weddingDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.cardUseType"/>" binding="comboCardUse"
+                                     width="230" data-map="rMembrcardList"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembrDetail.emailRecvYn"/>" binding="comboEmail"
+                                     width="115" data-map="recvDataMap"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayMembrDetail.smsRecvYn"/>" binding="comboSms"
+                                     width="120" data-map="recvDataMap"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.dlAddrOne"/>" binding="comboLzone"
+                                     width="120" data-map="dlvrLzoneList"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="comboMzone"
+                                     width="120" data-map="memberClassList"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -174,58 +180,63 @@
                                      align="center" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.check.result"/>" binding="result" width="115"
                                      is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrKrNm" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.nm.kr"/>" binding="membrNm" width="115"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.nm.en"/>" binding="membrEnNm" width="115"
-                                     is-read-only="true" align="center"></wj-flex-grid-column>
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.membrClassCd"/>" binding="membrClassCd"
-                                     width="115" data-map="memberClassList"
+                                     width="115" align="center" data-map="memberClassList"
                                      is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.store"/>" binding="membrStore" width="140"
-                                     data-map="regstrStoreList"
-                                     is-read-only="false" align="right"></wj-flex-grid-column>
+                                     data-map="regstrStoreList" align="center" is-read-only="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.gendrFg"/>" binding="gendrFg" width="100"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="center" data-map="genderDataMap" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.card.no"/>" binding="membrCardNo" width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="member.excel.birthday"/>" binding="memberBithday"
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.birthday"/>" binding="birthday"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.weddingYn"/>" binding="weddingYn"
+                                     width="140" data-map="weddingDataMap"
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="member.excel.weddingday"/>" binding="weddingday"
+                                     width="140"
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.telNo"/>" binding="memberTelNo" width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.shortNo"/>" binding="memebrShortNo"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.email"/>" binding="memberEmail" width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.postNo"/>" binding="memberPostNo" width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.addr"/>" binding="memberAddr" width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.addrDtl"/>" binding="memberAddrDtl"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.emailRecvYn"/>" binding="emailRecvYn"
                                      width="140" data-map="recvDataMap"
-                                     is-read-only="false" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.smsRecvYn"/>" binding="smsRecvYn"
                                      width="140" data-map="recvDataMap"
-                                     is-read-only="false" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.avablPoint"/>" binding="avablPoint"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.totPoint"/>" binding="totSavePoint"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.dlAddrOne"/>" binding="dlvrLzoneCd"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="dlvrMzoneCd"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.dlAddrDtl"/>" binding="addrDtl"
                                      width="140"
-                                     is-read-only="true" align="right"></wj-flex-grid-column>
+                                     is-read-only="false" align="right"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -233,7 +244,7 @@
 </div>
 
 <script>
-    var recvDataMap = ${ccu.getCommCode("072")};
+    var recvDataMap = ${ccu.getCommCodeSelect("072")};
     <%--수신, 미수신--%>
     var recvDataMapEx = ${ccu.getCommCodeExcpAll("072")};
     <%--수신, 미수신--%>
@@ -252,6 +263,7 @@
     var rMembrcardList = ${ccu.getCommCode("014")};
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
+    var dlvrLzoneList = ${dlvrLzoneList};
     <%--카드발급구분--%>
     <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
     <%--카드상태구분--%>
@@ -261,4 +273,6 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberExcelUpload.js?ver=2019052801.11"
+        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberPoint.js?ver=2019052801.11"
         charset="utf-8"></script>

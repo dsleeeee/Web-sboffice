@@ -124,4 +124,6 @@ public interface RegistService {
     List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 
     DefaultMap<Object> getDlvrMzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

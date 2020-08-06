@@ -1,6 +1,16 @@
 package kr.co.solbipos.membr.info.excelUpload.service;
 
-public class MemberExcelUploadVO {
+import kr.co.common.data.enums.UseYn;
+import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
+import kr.co.solbipos.membr.info.regist.service.enums.AnvType;
+import kr.co.solbipos.membr.info.regist.service.enums.PeriodType;
+import kr.co.solbipos.membr.info.regist.validate.Regist;
+import kr.co.solbipos.membr.info.regist.validate.RegistDelete;
+import org.hibernate.validator.constraints.NotBlank;
+
+public class MemberExcelUploadVO extends PageVO {
   private String membrOrgnCd;
   private String membrNo;
   private String membrNm;
@@ -17,16 +27,23 @@ public class MemberExcelUploadVO {
   private String emailAddr;
   private String shortNo;
   private String telNo;
-  private String weddingYn;
+  private WeddingYn weddingYn;
   private String weddingday;
   private String emailRecvYn;
   private String smsRecvYn;
   private String useYn;
   private String remark;
-  private String regDt;
-  private String regId;
-  private String modDt;
-  private String modId;
+  private String memberEngNm;
+  private String cstCardUseFg;
+  private Integer cstCardIssCnt;
+  private String orgCstCardNo;
+
+//  private String dlvrAddrSeq;
+//  private String dlvrStoreCd;
+//  private String dlvrLzoneCd;
+//  private String dlvrMzoneCd;
+//  private String lastSlvrSate;
+//  private String totSlvrCnt;
 
   public String getMembrOrgnCd() {
     return membrOrgnCd;
@@ -156,11 +173,11 @@ public class MemberExcelUploadVO {
     this.telNo = telNo;
   }
 
-  public String getWeddingYn() {
+  public WeddingYn getWeddingYn() {
     return weddingYn;
   }
 
-  public void setWeddingYn(String weddingYn) {
+  public void setWeddingYn(WeddingYn weddingYn) {
     this.weddingYn = weddingYn;
   }
 
@@ -204,38 +221,6 @@ public class MemberExcelUploadVO {
     this.remark = remark;
   }
 
-  public String getRegDt() {
-    return regDt;
-  }
-
-  public void setRegDt(String regDt) {
-    this.regDt = regDt;
-  }
-
-  public String getRegId() {
-    return regId;
-  }
-
-  public void setRegId(String regId) {
-    this.regId = regId;
-  }
-
-  public String getModDt() {
-    return modDt;
-  }
-
-  public void setModDt(String modDt) {
-    this.modDt = modDt;
-  }
-
-  public String getModId() {
-    return modId;
-  }
-
-  public void setModId(String modId) {
-    this.modId = modId;
-  }
-
   public String getMemberEngNm() {
     return memberEngNm;
   }
@@ -252,27 +237,19 @@ public class MemberExcelUploadVO {
     this.cstCardUseFg = cstCardUseFg;
   }
 
-  public int getCstCardIssCnt() {
+  public Integer getCstCardIssCnt() {
     return cstCardIssCnt;
   }
 
-  public void setCstCardIssCnt(int cstCardIssCnt) {
+  public void setCstCardIssCnt(Integer cstCardIssCnt) {
     this.cstCardIssCnt = cstCardIssCnt;
   }
 
-  public String getOrgCstCardN() {
-    return orgCstCardN;
+  public String getOrgCstCardNo() {
+    return orgCstCardNo;
   }
 
-  public void setOrgCstCardN(String orgCstCardN) {
-    this.orgCstCardN = orgCstCardN;
+  public void setOrgCstCardNo(String orgCstCardNo) {
+    this.orgCstCardNo = orgCstCardNo;
   }
-
-  private String memberEngNm;
-  private String cstCardUseFg;
-  private int cstCardIssCnt;
-  private String orgCstCardN;
-
-
-
 }

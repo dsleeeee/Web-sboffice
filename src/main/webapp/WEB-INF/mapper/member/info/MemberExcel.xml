@@ -3,23 +3,181 @@
 
 <mapper namespace="kr.co.solbipos.membr.info.excelUpload.service.impl.MemberExcelUploadMapper">
 
-  <!-- 회원 엑셀 업로드 -->
-  <!--
-      TABLE    : TB_MB_MEMBER
-      COMMENTS : 회원 엑셀 업로드
-  -->
-  <select id="getMemberExcelList" parameterType="excelUploadVO" resultType="DefaultMap">
+    <!-- 회원 엑셀 업로드 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        COMMENTS : 회원 엑셀 업로드
+    -->
+    <select id="getMemberExcelList" parameterType="memberExcelUploadVO" resultType="DefaultMap">
         /* 회원엑셀 조회 */
       SELECT tmm.MEMBR_NM, tmm.MEMBER_ENG_NM, tmm.MEMBR_CLASS_CD, tmm.REG_STORE_CD, tmm.GENDR_FG, tmm.MEMBR_CARD_NO, tmm.BIRTHDAY, tmm.WEDDING_YN, tmm.WEDDINGDAY, tmm.MEMBR_NO
       FROM TB_MB_MEMBER tmm
   </select>
 
-  <delete id="deleteMemberExcel" parameterType="excelUploadVO">
-          /* 회원엑셀 삭제 */
-      DELETE FROM TB_MB_MEMBER tmm
-      WHERE MEMBR_NO = ''
---       WHERE MEMBR_NO = #{membrNo}
-  </delete>
+    <!--
+      TABLE    : TB_MB_MEMBER
+      COMMENTS : 회원 엑셀 업로드 저장
+  -->
+    <insert id="insertMember" parameterType="memberExcelUploadVO">
+        <selectKey keyProperty="membrNo" resultType="String" order="AFTER">
+            select MEMBR_NO FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}
+        </selectKey>
+        /* MemberExcelMapper.insertMember */
+        INSERT INTO TB_MB_MEMBER tmm (
+            tmm.MEMBR_ORGN_CD,
+            tmm.MEMBR_NO,
+            tmm.MEMBR_NM,
+            tmm.MEMBR_NICKNM,
+            tmm.MEMBR_CLASS_CD,
+            tmm.MEMBR_CARD_NO,
+            tmm.REG_STORE_CD,
+            tmm.POST_NO,
+            tmm.ADDR,
+            tmm.ADDR_DTL,
+            tmm.BIRTHDAY,
+            tmm.LUNAR_YN,
+            tmm.GENDR_FG,
+            tmm.EMAIL_ADDR,
+            tmm.SHORT_NO,
+            tmm.TEL_NO,
+            tmm.WEDDING_YN,
+            tmm.WEDDINGDAY,
+            tmm.EMAIL_RECV_YN,
+            tmm.SMS_RECV_YN,
+            tmm.USE_YN,
+            tmm.REMARK,
+            tmm.REG_DT,
+            tmm.REG_ID,
+            tmm.MOD_DT,
+            tmm.MOD_ID
+        ) VALUES (
+            #{membrOrgnCd},
+            #{membrNo},
+            SBPENC.E(#{membrNm}),
+            #{membrNicknm},
+            #{membrClassCd},
+            #{membrCardNo},
+            #{regStoreCd},
+            #{postNo},
+            SBPENC.E(#{addr}),
+            SBPENC.E(#{addrDtl}),
+            #{birthday},
+            #{lunarYn},
+            #{gendrFg},
+            #{emailAddr},
+            #{shortNo},
+            SBPENC.E(#{telNo}),
+            #{weddingYn},
+            #{weddingday},
+            #{emailRecvYn},
+            #{smsRecvYn},
+            'Y',
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+    <!--
+     TABLE    : TB_MB_MEMBER_ADDR
+     COMMENTS : 회원 엑셀 업로드 저장
+ -->
+<!--    <insert id="insertMemberAddr" parameterType="excelUploadVO">-->
+<!--        /* MemberExcelMapper.insertMemberAddr */-->
+<!--        <![CDATA[-->
+<!--        INSERT INTO TB_MB_MEMBER_DLVR_ADDR tmmda (-->
+<!--            , tmmda.MEMBR_ORGN_CD-->
+<!--            , tmmda.MEMBR_NO-->
+<!--            , tmmda.DLVR_ADDR_SEQ-->
+<!--            , tmmda.DLVR_STORE_CD-->
+<!--            , tmmda.DLVR_LZONE_CD-->
+<!--            , tmmda.DLVR_MZONE_CD-->
+<!--            , tmmda.ADDR-->
+<!--            , tmmda.ADDR_DTL-->
+<!--            , tmmda.LAST_DLVR_DATE-->
+<!--            , tmmda.TOT_DLVR_CNT-->
+<!--            , tmmda.USE_YN-->
+<!--            , tmmda.REG_DT-->
+<!--            , tmmda.REG_ID-->
+<!--            , tmmda.MOD_DT-->
+<!--            , tmmda.MOD_ID-->
+<!--        ) VALUES (-->
+<!--            #{membrOrgnCd}-->
+<!--            , #{membrNo}-->
+<!--            , #{dlvrAddrSeq}-->
+<!--            , #{dlvrStoreCd}-->
+<!--            , #{dlvrLzoneCd}-->
+<!--            , #{dlvrMzoneCd}-->
+<!--            , #{addr}-->
+<!--            , #{addrDtl}-->
+<!--            , #{lastDlvrDate}-->
+<!--            , #{totDlvrCnt}-->
+<!--            , 'Y'-->
+<!--            , #{regDt}-->
+<!--            , #{regId}-->
+<!--            , #{modDt}-->
+<!--            , #{modId}-->
+<!--        )-->
+
+
+<!--        ]]>-->
+<!--    </insert>-->
+<!--    <insert id="insertMemberPoint" parameterType="excelUploadVO">-->
+<!--        /* MemberExcelMapper.insertMemberPoint */-->
+<!--        <![CDATA[-->
+<!--        INSERT INTO TB_MB_MEMBER_POINT tmmp (-->
+<!--            tmmp.MEMBR_ORGN_CD-->
+<!--            , tmmp.MEMBR_NO-->
+<!--            , tmmp.TOT_SALE_CNT-->
+<!--            , tmmp.TOT_SALE_AMT-->
+<!--            , tmmp.TOT_DC_AMT-->
+<!--            , tmmp.TOT_SAVE_POINT-->
+<!--            , tmmp.TOT_USE_POINT-->
+<!--            , tmmp.AVABL_POINT-->
+<!--            , tmmp.TOT_ADJ_POINT-->
+<!--            , tmmp.FIRST_SALE_DATE-->
+<!--            , tmmp.LAST_SALE_DATE-->
+<!--            , tmmp.POINT_ACC_CNT-->
+<!--            , tmmp.POINT_USE_CNT-->
+<!--            , tmmp.REG_STORE_CD-->
+<!--            , tmmp.REG_TOT_SALE_CNT-->
+<!--            , tmmp.REG_TOT_SALE_AMT-->
+<!--            , tmmp.REG_TOT_DC_AMT-->
+<!--            , tmmp.REG_F_SALE_DATE-->
+<!--            , tmmp.REG_L_SALE_DATE-->
+<!--            , tmmp.REG_DT-->
+<!--            , tmmp.REG_ID-->
+<!--            , tmmp.MOD_DT-->
+<!--            , tmmp.MOD_ID-->
+<!--        ) VALUES (-->
+<!--            , #{membrOrgnCd}-->
+<!--            , #{membrNo}-->
+<!--            , #{totSaleCnt}-->
+<!--            , #{totSaleAmt}-->
+<!--            , #{totDcAmt}-->
+<!--            , #{totSavePoint}-->
+<!--            , #{totUsePoint}-->
+<!--            , #{avablPoint}-->
+<!--            , #{totAdjPoint}-->
+<!--            , #{firstSaleDate}-->
+<!--            , #{lastSaleDate}-->
+<!--            , #{pointAccCnt}-->
+<!--            , #{pointUseCnt}-->
+<!--            , #{regStoreCd}-->
+<!--            , #{regTotSaleCnt}-->
+<!--            , #{regTotSaleAmt}-->
+<!--            , #{regTotDcAmt}-->
+<!--            , #{regFSaleDate}-->
+<!--            , #{regLSaleDate}-->
+<!--            , #{regDt}-->
+<!--            , #{regId}-->
+<!--            , #{modDt}-->
+<!--            , #{modId}-->
+<!--        )-->
+
+<!--        ]]>-->
+<!--    </insert>-->
 
 
 </mapper>

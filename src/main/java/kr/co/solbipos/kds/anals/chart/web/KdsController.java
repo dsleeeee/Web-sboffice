@@ -370,5 +370,52 @@ public class KdsController {
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
+
+    /**
+     * 페이지 이동
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "service/list.sb", method = RequestMethod.GET)
+    public String kdsServiceTimeList(HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        // 등록 매장 조회
+        List regstrStoreList = registService.getRegistStore(sessionInfoVO);
+        // 등록 매장 전체 포함
+        String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.SELECT);
+
+        // 본사일 경우 해당 본사의 기본매장(코드)을 조회 해야 함.
+        // [보나비]의 경우 기본매장코드를 사용하여
+        // 회원등록 매장이 기본매장일 경우 후불회원 적용매장을 등록한다.
+        String defaultStoreCd = "";
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
+            defaultStoreCd.replace("*", "");
+        }
+
+        model.addAttribute("regstrStoreList", regstrStoreListAll);
+        return "kds/anals/view/kdsServiceTime";
+    }
+
+    /**
+     * 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     */
+    @RequestMapping(value = "service/getKdsServiceTime.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKdsServiceTime(KdsVO kdsVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kdsService.getKdsServiceTime(kdsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
 }
 

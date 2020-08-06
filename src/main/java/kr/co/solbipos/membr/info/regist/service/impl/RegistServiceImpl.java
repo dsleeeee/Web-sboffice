@@ -422,6 +422,27 @@ public class RegistServiceImpl implements RegistService {
     }
 
     @Override
+    public List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+//            registVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
+//        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+//        }
+
+        List<DefaultMap<String>> resultList = mapper.getDlvrList(registVO);
+
+        // 등록된 회원등급이 없을때는 기본등급을 리스트에 넣어줌.
+        if (resultList.size() == 0) {
+            DefaultMap<String> tmpList = new DefaultMap<String>();
+            tmpList.put("value", "000");
+            tmpList.put("name", "없음");
+            resultList.add(tmpList);
+        }
+        return resultList;
+    }
+
+    @Override
     public List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         return mapper.getDlvrTelList(registVO);
     }

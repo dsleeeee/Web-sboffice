@@ -12,9 +12,11 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.dlvr.info.regist.service.DlvrRegistService;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadVO;
 import kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadService;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistService;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import org.slf4j.Logger;
@@ -43,17 +45,19 @@ public class MemberExcelUploadController {
   private final MemberExcelUploadService memberExcelUploadService;
   private final MessageService messageService;
   private final RegistService registService;
+  private final DlvrRegistService dlvrRegistService;
   private final CmmCodeUtil cmmCodeUtil;
   private final CmmEnvUtil cmmEnvUtil;
 
   @Autowired
-  public MemberExcelUploadController(MemberExcelUploadService memberExcelUploadService, RegistService registService, SessionService sessionService, MessageService messageService,
+  public MemberExcelUploadController(MemberExcelUploadService memberExcelUploadService, RegistService registService, DlvrRegistService dlvrRegistService, SessionService sessionService, MessageService messageService,
                                      CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
+    this.memberExcelUploadService = memberExcelUploadService;
+    this.dlvrRegistService = dlvrRegistService;
     this.registService = registService;
     this.messageService = messageService;
     this.cmmCodeUtil = cmmCodeUtil;
     this.cmmEnvUtil = cmmEnvUtil;
-    this.memberExcelUploadService = memberExcelUploadService;
     this.sessionService = sessionService;
   }
 
@@ -65,7 +69,7 @@ public class MemberExcelUploadController {
    * @param model
    */
   @RequestMapping(value = "/upload/list.sb", method = RequestMethod.GET)
-  public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
+  public String registList(RegistVO registVO , HttpServletRequest request, HttpServletResponse response, Model model) {
 
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     // 등록 매장 조회
@@ -86,6 +90,11 @@ public class MemberExcelUploadController {
       defaultStoreCd = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0025"));
       defaultStoreCd.replace("*", "");
     }
+
+    List dlvrLzoneList = registService.getLzoneList(registVO, sessionInfoVO);
+    String dlvrLzoneListAll = cmmCodeUtil.assmblObj(dlvrLzoneList, "name", "value", UseYn.SELECT);
+
+    model.addAttribute("dlvrLzoneList", dlvrLzoneListAll);
     model.addAttribute("regstrStoreList", regstrStoreListAll);
     model.addAttribute("memberClassList", membrClassListAll);
     model.addAttribute("defaultStoreCd", defaultStoreCd);
@@ -106,5 +115,19 @@ public class MemberExcelUploadController {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     List<DefaultMap<Object>> result = memberExcelUploadService.getMemberExcelList(memberExcelUploadVO, sessionInfoVO);
     return ReturnUtil.returnListJson(Status.OK, result, memberExcelUploadVO);
+  }
+
+    /**
+   * 회원 엑셀 저장
+   *
+   * @param request
+   * @return
+   */
+  @RequestMapping(value = "/excel/memberExcelSave.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result memberExcelSave(@RequestBody MemberExcelUploadVO[] memberExcelUploadVOs, RegistVO registVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    int result = memberExcelUploadService.memberExcelSave(memberExcelUploadVOs, registVO, sessionInfoVO);
+    return returnJson(Status.OK, result);
   }
 }

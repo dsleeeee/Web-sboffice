@@ -73,15 +73,11 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.dlvrStoreCd = params.regStoreCd;
                 if (list.length === undefined || list.length === 0) {
                     $scope.data = new wijmo.collections.CollectionView([]);
-                    if (isView && response.data.message) {
-                        $scope._popMsg(response.data.message);
-                    }
                     return false;
                 }
                 var data = new wijmo.collections.CollectionView(list);
                 data.trackChanges = true;
                 $scope.data = data;
-                console.log($scope.dlvrLzone);
             }
         }, function errorCallback(response) {
             // 로딩바 hide

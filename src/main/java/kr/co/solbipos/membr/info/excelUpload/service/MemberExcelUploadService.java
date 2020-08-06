@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.info.excelUpload.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ import java.util.List;
 public interface MemberExcelUploadService {
 
   List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO, SessionInfoVO sessionInfoVO);
+
+  int memberExcelSave(MemberExcelUploadVO[] memberExcelUploadVOs,  RegistVO registVO, SessionInfoVO sessionInfoVO);
 }
