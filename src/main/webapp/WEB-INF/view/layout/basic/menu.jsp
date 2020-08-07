@@ -25,7 +25,7 @@
     <%--open : 즐겨찾기 메뉴--%>
 
     <%--위즈모 메뉴--%>
-    <div id="_theTreeAll" ng-controller="menuCtrl">
+    <div id="_theTreeAll" ng-controller="menuCtrl" style="height: 100%; overflow-y: auto; overflow-x: hidden;">
       <wj-tree-view control="flex"
         class="theTreeAll"
         items-source="items"
@@ -42,7 +42,7 @@
       </wj-tree-view>
     </div>
 
-    <div id="_theTreeBkmk" style="display:none;" ng-controller="bkmkCtrl">
+    <div id="_theTreeBkmk" style="display:none;" ng-controller="bkmkCtrl" style="height: 100%; overflow-y: auto; overflow-x: hidden;">
       <wj-tree-view control="flex"
         class="theTreeAll"
         items-source="items"
