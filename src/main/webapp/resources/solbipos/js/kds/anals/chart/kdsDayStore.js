@@ -207,6 +207,7 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.prodNm = $scope.prodNm;
         params.prodClassCd = $scope.prodClassCd;
         params.prodClassCdNm = $scope.prodClassCdNm;
+        params.orgnFg = $("#resurceFg").val();
 
         $scope.kdsSearch(params);
     });

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class KdsVO extends PageVO {
+    private String orgnFg;
     private String hqOfficeCd;
     private String storeCd;
     private String conStoreCd;
@@ -38,6 +39,13 @@ public class KdsVO extends PageVO {
 //    private List<Map<String, Object>> kdsTimeList;
     private List<String> kdsTimeList;
 
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;

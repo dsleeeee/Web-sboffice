@@ -134,6 +134,7 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.prodClassCd = $scope.prodClassCd;
         params.prodClassCdNm = $scope.prodClassCdNm;
         params.storeCd = $("#regStoreCd").val();
+        params.orgnFg = $("#resurceFg").val();
 
         $scope.kdsSearch(params);
     });
@@ -278,13 +279,6 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         var msg = messages["kds.picDate.setting"] + messages["cmm.require.text"];
         if (isNull($scope.picDateSecCombo.selectedValue)) {
             $scope._popMsg(msg);
-            return false;
-        }
-
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
         }
         return true;
     };

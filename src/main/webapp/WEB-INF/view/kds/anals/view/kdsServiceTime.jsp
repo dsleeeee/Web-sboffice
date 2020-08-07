@@ -64,6 +64,7 @@
                     </span>
                 </div>
             </td>
+            <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
             <c:if test="${orgnFg == 'HQ'}">
                 <th><s:message code="kds.store"/></th>
                 <td>

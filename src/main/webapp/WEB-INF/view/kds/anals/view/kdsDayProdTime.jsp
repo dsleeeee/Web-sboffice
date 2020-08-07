@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="kdsDayProdTimeCtrl">
-
+    <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
@@ -200,6 +200,10 @@
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;"
                         ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
+            <c:if test="${orgnFg != 'HQ'}">
+                <td></td>
+                <td></td>
+            </c:if>
         </tr>
         </tbody>
     </table>

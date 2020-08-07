@@ -21,7 +21,12 @@
         TB_SL_SALE_HDR_DLVR tsshd
         WHERE
         tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
-        AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test = 'hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test = 'storeCd != null and storeCd != ""'>
+            AND tsshd.STORE_CD = #{storeCd}
+        </if>
         GROUP BY
         tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, tsshd.DLVR_ADDR, tsshd.POS_NO) H,
         (

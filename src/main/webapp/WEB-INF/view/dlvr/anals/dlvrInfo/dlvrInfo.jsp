@@ -111,5 +111,4 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resources/solbipos/js/membr/info/view/dlvrInfo.js?ver=2019052801.11"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resources/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.11" charset="utf-8"></script>

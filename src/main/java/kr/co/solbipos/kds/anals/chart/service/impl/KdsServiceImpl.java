@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.kds.anals.chart.service.KdsService;
 import kr.co.solbipos.kds.anals.chart.service.KdsVO;
 import org.slf4j.Logger;
@@ -78,7 +79,12 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProd(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getKdsDayProd(kdsVO);
     }
 
@@ -87,7 +93,13 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsMonth(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        LOGGER.debug("kdsVO.orgnFg {}", kdsVO.getOrgnFg());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getKdsMonth(kdsVO);
     }
 
@@ -113,6 +125,12 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getKdsDayProdTime(kdsVO);
     }
 
@@ -121,6 +139,12 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProdTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getKdsDayProdTimeChart(kdsVO);
     }
 
@@ -129,6 +153,12 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsServiceTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getKdsServiceTime(kdsVO);
     }
 }

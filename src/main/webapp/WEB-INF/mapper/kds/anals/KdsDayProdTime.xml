@@ -109,11 +109,19 @@
             </if>
         </foreach>
         FROM
-        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt
+        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+        TB_HQ_PRODUCT thp
         WHERE
-        tookddt.STORE_CD = 'A000001'
-        AND tookddt.SALE_DATE BETWEEN '20200701' AND '20200722'
-        AND tookddt.SALE_HH BETWEEN '00' AND '06'
+        thp.PROD_CD = tookddt.PROD_CD
+        AND tookddt.STORE_CD = #{storeCd}
+        AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+        <if test='prodCd != null and prodCd != ""'>
+            AND tookddt.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND B.PROD_CLASS_CD = #{prodClassCd}
+        </if>
         GROUP BY
         tookddt.STORE_CD , tookddt.SALE_DATE, tookddt.SALE_HH, tookddt.PROD_CD) A ,
         TB_MS_STORE tms
@@ -129,32 +137,63 @@
     </select>
     <select id="getKdsDayProdTimeChart" parameterType="KdsVO" resultType="DefaultMap">
         /* KdsMapper.getKdsDayProdTimeChart */
+        SELECT STORE_CD,
+        SALE_HH,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(AVG_MAKE) AS AVG_MAKE,
+        SUM(AVG_PIC) AS AVG_PIC
+        FROM
+        (
         SELECT
         tookddt.STORE_CD
         , tookddt.SALE_HH||'시' AS SALE_HH
-        , sum(tookddt.SALE_QTY) AS SALE_QTY
+        , NVL(sum(tookddt.SALE_QTY),0) AS SALE_QTY
         <if test='makeDate == 0'>
-            , avg(tookddt.AVG_S_CK_TO_E_CK) AS AVG_MAKE
+            , NVL(avg(tookddt.AVG_S_CK_TO_E_CK),0) AS AVG_MAKE
         </if>
         <if test="makeDate == 1">
-            , avg(tookddt.AVG_L_OD_TO_E_CK) AS AVG_MAKE
+            , NVL(avg(tookddt.AVG_L_OD_TO_E_CK),0) AS AVG_MAKE
         </if>
         <if test='picDate == 0'>
-            , avg(tookddt.AVG_S_OD_TO_E_PK) AS AVG_PIC
+            , NVL(avg(tookddt.AVG_S_OD_TO_E_PK),0) AS AVG_PIC
         </if>
         <if test="picDate == 1">
-            , avg(tookddt.AVG_E_CK_TO_E_PK) AS AVG_PIC
+            , NVL(avg(tookddt.AVG_E_CK_TO_E_PK),0) AS AVG_PIC
         </if>
         FROM
-        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt
+        TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+        TB_HQ_PRODUCT thp
         WHERE
-        tookddt.STORE_CD = #{storeCd}
+        thp.PROD_CD = tookddt.PROD_CD
+        AND tookddt.STORE_CD = #{storeCd}
         AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        AND tookddt.SALE_HH BETWEEN #{startHh} AND #{endHh}
+        <if test='prodCd != null and prodCd != ""'>
+            AND tookddt.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND B.PROD_CLASS_CD = #{prodClassCd}
+        </if>
         GROUP BY
         tookddt.STORE_CD ,
         tookddt.SALE_HH
-        ORDER BY
-        tookddt.SALE_HH
+        <foreach collection="kdsTimeList" item="i" separator="">
+            UNION
+            SELECT tookddt.STORE_CD
+            , #{i}||'시' AS SALE_HH
+            , 0 AS SALE_QTY
+            , 0 AS AVG_MAKE
+            , 0 AS AVG_PIC
+            FROM TB_OD_ORDER_KDS_DTL_DAILY_TIME tookddt,
+            TB_HQ_PRODUCT thp
+            WHERE
+            thp.PROD_CD = tookddt.PROD_CD
+            AND tookddt.STORE_CD = #{storeCd}
+            AND tookddt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        </foreach>
+        )
+        WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+        GROUP BY STORE_CD,
+        SALE_HH
+        ORDER BY SALE_HH
     </select>
 </mapper>

@@ -539,7 +539,7 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
         var date2 = new Date($scope.kdsDayEndDate);
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         console.log("diffDay: ", diffDay);
-        if ( diffDay < 0) {
+        if (diffDay < 0) {
             $scope._popMsg(messages["kds.date.hour.error"]);
             return false;
         }
@@ -568,10 +568,12 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
+        if ($("#resurceFg").val() === "HQ") {
+            var msg = messages["kds.store"] + messages["cmm.require.text"];
+            if (isNull($("#regStoreCd").val())) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
         return true;
     };

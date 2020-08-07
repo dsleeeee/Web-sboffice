@@ -8,78 +8,78 @@
         A.STORE_CD,
         tms.STORE_NM,
         A.SALE_DATE,
-        SUM(A.CNT_HH_00) AS CNT_HH_00,
-        AVG(A.MAKE_HH_00) AS MAKE_HH_00,
-        AVG(A.PIC_HH_00) AS PIC_HH_00,
-        SUM(A.CNT_HH_01) AS CNT_HH_01,
-        AVG(A.MAKE_HH_01) AS MAKE_HH_01,
-        AVG(A.PIC_HH_01) AS PIC_HH_01,
-        SUM(A.CNT_HH_02) AS CNT_HH_02,
-        AVG(A.MAKE_HH_02) AS MAKE_HH_02,
-        AVG(A.PIC_HH_02) AS PIC_HH_02,
-        SUM(A.CNT_HH_03) AS CNT_HH_03,
-        AVG(A.MAKE_HH_03) AS MAKE_HH_03,
-        AVG(A.PIC_HH_03) AS PIC_HH_03,
-        SUM(A.CNT_HH_04) AS CNT_HH_04,
-        AVG(A.MAKE_HH_04) AS MAKE_HH_04,
-        AVG(A.PIC_HH_04) AS PIC_HH_04,
-        SUM(A.CNT_HH_05) AS CNT_HH_05,
-        AVG(A.MAKE_HH_05) AS MAKE_HH_05,
-        AVG(A.PIC_HH_05) AS PIC_HH_05,
-        SUM(A.CNT_HH_06) AS CNT_HH_06,
-        AVG(A.MAKE_HH_06) AS MAKE_HH_06,
-        AVG(A.PIC_HH_06) AS PIC_HH_06,
-        SUM(A.CNT_HH_07) AS CNT_HH_07,
-        AVG(A.MAKE_HH_07) AS MAKE_HH_07,
-        AVG(A.PIC_HH_07) AS PIC_HH_07,
-        SUM(A.CNT_HH_08) AS CNT_HH_08,
-        AVG(A.MAKE_HH_08) AS MAKE_HH_08,
-        AVG(A.PIC_HH_08) AS PIC_HH_08,
-        SUM(A.CNT_HH_09) AS CNT_HH_09,
-        AVG(A.MAKE_HH_09) AS MAKE_HH_09,
-        AVG(A.PIC_HH_09) AS PIC_HH_09,
-        SUM(A.CNT_HH_10) AS CNT_HH_10,
-        AVG(A.MAKE_HH_10) AS MAKE_HH_10,
-        AVG(A.PIC_HH_10) AS PIC_HH_10,
-        SUM(A.CNT_HH_11) AS CNT_HH_11,
-        AVG(A.MAKE_HH_11) AS MAKE_HH_11,
-        AVG(A.PIC_HH_11) AS PIC_HH_11,
-        SUM(A.CNT_HH_12) AS CNT_HH_12,
-        AVG(A.MAKE_HH_12) AS MAKE_HH_12,
-        AVG(A.PIC_HH_12) AS PIC_HH_12,
-        SUM(A.CNT_HH_13) AS CNT_HH_13,
-        AVG(A.MAKE_HH_13) AS MAKE_HH_13,
-        AVG(A.PIC_HH_13) AS PIC_HH_13,
-        SUM(A.CNT_HH_14) AS CNT_HH_14,
-        AVG(A.MAKE_HH_14) AS MAKE_HH_14,
-        AVG(A.PIC_HH_14) AS PIC_HH_14,
-        SUM(A.CNT_HH_15) AS CNT_HH_15,
-        AVG(A.MAKE_HH_15) AS MAKE_HH_15,
-        AVG(A.PIC_HH_15) AS PIC_HH_15,
-        SUM(A.CNT_HH_16) AS CNT_HH_16,
-        AVG(A.MAKE_HH_16) AS MAKE_HH_16,
-        AVG(A.PIC_HH_16) AS PIC_HH_16,
-        SUM(A.CNT_HH_17) AS CNT_HH_17,
-        AVG(A.MAKE_HH_17) AS MAKE_HH_17,
-        AVG(A.PIC_HH_17) AS PIC_HH_17,
-        SUM(A.CNT_HH_18) AS CNT_HH_18,
-        AVG(A.MAKE_HH_18) AS MAKE_HH_18,
-        AVG(A.PIC_HH_18) AS PIC_HH_18,
-        SUM(A.CNT_HH_19) AS CNT_HH_19,
-        AVG(A.MAKE_HH_19) AS MAKE_HH_19,
-        AVG(A.PIC_HH_19) AS PIC_HH_19,
-        SUM(A.CNT_HH_20) AS CNT_HH_20,
-        AVG(A.MAKE_HH_20) AS MAKE_HH_20,
-        AVG(A.PIC_HH_20) AS PIC_HH_20,
-        SUM(A.CNT_HH_21) AS CNT_HH_21,
-        AVG(A.MAKE_HH_21) AS MAKE_HH_21,
-        AVG(A.PIC_HH_21) AS PIC_HH_21,
-        SUM(A.CNT_HH_22) AS CNT_HH_22,
-        AVG(A.MAKE_HH_22) AS MAKE_HH_22,
-        AVG(A.PIC_HH_22) AS PIC_HH_22,
-        SUM(A.CNT_HH_23) AS CNT_HH_23,
-        AVG(A.MAKE_HH_23) AS MAKE_HH_23,
-        AVG(A.PIC_HH_23) AS PIC_HH_23
+        NVL(SUM(A.CNT_HH_00), 0) AS CNT_HH_00,
+        NVL(AVG(A.MAKE_HH_00), 0) AS MAKE_HH_00,
+        NVL(AVG(A.PIC_HH_00), 0) AS PIC_HH_00,
+        NVL(SUM(A.CNT_HH_01), 0) AS CNT_HH_01,
+        NVL(AVG(A.MAKE_HH_01), 0) AS MAKE_HH_01,
+        NVL(AVG(A.PIC_HH_01), 0) AS PIC_HH_01,
+        NVL(SUM(A.CNT_HH_02), 0) AS CNT_HH_02,
+        NVL(AVG(A.MAKE_HH_02), 0) AS MAKE_HH_02,
+        NVL(AVG(A.PIC_HH_02), 0) AS PIC_HH_02,
+        NVL(SUM(A.CNT_HH_03), 0) AS CNT_HH_03,
+        NVL(AVG(A.MAKE_HH_03), 0) AS MAKE_HH_03,
+        NVL(AVG(A.PIC_HH_03), 0) AS PIC_HH_03,
+        NVL(SUM(A.CNT_HH_04), 0) AS CNT_HH_04,
+        NVL(AVG(A.MAKE_HH_04), 0) AS MAKE_HH_04,
+        NVL(AVG(A.PIC_HH_04), 0) AS PIC_HH_04,
+        NVL(SUM(A.CNT_HH_05), 0) AS CNT_HH_05,
+        NVL(AVG(A.MAKE_HH_05), 0) AS MAKE_HH_05,
+        NVL(AVG(A.PIC_HH_05), 0) AS PIC_HH_05,
+        NVL(SUM(A.CNT_HH_06), 0) AS CNT_HH_06,
+        NVL(AVG(A.MAKE_HH_06), 0) AS MAKE_HH_06,
+        NVL(AVG(A.PIC_HH_06), 0) AS PIC_HH_06,
+        NVL(SUM(A.CNT_HH_07), 0) AS CNT_HH_07,
+        NVL(AVG(A.MAKE_HH_07), 0) AS MAKE_HH_07,
+        NVL(AVG(A.PIC_HH_07), 0) AS PIC_HH_07,
+        NVL(SUM(A.CNT_HH_08), 0) AS CNT_HH_08,
+        NVL(AVG(A.MAKE_HH_08), 0) AS MAKE_HH_08,
+        NVL(AVG(A.PIC_HH_08), 0) AS PIC_HH_08,
+        NVL(SUM(A.CNT_HH_09), 0) AS CNT_HH_09,
+        NVL(AVG(A.MAKE_HH_09), 0) AS MAKE_HH_09,
+        NVL(AVG(A.PIC_HH_09), 0) AS PIC_HH_09,
+        NVL(SUM(A.CNT_HH_10), 0) AS CNT_HH_10,
+        NVL(AVG(A.MAKE_HH_10), 0) AS MAKE_HH_10,
+        NVL(AVG(A.PIC_HH_10), 0) AS PIC_HH_10,
+        NVL(SUM(A.CNT_HH_11), 0) AS CNT_HH_11,
+        NVL(AVG(A.MAKE_HH_11), 0) AS MAKE_HH_11,
+        NVL(AVG(A.PIC_HH_11), 0) AS PIC_HH_11,
+        NVL(SUM(A.CNT_HH_12), 0) AS CNT_HH_12,
+        NVL(AVG(A.MAKE_HH_12), 0) AS MAKE_HH_12,
+        NVL(AVG(A.PIC_HH_12), 0) AS PIC_HH_12,
+        NVL(SUM(A.CNT_HH_13), 0) AS CNT_HH_13,
+        NVL(AVG(A.MAKE_HH_13), 0) AS MAKE_HH_13,
+        NVL(AVG(A.PIC_HH_13), 0) AS PIC_HH_13,
+        NVL(SUM(A.CNT_HH_14), 0) AS CNT_HH_14,
+        NVL(AVG(A.MAKE_HH_14), 0) AS MAKE_HH_14,
+        NVL(AVG(A.PIC_HH_14), 0) AS PIC_HH_14,
+        NVL(SUM(A.CNT_HH_15), 0) AS CNT_HH_15,
+        NVL(AVG(A.MAKE_HH_15), 0) AS MAKE_HH_15,
+        NVL(AVG(A.PIC_HH_15), 0) AS PIC_HH_15,
+        NVL(SUM(A.CNT_HH_16), 0) AS CNT_HH_16,
+        NVL(AVG(A.MAKE_HH_16), 0) AS MAKE_HH_16,
+        NVL(AVG(A.PIC_HH_16), 0) AS PIC_HH_16,
+        NVL(SUM(A.CNT_HH_17), 0) AS CNT_HH_17,
+        NVL(AVG(A.MAKE_HH_17), 0) AS MAKE_HH_17,
+        NVL(AVG(A.PIC_HH_17), 0) AS PIC_HH_17,
+        NVL(SUM(A.CNT_HH_18), 0) AS CNT_HH_18,
+        NVL(AVG(A.MAKE_HH_18), 0) AS MAKE_HH_18,
+        NVL(AVG(A.PIC_HH_18), 0) AS PIC_HH_18,
+        NVL(SUM(A.CNT_HH_19), 0) AS CNT_HH_19,
+        NVL(AVG(A.MAKE_HH_19), 0) AS MAKE_HH_19,
+        NVL(AVG(A.PIC_HH_19), 0) AS PIC_HH_19,
+        NVL(SUM(A.CNT_HH_20), 0) AS CNT_HH_20,
+        NVL(AVG(A.MAKE_HH_20), 0) AS MAKE_HH_20,
+        NVL(AVG(A.PIC_HH_20), 0) AS PIC_HH_20,
+        NVL(SUM(A.CNT_HH_21), 0) AS CNT_HH_21,
+        NVL(AVG(A.MAKE_HH_21), 0) AS MAKE_HH_21,
+        NVL(AVG(A.PIC_HH_21), 0) AS PIC_HH_21,
+        NVL(SUM(A.CNT_HH_22), 0) AS CNT_HH_22,
+        NVL(AVG(A.MAKE_HH_22), 0) AS MAKE_HH_22,
+        NVL(AVG(A.PIC_HH_22), 0) AS PIC_HH_22,
+        NVL(SUM(A.CNT_HH_23), 0) AS CNT_HH_23,
+        NVL(AVG(A.MAKE_HH_23), 0) AS MAKE_HH_23,
+        NVL(AVG(A.PIC_HH_23), 0) AS PIC_HH_23
         FROM
         (
         SELECT
@@ -125,6 +125,13 @@
         tms.STORE_NM
     </select>
     <select id="getKdsDayTimeChart" parameterType="KdsVO" resultType="DefaultMap">
+        SELECT STORE_CD,
+        SALE_HH,
+        SUM(ORDER_CNT) AS ORDER_CNT,
+        SUM(AVG_MAKE) AS AVG_MAKE,
+        SUM(AVG_PIC) AS AVG_PIC
+        FROM
+        (
         SELECT
         tookdt.STORE_CD
         , tookdt.SALE_HH||'시' AS SALE_HH
@@ -146,11 +153,24 @@
         WHERE
         tookdt.STORE_CD = #{storeCd}
         AND tookdt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
-        AND tookdt.SALE_HH BETWEEN #{startHh} AND #{endHh}
         GROUP BY
         tookdt.STORE_CD ,
         tookdt.SALE_HH
-        ORDER BY
-        tookdt.SALE_HH
+        <foreach collection="kdsTimeList" item="i" separator="">
+            UNION
+            SELECT tookdt.STORE_CD
+            , #{i}||'시' AS SALE_HH
+            , 0 AS ORDER_CNT
+            , 0 AS AVG_MAKE
+            , 0 AS AVG_PIC
+            FROM TB_OD_ORDER_KDS_DAILY_TIME tookdt
+            WHERE tookdt.STORE_CD = #{storeCd}
+            AND tookdt.SALE_DATE BETWEEN #{kdsDayStartDate} AND #{kdsDayEndDate}
+        </foreach>
+        )
+        WHERE SALE_HH BETWEEN #{startHh} AND #{endHh}
+        GROUP BY STORE_CD,
+        SALE_HH
+        ORDER BY SALE_HH
     </select>
 </mapper>

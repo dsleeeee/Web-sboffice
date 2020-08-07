@@ -301,12 +301,12 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        if($scope.timeZone > $scope.timeZoneSec) {
+        if ($scope.timeZone > $scope.timeZoneSec) {
             $scope._popMsg(messages['kds.date.hour.error']);
             return false;
         }
+        if (!$scope.valueCheck()) return false;
 
-        // if (!$scope.valueCheck()) return false;
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
@@ -318,6 +318,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         params.endHh = $scope.timeZoneSec;
         params.kdsTimeList = $scope.kdsTimeZone2;
         params.storeCd = $("#regStoreCd").val();
+        params.orgnFg = $("#resurceFg").val();
 
         $scope.kdsSearch(params);
     });
@@ -384,17 +385,13 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.regStoreShow = function () {
         $scope._broadcast('regStoreCtrl');
     };
-
-// 차트
+    // 차트
     $scope.chartKds = function () {
-        var date1 = new Date($scope.kdsDayStartDate);
-        var date2 = new Date($scope.kdsDayEndDate);
-        var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
-        if (diffDay > 30) {
-            $scope._popMsg(messages['kds.date.error']);
-            return false;
-        }
+
+        if (!$scope.valueCheck()) return false;
+
         var params = {};
+
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');
         params.makeDate = $scope.makeDate;
@@ -405,6 +402,8 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
         params.endHh = $scope.timeZoneSec;
         params.kdsTimeList = $scope.kdsTimeZone2;
         params.storeCd = $("#regStoreCd").val();
+        params.orgnFg = $("#resurceFg").val();
+
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
         $http({
@@ -451,7 +450,6 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             }
         });
     };
-
 // 픽업시간
     $scope.picChkDt = function () {
         // getData(list);
@@ -497,6 +495,11 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             $scope._popMsg(messages['kds.date.error']);
             return false;
         }
+
+        if ($scope.timeZone > $scope.timeZoneSec) {
+            $scope._popMsg(messages['kds.date.hour.error']);
+            return false;
+        }
         var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
         if (isNull($scope.makeDateCombo.selectedValue)) {
             $scope._popMsg(msg);
@@ -518,13 +521,48 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
-        }
+        // var msg = messages["kds.prodCd"] + messages["cmm.require.text"];
+        // if (isNull($scope.prodCd)) {
+        //     $scope._popMsg(msg);
+        //     return false;
+        // }
+        //
+        // if ($("#resurceFg").val() === "HQ") {
+        //     var msg = messages["kds.store"] + messages["cmm.require.text"];
+        //     if (isNull($("#regStoreCd").val())) {
+        //         $scope._popMsg(msg);
+        //         return false;
+        //     }
+        // }
         return true;
     };
+
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function (response) {
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassCdNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function () {
+        $scope.prodClassCd = "";
+        $scope.prodClassCdNm = "";
+    }
 
     // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
@@ -547,5 +585,20 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             });
         }, 10);
     };
+
+    $scope.$watch('prodCd', function () {
+        if ($scope.prodCd !== "") {
+            $scope.prodClassCdNm = "";
+            $scope.prodClassCd = "";
+        }
+    });
+
+    $scope.$watch('prodClassCd', function () {
+        if ($scope.prodClassCd !== "") {
+            $scope.prodCd = "";
+            $scope.prodNm = "";
+        }
+    });
+
 }])
 ;

@@ -244,8 +244,8 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
     function chartList(list) {
         // create the Pareto chart
         chart1 = new wijmo.chart.FlexChart('#chart1', {
-            // itemsSource: getData(list),
-            itemsSource: testList(),
+            itemsSource: getData(list),
+            // itemsSource: testList(),
             bindingX: "saleHh",
             legend: {
                 position: wijmo.chart.Position.None
@@ -395,6 +395,10 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 // 차트
     $scope.chartKds = function () {
+        if(!$scope.valueCheck()){
+            return false;
+        }
+
         var params = {};
         params.kdsDayStartDate = dateToDaystring($scope.kdsDayStartDate).replaceAll('-', '');
         params.kdsDayEndDate = dateToDaystring($scope.kdsDayEndDate).replaceAll('-', '');

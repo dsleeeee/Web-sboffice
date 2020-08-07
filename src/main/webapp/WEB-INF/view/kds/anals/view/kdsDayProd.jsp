@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="kdsDayProdCtrl">
-
+    <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl">${menuNm}</a>
@@ -71,6 +71,10 @@
                         <jsp:param name="targetId" value="regStore"/>
                     </jsp:include>
                 </td>
+            </c:if>
+            <c:if test="${orgnFg != 'HQ'}">
+                <td></td>
+                <td></td>
             </c:if>
         </tr>
         <tr>
@@ -163,52 +167,52 @@
     </table>
 
 
-        <div class="mt20 oh sb-select dkbr">
-            <%-- 차트 --%>
-            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
-                <s:message code="kds.chart"/>
-            </button>
-            <div class="sb-select mt10 fr">
+    <div class="mt20 oh sb-select dkbr">
+        <%-- 차트 --%>
+        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
+            <s:message code="kds.chart"/>
+        </button>
+        <div class="sb-select mt10 fr">
             <span class="chk ml10">
                 <%-- 제조시간 --%>
                 <input type="checkbox" name="makeChkDt" id="makeChecked" ng-model="makeChecked" ng-change="makeChkDt()">
                 <label for="makeChecked"><s:message code='kds.makeDate'/></label>
             </span>
-                <span class="chk ml10">
+            <span class="chk ml10">
                 <%-- 픽업시간 --%>
                 <input type="checkbox" name="picChkDt" id="picChecked" ng-model="picChecked" ng-change="picChkDt()">
                 <label for="picChecked"><s:message code='kds.picDate'/></label>
             </span>
-            </div>
-            <%-- 건수 --%>
-            <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
-            <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
-            <%--			<label for="chkDt">--%>
-            <%--				<s:message code="kds.cnt"/>--%>
-            <%--			</label>--%>
-            <%--		</span>--%>
         </div>
-        <div class="w100 mt40 mb20 ">
-            <%--위즈모 차트--%>
-            <h2>
-                <div class="circle">
+        <%-- 건수 --%>
+        <%--        <span class="btn_skyblue ml5 mt5 fr">--%>
+        <%--			<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()"/>--%>
+        <%--			<label for="chkDt">--%>
+        <%--				<s:message code="kds.cnt"/>--%>
+        <%--			</label>--%>
+        <%--		</span>--%>
+    </div>
+    <div class="w100 mt40 mb20 ">
+        <%--위즈모 차트--%>
+        <h2>
+            <div class="circle">
                 <span class="orange" ng-if="makeChecked === true" style="color:#ff9d39 !important;">
                     <s:message code="kds.makeDate"/>
                 </span>
-                    <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
+                <span class="green" ng-if="picChecked === true" style="color: #00ba8b !important;">
                     <s:message code="kds.picDate"/>
                 </span>
-                </div>
-            </h2>
-            <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
-        </div>
+            </div>
+        </h2>
+        <div class="wizWrap" id="chart1" style="width:100%; height:370px;"></div>
+    </div>
 
-        <div class="mt20 oh sb-select dkbr">
-            <%-- 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
-                <s:message code="cmm.excel.down"/>
-            </button>
-        </div>
+    <div class="mt20 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()">
+            <s:message code="cmm.excel.down"/>
+        </button>
+    </div>
     <%-- 그리드 --%>
     <div class="w100 mt20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">

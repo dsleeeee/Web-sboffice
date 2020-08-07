@@ -125,6 +125,7 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     var list = [];
     // 조회
     $scope.$on("kdsMonthList", function () {
+
         if (!$scope.valueCheck()) return false;
 
         var params = {};
@@ -141,6 +142,7 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeCd = $("#regStoreCd").val();
+        params.orgnFg = $("#resurceFg").val();
 
         $scope.kdsSearch(params);
     });
@@ -254,8 +256,6 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
         });
         chart1.dataLabel.content = '건수: {saleQty}';
         chart1.dataLabel.position = 'Top';
-        console.log("makeChkDt: ", chart1.dataLabel.content);
-        console.log("makeChkDt: ", chart1.dataLabel.position);
     };
 
 // 체크
@@ -291,11 +291,14 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
+        if ($("#resurceFg").val() === "HQ") {
+            var msg = messages["kds.store"] + messages["cmm.require.text"];
+            if (isNull($("#regStoreCd").val())) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
+        return true;
     };
 
 // 엑셀 다운로드
