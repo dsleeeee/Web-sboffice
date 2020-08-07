@@ -82,7 +82,7 @@
                     </td>
                     <%-- 팩스번호 --%>
                     <th><s:message code="instlAgency.faxNo" /></th>
-                    <td><input type="text" id="ai_faxno" name="ai_faxno" ng-model="ai_faxno" maxlength="15" /></td>
+                    <td><input type="text" id="ai_faxNo" name="ai_faxNo" ng-model="ai_faxNo" maxlength="15" /></td>
                 </tr>
                 <tr>
                     <%-- 이메일주소 --%>
