@@ -16,7 +16,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="dayDlvrCtrl">
-
+  <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>
@@ -94,6 +94,15 @@
             <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="nonDlvrAmt"
                                  width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="hqOfficeCd"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="hqBrandCd"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="posNo"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="billNo"
+                                 width="150" is-read-only="true" align="right" aggregate="Sum" visible="false"></wj-flex-grid-column>
+
           </wj-flex-grid>
         </div>
       </div>
@@ -155,13 +164,13 @@
                                  is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayDlvr.prodNm"/>" binding="prodNm" width="150"
                                  is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="dlvrCntQty" width="150"
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="dlvrSaleQty" width="150"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="dlvrDtlAmt"
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="dlvrAmt"
                                  width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="nonDlvrCntQty" width="100"
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumSaleQty"/>" binding="nonDlvrSaleQty" width="100"
                                  is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="nonDlvrDtlAmt"
+            <wj-flex-grid-column header="<s:message code="dayDlvr.sumRealSaleAmt"/>" binding="nonDlvrAmt"
                                  width="150" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>

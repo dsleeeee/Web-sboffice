@@ -105,10 +105,10 @@
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <%-- id --%>
-    <ul id="memberChgBatchCtrlPager" data-size="10">
+    <ul id="dlvrInfoCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resources/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.11" charset="utf-8"></script>

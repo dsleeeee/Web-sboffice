@@ -3,6 +3,8 @@ package kr.co.solbipos.dlvr.anals.dayDlvr.service;
 import kr.co.solbipos.application.common.service.PageVO;
 
 public class DayDlvrVO extends PageVO {
+  private String orgnFg;
+  private String storeCd;
   private String saleDate;
   private String hqOfficeCd;
   private String hqBrandCd;
@@ -22,6 +24,23 @@ public class DayDlvrVO extends PageVO {
   private int sumRealSaleAmt;
   private int cntBillNo;
   private String searchDate;
+
+
+  public String getOrgnFg() {
+    return orgnFg;
+  }
+
+  public void setOrgnFg(String orgnFg) {
+    this.orgnFg = orgnFg;
+  }
+
+  public String getStoreCd() {
+    return storeCd;
+  }
+
+  public void setStoreCd(String storeCd) {
+    this.storeCd = storeCd;
+  }
 
   public String getSaleDate() {
     return saleDate;

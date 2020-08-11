@@ -16,7 +16,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 
 <div class="subCon" ng-controller="dayDlvrCtrl">
-
+  <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
   <%-- 조회조건 --%>
   <div class="searchBar flddUnfld">
     <a href="#" class="open fl">${menuNm}</a>

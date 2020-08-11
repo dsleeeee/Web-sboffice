@@ -2,6 +2,7 @@ package kr.co.solbipos.dlvr.anals.dayDlvr.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrService;
 import kr.co.solbipos.dlvr.anals.dayDlvr.service.DayDlvrVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,12 @@ public class DayDlvrServiceImpl implements DayDlvrService {
 
   @Override
   public List<DefaultMap<Object>> getDayDlvrSaleList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
-    dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+      dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    }
+    else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+      dayDlvrVO.setStoreCd(sessionInfoVO.getStoreCd());
+    }
     return dayDlvrMapper.getDayDlvrSaleList(dayDlvrVO);
   }
 
@@ -34,7 +40,12 @@ public class DayDlvrServiceImpl implements DayDlvrService {
 
   @Override
   public List<DefaultMap<Object>> getDaySaleDtlList(DayDlvrVO dayDlvrVO, SessionInfoVO sessionInfoVO) {
-    dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+      dayDlvrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    }
+    else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+      dayDlvrVO.setStoreCd(sessionInfoVO.getStoreCd());
+    }
     return dayDlvrMapper.getDaySaleDtlList(dayDlvrVO);
   }
 }

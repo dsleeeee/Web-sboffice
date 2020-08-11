@@ -200,10 +200,10 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     dataItem.lv2Nm = messages["dayDlvr.prodLV2"];
     dataItem.prodCd = messages["dayDlvr.prodDd"];
     dataItem.prodNm = messages["dayDlvr.prodNm"];
-    dataItem.dlvrCntQty = messages["dayDlvr.dlvrSale"];
-    dataItem.dlvrDtlAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.nonDlvrCntQty = messages["dayDlvr.nonDlvrSale"];
-    dataItem.nonDlvrDtlAmt = messages["dayDlvr.nonDlvrSale"];
+    dataItem.dlvrSaleQty = messages["dayDlvr.dlvrSale"];
+    dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
+    dataItem.nonDlvrSaleQty = messages["dayDlvr.nonDlvrSale"];
+    dataItem.nonDlvrAmt = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -247,6 +247,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   }
   // <-- //그리드 헤더2줄 -->
   $scope.$on("dayDlvrDtlCtrl", function (event, data) {
+    console.log(data);
     $scope.setSelectedMember(data);
     $scope.searchDlvrDtlInfo(data);
     event.preventDefault();
@@ -260,6 +261,7 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.hqBrandCd = data.hqBrandCd;
     params.posNo = data.posNo;
     params.billNo = data.billNo;
+    params.orgnFg = $("#resurceFg").val();
 
     $scope._inquirySub("/dlvr/manage/anals/dayDlvr/getDaySaleDtlList.sb", params, function () {
     }, false);
