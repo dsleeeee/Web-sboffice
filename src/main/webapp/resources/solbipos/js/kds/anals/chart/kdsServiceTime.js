@@ -276,7 +276,7 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
             chartType: parseInt(0),
             stacking: parseInt(1),
             tooltip: {content: "{seriesName} {value}건"},
-            options: {groupWidth: "5%"},
+            // options: {groupWidth: "5%"},
             legend: {
                 position: wijmo.chart.Position.Left
             },
