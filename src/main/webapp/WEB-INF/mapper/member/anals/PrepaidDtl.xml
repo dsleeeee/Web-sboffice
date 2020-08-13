@@ -23,7 +23,7 @@
         tmmp.STORE_CD,
         tms.STORE_NM,
         tmmp.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         (SUBSTR(tmmp.SALE_DATE, 1,4) || '/' || SUBSTR(tmmp.SALE_DATE, 5,2) || '/' || SUBSTR(tmmp.SALE_DATE, 7)) AS SALE_DATE,
         tmmp.PREPAID_FG,
         tmmp.PREPAID_AMT,
@@ -59,7 +59,7 @@
         </if>
         <if test='membrNm != null and membrNm != ""'>
             <![CDATA[
-           AND tmm.MEMBR_NM LIKE '%'|| #{membrNm} ||'%'
+           AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
            ]]>
         </if>
         AND tmmp.SALE_DATE BETWEEN #{startDate} AND #{endDate}

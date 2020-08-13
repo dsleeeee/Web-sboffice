@@ -375,7 +375,12 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public List<DefaultMap<String>> getCardList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getCardList(registVO);
     }
 
@@ -387,7 +392,13 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
+
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
@@ -406,6 +417,7 @@ public class RegistServiceImpl implements RegistService {
         DefaultMap<Object> result = new DefaultMap<>();
 
         LOGGER.debug("regStoreCd: {}", registVO.getRegStoreCd());
+        LOGGER.debug("sessionInfoStoreCd: {}", sessionInfoVO.getStoreCd());
 
         List dlvrList = mapper.getDlvrList(registVO);
         List lZoneList = mapper.getMembrLzoneList(registVO);
@@ -424,11 +436,11 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public List getLzoneList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
 
-//        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-//            registVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
-//        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            registVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
-//        }
+        }
 
         List<DefaultMap<String>> resultList = mapper.getDlvrList(registVO);
 
@@ -442,24 +454,37 @@ public class RegistServiceImpl implements RegistService {
         return resultList;
     }
 
+    // 배달전화 리스트
     @Override
     public List<DefaultMap<String>> getDlvrTelList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
         return mapper.getDlvrTelList(registVO);
     }
 
 
-
+    // 배달정보등록
     @Override
     public int registDlvrInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);
         registVO.setModId(sessionInfoVO.getUserId());
 
-        // 회원카드 등록
+        // 회원배달 등록
         int result = mapper.insertMembrDlvr(registVO);
         if (result <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -467,11 +492,17 @@ public class RegistServiceImpl implements RegistService {
         return result;
     }
 
+    // 배달정보등록
     @Override
     public int registDlvrTelInfo(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
         registVO.setRegDt(dt);
         registVO.setRegId(sessionInfoVO.getUserId());
         registVO.setModDt(dt);

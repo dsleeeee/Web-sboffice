@@ -23,18 +23,18 @@
                         <%-- 발급구분 --%>
                     <th><s:message code="regist.card.fg"/><em class="imp">*</em></th>
                     <td>
-<%--                        <div class="sb-select">--%>
-<%--                            <wj-combo-box--%>
-<%--                                    id="cstCardIssFg"--%>
-<%--                                    ng-model="cstCardIssFg"--%>
-<%--                                    control="cstCardIssFgCombo"--%>
-<%--                                    items-source="_getComboData('cstCardIssFg')"--%>
-<%--                                    display-member-path="name"--%>
-<%--                                    selected-value-path="value"--%>
-<%--                                    is-editable="false"--%>
-<%--                                    initialized="_initComboBox(s)">--%>
-<%--                            </wj-combo-box>--%>
-<%--                        </div>--%>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="cstCardIssFg"
+                                    ng-model="cstCardIssFg"
+                                    control="rMembrcardYnCombo"
+                                    items-source="_getComboData('rMembrcardYn')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
                     </td>
                         <%-- 발급소속 --%>
                     <th><s:message code="regist.card.org"/><em class="imp">*</em></th>
@@ -105,19 +105,19 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk"
                                          width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.new.no"/>" binding="membrNo" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.new.no"/>" binding="membrCardNo" align="center"
                                          is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.old.no"/>" binding="membrNm" align="left"
+                    <wj-flex-grid-column header="<s:message code="regist.card.old.no"/>" binding="oldCstCardNo" align="left"
                                          is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.iss.fg"/>" binding="membrClassNm" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.iss.fg"/>" binding="cstCardStatFg" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.fg"/>" binding="membrCardNo" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.fg"/>" binding="cstCardIssFg" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.org"/>" binding="birthday" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.org"/>" binding="membrOrgnCd" align="center"
                                          width="100" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.iss.date"/>" binding="telNo" width="100" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.iss.date"/>" binding="issDate" width="100" align="center"
                                          is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="regist.card.iss.remark"/>" binding="phoneNo" width="100" align="center"
+                    <wj-flex-grid-column header="<s:message code="regist.card.iss.remark"/>" binding="issRemark" width="100" align="center"
                                          is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -129,5 +129,10 @@
                 code="cmm.save"/></a></span>
     </div>
 </div>
+
+<script>
+    <%--var cstCardIssFg = ${ccu.getCommCode("300")};--%>
+    <%--var cstCardStatFg = ${ccu.getCommCode("301")};--%>
+</script>
 <script type="text/javascript"
         src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20191223.17 charset='utf-8'"></script>

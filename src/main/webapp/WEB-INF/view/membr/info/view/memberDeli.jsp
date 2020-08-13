@@ -11,7 +11,7 @@
                 <div class="searchBar flddUnfld">
                     <a href="#" class="open fl"> <s:message code="regist.delivery.addr"/></a>
                     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                        <button class="btn_blue fr" ng-click="save()">
+                        <button type="button" class="btn_blue fr" ng-click="saveAddr()">
                             <s:message code="cmm.save"/>
                         </button>
                     </div>
@@ -119,11 +119,11 @@
             </div>
         </div>
         <div ng-controller="memberDlvrTelCtrl">
-            <f:form id="regDlvrTelForm" name="regDlvrTelForm">
+<%--            <f:form id="regDlvrTelForm" name="regDlvrTelForm">--%>
                 <div class="searchBar flddUnfld">
                     <a href="#" class="open fl"> <s:message code="regist.delivery.tel"/></a>
                     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                        <button class="btn_blue fr" ng-click="save()">
+                        <button type="button" class="btn_blue fr" ng-click="saveTel()">
                             <s:message code="cmm.save"/>
                         </button>
                     </div>
@@ -148,7 +148,7 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="useYn"
+                                        id="dlvrTelUseYn"
                                         ng-model="dlvrTelUseYn"
                                         control="useYnCombo"
                                         items-source="_getComboData('useYn')"
@@ -162,7 +162,7 @@
                     </tr>
                     </tbody>
                 </table>
-            </f:form>
+<%--            </f:form>--%>
 
             <%-- Card Histroy --%>
             <div class="w100 mt10 mb20">
@@ -177,22 +177,22 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="membrNo"
-                                             align="center"
-                                             is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="membrNm"
+<%--                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="dlvrTelSeq"--%>
+<%--                                             align="center"--%>
+<%--                                             is-read-only="true"></wj-flex-grid-column>--%>
+                        <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo"
                                              align="left"
                                              is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="membrClassNm"
+                        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn"
                                              align="center"
-                                             width="100" is-read-only="true"></wj-flex-grid-column>
+                                             width="*" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="regist.delivery.inputDate"/>"
-                                             binding="membrCardNo"
+                                             binding="regDt"
                                              align="center"
-                                             width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.delivery.updateDate"/>" binding="birthday"
+                                             width="*" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="regist.delivery.updateDate"/>" binding="modDt"
                                              align="center"
-                                             width="100" is-read-only="true"></wj-flex-grid-column>
+                                             width="*" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -207,6 +207,4 @@
 </script>
 <script type="text/javascript"
         src="/resource/solbipos/js/membr/info/view/memberDlvr.js?ver=20191223.17 charset='utf-8'">
-
-
 </script>

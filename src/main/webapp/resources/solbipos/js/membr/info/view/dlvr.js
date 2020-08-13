@@ -124,7 +124,6 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
             if (_httpStatusCheck(response, true)) {
                 // this callback will be called asynchronously
                 // when the response is available
-                console.log(response);
                 $scope.dlvrMzone = response.data.data.mZoneList;
             }
         }, function errorCallback(response) {
@@ -160,7 +159,6 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
             if (_httpStatusCheck(response, true)) {
                 // this callback will be called asynchronously
                 // when the response is available
-                console.log(response);
                 $scope.totDlvrMzone = response.data.data.mZoneList;
             }
         }, function errorCallback(response) {

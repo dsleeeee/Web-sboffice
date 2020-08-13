@@ -78,11 +78,11 @@
     -->
     <select id="getTodayGnrlzMemberList" parameterType="todayGnrlzVO" resultType="DefaultMap">
         /* USE : TodayGnrlzMapper.getTodayGnrlzMemberList */
-        SELECT  MEMBR_NO, MEMBR_NM
+        SELECT  MEMBR_NO, SBPENC.D(MEMBR_NM) AS MEMBR_NM
         ,       SAVE_POINT
         ,       USE_POINT
         FROM    (
-                    SELECT  tsshm.MEMBR_NO, tsshm.MEMBR_NM
+                    SELECT  tsshm.MEMBR_NO, SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM
                     ,       SUM(tsshm.SALE_SAVE_POINT) AS SAVE_POINT
                     ,       0 AS USE_POINT
                     FROM    TB_SL_SALE_HDR_MEMBR tsshm
@@ -97,7 +97,7 @@
                     GROUP
                     BY      tsshm.MEMBR_NO, tsshm.MEMBR_NM
                     UNION ALL
-                    SELECT  tsspp.MEMBR_NO, tmm.MEMBR_NM
+                    SELECT  tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
                     ,       0 AS SAVE_POINT
                     ,       SUM(tsspp.SALE_AMT) AS USE_POINT
                     FROM    TB_SL_SALE_PAY_POINT tsspp

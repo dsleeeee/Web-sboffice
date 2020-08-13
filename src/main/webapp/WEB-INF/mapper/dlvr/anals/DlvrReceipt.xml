@@ -9,14 +9,14 @@
         D.HQ_OFFICE_CD,
         D.HQ_BRAND_CD,
         D.POS_NO,
-        H.DLVR_ADDR,
+        SBPENC.D(H.DLVR_ADDR) AS DLVR_ADDR,
         H.BILL_COUNT,
         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
         SELECT
-        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, tsshd.DLVR_ADDR, tsshd.POS_NO, COUNT(tsshd.BILL_NO) AS BILL_COUNT
+        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR, tsshd.POS_NO, COUNT(tsshd.BILL_NO) AS BILL_COUNT
         FROM
         TB_SL_SALE_HDR_DLVR tsshd
         WHERE
@@ -28,7 +28,7 @@
             AND tsshd.STORE_CD = #{storeCd}
         </if>
         GROUP BY
-        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, tsshd.DLVR_ADDR, tsshd.POS_NO) H,
+        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR, tsshd.POS_NO) H,
         (
         SELECT
         tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tssh.POS_NO, SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT

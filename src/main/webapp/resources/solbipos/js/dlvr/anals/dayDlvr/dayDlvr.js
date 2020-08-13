@@ -247,7 +247,6 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   }
   // <-- //그리드 헤더2줄 -->
   $scope.$on("dayDlvrDtlCtrl", function (event, data) {
-    console.log(data);
     $scope.setSelectedMember(data);
     $scope.searchDlvrDtlInfo(data);
     event.preventDefault();

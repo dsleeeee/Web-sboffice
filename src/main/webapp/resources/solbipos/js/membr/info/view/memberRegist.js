@@ -12,6 +12,10 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
         $("#basicView").show();
         $("#cardView").hide();
         $("#deliView").hide();
+
+        $("#basicTab").addClass("on");
+        $("#cardTab").removeClass("on");
+        $("#deliTab").removeClass("on")
     };
     // 기본 탭 보이기
     $scope.basicShow = function () {
@@ -26,7 +30,6 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
 
     // 카드 탭 보이기
     $scope.cardShow = function () {
-        console.log($scope.insertMembrNo, $scope.saveMode);
         if ($scope.saveMode === 'REG' && $scope.insertMembrNo === undefined) {
             $scope._popMsg(messages["cmm.base.info.save"]);
         } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
@@ -54,32 +57,46 @@ app.controller('memberRegistCtrl', ['$scope', function ($scope, $http) {
 
     // 배달 탭 보이기
     $scope.deliShow = function () {
-        $("#basicView").hide();
-        $("#cardView").hide();
-        $("#deliView").show();
+        if ($scope.saveMode === 'REG' && $scope.insertMembrNo === undefined) {
+            $scope._popMsg(messages["cmm.base.info.save"]);
+        } else if ($scope.saveMode === 'REG' && $scope.insertMembrNo !== undefined) {
+            $("#basicView").hide();
+            $("#cardView").hide();
+            $("#deliView").show()
 
-        $("#basicTab").removeClass("on");
-        $("#cardTab").removeClass("on");
-        $("#deliTab").addClass("on");
+            $("#basicTab").removeClass("on");
+            $("#cardTab").removeClass("on");
+            $("#deliTab").addClass("on");
+            $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
+            $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+        } else if ($scope.saveMode === 'MOD') {
+            $("#basicView").hide();
+            $("#cardView").hide();
+            $("#deliView").show()
 
-        console.log($scope.insertMembrNo);
-        $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
-        $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+            $("#basicTab").removeClass("on");
+            $("#cardTab").removeClass("on");
+            $("#deliTab").addClass("on");
+            $scope.$broadcast('getMemberDlvr', $scope.insertMembrNo);
+            $scope.$broadcast('getMemberDlvrTel', $scope.insertMembrNo);
+        } else {
+            $scope._popMsg(messages["cmm.base.info.save"]);
+        }
     };
     $scope.$on("responseGet", function (event, params, mode) {
-        console.log(params);
         $scope.insertMembrNo = params;
         $scope.saveMode = mode;
         $scope.$broadcast("paramsCard", params);
     });
 
-    $scope.$on("modMember", function (event, mode,  data) {
+    $scope.$on("modMember", function (event, mode, data) {
         $scope.saveMode = mode;
         $scope.updateMembrNo = data;
         // event.preventDefault();
     });
 
     $scope.$on("memberRegistInfo", function (event, data) {
+        $scope.init();
         $scope.$broadcast("memberBasicCtrl", data);
         // event.preventDefault();
     });

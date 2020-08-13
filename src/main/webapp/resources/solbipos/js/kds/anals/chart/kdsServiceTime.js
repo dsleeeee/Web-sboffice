@@ -404,7 +404,6 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
     var list = [];
     // 조회
     $scope.$on("kdsServiceTimeList", function () {
-        console.log($scope.valueCheck());
         if (!$scope.valueCheck()) {
             return false;
         }

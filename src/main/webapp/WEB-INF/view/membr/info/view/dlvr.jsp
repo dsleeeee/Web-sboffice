@@ -284,10 +284,10 @@
                         items-source="data"
                         item-formatter="_itemFormatter">
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="searchResult"
-                                         width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                                          is-read-only="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="searchResult"
+                                         width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvr.membr.addr"/>" binding="addr"
                                          width="220"
                                          is-read-only="true" align="center"></wj-flex-grid-column>
@@ -334,10 +334,10 @@
                     items-source="data"
                     item-formatter="_itemFormatter">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="membrNm"
-                                     width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"
                                      is-read-only="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dlvr.membr.name"/>" binding="membrNm"
+                                     width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvr.membr.phoneNumber"/>" binding="telNo" width="180"
                                      is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvr.membr.useYn"/>" binding="useYn" width="90"

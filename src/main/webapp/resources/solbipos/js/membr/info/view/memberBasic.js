@@ -155,6 +155,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 회원명 최대길이 체크
+        if (nvl(i$scope.member.membrNm, '') !== '' && nvl($scope.member.membrNm + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["regist.membr.nm"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
+            item.result = msg;
+            return false;
+        }
+
         // 전화번호를 입력하세요.
         var msg = messages["regist.tel"]+messages["cmm.require.text"];
         if( isNull( $scope.member.telNo )) {
@@ -172,7 +179,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 회원카드번호를 입력하세요.
         var msg = messages["regist.membr.card.no"]+messages["cmm.require.text"];
-        if( isNull( $scope.member.cardNo )) {
+        if( isNull( $scope.member.membrCardNo )) {
             $scope._popMsg(msg);
             return false;
         }
@@ -217,7 +224,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 // console.log(result.data.data)
                 $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-                // $scope.memberRegistLayer.hide();
+                $scope.memberRegistLayer.hide();
                 // memberInfoScope.getMemberList();
             });
         }
@@ -226,7 +233,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-                // $scope.memberRegistLayer.hide();
+                $scope.memberRegistLayer.hide();
                 // $scope.memberInfoDetailLayer.hide();
                 // memberInfoScope.getMemberList();
             });

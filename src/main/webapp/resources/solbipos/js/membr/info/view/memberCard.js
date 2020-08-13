@@ -5,8 +5,10 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('memberCardCtrl', $scope, $http, false));
 
     // 조회조건 콤보박스 데이터
-    // $scope._setComboData("rCstCardIssFg", rCstCardIssFgList);
-    // $scope._setComboData("rCstCardStatFg", rCstCardStatFgList);
+    $scope._setComboData("rMembrcardYn", rMembrcardList);
+    // $scope._getComboDataQuery('300', 'cstCardIssFg', 'A');
+    // $scope._getComboDataQuery('301', 'cstCardStatFg', 'A');
+    // $scope._getComboDataQuery('067', 'useYn', '');
 
     $scope.selectedMember;
     $scope.setSelectedMember = function (data) {
@@ -84,7 +86,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.$on("paramsCard", function (event, params) {
-        $scope.membrNo = params;
+        $scope.params = params;
         // $scope.$broadcast("paramsGet", params);
     });
 
@@ -93,7 +95,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
      * *******************************************************/
     $scope.$on("getCardList", function () {
         var params = {};
-        params.membrNo = $scope.membrNo;
+        params.membrNo = $scope.params.membrNo;
         // params.membrOrgnCd = $scope.card.data.data.membrOrgnCd;
         $scope._inquiryMain("/membr/info/view/view/getCardlist.sb", params, function () {
         });
@@ -108,7 +110,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 발급구분을 선택해주세요.
         var msg = messages["regist.card.fg"] + messages["cmm.require.select"];
-        if (isNull($scope.cstCardIssFgCombo.selectedValue)) {
+        if (isNull($scope.rMembrcardYnCombo.selectedValue)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -122,7 +124,7 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 발급일자를 선택해주세요.
         var msg = messages["regist.card.iss.date"] + messages["cmm.require.select"];
-        if (isNull($scope.issDateCombo.selectedValue)) {
+        if (isNull($scope.member.issDate)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -154,16 +156,29 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (!$scope.valueCheck()) return false;
         var params = $scope.member;
-        params.membrNo = $scope.membrNo;
+        params.membrNo = $scope.params.membrNo;
         params.issDate = getFormatDateString($scope.member.issDate);
 
         var memberInfoScope = agrid.getScope('memberCtrl');
 
-        $scope._postJSONSave.withPopUp("/membr/info/view/base/registCardInfo.sb", params, function (result ) {
-            $scope._popMsg(messages["cmm.saveSucc"]);
-            $scope.memberRegistLayer.hide();
-            memberInfoScope.getMemberList();
-        });
+        if($scope.saveMode === "REG") {
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/registCardInfo.sb", params, function (result) {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                $scope.memberRegistLayer.hide();
+                memberInfoScope.getMemberList();
+            });
+        }
+        // 수정
+        else if($scope.saveMode === "MOD"){
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberCard.sb", params, function (result) {
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                $scope.$emit("responseGet", result.data.data, $scope.saveMode);
+                $scope.memberRegistLayer.hide();
+                // $scope.memberInfoDetailLayer.hide();
+                memberInfoScope.getMemberList();
+            });
+        }
+
     };
 
     // 화면 ready 된 후 설정

@@ -241,20 +241,20 @@
         INSERT INTO TB_MB_MEMBER tmm (
             tmm.MEMBR_ORGN_CD,
             tmm.MEMBR_NO,
-            tmm.MEMBR_NM,
+            SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
             tmm.MEMBR_NICKNM,
             tmm.MEMBR_CLASS_CD,
             tmm.MEMBR_CARD_NO,
             tmm.REG_STORE_CD,
             tmm.POST_NO,
-            tmm.ADDR,
-            tmm.ADDR_DTL,
+            SBPENC.D(tmm.ADDR) AS ADDR,
+            SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
             tmm.BIRTHDAY,
             tmm.LUNAR_YN,
             tmm.GENDR_FG,
             tmm.EMAIL_ADDR,
             tmm.SHORT_NO,
-            tmm.TEL_NO,
+            SBPENC.D(tmm.TEL_NO) AS TEL_NO,
             tmm.WEDDING_YN,
             tmm.WEDDINGDAY,
             tmm.EMAIL_RECV_YN,
@@ -718,8 +718,14 @@
         	*
         FROM
         	TB_MB_MEMBER_CARD tmmc
-        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-        AND MEMBR_NO = #{membrNo}
+        WHERE 1=1
+        <if test='membrOrgnCd != null and membrOrgnCd != ""'>
+            AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+            AND MEMBR_NO = #{membrNo}
+        </if>
+
     </select>
 
     <!-- 회원카드정보 추가 -->
@@ -747,9 +753,9 @@
             #{membrCardNo},
             #{membrOrgnCd},
             #{membrNo},
-            #{cstCardStatFg},
+            0,
             #{oldCstCardNo},
-            #{cstCardIssFg},
+            0,
             #{issRemark},
             #{issOrgnCd},
             #{issDate},
@@ -758,6 +764,28 @@
             #{modId},
             #{modDt})
     </insert>
+
+    <!-- 회원정보 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CARD
+        COMMENTS : 카드정보수정
+    -->
+    <update id="updateMemberCard" parameterType="registVO">
+        /* RegistMapper.updateMemberInfo */
+        UPDATE TB_MB_MEMBER_CARD tmmc
+           SET
+            tmmc.MEMBR_CARD_NO = #{membrCardNo},
+            tmmc.CST_CARD_STAT_FG = #{cstCardStatFg},
+            tmmc.OLD_CST_CARD_NO = #{oldCstCardNo},
+            tmmc.CST_CARD_ISS_FG = #{cstCardIssFg},
+            tmmc.ISS_REMARK = #{issRemark},
+            tmmc.ISS_ORGN_CD = #{issOrgnCd},
+            tmmc.ISS_DATE = #{iss_date},
+            tmmc.MOD_ID = #{modId},
+            tmmc.MOD_DT = #{modDt}
+         WHERE tmm.MEMBR_NO = #{membrNo}
+           AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+    </update>
 
     <!-- 배달정보 조회 -->
     <!--
@@ -768,7 +796,10 @@
  /* RegistMapper.getDlvrList */
        SELECT *
         FROM TB_MB_MEMBER_DLVR_ADDR tmmda
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_NO = #{membrNo}
     </select>
+
 
     <!-- 배달정보 추가 -->
     <!--
@@ -777,35 +808,66 @@
     -->
     <insert id="insertMembrDlvr" parameterType="registVO">
         /* RegistMapper.insertMembrDlvr */
-        INSERT INTO TB_MB_MEMBER_CARD tmmc (
-            tmmc.MEMBR_CARD_NO,
-            tmmc.MEMBR_ORGN_CD,
-            tmmc.MEMBR_NO,
-            tmmc.CST_CARD_STAT_FG,
-            tmmc.OLD_CST_CARD_NO,
-            tmmc.CST_CARD_ISS_FG,
-            tmmc.ISS_REMARK,
-            tmmc.ISS_ORGN_CD,
-            tmmc.ISS_DATE,
-            tmmc.REG_ID,
-            tmmc.REG_DT,
-            tmmc.MOD_ID,
-            tmmc.MOD_DT)
+        INSERT INTO TB_MB_MEMBER_DLVR_ADDR tmmda (
+            tmmda.MEMBR_ORGN_CD
+            , tmmda.MEMBR_NO
+            , tmmda.DLVR_ADDR_SEQ
+            , tmmda.DLVR_STORE_CD
+            , tmmda.DLVR_LZONE_CD
+            , tmmda.DLVR_MZONE_CD
+            , SBPENC.D(tmmda.ADDR) AS ADDR
+            , SBPENC.D(tmmda.ADDR_DTL) AS ADDR_DTL
+            , tmmda.LAST_DLVR_DATE
+            , tmmda.TOT_DLVR_CNT
+            , tmmda.USE_YN
+            , tmmda.REG_DT
+            , tmmda.REG_ID
+            , tmmda.MOD_DT
+            , tmmda.MOD_ID
+            )
         VALUES (
-            #{membrCardNo},
-            #{membrOrgnCd},
-            #{membrNo},
-            #{cstCardStatFg},
-            #{oldCstCardNo},
-            #{cstCardIssFg},
-            #{issRemark},
-            #{issOrgnCd},
-            #{issDate},
-            #{regId},
-            #{regDt},
-            #{modId},
-            #{modDt})
+            #{membrOrgnCd}
+            , #{membrNo}
+            , (SELECT NVL(MAX(DLVR_ADDR_SEQ),0)+1 FROM TB_MB_MEMBER_DLVR_ADDR WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo})
+            , #{regStoreCd}
+            , #{dlvrLzoneCd}
+            , #{dlvrMzoneCd}
+            , #{addr}
+            , #{addrDtl}
+            , #{lastDlvrDate}
+            , #{totDlvrCnt}
+            , #{useYn}
+            , #{regDt}
+            , #{regId}
+            , #{modDt}
+            , #{modId}
+             )
     </insert>
+
+    <!-- 배달정보 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_ADDR
+        COMMENTS : 배달정보 수정
+    -->
+    <update id="updateMemberDlvr" parameterType="registVO">
+        /* RegistMapper.updateMemberDlvr */
+        UPDATE TB_MB_MEMBER_DLVR_ADDR tmmda
+           SET
+          tmmda.DLVR_STORE_CD = #{reqStoreCd}
+          , tmmda.DLVR_LZONE_CD = #{dlvrLzoneCd}
+          , tmmda.DLVR_MZONE_CD = #{dlvrMzoneCd}
+          , tmmda.ADDR = SBPENC.E(#{addr})
+          , tmmda.ADDR_DTL = SBPENC.E(#{addrDtl})
+          , tmmda.LAST_DLVR_DATE = #{lastDlvrDate}
+          , tmmda.TOT_DLVR_CNT = #{totDlvrCnt}
+          , tmmda.USE_YN = #{useYn}
+          , tmmda.MOD_DT = #{modDt}
+          , tmmda.MOD_ID = #{modId}
+         WHERE tmmda.MEMBR_NO = #{membrNo}
+           AND tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND tmmda.DLVR_ADDR_SEQ = #{dlvrAddrSeq}
+    </update>
+
     <!-- 배달전화정보 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER, TB_MB_MEMBER_DLVR_TEL,
@@ -814,9 +876,19 @@
     <select id="getDlvrTelList" parameterType="registVO" resultType="DefaultMap">
  /* RegistMapper.getDlvrTelList */
        SELECT
-        	*
+            tmmdt.MEMBR_ORGN_CD
+            , tmmdt.MEMBR_NO
+            , tmmdt.DLVR_TEL_SEQ
+            , tmmdt.DLVR_STORE_CD
+            , tmmdt.TEL_NO
+            , tmmdt.SHORT_NO
+            , tmmdt.USE_YN
+            , TO_CHAR(TO_DATE(tmmdt.REG_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS REG_DT
+            , tmmdt.REG_ID
+            , TO_CHAR(TO_DATE(tmmdt.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS MOD_DT
+            , tmmdt.MOD_ID
         FROM
-        	TB_MB_MEMBER_CARD tmmc
+        	TB_MB_MEMBER_DLVR_TEL tmmdt
         WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
         AND MEMBR_NO = #{membrNo}
     </select>
@@ -828,35 +900,50 @@
     -->
     <insert id="insertMembrDlvrTel" parameterType="registVO">
         /* RegistMapper.insertMembrDlvrTel */
-        INSERT INTO TB_MB_MEMBER_CARD tmmc (
-            tmmc.MEMBR_CARD_NO,
-            tmmc.MEMBR_ORGN_CD,
-            tmmc.MEMBR_NO,
-            tmmc.CST_CARD_STAT_FG,
-            tmmc.OLD_CST_CARD_NO,
-            tmmc.CST_CARD_ISS_FG,
-            tmmc.ISS_REMARK,
-            tmmc.ISS_ORGN_CD,
-            tmmc.ISS_DATE,
-            tmmc.REG_ID,
-            tmmc.REG_DT,
-            tmmc.MOD_ID,
-            tmmc.MOD_DT)
+        INSERT INTO TB_MB_MEMBER_DLVR_TEL tmmdt (
+            tmmdt.MEMBR_ORGN_CD,
+            tmmdt.MEMBR_NO,
+            tmmdt.DLVR_TEL_SEQ,
+            tmmdt.DLVR_STORE_CD,
+            tmmdt.TEL_NO,
+            tmmdt.SHORT_NO,
+            tmmdt.USE_YN,
+            tmmdt.REG_ID,
+            tmmdt.REG_DT,
+            tmmdt.MOD_ID,
+            tmmdt.MOD_DT)
         VALUES (
-            #{membrCardNo},
             #{membrOrgnCd},
             #{membrNo},
-            #{cstCardStatFg},
-            #{oldCstCardNo},
-            #{cstCardIssFg},
-            #{issRemark},
-            #{issOrgnCd},
-            #{issDate},
+            (SELECT NVL(MAX(DLVR_TEL_SEQ),0)+1 FROM TB_MB_MEMBER_DLVR_TEL WHERE MEMBR_ORGN_CD = #{membrOrgnCd} AND MEMBR_NO = #{membrNo}),
+            #{regStoreCd},
+            #{telNo},
+            #{shortNo},
+            #{useYn},
             #{regId},
             #{regDt},
             #{modId},
-            #{modDt})
+            #{modDt}
+            )
     </insert>
+
+    <!-- 배달전화정보 수정 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_DLVR_TEL
+        COMMENTS : 배달전화정보 수정
+    -->
+    <update id="updateMemberDlvrTel" parameterType="registVO">
+        /* RegistMapper.updateMemberDlvrTel */
+        UPDATE TB_MB_MEMBER_DLVR_TEL tmmda
+           SET
+            DLVR_STORE_CD = #{regStoreCd}
+            , TEL_NO = SBPENC.E(#{telNo})
+            , SHORT_NO = #{shortNo}
+            , USE_YN = #{useYn}
+         WHERE tmmda.MEMBR_NO = #{membrNo}
+           AND tmmda.MEMBR_ORGN_CD = #{membrOrgnCd}
+           AND tmmda.DLVR_TEL_SEQ = #{dlvrTelSeq}
+    </update>
 
     <!-- 배달구역 리스트 조회-->
     <!--

@@ -235,7 +235,6 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
             {avgMake: 1300, avgPic: 1200, orderCnt: 20, saleHh: '11시'}
 
         ];
-        console.log(testList);
         return testList
     }
 

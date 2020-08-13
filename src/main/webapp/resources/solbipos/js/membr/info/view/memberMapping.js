@@ -44,8 +44,6 @@ app.controller('memberMappingCtrl', ['$scope', '$http', function ($scope, $http)
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "cdPartner" || col.binding === "lnPartner") {
-          console.log('selectedRow', selectedRow);
-
           $scope.setCompany(selectedRow);
           $scope._gridDataInit();
           $scope.memberMappingLayer.hide();

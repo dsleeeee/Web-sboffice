@@ -40,9 +40,6 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     };
 
     function getData(dataList) {
-        // dataList.forEach((e, i)=> {
-        //     console.log(e);
-        // })
         let view = new wijmo.collections.CollectionView(dataList);
         return view;
     }
@@ -212,7 +209,6 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 // 차트
     $scope.chartKds = function () {
-        console.log("chart!!!");
     };
 
 // 픽업시간

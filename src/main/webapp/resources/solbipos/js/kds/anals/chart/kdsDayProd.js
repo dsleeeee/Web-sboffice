@@ -213,7 +213,6 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
 // 차트
     $scope.chartKds = function () {
-        console.log("chart!!!");
     };
 
 // 픽업시간
@@ -248,8 +247,6 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         });
         chart1.dataLabel.content = '건수: {saleQty}';
         chart1.dataLabel.position = 'Top';
-        console.log("makeChkDt: ", chart1.dataLabel.content);
-        console.log("makeChkDt: ", chart1.dataLabel.position);
     };
 
 // 체크

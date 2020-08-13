@@ -91,7 +91,7 @@
         , DLVR_LZONE_CD
         , PAGE_NO
         , EMP_NO
-        , DLVR_ADDR
+        , SBPENC.D(DLVR_ADDR) AS DLVR_ADDR
         , IN_FG
         , USE_YN
         , REG_DT
@@ -123,7 +123,7 @@
             , DLVR_LZONE_CD
             , PAGE_NO
             , EMP_NO
-            , DLVR_ADDR
+            , SBPENC.D(DLVR_ADDR) AS DLVR_ADDR
             , IN_FG
             , USE_YN
             , REG_DT
@@ -137,7 +137,7 @@
             , #{dlvrLzoneCd}
             , #{pageNo}
             , #{empNo}
-            , #{dlvrAddr}
+            , SBPENC.E(#{dlvrAddr})
             , #{inFg}
             , #{useYn}
             , #{regDt}
@@ -154,7 +154,7 @@
             , DLVR_LZONE_CD = #{dlvrLzoneCd}
             , PAGE_NO       = #{pageNo}
             , EMP_NO        = #{empNo}
-            , DLVR_ADDR     = #{dlvrAddr}
+            , DLVR_ADDR     = SBPENC.E(#{dlvrAddr})
             , IN_FG         = #{inFg}
             , USE_YN        = #{useYn}
             , MOD_DT        = #{modDt}

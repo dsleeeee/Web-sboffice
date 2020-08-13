@@ -3,8 +3,11 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:850px;">
-  <div class="wj-dialog wj-dialog-columns title" >
+<c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
+<c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+
+<wj-popup id="postpaidStoreRegistLayer" control="postpaidStoreRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:850px; height:620px;">
+  <div class="wj-dialog wj-dialog-columns title"  >
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -18,7 +21,7 @@
       <div class="oh">
         <%--- 적용매장 그리드 --%>
         <div class="w50 fl">
-          <div class="wj-TblWrap mr10" style="height:430px; overflow-y: hidden;" ng-controller="postpaidStoreRegistCtrl">
+          <div class="wj-TblWrap mr10" style="height:430px; overflow-y: hidden;" ng-controller="postpaidStoreRegistCtrl" ng-init="init()">
             <div class="oh mb10">
               <%-- 페이지 스케일  --%>
               <%--

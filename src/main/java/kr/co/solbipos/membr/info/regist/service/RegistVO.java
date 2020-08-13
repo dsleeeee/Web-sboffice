@@ -150,6 +150,11 @@ public class RegistVO extends PageVO {
     /** 발급일자*/
     private String dlvrLzoneCd;
 
+    private String dlvrMzoneCd;
+    private String lastDlvrDate;
+    private Integer totDlvrCnt;
+    private Integer dlvrAddrSeq;
+
     /**
      * @return the orgnFg
      */
@@ -947,5 +952,37 @@ public class RegistVO extends PageVO {
 
     public void setDlvrLzoneCd(String dlvrLzoneCd) {
         this.dlvrLzoneCd = dlvrLzoneCd;
+    }
+
+    public String getDlvrMzoneCd() {
+        return dlvrMzoneCd;
+    }
+
+    public void setDlvrMzoneCd(String dlvrMzoneCd) {
+        this.dlvrMzoneCd = dlvrMzoneCd;
+    }
+
+    public String getLastDlvrDate() {
+        return lastDlvrDate;
+    }
+
+    public void setLastDlvrDate(String lastDlvrDate) {
+        this.lastDlvrDate = lastDlvrDate;
+    }
+
+    public Integer getTotDlvrCnt() {
+        return totDlvrCnt;
+    }
+
+    public void setTotDlvrCnt(Integer totDlvrCnt) {
+        this.totDlvrCnt = totDlvrCnt;
+    }
+
+    public Integer getDlvrAddrSeq() {
+        return dlvrAddrSeq;
+    }
+
+    public void setDlvrAddrSeq(Integer dlvrAddrSeq) {
+        this.dlvrAddrSeq = dlvrAddrSeq;
     }
 }

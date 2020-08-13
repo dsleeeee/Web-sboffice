@@ -65,14 +65,14 @@
         , tmmda.DLVR_STORE_CD
         , tmmda.DLVR_LZONE_CD
         , tmmda.DLVR_MZONE_CD
-        , tmmda.ADDR
-        , tmmda.ADDR_DTL
+        , SBPENC.D(tmmda.ADDR) AS ADDR
+        , SBPENC.D(tmmda.ADDR_DTL) AS ADDR_DTL
         , tmmda.LAST_DLVR_DATE
         , tmmda.TOT_DLVR_CNT
         , tmmda.USE_YN
-        , tmmda.REG_DT
+        , TO_CHAR(TO_DATE(tmmda.REG_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS REG_DT
         , tmmda.REG_ID
-        , tmmda.MOD_DT
+        , TO_CHAR(TO_DATE(tmmda.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS MOD_DT
         , tmmda.MOD_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER_DLVR_ADDR tmmda,
@@ -127,12 +127,12 @@
         , SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         , tmmdt.DLVR_TEL_SEQ
         , tmmdt.DLVR_STORE_CD
-        , tmmdt.TEL_NO
+        , SBPENC.D(tmmdt.TEL_NO) AS TEL_NO
         , tmmdt.SHORT_NO
         , tmmdt.USE_YN
-        , tmmdt.REG_DT
+        , TO_CHAR(TO_DATE(tmmdt.REG_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS REG_DT
         , tmmdt.REG_ID
-        , tmmdt.MOD_DT
+        , TO_CHAR(TO_DATE(tmmdt.MOD_DT, 'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') AS MOD_DT
         , tmmdt.MOD_ID
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER_DLVR_TEL tmmdt,
@@ -148,7 +148,7 @@
             AND tmm.MEMBR_CLASS_CD LIKE '%'|| #{membrClassNo}||'%'
         </if>
         <if test='telNo != null and telNo !=""'>
-            AND tmmdt.TEL_NO LIKE '%'|| #{telNo}||'%'
+            AND SBPENC.D(tmmdt.TEL_NO) LIKE '%'|| #{telNo}||'%'
         </if>
         <if test='shortNo != null and shortNo !=""'>
             AND tmmdt.SHORT_NO LIKE '%'|| #{shortNo}||'%'
@@ -168,7 +168,7 @@
       /*배달전화 저장*/
       UPDATE TB_MB_MEMBER_DLVR_TEL tmmdt
       SET tmmdt.DLVR_STORE_CD = #{dlvrStoreCd}
-      , tmmdt.TEL_NO = #{telNo}
+      , tmmdt.TEL_NO = SBPENC.E(#{telNo})
       , tmmdt.SHORT_NO = #{shortNo}
       , tmmdt.USE_YN = #{useYn}
       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}

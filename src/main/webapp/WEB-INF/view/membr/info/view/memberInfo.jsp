@@ -507,6 +507,12 @@
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.07"
         charset="utf-8"></script>
 
+<%-- 후불적용매장등록 --%>
+<c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 <%-- 매장 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
@@ -514,13 +520,7 @@
 </c:import>
 
 <%-- 매장 등록/수정--%>
-<%--<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">--%>
-<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
-<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
-<%--</c:import>--%>
-
-<%-- 후불적용매장등록 --%>
-<c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">
+<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

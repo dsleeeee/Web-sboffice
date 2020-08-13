@@ -77,7 +77,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                 if (col.binding === "membrNo" || col.binding === "membrNm") {
                     var selectedData = s.rows[ht.row].dataItem;
                     $scope.setSelectedMember(selectedData);
-                    // $scope.memberRegistLayer.show(true);
+                    $scope.memberRegistLayer.show(true);
                     // // $scope.memberInfoDetailLayer.show(true);
                     event.preventDefault();
                 }
@@ -187,6 +187,11 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         }
         // <-- //그리드 헤더3줄 -->
 
+    };
+    
+    // 등록매장
+    $scope.regStoreShow = function () {
+        $scope._broadcast('regStoreCtrl');
     };
 
     // 조회 버튼 클릭

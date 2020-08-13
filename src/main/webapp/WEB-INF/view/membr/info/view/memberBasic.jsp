@@ -58,7 +58,7 @@
                         <%-- 회원카드번호 --%>
                     <th><s:message code="regist.membr.card.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrCardNo" name="membrCardNo" ng-model="member.cardNo"
+                        <input type="text" id="rMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
                                class="sb-input w100" maxlength="30" required>
                     </td>
                         <%-- 카드사용구분 --%>

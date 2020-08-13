@@ -285,16 +285,17 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     });
 
     // 후불회원등록 팝업 핸들러 추가
-    // $scope.postpaidStoreRegistLayer.shown.addHandler(function (s) {
-    //   setTimeout(function() {
-    //     $scope._broadcast('postpaidStoreRegistCtrl', $scope.getSelectedMember());
-    //   }, 50)
-    // });
+    $scope.postpaidStoreRegistLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('postpaidStoreRegistCtrl', $scope.getSelectedMember());
+      }, 50)
+    });
   });
 
   // 신규회원 등록
   $scope.registMember = function(){
     $scope.setSelectedMember(null);
+    $scope._broadcast('responseGet', {});
     $scope.memberRegistLayer.show(true);
   };
 

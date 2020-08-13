@@ -14,7 +14,7 @@
         tssh.REAL_SALE_AMT,
         tsshd.DLVR_ADDR,
         tsshd.DLVR_TEL_NO,
-        SBPENC.D ( tsshm.MEMBR_NM ) AS MEMBR_NM,
+        tsshm.MEMBR_NM,
         tssh.BILL_DT,
         ( CASE WHEN tme.EMP_NM IS NULL THEN '배달원' ELSE tme.EMP_NM END ) AS EMP_NM
     <include refid="CmmSQL.PagingTemplateCount"/>
@@ -35,7 +35,7 @@
     WHERE
         tssh.SALE_DATE BETWEEN #{ startDate } AND #{ endDate }
     <if test='membrNm != null and membrNm !=""'>
-        AND SBPENC.D(tsshm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+        AND tsshm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
     </if>
     <include refid="CmmSQL.PagingTemplateBottom"/>
   </select>
