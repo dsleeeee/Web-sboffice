@@ -290,6 +290,12 @@
         <if test='clsFg != null and clsFg != ""'>
             AND unused.CLS_FG = #{clsFg}
         </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND UPPER(unused.STORE_CD) LIKE '%' || UPPER(#{storeCd}) || '%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND unused.STORE_NM LIKE '%' ||  #{storeNm} || '%'
+        </if>
         ORDER BY
             unused.STORE_FG,
             unused.SYS_STAT_FG,
