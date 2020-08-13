@@ -377,7 +377,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
     // 일괄등록 버튼
     $scope.pointTotal = async function () {
         if ($scope.initData === undefined || $scope.initData === null) {
-            $scope._popMsg(messages["grade.membr.add.message"]);
+            $scope._popMsg(messages["grade.membr.point.total.add"]);
         } else {
             $scope.data = await new wijmo.collections.CollectionView([]);
             await $scope.getTotalAdd();

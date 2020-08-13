@@ -415,6 +415,12 @@ public class RegistServiceImpl implements RegistService {
     @Override
     public DefaultMap<Object> getDlvrList(RegistVO registVO, SessionInfoVO sessionInfoVO) {
         DefaultMap<Object> result = new DefaultMap<>();
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+            registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            registVO.setMembrOrgnCd(sessionInfoVO.getStoreCd());
+        }
 
         LOGGER.debug("regStoreCd: {}", registVO.getRegStoreCd());
         LOGGER.debug("sessionInfoStoreCd: {}", sessionInfoVO.getStoreCd());

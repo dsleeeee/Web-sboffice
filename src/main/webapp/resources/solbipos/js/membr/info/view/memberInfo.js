@@ -105,8 +105,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     dataItem.membrClassNm = messages["regist.class.nm"]
     dataItem.membrCardNo = messages["regist.card.no"]
     dataItem.birthday = messages["regist.brthd"]
-    dataItem.telNo = messages["regist.tel"]
-    dataItem.phoneNo = messages["regist.phone.no"]
+    dataItem.phoneNo = messages["regist.tel"]
+    dataItem.telNo = messages["regist.phone.no"]
     dataItem.shortNo = messages["regist.membr.stortNo"]
     // dataItem.regStoreCd = messages["regist.membr.regStore"]
     // dataItem.regStoreNm = messages["regist.membr.regStore"]
@@ -142,8 +142,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     dataItem1.membrClassNm = messages["regist.class.nm"]
     dataItem1.membrCardNo = messages["regist.card.no"]
     dataItem1.birthday = messages["regist.brthd"]
-    dataItem1.telNo = messages["regist.tel"]
-    dataItem1.phoneNo = messages["regist.phone.no"]
+    dataItem1.phoneNo = messages["regist.tel"]
+    dataItem1.telNo = messages["regist.phone.no"]
     dataItem1.shortNo = messages["regist.membr.stortNo"]
     dataItem1.regStoreCd = messages["regist.membr.regStore"]
     dataItem1.regStoreNm = messages["regist.membr.regStore"]
@@ -244,6 +244,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     params.membrNo = $("#memberNo").val();
     params.membrNm = $("#memberNm").val();
+    params.membrEngNm = $("#memberEngNm").val();
     params.regStoreCd = $("#regStoreCd").val();
     params.telNo = $("#telNo").val();
     params.membrCardNo = $("#membrCardNo").val();

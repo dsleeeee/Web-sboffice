@@ -94,10 +94,15 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
      * 회원정보 조회
      * *******************************************************/
     $scope.$on("getCardList", function () {
+        console.log($scope.params);
         var params = {};
         params.membrNo = $scope.params.membrNo;
         // params.membrOrgnCd = $scope.card.data.data.membrOrgnCd;
         $scope._inquiryMain("/membr/info/view/view/getCardlist.sb", params, function () {
+            console.log($scope.data);
+            console.log($scope.data.items[0].membrCardNo)
+            $scope.member.oldCstCardNo = $scope.data.items[0].membrCardNo;
+            $('#rOldCstCardNo').val($scope.data.items[0].membrCardNo);
         });
     });
     /*********************************************************
@@ -122,12 +127,36 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 카드번호
+        var msg = messages["regist.card.new.no"] + messages["regist.card.add.new"];
+        $scope.data.items.forEach(e => {
+            if(e.oldCstCardNo == $scope.member.membrCardNo) {
+                $scope._popMsg(msg);
+                return false;
+            }
+        });
+
+        // 카드번호 최대길이 체크
+        if (nvl($scope.member.membrCardNo, '') !== '' && nvl($scope.member.membrCardNo + '', '').getByteLengthForOracle() > 16) {
+            msg = messages["regist.card.new.no"] + messages["excelUpload.overLength"] + " 16 " + messages["excelUpload.bateLengthInfo"];
+             $scope._popMsg(msg);
+            return false;
+        }
+
         // 발급일자를 선택해주세요.
         var msg = messages["regist.card.iss.date"] + messages["cmm.require.select"];
         if (isNull($scope.member.issDate)) {
             $scope._popMsg(msg);
             return false;
         }
+
+        // 비고 최대길이 체크
+        if (nvl($scope.member.issRemark, '') !== '' && nvl($scope.member.issRemark + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["regist.card.iss.remark"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
+             $scope._popMsg(msg);
+            return false;
+        }
+
 
         // 전화번호는 숫자만 입력할 수 있습니다.
         // var msg = messages["regist.tel"] + messages["cmm.require.number"];

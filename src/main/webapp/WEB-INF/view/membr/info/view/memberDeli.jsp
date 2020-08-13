@@ -94,23 +94,23 @@
                     <%--                        frozen-columns="3"--%>
                             item-formatter="_itemFormatter">
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="membrNo"
+                        <wj-flex-grid-column header="<s:message code="cmm.no"/>" binding="dlvrAddrSeq"
                                              align="center"
                                              is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.addr"/>" binding="membrNm"
+                        <wj-flex-grid-column header="<s:message code="regist.addr"/>" binding="addr"
                                              align="left"
                                              is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="regist.delivery.addr.dtl"/>"
-                                             binding="membrClassNm"
+                                             binding="addrDtl"
                                              align="center"
                                              width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="membrCardNo"
+                        <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn"
                                              align="center"
                                              width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>" binding="birthday"
+                        <wj-flex-grid-column header="<s:message code="dlvr.membr.finalDlvrDate"/>" binding="lastDlvrDate"
                                              align="center"
                                              width="100" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvr.membr.time"/>" binding="telNo"
+                        <wj-flex-grid-column header="<s:message code="dlvr.membr.time"/>" binding="totDlvrCnt"
                                              width="100"
                                              align="center"
                                              is-read-only="true"></wj-flex-grid-column>

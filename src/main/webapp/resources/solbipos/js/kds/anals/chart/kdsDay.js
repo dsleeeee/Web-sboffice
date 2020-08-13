@@ -37,6 +37,8 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 }
             }
         });
+        console.log($scope.kdsDayStartDate);
+        console.log($scope.kdsDayEndDate);
     };
 
     function getData(dataList) {
@@ -274,10 +276,12 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
+        if ($("#resurceFg").val() === "HQ") {
+            var msg = messages["kds.store"] + messages["cmm.require.text"];
+            if (isNull($("#regStoreCd").val())) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
         return true;
     };

@@ -175,6 +175,13 @@ app.controller('memberDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
      * 값 체크
      * *******************************************************/
     $scope.valueCheck = function () {
+
+        // 주소 최대길이 체크
+        if (nvl($scope.dlvrAddr, '') !== '' && nvl($scope.dlvrAddr + '', '').getByteLengthForOracle() > 60) {
+            msg = messages["regist.delivery.addr.dtl"] + messages["excelUpload.overLength"] + " 60 " + messages["excelUpload.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
         return true;
     };
 }]);
@@ -231,12 +238,35 @@ app.controller('memberDlvrTelCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.dlvrTelUseYn = params.useYn;
         event.preventDefault();
     });
+
+    /*********************************************************
+     * 값 체크
+     * *******************************************************/
+    $scope.valueCheck = function () {
+
+        // 전화번호는 숫자만 입력할 수 있습니다.
+        // var msg = messages["regist.delivery.tel"]+messages["cmm.require.number"];
+        // var numChkregexp = /[^0-9]/g;
+        // if(numChkregexp.test( $scope.member.dlvrTelNo )) {
+        //     $scope._popMsg(msg);
+        //     return false;
+        // }
+
+        // 전화번호 최대길이 체크
+        if (nvl($scope.dlvrTelNo, '') !== '' && nvl($scope.dlvrTelNo + '', '').getByteLengthForOracle() > 14) {
+            msg = messages["regist.delivery.tel"] + messages["excelUpload.overLength"] + " 14 " + messages["excelUpload.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
+        return true;
+    };
     // 저장
     $scope.saveTel = function () {
+        if (!$scope.valueCheck()) return false;
         // 파라미터 설정
         var memberInfoScope = agrid.getScope('memberCtrl');
         var params = {};
-        console.log( $scope.memberParmas);
         params.membrOrgnCd = $scope.memberParmas.membrOrgnCd;
         params.membrNo = $scope.memberParmas.membrNo;
         params.regStoreCd = $scope.memberParmas.dlvrStoreCd;

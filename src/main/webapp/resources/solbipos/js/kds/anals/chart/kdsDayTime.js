@@ -528,10 +528,12 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
 
-        var msg = messages["kds.store"] + messages["cmm.require.text"];
-        if (isNull($("#regStoreCd").val())) {
-            $scope._popMsg(msg);
-            return false;
+        if ($("#resurceFg").val() === "HQ") {
+            var msg = messages["kds.store"] + messages["cmm.require.text"];
+            if (isNull($("#regStoreCd").val())) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
         return true;
     };

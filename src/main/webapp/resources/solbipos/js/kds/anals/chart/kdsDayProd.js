@@ -277,6 +277,13 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         if (isNull($scope.picDateSecCombo.selectedValue)) {
             $scope._popMsg(msg);
         }
+        if ($("#resurceFg").val() === "HQ") {
+            var msg = messages["kds.store"] + messages["cmm.require.text"];
+            if (isNull($("#regStoreCd").val())) {
+                $scope._popMsg(msg);
+                return false;
+            }
+        }
         return true;
     };
 

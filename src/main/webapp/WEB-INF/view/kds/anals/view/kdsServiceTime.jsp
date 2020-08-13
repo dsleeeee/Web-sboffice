@@ -73,6 +73,10 @@
                     </jsp:include>
                 </td>
             </c:if>
+            <c:if test="${orgnFg != 'HQ'}">
+                <td></td>
+                <td></td>
+            </c:if>
         </tr>
         <tr>
             <th>

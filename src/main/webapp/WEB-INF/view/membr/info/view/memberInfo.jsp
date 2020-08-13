@@ -135,11 +135,23 @@
                 <input type="text" id="memberNo" class="sb-input w100" ng-model="memberNo" maxlength="10"/>
             </td>
 
-            <%-- 회원명 --%>
-            <th><s:message code="regist.membr.nm"/></th>
+            <%-- 회원등급 --%>
+            <th><s:message code="regist.memberClass"/></th>
             <td>
-                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15"/>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="rMemberClass"
+                            ng-model="member.membrClassCd"
+                            control="memberClassCombo"
+                            items-source="_getComboData('rMemberClass')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                    </wj-combo-box>
+                </div>
             </td>
+
 
         </tr>
         <tr>
@@ -320,25 +332,18 @@
             </td>
         </tr>
         <tr>
-            <%-- 회원등급 --%>
-            <th><s:message code="regist.memberClass"/></th>
+
+            <%-- 회원명(한글) --%>
+            <th><s:message code="regist.membr.nm"/></th>
             <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="rMemberClass"
-                            ng-model="member.membrClassCd"
-                            control="memberClassCombo"
-                            items-source="_getComboData('rMemberClass')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
+                <input type="text" id="memberNm" class="sb-input w100" ng-model="memberNm" maxlength="15"/>
             </td>
-            <%--<th></th>--%>
-            <td></td>
-            <td></td>
+
+            <%-- 회원명(영문) --%>
+            <th><s:message code="regist.membr.nm.eng"/></th>
+            <td>
+                <input type="text" id="memberEngNm" class="sb-input w100" ng-model="memberEngNm" maxlength="15"/>
+            </td>
         </tr>
         <tr>
             <%-- 전화번호 --%>
@@ -414,9 +419,9 @@
                 <wj-flex-grid-column header="<s:message code="regist.brthd"/>" binding="birthday" align="center"
                                      width="100" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="100" align="center"
+                <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="phoneNo" width="100" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100"
+                <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="telNo" width="100"
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
@@ -494,7 +499,7 @@
     <%--결혼유무--%>
     var anvrsDataMap = ${ccu.getCommCode("032")};
     <%--카드사용구분--%>
-    var rMembrcardList = ${ccu.getCommCode("014")};
+    var rMembrcardList = ${ccu.getCommCodeExcpAll("014")};
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
     <%--카드발급구분--%>

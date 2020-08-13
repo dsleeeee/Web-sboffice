@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.membr.anals.dayMembr.service.DayMembrVO;
 import kr.co.solbipos.membr.anals.membrProd.service.MembrProdService;
 import kr.co.solbipos.membr.anals.membrProd.service.MembrProdVO;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,22 @@ public class MembrProdController {
     }
 
     /**
+     * 상세
+     *
+     * @param request
+     * @param response
+     * @param model
+     * */
+    @RequestMapping(value = "membrProd/membrProdDetail.sb", method = RequestMethod.GET)
+    public Result membrProdDetail(RegistVO registVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        DefaultMap<Object> result = service.getMembrProdDetail(registVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, registVO);
+    }
+
+    /**
      * 회원 상품 구매내역 조회
      *
      * @param membrProdVO
@@ -83,7 +100,7 @@ public class MembrProdController {
     @RequestMapping(value = "membrProd/getMembrProdList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getMembrProdList(MembrProdVO membrProdVO, HttpServletRequest request,
-                                  HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

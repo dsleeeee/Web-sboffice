@@ -23,21 +23,11 @@
                         <input type="text" id="rMembrNo" class="sb-input w100" ng-model="member.membrNo"
                                readonly="readonly"/>
                     </td>
-                        <%-- 등록매장 --%>
-                    <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
+                        <%-- 회원닉네임 --%>
+                    <th><s:message code="regist.membr.nicknm"/></th>
                     <td>
-                        <div class="sb-select">
-                            <wj-combo-box
-                                    id="rRegStoreCd"
-                                    ng-model="member.regStoreCd"
-                                    control="regStoreCdCombo"
-                                    items-source="_getComboData('rRegStoreCd')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)">
-                            </wj-combo-box>
-                        </div>
+                        <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm"
+                               class="sb-input w100" maxlength="30"/>
                     </td>
                 </tr>
                 <tr>
@@ -47,11 +37,11 @@
                         <input type="text" id="rMembrNm" name="membrNm" ng-model="member.membrNm"
                                class="sb-input w100" maxlength="30" required>
                     </td>
-                        <%-- 회원닉네임 --%>
-                    <th><s:message code="regist.membr.nicknm"/></th>
+                        <%-- 회원명영문 --%>
+                    <th><s:message code="regist.membr.nm.eng"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrNicknm" name="membrNicknm" ng-model="member.membrNicknm"
-                               class="sb-input w100" maxlength="30"/>
+                        <input type="text" id="rMemberEngNm" name="memberEngNm" ng-model="member.memberEngNm"
+                               class="sb-input w100" maxlength="30" required>
                     </td>
                 </tr>
                 <tr>
@@ -86,23 +76,37 @@
                         <input type="text" id="stortNo" class="sb-input w100" ng-model="stortNo"
                                maxlength="15"/>
                     </td>
-                    <td></td>
-                    <td></td>
+                        <%-- 등록매장 --%>
+                    <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="rRegStoreCd"
+                                    ng-model="member.regStoreCd"
+                                    control="regStoreCdCombo"
+                                    items-source="_getComboData('rRegStoreCd')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
 
 
                 <tr>
                         <%-- 전화번호 --%>
-                    <th><s:message code="regist.tel"/><em class="imp">*</em></th>
+                    <th><s:message code="regist.tel"/></th>
                     <td>
-                        <input type="text" id="rTelNo" name="telNo" ng-model="member.telNo"
-                               class="sb-input w100" maxlength="11"
+                        <input type="text" id="rTelNo" name="telNo" ng-model="member.phoneNo"
+                               class="sb-input w100" maxlength="11" disable="true"
                                placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
                     </td>
                         <%-- 핸드폰번호 --%>
-                    <th><s:message code="regist.phone.no"/></th>
+                    <th><s:message code="regist.phone.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
+                        <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.telNo"
                                maxlength="15"/>
                     </td>
 
