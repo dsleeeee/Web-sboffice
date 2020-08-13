@@ -60,7 +60,7 @@
             tms.CLS_FG = tcm_cls_fg.NMCODE_CD
             AND tcm_cls_fg.NMCODE_GRP_CD = '001'
         LEFT OUTER JOIN TB_CM_NMCODE tcm_sys_stat_fg ON
-            tms.CLS_FG = tcm_sys_stat_fg.NMCODE_CD
+            tms.SYS_STAT_FG = tcm_sys_stat_fg.NMCODE_CD
             AND tcm_sys_stat_fg.NMCODE_GRP_CD = '005'
       WHERE 1=1
         <if test='orgnFg != null and orgnFg == "H"'> -- 본사권한 접근시

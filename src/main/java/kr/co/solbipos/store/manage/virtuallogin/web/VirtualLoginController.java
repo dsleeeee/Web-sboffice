@@ -131,7 +131,7 @@ public class VirtualLoginController {
         int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
         // 권한 있는 경우 가상로그인 진행, 가상로그인 시 신규세션ID 생성하여 redis 에 저장한다 : 20180918 노현수
         if ( authResult > 0 ) {
-
+            String vGetUserId = sessionInfoVO.getUserId();
             BaseEnv.VIRTUAL_LOGIN_ID = virtualLoginVO.getvUserId();
 
             StopWatch sw = new StopWatch();
@@ -143,7 +143,8 @@ public class VirtualLoginController {
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
-            sessionInfoVO.setvUserId(BaseEnv.VIRTUAL_LOGIN_ID);
+            // 가상로그인 아이디는 현재 아이디가 되어야함
+            sessionInfoVO.setvUserId(vGetUserId);
             // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
             // 가상로그인은 로그인 상태 정상으로 판단
