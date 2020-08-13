@@ -31,6 +31,10 @@ app.controller('popUpApplyTemplateCtrl', ['$scope', '$http', function ($scope, $
   };
   // 팝업 그리드 조회
   $scope.$on("popUpApplyTemplateCtrl", function(event, data) {
+
+    // 선택한 출력물 종류가 무엇인지 보이도록 추가
+    $("#prtClassNm").text(data);
+    
     // 파라미터
     var params = {};
 
