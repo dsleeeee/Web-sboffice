@@ -135,7 +135,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="todayGnrlz.memberNm"/>" binding="memberNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="todayGnrlz.memberNm"/>" binding="membrNm" width="*" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayGnrlz.savePoint"/>" binding="savePoint" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="todayGnrlz.usePoint"/>" binding="usePoint" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
@@ -187,5 +187,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.06" charset="utf-8"></script>
 

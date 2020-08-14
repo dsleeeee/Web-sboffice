@@ -16,8 +16,9 @@ var app = agrid.getApp();
 // 조회조건 DropBoxDataMap
 var recvYn = [
   {"name":"전체","value":""},
-  {"name":"수신","value":"Y"},
-  {"name":"미수신","value":"N"}
+  {"name":"수신완료","value":"2"},
+  {"name":"수신오류","value":"3"},
+  {"name":"미수신","value":"1"}
 ];
 
 function changeTab(val){

@@ -33,8 +33,10 @@
           FROM TB_CM_POS_VERSN tcpv,
               (
          SELECT VER_SER_NO,
-                SUM(DECODE(VER_RECV_FG, '1', 1, '2', 1, 0)) REG_CNT,
-                SUM(DECODE(VER_RECV_FG , '2' , 1, 0)) RECV_CNT
+                COUNT(*) REG_CNT,
+                SUM(DECODE(VER_RECV_FG, '1', 1, 0)) REG_READY_CNT,
+                SUM(DECODE(VER_RECV_FG, '2', 1, 0)) RECV_CNT,
+                SUM(DECODE(VER_RECV_FG, '3', 1, 0)) ERROR_CNT
            FROM TB_CM_POS_VERSN_STORE
           GROUP BY VER_SER_NO
                ) tcpvs
@@ -73,11 +75,8 @@
                TB_MS_STORE tms
          WHERE tcpvs.VER_SER_NO = #{verSerNo}
            AND tms.STORE_CD = tcpvs.STORE_CD
-        <if test='verRecvYn != null and verRecvYn == "Y"'>
-           AND tcpvs.VER_RECV_DT IS NOT NULL
-        </if>
-        <if test='verRecvYn != null and verRecvYn == "N"'>
-          AND tcpvs.VER_RECV_DT IS NULL
+        <if test='verRecvYn != null and verRecvYn != ""'>
+           AND tcpvs.VER_RECV_FG = #{verRecvYn}
         </if>
          ORDER BY tcpvs.STORE_CD
          <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -105,11 +104,8 @@
         TB_MS_STORE tms
         WHERE tcpvs.VER_SER_NO = #{verSerNo}
         AND tms.STORE_CD = tcpvs.STORE_CD
-        <if test='verRecvYn != null and verRecvYn == "Y"'>
-            AND tcpvs.VER_RECV_DT IS NOT NULL
-        </if>
-        <if test='verRecvYn != null and verRecvYn == "N"'>
-            AND tcpvs.VER_RECV_DT IS NULL
+        <if test='verRecvYn != null and verRecvYn != ""'>
+            AND tcpvs.VER_RECV_FG = #{verRecvYn}
         </if>
         ORDER BY tcpvs.STORE_CD
     </select>

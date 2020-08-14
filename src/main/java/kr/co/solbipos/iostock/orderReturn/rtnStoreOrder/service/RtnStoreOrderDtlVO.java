@@ -110,6 +110,11 @@ public class RtnStoreOrderDtlVO extends PageVO {
     /** 창고별 배열값-입고금액 합계 */
     private String  arrOrderTot;
     
+    /** 출고창고 */
+    private String outStorageCd;
+    
+    
+    
     /**
      * @return the reqDate
      */
@@ -694,6 +699,14 @@ public class RtnStoreOrderDtlVO extends PageVO {
 
 	public void setStorageCd(String storageCd) {
 		this.storageCd = storageCd;
+	}
+
+	public String getOutStorageCd() {
+		return outStorageCd;
+	}
+
+	public void setOutStorageCd(String outStorageCd) {
+		this.outStorageCd = outStorageCd;
 	}
 	
 }

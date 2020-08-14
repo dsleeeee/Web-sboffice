@@ -80,6 +80,34 @@
 
       <div class="tr mt20 fr">
         <div id="outstockBtnLayer" style="display: none;">
+        	<%--출고창고 --%>
+          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
+          	<span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="saveDtlOutStorageCd"
+                ng-model="save.dtl.outStorageCd"
+                items-source="_getComboData('saveDtlOutStorageCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                selected-index-changed="selectedIndexChanged(s)"
+                >
+              </wj-combo-box>
+            </span>
+          	<%--배송기사 --%>    
+          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.dlvrNm"/></p>     
+        	<span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="saveDtlDlvrCd"
+                ng-model="save.dtl.dlvrCd"
+                items-source="_getComboData('saveDtlDlvrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
           <%-- 출고확정 체크박스 --%>
           <span id="spanOutstockConfirmFg" class="chk pdb5 txtIn fl" style="top: 0px;" ng-if="spanOutstockConfirmFg">
             <input type="checkbox" name="outstockConfirmFg" id="outstockConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
@@ -90,7 +118,7 @@
             <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 출고내역으로 입고내역 세팅 --%>
-          <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" ng-click="setOutToIn()" ng-if="btnSetOutToIn"><s:message code="rtnInstockConfm.dtl.setOutToIn"/></button>
+          <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" style="display: none;" ng-click="setOutToIn()" ng-if="btnSetOutToIn"><s:message code="rtnInstockConfm.dtl.setOutToIn"/></button>
           <%-- 저장 --%>
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave"><s:message code="cmm.save"/></button>
         </div>
@@ -125,8 +153,8 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outUnitQty"/>" binding="outUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outUnitQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTotQty"/>" binding="outTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outEtcQty"/>" binding="outEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTotQty"/>" binding="outTotQty" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outAmt"/>" 	 binding="outAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outVat"/>" 	 binding="outVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.outTot"/>" 	 binding="outTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -139,18 +167,6 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderAmt" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderVat" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderTot" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            
-            <wj-flex-grid-column header=""                                                  binding="arrStorageCd"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrStorageNm"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			
-			<wj-flex-grid-column header=""                                                  binding="arrcurrQty"  		width="200" align="left"   	is-read-only="true"     visible="false" 												></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrOrderUnitQty"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrOrderEtcQty"   	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrOrderTotQty"   	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-
-			<wj-flex-grid-column header=""                                                  binding="arrOrderAmt"      	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrOrderVat"      	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrOrderTot"      	width="200" align="left"   	is-read-only="true"     visible="false"         										></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
@@ -161,7 +177,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20200805.01" charset="utf-8"></script>
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">

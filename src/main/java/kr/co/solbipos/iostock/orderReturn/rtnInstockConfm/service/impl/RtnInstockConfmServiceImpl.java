@@ -64,14 +64,6 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         RtnInstockConfmVO rtnInstockConfmHdVO = new RtnInstockConfmVO();
         
         //TB_PO_HQ_STORE_OUTSTOCK_PROD Insert or Update에 사용
-        String[] storageCd;
-        String[] storageNm;
-        String[] storageInUnitQty;
-        String[] storageInEtcQty;
-        String[] storageInTotQty;
-        String[] storageInAmt;
-        String[] storageInVat;
-        String[] storageInTot;
         
         for (RtnInstockConfmVO rtnInstockConfmVO : rtnInstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
@@ -119,56 +111,32 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             returnResult += result;
             i++;
             
-            //TB_PO_HQ_STORE_OUTSTOCK_PROD - START
-        	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-            storageCd           = rtnInstockConfmVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-            storageNm           = rtnInstockConfmVO.getArrStorageNm().split("\\^");
-            storageInUnitQty    = rtnInstockConfmVO.getArrInUnitQty().split("\\^");
-            storageInEtcQty     = rtnInstockConfmVO.getArrInEtcQty	().split("\\^");
-            storageInTotQty     = rtnInstockConfmVO.getArrInTotQty	().split("\\^");
-            storageInAmt        = rtnInstockConfmVO.getArrInAmt	().split("\\^");
-            storageInVat        = rtnInstockConfmVO.getArrInVat	().split("\\^");
-            storageInTot        = rtnInstockConfmVO.getArrInTot	().split("\\^");
+//            rtnInstockConfmVO.setHqOfficeCd			(rtnInstockConfmVO	.getHqOfficeCd	()		);	//본사코드
+//            rtnInstockConfmVO.setSlipNo				(rtnInstockConfmVO	.getSlipNo		()		);	//전표번호
+//            rtnInstockConfmVO.setProdCd				(rtnInstockConfmVO		.getProdCd		()	);	//상품코드
+            rtnInstockConfmVO.setStorageCd		    (rtnInstockConfmVO	.getInStorageCd	()		);	//입고창고코드
+            rtnInstockConfmVO.setOccrFg				("02"										);	//발생구분(03:매장입고)
+//            rtnInstockConfmVO.setStoreCd		    (rtnInstockConfmVO.getStoreCd()				);	//매장코드
+            rtnInstockConfmVO.setSlipFg		        (-1											);	//전표구분 1:주문 -1:반품
 
-            for(int k=0; k<storageCd.length; k++) {
-            	LOGGER.debug("### confmYn         : " + confirmFg			);
-	            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
-	            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
-	            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
-	            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
-	            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
-	            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+            rtnInstockConfmVO.setConfmYn				(confirmFg.equals("Y")? "Y":"N"				);	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
+//            rtnInstockConfmVO.setInUnitQty		    (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//            rtnInstockConfmVO.setInEtcQty		    (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//            rtnInstockConfmVO.setInTotQty		    (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//            rtnInstockConfmVO.setInAmt			    (Long.parseLong		(storageInAmt		[k]));	//입고금액
+//            rtnInstockConfmVO.setInVat			    (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//            rtnInstockConfmVO.setInTot			    (Long.parseLong		(storageInTot		[k]));	//입고금액합계
 
-	            rtnInstockConfmVO.setHqOfficeCd			(rtnInstockConfmVO	.getHqOfficeCd	()		);	//본사코드
-	            rtnInstockConfmVO.setSlipNo				(rtnInstockConfmVO	.getSlipNo		()		);	//전표번호
-	            rtnInstockConfmVO.setProdCd				(rtnInstockConfmVO		.getProdCd		()	);	//상품코드
-	            rtnInstockConfmVO.setStorageCd		    (storageCd[k]								);	//창고코드
-	            rtnInstockConfmVO.setOccrFg				("02"										);	//발생구분(03:매장입고)
-	            rtnInstockConfmVO.setStoreCd		    (rtnInstockConfmVO.getStoreCd()				);	//매장코드
-	            rtnInstockConfmVO.setSlipFg		        (-1											);	//전표구분 1:주문 -1:반품
-	            if(confirmFg.equals("Y")) {
-	            	rtnInstockConfmVO.setConfmYn			("Y");	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
-	            }else {
-	            	rtnInstockConfmVO.setConfmYn			("N");	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용	
-	            }
-	            rtnInstockConfmVO.setInUnitQty		    (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-	            rtnInstockConfmVO.setInEtcQty		    (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-	            rtnInstockConfmVO.setInTotQty		    (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-	            rtnInstockConfmVO.setInAmt			    (Long.parseLong		(storageInAmt		[k]));	//입고금액
-	            rtnInstockConfmVO.setInVat			    (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-	            rtnInstockConfmVO.setInTot			    (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+            rtnInstockConfmVO.setRegId			    (userId		);
+            rtnInstockConfmVO.setRegDt			    (currentDt	);
+            rtnInstockConfmVO.setModId			    (userId		);
+            rtnInstockConfmVO.setModDt			    (currentDt	);
 
-	            rtnInstockConfmVO.setRegId			    (userId		);
-	            rtnInstockConfmVO.setRegDt			    (currentDt	);
-	            rtnInstockConfmVO.setModId			    (userId		);
-	            rtnInstockConfmVO.setModDt			    (currentDt	);
+        	LOGGER.debug("### getProperties: " + rtnInstockConfmVO.getProperties() );
 
-            	LOGGER.debug("### getProperties: " + rtnInstockConfmVO.getProperties() );
-
-            	result = rtnInstockConfmMapper.mergeInstockConfmProd(rtnInstockConfmVO);
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            }
-        //TB_PO_HQ_STORE_OUTSTOCK_PROD - END
+        	result = rtnInstockConfmMapper.mergeInstockConfmProd(rtnInstockConfmVO);
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            
         }
 
         // HD 수정

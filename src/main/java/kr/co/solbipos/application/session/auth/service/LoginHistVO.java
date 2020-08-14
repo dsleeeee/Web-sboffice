@@ -39,6 +39,8 @@ public class LoginHistVO extends CmmVO {
     private String loginDate;
     /** 로그인 일시 */
     private String loginDt;
+    /** 버추얼로그인 사용자 아이디 */
+    private String vUserId;
     
     
     /**
@@ -137,5 +139,17 @@ public class LoginHistVO extends CmmVO {
     public void setLoginDt(String loginDt) {
         this.loginDt = loginDt;
     }
-    
+    /**
+     * @return the vUserId
+     */
+    public String getvUserId() {
+        return vUserId;
+    }
+    /**
+     * @param vUserId the vUserId to set
+     */
+    public void setvUserId(String vUserId) {
+        this.vUserId = vUserId;
+    }
+
 }

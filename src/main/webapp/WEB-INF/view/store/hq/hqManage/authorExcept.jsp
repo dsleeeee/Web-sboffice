@@ -98,8 +98,8 @@
     {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:90},
     //{"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
     {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:90},
-    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:60},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:93},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:70},
     {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", visible:false, width:"*"},
     {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:230}
   ];
@@ -109,8 +109,8 @@
     {"binding":"resrceNmLarge", "header":"<s:message code='hqManage.lMenuNm' />", allowMerging:true, width:90},
     //{"binding":"menuChkMid", "header":"<s:message code='hqManage.chk.menu' />", dataType:wijmo.DataType.Boolean, isReadOnly:false, width:"*"},
     {"binding":"resrceCdMid", "header":"<s:message code='hqManage.mMenuCd' />", allowMerging:true, visible:false, width:"*"},
-    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:90},
-    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType: wijmo.DataType.Boolean, isReadOnly:false, width:60},
+    {"binding":"resrceNmMid", "header":"<s:message code='hqManage.mMenuNm' />", allowMerging:true, width:93},
+    {"binding":"menuChkSmall", "header":"<s:message code='hqManage.chk.menu' />", dataType: wijmo.DataType.Boolean, isReadOnly:false, width:70},
     {"binding":"resrceCdSmall", "header":"<s:message code='hqManage.sMenuCd' />", visible:false, width:"*"},
     {"binding":"resrceNmSmall", "header":"<s:message code='hqManage.sMenuNm' />", width:230 }
   ];

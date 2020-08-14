@@ -4,6 +4,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
+import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -29,10 +30,10 @@ public interface RtnStoreOrderMapper {
     int insertRtnStoreOrderDtl(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
     
     /** 반품등록 PROD 등록 */
-    int savetRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
+    int savetRtnStoreOrderProd(RtnStoreOrderProdVO prodVO);
     
     /** 반품등록 PROD 수정 */
-    int updateRtnStoreOrderProd(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
+    int updateRtnStoreOrderProd(RtnStoreOrderProdVO prodVO);
     
     /** 반품등록 반품상품 삭제 */
     int deleteRtnStoreOrderDtl(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);

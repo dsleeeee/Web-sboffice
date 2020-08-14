@@ -182,6 +182,9 @@ public class RtnInstockConfmVO extends PageVO {
     /** 확정여부 */
     private String  confmYn;
     
+    /** 창고코드 */
+    private String inStorageCd;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1250,5 +1253,14 @@ public class RtnInstockConfmVO extends PageVO {
 		this.areaFg = areaFg;
 	}
 
+	public String getInStorageCd() {
+		return inStorageCd;
+	}
+
+	public void setInStorageCd(String inStorageCd) {
+		this.inStorageCd = inStorageCd;
+	}
+	
+	
     
 }

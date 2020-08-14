@@ -13,15 +13,15 @@
             <div>
                 <table class="tblType01">
                     <colgroup>
-                        <col width="10%" />
-                        <col width="30%" />
-                        <col width="10%" />
-                        <col width="20%" />
-                        <col width="10%" />
-                        <col width="20%" />
+                        <col class="w15" />
+                        <col class="w35" />
+                        <col class="w15" />
+                        <col class="w35" />
                     </colgroup>
                     <tbody>
                     <tr>
+                        <th><s:message code="template.srchNm" /></th>
+                        <td><label id="prtClassNm"></label></td>
                         <th><s:message code="template.layer.template" /></th>
                         <td>
                             <div class="sb-select">
@@ -37,6 +37,8 @@
                                 </wj-combo-box>
                             </div>
                         </td>
+                    </tr>
+                    <tr>
                         <th><s:message code="template.layer.sysStatFg" /></th>
                         <td>
                             <div class="sb-select">
@@ -65,6 +67,12 @@
                                 </wj-combo-box>
                             </div>
                         </td>
+                    </tr>
+                    <tr>
+                        <th><s:message code="template.layer.storeCd" /></th>
+                        <td><input type="text" ng-model="storeCd"></td>
+                        <th><s:message code="template.layer.storeNm" /></th>
+                        <td><input type="text" ng-model="storeNm"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -105,4 +113,4 @@
   var sysStatFgComboData = ${ccu.getCommCode("005")};
   var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/popUpTemplate.js?ver=2018091401" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/popUpTemplate.js?ver=2018091402" charset="utf-8"></script>

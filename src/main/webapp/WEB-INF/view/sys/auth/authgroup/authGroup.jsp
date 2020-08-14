@@ -31,14 +31,14 @@
         <%-- 그룹명 --%>
         <th><s:message code="authGroup.authGrpNm" /></th>
         <td>
-          <div class="sb-select fl">
+          <div class="sb-select w100">
             <div id="grpNm" class="sb-input"></div>
           </div>
         </td>
         <%-- 사용여부 --%>
         <th><s:message code="cmm.useYn" /></th>
         <td>
-          <div class="sb-select w40">
+          <div class="sb-select w100">
             <div id="useYn"></div>
           </div>
         </td>
@@ -47,15 +47,15 @@
         <%-- 예외 관리 // TODO 검색조건에 누락됨 --%>
         <th><s:message code="authGroup.exceptMng" /></th>
         <td>
-          <div class="sb-select fl w40">
+          <div class="sb-select w100">
             <div id="availCombo"></div>
           </div>
         </td>
         <%-- 예외 관리 --%>
         <th><s:message code="authGroup.exceptMng" /></th>
         <td>
-          <div class="sb-select fl">
-            <div id="userId" class="sb-input"></div>
+          <div class="sb-select w80" style="float: left;">
+            <div id="userId"></div>
           </div>
           <a href="#" class="btn_grayS ml5" id="btnExceptMng"><s:message code="authGroup.exceptMng"/></a>
         </td>

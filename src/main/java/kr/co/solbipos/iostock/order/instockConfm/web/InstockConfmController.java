@@ -7,6 +7,8 @@ import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmService;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,12 +54,14 @@ public class InstockConfmController {
     private final SessionService sessionService;
     private final InstockConfmService instockConfmService;
     private final CmmEnvService cmmEnvService;
+    private final IostockCmmService iostockCmmService;
 
     @Autowired
-    public InstockConfmController(SessionService sessionService, InstockConfmService instockConfmService, CmmEnvService cmmEnvService) {
+    public InstockConfmController(SessionService sessionService, InstockConfmService instockConfmService, CmmEnvService cmmEnvService, IostockCmmService iostockCmmService) {
         this.sessionService = sessionService;
         this.instockConfmService = instockConfmService;
         this.cmmEnvService = cmmEnvService;
+        this.iostockCmmService = iostockCmmService;
     }
 
     /**
@@ -177,4 +183,33 @@ public class InstockConfmController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+    
+    /**
+     * 다이나믹 콤보조회 - 출고창고 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  M2M
+     * @since   2020. 08. 03.
+     */
+    @RequestMapping(value = "/instockConfm/getInStorageCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOutStorageCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+        iostockCmmVO.setSelectTable("TB_MS_STORAGE");
+        iostockCmmVO.setSelectCd("STORAGE_CD");
+        iostockCmmVO.setSelectNm("STORAGE_NM");
+        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'"
+            						+ " AND STORE_CD='"+ sessionInfoVO.getStoreCd() +"' "        		
+        		);
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }    
 }

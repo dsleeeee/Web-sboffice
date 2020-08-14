@@ -16,14 +16,16 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
   $scope.initGrid = function (s, e) {
     // 배송기사
     var comboParams             = {};
-    //가상로그인 session 설정
-    if(document.getElementsByName('sessionId')[0]){
-    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
-    }
+   
     var url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
+    
+    // 출고창고
+    url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    
     comboParams         = {};
     comboParams.nmcodeGrpCd = "097";
     url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -58,11 +60,11 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
           $scope.calcAmt(item);
         }
         
-        if(str.indexOf('arr') != -1){	//입고수량 수정시
-          	idx = str.lastIndexOf('_');
-              var item = s.rows[e.row].dataItem;
-              $scope.newCalcAmt(item, str.substring(idx+1));
-          }
+//        if(str.indexOf('arr') != -1){	//입고수량 수정시
+//          	idx = str.lastIndexOf('_');
+//              var item = s.rows[e.row].dataItem;
+//              $scope.newCalcAmt(item, str.substring(idx+1));
+//          }
       }
 
       s.collectionView.commitEdit();
@@ -73,37 +75,53 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
     
-    //Grid Header 2줄 - START	----------------------------------------------------------------
-    s.allowMerging  = 2;
-    s.columnHeaders.rows.push(new wijmo.grid.Row());
-    
-    //첫째줄 Header 생성
-    var dataItem = {};
-        dataItem.slipNo         	= messages["rtnOutstockConfm.dtl.slipNo"         ];	
-        dataItem.slipFg         	= messages["rtnOutstockConfm.dtl.slipFg"         ];	
-        dataItem.seq  			    = messages["rtnOutstockConfm.dtl.seq" 			 ];	
-        
-        dataItem.storeCd   			= messages["rtnOutstockConfm.dtl.storeCd"		 ]; 
-        dataItem.prodCd    			= messages["rtnOutstockConfm.dtl.prodCd"		 ]; 
-        dataItem.prodNm    			= messages["rtnOutstockConfm.dtl.prodNm"		 ]; 
-        dataItem.barcdCd    		= messages["rtnOutstockConfm.dtl.barcdCd"		 ]; 
-             
-        dataItem.poUnitFg     		= messages["rtnOutstockConfm.dtl.poUnitFg"		 ];
-        dataItem.poUnitQty      	= messages["rtnOutstockConfm.dtl.poUnitQty"		 ]; 
-        
-        dataItem.outSplyUprc     	= messages["rtnOutstockConfm.dtl.outSplyUprc"	 ];
-        dataItem.outUnitQty      	= messages["rtnOutstockConfm.dtl.outUnitQty"	 ]; 
-        dataItem.outEtcQty      	= messages["rtnOutstockConfm.dtl.outUnitQty"	 ]; 
-        dataItem.outTotQty      	= messages["rtnOutstockConfm.dtl.outUnitQty"	 ]; 
-        
-        dataItem.outAmt        		= messages["rtnOutstockConfm.dtl.outAmt"      	 ];	
-        dataItem.outVat         	= messages["rtnOutstockConfm.dtl.outVat"      	 ];	
-        dataItem.outTot         	= messages["rtnOutstockConfm.dtl.outTot"      	 ];	
-        dataItem.remark        		= messages["rtnOutstockConfm.dtl.remark"      	 ];	
-        dataItem.vatFg01       		= messages["rtnOutstockConfm.dtl.vatFg"      	 ]; 
-        dataItem.envst0011      	= messages["rtnOutstockConfm.dtl.envst0011"      ]; 
+  //Header column merge (출고수량, 입고수량)
+    s.allowMerging                          = 'ColumnHeaders';
+    s.columnHeaders.rows[0].allowMerging    = true;
 
-    s.columnHeaders.rows[0].dataItem = dataItem;
+    //Header - START
+		//헤더 생성
+		s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+		for(var i=0; i<s.columnHeaders.rows.length; i++) {
+            s.columnHeaders.setCellData(i, "slipNo"     , messages["rtnOutstockConfm.dtl.slipNo"        ] );      
+			s.columnHeaders.setCellData(i, "slipFg"     , messages["rtnOutstockConfm.dtl.slipFg"        ] );      
+			s.columnHeaders.setCellData(i, "seq"        , messages["rtnOutstockConfm.dtl.seq"           ] );      
+			s.columnHeaders.setCellData(i, "storeCd"    , messages["rtnOutstockConfm.dtl.storeCd"       ] );      
+			s.columnHeaders.setCellData(i, "prodCd"     , messages["rtnOutstockConfm.dtl.prodCd"        ] );      
+			s.columnHeaders.setCellData(i, "prodNm"     , messages["rtnOutstockConfm.dtl.prodNm"        ] );      
+			s.columnHeaders.setCellData(i, "barcdCd"    , messages["rtnOutstockConfm.dtl.barcdCd"       ] );      
+			s.columnHeaders.setCellData(i, "poUnitFg"   , messages["rtnOutstockConfm.dtl.poUnitFg"      ] );      
+			s.columnHeaders.setCellData(i, "poUnitQty"  , messages["rtnOutstockConfm.dtl.poUnitQty"     ] );      
+			s.columnHeaders.setCellData(i, "outSplyUprc", messages["rtnOutstockConfm.dtl.outSplyUprc"   ] );      
+			                                                                                                  
+			s.columnHeaders.setCellData(i, "outUnitQty" , messages["rtnOutstockConfm.dtl.outUnitQty"    ] );    
+			s.columnHeaders.setCellData(i, "outEtcQty"  , messages["rtnOutstockConfm.dtl.outUnitQty"	] );      
+			
+			s.columnHeaders.setCellData(i, "outTotQty"   , messages["rtnOutstockConfm.dtl.outUnitQty"      ] );      
+			s.columnHeaders.setCellData(i, "outAmt"      , messages["rtnOutstockConfm.dtl.outAmt"         ] );      
+			s.columnHeaders.setCellData(i, "outVat"      , messages["rtnOutstockConfm.dtl.outVat"         ] );      
+			s.columnHeaders.setCellData(i, "outTot"      , messages["rtnOutstockConfm.dtl.outTot"         ] );      
+			s.columnHeaders.setCellData(i, "remark"     , messages["rtnOutstockConfm.dtl.remark"        ] );      
+			s.columnHeaders.setCellData(i, "vatFg01"    , messages["rtnOutstockConfm.dtl.vatFg"         ] );      
+		}
+    //Header - END
+
+        for(var i=0; i<18; i++){
+        	s.columnHeaders.columns[i].allowMerging = true;
+        }
+    
+    $scope.selectedIndexChanged = function (s) {
+      	var comboParams             = {};	
+      	comboParams.storageCd 	= $scope.save.dtl.outStorageCd;
+          // 배송기사
+          url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+
+          // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+          $scope._queryCombo("combo", "saveDtlDlvrCd", null, url, comboParams, ""); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+          
+      };
+      
   };
 
   // 금액 계산
@@ -128,56 +146,6 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     item.outTot    = outTot; // 합계
   };
   
-  $scope.newCalcAmt = function (item, idx) {
-  	//$scope.flex.collectionView.editItem(item);
-
-	  var orderSplyUprc = parseInt(item.outSplyUprc);
-	  var poUnitQty     = parseInt(item.poUnitQty);
-	  var vat01         = parseInt(item.vatFg01);
-	  var envst0011     = parseInt(item.envst0011);
-	  
-      var unitQty     = parseInt(nvl(eval('item.arrOrderUnitQty_' + idx), 0)) * parseInt(item.poUnitQty);
-      var etcQty      = parseInt(nvl(eval('item.arrOrderEtcQty_'  + idx), 0));
-      var totQty      = parseInt(unitQty + etcQty);
-      var tempAmt  	  = Math.round(totQty * orderSplyUprc / poUnitQty);
-      var orderAmt 	  = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-      var orderVat 	  = Math.round(tempAmt * vat01 / (10 + envst0011));
-      var orderTot    = parseInt(orderAmt + orderVat);
-
-      eval('item.arrOrderTotQty_'	+ idx + ' = totQty;');		//총입고수량
-      eval('item.arrOrderAmt_' 		+ idx + ' = orderAmt;'	); 	//금액
-      eval('item.arrOrderVat_' 		+ idx + ' = orderVat;'	); 	//VAT
-      eval('item.arrOrderTot_'		+ idx + ' = orderTot;'	);	//합계
-
-      //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - START
-	    //console.log('global_storage_cnt:' + global_storage_cnt);
-	    var arrOrderUnitQty= 0;
-	    var arrOrderEtcQty	= 0;
-	    var arrOrderTotQty = 0;
-	    var arrOrderAmt	= 0;
-	    var arrOrderVat	= 0;
-	    var arrOrderTot	= 0;
-
-        for(var i=0; i<global_storage_cnt; i++){
-        	eval('arrOrderUnitQty	+= parseInt(nvl(item.arrOrderUnitQty_'	+ i + ',0));');
-        	eval('arrOrderEtcQty	+= parseInt(nvl(item.arrOrderEtcQty_'	+ i + ',0));');
-        	eval('arrOrderTotQty	+= parseInt(nvl(item.arrOrderTotQty_'	+ i + ',0));');
-        	eval('arrOrderAmt		+= parseInt(nvl(item.arrOrderAmt_'		+ i + ',0));');
-        	eval('arrOrderVat		+= parseInt(nvl(item.arrOrderVat_'		+ i + ',0));');
-        	eval('arrOrderTot		+= parseInt(nvl(item.arrOrderTot_'		+ i + ',0));');
-        }
-        item.orderUnitQty	= arrOrderUnitQty;  //입고수량 - 단위
-        item.orderEtcQty    = arrOrderEtcQty;   //입고수량 - 나머지
-	                
-        item.orderTotQty = totQty;   // 총수량
-        item.orderAmt    = orderAmt; // 금액
-        item.orderVat    = orderVat; // VAT
-        item.orderTot    = orderTot; // 합계
-	        
-	    //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - END
-
-	    //$scope.flex.collectionView.commitEdit();
-  };	//$scope.calcAmt	--------------------------------------------------------------------------------------------------------------------------
 	  
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnOutstockConfmDtlCtrl", function (event, data) {
@@ -277,155 +245,7 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     params.reqDate = $scope.reqDate;
     params.storeCd = $scope.storeCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl/list.sb", params, function () {
-    	global_storage_cnt	= 0;	//매장의 창고 갯수
-
-    	var arrProdCd		= new Array( new Array(), new Array() );
-        var arrStorageCd	= new Array( new Array(), new Array() );
-        var arrStorageNm	= new Array( new Array(), new Array() );
-        var arrOrderUnitQty	= new Array( new Array(), new Array() );
-        var arrOrderEtcQty	= new Array( new Array(), new Array() );
-        var arrOrderTotQty	= new Array( new Array(), new Array() );
-        var arrOrderAmt		= new Array( new Array(), new Array() );
-        var arrOrderVat		= new Array( new Array(), new Array() );
-        var arrOrderTot		= new Array( new Array(), new Array() );
-//        var arrCurrQty		= new Array( new Array(), new Array() );
-      
-        var grid 			= $scope.flex;
-        var item;
-    	for(var i=0; i<grid.collectionView.items.length; i++){
-            item 				= grid.collectionView.items[i];
-
-            arrProdCd[i] 		= item.prodCd;
-            arrStorageCd[i] 	= item.arrStorageCd.split("^");
-            arrStorageNm[i] 	= item.arrStorageNm.split("^");
-            arrOrderUnitQty[i] 	= item.arrOrderUnitQty.split("^");	//입고수량 - 주문딘위
-            arrOrderEtcQty[i] 	= item.arrOrderEtcQty.split("^");	//입고수량 - 나머지
-            arrOrderTotQty[i] 	= item.arrOrderTotQty.split("^");	//입고수량 - 합계
-            arrOrderAmt[i] 		= item.arrOrderAmt.split("^");		//입고금액
-            arrOrderVat[i] 		= item.arrOrderVat.split("^");		//입고금액 - 부가세
-            arrOrderTot[i] 		= item.arrOrderTot.split("^");		//입고금액 - 합계
-//            arrCurrQty[i] 		= item.arrCurrQty.split("^");		//재고수량
-    	}
-
-    	global_storage_cnt	= arrStorageCd[0].length;
-    	/*
-		  	while(grid.columns.length > 14){	//'비고'가 14번째	-> 숨겨져 있는 column도 포함해야 함. -> 아래처럼 변경
-		  		grid.columns.removeAt(grid.columns.length-1);
-		  	}
-		  	*/
-		  	while(grid.columns.length > 19){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
-		  		grid.columns.removeAt(grid.columns.length-1);
-		  	}
-
-        for(var i=0; i<arrStorageCd.length; i++){
-        	for(var j=0; j<arrStorageCd[i].length; j++){
-        		/*
-            	console.log(i + '-' + j +
-            			' Prod:'		+ arrProdCd   	[i]		+
-            			' & Cd:'    	+ arrStorageCd	[i][j]	+
-                        ' & Nm:' 		+ arrStorageNm	[i][j]  +
-                        ' & UnitQty:' 	+ arrOrderUnitQty	[i][j]  +
-                        ' & EtcQty:'  	+ arrOrderEtcQty	[i][j]  +
-                        ' & TotQty:'  	+ arrOrderTotQty	[i][j]  +
-                        ' & Amt:'     	+ arrOrderAmt		[i][j]  +
-                        ' & Vat:'     	+ arrOrderVat		[i][j]  +
-                        ' & Tot:'     	+ arrOrderTot		[i][j]  );
-				*/
-            	if(i == 0){
-            		//입고수량, 금액, VAT, 합계
-//            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.currQty"],	binding:"arrCurrQty_"		+ j,	width:80,    align:"right",    isReadOnly:true,		aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//재고수량 - 주문딘위
-            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrOrderUnitQty_"	+ j,	width:50,    align:"right",    isReadOnly:false,	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 주문딘위
-                	grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrOrderEtcQty_"	+ j,    width:50,    align:"right",    isReadOnly:false,  	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 나머지
-                  //grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTotQty"], binding:"arrOrderTotQty_"	+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum"}) );					//입고수량 - 합계
-                  //grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTotQty"], binding:"arrOrderTotQty_"	+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", visible:"false"}) );	//입고수량 - 합계
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inAmt"],	binding:"arrOrderAmt_"		+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inVat"],    binding:"arrOrderVat_"		+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액 - 부가세
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTot"],	binding:"arrOrderTot_"		+ j,    width:70,    align:"right",    isReadOnly:true,		aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액 - 합계
-            	}
-            	
-//            	grid.columnHeaders.setCellData(0, 'arrCurrQty_'			+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderUnitQty_'	+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderEtcQty_'		+ j, arrStorageNm[i][j]);
-              //grid.columnHeaders.setCellData(0, 'arrOrderTotQty_'	+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderAmt_'		+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderVat_'		+ j, arrStorageNm[i][j]);
-                grid.columnHeaders.setCellData(0, 'arrOrderTot_'		+ j, arrStorageNm[i][j]);
-                
-//                grid.setCellData(i, 'arrCurrQty_'		+ j,	arrCurrQty[i][j]);
-                grid.setCellData(i, 'arrOrderUnitQty_'	+ j,	arrOrderUnitQty[i][j]);
-                grid.setCellData(i, 'arrOrderEtcQty_'	+ j,	arrOrderEtcQty	[i][j]);
-                grid.setCellData(i, 'arrOrderAmt_'		+ j,	arrOrderAmt	[i][j]);
-                grid.setCellData(i, 'arrOrderVat_'		+ j,	arrOrderVat	[i][j]);
-                grid.setCellData(i, 'arrOrderTot_'		+ j,	arrOrderTot	[i][j]);
-
-        	}	//for(var j=0; j<arrStorageCd[i].length; j++){
-        }		//for(var i=0; i<arrStorageCd.length; i++){
-
-        /*
-		console.log('panel.cellType: ' + wijmo.grid.CellType.None			);	//0
-		console.log('panel.cellType: ' + wijmo.grid.CellType.Cell			);	//1
-		console.log('panel.cellType: ' + wijmo.grid.CellType.ColumnHeader	);	//2
-		console.log('panel.cellType: ' + wijmo.grid.CellType.RowHeader		);	//3
-		console.log('panel.cellType: ' + wijmo.grid.CellType.TopLeft		);	//4
-		console.log('panel.cellType: ' + wijmo.grid.CellType.ColumnFooter	);	//5
-		console.log('panel.cellType: ' + wijmo.grid.CellType.BottomLeft		);	//6
-
-		//console.log('panel.cellType: ' + r + ' - ' + c + ' - ' + panel.cellType);
-		if (panel.cellType === wijmo.grid.CellType.ColumnFooter) {
-			console.log('### ColumnFooter:' + panel.getCellData(r,c) );
-		}
-
-		s.columnHeaders.rows[0].allowMerging    = true;
-		*/
-
-        ///*
-        grid.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows   [r].allowMerging = true;
-                panel.columns[c].allowMerging = true;
-
-                wijmo.setCss(cell,  {
-                                        display		: 'table',
-                                        tableLayout : 'fixed'
-                                    });
-
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-
-                wijmo.setCss(cell.children[0],	{
-				  									display 		: 'table-cell',
-				  									verticalAlign 	: 'middle',
-				  									textAlign		: 'center'
-			  									});
-
-            } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {	//로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {			//GroupRow 인 경우에는 표시하지 않음
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-
-            } else if (panel.cellType === wijmo.grid.CellType.Cell) {	//readOnly 배경색 표시
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }	//grid.itemFormatter = function (panel, r, c, cell) {
-        //*/
-
-        //[합계]란에 새로 추가한 column들의 '합계'가 계산되지 않아 추가해 보았으나, 원인은 'dataType'등을 넣어주면 되는 것이었음.
-		//grid.columnFooters.rows.push(new wijmo.grid.GroupRow());	//add the new GroupRow to the grid's 'columnFooters' panel
-		//grid.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
-
-        $scope.flex.refresh();
-
-    });		//$scope._inquirySub("/iostock/order/instockConfm/instockConfmDtl/list.sb", params, function () {
+  $scope._inquirySub("/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl/list.sb", params, function (){});    
   };	//$scope.searchInstockConfmDtlList	------------------------------------------
 
   // 저장
@@ -433,23 +253,25 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
     var params = [];
 
     // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
-    if ($("#outstockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
-      var item = $scope.flex.collectionView.items[0];
-      if (item === null) return false;
+//    if ($("#outstockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
+//      var item = $scope.flex.collectionView.items[0];
+//      if (item === null) return false;
+//
+//      $scope.flex.collectionView.editItem(item);
+//      item.status = "U";
+//      $scope.flex.collectionView.commitEdit();
+//    }
 
-      $scope.flex.collectionView.editItem(item);
-      item.status = "U";
-      $scope.flex.collectionView.commitEdit();
-    }
-
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+//    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+//      var item = $scope.flex.collectionView.itemsEdited[i];
+	  for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+      	var item =  $scope.flex.collectionView.items[i];      
       var k = i+1;
 
-      if (nvl(item.orderTotQty,0) !== item.outTotQty) {
-          $scope._popMsg(k+"번째 행의 주문수량과 창고출고수량이 맞지 않습니다."); // 출고수량을 입력해주세요.
-          return false;
-      }
+//      if (nvl(item.orderTotQty,0) !== item.outTotQty) {
+//          $scope._popMsg(k+"번째 행의 주문수량과 창고출고수량이 맞지 않습니다."); // 출고수량을 입력해주세요.
+//          return false;
+//      }
       if (item.outUnitQty === null && item.outEtcQty === null) {
         $scope._popMsg(messages["rtnOutstockConfm.dtl.require.outQty"]); // 출고수량을 입력해주세요.
         return false;
@@ -474,38 +296,9 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
       item.storeCd   = $scope.storeCd;
       item.empNo     = "0000";
       item.storageCd = "999";
+      item.outStorageCd	= $scope.save.dtl.outStorageCd;
+      item.dlvrCd    = $scope.save.dtl.dlvrCd;
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      
-      var arrOrderUnitQty	= "";	//입고수량 주문단위
-      var arrOrderEtcQty	= "";	//입고수량 나머지
-      var arrOrderTotQty 	= "";	//입고수량 합계
-      var arrOrderAmt		= "";	//입고금액
-      var arrOrderVat		= "";	//입고금액 부가세
-      var arrOrderTot		= "";	//입고금액 합계
-      
-      for(var k=0; k<global_storage_cnt; k++){
-    	  if(k==0){
-    		  eval('arrOrderUnitQty	= parseInt(nvl(item.arrOrderUnitQty_'	+ k + ',0));');
-    		  eval('arrOrderEtcQty	= parseInt(nvl(item.arrOrderEtcQty_'	+ k + ',0));');
-    		  eval('arrOrderTotQty	= parseInt(nvl(item.arrOrderTotQty_'	+ k + ',0));');
-    		  eval('arrOrderAmt		= parseInt(nvl(item.arrOrderAmt_'		+ k + ',0));');
-    		  eval('arrOrderVat		= parseInt(nvl(item.arrOrderVat_'		+ k + ',0));');
-    		  eval('arrOrderTot		= parseInt(nvl(item.arrOrderTot_'		+ k + ',0));');
-    	  }else{
-    		  eval('arrOrderUnitQty += "^" + parseInt(nvl(item.arrOrderUnitQty_'	+ k + ',0));');
-    		  eval('arrOrderEtcQty	+= "^" + parseInt(nvl(item.arrOrderEtcQty_'		+ k + ',0));');
-    		  eval('arrOrderTotQty	+= "^" + parseInt(nvl(item.arrOrderTotQty_'		+ k + ',0));');
-    		  eval('arrOrderAmt		+= "^" + parseInt(nvl(item.arrOrderAmt_'		+ k + ',0));');
-    		  eval('arrOrderVat		+= "^" + parseInt(nvl(item.arrOrderVat_'		+ k + ',0));');
-    		  eval('arrOrderTot		+= "^" + parseInt(nvl(item.arrOrderTot_'		+ k + ',0));');
-    	  }
-      }
-      item.arrOrderUnitQty 	= arrOrderUnitQty;
-      item.arrOrderEtcQty 	= arrOrderEtcQty;
-      item.arrOrderTotQty 	= arrOrderTotQty;
-      item.arrOrderAmt 		= arrOrderAmt;
-      item.arrOrderVat		= arrOrderVat;
-      item.arrOrderTot 		= arrOrderTot;
       
       params.push(item);
     }
@@ -584,20 +377,20 @@ app.controller('rtnOutstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functi
           	item.orderTotQty = orderTotQty;
             $scope.flex.collectionView.editItem(item);
             
-          	//창고부분 모두 0으로 setting
-  			for(var k=0; k<global_storage_cnt; k++){
-  				eval('item.arrOrderUnitQty_'	+ 0 + ' = orderUnitQty;');
-  				eval('item.arrOrderEtcQty_'		+ 0 + ' = orderEtcQty;');
-  				eval('item.arrOrderTotQty_'		+ 0 + ' = orderTotQty;');
-  				eval('item.arrOrderAmt_'		+ 0 + ' = orderAmt;');
-  				eval('item.arrOrderVat_'		+ 0 + ' = orderVat;');
-  				eval('item.arrOrderTot_'		+ 0 + ' = orderTot;');
-  				
-  			}
-
-  			//첫번째 창고의 [입고수량]을 [출고수량] 값으로 setting
-              item.arrInUnitQty_0	= item.outUnitQty;
-              item.arrInEtcQty_0	= item.outEtcQty;
+//          	//창고부분 모두 0으로 setting
+//  			for(var k=0; k<global_storage_cnt; k++){
+//  				eval('item.arrOrderUnitQty_'	+ 0 + ' = orderUnitQty;');
+//  				eval('item.arrOrderEtcQty_'		+ 0 + ' = orderEtcQty;');
+//  				eval('item.arrOrderTotQty_'		+ 0 + ' = orderTotQty;');
+//  				eval('item.arrOrderAmt_'		+ 0 + ' = orderAmt;');
+//  				eval('item.arrOrderVat_'		+ 0 + ' = orderVat;');
+//  				eval('item.arrOrderTot_'		+ 0 + ' = orderTot;');
+//  				
+//  			}
+//
+//  			//첫번째 창고의 [입고수량]을 [출고수량] 값으로 setting
+//              item.arrInUnitQty_0	= item.outUnitQty;
+//              item.arrInEtcQty_0	= item.outEtcQty;
 
               $scope.calcAmt(item, 0);
 

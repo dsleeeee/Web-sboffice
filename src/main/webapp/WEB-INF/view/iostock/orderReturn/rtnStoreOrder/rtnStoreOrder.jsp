@@ -138,7 +138,7 @@ console.log('gEnvst1042: ' + gEnvst1042);
 */
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20200804.01" charset="utf-8"></script>
 
 <%-- 반품등록 상품 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.jsp">

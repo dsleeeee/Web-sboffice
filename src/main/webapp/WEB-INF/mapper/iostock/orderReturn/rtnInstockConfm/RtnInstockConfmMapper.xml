@@ -195,53 +195,7 @@
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         -->
-		SELECT  A.SLIP_NO,
-		        A.SLIP_FG,
-		        A.STORE_CD,
-		        A.PROD_CD,
-		        A.PROD_NM,
-		        A.SEQ,
-		        A.PO_UNIT_FG,
-		        A.PO_UNIT_QTY,
-		        A.PO_UNIT_ALLOW_FG,
-		        A.VAT_FG01,
-		        A.ORDER_SPLY_UPRC,
-		        A.ORDER_UNIT_QTY,
-		        A.ORDER_ETC_QTY,
-		        A.ORDER_AMT,
-		        A.ORDER_VAT,
-		        A.ORDER_TOT,
-		        A.MGR_SPLY_UPRC,
-		        A.MGR_UNIT_QTY,
-		        A.MGR_ETC_QTY,
-		        A.MGR_AMT,
-		        A.MGR_VAT,
-		        A.MGR_TOT,
-		        A.OUT_SPLY_UPRC,
-		        A.OUT_UNIT_QTY,
-		        A.OUT_ETC_QTY,
-		        A.OUT_TOT_QTY,
-		        A.OUT_AMT,
-		        A.OUT_VAT,
-		        A.OUT_TOT,
-		        A.IN_SPLY_UPRC,
-		        A.IN_UNIT_QTY,
-		        A.IN_ETC_QTY,
-		        A.IN_AMT,
-		        A.IN_VAT,
-		        A.IN_TOT,
-		        A.REMARK,
-		        A.ENVST0011,
-		        A.BARCD_CD,
-		        LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD,
-		        LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT,
-		        LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
-		FROM    (
+		
 		            SELECT  A.SLIP_NO,
 		                    A.SLIP_FG,
 		                    A.STORE_CD,
@@ -279,16 +233,7 @@
 		                    A.IN_TOT,
 		                    A.REMARK,
 		                    A.ENVST0011,
-		                    A.BARCD_CD,
-		                    B.PROD_CD       AS  A_PROD_CD,
-		                    B.STORAGE_CD    AS  A_STORAGE_CD,
-		                    B.STORAGE_NM    AS  A_STORAGE_NM,
-		                    B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY,
-		                    B.IN_ETC_QTY    AS  A_IN_ETC_QTY,
-		                    B.IN_TOT_QTY    AS  A_IN_TOT_QTY,
-		                    B.IN_AMT        AS  A_IN_AMT,
-		                    B.IN_VAT        AS  A_IN_VAT,
-		                    B.IN_TOT        AS  A_IN_TOT
+		                    A.BARCD_CD
 		            FROM    (
 		                        SELECT  A.HQ_OFFICE_CD,
 		                                A.SLIP_NO,
@@ -341,79 +286,7 @@
 		                        AND     C.PROD_CD          (+) = A.PROD_CD
 		                        AND     D.HQ_OFFICE_CD         = #{hqOfficeCd}
 		                        AND     D.ENVST_CD             = '0011'			<!-- 출고가-부가세포함여부 -->
-		                    )   A
-		                    LEFT OUTER JOIN
-		                    (
-		                        SELECT  X.STORAGE_CD,
-		                                X.STORAGE_NM,
-		                                --Y.HQ_OFFICE_CD,
-		                                #{hqOfficeCd}			AS HQ_OFFICE_CD,
-		                                #{slipNo}				AS SLIP_NO,
-		                                Y.PROD_CD,
-		                                --Y.STORAGE_CD,
-		                                NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
-		                                NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
-		                                NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
-		                                NVL(Y.IN_AMT,       0)  AS IN_AMT,
-		                                NVL(Y.IN_VAT,       0)  AS IN_VAT,
-		                                NVL(Y.IN_TOT,       0)  AS IN_TOT
-		                        FROM            TB_HQ_STORAGE                   X
-		                        LEFT OUTER JOIN TB_PO_HQ_STORE_OUTSTOCK_PROD    Y
-		                        ON              X.HQ_OFFICE_CD  = Y.HQ_OFFICE_CD
-		                        AND             X.STORAGE_CD    = Y.STORAGE_CD
-		                        AND             Y.HQ_OFFICE_CD  = #{hqOfficeCd}
-		                        AND             Y.SLIP_NO       = #{slipNo}
-		                        AND             Y.SLIP_FG       = '-1'
-		                        AND             Y.OCCR_FG = '02'
-		                        
-		                        WHERE   X.HQ_OFFICE_CD  = #{hqOfficeCd}   
-		                        AND		X.USE_YN    = 'Y'
-		                        AND     X.AREA_FG          =   #{areaFg}      /* 권역별 창고 코드 AREA_FG */
-		                    )   B
-		                    ON      A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-		                    AND     A.SLIP_NO       = B.SLIP_NO
-		                <!--AND     A.PROD_CD       = B.PROD_CD-->
-		                    AND     A.PROD_CD       = (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
-		        ) A
-		GROUP BY
-		            A.SLIP_NO,
-		            A.SLIP_FG,
-		            A.STORE_CD,
-		            A.PROD_CD,
-		            A.PROD_NM,
-		            A.SEQ,
-		            A.PO_UNIT_FG,
-		            A.PO_UNIT_QTY,
-		            A.PO_UNIT_ALLOW_FG,
-		            A.VAT_FG01,
-		            A.ORDER_SPLY_UPRC,
-		            A.ORDER_UNIT_QTY,
-		            A.ORDER_ETC_QTY,
-		            A.ORDER_AMT,
-		            A.ORDER_VAT,
-		            A.ORDER_TOT,
-		            A.MGR_SPLY_UPRC,
-		            A.MGR_UNIT_QTY,
-		            A.MGR_ETC_QTY,
-		            A.MGR_AMT,
-		            A.MGR_VAT,
-		            A.MGR_TOT,
-		            A.OUT_SPLY_UPRC,
-		            A.OUT_UNIT_QTY,
-		            A.OUT_ETC_QTY,
-		            A.OUT_TOT_QTY,
-		            A.OUT_AMT,
-		            A.OUT_VAT,
-		            A.OUT_TOT,
-		            A.IN_SPLY_UPRC,
-		            A.IN_UNIT_QTY,
-		            A.IN_ETC_QTY,
-		            A.IN_AMT,
-		            A.IN_VAT,
-		            A.IN_TOT,
-		            A.REMARK,
-		            A.ENVST0011,
-		            A.BARCD_CD
+		                    )   A		                    
 		ORDER BY    A.PROD_CD
     </select>
 

@@ -60,14 +60,14 @@
                 <%--- 적용매장 그리드 --%>
                 <div class="oh mt20">
                     <div class="w50 fl" ng-controller="regFnkeyCtrl">
-                        <div class="wj-TblWrap mr10" style="height:400px; overflow-y:hidden;">
+                        <div class="wj-TblWrap mr10" style="height:430px; overflow-y:hidden;">
                             <div class="oh">
                                 <span class="fl bk lh20 s14"><s:message code="func.regFnkey"/></span>
                                 <span class="fr">
                                     <a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a>
                                   </span>
                             </div>
-                            <div id="regFnkeyGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
+                            <div id="regFnkeyGrid" class="mt10" style="height: 380px; overflow-y: hidden;">
                                 <wj-flex-grid
                                         autoGenerateColumns="false"
                                         control="flex"
@@ -92,13 +92,13 @@
                     <%--- 미적용매장 그리드 --%>
                     <div class="w50 fr" ng-controller="noRegFnkeyCtrl">
 
-                        <div class="wj-TblWrap ml10" style="height:400px; overflow-y: hidden;" >
+                        <div class="wj-TblWrap ml10" style="height:430px; overflow-y: hidden;" >
                             <div class="oh">
                                 <span class="fl bk lh20 s14"><s:message code="func.noRegFnkey"/></span>
                                 <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="func.regist"/></a></span>
                             </div>
 
-                            <div id="noRegFnKeyGrid" class="mt10" style="height: 370px; overflow-y: hidden;">
+                            <div id="noRegFnKeyGrid" class="mt10" style="height: 380px; overflow-y: hidden;">
                                 <wj-flex-grid
                                         autoGenerateColumns="false"
                                         control="flex"

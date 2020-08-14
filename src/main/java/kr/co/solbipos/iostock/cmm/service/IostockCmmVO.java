@@ -34,6 +34,11 @@ public class IostockCmmVO extends PageVO {
     private String selectWhere;
     /** 처리구분 */
     private String procFg;
+    
+    /** 창고코드 */
+    private String storageCd;
+    
+    
 
     /**
      * @return the orgnFg
@@ -188,4 +193,14 @@ public class IostockCmmVO extends PageVO {
     public void setProcFg(String procFg) {
         this.procFg = procFg;
     }
+
+	public String getStorageCd() {
+		return storageCd;
+	}
+
+	public void setStorageCd(String storageCd) {
+		this.storageCd = storageCd;
+	}
+    
+    
 }
