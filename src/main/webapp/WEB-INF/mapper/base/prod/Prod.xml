@@ -226,8 +226,8 @@
 
     <!-- 상품 상세 조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
-                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_IMAGE
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_IMAGE
         PARAM    : prodVO
         COMMENTS : 상품의 상세정보를 조회한다. ( 본사/매장 )
     -->
@@ -273,7 +273,8 @@
                     thp.STOCK_UNIT_FG,
                     thp.USE_YN,                     -- 사용여부
                     NVL(thp.REMARK, '') AS REMARK,  -- 비고
-                    thp.REG_DT
+                    thp.REG_DT,
+                    thpi.IMG_URL
                 FROM
                     TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
@@ -297,6 +298,16 @@
                     ) thpsp ON
                     thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                     AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    IMG_URL || IMG_FILE_NM AS IMG_URL
+                    FROM TB_HQ_PRODUCT_IMAGE
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) thpi ON
+                    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpi.PROD_CD
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thp.PROD_CD = #{prodCd}
@@ -340,7 +351,8 @@
                     tmp.STOCK_UNIT_FG,
                     tmp.USE_YN,                     -- 사용여부
                     NVL(tmp.REMARK, '') AS REMARK,  -- 비고
-                    tmp.REG_DT
+                    tmp.REG_DT,
+                    tmpi.IMG_URL
                 FROM
                     TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
@@ -364,6 +376,16 @@
                     ) tmpsp ON
                     tmp.STORE_CD = tmpsp.STORE_CD
                     AND tmp.PROD_CD = tmpsp.PROD_CD
+                LEFT OUTER JOIN (
+                    SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_URL || IMG_FILE_NM AS IMG_URL
+                    FROM TB_MS_PRODUCT_IMAGE
+                    WHERE STORE_CD = #{storeCd}
+                    ) tmpi ON
+                    tmp.STORE_CD = tmpi.STORE_CD
+                    AND tmp.PROD_CD = tmpi.PROD_CD
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                     AND tmp.PROD_CD = #{prodCd}
@@ -1883,4 +1905,208 @@
             )
         }
     </select>
+
+    <!-- 상품 이미지 저장시 파일여부 체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        COMMENTS : [본사]상품 이미지, [매장]상품 이미지
+    -->
+    <select id="getProdImageFileSaveCheck"  parameterType="prodVO" resultType="String">
+        /* ProdMapper.getProdImageFileSaveCheck */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "HQ"'>
+                    SELECT COUNT(*)
+                    FROM TB_HQ_PRODUCT_IMAGE thpi
+                    WHERE 1=1
+                    AND thpi.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpi.PROD_CD = #{prodCd}
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "STORE"'>
+                    SELECT COUNT(*)
+                    FROM TB_MS_PRODUCT_IMAGE tmpi
+                    WHERE 1=1
+                    AND tmpi.STORE_CD = #{storeCd}
+                    AND tmpi.PROD_CD = #{prodCd}
+                </if>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품 신규등록,수정 팝업 - 상품 이미지 저장 insert -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        COMMENTS : [본사]상품 이미지, [매장]상품 이미지
+    -->
+    <insert id="getProdImageFileSaveInsert" parameterType="prodVO">
+        /* ProdMapper.getProdImageFileSaveInsert */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "HQ"'>
+                    INSERT INTO TB_HQ_PRODUCT_IMAGE
+                    (
+                        HQ_OFFICE_CD,
+                        PROD_CD,
+                        IMG_FG,
+                        IMG_URL,
+                        IMG_FILE_NM,
+                        IMG_CHG_DT,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{hqOfficeCd},
+                        #{prodCd},
+                        '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
+                        #{filePath},
+                        #{fileNm} ||'.'|| #{fileExt},
+                        #{modDt},
+                        '',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "STORE"'>
+                    INSERT INTO TB_MS_PRODUCT_IMAGE
+                    (
+                        STORE_CD,
+                        PROD_CD,
+                        IMG_FG,
+                        IMG_URL,
+                        IMG_FILE_NM,
+                        IMG_CHG_DT,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                    ) VALUES (
+                        #{storeCd},
+                        #{prodCd},
+                        '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
+                        #{filePath},
+                        #{fileNm} ||'.'|| #{fileExt},
+                        #{modDt},
+                        '',
+                        #{regDt},
+                        #{regId},
+                        #{modDt},
+                        #{modId}
+                    )
+                </if>
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 상품 신규등록,수정 팝업 - 상품 이미지 저장 update -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        COMMENTS : [본사]상품 이미지, [매장]상품 이미지
+    -->
+    <update id="getProdImageFileSaveUpdate" parameterType="prodVO">
+        /* ProdMapper.getProdImageFileSaveUpdate */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "HQ"'>
+                    UPDATE
+                    TB_HQ_PRODUCT_IMAGE
+                    SET
+                    IMG_URL = #{filePath},
+                    IMG_FILE_NM = #{fileNm} ||'.'|| #{fileExt},
+                    IMG_CHG_DT = #{modDt},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PROD_CD = #{prodCd}
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "STORE"'>
+                    UPDATE
+                    TB_MS_PRODUCT_IMAGE
+                    SET
+                    IMG_URL = #{filePath},
+                    IMG_FILE_NM = #{fileNm} ||'.'|| #{fileExt},
+                    IMG_CHG_DT = #{modDt},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                    WHERE 1=1
+                    AND STORE_CD = #{storeCd}
+                    AND PROD_CD = #{prodCd}
+                </if>
+            </when>
+        </choose>
+    </update>
+
+    <!-- 상품 신규등록,수정 팝업 - 상품 이미지 저장 delete -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        COMMENTS : [본사]상품 이미지, [매장]상품 이미지
+    -->
+    <delete id="getProdImageFileSaveDelete" parameterType="prodVO">
+        /* ProdMapper.getProdImageFileSaveDelete */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "HQ"'>
+                    DELETE
+                    TB_HQ_PRODUCT_IMAGE
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND PROD_CD = #{prodCd}
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "STORE"'>
+                    DELETE
+                    TB_MS_PRODUCT_IMAGE
+                    WHERE 1=1
+                    AND STORE_CD = #{storeCd}
+                    AND PROD_CD = #{prodCd}
+                </if>
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 상품 이미지 삭제시 파일명 가져오기 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        COMMENTS : [본사]상품 이미지, [매장]상품 이미지
+    -->
+    <select id="getProdImageFileSaveImgFileNm"  parameterType="prodVO" resultType="String">
+        /* ProdMapper.getProdImageFileSaveImgFileNm */
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 본사 -->
+                <if test='orgnFg == "HQ"'>
+                    SELECT
+                    SUBSTR(thpi.IMG_URL, INSTR(thpi.IMG_URL, '\prod_img')) || thpi.IMG_FILE_NM AS PATH_FULL
+--                     SUBSTR(thpi.IMG_URL, INSTR(thpi.IMG_URL, '\A0001')) || thpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
+                    FROM TB_HQ_PRODUCT_IMAGE thpi
+                    WHERE 1=1
+                    AND thpi.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpi.PROD_CD = #{prodCd}
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "STORE"'>
+                    SELECT
+                    SUBSTR(tmpi.IMG_URL, INSTR(tmpi.IMG_URL, '\prod_img')) || tmpi.IMG_FILE_NM AS PATH_FULL
+--                     SUBSTR(tmpi.IMG_URL, INSTR(tmpi.IMG_URL, '\S000002')) || tmpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
+                    FROM TB_MS_PRODUCT_IMAGE tmpi
+                    WHERE 1=1
+                    AND tmpi.STORE_CD = #{storeCd}
+                    AND tmpi.PROD_CD = #{prodCd}
+                </if>
+            </when>
+        </choose>
+    </select>
+
 </mapper>
