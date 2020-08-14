@@ -45,6 +45,7 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prodDetail = prodDetail;
         var scope = agrid.getScope("prodCtrl");
         scope.setProdInfo(prodDetail);
+
         // 연결상품정보
         var linkedProdList = prodDetail.linkedProdList;
         var linkedProdInfo = "";
@@ -57,6 +58,18 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
           linkedProdInfo = '<tr><th colspan=\"2\">' + messages['cmm.empty.data'] + '</th></tr>';
         }
         $("#_linkedProdInfo").html(linkedProdInfo);
+
+        // 상품 이미지
+        if(prodDetail.imgUrl === null) {
+            $("#goodsNoProdDetail").css('display', 'block');
+            $("#goodsYesProdDetail").css('display', 'none');
+
+        } else {
+            $("#goodsNoProdDetail").css('display', 'none');
+            $("#goodsYesProdDetail").css('display', 'block');
+            $("#imgProdImageProdDetail").attr("src", prodDetail.imgUrl);
+        }
+
       }
     );
     // 기능수행 종료 : 반드시 추가

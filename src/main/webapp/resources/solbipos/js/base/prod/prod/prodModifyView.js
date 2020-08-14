@@ -17,6 +17,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
   var vProdNoEnvFg = prodNoEnvFg;
 
+  // 상품 이미지 삭제여부 (DEL:삭제)
+  var prodImageDelFg;
+
   // 상품정보
   $scope.prodModifyInfo = {};
   $scope.setProdModifyInfo = function(data){
@@ -25,6 +28,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.getProdModifyInfo = function(){
     return $scope.prodModifyInfo;
   };
+
   // 상품정보 조회
   $scope.$on("prodModifyCtrl", function(event, data) {
     // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
@@ -34,28 +38,52 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상품정보 set
     $scope.setProdModifyInfo(data);
 
+    // 첨부파일, 상품 이미지 초기화
+    $scope.clearProdImage();
+
     // 수정 모드 시
     if(data.prodCd !== null && data.prodCd !== undefined && data.prodCd !== ""){
+        // 상품 이미지
+        if(data.imgUrl === null){
+            $("#goodsNo").css('display', 'block');
+            $("#goodsYes").css('display', 'none');
+
+        } else {
+            $("#goodsNo").css('display', 'none');
+            $("#goodsYes").css('display', 'block');
+
+            try {
+                $("#imgProdImage").attr("src", data.imgUrl);
+            } catch (e) {
+                alert(e);
+            }
+        }
 
     // 신규 모드 시
-    }else {
-      var params = {};
-      params.saleProdYn = $scope.prodModifyInfo.saleProdYn = "Y"; // 판매상품여부
-      // params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
-      params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
-      params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
-      params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
-      params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
-      params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
-      params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고
-      params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
-      $scope.setProdModifyInfo(params);
+    } else {
+        var params = {};
+        params.saleProdYn = $scope.prodModifyInfo.saleProdYn = "Y"; // 판매상품여부
+        // params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
+        params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
+        params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
+        params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
+        params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
+        params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
+        params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고
+        params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
+        // 상품정보 set (초기값 셋팅)
+        $scope.setProdModifyInfo(params);
+
+        // 상품 이미지
+        $("#goodsNo").css('display', 'block');
+        $("#goodsYes").css('display', 'none');
     }
 
     // 메시지창 닫기
     setTimeout(function() {
       $scope.$broadcast('loadingPopupInactive');
     }, 30);
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
@@ -126,7 +154,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
             params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
-            params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고 -> 현재 저장,조회 로직 빠져있음
+            // params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고 -> 현재 저장,조회 로직 빠져있음
             params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
 
             // 저장수행
@@ -139,6 +167,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 }else{
                     $scope._popMsg(messages["cmm.saveSucc"]);
+
+                    // 이미지파일 저장
+                    $scope.prodImageFileSave(result);
+
                     $scope.prodModifyLayer.hide();
 
                     // 저장기능 수행후 재조회
@@ -146,7 +178,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             });
         }
-    }
+    };
 
   // 값 체크
   $scope.valueCheck = function () {
@@ -225,8 +257,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
 
+        // 상품 이미지
+        if (!isNull($("#file")[0].files[0])) {
+            var maxSize = 500 * 1024; // 500KB
+            var fileSize = $("#file")[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(messages["prod.fileSizeChk.msg"]);
+                return false;
+            }
+        }
+
         return true;
-    }
+    };
 
   // 등록/수정 모드에 따른 VIEW 변경
   $scope.chkSaveMode = function(data){
@@ -271,6 +313,110 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
 
           $("#saveMode").val("REG");
       }
-  }
+  };
+
+    // 이미지 화면에 넣기
+    $scope.changeProdImage = function (value) {
+        if(value.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#imgProdImage").attr('src', e.target.result);
+            };
+            reader.readAsDataURL(value.files[0]);
+        }
+
+        // 상품 이미지
+        $("#goodsNo").css('display', 'none');
+        $("#goodsYes").css('display', 'block');
+    };
+
+    // 상품 이미지 파일 저장
+    $scope.prodImageFileSave = function(data){
+        var prodCd;
+
+        // 수정
+        if($("#saveMode").val() === "MOD"){
+            prodCd = $scope.prodModifyInfo.prodCd;
+        // 신규
+        } else if($("#saveMode").val() === "REG"){
+            prodCd = data;
+        }
+
+        var formData = new FormData($("#myForm")[0]);
+        formData.append("orgnFg", orgnFg);
+        formData.append("hqOfficeCd", hqOfficeCd);
+        formData.append("storeCd", storeCd);
+        formData.append("ImageProdCd", prodCd);
+        formData.append("prodImageDelFg", prodImageDelFg);
+
+        var url = '/base/prod/prod/prod/getProdImageFileSave.sb';
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            // async:false,
+            success: function(result) {
+                // console.log('save result', result);
+                if (result.status === "OK") {
+                    $scope._popMsg("저장되었습니다.");
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            error : function(result){
+                $scope._popMsg("error");
+                $scope.$broadcast('loadingPopupInactive');
+            }
+        },function() {
+            $scope._popMsg("Ajax Fail By HTTP Request");
+            $scope.$broadcast('loadingPopupInactive');
+        });
+    };
+
+    // 상품 이미지 삭제
+    $scope.delProdImage = function () {
+        // 첨부파일, 상품 이미지 초기화
+        $scope.clearProdImage();
+
+        // 상품 이미지
+        if($scope.prodModifyInfo.imgUrl != null) {
+            // 상품 이미지 삭제여부 (DEL:삭제)
+            prodImageDelFg = "DEL";
+        }
+    };
+
+    // 첨부파일, 상품 이미지 초기화
+    $scope.clearProdImage = function () {
+        // 첨부파일 리셋
+        var agent = navigator.userAgent.toLowerCase();
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            $("#file").replaceWith( $("#file").clone(true) );
+        } else {
+            // other browser 일때
+            $("#file").val("");
+        }
+        // 상품 이미지 초기화
+        $("#imgProdImage").attr("src", null);
+
+        // 상품 이미지 삭제여부 (DEL:삭제)
+        prodImageDelFg = null;
+    };
 
 }]);

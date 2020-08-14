@@ -151,6 +151,17 @@ public class ProdVO extends PageVO {
     /** 상품적용여부 */
     private UseYn prodRegFg;
 
+    /** 파일 경로 */
+    private String filePath;
+
+    /** 파일 명 */
+    private String fileNm;
+
+    /** 파일확장자 */
+    private String fileExt;
+
+    /** 상품이미지파일 삭제여부 */
+    private String prodImageDelFg;
 
     /**
      * @return the hqOfficeCd
@@ -839,4 +850,20 @@ public class ProdVO extends PageVO {
     public void setProdRegFg(UseYn prodRegFg) {
         this.prodRegFg = prodRegFg;
     }
+
+    public String getFilePath() { return filePath; }
+
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+
+    public String getFileNm() { return fileNm; }
+
+    public void setFileNm(String fileNm) { this.fileNm = fileNm; }
+
+    public String getFileExt() { return fileExt; }
+
+    public void setFileExt(String fileExt) { this.fileExt = fileExt; }
+
+    public String getProdImageDelFg() { return prodImageDelFg; }
+
+    public void setProdImageDelFg(String prodImageDelFg) { this.prodImageDelFg = prodImageDelFg; }
 }
