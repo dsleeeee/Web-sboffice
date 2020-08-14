@@ -92,7 +92,7 @@ app.controller('migDataMappingCtrl', ['$scope', '$http', function ($scope, $http
                     wijmo.addClass(cell, 'wj-custom-readonly');
                 }
             }
-        }
+        };
         // <-- //그리드 헤더2줄 -->
 
         // 조회
@@ -105,7 +105,7 @@ app.controller('migDataMappingCtrl', ['$scope', '$http', function ($scope, $http
         event.preventDefault();
     });
 
-    $scope.searchMigDataMapping = function(){
+    $scope.searchMigDataMapping = function() {
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
@@ -115,7 +115,7 @@ app.controller('migDataMappingCtrl', ['$scope', '$http', function ($scope, $http
     // <-- //검색 호출 -->
 
     // 신규이관요청
-    $scope.addInfo = function(){
+    $scope.addInfo = function() {
         $scope.wjMigDataMappingInfoLayer.show(true);
         event.preventDefault();
     };
@@ -130,4 +130,29 @@ app.controller('migDataMappingCtrl', ['$scope', '$http', function ($scope, $http
             }, 50)
         });
     });
+
+    // 매출재이관
+    $scope.saleAgainSave = function() {
+        $scope._popConfirm(messages["migDataMapping.saleAgainSaveConfirm"], function() {
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].gChk) {
+                    params.push($scope.flex.collectionView.items[i]);
+                }
+            }
+
+            if(params.length <= 0) {
+                s_alert.pop(messages["cmm.not.select"]);
+                return;
+            }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/store/manage/migDataMapping/migDataMapping/getMigDataMappingSaleAgainSave.sb", params, function(){
+                var storeScope = agrid.getScope('migDataMappingCtrl');
+                storeScope.searchMigDataMapping();
+            });
+        });
+    };
+
 }]);
