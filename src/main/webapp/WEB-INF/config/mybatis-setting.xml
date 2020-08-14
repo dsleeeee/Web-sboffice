@@ -236,7 +236,8 @@
     <typeAlias alias="recpOriginVO" type="kr.co.solbipos.base.prod.recpOrigin.service.RecpOriginVO"/>
     <!-- 기초관리 > 상품관리 > 메뉴순위표시여부관리 -->
     <typeAlias alias="menuRankVO" type="kr.co.solbipos.base.prod.menuRank.service.MenuRankVO"/>
-
+    <!-- 기초관리 > 상품관리 > 상품이미지관리 -->
+    <typeAlias alias="prodImgVO" type="kr.co.solbipos.base.prod.prodImg.service.ProdImgVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
