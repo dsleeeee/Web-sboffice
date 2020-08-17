@@ -4,8 +4,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('memberBasicCtrl', $scope, $http, false));
 
     // 기본 회원등급
-    if(memberClassList.length == 0) {
-        memberClassList = [{value: "", name: "선택"}, {value: "001", name: "기본등급"}];
+    if (memberClassList.length == 0) {
+        memberClassList = [{value: "", name: "전체"}, {value: "001", name: "기본등급"}];
+    } else {
+        memberClassList.unshift({value: "", name: "전체"});
     }
 
     // 조회조건 콤보박스 데이터
@@ -13,16 +15,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("rSmsRecvYn", recvDataMapEx);
     $scope._setComboData("rGendrFg", genderDataMapEx);
     $scope._setComboData("rWeddingYn", weddingDataMap);
-    $scope._setComboData("rRegStoreCd", regstrStoreList);
+    $scope._setComboData("basicRegStoreCd", regstrStoreList);
     $scope._setComboData("rUseYn", useDataMap);
     $scope._setComboData("rMemberClass", memberClassList);
     $scope._setComboData("rMembrcardYn", rMembrcardList);
 
     $scope.selectedMember;
-    $scope.setSelectedMember = function(data) {
+    $scope.setSelectedMember = function (data) {
         $scope.selectedMember = data;
     };
-    $scope.getSelectedMember = function(){
+    $scope.getSelectedMember = function () {
         return $scope.selectedMember;
     };
 
@@ -34,11 +36,11 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
      * 선택된 회원이 없으면 : 신규등록 (폼 리셋)
      * 선택된 회원이 있으면 : 데이터 수정
      * *******************************************************/
-    $scope.$on("memberBasicCtrl", function(event, data) {
+    $scope.$on("memberBasicCtrl", function (event, data) {
 
         $scope.setSelectedMember(data);
 
-        if($.isEmptyObject(data) ) {
+        if ($.isEmptyObject(data)) {
             $scope.resetForm();
             $scope.saveMode = "REG";
         } else {
@@ -50,11 +52,11 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
 
-    $scope.changeWeddingCombo = function(s, e){
-        if(s.selectedValue === 'Y') {
-            $scope.weddingDayCombo.isReadOnly     = false;
+    $scope.changeWeddingCombo = function (s, e) {
+        if (s.selectedValue === 'Y') {
+            $scope.weddingDayCombo.isReadOnly = false;
         } else {
-            $scope.weddingDayCombo.isReadOnly     = true;
+            $scope.weddingDayCombo.isReadOnly = true;
         }
     };
 
@@ -62,29 +64,29 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     /*********************************************************
      * 회원 등록을 위한 폼 리셋
      * *******************************************************/
-    $scope.resetForm = async function(){
+    $scope.resetForm = async function () {
 
         await $("#regForm")[0].reset();
         // $("#memberInfoTitle").text("");
 
-        $scope.$apply( await function(){
-            $scope.member.membrNo                 = '자동채번';
-            $scope.member.beforeBizNo             = '';
-            $scope.regStoreCdCombo.selectedIndex  = 0;
+        $scope.$apply(await function () {
+            $scope.member.membrNo = '자동채번';
+            $scope.member.beforeBizNo = '';
+            $scope.basicRegStoreCdCombo.selectedIndex = 0;
             $scope.member.membrNm = '';
             $scope.member.membrNicknm = '';
             $scope.member.telNo = '';
-            $scope.genderCombo.selectedIndex      = 0;
-            $scope.weddingYnCombo.selectedIndex   = 0;
-            $scope.weddingDayCombo.selectedValue  = new Date();
+            $scope.genderCombo.selectedIndex = 0;
+            $scope.weddingYnCombo.selectedIndex = 0;
+            $scope.weddingDayCombo.selectedValue = new Date();
             $scope.weddingDayCombo.refresh();
-            $scope.weddingDayCombo.isReadOnly     = true;
+            $scope.weddingDayCombo.isReadOnly = true;
             $scope.member.lunarYn = 0;
-            $scope.birthdayCombo.selectedValue    = new Date();
+            $scope.birthdayCombo.selectedValue = new Date();
             $scope.birthdayCombo.refresh();
             $scope.member.birthday = new Date();
             $scope.memberClassCombo.selectedIndex = 0;
-            $scope.useYnCombo.selectedValue       = 'Y';
+            $scope.useYnCombo.selectedValue = 'Y';
             $scope.member.lnPartner = '';
             $scope.member.cdCompany = '';
             $scope.member.cdPartner = '';
@@ -93,7 +95,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.addr = '';
             $scope.member.addrDtl = '';
             $scope.emailRecvYnCombo.selectedIndex = 0;
-            $scope.smsRecvYnCombo.selectedIndex   = 0;
+            $scope.smsRecvYnCombo.selectedIndex = 0;
             $scope.member.remark = '';
 
         });
@@ -102,13 +104,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     /*********************************************************
      * 회원정보 조회
      * *******************************************************/
-    $scope.getMemberInfo = function(){
+    $scope.getMemberInfo = function () {
 
         var params = $scope.getSelectedMember();
 
-        $scope._postJSONQuery.withOutPopUp( '/membr/info/view/base/getMemberInfo.sb', params, function(response){
+        $scope._postJSONQuery.withOutPopUp('/membr/info/view/base/getMemberInfo.sb', params, function (response) {
 
-            if($.isEmptyObject(response.data) ) {
+            if ($.isEmptyObject(response.data)) {
                 $scope._popMsg(messages["cmm.empty.data"]);
                 $scope.memberRegistLayer.hide();
                 return false;
@@ -119,16 +121,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $("#memberInfoTitle").text("[" + memberDetailInfo.membrNo + "] " + memberDetailInfo.membrNm);
 
-            memberDetailInfo.birthday               = stringToDate(memberDetailInfo.birthday);
-            memberDetailInfo.weddingday             = stringToDate(memberDetailInfo.weddingday);
+            memberDetailInfo.birthday = stringToDate(memberDetailInfo.birthday);
+            memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
 
-            $scope.member                           = memberDetailInfo;
+            $scope.member = memberDetailInfo;
 
-            if(memberDetailInfo.weddingYn == "Y") {
-                $scope.weddingDayCombo.isReadOnly     = false;
+            if (memberDetailInfo.weddingYn == "Y") {
+                $scope.weddingDayCombo.isReadOnly = false;
             } else {
-                $scope.weddingDayCombo.isReadOnly     = true;
-                $scope.member.weddingday              = new Date();
+                $scope.weddingDayCombo.isReadOnly = true;
+                $scope.member.weddingday = new Date();
             }
         });
     };
@@ -136,21 +138,21 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     /*********************************************************
      * 값 체크
      * *******************************************************/
-    $scope.valueCheck = function(){
+    $scope.valueCheck = function () {
 
         // 신규등록일 경우
         //if( $.isEmptyObject($scope.selectedMember) ){
 
         // 등록매장을 선택해주세요.
-        var msg = messages["regist.reg.store.cd"]+messages["cmm.require.select"];
-        if( isNull( $scope.regStoreCdCombo.selectedValue )) {
+        var msg = messages["regist.reg.store.cd"] + messages["cmm.require.select"];
+        if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
             $scope._popMsg(msg);
             return false;
         }
 
         // 회원명을 입력하세요.
-        var msg = messages["regist.membr.nm"]+messages["cmm.require.text"];
-        if( isNull( $scope.member.membrNm )) {
+        var msg = messages["regist.membr.nm"] + messages["cmm.require.text"];
+        if (isNull($scope.member.membrNm)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -158,21 +160,21 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // 회원명 최대길이 체크
         if (nvl($scope.member.membrNm, '') !== '' && nvl($scope.member.membrNm + '', '').getByteLengthForOracle() > 50) {
             msg = messages["regist.membr.nm"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
         // 회원명(영문)
-        if (nvl( $scope.member.memberEngNm, '') === '') {
+        if (nvl($scope.member.memberEngNm, '') === '') {
             msg = messages["member.excel.nm.en"] + messages["excelUpload.require.data"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
         // 회원명 영문 최대길이 체크
-        if (nvl( $scope.member.memberEngNm, '') !== '' && nvl($scope.member.memberEngNm + '', '').getByteLengthForOracle() > 50) {
+        if (nvl($scope.member.memberEngNm, '') !== '' && nvl($scope.member.memberEngNm + '', '').getByteLengthForOracle() > 50) {
             msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
@@ -180,7 +182,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         var numChkexp = /[^a-z]/gi;
         if (numChkexp.test($scope.member.memberEngNm)) {
             msg = messages["member.excel.nm.en"] + messages["cmm.require.en"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
@@ -212,31 +214,40 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         //     return false;
         // }
 
-        // 핸드폰번호
-        var msg = messages["regist.phone.no"]+messages["cmm.require.number"];
-        var numChkregexp = /[^0-9]/g;
-        if(numChkregexp.test( $scope.member.phoneNo )) {
+
+        // 핸드폰번호를 입력하세요.
+        var msg = messages["regist.phone.no"] + messages["cmm.require.text"];
+        if (isNull($scope.member.phoneNo)) {
             $scope._popMsg(msg);
+            return false;
+        }
+
+        // 핸드폰번호
+        var numChkregexp = /^\d{3}[-]?\d{3,4}[-]?\d{4}$/g;
+        if (!numChkregexp.test($scope.member.phoneNo)) {
+            console.log($scope.member.phoneNo);
+            console.log(numChkregexp.test($scope.member.phoneNo));
+            $scope._popMsg(messages["cmm.not.phoneNo"]);
             return false;
         }
 
         // 핸드폰번호 최대길이 체크
         if (nvl($scope.member.phoneNo, '') !== '' && nvl($scope.member.phoneNo + '', '').getByteLengthForOracle() > 14) {
             msg = messages["regist.phone.no"] + messages["excelUpload.overLength"] + " 14 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
         // 회원카드번호를 입력하세요.
-        var msg = messages["regist.membr.card.no"]+messages["cmm.require.text"];
-        if( isNull( $scope.member.membrCardNo )) {
+        var msg = messages["regist.membr.card.no"] + messages["cmm.require.text"];
+        if (isNull($scope.member.membrCardNo)) {
             $scope._popMsg(msg);
             return false;
         }
         // 회원카드번호는 숫자만 입력할 수 있습니다.
-        var msg = messages["regist.membr.card.no"]+messages["cmm.require.number"];
+        var msg = messages["regist.membr.card.no"] + messages["cmm.require.number"];
         var numChkregexp = /[^0-9]/g;
-        if(numChkregexp.test( $scope.member.membrCardNo )) {
+        if (numChkregexp.test($scope.member.membrCardNo)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -244,27 +255,23 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // 이메일 최대길이 체크
         if (nvl($scope.member.emailAddr, '') !== '' && nvl($scope.member.emailAddr + '', '').getByteLengthForOracle() > 30) {
             msg = messages["regist.email"] + messages["excelUpload.overLength"] + " 30 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
         // 상세주소 최대길이 체크
         if (nvl($scope.member.addrDtl, '') !== '' && nvl($scope.member.addrDtl + '', '').getByteLengthForOracle() > 100) {
             msg = messages["regist.addr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
 
         // 비고 최대길이 체크
         if (nvl($scope.member.remark, '') !== '' && nvl($scope.member.remark + '', '').getByteLengthForOracle() > 300) {
             msg = messages["regist.remark"] + messages["excelUpload.overLength"] + " 300 " + messages["excelUpload.bateLengthInfo"];
-             $scope._popMsg(msg);
+            $scope._popMsg(msg);
             return false;
         }
-
-
-
-
 
 
         //
@@ -283,20 +290,20 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     /*********************************************************
      * 저장
      * *******************************************************/
-    $scope.save = function(){
+    $scope.save = function () {
 
-        if(!$scope.valueCheck()) return false;
+        if (!$scope.valueCheck()) return false;
 
-        var params         = $scope.member;
+        var params = $scope.member;
 
         // console.log(params)
 
         params.cdCompany = "15";
         params.cdPartner = "00001000502";
-        params.weddingday  = dateToDaystring(params.weddingday);
-        params.birthday    = dateToDaystring(params.birthday);
-        params.lunarYn     = $(":input:radio[name=lunarYn]:checked").val();
-        params.telNo       = $scope.member.phoneNo;
+        params.weddingday = dateToDaystring(params.weddingday);
+        params.birthday = dateToDaystring(params.birthday);
+        params.lunarYn = $(":input:radio[name=lunarYn]:checked").val();
+        params.telNo = $scope.member.phoneNo;
 
         // console.log(params);
 
@@ -304,25 +311,35 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 회원 신규 등록시
         // if($.isEmptyObject($scope.selectedMember) ) {
-        if($scope.saveMode === "REG"){
-            $scope._postJSONSave.withPopUp("/membr/info/view/base/registMemberInfo.sb", params, function (result ) {
+        if ($scope.saveMode === "REG") {
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/registMemberInfo.sb", params, function (result) {
+                var scope = agrid.getScope('memberCtrl');
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 // console.log(result.data.data)
                 $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                 $scope.memberRegistLayer.hide();
+                scope.getMemberList();
+
                 // memberInfoScope.getMemberList();
             });
         }
         // 수정
-        else if($scope.saveMode === "MOD"){
+        else if ($scope.saveMode === "MOD") {
             $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
+                var scope = agrid.getScope('memberCtrl');
                 $scope._popMsg(messages["cmm.saveSucc"]);
                 $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                 $scope.memberRegistLayer.hide();
+                scope.getMemberList();
                 // $scope.memberInfoDetailLayer.hide();
                 // memberInfoScope.getMemberList();
             });
         }
+    };
+
+    $scope.close = function () {
+        $scope.member = {};
+        $scope.memberRegistLayer.hide();
     };
 
 

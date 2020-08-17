@@ -242,6 +242,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     params.listScale = $scope.listScale;
 
+    params.membrClassCd = $scope.member.membrClassCd;
     params.membrNo = $("#memberNo").val();
     params.membrNm = $("#memberNm").val();
     params.membrEngNm = $("#memberEngNm").val();

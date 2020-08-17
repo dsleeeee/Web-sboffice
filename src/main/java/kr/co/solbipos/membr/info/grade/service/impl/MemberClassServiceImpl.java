@@ -103,7 +103,6 @@ public class MemberClassServiceImpl implements MemberClassService {
     }
 
 
-
     /**
      * 회원등급 check
      *
@@ -115,14 +114,17 @@ public class MemberClassServiceImpl implements MemberClassService {
         String dt = currentDateTimeString();
         String defltYn = membrClassVO.getDefltYn();
 
+        membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+
         int classChk = mapper.classInfoChk(membrClassVO);
         int classResult;
-        membrClassVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+
         membrClassVO.setRegDt(dt);
         membrClassVO.setRegId(sessionInfoVO.getUserId());
         membrClassVO.setModDt(dt);
         membrClassVO.setModId(sessionInfoVO.getUserId());
         membrClassVO.setMembrOrgnClassCd(membrClassVO.getMembrOrgnCd() + membrClassVO.getMembrClassCd());
+
         if (classChk > 0) {
             classResult = mapper.updateClassInfo(membrClassVO);
             if (classResult > 0 && "Y".equals(defltYn)) {
@@ -189,22 +191,39 @@ public class MemberClassServiceImpl implements MemberClassService {
                 membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
                 membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
             }
-
             membrClassPointVO.setRegDt(dt);
             membrClassPointVO.setRegId(sessionInfoVO.getUserId());
             membrClassPointVO.setModDt(dt);
             membrClassPointVO.setModId(sessionInfoVO.getUserId());
 
+            if(membrClassPointVO.getInitPayCd() != null) {
+                membrClassPointVO.setStatus(GridDataFg.INSERT);
+                result = mapper.deleteClassInitPointInfo(membrClassPointVO);
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            } else {
+                int classPointChk = mapper.classPointInfoChk(membrClassPointVO);
+
+                if (classPointChk > 0) {
+                    membrClassPointVO.setStatus(GridDataFg.INSERT);
+                    result = mapper.deleteClassPointInfo(membrClassPointVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    membrClassPointVO.setStatus(GridDataFg.INSERT);
+                }
+            }
+
             if (membrClassPointVO.getStatus() == GridDataFg.INSERT) {
                 result = mapper.insertClassPointInfo(membrClassPointVO);
                 if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            } else if (membrClassPointVO.getStatus() == GridDataFg.UPDATE) {
-                result = mapper.updateClassPointInfo(membrClassPointVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            } else {
-                result = mapper.deleteClassPointInfo(membrClassPointVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
+//            else if (membrClassPointVO.getStatus() == GridDataFg.UPDATE) {
+//                result = mapper.updateClassPointInfo(membrClassPointVO);
+//                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
+//            else {
+//                result = mapper.deleteClassPointInfo(membrClassPointVO);
+//                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//            }
 //            }
 //            // 매장에서 접속시
 //            else {
@@ -229,6 +248,34 @@ public class MemberClassServiceImpl implements MemberClassService {
         return result;
     }
 
+    @Override
+    public int getMemberClassPointDel(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String procResult = "";
 
+        OrgnFg orgnFg = sessionInfoVO.getOrgnFg();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+        String dt = currentDateTimeString();
 
+        for (MembrClassPointVO membrClassPointVO : membrClassPointVOs) {
+
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            } else {
+                membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
+                membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+            }
+
+            membrClassPointVO.setRegDt(dt);
+            membrClassPointVO.setRegId(sessionInfoVO.getUserId());
+            membrClassPointVO.setModDt(dt);
+            membrClassPointVO.setModId(sessionInfoVO.getUserId());
+
+            result = mapper.deleteClassPointInfo(membrClassPointVO);
+            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return result;
+    }
 }

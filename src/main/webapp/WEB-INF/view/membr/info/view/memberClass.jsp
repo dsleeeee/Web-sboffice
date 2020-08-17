@@ -45,7 +45,7 @@
                 <th><s:message code="grade.membr.class.cd.nm"/></th>
                 <td colspan="3">
                     <input type="text" id="membrCd" class="sb-input w10 fl mr10" ng-model="detailData.membrClassCd"
-                           maxlength="1" />
+                           maxlength="3" />
                     <input type="text" id="membrCdNm" class="sb-input w30 fl mr10" ng-model="detailData.membrClassNm"
                            maxlength="15" />
                     <div class="sb-select fl w20 mr10">
@@ -87,7 +87,7 @@
                 <th><s:message code="grade.membr.min.use.point"/></th>
                 <td>
                     <input type="text" id="membrMinPoint" class="sb-input w50" ng-model="detailData.minUsePoint"
-                           maxlength="15"/>
+                           maxlength="8"/>
                     <s:message code="grade.membr.min.use.point.message"/>
                 </td>
                 <%-- 첫거래 적립 Point --%>
@@ -104,7 +104,7 @@
                 <th><s:message code="grade.membr.max.use.point"/></th>
                 <td>
                     <input type="text" id="membrMaxPoint" class="sb-input w50" ng-model="detailData.maxUsePoint"
-                           maxlength="15"/>
+                           maxlength="8"/>
                     <s:message code="grade.membr.max.use.point.message"/>
                 </td>
                 <%-- 포인트 사용시 적립여부 --%>
@@ -144,7 +144,7 @@
                 <%-- 할인한도액 --%>
                 <th><s:message code="grade.membr.dc.max"/></th>
                 <td>
-                    <input type="text" id="membrDcMax" class="sb-input w100" ng-model="detailData.dcLimitAmt" maxlength="15"/>
+                    <input type="text" id="membrDcMax" class="sb-input w100" ng-model="detailData.dcLimitAmt" maxlength="8"/>
                 </td>
             </tr>
             <tr>
@@ -299,6 +299,7 @@
                             autoGenerateColumns="false"
                             control="flex"
                             beginning-edit="beginningEdit(s,e)"
+<%--                            sorting-column="sortingColumn(s,e)"--%>
                             cell-edit-ended="cellEditEnded(s,e)"
                             initialized="initGrid(s,e)"
                             sticky-headers="true"
@@ -329,7 +330,7 @@
                                              binding="accRate" width="*"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="grade.membr.point.list.amt"/>"
                                              ng-switch-when="2"
-                                             binding="accRate" width="*" max-length="6"></wj-flex-grid-column>
+                                             binding="accRate" width="*" max-length="5"></wj-flex-grid-column>
                     </wj-flex-grid>
                     <%-- ColumnPicker 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

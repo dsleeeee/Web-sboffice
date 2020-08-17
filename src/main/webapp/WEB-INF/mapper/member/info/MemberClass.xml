@@ -36,7 +36,8 @@
               , USE_ACC_POINT_YN
           FROM TB_MB_MEMBER_CLASS
           WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-         ORDER BY DEFLT_YN DESC
+          AND USE_YN = 'Y'
+         ORDER BY MEMBR_CLASS_CD ASC
     </select>
 
     <!-- 회원등급 상세 조회-->
@@ -95,7 +96,7 @@
 	        AND tmmc.MEMBR_CLASS_CD = tmmcpr.MEMBR_CLASS_CD
           WHERE tmmcpr.MEMBR_ORGN_CD = #{membrOrgnCd}
             AND tmmcpr.MEMBR_CLASS_CD = #{membrClassCd}
-         ORDER BY tmmcpr.PAY_CD DESC
+         ORDER BY tmmcpr.PAY_CD ASC
     </select>
 
     <!-- 회원등급 중복여부-->
@@ -168,33 +169,33 @@
     -->
     <update id="updateClassInfo" parameterType="membrClassVO">
         /* MemberClassMapper.updateClassInfo */
-<!--        <selectKey keyProperty="DEFLT_YN" resultType="String" order="AFTER">-->
-<!--            SELECT DEFLT_YN-->
-<!--            FROM TB_MB_MEMBER_CLASS-->
-<!--            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}-->
-<!--            AND MEMBR_CLASS_CD = #{membrClassCd}-->
-<!--        </selectKey>-->
-       UPDATE TB_MB_MEMBER_CLASS
-          SET MEMBR_CLASS_NM = #{membrClassNm}
-	          , DC_RATE = #{dcRate}
-	          , POINT_SAVE_FG = #{pointSaveFg}
-	          , DEFLT_YN = #{defltYn}
-	          , NEW_JOIN_SAVE_POINT = #{newJoinSavePoint}
-	          , FIRST_SALE_SAVE_POINT = #{firstSaleSavePoint}
-	          , MIN_USE_POINT = #{minUsePoint}
-	          , ANVSR_POINT_SAVE_FG = #{anvsrPointSaveFg}
-	          , ANVSR_SAVE_POINT = #{anvsrSavePoint}
-	          , USE_YN = #{useYn}
-	          , REG_DT = #{regDt}
-	          , REG_ID = #{regId}
-	          , MOD_DT = #{modDt}
-	          , MOD_ID = #{modId}
-	          , DC_ACC_POINT_YN = #{dcAccPointYn}
-	          , MAX_USE_POINT = #{maxUsePoint}
-	          , DC_LIMIT_AMT = #{dcLimitAmt}
-	          , USE_ACC_POINT_YN = #{useAccPointYn}
-	    WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-	      AND MEMBR_CLASS_CD = #{membrClassCd}
+        <!--        <selectKey keyProperty="DEFLT_YN" resultType="String" order="AFTER">-->
+        <!--            SELECT DEFLT_YN-->
+        <!--            FROM TB_MB_MEMBER_CLASS-->
+        <!--            WHERE MEMBR_ORGN_CD = #{membrOrgnCd}-->
+        <!--            AND MEMBR_CLASS_CD = #{membrClassCd}-->
+        <!--        </selectKey>-->
+        UPDATE TB_MB_MEMBER_CLASS
+        SET MEMBR_CLASS_NM = #{membrClassNm}
+        , DC_RATE = #{dcRate}
+        , POINT_SAVE_FG = #{pointSaveFg}
+        , DEFLT_YN = #{defltYn}
+        , NEW_JOIN_SAVE_POINT = #{newJoinSavePoint}
+        , FIRST_SALE_SAVE_POINT = #{firstSaleSavePoint}
+        , MIN_USE_POINT = #{minUsePoint}
+        , ANVSR_POINT_SAVE_FG = #{anvsrPointSaveFg}
+        , ANVSR_SAVE_POINT = #{anvsrSavePoint}
+        , USE_YN = #{useYn}
+        , REG_DT = #{regDt}
+        , REG_ID = #{regId}
+        , MOD_DT = #{modDt}
+        , MOD_ID = #{modId}
+        , DC_ACC_POINT_YN = #{dcAccPointYn}
+        , MAX_USE_POINT = #{maxUsePoint}
+        , DC_LIMIT_AMT = #{dcLimitAmt}
+        , USE_ACC_POINT_YN = #{useAccPointYn}
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_CLASS_CD = #{membrClassCd}
     </update>
 
     <update id="defaultUpdateClassInfo" parameterType="membrClassVO">
@@ -203,7 +204,6 @@
           SET DEFLT_YN = #{defltYn}
 	    WHERE  MEMBR_ORGN_CD || MEMBR_CLASS_CD != #{membrOrgnClassCd}
     </update>
-
 
 
     <!-- 회원등급 삭제 -->
@@ -280,7 +280,7 @@
 	          , MOD_ID = #{modId}
 	    WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
 	      AND MEMBR_CLASS_CD = #{membrClassCd}
-	      AND PAY_CD = #{initPayCd}
+	      AND PAY_CD = #{payCd}
     </update>
 
     <!-- 회원Point적립 삭제 -->
@@ -288,11 +288,24 @@
         TABLE    : TB_MB_MEMBER_CLASS_PAY_RATE
     -->
     <delete id="deleteClassPointInfo" parameterType="memberClassVO">
-      /* MemberClassMapper.deleteClassPointInfo */
-      DELETE FROM TB_MB_MEMBER_CLASS_PAY_RATE
-       WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
-         AND MEMBR_CLASS_CD = #{membrClassCd}
-         AND PAY_CD = #{payCd}
+        /* MemberClassMapper.deleteClassPointInfo */
+        DELETE FROM TB_MB_MEMBER_CLASS_PAY_RATE
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_CLASS_CD = #{membrClassCd}
+            AND PAY_CD = #{payCd}
+
+    </delete>
+
+    <!-- 회원Point적립 삭제 -->
+    <!--
+        TABLE    : TB_MB_MEMBER_CLASS_PAY_RATE
+    -->
+    <delete id="deleteClassInitPointInfo" parameterType="memberClassVO">
+        /* MemberClassMapper.deleteClassInitPointInfo */
+        DELETE FROM TB_MB_MEMBER_CLASS_PAY_RATE
+        WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_CLASS_CD = #{membrClassCd}
+            AND PAY_CD = #{initPayCd}
     </delete>
 
 </mapper>

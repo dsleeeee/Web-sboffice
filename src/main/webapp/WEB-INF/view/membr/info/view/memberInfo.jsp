@@ -51,7 +51,7 @@
             <td>
                 <div class="sb-select">
             <span class="txtIn">
-              <div class="sb-select">
+              <div class="sb-select w110px" >
                 <wj-input-date
                         value="periodStartDate"
                         ng-model="periodStartDate"
@@ -65,7 +65,7 @@
             </span>
                     <span class="rg">~</span>
                     <span class="txtIn">
-              <div class="sb-select">
+              <div class="sb-select w110px">
                 <wj-input-date
                         value="periodEndDate"
                         ng-model="periodEndDate"
@@ -98,7 +98,7 @@
             <td>
                 <div class="sb-select">
             <span class="txtIn">
-              <div class="sb-select">
+              <div class="sb-select w110px">
                 <wj-input-date
                         value="anvStartDate"
                         ng-model="anvStartDate"
@@ -112,7 +112,7 @@
             </span>
                     <span class="rg">~</span>
                     <span class="txtIn">
-              <div class="sb-select">
+              <div class="sb-select w110px">
                 <wj-input-date
                         value="anvEndDate"
                         ng-model="anvEndDate"

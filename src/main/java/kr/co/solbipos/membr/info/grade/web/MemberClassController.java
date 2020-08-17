@@ -195,4 +195,26 @@ public class MemberClassController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 등급포인트 적립 저장
+     * @param membrClassPointVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     *
+     */
+    @ResponseBody
+    @RequestMapping(value = "grade/getMemberClassPointDel.sb", method = RequestMethod.POST)
+    public Result getMemberClassPointDel(@RequestBody MembrClassPointVO[] membrClassPointVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        int result = classService.getMemberClassPointDel(membrClassPointVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+
+
 }

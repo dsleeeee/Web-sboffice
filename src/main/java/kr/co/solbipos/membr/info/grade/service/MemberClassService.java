@@ -20,5 +20,7 @@ import java.util.List;
 
         List<DefaultMap<String>> getMemberClassGridList(SessionInfoVO sessionInfoVO);
 
+        int getMemberClassPointDel(MembrClassPointVO[] membrClassPointVOs, SessionInfoVO sessionInfoVO);
+
 //        List<DefaultMap<String>> getMemberClassPoint(SessionInfoVO sessionInfoVO);
 }

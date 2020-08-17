@@ -48,7 +48,7 @@
                         <%-- 회원카드번호 --%>
                     <th><s:message code="regist.membr.card.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="rMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
+                        <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
                                class="sb-input w100" maxlength="30" required>
                     </td>
                         <%-- 카드사용구분 --%>
@@ -73,7 +73,7 @@
                         <%-- 회사단축번호 --%>
                     <th><s:message code="regist.membr.stortNo"/></th>
                     <td>
-                        <input type="text" id="stortNo" class="sb-input w100" ng-model="stortNo"
+                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.stortNo"
                                maxlength="15"/>
                     </td>
                         <%-- 등록매장 --%>
@@ -81,16 +81,19 @@
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
-                                    id="rRegStoreCd"
+                                    id="basicRegStoreCd"
                                     ng-model="member.regStoreCd"
-                                    control="regStoreCdCombo"
-                                    items-source="_getComboData('rRegStoreCd')"
+                                    control="basicRegStoreCdCombo"
+                                    items-source="_getComboData('basicRegStoreCd')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
                                     initialized="_initComboBox(s)">
                             </wj-combo-box>
                         </div>
+<%--                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreS.jsp" flush="true">--%>
+<%--                            <jsp:param name="targetId" value="regStoreSelect"/>--%>
+<%--                        </jsp:include>--%>
                     </td>
                 </tr>
 
@@ -99,14 +102,14 @@
                         <%-- 전화번호 --%>
                     <th><s:message code="regist.tel"/></th>
                     <td>
-                        <input type="text" id="rTelNo" name="telNo" ng-model="member.phoneNo"
-                               class="sb-input w100" maxlength="11" disable="true"
+                        <input type="text" id="telNo" name="telNo" ng-model="member.telNo"
+                               class="sb-input w100" maxlength="11" disable="true" readonly
                                placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
                     </td>
                         <%-- 핸드폰번호 --%>
                     <th><s:message code="regist.phone.no"/><em class="imp">*</em></th>
                     <td>
-                        <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.telNo"
+                        <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
                                maxlength="15"/>
                     </td>
 
@@ -294,12 +297,12 @@
                 </tr>
                 <tr>
                         <%-- 회원유치사원 --%>
-                    <th><s:message code="regist.membr.attract"/></th>
-                    <td colspan="3">
-                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">
-                            <jsp:param name="targetId" value="regStore"/>
-                        </jsp:include>
-                    </td>
+<%--                    <th><s:message code="regist.membr.attract"/></th>--%>
+<%--                    <td colspan="3">--%>
+<%--                        <jsp:include page="/WEB-INF/view/application/layer/searchStoreM.jsp" flush="true">--%>
+<%--                            <jsp:param name="targetId" value="regStore"/>--%>
+<%--                        </jsp:include>--%>
+<%--                    </td>--%>
                 </tr>
                 <tr>
                         <%-- 비고 --%>
@@ -318,6 +321,7 @@
         <%-- 저장 --%>
         <span><a href="#" class="btn_blue pd20" id="btnSave" ng-click="save()"><s:message
                 code="cmm.save"/></a></span>
+            <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
     </div>
 </div>
 <script type="text/javascript"
