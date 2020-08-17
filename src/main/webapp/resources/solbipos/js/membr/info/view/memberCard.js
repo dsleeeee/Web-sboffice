@@ -211,12 +211,12 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 화면 ready 된 후 설정
-    angular.element(document).ready(function () {
-        // 회원조회 팝업 핸들러 추가
-        $scope.memberMappingLayer.shown.addHandler(function (s) {
-            setTimeout(function () {
-                // $scope._broadcast('memberMappingCtrl');
-            }, 50)
-        });
-    });
+    // angular.element(document).ready(function () {
+    //     // 회원조회 팝업 핸들러 추가
+    //     $scope.memberMappingLayer.shown.addHandler(function (s) {
+    //         setTimeout(function () {
+    //             // $scope._broadcast('memberMappingCtrl');
+    //         }, 50)
+    //     });
+    // });
 }]);

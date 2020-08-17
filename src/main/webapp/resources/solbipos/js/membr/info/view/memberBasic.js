@@ -6,9 +6,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기본 회원등급
     if (memberClassList.length == 0) {
         memberClassList = [{value: "", name: "전체"}, {value: "001", name: "기본등급"}];
-    } else {
-        memberClassList.unshift({value: "", name: "전체"});
     }
+    // else {
+    //     memberClassList.unshift({value: "", name: "전체"});
+    // }
 
     // 조회조건 콤보박스 데이터
     $scope._setComboData("rEmailRecvYn", recvDataMapEx);
@@ -318,29 +319,37 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 // console.log(result.data.data)
                 $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                 $scope.memberRegistLayer.hide();
-                scope.getMemberList();
+                $scope.$broadcast("memberCtrl");
+
 
                 // memberInfoScope.getMemberList();
             });
         }
         // 수정
         else if ($scope.saveMode === "MOD") {
-            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, async function (result) {
                 var scope = agrid.getScope('memberCtrl');
-                $scope._popMsg(messages["cmm.saveSucc"]);
-                $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-                $scope.memberRegistLayer.hide();
-                scope.getMemberList();
+                await $scope._popMsg(messages["cmm.saveSucc"]);
+                await $scope.$emit("responseGet", result.data.data, $scope.saveMode);
+                await $scope.memberRegistLayer.hide();
+                await $scope.$broadcast("memberCtrl");
+                await $scope.$broadcast("memberChgBatchCtrl");
                 // $scope.memberInfoDetailLayer.hide();
                 // memberInfoScope.getMemberList();
             });
         }
     };
 
+    // 닫기
     $scope.close = function () {
         $scope.member = {};
         $scope.memberRegistLayer.hide();
     };
+
+    // form 변화
+    $scope.$watch('member', () => {
+        console.log("==감지==", $scope.member);
+    }, true);
 
 
     /*********************************************************

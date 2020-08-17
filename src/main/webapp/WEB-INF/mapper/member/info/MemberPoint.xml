@@ -86,10 +86,10 @@
         WHERE
 	       tmmp.MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD
 	    AND tmmp.MEMBR_NO = tmm.MEMBR_NO
-	    AND tmmp.MEMBR_ORGN_CD = 'A0001'
+        AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}
 	    AND tmmp.MEMBR_NO = #{membrNo}
   </select>
-<!-- AND tmmp.MEMBR_ORGN_CD = #{membrOrgnCd}-->
+
 
     <!-- 회원포인트조정 수정 -->
     <!--

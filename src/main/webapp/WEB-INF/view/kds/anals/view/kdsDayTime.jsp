@@ -187,9 +187,9 @@
 
     <div class="mt20 oh sb-select dkbr">
         <%-- 차트 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">
-            <s:message code="kds.chart"/>
-        </button>
+<%--        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="chartKds()">--%>
+<%--            <s:message code="kds.chart"/>--%>
+<%--        </button>--%>
         <div class="sb-select mt10 fr">
             <span class="chk ml10">
                 <%-- 제조시간 --%>

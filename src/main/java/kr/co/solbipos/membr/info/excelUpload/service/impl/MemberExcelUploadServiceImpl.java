@@ -44,6 +44,7 @@ public class MemberExcelUploadServiceImpl implements MemberExcelUploadService {
 
     @Override
     public List<DefaultMap<Object>> getMemberExcelList(MemberExcelUploadVO memberExcelUploadVO, SessionInfoVO sessionInfoVO) {
+
         return mapper.getMemberExcelList(memberExcelUploadVO);
     }
 

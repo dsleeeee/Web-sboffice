@@ -357,6 +357,7 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
                 var data = new wijmo.collections.CollectionView(list);
                 data.trackChanges = true;
                 $scope.data = data;
+                $scope.chartKds();
             }
         }, function errorCallback(response) {
             // 로딩바 hide

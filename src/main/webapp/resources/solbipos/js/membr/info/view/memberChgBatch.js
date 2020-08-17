@@ -25,8 +25,12 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("rWeddingYn", weddingDataMap);
     $scope._setComboData("rUseYn", useDataMap);
     $scope._setComboData("rMemberClass", memberClassList);
+    $scope._setComboData("rMemberClassSelect", memberClassSelect);
     $scope._setComboData("rMembrcardYn", rMembrcardList);
     memberClassList.unshift({name: "전체", value: ""});
+    // $scope.memberClassSelect = memberClassList;
+    // $scope.memberClassSelect.splice(0,1);
+    // $scope._setComboData("rMemberClassSelect", $scope.memberClassSelect);
 
     $scope._getComboDataQuery('072', 'emailRecvYn', 'A');
     $scope._getComboDataQuery('072', 'smsRecvYn', 'A');
@@ -49,7 +53,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.useYnDataMap = new wijmo.grid.DataMap(useDataMap, 'value', 'name');
-        $scope.memberClassDataMap = new wijmo.grid.DataMap(memberClassList, 'value', 'name');
+        $scope.memberClassDataMap = new wijmo.grid.DataMap(memberClassSelect, 'value', 'name');
         $scope.emailRecvDataMap = new wijmo.grid.DataMap(recvDataMapEx, 'value', 'name');
         $scope.smsRecvDataMap = new wijmo.grid.DataMap(recvDataMapEx, 'value', 'name');
 
@@ -77,6 +81,7 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                 if (col.binding === "membrNo" || col.binding === "membrNm") {
                     var selectedData = s.rows[ht.row].dataItem;
                     $scope.setSelectedMember(selectedData);
+                    $scope._broadcast('responseGet', selectedData);
                     $scope.memberRegistLayer.show(true);
                     // // $scope.memberInfoDetailLayer.show(true);
                     event.preventDefault();
@@ -188,7 +193,19 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         // <-- //그리드 헤더3줄 -->
 
     };
-    
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 회원 등록 및 수정 팝업 핸들러 추가
+        $scope.memberRegistLayer.shown.addHandler(function (s) {
+            setTimeout(function () {
+                $scope._broadcast('memberRegistInfo', $scope.getSelectedMember());
+            }, 50)
+        });
+    });
+
+
     // 등록매장
     $scope.regStoreShow = function () {
         $scope._broadcast('regStoreCtrl');
@@ -250,14 +267,16 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         var params = new Array();
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
-            params.push($scope.flex.collectionView.itemsEdited[i]);
-
+            if ($scope.flex.collectionView.itemsEdited[i].gChk == true) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                $scope.flex.collectionView.itemsEdited[i].birthday = getFormatDateString($scope.flex.collectionView.itemsEdited[i].birthday);
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $.postJSONArray("/membr/info/chgBatch/chgBatch/getMemberChgBatchSave.sb", params, function (result) {
                 $scope.getMemberChgBatchList();
             });
-        };
+        }
+        ;
     };
 }]);

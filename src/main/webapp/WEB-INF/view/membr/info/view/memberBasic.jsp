@@ -6,7 +6,7 @@
 <div class="wj-dialog-body" id="basicView" name="basicView" class="subCon" ng-controller="memberBasicCtrl">
     <%-- body --%>
     <div style="height:400px; overflow-y: auto;">
-        <f:form id="regForm" name="regForm">
+        <f:form id="regForm" name="regForm" ng-submit="submit()">
             <%--                    <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
             <table class="searchTbl">
                 <colgroup>

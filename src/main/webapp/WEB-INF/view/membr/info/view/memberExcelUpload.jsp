@@ -151,7 +151,7 @@
                                      width="120" data-map="dlvrLzoneList"
                                      is-read-only="false" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="member.excel.dlAddrTwo"/>" binding="comboMzone"
-                                     width="120" data-map="memberClassList"
+                                     width="120" data-map="dlvrMzoneList"
                                      is-read-only="false" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>

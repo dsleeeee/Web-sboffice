@@ -363,6 +363,7 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var data = new wijmo.collections.CollectionView(list);
                 data.trackChanges = true;
                 $scope.data = data;
+                $scope.chartKds();
             }
         }, function errorCallback(response) {
             // 로딩바 hide

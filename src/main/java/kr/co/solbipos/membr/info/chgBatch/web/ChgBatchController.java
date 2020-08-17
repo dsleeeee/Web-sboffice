@@ -42,6 +42,7 @@ public class ChgBatchController {
     private final ChgBatchService chgBatchService;
     private final SessionService sessionService;
     private final MessageService messageService;
+    private final RegistService registService;
 
     private final CmmCodeUtil cmmCodeUtil;
     private final CmmEnvUtil cmmEnvUtil;
@@ -50,11 +51,12 @@ public class ChgBatchController {
      * Constructor Injection
      */
     @Autowired
-    public ChgBatchController(ChgBatchService chgBatchService, SessionService sessionService, MessageService messageService,
+    public ChgBatchController(ChgBatchService chgBatchService, RegistService registService, SessionService sessionService, MessageService messageService,
                               CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.chgBatchService = chgBatchService;
         this.sessionService = sessionService;
         this.messageService = messageService;
+        this.registService = registService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -71,14 +73,16 @@ public class ChgBatchController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         // 등록 매장 조회
-//        List regstrStoreList = registService.getRegistStore(sessionInfoVO);
-        // 등록 매장 전체 포함
-//        String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.SELECT);
+        List regstrStoreList = registService.getRegistStore(sessionInfoVO);
+        //   등록 매장 전체 포함
+        String regstrStoreListAll = cmmCodeUtil.assmblObj(regstrStoreList, "name", "value", UseYn.SELECT);
         // 회원등급 리스트 조회
         List membrClassList = chgBatchService.getMembrClassList(sessionInfoVO);
         String membrClassListAll = cmmCodeUtil.assmblObj(membrClassList, "name", "value", UseYn.N);
 
+        model.addAttribute("regstrStoreList", regstrStoreListAll);
         model.addAttribute("memberClassList", membrClassListAll);
+        model.addAttribute("memberClassSelect", membrClassListAll);
 //        model.addAttribute("membrChgBatchList", membrChgBatchList);
 
         return "membr/info/view/memberChgBatch";

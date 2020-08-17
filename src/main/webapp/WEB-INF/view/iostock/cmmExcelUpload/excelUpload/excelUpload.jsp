@@ -745,8 +745,8 @@
                 }
 
                 // 전화번호 최대길이 체크
-                if (nvl(item.telNo, '') !== '' && nvl(item.telNo + '', '').getByteLengthForOracle() > 200) {
-                    msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
+                if (nvl(item.telNo, '') !== '' && nvl(item.telNo + '', '').getByteLengthForOracle() > 16) {
+                    msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 16 " + messages["excelUpload.bateLengthInfo"];
                     item.result = msg;
                     return false;
                 }
@@ -759,8 +759,8 @@
                 }
 
                 // E-MAIL 최대길이 체크
-                if (nvl(item.email, '') !== '' && nvl(item.email + '', '').getByteLengthForOracle() > 8) {
-                    msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
+                if (nvl(item.email, '') !== '' && nvl(item.email + '', '').getByteLengthForOracle() > 200) {
+                    msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"];
                     item.result = msg;
                     return false;
                 }

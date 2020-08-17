@@ -374,7 +374,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.tel"/>" binding="telNo" width="100" align="center"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.phone.no"/>" binding="phoneNo" width="100"
-                                     align="center"
+                                     align="center" visible="false"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="shortNo" width="85"
                                      align="center" is-read-only="true"></wj-flex-grid-column>
@@ -431,10 +431,17 @@
     var rMembrcardList = ${ccu.getCommCode("014")};
     <%--var membrChgBatchList = ${membrChgBatchList};--%>
     var memberClassList = ${memberClassList};
+    var memberClassSelect = ${memberClassSelect};
+
+    var regstrStoreList = ${regstrStoreList};
 
 
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20191223.07"
         charset="utf-8"></script>
 
-
+<%-- 매장 등록/수정--%>
+<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
