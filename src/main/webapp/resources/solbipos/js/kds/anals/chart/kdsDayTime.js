@@ -433,8 +433,8 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if (chart1 === '') {
                     chartList(list);
                 } else {
-                    // chart1.itemsSource = getData(list);
-                    chart1.itemsSource = testList();
+                    chart1.itemsSource = getData(list);
+                    // chart1.itemsSource = testList();
                 }
             }
         }, function errorCallback(response) {
@@ -502,6 +502,10 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
         if (diffDay > 30) {
             $scope._popMsg(msg);
+            return false;
+        }
+        if (diffDay < 0) {
+            $scope._popMsg(messages["kds.date.hour.error"]);
             return false;
         }
         if ($scope.timeZone > $scope.timeZoneSec) {

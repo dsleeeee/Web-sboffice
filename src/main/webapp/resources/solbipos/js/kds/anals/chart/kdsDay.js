@@ -255,6 +255,10 @@ app.controller('kdsDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             $scope._popMsg(msg);
             return false;
         }
+        if (diffDay < 0) {
+            $scope._popMsg(messages["kds.date.hour.error"]);
+            return false;
+        }
         var msg = messages["kds.makeDate.setting"] + messages["cmm.require.text"];
         if (isNull($scope.makeDateCombo.selectedValue)) {
             $scope._popMsg(msg);

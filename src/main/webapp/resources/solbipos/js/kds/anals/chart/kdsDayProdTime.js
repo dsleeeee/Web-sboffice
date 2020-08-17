@@ -496,6 +496,10 @@ app.controller('kdsDayProdTimeCtrl', ['$scope', '$http', '$timeout', function ($
             $scope._popMsg(messages['kds.date.error']);
             return false;
         }
+        if (diffDay < 0) {
+            $scope._popMsg(messages["kds.date.hour.error"]);
+            return false;
+        }
 
         if ($scope.timeZone > $scope.timeZoneSec) {
             $scope._popMsg(messages['kds.date.hour.error']);

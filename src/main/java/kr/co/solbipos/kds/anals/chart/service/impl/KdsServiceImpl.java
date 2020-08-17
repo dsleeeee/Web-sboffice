@@ -40,6 +40,13 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDay(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+//            kdsVO.setStoreCd(sessionInfoVO.getHqOfficeCd());
+//        }
+//        else
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
         return mapper.getKdsDay(kdsVO);
     }
 
@@ -48,6 +55,9 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
         List<DefaultMap<String>> kdsTimeList = mapper.getKdsDayTime(kdsVO);
 
         for (int i = 0; i < kdsTimeList.size(); i++) {
@@ -71,6 +81,9 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
         return mapper.getKdsDayTimeChart(kdsVO);
     }
 
@@ -83,8 +96,9 @@ public class KdsServiceImpl implements KdsService {
             kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
+
         return mapper.getKdsDayProd(kdsVO);
     }
 
@@ -98,8 +112,9 @@ public class KdsServiceImpl implements KdsService {
             kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
+
         return mapper.getKdsMonth(kdsVO);
     }
 
@@ -125,11 +140,8 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProdTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
         return mapper.getKdsDayProdTime(kdsVO);
     }
@@ -139,11 +151,8 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsDayProdTimeChart(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
         return mapper.getKdsDayProdTimeChart(kdsVO);
     }
@@ -153,11 +162,8 @@ public class KdsServiceImpl implements KdsService {
      */
     @Override
     public List<DefaultMap<String>> getKdsServiceTime(KdsVO kdsVO, SessionInfoVO sessionInfoVO) {
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            kdsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            kdsVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            kdsVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
         return mapper.getKdsServiceTime(kdsVO);
     }
