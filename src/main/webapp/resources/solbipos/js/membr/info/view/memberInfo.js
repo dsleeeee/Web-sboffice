@@ -26,6 +26,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   //   membrClassList = [{value: "", name: "선택"}, {value: "001", name: "기본등급"}];
   // }
 
+  memberClassList.unshift({value: "", name: "전체"});
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 

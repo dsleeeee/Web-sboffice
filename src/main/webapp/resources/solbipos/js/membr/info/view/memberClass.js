@@ -388,7 +388,6 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
         var gridRepresent = agrid.getScope("memberClassCtrl");
         var selectedRow = gridRepresent.flex.selectedRows[0]._data;
         var params = {};
-        alert("일괄");
         for (var i = 0; i < payCd.length + 1; i++) {
             // for (var i = 20; i < 0;  i--) {
             console.log(i);
@@ -434,6 +433,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            $scope.flex.collectionView.itemsAdded[i].status = "I";
             var item = $scope.flex.collectionView.itemsAdded[i];
             if (item.payCd === "선택" || item.payCd === null) {
                 $scope._popMsg(messages["grade.membr.pay.code"] + messages["cmm.require.select"]);
@@ -444,7 +444,7 @@ app.controller('memberClassDetailCtrl', ['$scope', '$http', function ($scope, $h
                 $scope._popMsg(messages["grade.membr.acc_rate"] + messages["cmm.require.number"]);
                 return false;
             }
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
+            params.push($scope.flex.collectionView.itemsAdded[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

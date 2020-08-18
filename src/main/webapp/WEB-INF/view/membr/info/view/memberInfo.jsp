@@ -502,6 +502,8 @@
     var rMembrcardList = ${ccu.getCommCodeExcpAll("014")};
     var regstrStoreList = ${regstrStoreList};
     var memberClassList = ${memberClassList};
+    var memberClassSelect = ${memberClassSelect};
+
     <%--카드발급구분--%>
     <%--var rCstCardIssFgList = ${ccu.getCommCodeExcpAll("301")};--%>
     <%--카드상태구분--%>

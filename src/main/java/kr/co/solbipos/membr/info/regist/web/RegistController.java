@@ -110,6 +110,7 @@ public class RegistController {
 
         model.addAttribute("regstrStoreList", regstrStoreListAll);
         model.addAttribute("memberClassList", membrClassListAll);
+        model.addAttribute("memberClassSelect", membrClassListAll);
         model.addAttribute("defaultStoreCd", defaultStoreCd);
 
         return "membr/info/view/memberInfo";

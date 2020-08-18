@@ -19,6 +19,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("basicRegStoreCd", regstrStoreList);
     $scope._setComboData("rUseYn", useDataMap);
     $scope._setComboData("rMemberClass", memberClassList);
+    $scope._setComboData("rMemberClassSelect", memberClassSelect);
     $scope._setComboData("rMembrcardYn", rMembrcardList);
 
     $scope.selectedMember;

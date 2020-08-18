@@ -182,10 +182,10 @@
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
-                                    id="rMemberClass"
+                                    id="rMemberClassSelect"
                                     ng-model="member.membrClassCd"
-                                    control="memberClassCombo"
-                                    items-source="_getComboData('rMemberClass')"
+                                    control="rMemberClassSelectCombo"
+                                    items-source="_getComboData('rMemberClassSelect')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
