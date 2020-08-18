@@ -99,4 +99,18 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
 
         return resultMap;
     }
+
+    /** 매출재이관 */
+    @Override
+    public int getMigDataMappingSaleAgainSave(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(MigDataMappingVO migDataMappingVO : migDataMappingVOs) {
+//            System.out.println("test1111" + migDataMappingVO.getOkposStoreCd());
+            procCnt = migDataMappingMapper.getMigDataMappingSaleAgainSave(migDataMappingVO);
+        }
+
+        return procCnt;
+    }
 }

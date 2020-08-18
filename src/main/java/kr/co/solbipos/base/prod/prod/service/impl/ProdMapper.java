@@ -132,4 +132,19 @@ public interface ProdMapper {
     /** 본사 상품 등록시, 본사 상품의 상품분류 수정 */
     String updateClsHqToStore(ProdVO prodVO);
 
+
+    /** 상품 이미지 저장시 파일여부 체크 */
+    String getProdImageFileSaveCheck(ProdVO ProdVO);
+
+    /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 insert */
+    int getProdImageFileSaveInsert(ProdVO ProdVO);
+
+    /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 update */
+    int getProdImageFileSaveUpdate(ProdVO ProdVO);
+
+    /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 delete */
+    int getProdImageFileSaveDelete(ProdVO ProdVO);
+
+    /** 상품 이미지 삭제시 파일명 가져오기 */
+    String getProdImageFileSaveImgFileNm(ProdVO ProdVO);
 }

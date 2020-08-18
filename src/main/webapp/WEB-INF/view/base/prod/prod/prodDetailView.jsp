@@ -27,9 +27,10 @@
             </th>
             <td rowspan="3">
               <%--등록한 상품이 없는 경우--%>
-              <span class="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
+              <span class="goodsNo" id="goodsNoProdDetail"><s:message code="image"/> 등록 준비중 입니다</span>
               <%--등록한 상품이 있는 경우--%>
               <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
+              <span class="goodsYes" id="goodsYesProdDetail"><img id="imgProdImageProdDetail" /></span>
             </td>
             <%--단가구분 //TODO --%>
             <th>
@@ -474,4 +475,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=201812103" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20200810.01" charset="utf-8"></script>

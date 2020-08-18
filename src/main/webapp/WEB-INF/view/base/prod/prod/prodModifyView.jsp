@@ -2,11 +2,14 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
 <wj-popup control="prodModifyLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="prodModifyCtrl">
-  <form name="myForm">
+  <form id="myForm" name="myForm">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prod.layer.info"/>
       <a href="#" class="wj-hide btn_close"></a>
@@ -25,12 +28,18 @@
             <tr>
               <%-- 상품이미지 //TODO --%>
               <th rowspan="3"><s:message code="prod"/><br/><s:message code="image"/>
+                <br/>
               </th>
               <td rowspan="3">
                 <%--등록한 상품이 없는 경우--%>
-                <span class="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
+                <span class="goodsNo" id="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
                 <%--등록한 상품이 있는 경우--%>
                 <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
+                <span class="goodsYes" id="goodsYes"><img id="imgProdImage" /></span>
+                <%--첨부파일--%>
+                <input type="file" id="file" name="file" accept="image/x-png" onchange="angular.element(this).scope().changeProdImage(this)"/>
+                <%--삭제--%>
+                <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
               </td>
               <%--단가구분 //TODO --%>
               <th><s:message code="prod.prodTypeFg"/></th>
@@ -603,7 +612,14 @@
     </form>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200801.22" charset="utf-8"></script>
+
+<script type="text/javascript">
+  var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
+  var storeCd = "${storeCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200814.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

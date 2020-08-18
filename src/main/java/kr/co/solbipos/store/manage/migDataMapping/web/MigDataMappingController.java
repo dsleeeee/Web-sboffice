@@ -184,4 +184,27 @@ public class MigDataMappingController {
 
         return returnJson(Status.OK, resultMap);
     }
+
+    /**
+     * 매출재이관
+     *
+     * @param migDataMappingVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 08. 14.
+     */
+    @RequestMapping(value = "/migDataMapping/getMigDataMappingSaleAgainSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMigDataMappingSaleAgainSave(@RequestBody MigDataMappingVO[] migDataMappingVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = migDataMappingService.getMigDataMappingSaleAgainSave(migDataMappingVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

@@ -70,6 +70,10 @@
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
             <s:message code="migDataMapping.newInfo" />
         </button>
+        <%-- 매출재이관 --%>
+        <button class="btn_skyblue ml5 fr" id="btnSaleAgainSaveRepresent" ng-click="saleAgainSave()">
+            <s:message code="migDataMapping.saleAgainSave" />
+        </button>
     </div>
 
     <%-- 그리드 --%>
@@ -82,10 +86,10 @@
                 sticky-headers="true"
                 selection-mode="Row"
                 items-source="data"
-                item-formatter="_itemFormatter"
-                is-read-only="true">
+                item-formatter="_itemFormatter">
 
                 <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreCd"/>" binding="okposStoreCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreNm"/>" binding="okposStoreNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>" binding="solbiStoreCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -107,7 +111,7 @@
     var authHqList = ${authHqList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200814.04" charset="utf-8"></script>
 
 <%-- OKPOS-KCP 데이터 이관 신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/migDataMapping/migDataMappingInfo.jsp">

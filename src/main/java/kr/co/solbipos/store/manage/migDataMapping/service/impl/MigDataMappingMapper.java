@@ -41,4 +41,7 @@ public interface MigDataMappingMapper {
 
     /** SOLBI 매장코드 조회 */
     DefaultMap<String> getMigDataMappingSolbiStoreCdList(MigDataMappingVO migDataMappingVO);
+
+    /** 매출재이관 */
+    int getMigDataMappingSaleAgainSave(MigDataMappingVO migDataMappingVO);
 }

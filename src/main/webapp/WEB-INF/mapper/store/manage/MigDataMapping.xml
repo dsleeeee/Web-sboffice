@@ -221,4 +221,21 @@
         AND STORE_CD LIKE 'S%'
     </select>
 
+    <!-- 매출재이관 -->
+    <!--
+        TABLE    : TB_MIG_DATA_MAPPING
+        COMMENTS : OKPOS 매장 컨버전 정보
+    -->
+    <update id="getMigDataMappingSaleAgainSave" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getMigDataMappingSaleAgainSave */
+        UPDATE
+        TB_MIG_DATA_MAPPING
+        SET
+        MIG_YN = 'N',
+        MIG_SALE_CNT = 0,
+        MIG_SALE_YN = 'N'
+        WHERE 1=1
+        AND OKPOS_STORE_CD = #{okposStoreCd}
+    </update>
+
 </mapper>

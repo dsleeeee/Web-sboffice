@@ -163,10 +163,14 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $('#summernote').summernote('reset');
 
         // 첨부파일 리셋
-        // ie 일때
-        $("#file").replaceWith( $("#file").clone(true) );
-        // other browser
-        $("#file").val("");
+        var agent = navigator.userAgent.toLowerCase();
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            $("#file").replaceWith( $("#file").clone(true) );
+        } else {
+            // other browser 일때
+            $("#file").val("");
+        }
 
         $("#boradForm")[0].reset();
     };

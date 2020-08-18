@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -135,7 +136,8 @@ public class ProdController {
     @ResponseBody
     public Result saveProductInfo(@RequestBody ProdVO prodVO, HttpServletRequest request) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
+//        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
+        long result = prodService.saveProductInfo(prodVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -268,4 +270,24 @@ public class ProdController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 상품 신규등록,수정 팝업 - 상품 이미지 저장
+     *
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 08. 04.
+     */
+    @RequestMapping(value = "/getProdImageFileSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdImageFileSave(MultipartHttpServletRequest request) {
+
+//        System.out.println("test1111");
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        if(prodService.getProdImageFileSave(request, sessionInfo)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
 }
