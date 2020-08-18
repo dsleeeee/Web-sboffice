@@ -306,5 +306,6 @@ public interface StoreManageMapper {
     /** 권한 전체 삭제 */
     int removeAuthAll(StoreMenuVO storeMenus);
 
+    /** 사업자번호 중복체크 */
+    DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO);
 }
-

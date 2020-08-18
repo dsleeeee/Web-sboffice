@@ -171,6 +171,7 @@
                 <input type="text" id="bizNo2" ng-model="store.bizNo2" class="sb-input w10" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>-
                 <input type="text" id="bizNo3" ng-model="store.bizNo3" class="sb-input w15" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <input type="hidden" ng-model="store.beforeBizNo" />
+                <%-- 중복체크 --%>
                 <a id="btnChkBizNo" href="#" class="btn_grayS ml5" ng-click="chkBizNo()"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
             </tr>
@@ -356,12 +357,13 @@
 
   </div>
 </wj-popup>
+
 <script>
   var startDate = "${sessionScope.sessionInfo.startDate}";
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110703.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20200818.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

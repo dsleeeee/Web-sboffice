@@ -1112,4 +1112,17 @@ public class StoreManageServiceImpl implements StoreManageService{
         }
         return procCnt;
     }
+
+    /** 사업자번호 중복체크 */
+    @Override
+    public DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO,  SessionInfoVO sessionInfoVO) {
+//        System.out.println("test1111");
+
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+
+        resultMap = mapper.bizNoCheckCount(storeManageVO);
+
+        return resultMap;
+    }
+
 }

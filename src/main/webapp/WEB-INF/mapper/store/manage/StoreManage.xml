@@ -2875,4 +2875,40 @@
         ]]>
     </select>
     -->
+
+    <!-- 사업자번호 중복체크 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_MS_STORE
+        COMMENTS :
+    -->
+    <select id="bizNoCheckCount" parameterType="storeManageVO" resultType="DefaultMap">
+        /* StoreManageMapper.bizNoCheckCount */
+        SELECT
+        COUNT(*) AS BIZ_NO
+        FROM
+        (
+            SELECT
+            'H' AS STORE_FG,
+            tho.HQ_OFFICE_CD AS STORE_CD,
+            tho.HQ_OFFICE_NM AS STORE_NM,
+            tho.OWNER_NM,
+            tho.BIZ_NO,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tho.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = tho.CLS_FG) AS CLS_FG_NM
+            FROM TB_HQ_OFFICE tho
+            WHERE tho.BIZ_NO = #{bizNo}
+            UNION ALL
+            SELECT
+            'S' AS STORE_FG,
+            tms.STORE_CD,
+            tms.STORE_NM,
+            tms.OWNER_NM,
+            tms.BIZ_NO,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '005' AND NMCODE_CD = tms.SYS_STAT_FG) AS SYS_STAT_FG_NM,
+            (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = tms.CLS_FG) AS CLS_FG_NM
+            FROM TB_MS_STORE tms
+            WHERE tms.BIZ_NO = #{bizNo}
+        )
+    </select>
+
 </mapper>

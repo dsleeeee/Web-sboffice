@@ -126,4 +126,7 @@ public interface StoreManageService {
 
     /** 메뉴 권한 삭제 */
     int removeAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 사업자번호 중복체크 */
+    DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 }

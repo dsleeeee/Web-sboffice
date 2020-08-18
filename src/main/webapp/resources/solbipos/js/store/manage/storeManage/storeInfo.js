@@ -130,19 +130,35 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.storeCd = '';
     $scope.store.storeCdChkFg ="";
     $scope.store.storeCdInputType ="";
-    $scope.store.beforeBizNo            = '';
-    $scope.store.installPosCnt          = '';
-    $scope.areaCdCombo.selectedIndex    = 0;
-    $scope.clsFgCombo.selectedIndex     = 0;
-    $scope.sysStatFgCombo.selectedIndex = 0;
-    $scope.store.sysOpenDate.value      = new Date();
-
+    $scope.store.storeNm ="";
+    $scope.store.bizStoreNm ="";
+    $scope.store.ownerNm ="";
 
     $scope.sysOpenDateCombo.isReadOnly  = false;
+    $scope.store.sysOpenDate.value      = new Date();
     $scope.sysStatFgCombo.isReadOnly    = false;
+    $scope.sysStatFgCombo.selectedIndex = 0;
     $scope.clsFgCombo.isReadOnly        = false;
-    $scope.readOnlyStatus               = false;
+    $scope.clsFgCombo.selectedIndex     = 0;
+    $scope.areaCdCombo.selectedIndex    = 0;
     $scope.store.installPosCnt.isReadOnly = false;
+    $scope.store.installPosCnt          = '';
+
+    $scope.store.bizNo1 ="";
+    $scope.store.bizNo2 ="";
+    $scope.store.bizNo3 ="";
+    $scope.store.beforeBizNo ="";
+    $scope.store.telNo ="";
+    $scope.store.faxNo ="";
+    $scope.store.emailAddr ="";
+    $scope.store.hmpgAddr ="";
+
+    $scope.store.postNo ="";
+    $scope.store.addr ="";
+    $scope.store.addrDtl ="";
+
+    $scope.readOnlyStatus               = false;
+
     $("#installPosCnt").css('background-color', '#ffffff');
     $("#storeCd").attr("readonly",true);
     $("#storeCd").css("width", "100%");
@@ -265,6 +281,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // 상호명을 입력해주세요.
+    var msg = messages["storeManage.bizStoreNm"]+messages["cmm.require.text"];
+    if( isNull( $scope.store.bizStoreNm )) {
+      $scope._popMsg(msg);
+      return false;
+    }
+
     // 대표자명을 입력해주세요.
     var msg = messages["storeManage.onwerNm"]+messages["cmm.require.text"];
     if( isNull( $scope.store.ownerNm)) {
@@ -272,34 +295,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return;
     }
 
-    // 사업자번호를 입력해주세요.
-    var msg = messages["storeManage.bizNo"]+messages["cmm.require.text"];
-    if( isNull( $scope.store.bizNo1 )|| isNull( $scope.store.bizNo2 ) || isNull( $scope.store.bizNo3 ) ) {
-      $scope._popMsg(msg);
-      return;
-    }
-
-    // 사업자번호는 숫자만 입력할 수 있습니다.
-    var msg = messages["storeManage.bizNo"]+messages["cmm.require.number"];
-    var numChkregexp = /[^0-9]/g;
-    if(numChkregexp.test( $scope.store.bizNo1 ) || numChkregexp.test( $scope.store.bizNo2 ) || numChkregexp.test( $scope.store.bizNo3 )) {
-      $scope._popMsg(msg);
-      return false;
-    }
-
-    // 등록시나 이전값과 변경하여 변경되었을때, 사업자번호 중복체크를 해주세요. //TODO
-    var msg = messages["storeManage.require.duplicate.bizNo"];
-    var bizNoStr = $scope.store.bizNo1 + $scope.store.bizNo2 +  $scope.store.bizNo3;
-    if($.isEmptyObject(storeScope.getSelectedStore())  || (bizNoStr !== $scope.store.beforeBizNo) ) {
-      if(!$scope.isBizChk) {
-        $scope._popMsg(msg);
-        return false;
-      }
-    }
-
-    // 상호명을 입력해주세요.
-    var msg = messages["storeManage.bizStoreNm"]+messages["cmm.require.text"];
-    if( isNull( $scope.store.bizStoreNm )) {
+    // 매장상태구분을 선택해주세요.
+    var msg = messages["storeManage.sysStatFg"]+messages["cmm.require.select"];
+    if( isNull( $scope.store.sysStatFg ) ) {
       $scope._popMsg(msg);
       return false;
     }
@@ -311,9 +309,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
-    // 매장상태구분을 선택해주세요.
-    var msg = messages["storeManage.sysStatFg"]+messages["cmm.require.select"];
-    if( isNull( $scope.store.sysStatFg ) ) {
+    // 날씨표시지역을 선택해주세요.
+    var msg = messages["storeManage.weatherArea"]+messages["cmm.require.select"];
+    if( isNull( $scope.store.areaCd )) {
       $scope._popMsg(msg);
       return false;
     }
@@ -342,11 +340,29 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    // 날씨표시지역을 선택해주세요.
-    var msg = messages["storeManage.weatherArea"]+messages["cmm.require.select"];
-    if( isNull( $scope.store.areaCd )) {
+    // 사업자번호를 입력해주세요.
+    var msg = messages["storeManage.bizNo"]+messages["cmm.require.text"];
+    if( isNull( $scope.store.bizNo1 )|| isNull( $scope.store.bizNo2 ) || isNull( $scope.store.bizNo3 ) ) {
+      $scope._popMsg(msg);
+      return;
+    }
+
+    // 사업자번호는 숫자만 입력할 수 있습니다.
+    var msg = messages["storeManage.bizNo"]+messages["cmm.require.number"];
+    var numChkregexp = /[^0-9]/g;
+    if(numChkregexp.test( $scope.store.bizNo1 ) || numChkregexp.test( $scope.store.bizNo2 ) || numChkregexp.test( $scope.store.bizNo3 )) {
       $scope._popMsg(msg);
       return false;
+    }
+
+    // 등록시나 이전값과 변경하여 변경되었을때, 사업자번호 중복체크를 해주세요. //TODO
+    var msg = messages["storeManage.require.duplicate.bizNo"];
+    var bizNoStr = $scope.store.bizNo1 + $scope.store.bizNo2 +  $scope.store.bizNo3;
+    if($.isEmptyObject(storeScope.getSelectedStore())  || (bizNoStr !== $scope.store.beforeBizNo) ) {
+      if(!$scope.isBizChk) {
+        $scope._popMsg(msg);
+        return false;
+      }
     }
 
     // 전화번호를 입력해주세요.
@@ -426,6 +442,27 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     console.log('params',params);
 
+    // 사업자번호 중복체크
+    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/bizNoCheckCount.sb", params, function(response){
+      var bizNoCheck = response.data.data.result;
+      $scope.bizNoCheck = bizNoCheck;
+
+      if($scope.bizNoCheck.bizNo > 0) {
+        // 해당 사업자번호[123-32-12312]가 이미 등록되어 있습니다. 계속 진행하시겠습니까?
+        $scope._popConfirm(messages["storeManage.chk.bizNo1"] +"["+ $scope.store.bizNo1 +"-"+ $scope.store.bizNo2 +"-"+ $scope.store.bizNo3 +"]"+ messages["storeManage.chk.bizNo2"], function() {
+          // 매장정보 저장
+          $scope.storeSave(params);
+        });
+      } else if($scope.bizNoCheck.bizNo === 0) {
+        // 매장정보 저장
+        $scope.storeSave(params);
+      }
+    });
+  };
+
+  // 매장정보 저장
+  $scope.storeSave = function(data){
+    var params         = data;
 
     var storeScope = agrid.getScope('storeManageCtrl');
 

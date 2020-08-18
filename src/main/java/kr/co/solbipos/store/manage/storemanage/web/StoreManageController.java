@@ -772,4 +772,34 @@ public class StoreManageController {
         return returnJson(Status.OK, cnt);
     }
 
+    /**
+     * 사업자번호 중복체크
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 08. 14.
+     */
+    @RequestMapping(value = "/storeManage/bizNoCheckCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result bizNoCheckCount(StoreManageVO storeManageVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 사업자번호 정리
+        String bizNo = storeManageVO.getBizNo1() + storeManageVO.getBizNo2() + storeManageVO.getBizNo3();
+        storeManageVO.setBizNo(bizNo);
+
+        DefaultMap<String> result = service.bizNoCheckCount(storeManageVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+//        System.out.println("test1111 : " + result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }
