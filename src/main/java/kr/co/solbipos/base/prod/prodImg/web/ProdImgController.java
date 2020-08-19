@@ -13,11 +13,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
@@ -101,6 +103,46 @@ public class ProdImgController {
         List<DefaultMap<String>> list = prodImgService.getProdImg(prodImgVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, prodImgVO);
+    }
+
+    /**
+     * 상품이미지관리 - 상품이미지저장
+     *
+     * @param prodImgVO HttpServletRequest
+     * @param request MultipartHttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/saveProdImg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProdImg(ProdImgVO prodImgVO, MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(prodImgService.saveProdImg(request, prodImgVO, sessionInfoVO)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
+    }
+
+    /**
+     * 상품이미지관리 - 상품이미지삭제
+     *
+     * @param prodImgVO HttpServletRequest
+     * @param request HttpServletRequest
+     * @return
+     */
+    @RequestMapping(value = "/prodImg/delProdImg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delProdImg(ProdImgVO prodImgVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if(prodImgService.delProdImg(prodImgVO, sessionInfoVO)) {
+            return returnJson(Status.OK);
+        } else {
+            return returnJson(Status.FAIL);
+        }
     }
 
 
