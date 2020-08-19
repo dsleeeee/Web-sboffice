@@ -32,6 +32,20 @@ public class ProdImgVO extends PageVO {
     private String barCd;
     /** 사용여부 */
     private String useYn;
+    /** 이미지 구분 */
+    private String imgFg;
+    /** 이미지 URL */
+    private String imgUrl;
+    /** 이미지 파일명 */
+    private String imgFileNm;
+    /** 이미지 변경일시 */
+    private String imgChgDt;
+    /** 비고 */
+    private String remark;
+    /** 이미지 구분명 */
+    private String imgFgType;
+    /** 사용자 아이디 */
+    private String userId;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -111,5 +125,61 @@ public class ProdImgVO extends PageVO {
 
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getImgFg() {
+        return imgFg;
+    }
+
+    public void setImgFg(String imgFg) {
+        this.imgFg = imgFg;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public String getImgFileNm() {
+        return imgFileNm;
+    }
+
+    public void setImgFileNm(String imgFileNm) {
+        this.imgFileNm = imgFileNm;
+    }
+
+    public String getImgChgDt() {
+        return imgChgDt;
+    }
+
+    public void setImgChgDt(String imgChgDt) {
+        this.imgChgDt = imgChgDt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getImgFgType() {
+        return imgFgType;
+    }
+
+    public void setImgFgType(String imgFgType) {
+        this.imgFgType = imgFgType;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

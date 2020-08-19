@@ -239,4 +239,167 @@
             </when>
         </choose>
     </select>
+
+    <!-- 상품이미지관리 - 기존 상품이미지 정보가 있는지 확인 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 기존 상품이미지 정보가 있는지 확인한다. ( 본사/매장 )
+    -->
+    <select id="getProdImgChk"  parameterType="prodImgVO" resultType="String">
+        /* ProdImgMapper.getProdImgChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT IMG_FILE_NM
+                  FROM TB_HQ_PRODUCT_IMAGE
+                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT IMG_FILE_NM
+                  FROM TB_MS_PRODUCT_IMAGE
+                 WHERE STORE_CD = #{storeCd}
+                   AND PROD_CD = #{prodCd}
+                   AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품이미지관리 - 상품이미지저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 상품의 이미지를 저장한다. ( 본사/매장 )
+    -->
+    <insert id="saveProdImg" parameterType="prodImgVO">
+        /* ProdImgMapper.saveProdImg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_IMAGE (
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{imgFg},
+                    #{imgUrl},
+                    #{imgFileNm},
+                    #{imgChgDt},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_IMAGE(
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{prodCd},
+                    #{imgFg},
+                    #{imgUrl},
+                    #{imgFileNm},
+                    #{imgChgDt},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 상품이미지관리 - 상품이미지수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 상품의 이미지를 수정한다. ( 본사/매장 )
+    -->
+    <update id="updateProgImg" parameterType="prodImgVO">
+        /* ProdImgMapper.updateProgImg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    UPDATE TB_HQ_PRODUCT_IMAGE
+                       SET IMG_URL = #{imgUrl},
+                            IMG_FILE_NM = #{imgFileNm},
+                            IMG_CHG_DT = #{imgChgDt},
+                            MOD_DT = #{modDt},
+                            MOD_ID = #{modId}
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND PROD_CD = #{prodCd}
+                       AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                    UPDATE TB_MS_PRODUCT_IMAGE
+                       SET IMG_URL = #{imgUrl},
+                            IMG_FILE_NM = #{imgFileNm},
+                            IMG_CHG_DT = #{imgChgDt},
+                            MOD_DT = #{modDt},
+                            MOD_ID = #{modId}
+                     WHERE STORE_CD = #{storeCd}
+                       AND PROD_CD = #{prodCd}
+                       AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 상품이미지관리 - 상품이미지삭제 -->
+    <!--
+        ABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
+        PARAM    : prodImgVO
+        COMMENTS : 상품의 이미지를 삭제한다. ( 본사/매장 )
+    -->
+    <delete id="delProdImg" parameterType="prodImgVO">
+        /* ProdImgMapper.delProdImg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                    DELETE TB_HQ_PRODUCT_IMAGE
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND PROD_CD = #{prodCd}
+                       AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                    DELETE TB_MS_PRODUCT_IMAGE
+                     WHERE STORE_CD = #{storeCd}
+                       AND PROD_CD = #{prodCd}
+                       AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </delete>
+
 </mapper>
