@@ -61,10 +61,10 @@ public class HqStoreMoveController {
      * @author  안동관
      * @since   2018. 10. 24.
      */
-    @RequestMapping(value = "/hqStoreMove/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/move/view.sb", method = RequestMethod.GET)
     public String hqStoreMoveView(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("selectStoreDisplayNmAll", messageService.get("cmm.all"));
-        return "iostock/move/hqStoreMove/hqStoreMove";
+        return "iostock/move/move";
     }
 
     /**

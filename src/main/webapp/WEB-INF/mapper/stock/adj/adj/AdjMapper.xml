@@ -123,10 +123,12 @@
         ,       (   SELECT  tshsc.PROD_CD, tshsc.CURR_QTY, tshsm.AVG_COST_UPRC
                     FROM    TB_ST_HQ_STOCK_CUR tshsc
                     ,       TB_ST_HQ_STOCK_MONTHLY tshsm
-                    WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
-                    AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{adjDate}, 0, 6)
-                    AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
-                    AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                    WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+                    AND		tshsc.STORAGE_CD		=	#{storageCd}
+                    AND		tshsc.STORAGE_CD IN (SELECT X.STORAGE_CD FROM TB_HQ_STORAGE X WHERE X.HQ_OFFICE_CD  =   #{hqOfficeCd} AND X.AREA_FG    =   #{areaFg})
+                    AND     tshsm.IOSTOCK_YM  (+) 	=   SUBSTR(#{adjDate}, 0, 6)
+                    AND     tshsm.HQ_OFFICE_CD(+) 	=   tshsc.HQ_OFFICE_CD
+                    AND     tshsm.PROD_CD     (+) 	=   tshsc.PROD_CD
                 )   tshsc
         ,       TB_HQ_PRODUCT_BARCD thpb
         WHERE   thp.HQ_OFFICE_CD        =   #{hqOfficeCd}
@@ -218,10 +220,11 @@
         ,       (   SELECT  tsssc.PROD_CD, tsssc.CURR_QTY, tsssm.AVG_COST_UPRC
                     FROM    TB_ST_STORE_STOCK_CUR tsssc
                     ,       TB_ST_STORE_STOCK_MONTHLY tsssm
-                    WHERE   tsssc.STORE_CD        =   #{storeCd}
-                    AND     tsssm.IOSTOCK_YM  (+) =   SUBSTR(#{adjDate}, 0, 6)
-                    AND     tsssm.STORE_CD(+)     =   tsssc.STORE_CD
-                    AND     tsssm.PROD_CD     (+) =   tsssc.PROD_CD
+                    WHERE   tsssc.STORE_CD        	=   #{storeCd}
+                    AND		tsssc.STORAGE_CD		=	#{storageCd}
+                    AND     tsssm.IOSTOCK_YM  (+) 	=   SUBSTR(#{adjDate}, 0, 6)
+                    AND     tsssm.STORE_CD(+)     	=   tsssc.STORE_CD
+                    AND     tsssm.PROD_CD     (+) 	=   tsssc.PROD_CD
                 )   tsssc
         ,       TB_MS_PRODUCT_BARCD tmpb
         WHERE   tmp.STORE_CD        =   #{storeCd}
@@ -688,6 +691,7 @@
             SEQ_NO,
             ADJ_TITLE,
             PROC_FG,
+            ADJ_STORAGE_CD,
             DTL_CNT,
             TOT_ADJ_AMT,
             REG_DT,
@@ -701,6 +705,7 @@
         ,       tshad.SEQ_NO
         ,       #{adjTitle}
         ,       #{procFg}
+        ,       #{adjStorageCd}
         ,       COUNT(tshad.PROD_CD)
         ,       SUM(tshad.ADJ_AMT)
         ,       #{regDt}
@@ -741,6 +746,7 @@
             SEQ_NO,
             ADJ_TITLE,
             PROC_FG,
+            ADJ_STORAGE_CD,
             DTL_CNT,
             TOT_ADJ_AMT,
             REG_DT,
@@ -754,6 +760,7 @@
         ,       tshad.SEQ_NO
         ,       #{adjTitle}
         ,       #{procFg}
+        ,       #{adjStorageCd}
         ,       COUNT(tshad.PROD_CD)
         ,       SUM(tshad.ADJ_AMT)
         ,       #{regDt}
@@ -1029,6 +1036,7 @@
                             AND     tshsm.IOSTOCK_YM  (+) =   SUBSTR(#{date}, 0, 6)
                             AND     tshsm.HQ_OFFICE_CD(+) =   tshsc.HQ_OFFICE_CD
                             AND     tshsm.PROD_CD     (+) =   tshsc.PROD_CD
+                            AND     tshsc.storage_cd = '999'
                         ) tshsc
                 WHERE   tshsc.HQ_OFFICE_CD  (+) =   tpte.HQ_OFFICE_CD
                 AND     tshsc.PROD_CD       (+) =   tpte.PROD_CD
@@ -1093,6 +1101,7 @@
                             AND     tsssm.IOSTOCK_YM(+) =   SUBSTR(#{date}, 0, 6)
                             AND     tsssm.STORE_CD  (+) =   tsssc.STORE_CD
                             AND     tsssm.PROD_CD   (+) =   tsssc.PROD_CD
+                            AND     tsssc.storage_cd = '999'
                         ) tsssc
                 WHERE   tsssc.STORE_CD  (+) =   tpte.STORE_CD
                 AND     tsssc.PROD_CD   (+) =   tpte.PROD_CD

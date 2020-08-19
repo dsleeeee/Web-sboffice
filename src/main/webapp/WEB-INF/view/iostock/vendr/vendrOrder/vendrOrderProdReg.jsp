@@ -81,7 +81,7 @@
               </wj-combo-box>
             </span>
             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="vendrOrder.reg.excelFormUpload"/></a>
-            <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="vendrOrder.reg.textFormUpload"/></a>
+<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="vendrOrder.reg.textFormUpload"/></a> --%>
             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="vendrOrder.reg.excelFormUploadErrorInfo"/></a>
           </td>
@@ -118,7 +118,8 @@
             control="flex"
             initialized="initGrid(s,e)"
             is-read-only="false"
-            item-formatter="_itemFormatter">
+            item-formatter="_itemFormatter"
+            frozen-columns		="2">
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vendrOrder.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>

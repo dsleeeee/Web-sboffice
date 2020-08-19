@@ -23,7 +23,10 @@ app.controller('dstbDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.dlvrCd = $scope.strDlvrCd;
-
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/dstmn/dstbDlvr/list.sb", params);
   };

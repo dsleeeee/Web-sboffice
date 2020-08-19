@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.manage.view.service.impl.StockManageViewMapper">
+
+<!-- 실사/조정/폐기 조회 - 리스트 조회 -->
+    <!--
+        TABLE    : 
+        PARAM    : storePeriodVO
+        COMMENTS : 실사/조정/폐기 조회 - 리스트를 조회한다.
+    -->
+    <select id="getStockManageViewList" parameterType="stockManageViewVO" resultType="DefaultMap">
+    	/* USE : StockManageViewMapper.getStockManageViewList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+        (SELECT M.HQ_GBN
+			 , M.TOT_DATE
+			 , M.SEQ_NO
+			 , M.PROC_FG_NM
+			 , M.TITLE
+			 , M.DTL_CNT
+			 <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHAI.SEQ_NO
+					 , DECODE(TSHAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHAI.ACINS_TITLE AS TITLE
+					 , TSHAI.DTL_CNT
+				  FROM TB_ST_HQ_ACTUAL_INSPECTION TSHAI
+				 WHERE TSHAI.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSHA.SEQ_NO
+					 , DECODE(TSHA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHA.ADJ_TITLE AS TITLE
+					 , TSHA.DTL_CNT
+				  FROM TB_ST_HQ_ADJUST TSHA
+				 WHERE TSHA.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHD.SEQ_NO
+					 , DECODE(TSHD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHD.DISUSE_TITLE AS TITLE
+					 , TSHD.DTL_CNT
+				  FROM TB_ST_HQ_DISUSE TSHD
+				 WHERE TSHD.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSHD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+			  ) M
+		 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ) A
+		 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getStockManageViewStoreList" parameterType="stockManageViewVO" resultType="DefaultMap">
+    	/* USE : StockManageViewMapper.getStockManageViewStoreList */
+    	<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+        (
+    	SELECT M.HQ_GBN
+			 , M.TOT_DATE
+			 , M.SEQ_NO
+			 , M.PROC_FG_NM
+			 , M.TITLE
+			 , M.DTL_CNT
+			 <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TSSAI.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSAI.SEQ_NO
+					 , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ACINS_TITLE AS TITLE
+					 , TSSAI.DTL_CNT
+				  FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+        		 AND TSSAI.STORE_CD = #{storeCd}
+				 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TSSA.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSSA.SEQ_NO
+					 , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ADJ_TITLE AS TITLE
+					 , TSSA.DTL_CNT
+				  FROM TB_ST_STORE_ADJUST TSSA
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+        		 AND TSSA.STORE_CD = #{storeCd}
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TSSD.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSD.SEQ_NO
+					 , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , DISUSE_TITLE AS TITLE
+					 , TSSD.DTL_CNT
+				  FROM TB_ST_STORE_DISUSE TSSD
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+				 AND TSSD.STORE_CD = #{storeCd}
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+			  ) M
+	   	 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ORDER BY M.STORE_CD, M.HQ_GBN
+		 ) A
+		 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getStockManageViewExcelList" parameterType="stockManageViewVO" resultType="DefaultMap">
+    	/* USE : StockManageViewMapper.getStockManageViewExcelList */
+        SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+        (SELECT M.HQ_GBN
+			 , M.TOT_DATE
+			 , M.SEQ_NO
+			 , M.PROC_FG_NM
+			 , M.TITLE
+			 , M.DTL_CNT
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHAI.SEQ_NO
+					 , DECODE(TSHAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHAI.ACINS_TITLE AS TITLE
+					 , TSHAI.DTL_CNT
+				  FROM TB_ST_HQ_ACTUAL_INSPECTION TSHAI
+				 WHERE TSHAI.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSHA.SEQ_NO
+					 , DECODE(TSHA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHA.ADJ_TITLE AS TITLE
+					 , TSHA.DTL_CNT
+				  FROM TB_ST_HQ_ADJUST TSHA
+				 WHERE TSHA.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 		AND TSHA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TO_CHAR(TO_DATE(TSHD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSHD.SEQ_NO
+					 , DECODE(TSHD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , TSHD.DISUSE_TITLE AS TITLE
+					 , TSHD.DTL_CNT
+				  FROM TB_ST_HQ_DISUSE TSHD
+				 WHERE TSHD.HQ_OFFICE_CD = #{hqOfficeCd}
+				 	<if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSHD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 	</if>
+				 	<if test="procFg != null and procFg != ''">
+				 		AND TSHD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 	</if>
+			  ) M
+		 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ) A
+    </select>
+    
+    <select id="getStockManageViewStoreExcelList" parameterType="stockManageViewVO" resultType="DefaultMap">
+    	/* USE : StockManageViewMapper.getStockManageViewStoreExcelList */
+    	SELECT A.*
+        	   , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+        FROM
+        (
+    	SELECT M.HQ_GBN
+			 , M.TOT_DATE
+			 , M.SEQ_NO
+			 , M.PROC_FG_NM
+			 , M.TITLE
+			 , M.DTL_CNT
+		  FROM (
+				SELECT '1' AS HQ_GBN
+					 , TSSAI.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSAI.SEQ_NO
+					 , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ACINS_TITLE AS TITLE
+					 , TSSAI.DTL_CNT
+				  FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+        		 AND TSSAI.STORE_CD = #{storeCd}
+				 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSAI.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '2' AS HQ_GBN
+					 , TSSA.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD')  AS TOT_DATE
+					 , TSSA.SEQ_NO
+					 , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , ADJ_TITLE AS TITLE
+					 , TSSA.DTL_CNT
+				  FROM TB_ST_STORE_ADJUST TSSA
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+        		 AND TSSA.STORE_CD = #{storeCd}
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSA.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+				UNION ALL
+				SELECT '3' AS HQ_GBN
+					 , TSSD.STORE_CD
+					 , TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+					 , TSSD.SEQ_NO
+					 , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+					 , DISUSE_TITLE AS TITLE
+					 , TSSD.DTL_CNT
+				  FROM TB_ST_STORE_DISUSE TSSD
+				 WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+				 AND TSSD.STORE_CD = #{storeCd}
+      			 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				 	AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+				 </if>
+				 <if test="procFg != null and procFg != ''">
+				 	AND TSSD.PROC_FG = #{procFg} 								/* (0:등록, 1:확정) */
+				 </if>
+			  ) M
+	   	 <if test="hqGbn != '' and hqGbn != null">
+		 	WHERE M.HQ_GBN = #{hqGbn} 				/* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ORDER BY M.STORE_CD, M.HQ_GBN
+		 ) A
+    </select>
+</mapper>

@@ -12,23 +12,24 @@
     -->
     <select id="getDstbReqList" parameterType="dstbReqVO" resultType="DefaultMap">
         /* USE : DstbReqMapper.getDstbReqList */
-        <![CDATA[
         SELECT   tphso.REQ_DATE, tphso.STORE_CD, tms.STORE_NM
-        ,        tphso.DTL_CNT, tphso.PROC_FG, tphso.REMARK
-        ,        tphso.SLIP_FG, tphso.MOD_DT
-        ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY
-        ,        tphso.ORDER_AMT*tphso.SLIP_FG     AS ORDER_AMT
-        ,        tphso.ORDER_VAT*tphso.SLIP_FG     AS ORDER_VAT
-        ,        tphso.ORDER_TOT*tphso.SLIP_FG     AS ORDER_TOT
-        ,        tphso.MD_TOT_QTY*tphso.SLIP_FG    AS MD_TOT_QTY
-        ,        tphso.MD_AMT*tphso.SLIP_FG        AS MD_AMT
-        ,        tphso.MD_VAT*tphso.SLIP_FG        AS MD_VAT
-        ,        tphso.MD_TOT*tphso.SLIP_FG        AS MD_TOT
+        ,        tphso.DTL_CNT,  tphso.PROC_FG,  tphso.REMARK
+        ,        tphso.SLIP_FG,  tphso.MOD_DT
+        ,        tphso.ORDER_TOT_QTY * tphso.SLIP_FG	AS ORDER_TOT_QTY
+        ,        tphso.ORDER_AMT     * tphso.SLIP_FG    AS ORDER_AMT
+        ,        tphso.ORDER_VAT     * tphso.SLIP_FG    AS ORDER_VAT
+        ,        tphso.ORDER_TOT     * tphso.SLIP_FG    AS ORDER_TOT
+        ,        tphso.MD_TOT_QTY    * tphso.SLIP_FG    AS MD_TOT_QTY
+        ,        tphso.MD_AMT        * tphso.SLIP_FG    AS MD_AMT
+        ,        tphso.MD_VAT        * tphso.SLIP_FG    AS MD_VAT
+        ,        tphso.MD_TOT        * tphso.SLIP_FG    AS MD_TOT
         FROM     TB_PO_HQ_STORE_ORDER tphso
-        ,        TB_MS_STORE tms
-        WHERE    tms.HQ_OFFICE_CD =   #{hqOfficeCd}
-        AND      tphso.STORE_CD   =   tms.STORE_CD
-        ]]>
+        ,        TB_MS_STORE          tms
+        WHERE    tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND      tphso.STORE_CD   = tms.STORE_CD
+        <if test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+        AND 	 tphso.STORE_CD   = #{storeCd}
+		</if>
         <if test='dateFg == "req"'>
             AND tphso.REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -95,6 +96,7 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND		STORAGE_CD = '999'
                 )   tshsc
         ,       TB_HQ_ENVST the
         WHERE   tphsod.STORE_CD       =   #{storeCd}
@@ -174,7 +176,7 @@
         ,       #{empNo}
         ,       #{slipFg}
         ,       #{dstbFg}
-        ,       '000'
+        ,       '999'		<!-- 전체 재고용 창고코드 ('001' -> '000' -> '999') -->
         ,       '00'
         ,       PROD_CD
         ,       PO_UNIT_FG

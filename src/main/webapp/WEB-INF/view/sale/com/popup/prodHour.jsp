@@ -9,7 +9,7 @@
 <wj-popup id="prodHourLayer" control="prodHourLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdHourCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="saleComPopup.table"/>
+      <s:message code="saleComPopup.prod"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>

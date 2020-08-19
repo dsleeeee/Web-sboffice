@@ -9,7 +9,8 @@
 <wj-popup id="wjExcelUploadErrInfoLayer" control="wjExcelUploadErrInfoLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;">
   <div id="excelUploadErrInfoLayer" class="wj-dialog wj-dialog-columns" ng-controller="excelUploadErrInfoCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="excelUploadErrInfo.title"/>
+  <%--<s:message code="excelUploadErrInfo.title"/>	*label변경: 엑셀업로드 실패내역 -> 업로드 실패내역 --%>
+      <s:message code="uploadErrInfo.title"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 450px;">
@@ -197,6 +198,11 @@
       if (url) {
         comboUrl = url;
       }
+
+        //가상로그인 session 설정
+            if(document.getElementsByName('sessionId')[0]){
+	    	    params['sid'] = document.getElementsByName('sessionId')[0].value;
+	        }
 
       // ajax 통신 설정
       $http({

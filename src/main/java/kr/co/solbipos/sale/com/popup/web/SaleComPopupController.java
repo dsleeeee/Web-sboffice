@@ -174,4 +174,172 @@ public class SaleComPopupController {
 
         return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
     }
+    
+    /**
+     * 매출공통팝업 - 매장정보,매출종합내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop1/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop1(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop1(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 결제내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop3/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop3(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop3(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 회원정보 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop4/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop4(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop4(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 신용카드,현금 결제내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop5/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop5(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop5(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 상품내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop6/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop6(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop6(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 원거래매출정보 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billSalePop7/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillSalePop7(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillSalePop7(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 신용카드,현금 결제취소내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billRtnPop5/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectBillRtnPop5(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectBillRtnPop5(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
+    
+    /**
+     * 매출공통팝업 - 원 신용카드,현금 결제내역 - 영수증 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   SaleComPopupVO
+     * @return  String
+     * @author  김진
+     * @since   2020. 03. 09.
+     */
+    @RequestMapping(value = "/billRealPop/view.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result selectbillRealPop(HttpServletRequest request, HttpServletResponse response, Model model, SaleComPopupVO saleComPopupVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = saleComPopupService.selectbillRealPop(saleComPopupVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, saleComPopupVO);
+    }
 }

@@ -2,7 +2,9 @@
 app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('rtnStoreOrderDtlCtrl', $scope, $http, true));
-
+  
+  var global_storage_cnt = 0;	//매장의 창고 갯수
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -10,7 +12,14 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
+    
+    // 출고창고
+    url = '/iostock/order/instockConfm/instockConfm/getInStorageCombo.sb';
+    comboParams             = {};
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "saveDtlRtnOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    
+    
     // 그리드 포맷 핸들러
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -29,31 +38,16 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     });
 
     s.cellEditEnded.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") { // 반품수량 수정시
-          var item          = s.rows[e.row].dataItem;
-          var orderSplyUprc = parseInt(item.orderSplyUprc);
-          var poUnitQty     = parseInt(item.poUnitQty);
-          var vat01         = parseInt(item.vatFg01);
-          var envst0011     = parseInt(item.envst0011);
-
-          var unitQty  = parseInt(nvl(item.orderUnitQty, 0)) * parseInt(item.poUnitQty);
-          var etcQty   = parseInt(nvl(item.orderEtcQty, 0));
-          var totQty   = parseInt(unitQty + etcQty);
-          var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
-          var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-          var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
-          var orderTot = parseInt(orderAmt + orderVat);
-
-          item.orderTotQty = totQty;   // 총반품수량
-          item.orderAmt    = orderAmt; // 금액
-          item.orderVat    = orderVat; // VAT
-          item.orderTot    = orderTot; // 합계
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
+          // 반품수량 수정시 금액,VAT,합계 계산하여 보여준다.
+          if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
+            var item = s.rows[e.row].dataItem;
+            $scope.calcAmt(item);
+          }
         }
-      }
 
-      s.collectionView.commitEdit();
+        s.collectionView.commitEdit();
     });
 
     // add the new GroupRow to the grid's 'columnFooters' panel
@@ -62,7 +56,35 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     s.bottomLeftCells.setCellData(0, 0, '합계');
 
     // 헤더머지
+    //Grid Header 2줄 - START	----------------------------------------------------------------
     s.allowMerging  = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    
+    //첫째줄 Header 생성
+    var dataItem = {};
+        dataItem.prodCd         	= messages["rtnStoreOrder.dtl.prodCd"        		];	//상품코드
+        dataItem.prodNm         	= messages["rtnStoreOrder.dtl.prodNm"        		];	//상품명
+        dataItem.orderSplyUprc  	= messages["rtnStoreOrder.dtl.orderSplyUprc" 		];	//공급단가       
+        dataItem.prevOrderUnitQty   = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		]; //기반품수량
+             
+        dataItem.orderUnitQty     	= messages["rtnStoreOrder.dtl.orderUnitQty"		 	]; //반품수량
+        dataItem.orderEtcQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 	]; //반품수량
+        dataItem.orderTotQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 	]; //반품수량
+
+        dataItem.orderAmt        	= messages["rtnStoreOrder.dtl.orderAmt"      ];	//금액
+        dataItem.orderVat         	= messages["rtnStoreOrder.dtl.orderVat"      ];	//VAT
+        dataItem.orderTot         	= messages["rtnStoreOrder.dtl.orderTot"      ];	//합계
+        
+        dataItem.poUnitFg       	= messages["rtnStoreOrder.dtl.poUnitFg"      ]; //반품단위
+        dataItem.poUnitQty      	= messages["rtnStoreOrder.dtl.poUnitQty"     ]; //입수
+        
+        dataItem.remark         	= messages["rtnStoreOrder.dtl.remark"        ]; //비고
+        dataItem.poMinQty        	= messages["rtnStoreOrder.dtl.poMinQty"      ]; //발주최소수량
+        dataItem.vatFg01        	= messages["rtnStoreOrder.dtl.vatFg"         ]; //상품부가세구분
+        dataItem.envst0011        	= messages["rtnStoreOrder.dtl.envst0011"     ]; //출고가-부가세포함여부
+    s.columnHeaders.rows[0].dataItem = dataItem;
+    //Grid Header 2줄 - END		----------------------------------------------------------------
+    
     s.itemFormatter = function (panel, r, c, cell) {
       if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
         //align in center horizontally and vertically
@@ -101,35 +123,69 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
       }
     }
   };
+  $scope.calcAmt = function (item) {
+	    /** 수량이 없는 경우 계산하지 않음.
+	        null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
+	    if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
 
+	    var orderSplyUprc = parseInt(item.orderSplyUprc);
+	    var poUnitQty     = parseInt(item.poUnitQty);
+	    var vat01         = parseInt(item.vatFg01);
+	    var envst0011     = parseInt(item.envst0011);
+
+	    var unitQty  = (parseInt(nvl(item.prevOrderUnitQty, 0)) + parseInt(nvl(item.orderUnitQty, 0))) * parseInt(item.poUnitQty);
+	    var etcQty   = parseInt(nvl(item.prevOrderEtcQty, 0)) + parseInt(nvl(item.orderEtcQty, 0));
+	    var totQty   = parseInt(unitQty + etcQty);
+	    var tempAmt  = Math.round(totQty * orderSplyUprc / poUnitQty);
+	    var orderAmt = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+	    var orderVat = Math.round(tempAmt * vat01 / (10 + envst0011));
+	    var orderTot = parseInt(orderAmt + orderVat);
+
+	    item.orderTotQty = totQty;   // 총수량
+	    item.orderAmt    = orderAmt; // 금액
+	    item.orderVat    = orderVat; // VAT
+	    item.orderTot    = orderTot; // 합계
+	  };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStoreOrderDtlCtrl", function (event, data) {
-    $scope.reqDate     = data.reqDate;
-    $scope.slipFg      = data.slipFg;
-    $scope.procFg      = data.procFg;
-    $scope.dtlHdRemark = data.hdRemark;
-    $scope.storeCd     = data.storeCd;
+	  
+	    // 그리드 초기화
+	    var cv          = new wijmo.collections.CollectionView([]);
+	    cv.trackChanges = true;
+	    $scope.data     = cv;
+	  
+	    $scope.reqDate     = data.reqDate;
+	    $scope.slipFg      = data.slipFg;
+	    $scope.procFg      = data.procFg;
+	    $scope.dtlHdRemark = data.hdRemark;
+	    $scope.storeCd     = data.storeCd;
 
-    $scope.wjRtnStoreOrderDtlLayer.show(true);
-    if ($scope.procFg === "00") {
-      $scope.btnAddProd = true;
-      $scope.btnDtlSave = true;
-      $scope.btnConfirm = true;
-      $scope.flex.isReadOnly = false;
-    }
-    else {
-      $scope.btnAddProd = false;
-      $scope.btnDtlSave = false;
-      $scope.btnConfirm = false;
-      $scope.flex.isReadOnly = true;
-    }
-
-    $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
-    $scope.wjRtnStoreOrderDtlLayer.show(true);
-    $scope.searchRtnStoreOrderDtlList();
-    // 기능수행 종료 : 반드시 추가
-    event.preventDefault();
+	    $scope.wjRtnStoreOrderDtlLayer.show(true);
+	    if ($scope.procFg === "00") {
+	      $scope.btnAddProd = true;
+	      $scope.btnDtlSave = true;
+//	      $scope.btnConfirm = true;
+	      $scope.flex.isReadOnly = false;
+	      
+	      if (gEnvst1042 === "1" || gEnvst1042 === "2") {
+	          $scope.btnConfirm = true;
+	        } else {
+	          $scope.btnConfirm = false;
+	        }
+	    }
+	    else {
+	      $scope.btnAddProd = false;
+	      $scope.btnDtlSave = false;
+	      $scope.btnConfirm = false;
+	      $scope.flex.isReadOnly = true;
+	    }
+	
+	    $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
+	    $scope.wjRtnStoreOrderDtlLayer.show(true);
+	    $scope.searchRtnStoreOrderDtlList();
+	    // 기능수행 종료 : 반드시 추가
+	    event.preventDefault();
   });
 
 
@@ -141,77 +197,67 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/list.sb", params);
-  };
+//    $scope._inquirySub("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/list.sb", params);
+    params.listScale = 50;
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+  $scope._inquirySub("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/list.sb", params); 
+};	//$scope.searchInstockConfmDtlList	----------------------------
 
 
   // 반품 상세 저장
   $scope.saveRtnStoreOrderDtl = function (saveFg) {
     var params   = [];
     var orderTot = 0;
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item       = $scope.flex.collectionView.itemsEdited[i];
+//    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+//      var item       = $scope.flex.collectionView.itemsEdited[i];
+  for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+  	  var item =  $scope.flex.collectionView.items[i];       
       item.status    = "U";
       item.reqDate   = $scope.reqDate;
       item.slipFg    = $scope.slipFg;
+      item.storageCd  = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
       item.hdRemark  = $scope.dtlHdRemark;
       item.storeCd   = $scope.storeCd;
+      item.outStorageCd	= $scope.save.dtl.rtnOutStorageCd;
       orderTot += parseInt(item.orderTot);
+           
+      
+      
       params.push(item);
     }
 
-    // 파라미터 길이체크
-    if (params.length <= 0) {
-      // 수정된 파라미터가 없더라도 확정은 진행되어야함.
-      if (saveFg === "confirm") {
-        $scope.confirm();
-      }
-      else {
-        $scope._popMsg(messages["cmm.not.modify"]);
-      }
-      return false;
-    } else {
-      params = JSON.stringify(params);
+
+    if (saveFg === "confirm") {
+    	$scope.confirm();
     }
-
-    // ajax 통신 설정
-    $http({
-      method : 'POST', //방식
-      url    : '/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/save.sb', /* 통신할 URL */
-      data   : params, /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
-        $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.flex.collectionView.clearChanges();
-
-        // 확정버튼 클릭시에도 변경사항 저장 후에 확정 로직을 진행해야하므로 저장 후에 확정로직 다시 실행.
-        if (saveFg === "confirm") {
-          $scope.confirm();
-        }
-        else if (saveFg === "save") {
-          $scope.saveOrderDtlCallback();
-        }
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
+      
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
+    $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/save.sb", params, function () {
+        $scope.saveOrderDtlCallback();
     });
+   
   };
 
 
   // 반품확정
   $scope.confirm = function () {
+
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.remark  = $scope.dtlHdRemark;
     params.storeCd = $scope.storeCd;
+    params.envst1042= gEnvst1042;
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }	
 
     $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/confirm.sb", params, function () {
       $scope.saveOrderDtlCallback()
@@ -222,7 +268,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchRtnStoreOrderDtlList();
-
+    $scope.wjRtnStoreOrderDtlLayer.hide(true);
     var rtnStoreOrderScope = agrid.getScope('rtnStoreOrderCtrl');
     rtnStoreOrderScope.searchRtnStoreOrderList();
   };
@@ -253,7 +299,12 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

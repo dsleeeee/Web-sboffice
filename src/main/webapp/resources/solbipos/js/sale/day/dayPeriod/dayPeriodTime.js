@@ -27,6 +27,10 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayPeriodTimeCtrl");
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -107,6 +111,10 @@ app.controller('dayPeriodTimeDetailCtrl', ['$scope', '$http', '$timeout', functi
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayPeriodTimeDetailCtrl");
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());

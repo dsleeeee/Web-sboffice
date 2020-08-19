@@ -44,6 +44,11 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+
+
+    //Header column merge
+    s.allowMerging                          = 'ColumnHeaders';
+    s.columnHeaders.rows[0].allowMerging    = true;
   };
 
   // 금액 계산
@@ -88,6 +93,11 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
 
+    //가상로그인 session 설정
+	      if(document.getElementsByName('sessionId')[0]){
+	    	  params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -118,6 +128,11 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
+
+    //가상로그인 session 설정
+	      if(document.getElementsByName('sessionId')[0]){
+	    	  params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
 
     // ajax 통신 설정
     $http({
@@ -240,7 +255,7 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       item.reqDate       = $scope.reqDate;
       item.slipFg        = $scope.slipFg;
       item.empNo         = "0000";
-      item.storageCd     = "001";
+      item.storageCd     = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
       item.hqBrandCd     = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
       item.hdRemark      = $scope.hdRemark;
@@ -322,6 +337,11 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       comboUrl = url;
     }
 
+    //가상로그인 session 설정
+	      if(document.getElementsByName('sessionId')[0]){
+	    	  params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -379,5 +399,37 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       }
     });
   };
+
+
+	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                return column.visible;
+                                            }
+                },
+              //'분배등록(요청분)_상세_' + getToday() + '.xlsx',
+                '분배등록(요청분)_상세_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
 
 }]);

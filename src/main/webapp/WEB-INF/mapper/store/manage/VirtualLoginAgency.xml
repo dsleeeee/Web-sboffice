@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VirtualLoginAgency.xml
+    총판/대리점 가상로그인
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.03.31     최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.virtualLoginAgency.service.impl.VirtualLoginAgencyMapper">
+
+    <!-- 총판/대리점 가상로그인 조회 -->
+    <!--
+        TABLE    : TB_CM_EMPLOYEE, TB_CM_AGENCY, TB_CM_NMCODE
+        COMMENTS : [공통]시스템/대리점 사원 정보, [공통]대리점 정보, [공통]명칭코드
+    -->
+    <select id="getVirtualLoginAgencyrList"  parameterType="VirtualLoginAgencyVO" resultType="DefaultMap">
+        /* VirtualLoginAgencyMapper.getVirtualLoginAgencyrList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        CASE WHEN tca.P_AGENCY_CD = '00000' THEN 'P' ELSE 'C' END AS AGENCY_FG,
+        tca.AGENCY_CD,
+        tca.AGENCY_NM,
+        tca.OWNER_NM,
+        tce.USER_ID,
+        tce.EMP_NM,
+        tca.TEL_NO,
+        tce.MP_NO,
+        tcn.NMCODE_CD
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_CM_EMPLOYEE tce,
+        TB_CM_AGENCY tca,
+        (
+            SELECT
+            NMCODE_CD
+            FROM TB_CM_NMCODE
+            WHERE 1=1
+            AND NMCODE_GRP_CD = '097'
+        ) tcn
+        WHERE 1=1
+        AND tce.AGENCY_CD = tca.AGENCY_CD
+        AND tce.ADMIN_FG = tcn.NMCODE_CD
+        AND tce.USE_YN = 'Y'
+        AND tca.USE_YN = 'Y'
+        AND tca.AGENCY_CD LIKE '%' || #{agencyCd} || '%'
+        AND tca.AGENCY_NM LIKE '%' || #{agencyNm} || '%'
+        AND tce.USER_ID LIKE '%' || #{userId} || '%'
+        AND tcn.NMCODE_CD IN ('C','P')
+        ORDER BY tca.AGENCY_CD, tce.USER_ID
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>

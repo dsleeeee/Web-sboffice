@@ -69,6 +69,34 @@ public class TableMonthController {
 		return ReturnUtil.returnListJson(Status.OK, list, tableMonthVO);
 	}
 
+	/** 테이블별 - 월별 엑셀리스트 조회 */
+	@RequestMapping(value = "/month/excelList.sb", method = RequestMethod.POST)
+	@ResponseBody
+	public Result getTableMonthExcelList(HttpServletRequest request, HttpServletResponse response, TableMonthVO tableMonthVO, Model model) {
+
+		SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+		// 테이블 리스트 조회
+        List<DefaultMap<String>> tblColList = tableMonthService.getStoreTableList(tableMonthVO, sessionInfoVO);
+
+        // 테이블 목록을 , 로 연결하는 문자열 생성
+        String tblCol = "";
+        if(tableMonthVO.getTableCd() == "" ) {
+        	for(int i=0; i < tblColList.size(); i++) {
+        		tblCol += (tblCol.equals("") ? "" : ",") + tblColList.get(i).getStr("nmcodeCd");
+        	}
+        }
+        else {
+        	tblCol += tableMonthVO.getTableCd() + ",";
+        }
+        tableMonthVO.setTblCol(tblCol);
+
+		// 테이블 목록 컬럼 쿼리 추가
+		tableMonthVO = setCol(tableMonthVO);
+		List<DefaultMap<String>> list = tableMonthService.getTableMonthExcelList(tableMonthVO, sessionInfoVO);
+
+		return ReturnUtil.returnListJson(Status.OK, list, tableMonthVO);
+	}
+
 	/** 테이블별 = 매장코드로 해당 매장의 테이블 목록 조회, 콤보박스 데이터 */
 	@RequestMapping(value = "/month//tableNmList.sb", method = RequestMethod.POST)
 	@ResponseBody
@@ -113,7 +141,7 @@ public class TableMonthController {
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
 					+ "' THEN REAL_SALE_AMT END), 0) AS REAL_SALE_AMT_T" + i + "\n";
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
-					+ "' THEN REAL_SALE_CNT END), 0) AS REAL_SALE_CNT_T" + i + "\n";
+					+ "' THEN SALE_CNT END), 0) AS SALE_CNT_T" + i + "\n";
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableMonthVO.getArrTableCd()[i]
 					+ "' THEN GUEST_CNT_1 END), 0) AS GUEST_CNT_1_T" + i + "\n";
 		}

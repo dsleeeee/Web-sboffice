@@ -22,7 +22,9 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
 
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
-
+  
+  var global_storage_cnt = 0;	//매장의 창고 갯수
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -31,6 +33,12 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 
+    // 출고창고
+    url = '/iostock/order/instockConfm/instockConfm/getInStorageCombo.sb';
+    
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "saveDtlRtnRegOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    
     // s.allowMerging = wijmo.grid.AllowMerging.AllHeaders;
     // 그리드 포맷 핸들러
     s.formatItem.addHandler(function (s, e) {
@@ -49,27 +57,64 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         }
       }
     });
-
+    
     s.cellEditEnded.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        // 반품수량 수정시 금액,VAT,합계 계산하여 보여준다.
-        if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
-          var item = s.rows[e.row].dataItem;
-          $scope.calcAmt(item);
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
+          // 반품수량 수정시 금액,VAT,합계 계산하여 보여준다.
+          if (col.binding === "orderUnitQty" || col.binding === "orderEtcQty") {
+            var item = s.rows[e.row].dataItem;
+            $scope.calcAmt(item);
+          }
         }
-      }
 
-      s.collectionView.commitEdit();
+        s.collectionView.commitEdit();
     });
+
 
     // add the new GroupRow to the grid's 'columnFooters' panel
     // s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     // s.bottomLeftCells.setCellData(0, 0, '합계');
-
+    
     // 헤더머지
+    //Grid Header 2줄 - START	----------------------------------------------------------------
     s.allowMerging  = 2;
+    s.columnHeaders.rows.push(new wijmo.grid.Row());
+    
+    //첫째줄 Header 생성
+    var dataItem = {};
+        dataItem.prodCd         	= messages["rtnStoreOrder.dtl.prodCd"        ];	//상품코드
+        dataItem.prodNm         	= messages["rtnStoreOrder.dtl.prodNm"        ];	//상품명
+        dataItem.orderSplyUprc  	= messages["rtnStoreOrder.dtl.orderSplyUprc" ];	//공급단가
+        
+        dataItem.prevOrderUnitQty   = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
+        dataItem.prevOrderEtcQty    = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
+        dataItem.prevOrderTotQty    = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
+             
+        dataItem.orderUnitQty     	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
+        dataItem.orderEtcQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
+        dataItem.orderTotQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
+
+        dataItem.orderAmt        	= messages["rtnStoreOrder.dtl.orderAmt"      ];	//금액
+        dataItem.orderVat         	= messages["rtnStoreOrder.dtl.orderVat"      ];	//VAT
+        dataItem.orderTot         	= messages["rtnStoreOrder.dtl.orderTot"      ];	//합계
+        dataItem.saleUprc        	= messages["rtnStoreOrder.dtl.saleUprc"      ];	//판매단가
+        dataItem.poUnitFg       	= messages["rtnStoreOrder.dtl.poUnitFg"      ]; //반품단위
+        dataItem.poUnitQty      	= messages["rtnStoreOrder.dtl.poUnitQty"     ]; //입수
+        
+        dataItem.safeStockUnitQty   = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
+        dataItem.safeStockEtcQty    = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
+             
+        dataItem.storeCurUnitQty   = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고
+        dataItem.storeCurEtcQty    = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고      
+        dataItem.remark         	= messages["rtnStoreOrder.dtl.remark"        ]; //비고
+        dataItem.poMinQty        	= messages["rtnStoreOrder.dtl.poMinQty"      ]; //발주최소수량
+        dataItem.vatFg01        	= messages["rtnStoreOrder.dtl.vatFg"         ]; //상품부가세구분
+        dataItem.envst0011        	= messages["rtnStoreOrder.dtl.envst0011"     ]; //출고가-부가세포함여부
+    s.columnHeaders.rows[0].dataItem = dataItem;
+    //Grid Header 2줄 - END		----------------------------------------------------------------
+
     s.itemFormatter = function (panel, r, c, cell) {
       if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
         //align in center horizontally and vertically
@@ -108,9 +153,8 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       }
     }
   };
-
-
-  $scope.calcAmt = function () {
+  
+  $scope.calcAmt = function (item) {
     /** 수량이 없는 경우 계산하지 않음.
         null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
     if (nvl(item.orderUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.orderEtcQty, null) === null)) return false;
@@ -132,8 +176,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     item.orderAmt    = orderAmt; // 금액
     item.orderVat    = orderVat; // VAT
     item.orderTot    = orderTot; // 합계
-  };
-
+  };//$scope.calcAmt	--------------------------------------------------------------------------------------------------------------------------
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnStoreOrderRegistCtrl", function (event, data) {
@@ -142,7 +185,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     var cv          = new wijmo.collections.CollectionView([]);
     cv.trackChanges = true;
     $scope.data     = cv;
-
+    
     if (!$.isEmptyObject(data)) {
       $scope.reqDate     = data.reqDate;
       $scope.slipFg      = data.slipFg;
@@ -179,7 +222,14 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
 
+    // ajax 통신 설정
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -193,8 +243,15 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
           if (response.data.data.procFg != "00") {
             $scope._popMsg(messages["rtnStoreOrder.dtl.not.orderProcEnd"]);
             return false;
+          }else{
+              $scope.wjRtnStoreOrderRegistLayer.show(true);
+              $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
           }
           $scope.regHdRemark = response.data.data.remark;
+        }else{
+            $scope.wjRtnStoreOrderRegistLayer.show(true);
+            $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+//            $scope.regHdRemark = response.data.data.remark;
         }
       }
     }, function errorCallback(response) {
@@ -204,8 +261,8 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       return false;
     }).then(function () {
       // "complete" code here
-      $scope.wjRtnStoreOrderRegistLayer.show(true);
-      $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+//      $scope.wjRtnStoreOrderRegistLayer.show(true);
+//      $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
     });
   };
 
@@ -219,22 +276,21 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.endDate   = wijmo.Globalize.format($scope.srchRegEndDate.value, 'yyyyMMdd');
     params.storeCd   = $scope.storeCd;
     params.listScale = 50;
-
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/list.sb", params);
-  };
+    
+};	//$scope.searchInstockConfmDtlList	----------------------------------------------------------------------------------------------------------
 
   // 반품 상품 저장
   $scope.saveRtnStoreOrderRegist = function () {
     var params   = [];
     var orderTot = 0;
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+//    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+//      var item = $scope.flex.collectionView.itemsEdited[i];
+    for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+  	  var item =  $scope.flex.collectionView.items[i];      
 
-      if (item.orderTotQty !== null && item.orderTotQty !== "0" && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
-        $scope._popMsg(messages["rtnStoreOrder.dtl.not.minOrderQty"]); // 반품수량은 최소반품수량 이상 입력하셔야 합니다.
-        return false;
-      }
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
         $scope._popMsg(messages["rtnStoreOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
         return false;
@@ -247,13 +303,21 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       item.status    = "U";
       item.reqDate   = $scope.reqDate;
       item.slipFg    = $scope.slipFg;
+      item.storageCd  = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.hdRemark  = $scope.regHdRemark;
       item.storeCd   = $scope.storeCd;
+      item.outStorageCd	= $scope.save.dtl.rtnRegOutStorageCd;
       orderTot += parseInt(item.orderTot);
+
       params.push(item);
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/save.sb", params, function () {
       $scope.saveRegistCallback()
     });
@@ -373,6 +437,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg   = uploadFg;
+        excelUploadScope.storeCd    = $scope.storeCd;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
         excelUploadScope.parentCtrl = 'rtnStoreOrderRegistCtrl';
         // 엑셀 업로드
@@ -394,10 +459,16 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   $scope.uploadCallBack = function () {
     var params      = {};
     params.date     = $scope.reqDate;
+    params.storeCd  = $scope.storeCd;
     params.slipFg   = $scope.slipFg;
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({
@@ -446,7 +517,12 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

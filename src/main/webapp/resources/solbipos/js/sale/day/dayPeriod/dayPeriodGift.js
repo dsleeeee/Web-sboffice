@@ -27,6 +27,10 @@ app.controller('dayPeriodGiftCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayPeriodGiftCtrl");
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -161,6 +165,10 @@ app.controller('dayPeriodGiftDetailCtrl', ['$scope', '$http', '$timeout', functi
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayPeriodGiftDetailCtrl");
+
         // 그리드 DataMap 설정
         $scope.saleFgDataMap = new wijmo.grid.DataMap(saleFgData, 'value', 'name'); //판매구분
         $scope.giftProcFgDataMap = new wijmo.grid.DataMap(giftProcFgData, 'value', 'name'); //상품권처리구분

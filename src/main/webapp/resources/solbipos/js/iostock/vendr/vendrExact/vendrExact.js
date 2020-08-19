@@ -204,6 +204,13 @@ app.controller('vendrExactDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         }
       }
     });
+    
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+
+    
   };
 
 

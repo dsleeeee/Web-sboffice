@@ -76,4 +76,47 @@
     ]]>
     </select>
     
+    
+    <!-- 코너별매출일자별 - 엑셀 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_CORNR_PROD, TB_MS_CORNER, TB_MS_PRODUCT
+        PARAM    : cornerDayVO
+        COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
+    -->
+    <select id="getCornerDayExcelList" parameterType="cornerDayVO" resultType="DefaultMap">
+       <![CDATA[
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
+              ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
+              ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
+              ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
+              ${sQuery1}
+       ]]>
+        <![CDATA[
+        FROM TB_SL_DAILY_CORNR_PROD TSDCP
+        WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
+        ]]>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND TSDCP.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='arrCornrCd != null and arrCornrCd != ""'>
+            AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_DATE >= #{startDate}
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        </if>
+        <![CDATA[
+        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        ORDER BY TSDCP.SALE_DATE DESC
+        ]]>
+    </select>
+    
 </mapper>

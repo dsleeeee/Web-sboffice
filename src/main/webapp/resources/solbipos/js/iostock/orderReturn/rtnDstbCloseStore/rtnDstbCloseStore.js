@@ -102,8 +102,7 @@ app.controller('rtnDstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function
     };
   };
 
-
-  <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
+  // 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용
   $scope.itemFormatter = function (panel, r, c, cell) {
     if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
       //align in center horizontally and vertically
@@ -151,10 +150,9 @@ app.controller('rtnDstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function
             flex.beginUpdate();
             for (var i = 0; i < flex.rows.length; i++) {
               var cell = flex.cells.getCellElement(i, c);
-
               // 활성화 및 readOnly 아닌 경우에만 체크되도록
-              if (!cell.children[0].disabled) {
-                flex.setCellData(i, c, cb.checked);
+              if (flex.getCellData(i, 4) === '10') {
+                  flex.setCellData(i, c, cb.checked);
               }
             }
             flex.endUpdate();
@@ -216,7 +214,7 @@ app.controller('rtnDstbCloseStoreCtrl', ['$scope', '$http', '$timeout', function
         if (item.gChk === true) {
           item.status    = "U";
           item.empNo     = "0000";
-          item.storageCd = "001";
+          item.storageCd = "999";
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
           params.push(item);
         }

@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="posExcclcView" class="subCon"  ng-controller="posExcclcCtrl">
+<div id="posExcclcView" class="subCon3"  ng-controller="posExcclcCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="posExccl.posExcclInfo"/></a>
       <%-- 조회 --%>
@@ -70,7 +70,7 @@
 		<td colspan="3">
 			<div class="sb-select">
 				<span class="txtIn">
-					<wj-combo-box id="srchCloseFgDisplay" ng-model="closeFg"
+					<wj-combo-box id="srchCloseFgDisplay" ng-model="closeFgModel"
 						items-source="_getComboData('srchCloseFgDisplay')"
 						display-member-path="name" selected-value-path="value"
 						is-editable="false" initialized="_initComboBox(s)">
@@ -93,8 +93,10 @@
             items-source="_getComboData('posExcclcListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
     </wj-combo-box>
 
     <%-- 엑셀 다운로드 //TODO --%>
@@ -104,7 +106,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="posExcclcGrid"
           autoGenerateColumns="false"
@@ -148,8 +150,40 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+  <%--엑셀 리스트--%>
+      <div class="wj-gridWrap2" style="display:none;" ng-controller="posExcclcExcelCtrl">
+        <wj-flex-grid
+          id="posExcclcExcelGrid"
+          autoGenerateColumns="false"
+          selection-mode="Row"
+          items-source="data"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          is-read-only="true"
+          item-formatter="_itemFormatter">
+          <!-- define columns -->
+          <wj-flex-grid-column header=""        									 binding="hqOfficeCd"       width="0"   align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.storeCd"/>"        binding="storeCd"          width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.storeNm"/>"        binding="storeNm"          width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.saleDate"/>"       binding="saleDate"         width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.posNo"/>"          binding="posNo"            width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.closeFg"/>"        binding="closeFgNm"        width="80"  align="center" is-read-only="true" ng-click="ViewItemDtl($item)"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.regDate"/>"        binding="regDt"          	width="200" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.totSaleAmt"/>"     binding="totSaleAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.totDcAmt"/>"       binding="totDcAmt"         width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.realSaleAmt"/>"    binding="realSaleAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.posFundAmt"/>"     binding="totFundAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.cashSaleAmt"/>"    binding="cashExactAmt"     width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.inAmt"/>"          binding="accntInAmt"       width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.outAmt"/>"         binding="accntOutAmt"      width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.cashTicketAmt"/>"  binding="cashTicketAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="posExcclc.cashLostAmt"/>"    binding="lostAmt"      	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+      <%--//엑셀 리스트--%>
 </div>
->
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=201901112.15" charset="utf-8"></script>
 
 <%-- 본사 상세정보 레이어 --%>

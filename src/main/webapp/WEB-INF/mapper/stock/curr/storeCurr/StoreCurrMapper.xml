@@ -12,15 +12,23 @@
     -->
     <select id="getStoreCurrList" parameterType="storeCurrVO" resultType="DefaultMap">
         /* USE : StoreCurrMapper.getStoreCurrList */
-        SELECT  tsssc.PROD_CD             ,   tmp.PROD_NM
+        SELECT  A.LV1_CD
+		, 		A.LV1_NM
+		, 		A.LV2_CD
+		,		A.LV2_NM
+		, 		A.LV3_CD
+		, 		A.LV3_NM
+        ,		tsssc.PROD_CD             ,   tmp.PROD_NM
         ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
         ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
+        ,       tsssc.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
         ,       tmp.COST_UPRC
         ,       tmv.VENDR_NM
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
-        <if test='unitFg == "order"'>
+        <if test='unitFg == "0"'>
             ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
             ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               ) / tmp.PO_UNIT_QTY) AS CURR_QTY
@@ -35,7 +43,7 @@
             ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
         </if>
-        <if test='unitFg == "stock"'>
+        <if test='unitFg == "1"'>
             ,       tmp.STOCK_UNIT_FG AS PO_UNIT_FG
             ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
             ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
@@ -50,27 +58,66 @@
             ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
             ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     )) AS ACC_STORE_SALE_QTY
         </if>
-        FROM    TB_ST_STORE_STOCK_CUR tsssc
+        FROM    (
+	  				<![CDATA[	    			 
+					SELECT  A.HQ_OFFICE_CD
+					,       A.PROD_CLASS_CD
+					,		NULL	LV1_CD
+					,		NULL	LV2_CD
+					,		NULL	LV3_CD
+					,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+					                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+					             	)  AS  LV1_NM
+					,       DECODE	(A.LV ,1  ,NULL
+					                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+					                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+					              	)  AS  LV2_NM
+					,       DECODE	(A.LV ,1  ,NULL
+					                    ,2  ,NULL
+					                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+					             	)  AS  LV3_NM                    
+					FROM    (
+					        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+					        FROM    (
+					                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+					                    FROM    TB_HQ_PRODUCT_CLASS				
+					                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+					                )
+					        START WITH  P_PROD_CLASS_CD ='00000'
+					        CONNECT BY 
+					        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+					        )   A
+			
+		    		]]>
+			              )  A
+        ,		TB_ST_STORE_STOCK_CUR tsssc
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       (   SELECT	tmvp.PROD_CD
                     ,		LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmv.VENDR_CD) AS VENDR_NM
                     FROM	TB_MS_VENDOR tmv
                     ,		TB_MS_VENDOR_PROD tmvp
-                    WHERE	tmv.STORE_CD  =   #{storeCd}
-                    AND     tmvp.STORE_CD =	  tmv.STORE_CD
+                    WHERE	tmvp.STORE_CD =	  tmv.STORE_CD
                     AND		tmvp.VENDR_CD =	  tmv.VENDR_CD
                     GROUP
                     BY      tmvp.PROD_CD
                 ) tmv
-        WHERE   tsssc.STORE_CD        =   #{storeCd}
-        AND     tmp.STORE_CD          =   tsssc.STORE_CD
+        WHERE   tmp.STORE_CD          =   tsssc.STORE_CD
+		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})        
+        AND     tsssc.STORAGE_CD      =   '999'        
         AND     tmp.PROD_CD           =   tsssc.PROD_CD
         AND     tmp.STOCK_PROD_YN     =   'Y'
         AND     tmp.USE_YN            =   'Y'
         AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
         AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
         AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
+        AND 	tmp.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+        <if test="storeCd != null and storeCd != ''">
+			AND TMP.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+				#{item}
+			</foreach>
+		</if>
         <if test='prodCd != null and prodCd != ""'>
             AND tsssc.PROD_CD = #{prodCd}
         </if>
@@ -89,21 +136,21 @@
         <if test='weightFg == "1"'>
             AND tmp.PROD_TYPE_FG IN ('2', '3')
         </if>
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
-                                        FROM    DUAL
-                                        UNION
-                                        SELECT  tmpc.PROD_CLASS_CD
-                                        FROM    TB_MS_PRODUCT_CLASS tmpc
-                                        WHERE   tmpc.STORE_CD = #{storeCd}
-                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
-                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+        <if test='prodClassCd != null and prodClassCd != ""'>
+           AND tmp.PROD_CLASS_CD IN  (
+                                       SELECT              PROD_CLASS_CD
+                                       FROM                TB_MS_PRODUCT_CLASS
+                                       WHERE               STORE_CD        = tsssc.STORE_CD
+                                       START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                       AND                 STORE_CD        = tsssc.STORE_CD
+                                       CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                       AND                 STORE_CD        = tsssc.STORE_CD
                                       )
         </if>
         <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
                                     FROM    TB_MS_VENDOR_PROD
-                                    WHERE   STORE_CD = #{storeCd}
+                                    WHERE   STORE_CD = tsssc.STORE_CD
                                     AND     VENDR_CD IN
                                     <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
                                         #{item}

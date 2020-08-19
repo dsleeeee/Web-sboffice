@@ -12,7 +12,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.week"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodWeekCtrlSrch')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnVersusPeriodWeekSearch" ng-click="_broadcast('versusPeriodWeekCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>
@@ -120,24 +120,17 @@
 		</table>
 
 		<div class="mt40 oh sb-select dkbr">
-		    <%-- 페이지 스케일  --%>
-		    <wj-combo-box
-		      class="w100px fl"
-		      id="versusPeriodWeeklistScaleBox"
-		      ng-model="listScale"
-		      control="listScaleCombo"
-		      items-source="_getComboData('versusPeriodWeeklistScaleBox')"
-		      display-member-path="name"
-		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
-		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="versusPeriodWeekSelectStoreStoreNum" ng-model="storeNum">
 			</c:if>
+			
+			<div class="fr">
+		    <%-- 차트 --%>
+		    <button class="btn_skyblue" id="btnShowChart"><s:message code="cmm.chart" /></button>
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
-		    </button>
+		    <button class="btn_skyblue" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" /></button>
+			</div>
+			<div class="clearfix"></div>
 		</div>
 
 		<%--위즈모 테이블--%>
@@ -154,17 +147,17 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.day"/>" 	binding="lvNm" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.day"/>" 	binding="lvNm" 	width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntA" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" 		binding="ratA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt"/>" 	binding="saleDateCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.totRealSaleAmt"/>" 	binding="saleCntB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.rat"/>" binding="ratB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum"  format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -176,9 +169,76 @@
 	    </div>
 	    <%--//위즈모 테이블--%>
 </div>
-<script type="text/javascript">
+
+<%--layer:For Center screen--%>
+<div class="fullDimmed versusPeriodWeekLayer" id="versusPeriodWeekMask" style="display: none"></div>
+<div class="layer versusPeriodWeekLayer" id="versusPeriodWeekLayer" style="display: none; z-index:1499;">
+    <div class="layer_inner">
+
+        <%--layerContent--%>
+        <div class="title" style="width:980px; padding:0">
+            <p class="tit" id="versusPeriodWeekTitle" style="padding-left:20px"><s:message code="cmm.chart" /></p>
+            <a href="#" class="btn_close _btnClose"></a>
+
+            <%--위즈모 테이블--%>
+		    <div class="w100" id="wjWrapType1" ng-controller="versusPeriodWeekChartCtrl">
+		    	<div class="wj-gridWrap" style="display:none;" >
+		    		<wj-flex-grid
+						id="versusPeriodWeekChartGrid"
+						autoGenerateColumns="false"
+						selection-mode="Row"
+						items-source="data"
+						control="flex"
+						is-read-only="true"
+						item-formatter="_itemFormatter">
+						<!-- define columns -->
+						<wj-flex-grid-column header="<s:message code="versusPeriod.category"/>"		binding="searchName"	width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtMon"/>"		binding="realSaleAmtA"	width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtTue"/>"		binding="realSaleAmtB"	width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+					</wj-flex-grid>
+				</div>
+
+				<div class="mt20 oh sb-select dkbr pd10">
+					<!-- 막대 차트 샘플 -->
+					<div>
+						<wj-flex-chart
+							id="versusPeriodWeekBarChart"
+							name="barChart1"
+							class="custom-flex-chart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							binding-x="searchName">
+
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSrch"/>" binding="realSaleAmtA"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtVs"/>" binding="realSaleAmtB"></wj-flex-chart-series>
+
+						</wj-flex-chart>
+					</div>
+				</div>
+			</div>
+               <%--//위즈모 테이블--%>
+        </div>
+
+    </div>
+    <%--//layerContent--%>
+</div>
+<%--//layer:For Center screen--%>
+
+<script>
+$(document).ready(function() {
+
+    $("#btnShowChart").click(function(e) {
+        $("div.versusPeriodWeekLayer").show();
+        $("#btnVersusPeriodWeekSearch").click();
+    });
+
+    $("._btnClose").click(function(e) {
+        $("div.versusPeriodWeekLayer").hide();
+    });
+
+});
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/week/versusPeriodWeek.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/week/versusPeriodWeek.js?ver=20190125.03" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

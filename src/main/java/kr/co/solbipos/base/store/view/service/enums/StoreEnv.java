@@ -44,7 +44,9 @@ public enum StoreEnv implements CodeEnum {
     /** 쿠폰분류 */
     COUPON_CLASS("08"),
     /** 상품권 */
-    GIFT("09");
+    GIFT("09"),
+    /** 입금/출금계정 */
+    ACCOUNT("10");
 
 
     private String code;

@@ -126,10 +126,12 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
       // 주문내역이 분배완료가 아닌 경우 분배 저장버튼 show
       if($scope.procFg !== "20") {
-        $scope.dstbBtnLayer = true;
+//        $scope.dstbBtnLayer.show(true);
+        $("#dstbBtnLayer").show(true);
       }
       else {
-        $scope.dstbBtnLayer = false;
+//        $scope.dstbBtnLayer.hide(true);
+    	  $("#dstbBtnLayer").hide(true);
       }
     });
   };
@@ -196,7 +198,7 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.reqDate       = $scope.reqDate;
       item.slipFg        = $scope.slipFg;
       item.empNo         = "0000";
-      item.storageCd     = "001";
+      item.storageCd     = "999";
       item.hqBrandCd     = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
       item.hdRemark      = $scope.hdRemark;

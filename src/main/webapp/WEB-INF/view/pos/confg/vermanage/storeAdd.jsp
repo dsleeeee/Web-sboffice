@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
 <%-- 매장추가 레이어 --%>
-<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:1160px;height:700px;">
+<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:1160px;height:710px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -52,6 +52,22 @@
                   </wj-combo-box>
                 </div>
               </td>
+              <%-- 매장상태구분 --%>
+              <th><s:message code="verManage.store.sysStatFg" /></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box
+                          id="srchSysStatFg"
+                          ng-model="sysStatFg"
+                          items-source="_getComboData('sysStatFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)"
+                          selected-index-changed="setSelectedSysStatFg(s)">
+                  </wj-combo-box>
+                </div>
+              </td>
               <%-- 본사코드 --%>
               <%--
               <th><s:message code="verManage.store.hqOfficeCd" /></th>
@@ -68,15 +84,17 @@
               --%>
             </tr>
             <tr>
-              <%-- 매장코드 --%>
+              <%-- 매장코드(복수 검색 가능) --%>
               <th><s:message code="verManage.store.storeCd" /></th>
               <td>
-                <input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7" ng-value=""/>
+                <input type="text" id="srchStoreCd" style="width:270px;" ng-value="" oninput="setText()"/>&nbsp;
+                  <input type="checkbox" id="chkMulti" />
+                  <label for="chkMulti">복수검색</label>
               </td>
               <%-- 매장명 --%>
               <th><s:message code="verManage.store.storeNm" /></th>
               <td>
-                <input type="text" id="srchStoreNm" class="sb-input w100" maxlength="20" ng-value=""/>
+                <input type="text" id="srchStoreNm" ng-value=""/>
               </td>
             </tr>
             </tbody>
@@ -89,7 +107,7 @@
 
         <%-- 등록매장 그리드 --%>
         <div class="oh mt40 w50 fl">
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden;">
+          <div class="wj-TblWrap mr10" style="height:405px; overflow-y: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.registed"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -105,13 +123,13 @@
                       item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="80" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
 
               </wj-flex-grid>
             </div>
@@ -122,7 +140,7 @@
       <%--- 미등록매장 그리드 --%>
       <div class="oh mt40 w50 ">
         <div class=" ">
-          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" ng-controller="allStoreCtrl">
+          <div class="wj-TblWrap ml10" style="height:405px; overflow-y: hidden;" ng-controller="allStoreCtrl">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.noRegisted" /></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="save()" ><s:message code="verManage.regist.new" /></a></span>
@@ -138,13 +156,13 @@
                       item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="66" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="80" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="80" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="80" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -153,4 +171,18 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20190122.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20200423.04" charset="utf-8"></script>
+
+<script>
+  $(document).ready(function(){
+    $("#chkMulti").change(function(){
+      if($("#chkMulti").is(":checked")){
+        setText();
+      }else{
+      }
+    });
+  });
+
+  var sysStatFgTotal = ${ccu.getCommCodeSelect("005")};
+</script>

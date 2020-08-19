@@ -11,4 +11,7 @@ public interface ProdPayFgService {
     
     /** 상품별 매출 - 결제수단 컬럼 리스트 조회 */
     List<DefaultMap<String>> getPayColList(ProdPayFgVO prodPayFgVO, SessionInfoVO sessionInfoVO);
+    
+    /** 상품별 매출 - 결제수단 엑셀 리스트 조회 */
+    List<DefaultMap<String>> getProdPayFgExcelList(ProdPayFgVO prodPayFgVO, SessionInfoVO sessionInfoVO);
 }

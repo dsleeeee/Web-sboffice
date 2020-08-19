@@ -134,7 +134,12 @@ app.controller('prodStockInfoCtrl', ['$scope', '$http', '$timeout', function ($s
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.vendrCd   = $("#prodStockInfoSelectVendrCd").val();
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/vendr/prodStockInfo/prodStockInfo/list.sb", params);
   };
@@ -183,7 +188,12 @@ app.controller('prodStockInfoCtrl', ['$scope', '$http', '$timeout', function ($s
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

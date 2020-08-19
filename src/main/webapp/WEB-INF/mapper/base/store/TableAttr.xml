@@ -6,13 +6,59 @@
   <select id="selectXmlByStore" parameterType="DefaultMap" resultType="String">
     /* TableAttrMapper.selectXmlByStore */
      SELECT XML
-       FROM TB_WB_STORE_CONFG_XML A
+       FROM TB_WB_STORE_TABLE_CONFG_XML A
       WHERE A.STORE_CD = #{storeCd}
         AND A.CONFG_FG = #{confgFg}
+  	<if test='confgSubFg != null and confgSubFg != ""'>
+        AND A.CONFG_SUB_FG = #{confgSubFg}
+    </if>
         AND A.USE_YN = 'Y'
+        AND ROWNUM = 1
   </select>
 
-  <select id="selectDefaultXml" resultType="tableAttrVO">
+  <select id="selectXmlByStoreTable" parameterType="DefaultMap" resultType="String">
+    /* TableAttrMapper.selectXmlByStore */
+    SELECT XML
+      FROM (
+      		SELECT XML, MOD_DT
+      		  FROM (
+      		  		SELECT XML, NVL(MOD_DT,1) AS MOD_DT
+      		  		  FROM TB_WB_STORE_TABLE_CONFG_XML A
+      		  		 WHERE A.STORE_CD = #{storeCd}
+      		  		   AND A.CONFG_FG = '30'
+      		  		   AND A.CONFG_SUB_FG = #{tblTypeFg}
+      		  		   AND A.USE_YN = 'Y'
+      		  		 UNION ALL
+      		  		SELECT XML, NVL(MOD_DT,1) AS MOD_DT
+      		  		  FROM TB_WB_STORE_TABLE_CONFG_XML A
+      		  		 WHERE A.STORE_CD = #{storeCd}
+      		  		   AND A.CONFG_FG = '40'
+      		  		   AND A.CONFG_SUB_FG = #{confgSubFg}
+      		  		   AND A.USE_YN = 'Y'
+      		  	   )
+      		 ORDER BY MOD_DT DESC
+			)
+	  WhERE ROWNUM = 1
+  </select>
+
+  <select id="selectTblAttrCommCode" resultType="tableAttrVO">
+    /* TableAttrMapper.selectTblAttrCommCode */
+     SELECT NMCODE_GRP_CD,
+            NMCODE_CD,
+            NMCODE_NM,
+            NMCODE_ITEM_1,
+            NMCODE_ITEM_2,
+            USE_COL_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+      FROM TB_CM_NMCODE
+     WHERE NMCODE_GRP_CD = '207'
+     ORDER BY NMCODE_CD ASC
+  </select>
+
+  <select id="selectDefaultXml" parameterType="DefaultMap" resultType="tableAttrVO">
     /* TableAttrMapper.selectDefaultXml */
      SELECT TBL_TYPE_FG,
             ATTR_CD,
@@ -27,17 +73,27 @@
             FONT_NM,
             FONT_SIZE,
             FONT_STYLE_FG,
-            FONT_COLOR
+            FONT_COLOR,
+            USE_YN
        FROM TB_CM_TABLE_ATTR A
-      WHERE A.USE_YN = 'Y'
+            , (
+            	SELECT NMCODE_CD
+            	  FROM TB_CM_NMCODE
+            	 WHERE NMCODE_GRP_CD = '035'
+            ) B
+      WHERE A.TBL_TYPE_FG = B.NMCODE_CD
+        AND A.USE_YN = 'Y'
+        AND A.TBL_TYPE_FG = #{tblTypeFg}
+      ORDER BY TBL_TYPE_FG, ATTR_CD
   </select>
 
   <update id="insertStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.insertStoreConfgXml */
-    INSERT INTO TB_WB_STORE_CONFG_XML A
+    INSERT INTO TB_WB_STORE_TABLE_CONFG_XML A
     (
         A.STORE_CD,
         A.CONFG_FG,
+        A.CONFG_SUB_FG,
         A.XML,
         A.USE_YN,
         A.REG_DT,
@@ -46,8 +102,9 @@
     VALUES (
         #{storeCd},
         #{confgFg},
+        #{confgSubFg},
         #{xml:CLOB},
-        #{useYn},
+        NVL(#{useYn}, 'Y'),
         #{regDt},
         #{regId}
     )
@@ -55,29 +112,33 @@
 
   <update id="updateStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.updateStoreConfgXml */
-    UPDATE TB_WB_STORE_CONFG_XML A
+    UPDATE TB_WB_STORE_TABLE_CONFG_XML A
        SET A.XML = #{xml:CLOB},
-           A.USE_YN = #{useYn},
+           A.USE_YN = NVL(#{useYn}, 'Y'),
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
      WHERE STORE_CD = #{storeCd}
        AND CONFG_FG = #{confgFg}
+       AND CONFG_SUB_FG = #{confgSubFg}
   </update>
 
   <update id="_mergeStoreConfgXml" parameterType="DefaultMap">
     /* TableAttrMapper.mergeStoreConfgXml */
-    MERGE INTO TB_WB_STORE_CONFG_XML A
+    MERGE INTO TB_WB_STORE_TABLE_CONFG_XML A
     USING (SELECT #{storeCd} STORE_CD,
-                  #{confgFg} CONFG_FG
+                  #{confgFg} CONFG_FG,
+                  #{confgSubFg} CONFG_SUB_FG
              FROM DUAL
           ) ORG
     ON (  A.STORE_CD = ORG.STORE_CD
-      AND A.CONFG_FG = ORG.CONFG_FG)
+      AND A.CONFG_FG = ORG.CONFG_FG
+      AND A.CONFG_SUB_FG = ORG.CONFG_SUB_FG
+      )
 
     WHEN MATCHED THEN
     UPDATE
        SET A.XML = #{xml:CLOB},
-           A.USE_YN = #{useYn},
+           A.USE_YN = NVL(#{useYn}, 'Y'),
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
 
@@ -85,6 +146,7 @@
     INSERT (
         A.STORE_CD,
         A.CONFG_FG,
+        A.CONFG_SUB_FG,
         A.XML,
         A.USE_YN,
         A.REG_DT,
@@ -93,8 +155,9 @@
     VALUES (
         #{storeCd},
         #{confgFg},
+        #{confgSubFg},
         #{xml:CLOB},
-        #{useYn},
+        NVL(#{useYn}, 'Y'),
         #{regDt},
         #{regId}
     )
@@ -105,7 +168,7 @@
     MERGE INTO TB_MS_TABLE_ATTR A
     USING (SELECT #{storeCd} STORE_CD,
                   #{tblTypeFg} TBL_TYPE_FG,
-                  #{attrCd} ATTR_CD
+                  LPAD(#{attrCd}, 2, '0') ATTR_CD
              FROM DUAL
           ) ORG
     ON (  A.STORE_CD = ORG.STORE_CD
@@ -125,7 +188,7 @@
            A.FONT_SIZE = #{fontSize},
            A.FONT_STYLE_FG = #{fontStyleFg},
            A.FONT_COLOR = #{fontColor},
-           A.USE_YN = #{useYn},
+           A.USE_YN = nvl(#{useYn},'Y'),
 
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
@@ -155,7 +218,82 @@
     VALUES (
         #{storeCd},
         #{tblTypeFg},
-        #{attrCd},
+        LPAD(#{attrCd}, 2, '0'),
+        #{attrNm},
+        #{x},
+        #{y},
+        #{width},
+        #{height},
+        #{textalignFg},
+        #{imgNm},
+        #{fontNm},
+        #{fontSize},
+        #{fontStyleFg},
+        #{fontColor},
+        nvl(#{useYn},'Y'),
+        #{regDt},
+        #{regId},
+        #{regDt},
+        #{regId}
+    )
+  </update>
+
+  <update id="mergeStoreTableNumAttr" parameterType="tableAttrVO">
+    /* TableAttrMapper.mergeStoreTableNumAttr */
+    MERGE INTO TB_MS_TABLE_ATTR_NEW A
+    USING (SELECT #{storeCd} STORE_CD,
+                  LPAD(#{tblCd}, 3, '0') TBL_CD,
+                  LPAD(#{attrCd}, 2, '0') ATTR_CD
+             FROM DUAL
+          ) ORG
+    ON (  A.STORE_CD = ORG.STORE_CD
+      AND A.TBL_CD = ORG.TBL_CD
+      AND A.ATTR_CD = ORG.ATTR_CD)
+
+     WHEN MATCHED THEN
+    UPDATE
+       SET A.ATTR_NM = #{attrNm},
+           A.X = #{x},
+           A.Y = #{y},
+           A.WIDTH = #{width},
+           A.HEIGHT = #{height},
+           A.TEXTALIGN_FG = #{textalignFg},
+           A.IMG_NM = #{imgNm},
+           A.FONT_NM = #{fontNm},
+           A.FONT_SIZE = #{fontSize},
+           A.FONT_STYLE_FG = #{fontStyleFg},
+           A.FONT_COLOR = #{fontColor},
+           A.USE_YN = #{useYn},
+
+           A.MOD_DT = #{regDt},
+           A.MOD_ID = #{regId}
+
+    WHEN NOT MATCHED THEN
+    INSERT (
+        A.STORE_CD,
+        A.TBL_CD,
+        A.ATTR_CD,
+        A.ATTR_NM,
+        A.X,
+        A.Y,
+        A.WIDTH,
+        A.HEIGHT,
+        A.TEXTALIGN_FG,
+        A.IMG_NM,
+        A.FONT_NM,
+        A.FONT_SIZE,
+        A.FONT_STYLE_FG,
+        A.FONT_COLOR,
+        A.USE_YN,
+        A.REG_DT,
+        A.REG_ID,
+        A.MOD_DT,
+        A.MOD_ID
+    )
+    VALUES (
+        #{storeCd},
+        LPAD(#{tblCd}, 3, '0'),
+        LPAD(#{attrCd}, 2, '0'),
         #{attrNm},
         #{x},
         #{y},
@@ -175,6 +313,3 @@
     )
   </update>
 </mapper>
-
-
-

@@ -49,7 +49,10 @@
                ) tcpvs
          WHERE tcpvs.VER_SER_NO (+)= tcpv.VER_SER_NO
         <if test='verSerNo != null and verSerNo != ""'>
-           AND tcpv.VER_SER_NO = #{verSerNo}
+           AND tcpv.VER_SER_NO LIKE '%' || #{verSerNo} || '%'
+        </if>
+        <if test='verSerNm != null and verSerNm != ""'>
+            AND tcpv.VER_SER_NM LIKE '%' || #{verSerNm} || '%'
         </if>
         <if test='fileDesc != null and fileDesc != ""'>
            AND tcpv.FILE_DESC = #{fileDesc}
@@ -266,10 +269,19 @@
         <if test='storeCd != null and storeCd != ""'>
            AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
         </if>
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+            AND tms.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
         <if test='storeNm != null and storeNm != ""'>
            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
-         ORDER BY HQ_OFFICE_CD,  STORE_CD
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY HQ_OFFICE_CD, STORE_CD
     </select>
 
     <!-- 버전 적용 매장 등록   -->

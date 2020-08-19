@@ -31,14 +31,14 @@
         <%-- 그룹명 --%>
         <th><s:message code="authGroup.authGrpNm" /></th>
         <td>
-          <div class="sb-select fl">
+          <div class="sb-select w100">
             <div id="grpNm" class="sb-input"></div>
           </div>
         </td>
         <%-- 사용여부 --%>
         <th><s:message code="cmm.useYn" /></th>
         <td>
-          <div class="sb-select w40">
+          <div class="sb-select w100">
             <div id="useYn"></div>
           </div>
         </td>
@@ -47,15 +47,15 @@
         <%-- 예외 관리 // TODO 검색조건에 누락됨 --%>
         <th><s:message code="authGroup.exceptMng" /></th>
         <td>
-          <div class="sb-select fl w40">
+          <div class="sb-select w100">
             <div id="availCombo"></div>
           </div>
         </td>
         <%-- 예외 관리 --%>
         <th><s:message code="authGroup.exceptMng" /></th>
         <td>
-          <div class="sb-select fl">
-            <div id="userId" class="sb-input"></div>
+          <div class="sb-select w80" style="float: left;">
+            <div id="userId"></div>
           </div>
           <a href="#" class="btn_grayS ml5" id="btnExceptMng"><s:message code="authGroup.exceptMng"/></a>
         </td>
@@ -91,7 +91,7 @@
         </div>
         <%--위즈모 트리  // todo height 조정--%>
         <%--<div id="treeResrce" style="height:430px; "></div>--%>
-        <div id="treeResrce" style="height:auto;overflow: hidden; "></div>
+        <div class="theTreeAll_cls" id="treeResrce" style="height:auto;overflow: hidden; "></div>
         <%--//위즈모 트리--%>
       </div>
     </div>
@@ -123,7 +123,7 @@
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     grid.isReadOnly  = false;
     var grpNm        = wcombo.genInput("#grpNm");
-    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("904")});
+    var useYn        = wcombo.genCommonBox("#useYn", ${ccu.getCommCode("067")});
     var availCombo   = wcombo.genCommonBox("#availCombo", ${availAuthGrp});
     var userId       = wcombo.genInput("#userId");
 

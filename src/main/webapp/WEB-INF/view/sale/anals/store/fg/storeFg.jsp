@@ -43,8 +43,8 @@
 				<th><s:message code="store.prodFg" /></th>
 			    <td>
 			        <input type="text" class="sb-input w50" id="srchStoreFgProdNm" ng-model="prodCdNm" ng-click="popUpProd()" style="float: left;" placeholder="선택" readonly/>
-			        <input type="hidden" id="srchStoreFgProdCd" ng-model="prodCd" disabled />
-			        <input type="hidden" id="srchStoreFgProdClassCd" ng-model="prodCalssCd" disabled />
+			        <input type="hidden" id="srchStoreFgProdCd" name="srchStoreFgProdCd" ng-model="prodCd" disabled />
+			        <input type="hidden" id="srchStoreFgProdClassCd" name="srchStoreFgProdClassCd" ng-model="prodClassCd" disabled />
 			        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdCd" style="margin-left: 5px;" ng-click="delProd()"><s:message code="cmm.selectCancel"/></button>
 			    </td>
 			    <%-- 매장유형선택 --%>
@@ -64,17 +64,17 @@
 
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
-            <%-- 매장코드 --%>           
+            <%-- 매장코드 --%>
 	            <th><s:message code="todayBillSaleDtl.store"/></th>
 	            <td colspan="3">
 	                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
 	                    <jsp:param name="targetId" value="storeFgSelectStore"/>
 	                </jsp:include>
 	                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-	            </td>   
+	            </td>
 	        </tr>
-	        </c:if> 
-	        <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+	        </c:if>
+	        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	            <input type="hidden" id="storeFgSelectStoreCd" value="${sessionInfo.storeCd}"/>
 	        </c:if>
 		</tbody>
@@ -100,14 +100,14 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="store.storeFg"/>"  binding="clsFg"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 	binding="storeNm" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" binding="totDcAmt" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.saleCnt"/>" 	binding="saleCnt" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.ratRealSaleAmt"/>" 		binding="ratRealSaleAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="store.ratCnt"/>" 	binding="ratCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.storeFg"/>"  			binding="clsFg"       		width="*" align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.storeNm"/>" 			binding="storeNm" 			width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 		binding="totSaleAmt" 		width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>" 			binding="totDcAmt" 			width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 		binding="realSaleAmt" 		width="*" align="right" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.saleCnt"/>" 			binding="saleCnt" 			width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.ratRealSaleAmt"/>" 	binding="ratRealSaleAmt" 	width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="store.ratCnt"/>" 			binding="ratCnt" 			width="*" align="center" 	is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -122,3 +122,9 @@
 	</div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.02" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 상품정보 --%>
+<c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

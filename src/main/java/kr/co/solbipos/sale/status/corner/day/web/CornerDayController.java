@@ -21,16 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * @Class Name : TodayBillSaleDtlController.java
- * @Description : 매출관리 > 매출현황 > 영수증별매출상세현황
+ * @Class Name : CornerDayController.java
+ * @Description : 매출관리 > 매출현황 > 코너별매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2019.02.15  안동관      최초생성
+ * @ 2020.02.15  조동훤      최초생성
  *
- * @author 솔비포스 차세대개발실 안동관
- * @since 2019.02.15
+ * @author 
+ * @since 2020.02.15
  * @version 1.0
  * @see
  *
@@ -70,7 +70,7 @@ public class CornerDayController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   cornerDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -92,7 +92,7 @@ public class CornerDayController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   cornerDaylVO
+     * @param   cornerDayVO
      * @return  String
      * @author  조동훤
      * @since   2020. 01. 13.
@@ -105,6 +105,27 @@ public class CornerDayController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         
         List<DefaultMap<String>> list = cornerDayService.getCornerNmList(cornerDayVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, cornerDayVO);
+    }
+    
+    /**
+     * 코너별매출 일자별 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   cornerDayVO
+     * @return  String
+     * @author  조동훤
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/day/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCornerDayExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, CornerDayVO cornerDayVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        
+        List<DefaultMap<String>> list = cornerDayService.getCornerDayExcelList(cornerDayVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, cornerDayVO);
     }
 

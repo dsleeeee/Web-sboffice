@@ -2,10 +2,8 @@ package kr.co.solbipos.sale.status.pos.day.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sale.status.pos.day.service.PosDayVO;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Mapper
@@ -13,6 +11,9 @@ import java.util.List;
 public interface PosDayMapper {
 	/** 포스별매출 일자별 탭 - 매장 및 포스 리스트 조회 */
     List<DefaultMap<String>> getStorePosList(PosDayVO posDayVO);
+
+    /** 포스별매출 일자별 탭 - 매장 및 포스 리스트 조회(엑셀) */
+    List<DefaultMap<String>> getPosDayExcelList(PosDayVO posDayVO);
 
     /** 포스별매출 일자별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getPosDayList(PosDayVO posDayVO);

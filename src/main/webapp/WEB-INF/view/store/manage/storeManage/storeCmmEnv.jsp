@@ -18,7 +18,7 @@
     </button>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeCmmEnv.js?ver=2018110701" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeCmmEnv.js?ver=20181107.01" charset="utf-8"></script>
 
 <script>
 var envstGrp = ${ccu.getCommCodeExcpAll("004")};

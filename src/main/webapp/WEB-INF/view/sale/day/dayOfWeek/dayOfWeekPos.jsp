@@ -89,6 +89,13 @@
                     </c:forEach>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="dayOfWeekPosCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -99,4 +106,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekPos.js?ver=20200103" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekPos.js?ver=20200103.01" charset="utf-8"></script>

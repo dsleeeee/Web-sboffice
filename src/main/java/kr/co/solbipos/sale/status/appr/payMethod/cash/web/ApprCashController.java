@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.payMethod.cash.service.ApprCashVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -86,5 +86,26 @@ public class ApprCashController {
         List<DefaultMap<String>> list = apprCashService.getApprCashList(apprCashVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprCashVO);
     }
-    
+
+    /**
+     * 신용카드 승인현황 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/cash/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprCashExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprCashVO apprCashVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprCashService.getApprCashExcelList(apprCashVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprCashVO);
+    }
+
 }

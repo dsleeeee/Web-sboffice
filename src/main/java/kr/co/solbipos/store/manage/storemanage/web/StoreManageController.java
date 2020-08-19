@@ -27,6 +27,7 @@ import java.util.Map;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
  * @Class Name : StoreManageController.java
@@ -72,8 +73,15 @@ public class StoreManageController {
      * @since 2018.06.08
      */
     @RequestMapping(value = "storeManage/view.sb", method = RequestMethod.GET)
-    public String list(HttpServletRequest request, HttpServletResponse response,
+    public String list(StoreManageVO storeManageVO, HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 메뉴권한 복사할 본사목록 조회
+        List<DefaultMap<String>> authHqList = service.authHqList(storeManageVO, sessionInfoVO);
+        model.addAttribute("authHqList", convertToJson(authHqList));
+
         return "store/manage/storeManage/storeManage";
     }
 
@@ -95,6 +103,28 @@ public class StoreManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         List<DefaultMap<String>> list = service.getStoreList(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeManageVO);
+    }
+
+    /**
+     * 매장 목록 - 엑셀조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 김지은
+     * @since 2020.04.23
+     */
+    @RequestMapping(value = "storeManage/getStoreExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreExcelList(StoreManageVO storeManageVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreExcelList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, storeManageVO);
     }
@@ -132,7 +162,9 @@ public class StoreManageController {
     public Result getStoreComboList(StoreManageVO storeManageVO, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = service.getStoreComboList(storeManageVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = service.getStoreComboList(storeManageVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list);
     }
@@ -610,4 +642,164 @@ public class StoreManageController {
         return returnJson(Status.OK, storeCdCnt);
     }
 
+    /**
+     * 권한그룹복사를 위한 매장목록 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.05.12
+     */
+    @RequestMapping(value = "storeManage/getAuthStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAuthStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 메뉴권한 복사할 본사목록 조회
+        List<DefaultMap<String>> getAuthStoreList = service.authStoreList(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, getAuthStoreList);
+    }
+
+    /**
+     * 사용메뉴 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.05.12
+     */
+    @RequestMapping(value = "storeManage/avlblMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMenu(StoreManageVO storeManageVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMenu = service.avlblMenu(storeManageVO);
+
+        return returnListJson(Status.OK, avlblMenu);
+    }
+
+    /**
+     * 미사용메뉴 조회
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2020.05.12
+     */
+    @RequestMapping(value = "storeManage/beUseMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMenu (StoreManageVO storeManageVO, HttpServletRequest request,
+                      HttpServletResponse response, Model model) {
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMenu  = service.beUseMenu (storeManageVO);
+
+        return returnListJson(Status.OK, beUseMenu );
+    }
+
+    /**
+     * 메뉴권한복사
+     * @param   storeMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  이다솜
+     * @since   2020. 05. 14.
+     */
+    @RequestMapping(value = "storeManage/copyAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyAuth(@RequestBody StoreMenuVO storeMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.copyAuth(storeMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 추가
+     * @param   storeMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "storeManage/addAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addAuth(@RequestBody StoreMenuVO[] storeMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.addAuth(storeMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사용메뉴 삭제
+     * @param   storeMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김지은
+     * @since   2018. 06. 08.
+     */
+    @RequestMapping(value = "storeManage/removeAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeAuth(@RequestBody StoreMenuVO[] storeMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.removeAuth(storeMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 사업자번호 중복체크
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2020. 08. 14.
+     */
+    @RequestMapping(value = "/storeManage/bizNoCheckCount.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result bizNoCheckCount(StoreManageVO storeManageVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 사업자번호 정리
+        String bizNo = storeManageVO.getBizNo1() + storeManageVO.getBizNo2() + storeManageVO.getBizNo3();
+        storeManageVO.setBizNo(bizNo);
+
+        DefaultMap<String> result = service.bizNoCheckCount(storeManageVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+//        System.out.println("test1111 : " + result);
+
+        return returnJson(Status.OK, resultMap);
+    }
 }

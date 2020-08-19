@@ -142,7 +142,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.$broadcast('loadingPopupActive');
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -159,7 +159,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
         if (!$.isEmptyObject(response.data.data)) {
           var data = response.data.data;
 
-          $("#billSubTitle").html('매장 : '+'['+data.storeCd+']'+ data.storeNm+' , 매출일자 : '+getFormatDate($scope.saleDate)+' , 포스번호 : '+$scope.posNo+' , 영수번호 : '+$scope.billNo);
+          $("#billSubTitle").html('매장 : '+'['+data.storeCd+']'+ data.storeNm+'  |  매출일자 : '+getFormatDate($scope.saleDate)+'  |  포스번호 : '+$scope.posNo+'  |  영수번호 : '+$scope.billNo);
 
           data.totSaleAmt   = addComma(data.totSaleAmt);
           data.totDcAmt     = addComma(data.totDcAmt);
@@ -180,6 +180,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
           $scope.billInfo = data; // view 종합내역에 조회한 값 세팅
           $scope.getBillPayInfo(); // 결제내역 조회
         }
+        $scope.$broadcast('loadingPopupInactive');
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -202,7 +203,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillPayInfo = function () {
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -250,7 +251,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.getBillGuestInfo = function () {
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -300,7 +301,7 @@ app.controller('billInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchBillInfoProdList = function () {
     // 파라미터
     var params       = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd   = $scope.storeCd;
     params.saleDate  = $scope.saleDate;
     params.posNo     = $scope.posNo;
@@ -429,7 +430,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.posNo     = data.posNo;
     $scope.billNo    = data.billNo;
 
-    $("#orgBillSubTitle").html(messages['billInfo.orgBill']+' - 원거래매출일자 : '+getFormatDate($scope.saleDate)+' , 원거래포스번호 : '+$scope.posNo+' , 원거래영수번호 : '+$scope.billNo);
+    $("#orgBillSubTitle").html(messages['billInfo.orgBill']+'  |  원거래 매출일자 : '+getFormatDate($scope.saleDate)+'  |  원거래 포스번호 : '+$scope.posNo+'  |  원거래 영수번호 : '+$scope.billNo);
 
     $scope.getOrgBillInfo();
 
@@ -444,7 +445,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.$broadcast('loadingPopupActive');
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -473,6 +474,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
           $scope.orgBillInfo = data; // view 종합내역에 조회한 값 세팅
           $scope.getOrgBillPayInfo(); // 결제내역 조회
         }
+        $scope.$broadcast('loadingPopupInactive');
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs
@@ -495,7 +497,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.getOrgBillPayInfo = function () {
 
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;
@@ -519,7 +521,56 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
           }
 
           $scope.orgBillPayInfo = data; // view 결제내역에 조회한 값 세팅
-          $scope.searchOrgBillInfoProdList(); // 원거래영수증 상품 리스트 조회
+          $scope.getOrgBillGuestInfo(); // 방문인원 조회
+        }
+      }
+    }, function errorCallback(response) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+      // 로딩바 hide
+      $scope.$broadcast('loadingPopupInactive');
+      if (response.data.message) {
+        $scope._popMsg(response.data.message);
+      } else {
+        $scope._popMsg(messages['cmm.error']);
+      }
+      return false;
+    }).then(function () {
+      // "complete" code here
+    });
+  };
+
+  // 영수증 방문인원 조회
+  $scope.getOrgBillGuestInfo = function () {
+
+    var params      = {};
+    params.hqOfficeCd = hqOfficeCd;
+    params.storeCd  = $scope.storeCd;
+    params.saleDate = $scope.saleDate;
+    params.posNo    = $scope.posNo;
+    params.billNo   = $scope.billNo;
+
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : '/sale/cmmSalePopup/billInfo/billInfo/billGuestInfo.sb', /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data)) {
+          var data = response.data.data;
+
+          data.guest01 = (nvl(data.guest01, '') !== '' ? addComma(data.guest01) : '');
+          data.guest02 = (nvl(data.guest02, '') !== '' ? addComma(data.guest02) : '');
+          data.guest03 = (nvl(data.guest03, '') !== '' ? addComma(data.guest03) : '');
+          data.guest04 = (nvl(data.guest04, '') !== '' ? addComma(data.guest04) : '');
+
+          $scope.orgBillGuestInfo = data;
+          $scope.$broadcast('loadingPopupInactive');
+
+          // 영수증 상품내역 리스트 조회
+          $scope.searchOrgBillInfoProdList();
         }
       }
     }, function errorCallback(response) {
@@ -543,7 +594,7 @@ app.controller('orgBillInfoCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.searchOrgBillInfoProdList = function () {
     // 파라미터
     var params      = {};
-    params.hqOfficeCd = orgnCd;
+    params.hqOfficeCd = hqOfficeCd;
     params.storeCd  = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.posNo    = $scope.posNo;

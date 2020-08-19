@@ -100,13 +100,16 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND		STORAGE_CD = '999'
                 )   tshsc
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_STORE_STOCK_CUR
                     WHERE   STORE_CD  =   #{storeCd}
+                    AND		STORAGE_CD = '999'
                 )   tsssc
         ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
+        AND		tphsd.STORE_CD  	 =   #{storeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
         AND     tphsd.SLIP_FG        =   #{slipFg}
         AND     tphsd.PROC_FG        =   #{procFg}
@@ -280,6 +283,7 @@
         ,       (   SELECT  PROD_CD, CURR_QTY
                     FROM    TB_ST_HQ_STOCK_CUR
                     WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     STORAGE_CD = '999'
                 )   tshsc
         ,       (   SELECT  tphsd.STORE_CD, tphsd.PROD_CD, tphsd.SLIP_FG, tphsd.PO_UNIT_QTY
                     ,       SUM(DECODE(tphsd.MGR_TOT_QTY, 0, tphsd.MD_TOT_QTY, tphsd.MGR_TOT_QTY)) AS PREV_MGR_UNIT_QTY
@@ -340,6 +344,7 @@
         <![CDATA[
         WHERE   tmp.STORE_CD          =   #{storeCd}
         AND     tmp.USE_YN            =   'Y'
+        AND     tsssc.STORAGE_CD  (+) =    '999'
         AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
         AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
@@ -351,6 +356,7 @@
         AND     tmpb.PROD_CD      (+) =   tmp.PROD_CD
         AND     the.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     the.ENVST_CD          =   '0011'
+        AND     thp.PROD_CD NOT IN  (SELECT PROD_CD FROM TB_PO_HQ_STORE_DISTRIBUTE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND REQ_DATE = #{reqDate} AND PROC_FG IN ('20','30') AND SLIP_FG = 1)
         ]]>
         <if test='prodCd != null and prodCd != ""'>
             AND tmp.PROD_CD = #{prodCd}
@@ -362,7 +368,8 @@
             AND tmpb.BARCD_CD = #{barcdCd}
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
-            AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+
+<!--             AND tmp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD 
                                         FROM    DUAL
                                         UNION
                                         SELECT  tmpc.PROD_CLASS_CD
@@ -371,6 +378,21 @@
                                         START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
                                         CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
                                       )
+                          -->
+			AND	tmp.PROD_CLASS_CD in (SELECT
+									      PROD_CLASS_CD
+									  FROM
+									      TB_MS_PRODUCT_CLASS tmpc
+									  WHERE
+									      tmpc.STORE_CD = #{storeCd}
+									  START WITH
+									      tmpc.PROD_CLASS_CD = #{prodClassCd}
+									      AND tmpc.STORE_CD = #{storeCd}
+									  CONNECT BY
+									      PRIOR tmpc.PROD_CLASS_CD = tmpc.P_PROD_CLASS_CD
+									      AND tmpc.STORE_CD = #{storeCd}
+			)
+			                                      
         </if>
         <if test='option1 == "S"'>
             <![CDATA[
@@ -532,7 +554,7 @@
         )
         SELECT  #{hqOfficeCd}   ,   #{date}         ,   ${seq}+(ROWNUM-1)
         ,       #{storeCd}      ,   '0000'          ,   #{slipFg}
-        ,       '0'             ,   '001'           ,   '00'
+        ,       '0'             ,   '999'           ,   '00'
         ,       tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
         ,       tmp.SPLY_UPRC
         ,       tpte.UNIT_QTY * ${slipFg} AS MGR_UNIT_QTY

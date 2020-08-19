@@ -33,6 +33,9 @@ public interface StoreManageMapper {
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);
 
+    /** 매장 목록 엑셀조회 */
+    List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO);
+
     /** 매장 상세 조회 */
     DefaultMap<String> getStoreDetail(StoreManageVO storeManageVO);
 
@@ -75,11 +78,17 @@ public interface StoreManageMapper {
     /** 매장 웹 사용자 등록 */
     int insertStoreWebUser(StoreManageVO storeManageVO);
 
-    /** 포스 출력물 마스터 등록 (단독) */
+    /** 포스 출력물 템플릿 등록 (단독) */
     int insertDefaultPrintTemplete(StoreManageVO storeManageVO);
 
-    /** 포스 출력물 마스터 등록(프랜차이즈) */
+    /** 포스 실제출력물 등록 (단독) */
+    int insertDefaultPrint(StoreManageVO storeManageVO);
+
+    /** 포스 출력물 템플릿 등록 (프랜차이즈) */
     int insertHqPrintTemplete(StoreManageVO storeManageVO);
+
+    /** 포스 실제출력물 등록 (프랜차이즈) */
+    int insertHqPrint(StoreManageVO storeManageVO);
 
     /** 포스 마스터 등록*/
     int insertPosInfo(StoreManageVO storeManageVO);
@@ -134,6 +143,9 @@ public interface StoreManageMapper {
 
     /** 포스설정 XML정보 복사 */
     int copyPosConfXml(ConfgXmlVO confgXmlVO);
+
+    /** 포스기능키별 적용매장 등록 */
+    int registPosFnkeyStore(StoreFnkeyVO storeFnkeyVO);
 
     /** 터치키 분류 복사 TODO */
     int copyFnkeyClassCopy(TouchKeyClassVO touchkeyClassVO);
@@ -261,5 +273,39 @@ public interface StoreManageMapper {
     /** 매장코드 중복체크*/
     int getStoreCdCnt(StoreManageVO storeManageVO);
 
-}
+    /** 권한그룹복사를 위한 본사목록 조회 */
+    List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO);
 
+    /** 권한그룹복사를 위한 매장목록 조회 */
+    List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO);
+
+    /** 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO);
+
+    /** 미사용 메뉴 조회 */
+    List<DefaultMap<String>> beUseMenu(StoreManageVO storeManageVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(StoreMenuVO storeMenuVO);
+
+    /** 권한예외 복사 시, 복사기준본사의 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMenu(StoreMenuVO storeMenuVO);
+
+    /** 권한예외 복사 */
+    int copyAuthExcp(StoreMenuVO storeMenuVO);
+
+    /** 권한확인 */
+    int isAuth(StoreMenuVO storeMenus);
+
+    /** 메뉴권한 추가*/
+    int addAuth(StoreMenuVO storeMenus);
+
+    /** 권한 삭제 */
+    int removeAuth(StoreMenuVO storeMenus);
+
+    /** 권한 전체 삭제 */
+    int removeAuthAll(StoreMenuVO storeMenus);
+
+    /** 사업자번호 중복체크 */
+    DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO);
+}

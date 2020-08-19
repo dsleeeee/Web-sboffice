@@ -36,7 +36,7 @@
 				, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
 				${sQuery2}
 			FROM TB_SL_DAILY_EMPLOYEE TSDE
-			WHERE 1 = 1
+			WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='storeCd != null and storeCd != ""'>
 			   AND TSDE.STORE_CD	IN
 			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -58,6 +58,58 @@
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
+	<!-- 상품별매출 - 분류별 리스트(엑셀) 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : todayBillSaleDtlVO
+        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+    -->
+    <select id="getEmpDayExcelList" parameterType="empDayVO" resultType="DefaultMap">
+        /* USE : EmpDayMapper.getEmpDayExcelList */
+        SELECT A.SALE_DATE
+		      , A.STORE_CNT	
+		      , TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'),'DY') YOIL
+		      , SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+		      , SUM(A.TOT_BILL_CNT) AS TOT_BILL_CNT
+			  ${sQuery1}
+		FROM 
+		(
+			SELECT TSDE.SALE_DATE 
+        		,( SELECT COUNT(TMS.STORE_CD)	  
+					FROM TB_MS_STORE TMS
+					WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+					<if test='storeCd != null and storeCd != ""'>
+					   AND TMS.STORE_CD	IN
+				        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                    </foreach>
+					</if>
+			     ) AS STORE_CNT
+				, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT
+				, SUM(TSDE.BILL_CNT) AS TOT_BILL_CNT
+				${sQuery2}
+			FROM TB_SL_DAILY_EMPLOYEE TSDE
+			WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+			<if test='storeCd != null and storeCd != ""'>
+			   AND TSDE.STORE_CD	IN
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+			</if>
+			<if test='startDate != null and startDate != ""'>
+			   AND TSDE.SALE_DATE >= #{startDate}
+			</if>
+			<if test='endDate != null and endDate != ""'>
+			   AND TSDE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+			</if>
+			GROUP BY TSDE.SALE_DATE, TSDE.EMP_NO, TSDE.STORE_CD
+			ORDER BY TSDE.SALE_DATE ASC
+		    ) A
+    	WHERE 1 = 1
+    	GROUP BY A.SALE_DATE, A.STORE_CNT
+    	ORDER BY A.SALE_DATE
+    </select>
+	
 	<!-- 상품별매출 - 분류별 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
@@ -69,7 +121,7 @@
 		  SELECT TMS.STORE_CD
 		    , TMS.STORE_NM||'('||TMS.STORE_CD||')' AS STORE_NM 
 		    , EMP_NO AS  NMCODE_CD
-		  	, (TMS.STORE_NM||'-'||EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
+		  	, (EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
 		  FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		  WHERE TME.STORE_CD = TMS.STORE_CD

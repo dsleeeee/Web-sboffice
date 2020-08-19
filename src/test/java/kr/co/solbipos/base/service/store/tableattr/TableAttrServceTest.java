@@ -1,19 +1,14 @@
 package kr.co.solbipos.base.service.store.tableattr;
 
-import com.mxgraph.io.mxCodec;
-import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
-import com.mxgraph.model.mxIGraphModel;
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.util.mxXmlUtils;
-import com.mxgraph.view.mxGraph;
-import kr.co.solbipos.base.store.tableattr.enums.*;
-import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
-import kr.co.solbipos.config.AbstractApplicationContextTest;
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
+import org.aspectj.lang.annotation.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -23,11 +18,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mxgraph.io.mxCodec;
+import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxGeometry;
+import com.mxgraph.model.mxIGraphModel;
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.util.mxXmlUtils;
+import com.mxgraph.view.mxGraph;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.junit.Assert.assertTrue;
+import jdk.nashorn.internal.ir.annotations.Ignore;
+import kr.co.solbipos.base.store.tableattr.enums.AttrCd;
+import kr.co.solbipos.base.store.tableattr.enums.TblTypeFg;
+import kr.co.solbipos.base.store.tableattr.enums.TextalignFg;
+import kr.co.solbipos.base.store.tableattr.enums.TextvalignFg;
+import kr.co.solbipos.base.store.tableattr.enums.TouchKeyStyle;
+import kr.co.solbipos.base.store.tableattr.service.TableAttrVO;
+import kr.co.solbipos.config.AbstractApplicationContextTest;
 
 @Transactional
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -37,7 +43,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
 
     List<TableAttrVO> tableAttrVOs = null;
 
-    @Before
+    @Before(value = "")
     public void init() {
         //test_100();
     }
@@ -128,7 +134,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
 
                 //TEST
                 tableAttrVO.setStoreCd("S000001");
-                tableAttrVO.setTblTypeFg(TblTypeFg.SQUARE);
+                tableAttrVO.setTblTypeFg("1");
 
                 //좌표, 크기
                 mxGeometry geo = cell.getGeometry();

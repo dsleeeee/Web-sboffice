@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
@@ -177,7 +178,7 @@ public class OutstockConfmController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        List<DefaultMap<String>> list = outstockConfmService.getOutstockConfmDtlList(outstockConfmVO);
+        List<DefaultMap<String>> list = outstockConfmService.getOutstockConfmDtlList(outstockConfmVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, outstockConfmVO);
     }
@@ -249,10 +250,64 @@ public class OutstockConfmController {
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
 
 //        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-        iostockCmmVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER");
-        iostockCmmVO.setSelectCd("DLVR_CD");
-        iostockCmmVO.setSelectNm("DLVR_NM");
+        if (iostockCmmVO.getStorageCd() != null) {
+        	iostockCmmVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER tphdc, TB_PO_HQ_DELIVERY_CHARGER_STORAGE tphdcs");
+            iostockCmmVO.setSelectCd("tphdc.DLVR_CD");
+            iostockCmmVO.setSelectNm("tphdc.DLVR_NM");
+            iostockCmmVO.setSelectWhere("tphdc.HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"' "
+//            iostockCmmVO.setSelectWhere("tphdc.HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"' "
+            		
+            						+ " AND tphdcs.STORAGE_CD='"+ iostockCmmVO.getStorageCd() +"' "
+
+            						+ "	AND tphdcs.HQ_OFFICE_CD(+)= tphdc.HQ_OFFICE_CD"
+            						+ " AND tphdcs.DLVR_CD     (+)= tphdc.DLVR_CD");
+		} else {
+			iostockCmmVO.setSelectTable("TB_PO_HQ_DELIVERY_CHARGER tphdc");
+            iostockCmmVO.setSelectCd("tphdc.DLVR_CD");
+            iostockCmmVO.setSelectNm("tphdc.DLVR_NM");
+			iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+		}
+        
+        
+//        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
+//        }
+//        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+//            iostockCmmVO.setSelectTable("TB_MS_STORE_NMCODE");
+//            iostockCmmVO.setSelectCd("NMCODE_CD");
+//            iostockCmmVO.setSelectNm("NMCODE_NM");
+//            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"' AND NMCODE_GRP_CD = 'AA1'");
+//            list = volmErrService.selectDynamicCodeList(iostockCmmVO);
+//        }
+
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }
+    
+    /**
+     * 다이나믹 콤보조회 - 출고창고 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  M2M
+     * @since   2020. 07. 22.
+     */
+    @RequestMapping(value = "/outstockConfm/getOutStorageCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOutStorageCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+        iostockCmmVO.setSelectTable("TB_HQ_STORAGE");
+        iostockCmmVO.setSelectCd("STORAGE_CD");
+        iostockCmmVO.setSelectNm("STORAGE_NM");
         iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+//        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"'");
             list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 //        }
 //        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장

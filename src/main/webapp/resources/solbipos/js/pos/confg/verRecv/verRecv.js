@@ -16,8 +16,9 @@ var app = agrid.getApp();
 // 조회조건 DropBoxDataMap
 var recvYn = [
   {"name":"전체","value":""},
-  {"name":"수신","value":"Y"},
-  {"name":"미수신","value":"N"}
+  {"name":"수신완료","value":"2"},
+  {"name":"수신오류","value":"3"},
+  {"name":"미수신","value":"1"}
 ];
 
 function changeTab(val){
@@ -162,5 +163,78 @@ app.controller('verRecvStoreCtrl', ['$scope', '$http', function ($scope, $http) 
     });
   };
 
+  // <-- 엑셀다운로드 호출 -->
+  $scope.excelDownload = function(){
+    var params       = {};
+    var scope = agrid.getScope('verRecvCtrl');
+
+    params.curr = $scope._getPagingInfo('curr');
+    params.verSerNo = $scope.getSelectVersion().verSerNo;
+    params.verRecvYn = scope.verRecvYn;
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope._broadcast('verRecvStoreExcelCtrl', params);
+  };
+  // <-- //엑셀다운로드 호출 -->
+
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('verRecvStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('verRecvStoreExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+  };
+
+  // <-- 검색 호출 -->
+  $scope.$on("verRecvStoreExcelCtrl", function(event, data) {
+    $scope.getVersionStoreExcelList(data);
+    event.preventDefault();
+  });
+
+  $scope.getVersionStoreExcelList = function(data){
+    var params = {};
+    params.curr = data.curr;
+    params.verSerNo = data.verSerNo;
+    params.verRecvYn = data.verRecvYn;
+
+    $scope._inquiryMain("/pos/confg/verRecv/verRecv/storeExcelList.sb", params, function() {
+
+      if ($scope.excelFlex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+      $timeout(function()	{
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.excelFlex,
+            {
+              includeColumnHeaders: 	true,
+              includeCellStyles	: 	false,
+              includeColumns      :	function (column) {
+                return column.visible;
+              }
+            },
+            '버전별매장수신정보_'+getToday()+'.xlsx',
+            function () {
+              $timeout(function () {
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+              }, 10);
+            }
+        );
+      }, 10);
+
+    });
+  };
+  // <-- //검색 호출 -->
 
 }]);

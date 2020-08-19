@@ -35,5 +35,17 @@ public class ProdClassServiceImpl implements ProdClassService {
     	
         return prodClassMapper.getProdClassList(prodClassVO);
     }
-
+    
+    /** 상품별 매출 - 분류별 상품 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdClassExcelList(ProdClassVO prodClassVO, SessionInfoVO sessionInfoVO) {
+  
+    	prodClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(prodClassVO.getStoreCd()).equals("")) {
+        	prodClassVO.setArrStoreCd(prodClassVO.getStoreCd().split(","));
+        }
+    	
+        return prodClassMapper.getProdClassExcelList(prodClassVO);
+    }
 }

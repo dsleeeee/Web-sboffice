@@ -84,4 +84,26 @@ public class ProdHourController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodHourVO);
     }
+    
+    /**
+     * 상품별 매출 - 시간대별 엑셀 다운로드 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodHourVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 23.
+     */
+    @RequestMapping(value = "/hour/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdHourExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdHourVO prodHourVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodHourService.getProdHourExcelList(prodHourVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodHourVO);
+    }
+    
 }

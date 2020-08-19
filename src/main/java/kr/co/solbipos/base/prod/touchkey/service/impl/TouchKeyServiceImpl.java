@@ -139,9 +139,10 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 터치키 분류 페이지별 스타일 코드 조회 */
     @Override
-    public String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO) {
+    public String getTouchKeyPageStyleCd(SessionInfoVO sessionInfoVO, String tukeyGrpCd) {
 
         TouchKeyClassVO touchKeyClassVO = new TouchKeyClassVO();
+        touchKeyClassVO.setTukeyGrpCd(tukeyGrpCd);
         touchKeyClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
         touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -166,11 +167,12 @@ public class TouchKeyServiceImpl implements TouchKeyService {
      * 상품명/상품금액 변경분 반영을 위해 xml 조회 후 해당 값 수정하여 반환한다.
      */
     @Override
-    public String getTouchKeyXml(SessionInfoVO sessionInfoVO) {
+    public String getTouchKeyXml(SessionInfoVO sessionInfoVO, String tukeyGrpCd) {
 
         String result = "";
         // 상품정보 조회 : 판매터치키 갱신용
         TouchKeyVO touchKeyVO = new TouchKeyVO();
+        touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
         touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -179,6 +181,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         // XML 조회 : 판매터치키 구성정보
         DefaultMap<String> param = new DefaultMap<String>();
+        param.put("tukeyGrpCd", tukeyGrpCd);
         param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
         param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
         param.put("storeCd", sessionInfoVO.getStoreCd());
@@ -297,7 +300,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
     /** 판매터치키 저장 */
     @Override
-    public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml) {
+    public Result saveTouchkey(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd) {
 
         // XML 저장
         DefaultMap<String> param = new DefaultMap<String>();
@@ -311,11 +314,22 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         param.put("regId", sessionInfoVO.getUserId());
 
         // XML 저장 처리 ( MERGE INTO )
-        if ( keyMapper.getTouchKeyXml(param) != null ) {
-            if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
-                throw new BizException( messageService.get("cmm.modifyFail") );
+        if(tukeyGrpCd != null && tukeyGrpCd.length() > 0){
+            param.put("tukeyGrpCd", tukeyGrpCd);
+            if ( keyMapper.getTouchKeyXml(param) != null ) {
+                if( keyMapper.updateTouchKeyConfgXml(param) != 1 ) {
+                    throw new BizException( messageService.get("cmm.modifyFail") );
+                }
+            } else {
+                tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
+                param.put("tukeyGrpCd", tukeyGrpCd);
+                if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
+                    throw new BizException( messageService.get("cmm.registFail") );
+                }
             }
-        } else {
+        }else{
+            tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
+            param.put("tukeyGrpCd", tukeyGrpCd);
             if( keyMapper.insertTouchKeyConfgXml(param) != 1 ) {
                 throw new BizException( messageService.get("cmm.registFail") );
             }
@@ -323,13 +337,14 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
         //XML 분석, TouchClass, Touch Domain 생성
         //터치키 분류 TABLE(TB_MS_TOUCH_CLASS)
-        List<TouchKeyClassVO> touchKeyClassVOS = parseXML(sessionInfoVO, xml);
+        List<TouchKeyClassVO> touchKeyClassVOS = parseXML(sessionInfoVO, xml, tukeyGrpCd);
 
         // 매장/본사의 현재 설정정보 삭제
         TouchKeyClassVO tcParams = new TouchKeyClassVO();
         tcParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         tcParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tcParams.setStoreCd(sessionInfoVO.getStoreCd());
+        tcParams.setTukeyGrpCd(tukeyGrpCd);
         // 매장/본사의 현재 터치키분류 정보 삭제
         keyMapper.deleteTouchKeyClass(tcParams);
 
@@ -337,6 +352,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         tParams.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         tParams.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         tParams.setStoreCd(sessionInfoVO.getStoreCd());
+        tParams.setTukeyGrpCd(tukeyGrpCd);
         // 매장/본사의 현재 터치키 정보 삭제
         keyMapper.deleteTouchKey(tParams);
 
@@ -348,6 +364,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchKeyClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             touchKeyClassVO.setStoreCd(sessionInfoVO.getOrgnCd());
             touchKeyClassVO.setRegId(sessionInfoVO.getUserId());
+
             // 터치 분류(그룹) 저장
             if( keyMapper.insertTouchKeyClass(touchKeyClassVO) != 1 ) {
                 throw new BizException( messageService.get("label.modifyFail") );
@@ -359,6 +376,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 touchKeyVO.setStoreCd(sessionInfoVO.getOrgnCd());
                 touchKeyVO.setRegId(sessionInfoVO.getUserId());
+                touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
+
                 // 터치키 저장
                 if( keyMapper.insertTouchKey(touchKeyVO) != 1 ) {
                     throw new BizException( messageService.get("label.modifyFail") );
@@ -366,7 +385,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             }
         }
 
-        return new Result(Status.OK);
+        return new Result(Status.OK, tukeyGrpCd);
     }
 
     /** 매장목록 조회 */
@@ -419,7 +438,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
      * @param xml 파싱대상XML
      * @return 테이블그룹객체
      */
-    private List<TouchKeyClassVO> parseXML(SessionInfoVO sessionInfoVO, String xml) {
+    private List<TouchKeyClassVO> parseXML(SessionInfoVO sessionInfoVO, String xml, String tukeyGrpCd) {
 
         String[] xmls = xml.split("\\|");
         List<TouchKeyClassVO> touchKeyClassVOS = new ArrayList<TouchKeyClassVO>();
@@ -454,7 +473,8 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyClassVO = new TouchKeyClassVO();
                 // 터치키 그룹은 시즌,행사별 등 일종의 템플릿.
                 // TODO : 터치키그룹 관리할 수 있는 화면 필요. ex.그룹키생성 : 20180919 노현수
-                touchKeyClassVO.setTukeyGrpCd("01");
+                //touchKeyClassVO.setTukeyGrpCd("01");
+                touchKeyClassVO.setTukeyGrpCd(tukeyGrpCd);
                 touchKeyClassVO.setTukeyClassNm(String.valueOf(cell.getValue()));
 
                 // 분류의 페이지당 Rows ( 1 or 2 or 3 )
@@ -720,6 +740,56 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         }
 
         return result;
+    }
+
+    /** 판매터치키 그룹 조회 */
+    @Override
+    public List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        return keyMapper.getTouchKeyGrp(touchKeyVO);
+    }
+
+    /** 터치키그룹 복사 */
+    @Override
+    public Result copyTouchKeyGrp(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        // 소속구분 설정
+        touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
+        touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        // 기본입력정보 설정
+        touchKeyVO.setRegDt(currentDt);
+        touchKeyVO.setRegId(sessionInfoVO.getUserId());
+        touchKeyVO.setModDt(currentDt);
+        touchKeyVO.setModId(sessionInfoVO.getUserId());
+
+        // 새 터치키 그룹코드 조회하여 셋팅
+        DefaultMap<String> param = new DefaultMap<String>();
+        param.put("orgnFg", sessionInfoVO.getOrgnFg().getCode());
+        param.put("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+        param.put("storeCd", sessionInfoVO.getStoreCd());
+
+        String tukeyGrpCd = keyMapper.getTouchKeyGrpCd(param);
+        touchKeyVO.setTukeyGrpCd(tukeyGrpCd);
+
+        // 1. XML 복사
+        result += keyMapper.copyTouchKeyGrpXml(touchKeyVO);
+
+        // 2. 터치키 Class 복사
+        result += keyMapper.copyTouchKeyGrpClass(touchKeyVO);
+
+        // 3. 터치키 복사
+        result += keyMapper.copyTouchKeyGrp(touchKeyVO);
+
+        if ( result >= 0 ) {
+            return new Result(Status.OK, tukeyGrpCd);
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
     }
 
 }

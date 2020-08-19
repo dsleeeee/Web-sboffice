@@ -39,7 +39,7 @@
 
         <%--- 대리점 그리드 --%>
         <div class="w100">
-          <div class="wj-TblWrap mr10" style="height:200px;">
+          <div class="wj-TblWrap mr10" style="height:270px; overflow-y: hidden;">
             <div id="agencyGrid" style="height: 270px;">
               <wj-flex-grid
                       autoGenerateColumns="false"
@@ -63,4 +63,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchAgency.js?ver=2018102301.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchAgency.js?ver=2018102301.05" charset="utf-8"></script>

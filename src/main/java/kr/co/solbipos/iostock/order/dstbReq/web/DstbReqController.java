@@ -23,6 +23,9 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqService;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +41,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/iostock/order/dstbReq")
 public class DstbReqController {
+	private final Logger	LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final SessionService sessionService;
     private final DstbReqService dstbReqService;
 
@@ -78,7 +83,12 @@ public class DstbReqController {
         Model model, DstbReqVO dstbReqVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        dstbReqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dstbReqVO.setOrgnFg		(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
+        dstbReqVO.setHqOfficeCd	(sessionInfoVO.getHqOfficeCd()		);	//본사코드
+        dstbReqVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
+        LOGGER.debug("### OrgnFg        : " + dstbReqVO.getOrgnFg		());
+        LOGGER.debug("### hqOfficeCd    : " + dstbReqVO.getHqOfficeCd	());
+        LOGGER.debug("### storeCd       : " + dstbReqVO.getStoreCd		());
 
         List<DefaultMap<String>> list = dstbReqService.getDstbReqList(dstbReqVO);
 

@@ -25,7 +25,7 @@ app.controller('saleApprCardCtrl', ['$scope', '$http', '$timeout', function ($sc
     var dataItem         	= {};
     dataItem.saleDate      	= messages["saleComPopup.card.saleDate"];
     dataItem.posNo  		= messages["saleComPopup.card.posNo"];
-    dataItem.apprGuBun    	= messages["saleComPopup.card.appr"];
+    dataItem.apprGubun    	= messages["saleComPopup.card.appr"];
     dataItem.apprProcFg 	= messages["saleComPopup.card.appr"]; 
     dataItem.acquireNm      = messages["saleComPopup.card.acquireNm"];
     dataItem.cardNo    		= messages["saleComPopup.card.cardNo"];   

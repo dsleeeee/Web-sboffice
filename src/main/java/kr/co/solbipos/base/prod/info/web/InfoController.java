@@ -4,9 +4,11 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmCodeUtil;
+import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.info.service.InfoService;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,14 +46,16 @@ public class InfoController {
     private final InfoService service;
     private final SessionService sessionService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
     public InfoController(InfoService service, SessionService sessionService,
-        CmmCodeUtil cmmCodeUtil) {
+        CmmCodeUtil cmmCodeUtil, CmmEnvUtil cmmEnvUtil) {
         this.service = service;
         this.sessionService = sessionService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.cmmEnvUtil = cmmEnvUtil;
     }
 
     /**
@@ -66,6 +70,14 @@ public class InfoController {
     @RequestMapping(value = "/class/prodClassView.sb", method = RequestMethod.GET)
     public String prodClassView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 상품등록 본사 통제여부
+        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+
+        model.addAttribute("prodEnvstVal", prodEnvstVal);
+
         return "base/prod/info/prodClassView";
     }
 

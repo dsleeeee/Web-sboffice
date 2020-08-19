@@ -97,4 +97,26 @@ public class ProdPayFgController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodPayFgVO);
     }
+    
+    /**
+     * 상품별 매출 - 결제수단별 리스트 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodPayFgVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/payFg/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdPayFgExcelList(HttpServletRequest request, HttpServletResponse response, Model model, ProdPayFgVO prodPayFgVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodPayFgService.getProdPayFgExcelList(prodPayFgVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, prodPayFgVO);
+    }
+    
 }

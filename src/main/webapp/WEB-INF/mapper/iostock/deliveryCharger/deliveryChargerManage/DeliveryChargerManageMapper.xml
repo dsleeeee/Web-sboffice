@@ -161,18 +161,17 @@
     -->
     <!-- TODO 2018.08.30 현재 매장의 창고관리 테이블이 없어 담당매장을 창고로 하여 코딩. 나중에 창고로 변경 필요 -->
     <select id="getDeliveryChargerStorageList" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
-        /* USE : DeliveryChargerManageMapper.getDeliveryChargerStorageList */
-        <![CDATA[
-        SELECT  tphdcs.DLVR_CD
-        ,       tphdcs.STORAGE_CD, tms.STORE_NM AS STORAGE_NM
-        FROM    TB_PO_HQ_DELIVERY_CHARGER_STORAGE tphdcs
-        ,       TB_MS_STORE tms
-        WHERE   tphdcs.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tphdcs.DLVR_CD      = #{dlvrCd}
-        AND     tms.HQ_OFFICE_CD    = tphdcs.HQ_OFFICE_CD
-        AND     SUBSTR(tms.STORE_CD, 5, 3) = tphdcs.STORAGE_CD
-        ORDER BY tphdcs.STORAGE_CD
-        ]]>
+
+        SELECT  TPHDCS.DLVR_CD
+        ,       TPHDCS.STORAGE_CD, THS.STORAGE_NM
+        FROM    TB_PO_HQ_DELIVERY_CHARGER_STORAGE TPHDCS
+        ,       TB_HQ_STORAGE THS
+        WHERE   TPHDCS.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     TPHDCS.DLVR_CD      = #{dlvrCd}
+        AND     THS.HQ_OFFICE_CD    = TPHDCS.HQ_OFFICE_CD
+        AND     THS.STORAGE_CD = TPHDCS.STORAGE_CD
+        ORDER BY TPHDCS.STORAGE_CD
+
     </select>
 
     <!-- 배송기사 담당 창고 설정 리스트 조회 -->
@@ -184,17 +183,15 @@
     <!-- TODO 2018.08.30 현재 매장의 창고관리 테이블이 없어 담당매장을 창고로 하여 코딩. 나중에 창고로 변경 필요 -->
     <select id="getDeliveryChargerStorageAllList" parameterType="DeliveryChargerManageVO" resultType="DefaultMap">
         /* USE : DeliveryChargerManageMapper.getDeliveryChargerStorageAllList */
-        <![CDATA[
-        SELECT  SUBSTR(tms.STORE_CD, 5, 3) AS STORAGE_CD, tms.STORE_NM AS STORAGE_NM
-        FROM    TB_MS_STORE tms
-        WHERE   tms.HQ_OFFICE_CD      =   #{hqOfficeCd}
-        AND     SUBSTR(tms.STORE_CD, 5, 3)	NOT IN	(	SELECT	STORAGE_CD
-                                                        FROM 	TB_PO_HQ_DELIVERY_CHARGER_STORAGE
-                                                        WHERE   HQ_OFFICE_CD	=	#{hqOfficeCd}
-                                                        AND     DLVR_CD			=	#{dlvrCd}
-                                                    )
-        ORDER BY SUBSTR(tms.STORE_CD, 5, 3)
-        ]]>
+        SELECT  THS.STORAGE_CD, THS.STORAGE_NM
+        FROM    TB_HQ_STORAGE THS
+        WHERE   THS.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     THS.STORAGE_CD  NOT IN  (   SELECT  STORAGE_CD
+                                              FROM  TB_PO_HQ_DELIVERY_CHARGER_STORAGE
+                                             WHERE  HQ_OFFICE_CD    =   #{hqOfficeCd}
+                                               AND  DLVR_CD         =   #{dlvrCd}
+                                         )
+        ORDER BY THS.STORAGE_CD
     </select>
 
     <!-- 배송기사 담당 창고 저장 -->

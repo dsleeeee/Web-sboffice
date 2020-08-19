@@ -96,7 +96,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
 
-        <%-- 신규매장등록 --%>
+        <%-- 설치의뢰 --%>
         <button class="btn_skyblue ml5 fr" ng-click="requestInstall()">
             <s:message code="instl.req" />
         </button>

@@ -65,23 +65,22 @@
     $scope.initGrid = function (s, e) {
     };
 
-    $scope.searchFg = "N";
+    $scope.searchFg = "";
+    
     // 다른 컨트롤러의 broadcast 받기
-
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 포스선택 팝업 오픈
-      eval('$scope.wj' + targetId + 'LayerM.show(true)');
+      if($("#${param.targetStoreId}Cd").val() !== ""){
+    	  eval('$scope.wj' + targetId + 'LayerM.show(true)');
+      }
 
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
         if ('${param.closeFunc}' !== '') {
-          eval('$scope.${param.closeFunc}()');
+        	$scope.cornerSelected();
+//           eval('$scope.${param.closeFunc}()');
         }
       });
-
-      if ($scope.searchFg == "N") {
-        $scope.searchCorner();
-      }
 
       $scope.searchCorner();
       // 기능수행 종료 : 반드시 추가
@@ -92,9 +91,14 @@
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
-      $scope._inquiryMain("/sale/status/corner/corner/cornerNmList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+      
+      if(params.storeCd !== "" && params.storeCd !== $scope.searchFg){
+	      $scope._inquiryMain("/sale/status/corner/corner/cornerNmList.sb", params, function () {
+	        $scope.searchFg = params.storeCd;
+	      });
+      }else if(params.storeCd === ""){
+          $scope._popMsg(messages["cmm.require.selectStore"]);
+      }
     };
 
     $scope.cornerSelected = function () {
@@ -102,23 +106,28 @@
       // var flex = $scope.posGridM;
 
       var arrCornrCd = [];
+      var arrCornrCdOrg = [];
       var arrCornrNm = [];
       var strCornrCd = "";
+      var strCornrCdOrg = "";
       var strStoreNm = "";
       var strCornrNm = "";
       var cnt        = 0;
       
       $("#" + targetId + "Cd").val("");
       $("#" + targetId + "Name").val("");
+      $("#" + targetId + "CdOrg").val("");
 
       for (var i = 0; i < flex.length; i++) {
         if (flex[i].gChk) {
           if (cnt == 0) {
             strCornrCd = flex[i].cornrCd;
+            strCornrCdOrg = flex[i].cornrCdOrg;
             strStoreNm = flex[i].storeNm;
             strCornrNm = flex[i].cornrNm;
           }
           arrCornrCd.push(flex[i].cornrCd);
+          arrCornrCdOrg.push(flex[i].cornrCdOrg);
           arrCornrNm.push(flex[i].storeNm + "||" + flex[i].cornrNm);
           cnt++;
         }
@@ -126,6 +135,8 @@
 
       $("#" + targetId + "Cd").val(arrCornrCd.join());
       $("#" + targetId + "Name").val(arrCornrNm.join());
+      $("#" + targetId + "CdOrg").val(arrCornrCdOrg.join());
+      
       if (cnt == 0) {
 //     	$("#" + targetId + "Cd").val(arrCornrCd.join());
         $("#" + targetId + "Nm").val(messages["cmm.all"]);

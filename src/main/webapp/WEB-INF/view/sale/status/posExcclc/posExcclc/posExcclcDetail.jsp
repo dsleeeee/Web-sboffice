@@ -635,14 +635,16 @@
 			}
 		);
 	}
-
+	
 	function numComma(num) {
 
 		if (num != null && num != undefined && num != "") {
-
+			/*
 			var len, point, str;
-
+			
 			num = num + "";
+			console.log("num :::"+num)
+			
 			point = num.length % 3 ;
 			len = num.length;
 
@@ -652,6 +654,9 @@
 				str += num.substring(point, point + 3);
 			    point += 3;
 			}
+			*/
+			var regexp = /\B(?=(\d{3})+(?!\d))/g;
+			return num.toString().replace(regexp, ',');
 
 		} else {
 			str = 0

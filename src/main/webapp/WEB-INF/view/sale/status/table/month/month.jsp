@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="tableMonthView" class="subCon"  ng-controller="tableMonthCtrl">
+<div id="tableMonthView" class="subCon"  ng-controller="tableMonthCtrl" style="display: none;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableMonth.tableMonthSale"/></a>
 		<%-- 조회 --%>
@@ -22,7 +22,7 @@
        	</colgroup>
        	<tbody>
        		<tr>
-       			<th><s:message code="cmm.search.date"/></th>
+       			<th><s:message code="cmm.search.month"/></th>
        			<td>
 					<div class="sb-select">
 			          <span class="txtIn w110px">
@@ -51,7 +51,7 @@
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
 							</label>
-						</span>  
+						</span>
 					</div>
 				</td>
 			</tr>
@@ -62,10 +62,10 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableMonthSelectStore"/>
-								<jsp:param name="targetTableId" value="tableMonthSelectTable"/>
-								<jsp:param name="closeFunc" value="getTableNmList"/>
+								<jsp:param name="subTargetId" value="tableMonthSelectTable"/>
+								<jsp:param name="closeFunc" value="closeSelectStore"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -77,6 +77,7 @@
 
 				<input type="hidden" id="tableMonthSelectTableCd" value=""/>
 				<input type="hidden" id="tableMonthSelectTableName" value=""/>
+				<input type="hidden" id="tableMonthSelectTableCdOrg" value=""/>
 				<tr>
 					<%-- 테이블선택 --%>
 					<th><s:message code="tableDay.table" /></th>
@@ -85,7 +86,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableMonthSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableMonthSelectStore"/>
-							<jsp:param name="closeFunc" value="getTableNmList"/>
+							<jsp:param name="closeFunc" value="closeSelectTable"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -100,11 +101,13 @@
 			class="w100px fl"
 			id="tableMonthListScaleBox"
 			ng-model="tableMonthListScale"
+			control="listScaleCombo"
 			items-source="_getComboData('tableMonthListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="tableMonthSelectStoreStoreNum" ng-model="storeNum">
@@ -115,9 +118,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+	<%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="tableMonthGrid"
 				autoGenerateColumns="false"
@@ -131,7 +134,7 @@
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableMonth.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableMonth.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="tableMonth.totRealSaleCnt"/>" binding="totRealSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableMonth.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
@@ -150,12 +153,30 @@
 		</ul>
 	</div>
 	<%--//페이지 리스트--%>
+
+	<%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="tableMonthExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="tableMonthExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                is-read-only="true"
+                frozen-columns="4"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="tableMonth.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableMonth.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/month/month.js?ver=20190125.02" charset="utf-8"></script>
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/table.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/month/month.js?ver=20190125.04" charset="utf-8"></script>
 

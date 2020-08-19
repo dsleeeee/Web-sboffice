@@ -19,7 +19,7 @@ public interface OutstockConfmService {
     DefaultMap<String> getSlipNoInfo(OutstockConfmVO outstockConfmVO);
 
     /** 출고확정 상세 리스트 조회 */
-    List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO);
+    List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO);
 
     /** 출고확정 - 출고확정 상세 리스트 저장 */
     int saveOutstockConfmDtl(OutstockConfmVO[] outstockConfmVOs, SessionInfoVO sessionInfoVO);

@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="cornerDayOfWeekView" class="subCon"  ng-controller="cornerDayOfWeekCtrl">
+<div id="cornerDayOfWeekView" class="subCon" style="display: none;" ng-controller="cornerDayOfWeekCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="corner.dayOfWeek"/></a>
       <%-- 조회 --%>
@@ -38,7 +38,7 @@
             </span>
         </div>
         </td>
-        
+
       <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="hidden" id="cornerDayOfWeekSelectStoreCd" value=""/>
         <%-- 매장코드 --%>
@@ -50,20 +50,20 @@
                             modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                             closeFunc - 팝업 닫기시 호출할 함수
             --%>
-            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDayOfWeekSelectStore"/>
-                <jsp:param name="targetCornerId" value="cornerDayOfWeekSelectCorner"/>
-                <jsp:param name="closeFunc" value="getCornerNmList"/>
+                <jsp:param name="subTargetId" value="cornerDayOfWeekSelectCorner"/>
+                <jsp:param name="closeFunc" value="closeSelectStore"/>
             </jsp:include>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="cornerDayOfWeekSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
                 <input type="hidden" id="cornerDayOfWeekSelectCornerCd" value=""/>
                 <input type="hidden" id="cornerDayOfWeekSelectCornerName" value=""/>
       </tr>
-      
+
       <tr>
         <%-- 코너표시 --%>
         <th><s:message code="corner.cornrDisplay" /></th>
@@ -71,14 +71,14 @@
           <jsp:include page="/WEB-INF/view/sale/com/popup/selectCornerM.jsp" flush="true">
                 <jsp:param name="targetId" value="cornerDayOfWeekSelectCorner"/>
                 <jsp:param name="targetStoreId" value="cornerDayOfWeekSelectStore"/>
-                <jsp:param name="closeFunc" value="getCornerNmList"/>
+                <jsp:param name="closeFunc" value="closeSelectCorner"/>
             </jsp:include>
         </td>
       </tr>
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
 <!--     <wj-combo-box -->
@@ -99,9 +99,9 @@
     </button>
   </div>
 
-    <div class="w100 mt10">
-      <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 395px;">
+    <%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
         <wj-flex-grid
           id="cornrDayOfWeekGrid"
           autoGenerateColumns="false"
@@ -125,7 +125,7 @@
       </div>
       <%--//위즈모 테이블--%>
     </div>
-    
+
   <%-- 페이지 리스트 --%>
 <!--   <div class="pageNum mt20"> -->
 <!--     <ul id="cornerDayOfWeekCtrlPager" data-size="10"> -->
@@ -136,10 +136,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20190125.02" charset="utf-8"></script>
-
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20190125.04" charset="utf-8"></script>

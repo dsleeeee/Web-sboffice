@@ -63,24 +63,24 @@
         <%-- 본사코드 --%>
         <th><s:message code="pwdManage.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="srchHqOfficeCd" maxlength="5"/>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="srchHqOfficeCd"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="pwdManage.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm" maxlength="50"/>
+          <input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/>
         </td>
       </tr>
       <tr ng-show="userOrgnFg != 'S'">
         <%-- 매장코드 --%>
         <th><s:message code="pwdManage.storeCd" /></th>
         <td>
-          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="srchStoreCd" maxlength="7"/>
+          <input type="text" id="srchStoreCd" class="sb-input w100" ng-model="srchStoreCd" />
         </td>
         <%-- 매장명 --%>
         <th><s:message code="pwdManage.storeNm" /></th>
         <td>
-          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" maxlength="50"/>
+          <input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm" />
         </td>
       </tr>
       <tr>

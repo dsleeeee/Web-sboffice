@@ -33,18 +33,34 @@
     ]]>
   </select>
 
+    <!-- 회원정보 중복체크 -->
+    <!--
+        TABLE    : TB_MB_MEMBER
+        PARAM    : memberVO
+        COMMENTS : 회원등록전, 이미 등록된 회원인지 아닌지 체크한다.
+    -->
+    <select id="chkDuplicateMember" parameterType="memberVO" resultType="DefaultMap">
+     /* USE : SimpleMemberJoinMapper.chkDuplicateMember */
+     SELECT MEMBR_NO,
+             USE_YN
+       FROM TB_MB_MEMBER
+      WHERE MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND MEMBR_NM = #{membrNm}
+        AND TEL_NO = #{telNo}
+    </select>
+
     <!-- 신규회원번호 조회 -->
     <!--
         TABLE    : TB_MB_MEMBER
         PARAM    : sessionInfoVO
         COMMENTS : 회원등록시 사용할 신규회원번호를 조회한다.
     -->
-  <select id="getNewMembrNo" parameterType="sessionInfoVO" resultType="String">
+    <select id="getNewMembrNo" parameterType="sessionInfoVO" resultType="String">
         /* USE : SimpleMemberJoinMapper.getNewMembrNo */
       SELECT LPAD(NVL(MAX(tmm.MEMBR_NO), '0')+1, 10, '0')
         FROM TB_MB_MEMBER tmm
        WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
-  </select>
+    </select>
 
     <!-- 신규 회원 저장 -->
   <!--

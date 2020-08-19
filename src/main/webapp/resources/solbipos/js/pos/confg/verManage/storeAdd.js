@@ -25,6 +25,35 @@ function search(){
   scope._pageView('addStoreCtrl', 1);
 }
 
+// 매장코드 입력양식 값 제어
+function setText(){
+
+  if ($("#chkMulti").prop("checked")) {
+    var val = $("#srchStoreCd").val();
+    var pattern = /[^a-zA-Z0-9]/gi;   // 특수문자, 공백, 한글 제거
+
+    $("#srchStoreCd").val(comma(val.replace(pattern, "")));
+  }
+}
+
+// 매장코드 자릿수(7자리) 체크하여 콤마 찍기
+function comma(num){
+  var len, point, str;
+
+  num = num + "";
+  point = num.length % 7 ;
+  len = num.length;
+
+  str = num.substring(0, point);
+  while (point < len) {
+    if (str != "") str += ",";
+    str += num.substring(point, point + 7);
+    point += 7;
+  }
+
+  return str;
+}
+
 /**********************************************************************
  *  적용매장 그리드
  **********************************************************************/
@@ -55,6 +84,15 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   };
   $scope.getSelectedHqOffice = function(){
     return $scope.selectedHqOffice;
+  };
+
+  // 선택본사
+  $scope.selectedSysStatFg;
+  $scope.setSelectedSysStatFg = function(s) {
+    $scope.selectedSysStatFg = s.selectedValue;
+  };
+  $scope.getSelectedSysStatFg = function(){
+    return $scope.selectedSysStatFg;
   };
 
   // 적용매장 목록 조회
@@ -122,6 +160,9 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('allStoreCtrl', $scope, $http, false));
 
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("sysStatFg", sysStatFgTotal);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
@@ -134,7 +175,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
-  // 적용매장 목록 조회
+  // 미적용매장 목록 조회
   $scope.allStoreSearch = function(){
 
     var params = {};
@@ -148,6 +189,14 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = addStoreScope.getSelectedHqOffice();
     params.storeCd = $("#srchStoreCd").val();
     params.storeNm = $("#srchStoreNm").val();
+    params.sysStatFg = addStoreScope.getSelectedSysStatFg();
+
+    // 복수검색 기능 사용여부
+    if ($("#chkMulti").prop("checked")) {
+      params.chkMulti = "Y";
+    }else{
+      params.chkMulti = "N";
+    }
 
     $scope._inquiryMain("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
     }, false);

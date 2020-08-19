@@ -163,7 +163,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       popup.shown.addHandler(function (s) {
         // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
         setTimeout(function() {
-          $scope._broadcast('popUpApplyTemplateCtrl');
+          $scope._broadcast('popUpApplyTemplateCtrl', $scope.prtClassCdCombo.text);
         }, 50)
       });
       // 팝업 닫을때

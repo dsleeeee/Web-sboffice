@@ -30,7 +30,7 @@ import kr.co.solbipos.sale.status.appr.payMethod.payco.service.ApprPaycoVO;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.31  조동훤      최초생성
  *
- * @author 
+ * @author
  * @since 2020.01.31
  * @version 1.0
  * @see
@@ -86,5 +86,26 @@ public class ApprPaycoController {
         List<DefaultMap<String>> list = apprPaycoService.getApprPaycoList(apprPaycoVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, apprPaycoVO);
     }
-    
+
+    /**
+     * 승인현황 승인현황 페이코 - 엑셀 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   apprCardVO
+     * @return  String
+     * @author  정유경
+     * @since   2020.04.22
+     */
+    @RequestMapping(value = "/payco/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getApprPaycoExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ApprPaycoVO apprPaycoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = apprPaycoService.getApprPaycoExcelList(apprPaycoVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, apprPaycoVO);
+    }
+
 }

@@ -1,0 +1,11 @@
+/*
+.searchBar_report 					{position:relative; border:1px solid #93cbfc; height:45px; background:#ebf5ff;}
+.searchBar_report a 				{display:block; height:100%; line-height:45px; color:#337dde;  padding:0 0 0 30px; font-size:0.875em; position:relative;}
+.searchBar_report a:before 			{content:''; position:absolute; left:15px; top:17px; background:url(/resource/solbipos/css/img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.searchBar_report a.open:before 	{transform:rotate(-90deg);}
+.searchBar_report a.close:before 	{transform:rotate(90deg);}
+*/
+.searchBar_report 					{position:relative; border:1px solid #93cbfc; height:45px; background:#ebf5ff;}
+.searchBar_report a:before 			{content:''; position:absolute; left:5px; top:17px; background:url(/resource/solbipos/css/img/menu_bullet_blue.png) no-repeat; width:6px; height:10px;}
+.searchBar_report a.open:before 	{transform:rotate(-90deg);}
+.searchBar_report a.close:before 	{transform:rotate( 90deg);}

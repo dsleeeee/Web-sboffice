@@ -36,4 +36,16 @@ public class StoreProdServiceImpl implements StoreProdService {
         return storeProdMapper.getStoreProdList(storeProdVO);
     }
 
+    /** 매장상품순위 - 매장상품순위 리스트(엑셀) 조회   */
+    @Override
+    public List<DefaultMap<String>> getStoreProdExcelList(StoreProdVO storeProdVO, SessionInfoVO sessionInfoVO) {
+  
+    	storeProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(storeProdVO.getStoreCd()).equals("")) {
+        	storeProdVO.setArrStoreCd(storeProdVO.getStoreCd().split(","));
+        }
+    	      
+        return storeProdMapper.getStoreProdExcelList(storeProdVO);
+    }
 }

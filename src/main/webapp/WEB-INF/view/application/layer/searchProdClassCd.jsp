@@ -12,7 +12,9 @@
     </div>
     <div class="wj-dialog-body sc2" style="height: 300px;">
       <%-- 상품분류 --%>
-      <wj-tree-view control="prodClassTree"
+      <wj-tree-view
+        class="theTreeAll_cls"
+        control="prodClassTree"
         items-source="items"
         initialized="initTreeView(s)"
         display-member-path="'prodClassNm'"
@@ -26,4 +28,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchProdClassCd.js?ver=20181120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/searchProdClassCd.js?ver=20181120.05" charset="utf-8"></script>

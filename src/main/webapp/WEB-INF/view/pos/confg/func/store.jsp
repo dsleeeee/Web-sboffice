@@ -15,7 +15,7 @@
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="func.regStore" />
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" onclick="closePop()"></a>
     </div>
 
     <%-- body --%>
@@ -54,9 +54,9 @@
             </tr>
             <tr>
               <th><s:message code="func.storeCd" /></th>
-              <td><input type="text" id="srchStoreCd" maxlength="7"/></td>
+              <td><input type="text" id="srchStoreCd" /></td>
               <th><s:message code="func.storeNm" /></th>
-              <td><input type="text" id="srchStoreNm" maxlength="20"/></td>
+              <td><input type="text" id="srchStoreNm" /></td>
             </tr>
           </tbody>
         </table>
@@ -67,7 +67,7 @@
 
         <%-- 등록 매장 그리드 --%>
         <div class="oh mt40 w50 fl"  >
-          <div class="wj-TblWrap mr10" style="height:395px; overflow-y: hidden; overflow-x: hidden" >
+          <div class="wj-TblWrap mr10" style="height:410px; overflow-y: hidden; overflow-x: hidden" >
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.regStore" /></span>
                 <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreDel" ng-click="delete()"><s:message code="cmm.del" /></a></span>
@@ -97,7 +97,7 @@
       <%-- 미등록매장 그리드 --%>
       <div class="oh mt40 w50">
         <div class=" "  ng-controller="noRegStoreCtrl" >
-          <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden; overflow-x: hidden;">
+          <div class="wj-TblWrap ml10" style="height:410px; overflow-y: hidden; overflow-x: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="func.noRegStore" /></span>
                 <span class="fr"><a href="#" class="btn_grayS2" id="btnStoreReg" ng-click="regist()"><s:message code="func.regist" /></a></span>
@@ -135,10 +135,10 @@
   if(orgnFg === "MASTER"){
     hqList = ${ccu.getHqOfficeList()};
   }else{
-    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd)};
+    hqList = ${ccu.getHqOfficeListChkAgency(orgnCd, "A")};
    }
 
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/store.js?ver=20190122.21" charset="utf-8"></script>
 

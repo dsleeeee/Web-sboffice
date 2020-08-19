@@ -70,8 +70,8 @@ public interface HqManageMapper {
 //    /** 공통코드 복사 */
 //    int copyCmmCode(HqNmcodeVO nmcodeVO);
 
-    /** 본사 포스 출력물 등록 */
-    int hqPrintTempReg(HqPrintTemplVO printTempVO);
+    /** 포스 출력물 템플릿 등록 (본사) */
+    int hqPrintTempReg(HqManageVO hqManage);
 
     /** 본사 수정 */
     int modify(HqManageVO hqManage);
@@ -79,14 +79,17 @@ public interface HqManageMapper {
     /** 권한그룹 목록조회 */
     List<DefaultMap<String>> authHqList(HqManageVO hqManage);
 
-    /** 사용가능 메뉴 조회 */
+    /** 사용메뉴 조회 */
     List<DefaultMap<String>> avlblMenu(HqManageVO hqManage);
 
-    /** 사용중인 메뉴 조회 */
+    /** 미사용 메뉴 조회 */
     List<DefaultMap<String>> beUseMenu(HqManageVO hqManage);
 
     /** 메뉴권한복사 */
     int copyAuth(HqMenuVO hqMenuVO);
+
+    /** 권한예외 복사 시, 복사기준본사의 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMenu(HqMenuVO hqMenuVO);
 
     /** 권한예외 복사 */
     int copyAuthExcp(HqMenuVO hqMenuVO);
@@ -111,5 +114,11 @@ public interface HqManageMapper {
 
     /** 환경설정 수정 - 매장 */
     int updateConfigStore(HqEnvstVO hqEnvst);
+
+    /** 권한 전체 삭제 */
+    int removeAuthAll(HqMenuVO hqMenus);
+
+    /** 업체 목록 조회 */
+    List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage);
 
 }

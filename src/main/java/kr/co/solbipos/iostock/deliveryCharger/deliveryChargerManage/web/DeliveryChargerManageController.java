@@ -101,7 +101,7 @@ public class DeliveryChargerManageController {
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         DefaultMap<String> result = deliveryChargerManageService.getDlvrInfo(deliveryChargerManageVO);
 
@@ -124,7 +124,7 @@ public class DeliveryChargerManageController {
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
         deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
 
@@ -149,7 +149,7 @@ public class DeliveryChargerManageController {
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         deliveryChargerManageVO.setRegId(sessionInfoVO.getUserId());
         deliveryChargerManageVO.setModId(sessionInfoVO.getUserId());
 
@@ -174,7 +174,7 @@ public class DeliveryChargerManageController {
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         List<DefaultMap<String>> list = deliveryChargerManageService.getDeliveryChargerStorageList(deliveryChargerManageVO);
 
@@ -197,7 +197,7 @@ public class DeliveryChargerManageController {
         Model model, DeliveryChargerManageVO deliveryChargerManageVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        //deliveryChargerManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         List<DefaultMap<String>> list = deliveryChargerManageService.getDeliveryChargerStorageAllList(deliveryChargerManageVO);
 

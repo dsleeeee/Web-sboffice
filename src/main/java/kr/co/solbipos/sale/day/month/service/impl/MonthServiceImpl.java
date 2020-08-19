@@ -67,7 +67,7 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthTotalList(monthVO);
     }
 
-    /** 할인구별별탭 - 할인구분별매출조회 */
+    /** 할인구별별탭 - 할인구분별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthDcList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
@@ -93,7 +93,7 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthDcList(monthVO);
     }
 
-    /** 과면세별탭 - 과면세별매출조회 */
+    /** 과면세별탭 - 과면세별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTaxList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
@@ -109,7 +109,7 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthTaxList(monthVO);
     }
 
-    /** 시간대별 - 시간대별매출조회 */
+    /** 시간대별탭 - 시간대별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTimeList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
@@ -196,41 +196,69 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthTimeList(monthVO);
     }
 
-    /** 코너별 - 코너별 매출조회 */
+    /** 상품분류별탭 - 상품분류별 매출조회 */
     @Override
-    public List<DefaultMap<Object>> getMonthCornerList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getMonthProdClassList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        monthVO.setLevel("Level" + monthVO.getLevel());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = monthVO.getStoreCds().split(",");
+            monthVO.setStoreCdList(storeCds);
+        }
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             monthVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        // 코너구분
-        if(monthVO.getStoreCd() == null)
-        {
-            // 코너구분 array 값 세팅
-            monthVO.setArrCornerCol(monthVO.getCornerCol().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "";
-            String arrCornerCol[] = monthVO.getCornerCol().split(",");
-            for(int i=0; i < arrCornerCol.length; i++) {
-                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
-            }
-            monthVO.setPivotCornerCol(pivotCornerCol);
+        // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+        monthVO.setArrProdClassCd(monthVO.getStrProdClassCd().split(","));
+
+        // 쿼리조회를 위한 변수
+        String pivotProdClassCol1 = "";
+        String pivotProdClassCol2 = "";
+        String pivotProdClassCol3 = "";
+        String strAmt = "";
+        String strQty = "";
+
+        for(int i=0; i<  monthVO.getArrProdClassCd().length; i++) {
+            strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_AMT, 0)";
+            strQty += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
+            pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ", ") + "tba.PAY" + (i+1) + "_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ", ") + "NVL(SUM(PAY" + (i+1) + "_SALE_AMT), 0) AS PAY" + (i+1) + "_SALE_AMT, NVL(SUM(PAY" + (i+1) + "_SALE_QTY), 0) AS PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol3 += (pivotProdClassCol3.equals("") ? "" : ", ") + "'" + monthVO.getArrProdClassCd()[i]  + "' AS PAY" + (i+1);
         }
-        else
-        {
-            // 외식테이블구분 array 값 세팅
-            monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "'"+monthVO.getStoreCornerCd()+"'"+" AS CORNR_"+monthVO.getStoreCornerCd();
-            monthVO.setPivotCornerCol(pivotCornerCol);
+        strAmt = "(" + strAmt + ") AS TOT_REAL_SALE_AMT, ";
+        strQty = "(" + strQty + ") AS TOT_SALE_QTY, ";
+
+        monthVO.setPivotProdClassCol1(strAmt + strQty + pivotProdClassCol1);
+        monthVO.setPivotProdClassCol2(pivotProdClassCol2);
+        monthVO.setPivotProdClassCol3(pivotProdClassCol3);
+
+        return monthMapper.getMonthProdClassList(monthVO);
+    }
+
+    /** 코너별탭 - 코너별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getMonthCornerList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
+
+        monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
+
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotCornerCol = "";
+        String arrCornerCol[] = monthVO.getStoreCornerCd().split(",");
+        for(int i=0; i < arrCornerCol.length; i++) {
+            pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
         }
+        monthVO.setPivotCornerCol(pivotCornerCol);
 
         return monthMapper.getMonthCornerList(monthVO);
     }
 
-    /** 외식테이블별 - 외식테이블별매출조회 */
+    /** 외식테이블별탭 - 외식테이블별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthTableList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 
@@ -264,7 +292,7 @@ public class MonthServiceImpl implements MonthService {
         return monthMapper.getMonthTableList(monthVO);
     }
 
-    /** 포스별 - 포스별매출조회 */
+    /** 포스별탭 - 포스별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getMonthPosList(MonthVO monthVO, SessionInfoVO sessionInfoVO) {
 

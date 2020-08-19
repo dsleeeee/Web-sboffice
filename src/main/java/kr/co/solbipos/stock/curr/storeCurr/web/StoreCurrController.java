@@ -97,9 +97,9 @@ public class StoreCurrController {
         Model model, StoreCurrVO storeCurrVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        storeCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
+        //storeCurrVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        List<DefaultMap<String>> list = storeCurrService.getStoreCurrList(storeCurrVO);
+        List<DefaultMap<String>> list = storeCurrService.getStoreCurrList(storeCurrVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storeCurrVO);
     }

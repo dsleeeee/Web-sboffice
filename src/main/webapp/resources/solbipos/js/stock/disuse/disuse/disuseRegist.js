@@ -99,6 +99,11 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.disuseDate = $scope.disuseDate;
     params.seqNo      = $scope.seqNo;
 
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -151,6 +156,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.disuseFg   = $scope.disuseFg;
     params.vendrCd     = $("#disuseRegistSelectVendrCd").val();
     params.listScale  = $scope.listScale;
+    params.storageCd    = $("#registSelectStorageCd").val();
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/disuse/disuse/disuseRegist/list.sb", params);
@@ -159,6 +165,11 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 조회버튼으로 조회시
   $scope.fnSearch = function () {
+	  
+	if($("#registSelectStorageCd").val() === ""){
+	  alert("창고를 선택하여 주십시요.");
+	  return false;
+	}		
     if ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0) {
       var msg = messages["disuse.reg.searchMsg"]; // 저장되지 않은 자료가 있습니다. 조회하시겠습니까?
       s_alert.popConf(msg, function () {
@@ -195,8 +206,9 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
-      item.storageCd   = "001";
+      item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.adjStorageCd = $("#registSelectStorageCd").val();
 
       params.push(item);
     }
@@ -215,8 +227,9 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
-      item.storageCd   = "001";
+      item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+      item.disuseStorageCd = $("#registSelectStorageCd").val();
 
       params.push(item);
     }
@@ -442,9 +455,14 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.disuseTitle;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
-
+    
     $http({
       method : 'POST', //방식
       url    : '/stock/disuse/disuse/disuseRegist/excelUpload.sb', /* 통신할 URL */
@@ -481,5 +499,11 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.disuseRegistSelectVendrShow = function () {
     $scope._broadcast('disuseRegistSelectVendrCtrl');
   };
-
+  
+  // 창고선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.registSelectStorageShow = function () {
+    $scope._broadcast('registSelectStorageCtrl');
+  };
 }]);

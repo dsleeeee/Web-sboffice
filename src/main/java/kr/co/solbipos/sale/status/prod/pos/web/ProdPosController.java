@@ -120,5 +120,58 @@ public class ProdPosController {
         //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
         return ReturnUtil.returnListJson(Status.OK, list, prodPosVO);
     }
+    
+    /**
+     * 상품별매출 상품별 - 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodPosVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 22.
+     */
+    @RequestMapping(value = "/prodPos/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdPosExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ProdPosVO prodPosVO) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        if (prodPosVO.getPosNo() != null && !"".equals(prodPosVO.getPosNo())) {
+        	 String[] arrPosNo = prodPosVO.getPosNo().split(",");
+        	 prodPosVO.setArrPosNo(arrPosNo);
+        	 prodPosVO.setArrStorePos(arrPosNo);
+        } else {
+        	String[] arrStoreCd = prodPosVO.getStoreCd().split(",");
+
+        	if (arrStoreCd.length > 0) {
+        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+        			prodPosVO.setArrStoreCd(arrStoreCd);
+        		}
+        	}
+
+            List<DefaultMap<String>> list = prodPosService.getPosNmList(prodPosVO, sessionInfoVO);
+
+            if (list.size() > 0) {
+
+            	String arrStorePos[] = new String[list.size()];
+
+                for (int i = 0; i < list.size(); i++) {
+                    DefaultMap<String> map = list.get(i);
+                    String storePos = map.getStr("posCd");
+                    arrStorePos[i] = storePos;
+                }
+
+                prodPosVO.setArrStorePos(arrStorePos);
+
+            }
+
+        }
+
+        List<DefaultMap<String>> list = prodPosService.getProdPosExcelList(prodPosVO, sessionInfoVO);
+        //System.out.println("list.size() :: "+posProdVO.getArrPosCd().length);
+        return ReturnUtil.returnListJson(Status.OK, list, prodPosVO);
+    }
+    
 }

@@ -14,6 +14,8 @@ app.controller('dlvrChgrListCtrl', ['$scope', '$http', function ($scope, $http) 
     {id: "N", name: messages["deliveryCharger.useYnN"]},
   ], 'id', 'name');
 
+  $scope.hqOfficeCd = gvHqOfficeCd;
+
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -44,6 +46,7 @@ app.controller('dlvrChgrListCtrl', ['$scope', '$http', function ($scope, $http) 
           var params    = {};
           params.dlvrCd = selectedRow.dlvrCd;
           params.dlvrNm = selectedRow.dlvrNm;
+          params.hqOfficeCd = $scope.hqOfficeCd;
           $scope._broadcast('dlvrRegistCtrl', params);
         }
       }
@@ -60,6 +63,7 @@ app.controller('dlvrChgrListCtrl', ['$scope', '$http', function ($scope, $http) 
   $scope.searchDlvrChgrList = function () {
     // 파라미터
     var params = {};
+    params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/deliveryCharger/deliveryChargerManage/deliveryChargerList/list.sb", params);
   };
@@ -69,6 +73,7 @@ app.controller('dlvrChgrListCtrl', ['$scope', '$http', function ($scope, $http) 
     var params = {};
     params.dlvrCd = '';
     params.dlvrNm = '';
+    params.hqOfficeCd = $scope.hqOfficeCd;
     $scope._broadcast('dlvrRegistCtrl', params);
   }
 }]);

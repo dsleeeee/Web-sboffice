@@ -123,6 +123,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             var endDate = $scope.boardInfo.endDate.substr(0, 4) + "/" + $scope.boardInfo.endDate.substr(4, 2) + "/" + $scope.boardInfo.endDate.substr(6, 2);
             $scope.startDate = startDate;
             $scope.endDate = endDate;
+            $scope.remark = $scope.boardInfo.remark;
             // 서머노트에 text 쓰기
             $('#summernote').summernote('code', $scope.boardInfo.content);
             // $('#summernote').summernote('insertText', $scope.boardInfo.content);
@@ -144,37 +145,50 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#lblStatus").text("I");
 
         $scope.title = "";
-        $scope.userNm = "";
+        $scope.userNm = userNm;
         $scope.apprFg = "1";
         $scope.targetFg = "1";
         $scope.noticeYn = false;
         $scope.smsYn = false;
         $scope.startDate = new Date();
         $scope.endDate = new Date();
+        $scope.remark = "";
 
         $scope.setSelectedBoardInfo(null);
+
+        var storeScope = agrid.getScope('boardInfoCtrl');
+        storeScope._gridDataInit();   // 그리드 초기화
 
         // 서머노트 리셋
         $('#summernote').summernote('reset');
 
         // 첨부파일 리셋
-        // ie 일때
-        $("#file").replaceWith( $("#file").clone(true) );
-        // other browser
-        $("#file").val("");
+        var agent = navigator.userAgent.toLowerCase();
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            $("#file").replaceWith( $("#file").clone(true) );
+        } else {
+            // other browser 일때
+            $("#file").val("");
+        }
 
         $("#boradForm")[0].reset();
     };
     // <-- //검색 호출 -->
 
+    // 선택 매장
+    $scope.selectedBoardInfo;
+    $scope.setSelectedBoardInfo = function(store) {
+        $scope.selectedBoardInfo = store;
+    };
+    $scope.getSelectedBoardInfo = function(){
+        return $scope.selectedBoardInfo;
+    };
+
     // 저장
     $("#funcSave").click(function(e){
         if($scope.title === "") {
             $scope._popMsg(messages["boardInfo.titleBlank"]); // 제목을 입력해주세요
-            return false;
-        }
-        if($scope.userNm === "") {
-            $scope._popMsg(messages["boardInfo.userNmBlank"]); // 작성자를 입력해주세요
             return false;
         }
 
@@ -197,6 +211,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // }
         params.startDate = dateToDaystring($scope.startDate).replaceAll("-","");
         params.endDate = dateToDaystring($scope.endDate).replaceAll("-","");
+        params.remark = $scope.remark;
         var html = $('#summernote').summernote('code');
         params.content = html;
         params.storeCds = $("#boardInfoStoreCd").val();
@@ -211,33 +226,59 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
+        // $scope._save("/adi/board/board/board/getBoardInfoSave.sb", params, function(){ });
+        $.ajax({
+            type: "POST",
+            url: "/adi/board/board/board/getBoardInfoSave.sb",
+            data:  JSON.stringify(params),
+            success: function(result){
+                // alert(result.status);
+                // alert(result.data);
+                if (result.status === "OK") {
+                    // 신규
+                    if(params.status === "I") {
+                        params.boardSeqNo = result.data;
+                    }
+                    //첨부파일 저장
+                    $scope.atchSave(params);
 
-        //첨부파일 저장
-        $scope.atchSave(params);
+                    // 수정
+                    if(params.status === "U") {
+                        params.userId = $scope.selectedBoardInfo.userId;
+
+                        // 저장기능 수행후 재조회
+                        $scope._broadcast('boardDetailCtrl', params);
+                    }
+
+                    $scope._popMsg("저장되었습니다.");
+                    $scope.close();
+                }
+                else if (result.status === "FAIL") {
+                    $scope._popMsg('Ajax Fail By HTTP Request');
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else if (result.status === "SERVER_ERROR") {
+                    $scope._popMsg(result.message);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+                else {
+                    var msg = result.status + " : " + result.message;
+                    $scope._popMsg(msg);
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },
+            cache: false,
+            dataType: "json",
+            contentType : 'application/json'
+        });
     });
 
     // 첨부파일 저장
     $scope.atchSave = function(data){
-        var params = {};
-        params.boardCd = data.boardCd;
-        params.boardSeqNo = data.boardSeqNo;
-        params.title = data.title;
-        params.userNm = data.userNm;
-        // 신규
-        if(data.status === "I") {
-            params.status = "INSERT";
-        // 수정
-        } else if (params.status === "U") {
-            params.status = "UPDATE";
-        }
 
         var formData = new FormData($("#boradForm")[0]);
-        formData.append("boardCd", params.boardCd);
-        formData.append("boardSeqNo", params.boardSeqNo);
-        formData.append("status", params.status);
-        formData.append("title", params.title);
-        formData.append("userNm", params.userNm);
+        formData.append("boardCd", data.boardCd);
+        formData.append("boardSeqNo", data.boardSeqNo);
 
         var url = '/adi/board/board/board/getBoardInfoAtchSave.sb';
 
@@ -252,14 +293,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             success: function(result) {
                 // console.log('save result', result);
                 if (result.status === "OK") {
-                    if( isEmptyObject($scope.getSelectVersion()) ) {
-                        $scope._popMsg("등록되었습니다.");
-                    } else {
-                        $scope._popMsg("저장되었습니다.");
-                    }
-
+                    $scope._popMsg("저장되었습니다.");
                     $scope.$broadcast('loadingPopupInactive');
-                    $scope.close();
                 }
                 else if (result.status === "FAIL") {
                     $scope._popMsg('Ajax Fail By HTTP Request');
@@ -312,25 +347,33 @@ app.controller('boardInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._broadcast('boardInfoStoreCtrl');
     };
 
-    // 선택 매장
-    $scope.selectedBoardInfo;
-    $scope.setSelectedBoardInfo = function(store) {
-        $scope.selectedBoardInfo = store;
-    };
-    $scope.getSelectedBoardInfo = function(){
-        return $scope.selectedBoardInfo;
-    };
-
     // 팝업 닫기
     $scope.close = function(){
         $scope.newForm();  //신규
-
         $scope.wjBoardInfoLayer.hide();
+
+        // 저장기능 수행후 재조회
+        $scope._broadcast('boardListCtrl');
     };
 
     // 글쓰기 에디터
     $(document).ready(function() {
-        $('#summernote').summernote( { height: 150 });
+        $('#summernote').summernote( {
+            height: 200,
+            toolbar: [
+                /*['fontname', ['fontname']],*/
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['paragraph']],
+                ['height', ['height']],
+                ['style', ['style']],
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['insert', ['link','image', 'doc', 'video', 'table']],
+                ['view', ['fullscreen', 'codeview', 'help']],
+            ],
+            fontSizes: [ '8', '10', '12', '14','16', '18', '24', '36'],
+        });
     });
 
 }]);

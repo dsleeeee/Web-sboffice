@@ -5,7 +5,7 @@
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2010.02.10     김설아      1.0
+ * 2020.02.10     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -72,7 +72,7 @@ app.controller('boardMasterCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             var item = $scope.flex.collectionView.items[i];
 
             if(item.gChk) {

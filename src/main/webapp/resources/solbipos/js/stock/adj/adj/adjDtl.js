@@ -65,7 +65,12 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     var params     = {};
     params.adjDate = $scope.adjDate;
     params.seqNo   = $scope.seqNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -153,7 +158,7 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.adjDate   = $scope.adjDate;
       item.seqNo     = $scope.seqNo;
       item.adjTitle  = $scope.adjTitle;
-      item.storageCd = "001";
+      item.storageCd = "999";	//001	->	999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg = confirmFg;
 
@@ -182,9 +187,23 @@ app.controller('adjDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 확정
   $scope.confirm = function () {
     var msg = messages["adj.dtl.confirmMsg"]; // 확정하시겠습니까?
+    var checkLenth = 0;
     s_alert.popConf(msg, function () {
-      $scope.saveAdjDtl('Y');
-      return false;
+	    for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
+	  	      var item = $scope.flex.collectionView.items[i];
+	  	      if(item.gChk == true){
+	  	    	  alert("확정하시려면 상품목록의 체크박스를 해제해주세요.");
+	  	    	  return false;
+	  	      }else{
+	  	    	  checkLenth++;
+	  	      }
+	  	 }
+    
+	    //체크해제된 ROW수가 총 ROW와 같으면 확정
+	    if($scope.flex.collectionView.items.length == checkLenth){
+	        $scope.saveAdjDtl('Y');
+	        return false;
+	    }
     });
   };
 

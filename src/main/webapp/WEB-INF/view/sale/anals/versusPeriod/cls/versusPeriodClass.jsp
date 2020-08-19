@@ -12,7 +12,7 @@
 		<div class="searchBar flddUnfld">
 			<a href="#" class="open fl"><s:message code="versusPeriod.cls"/></a>
 	    	<%-- 조회 --%>
-	    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('versusPeriodClassCtrlSrch')">
+	    	<button class="btn_blue fr mt5 mr10" id="btnVersusPeriodClassSearch" ng-click="_broadcast('versusPeriodClassCtrlSrch')">
 	    		<s:message code="cmm.search"/>
 	    	</button>
 		</div>
@@ -108,7 +108,7 @@
                 <div class="sb-select fl w200px">
                     <wj-combo-box
                             id="brandCd"
-                            ng-model="brandCd"
+                            ng-model="brandCdModel"
                             items-source="_getComboData('brandCd')"
                             display-member-path="name"
                             selected-value-path="value"
@@ -130,7 +130,7 @@
 	          	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	        		<input type="hidden" id="versusPeriodClassSelectStoreCd" value="${sessionInfo.storeCd}"/>
 	      		</c:if>
-	          	
+
 	        </tr>
 			</tbody>
 		</table>
@@ -169,8 +169,8 @@
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 	binding="realSaleAmtB" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.realSaleAmt2"/>" 		binding="sinAmt" 		width="*" align="right" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -191,16 +191,19 @@
 		      class="w100px fl"
 		      id="versusPeriodClassDtllistScaleBox"
 		      ng-model="listScale"
-		      control="listScaleCombo"
 		      items-source="_getComboData('versusPeriodClassDtllistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      control="conListScale"
+              is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 
 		    <%-- 엑셀 다운로드 //TODO --%>
 		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClassDtl()"><s:message code="cmm.excel.down" />
+		    </button>
+		    <button class="btn_skyblue fr" id="btnVersusPeriodClassChartSearch" ng-click="_broadcast('versusPeriodClassChartCtrlSrch')"><s:message code="cmm.chart" />
 		    </button>
 		</div>
 
@@ -218,13 +221,13 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
 	        </wj-flex-grid>
 
 	        <%-- ColumnPicker 사용시 include --%>
@@ -247,10 +250,97 @@
 	  <%--//페이지 리스트--%>
 </div>
 
+	  <%-- 엑셀 리스트 --%>
+  	  <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="versusPeriodClassDtlExcelCtrl">
+         <div class="wj-gridWrap">
+	        <wj-flex-grid
+	          id="versusPeriodClassDtlExcelGrid"
+	          autoGenerateColumns="false"
+	          control="excelFlex"
+	          initialized="initGrid(s,e)"
+	          sticky-headers="true"
+	          selection-mode="Row"
+	          items-source="data"
+	          item-formatter="_itemFormatter">
 
-<script type="text/javascript">
+	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.prod"/>" 	binding="prodNm" 	width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtA" 	width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="saleCntA" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 	binding="realSaleAmtB" 		width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" binding="saleCntB" 	width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.saleCnt"/>" 		binding="sinAmt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="versusPeriod.sinCnt"/>" 	binding="sinCnt" 		width="*" align="center" is-read-only="true" aggregate="Sum" format="n2"></wj-flex-grid-column>
+	        </wj-flex-grid>
+  		 </div>
+ 	  </div>
+	  <%--//엑셀 리스트--%>
+
+<%--layer:For Center screen--%>
+<div class="fullDimmed versusPeriodClassLayer" id="versusPeriodClassMask" style="display: none; z-index:4;"></div>
+<div class="layer versusPeriodClassLayer" id="versusPeriodClassLayer" style="display: none; z-index:5;">
+    <div class="layer_inner">
+
+        <%--layerContent--%>
+        <div class="title" style="width:1010px">
+            <p class="tit" id="tblAttrTitle" style="padding-left:20px">
+            </p>
+            <a href="#" class="btn_close _btnClose"></a>
+
+            <%--위즈모 테이블--%>
+		    <div class="w100 mt10" id="wjWrapType1" ng-controller="versusPeriodClassChartCtrl">
+		    	<div class="wj-gridWrap" style="display:none;" >
+		    		<wj-flex-grid
+						id="versusPeriodClassChartGrid"
+						autoGenerateColumns="false"
+						selection-mode="Row"
+						items-source="data"
+						control="flex"
+						is-read-only="true"
+						item-formatter="_itemFormatter">
+						<!-- define columns -->
+						<wj-flex-grid-column header="<s:message code="cmm.storeNm"/>"				binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtSrch"/>"		binding="realSaleAmtA" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+						<wj-flex-grid-column header="<s:message code="pos.realSaleAmtVs"/>"			binding="realSaleAmtB" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+					</wj-flex-grid>
+				</div>
+
+				<div class="mt20 oh sb-select dkbr pd10">
+					<!-- 막대 차트 샘플 -->
+					<div>
+						<wj-flex-chart
+							id="versusPeriodClassBarChart"
+							name="barChart1"
+							class="custom-flex-chart"
+							initialized="initChart(s,e)"
+							items-source="data"
+							binding-x="prodNm">
+
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtSrch"/>" binding="realSaleAmtA"></wj-flex-chart-series>
+							<wj-flex-chart-series name="<s:message code="pos.realSaleAmtVs"/>" binding="realSaleAmtB"></wj-flex-chart-series>
+						</wj-flex-chart>
+					</div>
+				</div>
+			</div>
+               <%--//위즈모 테이블--%>
+        </div>
+
+    </div>
+    <%--//layerContent--%>
+</div>
+<%--//layer:For Center screen--%>
+
+
+<script>
+    $(document).ready(function() {
+
+        $("._btnClose").click(function(e) {
+            $("div.versusPeriodClassLayer").hide();
+        });
+
+    });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20190125.05" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="goalDayView" class="subCon"  ng-controller="goalDayCtrl">
+<div id="goalDayView" class="subCon3"  ng-controller="goalDayCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="goal.goalDay.versusGoalSaleAnals"/></a>
       <%-- 조회 --%>
@@ -69,8 +69,10 @@
             items-source="_getComboData('goalDayListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="conListScale"
+			is-editable="true"
+			text-changed="_checkValidation(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="goalDaySelectStoreStoreNum" ng-model="storeNum">
@@ -85,7 +87,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="goalDayGrid"
           autoGenerateColumns="false"
@@ -115,6 +117,25 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+    <%-- 엑셀 리스트 --%>
+    <div class="wj-gridWrap2" style="display: none;" ng-controller="goalDayExcelCtrl">
+     <wj-flex-grid
+       id="goalDayExcelGrid"
+       autoGenerateColumns="false"
+       selection-mode="Row"
+       items-source="data"
+       control="excelFlex"
+       initialized="initGrid(s,e)"
+       is-read-only="true"
+       frozen-columns="2"
+       item-formatter="_itemFormatter">
+       <!-- define columns -->
+       <wj-flex-grid-column header="<s:message code="goal.goalDay.saleDate"/>"          binding="saleGoalDate"          width="200" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+       <wj-flex-grid-column header="<s:message code="goal.goalDay.yoil"/>"              binding="saleGoalDy"            width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+     </wj-flex-grid>
+   </div>
+   <%-- //엑셀 리스트 --%>
 </div>
 
 <script type="text/javascript">

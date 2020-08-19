@@ -186,7 +186,29 @@ public class RtnStoreOrderController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+    
+    /**
+     * 반품등록 - 반품상세 저장
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   rtnStoreOrderDtlVOs
+     * @return  String
+     * @author  안동관
+     * @since   2018. 10. 15.
+     */
+    @RequestMapping(value = "/rtnStoreOrderDtl/save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveRtnStoreOrderDtl(HttpServletRequest request, HttpServletResponse response,
+        Model model, @RequestBody RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = rtnStoreOrderService.saveRtnStoreOrderDtl(rtnStoreOrderDtlVOs, sessionInfoVO);
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
+    
     /**
      * 반품등록 - 주문진행구분 조회
      * @param   request
@@ -215,7 +237,7 @@ public class RtnStoreOrderController {
     }
 
     /**
-     * 주문등록 - 주문등록 확정
+     * 반품등록 -  반품등록 확정
      * @param   request
      * @param   response
      * @param   model
@@ -226,8 +248,7 @@ public class RtnStoreOrderController {
      */
     @RequestMapping(value = "/rtnStoreOrderDtl/confirm.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveRtnStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response,
-        Model model, RtnStoreOrderVO rtnStoreOrderVO) {
+    public Result saveRtnStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response, Model model, @RequestBody RtnStoreOrderVO rtnStoreOrderVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

@@ -64,10 +64,16 @@ public interface VendrInstockStoreMapper {
 
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 등록 */
     int insertVendrInstockDtl(VendrInstockVO vendrInstockVO);
-
+    
+    /** 거래처 입고/반출등록 - 입고/반출상품 PROD 등록 */
+    int insertVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 수정 */
     int updateVendrInstockDtl(VendrInstockVO vendrInstockVO);
-
+    
+    /** 거래처 입고/반출등록 - 입고/반출상품 PROD 수정 */
+    int updateVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 삭제 */
     int deleteVendrInstockDtl(VendrInstockVO vendrInstockVO);
 
@@ -96,6 +102,8 @@ public interface VendrInstockStoreMapper {
     int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
 
     /** 거래처 입고/반출등록 - 반출서 반출정보 조회(반출처, 공급자 정보) */
-    DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO);
-
+    DefaultMap<String> getVendrInstockReportInfo(VendrInstockVO vendrInstockVO);   
+    
+    /** TB_PO_HQ_VENDR_INSTOCK_PROD 확정여부 'Y' */
+    int saveVendrInstockProd(VendrInstockVO vendrInstockVO);
 }

@@ -90,6 +90,27 @@ public class EmpPosController {
     }
     
     /**
+     * 판매자별 매출 - 포스별 리스트 조회 
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   empPosVO
+     * @return  String
+     * @author  박지선
+     * @since   2020. 04. 23.
+     */
+    @RequestMapping(value = "/pos/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpPosExcelList(HttpServletRequest request, HttpServletResponse response, Model model, EmpPosVO empPosVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empPosService.getEmpPosExcelList(empPosVO, sessionInfoVO);
+        
+        return ReturnUtil.returnListJson(Status.OK, list, empPosVO);
+    }
+    
+    /**
      * 판매자별 매출 -판매자 리스트 조회 
      * @param   request
      * @param   response

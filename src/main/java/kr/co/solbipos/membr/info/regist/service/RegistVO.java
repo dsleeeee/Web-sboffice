@@ -154,6 +154,8 @@ public class RegistVO extends PageVO {
     private String lastDlvrDate;
     private Integer totDlvrCnt;
     private Integer dlvrAddrSeq;
+    /** 프로시져 결과 */
+    private String result;
 
     /**
      * @return the orgnFg
@@ -985,4 +987,7 @@ public class RegistVO extends PageVO {
     public void setDlvrAddrSeq(Integer dlvrAddrSeq) {
         this.dlvrAddrSeq = dlvrAddrSeq;
     }
+    public String getResult() { return result; }
+
+    public void setResult(String result) { this.result = result; }
 }

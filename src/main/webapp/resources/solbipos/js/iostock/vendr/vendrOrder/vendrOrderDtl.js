@@ -59,7 +59,12 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     var params    = {};
     params.slipNo = $scope.slipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/slipInfo.sb", /* 통신할 URL */
@@ -149,7 +154,12 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     params.orderDate    = wijmo.Globalize.format($scope.slipInfo.orderDate, 'yyyyMMdd');
     params.orderReqDate = wijmo.Globalize.format($scope.slipInfo.orderReqDate, 'yyyyMMdd');
     params.remark       = $scope.slipInfo.remark;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/save.sb", /* 통신할 URL */
@@ -207,7 +217,12 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     s_alert.popConf(msg, function () {
       var params    = {};
       params.slipNo = $scope.slipNo;
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/delete.sb", /* 통신할 URL */
@@ -247,7 +262,12 @@ app.controller('vendrOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       var params    = {};
       params.slipNo = $scope.slipNo;
       params.procFg = $scope.slipInfo.procFg;
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrOrder/vendrOrderDtl/saveProcFg.sb", /* 통신할 URL */

@@ -90,9 +90,6 @@ public class BoardVO extends PageVO {
     /** 파일 명 */
     private String fileNm;
 
-    /** 구분 */
-    private String statusS;
-
     /** 조회매장 */
     private String storeCds;
 
@@ -104,6 +101,12 @@ public class BoardVO extends PageVO {
 
     /** 파일확장자 */
     private String fileExt;
+
+    /** 날짜 */
+    private String date;
+
+    /** 비고 */
+    private String remark;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -197,10 +200,6 @@ public class BoardVO extends PageVO {
 
     public void setFileNm(String fileNm) { this.fileNm = fileNm; }
 
-    public String getStatusS() { return statusS; }
-
-    public void setStatusS(String statusS) { this.statusS = statusS; }
-
     public String getStoreCds() { return storeCds; }
 
     public void setStoreCds(String storeCds) { this.storeCds = storeCds; }
@@ -216,4 +215,12 @@ public class BoardVO extends PageVO {
     public String getFileExt() { return fileExt; }
 
     public void setFileExt(String fileExt) { this.fileExt = fileExt; }
+
+    public String getDate() { return date; }
+
+    public void setDate(String date) { this.date = date; }
+
+    public String getRemark() { return remark; }
+
+    public void seRemark(String remark) { this.remark = remark; }
 }

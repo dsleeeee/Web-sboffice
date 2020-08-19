@@ -20,9 +20,11 @@
       <div ng-controller="storeEnvCtrl">
         <ul class="subTab">
           <%-- 매장정보 --%>
-          <li><a id="storeInfo" href="#" ng-click="changeTab();"><s:message code="storeManage.storeInfo" /></a></li>
+          <li><a id="storeInfo" href="#" ng-click="changeInfoTab();"><s:message code="storeManage.storeInfo" /></a></li>
           <%-- 매장환경 --%>
           <li><a id="storeEnv" href="#" class="on"><s:message code="storeManage.storeEnv" /></a></li>
+          <%-- 메뉴권한 --%>
+          <li><a id="storeAuth" href="#" ng-click="changeAuthTab();"><s:message code="storeManage.auth" /></a></li>
         </ul>
       </div>
 
@@ -49,5 +51,5 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=2018110701" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20181107.05" charset="utf-8"></script>
 

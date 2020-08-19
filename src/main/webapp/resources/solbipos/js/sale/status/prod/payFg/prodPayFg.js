@@ -12,7 +12,8 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.srchStartDate = wcombo.genDateVal("#srchPayFgStartDate", getToday());
   $scope.srchEndDate   = wcombo.genDateVal("#srchPayFgEndDate", getToday());
   $scope.orgnFg = gvOrgnFg;
-
+  $scope.isSearch = false;
+  
   // 콤보박스 데이터 Set
   $scope._setComboData('prodPayFglistScaleBox', gvListScaleBoxData);
 
@@ -50,10 +51,10 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	//params.chkPop	= "tablePop";
-        
         	params.storeCd   = $("#pordPayFgSelectStoreCd").val();
         	params.prodCd = selectedRow.prodCd
         	params.dialogHd  = col.header;
+
         	// 등록일자 '전체기간' 선택에 따른 params
             if(!$scope.isChecked){
               params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -62,7 +63,6 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         if ((col.binding.substr(0, 3) === "pay") && col.binding !== "payAmt") { // 결제수단
           params.payCd = col.binding.substr(3,2); // pay01 : 끝에 2자리 숫자만 가져옴
-          console.log(col.binding);
           $scope._broadcast('saleComPayFgCtrl', params);
         } else if (col.binding === "payAmt") { // 실매출액
           $scope._broadcast('saleComPayFgCtrl', params);
@@ -96,13 +96,25 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.prodCd    = $("#srchPayFgProdCd").val();
     params.prodNm    = $("#srchPayFgProdNm").val();
     params.orgnFg    = $scope.orgnFg;
-    params.listScale = $scope.prodPayFglistScale; //-페이지 스케일 갯수
+    params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
     params.isPageChk = isPageChk;
+    
+    $scope.excelStartDate = "";
+    $scope.excelEndDate = "";
+    $scope.excelStoreCd	=	params.storeCd;
+    $scope.excelProdCd	=	params.prodCd;
+    $scope.excelProdNm	=	params.prodNm;
+    $scope.excelOrgnFg	=	params.orgnFg;
+    $scope.isSearch			= true;
+    
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
+    
+    $scope.excelStartDate = params.startDate;
+    $scope.excelEndDate = params.endDate;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/prod/payFg/list.sb", params, function() {});
@@ -115,6 +127,17 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
+  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  var columns = $scope.flex.columns;
+
+	  for(var i=0; i<columns.length; i++){
+		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+		  }
+	  }
+  };
+
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -122,26 +145,90 @@ app.controller('prodPayFgCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._broadcast('pordPayFgSelectStoreCtrl');
   };
 
-  // 엑셀 다운로드
+  //엑셀 다운로드
   $scope.excelDownloadPayFg = function () {
-    if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-      return false;
-    }
-
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-    $timeout(function () {
-      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-        includeColumnHeaders: true,
-        includeCellStyles   : true,
-        includeColumns      : function (column) {
-          return column.visible;
-        }
-      }, '매출현황_상품별_결제수단별_'+getToday()+'.xlsx', function () {
-        $timeout(function () {
-          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-        }, 10);
-      });
-    }, 10);
+	  var params = {};
+	  $scope._broadcast('prodPayFgExcelCtrl', params);
+	  
   };
+  
+}]);
+
+
+/** 결제수단별 상세현황 controller */
+app.controller('prodPayFgExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('prodPayFgExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+  };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("prodPayFgExcelCtrl", function (event, data) {
+    $scope.searchProdPayFgExcelList(true);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 상품매출순위 리스트 조회
+  $scope.searchProdPayFgExcelList = function (isPageChk) {
+
+    // 파라미터
+    var params       = {};
+
+    params.startDate	=	$scope.excelStartDate;
+    params.endDate		=	$scope.excelEndDate;
+    params.storeCd 	=	$scope.excelStoreCd;
+    params.prodCd	=	$scope.excelProdCd;
+    params.prodNm	=	$scope.excelProdNm;
+    params.orgnFg	=	$scope.excelOrgnFg;
+    params.listscale	=	$scope.excelListScale;
+    
+    
+    $scope.isChkProdClassDisplay();
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/sale/status/prod/payFg/excelList.sb", params, function() {
+    	
+    	if ($scope.excelFlexTrd.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+    	}
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexTrd, {
+          includeColumnHeaders: true,
+          includeCellStyles   : true,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, '매출현황_상품별_결제수단별_'+getToday()+'.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+      });
+
+  };
+
+
+  // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+  $scope.isChkProdClassDisplay = function(){
+	  var columns = $scope.excelFlexTrd.columns;
+
+	  for(var i=0; i<columns.length; i++){
+		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+		  }
+	  }
+  };
+  
 }]);

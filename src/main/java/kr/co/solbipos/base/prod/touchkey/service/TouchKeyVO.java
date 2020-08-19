@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.touchkey.service;
 
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.base.common.enums.InFg;
+import kr.co.solbipos.pos.loginstatus.enums.SysStatFg;
 
 /**
  * @Class Name : TouchKeyVO.java
@@ -75,6 +76,21 @@ public class TouchKeyVO extends CmmVO {
 
     /** 조회용 가맹점명 */
     private String storeNm;
+
+    /** 터치키그룹코드 : 시즌,행사별 등 일종의 템플릿 */
+    private String tukeyGrpCd;
+
+    /** 상품명  */
+    private String prodNm;
+
+    /** 시스템상태구분 */
+    private SysStatFg sysStatFg;
+
+    /** 용도구분  */
+    private String clsFg;
+
+    /** 복사기준 터치키 그룹코드 */
+    private String copyTukeyGrpCd;
 
     /**
      * @return the orgnFg
@@ -357,5 +373,45 @@ public class TouchKeyVO extends CmmVO {
      */
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+
+    public String getTukeyGrpCd() {
+        return tukeyGrpCd;
+    }
+
+    public void setTukeyGrpCd(String tukeyGrpCd) {
+        this.tukeyGrpCd = tukeyGrpCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    public SysStatFg getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(SysStatFg sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
+
+    public String getClsFg() {
+        return clsFg;
+    }
+
+    public void setClsFg(String clsFg) {
+        this.clsFg = clsFg;
+    }
+
+    public String getCopyTukeyGrpCd() {
+        return copyTukeyGrpCd;
+    }
+
+    public void setCopyTukeyGrpCd(String copyTukeyGrpCd) {
+        this.copyTukeyGrpCd = copyTukeyGrpCd;
     }
 }

@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="baseUrl" value="/iostock/volmErr/volmErr/volmErrDtl/"/>
 
 <wj-popup id="wjVolmErrDtlLayer" control="wjVolmErrDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
@@ -88,13 +89,20 @@
             <label for="volmErrConfirmFg"><s:message code="volmErr.dtl.confirm"/></label>
           </span>
           <%-- 출고일자 --%>
-          <div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">
+        <%--<div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">--%>
+       		<div id="divDtlOutDate" class="sb-select ml10 fl">
             <p class="s12 fl mr5 lh30"><s:message code="volmErr.dtl.outDate"/> : </p>
             <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
           </div>
           <%-- 저장 --%>
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
             <s:message code="cmm.save"/></button>
+          <%-- 엑셀 다운로드 --%>
+          <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+        </div>
+        <div id="volmErrBtnExcelLayer" style="display: none;">
+	        <%-- 엑셀 다운로드 --%>
+	        <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
         </div>
       </div>
       <div style="clear: both;"></div>
@@ -112,15 +120,15 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.seq"/>" binding="seq" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.outUnitQty"/>" binding="outUnitQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.outEtcQty"/>" binding="outEtcQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inUnitQty"/>" binding="inUnitQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inEtcQty"/>" binding="inEtcQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.errFg"/>" binding="errFg" width="100" align="center" is-read-only="false" data-map="errFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.seq"/>" 			binding="seq" 			width="0" 	align="center" 	is-read-only="true"		visible="false"									></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.prodCd"/>" 		binding="prodCd" 		width="100" align="center" 	is-read-only="true"														></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.prodNm"/>" 		binding="prodNm" 		width="150" align="left" 	is-read-only="true"														></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.outUnitQty"/>" 	binding="outUnitQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.outEtcQty"/>" 	binding="outEtcQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inUnitQty"/>" 	binding="inUnitQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inEtcQty"/>" 		binding="inEtcQty" 		width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0"	aggregate="Sum"	></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.errFg"/>" 		binding="errFg" 		width="100" align="center" 	is-read-only="false"	data-map="errFgMap"								></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.remark"/>" 		binding="remark" 		width="200" align="left" 	is-read-only="false"	max-length=300									></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

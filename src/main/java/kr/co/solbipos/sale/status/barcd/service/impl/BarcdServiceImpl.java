@@ -58,4 +58,38 @@ public class BarcdServiceImpl implements BarcdService {
     	}
         return barcdMapper.getBarcdDtlList(barcdVO);
 	}
+
+
+	@Override
+	public List<DefaultMap<String>> getBarcdExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
+		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+    	
+    	if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
+    		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				barcdVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        return barcdMapper.getBarcdExcelList(barcdVO);
+	}
+
+
+	@Override
+	public List<DefaultMap<String>> getBarcdDtlExcelList(BarcdVO barcdVO, SessionInfoVO sessionInfoVO) {
+		barcdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	barcdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		
+		if (barcdVO.getStoreCd() != null && !"".equals(barcdVO.getStoreCd())) {
+    		String[] arrStoreCd = barcdVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				barcdVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+        return barcdMapper.getBarcdDtlExcelList(barcdVO);
+	}
 }

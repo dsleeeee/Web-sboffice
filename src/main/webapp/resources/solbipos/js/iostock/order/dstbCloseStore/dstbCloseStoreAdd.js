@@ -175,32 +175,57 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.storeCd = $scope.storeCd;
+    params.slipFg  = $scope.slipFg;
 
-    // ajax 통신 설정
-    $http({
-      method : 'POST', //방식
-      url    : '/iostock/order/dstbCloseStore/dstbCloseStoreAdd/getOrderFg.sb', /* 통신할 URL */
-      params : params, /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
-        if (!$.isEmptyObject(response.data.data)) {
-          $scope.orderFg  = response.data.data.orderFg;
-          var orderFgText = messages["dstbCloseStore.add.orderPossibleFg"] + ' : ';
-          if ($scope.orderFg === 0) orderFgText += messages["dstbCloseStore.add.possible"];
-          else orderFgText += messages["dstbCloseStore.add.impossible"];
-          $("#orderFgSubTitle").html(orderFgText);
-        }
-        $scope.searchDstbCloseStoreAddList();
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-      // "complete" code here
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
+	    var dstbFg = response.data.data;
+	    
+	    if(dstbFg < 1){ // 마감이 아닐때
+	    	
+		    // ajax 통신 설정
+		    $http({
+		      method : 'POST', //방식
+		      url    : '/iostock/order/dstbCloseStore/dstbCloseStoreAdd/getOrderFg.sb', /* 통신할 URL */
+		      params : params, /* 파라메터로 보낼 데이터 */
+		      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+		    }).then(function successCallback(response) {
+		      if ($scope._httpStatusCheck(response, true)) {
+		        if (!$.isEmptyObject(response.data.data)) {
+		          $scope.orderFg  = response.data.data.orderFg;
+		          var orderFgText = messages["dstbCloseStore.add.orderPossibleFg"] + ' : ';
+		          if ($scope.orderFg === 0) orderFgText += messages["dstbCloseStore.add.possible"];
+		          else orderFgText += messages["dstbCloseStore.add.impossible"];
+		          $("#orderFgSubTitle").html(orderFgText);
+		        }
+		        $scope.searchDstbCloseStoreAddList();
+		      }
+		    }, function errorCallback(response) {
+		      // called asynchronously if an error occurs
+		      // or server returns response with an error status.
+		      $scope._popMsg(messages["cmm.saveFail"]);
+		      return false;
+		    }).then(function () {
+		      // "complete" code here
+		    });
+	    
+	    }else{
+	    	$scope._popMsg(messages["dstbCloseStore.add.txt2"]); // 이미 마감된 매장입니다.
+	    	// 그리드 초기화
+		    var dstbCloseStoreAddScope = agrid.getScope('dstbCloseStoreAddCtrl');
+		    dstbCloseStoreAddScope.dtlGridDefault();
+	    }
     });
+  };
+  
+  //그리드 초기화
+  $scope.dtlGridDefault = function () {
+    $timeout(function () {
+      var cv          = new wijmo.collections.CollectionView([]);
+      cv.trackChanges = true;
+      $scope.data     = cv;
+      $scope.flex.refresh();
+    }, 10);
   };
 
   // 분배가능상품 리스트 조회
@@ -242,7 +267,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
       item.slipFg    = $scope.slipFg;
       item.storeCd   = $scope.storeCd;
       item.empNo     = "0000";
-      item.storageCd = "001";
+      item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       params.push(item);
     }
@@ -398,7 +423,12 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     params.storeCd = $("#dstbCloseStoreAddSelectStoreCd").val();
     params.slipFg  = $scope.slipFg;
     params.date    = $scope.reqDate;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({

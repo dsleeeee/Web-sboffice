@@ -332,4 +332,51 @@ public class GoalServiceImpl implements GoalService {
         
         return result;
     }
+
+    /**매출목표관리 - 일자별 목표대비 매출 엑셀리스트 조회   */
+	@Override
+	public List<DefaultMap<String>> getSaleGoalDayExcelList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
+		  
+    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
+    		String[] arrStoreCd = goalVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				goalVO.setArrStoreCd(arrStoreCd);
+    			}
+    			// 동적 컬럼 생성을 위한 쿼리 변수.
+    	    	String sQuery1 = "";
+    	    	String sQuery2 = "";
+    	    	String startDate = goalVO.getStartDate();
+	    		String[] list = goalVO.getArrStoreCd();
+    	    	for(int i=0; i<goalVO.getArrStoreCd().length; i++) {
+    	    		sQuery1 += ", NVL((SELECT SALE_GOAL_AMT FROM TB_SL_SALE_GOAL_MONTHLY WHERE SALE_GOAL_YM = '" +startDate+"' AND STORE_CD = '" + list[i] + "'),0) AS SALE_GOAL_MONTHLY_AMT_"+ i +"\n";
+    	    		sQuery1 += ", (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = '" + list[i] + "') AS STORE_NM_"+ i +"\n";
+    	    		sQuery1 += ", NVL(SUM(M.SALE_GOAL_AMT_"+ i +"),0) AS SALE_GOAL_AMT_"+ i +"\n";
+    	    		sQuery1 += ", NVL(SUM(M.TOT_SALE_AMT_"+ i +"),0)  AS TOT_SALE_AMT_"+ i +"\n";
+    	    		sQuery1 += ", NVL(SUM(SUM(M.TOT_SALE_AMT_"+ i +")) OVER(ORDER BY M.SALE_GOAL_DATE ASC),0) AS ACC_"+ i +"\n";
+    	    		sQuery1 += ", NVL(ROUND(NVL((1+(NVL(SUM(M.TOT_SALE_AMT_"+ i +"),0)-SUM(M.SALE_GOAL_AMT_"+ i +"))/DECODE(ABS(SUM(M.SALE_GOAL_AMT_"+ i +")),0,NULL,ABS(SUM(M.SALE_GOAL_AMT_"+ i +")))),0)*100,1),0) AS GOAL_ACHI_"+ i +"\n";
+    	    		sQuery2 += ", NVL(SUM(DECODE(TSSGD.STORE_CD,'" + list[i] + "',TSSGD.SALE_GOAL_AMT,0)),0)   AS SALE_GOAL_AMT_"+ i +"\n";
+    	    		sQuery2 += ", NVL(SUM(DECODE(TSSGD.STORE_CD,'" + list[i] + "',TSDT.TOT_SALE_AMT,0)),0)	AS TOT_SALE_AMT_"+ i +"\n";
+    	    	}
+    	    	goalVO.setsQuery1(sQuery1);
+    	    	goalVO.setsQuery2(sQuery2);
+    		}
+    	}
+        return goalMapper.getSaleGoalDayExcelList(goalVO);
+	}
+
+	/**매출목표관리 - 월별 목표대비 매출 엑셀리스트 조회   */
+	@Override
+	public List<DefaultMap<String>> getSaleGoalMonthExcelList(GoalVO goalVO, SessionInfoVO sessionInfoVO) {
+		  
+    	goalVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(goalVO.getStoreCd()).equals("")) {
+        	goalVO.setArrStoreCd(goalVO.getStoreCd().split(","));
+        }
+    	        
+        return goalMapper.getSaleGoalMonthExcelList(goalVO);
+	}
 }

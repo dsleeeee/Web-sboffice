@@ -1,7 +1,7 @@
 /** 입고확정 상세 그리드 controller */
 app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('rtnInstockConfmDtlCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('rtnInstockConfmDtlCtrl', $scope, $http, $timeout, true));
 
   $scope.dtlInDate = wcombo.genDate("#dtlInDate");
 
@@ -10,15 +10,27 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
     {"name": messages["rtnInstockConfm.dtl.stmtAcctSplr"], "value": "1"},
     {"name": messages["rtnInstockConfm.dtl.stmtAcctSplrRcpnt"], "value": "2"}
   ]);
-
+  
+  var global_storage_cnt = 0;	//매장의 창고 갯수
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
+  $scope.initGrid = function (s, e) {	  
     // 배송기사
     var comboParams = {};
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	comboParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
     var url         = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
+    
+    // 출고창고
+    url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';    
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    
     comboParams             = {};
     comboParams.nmcodeGrpCd = "097";
     url                     = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -53,36 +65,89 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
 
       s.collectionView.commitEdit();
     });
-
+    
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-  };
+    
+  //Header column merge (출고수량, 입고수량)
+    s.allowMerging                          = 'ColumnHeaders';
+    s.columnHeaders.rows[0].allowMerging    = true;
 
-  // 금액 계산
+    //Header - START
+		//헤더 생성
+		s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+		for(var i=0; i<s.columnHeaders.rows.length; i++) {
+            s.columnHeaders.setCellData(i, "slipNo"     , messages["instockConfm.dtl.slipNo"        ] );      
+			s.columnHeaders.setCellData(i, "slipFg"     , messages["instockConfm.dtl.slipFg"        ] );      
+			s.columnHeaders.setCellData(i, "seq"        , messages["instockConfm.dtl.seq"           ] );      
+			s.columnHeaders.setCellData(i, "storeCd"    , messages["instockConfm.dtl.storeCd"       ] );      
+			s.columnHeaders.setCellData(i, "prodCd"     , messages["instockConfm.dtl.prodCd"        ] );      
+			s.columnHeaders.setCellData(i, "prodNm"     , messages["instockConfm.dtl.prodNm"        ] );      
+			s.columnHeaders.setCellData(i, "barcdCd"    , messages["instockConfm.dtl.barcdCd"       ] );      
+			s.columnHeaders.setCellData(i, "poUnitFg"   , messages["instockConfm.dtl.poUnitFg"      ] );      
+			s.columnHeaders.setCellData(i, "poUnitQty"  , messages["instockConfm.dtl.poUnitQty"     ] );      
+			s.columnHeaders.setCellData(i, "outSplyUprc", messages["instockConfm.dtl.outSplyUprc"   ] );      
+			                                                                                                  
+			s.columnHeaders.setCellData(i, "outUnitQty" , messages["instockConfm.dtl.outUnitQty"    ] );    
+			s.columnHeaders.setCellData(i, "outEtcQty"  , messages["instockConfm.dtl.outUnitQty"	] );      
+			s.columnHeaders.setCellData(i, "inUnitQty" , messages["instockConfm.dtl.inUnitQty"    ] );    
+			s.columnHeaders.setCellData(i, "inEtcQty"  , messages["instockConfm.dtl.inUnitQty"	] );
+			
+			s.columnHeaders.setCellData(i, "inTotQty"   , messages["instockConfm.dtl.inTotQty"      ] );      
+			s.columnHeaders.setCellData(i, "inAmt"      , messages["instockConfm.dtl.inAmt"         ] );      
+			s.columnHeaders.setCellData(i, "inVat"      , messages["instockConfm.dtl.inVat"         ] );      
+			s.columnHeaders.setCellData(i, "inTot"      , messages["instockConfm.dtl.inTot"         ] );      
+			s.columnHeaders.setCellData(i, "remark"     , messages["instockConfm.dtl.remark"        ] );      
+			s.columnHeaders.setCellData(i, "vatFg01"    , messages["instockConfm.dtl.vatFg"         ] );      
+		}
+    //Header - END
+
+        for(var i=0; i<19; i++){
+        	s.columnHeaders.columns[i].allowMerging = true;
+        }    
+    
+  
+      
+      $scope.selectedIndexChanged = function (s) {
+        	var comboParams             = {};	
+        	comboParams.storageCd 	= $scope.save.dtl.outStorageCd;
+            // 배송기사
+            url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+
+            // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+            $scope._queryCombo("combo", "saveDtlDlvrCd", null, url, comboParams, ""); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+            
+        };
+  };
+  
+  //금액 계산					--------------------------------------------------------------------------------------------------------------------------
   $scope.calcAmt = function (item) {
-    var outSplyUprc = parseInt(item.outSplyUprc);
-    var poUnitQty   = parseInt(item.poUnitQty);
-    var vat01       = parseInt(item.vatFg01);
-    var envst0011   = parseInt(item.envst0011);
+      var outSplyUprc = parseInt(item.outSplyUprc);
+      var poUnitQty   = parseInt(item.poUnitQty);
+      var vat01       = parseInt(item.vatFg01);
+      var envst0011   = parseInt(item.envst0011);
 
-    var unitQty = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
-    var etcQty  = parseInt(nvl(item.inEtcQty, 0));
-    var totQty  = parseInt(unitQty + etcQty);
-    var tempAmt = Math.round(totQty * outSplyUprc / poUnitQty);
-    var inAmt   = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-    var inVat   = Math.round(tempAmt * vat01 / (10 + envst0011));
-    var inTot   = parseInt(inAmt + inVat);
+      var unitQty     = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
+      var etcQty      = parseInt(nvl(item.inEtcQty,  0));
+      var totQty      = parseInt(unitQty + etcQty);
+      var tempAmt     = Math.round(totQty * outSplyUprc / poUnitQty);
+      var inAmt       = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+      var inVat       = Math.round(tempAmt * vat01 / (10 + envst0011));
+      var inTot       = parseInt(inAmt + inVat);
 
-    item.inTotQty = totQty; // 총입고수량
-    item.inAmt    = inAmt; // 금액
-    item.inVat    = inVat; // VAT
-    item.inTot    = inTot; // 합계
+      item.inTotQty   = totQty;   //총입고수량
+      item.inAmt      = inAmt;    //금액
+      item.inVat      = inVat;    //VAT
+      item.inTot      = inTot;    //합계
   };
-
+  
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnInstockConfmDtlCtrl", function (event, data) {
+	$scope.startDate = data.startDate;
+	$scope.endDate = data.endDate;
     $scope.slipFg = data.slipFg;
     $scope.slipNo = data.slipNo;
     $scope.wjRtnInstockConfmDtlLayer.show(true);
@@ -95,8 +160,12 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   // 전표상세 조회
   $scope.getSlipNoInfo = function () {
     var params    = {};
-    params.slipNo = $scope.slipNo;
-
+    	params.slipNo = $scope.slipNo;
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    	
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -159,28 +228,33 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
     // 파라미터
     var params    = {};
     params.slipNo = $scope.slipNo;
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl/list.sb", params, function () {
+    
+ // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquirySub("/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl/list.sb", params, function () {    	
     });
+
   };
 
 
   // 저장
   $scope.save = function () {
     var params = [];
-
+    
     // 확정처리가 체크 되어있으면서 그리드의 수정된 내역은 없는 경우 저장로직 태우기 위해 값 하나를 강제로 수정으로 변경한다.
-    if ($("#instockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
-      var item = $scope.flex.collectionView.items[0];
-      if (item === null) return false;
+//    if ($("#instockConfirmFg").is(":checked") && $scope.flex.collectionView.itemsEdited.length <= 0) {
+//      var item = $scope.flex.collectionView.items[0];
+//      if (item === null) return false;
+//
+//      $scope.flex.collectionView.editItem(item);
+//      item.status = "U";
+//      $scope.flex.collectionView.commitEdit();
+//    }
 
-      $scope.flex.collectionView.editItem(item);
-      item.status = "U";
-      $scope.flex.collectionView.commitEdit();
-    }
-
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+//    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+//      var item = $scope.flex.collectionView.itemsEdited[i];
+      
+      for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+      	var item =  $scope.flex.collectionView.items[i];
 
       if (item.inUnitQty === null && item.inEtcQty === null) {
         $scope._popMsg(messages["rtnInstockConfm.dtl.require.inQty"]); // 입고수량을 입력해주세요.
@@ -199,10 +273,14 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
       item.inDate    = wijmo.Globalize.format($scope.dtlInDate.value, 'yyyyMMdd');
       item.hdRemark  = $scope.hdRemark;
       item.confirmFg = ($("#instockConfirmFg").is(":checked") ? $("#instockConfirmFg").val() : "");
-
+      item.inStorageCd	= $scope.save.dtl.outStorageCd;
+      item.dlvrCd    = $scope.save.dtl.dlvrCd;
+      
+     
+      
       params.push(item);
     }
-
+    console.log(params);
     $scope._save("/iostock/orderReturn/rtnInstockConfm/rtnInstockConfmDtl/save.sb", params, function () {
       $scope.saveRtnInstockConfmDtlCallback()
     });
@@ -226,19 +304,23 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
     }
   };
 
-
-  // 출고내역으로 입고내역 세팅
+  //출고내역으로 입고내역 세팅		--------------------------------------------------------------------------------------------------------------------------
   $scope.setOutToIn = function () {
-    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-      var item = $scope.flex.collectionView.items[i];
-      $scope.flex.collectionView.editItem(item);
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+      //데이터 처리중 팝업 띄우기위해 $timeout 사용.
+      $timeout(function () {
+          for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+              var item = $scope.flex.collectionView.items[i];
+              $scope.flex.collectionView.editItem(item);
 
-      item.inUnitQty = item.outUnitQty;
-      item.inEtcQty  = item.outEtcQty;
-      $scope.calcAmt(item);
+              item.inUnitQty  = item.outUnitQty;
+              item.inEtcQty   = item.outEtcQty;
+              $scope.calcAmt(item);
 
-      $scope.flex.collectionView.commitEdit();
-    }
+              $scope.flex.collectionView.commitEdit();
+          }
+          $scope.$broadcast('loadingPopupInactive');
+      }, 100);
   };
 
 
@@ -258,6 +340,8 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
   // 거래명세표
   $scope.reportTrans = function () {
     var params        = {};
+    params.startDate  = $scope.startDate;
+    params.endDate    = $scope.endDate;
     params.slipFg     = $scope.slipFg;
     params.strSlipNo  = $scope.slipNo;
     params.stmtAcctFg = $scope.stmtAcctFg;
@@ -278,7 +362,12 @@ app.controller('rtnInstockConfmDtlCtrl', ['$scope', '$http', '$timeout', functio
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

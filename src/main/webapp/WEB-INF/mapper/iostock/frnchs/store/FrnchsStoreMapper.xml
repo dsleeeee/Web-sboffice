@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.frnchs.store.service.impl.FrnchsStoreMapper">
+    <!-- 매장-상품별 입출고내역 - 매장-상품별 입출고내역 리스트 조회 / 20200311 박정은 -->
+    <select id="getFrnchsStoreList" parameterType="frnchsStoreVO" resultType="DefaultMap">
+    	/* USE : FrnchsStoreMapper.getFrnchsStoreList */
+    			<include refid="CmmSQL.PagingTemplateHeader"/>
+    	SELECT TPHSO.STORE_CD <!-- 매장코드 -->
+	 			, TMS.STORE_NM <!-- 매장명 -->
+			 	, COUNT(*) SLIP_CNT <!-- 전표수 -->
+	 			, SUM(TPHSO.ORDER_TOT) AS ORDER_TOT <!-- 주문금액 -->
+	 			, SUM(TPHSO.MD_TOT) AS MD_TOT <!-- 분배금액 -->
+	 			, SUM(TPHSO.OUT_TOT) AS OUT_TOT <!-- 출고금액 -->
+	 			, SUM(TPHSO.IN_TOT) AS IN_TOT <!-- 입고금액 -->
+	 			, SUM(TPHSO.OUT_AMT) AS OUT_AMT <!-- 출고가액 -->
+				, SUM(TPHSO.OUT_VAT) AS OUT_VAT <!-- 출고부가세 -->
+				, TMS.BIZ_NO <!-- 사업자번호 -->
+				, TMS.BIZ_STORE_NM <!-- 상호 -->
+				, TMS.POST_NO <!-- 우편번호 -->
+				, TMS.ADDR || TMS.ADDR_DTL AS ADDR <!-- 주소 -->
+				, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '057' AND NMCODE_CD = TMS.STORE_TYPE) AS STORE_TYPE_NM <!-- 종목 -->
+				, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM <!-- 업태 -->
+				, TMS.EMAIL_ADDR <!-- Email -->
+				,(SELECT LISTAGG(SLIP_NO, ',') WITHIN GROUP (ORDER BY STORE_CD) AS SLIP_NO FROM TB_PO_HQ_STORE_OUTSTOCK WHERE STORE_CD = TPHSO.STORE_CD) AS SLIP_NO <!-- 전표번호 -->
+			<include refid="CmmSQL.PagingTemplateCount"/>
+  			FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+  	 			, TB_MS_STORE TMS
+ 			WHERE TPHSO.STORE_CD = TMS.STORE_CD
+ 			AND     TPHSO.HQ_OFFICE_CD  = #{hqOfficeCd} <!-- 본사코드 세션값 -->
+    		<if test='startDate != null and startDate != ""'>
+    			AND TPHSO.OUT_DATE >= #{startDate}
+    		</if>
+    		<if test='endDate != null and endDate != ""'>
+    			AND TPHSO.OUT_DATE <![CDATA[<= ]]> #{endDate}
+    		</if>
+    		<if test='slipFg != null and slipFg != ""'>
+            	AND TPHSO.SLIP_FG = #{slipFg}
+        	</if>
+        	<if test='storeCd != null and storeCd != ""'>
+        		AND TPHSO.STORE_CD IN
+        		<foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+          			#{item}
+        		</foreach>
+      		</if>
+      		<if test="storeNm != null and storeNm != ''">
+            	AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
+        	</if>
+         GROUP BY TPHSO.STORE_CD
+	 			, TMS.STORE_NM
+	 			, TMS.BIZ_NO
+	 			, TMS.BIZ_STORE_NM
+	 			, TMS.POST_NO
+	 			, TMS.ADDR || TMS.ADDR_DTL
+	 			, TMS.STORE_TYPE
+	 			, TMS.CLS_FG
+	 			, TMS.EMAIL_ADDR
+		ORDER BY TPHSO.STORE_CD
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 매장별 입출고내역 - 엑셀 리스트 조회 / 20200421 조동훤 -->
+    <select id="getFrnchsStoreExcelList" parameterType="frnchsStoreVO" resultType="DefaultMap">
+        /* USE : FrnchsStoreMapper.getFrnchsStoreExcelList */
+        SELECT TPHSO.STORE_CD <!-- 매장코드 -->
+                , TMS.STORE_NM <!-- 매장명 -->
+                , COUNT(*) SLIP_CNT <!-- 전표수 -->
+                , SUM(TPHSO.ORDER_TOT) AS ORDER_TOT <!-- 주문금액 -->
+                , SUM(TPHSO.MD_TOT) AS MD_TOT <!-- 분배금액 -->
+                , SUM(TPHSO.OUT_TOT) AS OUT_TOT <!-- 출고금액 -->
+                , SUM(TPHSO.IN_TOT) AS IN_TOT <!-- 입고금액 -->
+                , SUM(TPHSO.OUT_AMT) AS OUT_AMT <!-- 출고가액 -->
+                , SUM(TPHSO.OUT_VAT) AS OUT_VAT <!-- 출고부가세 -->
+                , TMS.BIZ_NO <!-- 사업자번호 -->
+                , TMS.BIZ_STORE_NM <!-- 상호 -->
+                , TMS.POST_NO <!-- 우편번호 -->
+                , TMS.ADDR || TMS.ADDR_DTL AS ADDR <!-- 주소 -->
+                , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '057' AND NMCODE_CD = TMS.STORE_TYPE) AS STORE_TYPE_NM <!-- 종목 -->
+                , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM <!-- 업태 -->
+                , TMS.EMAIL_ADDR <!-- Email -->
+                ,(SELECT LISTAGG(SLIP_NO, ',') WITHIN GROUP (ORDER BY STORE_CD) AS SLIP_NO FROM TB_PO_HQ_STORE_OUTSTOCK WHERE STORE_CD = TPHSO.STORE_CD) AS SLIP_NO <!-- 전표번호 -->
+            FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+                , TB_MS_STORE TMS
+            WHERE TPHSO.STORE_CD = TMS.STORE_CD
+            AND     TPHSO.HQ_OFFICE_CD  = #{hqOfficeCd} <!-- 본사코드 세션값 -->
+            <if test='startDate != null and startDate != ""'>
+                AND TPHSO.OUT_DATE >= #{startDate}
+            </if>
+            <if test='endDate != null and endDate != ""'>
+                AND TPHSO.OUT_DATE <![CDATA[<= ]]> #{endDate}
+            </if>
+            <if test='slipFg != null and slipFg != ""'>
+                AND TPHSO.SLIP_FG = #{slipFg}
+            </if>
+            <if test='storeCd != null and storeCd != ""'>
+                AND TPHSO.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="storeNm != null and storeNm != ''">
+                AND TMS.STORE_NM LIKE '%'||#{storeNm}||'%'
+            </if>
+         GROUP BY TPHSO.STORE_CD
+                , TMS.STORE_NM
+                , TMS.BIZ_NO
+                , TMS.BIZ_STORE_NM
+                , TMS.POST_NO
+                , TMS.ADDR || TMS.ADDR_DTL
+                , TMS.STORE_TYPE
+                , TMS.CLS_FG
+                , TMS.EMAIL_ADDR
+        ORDER BY TPHSO.STORE_CD
+    </select>
+
+    <!-- 매장-상품별 입출고내역 - 매장-상품별 입출고내역 상세 리스트 조회 -->
+    <select id="getFrnchsStoreInfoList" parameterType="frnchsStoreVO" resultType="DefaultMap">
+        SELECT TMS.STORE_CD					/* 매장코드 */
+	 			, TMS.STORE_NM					/* 매장명 */
+	 			, TMS.BIZ_NO					/* 사업자번호 */
+	 			, TMS.BIZ_STORE_NM				/* 상호 */
+	 			, TMS.POST_NO					/* 우편번호 */
+	 			, TMS.ADDR || TMS.ADDR_DTL AS ADDR	/* 주소 */
+	 			, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '057' AND NMCODE_CD = TMS.STORE_TYPE) AS STORE_TYPE_NM	/* 업태 */
+	 			, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '001' AND NMCODE_CD = TMS.CLS_FG) AS CLS_FG_NM			/* 종목 */
+	 			, TMS.EMAIL_ADDR				/* 이메일 */
+  			FROM TB_MS_STORE TMS
+ 		WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}      /* 본사코드 세션값 */
+   		AND TMS.STORE_CD = #{storeCd}		   /* PARAM 매장코드 */
+    </select>
+
+    <!-- 매장별 입출고내역 상세 레이어- 매장별 입출고내역 상세 리스트 조회 -->
+    <select id="getFrnchsStoreDtlList" parameterType="frnchsStoreVO" resultType="DefaultMap">
+        SELECT TPHSOD.PROD_CD       				/* 상품코드 */
+	 			, TMP.PROD_NM							/* 상품명 */
+				, TMP.ORGPLCE_CD						/* 원산지코드 */
+				, NULL						AS ORGPLCE_NM /* 원산지명 ###확인필요 */
+				, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = TMP.STORE_CD AND NMCODE_CD = TMP.PO_UNIT_FG)  AS PO_UNIT_FG_NM    /* 주문단위 */
+				, TMP.PO_UNIT_QTY						/* 입수 */
+				, TMP.SPLY_UPRC						/* 공급단가 */
+			    , SUM(TPHSOD.OUT_TOT_QTY)  AS TOT_QTY	/* 수량 */
+			    , SUM(TPHSOD.OUT_AMT) 		AS TOT_AMT	/* 금액 */
+			    , SUM(TPHSOD.OUT_VAT) 		AS TOT_VAT	/* VAT */
+			    , SUM(TPHSOD.OUT_TOT) 		AS TOT_TOT	/* 합계 */
+  		FROM TB_PO_HQ_STORE_OUTSTOCK TPHSO
+  	 			, TB_PO_HQ_STORE_OUTSTOCK_DTL TPHSOD
+  	 			, TB_MS_PRODUCT TMP
+ 		WHERE TPHSOD.HQ_OFFICE_CD = #{hqOfficeCd}      /* 본사코드 세션값 */
+   			AND TPHSOD.STORE_CD = #{storeCd}        /* PARAM 매장코드 */
+			<if test='startDate != null and startDate != ""'>
+			AND TPHSO.OUT_DATE >= #{startDate}				  /* PARAM 조회기간 FR */ 
+			</if>
+    		<if test='endDate != null and endDate != ""'>
+			AND TPHSO.OUT_DATE <![CDATA[<= ]]> #{endDate}        		  /* PARAM 조회기간 TO */
+			</if>
+			<if test='slipFg != null and slipFg != ""'>
+			AND TPHSO.SLIP_FG = #{slipFg}          		  /* PARAM 전표구분 (1 : 출고, -1 : 반품) */
+			</if>   
+   			AND TPHSO.HQ_OFFICE_CD = TPHSOD.HQ_OFFICE_CD
+   			AND TPHSO.SLIP_NO = TPHSOD.SLIP_NO
+   			AND TPHSOD.STORE_CD = TMP.STORE_CD
+   			AND TPHSOD.PROD_CD = TMP.PROD_CD
+ 		GROUP BY TMP.STORE_CD
+ 	 			, TPHSOD.PROD_CD       
+				, TMP.PROD_NM			
+				, TMP.ORGPLCE_CD		
+				, TMP.PO_UNIT_FG
+				, TMP.PO_UNIT_QTY
+				, TMP.SPLY_UPRC
+ 		ORDER BY TPHSOD.PROD_CD
+    </select>
+</mapper>

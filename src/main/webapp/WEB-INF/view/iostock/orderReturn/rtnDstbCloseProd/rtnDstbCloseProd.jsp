@@ -8,7 +8,10 @@
 
 <div class="subCon" ng-controller="rtnDstbCloseProdCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnDstbCloseProdCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -70,12 +73,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbCloseProdCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10">
     <%-- 확정 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()">
@@ -93,7 +90,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>

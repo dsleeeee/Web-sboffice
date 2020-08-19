@@ -54,6 +54,8 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
         var selectedRow = s.rows[ht.row].dataItem;
         if (col.binding === "slipNo") { // 전표번호 클릭
           var params    = {};
+          params.startDate  = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate    = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
           params.slipNo = selectedRow.slipNo;
           params.slipFg = $scope.slipFg;
 
@@ -66,6 +68,18 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+    
+    
+    $scope.selectedIndexChanged = function (s) {
+    	var comboParams             = {};	
+    	comboParams.storageCd 	= $scope.save.outStorageCd;
+        // 배송기사
+        url = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+
+        // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+        $scope._queryCombo("combo", "saveDlvrCd", null, url, comboParams, ""); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+        
+    };
   };
 
 
@@ -84,10 +98,16 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     comboParams.nmcodeGrpCd = "087";
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo,map", "srchSlipKind", "slipKindMap", null, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-
+    
+    // 출고창고
+    var url = '/iostock/order/outstockConfm/outstockConfm/getOutStorageCombo.sb';
+    
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+    $scope._queryCombo("combo", "srchOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+    
     // 배송기사
     comboParams = {}; // 여러번 조회시 초기화를 해줘야함...
-    var url     = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
+    url     = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "srchDlvrCd", null, url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
   };
@@ -107,7 +127,12 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     params.slipFg    = $scope.slipFg;
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -141,6 +166,7 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
     params.vendrCd   = $("#outstockConfmSelectVendrCd").val();
+    params.dlvrCd	 = $scope.srch.dlvrCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/outstockConfm/outstockConfm/list.sb", params);
@@ -158,11 +184,13 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       if (item.gChk === true) {
-        item.status    = "U";
-        item.outDate   = wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
-        item.empNo     = "0000";
-        item.storageCd = "001";
-        item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        item.status    	= "U";
+        item.outDate   	= wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
+        item.outStorageCd	= $scope.save.outStorageCd;
+        item.dlvrCd		= $scope.save.dlvrCd;
+        item.empNo     	= "0000";
+        item.storageCd 	= "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
+        item.hqBrandCd 	= "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
         params.push(item);
       }
     }
@@ -186,7 +214,12 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

@@ -33,7 +33,7 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("gubunCombo", gubunComboData); //정렬
+    $scope._setComboData("gubunCombo", gubunComboData); // 조회구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -50,14 +50,6 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
                 if (col.binding === "title") {
                     // var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
-                }
-
-                if (col.format === "date") {
-                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
-                } else if (col.format === "dateTime") {
-                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-                } else if (col.format === "time") {
-                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
                 }
             }
         });

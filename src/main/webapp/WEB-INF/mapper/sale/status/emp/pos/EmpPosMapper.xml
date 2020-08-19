@@ -40,7 +40,8 @@
 						${sQuery2}                                          
 				FROM TB_SL_SALE_HDR TSDE   
 						,TB_MS_STORE TMS
-				WHERE TSDE.STORE_CD = TMS.STORE_CD    	         	
+				WHERE 	TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+				AND		TSDE.STORE_CD = TMS.STORE_CD    	         	
 				<if test='storeCd != null and storeCd != ""'>
 				   AND TSDE.STORE_CD	IN
 			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
@@ -61,6 +62,62 @@
 		<include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 	
+	<!-- 상품별매출 - 판매자포스별 리스트(엑셀) 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR, TB_MS_EMPLOYEE
+        PARAM    : empPosVO
+        COMMENTS : 판매자포스별상세현황 - 판매자포스별 리스트를 조회한다.
+    -->
+    <select id="getEmpPosExcelList" parameterType="empPosVO" resultType="DefaultMap">
+        /* USE : EmpMonthMapper.getEmpPosExcelList */
+			SELECT A.STORE_NM
+				, A.STORE_CD
+			    , A.POS_NO
+			    , A.STORE_CNT
+				, SUM(A.REAL_SALE_AMT_TOT) AS REAL_SALE_AMT_TOT
+				, SUM(A.BILL_CNT_TOT) AS TOT_BILL_CNT
+				${sQuery1}
+			FROM
+			(
+				SELECT TMS.STORE_NM
+						, TSDE.STORE_CD
+						, TSDE.POS_NO
+						,( SELECT COUNT(TMS.STORE_CD)	  
+							FROM TB_MS_STORE TMS
+							WHERE TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+							<if test='storeCd != null and storeCd != ""'>
+							   AND TMS.STORE_CD	IN
+						        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+			                        #{item}
+			                    </foreach>
+							</if>
+					     ) AS STORE_CNT
+						, SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT_TOT    
+						, COUNT(TSDE.BILL_NO) AS BILL_CNT_TOT    					
+						${sQuery2}                                          
+				FROM TB_SL_SALE_HDR TSDE   
+						,TB_MS_STORE TMS
+				WHERE 	TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+				AND		TSDE.STORE_CD = TMS.STORE_CD    	         	
+				<if test='storeCd != null and storeCd != ""'>
+				   AND TSDE.STORE_CD	IN
+			        <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                        #{item}
+                    </foreach>
+				</if>
+				<if test='startDate != null and startDate != ""'>
+				   AND TSDE.SALE_DATE >= #{startDate}
+				</if>
+				<if test='endDate != null and endDate != ""'>
+				   AND TSDE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+				</if>
+				GROUP BY TSDE.SALE_DATE, TSDE.EMP_NO, TSDE.STORE_CD, TSDE.BILL_NO, TSDE.POS_NO, TMS.STORE_NM  
+			) A 
+		WHERE 1 = 1
+		GROUP BY A.POS_NO, A.STORE_CD, A.STORE_NM, A.STORE_CNT
+		ORDER BY STORE_CD ASC
+    </select>
+	
 	<!-- 상품별매출 - 분류별 리스트 조회 -->
     <!--
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
@@ -72,7 +129,7 @@
 		  SELECT TMS.STORE_CD
 		    , TMS.STORE_NM||'('||TMS.STORE_CD||')' AS STORE_NM 
 		    , EMP_NO AS  NMCODE_CD
-		  	, (TMS.STORE_NM||'-'||EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
+		  	, (EMP_NM||'('||EMP_NO||')') AS  NMCODE_NM
 		  FROM TB_MS_EMPLOYEE TME
 		  		, TB_MS_STORE TMS
 		   WHERE TME.STORE_CD = TMS.STORE_CD
@@ -85,7 +142,8 @@
           </if>
 		  <if test='empChk != "Y"'>
 	          AND EXISTS (SELECT * FROM TB_SL_SALE_HDR Z 
-	                  WHERE Z.store_cd = TME.STORE_CD 
+	                  WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd}
+	                  AND	Z.store_cd = TME.STORE_CD 
 	                  AND Z.EMP_NO = TME.EMP_NO
 	                  <if test='storeCd != null and storeCd != ""'>
 	                  AND Z.STORE_CD IN

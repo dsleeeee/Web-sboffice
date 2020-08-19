@@ -8,13 +8,13 @@
 		SELECT SALE_DATE SALE_DATE
        		, TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-       		, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+       		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
        		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
        		${sQuery1}
      	<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_SL_DAILY_TABLE TSDT
 		WHERE 1 = 1
-			  <!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
+			  AND HQ_OFFICE_CD = #{hqOfficeCd}
 			  <if test='arrTableCd != null and arrTableCd.length >= 0'>
 			  	AND STORE_CD||'||'||TBL_CD IN
 			  	<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
@@ -45,11 +45,43 @@
 		<include refid="CmmSQL.PagingTemplateBottom"/>
 	</select>
 
+	<select id="getTableDayExcelList" parameterType="tableDayVO" resultType="DefaultMap">
+
+        SELECT SALE_DATE SALE_DATE
+            , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
+            , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
+            , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
+            , NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
+            ${sQuery1}
+        FROM TB_SL_DAILY_TABLE TSDT
+        WHERE 1 = 1
+              AND HQ_OFFICE_CD = #{hqOfficeCd}
+              <if test='arrTableCd != null and arrTableCd.length >= 0'>
+                AND STORE_CD||'||'||TBL_CD IN
+                <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+              </if>
+              <if test='startDate != null and startDate != ""'>
+                AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
+              </if>
+              <if test='endDate != null and endDate != ""'>
+                AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+              </if>
+        GROUP
+        BY    SALE_DATE
+        ORDER
+        BY    SALE_DATE DESC
+    </select>
+
+
  	<select id="getStoreTableList" parameterType="tableDayVO" resultType="DefaultMap">
 
 		SELECT	TMP.STORE_CD||'||'||TMP.TBL_CD AS TABLE_CD
 				, TMP.TBL_NM AS TABLE_NM
 				, (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TMP.STORE_CD) AS STORE_NM
+				, TMP.TBL_GRP_CD
+				, TMP.TBL_CD	AS	TABLE_CD_ORG
 		FROM    TB_MS_TABLE TMP
 		WHERE	1=1
 		  AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TMP.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})

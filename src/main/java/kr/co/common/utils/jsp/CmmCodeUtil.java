@@ -1,5 +1,6 @@
 package kr.co.common.utils.jsp;
 
+import kr.co.common.data.domain.AgencyVO;
 import kr.co.common.data.domain.CommonCodeVO;
 import kr.co.common.data.domain.EnvCodeVO;
 import kr.co.common.data.enums.UseYn;
@@ -392,8 +393,13 @@ public class CmmCodeUtil {
      *
      * @return
      */
-    public String getHqOfficeListChkAgency(String agencyCd) {
-        List<DefaultMap<String>> hqOfficeList = cmmCodeService.getHqOfficeListChkAgency(agencyCd);
+    public String getHqOfficeListChkAgency(String agencyCd, String type) {
+        AgencyVO agencyVO = new AgencyVO();
+
+        agencyVO.setAgencyCd(agencyCd);
+        agencyVO.setSrchType(type);
+
+        List<DefaultMap<String>> hqOfficeList = cmmCodeService.getHqOfficeListChkAgency(agencyVO);
 
         // 데이터가 없는 경우, 빈값이라도 넣어 에러 방지
         if(hqOfficeList.size() == 0){

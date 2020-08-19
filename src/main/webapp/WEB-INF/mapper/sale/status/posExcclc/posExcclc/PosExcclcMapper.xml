@@ -12,7 +12,8 @@
     -->
     <select id="getPosExcclcList" parameterType="posExcclcVO" resultType="DefaultMap">
         <include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT TPE.STORE_CD
+    	SELECT 	TPE.HQ_OFFICE_CD
+    	,		TPE.STORE_CD
 			     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
 			     , TPE.SALE_DATE
 			     , TPE.POS_NO
@@ -324,6 +325,7 @@
 		         AND TPE.SALE_DATE = TPES.SALE_DATE(+)
 		         AND TPE.POS_NO = TPES.POS_NO(+)
 		         AND TPE.REG_SEQ = TPES.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -361,7 +363,8 @@
 		         AND TPE.STORE_CD = TPEP.STORE_CD(+)
 		         AND TPE.SALE_DATE = TPEP.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEP.POS_NO(+)
-		         AND TPE.REG_SEQ = TPEP.REG_SEQ(+)		         
+		         AND TPE.REG_SEQ = TPEP.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}		         
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -388,6 +391,7 @@
 		         AND TPE.SALE_DATE = TPED.SALE_DATE(+)
 		         AND TPE.POS_NO = TPED.POS_NO(+)
 		         AND TPE.REG_SEQ = TPED.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -407,6 +411,7 @@
 		         AND TPE.SALE_DATE = TPEI.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEI.POS_NO(+)
 		         AND TPE.REG_SEQ = TPEI.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -434,6 +439,7 @@
 		         AND TPE.SALE_DATE = TPECT.SALE_DATE(+)
 		         AND TPE.POS_NO = TPECT.POS_NO(+)
 		         AND TPE.REG_SEQ = TPECT.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -455,6 +461,7 @@
 		         AND TPE.SALE_DATE = TPEL.SALE_DATE(+)
 		         AND TPE.POS_NO = TPEL.POS_NO(+)
 		         AND TPE.REG_SEQ = TPEL.REG_SEQ(+)
+		         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -482,6 +489,7 @@
 	         AND TPE.SALE_DATE = TPEN.SALE_DATE(+)
 	         AND TPE.POS_NO = TPEN.POS_NO(+)
 	         AND TPE.REG_SEQ = TPEN.REG_SEQ(+)
+	         AND TPE.HQ_OFFICE_CD = #{hqOfficeCd}
 		         AND TPE.STORE_CD = #{storeCd}
 		         AND TPE.SALE_DATE = REPLACE(#{saleDate},'-','')
 		         AND TPE.POS_NO = #{posNo}
@@ -492,5 +500,227 @@
 	       )G
        
     </select>
-
+    
+    <select id="getPosExcclcExcelList" parameterType="posExcclcVO" resultType="DefaultMap">
+    	SELECT TPE.HQ_OFFICE_CD
+    	,		TPE.STORE_CD
+			     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = TPE.STORE_CD) AS STORE_NM
+			     , TPE.SALE_DATE
+			     , TPE.POS_NO
+			     , TPE.REG_SEQ
+			     , TPE.CLOSE_FG_SEQ
+			     , TPE.CLOSE_FG_NM
+			     , TO_CHAR(TO_DATE(TPE.REG_DT,'YYYYMMDDHH24MISS'),'YYYY.MM.DD HH24:MI:SS') AS REG_DT
+			----------------------------
+			     , NVL((SELECT SUM(NVL(TPES.TOT_SALE_AMT,0))
+			          FROM TB_PS_EXACTCALC_SALE TPES
+			         WHERE TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPES.STORE_CD
+			         AND TPE.SALE_DATE = TPES.SALE_DATE
+			         AND TPE.POS_NO = TPES.POS_NO
+			         AND TPE.REG_SEQ = TPES.REG_SEQ
+			       ),0) AS TOT_SALE_AMT
+			    , NVL((SELECT SUM(NVL(TPES.TOT_DC_AMT,0))
+			          FROM TB_PS_EXACTCALC_SALE TPES
+			         WHERE TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPES.STORE_CD
+			         AND TPE.SALE_DATE = TPES.SALE_DATE
+			         AND TPE.POS_NO = TPES.POS_NO
+			         AND TPE.REG_SEQ = TPES.REG_SEQ
+			       ),0) AS TOT_DC_AMT
+			    , NVL((SELECT SUM(NVL(TPES.REAL_SALE_AMT,0))
+			          FROM TB_PS_EXACTCALC_SALE TPES
+			         WHERE TPE.HQ_OFFICE_CD = TPES.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPES.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPES.STORE_CD
+			         AND TPE.SALE_DATE = TPES.SALE_DATE
+			         AND TPE.POS_NO = TPES.POS_NO
+			         AND TPE.REG_SEQ = TPES.REG_SEQ
+			       ),0) AS REAL_SALE_AMT
+			
+			--    , NVL(SUM(TPES.TOT_SALE_AMT),0)  AS TOT_SALE_AMT
+			--    , NVL(SUM(TPES.TOT_DC_AMT),0)    AS TOT_DC_AMT
+			--    , NVL(SUM(TPES.REAL_SALE_AMT),0) AS REAL_SALE_AMT
+			------------------------------
+			    , NVL((SELECT SUM(TPEF.FUND_AMT)
+			          FROM TB_PS_EXACTCALC_FUND TPEF
+			         WHERE TPE.HQ_OFFICE_CD = TPEF.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPEF.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPEF.STORE_CD
+			         AND TPE.SALE_DATE = TPEF.SALE_DATE
+			         AND TPE.POS_NO = TPEF.POS_NO
+			         AND TPE.REG_SEQ = TPEF.REG_SEQ
+			       ),0) AS FUND_AMT
+			--    , NVL(SUM(TPEF.FUND_AMT),0)       AS FUND_AMT
+			------------------------------
+			    , NVL((SELECT SUM(TPEC.CASH_EXACT_AMT)
+			          FROM TB_PS_EXACTCALC_CASH TPEC --현금
+			         WHERE TPE.HQ_OFFICE_CD = TPEC.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPEC.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPEC.STORE_CD
+			         AND TPE.SALE_DATE = TPEC.SALE_DATE
+			         AND TPE.POS_NO = TPEC.POS_NO
+			         AND TPE.REG_SEQ = TPEC.REG_SEQ
+			       ),0) AS CASH_EXACT_AMT
+			--    , NVL(SUM(TPEC.CASH_EXACT_AMT),0)AS CASH_EXACT_AMT
+			------------------------------
+			    , NVL((SELECT SUM(DECODE(TPEI.ACCNT_FG,'1',TPEI.ACCNT_AMT, 0))
+			          FROM TB_PS_EXACTCALC_IOMONEY TPEI --시재
+			         WHERE TPE.HQ_OFFICE_CD = TPEI.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPEI.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPEI.STORE_CD
+			         AND TPE.SALE_DATE = TPEI.SALE_DATE
+			         AND TPE.POS_NO = TPEI.POS_NO
+			         AND TPE.REG_SEQ = TPEI.REG_SEQ
+			       ),0) AS ACCNT_IN_AMT
+			    , NVL((SELECT SUM(DECODE(TPEI.ACCNT_FG,'2',TPEI.ACCNT_AMT, 0))
+			          FROM TB_PS_EXACTCALC_IOMONEY TPEI --시재
+			         WHERE TPE.HQ_OFFICE_CD = TPEI.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPEI.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPEI.STORE_CD
+			         AND TPE.SALE_DATE = TPEI.SALE_DATE
+			         AND TPE.POS_NO = TPEI.POS_NO
+			         AND TPE.REG_SEQ = TPEI.REG_SEQ
+			       ),0) AS ACCNT_OUT_AMT
+			--     , SUM(DECODE(TPEI.ACCNT_FG,'1',TPEI.ACCNT_AMT, 0)) AS ACCNT_IN_AMT
+			--     , SUM(DECODE(TPEI.ACCNT_FG,'2',TPEI.ACCNT_AMT, 0)) AS ACCNT_OUT_AMT
+			------------------------------
+			    , NVL((SELECT SUM(TPECT.CASH_TICKET_AMT)
+			          FROM TB_PS_EXACTCALC_CASH_TICKET TPECT
+			         WHERE TPE.HQ_OFFICE_CD = TPECT.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPECT.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPECT.STORE_CD
+			         AND TPE.SALE_DATE = TPECT.SALE_DATE
+			         AND TPE.POS_NO = TPECT.POS_NO
+			         AND TPE.REG_SEQ = TPECT.REG_SEQ
+			       ),0) AS CASH_TICKET_AMT
+			--     , NVL(SUM(TPECT.CASH_TICKET_AMT),0) AS CASH_TICKET_AMT
+			------------------------------
+			    , NVL((SELECT SUM(TPEL.LOST_AMT)
+			          FROM TB_PS_EXACTCALC_LOST TPEL  --과부족
+			         WHERE TPE.HQ_OFFICE_CD = TPEL.HQ_OFFICE_CD
+			         AND TPE.HQ_BRAND_CD = TPEL.HQ_BRAND_CD
+			         AND TPE.STORE_CD = TPEL.STORE_CD
+			         AND TPE.SALE_DATE = TPEL.SALE_DATE
+			         AND TPE.POS_NO = TPEL.POS_NO
+			         AND TPE.REG_SEQ = TPEL.REG_SEQ
+			       ),0) AS LOST_AMT
+			--     , NVL(SUM(TPEL.LOST_AMT),0) AS LOST_AMT
+			----------------------------
+			  FROM (
+			      SELECT TPE.CLOSE_FG_SEQ
+			          , DECODE(TPE.CLOSE_FG_SEQ, '1', '개점', '2', '중간마감', '일마감') AS CLOSE_FG_NM
+			           , TPE.HQ_OFFICE_CD
+			           , TPE.HQ_BRAND_CD
+			          , TPE.STORE_CD
+			           , TPE.SALE_DATE
+			           , TPE.POS_NO
+			           , TPE.REG_SEQ
+			           , TPE.REG_DT
+			        FROM (
+			            SELECT '1'  AS CLOSE_FG_SEQ
+			                , '1'  AS CLOSE_POS_SEQ
+			                 , TPE.HQ_OFFICE_CD
+			                 , TPE.HQ_BRAND_CD
+			                 , TPE.STORE_CD
+			                 , TPE.SALE_DATE
+			                 , TPE.POS_NO
+			                 , TPE.REG_SEQ
+			                 , TPE.OPEN_DT   AS REG_DT
+			              FROM TB_PS_EXACTCALC TPE
+			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
+                           <if test='arrStoreCd != null and arrStoreCd != ""'>
+                               AND TPE.STORE_CD IN
+                               <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                   #{item}
+                               </foreach>
+                           </if>
+                           <if test='startDate != null and startDate != ""'>
+                               AND TPE.SALE_DATE >= #{startDate}
+                           </if>
+                           <if test='endDate != null and endDate != ""'>
+                               AND TPE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                           </if>
+                           <if test='closeFg != null and closeFg != "" and closeFg.toString() != "1"'>
+                               AND 1 = 2
+                           </if>
+			               --AND TPE.CLOSE_FG = '1'
+			               AND TPE.REG_SEQ = '00'
+			
+			            UNION ALL
+			
+			            SELECT '2'  AS CLOSE_FG_SEQ
+			                , '2'  AS CLOSE_POS_SEQ
+			                 , TPE.HQ_OFFICE_CD
+			                 , TPE.HQ_BRAND_CD
+			                 , TPE.STORE_CD
+			                 , TPE.SALE_DATE
+			                 , TPE.POS_NO
+			                 , TPE.REG_SEQ
+			                 , TPE.CLOSE_DT AS REG_DT
+			              FROM TB_PS_EXACTCALC TPE
+			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
+                            <if test='arrStoreCd != null and arrStoreCd != ""'>
+                                AND TPE.STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            <if test='startDate != null and startDate != ""'>
+                                AND TPE.SALE_DATE >= #{startDate}
+                            </if>
+                            <if test='endDate != null and endDate != ""'>
+                                AND TPE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                            </if>
+                            <if test='closeFg != null and closeFg != "" and closeFg.toString() != "2"'>
+                                AND 1 = 2
+                            </if>
+			               AND TPE.REG_SEQ >= '01'
+			
+			            UNION ALL
+			
+			            SELECT '3'  AS CLOSE_FG_SEQ
+			                , '3'  AS CLOSE_POS_SEQ
+			                 , TPE.HQ_OFFICE_CD
+			                 , TPE.HQ_BRAND_CD
+			                 , TPE.STORE_CD
+			                 , TPE.SALE_DATE
+			                 , TPE.POS_NO
+			                 , TPE.REG_SEQ
+			                 , TPE.CLOSE_DT AS REG_DT
+			              FROM TB_PS_EXACTCALC TPE
+			             WHERE TPE.HQ_OFFICE_CD = #{hqOfficeCd}
+		                <if test='arrStoreCd != null and arrStoreCd != ""'>
+                            AND TPE.STORE_CD IN
+                            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                #{item}
+                            </foreach>
+                        </if>
+			            <if test='startDate != null and startDate != ""'>
+                            AND TPE.SALE_DATE >= #{startDate}
+                        </if>
+                        <if test='endDate != null and endDate != ""'>
+                            AND TPE.SALE_DATE <![CDATA[<= ]]> #{endDate}
+                        </if>
+                        <if test='closeFg != null and closeFg != "" and closeFg.toString() != "3"'>
+                            AND 1 = 2
+                        </if>
+                         --  AND TPE.CLOSE_FG = '2'
+			               AND TPE.REG_SEQ = '00'
+			             ) TPE
+			      ) TPE
+			
+			 GROUP BY TPE.HQ_OFFICE_CD
+			    , TPE.HQ_BRAND_CD
+			     , TPE.STORE_CD
+			     , TPE.SALE_DATE
+			     , TPE.POS_NO
+			     , TPE.REG_SEQ
+			    , TPE.CLOSE_FG_SEQ
+			     , TPE.CLOSE_FG_NM
+			     , TPE.REG_DT
+			 ORDER BY TPE.STORE_CD, TPE.SALE_DATE, TPE.CLOSE_FG_SEQ
+    </select>
 </mapper>

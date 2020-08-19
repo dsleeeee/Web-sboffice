@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.prod.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -37,7 +38,8 @@ public interface ProdService {
     DefaultMap<String> getProdDetail(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 상품정보 저장 */
-    int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+//    int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 상품 적용/미적용 매장 조회 */
     List<DefaultMap<String>> getStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
@@ -60,4 +62,6 @@ public interface ProdService {
     /** 매장 적용상품 등록 */
     int insertStoreProdBatch(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 
+    /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 */
+    boolean getProdImageFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo);
 }

@@ -8,7 +8,6 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.day.day.service.DayVO;
-import kr.co.solbipos.sale.day.month.service.MonthVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +42,7 @@ public class DayServiceImpl implements DayService {
     @Override
     public List<DefaultMap<String>> getCornerColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -274,36 +274,85 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getDayTimeList(dayVO);
     }
 
+    /** 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져오기 */
+    @Override
+    public int getDayProdClassMaxLevel(DayVO dayVO, SessionInfoVO sessionInfoVO){
+
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        dayVO.setpProdClassCd("00000");
+
+        return dayMapper.getDayProdClassMaxLevel(dayVO);
+    }
+
+    /** 일자별(상품분류 탭) - 분류레벨에 따른 상품분류 가져오기 */
+    public List<DefaultMap<String>> getDayProdClassLevel(DayVO dayVO, SessionInfoVO sessionInfoVO){
+
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        dayVO.setpProdClassCd("00000");
+
+        return dayMapper.getDayProdClassLevel(dayVO);
+    }
+
+    /** 일자별(상품분류 탭) - 상품분류별 리스트 조회 */
+    public List<DefaultMap<String>> getDayProdClassList(DayVO dayVO, SessionInfoVO sessionInfoVO){
+
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dayVO.setpProdClassCd("00000");
+        dayVO.setLevel("Level" + dayVO.getLevel());
+
+        // storeCd 관련처리
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사면서 매장 검색조건이 있는 경우 배열변수에 넣는다.
+            if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+                dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            }
+        }
+
+        // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+        dayVO.setArrProdClassCd(dayVO.getStrProdClassCd().split(","));
+
+        // 쿼리조회를 위한 변수
+        String pivotProdClassCol1 = "";
+        String pivotProdClassCol2 = "";
+        String pivotProdClassCol3 = "";
+        String strAmt = "";
+        String strQty = "";
+
+        for(int i=0; i<  dayVO.getArrProdClassCd().length; i++) {
+            strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_AMT, 0)";
+            strQty += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
+            pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ",") + "tba.PAY" + (i+1) + "_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ",") + "SUM(PAY" + (i+1) + "_SALE_AMT) AS PAY" + (i+1) + "_SALE_AMT, SUM(PAY" + (i+1) + "_SALE_QTY) AS PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol3 += (pivotProdClassCol3.equals("") ? "" : ",") + "'" + dayVO.getArrProdClassCd()[i]  + "' AS PAY" + (i+1);
+        }
+        strAmt = "(" + strAmt + ") AS TOT_REAL_SALE_AMT,";
+        strQty = "(" + strQty + ") AS TOT_SALE_QTY,";
+
+        dayVO.setPivotProdClassCol1(strAmt + strQty + pivotProdClassCol1);
+        dayVO.setPivotProdClassCol2(pivotProdClassCol2);
+        dayVO.setPivotProdClassCol3(pivotProdClassCol3);
+
+        return dayMapper.getDayProdClassList(dayVO);
+    }
+
     /** 코너별 - 코너별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayCornerList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
+        dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
 
-        // 코너구분
-        if(dayVO.getStoreCd() == null)
-        {
-            // 코너구분 array 값 세팅
-            dayVO.setArrCornerCol(dayVO.getCornerCol().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "";
-            String arrCornerCol[] = dayVO.getCornerCol().split(",");
-            for(int i=0; i < arrCornerCol.length; i++) {
-                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
-            }
-            dayVO.setPivotCornerCol(pivotCornerCol);
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotCornerCol = "";
+        String arrCornerCol[] = dayVO.getStoreCornerCd().split(",");
+        for(int i=0; i < arrCornerCol.length; i++) {
+            pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
         }
-        else
-        {
-            // 외식테이블구분 array 값 세팅
-            dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "'"+dayVO.getStoreCornerCd()+"'"+" AS CORNR_"+dayVO.getStoreCornerCd();
-            dayVO.setPivotCornerCol(pivotCornerCol);
-        }
+        dayVO.setPivotCornerCol(pivotCornerCol);
 
         return dayMapper.getDayCornerList(dayVO);
     }
@@ -369,6 +418,9 @@ public class DayServiceImpl implements DayService {
     public List<DefaultMap<Object>> getDayPosList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
 
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dayVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
             dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));

@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8"%>
+  <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -6,9 +6,10 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="gvOrgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 <c:set var="baseUrl" value="/sale/anals/abc/" />
 
-<div id="abcView" class="subCon" ng-controller="abcCtrl">
+<div id="abcView" class="subCon3" ng-controller="abcCtrl">
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="abc.abc" /></a>
         <%-- 조회 --%>
@@ -58,11 +59,22 @@
             <tr>
                 <%-- 누적판매비율 --%>
                 <th><s:message code="abc.totSaleRate" /></th>
-                <td colspan="3">
-                        <span class="txtIn">A등급<input id="abcGradeA" class="w120px sb-input" value="70">%</span>
-                        <span class="txtIn">B등급<input id="abcGradeB" class="w120px sb-input" value="90">%</span>
-                        <span class="txtIn">C등급<input id="abcGradeC" class="w120px sb-input" value="100">%</span>
+                <td>
+                    <span class="txtIn" style="width:32%;">A등급<input id="abcGradeA" class="sb-input" value="70" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:32%;">B등급<input id="abcGradeB" class="sb-input" value="90" style="width:40%;">%</span>
+                    <span class="txtIn" style="width:32%;">C등급<input id="abcGradeC" class="sb-input" value="100" style="width:45%;">%</span>
+                    <span class="txtIn" style="width:32%;">그외 Z등급</span>
                 </td>
+	            <%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
             </tr>
             <tr>
                 <%-- 정렬순서 --%>
@@ -82,19 +94,7 @@
         </tbody>
     </table>
 
-    <div class="mt40 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-              class="w100px fl"
-              id="abclistScaleBox"
-              ng-model="listScale"
-              control="listScaleCombo"
-              items-source="_getComboData('abclistScaleBox')"
-              display-member-path="name"
-              selected-value-path="value"
-              is-editable="false"
-              initialized="_initComboBox(s)">
-            </wj-combo-box>
+    <div class="mt20 oh sb-select dkbr">
 
             <%-- 엑셀 다운로드 //TODO --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadAbc()"><s:message code="cmm.excel.down" />
@@ -103,7 +103,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px;">
+          <div class="wj-gridWrap1">
             <wj-flex-grid
               id="abcGrid"
               autoGenerateColumns="false"
@@ -116,15 +116,15 @@
 
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="abc.grade"/>"              binding="grade"       width="50" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv1Nm"/>"              binding="lv1Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv2Nm"/>"              binding="lv2Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.lv3Nm"/>"              binding="lv3Nm"       width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.prodCd"/>"             binding="prodCd"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv1Nm"/>"              binding="lv1Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv2Nm"/>"              binding="lv2Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.lv3Nm"/>"              binding="lv3Nm"       width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.prodCd"/>"             binding="prodCd"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true" format="d"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.prodNm"/>"             binding="prodNm"   width="165" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.realSaleAmt"/>"        binding="realSaleAmt"   width="*" align="right" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.totSaleQty"/>"         binding="totSaleQty"   width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="abc.rat"/>"                binding="rat"        width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="abc.acc"/>"                binding="accRat"        width="*" align="center" is-read-only="true" aggregate="Sum" word-wrap="true" multi-line="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="abc.acc"/>"                binding="accRat"        width="*" align="center" is-read-only="true" word-wrap="true" multi-line="true"></wj-flex-grid-column>
             </wj-flex-grid>
 
             <%-- ColumnPicker 사용시 include --%>
@@ -135,14 +135,18 @@
           </div>
         </div>
         <%--//위즈모 테이블--%>
-        <%-- 페이지 리스트 --%>
-	    <div class="pageNum mt20">
-	    <%-- id --%>
-	        <ul id="abcCtrlPager" data-size="10">
-	        </ul>
-	    </div>
-	    <%--//페이지 리스트--%>
 
     </div>
 
+<script>
+  var prodEnvstVal = "${prodEnvstVal}";
+</script>
+
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/abc/abc/abc.js?ver=20190125.02" charset="utf-8"></script>
+
+<%-- 레이어 팝업 : 상품상세정보 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+  <c:param name="prodNoEnvFg" value="${prodNoEnvFg}"/>
+</c:import>

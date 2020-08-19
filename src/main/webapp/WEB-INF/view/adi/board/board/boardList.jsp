@@ -69,14 +69,16 @@
         <%--// 페이지 스케일  --%>
 
         <%-- 신규등록 --%>
-        <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
-            <s:message code="board.newInfo" />
-        </button>
+        <div <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if> >
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addInfo()">
+                <s:message code="board.newInfo" />
+            </button>
+        </div>
     </div>
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:380px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -88,13 +90,14 @@
                 is-read-only="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="250" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.targetFg"/>" binding="targetFg" data-map="targetFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.apprFg"/>" binding="apprFg" data-map="apprFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.agencyNm"/>" binding="agencyNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userNm"/>" binding="userNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="board.modDt"/>" binding="modDt" width="130" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.noticeDate"/>" binding="noticeDate" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="board.remark"/>" binding="remark" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 <%--팝업 조회시 필요--%>
                 <wj-flex-grid-column header="<s:message code="board.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -118,13 +121,22 @@
 <script type="text/javascript">
     <%-- 공개대상 --%>
     var targetFgData = ${ccu.getCommCodeExcpAll("106")};
+   /* var targetFgData = [
+        {"name":"전체","value":"1"},
+        {"name":"특정매장","value":"2"}
+    ];*/
     <%-- 승인구분 --%>
     var apprFgData = ${ccu.getCommCodeExcpAll("107")};
+    /*var apprFgData = [
+        {"name":"기안","value":"1"},
+        {"name":"승인","value":"2"},
+        {"name":"반려","value":"3"}
+    ];*/
 
     var boardCd = "${boardCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20200224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20200317.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

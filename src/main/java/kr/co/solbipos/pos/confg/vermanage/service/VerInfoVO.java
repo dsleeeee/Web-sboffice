@@ -52,7 +52,8 @@ public class VerInfoVO extends PageVO {
     private String delYn;
     /** 사용여부 */
     private UseYn useYn;
-
+    /**  상태 */
+    private String sysStatFg;
 
     /**
      * @return the verSerNo
@@ -267,4 +268,11 @@ public class VerInfoVO extends PageVO {
         this.useYn = useYn;
     }
 
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
+    }
 }

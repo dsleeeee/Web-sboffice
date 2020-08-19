@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="dstbReqCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dstbReqCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -60,14 +62,9 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('dstbReqCtrl')"><s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10">
-    <%-- 분배완료 --%>
-    <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveDstbConfirm()"><s:message code="dstbReq.dstbConfirm"/></button>
+    <button type="button" id="btnDstbConfirm" class="btn_skyblue ml5" ng-click="saveDstbConfirm()"><s:message code="dstbReq.dstbConfirm"/></button><%--분배완료--%>
+    <button                                   class="btn_skyblue ml5" ng-click="excelDownload()"  ><s:message code="cmm.excel.down" 	/></button><%--엑셀 다운로드--%>
   </div>
 
   <div class="w100 mt10">
@@ -80,20 +77,20 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter">
+        item-formatter="itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.mdTot"/>" binding="mdTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>" binding="modDt" width="130" align="center" is-read-only="true" format="dateTime"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.remark"/>" binding="remark" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="dstbReq.slipFg"/>" binding="slipFg" width="70" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 			binding="gChk" 		width="30" 	align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.reqDate"/>" 	binding="reqDate" 	width="100"	align="center" 	is-read-only="true" 					format="date"				></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true"													></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.storeNm"/>" 	binding="storeNm" 	width="150" align="left" 	is-read-only="true"													></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.procFg"/>" 	binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"							></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.dtlCnt"/>" 	binding="dtlCnt" 	width="70" 	align="right" 	is-read-only="true" data-type="Number" 	format="n0"					></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.orderTot"/>" 	binding="orderTot" 	width="130"	align="right" 	is-read-only="true" data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.mdTot"/>" 	binding="mdTot" 	width="130"	align="right" 	is-read-only="true" data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.modDt"/>" 	binding="modDt" 	width="130" align="center" 	is-read-only="true" 					format="dateTime"			></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.remark"/>" 	binding="remark" 	width="200" align="left" 	is-read-only="true"													></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.slipFg"/>" 	binding="slipFg" 	width="70" 	align="left" 	is-read-only="true" visible="false"									></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

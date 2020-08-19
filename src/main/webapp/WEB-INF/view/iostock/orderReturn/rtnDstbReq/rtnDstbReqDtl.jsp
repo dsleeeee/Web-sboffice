@@ -37,7 +37,7 @@
 
       <div class="tr mt20">
         <p id="dtlAvailableOrderAmt" class="fl s14 bk lh30"></p>
-        <div id="dstbBtnLayer" ng-if="dstbBtnLayer">
+        <div id="dstbBtnLayer" style="display:none;">
           <span id="spanDstbConfirmFg" class="chk pdb5 txtIn" style="top: 0px;"><input type="checkbox" name="dstbConfirmFg" id="dstbConfirmFg" value="Y"/>
               <label for="dstbConfirmFg"><s:message code="rtnDstbReq.dtl.dstbConfirmFg"/></label>
           </span>
@@ -68,7 +68,7 @@
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.splyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.splyUprc"/>" binding="splyUprc" width="90" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.orderUnitQty"/>" binding="orderUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.orderEtcQty"/>" binding="orderEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbReq.dtl.orderTotQty"/>" binding="orderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>

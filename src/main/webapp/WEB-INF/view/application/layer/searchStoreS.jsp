@@ -28,9 +28,9 @@
           <tbody>
           <tr>
             <th><s:message code="cmm.storeCd"/></th>
-            <td><input type="text" id="srchStoreCd" ng-model="storeCd" maxlength="5" /></td>
+            <td><input type="text" id="srchStoreCd" ng-model="storeCd"/></td>
             <th><s:message code="cmm.storeNm"/></th>
-            <td><input type="text" id="srchStoreNm" ng-model="storeNm" maxlength="16" /></td>
+            <td><input type="text" id="srchStoreNm" ng-model="storeNm"/></td>
           </tr>
           </tbody>
         </table>

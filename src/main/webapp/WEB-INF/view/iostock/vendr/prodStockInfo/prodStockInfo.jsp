@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="prodStockInfoCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('prodStockInfoCtrl', 1)"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -63,13 +65,6 @@
     </tr>
     </tbody>
   </table>
-
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodStockInfoCtrl', 1)">
-      <%--<button class="btn_blue fr" id="btnSearch" ng-click="fnSearch()">--%>
-      <s:message code="cmm.search"/></button>
-  </div>
 
   <div class="w100 mt10">
     <div class="wj-TblWrapBr">

@@ -28,11 +28,14 @@ public interface StoreManageService {
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장 목록 엑셀조회 */
+    List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
     /** 매장정보 상세조회 */
     Map<String, Object> getStoreDetail(StoreManageVO storeManageVO);
 
     /** 매장 콤보 리스트 조회 */
-    List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO);
+    List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 
     /** 매장환경조회 팝업 데이터 조회 */
     Map<String, Object> getStoreEnvInfo(StoreManageVO storeManageVO);
@@ -103,4 +106,27 @@ public interface StoreManageService {
     /** 매장코드 중복체크 */
     int getStoreCdCnt(StoreManageVO storeManageVO);
 
+    /** 권한그룹복사를 위한 본사목록 조회 */
+    List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 권한그룹복사를 위한 매장목록 조회 */
+    List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 사용 메뉴 */
+    List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO);
+
+    /** 미사용 메뉴 */
+    List<DefaultMap<String>> beUseMenu(StoreManageVO storeManageVO);
+
+    /** 메뉴권한복사 */
+    int copyAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 추가 */
+    int addAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 메뉴 권한 삭제 */
+    int removeAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 사업자번호 중복체크 */
+    DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 }

@@ -62,7 +62,11 @@ public class DisuseVO extends PageVO {
     private String prodBarcdCd;
     /** 조정구분 */
     private String disuseFg;
-
+    /** 권역별 창고 코드 */
+    private String  areaFg;
+    /** 선택창고 */
+    private String disuseStorageCd;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -454,4 +458,23 @@ public class DisuseVO extends PageVO {
     public void setDisuseFg(String disuseFg) {
         this.disuseFg = disuseFg;
     }
+
+	public String getDisuseStorageCd() {
+		return disuseStorageCd;
+	}
+
+	public void setDisuseStorageCd(String disuseStorageCd) {
+		this.disuseStorageCd = disuseStorageCd;
+	}
+
+	public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
+    
+
+    
 }

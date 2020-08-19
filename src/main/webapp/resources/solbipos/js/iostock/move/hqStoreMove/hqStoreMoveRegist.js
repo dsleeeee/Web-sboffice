@@ -3,9 +3,9 @@ app.controller('hqStoreMoveRegistCtrl', ['$scope', '$http', '$timeout', function
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('hqStoreMoveRegistCtrl', $scope, $http, true));
 
-  $scope.moveDate = wcombo.genDate("#regMoveDate");
+  $scope.moveDate = wcombo.genDate("#regHqStoreMoveDate");
 
-  $scope._setComboData("srchRegDlvrFg", [
+  $scope._setComboData("srchHqStoreMoveRegDlvrFg", [
     {"name": messages["hqStoreMove.dlvrFg0"], "value": "0"},
     {"name": messages["hqStoreMove.dlvrFg1"], "value": "1"},
     {"name": messages["hqStoreMove.dlvrFg2"], "value": "2"}
@@ -13,6 +13,10 @@ app.controller('hqStoreMoveRegistCtrl', ['$scope', '$http', '$timeout', function
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+	  
+	// picker 사용시 호출 : 미사용시 호출안함
+	$scope._makePickColumns("hqStoreMoveRegistCtrl");
+	
     var comboParams         = {};
     comboParams.nmcodeGrpCd = "097";
     var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -61,7 +65,7 @@ app.controller('hqStoreMoveRegistCtrl', ['$scope', '$http', '$timeout', function
     s.columnHeaders.rows[0].dataItem = {
       prodCd     : messages["hqStoreMove.reg.prodCd"],
       prodNm     : messages["hqStoreMove.reg.prodNm"],
-      poUnitFg   : messages["hqStoreMove.reg.poUnitFg"],
+      poUnitFgNm : messages["hqStoreMove.reg.poUnitFg"],
       poUnitQty  : messages["hqStoreMove.reg.poUnitQty"],
       outUnitQty : messages["hqStoreMove.reg.qty"],
       outEtcQty  : messages["hqStoreMove.reg.qty"],
@@ -77,6 +81,7 @@ app.controller('hqStoreMoveRegistCtrl', ['$scope', '$http', '$timeout', function
       vatFg      : messages["hqStoreMove.reg.vatFg"],
       envst0011  : messages["hqStoreMove.reg.envst0011"],
       envst0011  : messages["hqStoreMove.reg.envst0011"],
+      poUnitFg   : messages["hqStoreMove.reg.poUnitFg"],
     };
 
     s.itemFormatter = function(panel, r, c, cell) {
@@ -227,7 +232,7 @@ app.controller('hqStoreMoveRegistCtrl', ['$scope', '$http', '$timeout', function
       item.inStoreCd  = $scope.inStoreCd;
       item.dlvrFg     = $scope.regDlvrFg;
       item.remark     = $scope.hdRemark;
-      item.storageCd  = "001";
+      item.storageCd  = "999";
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg  = confirmFg;
 

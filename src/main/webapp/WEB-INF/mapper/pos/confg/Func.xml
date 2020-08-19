@@ -243,7 +243,7 @@
         AND tms.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
       </if>
       <if test='storeCd != null and storeCd != ""'>
-        AND tms.STORE_CD = #{storeCd}
+        AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
       </if>
       <if test='storeNm != null and storeNm != ""'>
         AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
@@ -404,6 +404,326 @@
       )
     }
   </select>
+
+    <!-- 매장선택 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : funcStoreVO
+        COMMENTS : 매장 리스트를 조회한다.
+    -->
+    <select id="selectStoreList" parameterType="funcStoreVO" resultType="DefaultMap">
+        /* USE : FuncMapper.selectStoreList */
+        <![CDATA[
+        SELECT tms.HQ_OFFICE_CD,
+                tho.HQ_OFFICE_NM,
+                tms.STORE_CD,
+                tms.STORE_NM
+          FROM TB_MS_STORE tms,
+        		TB_HQ_OFFICE tho
+         WHERE tho.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        ]]>
+        <choose>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+                <![CDATA[
+                    AND (tms.AGENCY_CD = #{agencyCd})
+                ]]>
+            </when>
+        </choose>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 포스기능키 매장정보 삭제 (적용매장 정보) -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_STORE
+        COMMENTS : 포스기능키 매장정보를 삭제한다.
+    -->
+    <delete id="delPosFnkeyStore"  parameterType="funcStoreVO">
+        /* USE : FuncMapper.delPosFnkeyStore */
+        DELETE
+            TB_CM_POS_FNKEY_STORE
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 매장별 포스기능키 삭제 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        COMMENTS : 매장별 포스기능키 정보를 삭제한다.
+    -->
+    <delete id="delStoreFnkey"  parameterType="funcStoreVO">
+        /* USE : FuncMapper.delStoreFnkey */
+        DELETE
+            TB_MS_STORE_FNKEY
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 포스별 포스기능키 삭제 -->
+    <!--
+        TABLE    : TB_MS_POS_FNKEY
+        COMMENTS : 포스별 포스기능키 정보를 삭제한다.
+    -->
+    <delete id="delPosFnkey"  parameterType="funcStoreVO">
+        /* USE : FuncMapper.delPosFnkey */
+        DELETE
+            TB_MS_POS_FNKEY
+        WHERE
+            STORE_CD = #{storeCd}
+    </delete>
+
+    <!--  기본 포스기능키 등록 (적용매장 정보 등록)  -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_STORE
+        COMMENTS : 기본으로 사용하는 포스기능키를 기능키 적용매장 정보에 등록,
+                   데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
+    -->
+    <update id="regDefaultFuncStore" parameterType="funcStoreVO">
+    /* USE : FuncMapper.regDefaultFuncStore */
+    MERGE INTO TB_CM_POS_FNKEY_STORE A
+    USING   (
+                    SELECT TCPF.FNKEY_FG    AS FNKEY_FG
+                    ,       TCPF.FNKEY_NO    AS FNKEY_NO
+                    ,       TMS.STORE_CD     AS STORE_CD
+                    ,       #{regDt}         AS REG_DT
+                    ,       #{regId}         AS REG_ID
+                    ,       #{modDt}         AS MOD_DT
+                    ,       #{modId}         AS MOD_ID
+                    FROM   TB_CM_POS_FNKEY TCPF
+                    ,       TB_MS_STORE TMS
+                    WHERE  TCPF.FNKEY_FG   IN  (
+                                                    SELECT  NMCODE_CD
+                                                    FROM    TB_CM_NMCODE TCN
+                                                    WHERE   NMCODE_GRP_CD   =   '026'
+                                                )
+                    AND     TCPF.ADD_YN     =   'Y'
+                    AND     TCPF.USE_YN     =   'Y'
+                    AND     TMS.STORE_CD    =   #{storeCd}
+            ) B
+    ON      (                B.FNKEY_NO      =   A.FNKEY_NO
+                    AND      B.FNKEY_FG      =   A.FNKEY_FG
+                    AND      B.STORE_CD      =   A.STORE_CD
+             )
+    WHEN NOT MATCHED THEN
+    INSERT  (
+                FNKEY_FG,
+                FNKEY_NO,
+                STORE_CD,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+             )
+    VALUES  (
+                B.FNKEY_FG,
+                B.FNKEY_NO,
+                B.STORE_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+              )
+  </update>
+
+    <!--  기본 포스기능키 등록 (매장별 포스기능키 등록)  -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        COMMENTS : 기본으로 사용하는 포스기능키를 매장별 포스기능키 정보에 등록,
+                   데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
+    -->
+    <update id="regDefaultFuncStoreFnkey" parameterType="funcStoreVO">
+    /* USE : FuncMapper.regDefaultFuncStoreFnkey */
+    MERGE INTO TB_MS_STORE_FNKEY A
+    USING   (
+                        SELECT TCPFS.STORE_CD        AS STORE_CD
+                        ,       TCPFS.FNKEY_NO        AS FNKEY_NO
+                        ,       TCPF.FNKEY_NM         AS FNKEY_NM
+                        ,       TCPF.FNKEY_FG         AS FNKEY_FG
+                        ,       TCPF.POS_FG           AS POS_FG
+                        ,       'N'                   AS AUTH_YN     <!-- 인증여부는 우선 'N' 기본값으로 -->
+                        ,       TCPF.IMG_FILE_NM_1    AS IMG_FILE_NM  <!-- 외식이미지로 넣는다. -->
+                        ,       TCPF.DISP_SEQ         AS DISP_SEQ
+                        ,       TCPF.POSI_ADJ_YN      AS POSI_ADJ_YN
+                        ,       TCPF.USE_YN           AS USE_YN
+                        ,       #{regDt}              AS REG_DT
+                        ,       #{regId}              AS REG_ID
+                        ,       #{modDt}              AS MOD_DT
+                        ,       #{modId}              AS MOD_ID
+                        FROM   TB_CM_POS_FNKEY_STORE TCPFS
+                        ,       TB_CM_POS_FNKEY TCPF
+                        ,       TB_MS_STORE TMS
+                        WHERE  TCPFS.STORE_CD   =   #{storeCd}
+                        AND     TCPF.FNKEY_NO   =   TCPFS.FNKEY_NO
+                        AND     TMS.STORE_CD    =   #{storeCd}
+                ) B
+    ON         (                B.FNKEY_NO   =   A.FNKEY_NO
+                        AND     B.STORE_CD   =   A.STORE_CD
+                )
+    WHEN NOT MATCHED THEN
+    INSERT  (
+                STORE_CD,
+                FNKEY_NO,
+                FNKEY_NM,
+                FNKEY_FG,
+                POS_FG,
+                AUTH_YN,
+                IMG_FILE_NM,
+                DISP_SEQ,
+                POSI_ADJ_YN,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            )
+    VALUES  (
+                B.STORE_CD,
+                B.FNKEY_NO,
+                B.FNKEY_NM,
+                B.FNKEY_FG,
+                B.POS_FG,
+                B.AUTH_YN,
+                B.IMG_FILE_NM,
+                B.DISP_SEQ,
+                B.POSI_ADJ_YN,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+  </update>
+
+    <!--  기본 포스기능키 등록 (포스별 포스기능키 등록)  -->
+    <!--
+        TABLE    : TB_MS_POS_FNKEY
+        COMMENTS : 기본으로 사용하는 포스기능키를 포스별 포스기능키 정보에 등록,
+                   데이터가 존재하면 UPDATE, 존재하지 않으면 INSERT
+    -->
+    <update id="regDefaultFuncPosFnkey" parameterType="funcStoreVO">
+    /* USE : FuncMapper.regDefaultFuncPosFnkey */
+    MERGE INTO TB_MS_POS_FNKEY A
+    USING   (
+                SELECT  TCPFS.STORE_CD                   AS STORE_CD
+                ,       TMP.POS_NO                        AS POS_NO
+                ,       TCPFS.FNKEY_NO                    AS FNKEY_NO
+                ,       TCPF.FNKEY_FG                     AS FNKEY_FG
+                ,       TCPF.DISP_SEQ                     AS DISP_SEQ
+                ,       NVL(TCPF.COL_POSI, 0)             AS X
+                ,       NVL(TCPF.ROW_POSI, 0)             AS Y
+                ,       NVL(TCPF.WIDTH, 0)                AS WIDTH
+                ,       NVL(TCPF.HEIGHT, 0)               AS HEIGHT
+                ,       '01'                             AS STYLE_CD
+                ,       ''                               AS IMG_NM       <!-- TCPF.IMG_FILE_NM_1(전준모님 확인 필요) -->
+                ,       TCPF.USE_YN                      AS USE_YN       <!-- 사용여부 우선 'N' 기본값으로 -->
+                ,        #{regDt}                        AS REG_DT
+                ,        #{regId}                        AS REG_ID
+                ,        #{modDt}                        AS MOD_DT
+                ,        #{modId}                        AS MOD_ID
+                FROM    TB_CM_POS_FNKEY_STORE TCPFS
+                ,       TB_CM_POS_FNKEY TCPF
+                ,       TB_MS_STORE TMS
+                ,       TB_MS_POS TMP
+                WHERE   TCPFS.STORE_CD  =   #{storeCd}
+                AND     TCPF.FNKEY_NO   =   TCPFS.FNKEY_NO
+                AND     TMS.STORE_CD    =   #{storeCd}
+                AND     TMP.STORE_CD    =   #{storeCd}
+            ) B
+    ON      (           B.FNKEY_NO      =   A.FNKEY_NO
+            AND         B.STORE_CD      =   A.STORE_CD
+            AND         B.POS_NO        =   A.POS_NO
+            )
+    WHEN NOT MATCHED THEN
+    INSERT  (
+                STORE_CD
+            ,   POS_NO
+            ,   FNKEY_NO
+            ,   FNKEY_FG
+            ,   DISP_SEQ
+            ,   X
+            ,   Y
+            ,   WIDTH
+            ,   HEIGHT
+            ,   STYLE_CD
+            ,   IMG_NM
+            ,   USE_YN
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+    VALUES  (
+                B.STORE_CD
+            ,   B.POS_NO
+            ,   B.FNKEY_NO
+            ,   B.FNKEY_FG
+            ,   B.DISP_SEQ
+            ,   B.X
+            ,   B.Y
+            ,   B.WIDTH
+            ,   B.HEIGHT
+            ,   B.STYLE_CD
+            ,   B.IMG_NM
+            ,   B.USE_YN
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </update>
+
+    <!-- 포스기능 등록/미등록 기능키 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY
+        PARAM    : funcVO
+        COMMENTS : 매장의 등록/미등록 된 기능키 목록을 조회한다.
+    -->
+    <select id="getFuncKeyList" parameterType="funcStoreVO" resultMap="funcListMap">
+        /* USE : FuncMapper.getFuncKeyList */
+        SELECT tcpf.FNKEY_FG,
+                tcpf.FNKEY_NO,
+                tcpf.FNKEY_NM,
+                tcn.NMCODE_NM AS FNKEY_FG_NM
+          FROM TB_CM_POS_FNKEY tcpf,
+                (   SELECT STORE_CD,
+                            FNKEY_FG,
+                            FNKEY_NO
+                     FROM TB_CM_POS_FNKEY_STORE
+                    WHERE STORE_CD = #{storeCd}  )tcpfs,
+                (	SELECT NMCODE_CD,
+                            NMCODE_NM
+                      FROM TB_CM_NMCODE
+                     WHERE NMCODE_GRP_CD = '026') tcn
+         WHERE tcpfs.FNKEY_FG (+)= tcpf.FNKEY_FG
+           AND tcpfs.FNKEY_NO (+)= tcpf.FNKEY_NO
+           AND tcn.NMCODE_CD (+)= tcpf.FNKEY_FG
+        <if test='regYn != null and regYn == "Y"'>
+            AND tcpfS.FNKEY_NO IS NOT NULL
+        </if>
+        <if test='regYn != null and regYn == "N"'>
+            AND tcpfS.FNKEY_NO IS NULL
+        </if>
+        <if test='fnkeyFg != null and fnkeyFg != ""'>
+            AND tcpf.FNKEY_FG = #{fnkeyFg}
+        </if>
+        <if test='fnkeyNo != null and fnkeyNo != ""'>
+            AND tcpf.FNKEY_NO LIKE '%'||#{fnkeyNo}||'%'
+        </if>
+        <if test='fnkeyNm != null and fnkeyNm != ""'>
+            AND tcpf.FNKEY_NM LIKE '%'||#{fnkeyNm}||'%'
+        </if>
+     ORDER BY tcpf.FNKEY_FG, tcpf.FNKEY_NO
+    </select>
+
 </mapper>
 
 

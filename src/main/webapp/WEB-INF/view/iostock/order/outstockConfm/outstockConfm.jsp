@@ -8,7 +8,10 @@
 
 <div class="subCon" ng-controller="outstockConfmCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -68,7 +71,7 @@
           <span class="txtIn w150px sb-select fl mr5">
             <wj-combo-box
               id="srchDlvrCd"
-              ng-model="dlvrCd"
+              ng-model="srch.dlvrCd"
               items-source="_getComboData('srchDlvrCd')"
               display-member-path="name"
               selected-value-path="value"
@@ -110,12 +113,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('outstockConfmCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10 fr">
     <p class="s14 bk fl mr10 lh30"><s:message code="outstockConfm.reqNoConfirm"/> : </p>
     <p class="s14 bk fl mr10 lh30 red" id="reqNoConfirmCnt"></p>
@@ -123,9 +120,38 @@
     <p class="s14 bk fl mr20 lh30 red" id="outstockNoCreateCnt"></p>
     <%-- 출고일자 --%>
     <p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.outDate"/></p>
-    <div class="sb-select fl">
-      <span class="txtIn"><input id="outDate" class="w120px"></span>
+    <div class="sb-select fl mr5">
+      <span class="txtIn "><input id="outDate" class="w120px"></span>
     </div>
+    <%--출고창고 --%>
+          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
+          	<span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="srchOutStorageCd"
+                ng-model="save.outStorageCd"
+                items-source="_getComboData('srchOutStorageCd')"
+                display-member-path="name"
+                selected-value-path="value"                
+                is-editable="false"
+                initialized="_initComboBox(s)"
+                selected-index-changed="selectedIndexChanged(s)"
+                >
+              </wj-combo-box>
+            </span>
+          	<%--배송기사 --%>    
+          	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.dlvrNm"/></p>     
+        	<span class="txtIn w150px sb-select fl mr5">
+              <wj-combo-box
+                id="saveDlvrCd"
+                ng-model="save.dlvrCd"
+                items-source="_getComboData('saveDlvrCd')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </span>
+    
     <%-- 출고자료생성 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">
       <s:message code="outstockConfm.outstockConfirm"/></button>
@@ -177,7 +203,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20200731.01" charset="utf-8"></script>
 
 <%-- 출고확정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockConfm/outstockConfmDtl.jsp">

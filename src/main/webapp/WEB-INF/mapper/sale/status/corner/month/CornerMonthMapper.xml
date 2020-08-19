@@ -4,11 +4,11 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.corner.month.service.impl.CornerMonthMapper">
 
-    <!-- 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 -->
+    <!-- 코너별매출현황 - 월별 리스트 조회 -->
     <!--
-        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
-        PARAM    : todayBillSaleDtlVO
-        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+        TABLE    : TB_SL_MONTHLY_CORNR_PROD
+        PARAM    : cornerMonthVO
+        COMMENTS : 코너별매출현황 - 월별 리스트 조회.
     -->
     <select id="getCornerMonthList" parameterType="cornerMonthVO" resultType="DefaultMap">
         /* USE : CornerMonthMapper.getCornerMonthList */
@@ -41,5 +41,41 @@
         GROUP BY TSDCP.SALE_YM
         ORDER BY TSDCP.SALE_YM DESC
        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 코너별매출현황 - 월별 엑셀 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_CORNR_PROD
+        PARAM    : cornerMonthVO
+        COMMENTS : 코너별매출현황 - 월별 엑셀 리스트 조회.
+    -->
+    <select id="getCornerMonthExcelList" parameterType="cornerMonthVO" resultType="DefaultMap">
+        /* USE : CornerMonthMapper.getCornerMonthExcelList */
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_YM, 'yyyymm'), 'yyyy-mm') SALE_YM
+              ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT
+              ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
+              ${sQuery1}       
+        FROM TB_SL_MONTHLY_CORNR_PROD TSDCP
+        WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='arrStoreCd != null and arrStoreCd != ""'>
+           AND TSDCP.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='arrCornrCd != null and arrCornrCd != ""'>
+            AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
+            <foreach collection="arrCornrCd" item="item" open="("  separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='startDate != null and startDate != ""'>
+           AND TSDCP.SALE_YM >= TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD'),'YYYYMM')
+        </if>
+        <if test='endDate != null and endDate != ""'>
+           AND TSDCP.SALE_YM <![CDATA[<= ]]> TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
+        </if>
+        GROUP BY TSDCP.SALE_YM
+        ORDER BY TSDCP.SALE_YM DESC
     </select>
 </mapper>

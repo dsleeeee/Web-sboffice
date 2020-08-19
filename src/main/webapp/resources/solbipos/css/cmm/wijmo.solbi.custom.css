@@ -139,7 +139,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding:9px 5px;
+    /*padding:9px 5px;*/
     line-height:15px;
     outline: none;
     color:#666;

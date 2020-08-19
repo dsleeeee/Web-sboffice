@@ -5,6 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="agencyList" value="${agencyList}" />
 
 <div class="subCon">
   <div class="searchBar flddUnfld">
@@ -28,19 +29,19 @@
         <%--본사코드 --%>
         <th><s:message code="hqManage.hqOfficeCd" /></th>
         <td>
-          <input type="text" id="srchHqOfficeCd" maxlength="5" class="sb-input w100"/>
+          <input type="text" id="srchHqOfficeCd" class="sb-input w100"/>
         </td>
         <%-- 본사명 --%>
         <th><s:message code="hqManage.hqOfficeNm" /></th>
         <td>
-          <input type="text" id="srchHqOfficeNm" maxlength="12" class="sb-input w100"/>
+          <input type="text" id="srchHqOfficeNm" class="sb-input w100"/>
         </td>
       </tr>
       <tr>
         <%--사업자번호 --%>
         <th><s:message code="hqManage.bizNo" /></th>
         <td>
-          <input type="text" id="srchBizNo" maxlength="10" class="sb-input w100"/>
+          <input type="text" id="srchBizNo" class="sb-input w100"/>
         </td>
         <%-- 용도 --%>
         <th><s:message code="hqManage.clsFg" /></th>
@@ -96,7 +97,9 @@
   var selectedHq = "";
 
   <%-- 검색조건 및 dataMap 조회 --%>
-  var agencyList        = ${ccu.getAgencyList()};
+  //공통에서 가져오던거 변경 >> 총판/대리점은 공통 못쓰고 자신이 관리하는 업체만 나와야 하기 때문
+  //var agencyList = ${ccu.getAgencyList()};
+  var agencyList = ${agencyList};
   var areaCd            = ${ccu.getCommCodeSelect("061")};
   var clsFg             = ${ccu.getCommCodeSelect("001")};
   var sysStatFg         = ${ccu.getCommCodeSelect("005")};

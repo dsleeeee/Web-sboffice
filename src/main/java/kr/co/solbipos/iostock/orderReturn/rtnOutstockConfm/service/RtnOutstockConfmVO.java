@@ -146,7 +146,47 @@ public class RtnOutstockConfmVO extends PageVO {
     private String penaltyCd;
     /** 패널티금액 반품시 */
     private Integer penaltyAmt;
+    private Long orderStorageAmt;
+    /** 주문금액VAT */
+    private Long orderStorageVat;
+    /** 주문금액합계 */
+    private Long orderStorageTot;
+    /** 발주단위수량 */
+    private Integer poUnitQty;
+    private String poUnitFg;
+    /** 창고 갯수 */
+    //private int	storageCnt;
 
+    /** 창고별 배열값-창고코드 */
+    private String  arrStorageCd;
+
+    /** 창고별 배열값-창고명 */
+    private String  arrStorageNm;
+
+    /** 창고별 배열값-입고수량 주문단위 */
+    private String  arrOrderUnitQty;
+
+    /** 창고별 배열값-입고수량 나머지 */
+    private String  arrOrderEtcQty;
+
+    /** 창고별 배열값-입고수량 합계 */
+    private String  arrOrderTotQty;
+
+    /** 창고별 배열값-입고금액 */
+    private String  arrOrderAmt;
+
+    /** 창고별 배열값-입고금액 부가세 */
+    private String  arrOrderVat;
+
+    /** 창고별 배열값-입고금액 합계 */
+    private String  arrOrderTot;
+    
+    /** 출고창고 */
+    private String outStorageCd;
+    /** 확정여부 */
+    private String confmYn;
+    
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1126,4 +1166,126 @@ public class RtnOutstockConfmVO extends PageVO {
     public void setPenaltyAmt(Integer penaltyAmt) {
         this.penaltyAmt = penaltyAmt;
     }
+
+	public String getArrStorageCd() {
+		return arrStorageCd;
+	}
+
+	public void setArrStorageCd(String arrStorageCd) {
+		this.arrStorageCd = arrStorageCd;
+	}
+
+	public String getArrStorageNm() {
+		return arrStorageNm;
+	}
+
+	public void setArrStorageNm(String arrStorageNm) {
+		this.arrStorageNm = arrStorageNm;
+	}
+
+	public String getArrOrderUnitQty() {
+		return arrOrderUnitQty;
+	}
+
+	public void setArrOrderUnitQty(String arrOrderUnitQty) {
+		this.arrOrderUnitQty = arrOrderUnitQty;
+	}
+
+	public String getArrOrderEtcQty() {
+		return arrOrderEtcQty;
+	}
+
+	public void setArrOrderEtcQty(String arrOrderEtcQty) {
+		this.arrOrderEtcQty = arrOrderEtcQty;
+	}
+
+	public String getArrOrderTotQty() {
+		return arrOrderTotQty;
+	}
+
+	public void setArrOrderTotQty(String arrOrderTotQty) {
+		this.arrOrderTotQty = arrOrderTotQty;
+	}
+
+	public String getArrOrderAmt() {
+		return arrOrderAmt;
+	}
+
+	public void setArrOrderAmt(String arrOrderAmt) {
+		this.arrOrderAmt = arrOrderAmt;
+	}
+
+	public String getArrOrderVat() {
+		return arrOrderVat;
+	}
+
+	public void setArrOrderVat(String arrOrderVat) {
+		this.arrOrderVat = arrOrderVat;
+	}
+
+	public String getArrOrderTot() {
+		return arrOrderTot;
+	}
+
+	public void setArrOrderTot(String arrOrderTot) {
+		this.arrOrderTot = arrOrderTot;
+	}
+
+	public Long getOrderStorageVat() {
+		return orderStorageVat;
+	}
+
+	public void setOrderStorageVat(Long orderStorageVat) {
+		this.orderStorageVat = orderStorageVat;
+	}
+
+	public Long getOrderStorageTot() {
+		return orderStorageTot;
+	}
+
+	public void setOrderStorageTot(Long orderStorageTot) {
+		this.orderStorageTot = orderStorageTot;
+	}
+
+	public Long getOrderStorageAmt() {
+		return orderStorageAmt;
+	}
+
+	public void setOrderStorageAmt(Long orderStorageAmt) {
+		this.orderStorageAmt = orderStorageAmt;
+	}
+
+	public Integer getPoUnitQty() {
+		return poUnitQty;
+	}
+
+	public void setPoUnitQty(Integer poUnitQty) {
+		this.poUnitQty = poUnitQty;
+	}
+
+	public String getPoUnitFg() {
+		return poUnitFg;
+	}
+
+	public void setPoUnitFg(String poUnitFg) {
+		this.poUnitFg = poUnitFg;
+	}
+
+	public String getOutStorageCd() {
+		return outStorageCd;
+	}
+
+	public void setOutStorageCd(String outStorageCd) {
+		this.outStorageCd = outStorageCd;
+	}
+
+	public String getConfmYn() {
+		return confmYn;
+	}
+
+	public void setConfmYn(String confmYn) {
+		this.confmYn = confmYn;
+	}
+    
+    
 }

@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.board.board.service.BoardService;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
@@ -55,7 +54,7 @@ public class BoardController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "{boardCd}/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/{boardCd}/list.sb", method = RequestMethod.GET)
     public String boardView(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable String boardCd) {
         // http://localhost:8080/adi/board/board/01/list.sb
 //        System.out.println("test1111 : " + boardCd);
@@ -98,7 +97,7 @@ public class BoardController {
      * @author  김설아
      * @since   2020. 02. 14.
      */
-    @RequestMapping(value = "board/getBoardDetailList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/getBoardDetailList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getBoardDetailList(BoardVO boardVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
@@ -124,7 +123,7 @@ public class BoardController {
      * @author  김설아
      * @since   2020. 02. 12.
      */
-    @RequestMapping(value = "board/getBoardInfoList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/getBoardInfoList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getBoardInfoList(BoardVO boardVO, HttpServletRequest request,
                                     HttpServletResponse response, Model model) {
@@ -158,6 +157,7 @@ public class BoardController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = boardService.getBoardInfoSave(boardVO, sessionInfoVO);
+//        System.out.println("test1111 : " + result);
 
         return returnJson(Status.OK, result);
     }
@@ -263,7 +263,7 @@ public class BoardController {
      * @author  김설아
      * @since   2020. 03. 04.
      */
-    @RequestMapping(value = "board/getBoardDetailAtchList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/board/getBoardDetailAtchList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getBoardDetailAtchList(BoardVO boardVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {

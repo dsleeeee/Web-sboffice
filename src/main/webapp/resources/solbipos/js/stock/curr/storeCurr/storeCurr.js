@@ -9,8 +9,8 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
   angular.extend(this, new RootController('storeCurrCtrl', $scope, $http, true));
 
   $scope._setComboData("srchUnitFg", [
-    {"name": messages["storeCurr.unitStockFg"], "value": "stock"},
-    {"name": messages["storeCurr.unitOrderFg"], "value": "order"}
+    {"name": messages["storeCurr.unitStockFg"], "value": "0"},
+    {"name": messages["storeCurr.unitOrderFg"], "value": "1"}
   ]);
 
   $scope._setComboData("srchWeightFg", [
@@ -22,6 +22,13 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["storeCurr.safeStockFg0"], "value": "0"}
   ]);
+  
+  //매장선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show']
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storeCurrSelectStoreShow = function () {
+	  $scope._broadcast('storeCurrSelectStoreCtrl');
+  };
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -38,7 +45,7 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "slipNo") { // 전표번호
+        if (col.binding === "currQty" && s.cells.getCellData(e.row,e.col,false) != null ) { // 현재고
           wijmo.addClass(e.cell, 'wijLink');
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
@@ -57,11 +64,13 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        // if (col.binding === "currQty") { // 전표번호 클릭
-        //   var params    = {};
-        //   params.prodCd = selectedRow.prodCd;
-        //   $scope._broadcast('storeCurrDtlCtrl', params);
-        // }
+         if (col.binding === "currQty") { // 현재고 클릭
+           var params    = {};
+           params.prodCd = selectedRow.prodCd;
+           params.prodNm = selectedRow.prodNm;
+           params.storeCd = selectedRow.storeCd;
+           $scope._broadcast('hqCurrDtlCtrl', params);
+         }
       }
     });
 
@@ -85,6 +94,8 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 파라미터
     var params     = {};
     params.vendrCd = $("#storeCurrSelectVendrCd").val();
+    params.storeCd = $("#storeCurrSelectStoreCd").val(); // 매장코드
+    params.storageCd = $("#storeCurrSelectStorageCd").val(); // 창고코드
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/curr/storeCurr/storeCurr/list.sb", params);
@@ -185,12 +196,35 @@ app.controller('storeCurrCtrl', ['$scope', '$http', '$timeout', function ($scope
     });
   };
 
+  // 상품분류정보 선택취소
+  $scope.delProdClass = function(){
+    $scope.prodClassCd = "";
+    $scope.prodClassCdNm = "";
+  };
+  
+  	//상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+	$scope.isChkProdClassDisplay = function(){
+		var columns = $scope.flex.columns;
+
+		for(var i=0; i<columns.length; i++){
+			if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+				$scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+			}
+		}
+	};
 
   // 거래처선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.storeCurrSelectVendrShow = function () {
     $scope._broadcast('storeCurrSelectVendrCtrl');
+  };
+  
+//창고선택 모듈 팝업 사용시 정의
+  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+  $scope.storageCurrSelectStorageShow = function () {
+    $scope._broadcast('storageCurrSelectStorageCtrl');
   };
 
 }]);

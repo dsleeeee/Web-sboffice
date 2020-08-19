@@ -1,5 +1,6 @@
 package kr.co.common.service.code.impl;
 
+import kr.co.common.data.domain.AgencyVO;
 import kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -54,5 +55,5 @@ public interface CmmCodeMapper {
      * 본사 코드 조회 (총판이 관리하는 본사 코드만 가져온다)
      * @return
      */
-    <E> List<E> getHqOfficeListChkAgency(String agencyCd);
+    <E> List<E> getHqOfficeListChkAgency(AgencyVO agencyVO);
 }

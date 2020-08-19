@@ -60,7 +60,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		    	sQuery1 +=", MAX(M.REAL_SALE_AMT"+ j +") AS REAL_SALE_AMT" + j + "\n";
 		    	sQuery1 +=", MAX(M.BILL_CNT"+ j +") AS BILL_CNT" + j + "\n";
 		    	sQuery1 +=", ROUND(SUM(REAL_SALE_AMT"+ j +")/DECODE(SUM(M.BILL_CNT"+ j +"),0, NULL, SUM(BILL_CNT" + j +")),0) AS TOT_BILL_AMT" + j + "\n";
-		    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER() *100, 1) AS STORE_RAT" + j + "\n";
+		    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER(), 2)  *100 AS STORE_RAT" + j + "\n";
 		    	
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_CD,'') AS STORE_CD" + j + "\n";
 		    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_NM,'') AS STORE_NM" + j + "\n";
@@ -74,9 +74,9 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 		        sQuery3 +=" FROM (" + "\n";
 		    	sQuery3 +=" SELECT TSDT.STORE_CD" + "\n";
 		    	sQuery3 +=", TMS.STORE_NM, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
-		    	sQuery3 +=" FROM TB_SL_DAILY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
+		    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
 		    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
-		    	sQuery3 +=" AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM')     = " + j + "\n";
+		    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 		    	if(!storeCd.equals("")) {
 		    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 		    	}
@@ -94,7 +94,7 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	    	sQuery1 +=", MAX(M.REAL_SALE_AMT"+ j +") AS REAL_SALE_AMT" + j + "\n";
 	    	sQuery1 +=", MAX(M.BILL_CNT"+ j +") AS BILL_CNT" + j + "\n";
 	    	sQuery1 +=", ROUND(SUM(REAL_SALE_AMT"+ j +")/DECODE(SUM(M.BILL_CNT"+ j +"),0, NULL, SUM(BILL_CNT" + j +")),0) AS TOT_BILL_AMT" + j + "\n";
-	    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER() *100, 1) AS STORE_RAT" + j + "\n";
+	    	sQuery1 +=", ROUND(RATIO_TO_REPORT(SUM(REAL_SALE_AMT" + j + ")) OVER(), 2) *100 AS STORE_RAT" + j + "\n";
 	    	
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_CD,'') AS STORE_CD" + j + "\n";
 	    	sQuery2 +=", DECODE(M.GBN,"+ j +",M.STORE_NM,'') AS STORE_NM" + j + "\n";
@@ -105,9 +105,9 @@ public class StoreMonthServiceImpl implements StoreMonthService {
 	        sQuery3 +=" FROM (" + "\n";
 	    	sQuery3 +=" SELECT TSDT.STORE_CD" + "\n";
 	    	sQuery3 +=", TMS.STORE_NM, SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(TSDT.BILL_CNT) AS BILL_CNT, RANK() OVER (ORDER BY SUM(TSDT.REAL_SALE_AMT) DESC)  RN" + "\n";
-	    	sQuery3 +=" FROM TB_SL_DAILY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
+	    	sQuery3 +=" FROM TB_SL_MONTHLY_TOTAL TSDT,TB_MS_STORE TMS WHERE TSDT.STORE_CD = TMS.STORE_CD" + "\n";
 	    	sQuery3 +=" AND TSDT.HQ_OFFICE_CD = " + "'"+ m +"'" + "\n";
-	    	sQuery3 +=" AND TO_CHAR(TO_DATE(TSDT.SALE_DATE), 'YYYYMM')     = " + j + "\n";
+	    	sQuery3 +=" AND TSDT.SALE_YM     = " + j + "\n";
 	    	if(!storeCd.equals("")) {
 	    		sQuery3 +=" AND TSDT.STORE_CD IN  (" + arrayStoreCd + ")" + "\n";
 	    	}

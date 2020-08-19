@@ -12,12 +12,14 @@ import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("vendrOrderService")
+@Transactional
 public class VendrOrderServiceImpl implements VendrOrderService {
     private final VendrOrderMapper vendrOrderMapper;
     private final MessageService messageService;
@@ -182,13 +184,23 @@ public class VendrOrderServiceImpl implements VendrOrderService {
 
             // regId, regDt, modId, modDt, hqOfficd, storeCd, orgnCd 세팅
             vendrOrderVO = setSessionValue(vendrOrderVO, sessionInfoVO, currentDt);
-
+            
+            String vendrChkProcFg = "N";
+            vendrChkProcFg = vendrOrderMapper.getChkProcFg(vendrOrderVO);
+            if(vendrChkProcFg.equals("Y")) {
+                String errMsg = messageService.get("vendrOrder.dtl.procFgChkMsg");
+                throw new JsonException(Status.SERVER_ERROR, errMsg);
+            }
+            
             String insFg = "";
+            int orderTotQty  = vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty();
+            
             // 기주문수량이 있는 경우 수정
             if(vendrOrderVO.getPrevOrderTotQty() != null) {
                 insFg = "U";
                 // 기주문수량이 있으면서 주문수량이 0 이나 null 인 경우 삭제
-                if(vendrOrderVO.getOrderTotQty() == 0 || vendrOrderVO.getOrderTotQty() == null) {
+//                if(vendrOrderVO.getOrderTotQty() == 0 || vendrOrderVO.getOrderTotQty() == null) {
+                if(orderTotQty == 0) {
                     insFg = "D";
                 }
             }
@@ -205,7 +217,7 @@ public class VendrOrderServiceImpl implements VendrOrderService {
                 int etcQty       = (vendrOrderVO.getOrderEtcQty()      == null ? 0 : vendrOrderVO.getOrderEtcQty());
                 int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                 int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-                int orderTotQty  = (vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty()) * slipFg;
+                	orderTotQty  = (vendrOrderVO.getOrderTotQty()   == null ? 0 : vendrOrderVO.getOrderTotQty()) * slipFg;
                 Long orderAmt    = (vendrOrderVO.getOrderAmt()      == null ? 0 : vendrOrderVO.getOrderAmt())    * slipFg;
                 Long orderVat    = (vendrOrderVO.getOrderVat()      == null ? 0 : vendrOrderVO.getOrderVat())    * slipFg;
                 Long orderTot    = (vendrOrderVO.getOrderTot()      == null ? 0 : vendrOrderVO.getOrderTot())    * slipFg;

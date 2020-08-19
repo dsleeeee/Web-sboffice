@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="tableDayOfWeekView" class="subCon"  ng-controller="tableDayOfWeekCtrl">
+<div id="tableDayOfWeekView" class="subCon"  ng-controller="tableDayOfWeekCtrl" style="display: none;">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="tableDayOfWeek.tableDayOfWeekSale"/></a>
 		<%-- 조회 --%>
@@ -44,10 +44,10 @@
 						<th><s:message code="todayDtl.store"/></th>
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
-							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="tableDayOfWeekSelectStore"/>
-								<jsp:param name="targetTableId" value="tableDayOfWeekSelectTable"/>
-								<jsp:param name="closeFunc" value="getTableNmList"/>
+								<jsp:param name="subTargetId" value="tableDayOfWeekSelectTable"/>
+								<jsp:param name="closeFunc" value="closeSelectStore"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 						</td>
@@ -59,6 +59,7 @@
 
 				<input type="hidden" id="tableDayOfWeekSelectTableCd" value=""/>
 				<input type="hidden" id="tableDayOfWeekSelectTableName" value=""/>
+				<input type="hidden" id="tableDayOfWeekSelectTableCdOrg" value=""/>
 				<tr>
 					<%-- 테이블선택 --%>
 					<th><s:message code="tableDay.table" /></th>
@@ -67,7 +68,7 @@
 						<jsp:include page="/WEB-INF/view/sale/status/table/cmm/selectTableM.jsp" flush="true">
 							<jsp:param name="targetId" value="tableDayOfWeekSelectTable"/>
 							<jsp:param name="targetStoreId" value="tableDayOfWeekSelectStore"/>
-							<jsp:param name="closeFunc" value="getTableNmList"/>
+							<jsp:param name="closeFunc" value="closeSelectTable"/>
 						</jsp:include>
 						<%--// 테이블선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -86,9 +87,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 395px;">
+	<%--위즈모 테이블--%>
+	<div class="w100 mt10" id="wjWrapType3">
+        <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="tableDayOfWeekGrid"
 				autoGenerateColumns="false"
@@ -102,7 +103,7 @@
 				<!-- define columns -->
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totRealSaleCnt"/>" binding="totRealSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
@@ -116,10 +117,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20190125.02" charset="utf-8"></script>
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/table.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20190125.04" charset="utf-8"></script>
 

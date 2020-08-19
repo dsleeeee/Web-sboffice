@@ -27,4 +27,7 @@ public interface DstbCloseProdService {
     /** 분배마감 추가등록 분배등록 리스트 저장 */
     int saveDstbCloseProdAddRegist(DstbCloseProdVO[] dstbCloseProdVOs, SessionInfoVO sessionInfoVO);
 
+    /** 분배마감 - 매장 마감여부 확인 */
+    int getDstbCloseProdAddProdDstbList(DstbCloseProdVO dstbCloseProdVO);
+
 }

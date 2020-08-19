@@ -14,7 +14,7 @@
     /* TableLayoutMapper.mergeTableGroupByStore */
     MERGE INTO TB_MS_TABLE_GROUP A
     USING (SELECT #{storeCd} STORE_CD,
-                  #{tblGrpCd} TBL_GRP_CD
+                  LPAD(#{tblGrpCd}, 2, '0') TBL_GRP_CD
              FROM DUAL
           ) ORG
        ON (A.STORE_CD = ORG.STORE_CD
@@ -25,7 +25,7 @@
     UPDATE
        SET A.TBL_GRP_NM = #{tblGrpNm},
            A.TBL_GRP_FG = #{tblGrpFg},
-           A.BG_IMG_NM = '',
+           A.BG_IMG_NM = #{bgImgNm},
            A.DISP_SEQ = #{dispSeq},
            A.USE_YN = #{useYn},
            A.MOD_DT = #{regDt},
@@ -47,10 +47,10 @@
     )
     VALUES (
         #{storeCd},
-        #{tblGrpCd},
+        LPAD(#{tblGrpCd}, 2, '0'),
         #{tblGrpNm},
         #{tblGrpFg},
-        '',
+        #{bgImgNm},
         #{dispSeq},
         #{useYn},
         #{regDt},
@@ -71,7 +71,7 @@
     /* TableLayoutMapper.mergeTableByStore */
     MERGE INTO TB_MS_TABLE A
     USING (SELECT #{storeCd} STORE_CD,
-                  #{tblCd} TBL_CD
+                  LPAD(#{tblCd}, 3, '0') TBL_CD
              FROM DUAL
           ) ORG
        ON (A.STORE_CD = ORG.STORE_CD
@@ -81,17 +81,17 @@
      WHEN MATCHED THEN
     UPDATE
        SET A.TBL_NM = #{tblNm},
-           A.TBL_GRP_CD = #{tblGrpCd},
+           A.TBL_GRP_CD = LPAD(#{tblGrpCd}, 2, '0'),
            A.TBL_SEAT_CNT = #{tblSeatCnt},
            A.X = #{x},
            A.Y = #{y},
            A.WIDTH = #{width},
            A.HEIGHT = #{height},
            A.TBL_TYPE_FG = #{tblTypeFg},
+           A.IMG_NM = #{imgNm},
            A.USE_YN = #{useYn},
            A.MOD_DT = #{regDt},
            A.MOD_ID = #{regId}
-
     WHEN NOT MATCHED THEN
     INSERT (
         A.STORE_CD,
@@ -104,6 +104,7 @@
         A.WIDTH,
         A.HEIGHT,
         A.TBL_TYPE_FG,
+        A.IMG_NM,
         A.USE_YN,
         A.REG_DT,
         A.REG_ID,
@@ -112,15 +113,16 @@
     )
     VALUES (
         #{storeCd},
-        #{tblCd},
+        LPAD(#{tblCd}, 3, '0'),
         #{tblNm},
-        #{tblGrpCd},
+        LPAD(#{tblGrpCd}, 2, '0'),
         #{tblSeatCnt},
         #{x},
         #{y},
         #{width},
         #{height},
         #{tblTypeFg},
+        #{imgNm},
         #{useYn},
         #{regDt},
         #{regId},
@@ -130,6 +132,3 @@
   </update>
 
 </mapper>
-
-
-

@@ -8,7 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
-<div id="prodPosView" class="subCon"  ng-controller="prodPosCtrl">
+<div id="prodPosView" class="subCon3" style="display: none;" ng-controller="prodPosCtrl"> <%-- 수정 사항 :: class="subCon" >> class="subCon3"--%>
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="prodsale.pos"/></a>
 		<%-- 조회 --%>
@@ -39,18 +39,28 @@
 						</span>
 					</div>
 				</td>
-
+				<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+		              	<label for="chkDt">
+	                		<s:message code="periodIostock.prodClassDisplay" />
+	              		</label>
+	            	</span>
+				</td>
+			</tr>
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 					<input type="hidden" id="posProdSelectStoreCd" value=""/>
 					<tr>
 						<%-- 매장코드 --%>
 						<th><s:message code="todayBillSaleDtl.store"/></th>
-						<td>
+						<td colspan="3">
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posProdSelectStore"/>
-								<jsp:param name="targetPosId" value="posProdSelectPos"/>
+								<jsp:param name="subTargetId" value="posProdSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -66,23 +76,21 @@
 				<tr>
 					<%-- 포스선택 --%>
 					<th><s:message code="pos.pos" /></th>
-					<td>
+					<td colspan="3">
 						<%-- 포스선택 모듈 멀티 선택 사용시 include --%>
 						<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectPosM.jsp" flush="true">
 							<jsp:param name="targetId" value="posProdSelectPos"/>
 							<jsp:param name="targetStoreId" value="posProdSelectStore"/>
-							<jsp:param name="closeFunc" value="getPosNmList"/>
 						</jsp:include>
 						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
 				</tr>
-
 			</tr>
 		</tbody>
 	</table>
 	<div style="clear: both;"></div>
 
-	<div class="mt20 oh sb-select dkbr">
+	<div class="mt20 oh sb-select dkbr"> <%-- 수정 사항 || 클래스변경 :: class="mt40" >> class="mt20" --%>
 		<%-- 페이지 스케일  --%>
 		<wj-combo-box
 			class="w100px fl"
@@ -91,21 +99,23 @@
 			items-source="_getComboData('posProdListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
-			<input type="text" id="posProdSelectStoreStoreNum" ng-model="storeNum">
+			<input type="hidden" id="posProdSelectStoreStoreNum" ng-model="storeNum">
 		</c:if>
 		<%-- 엑셀 다운로드 //TODO --%>
-		<button class="btn_skyblue fr" ng-click="excelDownloadDay()">
+		<button class="btn_skyblue fr" ng-click="excelDownloadPos()">
 			<s:message code="cmm.excel.down" />
 		</button>
 	</div>
 
-	<div class="w100 mt10">
+	<div id="wjWrapType3" class="w100 mt10"> <%-- 수정 사항 || head line 3 아이디 추가 :: id="wjWrapType3" --%>
 		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+		<div class="wj-gridWrap"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
 			<wj-flex-grid
 				id="posProdGrid"
 				autoGenerateColumns="false"
@@ -118,9 +128,9 @@
 				frozen-columns="9"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
-				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -143,7 +153,41 @@
 		<ul id="prodPosCtrlPager" data-size="10">
 		</ul>
 	</div>
-	<%--//페이지 리스트--%>
+	
+	<%--//엑셀 다운로드--%>
+	<div id="wjWrapType3" class="w100 mt10"> <%-- 수정 사항 || head line 3 아이디 추가 :: id="wjWrapType3" --%>
+		<%--위즈모 테이블--%>
+		<div class="wj-gridWrap" style="display:none;" ng-controller="prodPosExcelCtrl"> <%-- 수정 사항 || 그리드 높이값 스타일 제거 :: style="height: 000px;" --%>
+			<wj-flex-grid
+				id="posProdExcelGrid"
+				autoGenerateColumns="false"
+				selection-mode="Row"
+				items-source="data"
+				control="excelFlex"
+				initialized="initGrid(s,e)"
+				loaded-rows="loadedRows(s,e)"
+				is-read-only="true"
+				frozen-columns="9"
+				item-formatter="_itemFormatter">
+				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          		<wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.prodNm"/>"			binding="prodNm" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.saleStore"/>"			binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			</wj-flex-grid>
+			<%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="prodPosCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
+		</div>
+		<%--//위즈모 테이블--%>
+	</div>
 </div>
 
 <script type="text/javascript">

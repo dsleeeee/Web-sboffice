@@ -29,27 +29,37 @@
 	       	<%-- 조회일자 --%>
 			<tr>
 		    	<th><s:message code="cmm.search.date" /></th>
-	        	<td colspan="3">
-	          	<div class="sb-select">
-	          		<span class="txtIn"><input id="srchPayFgStartDate" class="w120px"></span>
-	                <span class="rg">~</span>
-	                <span class="txtIn"><input id="srchPayFgEndDate" class="w120px"></span>
-	            	<span class="chk ml10">
-						<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+	        	<td>
+		          	<div class="sb-select">
+		          		<span class="txtIn"><input id="srchPayFgStartDate" class="w120px"></span>
+		                <span class="rg">~</span>
+		                <span class="txtIn"><input id="srchPayFgEndDate" class="w120px"></span>
+		            	<span class="chk ml10">
+							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+			              	<label for="chkDt">
+		                		<s:message code="cmm.all.day" />
+		              		</label>
+		            	</span>
+		          	</div>
+	        	</td>
+	        	<%-- 조회옵션 --%>
+				<th><s:message code="periodIostock.srchOption" /></th>
+				<td>
+		          	<span class="chk ml10">
+						<input type="checkbox" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
 		              	<label for="chkDt">
-	                		<s:message code="cmm.all.day" />
+	                		<s:message code="periodIostock.prodClassDisplay" />
 	              		</label>
 	            	</span>
-	          	</div>
-	        	</td>
+				</td>
 			</tr>
 			<tr>
 	        <%-- 상품코드 --%>
 	        <th><s:message code="prodcalss.prodCd" /></th>
-	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13" ng-model="prodCd"/></td>
+	        <td><input type="text" id="srchPayFgProdCd" class="sb-input w100" maxlength="13"/></td>
 	        <%-- 상품명 --%>
 	        <th><s:message code="prodcalss.prodNm" /></th>
-	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100" ng-model="prodNm"/></td>
+	        <td><input type="text" id="srchPayFgProdNm" class="sb-input w100" maxlength="100"/></td>
 	      	</tr>
       		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	        <tr>
@@ -79,8 +89,9 @@
 		      items-source="_getComboData('prodPayFglistScaleBox')"
 		      display-member-path="name"
 		      selected-value-path="value"
-		      is-editable="false"
-		      initialized="_initComboBox(s)">
+		      initialized="_initComboBox(s)"
+		      is-editable="true"
+              text-changed="_checkValidation(s)">
 		    </wj-combo-box>
 			<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 				<input type="text" id="pordPayFgSelectStoreStoreNum" ng-model="storeNum">
@@ -91,8 +102,8 @@
 		</div>
 
 		<%--위즈모 테이블--%>
-	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 350px;">
+	    <div class="w100 mt10" id="wjWrapType1">
+	      <div class="wj-gridWrap">
 	        <wj-flex-grid
 	          autoGenerateColumns="false"
 	          control="flex"
@@ -104,21 +115,21 @@
 	          item-formatter="_itemFormatter">
 
 	          <!-- define columns -->
-	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="netSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="vatAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="totGaAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="totVatAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totTipAmt"/>" 	binding="totTipAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="prodpayfg.totEtcAmt"/>" 	binding="totEtcAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmtTot"/>" 		binding="payAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmtTot"/>" 	binding="payAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	          <%-- 결제수단 컬럼 생성--%>
               <c:forEach var="payCol" items="${payColList}">
                 <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -141,6 +152,50 @@
 	    </ul>
 	  </div>
 	  <%--//페이지 리스트--%>
+	  
+	  <%--엑셀 리스트 --%>
+	    <div class="w100 mt10" id="wjWrapType1" style="display:none;" ng-controller="prodPayFgExcelCtrl">
+	      <div class="wj-gridWrap">
+	        <wj-flex-grid
+	          autoGenerateColumns="false"
+	          control="excelFlexTrd"
+	          initialized="initGrid(s,e)"
+	          sticky-headers="true"
+	          selection-mode="Row"
+	          items-source="data"
+	          frozen-columns="5"
+	          item-formatter="_itemFormatter">
+
+	          <!-- define columns -->
+	          <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+          	  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodCd"/>" 		binding="prodCd" 		width="120" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.prodBar"/>" 		binding="prodBar" 		width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totSaleAmt"/>" 	binding="totSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totDcAmt"/>" 		binding="totDcAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.netSaleAmt"/>" 	binding="totGaAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.vatAmt"/>" 		binding="totVatAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totTipAmt"/>" 	binding="totTipAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.totEtcAmt"/>" 	binding="totEtcAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <wj-flex-grid-column header="<s:message code="prodpayfg.payAmtTot"/>" 	binding="payAmt" 		width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	          <%-- 결제수단 컬럼 생성--%>
+              <c:forEach var="payCol" items="${payColList}">
+                <wj-flex-grid-column header="${payCol.payNm}" binding="pay${payCol.payCd}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              </c:forEach>
+	        </wj-flex-grid>
+
+	        <%-- ColumnPicker 사용시 include --%>
+	        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+	          <jsp:param name="pickerTarget" value="prodPayFgCtrl"/>
+	        </jsp:include>
+	        <%--// ColumnPicker 사용시 include --%>
+	      </div>
+	    </div>
+	    <%--//엑셀 리스트--%>
 	</div>
 </div>
 <script type="text/javascript">

@@ -86,6 +86,71 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
     s.bottomLeftCells.setCellData(0, 0, '합계');
   };
 
+  // itemFormatter 기본설정 : private
+  $scope.itemFormatter = function (panel, r, c, cell) {
+    // 컬럼헤더 merged 의 헤더타이틀 중앙(vertical) 정렬
+    if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+      var mRange = panel.grid.getMergedRange(panel, r, c);
+      if (mRange) {
+        cell.innerHTML = '<div class=\"wj-header merged-custom\">' + cell.innerHTML + '</div>';
+      }
+      // 헤더의 전체선택 클릭 로직
+      var flex = panel.grid;
+      var column = flex.columns[c];
+      // check that this is a boolean column
+      if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+        // prevent sorting on click
+        column.allowSorting = false;
+        // count true values to initialize checkbox
+        var cnt = 0;
+        for (var i = 0; i < flex.rows.length; i++) {
+          if (flex.getCellData(i, c) === true) {
+            cnt++;
+          }
+        }
+        // create and initialize checkbox
+        if (column.format === 'checkBoxText') {
+          cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+            + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+        } else {
+          cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+        }
+        var cb = cell.firstChild;
+        cb.checked = cnt > 0;
+        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+        // apply checkbox value to cells
+        cb.addEventListener('click', function (e) {
+          flex.beginUpdate();
+          for (var i = 0; i < flex.rows.length; i++) {
+            var cell = flex.cells.getCellElement(i, c);
+            // TODO : 활성화 및 readOnly 아닌 경우에만 체크되도록
+             if (flex.getCellData(i, 4) === '10') {
+              flex.setCellData(i, c, cb.checked);
+             }
+          }
+          flex.endUpdate();
+        });
+      }
+    } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+      // GroupRow 인 경우에는 표시하지 않는다.
+      if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+        cell.textContent = '';
+      } else {
+        if (!isEmpty(panel._rows[r]._data.rnum)) {
+          cell.textContent = (panel._rows[r]._data.rnum).toString();
+        } else {
+          cell.textContent = (r + 1).toString();
+        }
+      }
+      // readOnly 배경색 표시
+    } else if (panel.cellType === wijmo.grid.CellType.Cell) {
+      var col = panel.columns[c];
+      if (col.isReadOnly) {
+        wijmo.addClass(cell, 'wj-custom-readonly');
+      }
+    }
+  }
+
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("dstbCloseProdCtrl", function (event, data) {
     $scope.searchDstbCloseProdList();
@@ -117,7 +182,7 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
         if (item.gChk === true) {
           item.status    = "U";
           item.empNo     = "0000";
-          item.storageCd = "001";
+          item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
           item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
           params.push(item);
         }
@@ -208,5 +273,38 @@ app.controller('dstbCloseProdCtrl', ['$scope', '$http', '$timeout', function ($s
       }
     });
   };
+
+
+	//[엑셀 다운로드] - START	------------------------------------------------------------------------------------------------------------------------------
+	$scope.excelDownload = function(){
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+		$timeout(function()	{
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+                $scope.flex,
+                {
+                    includeColumnHeaders: 	true,
+                    includeCellStyles   : 	true,
+                    includeColumns      :   function (column) {
+                                                //return column.visible;
+                                                return column.binding != 'gChk'; //선택
+                                            }
+                },
+              //'분배마감(상품별)_' + getToday() + '.xlsx',
+                '분배마감(상품별)_' + getCurDate('-') + '.xlsx',
+                function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                }
+            );
+        }, 10);
+	};
+    //[엑셀 다운로드] - END	------------------------------------------------------------------------------------------------------------------------------
+
 
 }]);

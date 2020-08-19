@@ -68,7 +68,10 @@ public class AcinsVO extends PageVO {
     private String prodBarcdCd;
     /** 실사구분 */
     private String acinsFg;
-
+    /** 권역별 창고 코드 */
+    private String  areaFg;
+    /** 선택창고 */
+    private String adjStorageCd;
     /**
      * @return the hqOfficeCd
      */
@@ -502,4 +505,20 @@ public class AcinsVO extends PageVO {
     public void setAcinsFg(String acinsFg) {
         this.acinsFg = acinsFg;
     }
+    
+    public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
+	
+	public String getAdjStorageCd() {
+		return adjStorageCd;
+	}
+
+	public void setAdjStorageCd(String adjStorageCd) {
+		this.adjStorageCd = adjStorageCd;
+	}
 }

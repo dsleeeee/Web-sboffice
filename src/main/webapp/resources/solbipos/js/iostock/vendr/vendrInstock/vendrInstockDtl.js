@@ -50,6 +50,8 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       $("#vendrInstockDtlSelectVendrCd").val('');
       $("#vendrInstockDtlSelectVendrNm").val('선택');
     } else {
+      $scope.btnSaveShowFg                         = true;  // 저장
+      $scope.btnDelShowFg                          = false; // 삭제
       $scope.vendrInstockDtlRtnSelectVendrNmDisabled  = false; // 반출 거래처선택 모듈 input
       $scope.vendrInstockDtlRtnSelectVendrBtnDisabled = false; // 반출 선택취소
 
@@ -80,6 +82,8 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       $scope.rtnLayerIfFg     = false;
 
       $scope.instockDateTxt = messages["vendrInstock.dtl.instockDate"];
+      $scope.instockTotQtyTxt = messages["vendrInstock.dtl.inTotQty"];
+      $scope.instockTotAmtTxt = messages["vendrInstock.dtl.inTotAmt"];
     }
     // 반출인 경우
     else if ($scope.slipFg === -1) {
@@ -87,6 +91,8 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       $scope.rtnLayerIfFg     = true;
 
       $scope.instockDateTxt = messages["vendrInstock.dtl.rtnDate"];
+      $scope.instockTotQtyTxt = messages["vendrInstock.dtl.rtnTotQty"];
+      $scope.instockTotAmtTxt = messages["vendrInstock.dtl.rtnTotAmt"];      
     }
   };
 
@@ -96,7 +102,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     var params    = {};
     params.slipNo = $scope.slipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrInstock/vendrInstockDtl/slipInfo.sb", /* 통신할 URL */
@@ -238,7 +249,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     else if ($scope.slipFg === -1) {
       params.vendrCd = $("#vendrInstockDtlRtnSelectVendrCd").val();
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrInstock/vendrInstockDtl/save.sb", /* 통신할 URL */
@@ -310,7 +326,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     s_alert.popConf(msg, function () {
       var params    = {};
       params.slipNo = $scope.slipNo;
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrInstock/vendrInstockDtl/delete.sb", /* 통신할 URL */
@@ -340,10 +361,20 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
   // 확정 및 확정취소
   $scope.confirm = function (procFg) {
     var msg = '';
+        
+    var inTotQty = $scope.slipInfo.inTotQty;
+    if(inTotQty <= 0 ){
+    	msg = messages["vendrInstock.dtl.confirmCheck"];
+    	$scope._popMsg(msg);
+    	return false;
+    }
+    
+    
     if (procFg === '1') {
       /** 확정처리 하시겠습니까? */
       msg = messages["vendrInstock.dtl.confirmMsg"];
-    } else if (procFg === '0') {
+    } 
+    else if (procFg === '0') {
       /** 확정취소 하시겠습니까? */
       msg = messages["vendrInstock.dtl.confirmCancelMsg"];
     }
@@ -357,7 +388,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
       if ($scope.slipFg === 1) {
         params.orderSlipNo = ($scope.slipInfo.instockType === 'Y' ? $scope.slipInfo.orderSlipNo : '');
       }
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrInstock/vendrInstockDtl/saveProcFg.sb", /* 통신할 URL */

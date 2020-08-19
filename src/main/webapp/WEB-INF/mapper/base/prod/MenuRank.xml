@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MenuRank.xml
+    메뉴 순위 표시 관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2020.08.06     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.prod.menuRank.service.impl.MenuRankMapper">
+
+    <!-- 메뉴 순위 표시 사용매장 수 조회(본사사용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_MS_MENU_SL_TOP_LIST, TB_MS_STORE
+        PARAM    : menuRankVO
+        COMMENTS : 메뉴 순위 표시 사용매장 수를 조회한다.
+    -->
+    <select id="getRankCnt" parameterType="menuRankVO" resultType="DefaultMap">
+    /* USE : MenuRankMapper.getRankCnt */
+    SELECT tcn.NMCODE_CD,
+            tcn.NMCODE_NM,
+            ( SELECT COUNT(tmmstl.STORE_CD)
+                FROM TB_MS_MENU_SL_TOP_LIST tmmstl,
+                      TB_MS_STORE tms
+               WHERE tms.STORE_CD (+)= tmmstl.STORE_CD
+                 AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND tmmstl.NMCODE_CD = tcn.NMCODE_CD
+                 AND tmmstl.USE_YN = 'Y') AS STORE_CNT
+      FROM TB_CM_NMCODE tcn
+     WHERE tcn.NMCODE_GRP_CD = '302'
+    </select>
+
+    <!-- 메뉴 순위 표시 사용/미사용 매장 조회(본사사용) -->
+    <!--
+        TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_MENU_SL_TOP_LIST
+        PARAM    : menuRankVO
+        COMMENTS : 메뉴 순위 표시 사용/미사용 매장을 조회한다.
+    -->
+    <select id="getRegStore" parameterType="menuRankVO" resultType="DefaultMap">
+       /* USE : MenuRankMapper.getRegStore */
+           SELECT tho.HQ_OFFICE_CD,
+                   tms.STORE_CD,
+                   tms.STORE_NM,
+                   tmmstl.STORE_CD
+             FROM TB_HQ_OFFICE tho,
+                   TB_MS_STORE tms,
+                   (SELECT STORE_CD,
+                            NMCODE_CD,
+                            NMCODE_NM,
+                            USE_YN,
+                            INS_FG
+                      FROM TB_MS_MENU_SL_TOP_LIST
+                     WHERE NMCODE_CD = #{nmcodeCd}
+                       AND USE_YN = 'Y') tmmstl
+            WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+              AND tmmstl.STORE_CD (+)= tms.STORE_CD
+              AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+            AND tmmstl.STORE_CD IS NOT NULL
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+            AND tmmstl.STORE_CD IS NULL
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 메뉴 순위 표시 미사용 처리(본사사용) -->
+    <!--
+        TABLE    : TB_MS_MENU_SL_TOP_LIST
+        PARAM    : menuRankVO
+        COMMENTS : 메뉴 순위 표시 사용하지 않을 경우, 미사용으로 등록한다.
+    -->
+    <update id="deleteStore" parameterType="menuRankVO">
+        /* USE : MenuRankMapper.deleteStore */
+        UPDATE TB_MS_MENU_SL_TOP_LIST
+           SET USE_YN = 'N',
+               INS_FG = #{insFg},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND NMCODE_CD = #{nmcodeCd}
+    </update>
+
+    <!-- 메뉴 순위 표시 관리 조회(매장사용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_MS_MENU_SL_TOP_LIST
+        PARAM    : menuRankVO
+        COMMENTS : 메뉴 순위 표시 여부를 조회한다.
+    -->
+    <select id="getRankUse" parameterType="menuRankVO" resultType="DefaultMap">
+    /* USE : MenuRankMapper.getRankUse */
+    SELECT tcn.NMCODE_CD,
+            tcn.NMCODE_NM,
+            NVL(tmmstl.USE_YN,'N') AS USE_YN
+      FROM TB_CM_NMCODE tcn,
+            (  SELECT NMCODE_CD, USE_YN
+                 FROM TB_MS_MENU_SL_TOP_LIST
+                WHERE STORE_CD = #{storeCd}
+                  AND USE_YN ='Y') tmmstl
+     WHERE tcn.NMCODE_GRP_CD = '302'
+       AND tmmstl.NMCODE_CD (+)= tcn.NMCODE_CD
+    </select>
+
+    <!-- 메뉴 순위 표시 관리 저장(본사/매장사용) -->
+    <!--
+        TABLE    : TB_MS_MENU_SL_TOP_LIST
+        PARAM    : menuRankVO
+        COMMENTS : 메뉴 순위 표시 여부를 저장한다.
+    -->
+    <insert id="saveRankUse" parameterType="menuRankVO">
+        /* USE : MenuRankMapper.saveRankInfo */
+        MERGE INTO TB_MS_MENU_SL_TOP_LIST tmmstl
+        USING DUAL
+        ON (
+          tmmstl.STORE_CD = #{storeCd}
+          AND tmmstl.NMCODE_CD = #{nmcodeCd}
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmmstl.NMCODE_NM = #{nmcodeNm},
+                tmmstl.USE_YN = #{useYn},
+                tmmstl.INS_FG = #{insFg},
+                tmmstl.MOD_DT = #{modDt},
+                tmmstl.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                STORE_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                USE_YN,
+                INS_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{storeCd},
+                #{nmcodeCd},
+                #{nmcodeNm},
+                #{useYn},
+                #{insFg},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
+    </insert>
+
+</mapper>

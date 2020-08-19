@@ -12,19 +12,16 @@
     </div>
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
-      <h3 class="h3_tbl brt"><s:message code="storeEmp.storeEmpInfo"/></h3>
 
       <%-- 사원기초정보 탭 --%>
-      <%--
       <div class="tabType1">
         <ul>
-          &lt;%&ndash; 사원기초정보 탭 &ndash;%&gt;
+          <%-- 사원기초정보 탭 --%>
           <li><a id="storeEmpInfoTab" href="#" class="on"><s:message code="storeEmp.storeEmpInfo" /></a></li>
-          &lt;%&ndash; 메뉴권한 탭 &ndash;%&gt;
-          &lt;%&ndash; &ndash;%&gt;
+          <%-- 메뉴권한 탭 --%>
+          <li><a id="storeEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="storeEmp.menuSetting" /></a></li>
         </ul>
       </div>
-      --%>
 
       <%-- 상세 --%>
       <div style="height: 193px; overflow-y: auto;">
@@ -100,4 +97,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpDetail.js?ver=2018112101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpDetail.js?ver=20181121.04" charset="utf-8"></script>

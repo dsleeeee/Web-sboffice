@@ -126,6 +126,7 @@ public class RegistServiceImpl implements RegistService {
         // 회원정보 조회시 해당 본사나 매장의 회원만 조회
         registVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         registVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             registVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -146,7 +147,7 @@ public class RegistServiceImpl implements RegistService {
 
         String dt = currentDateTimeString();
 
-        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         registVO.setMembrNo(mapper.getNewMemberNo(registVO));
 
         // 회원단축번호 추가_2019.08.02 추가 이다솜
@@ -179,6 +180,7 @@ public class RegistServiceImpl implements RegistService {
         }
 
 //        System.out.println("test1111");
+        LOGGER.info("회원등록 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
         if (registVO.getMembrOrgnCd() == "A0007") {
             result = mapper.registPoslinkPtn(registVO);
@@ -225,6 +227,7 @@ public class RegistServiceImpl implements RegistService {
         }
 
 //        System.out.println("test1111");
+        LOGGER.info("회원수정 >>> 날짜 : " + dt + ", 본사코드 : " + registVO.getMembrOrgnCd() + ", 매장코드 : " + registVO.getRegStoreCd() + ", 회원코드 : " + registVO.getMembrNo());
         // 회원정보 등록,수정시 본사코드 A0007만
         if (registVO.getMembrOrgnCd() == "A0007") {
             result = mapper.registPoslinkPtn(registVO);

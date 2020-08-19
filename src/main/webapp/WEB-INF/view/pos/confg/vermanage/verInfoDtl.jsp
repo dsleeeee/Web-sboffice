@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:420px;">
+<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:370px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -24,7 +24,7 @@
       </ul>
 
       <div>
-        <div style="height:220px; overflow-y: auto;">
+        <div style="height:170px; overflow-y: auto;">
           <f:form id="viewForm" name="viewForm" >
             <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
             <table class="searchTbl">
@@ -83,7 +83,7 @@
               </tr>
               <tr>
                   <%-- 비고 --%>
-                <th><s:message code="verManage.fileDesc" /></th>
+                <th style="height:65px;"><s:message code="verManage.fileDesc" /></th>
                 <td colspan="3">{{version.fileDesc}}</td>
               </tr>
               </tbody>

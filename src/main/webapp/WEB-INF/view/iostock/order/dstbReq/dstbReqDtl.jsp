@@ -45,6 +45,8 @@
           <button type="button" id="btnDtlApply" class="btn_skyblue ml5" ng-click="setQtyApply()"><s:message code="dstbReq.dtl.qtyApply"/></button>
           <%-- 저장 --%>
           <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="saveValueCheck()"><s:message code="cmm.save"/></button>
+          <%-- 엑셀 다운로드 --%>
+          <button                               class="btn_skyblue ml5" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
         </div>
       </div>
       <div style="clear: both;"></div>
@@ -62,28 +64,27 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.splyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderUnitQty"/>" binding="orderUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderEtcQty"/>" binding="orderEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderTotQty"/>" binding="orderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdSplyUprc"/>" binding="mdSplyUprc" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdUnitQty"/>" binding="mdUnitQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdEtcQty"/>" binding="mdEtcQty" width="70" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdTotQty"/>" binding="mdTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prevMdTotQty"/>" binding="prevMdTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdAmt"/>" binding="mdAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdVat"/>" binding="mdVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdTot"/>" binding="mdTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-
+        <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"               	binding="gChk"         	width="40"  align="center"></wj-flex-grid-column>--%>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.storeCd"/>"       binding="storeCd"       width="0"   align="center"  is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prodCd"/>"        binding="prodCd"        width="100" align="center"  is-read-only="true"                                                                     ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prodNm"/>"        binding="prodNm"        width="150" align="left"    is-read-only="true"                                                                     ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitFg"/>"      binding="poUnitFg"      width="70"  align="center"  is-read-only="true"     data-map="poUnitFgMap"                                          ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.poUnitQty"/>"     binding="poUnitQty"     width="70"  align="right"   is-read-only="true"                                                                     ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.splyUprc"/>"      binding="splyUprc"      width="80"  align="right"   is-read-only="true"     data-type="Number" format="n0"                                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderUnitQty"/>"  binding="orderUnitQty"  width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0"                  aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderEtcQty"/>"   binding="orderEtcQty"   width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0"                  aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.orderTotQty"/>"   binding="orderTotQty"   width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdSplyUprc"/>"    binding="mdSplyUprc"    width="70"  align="right"   is-read-only="false"    data-type="Number" format="n0"  max-length=10                   ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdUnitQty"/>"     binding="mdUnitQty"     width="70"  align="right"   is-read-only="false"    data-type="Number" format="n0"  max-length=8    aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdEtcQty"/>"      binding="mdEtcQty"      width="70"  align="right"   is-read-only="false"    data-type="Number" format="n0"  max-length=8    aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdTotQty"/>"      binding="mdTotQty"      width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.prevMdTotQty"/>"  binding="prevMdTotQty"  width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdAmt"/>"         binding="mdAmt"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0"                  aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdVat"/>"         binding="mdVat"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0"                  aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.mdTot"/>"         binding="mdTot"         width="70"  align="right"   is-read-only="true"     data-type="Number" format="n0"                  aggregate="Sum" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.remark"/>"        binding="remark"        width="200" align="left"    is-read-only="false"                                    max-length=300                  ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.vatFg"/>"         binding="vatFg01"       width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbReq.dtl.envst0011"/>"     binding="envst0011"     width="70"  align="right"   is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>

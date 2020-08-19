@@ -29,6 +29,8 @@ public class ApplcStoreVO extends PageVO {
     private String hqOfficeNm;
     /** 매장코드 */
     private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
     /** 매장명 */
     private String storeNm;
     /** 버전수신구분 */
@@ -53,6 +55,8 @@ public class ApplcStoreVO extends PageVO {
     private String searchSatus;
     /** 프로시져 결과 */
     private String result;
+    /** 복수검색여부 */
+    private String chkMulti;
 
 
     /**
@@ -103,6 +107,15 @@ public class ApplcStoreVO extends PageVO {
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
     }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
+    }
+
     /**
      * @return the storeNm
      */
@@ -252,5 +265,13 @@ public class ApplcStoreVO extends PageVO {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getChkMulti() {
+        return chkMulti;
+    }
+
+    public void setChkMulti(String chkMulti) {
+        this.chkMulti = chkMulti;
     }
 }

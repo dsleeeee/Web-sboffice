@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.adj.adj.service.AdjService;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("adjServiceImpl")
+@Transactional
 public class AdjServiceImpl implements AdjService {
     private final AdjMapper adjMapper;
     private final MessageService messageService;
@@ -115,6 +117,7 @@ public class AdjServiceImpl implements AdjService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            adjVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = adjMapper.getHqAdjRegistList(adjVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -151,6 +154,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setRegDt(currentDt);
                 adjHdVO.setModId(sessionInfoVO.getUserId());
                 adjHdVO.setModDt(currentDt);
+                adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
 
                 // 신규등록인 경우
                 if(seqNo.equals("")) {
@@ -259,6 +263,7 @@ public class AdjServiceImpl implements AdjService {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            adjVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = adjMapper.getHqAdjRegistList(adjVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -322,6 +327,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setRegDt(currentDt);
                 adjHdVO.setModId(sessionInfoVO.getUserId());
                 adjHdVO.setModDt(currentDt);
+                adjHdVO.setStatus(adjVO.getStatus());
             }
 
             adjVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -374,17 +380,20 @@ public class AdjServiceImpl implements AdjService {
             returnResult += result;
             i++;
         }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            // HD 수정
-            result = adjMapper.updateHqAdjHd(adjHdVO);
+        
+        //삭제가 아닐경우만
+        if(!StringUtil.getOrBlank(adjHdVO.getStatus()).equals("DELETE")) {
+	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+	            // HD 수정
+	            result = adjMapper.updateHqAdjHd(adjHdVO);
+	        }
+	        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+	            // HD 수정
+	            result = adjMapper.updateStAdjHd(adjHdVO);
+	        }
+	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            // HD 수정
-            result = adjMapper.updateStAdjHd(adjHdVO);
-        }
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+        
         return returnResult;
     }
 
@@ -446,7 +455,7 @@ public class AdjServiceImpl implements AdjService {
         adjHdVO.setAdjTitle(excelUploadVO.getTitle());
         adjHdVO.setSeqNo(Integer.parseInt(seqNo));
         adjHdVO.setProcFg("0");
-        adjHdVO.setStorageCd("000");
+        adjHdVO.setStorageCd("999");
         adjHdVO.setRegId(sessionInfoVO.getUserId());
         adjHdVO.setRegDt(currentDt);
         adjHdVO.setModId(sessionInfoVO.getUserId());
@@ -460,6 +469,7 @@ public class AdjServiceImpl implements AdjService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.insertStAdjHd(adjHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -471,6 +481,7 @@ public class AdjServiceImpl implements AdjService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.updateStAdjHd(adjHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

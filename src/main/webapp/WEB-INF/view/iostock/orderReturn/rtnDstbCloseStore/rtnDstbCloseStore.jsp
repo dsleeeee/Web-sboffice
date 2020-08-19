@@ -8,7 +8,10 @@
 
 <div class="subCon" ng-controller="rtnDstbCloseStoreCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnDstbCloseStoreCtrl')">
+      <s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -82,12 +85,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnDstbCloseStoreCtrl')">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10">
     <%-- 확정 --%>
     <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="saveConfirm()"><s:message code="rtnDstbCloseStore.confirm"/></button>
@@ -103,10 +100,10 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="itemFormatter">
+        item-formatter="itemFormatter"> <!-- 체크박스가 있는 헤더머지 때문에 현재 페이지에 재정의 한 itemFormatter 를 사용 -->
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="gChk" width="40" align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>

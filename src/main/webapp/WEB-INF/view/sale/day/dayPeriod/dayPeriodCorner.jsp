@@ -83,6 +83,13 @@
                             <wj-flex-grid-column header="<s:message code="dayPeriod.cornrCd"/>" binding="cornrCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                         </wj-flex-grid>
+
+                        <%-- ColumnPicker 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                            <jsp:param name="pickerTarget" value="dayPeriodCornerCtrl"/>
+                        </jsp:include>
+                        <%--// ColumnPicker 사용시 include --%>
+
                     </div>
                 </div>
             </div>
@@ -111,6 +118,13 @@
                         <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
+
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                        <jsp:param name="pickerTarget" value="dayPeriodCornerDetailCtrl"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+
                 </div>
             </div>
 
@@ -124,4 +138,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodCorner.js?ver=20200204.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodCorner.js?ver=20200204.07" charset="utf-8"></script>

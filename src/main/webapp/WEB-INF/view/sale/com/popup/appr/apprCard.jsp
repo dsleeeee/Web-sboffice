@@ -32,7 +32,7 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.posNo"/>" 		binding="posNo"			width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprGuBun"/>" 	binding="apprGubun"		width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.apprProcFg"/>" 	binding="apprProcFg" 	width="80" 		align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.card.acquireNm"/>" 	binding="acquireNm" 	width="150" 	align="right"  is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.card.acquireNm"/>" 	binding="acquireNm" 	width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.cardNo"/>" 		binding="cardNo"		width="150" 	align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.saleAmt"/>" 	binding="saleAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>            
             <wj-flex-grid-column header="<s:message code="saleComPopup.card.tipAmt"/>" 		binding="tipAmt" 		width="100" 	align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>     

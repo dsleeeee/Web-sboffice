@@ -40,6 +40,7 @@ app.controller('todayGnrlzCtrl', ['$scope', '$http', function ($scope, $http) {
     // 파라미터
     var params       = {};
     params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+    params.storeCd   = $("#todayGnrlzSelectStoreCd").val();
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlz/list.sb", params, null, false);

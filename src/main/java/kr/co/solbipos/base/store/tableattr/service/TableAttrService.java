@@ -31,11 +31,18 @@ public interface TableAttrService {
     List<TableAttrVO> selectTableAttrDefault();
 
     /**
+     * 매장 테이블 속성 공통코드 조회
+     * @param sessionInfoVO 세션정보
+     * @return 매장 테이블 속성 공통코드
+     */
+    List<TableAttrVO> selectTblAttrCommCode();
+
+    /**
      * 세션의 가맹점코드로 해당 가맹점의 테이블 속성 조회
      * @param sessionInfoVO 세션정보
      * @return XML_String
      */
-    String selectTableAttrByStore(SessionInfoVO sessionInfoVO);
+    String selectTableAttrByStore(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO);
 
     /**
      * 세션의 가맹점코드에 테이블 속성 저장
@@ -43,7 +50,7 @@ public interface TableAttrService {
      * @param xml 클라이인트로 부터 받은 xml 문자열
      * @return Result
      */
-    Result setTableAttr(SessionInfoVO sessionInfoVO, String xml);
+    Result setTableAttr(SessionInfoVO sessionInfoVO, TableAttrVO tableAttrVO, String xmlGraph, String xmlPreview);
 
 
 }

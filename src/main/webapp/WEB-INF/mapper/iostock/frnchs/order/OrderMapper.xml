@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.frnchs.order.service.impl.OrderMapper">
+    <!-- 주문대비 입출고현황 - 주문대비 입출고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE, TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE
+        PARAM    : orderVO
+        COMMENTS : 주문대비 입출고현황 - 주문대비 입출고현황 리스트를 조회한다.
+    -->
+    <select id="getOrderList" parameterType="orderVO" resultType="DefaultMap">
+        /* USE : OrderMapper.getOrderList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT M.REQ_DATE
+             , TO_CHAR(TO_DATE(M.REQ_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS REQ_DATE_FM
+		     , M.STORE_CD
+		     , (SELECT STORE_NM FROM TB_MS_STORE TMS WHERE TMS.STORE_CD = M.STORE_CD) AS STORE_NM
+		     , M.SLIP_FG
+		     , M.SLIP_FG_NM
+		     , M.PROC_FG
+		     , (SELECT NMCODE_NM FROM TB_CM_NMCODE TCM WHERE TCM.NMCODE_GRP_CD = '113' AND TCM.NMCODE_CD = M.PROC_FG) AS PROC_FG_NM
+		     , M.SLIP_NO
+		     , M.OUT_DT
+		     , TO_CHAR(TO_DATE(M.OUT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS OUT_DT_FM
+             , M.IN_DT
+             , TO_CHAR(TO_DATE(M.IN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS IN_DT_FM
+		     , M.DTL_CNT
+		     , M.ORDER_TOT_QTY
+		     , M.ORDER_TOT
+		     , M.OUT_TOT_QTY
+		     , M.OUT_TOT
+		     , M.IN_TOT_QTY
+		     , M.IN_TOT
+		     , M.PENALTY_AMT
+		     <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM (
+		        SELECT A.REQ_DATE
+		             , A.STORE_CD
+		             , A.SLIP_FG
+		             , DECODE(A.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM
+		             , A.PROC_FG
+		             , '미생성'  AS SLIP_NO
+		             , NULL   AS OUT_DT
+		             , NULL   AS IN_DT
+		             , A.DTL_CNT
+		             , A.ORDER_TOT_QTY
+		             , A.ORDER_TOT
+		             , NULL   AS OUT_TOT_QTY
+		             , NULL   AS OUT_TOT
+		             , NULL   AS IN_TOT_QTY
+		             , NULL   AS IN_TOT
+		             , NULL   AS PENALTY_AMT
+		          FROM TB_PO_HQ_STORE_ORDER A
+		         WHERE A.PROC_FG = '00'
+		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
+		           <if test='storeCd != null and storeCd != ""'>
+                       AND A.STORE_CD IN
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                           #{item}
+                       </foreach>
+                   </if>
+		        UNION ALL
+		
+		        SELECT A.REQ_DATE
+		             , A.STORE_CD
+		             , A.SLIP_FG
+		             , A.SLIP_FG_NM
+		             , A.PROC_FG
+		             , A.SLIP_NO
+		             , B.OUT_DT
+		             , B.IN_DT
+		             , A.DTL_CNT
+		             , A.ORDER_TOT_QTY
+		             , A.ORDER_TOT
+		             , B.OUT_TOT_QTY
+		             , B.OUT_TOT
+		             , B.IN_TOT_QTY
+		             , B.IN_TOT
+		             , B.PENALTY_AMT
+		          FROM (
+		                SELECT TPHSD.HQ_OFFICE_CD
+		                     , TPHSD.REQ_DATE       /* 출고요청일자 */
+		                     , TPHSD.STORE_CD       /* 매장코드 */
+		                     , TPHSD.SLIP_FG        /* 전표구분코드 */
+		                     , DECODE(TPHSD.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM   /* 전표구분코드 */
+		                     , TPHSD.PROC_FG        /* */
+		                     , NVL(TPHSD.SLIP_NO,'미생성') AS SLIP_NO
+		                     , (SELECT SUM(DTL_CNT) FROM TB_PO_HQ_STORE_ORDER Z WHERE Z.REQ_DATE = TPHSD.REQ_DATE AND Z.STORE_CD = TPHSD.STORE_CD) AS DTL_CNT
+		                     , SUM(TPHSD.ORDER_TOT_QTY) AS ORDER_TOT_QTY/* 주문수량 */
+		                     , SUM(TPHSD.ORDER_TOT)     AS ORDER_TOT/* 주문합계금액 */
+		                  FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
+		                 WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+		                   <if test='storeCd != null and storeCd != ""'>
+					            AND TPHSD.STORE_CD IN
+					            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+					                #{item}
+					            </foreach>
+					        </if>
+		                 GROUP BY TPHSD.HQ_OFFICE_CD
+		                     , TPHSD.REQ_DATE
+		                     , TPHSD.STORE_CD
+		                     , TPHSD.SLIP_FG
+		                     , TPHSD.PROC_FG
+		                     , TPHSD.SLIP_NO
+		                ) A
+		              , (
+		                SELECT B.HQ_OFFICE_CD
+		                     , B.SLIP_NO
+		                     , B.STORE_CD
+		                     , B.SLIP_FG
+		                     , B.OUT_TOT_QTY
+		                     , B.OUT_TOT
+		                     , B.OUT_DT
+		                     , B.IN_TOT_QTY
+		                     , B.IN_TOT
+		                     , B.IN_DT
+		                     , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND Z.SLIP_NO = B.SLIP_NO) AS PENALTY_AMT
+		                  FROM TB_PO_HQ_STORE_OUTSTOCK B
+		                 WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
+		                 ) B
+		         WHERE A.SLIP_NO = B.SLIP_NO(+)
+		       ) M
+		       WHERE 1=1
+	            <if test='startDate != null and startDate != ""'>
+                   <if test='outDateFg == "1"'>
+                      AND M.REQ_DATE >= #{startDate}
+                   </if>
+                   <if test='outDateFg == "-1"'>
+                      AND SUBSTR(M.OUT_DT, 1, 8) >= #{startDate}
+                   </if>
+                </if>
+                <if test='endDate != null and endDate != ""'>
+                   <if test='outDateFg == "1"'>
+                      AND M.REQ_DATE <![CDATA[<= ]]> #{endDate}
+                   </if>
+                   <if test='outDateFg == "-1"'>
+                      AND SUBSTR(M.OUT_DT, 1, 8) <![CDATA[<= ]]> #{endDate}
+                   </if>
+                </if>
+                <if test='slipFg != null and slipFg != ""'>
+                   AND M.SLIP_FG = #{slipFg}
+                </if>
+                <if test='procFg != null and procFg != ""'>
+                   AND M.PROC_FG = #{procFg}
+                </if>
+		 ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG 
+		 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 주문대비 입출고현황 - 주문대비 입출고현황 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_STORE_NMCODE,
+                   TB_HQ_NMCODE
+        PARAM    : orderVO
+        COMMENTS : 주문대비 입출고현황 - 주문대비 입출고현황 상세 리스트를 조회한다.
+    -->
+    <select id="getOrderDtlList" parameterType="orderVO" resultType="DefaultMap">
+        /* USE : OrderMapper.getOrderDtlList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+         SELECT A.REQ_DATE
+              , TO_CHAR(TO_DATE(A.REQ_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS REQ_DATE_FM
+		      , A.PROD_CD
+		      , Z.PROD_NM
+		      , A.PO_UNIT_FG
+		      <if test='orgnFg == "S"'>
+		        , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+		      </if>
+		      <if test='orgnFg == "H" or orgnFg == "M"'>
+                , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = A.HQ_OFFICE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+              </if>
+		      , A.PO_UNIT_QTY
+		      , Z.SPLY_UPRC
+		      , DECODE(A.SLIP_FG,1,'주문',-1,'반품') AS SLIP_FG_NM /* 구분 */
+		      , A.ORDER_TOT_QTY
+		      , A.ORDER_AMT
+		      , A.ORDER_VAT
+		      , A.ORDER_TOT
+		      , A.MD_TOT_QTY
+		      , A.MD_AMT
+		      , A.MD_VAT
+		      , A.MD_TOT
+		      , A.OUT_TOT_QTY
+		      , A.OUT_AMT
+		      , A.OUT_VAT
+		      , A.OUT_TOT
+		      , A.IN_TOT_QTY
+		      , A.IN_AMT
+		      , A.IN_VAT
+		      , A.IN_TOT
+		      , A.PENALTY_AMT
+		      , A.REMARK
+		      <include refid="CmmSQL.PagingTemplateCount"/>
+		   FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
+		      , TB_MS_PRODUCT Z
+		  WHERE A.HQ_OFFICE_CD	=	#{hqOfficeCd}
+		  	AND	A.SLIP_NO = #{slipNo}
+		    AND A.STORE_CD = Z.STORE_CD
+		    AND A.PROD_CD = Z.PROD_CD
+		  <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 본사 주문대비 입출고현황 - 조회조건 진행상황 콤보 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : orderVO
+        COMMENTS : 본사 주문대비 입출고현황 - 조회조건 진행상황 콤보 리스트를 조회한다.
+    -->
+    <select id="getSrchOrderProcFgList" parameterType="orderVO" resultType="DefaultMap">
+        SELECT NMCODE_NM, NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113'
+    </select>
+    
+    
+    <!-- 주문대비 입출고현황 - 주문대비 입출고현황 엑셀리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE, TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE
+        PARAM    : orderVO
+        COMMENTS : 주문대비 입출고현황 - 주문대비 입출고현황 엑셀리스트를 조회한다.
+    -->
+    <select id="getOrderExcelList" parameterType="orderVO" resultType="DefaultMap">
+        /* USE : OrderMapper.getOrderExcelList */
+        SELECT M.REQ_DATE
+             , TO_CHAR(TO_DATE(M.REQ_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS REQ_DATE_FM
+             , M.STORE_CD
+             , (SELECT STORE_NM FROM TB_MS_STORE TMS WHERE TMS.STORE_CD = M.STORE_CD) AS STORE_NM
+             , M.SLIP_FG
+             , M.SLIP_FG_NM
+             , M.PROC_FG
+             , (SELECT NMCODE_NM FROM TB_CM_NMCODE TCM WHERE TCM.NMCODE_GRP_CD = '113' AND TCM.NMCODE_CD = M.PROC_FG) AS PROC_FG_NM
+             , M.SLIP_NO
+             , M.OUT_DT
+             , TO_CHAR(TO_DATE(M.OUT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS OUT_DT_FM
+             , M.IN_DT
+             , TO_CHAR(TO_DATE(M.IN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS IN_DT_FM
+             , M.DTL_CNT
+             , M.ORDER_TOT_QTY
+             , M.ORDER_TOT
+             , M.OUT_TOT_QTY
+             , M.OUT_TOT
+             , M.IN_TOT_QTY
+             , M.IN_TOT
+             , M.PENALTY_AMT
+          FROM (
+                SELECT A.REQ_DATE
+                     , A.STORE_CD
+                     , A.SLIP_FG
+                     , DECODE(A.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM
+                     , A.PROC_FG
+                     , '미생성'  AS SLIP_NO
+                     , NULL   AS OUT_DT
+                     , NULL   AS IN_DT
+                     , A.DTL_CNT
+                     , A.ORDER_TOT_QTY
+                     , A.ORDER_TOT
+                     , NULL   AS OUT_TOT_QTY
+                     , NULL   AS OUT_TOT
+                     , NULL   AS IN_TOT_QTY
+                     , NULL   AS IN_TOT
+                     , NULL   AS PENALTY_AMT
+                  FROM TB_PO_HQ_STORE_ORDER A
+                 WHERE A.PROC_FG = '00'
+                 AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
+                   <if test='storeCd != null and storeCd != ""'>
+                       AND A.STORE_CD IN
+                       <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                           #{item}
+                       </foreach>
+                   </if>
+                UNION ALL
+        
+                SELECT A.REQ_DATE
+                     , A.STORE_CD
+                     , A.SLIP_FG
+                     , A.SLIP_FG_NM
+                     , A.PROC_FG
+                     , A.SLIP_NO
+                     , B.OUT_DT
+                     , B.IN_DT
+                     , A.DTL_CNT
+                     , A.ORDER_TOT_QTY
+                     , A.ORDER_TOT
+                     , B.OUT_TOT_QTY
+                     , B.OUT_TOT
+                     , B.IN_TOT_QTY
+                     , B.IN_TOT
+                     , B.PENALTY_AMT
+                  FROM (
+                        SELECT TPHSD.HQ_OFFICE_CD
+                             , TPHSD.REQ_DATE       /* 출고요청일자 */
+                             , TPHSD.STORE_CD       /* 매장코드 */
+                             , TPHSD.SLIP_FG        /* 전표구분코드 */
+                             , DECODE(TPHSD.SLIP_FG,1,'출고',-1,'반품') AS SLIP_FG_NM   /* 전표구분코드 */
+                             , TPHSD.PROC_FG        /* */
+                             , NVL(TPHSD.SLIP_NO,'미생성') AS SLIP_NO
+                             , (SELECT SUM(DTL_CNT) FROM TB_PO_HQ_STORE_ORDER Z WHERE Z.REQ_DATE = TPHSD.REQ_DATE AND Z.STORE_CD = TPHSD.STORE_CD) AS DTL_CNT
+                             , SUM(TPHSD.ORDER_TOT_QTY) AS ORDER_TOT_QTY/* 주문수량 */
+                             , SUM(TPHSD.ORDER_TOT)     AS ORDER_TOT/* 주문합계금액 */
+                          FROM TB_PO_HQ_STORE_DISTRIBUTE TPHSD
+                         WHERE TPHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+                           <if test='storeCd != null and storeCd != ""'>
+                                AND TPHSD.STORE_CD IN
+                                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
+                                    #{item}
+                                </foreach>
+                            </if>
+                         GROUP BY TPHSD.HQ_OFFICE_CD
+                             , TPHSD.REQ_DATE
+                             , TPHSD.STORE_CD
+                             , TPHSD.SLIP_FG
+                             , TPHSD.PROC_FG
+                             , TPHSD.SLIP_NO
+                        ) A
+                      , (
+                        SELECT B.HQ_OFFICE_CD
+                             , B.SLIP_NO
+                             , B.STORE_CD
+                             , B.SLIP_FG
+                             , B.OUT_TOT_QTY
+                             , B.OUT_TOT
+                             , B.OUT_DT
+                             , B.IN_TOT_QTY
+                             , B.IN_TOT
+                             , B.IN_DT
+                             , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND Z.SLIP_NO = B.SLIP_NO) AS PENALTY_AMT
+                          FROM TB_PO_HQ_STORE_OUTSTOCK B
+                         WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
+                         ) B
+                 WHERE A.SLIP_NO = B.SLIP_NO(+)
+               ) M
+               WHERE 1=1
+                <if test='startDate != null and startDate != ""'>
+                   <if test='outDateFg == "1"'>
+                      AND M.REQ_DATE >= #{startDate}
+                   </if>
+                   <if test='outDateFg == "-1"'>
+                      AND SUBSTR(M.OUT_DT, 1, 8) >= #{startDate}
+                   </if>
+                </if>
+                <if test='endDate != null and endDate != ""'>
+                   <if test='outDateFg == "1"'>
+                      AND M.REQ_DATE <![CDATA[<= ]]> #{endDate}
+                   </if>
+                   <if test='outDateFg == "-1"'>
+                      AND SUBSTR(M.OUT_DT, 1, 8) <![CDATA[<= ]]> #{endDate}
+                   </if>
+                </if>
+                <if test='slipFg != null and slipFg != ""'>
+                   AND M.SLIP_FG = #{slipFg}
+                </if>
+                <if test='procFg != null and procFg != ""'>
+                   AND M.PROC_FG = #{procFg}
+                </if>
+         ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG 
+    </select>
+
+
+    <!-- 주문대비 입출고현황 - 주문대비 입출고현황 상세 엑셀리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_STORE_NMCODE,
+                   TB_HQ_NMCODE
+        PARAM    : orderVO
+        COMMENTS : 주문대비 입출고현황 - 주문대비 입출고현황 상세 엑셀리스트를 조회한다.
+    -->
+    <select id="getOrderDtlExcelList" parameterType="orderVO" resultType="DefaultMap">
+        /* USE : OrderMapper.getOrderDtlExcelList */
+         SELECT A.REQ_DATE
+              , TO_CHAR(TO_DATE(A.REQ_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS REQ_DATE_FM
+              , A.PROD_CD
+              , Z.PROD_NM
+              , A.PO_UNIT_FG
+              <if test='orgnFg == "S"'>
+                , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+              </if>
+              <if test='orgnFg == "H" or orgnFg == "M"'>
+                , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = A.HQ_OFFICE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+              </if>
+              , A.PO_UNIT_QTY
+              , Z.SPLY_UPRC
+              , DECODE(A.SLIP_FG,1,'주문',-1,'반품') AS SLIP_FG_NM /* 구분 */
+              , A.ORDER_TOT_QTY
+              , A.ORDER_AMT
+              , A.ORDER_VAT
+              , A.ORDER_TOT
+              , A.MD_TOT_QTY
+              , A.MD_AMT
+              , A.MD_VAT
+              , A.MD_TOT
+              , A.OUT_TOT_QTY
+              , A.OUT_AMT
+              , A.OUT_VAT
+              , A.OUT_TOT
+              , A.IN_TOT_QTY
+              , A.IN_AMT
+              , A.IN_VAT
+              , A.IN_TOT
+              , A.PENALTY_AMT
+              , A.REMARK
+           FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
+              , TB_MS_PRODUCT Z
+          WHERE A.HQ_OFFICE_CD	=	#{hqOfficeCd}
+		  	AND	A.SLIP_NO 		= 	#{slipNo}
+            AND A.STORE_CD 		= 	Z.STORE_CD
+            AND A.PROD_CD 		= 	Z.PROD_CD
+    </select>
+</mapper>

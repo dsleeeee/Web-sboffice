@@ -16,7 +16,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope._setComboData("posHourListScaleBox", gvListScaleBoxData);
 
 	var checkInt = true;
-
+	var sltSaleCnt; 
+	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 
@@ -31,8 +32,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    s.formatItem.addHandler(function (s, e) {
 	      if (e.panel === s.cells) {
 	        var col = s.columns[e.col];
-
-	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt") { // 수량합계
+	        
+	        if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt" && s.cells.getCellData(e.row, e.col,false) != null) { // 수량합계
 	        	var item = s.rows[e.row].dataItem;
 	          	wijmo.addClass(e.cell, 'wijLink');
 	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -249,11 +250,11 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	    			storePosCd = $("#posHourSelectPosCd").val();
 	    			storePosNm = $("#posHourSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -324,15 +325,17 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			   		
 		    		var params       = {};
 		    		params.chkPop	= "posHourPop";    	
-					params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+		    		if(!$scope.isChecked){
+		    			params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
+		    			params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+		    		}
 		    		params.saleHour   = selectedRow.saleHour;
-		    		
-		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt" && grid.getCellData(ht.row,ht.col,true) != "") { 
 			    		params.storeCd   = storeCd;
 			    		params.posNo	 = posNo;			    			    	    
 		    			$scope._broadcast('saleComProdHourCtrl', params); // 수량
-		    		}else if (col.binding === "totSaleCnt") { // 수량합계
+		    		}else if (col.binding === "totSaleCnt" && selectedRow.totSaleCnt != null) { // 수량합계
 		    			params.storeCd   = $("#posHourSelectStoreCd").val();		    		
 		    			$scope._broadcast('saleComProdHourCtrl', params);
 		    		}
@@ -415,7 +418,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 					  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
 					  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
 
-					  if (saleAmt == null || saleAmt == "") {
+					  /*if (saleAmt == null || saleAmt == "") {
 						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
 					  }
 
@@ -429,7 +432,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 					  if (saleCnt == null || saleCnt == "") {
 						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
-					  }
+					  }*/
 				  }
 			  }
 		  }

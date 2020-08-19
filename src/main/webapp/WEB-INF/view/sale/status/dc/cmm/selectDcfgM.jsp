@@ -55,7 +55,7 @@
    */
   var app = agrid.getApp();
 
-  /** 테이블선택 controller */
+  /** 할인유형 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
     var targetId = '${param.targetId}';
 
@@ -66,6 +66,7 @@
     $scope.initGrid = function (s, e) {
     };
 
+    $scope.oldStoreCd = "";
     $scope.searchFg = "N";
     // 다른 컨트롤러의 broadcast 받기
 
@@ -75,27 +76,36 @@
 
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
+    	  $scope.tableSelected();
         if ('${param.closeFunc}' !== '') {
           eval('$scope.${param.closeFunc}()');
         }
       });
 
-      if ($scope.searchFg == "N") {
-        $scope.searchTable();
-      }
+//       if ($scope.searchFg == "N") {
+//         $scope.searchTable();
+//       }
 
       $scope.searchTable();
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
     });
 
+//     $scope.$on('dcDcfgSelectedTableCtrl', function(){
+//     	$scope.searchTable();
+//     });
+
     $scope.searchTable = function () {
       // 파라미터
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
-      $scope._inquirySub("/sale/status/dc/dcfg/dcNmList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+      
+      if(params.storeCd !== $scope.oldStoreCd || $scope.searchFg === "N"){
+    	  $scope._inquirySub("/sale/status/dc/dcfg/dcNmList.sb", params, function () {
+  	        $scope.searchFg = "Y";
+    	    $scope.oldStoreCd = params.storeCd;
+  	      });
+      }
     };
 
     $scope.tableSelected = function () {

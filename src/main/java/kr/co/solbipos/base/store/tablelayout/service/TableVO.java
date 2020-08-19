@@ -31,8 +31,10 @@ public class TableVO extends CmmVO {
     /** 테이블그룹코드 */
     private String tblGrpCd;
     /** 테이블좌석수 */
-    private Long tblSeatCnt = 0L;;
-    /** X */
+    private Long tblSeatCnt = 0L;
+    /** 이미지명 */
+    private String imgNm;
+	/** X */
     private Long x = 0L;
     /** Y */
     private Long y = 0L;
@@ -45,7 +47,9 @@ public class TableVO extends CmmVO {
     /** 사용여부 */
     private String useYn;
     
-    
+    private String xml;
+
+
     /**
      * @return the storeCd
      */
@@ -106,6 +110,18 @@ public class TableVO extends CmmVO {
     public void setTblSeatCnt(Long tblSeatCnt) {
         this.tblSeatCnt = tblSeatCnt;
     }
+    /**
+     * @return the imgNm
+     */
+    public String getImgNm() {
+		return imgNm;
+	}
+    /**
+     * @return the imgNm
+     */
+	public void setImgNm(String imgNm) {
+		this.imgNm = imgNm;
+	}
     /**
      * @return the x
      */
@@ -178,5 +194,11 @@ public class TableVO extends CmmVO {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
+	public String getXml() {
+		return xml;
+	}
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
 
 }

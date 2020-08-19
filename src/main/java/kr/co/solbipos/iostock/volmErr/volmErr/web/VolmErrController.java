@@ -80,7 +80,9 @@ public class VolmErrController {
         Model model, VolmErrVO volmErrVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        volmErrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        volmErrVO.setOrgnFg		(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
+        volmErrVO.setHqOfficeCd	(sessionInfoVO.getHqOfficeCd()		);	//본사코드
+        volmErrVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
 
         List<DefaultMap<String>> list = volmErrService.getVolmErrList(volmErrVO);
 

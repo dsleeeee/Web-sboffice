@@ -6,9 +6,9 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="rtnStatusProdView" class="subCon"  ng-controller="rtnStatusProdCtrl">
+<div id="rtnStatusProdView" class="subCon3" style="display: none;" ng-controller="rtnStatusProdCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
+      <a href="#" class="open fl"><s:message code="rtnStatus.prod"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnRtnStatusProdSearch" ng-click="_broadcast('rtnStatusProdCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -36,7 +36,7 @@
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
-                      selection-mode="Month" 
+                      selection-mode="Month"
                       format="y">
               </wj-input-date>
             </span>
@@ -50,19 +50,19 @@
                       min="2000-01-01"
                       max="2099-12-31"
                       initialized="_initDateBox(s)"
-                      selection-mode="Month" 
+                      selection-mode="Month"
                       format="y">
               </wj-input-date>
             </span>
             <span class="chk ml10">
-                <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
+                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                 <label for="chkDt">
                     <s:message code="cmm.all.day" />
                 </label>
             </span>
         </div>
         </td>
-        
+
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="hidden" id="rtnStatusProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
         <%-- 매장코드 --%>
@@ -78,18 +78,26 @@
                 <jsp:param name="targetId" value="rtnStatusProdSelectStore"/>
             </jsp:include>
             <%-- //매장선택 모듈 싱글 선택 사용시 include --%>
+            <div class="mt10">
+                <span class="chk ml10">
+                    <input type="checkbox" id="chkProdClass" ng-model="ChkProdClassDisplay" ng-change="isChkProdClassDisplay()" />
+                    <label for="chkProdClass">
+                        <s:message code="periodIostock.prodClassDisplay" />
+                    </label>
+                </span>
+            </div>
         </td>
       </c:if>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
             <input type="hidden" id="rtnStatusProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
       </tr>
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <!-- contents start -->
-    <div class="subCon">
+    <div class="">
         <%-- wj grid start --%>
         <div class="mt20 oh sb-select dkbr">
         <%-- 페이지 스케일  --%>
@@ -100,51 +108,75 @@
                 items-source="_getComboData('rtnStatusProdListScaleBox')"
                 display-member-path="name"
                 selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
+                initialized="initComboBox(s)"
+                control="listScaleCombo"
+                is-editable="true"
+                text-changed="_checkValidation(s)">
         </wj-combo-box>
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
         </button>
         </div>
-        <div class="wj-gridWrap mt10">
-            <div style="height:350px">
-                <wj-flex-grid
-                  id="rtnStatusProdGrid"
-                  autoGenerateColumns="false"
-                  selection-mode="Row"
-                  items-source="data"
-                  control="flex"
-                  initialized="initGrid(s,e)"
-                  is-read-only="true"
-                  item-formatter="_itemFormatter">
-                  <!-- define columns -->
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"     width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"    width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                </wj-flex-grid>
-                <%-- ColumnPicker 사용시 include --%>
-                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                  <jsp:param name="pickerTarget" value="rtnStatusProdCtrl"/>
-                </jsp:include>
-                <%--// ColumnPicker 사용시 include --%>
-            </div>
+        <div class="wj-gridWrap2 mt20">
+               <wj-flex-grid
+                 id="rtnStatusProdGrid"
+                 autoGenerateColumns="false"
+                 selection-mode="Row"
+                 items-source="data"
+                 control="flex"
+                 initialized="initGrid(s,e)"
+                 is-read-only="true"
+                 item-formatter="_itemFormatter">
+                 <!-- define columns -->
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                 <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+               </wj-flex-grid>
+               <%-- ColumnPicker 사용시 include --%>
+               <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                 <jsp:param name="pickerTarget" value="rtnStatusProdCtrl"/>
+               </jsp:include>
+               <%--// ColumnPicker 사용시 include --%>
         </div>
-        <%-- //wj grid end --%> 
+        <%-- //wj grid end --%>
     </div>
     <!-- //contents end -->
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
     <ul id="rtnStatusProdCtrlPager" data-size="10">
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
+  <%-- 엑셀 리스트 --%>
+  <div class="wj-gridWrap2 mt20" style="display:none;" ng-controller="rtnStatusProdExcelCtrl">
+  		<wj-flex-grid
+  			id="rtnStatusProdExcelGrid"
+            autoGenerateColumns="false"
+            selection-mode="Row"
+            items-source="data"
+            control="excelFlex"
+            initialized="initGrid(s,e)"
+            is-read-only="true"
+            item-formatter="_itemFormatter">
+            <!-- define columns -->
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+   </div>
+   <%-- //엑셀 리스트 --%>
 </div>
 
 <script type="text/javascript">

@@ -51,6 +51,16 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
   };
 
+  // 탭변경
+  $scope.changeTab = function() {
+
+        $scope.hqEmpDetailLayer.hide();
+        $scope.hqEmpAuthLayer.show(true);
+
+        $scope._broadcast('hqEmpAuthCtrl', $scope.selectedHqEmp);
+        event.preventDefault();
+  };
+
   // 닫기버튼 클릭
   $scope.close = function(){
     $scope.hqEmpDetailLayer.hide();

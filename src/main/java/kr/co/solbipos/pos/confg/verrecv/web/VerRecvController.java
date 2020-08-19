@@ -97,6 +97,25 @@ public class VerRecvController {
     }
 
     /**
+     * 버전별수신현황 - 매장 리스트 엑셀조회
+     * @param verRecv
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "verRecv/storeExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result verrecvStoreExcelList(VerRecvVO verRecv, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+//        System.out.println("test11111");
+        List<DefaultMap<String>> list = verRecvService.selectStoreExcelList(verRecv);
+
+        return returnListJson(Status.OK, list, verRecv);
+    }
+
+    /**
      * 매장별수신현황 - 페이지 이동
      *
      * @param request

@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.acins.acins.service.AcinsService;
 import kr.co.solbipos.stock.acins.acins.service.AcinsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("acinsService")
+@Transactional
 public class AcinsServiceImpl implements AcinsService {
     private final AcinsMapper acinsMapper;
     private final MessageService messageService;
@@ -115,6 +117,7 @@ public class AcinsServiceImpl implements AcinsService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             acinsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            acinsVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = acinsMapper.getHqAcinsRegistList(acinsVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -146,6 +149,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setAcinsTitle(acinsVO.getAcinsTitle());
                 acinsHdVO.setSeqNo(acinsVO.getSeqNo());
                 acinsHdVO.setProcFg("0");
+                acinsHdVO.setAdjStorageCd(acinsVO.getAdjStorageCd());
                 acinsHdVO.setStorageCd(acinsVO.getStorageCd());
                 acinsHdVO.setRegId(sessionInfoVO.getUserId());
                 acinsHdVO.setRegDt(currentDt);
@@ -259,6 +263,7 @@ public class AcinsServiceImpl implements AcinsService {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             acinsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            acinsVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = acinsMapper.getHqAcinsRegistList(acinsVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -322,6 +327,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setRegDt(currentDt);
                 acinsHdVO.setModId(sessionInfoVO.getUserId());
                 acinsHdVO.setModDt(currentDt);
+                acinsHdVO.setStatus(acinsVO.getStatus());
             }
 
             acinsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -374,17 +380,20 @@ public class AcinsServiceImpl implements AcinsService {
             returnResult += result;
             i++;
         }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            // HD 수정
-            result = acinsMapper.updateHqAcinsHd(acinsHdVO);
+        
+        //삭제가 아닐경우만
+        if(!StringUtil.getOrBlank(acinsHdVO.getStatus()).equals("DELETE")) {
+	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+	            // HD 수정
+	            result = acinsMapper.updateHqAcinsHd(acinsHdVO);
+	        }
+	        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+	            // HD 수정
+	            result = acinsMapper.updateStAcinsHd(acinsHdVO);
+	        }
+	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            // HD 수정
-            result = acinsMapper.updateStAcinsHd(acinsHdVO);
-        }
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+        
         return returnResult;
     }
 
@@ -446,7 +455,7 @@ public class AcinsServiceImpl implements AcinsService {
         acinsHdVO.setAcinsTitle(excelUploadVO.getTitle());
         acinsHdVO.setSeqNo(Integer.parseInt(seqNo));
         acinsHdVO.setProcFg("0");
-        acinsHdVO.setStorageCd("000");
+        acinsHdVO.setStorageCd("999");
         acinsHdVO.setRegId(sessionInfoVO.getUserId());
         acinsHdVO.setRegDt(currentDt);
         acinsHdVO.setModId(sessionInfoVO.getUserId());
@@ -460,6 +469,7 @@ public class AcinsServiceImpl implements AcinsService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.insertStAcinsHd(acinsHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -471,6 +481,7 @@ public class AcinsServiceImpl implements AcinsService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.updateStAcinsHd(acinsHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

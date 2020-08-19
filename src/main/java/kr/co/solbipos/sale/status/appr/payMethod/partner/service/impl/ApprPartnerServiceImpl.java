@@ -23,12 +23,12 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
     }
 
 
-    
-    /** 신용카드 승인현황 - 리스트 조회 */
+
+    /** 제휴카드 승인현황 - 엑셀 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getApprPartnerList(ApprPartnerVO apprPartnerVO, SessionInfoVO sessionInfoVO) {
 		apprPartnerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-		
+
 		if ((apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) || (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo()))) {
     		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) {
     			String[] arrCornrCd = apprPartnerVO.getCornrCd().split(",");
@@ -56,8 +56,44 @@ public class ApprPartnerServiceImpl implements ApprPartnerService {
     			}
     		}
     	}
-		
+
 		return apprPartnerMapper.getApprPartnerList(apprPartnerVO);
+	}
+
+	/** 제휴카드 승인현황 - 엑셀 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getApprPartnerExcelList(ApprPartnerVO apprPartnerVO, SessionInfoVO sessionInfoVO) {
+		apprPartnerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if ((apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) || (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo()))) {
+    		if (apprPartnerVO.getCornrCd() != null && !"".equals(apprPartnerVO.getCornrCd())) {
+    			String[] arrCornrCd = apprPartnerVO.getCornrCd().split(",");
+    			if (arrCornrCd.length > 0) {
+        			if (arrCornrCd[0] != null && !"".equals(arrCornrCd[0])) {
+        				apprPartnerVO.setArrCornrCd(arrCornrCd);
+//        				apprPartnerVO.setArrStoreCornr(arrCornrCd);
+        			}
+        		}
+    		}
+    		if (apprPartnerVO.getPosNo() != null && !"".equals(apprPartnerVO.getPosNo())) {
+    			String[] arrPosNo = apprPartnerVO.getPosNo().split(",");
+    			if (arrPosNo.length > 0) {
+        			if (arrPosNo[0] != null && !"".equals(arrPosNo[0])) {
+        				apprPartnerVO.setArrPosNo(arrPosNo);
+//        				apprPartnerVO.setArrStorePos(arrPosNo);
+        			}
+        		}
+    		}
+    	} else {
+    		String[] arrStoreCd = apprPartnerVO.getStoreCd().split(",");
+    		if (arrStoreCd.length > 0) {
+    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+    				apprPartnerVO.setArrStoreCd(arrStoreCd);
+    			}
+    		}
+    	}
+
+		return apprPartnerMapper.getApprPartnerExcelList(apprPartnerVO);
 	}
 
 }

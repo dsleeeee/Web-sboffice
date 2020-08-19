@@ -185,6 +185,38 @@
             </when>
         </choose>
     </select>
+    
+
+    <!-- 거래처 발주등록 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_VENDR_ORDER
+                   TB_PO_STORE_VENDR_ORDER
+        PARAM    : vendrOrderVO
+        COMMENTS : 거래처 발주등록 진행상태를 조회한다.
+    -->
+    <select id="getChkProcFg" parameterType="vendrOrderVO" resultType="String">
+        /* USE : VendrOrderMapper.getChkProcFg */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <![CDATA[                    
+    			SELECT  DECODE(tphvo.PROC_FG,'0','N','Y')	AS	CHK_PROC_FG
+                FROM    TB_PO_HQ_VENDR_ORDER tphvo
+                WHERE   tphvo.HQ_OFFICE_CD  =   #{hqOfficeCd}
+				AND     tphvo.SLIP_NO 		=	#{slipNo}
+                ]]>
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <![CDATA[
+                SELECT  DECODE(tpsvo.PROC_FG,'0','N','Y')	AS	CHK_PROC_FG
+                FROM    TB_PO_STORE_VENDR_ORDER tpsvo
+                WHERE   tpsvo.STORE_CD  	=   #{storeCd}
+				AND     tpsvo.SLIP_NO 		=	#{slipNo}
+                ]]>
+            </when>
+        </choose>
+    </select>
 
 
     <!-- 거래처 발주등록 - 발주상품 리스트 조회 -->
@@ -345,18 +377,20 @@
                 ,       TB_ST_HQ_STOCK_CUR tshsc
                 ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
                 ,       TB_HQ_VENDOR thv
-                WHERE   thvp.HQ_OFFICE_CD     =   #{hqOfficeCd}
-                AND     thvp.VENDR_CD         =   #{vendrCd}
-                AND     thp.HQ_OFFICE_CD      =   #{hqOfficeCd}
-                AND     thp.PROD_CD           =   thvp.PROD_CD
-                AND     thp.USE_YN            =   'Y'
-                AND     tshsc.HQ_OFFICE_CD(+) =   thp.HQ_OFFICE_CD
-                AND     tshsc.PROD_CD     (+) =   thp.PROD_CD
-                AND     tphvod.HQ_OFFICE_CD(+)=   thp.HQ_OFFICE_CD
-                AND     tphvod.SLIP_NO    (+) =   #{slipNo}
-                AND     tphvod.PROD_CD    (+) =   thp.PROD_CD
-                AND     thv.HQ_OFFICE_CD      =   thvp.HQ_OFFICE_CD
-                AND     thv.VENDR_CD          =   #{vendrCd}
+                WHERE   thvp.HQ_OFFICE_CD     	=   #{hqOfficeCd}
+                AND     thvp.VENDR_CD         	=   #{vendrCd}
+                AND     thp.HQ_OFFICE_CD      	=   #{hqOfficeCd}
+                AND     thp.PROD_CD           	=   thvp.PROD_CD
+                AND     thp.USE_YN            	=   'Y'
+                AND     thp.PO_PROD_FG    		IN  ('1','2')
+                AND		tshsc.STORAGE_CD	(+)	=	'999'
+                AND     tshsc.HQ_OFFICE_CD(+) 	=   thp.HQ_OFFICE_CD
+                AND     tshsc.PROD_CD     (+) 	=   thp.PROD_CD
+                AND     tphvod.HQ_OFFICE_CD(+)	=   thp.HQ_OFFICE_CD
+                AND     tphvod.SLIP_NO    (+) 	=   #{slipNo}
+                AND     tphvod.PROD_CD    (+) 	=   thp.PROD_CD
+                AND     thv.HQ_OFFICE_CD      	=   thvp.HQ_OFFICE_CD
+                AND     thv.VENDR_CD          	=   #{vendrCd}
                 ]]>
                 <if test='prodCd != null and prodCd != ""'>
                     AND thp.PROD_CD = #{prodCd}
@@ -427,6 +461,7 @@
                 AND     tmp.STORE_CD        =   tmvp.STORE_CD
                 AND     tmp.PROD_CD         =   tmvp.PROD_CD
                 AND     tmp.USE_YN          =   'Y'
+                AND		tsssc.STORAGE_CD (+)	=	'999'
                 AND     tsssc.STORE_CD  (+) =   tmp.STORE_CD
                 AND     tsssc.PROD_CD   (+) =   tmp.PROD_CD
                 AND     tpsvod.STORE_CD (+) =   tmp.STORE_CD
@@ -517,10 +552,10 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  DECODE(COUNT(tphvi.SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
+                SELECT  DECODE(COUNT(tphvi.ORDER_SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
                 FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
                 WHERE   tphvi.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     tphvi.SLIP_NO      = #{slipNo}
+                AND     tphvi.ORDER_SLIP_NO      = #{slipNo}
                 ]]>
                 <if test='procFg != null and procFg != ""'>
                     AND tphvi.PROC_FG = #{procFg}
@@ -529,10 +564,10 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <![CDATA[
-                SELECT  DECODE(COUNT(tpsvi.SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
+                SELECT  DECODE(COUNT(tpsvi.ORDER_SLIP_NO), 0, 'N', 'Y') AS IS_EXIST
                 FROM    TB_PO_STORE_VENDR_INSTOCK tpsvi
                 WHERE   tpsvi.STORE_CD  = #{storeCd}
-                AND     tpsvi.SLIP_NO   = #{slipNo}
+                AND     tpsvi.ORDER_SLIP_NO   = #{slipNo}
                 ]]>
                 <if test='procFg != null and procFg != ""'>
                     AND tpsvi.PROC_FG = #{procFg}
@@ -1310,7 +1345,7 @@
                 )
                 SELECT  #{hqOfficeCd}
                 ,       #{slipNo}
-                ,       '000' AS STORAGE_CD
+                ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
                 ,       #{slipFg}
@@ -1405,7 +1440,7 @@
                 )
                 SELECT  #{storeCd}
                 ,       #{slipNo}
-                ,       '000' AS STORAGE_CD
+                ,       '999' AS STORAGE_CD		<!-- 전체재고용 창고코드 ('001' -> '000' -> '999') -->
                 ,       '00' AS HQ_BRAND_CD
                 ,       tpte.PROD_CD
                 ,       #{slipFg}

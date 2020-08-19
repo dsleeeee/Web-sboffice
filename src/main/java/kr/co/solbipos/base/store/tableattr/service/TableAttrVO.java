@@ -28,8 +28,14 @@ public class TableAttrVO extends CmmVO {
     /** 매장코드 */
     private String storeCd;
     /** 테이블유형구분 */
-    private TblTypeFg tblTypeFg;
-    /** 속성코드 */
+    private String tblTypeFg;
+    /** 테이블번호 */
+    private String tblCd;
+    /** 테이블번호 array */
+    private String arrTblCd[];
+	/** 테이블추가유형구분 */
+    private String confgSubFg;
+	/** 속성코드 */
     private AttrCd attrCd;
     /** 속성명 */
     private String attrNm;
@@ -57,9 +63,25 @@ public class TableAttrVO extends CmmVO {
     private String fontColor = "#000000";
     /** 사용여부 */
     private String useYn;
-    
-    
-    /**
+
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+	/** 명칭코드코드 */
+    private String nmcodeCd;
+    /** 명칭코드명 */
+    private String nmcodeNm;
+
+    private String xmlGraph;
+	private String xmlPreview;
+	private String sid;
+
+    public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+	/**
      * @return the storeCd
      */
     public String getStoreCd() {
@@ -74,13 +96,13 @@ public class TableAttrVO extends CmmVO {
     /**
      * @return the tblTypeFg
      */
-    public TblTypeFg getTblTypeFg() {
+    public String getTblTypeFg() {
         return tblTypeFg;
     }
     /**
      * @param tblTypeFg the tblTypeFg to set
      */
-    public void setTblTypeFg(TblTypeFg tblTypeFg) {
+    public void setTblTypeFg(String tblTypeFg) {
         this.tblTypeFg = tblTypeFg;
     }
     /**
@@ -251,5 +273,58 @@ public class TableAttrVO extends CmmVO {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
+
+    public String getXmlGraph() {
+		return xmlGraph;
+	}
+	public void setXmlGraph(String xmlGraph) {
+		this.xmlGraph = xmlGraph;
+	}
+	public String getXmlPreview() {
+		return xmlPreview;
+	}
+	public void setXmlPreview(String xmlPreview) {
+		this.xmlPreview = xmlPreview;
+	}
+
+    public String getNmcodeGrpCd() {
+		return nmcodeGrpCd;
+	}
+	public void setNmcodeGrpCd(String nmcodeGrpCd) {
+		this.nmcodeGrpCd = nmcodeGrpCd;
+	}
+	public String getNmcodeCd() {
+		return nmcodeCd;
+	}
+	public void setNmcodeCd(String nmcodeCd) {
+		this.nmcodeCd = nmcodeCd;
+	}
+	public String getNmcodeNm() {
+		return nmcodeNm;
+	}
+	public void setNmcodeNm(String nmcodeNm) {
+		this.nmcodeNm = nmcodeNm;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public String getConfgSubFg() {
+		return confgSubFg;
+	}
+	public void setConfgSubFg(String confgSubFg) {
+		this.confgSubFg = confgSubFg;
+	}
+	public String getTblCd() {
+		return tblCd;
+	}
+	public void setTblCd(String tblCd) {
+		this.tblCd = tblCd;
+	}
+	public String[] getArrTblCd() {
+		return arrTblCd;
+	}
+	public void setArrTblCd(String[] arrTblCd) {
+		this.arrTblCd = arrTblCd;
+	}
 
 }

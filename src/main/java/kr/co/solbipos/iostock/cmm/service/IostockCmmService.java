@@ -13,6 +13,9 @@ public interface IostockCmmService {
     /** 수불&재고관련 공통 - 거래처 선택모듈 리스트 조회 */
     List<DefaultMap<String>> getVendrList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 
+    /** 수불&재고관련 공통 - 창고선택모듈 리스트 조회 */
+    List<DefaultMap<String>> selectStorageList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
+
     /** 수불&재고관련 공통 - 공통 명칭 콤보조회 */
     List<DefaultMap<String>> selectCmmCodeList(IostockCmmVO iostockCmmVO, SessionInfoVO sessionInfoVO);
 

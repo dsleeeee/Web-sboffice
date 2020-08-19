@@ -63,12 +63,12 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
 
 
     if( isEmptyObject($("#originalStoreCd").val()) ) {
-      $scope._popMsg("원매장을 선택해주세요.");
+      $scope._popMsg("기준매장을 선택해주세요.");
       return false;
     }
 
     if( isEmptyObject($("#targetStoreCd").val()) ) {
-      $scope._popMsg("복사대상매장을 선택해주세요.");
+      $scope._popMsg("적용대상매장을 선택해주세요.");
       return false;
     }
 
@@ -76,6 +76,12 @@ app.controller('copyStoreEnvCtrl', ['$scope', '$http', function ($scope, $http) 
     var storeParams             = {};
     storeParams.originalStoreCd = $("#originalStoreCd").val();
     storeParams.targetStoreCd   = $("#targetStoreCd").val();
+    // 가상로그인 대응
+    // 가상로그인으로 들어왔을때 저장시 Controller에서 sid값을 못읽는 현상 때문에 추가. (2020.03.26_이다솜)
+    if (document.getElementsByName('sessionId')[0]) {
+      storeParams.sid = document.getElementsByName('sessionId')[0].value;
+    }
+
 
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -92,32 +98,42 @@ console.log('storeParams',storeParams);
       return false;
     }
 
-    $scope.$broadcast('loadingPopupActive');
-
-    $http({
-      method : 'POST', //방식
-      url    : '/base/store/view/copyStoreEnv/copyStoreEnvInfo.sb', /* 통신할 URL */
-      data   : params, /* 파라메터로 보낼 데이터 */
-      params : storeParams,
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
-
-        console.log('response', response);
-        if(response.data.status == 'OK'){
-
-          $scope._popMsg("복사되었습니다");
-          $scope.searchEnvList();
-          $scope.$broadcast('loadingPopupInactive');
-        }
-      }
-    }, function errorCallback(response) {
-      $scope.$broadcast('loadingPopupInactive');
-      $scope._popMsg(response.data.message);
+    if(storeParams.originalStoreCd == storeParams.targetStoreCd) {
+      $scope._popMsg("기준매장과 적용대상매장이 같을 수 없습니다.");
       return false;
-    }).then(function () {
-      $scope.$broadcast('loadingPopupInactive');
+    }
+
+    var msg = "(" + $("#originalStoreNm").val() + ")의 환경설정값을 ("  + $("#targetStoreNm").val() + ")에 적용하시겠습니까?";
+    s_alert.popConf(msg, function(){
+
+      $scope.$broadcast('loadingPopupActive');
+
+      $http({
+        method : 'POST', //방식
+        url    : '/base/store/view/copyStoreEnv/copyStoreEnvInfo.sb', /* 통신할 URL */
+        data   : params, /* 파라메터로 보낼 데이터 */
+        params : storeParams,
+        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+      }).then(function successCallback(response) {
+        if ($scope._httpStatusCheck(response, true)) {
+
+          console.log('response', response);
+          if(response.data.status == 'OK'){
+
+            $scope._popMsg("복사되었습니다");
+            $scope.searchEnvList();
+            $scope.$broadcast('loadingPopupInactive');
+          }
+        }
+      }, function errorCallback(response) {
+        $scope.$broadcast('loadingPopupInactive');
+        $scope._popMsg(response.data.message);
+        return false;
+      }).then(function () {
+        $scope.$broadcast('loadingPopupInactive');
+      });
     });
+
   };
 
   // 팝업 닫기

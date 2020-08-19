@@ -31,7 +31,12 @@ app.controller('taxReportCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.$broadcast('loadingPopupActive');
 
     var params = {};
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -77,7 +82,12 @@ app.controller('taxReportCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

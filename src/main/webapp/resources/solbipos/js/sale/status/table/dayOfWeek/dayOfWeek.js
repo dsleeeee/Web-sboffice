@@ -52,9 +52,10 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		for(var i = 0; i < s.columnHeaders.rows.length; i++) {
 			s.columnHeaders.setCellData(i, "saleDay", messages["tableDay.saleDay"]);
 			s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["tableDay.totRealSaleAmt"]);
-			s.columnHeaders.setCellData(i, "totRealSaleCnt", messages["tableDay.totRealSaleCnt"]);
+			s.columnHeaders.setCellData(i, "totSaleCnt", messages["tableDay.totSaleCnt"]);
 			s.columnHeaders.setCellData(i, "totGuestCnt", messages["tableDay.totGuestCnt"]);
 		}
+		// <-- //그리드 헤더2줄 -->
 
 		//그리드 아이템포멧 생성
 		s.itemFormatter = function (panel, r, c, cell) {
@@ -90,7 +91,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 				}
 			}
 		}
-		// <-- //그리드 헤더2줄 -->
+
 		// 그리드 클릭 이벤트
     	s.addEventListener(s.hostElement, 'mousedown', function (e) {
 	    	var ht = s.hitTest(e);
@@ -109,12 +110,16 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    		var col         = ht.panel.columns[ht.col];
 	    		var selectedRow = s.rows[ht.row].dataItem;
 	    		var params       = {};
-	    		params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
-				params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
+				if(!$scope.isChecked){
+					params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
+					params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
+				}
 	    		params.saleDay    = selectedRow.saleDay;
 	    		params.chkPop   = "tablePop";
 
 	    		var storeTable   = $("#tableDayOfWeekSelectTableCd").val().split(",");
+	    		var storeTableOrg   = 	$("#tableDayOfWeekSelectTableCdOrg").val().split(",");
+	    		var storeCd			=	$("#tableDayOfWeekSelectStoreCd").val();
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			var arrStore= [];
@@ -125,11 +130,16 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		    			arrTbl.push(temp[1]);
 		    		}
 
-		    		params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
+		    		//params.storeCd = arrStore[Math.floor(ht.col/3) - 1];
+//		    		params.tblCd   = arrStore[Math.floor(ht.col/3) - 1] + '||' + arrTbl[Math.floor(ht.col/3) - 1];
 		    		params.tblCd   = arrTbl[Math.floor(ht.col/3) - 1];
+		    		params.storeCd	=	storeCd;
+		    		
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		} else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
-        			params.tblCd	 = storeTable;
+//        			params.tblCd	 = storeTable.join(",");
+        			params.tblCd	= storeTableOrg.join(",");
+        			params.storeCd	=	storeCd;
 	    			$scope._broadcast('saleComTableCtrl', params);
 	    		}
 	    	}
@@ -138,11 +148,6 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayOfWeekCtrl", function (event, data) {
-
-//		if ($("#tableDayOfWeekSelectStoreCd").val() === "") {
-//			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-//			return false;
-//		}
 
 		$scope.searchTableDayOfWeekList(true);
 
@@ -155,10 +160,10 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("tableDayOfWeekCtrlSrch", function (event, data) {
 
-//		if ($("#tableDayOfWeekSelectStoreCd").val() === "") {
-//			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
-//			return false;
-//		}
+		if ($("#tableDayOfWeekSelectStoreCd").val() === "") {
+			$scope._popMsg(messages["todayDtl.require.selectStore"]); // 매장을 선택해주세요.
+			return false;
+		}
 
 		$scope.searchTableDayOfWeekList(false);
 
@@ -251,12 +256,16 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 		}, 10);
 	};
 
-	//매장의 테이블 리스트 조회
-	$scope.getTableNmList = function () {
+	// 조회조건 매장 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectStore = function () {
+		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
+		$scope.getReTableNmList(storeCd, "",  false);
+	};
 
+	// 조회조건 테이블 선택 팝업 닫힐 때 메서드
+	$scope.closeSelectTable = function () {
 		var storeCd = $("#tableDayOfWeekSelectStoreCd").val();
 		var tableCd = $("#tableDayOfWeekSelectTableCd").val();
-
 		$scope.getReTableNmList(storeCd, tableCd,  false);
 	};
 
@@ -280,10 +289,12 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 	    			var list       = response.data.data.list;
 	    			var arrStroreTable = [];
 	    			var arrStoreTableNm = [];
+	    			var arrTblGrpCd = [];
 
 	    			for (var i = 0; i < list.length; i++) {
 	    				arrStroreTable.push(list[i].tableCd);
 	    				arrStoreTableNm.push(list[i].storeNm + "||" + list[i].tableNm);
+	    				arrTblGrpCd.push(list[i].tblGrpCd);
 	    			}
 
 	    			$("#tableDayOfWeekSelectTableCd").val(arrStroreTable.join());
@@ -291,6 +302,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 
 	    			storeTableCd = $("#tableDayOfWeekSelectTableCd").val();
 	    			storeTableNm = $("#tableDayOfWeekSelectTableName").val();
+	    			tblGrpCd = arrTblGrpCd.join();
 
 	    			if (grindSet) {
 	                    $scope.makeDataGrid();
@@ -317,6 +329,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 
 		  var arrTableCd = storeTableCd.split(',');
 		  var arrTableNm = storeTableNm.split(',');
+		  var arrTblGrpCd = tblGrpCd.split(',');
 
 		  if (arrTableCd != null) {
 			  for(var i = 0; i < arrTableCd.length; i++) {
@@ -326,16 +339,16 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
 				  var colSplit = colName.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleAmt"], binding: 'realSaleAmtT'+(i), width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-				  grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleCnt"], binding: 'realSaleCntT'+(i), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+				  grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.saleCnt"], binding: 'saleCntT'+(i), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 				  grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.guestCnt"], binding: 'guestCnt1T'+(i), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
 				  grid.columnHeaders.setCellData(0, 'realSaleAmtT'+(i), colSplit[0]);
-				  grid.columnHeaders.setCellData(0, 'realSaleCntT'+(i), colSplit[0]);
+				  grid.columnHeaders.setCellData(0, 'saleCntT'+(i), colSplit[0]);
 				  grid.columnHeaders.setCellData(0, 'guestCnt1T'+(i), colSplit[0]);
 
-				  grid.columnHeaders.setCellData(1, 'realSaleAmtT'+(i), colSplit[1]);
-				  grid.columnHeaders.setCellData(1, 'realSaleCntT'+(i), colSplit[1]);
-				  grid.columnHeaders.setCellData(1, 'guestCnt1T'+(i), colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 'realSaleAmtT'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+				  grid.columnHeaders.setCellData(1, 'saleCntT'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+				  grid.columnHeaders.setCellData(1, 'guestCnt1T'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
 
 			  }
 		  }

@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.sale.status.pos.dayOfWeek.service.PosDayOfWeekVO;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankService;
 import kr.co.solbipos.sale.status.prod.rank.service.ProdRankVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import java.util.List;
  * @ ----------  ---------   -------------------------------
  * @ 2020.01.08  김진      최초생성
  *
- * @author 솔비포스 
+ * @author 솔비포스
  * @since 2020.01.08
  * @version 1.0
  * @see
@@ -65,11 +66,11 @@ public class ProdRankController {
 
 
     /**
-     * 상품별 매출 - 상품매출순위 리스트 조회 
+     * 상품별 매출 - 상품매출순위 리스트 조회
      * @param   request
      * @param   response
      * @param   model
-     * @param   prodRnakVO
+     * @param   prodRankVO
      * @return  String
      * @author  김진
      * @since   2020. 01. 08.
@@ -84,4 +85,47 @@ public class ProdRankController {
 
         return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
     }
+
+    /**
+     * 상품별매출 - 상품매출순위 차트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodRankVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 14.
+     */
+    @RequestMapping(value = "/rank/chartList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRankChartList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ProdRankVO prodRankVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodRankService.getProdRankChartList(prodRankVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
+    }
+    
+    /**
+     * 상품별매출 - 상품매출순위 엑셀다운로드 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   prodRankVO
+     * @return  String
+     * @author  서재식
+     * @since   2020. 04. 21.
+     */
+    @RequestMapping(value = "/rank/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdRankExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, ProdRankVO prodRankVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = prodRankService.getProdRankExcelList(prodRankVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, prodRankVO);
+    }
+    
 }

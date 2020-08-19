@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="vendrInstockCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('vendrInstockCtrl', 1)"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -91,12 +93,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('vendrInstockCtrl', 1)">
-      <s:message code="cmm.search"/></button>
-  </div>
-
   <div class="mt20 tr">
     <%-- 입고신규등록 --%>
     <button type="button" class="btn_skyblue ml5" id="btnInRegist" ng-click="newVendrInstock(1)">
@@ -125,7 +121,7 @@
         <wj-flex-grid-column header="<s:message code="vendrInstock.vendr"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.procFg"/>" binding="procFg" width="60" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="vendrInstock.instockType"/>" binding="instockType" width="80" align="center" is-read-only="true" data-map="instockTypeMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="vendrInstock.instockDate"/>" binding="instockDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="vendrInstock.instockRtnDate"/>" binding="instockDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

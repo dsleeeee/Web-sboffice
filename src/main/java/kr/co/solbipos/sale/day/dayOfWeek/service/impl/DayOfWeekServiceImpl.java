@@ -68,7 +68,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         return dayOfWeekMapper.getDayOfWeekTotalList(dayOfWeekVO);
     }
 
-    /** 할인구별별탭 - 할인구분별매출조회 */
+    /** 할인구별별탭 - 할인구분별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekDcList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
@@ -94,7 +94,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         return dayOfWeekMapper.getDayOfWeekDcList(dayOfWeekVO);
     }
 
-    /** 과면세별탭 - 과면세별매출조회 */
+    /** 과면세별탭 - 과면세별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTaxList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
@@ -110,7 +110,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         return dayOfWeekMapper.getDayOfWeekTaxList(dayOfWeekVO);
     }
 
-    /** 시간대별 - 시간대별매출조회 */
+    /** 시간대별탭 - 시간대별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTimeList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
@@ -197,41 +197,69 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         return dayOfWeekMapper.getDayOfWeekTimeList(dayOfWeekVO);
     }
 
-    /** 코너별 - 코너별 매출조회 */
+    /** 상품분류별탭 - 상품분류별 매출조회 */
     @Override
-    public List<DefaultMap<Object>> getDayOfWeekCornerList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getDayOfWeekProdClassList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayOfWeekVO.setLevel("Level" + dayOfWeekVO.getLevel());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = dayOfWeekVO.getStoreCds().split(",");
+            dayOfWeekVO.setStoreCdList(storeCds);
+        }
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             dayOfWeekVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        // 코너구분
-        if(dayOfWeekVO.getStoreCd() == null)
-        {
-            // 코너구분 array 값 세팅
-            dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getCornerCol().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "";
-            String arrCornerCol[] = dayOfWeekVO.getCornerCol().split(",");
-            for(int i=0; i < arrCornerCol.length; i++) {
-                pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
-            }
-            dayOfWeekVO.setPivotCornerCol(pivotCornerCol);
+        // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+        dayOfWeekVO.setArrProdClassCd(dayOfWeekVO.getStrProdClassCd().split(","));
+
+        // 쿼리조회를 위한 변수
+        String pivotProdClassCol1 = "";
+        String pivotProdClassCol2 = "";
+        String pivotProdClassCol3 = "";
+        String strAmt = "";
+        String strQty = "";
+
+        for(int i=0; i<  dayOfWeekVO.getArrProdClassCd().length; i++) {
+            strAmt += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_AMT, 0)";
+            strQty += (strAmt.equals("") ? "" : "+") +"NVL(tba.PAY" + (i+1) +"_SALE_QTY, 0)";
+            pivotProdClassCol1 += (pivotProdClassCol1.equals("") ? "" : ", ") + "tba.PAY" + (i+1) + "_SALE_AMT, tba.PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol2 += (pivotProdClassCol2.equals("") ? "" : ", ") + "NVL(SUM(PAY" + (i+1) + "_SALE_AMT), 0) AS PAY" + (i+1) + "_SALE_AMT, NVL(SUM(PAY" + (i+1) + "_SALE_QTY), 0) AS PAY" + (i+1) + "_SALE_QTY";
+            pivotProdClassCol3 += (pivotProdClassCol3.equals("") ? "" : ", ") + "'" + dayOfWeekVO.getArrProdClassCd()[i]  + "' AS PAY" + (i+1);
         }
-        else
-        {
-            // 외식테이블구분 array 값 세팅
-            dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getStoreCornerCd().split(","));
-            // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-            String pivotCornerCol = "'"+dayOfWeekVO.getStoreCornerCd()+"'"+" AS CORNR_"+dayOfWeekVO.getStoreCornerCd();
-            dayOfWeekVO.setPivotCornerCol(pivotCornerCol);
+        strAmt = "(" + strAmt + ") AS TOT_REAL_SALE_AMT, ";
+        strQty = "(" + strQty + ") AS TOT_SALE_QTY, ";
+
+        dayOfWeekVO.setPivotProdClassCol1(strAmt + strQty + pivotProdClassCol1);
+        dayOfWeekVO.setPivotProdClassCol2(pivotProdClassCol2);
+        dayOfWeekVO.setPivotProdClassCol3(pivotProdClassCol3);
+
+        return dayOfWeekMapper.getDayOfWeekProdClassList(dayOfWeekVO);
+    }
+
+    /** 코너별탭 - 코너별 매출조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayOfWeekCornerList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
+
+        dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
+
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotCornerCol = "";
+        String arrCornerCol[] = dayOfWeekVO.getStoreCornerCd().split(",");
+        for(int i=0; i < arrCornerCol.length; i++) {
+            pivotCornerCol += (pivotCornerCol.equals("") ? "" : ",") + "'"+arrCornerCol[i]+"'"+" AS CORNR_"+arrCornerCol[i];
         }
+        dayOfWeekVO.setPivotCornerCol(pivotCornerCol);
 
         return dayOfWeekMapper.getDayOfWeekCornerList(dayOfWeekVO);
     }
 
-    /** 외식테이블별 - 외식테이블별매출조회 */
+    /** 외식테이블별탭 - 외식테이블별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekTableList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 
@@ -265,7 +293,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
         return dayOfWeekMapper.getDayOfWeekTableList(dayOfWeekVO);
     }
 
-    /** 포스별 - 포스별매출조회 */
+    /** 포스별탭 - 포스별 매출조회 */
     @Override
     public List<DefaultMap<Object>> getDayOfWeekPosList(DayOfWeekVO dayOfWeekVO, SessionInfoVO sessionInfoVO) {
 

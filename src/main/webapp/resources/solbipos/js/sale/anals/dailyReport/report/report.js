@@ -78,6 +78,7 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	        params.endDate 			= wijmo.Globalize.format(endDate  .value, 'yyyyMMdd');
 	        params.searchStoreCd   	= $("#reportSelectStoreCd").val();
 //For Test	params.startDate 		= wijmo.Globalize.format('20190101', 	  'yyyyMMdd'); //조회기간
+
 	        /*
 			console.log("startDate     :" + params.startDate 		);
 			console.log("endDate       :" + params.endDate			);
@@ -127,10 +128,17 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
 															            	if(item.cfgSelYn == "Y"){
 															            		item.gChk = true;
-															            		eval( '$(".div_' + item.cfgCd + '").show();' );
+                                                                                eval( '$(".div_'  + item.cfgCd + '").show();' );
+                                                                                eval( '$("#span_' + item.cfgCd + '").show();' );
+                                                                                     //$(".oh .sb-select, .mb10"  ).show();
+                                                                                     //$(".sb-select"             ).show();
+
 															            	}else{
-															            		eval( '$(".div_' + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
-															            	}
+                                                                                eval( '$(".div_'  + item.cfgCd + '").hide();' );	//[영업일보 구성]에 없으면 숨기기
+                                                                                eval( '$("#span_' + item.cfgCd + '").hide();' );
+                                                                                     //$(".oh .sb-select, .mb10"  ).hide();
+                                                                                     //$(".sb-select"             ).hide();
+                                                                            }
 															            }
 
 															            //'영업일보(0000-00-00 ~ 0000-00-00)' 문구 setting
@@ -195,6 +203,8 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 	angular.extend(this, new RootController('reportCtrl_sl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 	$scope.initGrid = function (s, e) {
+        $scope._makePickColumns("reportCtrl_sl");   	        //picker 사용시 호출
+
 	    s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
 	    s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -257,10 +267,13 @@ app.controller('reportCtrl_sl', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_pay    START   ############################################################################################################################################################################
 app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
+    angular.extend(this, new RootController('reportCtrl_pay', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
     $scope.initGrid = function (s, e) {
+        $scope._makePickColumns("reportCtrl_pay");   	        //picker 사용시 호출
+
         //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-        //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+        //s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
         //Grid Header 2줄 - START	----------------------------------------------------------------
         s.allowMerging = 2;
@@ -352,10 +365,13 @@ app.controller('reportCtrl_pay', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_nsl 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_nsl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_nsl");   	        //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -416,8 +432,11 @@ app.controller('reportCtrl_nsl', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_npay 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_npay', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_npay");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -495,8 +514,11 @@ app.controller('reportCtrl_npay', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_pos  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_pos', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_pos");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -559,8 +581,11 @@ app.controller('reportCtrl_pos', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_emp  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_emp', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_emp");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -647,8 +672,11 @@ app.controller('reportCtrl_emp', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_dc   	START   ############################################################################################################################################################################
 app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_dc', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_dc");   	            //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -711,8 +739,11 @@ app.controller('reportCtrl_dc', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_dcdtl	START   ############################################################################################################################################################################
 app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_dcdtl', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_dcdtl");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -775,8 +806,11 @@ app.controller('reportCtrl_dcdtl', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_gift 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_gift', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_gift");   	        //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -863,10 +897,13 @@ app.controller('reportCtrl_gift', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_order	START   ############################################################################################################################################################################
 app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_order', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_order");          //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
 
       //Grid Header 2줄 - START	----------------------------------------------------------------
       s.allowMerging = 2;
@@ -944,8 +981,11 @@ app.controller('reportCtrl_order', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_lv1  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv1', ['$scope', '$http', function ($scope, $http) {
+angular.extend(this, new RootController('reportCtrl_lv1', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 $scope.initGrid = function (s, e) {
+    $scope._makePickColumns("reportCtrl_lv1");              //picker 사용시 호출
+
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
     s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1008,8 +1048,11 @@ $scope.initGrid = function (s, e) {
 
 //reportCtrl_lv2  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv2', ['$scope', '$http', function ($scope, $http) {
+angular.extend(this, new RootController('reportCtrl_lv2', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
 $scope.initGrid = function (s, e) {
+    $scope._makePickColumns("reportCtrl_lv2");              //picker 사용시 호출
+
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
     s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1072,10 +1115,13 @@ $scope.initGrid = function (s, e) {
 
 //reportCtrl_lv3  	START   ############################################################################################################################################################################
 app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_lv3', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_lv3");            //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');          //add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -1136,10 +1182,13 @@ app.controller('reportCtrl_lv3', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_prod 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_prod', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_prod");           //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');          //add a sigma to the header to show that this is a summary row
 
       s.itemFormatter = function (panel, r, c, cell) {
           if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {		//align in center horizontally and vertically
@@ -1200,8 +1249,11 @@ app.controller('reportCtrl_prod', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_compt	START   ############################################################################################################################################################################
 app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_compt', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_compt");              //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1264,10 +1316,13 @@ app.controller('reportCtrl_compt', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_appr 	START   ############################################################################################################################################################################
 app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_appr', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_appr");           //picker 사용시 호출
+
       s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
-      s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
+      s.bottomLeftCells.setCellData(0, 0, '합계');		    //add a sigma to the header to show that this is a summary row
 
       //Grid Header 2줄 - START	----------------------------------------------------------------
       s.allowMerging = 2;
@@ -1370,8 +1425,11 @@ app.controller('reportCtrl_appr', ['$scope', '$http', function ($scope, $http) {
 
 //reportCtrl_membr	START   ############################################################################################################################################################################
 app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_membr', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_membr");              //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1434,8 +1492,11 @@ app.controller('reportCtrl_membr', ['$scope', '$http', function ($scope, $http) 
 
 //reportCtrl_work   START   ############################################################################################################################################################################
 app.controller('reportCtrl_work', ['$scope', '$http', function ($scope, $http) {
+  angular.extend(this, new RootController('reportCtrl_work', $scope, $http, true));	//상위 객체 상속 : T/F 는 picker
 
   $scope.initGrid = function (s, e) {
+      $scope._makePickColumns("reportCtrl_work");                //picker 사용시 호출
+
       //s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//합계 - add the new GroupRow to the grid's 'columnFooters' panel
       //s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
@@ -1651,7 +1712,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 	  //let doc = new wjcCore.PrintDocument	({
         let doc = new wijmo.PrintDocument	({
-								            	title	: printTitle,
+                                              //title	: printTitle,   --> 아래의 제목스타일 '영업일보 기간'으로 대체
+                                                title	: '',
 								            	copyCss	: true //false가 낫다 -> To prevent cross-origin issues
         									});
 
@@ -1669,7 +1731,65 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 		*/
 		doc.append('<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css"	/>');
 
-        doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
+        //영업일보 기간
+            doc.append('<h3 align="center">' + printTitle + '</h3><br><br><br>');
+
+        //결제라인
+            var flex_payline        = agrid.getScope('configCtrl_1').flex; //결제라인 Grid
+            var arr_cfgPayLineSeq   = new Array();
+            var arr_cfgPayLineNm    = new Array();
+            var tmp_table           = "";
+
+            for(var i=0; i<flex_payline.collectionView.items.length; i++){
+                var item = flex_payline.collectionView.items[i];
+                //console.log('arr_cfgPayLineSeq:' + item.cfgPayLineSeq);
+                //console.log('arr_cfgPayLineNm :' + item.cfgPayLineNm );
+                arr_cfgPayLineSeq.push(item.cfgPayLineSeq);
+                arr_cfgPayLineNm .push(item.cfgPayLineNm );
+            }
+            /*
+            tmp_table += '<table class="reportPrint" align="right">';
+            tmp_table += '    <thead>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <th colspan="2" style="width:120px;text-align:center;padding-right: 6px">' + arr_cfgPayLineSeq[i] + '</th>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </thead>';
+            tmp_table += '    <tbody>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <td style="width:80px;text-align:center;padding-right: 6px">' + arr_cfgPayLineNm[i] + '</td>';
+                tmp_table += '        <td style="width:40px;text-align:center;padding-right: 6px"></td>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </tbody>';
+            tmp_table += '</table><br><br><br><br><br><br>';
+            doc.append(tmp_table);
+            */
+            tmp_table += '<table class="reportPrint" align="right">';
+            tmp_table += '    <thead>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <th style="width:100px;text-align:center;padding-right: 6px">' + arr_cfgPayLineNm[i] + '</th>';
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </thead>';
+            tmp_table += '    <tbody>';
+            tmp_table += '        <tr>';
+            for(var i=0; i<flex_payline.rows.length; i++){
+                tmp_table += '        <td height="60px"></td>';	//참고: .reportPrint tr {height: 30px;} -> '서명'부분 2배크기로 설정함
+            }
+            tmp_table += '        </tr>';
+            tmp_table += '    </tbody>';
+            tmp_table += '</table><br><br><br><br><br><br>';
+
+          //doc.append('<h3 align="right">' + messages["dailyReport.cfgPayLine"] + '</h3><br>');
+            doc.append(tmp_table);
+
+
+        //매출종합
+            doc.append('<h3>' + messages["dailyReport.sl"] + '</h3><br>');
 
         //add a printer-friendly version of a FlexGrid to the document
         //doc.append('<p>Here\'s a FlexGrid rendered as a table:</p>');
@@ -1701,9 +1821,14 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
             var item = configCtrl_2.flex.collectionView.items[i];
             if(item.cfgCd == 'SL')	continue;
         	if(item.cfgSelYn == "Y"){
+        		/* 2020.04.14 변경: [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
         		doc.append("<br><br><br>");
         		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
                 eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex) );'      	);
+                */
+        		doc.append("<br><br><br>");
+        		eval( 'doc.append("<h3>" + messages["dailyReport.' + item.cfgCd.toLowerCase() + '"] + "</h3><br>");');
+        		eval( 'doc.append( this._renderTable(reportCtrl_'  + item.cfgCd.toLowerCase() + '.flex, "'+ item.cfgCd.toLowerCase() + '") );'	);	//parameter 추가 용도 : [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
         	}
         }
 
@@ -1711,7 +1836,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	};
 
     //Grid를 Table로 rendering 처리
-	$scope._renderTable = function(flex){	//function(flex: wjcGrid.FlexGrid){
+	$scope._renderTable = function(flex, name){	//function(flex: wjcGrid.FlexGrid){
 		//Table - START
 			/*
  	        let tbl = '<table>';
@@ -1728,7 +1853,8 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 	            tbl += '<thead>';
 	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
 ////////////////////tbl += this._renderRow       (flex.columnHeaders, r);
-	                tbl += this._renderRow_Header(flex.columnHeaders, r);
+                    tbl += this._renderRow_Header(flex.columnHeaders, r, name);
+                    //console.log('Headers > tbl: ' + this._renderRow_Header(flex.columnHeaders, r));
 	            }
 	            tbl += '</thead>';
 	        }
@@ -1736,44 +1862,51 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         //Body
 	        tbl += '<tbody>';
 	        for(let r=0; r<flex.rows.length; r++){
-	            tbl += this._renderRow(flex.cells, r);
+                tbl += this._renderRow(flex.cells, r, name);
+                //console.log('Body    > tbl: ' + this._renderRow(flex.cells, r));
 	        }
 	        tbl += '</tbody>';
 
         //Table - End
-	        tbl += '</table>';
+            tbl += '</table>';
+            //console.log('tbl: ' + tbl);
 	        return tbl;
     }
 
-
-	/*
-    for(let r=0; r<flex.columnHeaders.rows.length; r++){
-    	let columnHeaders =
-
-        //tbl += this._renderRow(flex.columnHeaders, r);
-          tbl += this._renderRow_Header(flex.columnHeaders, r);
-    }
-	*/
-
-	$scope._renderRow_Header = function(panel, r){
+	$scope._renderRow_Header = function(panel, r, name){
         let tr 		= '',
-        row 		= panel.rows[r];
-      //row_next 	= panel.rows[r+1];
+            row 	= panel.rows[r];
+          //row_next= panel.rows[r+1];
 
         let header_rowspan 	= 1;
         let header_colspan 	= 1;
         let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
 
+        var tmpFlex 		= agrid.getScope("reportCtrl_pay").flex;	//용도 : [결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+
         if(row.renderSize > 0){
             tr += '<tr>';
 
             for(let c=0; c<panel.columns.length; c++){
+            	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	            	if(name=="pay"   &&   r==1   &&   c >= 3){	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+	            		/*
+	            		console.log('----------------------------0');
+	            		console.log('r: ' + r + ' & c:' + c);
+	            		console.log(tmpFlex.getCellData(0,c) );
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            		console.log('----------------------------1');
+	            		*/
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            	}
+
                 let col 			= panel.columns[c];
                 let col_next		= panel.columns[c+1];
 
                 if(col.renderSize > 0){
                     //Cell style & content 구하기
-	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                  //let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:center;'                     + 'padding-right: 6px';
 
 	                    let content 			= panel.getCellData(r, 	c,	true);
 	                    let content_prev_row	= "";																		//Previous 	row    값
@@ -1863,7 +1996,7 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 
 
-	$scope._renderRow = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+	$scope._renderRow = function(panel, r, name){	//function(panel: wjcGrid.GridPanel, r: number){
         let tr 	= '',
         row 	= panel.rows[r];
 
@@ -1877,6 +2010,11 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
                     //Cell style & content 구하기
 	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
 	                    let content = panel.getCellData(r, c, true);
+
+	                	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	                    	if(name=="pay"   &&   c >= 3   &&   content == 0)	continue;	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+		                    //console.log('----------------------------------------------------------');
+		                    //console.log('content              : ' + content			);
 
 	                    if(!row.isContentHtml && !col.isContentHtml){
 	                      //content = wjcCore.escapeHtml(content);
@@ -1938,6 +2076,165 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
         }
         return tr;
     }
+
+
+/*
+	//결제수단용 (금액이 '0'인 결제수단은 인쇄시 제외)	START	--------------------------------------------------------
+    //Grid를 Table로 rendering 처리
+	$scope._renderTable_PAY = function(flex){	//function(flex: wjcGrid.FlexGrid){
+		//Table - START
+			let tbl = '<table class="reportPrint">';
+
+        //Headers
+	        if(flex.headersVisibility & wijmo.grid.HeadersVisibility.Column){
+	            tbl += '<thead>';
+	            for(let r=0; r<flex.columnHeaders.rows.length; r++){
+                    tbl += this._renderRow_Header_PAY(flex.columnHeaders, r);
+                    //console.log('Headers > tbl: ' + this._renderRow_Header(flex.columnHeaders, r));
+	            }
+	            tbl += '</thead>';
+	        }
+
+        //Body
+	        tbl += '<tbody>';
+	        for(let r=0; r<flex.rows.length; r++){
+                tbl += this._renderRow_PAY(flex.cells, r);
+                //console.log('Body    > tbl: ' + this._renderRow(flex.cells, r));
+	        }
+	        tbl += '</tbody>';
+
+        //Table - End
+            tbl += '</table>';
+            //console.log('tbl: ' + tbl);
+	        return tbl;
+    }
+
+	$scope._renderRow_Header_PAY = function(panel, r){
+		var tmpFlex = agrid.getScope("reportCtrl_pay").flex;
+        let tr 		= '',
+            row 	= panel.rows[r];
+
+        let header_rowspan 	= 1;
+        let header_colspan 	= 1;
+        let header_colsize 	= 0;	//Header size는 의미없다 !!! (해당 데이터의 길이에 따라 가변적이기에)
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+
+            	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	            	if(r==1   &&   c >= 3){	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+	            		if( tmpFlex.getCellData(0,c) == 0 )	continue;
+	            	}
+
+                let col 			= panel.columns[c];
+                let col_next		= panel.columns[c+1];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 				= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+
+	                    let content 			= panel.getCellData(r, 	c,	true);
+	                    let content_prev_row	= "";																		//Previous 	row    값
+	                    let content_next_row	= "";																		//Next 		row    값
+	                    let content_next_col 	= "";																		//Next 		column 값
+
+	                    if(0                    <  r   )	content_prev_row 	= panel.getCellData(r-1,	c,  	true);	//Previous 	row    값
+	                    if(panel.rows   .length > (r+1))	content_next_row 	= panel.getCellData(r+1,	c,  	true);	//Next 		row    값
+	                    if(panel.columns.length > (c+1))	content_next_col 	= panel.getCellData(r,  	c+1,	true);	//Next 		column 값
+
+	                    if(header_colsize == 0)				header_colsize 		= col.renderSize;
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                    	if(content == content_prev_row)	continue;	//이전행 Header값과 같으면 skip
+
+                    	if(content == content_next_row){
+                    		header_rowspan++;
+                    	}
+
+                    	if(content == content_next_col){
+                    		header_colspan++;
+                    		header_colsize += col_next.renderSize;
+                    		//console.log("content == content_next_col: " + content + " == " + content_next_col + " & " + header_colspan + " & " + header_colsize);
+                    	}
+                    	else{
+
+                    		//console.log('header_rowspan       : ' + header_rowspan + ' & header_colspan: ' + header_colspan);
+
+                    		if		(header_rowspan >  1    &&    header_colspan == 1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+
+                    		}else if(header_rowspan == 1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else if(header_rowspan >  1    &&    header_colspan >  1){
+                    			tr += '<th rowspan="' + header_rowspan + '" colspan="' + header_colspan + '" style="text-align:center;width:' + header_colsize + 'px">' + content + '</th>';
+                    			header_rowspan = 1;
+                    			header_colspan = 1;
+                    			header_colsize = 0;
+
+                    		}else{
+                    			tr += '<th style="' + style + '">' + content + '</th>';
+                    		}
+                    	}
+                    	//header_prev = panel.getCellData(r, c, true);
+                }	//if(col.renderSize > 0){
+            }		//for(let c=0; c<panel.columns.length; c++){
+            tr += '</tr>';
+        }
+        return tr;
+    }
+
+
+
+	$scope._renderRow_PAY = function(panel, r){	//function(panel: wjcGrid.GridPanel, r: number){
+        let tr 	= '',
+        row 	= panel.rows[r];
+
+        if(row.renderSize > 0){
+            tr += '<tr>';
+
+            for(let c=0; c<panel.columns.length; c++){
+                let col = panel.columns[c];
+
+                if(col.renderSize > 0){
+                    //Cell style & content 구하기
+	                    let style 	= 'width:' + col.renderSize + 'px;' + 'text-align:' + col.getAlignment() + ';' + 'padding-right: 6px';
+	                    let content = panel.getCellData(r, c, true);
+
+	                	//[결제수단]의 값이 '0'이면 인쇄에서 제외(신용카드 ~ 스마트오더)
+	                    	if(c >= 3   &&   content == 0)	continue;	//c >= 3 --> 0:실매출, 1:봉사료, 2:에누리
+		                    //console.log('----------------------------------------------------------');
+		                    //console.log('content              : ' + content			);
+
+	                    if(!row.isContentHtml && !col.isContentHtml){
+	                      //content = wjcCore.escapeHtml(content);
+	                        content = wijmo.escapeHtml(content);
+	                    }
+
+                    //Cell을  row에 추가
+                        //'check-box'있으면 true/false 구분해서 색깔 다르게
+                        let raw = panel.getCellData(r, c, false);
+                        if		(raw === true)	content = '&#9745;';
+                        else if	(raw === false)	content = '&#9744;';
+
+                        tr += '<td style="' + style + '">' + content + '</td>';
+                }
+            }
+            tr += '</tr>';
+        }
+        return tr;
+    }
+	//결제수단용 (금액이 '0'인 결제수단은 인쇄시 제외)	END		--------------------------------------------------------
+	*/
 	//print				END		----------------------------------------------------------------------------------------------------------------------
 
 

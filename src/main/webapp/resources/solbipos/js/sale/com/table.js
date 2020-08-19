@@ -11,18 +11,60 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+	  
+	// picker 사용시 호출 : 미사용시 호출안함
+	$scope._makePickColumns("saleComTableCtrl");  
+	
     // add the new GroupRow to the grid's 'columnFooters' panel
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
+    
+    // 그리드 링크 효과
+    s.formatItem.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
 
+        if (col.binding === "billNo") { // 결제수단
+        	var item = s.rows[e.row].dataItem;
+          	wijmo.addClass(e.cell, 'wijLink');
+        } 
+      }
+    });
+    
+    // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        var params       = {};
+        	params.storeCd   = selectedRow.storeCd;
+        	params.posNo   	 = selectedRow.posNo;
+        	params.saleDate  = selectedRow.saleDate;
+        	params.billNo	 = selectedRow.billNo;
+
+        if (col.binding === "billNo") { // 영수증번호
+        	//판매여부 
+        	if(selectedRow.saleFg === "판매"){
+        		$scope._broadcast('billSalePopCtrl', params);
+        	}else if(selectedRow.saleFg === "반품"){
+        		$scope._broadcast('billRtnPopCtrl', params);
+        	}
+        } 
+      }
+    });
+   
  // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
 
     // 첫째줄 헤더 생성
     var dataItem         	= {};
+    dataItem.storeCd      	= messages["saleComPopup.storeCd"];
+    dataItem.storeNm      	= messages["saleComPopup.storeNm"];
+    dataItem.saleDate      	= messages["saleComPopup.saleDate"];    
     dataItem.posNo      	= messages["saleComPopup.posNo"];
     dataItem.billNo  		= messages["saleComPopup.billNo"];
     dataItem.billDt    		= messages["saleComPopup.billDt"];
@@ -30,7 +72,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     dataItem.totSaleAmt     = messages["saleComPopup.totSaleAmt"];
     dataItem.realSaleAmt    = messages["saleComPopup.realSaleAmt"];
     dataItem.netSaleAmt   	= messages["saleComPopup.netSaleAmt"];
-    dataItem.taxSaleAmt   	= messages["saleComPopup.taxSaleAmt"];
+    dataItem.vatAmt   		= messages["saleComPopup.vatAmt"];
     dataItem.payTot     	= messages["saleComPopup.payChoice"];
     dataItem.pay01     		= messages["saleComPopup.payChoice"];
     dataItem.pay02     		= messages["saleComPopup.payChoice"];
@@ -86,7 +128,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("saleComTableCtrl", function (event, data) {
-
+	  	  
     $scope.storeCd  	= data.storeCd;
     $scope.startDate 	= data.startDate;
     $scope.endDate		= data.endDate;
@@ -109,6 +151,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.searchSaleComTableList = function () {
     // 파라미터
     var params      	= {};
+
     if($scope.gubun == "month"){
     	params.storeCd  	= $scope.storeCd;
     	params.tblCd    	= $scope.tblCd;
@@ -121,6 +164,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.saleDate 	= $scope.saleDate;
         params.saleDay     	= $scope.saleDay;
     }
+        
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/table/view.sb", params);
   };

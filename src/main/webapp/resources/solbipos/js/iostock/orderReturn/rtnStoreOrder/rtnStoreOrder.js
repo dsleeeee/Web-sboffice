@@ -138,7 +138,12 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -196,5 +201,29 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
       }
     });
   };
+
+  //엑셀 다운로드
+	$scope.excelDownloadDay = function () {
+
+		if ($scope.flex.rows.length <= 0) {
+			$scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+			return false;
+		}
+
+		$scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+		$timeout(function () {
+			wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+				includeColumnHeaders: true,
+				includeCellStyles   : true,
+				includeColumns      : function (column) {
+					return column.visible;
+				}
+			},'수불관리_매장반품관리_매장반품등록_'+getToday()+'.xlsx', function () {
+				$timeout(function () {
+					$scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+				}, 10);
+			});
+		}, 10);
+	};
 
 }]);

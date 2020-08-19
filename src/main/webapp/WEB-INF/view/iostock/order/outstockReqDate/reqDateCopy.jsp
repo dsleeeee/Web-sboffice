@@ -10,7 +10,9 @@
 <div id="reqDateCopyView" class="subCon" style="display: none;">
   <div ng-controller="reqDateCopyCtrl">
     <div class="searchBar flddUnfld">
-      <a href="#" class="open">${menuNm}</a>
+      <a href="#" class="open fl">${menuNm}</a>
+      <%-- 조회 --%>
+      <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="search();"><s:message code="cmm.search"/></button>
     </div>
     <table class="searchTbl">
       <colgroup>
@@ -52,12 +54,6 @@
       </tr>
       </tbody>
     </table>
-
-    <div class="mt10 pdb20 oh bb">
-      <%-- 조회 --%>
-      <button class="btn_blue fr" id="btnSearch" ng-click="search();">
-        <s:message code="cmm.search"/></button>
-    </div>
   </div>
 
   <div class="w100" ng-controller="reqDateCopyDaysCtrl">

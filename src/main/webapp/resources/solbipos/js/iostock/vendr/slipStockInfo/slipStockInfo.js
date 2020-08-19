@@ -153,7 +153,12 @@ app.controller('slipStockInfoCtrl', ['$scope', '$http', '$timeout', function ($s
     params.startDate = $scope.searchedStartDate;
     params.endDate   = $scope.searchedEndDate;
     params.vendrCd   = $("#slipStockInfoSelectVendrCd").val();
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/vendr/slipStockInfo/slipStockInfo/list.sb", params, function () {
       // 거래처별 정산 그리드 조회 후 상세내역 그리드 초기화
@@ -206,7 +211,12 @@ app.controller('slipStockInfoCtrl', ['$scope', '$http', '$timeout', function ($s
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -372,6 +382,12 @@ app.controller('slipStockInfoDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.slipNo    = $scope.slipNo;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/vendr/slipStockInfo/slipStockInfoDtl/list.sb", params);
   };

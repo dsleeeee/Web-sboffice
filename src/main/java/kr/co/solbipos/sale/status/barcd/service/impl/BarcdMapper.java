@@ -14,8 +14,12 @@ public interface BarcdMapper {
     /** 코너별매출 일자별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getBarcdList(BarcdVO barcdVO);
 
-    /** 코너별매출 일자별 탭 - 리스트 조회 */
+    /** 코너별매출 일자별 탭 - 상세 리스트 조회 */
 	List<DefaultMap<String>> getBarcdDtlList(BarcdVO barcdVO);
-
-
+	
+	/** 코너별매출 일자별 탭 - 엑셀 전체 리스트 조회 */
+	List<DefaultMap<String>> getBarcdExcelList(BarcdVO barcdVO);
+	
+	/** 코너별매출 일자별 탭 - 엑셀 전체 상세 리스트 조회 */
+	List<DefaultMap<String>> getBarcdDtlExcelList(BarcdVO barcdVO);
 }

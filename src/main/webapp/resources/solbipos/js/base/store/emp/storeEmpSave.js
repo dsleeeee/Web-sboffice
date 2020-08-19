@@ -216,5 +216,10 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     });
   });
 
+  // 탭변경
+  $scope.changeTab = function() {
+    s_alert.pop(messages["storeEmp.request.regist.storeEmpInfo"]);
+    return;
+  };
 
 }]);

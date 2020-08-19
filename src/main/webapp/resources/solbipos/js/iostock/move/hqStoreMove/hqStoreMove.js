@@ -8,8 +8,8 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('hqStoreMoveCtrl', $scope, $http, true));
 
-  var srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
-  var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
+  var srchStartDate = wcombo.genDateVal("#srchHqStoreMoveStartDate", getToday());
+  var srchEndDate   = wcombo.genDateVal("#srchHqStoreMoveEndDate", getToday());
 
   $scope.dlvrFgMap = new wijmo.grid.DataMap([
     {id: "0", name: messages["hqStoreMove.dlvrFg0"]},
@@ -24,14 +24,14 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
     {id: "3", name: messages["hqStoreMove.procFg3"]}
   ], 'id', 'name');
 
-  $scope._setComboData("srchDlvrFg", [
+  $scope._setComboData("srchHqStoreMoveDlvrFg", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["hqStoreMove.dlvrFg0"], "value": "0"},
     {"name": messages["hqStoreMove.dlvrFg1"], "value": "1"},
     {"name": messages["hqStoreMove.dlvrFg2"], "value": "2"}
   ]);
 
-  $scope._setComboData("srchProcFg", [
+  $scope._setComboData("srchHqStoreMoveProcFg", [
     {"name": messages["cmm.all"], "value": ""},
     {"name": messages["hqStoreMove.procFg0"], "value": "0"},
     {"name": messages["hqStoreMove.procFg1"], "value": "1"},
@@ -66,6 +66,14 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
+      
+      if (ht.panel == s.columnHeaders && !ht.edgeRight && !e['dataTransfer']) {
+    		var rng = s.getMergedRange(ht.panel, ht.row, ht.col);
+    		if (rng && rng.columnSpan > 1) {
+    			e.preventDefault();
+    		}
+  	  }
+      
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
@@ -75,7 +83,7 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope._broadcast('hqStoreMoveDtlCtrl', params);
         }
       }
-    });
+    }, true);
 
     // 헤더머지
     s.allowMerging = 2;
@@ -111,26 +119,6 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
           textAlign    : 'center'
         });
       }
-      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-        // GroupRow 인 경우에는 표시하지 않는다.
-        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-          cell.textContent = '';
-        } else {
-          if (!isEmpty(panel._rows[r]._data.rnum)) {
-            cell.textContent = (panel._rows[r]._data.rnum).toString();
-          } else {
-            cell.textContent = (r + 1).toString();
-          }
-        }
-      }
-      // readOnly 배경색 표시
-      else if (panel.cellType === wijmo.grid.CellType.Cell) {
-        var col = panel.columns[c];
-        if (col.isReadOnly) {
-          wijmo.addClass(cell, 'wj-custom-readonly');
-        }
-      }
     }
 
 
@@ -157,7 +145,7 @@ app.controller('hqStoreMoveCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
   // 신규등록
-  $scope.newRegist = function () {
+  $scope.newHqStoreMoveRegist = function () {
     var params = {};
     $scope._broadcast("hqStoreMoveRegistCtrl", params);
   };

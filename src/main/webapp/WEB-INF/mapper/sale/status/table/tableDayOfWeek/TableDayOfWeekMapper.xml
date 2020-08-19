@@ -16,12 +16,12 @@
     				ELSE 7
     			END AS DAY_ORDER
 				, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-				, NVL(SUM(REAL_SALE_CNT), 0) TOT_REAL_SALE_CNT
+				, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
 				, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
 				${sQuery1}
 		FROM TB_SL_DAILY_TABLE TSDT
 		WHERE 1 = 1
-		<!-- AND HQ_OFFICE_CD = #{hqOfficeCd} -->
+		AND HQ_OFFICE_CD = #{hqOfficeCd}
 		<if test='arrTableCd != null and arrTableCd != ""'>
 			AND STORE_CD||'||'||TBL_CD IN
 			<foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">

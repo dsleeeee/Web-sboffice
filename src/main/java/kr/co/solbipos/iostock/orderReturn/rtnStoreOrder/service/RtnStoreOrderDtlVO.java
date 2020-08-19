@@ -80,7 +80,41 @@ public class RtnStoreOrderDtlVO extends PageVO {
     private String option2;
     /** 판매금액 */
     private String saleUprc;
+    /** 창고코드 */
+    private String storageCd;
+    
+    /** 창고 갯수 */
+    //private int	storageCnt;
 
+    /** 창고별 배열값-창고코드 */
+    private String  arrStorageCd;
+
+    /** 창고별 배열값-창고명 */
+    private String  arrStorageNm;
+
+    /** 창고별 배열값-입고수량 주문단위 */
+    private String  arrOrderUnitQty;
+
+    /** 창고별 배열값-입고수량 나머지 */
+    private String  arrOrderEtcQty;
+
+    /** 창고별 배열값-입고수량 합계 */
+    private String  arrOrderTotQty;
+
+    /** 창고별 배열값-입고금액 */
+    private String  arrOrderAmt;
+
+    /** 창고별 배열값-입고금액 부가세 */
+    private String  arrOrderVat;
+
+    /** 창고별 배열값-입고금액 합계 */
+    private String  arrOrderTot;
+    
+    /** 출고창고 */
+    private String outStorageCd;
+    
+    
+    
     /**
      * @return the reqDate
      */
@@ -598,4 +632,81 @@ public class RtnStoreOrderDtlVO extends PageVO {
     public void setSaleUprc(String saleUprc) {
         this.saleUprc = saleUprc;
     }
+    
+	public String getArrStorageCd() {
+		return arrStorageCd;
+	}
+	public void setArrStorageCd(String arrStorageCd) {
+		this.arrStorageCd = arrStorageCd;
+	}
+	public String getArrStorageNm() {
+		return arrStorageNm;
+	}
+	public void setArrStorageNm(String arrStorageNm) {
+		this.arrStorageNm = arrStorageNm;
+	}
+	public String getArrOrderUnitQty() {
+		return arrOrderUnitQty;
+	}
+
+	public void setArrOrderUnitQty(String arrOrderUnitQty) {
+		this.arrOrderUnitQty = arrOrderUnitQty;
+	}
+
+	public String getArrOrderEtcQty() {
+		return arrOrderEtcQty;
+	}
+
+	public void setArrOrderEtcQty(String arrOrderEtcQty) {
+		this.arrOrderEtcQty = arrOrderEtcQty;
+	}
+
+	public String getArrOrderTotQty() {
+		return arrOrderTotQty;
+	}
+
+	public void setArrOrderTotQty(String arrOrderTotQty) {
+		this.arrOrderTotQty = arrOrderTotQty;
+	}
+
+	public String getArrOrderAmt() {
+		return arrOrderAmt;
+	}
+
+	public void setArrOrderAmt(String arrOrderAmt) {
+		this.arrOrderAmt = arrOrderAmt;
+	}
+
+	public String getArrOrderVat() {
+		return arrOrderVat;
+	}
+
+	public void setArrOrderVat(String arrOrderVat) {
+		this.arrOrderVat = arrOrderVat;
+	}
+
+	public String getArrOrderTot() {
+		return arrOrderTot;
+	}
+
+	public void setArrOrderTot(String arrOrderTot) {
+		this.arrOrderTot = arrOrderTot;
+	}
+
+	public String getStorageCd() {
+		return storageCd;
+	}
+
+	public void setStorageCd(String storageCd) {
+		this.storageCd = storageCd;
+	}
+
+	public String getOutStorageCd() {
+		return outStorageCd;
+	}
+
+	public void setOutStorageCd(String outStorageCd) {
+		this.outStorageCd = outStorageCd;
+	}
+	
 }

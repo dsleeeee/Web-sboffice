@@ -271,6 +271,23 @@
             AND twf.USE_YN = 'Y'
     </select>
 
+    <!--  유효 메뉴 여부 확인 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO
+        PARAM    : String
+        COMMENTS : 입력받은 URL이 유효한 메뉴인지 확인한다.
+    -->
+    <select id="menuResrceChk" parameterType="java.lang.String" resultType="Integer">
+        /* USE : CmmMenuMapper.menuResrceChk */
+       SELECT COUNT(RESRCE_CD)
+         FROM TB_WB_RESRCE_INFO
+        WHERE RESRCE_FG = 'M'
+          AND DISP_LEVEL = '3'
+          AND URL IS NOT NULL
+          AND USE_YN ='Y'
+          AND URL = #{url}
+    </select>
+
 </mapper>
 
 

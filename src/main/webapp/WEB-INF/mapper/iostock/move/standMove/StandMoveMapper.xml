@@ -1,0 +1,1057 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.move.standMove.service.impl.StandMoveMapper">
+    <!-- 매대이동관리 - 매대이동관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_MS_EMPLOYEE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 - 매대이동관리 리스트를 조회한다.
+    -->
+    <select id="getStandMoveList" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StandMoveMapper.getStandMoveList */
+        <![CDATA[
+        SELECT TPSSM.STORE_CD
+				,TPSSM.SLIP_NO
+				,TPSSM.HQ_OFFICE_CD
+				,TPSSM.SLIP_FG
+				,TPSSM.MOVE_DATE
+				,TPSSM.DTL_CNT
+				,TPSSM.CONFM_YN
+				,TPSSM.REMARK
+				,TPSSM.REG_DT
+				,TPSSM.REG_ID
+				,TPSSM.MOD_DT
+				,TPSSM.MOD_ID
+        FROM    TB_PO_STORE_STAND_MOVE TPSSM
+        WHERE   TPSSM.HQ_OFFICE_CD 	=   #{hqOfficeCd}
+        AND     TPSSM.STORE_CD   	=   #{storeCd}
+        AND     TPSSM.MOVE_DATE    BETWEEN #{startDate} AND #{endDate}
+        ]]>
+        <if test='ioFg != null and ioFg != ""'>
+            AND TPSSM.SLIP_FG = #{ioFg}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND TPSSM.CONFM_YN = #{procFg}
+        </if>
+        <![CDATA[
+        ORDER BY TPSSM.MOVE_DATE DESC
+        ]]>
+    </select>
+
+    <!-- 매대이동관리 - 전표상세 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 - 전표상세 내역을 조회한다.
+    -->
+    <select id="getSlipNoInfo" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StoreMoveMapper.getSlipNoInfo */
+        <![CDATA[
+        SELECT	tpsm.MOVE_DATE
+        ,		tpsm.DLVR_FG
+        ,		tpsm.PROC_FG
+        ,		tpsm.OUT_STORE_CD
+        ,		tmsout.STORE_NM AS OUT_STORE_NM
+        ,		tpsm.IN_STORE_CD
+        ,		tmsin.STORE_NM AS IN_STORE_NM
+        ,		tpsm.REMARK
+        ,		tpsm.REG_DT
+        ,		tpsm.OUT_CONFM_DT
+        ,		tpsm.IN_CONFM_DT
+        ,		tpsm.HQ_CONFM_DT
+        ,		tpsm.OUT_SLIP_NO
+        ,		tpsm.IN_SLIP_NO
+        FROM    TB_PO_STORE_MOVE tpsm
+        ,       TB_MS_STORE tmsout
+        ,       TB_MS_STORE tmsin
+        WHERE   tpsm.HQ_OFFICE_CD =   #{hqOfficeCd}
+        AND     tpsm.SLIP_NO      =   #{slipNo}
+        AND		tmsout.STORE_CD   =   tpsm.OUT_STORE_CD
+        AND		tmsin.STORE_CD    =   tpsm.IN_STORE_CD
+        ]]>
+    </select>
+
+    <!-- 매대이동관리 - 매대이동관리 신규등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST, TB_CM_NMCODE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 - 매대이동관리 신규등록 상품 리스트를 조회한다.
+    -->
+    <select id="getStandMoveRegistList" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StandMoveMapper.getStandMoveRegistList */
+		SELECT  A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY 
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT       
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		      /* 동적 START */
+			  ${sQuery1}
+		      /* 동적 START */
+		,      LISTAGG(                                     A.A_STORAGE_CD,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,      LISTAGG(                                     A.A_STORAGE_NM,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_UNIT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ETC_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_AMT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_VAT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT
+		FROM   (
+		      SELECT   A.STORE_CD
+		      ,      A.PROD_CD
+		      ,      A.PROD_NM
+		      ,      A.PO_UNIT_FG
+		      ,      A.PO_UNIT_QTY
+		      ,      A.SAFE_STOCK_QTY
+		      ,      A.STAND_CURR_QTY AS TOT_CURR_QTY
+		      ,      A.STAND_CURR_UNIT_QTY AS TOT_CURR_UNIT_QTY
+		      ,      A.STAND_CURR_ETC_QTY AS TOT_CURR_ETC_QTY
+		      ,      A.CURR_QTY_000 AS STAND_CURR_UNIT_TOT
+		      ,      TRUNC(NVL(A.CURR_QTY_000,0)                            / A.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		      ,      MOD  (NVL(A.CURR_QTY_000,0)                            , A.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY    /* 매대 낱개수량 */
+		      /* 동적 START */
+		      	${sQuery1}
+		      /* 동적 END */
+		      ,      B.PROD_CD       AS  A_PROD_CD
+		      ,      B.STORAGE_CD    AS  A_STORAGE_CD
+		      ,      B.STORAGE_NM    AS  A_STORAGE_NM
+		      ,      B.UNIT_QTY      AS  A_UNIT_QTY
+		      ,      B.ETC_QTY       AS  A_ETC_QTY
+		      ,      B.TOT_QTY       AS  A_TOT_QTY
+		      ,      B.AMT           AS  A_AMT
+		      ,      B.VAT           AS  A_VAT
+		      ,      B.TOT           AS  A_TOT
+		      FROM   (
+		            SELECT  A.STORE_CD
+		            ,      A.PROD_CD
+		            ,      A.PROD_NM
+		            ,      A.PO_UNIT_FG
+		            ,      A.PO_UNIT_QTY
+		            ,      A.SAFE_STOCK_QTY
+		            ,      A.STAND_CURR_QTY
+		            ,      A.STAND_CURR_UNIT_QTY
+		            ,      A.STAND_CURR_ETC_QTY
+		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            /* 동적 START */
+		            	${sQuery2}
+		            /* 동적 END */
+		            FROM   (
+		                  SELECT    TMP.STORE_CD
+		                  ,      TMP.PROD_CD
+		                    ,       TMP.PROD_NM
+		                    ,       TMP.PO_UNIT_FG
+		                    ,       TMP.PO_UNIT_QTY
+		                    ,       TMP.SAFE_STOCK_QTY
+		                    ,      NVL(TSSSC.CURR_QTY,0)                                          AS   STAND_CURR_QTY      /* 매대 재고수량 */
+		                    ,       TRUNC(NVL(TSSSC.CURR_QTY,0)                            / TMP.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		                    ,       MOD  (NVL(TSSSC.CURR_QTY,0)                            , TMP.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY   /* 매대 낱개수량 */
+		                    FROM    TB_MS_PRODUCT TMP
+		                    ,       TB_ST_STORE_STOCK_CUR TSSSC
+		                    WHERE   TMP.STORE_CD          =   #{storeCd}
+		                    AND     TMP.USE_YN            =   'Y'
+		                    AND     TSSSC.STORE_CD        =   #{storeCd}
+		                    AND     TSSSC.STORAGE_CD      =   '999'
+		                    AND     TSSSC.STORE_CD        =   tmp.STORE_CD
+		                    AND     TSSSC.PROD_CD         =   tmp.PROD_CD
+		                  )   A
+		                  LEFT
+		                  OUTER
+		                  JOIN    (
+		                        SELECT  B.STORE_CD
+		                        ,      B.PROD_CD
+		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        /* 동적 START */
+									${sQuery3}
+		                        /* 동적 END */
+		                        FROM   (
+		                              SELECT   B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              ,        SUM(B.CURR_QTY)   AS   CURR_QTY
+		                              FROM     TB_ST_STORE_STOCK_CUR   B
+		                              WHERE    B.STORE_CD      =   #{storeCd}
+		                              AND      EXISTS   (SELECT   * FROM TB_MS_STORAGE Z WHERE B.STORE_CD   = Z.STORE_CD AND Z.USE_YN = 'Y')
+		                              AND      B.STORAGE_CD  <![CDATA[  >=  ]]>  '000'
+		                              AND      B.STORAGE_CD  <![CDATA[  <   ]]>  '999'
+		                              GROUP
+		                              BY       B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              )   B
+		                        GROUP
+		                        BY      B.STORE_CD
+		                        ,      B.PROD_CD
+		                        )   B
+		                  ON      A.PROD_CD   =   B.PROD_CD
+		            )   A
+		            LEFT
+		            OUTER
+		            JOIN   (
+		                      SELECT  X.STORE_CD
+		                         ,       X.STORAGE_CD
+		                         ,       X.STORAGE_NM
+		                         ,       Y.PROD_CD
+		                         ,       NVL(Y.UNIT_QTY,  0) AS UNIT_QTY
+		                         ,       NVL(Y.ETC_QTY,   0) AS ETC_QTY
+		                         ,       NVL(Y.TOT_QTY,   0) AS TOT_QTY
+		                         ,       NVL(Y.AMT,       0) AS AMT
+		                         ,       NVL(Y.VAT,       0) AS VAT
+		                         ,       NVL(Y.TOT,       0) AS TOT
+		                         FROM    TB_MS_STORAGE                 X
+		                         LEFT
+		                         OUTER
+		                         JOIN    TB_PO_STORE_STAND_MOVE_DTL    Y
+		                         ON      X.STORE_CD      =   Y.STORE_CD      (+)
+		                         AND     X.STORAGE_CD    =   Y.STORAGE_CD   (+)		                         
+		                         AND     Y.STORE_CD      =   #{storeCd}
+		                         AND     Y.SLIP_NO       =   NVL(#{slipNo},'X')
+		                         WHERE   X.STORE_CD  	 = 	 #{storeCd}	                         
+		                         AND     X.USE_YN    	 = 	 'Y'
+		                  )   B
+		            ON   A.STORE_CD   =   B.STORE_CD
+		            AND  A.PROD_CD   =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+		      )   A
+		WHERE 1 = 1
+		<if test='prodCd != null and prodCd != ""'>
+            AND A.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+		GROUP
+		BY      A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT        
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		/* 동적 START */
+			${sQuery1}
+		/* 동적 END */
+		ORDER
+		BY      A.PROD_CD
+    </select>
+	
+	<!-- 매대이동관리 - 매대이동관리 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST, TB_CM_NMCODE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 - 매대이동관리 상세 리스트를 조회한다.
+    -->
+    <select id="getStandMoveDtlList" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StandMoveMapper.getStandMoveDtlList */
+		SELECT  A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		, 	   A.SLIP_NO
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY 
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT       
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		      /* 동적 START */
+			  ${sQuery1}
+		      /* 동적 START */
+		,      LISTAGG(                                     A.A_STORAGE_CD,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,      LISTAGG(                                     A.A_STORAGE_NM,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_UNIT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ETC_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_AMT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_VAT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT
+		FROM   (
+		      SELECT   A.STORE_CD
+		      ,      A.PROD_CD
+		      ,      A.PROD_NM
+		      ,      A.PO_UNIT_FG
+		      ,      A.PO_UNIT_QTY
+		      , 	 B.SLIP_NO
+		      ,      A.SAFE_STOCK_QTY
+		      ,      A.STAND_CURR_QTY AS TOT_CURR_QTY
+		      ,      A.STAND_CURR_UNIT_QTY AS TOT_CURR_UNIT_QTY
+		      ,      A.STAND_CURR_ETC_QTY AS TOT_CURR_ETC_QTY
+		      ,      A.CURR_QTY_000 AS STAND_CURR_UNIT_TOT
+		      ,      TRUNC(NVL(A.CURR_QTY_000,0)                            / A.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		      ,      MOD  (NVL(A.CURR_QTY_000,0)                            , A.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY    /* 매대 낱개수량 */
+		      /* 동적 START */
+		      	${sQuery1}
+		      /* 동적 END */
+		      ,      B.PROD_CD       AS  A_PROD_CD
+		      ,      B.STORAGE_CD    AS  A_STORAGE_CD
+		      ,      B.STORAGE_NM    AS  A_STORAGE_NM
+		      ,      B.UNIT_QTY      AS  A_UNIT_QTY
+		      ,      B.ETC_QTY       AS  A_ETC_QTY
+		      ,      B.TOT_QTY       AS  A_TOT_QTY
+		      ,      B.AMT           AS  A_AMT
+		      ,      B.VAT           AS  A_VAT
+		      ,      B.TOT           AS  A_TOT
+		      FROM   (
+		            SELECT  A.STORE_CD
+		            ,      A.PROD_CD
+		            ,      A.PROD_NM
+		            ,      A.PO_UNIT_FG
+		            ,      A.PO_UNIT_QTY
+		            ,      A.SAFE_STOCK_QTY
+		            ,      A.STAND_CURR_QTY
+		            ,      A.STAND_CURR_UNIT_QTY
+		            ,      A.STAND_CURR_ETC_QTY
+		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            /* 동적 START */
+		            	${sQuery2}
+		            /* 동적 END */
+		            FROM   (
+		                  SELECT    TMP.STORE_CD
+		                  ,      TMP.PROD_CD
+		                    ,       TMP.PROD_NM
+		                    ,       TMP.PO_UNIT_FG
+		                    ,       TMP.PO_UNIT_QTY
+		                    ,       TMP.SAFE_STOCK_QTY
+		                    ,      NVL(TSSSC.CURR_QTY,0)                                          AS   STAND_CURR_QTY      /* 매대 재고수량 */
+		                    ,       TRUNC(NVL(TSSSC.CURR_QTY,0)                            / TMP.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		                    ,       MOD  (NVL(TSSSC.CURR_QTY,0)                            , TMP.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY   /* 매대 낱개수량 */
+		                    FROM    TB_MS_PRODUCT TMP
+		                    ,       TB_ST_STORE_STOCK_CUR TSSSC
+		                    WHERE   TMP.STORE_CD          =   #{storeCd}
+		                    AND     TMP.USE_YN            =   'Y'
+		                    AND     TSSSC.STORE_CD        =   #{storeCd}
+		                    AND     TSSSC.STORAGE_CD      =   '999'
+		                    AND     TSSSC.STORE_CD        =   tmp.STORE_CD
+		                    AND     TSSSC.PROD_CD         =   tmp.PROD_CD
+		                  )   A
+		                  LEFT
+		                  OUTER
+		                  JOIN    (
+		                        SELECT  B.STORE_CD
+		                        ,      B.PROD_CD
+		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        /* 동적 START */
+									${sQuery3}
+		                        /* 동적 END */
+		                        FROM   (
+		                              SELECT   B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              ,        SUM(B.CURR_QTY)   AS   CURR_QTY
+		                              FROM     TB_ST_STORE_STOCK_CUR   B
+		                              WHERE    B.STORE_CD      =   #{storeCd}
+		                              AND      EXISTS   (SELECT   * FROM TB_MS_STORAGE Z WHERE B.STORE_CD   = Z.STORE_CD AND Z.USE_YN = 'Y')
+		                              AND      B.STORAGE_CD  <![CDATA[  >=  ]]>  '000'
+		                              AND      B.STORAGE_CD  <![CDATA[  <   ]]>  '999'
+		                              GROUP
+		                              BY       B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              )   B
+		                        GROUP
+		                        BY      B.STORE_CD
+		                        ,      B.PROD_CD
+		                        )   B
+		                  ON      A.PROD_CD   =   B.PROD_CD
+		            )   A
+		            LEFT
+		            OUTER
+		            JOIN   (
+		                      SELECT  X.STORE_CD
+		                         ,       X.STORAGE_CD
+		                         ,       X.STORAGE_NM
+		                         ,       Y.PROD_CD
+		                         ,       Y.SLIP_NO
+		                         ,       NVL(Y.UNIT_QTY,  0) AS UNIT_QTY
+		                         ,       NVL(Y.ETC_QTY,   0) AS ETC_QTY
+		                         ,       NVL(Y.TOT_QTY,   0) AS TOT_QTY
+		                         ,       NVL(Y.AMT,       0) AS AMT
+		                         ,       NVL(Y.VAT,       0) AS VAT
+		                         ,       NVL(Y.TOT,       0) AS TOT
+		                         FROM    TB_MS_STORAGE                 X
+		                         LEFT
+		                         OUTER
+		                         JOIN    TB_PO_STORE_STAND_MOVE_DTL    Y
+		                         ON      X.STORE_CD      =   Y.STORE_CD      (+)
+		                         AND     X.STORAGE_CD    =   Y.STORAGE_CD   (+)		                         
+		                         AND     Y.STORE_CD      =   #{storeCd}
+		                         AND     Y.SLIP_NO       =     NVL(#{slipNo},'X')
+		                         WHERE   X.STORE_CD  	 = 	 #{storeCd}	                         
+		                         AND     X.USE_YN    	 = 	 'Y'
+		                  )   B
+		            ON   A.STORE_CD   =   B.STORE_CD
+		            AND  A.PROD_CD   =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+		      )   A
+		WHERE 1 = 1
+		AND A.SLIP_NO = #{slipNo}
+		<if test='prodCd != null and prodCd != ""'>
+            AND A.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+		GROUP
+		BY      A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		, 	   A.SLIP_NO
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT        
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		/* 동적 START */
+			${sQuery1}
+		/* 동적 END */
+		ORDER
+		BY      A.PROD_CD
+    </select>
+	
+	<!-- 매대이동관리 - 매대이동관리 추가등록 상품 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE, TB_PO_STORE_MOVE_DTL, TB_HQ_PRODUCT, TB_MS_STORE_ENVST, TB_CM_NMCODE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 - 매대이동관리 추가등록 상품 리스트를 조회한다.
+    -->
+    <select id="getStandMoveProdList" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StandMoveMapper.getStandMoveProdList */
+		SELECT  A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY 
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT       
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		      /* 동적 START */
+			  ${sQuery1}
+		      /* 동적 START */
+		,      LISTAGG(                                     A.A_STORAGE_CD,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
+		,      LISTAGG(                                     A.A_STORAGE_NM,               '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_UNIT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_ETC_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT_QTY
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_AMT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_VAT
+		,      LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_TOT
+		FROM   (
+		      SELECT   A.STORE_CD
+		      ,      A.PROD_CD
+		      ,      A.PROD_NM
+		      ,      A.PO_UNIT_FG
+		      ,      A.PO_UNIT_QTY
+		      ,      A.SAFE_STOCK_QTY
+		      ,      A.STAND_CURR_QTY AS TOT_CURR_QTY
+		      ,      A.STAND_CURR_UNIT_QTY AS TOT_CURR_UNIT_QTY
+		      ,      A.STAND_CURR_ETC_QTY AS TOT_CURR_ETC_QTY
+		      ,      A.CURR_QTY_000 AS STAND_CURR_UNIT_TOT
+		      ,      TRUNC(NVL(A.CURR_QTY_000,0)                            / A.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		      ,      MOD  (NVL(A.CURR_QTY_000,0)                            , A.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY    /* 매대 낱개수량 */
+		      /* 동적 START */
+		      	${sQuery1}
+		      /* 동적 END */
+		      ,      B.PROD_CD       AS  A_PROD_CD
+		      ,      B.STORAGE_CD    AS  A_STORAGE_CD
+		      ,      B.STORAGE_NM    AS  A_STORAGE_NM
+		      ,      B.UNIT_QTY      AS  A_UNIT_QTY
+		      ,      B.ETC_QTY       AS  A_ETC_QTY
+		      ,      B.TOT_QTY       AS  A_TOT_QTY
+		      ,      B.AMT           AS  A_AMT
+		      ,      B.VAT           AS  A_VAT
+		      ,      B.TOT           AS  A_TOT
+		      FROM   (
+		            SELECT  A.STORE_CD
+		            ,      A.PROD_CD
+		            ,      A.PROD_NM
+		            ,      A.PO_UNIT_FG
+		            ,      A.PO_UNIT_QTY
+		            ,      A.SAFE_STOCK_QTY
+		            ,      A.STAND_CURR_QTY
+		            ,      A.STAND_CURR_UNIT_QTY
+		            ,      A.STAND_CURR_ETC_QTY
+		            ,      NVL(B.CURR_QTY_000,0)    AS   CURR_QTY_000
+		            /* 동적 START */
+		            	${sQuery2}
+		            /* 동적 END */
+		            FROM   (
+		                  SELECT    TMP.STORE_CD
+		                  ,      TMP.PROD_CD
+		                    ,       TMP.PROD_NM
+		                    ,       TMP.PO_UNIT_FG
+		                    ,       TMP.PO_UNIT_QTY
+		                    ,       TMP.SAFE_STOCK_QTY
+		                    ,      NVL(TSSSC.CURR_QTY,0)                                          AS   STAND_CURR_QTY      /* 매대 재고수량 */
+		                    ,       TRUNC(NVL(TSSSC.CURR_QTY,0)                            / TMP.PO_UNIT_QTY)    AS    STAND_CURR_UNIT_QTY   /* 매대 단위수량 */
+		                    ,       MOD  (NVL(TSSSC.CURR_QTY,0)                            , TMP.PO_UNIT_QTY)    AS    STAND_CURR_ETC_QTY   /* 매대 낱개수량 */
+		                    FROM    TB_MS_PRODUCT TMP
+		                    ,       TB_ST_STORE_STOCK_CUR TSSSC
+		                    WHERE   TMP.STORE_CD          =   #{storeCd}
+		                    AND     TMP.USE_YN            =   'Y'
+		                    AND     TSSSC.STORE_CD        =   #{storeCd}
+		                    AND     TSSSC.STORAGE_CD      =   '999'
+		                    AND     TSSSC.STORE_CD        =   tmp.STORE_CD
+		                    AND     TSSSC.PROD_CD         =   tmp.PROD_CD
+		                  )   A
+		                  LEFT
+		                  OUTER
+		                  JOIN    (
+		                        SELECT  B.STORE_CD
+		                        ,      B.PROD_CD
+		                        ,      SUM(DECODE(B.STORAGE_CD,'000',B.CURR_QTY,0))   AS   CURR_QTY_000
+		                        /* 동적 START */
+									${sQuery3}
+		                        /* 동적 END */
+		                        FROM   (
+		                              SELECT   B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              ,        SUM(B.CURR_QTY)   AS   CURR_QTY
+		                              FROM     TB_ST_STORE_STOCK_CUR   B
+		                              WHERE    B.STORE_CD      =   #{storeCd}
+		                              AND      EXISTS   (SELECT   * FROM TB_MS_STORAGE Z WHERE B.STORE_CD   = Z.STORE_CD AND Z.USE_YN = 'Y')
+		                              AND      B.STORAGE_CD  <![CDATA[  >=  ]]>  '000'
+		                              AND      B.STORAGE_CD  <![CDATA[  <   ]]>  '999'
+		                              GROUP
+		                              BY       B.STORE_CD
+		                              ,        B.STORAGE_CD
+		                              ,        B.PROD_CD
+		                              )   B
+		                        GROUP
+		                        BY      B.STORE_CD
+		                        ,      B.PROD_CD
+		                        )   B
+		                  ON      A.PROD_CD   =   B.PROD_CD
+		            )   A
+		            LEFT
+		            OUTER
+		            JOIN   (
+		                      SELECT  X.STORE_CD
+		                         ,       X.STORAGE_CD
+		                         ,       X.STORAGE_NM
+		                         ,       Y.PROD_CD
+		                         ,       NVL(Y.UNIT_QTY,  0) AS UNIT_QTY
+		                         ,       NVL(Y.ETC_QTY,   0) AS ETC_QTY
+		                         ,       NVL(Y.TOT_QTY,   0) AS TOT_QTY
+		                         ,       NVL(Y.AMT,       0) AS AMT
+		                         ,       NVL(Y.VAT,       0) AS VAT
+		                         ,       NVL(Y.TOT,       0) AS TOT
+		                         FROM    TB_MS_STORAGE                 X
+		                         LEFT
+		                         OUTER
+		                         JOIN    TB_PO_STORE_STAND_MOVE_DTL    Y
+		                         ON      X.STORE_CD      =   Y.STORE_CD      (+)
+		                         AND     X.STORAGE_CD    =   Y.STORAGE_CD   (+)		                         
+		                         AND     Y.STORE_CD      =   #{storeCd}
+		                         AND     Y.SLIP_NO       =   NVL('','X')
+		                         WHERE   X.STORE_CD  	 = 	 #{storeCd}	                         
+		                         AND     X.USE_YN    	 = 	 'Y'
+		                  )   B
+		            ON   A.STORE_CD   =   B.STORE_CD
+		            AND  A.PROD_CD   =   (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
+		      )   A
+		WHERE 1 = 1
+		AND A.PROD_CD NOT IN (SELECT DISTINCT PROD_CD FROM TB_PO_STORE_STAND_MOVE_DTL WHERE STORE_CD = #{storeCd}	  AND SLIP_NO = #{slipNo})
+		<if test='prodCd != null and prodCd != ""'>
+            AND A.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+		GROUP
+		BY      A.STORE_CD
+		,      A.PROD_CD
+		,      A.PROD_NM
+		,      A.PO_UNIT_FG
+		,      A.PO_UNIT_QTY
+		,      A.SAFE_STOCK_QTY
+		,      A.TOT_CURR_QTY 
+		,      A.TOT_CURR_UNIT_QTY
+		,      A.TOT_CURR_ETC_QTY  
+		,      A.STAND_CURR_UNIT_TOT        
+		,      A.STAND_CURR_UNIT_QTY
+		,      A.STAND_CURR_ETC_QTY
+		/* 동적 START */
+			${sQuery1}
+		/* 동적 END */
+		ORDER
+		BY      A.PROD_CD
+    </select>
+	
+	<select id="getStorageList" parameterType="standMoveVO" resultType="DefaultMap">
+        /* USE : StandMoveMapper.getStorageList - 매장 창고정보 조회 */
+	    SELECT   B.STORE_CD
+		  ,      B.STORAGE_CD
+		  ,      TMS.STORAGE_NM
+	      ,      SUM(B.CURR_QTY) AS CURR_QTY
+		FROM   TB_ST_STORE_STOCK_CUR B
+		  ,    TB_MS_STORAGE TMS
+		WHERE    B.STORE_CD   	=   #{storeCd}
+		AND      B.STORAGE_CD   <![CDATA[  >=  ]]>  '000'
+		AND      B.STORAGE_CD   <![CDATA[  <  ]]>   '999'
+		AND      B.STORE_CD     =   TMS.STORE_CD
+		AND      B.STORAGE_CD 	= 	TMS.STORAGE_CD
+		GROUP
+		BY     B.STORE_CD
+		,      B.STORAGE_CD
+		,      TMS.STORAGE_NM
+    </select>
+	
+    <!-- 매대이동관리 - 매대이동관리 상세 리스트 DTL 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 상세 리스트 DTL을 수정한다.
+    -->
+    <update id="updateStandMoveDtl" parameterType="standMoveVO">
+        /* USE : StandMoveMapper.updateStandMoveDtl */
+        UPDATE  TB_PO_STORE_MOVE_DTL
+        SET     OUT_SPLY_UPRC    = #{outSplyUprc},
+                OUT_UNIT_QTY     = #{outUnitQty},
+                OUT_ETC_QTY      = #{outEtcQty},
+                OUT_TOT_QTY      = #{outTotQty},
+                OUT_AMT          = #{outAmt},
+                OUT_VAT          = #{outVat},
+                OUT_TOT          = #{outTot},
+                IN_SPLY_UPRC     = #{inSplyUprc},
+                IN_UNIT_QTY      = #{inUnitQty},
+                IN_ETC_QTY       = #{inEtcQty},
+                IN_TOT_QTY       = #{inTotQty},
+                IN_AMT           = #{inAmt},
+                IN_VAT           = #{inVat},
+                IN_TOT           = #{inTot},
+                MOD_DT           = #{modDt},
+                MOD_ID           = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     PROD_CD       = #{prodCd}
+    </update>
+
+    <!-- 매대이동관리 - 매대이동관리 상세 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : standMoveVO
+        COMMENTS : 매대이동관리 상세 리스트 HD 수정한다.
+    -->
+    <update id="updateStandMoveHd" parameterType="standMoveVO">
+        /* USE : StandMoveMapper.updateStandMoveHd */
+        UPDATE  TB_PO_STORE_STAND_MOVE
+        SET     (   DTL_CNT,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*),       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_STORE_STAND_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND		STORE_CD	  =   #{storeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND		STORE_CD	  =   #{storeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+
+    <!-- 매대이동관리 - 매대이동관리 상세 DTL 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 상세 DTL 의 내용을 모두 삭제한다.
+    -->
+    <delete id="deleteAllStandMoveDtl" parameterType="standMoveVO">
+        /* USE : StoreMoveMapper.deleteAllStoreMoveDtl */
+        DELETE  TB_PO_STORE_MOVE_DTL
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </delete>
+
+
+    <!-- 매대이동관리 - 매대이동관리 상세 HD 삭제 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 상세 HD를 삭제한다.
+    -->
+    <delete id="deleteStandMoveDtl" parameterType="standMoveVO">
+        /* USE : StandMoveMapper.deleteStandMoveDtl */
+        DELETE  TB_PO_STORE_STAND_MOVE_DTL
+        WHERE	STORE_CD 	  = #{storeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND		PROD_CD		  = #{prodCd}
+    </delete>
+
+
+    <!-- 매대이동관리 - 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 신규전표번호를 조회한다.
+    -->
+    <select id="getNewSlipNo" parameterType="standMoveVO" resultType="String">
+        /* USE : StoreMoveMapper.getNewSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tpsm.SLIP_NO), #{yymm}||'0000')+1 AS SLIP_NO
+        FROM    TB_PO_STORE_STAND_MOVE tpsm
+        WHERE   tpsm.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND   	tpsm.STORE_CD  	   =     #{storeCd}
+        AND     tpsm.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+    <!-- 매대이동관리 - 신규등록 상품 리스트 DTL 저장 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE_DTL
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 신규등록 상품 리스트를 등록한다.
+    -->
+    <insert id="insertStandMoveDtl" parameterType="standMoveVO">
+        /* USE : StoreMoveMapper.insertStoreMoveDtl */
+        INSERT INTO TB_PO_STORE_MOVE_DTL
+        (
+            HQ_OFFICE_CD,
+            SLIP_NO,
+            STORAGE_CD,
+            HQ_BRAND_CD,
+            PROD_CD,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            OUT_SPLY_UPRC,
+            OUT_UNIT_QTY,
+            OUT_ETC_QTY,
+            OUT_TOT_QTY,
+            OUT_AMT,
+            OUT_VAT,
+            OUT_TOT,
+            IN_SPLY_UPRC,
+            IN_UNIT_QTY,
+            IN_ETC_QTY,
+            IN_TOT_QTY,
+            IN_AMT,
+            IN_VAT,
+            IN_TOT,
+            REG_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{slipNo},
+            #{storageCd},
+            #{hqBrandCd},
+            #{prodCd},
+            #{poUnitFg},
+            #{poUnitQty},
+            #{outSplyUprc},
+            #{outUnitQty},
+            #{outEtcQty},
+            #{outTotQty},
+            #{outAmt},
+            #{outVat},
+            #{outTot},
+            #{inSplyUprc},
+            #{inUnitQty},
+            #{inEtcQty},
+            #{inTotQty},
+            #{inAmt},
+            #{inVat},
+            #{inTot},
+            #{regFg},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 매대이동관리 - 신규등록 상품 리스트 HD 저장 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 신규등록 상품 리스트를 등록한다.
+    -->
+    <insert id="insertStandMoveHd" parameterType="standMoveVO">
+        /* USE : StandMoveMapper.insertStandMoveHd */
+        INSERT INTO TB_PO_STORE_STAND_MOVE
+        (       STORE_CD      	  
+	        ,   SLIP_NO       
+	        ,   HQ_OFFICE_CD    
+	        ,   SLIP_FG
+	        ,   MOVE_DATE         
+	        ,   DTL_CNT        
+	        ,   REMARK
+	        ,   REG_DT            
+	        ,   REG_ID            
+	        ,   MOD_DT            
+	        ,   MOD_ID
+        )
+        SELECT  #{storeCd}     	  
+        	,   #{slipNo}     
+        	,   #{hqOfficeCd}    
+        	,   #{slipFg}   
+        	,   #{moveDate}       
+        	,   COUNT(*)
+        	,   #{remark}       
+        	,   #{regDt}          
+        	,   #{regId}          
+        	,   #{modDt}          
+        	,   #{modId}
+        FROM    TB_PO_STORE_STAND_MOVE_DTL
+        WHERE   STORE_CD  		=   #{storeCd}
+        AND     SLIP_NO       	=   #{slipNo}
+    </insert>
+
+    <!-- 매대이동관리 - 신규등록 상품 리스트 HD 확정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 진행구분을 수정한다.
+    -->
+    <update id="updateStandMoveConfirm" parameterType="standMoveVO">
+        /* USE : StandMoveMapper.updateStandMoveConfirm */
+        UPDATE  TB_PO_STORE_STAND_MOVE
+        SET     CONFM_YN      = 'Y',
+                MOD_DT        = #{modDt},
+                MOD_ID        = #{modId}
+        WHERE   STORE_CD  	  = #{storeCd}
+        AND     SLIP_NO       = #{slipNo}
+    </update>
+
+    <!-- 매대이동관리 - 출고, 반품 신규전표번호 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : volmErrVO
+        COMMENTS : 매대이동관리 확정시 출고, 반품 신규전표번호를 조회한다.
+    -->
+    <select id="getIostockNewSlipNo" parameterType="standMoveVO" resultType="String">
+        /* USE : StoreMoveMapper.getIostockNewSlipNo */
+        <![CDATA[
+        SELECT  NVL(MAX(tphso.SLIP_NO), #{yymm}||'000000')+1 AS SLIP_NO
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        WHERE   tphso.HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     tphso.SLIP_NO       LIKE  #{yymm}||'%'
+        ]]>
+    </select>
+
+
+    <!-- 매대이동관리 - 매대이동관리 상품추가 리스트 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_STORE_MOVE
+        PARAM    : storeMoveVO
+        COMMENTS : 매대이동관리 상품추가 리스트 HD 수정한다.
+    -->
+    <update id="updateStandMoveAddProdHd" parameterType="standMoveVO">
+        /* USE : StoreMoveMapper.updateStoreMoveAddProdHd */
+        UPDATE  TB_PO_STORE_MOVE
+        SET     (   DTL_CNT
+                ,   OUT_UNIT_QTY      ,   OUT_ETC_QTY       ,   OUT_TOT_QTY       ,   OUT_AMT         ,   OUT_VAT       ,   OUT_TOT
+                ,   IN_UNIT_QTY       ,   IN_ETC_QTY        ,   IN_TOT_QTY        ,   IN_AMT          ,   IN_VAT        ,   IN_TOT
+                ,   MOD_DT            ,   MOD_ID
+                )
+            =   (   SELECT  COUNT(*)
+                    ,       SUM(OUT_UNIT_QTY) ,   SUM(OUT_ETC_QTY)  ,   SUM(OUT_TOT_QTY)  ,   SUM(OUT_AMT)    ,   SUM(OUT_VAT)  ,   SUM(OUT_TOT)
+                    ,       SUM(IN_UNIT_QTY)  ,   SUM(IN_ETC_QTY)   ,   SUM(IN_TOT_QTY )  ,   SUM(IN_AMT )    ,   SUM(IN_VAT )  ,   SUM(IN_TOT )
+                    ,       #{modDt}          ,   #{modId}
+                    FROM    TB_PO_STORE_MOVE_DTL
+                    WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     SLIP_NO       =   #{slipNo}
+                )
+        WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     SLIP_NO       =   #{slipNo}
+    </update>
+    
+    <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
+
+	        TABLE    : TB_PO_STORE_STAND_MOVE_DTL
+	        PARAM    : instockConfmProdVO
+	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
+    -->
+	<update id="mergeStandMoveDtl" parameterType="standMoveVO">
+	    MERGE INTO TB_PO_STORE_STAND_MOVE_DTL	A
+	    USING DUAL ON           (
+	                                    A.STORE_CD			= #{storeCd}
+	                                    AND A.SLIP_NO		= #{slipNo}
+	                                    AND A.PROD_CD  		= #{prodCd}
+	                                    AND A.STORAGE_CD  	= #{storageCd}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE	SET	A.PO_UNIT_FG    = #{poUnitFg},
+	    									A.PO_UNIT_QTY	= #{poUnitQty},
+											A.SPLY_UPRC		= #{splyUprc},
+											A.UNIT_QTY		= #{unitQty},
+											A.ETC_QTY		= #{etcQty},
+											A.TOT_QTY		= #{totQty},
+											A.AMT			= #{amt},
+											A.VAT			= #{vat},
+											A.TOT			= #{tot},
+	                                        A.MOD_DT    	= #{modDt},
+	                                        A.MOD_ID    	= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+											A.STORE_CD,
+											A.SLIP_NO,
+											A.PROD_CD,
+											A.STORAGE_CD,
+											A.PO_UNIT_FG,    
+	    									A.PO_UNIT_QTY,	
+											A.SPLY_UPRC,		
+											A.UNIT_QTY,		
+											A.ETC_QTY,		
+											A.TOT_QTY,		
+											A.AMT,			
+											A.VAT,			
+											A.TOT,			
+											A.REG_DT,
+											A.REG_ID,
+											A.MOD_DT,
+											A.MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{storeCd},
+											#{slipNo},
+											#{prodCd},
+											#{storageCd},
+											#{poUnitFg},
+											#{poUnitQty},
+											#{splyUprc},
+											#{unitQty},
+											#{etcQty},
+											#{totQty},
+											#{amt},
+											#{vat},
+											#{tot},											
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</update>
+	
+	<!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
+
+	        TABLE    : TB_PO_STORE_STAND_MOVE_DTL
+	        PARAM    : instockConfmProdVO
+	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
+    -->
+	<update id="mergeStandMoveProd" parameterType="standMoveVO">
+	    MERGE INTO TB_PO_STORE_STAND_MOVE_DTL	A
+	    USING DUAL ON           (
+	                                    A.STORE_CD			= #{storeCd}
+	                                    AND A.SLIP_NO		= #{slipNo}
+	                                    AND A.PROD_CD  		= #{prodCd}
+	                                    AND A.STORAGE_CD  	= #{storageCd}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE	SET	A.PO_UNIT_FG    = #{poUnitFg},
+	    									A.PO_UNIT_QTY	= #{poUnitQty},
+											A.SPLY_UPRC		= #{splyUprc},
+											A.UNIT_QTY		= #{unitQty},
+											A.ETC_QTY		= #{etcQty},
+											A.TOT_QTY		= #{totQty},
+											A.AMT			= #{amt},
+											A.VAT			= #{vat},
+											A.TOT			= #{tot},
+	                                        A.MOD_DT    	= #{modDt},
+	                                        A.MOD_ID    	= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+											A.STORE_CD,
+											A.SLIP_NO,
+											A.PROD_CD,
+											A.STORAGE_CD,
+											A.PO_UNIT_FG,    
+	    									A.PO_UNIT_QTY,	
+											A.SPLY_UPRC,		
+											A.UNIT_QTY,		
+											A.ETC_QTY,		
+											A.TOT_QTY,		
+											A.AMT,			
+											A.VAT,			
+											A.TOT,			
+											A.REG_DT,
+											A.REG_ID,
+											A.MOD_DT,
+											A.MOD_ID
+	                                    )
+	                            VALUES  (
+	                                        #{storeCd},
+											#{slipNo},
+											#{prodCd},
+											#{storageCd},
+											#{poUnitFg},
+											#{poUnitQty},
+											#{splyUprc},
+											#{unitQty},
+											#{etcQty},
+											#{totQty},
+											#{amt},
+											#{vat},
+											#{tot},											
+	                                        #{regDt},
+	                                        #{regId},
+	                                        #{modDt},
+	                                        #{modId}
+	                                    )
+	</update>
+	
+	<!-- 매대이동자료생성 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 매대이동자료생성(PROD)
+    -->
+    <insert id="insertRtnStoreOutStockProd" parameterType="standMoveVO">
+        /* USE : StoreMoveMapper.insertRtnStoreOutStockProd */
+        INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_PROD
+        (      
+        	HQ_OFFICE_CD
+			,SLIP_NO
+			,PROD_CD
+			,STORAGE_CD
+			,OCCR_FG
+			,STORE_CD
+			,IN_UNIT_QTY
+			,IN_ETC_QTY
+			,IN_TOT_QTY
+			,CONFM_YN
+			,REG_DT
+			,REG_ID
+			,MOD_DT
+			,MOD_ID
+        )
+        SELECT  
+        	#{hqOfficeCd}           
+        	,   SLIP_NO    
+        	,	PROD_CD   
+        	,	STORAGE_CD    
+        	,	#{occrFg}
+        	,   STORE_CD   
+ 			,	UNIT_QTY
+ 			,  	ETC_QTY
+  			,	TOT_QTY
+  			,   #{confmYn}     
+        	,   #{regDt}                
+        	,   #{regId}
+        	,   #{modDt}                
+        	,   #{modId}
+        FROM    TB_PO_STORE_STAND_MOVE_DTL
+        WHERE   SLIP_NO     =   #{slipNo}
+        AND     STORE_CD    =   #{storeCd}
+
+    </insert>
+</mapper>

@@ -14,5 +14,7 @@ public interface ProdPosService {
 
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	List<DefaultMap<String>> getPosNmList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO);
-
+	
+	/** 포스별매출 - 엑셀 다운로드 조회 */
+	List<DefaultMap<String>> getProdPosExcelList(ProdPosVO prodPosVO, SessionInfoVO sessionInfoVO);
 }

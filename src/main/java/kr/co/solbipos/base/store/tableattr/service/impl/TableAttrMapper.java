@@ -35,11 +35,25 @@ public interface TableAttrMapper {
     String selectXmlByStore(DefaultMap<String> param);
 
     /**
+     * storeCd, confgFg 로 매장 테이블 속성 조회
+     * @param param
+     * @return
+     */
+    String selectXmlByStoreTable(DefaultMap<String> param);
+
+    /**
+     * 매장 테이블 속성 공통코드 조회
+     * @param param
+     * @return
+     */
+    List<TableAttrVO> selectTblAttrCommCode();
+
+    /**
      * 매장 테이블 속성 DB 값이 없을 경우 Default 설정 조회
      * @param param
      * @return
      */
-    List<TableAttrVO> selectDefaultXml();
+    List<TableAttrVO> selectDefaultXml(DefaultMap<String> param);
 
     /**
      * 매장 환경설정 XML 값을 insert
@@ -61,4 +75,12 @@ public interface TableAttrMapper {
      * @return
      */
     int mergeStoreTableAttr(TableAttrVO tableAttrVO);
+
+    /**
+     * 매장 테이블 번호별 속성 저장(Merge)
+     * @param tableAttrVO
+     * @return
+     */
+    int mergeStoreTableNumAttr(TableAttrVO tableAttrVO);
+
 }

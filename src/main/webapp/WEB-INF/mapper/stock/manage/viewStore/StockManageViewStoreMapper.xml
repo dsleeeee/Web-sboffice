@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.manage.viewStore.service.impl.StockManageViewStoreMapper">
+
+    <!-- 실사/조정/폐기 - 매장-실사/조정/폐기 조회 리스트 조회 -->
+    <select id="getStockManageViewStoreList" parameterType="stockManageViewStoreVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT A.*
+        	, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+		    FROM
+		    (SELECT M.HQ_GBN
+		     , M.STORE_CD
+		     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = M.STORE_CD) AS STORE_NM
+		     , M.TOT_DATE
+		     , M.SEQ_NO
+		     , M.PROC_FG_NM
+		     , M.DTL_CNT
+		     , M.TITLE
+		     <include refid="CmmSQL.PagingTemplateCount"/>
+		  FROM (
+		        SELECT '1' AS HQ_GBN
+		             , TSSAI.STORE_CD
+	                 , TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSAI.SEQ_NO
+		             , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSAI.DTL_CNT
+		             , TSSAI.ACINS_TITLE AS TITLE
+		          FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSAI.PROC_FG = #{procFg}                              /* (0:등록, 1:확정) */
+		           </if>
+	               <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSAI.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		        UNION ALL
+		        SELECT '2' AS HQ_GBN
+		             , TSSA.STORE_CD
+		             , TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSA.SEQ_NO
+		             , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSA.DTL_CNT
+		             , TSSA.ADJ_TITLE AS TITLE
+		          FROM TB_ST_STORE_ADJUST TSSA
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSA.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
+		           </if>
+		           <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSA.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		        UNION ALL
+		        SELECT '3' AS HQ_GBN
+		             , TSSD.STORE_CD
+		             , TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSD.SEQ_NO
+		             , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSD.DTL_CNT
+		             , TSSD.DISUSE_TITLE AS TITLE
+		          FROM TB_ST_STORE_DISUSE TSSD
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSD.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
+		           </if>
+		           <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSD.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		      ) M
+		 WHERE 1 = 1
+		 <if test="statusFg != '' and statusFg != null">
+		   AND M.HQ_GBN = #{statusFg}               /* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ORDER BY M.STORE_CD, M.HQ_GBN
+	 ) A
+	 <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+<!-- 실사/조정/폐기 - 매장-실사/조정/폐기 조회 리스트(엑셀) 조회 -->
+    <select id="getStockManageViewStoreExcelList" parameterType="stockManageViewStoreVO" resultType="DefaultMap">
+        SELECT A.*
+        	, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '202' AND NMCODE_CD = A.HQ_GBN) AS HQ_GBN_NM
+		    FROM
+		    (SELECT M.HQ_GBN
+		     , M.STORE_CD
+		     , (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = M.STORE_CD) AS STORE_NM
+		     , M.TOT_DATE
+		     , M.SEQ_NO
+		     , M.PROC_FG_NM
+		     , M.DTL_CNT
+		     , M.TITLE
+		  FROM (
+		        SELECT '1' AS HQ_GBN
+		             , TSSAI.STORE_CD
+	                 , TO_CHAR(TO_DATE(TSSAI.ACINS_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSAI.SEQ_NO
+		             , DECODE(TSSAI.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSAI.DTL_CNT
+		             , TSSAI.ACINS_TITLE AS TITLE
+		          FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSAI.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSAI.PROC_FG = #{procFg}                              /* (0:등록, 1:확정) */
+		           </if>
+	               <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSAI.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		        UNION ALL
+		        SELECT '2' AS HQ_GBN
+		             , TSSA.STORE_CD
+		             , TO_CHAR(TO_DATE(TSSA.ADJ_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSA.SEQ_NO
+		             , DECODE(TSSA.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSA.DTL_CNT
+		             , TSSA.ADJ_TITLE AS TITLE
+		          FROM TB_ST_STORE_ADJUST TSSA
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSA.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSA.ADJ_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSA.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
+		           </if>
+		           <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSA.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		        UNION ALL
+		        SELECT '3' AS HQ_GBN
+		             , TSSD.STORE_CD
+		             , TO_CHAR(TO_DATE(TSSD.DISUSE_DATE,'YYYYMMDD'), 'YYYY-MM-DD') AS TOT_DATE
+		             , TSSD.SEQ_NO
+		             , DECODE(TSSD.PROC_FG,'0','등록','확정') AS PROC_FG_NM
+		             , TSSD.DTL_CNT
+		             , TSSD.DISUSE_TITLE AS TITLE
+		          FROM TB_ST_STORE_DISUSE TSSD
+		         WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSD.STORE_CD)
+		           <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+		               AND TSSD.DISUSE_DATE BETWEEN #{startDate} AND #{endDate} /* 조회일자 */
+		           </if>
+		           <if test="procFg != '' and procFg != null">
+		               AND TSSD.PROC_FG = #{procFg}                               /* (0:등록, 1:확정) */
+		           </if>
+		           <if test="arrStoreCd != '' and arrStoreCd != null">
+	                   AND TSSD.STORE_CD IN
+	                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+	                        #{item}
+	                   </foreach>
+	               </if>
+		      ) M
+		 WHERE 1 = 1
+		 <if test="statusFg != '' and statusFg != null">
+		   AND M.HQ_GBN = #{statusFg}               /* (1:실사, 2:조정, 3:폐기) */
+		 </if>
+		 ORDER BY M.STORE_CD, M.HQ_GBN
+	 ) A
+    </select>
+</mapper>

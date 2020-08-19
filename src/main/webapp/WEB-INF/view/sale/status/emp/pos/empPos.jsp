@@ -9,9 +9,9 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/status/emp/month/"/>
 
-<div id="empPosView" class="subCon" ng-controller="empPosCtrl">
+<div id="empPosView" class="subCon" style="display: none;" ng-controller="empPosCtrl">
 	<div class="searchBar flddUnfld">
-		<a href="#" class="open fl"><s:message code="empsale.month"/></a>
+		<a href="#" class="open fl"><s:message code="empsale.pos"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('empPosCtrlSrch')">
     		<s:message code="cmm.search"/>
@@ -51,6 +51,7 @@
         	</td>
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <input type="hidden" id="empPosSelectStoreCd" value=""/>
       	<tr>
            <%-- 매장코드 --%>
          	<th><s:message code="todayBillSaleDtl.store"/></th>
@@ -74,12 +75,13 @@
 	      class="w100px fl"
 	      id="empPoslistScaleBox"
 	      ng-model="listScale"
-	      control="listScaleCombo"
 	      items-source="_getComboData('empPoslistScaleBox')"
 	      display-member-path="name"
 	      selected-value-path="value"
-	      is-editable="false"
-	      initialized="_initComboBox(s)">
+	      initialized="_initComboBox(s)"
+	      control="listScaleCombo"
+          is-editable="true"
+          text-changed="_checkValidation(s)">
 	    </wj-combo-box>
 		<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 			<input type="text" id="empPosSelectStoreStoreNum" ng-model="storeNum">
@@ -90,8 +92,8 @@
 	</div>
 
 	<%--위즈모 테이블--%>
-    <div class="w100 mt10">
-      <div class="wj-gridWrap" style="height: 350px;">
+    <div class="w100 mt10" id="wjWrapType3">
+      <div class="wj-gridWrap">
         <wj-flex-grid
           id="empPosGrid"
           autoGenerateColumns="false"
@@ -105,9 +107,9 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="empday.storeNm"/>" 			binding="storeNm" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
         </wj-flex-grid>
 
@@ -127,13 +129,32 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  <%-- 엑셀 리스트 --%>
+  <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="empPosExcelCtrl">
+      <div class="wj-gridWrap">
+        <wj-flex-grid
+          id="empPosExcelGrid"
+          autoGenerateColumns="false"
+          control="excelFlex"
+          initialized="initGrid(s,e)"
+          sticky-headers="true"
+          selection-mode="Row"
+          items-source="data"
+          frozen-columns="5"
+          item-formatter="_itemFormatter">
+
+          <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="empday.storeNm"/>" 			binding="storeNm" 			width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.posNo"/>" 			binding="posNo" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.storeCnt"/>" 		binding="storeCnt" 			width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.realSaleAmtTot"/>"	binding="realSaleAmtTot" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="empday.totBillCnt"/>" 		binding="totBillCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        </wj-flex-grid>
+      </div>
+  </div>
+  <%--//엑셀 리스트 --%>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20190125.04" charset="utf-8"></script>
 
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

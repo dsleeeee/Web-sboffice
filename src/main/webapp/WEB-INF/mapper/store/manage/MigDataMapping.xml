@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MigDataMapping.xml
+    OKPOS-KCP 데이터 이관
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.07.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.migDataMapping.service.impl.MigDataMappingMapper">
+
+    <!-- OKPOS-KCP 데이터 이관 조회 -->
+    <!--
+        TABLE    : TB_MIG_DATA_MAPPING
+        COMMENTS : OKPOS 매장 컨버전 정보
+    -->
+    <select id="getMigDataMappingList"  parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getMigDataMappingList */
+        SELECT
+        tmdm.OKPOS_STORE_CD,
+        tmdm.OKPOS_STORE_NM,
+        tmdm.SOLBI_STORE_CD,
+        tmdm.SOLBI_STORE_NM,
+        tmdm.MIG_YN,
+        tmdm.MIG_POS_MST_CNT,
+        tmdm.MIG_PROD_CLS_CNT,
+        tmdm.MIG_PROD_CNT,
+        tmdm.MIG_PROD_PRICE_CNT,
+        tmdm.MIG_SALE_CNT
+        FROM TB_MIG_DATA_MAPPING tmdm
+        WHERE 1=1
+        AND tmdm.MIG_REG_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test="okposStoreCd != null and okposStoreCd != ''">
+            AND tmdm.OKPOS_STORE_CD LIKE '%'|| #{okposStoreCd} ||'%'
+        </if>
+        <if test="okposStoreNm != null and okposStoreNm != ''">
+            AND tmdm.OKPOS_STORE_NM LIKE '%'|| #{okposStoreNm} ||'%'
+        </if>
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND tmdm.REG_ID = #{userId}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        ORDER BY tmdm.SOLBI_STORE_CD
+    </select>
+
+    <!-- OKPOS-KCP 사용자정보 조회 -->
+    <!--
+        TABLE    : OKPOS_USER_INFO
+        COMMENTS :
+    -->
+    <select id="getOkposUserInfoList" parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getOkposUserInfoList */
+        SELECT
+        oui.USER_ID -- OKPOS ID
+        ,oui.USER_PWD -- OKPOS 비밀번호 ( 평문 )
+        ,oui.CORP_CD -- OKPOS VAN대리점 코드
+        FROM OKPOS_USER_INFO oui --view
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND oui.USER_ID = #{userId}
+        </if>
+        <if test="userPwd != null and userPwd != ''">
+            AND oui.USER_PWD = #{userPwd}
+        </if>
+    </select>
+
+    <!-- OKPOS-KCP 매장 조회 -->
+    <!--
+        TABLE    : OKPOS_TB_MS_STORE
+        COMMENTS :
+    -->
+    <select id="getMigDataMappingInfoList"  parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getMigDataMappingInfoList */
+        SELECT
+        otms.HQ_OFFICE_CD
+        ,otms.HQ_OFFICE_NM
+        ,otms.STORE_CD
+        ,otms.STORE_NM
+        ,otms.BIZ_NO
+        ,otms.POS_CNT AS POS_NO
+        ,otms.POS_CNT AS INSTALL_POS_CNT
+        ,otms.OWNER_NM
+--         ,otms.BIZ_TYPE_NM
+--         ,otms.BIZ_KIND_NM
+--         ,otms.BIZ_SHOP_NM
+        ,SUBSTR(otms.POST_NO, 0, 5) AS POST_NO -- (신)우편번호5자리, (구)우편번호6자리
+        ,otms.ADDR
+        ,otms.ADDR_DTL
+        ,otms.ADDRESS
+        ,otms.TEL_NO
+--         ,otms.HP_NO
+        ,otms.SHOP_STAT_FG AS SYS_STAT_FG
+--         ,otms.SOLBI_SHOP_STAT_FG
+--         ,otms.PGM_TYPE_FG_NM
+        ,otms.CLS_FG
+--         ,otms.BRAND_MGR_YN
+--         ,otms.CLS_MGR_LEVEL_FG
+--         ,otms.CORP_CD -- OKPOS VAN대리점 코드
+--         ,otms.CORP_NM
+--         ,otms.VAN_CD
+--         ,otms.MIG_FG
+        ,otms.VAN_TERM_NO -- 다중 사업자 구분
+--         ,otms.PROGRAM_FG
+--         ,otms.POS_PROGRAM_FG_NM
+--         ,otms.SAIP_FG
+--         ,otms.PROD_CR_FG
+--         ,otms.CORNER_FG
+--         ,otms.CORNER_USE_FG
+--         ,otms.PRICE_MGR_FG
+--         ,otms.PRICE_CONTROL_FG
+--         ,otms.LAST_LOGIN_DATE
+        ,otms.SYS_OPEN_DATE
+--         ,otms.SYS_CLOSE_DATE
+--         ,otms.SHOP_USER_ID
+--         ,otms.LAST_VER_SEQ
+--         ,otms.USER_ID
+--         ,otms.USER_PWD
+--         ,otms.MULTI_BIZ_TYPE
+--         ,otms.MULTI_BIZ_TYPE_FG -- 1 :단독 2: 다중사업자
+        ,otms.AREA_CD
+        ,otms.LAST_SALE_DATE  -- 최종 영업일
+        FROM OKPOS_TB_MS_STORE otms --view
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND otms.USER_ID = #{userId}
+        </if>
+        <if test="corpCd != null and corpCd != ''">
+            AND otms.CORP_CD = #{corpCd}
+        </if>
+        <if test="okposStoreCd != null and okposStoreCd != ''">
+            AND otms.STORE_CD LIKE '%'|| #{okposStoreCd} ||'%'
+        </if>
+        <if test="okposStoreNm != null and okposStoreNm != ''">
+            AND otms.STORE_NM LIKE '%'|| #{okposStoreNm} ||'%'
+        </if>
+        ORDER BY otms.STORE_CD
+    </select>
+
+    <!-- OKPOS-KCP 데이터 이관 저장 -->
+    <!--
+        TABLE    : TB_MIG_DATA_MAPPING
+        COMMENTS : OKPOS 매장 컨버전 정보
+    -->
+    <insert id="getMigDataMappingInfoSaveInsert" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getMigDataMappingInfoSaveInsert */
+        INSERT INTO TB_MIG_DATA_MAPPING
+        (
+            OKPOS_STORE_CD
+            ,OKPOS_STORE_NM
+            ,OKPOS_HQ_OFFICE_CD
+            ,OKPOS_HQ_OFFICE_NM
+            ,SOLBI_STORE_CD
+            ,SOLBI_STORE_NM
+            ,SOLBI_HQ_OFFICE_CD
+            ,SOLBI_HQ_OFFICE_NM
+            ,MIG_REG_DATE
+            ,MIG_YN
+            ,MIG_DT
+            ,MIG_POS_MST_CNT
+            ,MIG_PROD_CLS_CNT
+            ,MIG_PROD_CNT
+            ,MIG_PROD_PRICE_CNT
+            ,MIG_SALE_CNT
+            ,REG_DT
+            ,REG_ID
+            ,MOD_DT
+            ,MOD_ID
+            ,MIG_POS_MST_YN
+            ,MIG_PROD_CLS_YN
+            ,MIG_PROD_YN
+            ,MIG_PROD_PRICE_YN
+            ,MIG_SALE_YN
+        ) VALUES (
+            #{okposStoreCd} -- OKPOS 매장 코드
+            ,#{okposStoreNm} -- OKPOS 매장명
+            ,#{okposHqOfficeCd} -- OKPOS 본사코드
+            ,#{okposHqOfficeNm} -- OKPOS 본사명
+            ,#{solbiStoreCd} -- 솔비 매장코드
+            ,'' -- 솔비 매장명
+            ,''-- 솔비 본사코드
+            ,'' -- 솔비 본사 명
+            ,#{date}
+            ,'N'
+            ,''
+            ,0
+            ,0
+            ,0
+            ,0
+            ,0
+            ,#{regDt}
+            ,#{regId} -- SOLBI_USER_ID
+            ,#{modDt}
+            ,#{modId} -- SOLBI_USER_ID
+            ,'N'
+            ,'N'
+            ,'N'
+            ,'N'
+            ,'N'
+        )
+    </insert>
+
+    <!-- SOLBI 매장코드 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : [매장]매장 정보
+    -->
+    <select id="getMigDataMappingSolbiStoreCdList" parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getMigDataMappingSolbiStoreCdList */
+        SELECT LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
+--         'S'||LPAD(TO_CHAR(NVL(MAX(SUBSTR(STORE_CD, 2, 6)), 0) + 1), 6, '0') STORE_CD
+        FROM TB_MS_STORE
+        WHERE 1=1
+        AND STORE_CD LIKE 'S%'
+    </select>
+
+    <!-- 매출재이관 -->
+    <!--
+        TABLE    : TB_MIG_DATA_MAPPING
+        COMMENTS : OKPOS 매장 컨버전 정보
+    -->
+    <update id="getMigDataMappingSaleAgainSave" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getMigDataMappingSaleAgainSave */
+        UPDATE
+        TB_MIG_DATA_MAPPING
+        SET
+        MIG_YN = 'N',
+        MIG_SALE_CNT = 0,
+        MIG_SALE_YN = 'N'
+        WHERE 1=1
+        AND OKPOS_STORE_CD = #{okposStoreCd}
+    </update>
+
+</mapper>

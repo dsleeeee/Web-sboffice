@@ -32,10 +32,10 @@ public interface PopupService {
     List<DefaultMap<String>> getVanList(VanVO vanVO);
 
     /** 대리점 목록 조회 */
-    List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO);
+    List<DefaultMap<String>> getAgencyList(AgencyVO agencyVO, SessionInfoVO sessionInfoVO);
 
     /** 본사 목록 조회 */
-    List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO);
+    List<DefaultMap<String>> getHqList(HqOfficeVO hqOfficeVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 목록 조회 */
     List<DefaultMap<String>> getStoreList(StoreManageVO storeManageVO);

@@ -8,7 +8,9 @@
 
 <div class="subCon" ng-controller="rtnOutstockDataCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('rtnOutstockDataCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -43,11 +45,6 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('rtnOutstockDataCtrl')"><s:message code="cmm.search"/></button>
-  </div>
-
   <div class="tr mt10 fr">
     <%-- 반품일자 --%>
     <p class="s14 bk fl mr10 lh30"><s:message code="rtnOutstockData.outDate"/></p>
@@ -72,18 +69,19 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.sysStatFg"/>" binding="sysStatFg" width="70" align="center" is-read-only="true" data-map="sysStatFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbAmt"/>" binding="dstbAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbVat"/>" binding="dstbVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbTot"/>" binding="dstbTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtlCnt"/>" binding="dtlCnt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.currLoanAmt"/>" binding="currLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.availableOrderAmt"/>" binding="availableOrderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.remark"/>" binding="remark" width="150" align="left" is-read-only="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.hqRemark"/>" binding="hqRemark" width="150" align="left" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 					binding="gChk" 		width="40" 	align="center" 	is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" 	binding="storeNm" 	width="180" align="left" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" 	binding="reqDate" 	width="0" 	align="left" 	is-read-only="true" disabled="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.sysStatFg"/>" binding="sysStatFg" width="70" 	align="center" 	is-read-only="true" data-map="sysStatFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbAmt"/>" 	binding="dstbAmt" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbVat"/>" 	binding="dstbVat" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbTot"/>" 	binding="dstbTot" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.dtlCnt"/>" 	binding="dtlCnt" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.currLoanAmt"/>" 		binding="currLoanAmt" 		width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.remark"/>" 	binding="remark" 	width="150" align="left" 	is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.hqRemark"/>" 	binding="hqRemark" 	width="150" align="left" 	is-read-only="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

@@ -6,9 +6,9 @@
 <%-- favicon 요청시 404 에러를 피하기 위한 설정 : TODO 추후 favicon 등록할것 --%>
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=2018112001" media="all"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/style.css?ver=20200731.02" media="all"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/wijmo/css/wijmo.css?ver=520183550"/>
-<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=2018112001"/>
+<link rel="stylesheet" type="text/css" href="/resource/solbipos/css/cmm/wijmo.solbi.custom.css?ver=20181121"/>
 <link rel="stylesheet" type="text/css" href="/resource/vendor/awesome-font/css/font-awesome.min.css?ver=470" />
 <%-- third-party plug-in --%>
 <script type="text/javascript" src="/resource/vendor/jquery/jquery-2.2.4.min.js"></script>
@@ -43,7 +43,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/common/grid.comm.angular.js?ver=2018121701" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/gen.comm.js?ver=2018102701" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/alert.min.js?ver=2018100401" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=2018100401" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/common/paging.min.js?ver=2020052001" charset="utf-8"></script>
 <%-- wijmo DragAndDrop ColumnPicker --%>
 <script type="text/javascript" src="/resource/solbipos/js/common/ColumnPicker.min.js?ver=2018091501" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/solbipos/js/common/DragDropTouch.min.js?ver=2018091501" charset="utf-8"></script>

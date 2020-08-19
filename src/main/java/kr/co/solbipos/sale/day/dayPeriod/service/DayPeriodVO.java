@@ -21,6 +21,15 @@ public class DayPeriodVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
+    /**
+     * 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 회원소속코드 */
     private String membrOrgnCd;
 
@@ -44,6 +53,18 @@ public class DayPeriodVO extends PageVO {
 
     /** 상품분류코드 */
     private String prodClassCd;
+
+    /** 상품분류 LEVEL */
+    private String level;
+
+    /** 다중 상품분류코드(string 형) */
+    private String strProdClassCd;
+    /** 다중 상품분류코드(배열형) */
+    private String[] arrProdClassCd;
+
+    public String getOrgnFg() { return orgnFg; }
+
+    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 
     public String getMembrOrgnCd() {
         return membrOrgnCd;
@@ -84,4 +105,28 @@ public class DayPeriodVO extends PageVO {
     public String getProdClassCd() { return prodClassCd; }
 
     public void setProdClassCd(String prodClassCd) { this.prodClassCd = prodClassCd; }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getStrProdClassCd() {
+        return strProdClassCd;
+    }
+
+    public void setStrProdClassCd(String strProdClassCd) {
+        this.strProdClassCd = strProdClassCd;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
 }

@@ -67,23 +67,21 @@
     $scope.initGrid = function (s, e) {
     };
 
-    $scope.searchFg = "N";
+    $scope.searchFg = "";
     // 다른 컨트롤러의 broadcast 받기
 
     $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
       // 테이블선택 팝업 오픈
-      eval('$scope.wj' + targetId + 'LayerM.show(true)');
-
+      if($("#${param.targetStoreId}Cd").val() !== ""){
+    	  eval('$scope.wj' + targetId + 'LayerM.show(true)');
+      }
       // 팝업 닫힐시 이벤트
       eval('$scope.wj' + targetId + 'LayerM').hidden.addHandler(function () {
-        if ('${param.closeFunc}' !== '') {
-          eval('$scope.${param.closeFunc}()');
+        if ('${param.closeFunc}' !== '') {        	
+			$scope.tableSelected();
+//           eval('$scope.${param.closeFunc}()');
         }
       });
-
-      if ($scope.searchFg == "N") {
-        $scope.searchTable();
-      }
 
       $scope.searchTable();
       // 기능수행 종료 : 반드시 추가
@@ -95,33 +93,42 @@
       var params = {};
       params.storeCd = $("#${param.targetStoreId}Cd").val();
       params.hqOfficeCd = $("#HqOfficePopCd").val();
-      $scope._inquirySub("/sale/status/table/day/tableNmList.sb", params, function () {
-        $scope.searchFg = "Y";
-      });
+      if(params.storeCd !== "" && params.storeCd !== $scope.searchFg){
+	      $scope._inquirySub("/sale/status/table/day/tableNmList.sb", params, function () {
+	        $scope.searchFg = params.storeCd;
+	      });
+      }else if(params.storeCd === ""){
+          $scope._popMsg(messages["cmm.require.selectStore"]);
+      }
     };
 
     $scope.tableSelected = function () {
       var flex       = agrid.getScope(targetId + 'Ctrl').data.sourceCollection;
       // var flex = $scope.tableGridM;
-
+	
       var arrTableCd = [];
+      var arrTableCdOrg = [];
       var arrTableNm = [];
       var strTableCd = "";
+      var strTableCdOrg = "";
       var strStoreNm = "";
       var strTableNm = "";
       var cnt        = 0;
 
       $("#" + targetId + "Cd").val("");
       $("#" + targetId + "Name").val("");
+      $("#" + targetId + "CdOrg").val("");
 
       for (var i = 0; i < flex.length; i++) {
         if (flex[i].gChk) {
           if (cnt == 0) {
             strTableCd = flex[i].tableCd;
+            strTableCdOrg = flex[i].tableCdOrg;
             strStoreNm = flex[i].storeNm;
             strTableNm = flex[i].tableNm;
           }
           arrTableCd.push(flex[i].tableCd);
+          arrTableCdOrg.push(flex[i].tableCdOrg);
           arrTableNm.push(flex[i].storeNm + "||" + flex[i].tableNm);
           cnt++;
         }
@@ -129,7 +136,8 @@
 
       $("#" + targetId + "Cd").val(arrTableCd.join());
       $("#" + targetId + "Name").val(arrTableNm.join());
-
+      $("#" + targetId + "CdOrg").val(arrTableCdOrg.join());
+      
       if (cnt == 0) {
         $("#" + targetId + "Nm").val(messages["cmm.all"]);
       }
@@ -138,7 +146,7 @@
         $("#" + targetId + "Nm").val("[" + storeTable[1] + "] " + strTableNm);
       }
       else if (cnt > 1) {
-	    $("#" + targetId + "Nm").val(strStoreNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["outstockReqDate.cntStore"]);
+	    $("#" + targetId + "Nm").val(strTableNm + " "+messages["outstockReqDate.except"]+" " + (cnt - 1) + messages["cmm.cntTable"]);
 	    $("#" + targetId +"StoreNum").val(" 영업매장수 : "+cnt+" 개");
       }
       eval('$scope.wj' + targetId + 'LayerM.hide(true)');

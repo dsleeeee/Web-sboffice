@@ -12,7 +12,7 @@
     -->
     <select id="getPosDayPeriodList" parameterType="posDayPeriodVO" resultType="DefaultMap">
     	<include refid="CmmSQL.PagingTemplateHeader"/>
-    	SELECT CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO) STORE_NM_POS_NO
+    	SELECT CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO) STORE_NM_POS_NO
     	       , TSDP.POS_NO
     	       , TSDP.STORE_CD
     	       , SUM(TSDP.SALE_CNT) AS SALE_CNT
@@ -35,7 +35,7 @@
            		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
            	</if>
            	    AND TSDP.STORE_CD = TMS.STORE_CD
-        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,'- POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
+        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
         ORDER BY STORE_NM_POS_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -53,10 +53,10 @@
                A.LV1_NM,
                A.LV2_CD,
                A.LV2_NM,
-               A.LV2_NM_FULL,
+               <!-- A.LV2_NM_FULL, -->
                A.LV3_CD,
                A.LV3_NM,
-               A.LV3_NM_FULL,
+               <!-- A.LV3_NM_FULL, -->
                C.PROD_CD,
                B.PROD_NM,
                SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,
@@ -66,93 +66,79 @@
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
              FROM    (
-                         SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-                                 A.PROD_CLASS_CD     AS LV2_CD,
-                                 A.PROD_CLASS_NM     AS LV2_NM,
-                                 B.PROD_CLASS_CD     AS LV3_CD,
-                                 B.PROD_CLASS_NM     AS LV3_NM,
-                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                                 (SELECT  SF_GET_PROD_CLASSES('H', #{hqOfficeCd},    B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
-                         FROM    (
-                                     SELECT  HQ_OFFICE_CD,
-                                           P_PROD_CLASS_CD,
-                                           PROD_CLASS_CD,
-                                           PROD_CLASS_NM
-                                     FROM    TB_HQ_PRODUCT_CLASS
-                                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                     AND     P_PROD_CLASS_CD IN (
-                                                                    SELECT  PROD_CLASS_CD
-                                                                    FROM    TB_HQ_PRODUCT_CLASS
-                                                                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                    AND     P_PROD_CLASS_CD = '00000'
-                                                                 )
-                                 )                      A,
-                                 TB_HQ_PRODUCT_CLASS    B
-                         WHERE   B.P_PROD_CLASS_CD IN    (
-                                                             SELECT  PROD_CLASS_CD
-                                                             FROM    TB_HQ_PRODUCT_CLASS
-                                                             WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                             AND     P_PROD_CLASS_CD IN (
-                                                                                      SELECT  PROD_CLASS_CD
-                                                                                            FROM    TB_HQ_PRODUCT_CLASS
-                                                                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                                                                            AND     P_PROD_CLASS_CD = '00000'
-                                                                                         )
-                                                         )
-                         AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+                         <![CDATA[
+		                SELECT  A.HQ_OFFICE_CD
+		                ,       A.PROD_CLASS_CD
+		                ,       NULL    LV1_CD
+		                ,       NULL    LV2_CD
+		                ,       NULL    LV3_CD
+		                ,       DECODE  (A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+		                                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+		                                )  AS  LV1_NM
+		                ,       DECODE  (A.LV ,1  ,NULL
+		                                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+		                                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+		                                )  AS  LV2_NM
+		                ,       DECODE  (A.LV ,1  ,NULL
+		                                    ,2  ,NULL
+		                                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+		                                )  AS  LV3_NM
+		                FROM    (
+		                        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+		                        FROM    (
+		                                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+		                                    FROM    TB_HQ_PRODUCT_CLASS
+		                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+		                                )
+		                        START WITH  P_PROD_CLASS_CD ='00000'
+		                        CONNECT BY
+		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                        )   A
+
+		                ]]>
                      )                   A,
                      TB_HQ_PRODUCT       B,
                      TB_SL_DAILY_POS_PROD    C
              WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
-             AND     B.PROD_CLASS_CD = A.LV3_CD
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD  = C.HQ_OFFICE_CD
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
             FROM    (
-                         SELECT  A.P_PROD_CLASS_CD   AS LV1_CD,
-                                 A.PROD_CLASS_CD     AS LV2_CD,
-                                 A.PROD_CLASS_NM     AS LV2_NM,
-                                 B.PROD_CLASS_CD     AS LV3_CD,
-                                 B.PROD_CLASS_NM     AS LV3_NM,
-                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.P_PROD_CLASS_CD) FROM DUAL)    AS LV1_NM,
-                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, A.PROD_CLASS_CD  ) FROM DUAL)    AS LV2_NM_FULL,
-                                 (SELECT  SF_GET_PROD_CLASSES('S', #{storeCd}, B.PROD_CLASS_CD  ) FROM DUAL)    AS LV3_NM_FULL
-                         FROM    (
-                                     SELECT  STORE_CD,
-                                           P_PROD_CLASS_CD,
-                                           PROD_CLASS_CD,
-                                           PROD_CLASS_NM
-                                     FROM    TB_MS_PRODUCT_CLASS
-                                     WHERE   STORE_CD        = #{storeCd}
-                                     AND     P_PROD_CLASS_CD IN (
-                                                                    SELECT  PROD_CLASS_CD
-                                                                    FROM    TB_MS_PRODUCT_CLASS
-                                                                    WHERE   STORE_CD        = #{storeCd}
-                                                                    AND     P_PROD_CLASS_CD = '00000'
-                                                                 )
-                                 )                      A,
-                                 TB_MS_PRODUCT_CLASS    B
-                         WHERE   B.P_PROD_CLASS_CD IN    (
-                                                             SELECT  PROD_CLASS_CD
-                                                             FROM    TB_MS_PRODUCT_CLASS
-                                                             WHERE   STORE_CD        = #{storeCd}
-                                                             AND     P_PROD_CLASS_CD IN (
-                                                                                      SELECT  PROD_CLASS_CD
-                                                                                            FROM    TB_MS_PRODUCT_CLASS
-                                                                                            WHERE   STORE_CD        = #{storeCd}
-                                                                                            AND     P_PROD_CLASS_CD = '00000'
-                                                                                         )
-                                                         )
-                         AND     A.STORE_CD      = B.STORE_CD
-                         AND     A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+                         <![CDATA[
+	                        SELECT  A.STORE_CD
+	                        ,       A.PROD_CLASS_CD
+	                        ,       NULL    LV1_CD
+                            ,       NULL    LV2_CD
+                            ,       NULL    LV3_CD
+	                        ,       DECODE(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+	                                            ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2))  AS  LV1_NM
+	                        ,       DECODE(A.LV ,1  ,NULL
+	                                            ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+	                                            ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+	                                      )  AS  LV2_NM
+	                        ,       DECODE(A.LV ,1  ,NULL
+	                                            ,2  ,NULL
+	                                            ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
+	                        FROM    (
+	                                SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+	                                FROM    (
+	                                            SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+	                                            FROM    TB_MS_PRODUCT_CLASS
+	                                            WHERE   STORE_CD    =  #{storeCd}
+	                                        )
+	                                START WITH  P_PROD_CLASS_CD ='00000'
+	                                CONNECT BY
+	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+	                                )   A
+	                    ]]>
                      )                   A,
                      TB_MS_PRODUCT       B,
                      TB_SL_DAILY_POS_PROD    C
              WHERE   B.STORE_CD      = #{storeCd}
-             AND     B.PROD_CLASS_CD = A.LV3_CD
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
              AND     B.PROD_CD       = C.PROD_CD
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
             </when>
@@ -178,11 +164,177 @@
                    A.LV3_CD,
                    A.LV3_NM,
                    A.LV1_NM,
-                   A.LV2_NM_FULL,
-                   A.LV3_NM_FULL,
+                   <!-- A.LV2_NM_FULL,
+                   A.LV3_NM_FULL, -->
                    C.PROD_CD,
                    B.PROD_NM
         ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
+
+
+    <!-- 포스별설정가간별 - 리스트 조회 (엑셀) -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_STORE
+        PARAM    : posDayPeriodVO
+        COMMENTS : 포스별설정기간별 - 리스트를 조회한다.
+    -->
+    <select id="getPosDayPeriodExcelList" parameterType="posDayPeriodVO" resultType="DefaultMap">
+    	SELECT CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO) STORE_NM_POS_NO
+    	       , TSDP.POS_NO
+    	       , TSDP.STORE_CD
+    	       , SUM(TSDP.SALE_CNT) AS SALE_CNT
+    	       , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+    	FROM TB_SL_DAILY_POS TSDP
+    	     , TB_MS_STORE TMS
+    	WHERE  1=1
+    	        AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+                AND TSDP.STORE_CD IN
+                <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+           	<if test='startDate != null and startDate != ""'>
+           		AND TSDP.SALE_DATE >= #{startDate}
+           	</if>
+           	<if test='endDate != null and endDate != ""'>
+           		AND TSDP.SALE_DATE <![CDATA[<= ]]> #{endDate}
+           	</if>
+           	    AND TSDP.STORE_CD = TMS.STORE_CD
+        GROUP BY CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO), TSDP.POS_NO, TSDP.STORE_CD
+        ORDER BY STORE_NM_POS_NO
+    </select>
+
+
+    <!-- 포스별설정가간별 - 상세 리스트 조회 (엑셀) -->
+    <!--
+        TABLE    : TB_SL_DAILY_POS_PROD, TB_SL_DAILY_POS, TB_MS_POS
+        PARAM    : posDayPeriodVO
+        COMMENTS : 포스별설정기간별 - 리스트를 조회한다.
+    -->
+    <select id="getPosDayPeriodDtlExcelList" parameterType="posDayPeriodVO" resultType="DefaultMap">
+     	SELECT  A.LV1_CD,
+               A.LV1_NM,
+               A.LV2_CD,
+               A.LV2_NM,
+               <!-- A.LV2_NM_FULL, -->
+               A.LV3_CD,
+               A.LV3_NM,
+               <!-- A.LV3_NM_FULL, -->
+               C.PROD_CD,
+               B.PROD_NM,
+               SUM(C.TOT_SALE_QTY)     AS TOT_SALE_QTY,
+               SUM(C.TOT_SALE_AMT)     AS TOT_SALE_AMT,
+               SUM(C.REAL_SALE_AMT)     AS REAL_SALE_AMT
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+             FROM    (
+                         <![CDATA[
+		                SELECT  A.HQ_OFFICE_CD
+		                ,       A.PROD_CLASS_CD
+		                ,       NULL    LV1_CD
+		                ,       NULL    LV2_CD
+		                ,       NULL    LV3_CD
+		                ,       DECODE  (A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+		                                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+		                                )  AS  LV1_NM
+		                ,       DECODE  (A.LV ,1  ,NULL
+		                                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+		                                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+		                                )  AS  LV2_NM
+		                ,       DECODE  (A.LV ,1  ,NULL
+		                                    ,2  ,NULL
+		                                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+		                                )  AS  LV3_NM
+		                FROM    (
+		                        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+		                        FROM    (
+		                                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+		                                    FROM    TB_HQ_PRODUCT_CLASS
+		                                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+		                                )
+		                        START WITH  P_PROD_CLASS_CD ='00000'
+		                        CONNECT BY
+		                        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+		                        )   A
+
+		                ]]>
+                     )                   A,
+                     TB_HQ_PRODUCT       B,
+                     TB_SL_DAILY_POS_PROD    C
+             WHERE   B.HQ_OFFICE_CD   = #{hqOfficeCd}
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND	 B.HQ_OFFICE_CD  = C.HQ_OFFICE_CD
+             AND     B.PROD_CD       = C.PROD_CD
+             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+            FROM    (
+                         <![CDATA[
+	                        SELECT  A.STORE_CD
+	                        ,       A.PROD_CLASS_CD
+	                        ,       NULL    LV1_CD
+                            ,       NULL    LV2_CD
+                            ,       NULL    LV3_CD
+	                        ,       DECODE(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+	                                            ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2))  AS  LV1_NM
+	                        ,       DECODE(A.LV ,1  ,NULL
+	                                            ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+	                                            ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+	                                      )  AS  LV2_NM
+	                        ,       DECODE(A.LV ,1  ,NULL
+	                                            ,2  ,NULL
+	                                            ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
+	                        FROM    (
+	                                SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+	                                FROM    (
+	                                            SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+	                                            FROM    TB_MS_PRODUCT_CLASS
+	                                            WHERE   STORE_CD    =  #{storeCd}
+	                                        )
+	                                START WITH  P_PROD_CLASS_CD ='00000'
+	                                CONNECT BY
+	                                PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+	                                )   A
+	                    ]]>
+                     )                   A,
+                     TB_MS_PRODUCT       B,
+                     TB_SL_DAILY_POS_PROD    C
+             WHERE   B.STORE_CD      = #{storeCd}
+             AND     B.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
+             AND     B.PROD_CD       = C.PROD_CD
+             AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+            </when>
+        </choose>
+           <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
+               AND C.STORE_CD IN
+               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                   #{item}
+               </foreach>
+           </if>
+           <if test='startDate != null and startDate != ""'>
+               AND C.SALE_DATE >= #{startDate}
+           </if>
+           <if test='endDate != null and endDate != ""'>
+               AND C.SALE_DATE <![CDATA[<= ]]> #{endDate}
+           </if>
+           <if test='posNo != null and posNo != ""'>
+               AND C.POS_NO = ${posNo}
+           </if>
+       	GROUP BY    A.LV1_CD,
+                   A.LV2_CD,
+                   A.LV2_NM,
+                   A.LV3_CD,
+                   A.LV3_NM,
+                   A.LV1_NM,
+                   <!-- A.LV2_NM_FULL,
+                   A.LV3_NM_FULL, -->
+                   C.PROD_CD,
+                   B.PROD_NM
+        ORDER BY LV1_CD, LV2_CD, LV3_CD, PROD_CD
+    </select>
+
+
 </mapper>

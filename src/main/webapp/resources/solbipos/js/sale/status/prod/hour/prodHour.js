@@ -6,6 +6,7 @@ var app = agrid.getApp();
 // 시간대 DropBoxDataMap
 var vSaleTime = [
     {"name":"전체","value":""},
+    {"name":"00시","value":"0"},
     {"name":"01시","value":"1"},
     {"name":"02시","value":"2"},
     {"name":"03시","value":"3"},
@@ -28,8 +29,7 @@ var vSaleTime = [
     {"name":"20시","value":"20"},
     {"name":"21시","value":"21"},
     {"name":"22시","value":"22"},
-    {"name":"23시","value":"23"},
-    {"name":"24시","value":"24"}
+    {"name":"23시","value":"23"}
 ];
 
 /** 과세면별 controller */
@@ -43,10 +43,10 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope.srchStartDate = wcombo.genDateVal("#srchHourStartDate", getToday());
     $scope.srchEndDate   = wcombo.genDateVal("#srchHourEndDate", getToday());
     $scope.orgnFg        = gvOrgnFg;
-    
+    $scope.isSearch = false;
     // 콤보박스 데이터 Set
     $scope._setComboData('prodHourlistScaleBox', gvListScaleBoxData);
-    
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -70,7 +70,282 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.prodNm    = messages["prodhour.prodNm"];
 
         // 시간대별 컬럼 생성
-        for (var i = 1; i < 25; i++) {
+        for (var i = 0; i < 24; i++) {        	
+            if(i<10){
+                dataItem['totSaleQty' + i] = i + "시";
+                dataItem['totSaleAmt' + i] = i + "시";
+
+            }else{
+                dataItem['totSaleQty' + i] = i + "시";
+                dataItem['totSaleAmt' + i] = i + "시";
+            }
+            j=0;
+        }
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+
+        // 그리드 클릭 이벤트
+    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
+	    	var ht = s.hitTest(e);
+
+	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
+	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
+	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
+	    	 */
+	    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 4) {
+	    		s.allowSorting = false;
+    		} else {
+    			s.allowSorting = true;
+    		}
+	    });
+
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prodHourCtrl", function (event, data) {
+        $scope.searchProdHourList(true);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prodHourCtrlSrch", function (event, data) {
+        $scope.searchProdHourList(false);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 전체기간 체크박스 클릭이벤트
+    $scope.isChkDt = function() {
+      $scope.srchStartDate.isReadOnly = $scope.isChecked;
+      $scope.srchEndDate.isReadOnly = $scope.isChecked;
+    };
+
+    // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+    $scope.isChkProdClassDisplay = function(){
+  	  var columns = $scope.flex.columns;
+
+  	  for(var i=0; i<columns.length; i++){
+  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+  		  }
+  	  }
+    }
+
+    // 시간별 리스트 조회
+    $scope.searchProdHourList = function (isPageChk) {
+        $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
+
+        // 파라미터
+        var params= {};
+        
+        params.storeCd = $scope.searchedStoreCd;
+        params.saleTime = $scope.saleTime;
+        params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
+        params.isPageChk = isPageChk;
+        params.orgnFg    = $scope.orgnFg;
+        $scope.excelStartDate	= "";
+		$scope.excelEndDate 	= "";
+        
+        if(!$scope.isChecked){
+        	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        	params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        	
+        	$scope.excelStartDate	= params.startDate;
+    		$scope.excelEndDate 	= params.endDate;
+        }
+
+        if(params.startDate > params.endDate){
+       	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
+       	 	return false;
+        }
+
+        
+		$scope.excelStoreCd 	= params.storeCd; // 상품코드
+		$scope.excelSaleTime	= params.saleTime; // 상품명
+		$scope.excelListScale 	= params.listScale;
+		$scope.excelOrgnFg		= params.orgnFg;
+		$scope.isSearch			= true;
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sale/status/prod/hour/list.sb", params, function() {});
+
+        // 선택한 시간대에 따른 리스트 항목 visible
+        var grid = wijmo.Control.getControl("#wjGridList");
+        var columns = grid.columns;
+        var start = 0;
+        var end = 0;
+        
+        if($scope.saleTime === "0"){
+            start = 5;
+            end = 6;
+        }else if($scope.saleTime  === "1"){
+            start = 7;
+            end = 8;
+        }else if($scope.saleTime  === "2"){
+            start = 9;
+            end = 10;
+        }else if($scope.saleTime  === "3"){
+            start = 11;
+            end = 12;
+        }else if($scope.saleTime  === "4"){
+            start = 13;
+            end = 14;
+        }else if($scope.saleTime  === "5"){
+            start = 15;
+            end = 16;
+        }else if($scope.saleTime  === "6"){
+            start = 17;
+            end = 18;
+        }else if($scope.saleTime  === "7"){
+            start = 19;
+            end = 20;
+        }else if($scope.saleTime  === "8"){
+            start = 21;
+            end = 22;
+        }else if($scope.saleTime  === "9"){
+            start = 23;
+            end = 24;
+        }else if($scope.saleTime  === "10"){
+            start = 25;
+            end = 26;
+        }else if($scope.saleTime  === "11"){
+            start = 27;
+            end = 28;
+        }else if($scope.saleTime  === "12"){
+            start = 29;
+            end = 30;
+        }else if($scope.saleTime  === "13"){
+            start = 31;
+            end = 32;
+        }else if($scope.saleTime  === "14"){
+            start = 33;
+            end = 34;
+        }else if($scope.saleTime  === "15"){
+            start = 35;
+            end = 36;
+        }else if($scope.saleTime  === "16"){
+            start = 37;
+            end = 38;
+        }else if($scope.saleTime  === "17"){
+            start = 39;
+            end = 40;
+        }else if($scope.saleTime  === "18"){
+            start = 41;
+            end = 42;
+        }else if($scope.saleTime  === "19"){
+            start = 43;
+            end = 44;
+        }else if($scope.saleTime  === "20"){
+            start = 45;
+            end = 46;
+        }else if($scope.saleTime  === "21"){
+            start = 47;
+            end = 48;
+        }else if($scope.saleTime  === "22"){
+            start = 49;
+            end = 50;
+        }else if($scope.saleTime  === "23"){
+            start = 51;
+            end = 52;
+        }else if($scope.saleTime === ""){ //전체
+            start = 5;
+            end = 52;
+        }
+        
+        for(var i = 5; i <= 76; i++){        	
+            if(i >= start && i <= end){
+                columns[i].visible = true;
+            }else{
+                columns[i].visible = false;
+            }
+        }
+        	
+//        start++;
+//        end++;
+
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.dayTimeSelectStoreShow = function () {
+        $scope._broadcast('dayTimeSelectStoreCtrl');
+    };
+
+    // 엑셀 다운로드
+    $scope.excelDownloadHour = function () {
+    	// 파라미터
+		var params     = {};
+		
+		$scope._broadcast('prodHourExcelCtrl', params);
+    };
+}]);
+
+/** 엑셀 컨트롤러1 */
+app.controller('prodHourExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodHourExcelCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+       // add the new GroupRow to the grid's 'columnFooters' panel
+       s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+       // add a sigma to the header to show that this is a summary row
+       s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+        // 첫째줄 헤더 생성
+        var dataItem       = {};
+        dataItem.lv1Nm     = messages["prodrank.prodClassLNm"];
+        dataItem.lv2Nm     = messages["prodrank.prodClassMNm"];
+        dataItem.lv3Nm     = messages["prodrank.prodClassSNm"];
+        dataItem.prodCd    = messages["prodhour.prodCd"];
+        dataItem.prodNm    = messages["prodhour.prodNm"];
+
+        // 시간대별 컬럼 생성
+        for (var i = 0; i < 24; i++) {
 
             if(i<10){
                 dataItem['totSaleQty' + i] = i + "시";
@@ -122,192 +397,158 @@ app.controller('prodHourCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 }
             }
         }
-        
-        // 그리드 클릭 이벤트
-    	s.addEventListener(s.hostElement, 'mousedown', function (e) {
-	    	var ht = s.hitTest(e);
-
-	    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
-	    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
-	    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
-	    	 */
-	    	if(ht.cellType == 2 && ht.row < 1 && ht.col > 4) {
-	    		s.allowSorting = false;
-    		} else {
-    			s.allowSorting = true;
-    		}
-	    });
 
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("prodHourCtrl", function (event, data) {
-        $scope.searchProdHourList(true);
+    $scope.$on("prodHourExcelCtrl", function (event, data) {
+        $scope.searchProdHourExcelList(true);
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
-    
-    // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("prodHourCtrlSrch", function (event, data) {
-        $scope.searchProdHourList(false);
-        // 기능수행 종료 : 반드시 추가
-        event.preventDefault();
-    });
-    
-    // 전체기간 체크박스 클릭이벤트
-    $scope.isChkDt = function() {
-      $scope.srchStartDate.isReadOnly = $scope.isChecked;
-      $scope.srchEndDate.isReadOnly = $scope.isChecked;
-    };
-    
+
+    // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
+    $scope.isChkProdClassDisplay = function(){    	
+  	  var columns = $scope.excelFlex.columns;
+
+  	  for(var i=0; i<columns.length; i++){
+  		  if(columns[i].binding === 'lv1Nm' || columns[i].binding === 'lv2Nm' || columns[i].binding === 'lv3Nm'){
+  			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
+  		  }
+  	  }
+    }
+
     // 시간별 리스트 조회
-    $scope.searchProdHourList = function (isPageChk) {
-        $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
-       
+    $scope.searchProdHourExcelList = function (isPageChk) {
+
         // 파라미터
         var params= {};
-        
-        if(!$scope.isChecked){
-        	params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-        	params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        }
-        
-        if(params.startDate > params.endDate){
-       	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-       	 	return false;
-        }
 
-        params.storeCd = $scope.searchedStoreCd;
-        params.saleTime = $scope.saleTime;
-        params.listScale = $scope.prodHourlistScale; //-페이지 스케일 갯수
-        params.isPageChk = isPageChk;
-        params.orgnFg    = $scope.orgnFg;
+        params.startDate	=	$scope.excelStartDate;
+		params.endDate		=	$scope.excelEndDate;
+		params.storeCd		=	$scope.excelStoreCd;
+		params.saleTime		=	$scope.excelSaleTime;
+		params.listScale	=	$scope.excelListScale;
+		params.orgnFg		=	$scope.excelOrgnFg;	
+		
+		$scope.isChkProdClassDisplay();
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/status/prod/hour/list.sb", params, function() {});
+        $scope._inquiryMain("/sale/status/prod/hour/excelList.sb", params, function() {
+        	if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+              }
+
+              $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+              $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                  includeColumnHeaders: true,
+                  includeCellStyles   : true,
+                  includeColumns      : function (column) {
+                    return column.visible;
+                  }
+                }, '매출현황_상품별_시간대별_'+getToday()+'.xlsx', function () {
+                  $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                  }, 10);
+                });
+              }, 10);
+        });
 
         // 선택한 시간대에 따른 리스트 항목 visible
-        var grid = wijmo.Control.getControl("#wjGridList");
+        var grid = wijmo.Control.getControl("#wjGridListExcel");
         var columns = grid.columns;
         var start = 0;
         var end = 0;
 
-        if($scope.saleTime === "1"){ 
-            start = 6;
-            end = 7;
-        }else if($scope.saleTime  === "2"){ 
-            start = 8;
-            end = 9;
-        }else if($scope.saleTime  === "3"){ 
-            start = 10;
-            end = 11;
-        }else if($scope.saleTime  === "4"){ 
-            start = 12;
-            end = 13;
-        }else if($scope.saleTime  === "5"){ 
-            start = 14;
-            end = 15;
-        }else if($scope.saleTime  === "6"){ 
-            start = 16;
-            end = 17;
-        }else if($scope.saleTime  === "7"){ 
-            start = 18;
-            end = 19;
-        }else if($scope.saleTime  === "8"){ 
-            start = 20;
-            end = 21;
-        }else if($scope.saleTime  === "9"){ 
-            start = 22;
-            end = 23;
-        }else if($scope.saleTime  === "10"){ 
-            start = 24;
-            end = 25;
-        }else if($scope.saleTime  === "11"){ 
-            start = 26;
-            end = 27;
-        }else if($scope.saleTime  === "12"){ 
-            start = 28;
-            end = 29;
-        }else if($scope.saleTime  === "13"){ 
-            start = 30;
-            end = 31;
+        if($scope.saleTime === "0"){
+            start = 5;
+            end = 6;
+        }else if($scope.saleTime  === "1"){
+            start = 7;
+            end = 8;
+        }else if($scope.saleTime  === "2"){
+            start = 9;
+            end = 10;
+        }else if($scope.saleTime  === "3"){
+            start = 11;
+            end = 12;
+        }else if($scope.saleTime  === "4"){
+            start = 13;
+            end = 14;
+        }else if($scope.saleTime  === "5"){
+            start = 15;
+            end = 16;
+        }else if($scope.saleTime  === "6"){
+            start = 17;
+            end = 18;
+        }else if($scope.saleTime  === "7"){
+            start = 19;
+            end = 20;
+        }else if($scope.saleTime  === "8"){
+            start = 21;
+            end = 22;
+        }else if($scope.saleTime  === "9"){
+            start = 23;
+            end = 24;
+        }else if($scope.saleTime  === "10"){
+            start = 25;
+            end = 26;
+        }else if($scope.saleTime  === "11"){
+            start = 27;
+            end = 28;
+        }else if($scope.saleTime  === "12"){
+            start = 29;
+            end = 30;
+        }else if($scope.saleTime  === "13"){
+            start = 31;
+            end = 32;
         }else if($scope.saleTime  === "14"){
-            start = 32;
-            end = 33;    
-        }else if($scope.saleTime  === "15"){ 
-            start = 34;
-            end = 35;
-        }else if($scope.saleTime  === "16"){ 
-            start = 36;
-            end = 37;
+            start = 33;
+            end = 34;
+        }else if($scope.saleTime  === "15"){
+            start = 35;
+            end = 36;
+        }else if($scope.saleTime  === "16"){
+            start = 37;
+            end = 38;
         }else if($scope.saleTime  === "17"){
-            start = 38;
-            end = 39;
-        }else if($scope.saleTime  === "18"){ 
-            start = 40;
-            end = 41;
-        }else if($scope.saleTime  === "19"){ 
-            start = 42;
-            end = 43;
-        }else if($scope.saleTime  === "20"){ 
-            start = 44;
-            end = 45;
-        }else if($scope.saleTime  === "21"){ 
-            start = 46;
-            end = 47;
+            start = 39;
+            end = 40;
+        }else if($scope.saleTime  === "18"){
+            start = 41;
+            end = 42;
+        }else if($scope.saleTime  === "19"){
+            start = 43;
+            end = 44;
+        }else if($scope.saleTime  === "20"){
+            start = 45;
+            end = 46;
+        }else if($scope.saleTime  === "21"){
+            start = 47;
+            end = 48;
         }else if($scope.saleTime  === "22"){
-            start = 48;
-            end = 49;
+            start = 49;
+            end = 50;
         }else if($scope.saleTime  === "23"){
-            start = 50;
-            end = 51;
-        }else if($scope.saleTime  === "24"){
-            start = 52;
-            end = 53;
+            start = 51;
+            end = 52;
         }else if($scope.saleTime === ""){ //전체
-            start = 6;
-            end = 53;
+            start = 5;
+            end = 52;
         }
         
-        start++;
-        end++;
-
-        for(var i = 6; i <= 77; i++){
+        for(var i = 5; i <= 76; i++){        	
             if(i >= start && i <= end){
                 columns[i].visible = true;
             }else{
                 columns[i].visible = false;
             }
         }
+        	
+//        start++;
+//        end++;
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.dayTimeSelectStoreShow = function () {
-        $scope._broadcast('dayTimeSelectStoreCtrl');
-    };
-    
-    // 엑셀 다운로드
-    $scope.excelDownloadHour = function () {
-      if ($scope.flex.rows.length <= 0) {
-        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-        return false;
-      }
-
-      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-      $timeout(function () {
-        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-          includeColumnHeaders: true,
-          includeCellStyles   : true,
-          includeColumns      : function (column) {
-            return column.visible;
-          }
-        }, '매출현황_상품별_시간대별_'+getToday()+'.xlsx', function () {
-          $timeout(function () {
-            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-          }, 10);
-        });
-      }, 10);
-    };
 }]);

@@ -9,7 +9,7 @@
 <wj-popup id="prodLayer" control="prodLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="saleComPopup.table"/>
+      <s:message code="saleComPopup.prod"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
@@ -36,8 +36,12 @@
             <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
           </wj-flex-grid>
+          	<%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="saleComProdCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
         </div>
         <%--//위즈모 테이블--%>
       </div>

@@ -12,6 +12,7 @@ app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', function ($scope, $http
   $scope.$on("dlvrStorageMgrCtrl", function (event, data) {
     $scope.dlvrCd = data.dlvrCd;
     $scope.dlvrNm = data.dlvrNm;
+    $scope.hqOfficeCd = data.hqOfficeCd;
 
     // 배송기사 창고 추가 팝업 오픈
     $scope.wjDlvrStorageMgrLayer.show(true);
@@ -29,6 +30,7 @@ app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', function ($scope, $http
     // 파라미터
     var params    = {};
     params.dlvrCd = $scope.dlvrCd;
+    params.hqOfficeCd = $scope.hqOfficeCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/deliveryCharger/deliveryChargerManage/dlvrStorageMgr/list.sb", params, "", false);
   };
@@ -43,6 +45,7 @@ app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', function ($scope, $http
 
       item.status = "U";
       item.dlvrCd = $scope.dlvrCd;
+      item.hqOfficeCd = $scope.hqOfficeCd;
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
 

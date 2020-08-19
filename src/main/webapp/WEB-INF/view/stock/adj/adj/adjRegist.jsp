@@ -63,17 +63,20 @@
             </td>
           </tr>
           <tr>
-            <%-- 거래처 --%>
-            <th><s:message code="adj.reg.vendr"/></th>
-            <td>
-              <%-- 거래처선택 모듈 멀티 선택 사용시 include
-                   param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-              --%>
-              <jsp:include page="/WEB-INF/view/iostock/cmm/selectVendrM.jsp" flush="true">
-                <jsp:param name="targetId" value="adjRegistSelectVendr"/>
-              </jsp:include>
-              <%--// 거래처선택 모듈 싱글 선택 사용시 include --%>
-            </td>
+	         <%-- 출고창고 --%>
+	         <th><s:message code="hqMove.outStorage"/></th>
+	         <td>
+	            <%-- 창고선택 모듈 멀티 선택 사용시 include
+	                 param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+	                              displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+	                              modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+	                              closeFunc - 팝업 닫기시 호출할 함수
+	            --%>	            
+	            <jsp:include page="/WEB-INF/view/stock/com/popup/cmmStorage/selectStorageS.jsp" flush="true">
+	              <jsp:param name="targetId" value="registSelectStorage"/>
+	            </jsp:include>
+	            <%--// 창고선택 모듈 멀티 선택 사용시 include --%>
+	        </td>
             <%-- 조정구분 --%>
             <th><s:message code="adj.reg.adjFg"/></th>
             <td>
@@ -108,7 +111,7 @@
                 </wj-combo-box>
               </span>
               <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="adj.reg.excelFormUpload"/></a>
-              <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="adj.reg.textFormUpload"/></a>
+<%--               <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="adj.reg.textFormUpload"/></a> --%>
               <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
               <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="adj.reg.excelFormUploadErrorInfo"/></a>
             </td>

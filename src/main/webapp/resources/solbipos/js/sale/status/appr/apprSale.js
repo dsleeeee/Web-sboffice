@@ -63,7 +63,7 @@ app.controller('apprSaleCtrl', ['$scope', function ($scope) {
 		$("#apprAcquireCardTab").addClass("on");
         $("#apprAcquireMpayTab").removeClass("on");
         $("#apprAcquireMcouponTab").removeClass("on");
-        $("apprAcquireNcardTab").removeClass("on");
+        $("#apprAcquireNcardTab").removeClass("on");
 
         $("#apprAcquireCardView").show();
         $("#apprAcquireMpayView").hide();

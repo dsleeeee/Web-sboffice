@@ -673,10 +673,10 @@
     -->
     <select id="registPoslinkPtn" statementType="CALLABLE" parameterType="registVO" resultType="DefaultMap">
     {
-        CALL VITIS.SP_NEOE_POSLINK_RTN
+        CALL VITIS.SP_NEOE_POSLINK_PTN
         (
             #{membrOrgnCd},
-            #{storeCd},
+            #{regStoreCd},
             #{membrNo},
             #{result, mode=OUT, jdbcType=VARCHAR}
         )

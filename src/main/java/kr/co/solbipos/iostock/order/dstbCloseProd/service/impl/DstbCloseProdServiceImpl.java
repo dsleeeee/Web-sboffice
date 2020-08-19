@@ -1,5 +1,12 @@
 package kr.co.solbipos.iostock.order.dstbCloseProd.service.impl;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -8,13 +15,9 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.order.dstbCloseProd.service.DstbCloseProdService;
 import kr.co.solbipos.iostock.order.dstbCloseProd.service.DstbCloseProdVO;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("dstbCloseProdService")
+@Transactional
 public class DstbCloseProdServiceImpl implements DstbCloseProdService {
     private final DstbCloseProdMapper dstbCloseProdMapper;
     private final MessageService messageService;
@@ -173,4 +176,12 @@ public class DstbCloseProdServiceImpl implements DstbCloseProdService {
 
         return returnResult;
     }
+
+    /** 분배마감 - 매장 마감여부 확인 */
+	@Override
+	public int getDstbCloseProdAddProdDstbList(DstbCloseProdVO dstbCloseProdVO) {
+		int result = 0;
+		result = dstbCloseProdMapper.getDstbCloseProdAddProdDstbList(dstbCloseProdVO);
+		return result;
+	}
 }

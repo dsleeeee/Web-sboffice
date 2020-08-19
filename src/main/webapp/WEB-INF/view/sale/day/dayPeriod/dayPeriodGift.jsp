@@ -85,6 +85,13 @@
                             <wj-flex-grid-column header="<s:message code="dayPeriod.payClassCd"/>" binding="payClassCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                         </wj-flex-grid>
+
+                        <%-- ColumnPicker 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                            <jsp:param name="pickerTarget" value="dayPeriodGiftCtrl"/>
+                        </jsp:include>
+                        <%--// ColumnPicker 사용시 include --%>
+
                     </div>
                 </div>
             </div>
@@ -118,6 +125,13 @@
                         <wj-flex-grid-column header="<s:message code="dayPeriod.giftUprc"/>" binding="giftUprc" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
+
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                        <jsp:param name="pickerTarget" value="dayPeriodGiftDetailCtrl"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+
                 </div>
             </div>
 
@@ -136,4 +150,4 @@
     var giftProcFgData = ${ccu.getCommCodeExcpAll("048")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodGift.js?ver=20200206.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodGift.js?ver=20200206.06" charset="utf-8"></script>

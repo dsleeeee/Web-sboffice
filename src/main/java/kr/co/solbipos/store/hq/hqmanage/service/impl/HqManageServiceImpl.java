@@ -209,17 +209,9 @@ public class HqManageServiceImpl implements HqManageService{
 //        hqNmcodeVO.setHqOfficeCd(hqOfficeCd);
 //        String copyNmcodeResult = mapper.copyCmmNameCode(nmcodeVO);
 
-        // 포스 출력물 등록 TODO
-//        HqPrintTemplVO printTempVO = new HqPrintTemplVO();
-//
-//        printTempVO.setHqOfficeCd(hqOfficeCd);
-//        printTempVO.setRegDt(dt);
-//        printTempVO.setRegId(sessionInfoVO.getUserId());
-//        printTempVO.setModDt(dt);
-//        printTempVO.setModId(sessionInfoVO.getUserId());
-
-//        int printTempReg = mapper.hqPrintTempReg(printTempVO);
-//        procCnt += printTempReg;
+        // 포스 템플릿 등록
+        result += mapper.hqPrintTempReg(hqManage);
+        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         return result;
     }
@@ -252,17 +244,24 @@ public class HqManageServiceImpl implements HqManageService{
 
     /** 권한그룹 목록 조회 */
     @Override
-    public List<DefaultMap<String>> authHqList(HqManageVO hqManage) {
+    public List<DefaultMap<String>> authHqList(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            hqManage.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.authHqList(hqManage);
     }
 
-    /** 사용가능한 메뉴 */
+    /** 사용 메뉴 */
     @Override
     public List<DefaultMap<String>> avlblMenu(HqManageVO hqManage) {
         return mapper.avlblMenu(hqManage);
     }
 
-    /** 사용중인 메뉴 */
+    /** 미사용 메뉴 */
     @Override
     public List<DefaultMap<String>> beUseMenu(HqManageVO hqManage) {
         return mapper.beUseMenu(hqManage);
@@ -282,20 +281,45 @@ public class HqManageServiceImpl implements HqManageService{
         // hqOfficeCd : 복사 대상이 되는 본사
         // copyHqOfficeCd : 복사할 기준이 되는 본사
 
-        // 권한 복사
+        // 1. 메뉴 권한 복사
         int authGrpCopy = mapper.copyAuth(hqMenuVO);
-        int authExpCopy = mapper.copyAuthExcp(hqMenuVO);
-
         if(authGrpCopy <= 0) {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(authExpCopy <= 0) {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        mapper.removeAuthAll(hqMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = mapper.exceptMenu(hqMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                hqMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    hqMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    hqMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                hqMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = mapper.copyAuthExcp(hqMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
         }
+
         return (authGrpCopy+authExpCopy);
     }
 
-    /** 메뉴 권한 추가 */
+    /** 사용메뉴 등록 */
     @Override
     public int addAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
@@ -304,18 +328,27 @@ public class HqManageServiceImpl implements HqManageService{
 
         for(HqMenuVO hqMenu : hqMenus){
 
-            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
             hqMenu.setRegDt(insertDt);
             hqMenu.setRegId(sessionInfoVO.getUserId());
             hqMenu.setModDt(insertDt);
             hqMenu.setModId(sessionInfoVO.getUserId());
 
-            procCnt = mapper.addAuth(hqMenu);
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(hqMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(hqMenu);
+            }
+
+            /*// 권한 추가 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            procCnt = mapper.addAuth(hqMenu);*/
         }
         return procCnt;
     }
 
-    /** 메뉴 권한 삭제 */
+    /** 미사용메뉴 등록 */
     @Override
     public int removeAuth(HqMenuVO[] hqMenus, SessionInfoVO sessionInfoVO) {
 
@@ -334,16 +367,12 @@ public class HqManageServiceImpl implements HqManageService{
 
             if(isAuth > 0) {
                 procCnt = mapper.removeAuth(hqMenu);
-            }else {
-
-                hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
-                hqMenu.setRegDt(insertDt);
-                hqMenu.setRegId(sessionInfoVO.getUserId());
-                hqMenu.setModDt(insertDt);
-                hqMenu.setModId(sessionInfoVO.getUserId());
-
-                procCnt = mapper.addAuth(hqMenu);
             }
+
+            // 권한 삭제 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = mapper.addAuth(hqMenu);
+
         }
         return procCnt;
     }
@@ -383,6 +412,19 @@ public class HqManageServiceImpl implements HqManageService{
             }
         }
         return procCnt;
+    }
+
+    /** 업체 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            hqManage.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            hqManage.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.getAgencyCd(hqManage);
     }
 
 

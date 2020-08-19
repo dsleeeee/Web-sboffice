@@ -37,4 +37,10 @@ public interface GoalService {
     
 	/**매출목표관리 - 매출목표금액TOT 저장    */
     int saveSaleGoalAmtTotSave(GoalVO goalVO, SessionInfoVO sessionInfoVO);
+
+    /**매출목표관리 - 일자별 목표대비 매출 엑셀리스트 조회   */
+	List<DefaultMap<String>> getSaleGoalDayExcelList(GoalVO goalVO, SessionInfoVO sessionInfoVO);
+
+	/**매출목표관리 - 월별 목표대비 매출 엑셀리스트 조회   */
+	List<DefaultMap<String>> getSaleGoalMonthExcelList(GoalVO goalVO, SessionInfoVO sessionInfoVO);
 }

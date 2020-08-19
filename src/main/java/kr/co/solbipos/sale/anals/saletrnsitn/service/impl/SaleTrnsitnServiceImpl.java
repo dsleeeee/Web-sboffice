@@ -109,6 +109,52 @@ public class SaleTrnsitnServiceImpl implements SaleTrnsitnService {
         return saletrnsitnMapper.getSaletrnsitnList(saleTrnsitnVO);
     }
 
+    
+    /**
+	 * 매출추이분석(엑셀) 목록조회 (매출관리 > 매출분석 > 매출추이분석)
+     * @param 	saleTrnsitnVO
+     * @param 	sessionInfoVO
+     * @return 	java.util.List<DefaultMap<String>> - XML_String
+	 * @author  박지선
+	 * @since   2020. 04. 22
+	*/
+    @Override
+    public List<DefaultMap<String>> getSaletrnsitnExcelList(@RequestBody SaleTrnsitnVO saleTrnsitnVO, SessionInfoVO sessionInfoVO) {
+        //소속구분 설정
+        saleTrnsitnVO.setOrgnFg		(sessionInfoVO.getOrgnFg().getCode());	//소속구분(M:시스템, A:대리점, H:본사, S:매장,가맹점
+        saleTrnsitnVO.setHqOfficeCd	(sessionInfoVO.getHqOfficeCd()		);	//본사코드
+        saleTrnsitnVO.setStoreCd	(sessionInfoVO.getStoreCd()			);	//매장코드
 
+    	LOGGER.debug("### saleTrnsitnVO: " + saleTrnsitnVO);
+    	LOGGER.debug("### baseDate     : " + saleTrnsitnVO.getBaseDate());
+    	LOGGER.debug("### prodCd       : " + saleTrnsitnVO.getProdCd());
+    	LOGGER.debug("### prodNm       : " + saleTrnsitnVO.getProdNm());
+    	
+		/* DateUtil에 날짜 기능이 있으나 Calendar 대신 Date를 사용하고 있음. -> 'new Date()'를 사용하기에  Calendar로의 변경 고려.
+		SimpleDateFormat 	formatter 	= new SimpleDateFormat ("yyyyMMdd");
+		Calendar 			cal			= Calendar.getInstance();
+    	String 				today		= formatter.format(cal.getTime());
+		*/    	
+		saleTrnsitnVO.setBaseDate( DateUtil.currentDateString() );	//DEFAULT_YMD_FORMAT = "yyyyMMdd";
+
+/* TODO Test용 - START */
+		String	startDate = StringUtils.defaultIfEmpty(saleTrnsitnVO.getStartDate(), "");
+		if(!"".contentEquals(startDate)) {
+	    	saleTrnsitnVO.setBaseDate( saleTrnsitnVO.getStartDate() );
+	    	String baseDate = StringUtils.defaultIfEmpty(saleTrnsitnVO.getBaseDate(), "");
+	
+	    	LOGGER.debug("### startDate    : " + saleTrnsitnVO.getStartDate());
+	    	LOGGER.debug("### baseDate     : " + baseDate);
+	    	if("".equals(baseDate) ){
+	    		saleTrnsitnVO.setBaseDate( DateUtil.currentDateString() );
+	    	}
+		}
+/* TODO Test용 - END */
+
+    	SaleTrnsitnDatesVO datesVo = saletrnsitnMapper.getPreviouseDatesInfo(saleTrnsitnVO);
+    	BeanUtils.copyProperties(datesVo, saleTrnsitnVO);
+    	
+        return saletrnsitnMapper.getSaletrnsitnExcelList(saleTrnsitnVO);
+    }
     
 }

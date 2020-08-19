@@ -7,17 +7,26 @@ import kr.co.common.service.code.impl.CmmEnvMapper;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
+import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("outstockConfmService")
+@Transactional
 public class OutstockConfmServiceImpl implements OutstockConfmService {
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	
     private final OutstockConfmMapper outstockConfmMapper;
     private final CmmEnvMapper cmmEnvMapper;
     private final MessageService messageService;
@@ -62,7 +71,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
             outstockConfmVO.setProcFg("10");
             outstockConfmVO.setUpdateProcFg("20");
-
+            
+            String slipKind	= outstockConfmVO.getSlipKind();
+            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
+            outstockConfmVO.setOccrFg(occrFg);
             // DTL의 진행구분 수정. 수주확정 -> 출고확정
             result = outstockConfmMapper.updateOutstockDtlConfirm(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -70,7 +83,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             // HD의 진행구분 수정. 수주확정 -> 출고확정
             result = outstockConfmMapper.updateOutstockConfirm(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+            
+            //PROD 입력. 수주확정 -> 출고확정
+            result = outstockConfmMapper.insertOutstockProdConfirm(outstockConfmVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            
             // 자동입고인 경우 입고로 수정
             if(StringUtil.getOrBlank(envst1043).equals("A")) {
                 outstockConfmVO.setProcFg("20");
@@ -99,7 +116,11 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
     /** 출고확정 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO) {
+    public List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO) {
+        
+    	// regId, regDt, modId, modDt, hqOfficd, storeCd 세팅
+    	outstockConfmVO = setSessionValue(outstockConfmVO, sessionInfoVO, null);
+    	
         return outstockConfmMapper.getOutstockConfmDtlList(outstockConfmVO);
     }
 
@@ -119,7 +140,17 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         String envst1043 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         OutstockConfmVO outstockConfmHdVO = new OutstockConfmVO();
-
+        
+        //TB_PO_HQ_STORE_OUTSTOCK_PROD Insert or Update에 사용
+//        String[] storageCd;
+//        String[] storageNm;
+//        String[] storageInUnitQty;
+//        String[] storageInEtcQty;
+//        String[] storageInTotQty;
+//        String[] storageInAmt;
+//        String[] storageInVat;
+//        String[] storageInTot;
+        
         for (OutstockConfmVO outstockConfmVO : outstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
@@ -137,13 +168,15 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                 outstockConfmHdVO.setModDt(currentDt);
             }
 
-            int slipFg     = outstockConfmVO.getSlipFg();
-            int outUnitQty = (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
-            int outEtcQty  = (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
-            int outTotQty  = (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;
-            Long outAmt    = (outstockConfmVO.getOutAmt()     == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
-            Long outVat    = (outstockConfmVO.getOutVat()     == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
-            Long outTot    = (outstockConfmVO.getOutTot()     == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
+            int slipFg     	= outstockConfmVO.getSlipFg();
+            String slipKind	= outstockConfmVO.getSlipKind();
+            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            int outUnitQty 	= (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
+            int outEtcQty  	= (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
+            int outTotQty  	= (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;
+            Long outAmt    	= (outstockConfmVO.getOutAmt()     == null ? 0 : outstockConfmVO.getOutAmt()) * slipFg;
+            Long outVat    	= (outstockConfmVO.getOutVat()     == null ? 0 : outstockConfmVO.getOutVat()) * slipFg;
+            Long outTot    	= (outstockConfmVO.getOutTot()     == null ? 0 : outstockConfmVO.getOutTot()) * slipFg;
 
             outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             outstockConfmVO.setOutUnitQty(outUnitQty);
@@ -163,6 +196,75 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
             returnResult += result;
             i++;
+            
+            outstockConfmVO.setHqOfficeCd			(outstockConfmHdVO	.getHqOfficeCd	()		);	//본사코드
+            outstockConfmVO.setSlipNo				(outstockConfmHdVO	.getSlipNo		()		);	//전표번호
+            outstockConfmVO.setProdCd				(outstockConfmVO	.getProdCd		()		);	//상품코드
+            outstockConfmVO.setStorageCd			(outstockConfmVO	.getOutStorageCd()		);	//출고창고코드
+            outstockConfmVO.setOccrFg				(occrFg										);	//발생구분(13:본사출고)
+            outstockConfmVO.setStoreCd		        (sessionInfoVO		.getStoreCd		()		);	//매장코드
+            outstockConfmVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
+
+            outstockConfmVO.setConfmYn				(confirmFg.equals("Y")? "Y":"N"				);	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
+
+            outstockConfmVO.setInUnitQty		    (outUnitQty									);	//입고수량 주문단위
+            outstockConfmVO.setInEtcQty		        (outEtcQty									);	//입고수량 나머지
+            outstockConfmVO.setInTotQty		        (outTotQty									);	//입고수량합계 낱개
+            outstockConfmVO.setInAmt			    (outAmt										);	//입고금액
+            outstockConfmVO.setInVat			    (outVat										);	//입고금액VAT
+            outstockConfmVO.setInTot			    (outTot										);	//입고금액합계
+
+        	LOGGER.debug("### getProperties: " + outstockConfmVO.getProperties() );
+
+        	result = outstockConfmMapper.mergeInstockConfmProd(outstockConfmVO);
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            //TB_PO_HQ_STORE_OUTSTOCK_PROD - START
+        	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
+//            storageCd           = outstockConfmVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
+//            storageNm           = outstockConfmVO.getArrStorageNm().split("\\^");
+//            storageInUnitQty    = outstockConfmVO.getArrInUnitQty().split("\\^");
+//            storageInEtcQty     = outstockConfmVO.getArrInEtcQty ().split("\\^");
+//            storageInTotQty     = outstockConfmVO.getArrInTotQty ().split("\\^");
+//            storageInAmt        = outstockConfmVO.getArrInAmt	 ().split("\\^");
+//            storageInVat        = outstockConfmVO.getArrInVat	 ().split("\\^");
+//            storageInTot        = outstockConfmVO.getArrInTot	 ().split("\\^");
+//
+//            for(int k=0; k<storageCd.length; k++) {
+//            	LOGGER.debug("### confmYn         : " + confirmFg			);
+//	            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
+//	            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
+//	            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
+//	            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
+//	            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
+//	            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+//
+//	            outstockConfmVO.setHqOfficeCd			(outstockConfmHdVO	.getHqOfficeCd	()		);	//본사코드
+//	            outstockConfmVO.setSlipNo				(outstockConfmHdVO	.getSlipNo		()		);	//전표번호
+//	            outstockConfmVO.setProdCd				(outstockConfmVO	.getProdCd		()	);	//상품코드
+//	            outstockConfmVO.setStorageCd			(storageCd[k]								);	//창고코드
+//	            outstockConfmVO.setOccrFg				(occrFg										);	//발생구분(13:본사출고)
+//	            outstockConfmVO.setStoreCd		        (sessionInfoVO		.getStoreCd		()		);	//매장코드
+//	            outstockConfmVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
+//
+//	            outstockConfmVO.setConfmYn				("Y"										);	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
+//	            outstockConfmVO.setInUnitQty		    (slipKind.equals("1")	?	Integer.parseInt	(storageInUnitQty	[k]) * -1 : Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//	            outstockConfmVO.setInEtcQty		        (slipKind.equals("1")	?	Integer.parseInt	(storageInEtcQty	[k]) * -1 : Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//	            outstockConfmVO.setInTotQty		        (slipKind.equals("1")	?	Integer.parseInt	(storageInTotQty	[k]) * -1 : Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//	            outstockConfmVO.setInAmt			    (slipKind.equals("1")	?	Long.parseLong		(storageInAmt		[k]) * -1 : Long.parseLong		(storageInAmt		[k]));	//입고금액
+//	            outstockConfmVO.setInVat			    (slipKind.equals("1")	?	Long.parseLong		(storageInVat		[k]) * -1 : Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//	            outstockConfmVO.setInTot			    (slipKind.equals("1")	?	Long.parseLong		(storageInTot		[k]) * -1 : Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//
+//	            outstockConfmVO.setRegId			    (sessionInfoVO.getUserId()		);
+//	            outstockConfmVO.setRegDt			    (currentDt	);
+//	            outstockConfmVO.setModId			    (sessionInfoVO.getUserId()		);
+//	            outstockConfmVO.setModDt			    (currentDt	);
+//
+//            	LOGGER.debug("### getProperties: " + outstockConfmVO.getProperties() );
+//
+//            	result = outstockConfmMapper.mergeInstockConfmProd(outstockConfmVO);
+//                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//            }
+        //TB_PO_HQ_STORE_OUTSTOCK_PROD - END
         }
 
         // HD 수정
@@ -224,4 +326,22 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         return returnResult;
     }
+    
+    /** regId, regDt, modId, modDt, hqOfficd, storeCd, areaFg 세팅  */
+    public OutstockConfmVO setSessionValue(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO, String currentDt) {
+        if(StringUtil.getOrBlank(currentDt).equals("")) {
+            currentDt = currentDateTimeString();
+        }
+
+        outstockConfmVO.setRegId(sessionInfoVO.getUserId());
+        outstockConfmVO.setRegDt(currentDt);
+        outstockConfmVO.setModId(sessionInfoVO.getUserId());
+        outstockConfmVO.setModDt(currentDt);
+
+        outstockConfmVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        outstockConfmVO.setStoreCd(sessionInfoVO.getStoreCd());
+        outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
+
+        return outstockConfmVO;
+    }    
 }

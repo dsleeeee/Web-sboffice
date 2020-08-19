@@ -48,6 +48,16 @@ app.controller('storeEmpDetailCtrl', ['$scope', '$http', function ($scope, $http
     $scope.storeEmpRegistLayer.show(true);
   };
 
+  // 탭변경
+  $scope.changeTab = function() {
+
+    $scope.storeEmpDetailLayer.hide();
+    $scope.storeEmpAuthLayer.show(true);
+
+    $scope._broadcast('storeEmpAuthCtrl', $scope.selectedStoreEmp);
+    event.preventDefault();
+  };
+
   // 닫기버튼 클릭
   $scope.close = function(){
     $scope.storeEmpDetailLayer.hide();

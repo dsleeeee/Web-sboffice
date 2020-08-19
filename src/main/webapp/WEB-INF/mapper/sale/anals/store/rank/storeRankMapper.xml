@@ -21,7 +21,7 @@
 		      , M.BILL_CNT
 		      , M.TOT_GUEST_CNT
 		      , ROUND(M.TOT_SALE_AMT/M.BILL_CNT,0) AS TOT_BILL_AMT
-		      , ROUND(RATIO_TO_REPORT(M.REAL_SALE_AMT) OVER() *100, 1) AS STORE_RAT
+		      , ROUND(RATIO_TO_REPORT(M.REAL_SALE_AMT) OVER(), 2) *100 AS STORE_RAT
 	 		  ${sQuery1}
 		FROM (
 			SELECT TSDT.STORE_CD
@@ -31,10 +31,11 @@
 			     , SUM(TSDT.REAL_SALE_AMT) AS REAL_SALE_AMT
 			     , SUM(TSDT.BILL_CNT) AS BILL_CNT
 			     , SUM(TSDT.TOT_GUEST_CNT) AS TOT_GUEST_CNT
-			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z 
-			     	WHERE Z.STORE_CD = TSDT.STORE_CD 
+			     , (SELECT COUNT(*) FROM TB_SL_DAILY_TOTAL Z
+			     	WHERE Z.STORE_CD = TSDT.STORE_CD
+			     	AND Z.HQ_OFFICE_CD = #{hqOfficeCd}
 			     	<if test='startDate != null and startDate != ""'>
-			     		AND Z.SALE_DATE >= #{startDate} 
+			     		AND Z.SALE_DATE >= #{startDate}
 			     	</if>
 			     	<if test='endDate != null and endDate != ""'>
 			     		AND Z.SALE_DATE <![CDATA[<= ]]> #{endDate}
@@ -47,6 +48,8 @@
 			 WHERE TSDT.STORE_CD = TSDP.STORE_CD
 			   AND TSDT.SALE_DATE = TSDP.SALE_DATE
 			   AND TSDT.STORE_CD = TMS.STORE_CD
+            	AND TSDP.HQ_OFFICE_CD = TSDP.HQ_OFFICE_CD
+         		AND TSDP.HQ_OFFICE_CD = TMS.HQ_OFFICE_CD
 			   AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='startDate != null and startDate != ""'>
 			   AND TSDT.SALE_DATE >= #{startDate}
@@ -58,7 +61,7 @@
 			   AND TSDT.STORE_CD IN
 			     	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
 							#{item}
-					</foreach>  
+					</foreach>
 			</if>
 			 GROUP BY TSDT.STORE_CD, TMS.STORE_NM
 			<if test='chkSort == "1"'>
@@ -68,10 +71,11 @@
 			 ORDER BY SUM(TSDT.TOT_SALE_AMT) ASC
 			</if>
 		 ) M
-		 WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}   
-	 
+		 <if test='rowNum != null and rowNum != "" and chkRank == "N"'>
+            WHERE ROWNUM <![CDATA[<= ]]> #{rowNum}
+	     </if>
     </select>
-	
+
 	<!-- 매장별매출분석 - 결제수단 컬럼 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE

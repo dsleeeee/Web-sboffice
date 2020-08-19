@@ -520,7 +520,7 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장 정보조회 --%>
+<%-- 회원 정보조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDetail.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

@@ -21,24 +21,24 @@
           <tr>
             <%-- 본사코드 --%>
             <th><s:message code="instl.hqOfficeCd"/></th>
-            <td><input type="text" id="hqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd"/></td>
+            <td><input type="text" id="hqOfficeCd" ng-model="hqOfficeCd"/></td>
             <%-- 본사명 --%>
             <th><s:message code="instl.hqOfficeNm"/></th>
-            <td><input type="text" id="hqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/></td>
+            <td><input type="text" id="hqOfficeNm" ng-model="hqOfficeNm"/></td>
           </tr>
           <tr>
             <%-- 매장코드 --%>
             <th><s:message code="instl.storeCd"/></th>
-            <td><input type="text" id="storeCd" class="sb-input w100" ng-model="storeCd"/></td>
+            <td><input type="text" id="storeCd" ng-model="storeCd"/></td>
             <%-- 매장명 --%>
             <th><s:message code="instl.storeNm"/></th>
-            <td><input type="text" id="storeNm" class="sb-input w100" ng-model="storeNm"/></td>
+            <td><input type="text" id="storeNm" ng-model="storeNm"/></td>
           </tr>
           <tr>
             <%-- 대리점 --%>
             <th><s:message code="instl.agency"/></th>
             <td>
-              <input type="text" id="pSrchAgencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency('1')"/>
+              <input type="text" id="pSrchAgencyNm" value="선택" ng-readonly="true" ng-click="searchAgency('1')"/>
               <input type="text" id="pSrchAgencyCd" ng-hide="true"/>
             </td>
             <%-- 설치구분 --%>
@@ -80,7 +80,7 @@
           <%-- 대리점 --%>
           <th><s:message code="instl.agency"/></th>
           <td>
-            <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency('2')"/>
+            <input type="text" id="agencyNm" value="선택" ng-readonly="true" ng-click="searchAgency('2')"/>
             <input type="text" id="agencyCd" ng-hide="true"/>
           </td>
           <%-- 설치사유 --%>
@@ -106,7 +106,7 @@
           <th><s:message code="instl.remark"/></th>
           <td colspan="3">
             <div class="w80 s12 txtIn">
-              <input type="text" class="sb-input w100" ng-model="request.remark" maxlength="60" ng-readonly="reasonReadOnly"/>
+              <input type="text" ng-model="request.remark" maxlength="60" ng-readonly="reasonReadOnly"/>
             </div>
             <a href="#" class="btn_grayS2" ng-click="request()"><s:message code="instl.install.request"/></a>
           </td>
@@ -130,7 +130,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px;">
+        <div class="wj-gridWrap" style="height: 280px;">
           <wj-flex-grid
                   autoGenerateColumns="false"
                   selection-mode="Row"

@@ -179,7 +179,7 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       // 이전 주문수량이 없으면서 주문수량 0인 경우 저장하지 않는다.
-      if (item.prevOrderTotQty === null && item.orderTotQty === 0) {
+      if (item.prevOrderTotQty === null && (item.orderTotQty === 0 || item.orderTotQty === undefined)) {
         continue;
       }
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
@@ -190,11 +190,11 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
         $scope._popMsg(messages["vendrOrder.reg.not.overOrderTot"]); // 주문금액이 너무 큽니다.
         return false;
       }
-
+      
       item.status    = "U";
       item.slipNo    = $scope.slipNo;
       item.slipFg    = $scope.slipFg;
-      item.storageCd = "001";
+      item.storageCd = "999";			//001 -> 999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);
@@ -321,7 +321,12 @@ app.controller('vendrOrderProdRegCtrl', ['$scope', '$http', '$timeout', function
     params.slipFg   = $scope.slipFg;
     params.vendrCd  = $scope.vendrCd;
     params.addQtyFg = $scope.addQtyFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({

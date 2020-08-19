@@ -1,5 +1,6 @@
 package kr.co.solbipos.base.prod.prod.service.impl;
 
+import kr.co.common.system.BaseEnv;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
@@ -20,7 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.File;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateString;
@@ -36,6 +41,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  * @ 2018.08.06  장혁수       최초생성
  * @ 2018.10.19  노현수       생성자 주입, 상품조회 관련 변경
  * @ 2019.06.03  이다솜       saveProductInfo 수정 (WorkMode 추가)
+ * @ 2020.08.10  김설아       saveProductInfo 수정 (return : 상품코드 / int -> long)
+ *                            getProdImageFileSave 추가 (상품 이미지 업로드)
  *
  * @author NHN한국사이버결제 KCP 장혁수
  * @since 2018. 08.06
@@ -142,7 +149,8 @@ public class ProdServiceImpl implements ProdService {
 
     /** 상품정보 저장 */
     @Override
-    public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+//    public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         String currentDt = currentDateTimeString();
 
@@ -201,7 +209,8 @@ public class ProdServiceImpl implements ProdService {
 
 
         // 상품정보 저장
-        int result = prodMapper.saveProductInfo(prodVO);
+//        int result = prodMapper.saveProductInfo(prodVO);
+        long result = prodMapper.saveProductInfo(prodVO);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
         //상품 바코드 저장(바코드정보가 있을 경우만)
@@ -263,6 +272,9 @@ public class ProdServiceImpl implements ProdService {
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && priceEnvstVal == PriceEnvFg.HQ) {
             String storeSalePriceReeulst = prodMapper.saveStoreSalePrice(prodVO);
         }
+
+        // 신규상품 이미지 등록시
+        result = Long.parseLong(prodVO.getProdCd());
 
         return result;
     }
@@ -539,6 +551,160 @@ public class ProdServiceImpl implements ProdService {
 
         return procCnt;
 
+    }
+
+    /** 상품 신규등록,수정 팝업 - 상품 이미지 저장 */
+    @Override
+    public boolean getProdImageFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+
+//        System.out.println("test1111");
+//        boolean isSuccess = false;
+        boolean isSuccess = true;
+
+        try{
+
+            // 업로드 파일 읽기
+            ProdVO prodInfo = new ProdVO();
+
+            // 현재 일자
+            String currentDt = currentDateTimeString();
+
+            prodInfo.setModDt(currentDt);
+            prodInfo.setModId(sessionInfo.getUserId());
+            prodInfo.setRegDt(currentDt);
+            prodInfo.setRegId(sessionInfo.getUserId());
+
+            prodInfo.setOrgnFg((String)multi.getParameter("orgnFg"));
+            prodInfo.setProdCd((String)multi.getParameter("ImageProdCd"));
+            prodInfo.setProdImageDelFg((String)multi.getParameter("prodImageDelFg"));
+
+            // 저장경로 폴더
+            String path_folder = "";
+
+            // 본사
+            if(String.valueOf(prodInfo.getOrgnFg()).equals("HQ")) {
+                prodInfo.setHqOfficeCd((String)multi.getParameter("hqOfficeCd"));
+                path_folder = prodInfo.getHqOfficeCd();
+
+            // 매장
+            } else if(String.valueOf(prodInfo.getOrgnFg()).equals("STORE")) {
+                prodInfo.setStoreCd((String)multi.getParameter("storeCd"));
+                path_folder = prodInfo.getStoreCd();
+            }
+
+            // 저장 경로 설정 (개발시 로컬) (파일 저장용)
+//            String pre_path = "D:\\Workspace\\javaWeb\\testProdImg\\" + path_folder;
+//            String path = "D:\\Workspace\\javaWeb\\testProdImg\\" + path_folder + "\\001\\";
+
+            // 파일서버 대응 경로 지정 (운영) (파일 저장용)
+            // 001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
+            String pre_path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/";
+            String path = BaseEnv.FILE_UPLOAD_DIR + "prod_img/" + path_folder + "/001/";
+            // FileRoot/prod_img/A0001/001/1597125734220.jpg
+            // C:\Users\김설아\.IntelliJIdea2018.3\system\tomcat\Unnamed_sboffice\work\Catalina\localhost\ROOT\FileRoot\prod_img\A0001\001\1597125734220.jpg
+
+            // 저장 경로 설정 (디비 저장용)
+            String path_table = multi.getSession().getServletContext().getRealPath("prod_img/" + path_folder + "/001/");
+            // http://neo.solbipos.com/prod_img/A0001/001/1597125734220.jpg
+
+            // 업로드 되는 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName = "";
+
+            // 경로에 폴도가 있는지 체크
+            File pre_dir = new File(pre_path);
+            if(!pre_dir.isDirectory()){
+                pre_dir.mkdir();
+            }
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            List<MultipartFile> fileList = multi.getFiles("file");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                // orgFileName
+                if ( orgFileName.contains(".") ) {
+                    orgFileName = orgFileName.substring(0, orgFileName.lastIndexOf("."));
+                }
+                // IE에선 C:\Users\김설아\Desktop\123\new2.txt
+                // 크롬에선 new2.txt
+                if ( orgFileName.contains("\\") ) {
+                    orgFileName = orgFileName.substring(orgFileName.lastIndexOf("\\"));
+                    orgFileName = orgFileName.substring(1);
+                }
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 1) {
+                    // 파일경로
+                    prodInfo.setFilePath(path_table);
+                    // 파일명 (물리적으로 저장되는 파일명)
+                    prodInfo.setFileNm(newFileName);
+                    // 원본 파일명
+//                    prodInfo.setOrginlFileNm(orgFileName);
+                    // 파일확장자
+                    prodInfo.setFileExt(fileExt);
+
+                    // 파일 저장하는 부분
+                    try {
+                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // 상품 이미지 저장시 파일여부 체크
+                    String check = prodMapper.getProdImageFileSaveCheck(prodInfo);
+                    if(String.valueOf(check).equals("0")) {
+                        // 상품 이미지 저장 insert
+                        if(prodMapper.getProdImageFileSaveInsert(prodInfo) > 0) {
+                            isSuccess = true;
+                        } else {
+                            isSuccess = false;
+                        }
+                    } else {
+                        // 상품 이미지 저장 update
+                        if(prodMapper.getProdImageFileSaveUpdate(prodInfo) > 0) {
+                            isSuccess = true;
+                        } else {
+                            isSuccess = false;
+                        }
+                    }
+                }
+            }
+
+            // 선택한 파일이 없으면
+            if(fileList.size() == 0) {
+                // 삭제시
+                if(String.valueOf(prodInfo.getProdImageDelFg()).equals("DEL")) {
+                    // 상품 이미지 삭제시 파일명 가져오기
+                    String pathFull = prodMapper.getProdImageFileSaveImgFileNm(prodInfo);
+
+                    // 상품 이미지 저장 delete
+                    if(prodMapper.getProdImageFileSaveDelete(prodInfo) > 0) {
+                        // 파일 삭제
+//                        File delFile = new File("D:\\Workspace\\javaWeb\\testProdImg\\" + pathFull);
+                        File delFile = new File(BaseEnv.FILE_UPLOAD_DIR + pathFull);
+                        if(delFile.exists()) {
+                            delFile.delete();
+                        }
+                        isSuccess = true;
+                    } else {
+                        isSuccess = false;
+                    }
+                }
+            }
+
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+        return isSuccess;
     }
 
 }

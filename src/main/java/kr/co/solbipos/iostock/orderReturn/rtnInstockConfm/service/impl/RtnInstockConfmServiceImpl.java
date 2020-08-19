@@ -6,8 +6,12 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmService;
 import kr.co.solbipos.iostock.orderReturn.rtnInstockConfm.service.RtnInstockConfmVO;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,8 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("rtnInstockConfmService")
 public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+	
     private final RtnInstockConfmMapper rtnInstockConfmMapper;
     private final MessageService messageService;
 
@@ -38,7 +44,9 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
     /** 반품본사입고 상세 리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO) {
+    public List<DefaultMap<String>> getRtnInstockConfmDtlList(RtnInstockConfmVO rtnInstockConfmVO, SessionInfoVO sessionInfoVO) {
+    	String areaFg	 = sessionInfoVO.getAreaFg();
+    	rtnInstockConfmVO.setAreaFg(areaFg);
         return rtnInstockConfmMapper.getRtnInstockConfmDtlList(rtnInstockConfmVO);
     }
 
@@ -49,11 +57,14 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         int result = 0;
         int i = 0;
         String currentDt = currentDateTimeString();
+        String userId	 = sessionInfoVO.getUserId();
         String confirmFg = "N";
         String penaltyFg = "";
 
         RtnInstockConfmVO rtnInstockConfmHdVO = new RtnInstockConfmVO();
-
+        
+        //TB_PO_HQ_STORE_OUTSTOCK_PROD Insert or Update에 사용
+        
         for (RtnInstockConfmVO rtnInstockConfmVO : rtnInstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
@@ -99,6 +110,33 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
             returnResult += result;
             i++;
+            
+//            rtnInstockConfmVO.setHqOfficeCd			(rtnInstockConfmVO	.getHqOfficeCd	()		);	//본사코드
+//            rtnInstockConfmVO.setSlipNo				(rtnInstockConfmVO	.getSlipNo		()		);	//전표번호
+//            rtnInstockConfmVO.setProdCd				(rtnInstockConfmVO		.getProdCd		()	);	//상품코드
+            rtnInstockConfmVO.setStorageCd		    (rtnInstockConfmVO	.getInStorageCd	()		);	//입고창고코드
+            rtnInstockConfmVO.setOccrFg				("02"										);	//발생구분(03:매장입고)
+//            rtnInstockConfmVO.setStoreCd		    (rtnInstockConfmVO.getStoreCd()				);	//매장코드
+            rtnInstockConfmVO.setSlipFg		        (-1											);	//전표구분 1:주문 -1:반품
+
+            rtnInstockConfmVO.setConfmYn				(confirmFg.equals("Y")? "Y":"N"				);	//확정여부(Y/N) - Trigger가  'Y'인것만 읽어서 처리하는데 사용
+//            rtnInstockConfmVO.setInUnitQty		    (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//            rtnInstockConfmVO.setInEtcQty		    (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//            rtnInstockConfmVO.setInTotQty		    (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//            rtnInstockConfmVO.setInAmt			    (Long.parseLong		(storageInAmt		[k]));	//입고금액
+//            rtnInstockConfmVO.setInVat			    (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//            rtnInstockConfmVO.setInTot			    (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+
+            rtnInstockConfmVO.setRegId			    (userId		);
+            rtnInstockConfmVO.setRegDt			    (currentDt	);
+            rtnInstockConfmVO.setModId			    (userId		);
+            rtnInstockConfmVO.setModDt			    (currentDt	);
+
+        	LOGGER.debug("### getProperties: " + rtnInstockConfmVO.getProperties() );
+
+        	result = rtnInstockConfmMapper.mergeInstockConfmProd(rtnInstockConfmVO);
+            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            
         }
 
         // HD 수정
@@ -117,7 +155,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
             // HD의 진행구분 수정. 출고확정 -> 입고확정
             result = rtnInstockConfmMapper.updateInstockConfirm(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));           
         }
 
         return returnResult;

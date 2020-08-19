@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.solbipos.base.store.storage.service.impl.StorageMapper">
+
+   <!-- 본사 창고 정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 본사 창고정보를 조회한다.
+    -->
+    <select id="getHqStorageList" parameterType="storageVO" resultType="DefaultMap">
+        /* USE : StorageMapper.getHqStorageList - 본사 창고정보 조회 */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT THS.STORAGE_CD,
+        	   THS.STORAGE_NM,
+        	   THS.USE_YN,
+        	   THE.EMP_NM,
+        	   TO_CHAR(TO_DATE(THS.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+		FROM TB_HQ_STORAGE THS,
+			 TB_HQ_EMPLOYEE THE
+		WHERE THS.MOD_ID = THE.USER_ID
+    	  AND THS.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storageCd != null and storageCd != ''">
+    	  AND THS.STORAGE_CD = #{storageCd}
+        </if>
+        <if test="storageNm != null and storageNm != ''">
+      	  AND THS.STORAGE_NM = #{storageNm}
+        </if>
+        <if test="useYn != null and useYn != ''">
+    	  AND THS.USE_YN = #{useYn}
+        </if>
+        ORDER BY THS.STORAGE_CD ASC
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+   <!-- 매장 창고 정보 조회 -->
+    <!--
+        TABLE    : TB_MS_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 매장 창고정보를 조회한다.
+    -->
+    <select id="getStoreStorageList" parameterType="storageVO" resultType="DefaultMap">
+        /* USE : StorageMapper.getStoreStorageList - 매장 창고정보 조회 */
+       <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT TMS.STORAGE_CD,
+               TMS.STORAGE_NM,
+               TMS.USE_YN,
+               TME.EMP_NM,
+               TO_CHAR(TO_DATE(TMS.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_STORAGE TMS,
+             TB_MS_EMPLOYEE TME
+        WHERE TMS.MOD_ID = TME.USER_ID
+          AND TMS.STORE_CD = #{storeCd}
+        <if test="storageCd != null and storageCd != ''">
+          AND TMS.STORAGE_CD = #{storageCd}
+        </if>
+        <if test="storageNm != null and storageNm != ''">
+          AND TMS.STORAGE_NM = #{storageNm}
+        </if>
+        <if test="useYn != null and useYn != ''">
+          AND TMS.USE_YN = #{useYn}
+        </if>
+        ORDER BY TMS.STORAGE_CD ASC
+         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

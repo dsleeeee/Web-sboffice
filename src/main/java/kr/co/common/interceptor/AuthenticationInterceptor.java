@@ -73,6 +73,12 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        // 세션 값 확인, 로그 검증용(가상로그인의 경우 매장/대리점 구분이 안되어 로그 남김)
+        LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
+
+        //정상 세션값 확인시
+        //LOGGER.info("getSessionId : {},getUserId : {},getUserPwd : {},getUserNm : {},getAuthGrpCd : {},getArrStoreCdList : {},getOrgnFg : {},getOrgnGrpCd : {},getOrgnGrpNm : {},getOrgnCd : {},getOrgnNm : {},getStoreCd : {},getStoreNm : {},getHqOfficeCd : {},getHqOfficeNm : {},getEmpNo : {},getLastLoginDt : {},getLastPwdChgDt : {},getLoginFailCnt : {},getUserStatFg : {},getUseYn : {},getLoginIp : {},getBrwsrInfo : {},getLoginResult : {},getStartDate : {},getEndDate : {},getMenuData : {},getMenuTreeData : {},getBkmkMenuData : {},getBkmkMenuTreeData : {},getFixedMenuData : {},getHistoryMenuData : {},getCurrentMenu : {},getvUserId : {},getvLogindIds : {},getHwAuthKey : {},getpAgencyCd : {},getAreaFg : {}", sessionInfoVO.getSessionId(), sessionInfoVO.getUserId(), "NOT CHECK", sessionInfoVO.getUserNm(), sessionInfoVO.getAuthGrpCd(), sessionInfoVO.getArrStoreCdList(), sessionInfoVO.getOrgnFg(), sessionInfoVO.getOrgnGrpCd(), sessionInfoVO.getOrgnGrpNm(), sessionInfoVO.getOrgnCd(), sessionInfoVO.getOrgnNm(), sessionInfoVO.getStoreCd(), sessionInfoVO.getStoreNm(), sessionInfoVO.getHqOfficeCd(), sessionInfoVO.getHqOfficeNm(), sessionInfoVO.getEmpNo(), sessionInfoVO.getLastLoginDt(), sessionInfoVO.getLastPwdChgDt(), sessionInfoVO.getLoginFailCnt(), sessionInfoVO.getUserStatFg(), sessionInfoVO.getUseYn(), sessionInfoVO.getLoginIp(), sessionInfoVO.getBrwsrInfo(), sessionInfoVO.getLoginResult(), sessionInfoVO.getStartDate(), sessionInfoVO.getEndDate(), sessionInfoVO.getMenuData(), sessionInfoVO.getMenuTreeData(), sessionInfoVO.getBkmkMenuData(), sessionInfoVO.getBkmkMenuTreeData(), sessionInfoVO.getFixedMenuData(), sessionInfoVO.getHistoryMenuData(), sessionInfoVO.getCurrentMenu(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds(), sessionInfoVO.getHwAuthKey(), sessionInfoVO.getpAgencyCd(), sessionInfoVO.getAreaFg());
+
         // 세션 상태
         boolean isSessionValid = true;
         // 세션 객체가 없는 경우
@@ -131,8 +137,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             String exceptionMsg = messageService.get("cmm.access.denied");
 
             // 권한 없음 처리
-            //TODO 개발 진행중 주석처리
-            //throw new AuthenticationException(exceptionMsg, "/error/403.sb");
+            throw new AuthenticationException(exceptionMsg, "/error/403.sb");
         }
 
         // jsp > sessionscope 로 쓸수 있게 httpsession 에 세팅
@@ -206,7 +211,41 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         if ( url.contains("?") ) {
             url = url.substring(0, url.indexOf("?"));
         }
-        // 메뉴 목록
+
+        // main.sb 호출 시, 로그인한 사람의 권한에 따라 다른 메인 URL redirect
+        if(url.contains("/application/main/content/")){
+
+            // 관리자
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER){
+                if(!("/application/main/content/sys.sb").equals(url)){ return false; }
+            }
+
+            // 대리점
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+                if(!("/application/main/content/agency.sb").equals(url)){ return false; }
+            }
+
+            // 본사
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                if(!("/application/main/content/hq.sb").equals(url)){ return false; }
+            }
+
+            // 매장
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+                if(!("/application/main/content/store.sb").equals(url)){ return false; }
+            }
+
+            return true;
+        }
+
+        // 유효 메뉴 여부 확인(화면 URL만 체크, Event URL은 skip)
+        if(cmmMenuService.menuResrceChk(url) < 1){
+            LOGGER.info("Event URL : " + url);
+            LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
+            return true;
+        }
+
+        // 세션 권한이 사용할 수 있는 메뉴 목록
         List<ResrceInfoBaseVO> menuList = sessionInfoVO.getMenuData();
         // url 값 비교
         for (ResrceInfoBaseVO resrceInfoBaseVO : menuList) {

@@ -9,10 +9,10 @@
             <span id="spanInstlRequestDtlTitle"></span>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <div class="wj-dialog-body sc2" style="height: 300px;">
+        <div class="wj-dialog-body sc2"">
             <div class="w100 mt10">
                 <%--위즈모 테이블--%>
-                <div class="wj-gridWrap" style="height: 200px;">
+                <div class="wj-gridWrap" style="height: 300px;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             selection-mode="Row"

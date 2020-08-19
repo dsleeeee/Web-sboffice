@@ -49,6 +49,18 @@ public class EmpDayPeriodController {
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
     
+    
+    @RequestMapping(value = "/dayperiod/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpDayPeriodExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, EmpDayPeriodVO empDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodExcelList(empDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
+    }
+    
     @RequestMapping(value = "/dayperiod/dtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getEmpDayPeriodDtlList(HttpServletRequest request, HttpServletResponse response,
@@ -57,6 +69,17 @@ public class EmpDayPeriodController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodDtlList(empDayPeriodVO, sessionInfoVO);
+        return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
+    }
+    
+    @RequestMapping(value = "/dayperiod/excelDtl.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEmpDayPeriodDtlExcelList(HttpServletRequest request, HttpServletResponse response,
+        Model model, EmpDayPeriodVO empDayPeriodVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = empDayPeriodService.getEmpDayPeriodDtlExcelList(empDayPeriodVO, sessionInfoVO);
         return ReturnUtil.returnListJson(Status.OK, list, empDayPeriodVO);
     }
 }

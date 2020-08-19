@@ -23,14 +23,29 @@ public class ProdInfoServiceImpl implements ProdInfoService {
     @Override
     public List<DefaultMap<Object>> getProdSaleDtlList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
 
+//        System.out.println("test1111");
+
         prodInfoVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setLevel("Level" + prodInfoVO.getLevel());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ ){
+            // 매장 array 값 세팅
+            String[] storeCds = prodInfoVO.getStoreCds().split(",");
+            prodInfoVO.setStoreCdList(storeCds);
+        }
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+            prodInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        // 매장 array 값 세팅
-        String[] storeCds = prodInfoVO.getStoreCds().split(",");
-        prodInfoVO.setStoreCdList(storeCds);
+        // 기간별매출 > 일자별 탭 > 상품분류별 탭
+        // 기간별매출 > 월별 탭 > 상품분류별 탭
+        if(("dayProdClass").equals(prodInfoVO.getGubun()) || ("monthProdClass").equals(prodInfoVO.getGubun())) {
+            if(prodInfoVO.getStrProdClassCd() != null && prodInfoVO.getStrProdClassCd().length() > 0) {
+                // 레벨에 따른 분류값 가져와서 배열변수에 넣음.
+                prodInfoVO.setArrProdClassCd(prodInfoVO.getStrProdClassCd().split(","));
+            }
+        }
 
         return prodInfoMapper.getProdSaleDtlList(prodInfoVO);
     }

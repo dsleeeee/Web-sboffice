@@ -76,6 +76,10 @@
       <s:message code="cmm.search"/></button>
   </div>
 
+	<div class="mt20 oh sb-select dkbr">
+		<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 --%>
+	</div>
+
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px;">
@@ -111,9 +115,14 @@
 
 
 <script type="text/javascript">
-var gReqDate = '${reqDate}';
-var gEnvst1044 = '${envst1044}';
-var gEnvst1042 = '${envst1042}';
+	var gReqDate 	= '${reqDate}';
+	var gEnvst1044 	= '${envst1044}';
+	var gEnvst1042 	= '${envst1042}';
+	
+	console.log('gReqDate  : ' + gReqDate);
+	console.log('gEnvst1044: ' + gEnvst1044);
+	console.log('gEnvst1042: ' + gEnvst1042);
+	
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20181224.01" charset="utf-8"></script>

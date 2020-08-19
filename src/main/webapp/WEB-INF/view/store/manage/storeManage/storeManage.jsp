@@ -11,6 +11,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
 <c:set var="orgnNm" value="${sessionScope.sessionInfo.orgnNm}"/>
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
+<c:set var="authHqList" value="${authHqList}" />
 
 <div class="subCon" ng-controller="storeManageCtrl">
   <div class="searchBar flddUnfld">
@@ -33,18 +34,18 @@
       <tr>
         <%-- 본사코드 --%>
         <th><s:message code="storeManage.hqOfficeCd" /></th>
-        <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" maxlength="5" ng-model="hqOfficeCd"/></td>
+        <td><input type="text" id="srchHqOfficeCd" class="sb-input w100" ng-model="hqOfficeCd"/></td>
         <%-- 본사명 --%>
         <th><s:message code="storeManage.hqOfficeNm" /></th>
-        <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" maxlength="15" ng-model="hqOfficeNm"/></td>
+        <td><input type="text" id="srchHqOfficeNm" class="sb-input w100" ng-model="hqOfficeNm"/></td>
       </tr>
       <tr>
         <%-- 매장코드 --%>
         <th><s:message code="storeManage.storeCd" /></th>
-        <td><input type="text" id="srchStoreCd" class="sb-input w100" maxlength="7" ng-model="storeCd"/></td>
+        <td><input type="text" id="srchStoreCd" class="sb-input w100" ng-model="storeCd"/></td>
         <%-- 매장명 --%>
         <th><s:message code="storeManage.storeNm" /></th>
-        <td><input type="text" id="srchStoreNm" class="sb-input w100" maxlength="15" ng-model="storeNm"/></td>
+        <td><input type="text" id="srchStoreNm" class="sb-input w100" ng-model="storeNm"/></td>
       </tr>
       <tr>
         <%-- 사업자번호 --%>
@@ -106,6 +107,9 @@
     <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addStore()">
       <s:message code="storeManage.regist.new.store" />
     </button>
+
+    <%-- 엑셀다운로드 --%>
+    <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
   </div>
 
  <%-- 매장 그리드 --%>
@@ -143,6 +147,34 @@
   </div>
   <%--//페이지 리스트--%>
 
+  <%-- 엑셀다운로드 그리드 --%>
+  <div class="w100 mt10 mb20" style="display:none;" ng-controller="storeManageExcelCtrl">
+    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              control="excelFlex"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              initialized="initGrid(s,e)"
+              sticky-headers="true"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOffice"/>" binding="hqOfficeCdNm" visible="false" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.hqOfficeNm"/>" binding="hqOfficeNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeNm"/>" binding="storeNm" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.weatherArea"/>" binding="areaCd" data-map="areaFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.clsFg"/>" binding="clsFg" data-map="clsFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.sysOpenDate"/>" binding="sysOpenDate" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.van"/>" binding="vanNm" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.agency"/>" binding="agencyNm" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -153,9 +185,10 @@ var orgnFg = "${orgnFg}";
 var orgnCd = "${orgnCd}";
 var orgnNm = "${orgnNm}";
 var pAgencyCd = "${pAgencyCd}";
+var authHqList = ${authHqList};
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=2018102301" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20200423.07" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">
@@ -165,6 +198,12 @@ var pAgencyCd = "${pAgencyCd}";
 
 <%-- 환경변수 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeEnv.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 메뉴권한 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeAuth.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -124,6 +124,13 @@
                     <wj-flex-grid-column header="<s:message code="month.time.totGuestCnt"/>" binding="totGuestCntT3" width="80" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="monthTimeCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -134,4 +141,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117.01" charset="utf-8"></script>

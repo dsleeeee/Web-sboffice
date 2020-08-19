@@ -121,6 +121,8 @@ public class StoreManageVO extends PageVO {
     /** 매장코드 채번방식 */
     private String storeCdInputType;
 
+    /** 직영구분 */
+    private String directManageYn;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -677,5 +679,13 @@ public class StoreManageVO extends PageVO {
 
     public void setStoreCdInputType(String storeCdInputType) {
         this.storeCdInputType = storeCdInputType;
+    }
+
+    public String getDirectManageYn() {
+        return directManageYn;
+    }
+
+    public void setDirectManageYn(String directManageYn) {
+        this.directManageYn = directManageYn;
     }
 }

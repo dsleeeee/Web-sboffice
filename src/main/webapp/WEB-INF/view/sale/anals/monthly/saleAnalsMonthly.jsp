@@ -14,6 +14,8 @@
   <div class="searchBar flddUnfld">
     <%-- <a href="#" class="open fl">${menuNm}</a> --%>
     <a href="#" class="open fl"><s:message code="saleAnalsMonthly.title"/></a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" ng-click="_broadcast('saleAnalsMonthlyCtrl')"><s:message code="cmm.search" /></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -35,7 +37,7 @@
     	<tr>
     		<%-- 매장코드 --%>
 			<th><s:message code="todayBillSaleDtl.store"/></th>
-			<td colspan="3">
+			<td>
 				<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
 					<jsp:param name="targetId" value="saleAnalsMonthlySelectStore"/>
 				</jsp:include>
@@ -70,13 +72,6 @@
     </tr> --%>
     </tbody>
   </table>
-
-    <%-- 조회 --%>
-    <div class="fr mt10" style="position: relative">
-      <button class="btn_blue fr" ng-click="_broadcast('saleAnalsMonthlyCtrl')">
-        <s:message code="cmm.search" />
-      </button>
-    </div>
 
     <div class="clearfix"></div>
 
@@ -128,8 +123,15 @@
 
 <script>
   var statusDataFg  = ${ccu.getCommCode("100")};
+  
+  
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20200116.01" charset="utf-8"></script>
 
 
+<%-- 상품코드 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/anals/monthly/monthlyPop/saleAnalsMonthlyPayFg.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

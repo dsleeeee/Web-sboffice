@@ -52,6 +52,18 @@ public interface SaleTrnsitnMapper {
     SaleTrnsitnDatesVO			getPreviouseDatesInfo(SaleTrnsitnVO saletrnsitnVO);
     
     
+
+	/**
+	 * 매출추이분석 목록조회 (매출관리 > 매출분석 > 매출추이분석)
+     * @param 	saleTrnsitnVO
+     * @param 	sessionInfoVO
+     * @return 	java.util.List<DefaultMap<String>> - XML_String
+	 * @author  조현수
+	 * @since   2020. 01. 14
+	*/
+    List<DefaultMap<String>> 	getSaletrnsitnExcelList(SaleTrnsitnVO saletrnsitnVO);
+
+
     
     
 //	/**

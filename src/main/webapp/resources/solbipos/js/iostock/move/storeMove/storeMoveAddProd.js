@@ -136,7 +136,7 @@ app.controller('storeMoveAddProdCtrl', ['$scope', '$http', '$timeout', function 
 
       item.status     = "U";
       item.slipNo     = $scope.slipNo;
-      item.storageCd  = "001";
+      item.storageCd  = "999";
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);

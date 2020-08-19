@@ -46,6 +46,11 @@ public class VerRecvServiceImpl implements VerRecvService {
     }
 
     @Override
+    public List<DefaultMap<String>> selectStoreExcelList(VerRecvVO verRecv) {
+        return verRecvMapper.selectStoreExcelList(verRecv);
+    }
+
+    @Override
     public List<DefaultMap<String>> selectStoreRecvList(VerRecvVO verRecv) {
         return verRecvMapper.selectStoreRecvList(verRecv);
     }

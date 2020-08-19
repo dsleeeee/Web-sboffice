@@ -1,10 +1,13 @@
 package kr.co.solbipos.application.pos.service.impl;
 
+import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.pos.service.MemberVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @Class Name : SimpleMemberJoinMapper.java
@@ -24,6 +27,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface SimpleMemberJoinMapper {
+
+    /** 회원정보 중복체크 */
+    List<DefaultMap<String>> chkDuplicateMember(MemberVO memberVO);
 
     /** 새로운 회원번호 조회 */
     String getNewMembrNo(SessionInfoVO sessionInfoVO);

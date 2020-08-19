@@ -26,6 +26,7 @@
             twui.LOGIN_FAIL_CNT,
             twui.USER_STAT_FG,
             info.P_AGENCY_CD,
+            twui.AREA_FG,
             #{vUserId, jdbcType=VARCHAR} AS V_USER_ID
         FROM
             TB_WB_USER_INFO twui
@@ -67,8 +68,14 @@
                 WHERE
                     A.STORE_CD = B.STORE_CD
                     AND B.HQ_OFFICE_CD = C.HQ_OFFICE_CD
-                    AND A.WEB_USE_YN = 'Y'
                     AND A.USER_ID = #{userId}
+                    <if test="vUserId == null or vUserId == ''">
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USE_YN = 'Y'
+                        AND A.SERVICE_FG = '1'
+                        AND B.SYS_STAT_FG IN ('1', '9')
+                        AND C.SYS_STAT_FG IN ('1', '9')
+                    </if>
             UNION ALL
                 SELECT
                     A.USER_ID,
@@ -89,8 +96,13 @@
                     TB_HQ_OFFICE B
                 WHERE
                     A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                    AND A.WEB_USE_YN = 'Y'
                     AND A.USER_ID = #{userId}
+                    <if test="vUserId == null or vUserId == ''">
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USE_YN = 'Y'
+                        AND A.SERVICE_FG = '1'
+                        AND B.SYS_STAT_FG IN ('1', '9')
+                    </if>
             UNION ALL
                 SELECT
                     A.USER_ID,
@@ -111,14 +123,22 @@
                     TB_CM_AGENCY B
                 WHERE
                     A.AGENCY_CD = B.AGENCY_CD
-                    AND A.WEB_USE_YN = 'Y'
-                    AND A.USER_ID = #{userId} )
+                    AND A.USER_ID = #{userId}
+                    <if test="vUserId == null or vUserId == ''">
+                        AND A.WEB_USE_YN = 'Y'
+                        AND A.USE_YN = 'Y'
+                        AND A.SERVICE_FG = '1'
+                        AND B.USE_YN = 'Y'
+                    </if>
+                    )
             WHERE
                 ROWNUM = 1 ) info ON
             twui.USER_ID = info.USER_ID
         WHERE
             twui.USER_ID = #{userId}
-            AND twui.USE_YN = 'Y'
+            <if test="vUserId == null or vUserId == ''">
+                AND twui.USE_YN = 'Y'
+            </if>
 
     </select>
 
@@ -147,7 +167,8 @@
           LOGIN_IP,
           BRWSR_INFO,
           LOGIN_DATE,
-          LOGIN_DT
+          LOGIN_DT,
+          V_USER_ID
         )
         VALUES
         (
@@ -158,7 +179,8 @@
           #{loginIp},
           #{brwsrInfo},
           #{loginDate},
-          #{loginDt}
+          #{loginDt},
+          #{vUserId}
         )
     </insert>
 

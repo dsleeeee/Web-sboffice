@@ -270,6 +270,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         }
     }
 
+    /** 유효 메뉴 여부 확인 */
+    @Override
+    public int menuResrceChk(String url) {
+        return cmmMenuMapper.menuResrceChk(url);
+    }
+
 }
 
 

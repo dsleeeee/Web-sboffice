@@ -39,78 +39,78 @@
                     <%-- 총판구분 --%>
                     <th><s:message code="instlAgency.agencyType" /></th>
                     <td colspan="3">
-                        <select id="ai_agencyType"  class='wj-content' style="width:150px;" onchange="hideAgency();">
+                        <select id="ai_agencyType"  class='wj-content' style="width:150px; height:25px;" onchange="hideAgency();">
                             <option value="dist"><s:message code="instlAgency.dist"/></option>
                             <option value="agency"><s:message code="instlAgency.agency"/></option>
                         </select>
-                        <select id="ai_pAgencyCd" class='wj-content' style="width:150px;">
+                        <select id="ai_pAgencyCd" class='wj-content' style="width:150px; height:25px;">
                         </select>
                     </td>
                 </tr>
                 <tr>
                     <th><s:message code="instlAgency.agencyCd" />/<s:message code="instlAgency.agencyNm" /></th>
-                    <td><input type="text" id="ai_agencyCd" readonly ng-model="ai_agencyCd" class="sb-input" style="width:90px;"> /
-                        <input type="text" id="ai_agencyNm" name="ai_agencyNm" ng-model="ai_agencyNm" class="sb-input" style="width:167px;" maxlength="50"/>
+                    <td><input type="text" id="ai_agencyCd" readonly ng-model="ai_agencyCd" style="width:90px;"> /
+                        <input type="text" id="ai_agencyNm" name="ai_agencyNm" ng-model="ai_agencyNm" style="width:167px;" maxlength="50"/>
                     </td>
                     <%-- 대표자명 --%>
                     <th><s:message code="instlAgency.ownerNm" /></th>
-                    <td><input type="text" id="ai_ownerNm" name="ai_ownerNm" ng-model="ai_ownerNm" class="sb-input w100" maxlength="25"/>
+                    <td><input type="text" id="ai_ownerNm" name="ai_ownerNm" ng-model="ai_ownerNm" maxlength="25"/>
                     </td>
                 </tr>
                 <tr>
                     <%-- 사업자번호 --%>
                     <th><s:message code="instlAgency.bizNo" /></th>
-                    <td><input type="text" id="ai_bizNo" name="ai_bizNo" ng-model="ai_bizNo" class="sb-input w100" maxlength="10"/>
+                    <td><input type="text" id="ai_bizNo" name="ai_bizNo" ng-model="ai_bizNo" maxlength="10"/>
                     </td>
                     <%-- 상호명 --%>
                     <th><s:message code="instlAgency.bizStoreNm" /></th>
-                    <td><input type="text" id="ai_bizStoreNm" name="ai_bizStoreNm" ng-model="ai_bizStoreNm" class="sb-input w100" maxlength="50"/>
+                    <td><input type="text" id="ai_bizStoreNm" name="ai_bizStoreNm" ng-model="ai_bizStoreNm" maxlength="50"/>
                     </td>
                 </tr>
                 <%--<tr>
                     &lt;%&ndash; 업태 &ndash;%&gt;
                     <th><s:message code="instlAgency.bizItem" /></th>
-                    <td><input type="text" id="bizItem" name="bizItem" ng-model="bizItem" class="sb-input w100" maxlength="15"/></td>
+                    <td><input type="text" id="bizItem" name="bizItem" ng-model="bizItem" maxlength="15"/></td>
                     &lt;%&ndash; 업체구분 &ndash;%&gt;
                     <th><s:message code="instlAgency.bizType" /></th>
-                    <td><input type="text" id="bizType" name="bizType" ng-model="bizType" class="sb-input w100" maxlength="5"/></td>
+                    <td><input type="text" id="bizType" name="bizType" ng-model="bizType" maxlength="5"/></td>
                 </tr>--%>
                 <tr>
                     <%-- 전화번호 --%>
                     <th><s:message code="instlAgency.telNo" /></th>
-                    <td><input type="text" id="ai_telNo" name="ai_telNo" ng-model="ai_telNo" class="sb-input w100" maxlength="15"/>
+                    <td><input type="text" id="ai_telNo" name="ai_telNo" ng-model="ai_telNo" maxlength="15"/>
                     </td>
                     <%-- 팩스번호 --%>
                     <th><s:message code="instlAgency.faxNo" /></th>
-                    <td><input type="text" id="ai_faxno" name="ai_faxno" ng-model="ai_faxno" class="sb-input w100" maxlength="15" /></td>
+                    <td><input type="text" id="ai_faxNo" name="ai_faxNo" ng-model="ai_faxNo" maxlength="15" /></td>
                 </tr>
                 <tr>
                     <%-- 이메일주소 --%>
                     <th><s:message code="instlAgency.emailAddr" /></th>
-                    <td><input type="text" id="ai_emailAddr" name="ai_emailAddr" ng-model="ai_emailAddr" class="sb-input w100" maxlength="100"/></td>
+                    <td><input type="text" id="ai_emailAddr" name="ai_emailAddr" ng-model="ai_emailAddr" maxlength="100"/></td>
                     <%-- 홈페이지주소 --%>
                     <th><s:message code="instlAgency.hmpgAddr" /></th>
-                    <td><input type="text" id="ai_hmpgAddr" name="ai_hmpgAddr" ng-model="ai_hmpgAddr" class="sb-input w100" maxlength="100"/></td>
+                    <td><input type="text" id="ai_hmpgAddr" name="ai_hmpgAddr" ng-model="ai_hmpgAddr" maxlength="100"/></td>
                 </tr>
                 <tr>
                     <%-- 주소 --%>
                     <th rowspan="3"><s:message code="instlAgency.addr" /></th>
-                    <td colspan="3"><input type="text" id="ai_postNo" name="ai_postNo" ng-model="ai_postNo" class="sb-input w20" maxlength="5" style="width:90px;"/>
+                    <td colspan="3"><input type="text" id="ai_postNo" name="ai_postNo" ng-model="ai_postNo" maxlength="5" style="width:90px;"/>
                                       <a href="#" class="btn_grayS ml5"><s:message code="instlAgency.addrSearch" /></a>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><input type="text" id="ai_addr" name="ai_addr" ng-model="ai_addr" class="sb-input w100" maxlength="100"/>
+                    <td colspan="3"><input type="text" id="ai_addr" name="ai_addr" ng-model="ai_addr" maxlength="100"/>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><input type="text" id="ai_addrDtl" name="ai_addrDtl" ng-model="ai_addrDtl" class="sb-input w100" maxlength="100"/>
+                    <td colspan="3"><input type="text" id="ai_addrDtl" name="ai_addrDtl" ng-model="ai_addrDtl" maxlength="100"/>
                     </td>
                 </tr>
                 <tr>
                     <%-- 비고 --%>
                     <th><s:message code="instlAgency.remark" /></th>
-                    <td colspan="3"><input type="text" id="ai_remark" name="ai_remark" ng-model="ai_remark" class="sb-input w100" maxlength="250" /></td>
+                    <td colspan="3"><input type="text" id="ai_remark" name="ai_remark" ng-model="ai_remark" maxlength="250" /></td>
                     <%-- 저장타입 지정 --%>
                     <input type="hidden" id="ai_saveType" name="ai_saveType" ng-model="ai_saveType">
                 </tr>

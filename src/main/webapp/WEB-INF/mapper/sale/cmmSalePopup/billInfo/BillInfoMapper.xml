@@ -37,10 +37,11 @@
     <select id="getBillPayInfo" parameterType="billInfoVO" resultType="DefaultMap">
         /* USE : BillInfoMapper.getBillPayInfo */
         SELECT  <foreach collection="arrPayCol" item="item" separator=",">
-                    DECODE(tsshp.PAY_CD, ${item}, tsshp.PAY_AMT, 0) AS PAY${item}
-                </foreach>
-        FROM    (   SELECT  tsshp.PAY_CD
-                    ,       SUM(tsshp.PAY_AMT) AS PAY_AMT
+                    NVL(PAY${item}, 0) AS PAY${item}
+                 </foreach>
+        FROM    (
+                    SELECT  tsshp.PAY_CD,
+                             SUM(tsshp.PAY_AMT) AS PAY_AMT
                     FROM    TB_SL_SALE_HDR_PAY tsshp
                     WHERE   tsshp.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND     tsshp.STORE_CD     = #{storeCd}
@@ -49,7 +50,12 @@
                     AND     tsshp.BILL_NO      = #{billNo}
                     GROUP
                     BY      tsshp.PAY_CD
-                ) tsshp
+                 )
+           PIVOT (
+                    SUM(PAY_AMT)
+                    FOR PAY_CD
+                    IN (${pivotPayCol})
+                 )
     </select>
 
 

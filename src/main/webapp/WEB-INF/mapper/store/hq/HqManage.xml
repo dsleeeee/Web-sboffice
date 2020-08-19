@@ -515,6 +515,41 @@
     </insert>
     -->
 
+    <!-- 포스 출력물 템플릿 등록 (본사) -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEMPL
+        PARAM    : hqManageVO
+        COMMENTS : 포스출력물의 템플릿을 저장한다.
+    -->
+    <insert id="hqPrintTempReg" parameterType="hqManageVO" >
+        /* USE : HqManageMapper.hqPrintTempReg */
+        INSERT INTO TB_HQ_PRINT_TEMPL
+        (
+            HQ_OFFICE_CD,
+            PRT_CLASS_CD,
+            TEMPLT_REG_FG,
+            TEMPLT_CD,
+            TEMPLT_NM,
+            PRT_FORM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        SELECT #{hqOfficeCd},
+               PRT_CLASS_CD,
+               'C' AS TEMPLT_REG_FG,
+               TEMPLT_CD,
+               TEMPLT_NM,
+               PRT_FORM,
+               #{regDt},
+               #{regId},
+               #{modDt},
+               #{modId}
+          FROM TB_CM_PRINT_TEMPL
+    </insert>
+
+
     <!-- 본사 수정 -->
     <!--
         TABLE    : TB_WB_USER_INFO
@@ -559,22 +594,23 @@
     -->
     <select id="authHqList" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.authHqList */
-        <![CDATA[
         SELECT HQ_OFFICE_CD AS VALUE,
-               HQ_OFFICE_NM AS NAME
+               '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
           FROM TB_HQ_OFFICE
          WHERE HQ_OFFICE_CD != #{hqOfficeCd}
-           AND SYS_OPEN_DATE <> '2'
+           <!-- AND SYS_STAT_FG = '1' -->
            AND SYS_CLOSURE_DATE > SYSDATE
-           AND CLS_FG = #{clsFg}
-        ]]>
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (AGENCY_CD = #{agencyCd} OR HQ_OFFICE_CD = '00000')
+        </if>
+     ORDER BY HQ_OFFICE_CD
     </select>
 
-    <!-- 사용가능 메뉴 조회 -->
+    <!-- 사용 메뉴 조회 -->
     <!--
         TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
         PARAM    : hqManageVO
-        COMMENTS : 사용가능한 메뉴를 조회한다.
+        COMMENTS : 사용 메뉴를 조회한다.
     -->
     <select id="avlblMenu" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.avlblMenu */
@@ -589,18 +625,17 @@
             FROM TB_WB_RESRCE_INFO twr,
                  TB_WB_RESRCE_INFO twri,
                  TB_WB_RESRCE_INFO twrif
-           WHERE twr.USE_YN = 'Y'
-             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
-             AND twri.P_RESRCE = twr.RESRCE_CD
+           WHERE 1=1
+             AND twr.USE_YN = 'Y'
              AND twri.USE_YN = 'Y'
+             AND twrif.USE_YN = 'Y'
+             AND twri.P_RESRCE = twr.RESRCE_CD
              AND twrif.P_RESRCE = twri.RESRCE_CD
-             AND twrif.DISP_LEVEL = '2'
+             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+             AND twrif.DISP_LEVEL = '3'
            ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
               ) twr,
               (
-          SELECT RESRCE_CD
-            FROM TB_WB_RESRCE_INFO
-           MINUS
           SELECT twa.RESRCE_CD
             FROM TB_HQ_EMPLOYEE the,
                  TB_WB_USER_INFO twu,
@@ -609,17 +644,8 @@
              AND the.EMP_NO = '0000'
              AND twu.USER_ID = the.USER_ID
              AND twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
+             AND twa.USE_YN = 'Y'
            MINUS
-          SELECT twa.RESRCE_CD
-            FROM TB_HQ_EMPLOYEE the,
-                 TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_EXCEPT twa
-           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-             AND the.EMP_NO = '0000'
-             AND twu.USER_ID = the.USER_ID
-             AND twa.USER_ID = twu.USER_ID
-             AND twa.INCLD_EXCLD_FG = 'I'
-           UNION ALL
           SELECT twa.RESRCE_CD
           FROM TB_HQ_EMPLOYEE the,
                TB_WB_USER_INFO twu,
@@ -629,15 +655,16 @@
            AND twu.USER_ID = the.USER_ID
            AND twa.USER_ID = twu.USER_ID
            AND twa.INCLD_EXCLD_FG = 'E'
+           AND twa.USE_YN = 'Y'
                ) the
        WHERE the.RESRCE_CD = twr.RESRCE_CD_SMALL
     </select>
 
-    <!-- 사용중인 메뉴 조회 -->
+    <!-- 미사용 메뉴 조회 -->
     <!--
         TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT
         PARAM    : hqManageVO
-        COMMENTS : 사용가능한 메뉴를 조회한다.
+        COMMENTS : 미사용 메뉴를 조회한다.
     -->
     <select id="beUseMenu" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.beUseMenu */
@@ -652,35 +679,17 @@
             FROM TB_WB_RESRCE_INFO twr,
                  TB_WB_RESRCE_INFO twri,
                  TB_WB_RESRCE_INFO twrif
-           WHERE twr.USE_YN = 'Y'
-             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
-             AND twri.P_RESRCE = twr.RESRCE_CD
+           WHERE 1=1
+             AND twr.USE_YN = 'Y'
              AND twri.USE_YN = 'Y'
+             AND twrif.USE_YN = 'Y'
+             AND twri.P_RESRCE = twr.RESRCE_CD
              AND twrif.P_RESRCE = twri.RESRCE_CD
-             AND twrif.DISP_LEVEL = '2'
+             AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+             AND twrif.DISP_LEVEL = '3'
            ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
                ) twr,
                (
-          SELECT twa.RESRCE_CD
-            FROM TB_HQ_EMPLOYEE the,
-                 TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_GRP_RESRCE twa
-           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-             AND the.EMP_NO = '0000'
-             AND twu.USER_ID = the.USER_ID
-             AND twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
-           UNION ALL
-          SELECT twa.RESRCE_CD
-            FROM TB_HQ_EMPLOYEE the,
-                 TB_WB_USER_INFO twu,
-                 TB_WB_AUTHOR_EXCEPT twa
-           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-             AND the.EMP_NO = '0000'
-             AND twu.USER_ID = the.USER_ID
-             AND twa.USER_ID = twu.USER_ID
-             AND twa.INCLD_EXCLD_FG = 'I'
-             AND twa.USE_YN = 'Y'
-           MINUS
           SELECT twa.RESRCE_CD
             FROM TB_HQ_EMPLOYEE the,
                  TB_WB_USER_INFO twu,
@@ -698,7 +707,7 @@
     <!-- 메뉴권한복사-->
     <!--
         TABLE    : TB_WB_USER_INFO, TB_HQ_EMPLOYEE
-        PARAM    : hqManageVO
+        PARAM    : hqMenuVO
         COMMENTS : 메뉴권한을 복사한다.
     -->
     <update id="copyAuth" parameterType="hqMenuVO" >
@@ -723,39 +732,36 @@
     <!-- 권한예외 복사-->
     <!--
         TABLE    : TB_WB_AUTHOR_EXCEPT, TB_HQ_EMPLOYEE, TB_WB_USER_INFO
-        PARAM    : hqManageVO
+        PARAM    : hqMenuVO
         COMMENTS : 예외 권한을 복사한다.
     -->
     <insert id="copyAuthExcp" parameterType="hqMenuVO" >
         /* USE : HqManageMapper.copyAuthExcp */
         <![CDATA[
         MERGE INTO TB_WB_AUTHOR_EXCEPT twa
-        USING (
-              SELECT USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN
-                FROM TB_WB_AUTHOR_EXCEPT
-               WHERE USER_ID = (
-                                SELECT twu.USER_ID
-                                  FROM TB_HQ_EMPLOYEE the,
-                                       TB_WB_USER_INFO twu
-                                 WHERE the.HQ_OFFICE_CD = #{copyHqOfficeCd}
-                                   AND the.EMP_NO = '0000'
-                                   AND twu.USER_ID = the.USER_ID
-                               )
-              ) twae
-         ON (twa.USER_ID = twae.USER_ID AND twa.RESRCE_CD = twae.RESRCE_CD)
+        USING DUAL
+         ON (
+              twa.USER_ID = ( SELECT the.USER_ID
+                                FROM TB_HQ_EMPLOYEE the,
+                                      TB_WB_USER_INFO twu
+                               WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+                                 AND the.EMP_NO = '0000'
+                                 AND twu.USER_ID = the.USER_ID)
+              AND twa.RESRCE_CD = #{resrceCd}
+             )
          WHEN MATCHED THEN
          UPDATE
-            SET twa.INCLD_EXCLD_FG = twae.INCLD_EXCLD_FG,
-                twa.USE_YN = twae.USE_YN,
+            SET twa.INCLD_EXCLD_FG = #{incldExcldFg},
+                twa.USE_YN = #{useYn},
                 twa.MOD_DT = #{modDt},
                 twa.MOD_ID = #{modId}
          WHEN NOT MATCHED THEN
          INSERT (USER_ID, RESRCE_CD, INCLD_EXCLD_FG, USE_YN, REG_DT, REG_ID)
          VALUES (
                   (SELECT the.USER_ID FROM TB_HQ_EMPLOYEE the, TB_WB_USER_INFO twu WHERE the.HQ_OFFICE_CD = #{hqOfficeCd} AND the.EMP_NO = '0000' AND twu.USER_ID = the.USER_ID),
-                  twae.RESRCE_CD,
-                  twae.INCLD_EXCLD_FG,
-                  twae.USE_YN,
+                  #{resrceCd},
+                  #{incldExcldFg},
+                  #{useYn},
                   #{regDt},
                   #{regId}
                 )
@@ -947,5 +953,62 @@
          WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
            AND ENVST_CD = #{envstCd}
     </update>
+
+    <!-- 권한예외 복사 시, 복사기준본사의 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : hqManageVO
+        COMMENTS : 권한예외 복사 시, 복사기준본사의 권한예외 값을 조회한다.
+    -->
+    <select id="exceptMenu" parameterType="hqMenuVO" resultType="DefaultMap">
+       /* USE : HqManageMapper.exceptMenu */
+        SELECT USER_ID,
+   	            RESRCE_CD,
+	            INCLD_EXCLD_FG,
+	            USE_YN
+          FROM TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                             FROM TB_HQ_EMPLOYEE the,
+                                   TB_WB_USER_INFO twu
+                            WHERE the.HQ_OFFICE_CD = #{copyHqOfficeCd}
+                               AND the.EMP_NO = '0000'
+                               AND twu.USER_ID = the.USER_ID)
+           AND USE_YN = 'Y'
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : hqManageVO
+        COMMENTS : 해당 본사의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeAuthAll" parameterType="DefaultMap">
+        /* HqManageMapper.removeAuthAll */
+        DELETE TB_WB_AUTHOR_EXCEPT
+         WHERE USER_ID = (SELECT twu.USER_ID
+                            FROM TB_HQ_EMPLOYEE the,
+                                 TB_WB_USER_INFO twu
+                           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+                             AND the.EMP_NO = '0000'
+                             AND twu.USER_ID = the.USER_ID)
+    </delete>
+
+    <!-- 업체 목록 조회 -->
+    <!--
+      TABLE    : TB_CM_AGENCY
+      COMMENTS : 업체 목록을 조회한다.
+    -->
+    <select id="getAgencyCd" parameterType="hqManageVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.selectAgencyList */
+          SELECT AGENCY_CD AS VALUE,
+                  '[' || AGENCY_CD || '] ' || AGENCY_NM AS NAME
+            FROM TB_CM_AGENCY
+            WHERE 1=1
+              AND AGENCY_CD != '00000'
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+        </if>
+        ORDER BY AGENCY_CD ASC
+    </select>
 
 </mapper>

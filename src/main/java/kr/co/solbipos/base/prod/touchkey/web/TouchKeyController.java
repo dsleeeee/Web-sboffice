@@ -112,6 +112,10 @@ public class TouchKeyController {
         String touchKeyEnvstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, envstCd));
         model.addAttribute("touchKeyEnvstVal", touchKeyEnvstVal);
 
+        // 터치키 그룹 가져오기
+        List<DefaultMap<String>> touchKeyGrpList = touchkeyService.getTouchKeyGrp(params, sessionInfoVO);
+        model.addAttribute("touchKeyGrp", convertToJson(touchKeyGrpList));
+
         return "base/prod/touchKey/touchKey";
     }
 
@@ -127,7 +131,7 @@ public class TouchKeyController {
     @ResponseBody
     public Result getTouchKeyStyleCd(HttpServletRequest request, HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(sessionInfoVO)));
+        return returnJson(Status.OK, convertToJson(touchkeyService.getTouchKeyPageStyleCd(sessionInfoVO, request.getParameter("tukeyGrpCd"))));
     }
 
     /**
@@ -194,7 +198,7 @@ public class TouchKeyController {
     @ResponseBody
     public Result getTouchKeyXml(HttpServletRequest request, HttpSession session, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO);
+        String xml = touchkeyService.getTouchKeyXml(sessionInfoVO, request.getParameter("tukeyGrpCd"));
         return new Result(Status.OK, xml);
     }
 
@@ -216,7 +220,7 @@ public class TouchKeyController {
         String xml = CmmUtil.decoder(request.getParameter("xml"));
         xml.replace("\n", "&#xa;");
 
-        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml));
+        result = touchkeyService.saveTouchkey(sessionInfoVO, XssPreventer.unescape(xml), request.getParameter("tukeyGrpCd"));
 
         return result;
     }
@@ -269,4 +273,51 @@ public class TouchKeyController {
         return returnJson(Status.OK, result);
 
     }
+
+    /**
+     * 터치키 그룹 가져오기(터치기 수정/저장 후 사용)
+     *
+     * @param touchKeyVO TouchKeyVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model   Model
+     * @return
+     */
+    @RequestMapping(value = "/getTouchKeyGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTouchKeyGrp(TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        TouchKeyVO params = new TouchKeyVO();
+        params.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        params.setStoreCd(sessionInfoVO.getStoreCd());
+        params.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return returnListJson(Status.OK, touchkeyService.getTouchKeyGrp(params, sessionInfoVO));
+    }
+
+    /**
+     * 터치키그룹 복사
+     *
+     * @param touchKeyVO TouchKeyVO
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param model Model
+     * @return Result
+     * @author 이다솜
+     * @since 2020. 04. 29.
+     */
+    @RequestMapping(value = "/copyTouchKeyGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyTouchKeyGrp(@RequestBody TouchKeyVO touchKeyVO, HttpServletRequest request, HttpServletResponse response,
+                                      Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        Result result = new Result(Status.FAIL);
+
+        result = touchkeyService.copyTouchKeyGrp(touchKeyVO, sessionInfoVO);
+
+        return result;
+    }
+
 }

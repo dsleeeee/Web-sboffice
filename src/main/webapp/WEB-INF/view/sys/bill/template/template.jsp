@@ -10,7 +10,13 @@
 <div class="subCon" ng-controller="templateCtrl">
 
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+      <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
+        <s:message code="cmm.search" />
+      </button>
+    </div>
   </div>
 
   <table class="searchTbl">
@@ -49,11 +55,7 @@
     <button class="btn_blk fl" id="btnApplyTemplate" ng-click="$broadcast('showPopUp')">
       <s:message code="template.layerBtnNm" />
     </button>
-    <button class="btn_blue fr" id="btnSrchTemplate" ng-click="_broadcast('templateCtrl')">
-      <s:message code="template.srchBtnNm" />
-    </button>
   </div>
-
 
   <div class="wj-TblWrap mt40">
     <%-- 템플릿 --%>
@@ -137,7 +139,7 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=2018111201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=2018111202" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">

@@ -31,9 +31,23 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
 
     // 신규등록인 경우
     if (nvl($scope.vendrCd, '') === '') {
-      $scope.wjVendrExactRegistLayer.show(true);
-    } else {
-      $scope.getExactInfo();
+    	$scope.excclcDateFg	= false;
+    	
+    	//거래처선택 모듈 disabled 컨트롤
+        $scope.vendrExactRegistSelectVendrNmDisabled  = false;
+        $scope.vendrExactRegistSelectVendrBtnDisabled = false;
+        
+    	$scope.wjVendrExactRegistLayer.show(true);
+    } else {    	
+    	$scope.getExactInfo();
+    	
+    	$scope.excclcDateFg	= true;
+    	
+    	//거래처선택 모듈 disabled 컨트롤
+        $scope.vendrExactRegistSelectVendrNmDisabled  = true;
+        $scope.vendrExactRegistSelectVendrBtnDisabled = true;
+        
+    	
     }
 
     // 기능수행 종료 : 반드시 추가
@@ -47,7 +61,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
     params.vendrCd    = $scope.vendrCd;
     params.excclcDate = $scope.excclcDate;
     params.seqNo      = $scope.seqNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrExact/vendrExactRegist/getExactInfo.sb", /* 통신할 URL */
@@ -61,13 +80,14 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
 
           // 삭제 버튼 활성화
           $scope.btnDeleteIfFg = true;
-
+          
           // 거래처 선택 모듈값 세팅
           $("#vendrExactRegistSelectVendrCd").val(data.vendrCd);
           $("#vendrExactRegistSelectVendrNm").val('[' + data.vendrCd + '] ' + data.vendrNm);
+          
           data.excclcDate = new Date(getFormatDate(data.excclcDate, "-"));
           data.excclcTot  = (nvl(data.excclcTot, '') !== '' ? addComma(data.excclcTot) : '');
-
+          
           $scope.vendrExact = data;
         } else {
           $scope.wjVendrExactRegistLayer.hide(true);
@@ -108,7 +128,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
     params.excclcTot  = removeComma($scope.vendrExact.excclcTot);
     params.excclcFg   = '2';
     params.remark     = $scope.vendrExact.remark;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     $http({
       method : 'POST', //방식
       url    : "/iostock/vendr/vendrExact/vendrExactRegist/save.sb", /* 통신할 URL */
@@ -152,7 +177,12 @@ app.controller('vendrExactRegistCtrl', ['$scope', '$http', '$compile', '$timeout
       params.vendrCd    = $("#vendrExactRegistSelectVendrCd").val();
       params.seqNo      = $scope.seqNo;
       params.excclcDate = wijmo.Globalize.format($scope.vendrExact.excclcDate, 'yyyyMMdd');
-
+      
+      //가상로그인 session 설정
+      if(document.getElementsByName('sessionId')[0]){
+      	params['sid'] = document.getElementsByName('sessionId')[0].value;
+      }
+      
       $http({
         method : 'POST', //방식
         url    : "/iostock/vendr/vendrExact/vendrExactRegist/delete.sb", /* 통신할 URL */

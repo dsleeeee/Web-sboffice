@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpStore.xml
+    사원별매장관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.05.12     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.empStore.service.impl.EmpStoreMapper">
+
+    <!-- 사원별탭 - 사원정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE, TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원 정보, [본사]사원별_관리매장
+    -->
+    <select id="getEmpStoreEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getEmpStoreEmpList */
+        SELECT
+        the.EMP_NO,
+        the.EMP_NM,
+        the.SERVICE_FG,
+        COUNT(thes.STORE_CD) AS STORE_CNT
+        FROM TB_HQ_EMPLOYEE the,
+        TB_HQ_EMPLOYEE_STORE thes
+        WHERE 1=1
+        AND thes.HQ_OFFICE_CD (+)= the.HQ_OFFICE_CD
+        AND thes.EMP_NO (+)= the.EMP_NO
+        AND the.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND the.USE_YN = 'Y'
+        GROUP BY the.EMP_NO, the.EMP_NM, the.SERVICE_FG
+        ORDER BY the.EMP_NO
+    </select>
+
+    <!-- 사원별탭 - 관리매장 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE, TB_MS_STORE
+        COMMENTS : [본사]사원별_관리매장, [매장]매장 정보
+    -->
+    <select id="getEmpManageStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getEmpManageStoreList */
+        SELECT
+        thes.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        thes.EMP_NO,
+        tms.SYS_STAT_FG
+        FROM TB_HQ_EMPLOYEE_STORE thes,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.STORE_CD (+)= thes.STORE_CD
+        AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND thes.EMP_NO = #{empNo}
+        ORDER BY thes.STORE_CD
+    </select>
+
+    <!-- 사원별탭 - 미관리매장 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_EMPLOYEE, TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [매장]매장 정보, [본사]사원 정보, [본사]사원별_관리매장
+    -->
+    <select id="getEmpNoManageStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getEmpNoManageStoreList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        the.EMP_NO,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms,
+        TB_HQ_EMPLOYEE the
+        WHERE 1=1
+        AND the.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND the.EMP_NO = #{empNo}
+        AND NOT EXISTS
+        (
+            SELECT *
+            FROM TB_HQ_EMPLOYEE_STORE thes
+            WHERE 1=1
+            AND thes.STORE_CD = tms.STORE_CD
+            AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
+            AND thes.EMP_NO = #{empNo}
+        )
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 사원별탭 - 관리매장 추가 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원별_관리매장
+    -->
+    <insert id="getEmpManageStoreSave" parameterType="EmpStoreVO">
+        /* EmpStoreMapper.getEmpManageStoreSave */
+        INSERT INTO TB_HQ_EMPLOYEE_STORE
+        (
+            HQ_OFFICE_CD,
+            EMP_NO,
+            HQ_BRAND_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{empNo},
+            '0000000',
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 사원별탭 - 관리매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원별_관리매장
+    -->
+    <delete id="getEmpManageStoreDelete" parameterType="EmpStoreVO">
+        /* EmpStoreMapper.getEmpManageStoreDelete */
+        DELETE TB_HQ_EMPLOYEE_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND EMP_NO = #{empNo}
+        AND STORE_CD = #{storeCd}
+    </delete>
+
+    <!-- 매장별탭 - 매장정보 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [매장]매장 정보, [본사]사원별_관리매장
+    -->
+    <select id="getEmpStoreStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getEmpStoreStoreList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG,
+        COUNT(thes.EMP_NO) AS EMP_CNT
+        FROM TB_MS_STORE tms,
+        TB_HQ_EMPLOYEE_STORE thes
+        WHERE 1=1
+        AND thes.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND thes.STORE_CD (+)= tms.STORE_CD
+        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+        GROUP BY tms.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG
+        ORDER BY tms.STORE_CD
+    </select>
+
+    <!-- 매장별탭 - 관리사원 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE, TB_HQ_EMPLOYEE
+        COMMENTS : [본사]사원별_관리매장, [본사]사원 정보
+    -->
+    <select id="getStoreManageEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getStoreManageEmpList */
+        SELECT
+        thes.HQ_OFFICE_CD,
+        thes.STORE_CD,
+        thes.EMP_NO,
+        the.EMP_NM,
+        the.SERVICE_FG
+        FROM TB_HQ_EMPLOYEE_STORE thes,
+        TB_HQ_EMPLOYEE the
+        WHERE 1=1
+        AND the.HQ_OFFICE_CD (+)= thes.HQ_OFFICE_CD
+        AND the.EMP_NO (+)= thes.EMP_NO
+        AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND thes.STORE_CD = #{storeCd}
+        ORDER BY thes.EMP_NO
+    </select>
+
+    <!-- 매장별탭 - 미관리사원 조회 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE, TB_MS_STORE, TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원 정보, [매장]매장 정보, [본사]사원별_관리매장
+    -->
+    <select id="getStoreNoManageEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+        /* EmpStoreMapper.getStoreNoManageEmpList */
+        SELECT
+        the.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        the.EMP_NO,
+        the.EMP_NM,
+        the.SERVICE_FG
+        FROM TB_HQ_EMPLOYEE the,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD (+)= the.HQ_OFFICE_CD
+        AND the.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tms.STORE_CD = #{storeCd}
+        AND NOT EXISTS
+        (
+            SELECT *
+            FROM TB_HQ_EMPLOYEE_STORE thes
+            WHERE 1=1
+            AND thes.EMP_NO = the.EMP_NO
+            AND thes.HQ_OFFICE_CD = #{membrOrgnCd}
+            AND thes.STORE_CD = #{storeCd}
+        )
+        ORDER BY the.EMP_NO
+    </select>
+
+    <!-- 매장별탭 - 관리사원 추가 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원별_관리매장
+    -->
+    <insert id="getStoreManageEmpSave" parameterType="EmpStoreVO">
+        /* EmpStoreMapper.getStoreManageEmpSave */
+        INSERT INTO TB_HQ_EMPLOYEE_STORE
+        (
+            HQ_OFFICE_CD,
+            EMP_NO,
+            HQ_BRAND_CD,
+            STORE_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{empNo},
+            '0000000',
+            #{storeCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 매장별탭 - 관리사원 삭제 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE_STORE
+        COMMENTS : [본사]사원별_관리매장
+    -->
+    <delete id="getStoreManageEmpDelete" parameterType="EmpStoreVO">
+        /* EmpStoreMapper.getStoreManageEmpDelete */
+        DELETE TB_HQ_EMPLOYEE_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND EMP_NO = #{empNo}
+        AND STORE_CD = #{storeCd}
+    </delete>
+
+</mapper>

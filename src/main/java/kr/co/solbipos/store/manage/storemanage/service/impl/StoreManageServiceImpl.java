@@ -16,6 +16,7 @@ import kr.co.solbipos.store.common.enums.ConfgFg;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
+import kr.co.solbipos.sys.auth.authgroup.enums.IncldExcldFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,22 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getStoreList(storeManageVO);
     }
 
+    /** 매장 목록 엑셀조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreExcelList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분, 총판의 부모총판 코드
+        storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        storeManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.getStoreExcelList(storeManageVO);
+    }
+
     /** 매장정보 상세조회 */
     @Override
     public Map<String, Object> getStoreDetail(StoreManageVO storeManageVO) {
@@ -111,7 +128,14 @@ public class StoreManageServiceImpl implements StoreManageService{
 
     /** 매장 콤보리스트 조회 */
     @Override
-    public List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO) {
+    public List<DefaultMap<String>> getStoreComboList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return mapper.getStoreComboList(storeManageVO);
     }
 
@@ -193,9 +217,20 @@ public class StoreManageServiceImpl implements StoreManageService{
 
             // 포스 출력물 마스터 등록 (단독, 프랜차이즈)
             if(EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) {
+
+                // 포스 템플릿 등록
                 procCnt += mapper.insertDefaultPrintTemplete(storeManageVO);
+
+                //포스 실제출력물 등록
+                procCnt += mapper.insertDefaultPrint(storeManageVO);
+
             } else {
+
+                // 포스 템플릿 등록
                 procCnt += mapper.insertHqPrintTemplete(storeManageVO);
+
+                //포스 실제출력물 등록
+                procCnt += mapper.insertHqPrint(storeManageVO);
             }
 
             // 포스 마스터 생성 (설치포수 개수만큼 포스 마스터 생성)
@@ -339,28 +374,22 @@ public class StoreManageServiceImpl implements StoreManageService{
                         confgXmlVO.setModDt(dt);
                         confgXmlVO.setModId(sessionInfoVO.getUserId());
 
-                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
-                        procCnt += mapper.copyStoreConfXml(confgXmlVO);
-
-//                    for(int p=0; p<installPosCnt; p++){
-//                        confgXmlVO.setPosNo(String.valueOf(p+i));
-//                    }
-
                         LOGGER.info(">>>>>>>>>>>>>>>>>> RIGIT >>>>>>>>>>>>>>>");
-
+                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_RIGHT); // 포스 기능키 (우)
                         confgXmlVO.setArrPosNo(posNoStr.split(","));
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
 
-                        procCnt += mapper.copyPosConfXml(confgXmlVO); //todo
-
-                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
-                        procCnt += mapper.copyStoreConfXml(confgXmlVO);
-
-//                    for(int p=0; p<installPosCnt; p++){
-//                        confgXmlVO.setPosNo(String.valueOf(p+i));
-//                    }
 
                         LOGGER.info(">>>>>>>>>>>>>>>>>> LEFT >>>>>>>>>>>>>>>");
-                        procCnt += mapper.copyPosConfXml(confgXmlVO); // todo
+                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_LEFT); // 포스 기능키 (좌)
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+
+                        LOGGER.info(">>>>>>>>>>>>>>>>>> DELIVERY >>>>>>>>>>>>>>>");
+                        confgXmlVO.setConfgFg(ConfgFg.POS_FN_DELIVERY); // 포스 기능키 (배달메뉴)
+                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+
+                        // 포스기능키별 적용매장 등록(TB_CM_POS_FNKEY_STORE)
+                        procCnt += mapper.registPosFnkeyStore(storeFnkeyVO);
 
                     }
 
@@ -386,9 +415,9 @@ public class StoreManageServiceImpl implements StoreManageService{
 //                        confgXmlVO.setPosNo(String.valueOf(p+i));
 //                    }
 
-                        confgXmlVO.setArrPosNo(posNoStr.split(","));
+                        //confgXmlVO.setArrPosNo(posNoStr.split(","));
 
-                        procCnt += mapper.copyPosConfXml(confgXmlVO);
+                        //procCnt += mapper.copyPosConfXml(confgXmlVO);
 
                         // 터치키 분류 복사
                         TouchKeyClassVO touchkeyClassVO = new TouchKeyClassVO();
@@ -940,4 +969,160 @@ public class StoreManageServiceImpl implements StoreManageService{
     public int getStoreCdCnt(StoreManageVO storeManageVO){
         return mapper.getStoreCdCnt(storeManageVO);
     }
+
+    /** 권한그룹복사를 위한 본사목록 조회 */
+    public List<DefaultMap<String>> authHqList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.authHqList(storeManageVO);
+    }
+
+    /** 권한그룹복사를 위한 매장목록 조회 */
+    public List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        // 총판인 경우, session의 AgencyCode 값 넣기
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY){
+            storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return mapper.authStoreList(storeManageVO);
+    }
+
+    /** 사용 메뉴 */
+    @Override
+    public List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO) {
+        return mapper.avlblMenu(storeManageVO);
+    }
+
+    /** 미사용 메뉴 */
+    @Override
+    public List<DefaultMap<String>> beUseMenu(StoreManageVO storeManageVO) {
+        return mapper.beUseMenu(storeManageVO);
+    }
+
+    /** 메뉴권한복사 */
+    @Override
+    public int copyAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storeMenuVO.setRegDt(dt);
+        storeMenuVO.setRegId(sessionInfoVO.getUserId());
+        storeMenuVO.setModDt(dt);
+        storeMenuVO.setModId(sessionInfoVO.getUserId());
+
+        // storeCd : 복사 대상이 되는 매장
+        // copyStoreCd : 복사할 기준이 되는 매장
+
+        // 1. 메뉴 권한 복사
+        int authGrpCopy = mapper.copyAuth(storeMenuVO);
+        if(authGrpCopy <= 0) {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        mapper.removeAuthAll(storeMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = mapper.exceptMenu(storeMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                storeMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    storeMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    storeMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                storeMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = mapper.copyAuthExcp(storeMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
+        }
+
+        return (authGrpCopy+authExpCopy);
+    }
+
+    /** 사용메뉴 등록 */
+    @Override
+    public int addAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreMenuVO storeMenu : storeMenus){
+
+            storeMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            storeMenu.setRegDt(insertDt);
+            storeMenu.setRegId(sessionInfoVO.getUserId());
+            storeMenu.setModDt(insertDt);
+            storeMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(storeMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(storeMenu);
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 미사용메뉴 등록 */
+    @Override
+    public int removeAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreMenuVO storeMenu : storeMenus){
+            storeMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            storeMenu.setRegDt(insertDt);
+            storeMenu.setRegId(sessionInfoVO.getUserId());
+            storeMenu.setModDt(insertDt);
+            storeMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(storeMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(storeMenu);
+            }
+
+            // 권한 삭제 처리
+            storeMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = mapper.addAuth(storeMenu);
+
+        }
+        return procCnt;
+    }
+
+    /** 사업자번호 중복체크 */
+    @Override
+    public DefaultMap<String> bizNoCheckCount(StoreManageVO storeManageVO,  SessionInfoVO sessionInfoVO) {
+//        System.out.println("test1111");
+
+        DefaultMap<String> resultMap = new DefaultMap<String>();
+
+        resultMap = mapper.bizNoCheckCount(storeManageVO);
+
+        return resultMap;
+    }
+
 }

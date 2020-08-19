@@ -288,7 +288,9 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeOrderVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        if(storeOrderVO.getStoreCd() == null || storeOrderVO.getStoreCd() == ""){
+        	storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
 
         DefaultMap<String> result = storeOrderService.getStoreOrderDateCheck(storeOrderVO);
 
@@ -308,7 +310,7 @@ public class StoreOrderController {
     @RequestMapping(value = "/storeOrderDtl/confirm.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveStoreOrderConfirm(HttpServletRequest request, HttpServletResponse response,
-        Model model, StoreOrderVO storeOrderVO) {
+        Model model, @RequestBody StoreOrderVO storeOrderVO) {
 
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);

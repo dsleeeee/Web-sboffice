@@ -64,7 +64,12 @@ app.controller('prodInstockInfoCtrl', ['$scope', '$http', function ($scope, $htt
     params.inSlipNo  = $scope.inSlipNo;
     params.startDate = $scope.startDate;
     params.endDate   = $scope.endDate;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/vendr/orderStockInfo/prodInstockInfo/list.sb", params);
   };

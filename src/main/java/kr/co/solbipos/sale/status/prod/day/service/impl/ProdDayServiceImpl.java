@@ -35,5 +35,18 @@ public class ProdDayServiceImpl implements ProdDayService {
         
         return prodDayMapper.getProdDayList(prodDayVO);
     }
-
+    
+    /** 상품별 매출 - 일자별 상품 엑셀 다운로드 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdDayExcelList(ProdDayVO prodDayVO, SessionInfoVO sessionInfoVO) {
+  
+    	prodDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	
+        if(!StringUtil.getOrBlank(prodDayVO.getStoreCd()).equals("")) {
+        	prodDayVO.setArrStoreCd(prodDayVO.getStoreCd().split(","));
+        }
+        
+        return prodDayMapper.getProdDayExcelList(prodDayVO);
+    }
+    
 }

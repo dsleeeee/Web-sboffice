@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="goalMonthView" class="subCon"  ng-controller="goalMonthCtrl">
+<div id="goalMonthView" class="subCon3"  ng-controller="goalMonthCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="goal.goalMonth.versusGoalSaleAnals"/></a>
       <%-- 조회 --%>
@@ -88,8 +88,10 @@
             items-source="_getComboData('goalMonthListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="conListScale"
+			is-editable="true"
+			text-changed="_checkValidation(s)">
     </wj-combo-box>
     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
         <input type="text" id="goalMonthSelectStoreStoreNum" ng-model="storeNum">
@@ -101,7 +103,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="cornrDayGrid"
           autoGenerateColumns="false"
@@ -115,12 +117,12 @@
           <wj-flex-grid-column header="<s:message code="cmm.mrhst.nm"/>"                     binding="storeNm"            width="200" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleMonth"/>"         binding="saleGoalYm"         width="150" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.monthDay"/>"          binding="saleGoalDateCnt"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleCnt"/>"           binding="saleDateCnt"        width="100" align="right"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleCnt"/>"           binding="saleDateCnt"        width="100" align="center"  is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalDay.monthGoalAmt"/>"        binding="saleGoalMonthlyAmt" width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTotSale"/>"        binding="saleGoalAmt"        width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="goal.goalMonth.realSaleAmt"/>"       binding="totSaleAmt"         width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -137,6 +139,31 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+  
+    <%--위즈모 테이블--%>
+    <div class="wj-gridWrap2" style="display: none;" ng-controller="goalMonthExcelCtrl">
+      <wj-flex-grid
+        id="goalMonthExcelGrid"
+        autoGenerateColumns="false"
+        selection-mode="Row"
+        items-source="data"
+        control="excelFlex"
+        initialized="initGrid(s,e)"
+        is-read-only="true"
+        item-formatter="_itemFormatter">
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="cmm.mrhst.nm"/>"                     binding="storeNm"            width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleMonth"/>"         binding="saleGoalYm"         width="150" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.monthDay"/>"          binding="saleGoalDateCnt"    width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.saleCnt"/>"           binding="saleDateCnt"        width="100" align="center"  is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalDay.monthGoalAmt"/>"        binding="saleGoalMonthlyAmt" width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTotSale"/>"        binding="saleGoalAmt"        width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.realSaleAmt"/>"       binding="totSaleAmt"         width="200" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.month"/>"             binding="goalAchiMonthly"    width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="goal.goalMonth.dayTot"/>"            binding="goalAchi"           width="150" align="right"  is-read-only="true" ></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+    <%--//위즈모 테이블--%>
 </div>
 
 <script type="text/javascript">

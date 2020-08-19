@@ -22,7 +22,7 @@
             <th><s:message code="vendrExact.reg.excclcDate"/></th>
             <td>
               <div class="sb-select">
-                <span class="txtIn"><input id="excclcDate" class="w120px" ng-model="vendrExact.excclcDate"></span>
+                <span class="txtIn"><input id="excclcDate" class="w120px" ng-disabled="excclcDateFg" ng-model="vendrExact.excclcDate"></span>
               </div>
             </td>
             <th><s:message code="vendrExact.reg.vendr"/></th>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="kr.co.solbipos.base.store.storage.popup.service.impl.StoragePopupMapper">
+   <!-- 본사 창고 신규 등록 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 본사 창고를 신규 등록한다.
+    -->
+	<insert id="RegHqStorageInfo" parameterType="storageVO">
+        /* USE : StorageMapper.RegHqStorageInfo */
+	    <![CDATA[
+	    INSERT INTO TB_HQ_STORAGE
+	    (
+	      HQ_OFFICE_CD,
+	      STORAGE_CD,
+	      STORAGE_NM,
+	      USE_YN,
+	      REG_DT,
+	      REG_ID,
+	      MOD_DT,
+	      MOD_ID
+	    )
+	    VALUES
+	    (
+	      #{hqOfficeCd},
+	      #{storageCd},
+	      #{storageNm},
+	      #{useYn},
+	      #{regDt},
+	      #{regId},
+	      #{modDt},
+	      #{modId}
+	    )
+	    ]]>
+    </insert>
+    
+   <!-- 매장 창고 신규 등록 -->
+    <!--
+        TABLE    : TB_MS_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 매장 창고를 신규 등록한다.
+    -->
+    <insert id="RegStoreStorageInfo" parameterType="storageVO">
+        /* USE : StorageMapper.RegStoreStorageInfo */
+        <![CDATA[
+        INSERT INTO TB_MS_STORAGE
+        (
+          HQ_OFFICE_CD,
+          STORE_CD,
+          STORAGE_CD,
+          STORAGE_NM,
+          USE_YN,
+          REG_DT,
+          REG_ID,
+          MOD_DT,
+          MOD_ID
+        )
+        VALUES
+        (
+          #{hqOfficeCd},
+          #{storeCd},
+          #{storageCd},
+          #{storageNm},
+          #{useYn},
+          #{regDt},
+          #{regId},
+          #{modDt},
+          #{modId}
+        )
+        ]]>
+    </insert>
+    
+   <!-- 본사 창고 정보 수정 -->
+    <!--
+        TABLE    : TB_HQ_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 본사 창고 정보를 수정한다.
+    -->
+    <update id="ModHqStorageInfo" parameterType="storageVO">
+        /* USE : StorageMapper.ModHqStorageInfo */
+	    <![CDATA[
+	    UPDATE TB_HQ_STORAGE A
+	       SET A.STORAGE_NM   = #{storageNm},
+	           A.USE_YN       = #{useYn},
+	           A.MOD_DT       = #{modDt},
+	           A.MOD_ID       = #{modId}
+	     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+	       AND A.STORAGE_CD   = #{storageCd}
+	    ]]>
+    </update>
+    
+   <!-- 매장 창고 정보 수정 -->
+    <!--
+        TABLE    : TB_MS_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 매장 창고 정보를 수정한다.
+    -->
+    <update id="ModStoreStorageInfo" parameterType="storageVO">
+        /* USE : StorageMapper.ModStoreStorageInfo */
+        <![CDATA[
+        UPDATE TB_MS_STORAGE A
+           SET A.STORAGE_NM   = #{storageNm},
+               A.USE_YN       = #{useYn},
+               A.MOD_DT       = #{modDt},
+               A.MOD_ID       = #{modId}
+         WHERE A.STORE_CD     = #{storeCd}
+           AND A.STORAGE_CD   = #{storageCd}
+        ]]>
+    </update>
+    
+    <!-- 창고 storageCd 카운트 조회-->
+    <!--
+        TABLE    : TB_HQ_STORAGE, TB_MS_STORAGE
+        PARAM    : storageVO
+        COMMENTS : 본사별, 매장별 storageCd 카운트를 조회한다.
+    -->
+    <select id="StorageCdCnt" parameterType="storageVO" resultType="int">
+        SELECT  NVL(MAX(STORAGE_CD), '0')+1 AS STORAGE_CD
+        <if test='orgnFg == "H"'>
+            FROM    TB_HQ_STORAGE
+            WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+        </if>
+        <if test='orgnFg == "S"'>
+            FROM    TB_MS_STORAGE
+            WHERE   STORE_CD  =     #{storeCd}
+        </if>
+    </select>
+    
+    <!-- 본사 창고 재고 조회-->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR, TB_ST_STORE_STOCK_CUR
+        PARAM    : storageVO
+        COMMENTS : 창고 현재고를 조회한다.
+    -->
+    <select id="StockCnt" parameterType="storageVO" resultType="int">
+    	SELECT COUNT(CURR_QTY)
+    	<if test='orgnFg == "H"'>
+	    	FROM TB_ST_HQ_STOCK_CUR
+	        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+	        AND STORAGE_CD = #{storageCd}
+    	</if>
+    	<if test='orgnFg == "S"'>
+            FROM TB_ST_STORE_STOCK_CUR
+            WHERE STORE_CD = #{storeCd}
+            AND STORAGE_CD = #{storageCd}
+        </if>
+    </select>
+    
+</mapper>

@@ -132,7 +132,12 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
     var params    = {};
     params.slipNo = $scope.slipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -151,11 +156,11 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
               $scope.btnOrderInfoRegistIfFg = true;
             }
             $scope.btnAddProdIfFg  = true;
-            $scope.btnProdSaveIfFg = true;
+//            $scope.btnProdSaveIfFg = true;
           } else {
             $scope.btnOrderInfoRegistIfFg = false;
             $scope.btnAddProdIfFg         = false;
-            $scope.btnProdSaveIfFg        = false;
+//            $scope.btnProdSaveIfFg        = false;
           }
         }
       }
@@ -197,10 +202,15 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
       item.status    = "U";
       item.slipNo    = $scope.slipNo;
       item.slipFg    = $scope.slipFg;
-      item.storageCd = "001";
+      item.storageCd = "999";			//001 -> 999
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
 
       params.push(item);
+    }
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
 
     $scope._save("/iostock/vendr/vendrInstock/vendrInstockProdReg/save.sb", params, function () {
@@ -251,7 +261,12 @@ app.controller('vendrInstockProdCtrl', ['$scope', '$http', '$timeout', function 
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

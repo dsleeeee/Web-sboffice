@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:400px;">
+<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:350px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -15,7 +15,7 @@
     <%-- body --%>
     <div class="wj-dialog-body" ng-controller="verRegistCtrl">
       <div>
-        <div style="height:250px; overflow-y: auto;">
+        <div style="height:200px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="verManage.verInfo" /></h3>
             <table class="searchTbl">

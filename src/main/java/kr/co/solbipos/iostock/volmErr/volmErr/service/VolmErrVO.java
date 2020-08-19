@@ -6,6 +6,15 @@ public class VolmErrVO extends PageVO {
 
     private static final long serialVersionUID = 5954552114499634897L;
 
+	/**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 본사코드 */
     private String hqOfficeCd;
     /** 전표번호 ( YYMM(4)+SEQ(6) ) */
@@ -98,6 +107,20 @@ public class VolmErrVO extends PageVO {
     private String storeNewAdjustFg;
     /** 전표번호 생성을 위한 YYMM 포맷 날짜 */
     private String yymm;
+    /** 권역별 창고 코드 */
+    private String  areaFg;
+    
+    /** 헤드 인덱스(DAY SEQUENCE) */
+    private Integer seqNo;
+    
+    
+    public String getOrgnFg() {
+		return orgnFg;
+	}
+
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 
     /**
      * @return the hqOfficeCd
@@ -742,4 +765,26 @@ public class VolmErrVO extends PageVO {
     public void setYymm(String yymm) {
         this.yymm = yymm;
     }
+    
+    /**
+     * @return the seqNo
+     */
+    public Integer getSeqNo() {
+        return seqNo;
+    }
+
+    /**
+     * @param seqNo the seqNo to set
+     */
+    public void setSeqNo(Integer seqNo) {
+        this.seqNo = seqNo;
+    }
+    
+    public String getAreaFg() {
+		return areaFg;
+	}
+
+	public void setAreaFg(String areaFg) {
+		this.areaFg = areaFg;
+	}
 }

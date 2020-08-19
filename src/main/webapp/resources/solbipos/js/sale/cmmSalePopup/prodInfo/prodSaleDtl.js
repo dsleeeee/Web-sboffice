@@ -58,6 +58,26 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
             params.yearMonth = data.yearMonth;
             params.posNo  = data.posNo;
         }
+        // 기간별매출 > 일자별 탭 > 상품분류별 탭
+        if(data.gubun == "dayProdClass") {
+            params.saleDate = data.saleDate;
+            params.strProdClassCd  = data.strProdClassCd;
+            params.level = data.level;
+            params.prodCd = data.prodCd;
+            params.prodNm = data.prodNm;
+            params.barCd = data.barCd;
+            params.prodClassCd = data.prodClassCd;
+        }
+        // 기간별매출 > 월별 탭 > 상품분류별 탭
+        if(data.gubun == "monthProdClass") {
+            params.yearMonth = data.yearMonth;
+            params.strProdClassCd  = data.strProdClassCd;
+            params.level = data.level;
+            params.prodCd = data.prodCd;
+            params.prodNm = data.prodNm;
+            params.barCd = data.barCd;
+            params.prodClassCd = data.prodClassCd;
+        }
         params.storeCds  = data.storeCd;
         params.gubun  = data.gubun;
 

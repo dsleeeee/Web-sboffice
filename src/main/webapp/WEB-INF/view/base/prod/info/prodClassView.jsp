@@ -9,6 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/base/prod/info/" />
+<c:set var="prodEnvstVal" value="${prodEnvstVal}" />
 
 
 <div class="subCon">
@@ -30,7 +31,7 @@
             <%-- 전체접기 --%>
             <button class="btn_skyblue" id="btnFold"><s:message code="cmm.all.fold" /></button>
           </div>
-          <div class="fr">
+          <div class="fr" <c:if test="${orgnFg == 'STORE' and prodEnvstVal == 'HQ'}">style="display: none;"</c:if>>
             <%-- 추가버튼 --%>
             <button class="btn_skyblue" id="btnAdd"><s:message code="cmm.add" /></button>
             <%-- 삭제버튼 --%>
@@ -40,7 +41,7 @@
           </div>
         </div>
         <%--위즈모 트리--%>
-        <div id="clsTree" class="mt20" style="height:380px;"></div>
+        <div class="theTreeAll_cls" id="clsTree" class="mt20" style="height:380px;"></div>
         <%--//위즈모 트리--%>
       </div>
     </div>

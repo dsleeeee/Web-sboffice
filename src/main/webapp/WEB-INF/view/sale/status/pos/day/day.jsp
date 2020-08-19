@@ -45,9 +45,9 @@
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posDaySelectStore"/>
-								<jsp:param name="targetPosId" value="posDaySelectPos"/>
+								<jsp:param name="subTargetId" value="posDaySelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -89,8 +89,10 @@
 			items-source="_getComboData('posDayListScaleBox')"
 			display-member-path="name"
 			selected-value-path="value"
-			is-editable="false"
-			initialized="initComboBox(s)">
+			initialized="initComboBox(s)"
+			control="listScaleCombo"
+            is-editable="true"
+            text-changed="_checkValidation(s)">
 		</wj-combo-box>
 
 		<%-- 엑셀 다운로드 //TODO --%>
@@ -99,9 +101,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+	<%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+      <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="posDayGrid"
 				autoGenerateColumns="false"
@@ -138,15 +140,35 @@
 		</ul>
 	</div>
 	<%--//페이지 리스트--%>
+
+    <%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="posDayExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="posDayExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                loaded-rows="loadedRows(s,e)"
+                is-read-only="true"
+                frozen-columns="7"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="pos.saleDate"/>"          binding="saleDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.yoil"/>"              binding="dayName" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.saleStore"/>"         binding="saleStoreCnt" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"        binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"          binding="totDcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"    binding="totRealSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"        binding="totSaleCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//엑셀 리스트--%>
 </div>
 
 <script type="text/javascript">
 </script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/day/day.js?ver=20190125.02" charset="utf-8"></script>
-
-<%-- 상품매출내역 팝업 상세 레이어 --%>
-<c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-

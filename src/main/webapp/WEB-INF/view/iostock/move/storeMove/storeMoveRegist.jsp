@@ -72,12 +72,12 @@
           <%-- 상품코드 --%>
           <th><s:message code="storeMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchstoreMoveRegProdCd" name="srchstoreMoveRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
           <th><s:message code="storeMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchstoreMoveRegProdNm" name="srchstoreMoveRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>
@@ -120,7 +120,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="storeMove.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitFg"/>" binding="poUnitFgNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -136,6 +136,7 @@
             <wj-flex-grid-column header="<s:message code="storeMove.reg.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.reg.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

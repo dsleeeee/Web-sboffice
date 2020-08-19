@@ -25,7 +25,7 @@
           <th><s:message code="hqStoreMove.reg.moveDate"/></th>
           <td>
             <div class="sb-select">
-              <span class="txtIn"><input id="regMoveDate" class="w150px" ng-model="moveDate"></span>
+              <span class="txtIn"><input id="regHqStoreMoveDate" class="w150px" ng-model="moveDate"></span>
             </div>
           </td>
           <%-- 배송구분 --%>
@@ -34,9 +34,9 @@
             <div class="sb-select">
               <span class="txtIn w150px">
                 <wj-combo-box
-                  id="srchRegDlvrFg"
+                  id="srchHqStoreMoveRegDlvrFg"
                   ng-model="regDlvrFg"
-                  items-source="_getComboData('srchRegDlvrFg')"
+                  items-source="_getComboData('srchHqStoreMoveRegDlvrFg')"
                   display-member-path="name"
                   selected-value-path="value"
                   is-editable="false"
@@ -81,19 +81,19 @@
         <tr>
           <th><s:message code="hqStoreMove.reg.remark"/></th>
           <td colspan="3">
-            <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100"/>
+            <input type="text" id="hdHqRemark" name="hdHqRemark" ng-model="hdRemark" class="sb-input w100"/>
           </td>
         </tr>
         <tr>
           <%-- 상품코드 --%>
           <th><s:message code="hqStoreMove.add.prodCd"/></th>
           <td>
-            <input type="text" id="srchRegProdCd" name="srchRegProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+            <input type="text" id="srchRegProdHqCd" name="srchRegProdHqCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
           </td>
           <%-- 상품명 --%>
           <th><s:message code="hqStoreMove.add.prodNm"/></th>
           <td>
-            <input type="text" id="srchRegProdNm" name="srchRegProdNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
+            <input type="text" id="srchRegProdHqNm" name="srchRegProdHqNm" ng-model="prodNm" class="sb-input w100" maxlength="50"/>
           </td>
         </tr>
         </tbody>
@@ -107,16 +107,16 @@
 
       <div class="mt10 pdb20 oh bb">
         <%-- 조회 --%>
-        <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchHqStoreMoveRegistList();">
+        <button type="button" class="btn_blue fr" id="btnHqSearch" ng-click="searchHqStoreMoveRegistList();">
           <s:message code="cmm.search"/></button>
       </div>
 
       <div class="tr mt20 fr">
         <%-- 저장 --%>
-        <button type="button" id="btnRegSave" class="btn_skyblue ml5 fl" ng-click="save()">
+        <button type="button" id="btnRegHqSave" class="btn_skyblue ml5 fl" ng-click="save()">
           <s:message code="cmm.save"/></button>
         <%-- 저장 --%>
-        <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()">
+        <button type="button" id="btnHqConfirm" class="btn_skyblue ml5 fl" ng-click="confirm()">
           <s:message code="hqStoreMove.reg.confirmBtn"/></button>
       </div>
       <div style="clear: both;"></div>
@@ -136,7 +136,7 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.poUnitFg"/>" binding="poUnitFgNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.unitQty"/>" binding="outUnitQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.etcQty"/>" binding="outEtcQty" width="70" align="right" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
@@ -152,8 +152,14 @@
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="outEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.envst0011"/>" binding="inEnvst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="hqStoreMove.reg.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
+          <%-- ColumnPicker 사용시 include --%>
+          <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+              <jsp:param name="pickerTarget" value="hqStoreMoveRegistCtrl"/>
+          </jsp:include>
+          <%--// ColumnPicker 사용시 include --%>
         </div>
         <%--//위즈모 테이블--%>
 

@@ -24,6 +24,7 @@
       autoGenerateColumns="false"
       control="flex"
       initialized="initGrid(s,e)"
+      is-read-only="false"
       sticky-headers="true"
       selection-mode="Row"
       items-source="data"
@@ -56,4 +57,4 @@ var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=2018112701" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.09" charset="utf-8"></script>

@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="posHourView" class="subCon"  ng-controller="posHourCtrl">
+<div id="posHourView" class="subCon" style="display: none;" ng-controller="posHourCtrl">
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="pos.hour"/></a>
 		<%-- 조회 --%>
@@ -45,9 +45,9 @@
 						<td>
 							<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
 <%-- 							<jsp:include page="/WEB-INF/view/sale/status/pos/cmm/selectStoreM.jsp" flush="true"> --%>
-							<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+							<jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
 								<jsp:param name="targetId" value="posHourSelectStore"/>
-								<jsp:param name="targetPosId" value="posHourSelectPos"/>
+								<jsp:param name="subTargetId" value="posHourSelectPos"/>
 								<jsp:param name="closeFunc" value="getPosNmList"/>
 							</jsp:include>
 							<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
@@ -99,9 +99,9 @@
 		</button>
 	</div>
 
-	<div class="w100 mt10">
-		<%--위즈모 테이블--%>
-		<div class="wj-gridWrap" style="height: 350px;">
+	<%--위즈모 테이블--%>
+    <div class="w100 mt10" id="wjWrapType3">
+      <div class="wj-gridWrap">
 			<wj-flex-grid
 				id="posHourGrid"
 				autoGenerateColumns="false"
@@ -139,12 +139,12 @@
 	<%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript">
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>
-
-<%-- 상품매출내역 팝업 상세 레이어 --%>
+<%-- 수량합계 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<script type="text/javascript">
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>

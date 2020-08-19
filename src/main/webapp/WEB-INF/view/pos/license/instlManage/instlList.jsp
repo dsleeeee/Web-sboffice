@@ -87,9 +87,9 @@
 
         <%--left--%>
         <div class="wj-TblWrap mt20 mb20 w40 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:470px;">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:420px;">
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:300px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -99,11 +99,11 @@
                             item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="instl.agency.agencyCd"/>" binding="agencyCd" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="instl.agency.agencyNm"/>" binding="agencyNm" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="instl.totStoreCnt"/>" binding="totStoreCnt" width="95" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="instl.closeStoreCnt"/>" binding="closeStoreCnt" width="95" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="instl.posCnt"/>" binding="posCnt" width="95" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="instl.agency.agencyCd"/>" binding="agencyCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="instl.agency.agencyNm"/>" binding="agencyNm" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="instl.totStoreCnt"/>" binding="totStoreCnt" width="75" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="instl.closeStoreCnt"/>" binding="closeStoreCnt" width="75" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="instl.posCnt"/>" binding="posCnt" width="75" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
 
                             <%--상세 조회시 필요--%>
                             <wj-flex-grid-column header="<s:message code="instl.restCnt"/>" binding="restCnt" width="115" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -118,10 +118,10 @@
 
     <%--right--%>
     <div class="wj-TblWrap mt20 mb20 w60 fr" ng-controller="instlListDetailCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:470px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:420px; overflow-y: hidden;">
             <label id="lblAgencyCdInstl"></label> <label id="lblAgencyNmInstl"></label> <label id="lblPosCntInstl"></label> <label id="lblRestCntInstl"></label>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:300px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         control="flex"

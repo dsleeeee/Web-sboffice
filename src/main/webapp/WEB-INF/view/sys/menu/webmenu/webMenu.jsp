@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div id="theGrid"></div>
+        <div class="theTreeAll_cls" id="theGrid"></div>
       </div>
     </div>
 
@@ -74,7 +74,7 @@
         </div>
 
         <%-- 메뉴정보 --%>
-        <h3 class="h3_tbl2 pdt5 lh30">
+        <h3 class="h3_tbl2 pdt5 lh25 mt20">
           <s:message code="webMenu.info" />
         </h3>
 
@@ -133,7 +133,7 @@
         </table>
 
         <%-- 기능정보 --%>
-        <h3 class="h3_tbl2 pdt5 lh30 mt20">
+        <h3 class="h3_tbl2 pdt5 lh25 mt20">
           <s:message code="webMenu.fun.info" />
           <span class="fr">
             <%-- 추가버튼 --%>

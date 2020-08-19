@@ -2,11 +2,14 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
 
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
 <wj-popup control="prodModifyLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="prodModifyCtrl">
-  <form name="myForm">
+  <form id="myForm" name="myForm">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prod.layer.info"/>
       <a href="#" class="wj-hide btn_close"></a>
@@ -25,12 +28,18 @@
             <tr>
               <%-- 상품이미지 //TODO --%>
               <th rowspan="3"><s:message code="prod"/><br/><s:message code="image"/>
+                <br/>
               </th>
               <td rowspan="3">
                 <%--등록한 상품이 없는 경우--%>
-                <span class="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
+                <span class="goodsNo" id="goodsNo"><s:message code="image"/> 등록 준비중 입니다</span>
                 <%--등록한 상품이 있는 경우--%>
                 <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
+                <span class="goodsYes" id="goodsYes"><img id="imgProdImage" /></span>
+                <%--첨부파일--%>
+                <input type="file" id="file" name="file" accept="image/x-png" onchange="angular.element(this).scope().changeProdImage(this)"/>
+                <%--삭제--%>
+                <a id="btnDelProdImage" href="#" class="btn_grayS mt5 fr" ng-click="delProdImage()"><s:message code="cmm.delete" /></a>
               </td>
               <%--단가구분 //TODO --%>
               <th><s:message code="prod.prodTypeFg"/></th>
@@ -89,7 +98,7 @@
               </td>
             </tr>
             <tr>
-              <%--상품분류--%>
+              <%--분류조회--%>
               <th><s:message code="prod.prodClass"/></th>
               <td>
                 <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input w100"
@@ -101,7 +110,8 @@
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.prodClass" />은(는) 필수 입력항목 입니다."
                        placeholder="<s:message code="prod.prodClass" /> 선택" <%--readonly--%>
-                       ng-click="popUpProdClass()" />
+                       readonly
+                       ng-click="popUpProdClass()"  />
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodModifyInfo.prodClassCd" disabled />
               </td>
               <%--거래처 //TODO --%>
@@ -142,7 +152,7 @@
               <%--판매단가--%>
               <th><s:message code="prod.saleUprc"/></th>
               <td>
-                <input type="text" id="_saleUprc" name="saleUprc" class="sb-input w100"
+                <input type="text" id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.saleUprc"
                        required
                        popover-enable="myForm.saleUprc.$invalid"
@@ -390,7 +400,7 @@
               <%--공급단가--%>
               <th><s:message code="prod.splyUprc"/></th>
               <td>
-                <input type="text" id="_splyUprc" name="splyUprc" class="sb-input w100"
+                <input type="text" id="prodModifySplyUprc" name="splyUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.splyUprc"
                        required
                        popover-enable="myForm.splyUprc.$invalid"
@@ -421,7 +431,7 @@
               <%--원가단가--%>
               <th><s:message code="prod.costUprc"/></th>
               <td>
-                <input type="text" id="_costUprc" name="costUprc" class="sb-input w100"
+                <input type="text" id="prodModifyCostUprc" name="costUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.costUprc"
                        required
                        popover-enable="myForm.costUprc.$invalid"
@@ -432,7 +442,7 @@
               <%--최종판매단가--%>
               <th><s:message code="prod.lastCostUprc"/></th>
               <td>
-                <input type="text" id="_lastCostUprc" name="lastCostUprc" class="sb-input w100"
+                <input type="text" id="prodModifyLastCostUprc" name="lastCostUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.lastCostUprc"
                        required
                        popover-enable="myForm.lastCostUprc.$invalid"
@@ -485,7 +495,7 @@
               <%--발주단위수량--%>
               <th><s:message code="prod.poUnitQty"/></th>
               <td>
-                <input type="text" id="_poUnitQty" name="poUnitQty" class="sb-input w100"
+                <input type="text" id="prodModifyPoUnitQty" name="poUnitQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poUnitQty"
                        required
                        popover-enable="myForm.poUnitQty.$invalid"
@@ -496,7 +506,7 @@
               <%--최소발주--%>
               <th><s:message code="prod.poMinQty"/></th>
               <td>
-                <input type="text" id="_poMinQty" name="poMinQty" class="sb-input w100"
+                <input type="text" id="prodModifyPoMinQty" name="poMinQty" class="sb-input w100"
                        ng-model="prodModifyInfo.poMinQty"
                        required
                        popover-enable="myForm.poMinQty.$invalid"
@@ -509,7 +519,7 @@
               <%--초기재고 //TODO --%>
               <th><s:message code="prod.defaultStock"/></th>
               <td>
-                <input type="text" id="_defaultStock" name="defaultStock" class="sb-input w100"
+                <input type="text" id="prodModifyDefaultStock" name="defaultStock" class="sb-input w100"
                        ng-model="prodModifyInfo.defaultStock"
                        required
                        popover-enable="myForm.defaultStock.$invalid"
@@ -520,7 +530,7 @@
               <%--안전재고--%>
               <th><s:message code="prod.safeStockQty"/></th>
               <td>
-                <input type="text" id="_safeStockQty" name="safeStockQty" class="sb-input w100"
+                <input type="text" id="prodModifySafeStockQty" name="safeStockQty" class="sb-input w100"
                        ng-model="prodModifyInfo.safeStockQty"
                        required
                        popover-enable="myForm.safeStockQty.$invalid"
@@ -594,14 +604,22 @@
       </div>
     </div>
     <div class="wj-dialog-footer">
-       <button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>
+       <%--<button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>--%>
+       <button class="btn btn_blue" ng-click="saveProd()"><s:message code="cmm.save"/></button>
       <button class="btn wj-hide btn_blue"><s:message code="cmm.close"/></button>
       <input type="hidden" id="saveMode" name="saveMode"/>
     </div>
     </form>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20181120.64" charset="utf-8"></script>
+
+<script type="text/javascript">
+  var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
+  var storeCd = "${storeCd}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20200814.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

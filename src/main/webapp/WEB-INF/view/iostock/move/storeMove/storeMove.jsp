@@ -7,9 +7,11 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/move/storeMove/storeMove/"/>
 
-<div class="subCon" ng-controller="storeMoveCtrl">
+<div id="storeMoveView" class="subCon" ng-controller="storeMoveCtrl" style="display: none;">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeMoveCtrl')"><s:message code="cmm.search"/></button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -24,9 +26,9 @@
       <th><s:message code="cmm.search.date"/></th>
       <td colspan="3">
         <div class="sb-select">
-          <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStoreMoveStartDate" class="w150px"></span>
           <span class="rg">~</span>
-          <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+          <span class="txtIn"><input id="srchStoreMoveEndDate" class="w150px"></span>
         </div>
       </td>
     </tr>
@@ -105,16 +107,10 @@
     </tbody>
   </table>
 
-  <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeMoveCtrl')"><s:message code="cmm.search"/></button>
-  </div>
-
-  <div class="tr mt10">
+  <div class="tr mt20">
     <%-- 신규 --%>
     <button type="button" id="btnRegist" class="btn_skyblue ml5" ng-click="newRegist()"><s:message code="storeMove.newRegist"/></button>
   </div>
-  <div style="clear: both;"></div>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
@@ -131,8 +127,8 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="storeMove.moveDate"/>" binding="moveDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeMove.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeMove.ioFg"/>" binding="ioFg" width="60" align="center" is-read-only="true" data-map="ioFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeMove.dlvrFg"/>" binding="dlvrFg" width="60" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeMove.ioFg"/>" binding="ioFg" width="90" align="center" is-read-only="true" data-map="ioFgMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeMove.dlvrFg"/>" binding="dlvrFg" width="80" align="center" is-read-only="true" data-map="dlvrFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeMove.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeMove.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeMove.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -153,21 +149,21 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/move/storeMove/storeMove.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/move/storeMove/storeMove.js" charset="utf-8"></script>
 
-<%-- 매장이동관리 상세 레이어 --%>
+<%-- 매장 매장이동관리 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/storeMove/storeMoveDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장이동관리 신규등록 레이어 --%>
+<%-- 매장 매장이동관리 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/storeMove/storeMoveRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 매장이동관리 상품추가 레이어 --%>
+<%-- 매장 매장이동관리 상품추가 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/move/storeMove/storeMoveAddProd.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

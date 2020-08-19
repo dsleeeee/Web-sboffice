@@ -15,4 +15,7 @@ public interface PosMonthService {
     /** 포스별매출 - 매장 포스 리스트 조회 */
 	List<DefaultMap<String>> getPosNmList(PosMonthVO posMonthVO, SessionInfoVO sessionInfoVO);
 
+	/** 포스별매출일자별 - 엑셀리스트 조회 */
+	List<DefaultMap<String>> getPosMonthExcelList(PosMonthVO posMonthVO, SessionInfoVO sessionInfoVO);
+
 }

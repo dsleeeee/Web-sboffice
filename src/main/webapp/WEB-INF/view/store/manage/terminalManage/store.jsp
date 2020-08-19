@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup id="storeLayer" control="storeLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:900px;">
+<wj-popup id="storeLayer" control="storeLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:950px;">
   <div class="wj-dialog wj-dialog-columns" ng-controller="storeCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="terminalManage.select.store" />

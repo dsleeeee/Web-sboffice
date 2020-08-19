@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 <c:set var="baseUrl" value="/sale/day/month/monthCorner/"/>
 
 <div id="monthCornerView" name="monthView" class="subCon" style="display: none;" ng-controller="monthCornerCtrl">
@@ -81,6 +82,13 @@
                     </c:forEach>
 
                 </wj-flex-grid>
+
+                <%-- ColumnPicker 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                    <jsp:param name="pickerTarget" value="monthCornerCtrl"/>
+                </jsp:include>
+                <%--// ColumnPicker 사용시 include --%>
+
             </div>
         </div>
     </div>
@@ -89,12 +97,7 @@
 
 <script type="text/javascript">
     var orgnFg = "${orgnFg}";
+    var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthCorner.js?ver=20200120.07" charset="utf-8"></script>
-
-<%-- 상품매출 상세 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthCorner.js?ver=20200120.09" charset="utf-8"></script>

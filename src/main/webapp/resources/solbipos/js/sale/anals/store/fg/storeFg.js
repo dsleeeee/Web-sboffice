@@ -5,17 +5,19 @@ var app = agrid.getApp();
 
 var vSortFg = [
 //	{"name":"매장형태","value":"1"}
-    {"name":"매장용도","value":"2"}
+	{"name":"직영구분","value":"1"}
+    ,{"name":"매장용도","value":"2"}
 ];
 
 /** 할인구분별(매출리스트) controller */
 app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeFgCtrl', $scope, $http, $timeout, true));
+  $scope.orgnFg = gvOrgnFg;
 
   //groupRow 접고 펼치기 flag 변수
   $scope.setCollapsed = false;
-  
+
   $scope.srchStoreFgStartDate = wcombo.genDateVal("#srchStoreFgStartDate", getToday());
   $scope.srchStoreFgEndDate   = wcombo.genDateVal("#srchStoreFgEndDate", getToday());
 
@@ -25,7 +27,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	// 콤보박스 데이터 Set
 	$scope._setComboData('storeFglistScaleBox', gvListScaleBoxData);
 	$scope._setComboData("srchStoreFgDisplay", vSortFg);
-	
+
 	// picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("storeFgCtrl");
 
@@ -88,7 +90,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
       }
     }
-    
+
     // 그리드 클릭 이벤트
 	s.addEventListener(s.hostElement, 'mousedown', function (e) {
     	var ht = s.hitTest(e);
@@ -126,14 +128,12 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.setCollapsed = false;
     // 파라미터
     var params       = {};
-  //  params.startDate = wijmo.Globalize.format($scope.srchStoreFgStartDate.value, 'yyyyMMdd');
-  //  params.endDate = wijmo.Globalize.format($scope.srchStoreFgEndDate.value, 'yyyyMMdd');
     params.prodCd   = $("#srchStoreFgProdCd").val();
-    params.storeFg = $scope.storeFg;
     params.storeCd   = $("#storeFgSelectStoreCd").val();
+    params.storeFg = $scope.storeFg;
     params.listScale = $scope.listScale; //-페이지 스케일 갯수
-    params.isPageChk = isPageChk;
     params.orgnFg    = $scope.orgnFg;
+    params.isPageChk = isPageChk;
 
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
@@ -145,15 +145,10 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
    	 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
    	 	return false;
     }
-    
-//    if ($("#srchStoreFgProdCd").val() === "") {
-//        $scope._popMsg(messages["storeManage.require.select.prod"]); // 상품을 선택해 주세요.
-//        return false;
-//    }
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/store/fg/list.sb", params);
-    
+
     //create a group to show the grand totals
     var grpLv1 = new wijmo.collections.PropertyGroupDescription('전체');
     var grpLv2 = new wijmo.collections.PropertyGroupDescription('clsFg');
@@ -161,7 +156,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     var theGrid = new wijmo.Control.getControl('#storeFgGrid');
 
     theGrid.itemsSource = new wijmo.collections.CollectionView();
-    
+
     // custom cell calculation
     theGrid.formatItem.addHandler(function(s, e) {
 
@@ -184,8 +179,8 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     			if(className){
     				row.cssClass=className;
     			}
-    			
-    			if(row.level == 1) { 
+
+    			if(row.level == 1) {
 					if(!$scope.setCollapsed){
 						row.isCollapsed = true;
 					}
@@ -194,7 +189,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     	});
 
     });
-    
+
 	// 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
     theGrid.addEventListener(theGrid.hostElement, 'mousedown', function (e) {
       var ht = theGrid.hitTest(e);
@@ -229,9 +224,10 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 상품분류정보 선택취소
   $scope.delProd = function(){
-    $scope.prodCd = "";
+    //$scope.prodCd = "";
+	$("#srchStoreFgProdCd").val("");
     $scope.prodCdNm = "";
-    $scope.prodCalssCd = "";
+    $scope.prodClassCd = "";
   }
 
   //매장선택 모듈 팝업 사용시 정의
@@ -240,7 +236,7 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   $scope.storeFgSelectStoreShow = function () {
     $scope._broadcast('storeFgSelectStoreCtrl');
   };
-  
+
   //엑셀 다운로드
   $scope.excelDownloadStoreFg = function () {
     if ($scope.flex.rows.length <= 0) {

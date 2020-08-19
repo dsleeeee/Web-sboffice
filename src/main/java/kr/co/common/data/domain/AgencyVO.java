@@ -19,38 +19,67 @@ import kr.co.solbipos.application.common.service.CmmVO;
  */
 public class AgencyVO extends CmmVO {
 
-    /** 대리점코드 */
+    private static final long serialVersionUID = 1743145092912592093L;
+
+    /** 대리점코드(검색용) */
+    private String srchAgencyCd;
+    /** 대리점명(검색용) */
+    private String srchAgencyNm;
+    /**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+    /** 업체코드 */
     private String agencyCd;
-    /** 대리점명 */
-    private String agencyNm;
 
     /**
-     * @return the agencyCd
+     * 본사코드만 가져올지, 본사코드 + 단독매장 코드 까지 가져올지 파악하기 위해
+     * H : 본사코드만
+     * A : 본사코드 + 단독매장
      */
+    private String srchType;
+
+    public String getSrchAgencyCd() {
+        return srchAgencyCd;
+    }
+
+    public void setSrchAgencyCd(String srchAgencyCd) {
+        this.srchAgencyCd = srchAgencyCd;
+    }
+
+    public String getSrchAgencyNm() {
+        return srchAgencyNm;
+    }
+
+    public void setSrchAgencyNm(String srchAgencyNm) {
+        this.srchAgencyNm = srchAgencyNm;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getAgencyCd() {
         return agencyCd;
     }
 
-    /**
-     * @param agencyCd the agencyCd to set
-     */
     public void setAgencyCd(String agencyCd) {
         this.agencyCd = agencyCd;
     }
 
-    /**
-     * @return the agencyNm
-     */
-
-    public String getAgencyNm() {
-        return agencyNm;
+    public String getSrchType() {
+        return srchType;
     }
 
-    /**
-     * @param agencyNm the agencyNm to set
-     */
-    public void setAgencyNm(String agencyNm) {
-        this.agencyNm = agencyNm;
+    public void setSrchType(String srchType) {
+        this.srchType = srchType;
     }
 }

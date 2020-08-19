@@ -6,7 +6,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
-<div id="apprNcardView" class="subCon"  ng-controller="apprNcardCtrl">
+<div id="apprNcardView" class="subCon3"  ng-controller="apprNcardCtrl" style="display: none;">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl"><s:message code="dailyReport.apprNcard"/></a>
       <%-- 조회 --%>
@@ -52,9 +52,9 @@
             </jsp:include>
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
-      
+
       </tr>
-      
+
       <tr>
      </c:if>
         <%-- 포스선택 --%>
@@ -69,7 +69,7 @@
             <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
         </td>
       </tr>
-      
+
       <tr>
         <%-- 승인구분 --%>
         <th><s:message code="dayMcoupn.apprProcFg" /></th>
@@ -78,7 +78,7 @@
               <span class="txtIn">
                     <wj-combo-box
                       id="srchNcardSaleYnDisplay"
-                      ng-model="saleYn"
+                      ng-model="saleYnModel"
                       items-source="_getComboData('srchNcardSaleYnDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
@@ -95,7 +95,7 @@
               <span class="txtIn">
                     <wj-combo-box
                       id="srchNcardApprProcFgDisplay"
-                      ng-model="apprProcFg"
+                      ng-model="apprProcFgModel"
                       items-source="_getComboData('srchNcardApprProcFgDisplay')"
                       display-member-path="name"
                       selected-value-path="value"
@@ -105,8 +105,8 @@
                 </span>
           </div>
         </td>
-      <c:if test="${sessionInfo.orgnFg == 'STORE'}">  
-            <input type="hidden" id="apprNcardSelectStoreStoreCd" value="${sessionInfo.storeCd}"/>
+      <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <input type="hidden" id="apprNcardSelectStoreCd" value="${sessionInfo.storeCd}"/>
       </c:if>
         <input type="hidden" id="posNcardSelectPosCd" value=""/>
         <input type="hidden" id="posNcardSelectPosName" value=""/>
@@ -114,7 +114,7 @@
       </tbody>
     </table>
     <div style="clear: both;"></div>
-    
+
     <div class="mt20 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box
@@ -124,11 +124,13 @@
             items-source="_getComboData('apprNcardListScaleBox')"
             display-member-path="name"
             selected-value-path="value"
-            is-editable="false"
-            initialized="initComboBox(s)">
+            initialized="initComboBox(s)"
+            control="conListScale"
+			is-editable="true"
+			text-changed="_checkValidation(s)">
     </wj-combo-box>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <input type="hidden" id="apprNcardSelectStoreStoreNum" ng-model="storeNum">
+            <input type="hidden" id="apprNcardSelectStoreNum" ng-model="storeNum">
         </c:if>
     <%-- 엑셀 다운로드 //TODO --%>
     <button class="btn_skyblue fr" ng-click="excelDownloadNcard()"><s:message code="cmm.excel.down" />
@@ -137,7 +139,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap2">
         <wj-flex-grid
           id="apprNcardGrid"
           autoGenerateColumns="false"
@@ -150,15 +152,15 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"       binding="storeCd"           width="100" is-read-only="true" align="center" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"       binding="storeNm"           width="200" is-read-only="true" align="center" ></wj-flex-grid-column>
-          
+
           <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cnt"               width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmt"             width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmt"           width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-          
+
           <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cntA"              width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmtA"            width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmtA"          width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
-          
+
           <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cntB"              width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmtB"            width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmtB"          width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
@@ -172,7 +174,7 @@
       </div>
       <%--//위즈모 테이블--%>
     </div>
-    
+
   <%-- 페이지 리스트 --%>
   <div class="pageNum mt20">
    <%-- id --%>
@@ -180,6 +182,37 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
+  <%-- 엑셀 리스트 --%>
+    <div class="w100 mt10" id="wjWrapType3" style="display:none;" ng-controller="apprNcardExcelCtrl">
+      <div class="wj-gridWrap">
+            <wj-flex-grid
+                id="apprNcardExcelGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                loaded-rows="loadedRows(s,e)"
+                is-read-only="true"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+	            <wj-flex-grid-column header="<s:message code="rtnStatus.storeCd"            />"       binding="storeCd"           width="100" is-read-only="true" align="center" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="rtnStatus.storeNm"            />"       binding="storeNm"           width="200" is-read-only="true" align="center" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cnt"               width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmt"             width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmt"           width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cntA"              width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmtA"            width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmtA"          width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprCntNcard"      />"      binding="cntB"              width="100" is-read-only="true" align="center"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprDcNcard"        />"      binding="dcAmtB"            width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+	            <wj-flex-grid-column header="<s:message code="dailyReport.apprApNcard"       />"      binding="apprAmtB"          width="150" is-read-only="true" align="right"   aggregate="Sum" ></wj-flex-grid-column>
+            </wj-flex-grid>
+        </div>
+    </div>
+    <%--//엑셀 리스트--%>
+
 </div>
 
 <script type="text/javascript">

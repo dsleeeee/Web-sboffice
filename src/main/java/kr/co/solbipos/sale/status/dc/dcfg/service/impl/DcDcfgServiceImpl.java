@@ -38,6 +38,20 @@ public class DcDcfgServiceImpl implements DcDcfgService {
         return dcDcfgMapper.getDcDcfgList(dcDcfgVO);
     }
 
+    /** 할일구분별매출 - 엑셀 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDcDcfgExcelList(DcDcfgVO dcDcfgVO, SessionInfoVO sessionInfoVO) {
+    	dcDcfgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+    	if(!StringUtil.getOrBlank(dcDcfgVO.getStoreCd()).equals("")) {
+        	dcDcfgVO.setArrStoreCd(dcDcfgVO.getStoreCd().split(","));
+        }
+    	if(!StringUtil.getOrBlank(dcDcfgVO.getDcCd()).equals("")) {
+        	dcDcfgVO.setArrDcCd(dcDcfgVO.getDcCd().split(","));
+        }
+        return dcDcfgMapper.getDcDcfgExcelList(dcDcfgVO);
+    }
+
 
     /** 할일구분별매출 - 상세 리스트 조회 */
 	@Override

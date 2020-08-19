@@ -27,6 +27,10 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("dayCornerCtrl");
+
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -150,7 +154,7 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.saleDate  = selectedRow.saleDate;
-                    params.storeCd = "";
+                    params.storeCd = $("#dayCornerStoreCd").val();
                     params.gubun = "dayCorner";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -183,26 +187,44 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
     });
 
     $scope.searchDayCorner = function() {
+
+        //조회할 코너 Key값 셋팅을 위해
+        var storeCornerCd = "";
+
+        // 매장권한 로그인 시
+        if(orgnFg != null && orgnFg == 'STORE') {
+
+            // 본인 매장것만 조회
+            $("#dayCornerStoreCd").val(storeCd);
+
+            // 매장권한의 경우, 이미 자기의 코너 값을 가져왔음.
+            storeCornerCd = cornerCol;
+        }
+
+        // 본사권한 로그인 시
+        if(orgnFg != null && orgnFg == 'HQ') {
+
+            // 매장코드 값 필수
+            if ($("#dayCornerStoreCd").val() == "") {
+                s_alert.pop("매장을 선택해주세요.");
+                return;
+            }
+
+            // 해당 본사의 전체 코너에서 조회할 매장의 코너만 추려내기
+            for (var i = 0; i < cornerColList.length; i++) {
+                if (cornerColList[i].storeCd === $("#dayCornerStoreCd").val()) {
+                    storeCornerCd += "," + arrCornerCol[i];
+                }
+            }
+
+            storeCornerCd = storeCornerCd.substring(1, storeCornerCd.length)
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.cornerCol = cornerCol;
-        // 전체매장
-        if ($("#dayCornerStoreCd").val() == "") {
-            params.storeCd = null;
-            //매장 선택시
-        } else {
-            params.storeCd = $("#dayCornerStoreCd").val();
-
-            // 선택시 매장의 storeCornrCd 가져오기
-            var storeCornerCd = "";
-            for (var i = 0; i < cornerColList.length; i++) {
-                if (cornerColList[i].storeCd === $("#dayCornerStoreCd").val()) {
-                    storeCornerCd = arrCornerCol[i];
-                }
-            }
-            params.storeCornerCd = storeCornerCd;
-        }
+        params.storeCd = $("#dayCornerStoreCd").val();
+        params.storeCornerCd = storeCornerCd;
 
         $scope._inquiryMain("/sale/day/day/day/getDayCornerList.sb", params, function() {}, false);
 

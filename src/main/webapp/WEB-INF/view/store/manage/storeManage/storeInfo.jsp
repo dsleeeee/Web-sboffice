@@ -21,7 +21,9 @@
         <%-- 매장정보 --%>
         <li><a id="storeInfo" href="#" class="on"><s:message code="storeManage.storeInfo" /></a></li>
         <%-- 매장환경 --%>
-        <li><a id="storeEnv" href="#" ng-click="changeTab();"><s:message code="storeManage.storeEnv" /></a></li>
+        <li><a id="storeEnv" href="#" ng-click="changeEnvTab();"><s:message code="storeManage.storeEnv" /></a></li>
+        <%-- 메뉴권한 --%>
+        <li><a id="storeAuth" href="#" ng-click="changeAuthTab();"><s:message code="storeManage.auth" /></a></li>
       </ul>
 
       <div style="height:400px; overflow-y: auto;">
@@ -151,7 +153,7 @@
               <th><s:message code="storeManage.directManage" /><em class="imp">*</em></th>
               <td>
                 <div class="sb-input">
-                  <input type="radio" ng-model="store.directManageYn" value="Y"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
+                  <input type="radio" ng-model="store.directManageYn" value="Y" checked="checked"><label class="mr5"><s:message code="storeManage.directManageStore" /></label>
                   <input type="radio" ng-model="store.directManageYn" value="N"><label><s:message code="storeManage.merchantStore" /></label>
                 </div>
               </td>
@@ -165,10 +167,11 @@
               <%-- 사업자번호 --%>
               <th><s:message code="storeManage.bizNo" /><em class="imp">*</em></th>
               <td colspan="3">
-                <input type="text" id="bizNo1" ng-model="store.bizNo1" class="sb-input w10" maxlength="3"/>-
-                <input type="text" id="bizNo2" ng-model="store.bizNo2" class="sb-input w10" maxlength="2"/>-
-                <input type="text" id="bizNo3" ng-model="store.bizNo3" class="sb-input w15" maxlength="5"/>
+                <input type="text" id="bizNo1" ng-model="store.bizNo1" class="sb-input w10" maxlength="3" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>-
+                <input type="text" id="bizNo2" ng-model="store.bizNo2" class="sb-input w10" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>-
+                <input type="text" id="bizNo3" ng-model="store.bizNo3" class="sb-input w15" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <input type="hidden" ng-model="store.beforeBizNo" />
+                <%-- 중복체크 --%>
                 <a id="btnChkBizNo" href="#" class="btn_grayS ml5" ng-click="chkBizNo()"><s:message code="storeManage.chk.duplicate" /></a><Br />
               </td>
             </tr>
@@ -202,13 +205,13 @@
               <%-- 주소 //TODO 주소검색 추가 필요 --%>
               <th><s:message code="storeManage.addr" /><em class="imp">*</em></th>
               <td colspan="3">
-                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w30" maxlength="5"/>
+                <input type="text" id="postNo" ng-model="store.postNo" class="sb-input w30" maxlength="5" placeholder="우편번호" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');"/>
                 <a id="btnSrchAddr" href="#" class="btn_grayS ml5" ng-click="searchAddr()">
                   <s:message code="storeManage.srchAddr" />
                 </a>
                 <br>
-                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60"/>
-                <input type="text" id="addrDtl" ng-model="store.addrDtl" class="sb-input w100" maxlength="60"/>
+                <input type="text" id="addr" ng-model="store.addr" class="sb-input w100" maxlength="60" placeholder="주소1"/>
+                <input type="text" id="addrDtl" ng-model="store.addrDtl" class="sb-input w100" maxlength="60" placeholder="주소2"/>
               </td>
             </tr>
             <tr>
@@ -261,7 +264,7 @@
             </tbody>
           </table>
           <%-- 추가설정 (매장등록시에만 보여줌) --%>
-          <div id="additionalArea" ng-if="readOnlyStatus == false"> <!--todo 왜 조회했다가 신규등록하려면 안보이냐 이자식아 -->
+          <div id="additionalArea"> <!--todo 왜 조회했다가 신규등록하려면 안보이냐 이자식아 -->
             <h3 class="h3_tbl"><s:message code="storeManage.additionalSetting" /></h3>
             <table class="searchTbl">
               <colgroup>
@@ -354,12 +357,13 @@
 
   </div>
 </wj-popup>
+
 <script>
   var startDate = "${sessionScope.sessionInfo.startDate}";
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=2018110702.47" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20200818.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

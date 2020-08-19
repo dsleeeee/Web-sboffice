@@ -36,6 +36,20 @@ public class TableDayServiceImpl implements TableDayService {
 		return tableDayMapper.getTableDayList(tableDayVO);
 	}
 
+	/** 테이블별 매출 - 일자별 엑셀 리스트 조회 */
+	@Override
+	public List<DefaultMap<String>> getTableDayExcelList(TableDayVO tableDayVO, SessionInfoVO sessionInfoVO) {
+
+		tableDayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+		if(!StringUtil.getOrBlank(tableDayVO.getStoreCd()).equals("")) {
+        	tableDayVO.setArrStoreCd(tableDayVO.getStoreCd().split(","));
+        }
+
+		return tableDayMapper.getTableDayExcelList(tableDayVO);
+	}
+
+
 	/** 테이블별 매출 - 일자별 테이블 선택 조회조건 리스트 조회 */
 	@Override
 	public List<DefaultMap<String>> getStoreTableList(TableDayVO tableDayVO, SessionInfoVO sessionInfoVO) {

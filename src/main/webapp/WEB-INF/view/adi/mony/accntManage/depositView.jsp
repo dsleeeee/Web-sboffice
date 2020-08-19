@@ -29,6 +29,9 @@
         <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.save" />
         </button>
+        <button class="btn_skyblue" ng-click="batch()" <c:if test="${orgnFg ne 'HQ'}">style="display: none"</c:if>>
+          <s:message code="accntManage.batch" />
+        </button>
       </div>
       <div class="wj-gridWrap" style="height:370px">
         <div class="row">
@@ -70,6 +73,9 @@
         <button class="btn_skyblue" ng-click="save()" <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">style="visibility: hidden"</c:if>>
           <s:message code="cmm.save" />
         </button>
+        <button class="btn_skyblue" ng-click="batch()" <c:if test="${orgnFg ne 'HQ'}">style="display: none"</c:if>>
+          <s:message code="accntManage.batch" />
+        </button>
       </div>
       <div class="wj-gridWrap" style="height:370px">
         <wj-flex-grid
@@ -102,4 +108,4 @@ var orgnFg = "${orgnFg}";
 var baseUrl = "${baseUrl}";
 var useYnFg = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=2018101201" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=2018101202" charset="utf-8"></script>

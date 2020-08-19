@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.stock.status.currUnity.service.impl.CurrUnityMapper">
+
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 리스트 조회  -->
+    <select id="getCurrUnityList" parameterType="currUnityVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT A.LV1_NM  
+        ,      A.LV1_CD
+        ,      A.LV2_NM
+        ,      A.LV2_CD
+        ,      A.LV3_NM
+        ,      A.LV3_CD
+        ,      H.PROD_CD
+	    ,      H.PROD_NM
+	    ,      H.BARCD_CD  AS   H_BARCD_CD
+	    ,      M.BARCD_CD  AS   M_BARCD_CD
+	    ,      H.CURR_QTY   AS   H_CURR_QTY
+	    ,      NVL(M.CURR_QTY,0)   AS   M_CURR_QTY
+	    ,      H.SAFE_STOCK_QTY   AS   H_SAFE_STOCK_QTY
+	    ,      H.CURR_QTY+NVL(M.CURR_QTY,0)   AS   TOT_CURR_QTY
+	    <include refid="CmmSQL.PagingTemplateCount"/>
+	    FROM   (
+	          SELECT    TSHSC.PROD_CD
+	          ,      THP.PROD_CLASS_CD 
+	          ,      THP.PROD_NM
+	          ,      THPB.BARCD_CD
+	          ,      THP.SAFE_STOCK_QTY
+	          ,      SUM(TSHSC.CURR_QTY)   AS   CURR_QTY
+	            FROM    TB_ST_HQ_STOCK_CUR TSHSC
+	           ,       TB_HQ_PRODUCT THP
+	           ,       TB_HQ_PRODUCT_BARCD THPB
+	          WHERE   TSHSC.HQ_OFFICE_CD       =   #{hqOfficeCd}
+	          AND      TSHSC.STORAGE_CD      =   '999'
+	           AND     THP.HQ_OFFICE_CD         =   TSHSC.HQ_OFFICE_CD
+	           AND     THP.PROD_CD              =   TSHSC.PROD_CD
+	           AND     THP.STOCK_PROD_YN        =   'Y'
+	           AND     THP.USE_YN               =   'Y'
+	           AND     THPB.HQ_OFFICE_CD (+)    =   TSHSC.HQ_OFFICE_CD
+	           AND     THPB.PROD_CD      (+)    =   TSHSC.PROD_CD
+	           GROUP
+	           BY      TSHSC.PROD_CD
+	          ,      THP.PROD_CLASS_CD 
+	          ,      THP.PROD_NM
+	          ,      THPB.BARCD_CD
+              ,      THP.SAFE_STOCK_QTY	          
+	           )   H
+	    ,      (
+	          SELECT    TSSSC.PROD_CD
+	          ,      TMP.PROD_NM
+	          ,      TMPB.BARCD_CD
+              ,      TMP.SAFE_STOCK_QTY	          
+	          ,      SUM(TSSSC.CURR_QTY)   AS   CURR_QTY
+	            FROM    TB_ST_STORE_STOCK_CUR TSSSC
+	           ,       TB_MS_PRODUCT TMP
+	           ,       TB_MS_PRODUCT_BARCD TMPB
+	          WHERE   TSSSC.STORAGE_CD      =   '999'
+	          AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
+	          AND      TMP.STORE_CD            =   TSSSC.STORE_CD
+	           AND     TMP.PROD_CD              =   TSSSC.PROD_CD
+	           AND     TMP.STOCK_PROD_YN        =   'Y'
+	           AND     TMP.USE_YN               =   'Y'
+	           AND     TMPB.STORE_CD      (+)    =   TSSSC.STORE_CD
+	           AND     TMPB.PROD_CD      (+)    =   TSSSC.PROD_CD
+	           GROUP
+	           BY      TSSSC.PROD_CD
+	          ,      TMP.PROD_NM
+	          ,      TMPB.BARCD_CD
+              ,      TMP.SAFE_STOCK_QTY	          
+	          )   M
+	    ,      (
+	    		<![CDATA[	    			 
+				SELECT  A.HQ_OFFICE_CD
+				,       A.PROD_CLASS_CD
+				,		NULL	LV1_CD
+				,		NULL	LV2_CD
+				,		NULL	LV3_CD
+				,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+				                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+				             	)  AS  LV1_NM
+				,       DECODE	(A.LV ,1  ,NULL
+				                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+				              	)  AS  LV2_NM
+				,       DECODE	(A.LV ,1  ,NULL
+				                    ,2  ,NULL
+				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+				             	)  AS  LV3_NM                    
+				FROM    (
+				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+				        FROM    (
+				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+				                    FROM    TB_HQ_PRODUCT_CLASS				
+				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+				                )
+				        START WITH  P_PROD_CLASS_CD ='00000'
+				        CONNECT BY 
+				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+				        )   A
+		
+	    		]]>
+              )   A 
+	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
+	    AND      H.PROD_NM   =   M.PROD_NM	(+)
+	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
+        <if test='prodCd != null and prodCd != ""'>
+           AND H.PROD_CD  = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+           AND H.PROD_NM  LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+           AND (H.BARCD_CD  = #{barcdCd} OR M.BARCD_CD  = #{barcdCd})
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND H.PROD_CD IN    ( SELECT  PROD_CD
+                                    FROM    TB_HQ_VENDOR_PROD
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     VENDR_CD IN
+                                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                  )
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+           AND H.PROD_CLASS_CD  IN (
+                                       SELECT
+                                           PROD_CLASS_CD
+                                       FROM
+                                           TB_HQ_PRODUCT_CLASS
+                                       WHERE
+                                           HQ_OFFICE_CD = #{hqOfficeCd}
+                                       START WITH
+                                           PROD_CLASS_CD = #{prodClassCd}
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                       CONNECT BY
+                                           PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+	    ORDER
+	    BY      H.PROD_CD
+	    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 본사 상세 리스트 조회  -->
+    <select id="getCurrUnityHqDtlList" parameterType="currUnityVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT   A.IO_PROC_DATE
+		,      CASE
+		      WHEN   A.IO_OCCR_FG   =   '01'   THEN   '본사입고'
+		      WHEN   A.IO_OCCR_FG   =   '02'   THEN   '본사반입'
+		      WHEN   A.IO_OCCR_FG   =   '04'   THEN   '매장이입'
+		      WHEN   A.IO_OCCR_FG   =   '13'   THEN   '본사출고'
+		      WHEN   A.IO_OCCR_FG   =   '14'   THEN   '매장이출'
+		      WHEN   A.IO_OCCR_FG   =   '16'   THEN   '업체반출'
+		      WHEN   A.IO_OCCR_FG   =   '17'   THEN   '재고폐기'
+		      WHEN   A.IO_OCCR_FG   =   '21'   THEN   '재고조정'
+		      WHEN   A.IO_OCCR_FG   =   '22'   THEN   '세트구성'
+		      WHEN   A.IO_OCCR_FG   =   '23'   THEN   '세트해제'
+		      WHEN   A.IO_OCCR_FG   =   '31'   THEN   '업체발주'
+		      WHEN   A.IO_OCCR_FG   =   '41'   THEN   '본사이출'
+              WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
+		      END   AS IO_OCCR_FG_NM
+		,      A.IO_OCCR_QTY
+		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM   (
+		      SELECT  TPHS.IO_PROC_DATE
+		      ,      TPHS.IO_OCCR_FG
+		      ,      CASE 
+                      WHEN   TPHS.IO_OCCR_FG   =   '01'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '02'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '04'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '13'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '14'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '16'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '21'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '22'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '31'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                     END  IO_OCCR_QTY
+		      FROM   TB_PO_HQ_STOCK   TPHS
+		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
+		      AND      TPHS.STORAGE_CD      =   '999'      
+		      <if test='prodCd != null and prodCd != ""'>
+	             AND TPHS.PROD_CD   = #{prodCd}
+	          </if>
+		      GROUP
+		      BY      TPHS.IO_PROC_DATE
+		      ,      TPHS.IO_OCCR_FG
+		      )   A
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 매장 상세 리스트 조회  -->
+    <select id="getCurrUnityStoreDtlList" parameterType="currUnityVO" resultType="DefaultMap">
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT    TSSSC.STORE_CD
+		,      TMS.STORE_NM
+		,       TMP.SAFE_STOCK_QTY
+		,      TMP.SPLY_UPRC
+		,      TSSSC.CURR_QTY
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM    TB_MS_PRODUCT TMP
+		,      TB_ST_STORE_STOCK_CUR   TSSSC
+		,      TB_MS_STORE            TMS
+		WHERE   TSSSC.STORAGE_CD   =   '999'
+		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
+		<if test='prodCd != null and prodCd != ""'>
+           AND TSSSC.PROD_CD  = #{prodCd}
+        </if>
+		AND     TSSSC.STORE_CD    (+) =   TMP.STORE_CD
+		AND     TSSSC.PROD_CD     (+) =   TMP.PROD_CD
+		AND      TMS.STORE_CD      =   TSSSC.STORE_CD
+		ORDER
+		BY      TSSSC.STORE_CD
+		<include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 엑셀 전체 리스트 조회  -->
+    <select id="getCurrUnityExcelList" parameterType="currUnityVO" resultType="DefaultMap">
+        SELECT A.LV1_NM  
+        ,      A.LV1_CD
+        ,      A.LV2_NM
+        ,      A.LV2_CD
+        ,      A.LV3_NM
+        ,      A.LV3_CD
+        ,      H.PROD_CD
+	    ,      H.PROD_NM
+	    ,      H.BARCD_CD  AS   H_BARCD_CD
+	    ,      M.BARCD_CD  AS   M_BARCD_CD
+	    ,      H.CURR_QTY   AS   H_CURR_QTY
+	    ,      NVL(M.CURR_QTY,0)   AS   M_CURR_QTY
+	    ,      H.SAFE_STOCK_QTY   AS   H_SAFE_STOCK_QTY
+	    ,      H.CURR_QTY+NVL(M.CURR_QTY,0)   AS   TOT_CURR_QTY
+	    FROM   (
+	          SELECT    TSHSC.PROD_CD
+	          ,      THP.PROD_CLASS_CD 
+	          ,      THP.PROD_NM
+	          ,      THPB.BARCD_CD
+	          ,      THP.SAFE_STOCK_QTY
+	          ,      SUM(TSHSC.CURR_QTY)   AS   CURR_QTY
+	            FROM    TB_ST_HQ_STOCK_CUR TSHSC
+	           ,       TB_HQ_PRODUCT THP
+	           ,       TB_HQ_PRODUCT_BARCD THPB
+	          WHERE   TSHSC.HQ_OFFICE_CD       =   #{hqOfficeCd}
+	          AND      TSHSC.STORAGE_CD      =   '999'
+	           AND     THP.HQ_OFFICE_CD         =   TSHSC.HQ_OFFICE_CD
+	           AND     THP.PROD_CD              =   TSHSC.PROD_CD
+	           AND     THP.STOCK_PROD_YN        =   'Y'
+	           AND     THP.USE_YN               =   'Y'
+	           AND     THPB.HQ_OFFICE_CD (+)    =   TSHSC.HQ_OFFICE_CD
+	           AND     THPB.PROD_CD      (+)    =   TSHSC.PROD_CD
+	           GROUP
+	           BY      TSHSC.PROD_CD
+	          ,      THP.PROD_CLASS_CD 
+	          ,      THP.PROD_NM
+	          ,      THPB.BARCD_CD
+              ,      THP.SAFE_STOCK_QTY	          
+	           )   H
+	    ,      (
+	          SELECT    TSSSC.PROD_CD
+	          ,      TMP.PROD_NM
+	          ,      TMPB.BARCD_CD
+              ,      TMP.SAFE_STOCK_QTY	          
+	          ,      SUM(TSSSC.CURR_QTY)   AS   CURR_QTY
+	            FROM    TB_ST_STORE_STOCK_CUR TSSSC
+	           ,       TB_MS_PRODUCT TMP
+	           ,       TB_MS_PRODUCT_BARCD TMPB
+	          WHERE   TSSSC.STORAGE_CD      =   '999'
+	          AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
+	          AND      TMP.STORE_CD            =   TSSSC.STORE_CD
+	           AND     TMP.PROD_CD              =   TSSSC.PROD_CD
+	           AND     TMP.STOCK_PROD_YN        =   'Y'
+	           AND     TMP.USE_YN               =   'Y'
+	           AND     TMPB.STORE_CD      (+)    =   TSSSC.STORE_CD
+	           AND     TMPB.PROD_CD      (+)    =   TSSSC.PROD_CD
+	           GROUP
+	           BY      TSSSC.PROD_CD
+	          ,      TMP.PROD_NM
+	          ,      TMPB.BARCD_CD
+              ,      TMP.SAFE_STOCK_QTY	          
+	          )   M
+	    ,      (
+                 <![CDATA[	    			 
+				SELECT  A.HQ_OFFICE_CD
+				,       A.PROD_CLASS_CD
+				,		NULL	LV1_CD
+				,		NULL	LV2_CD
+				,		NULL	LV3_CD
+				,       DECODE	(A.LV ,1  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,LENGTH(A.AC))
+				                    ,    SUBSTR(A.AC,INSTR(A.AC,'^',1,1)+1,INSTR(A.AC,'^',2,1)-2)
+				             	)  AS  LV1_NM
+				,       DECODE	(A.LV ,1  ,NULL
+				                    ,2  ,SUBSTR(A.AC,INSTR(A.AC,'^',2,1)+1,LENGTH(A.AC))
+				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,2)+1,(INSTR(A.AC,'^',1,3)-1)-INSTR(A.AC,'^',1,2))
+				              	)  AS  LV2_NM
+				,       DECODE	(A.LV ,1  ,NULL
+				                    ,2  ,NULL
+				                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
+				             	)  AS  LV3_NM                    
+				FROM    (
+				        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
+				        FROM    (
+				                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
+				                    FROM    TB_HQ_PRODUCT_CLASS				
+				                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+				                )
+				        START WITH  P_PROD_CLASS_CD ='00000'
+				        CONNECT BY 
+				        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
+				        )   A
+		
+	    		]]>
+              )   A 
+	    WHERE   H.PROD_CD    =    M.PROD_CD	(+)
+	    AND      H.PROD_NM   =   M.PROD_NM	(+)
+	    AND     H.PROD_CLASS_CD = A.PROD_CLASS_CD (+)
+        <if test='prodCd != null and prodCd != ""'>
+           AND H.PROD_CD  = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+           AND H.PROD_NM  LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+           AND (H.BARCD_CD  = #{barcdCd} OR M.BARCD_CD  = #{barcdCd})
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND H.PROD_CD IN    ( SELECT  PROD_CD
+                                    FROM    TB_HQ_VENDOR_PROD
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND     VENDR_CD IN
+                                    <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                  )
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+           AND H.PROD_CLASS_CD  IN (
+                                       SELECT
+                                           PROD_CLASS_CD
+                                       FROM
+                                           TB_HQ_PRODUCT_CLASS
+                                       WHERE
+                                           HQ_OFFICE_CD = #{hqOfficeCd}
+                                       START WITH
+                                           PROD_CLASS_CD = #{prodClassCd}
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                       CONNECT BY
+                                           PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                                           AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+	    ORDER
+	    BY      H.PROD_CD
+    </select>
+    
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 본사 상세 리스트 조회  -->
+    <select id="getCurrUnityHqDtlExcelList" parameterType="currUnityVO" resultType="DefaultMap">
+        SELECT   A.IO_PROC_DATE
+		,      CASE
+		      WHEN   A.IO_OCCR_FG   =   '01'   THEN   '본사입고'
+		      WHEN   A.IO_OCCR_FG   =   '02'   THEN   '본사반입'
+		      WHEN   A.IO_OCCR_FG   =   '04'   THEN   '매장이입'
+		      WHEN   A.IO_OCCR_FG   =   '13'   THEN   '본사출고'
+		      WHEN   A.IO_OCCR_FG   =   '14'   THEN   '매장이출'
+		      WHEN   A.IO_OCCR_FG   =   '16'   THEN   '업체반출'
+		      WHEN   A.IO_OCCR_FG   =   '17'   THEN   '재고폐기'
+		      WHEN   A.IO_OCCR_FG   =   '21'   THEN   '재고조정'
+		      WHEN   A.IO_OCCR_FG   =   '22'   THEN   '세트구성'
+		      WHEN   A.IO_OCCR_FG   =   '23'   THEN   '세트해제'
+		      WHEN   A.IO_OCCR_FG   =   '31'   THEN   '업체발주'
+		      WHEN   A.IO_OCCR_FG   =   '41'   THEN   '본사이출'
+              WHEN   A.IO_OCCR_FG   =   '42'   THEN   '본사이입'
+		      END   AS IO_OCCR_FG_NM
+		,      A.IO_OCCR_QTY
+		,      SUM(A.IO_OCCR_QTY) OVER(ORDER BY A.IO_PROC_DATE)   AS   TOT_IO_OCCR_QTY
+		FROM   (
+		      SELECT  TPHS.IO_PROC_DATE
+		      ,      TPHS.IO_OCCR_FG
+		      ,      CASE 
+                      WHEN   TPHS.IO_OCCR_FG   =   '01'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '02'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '04'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '13'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '14'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '16'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '17'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '21'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '22'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '23'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '31'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                      WHEN   TPHS.IO_OCCR_FG   =   '41'   THEN   SUM(TPHS.IO_OCCR_QTY) * -1
+                      WHEN   TPHS.IO_OCCR_FG   =   '42'   THEN   SUM(TPHS.IO_OCCR_QTY)
+                     END  IO_OCCR_QTY
+		      FROM   TB_PO_HQ_STOCK   TPHS
+		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
+		      AND      TPHS.STORAGE_CD      =   '999'      
+		      <if test='prodCd != null and prodCd != ""'>
+	             AND TPHS.PROD_CD   = #{prodCd}
+	          </if>
+		      GROUP
+		      BY      TPHS.IO_PROC_DATE
+		      ,      TPHS.IO_OCCR_FG
+		      )   A
+    </select>
+    
+    <!-- 본사매장통합현재고 - 본사매장통합현재고 매장 상세 리스트 조회  -->
+    <select id="getCurrUnityStoreDtlExcelList" parameterType="currUnityVO" resultType="DefaultMap">
+        SELECT    TSSSC.STORE_CD
+		,      TMS.STORE_NM
+		,       TMP.SAFE_STOCK_QTY
+		,      TMP.SPLY_UPRC
+		,      TSSSC.CURR_QTY
+		FROM    TB_MS_PRODUCT TMP
+		,      TB_ST_STORE_STOCK_CUR   TSSSC
+		,      TB_MS_STORE            TMS
+		WHERE   TSSSC.STORAGE_CD   =   '999'
+		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = TSSSC.STORE_CD)
+		<if test='prodCd != null and prodCd != ""'>
+           AND TSSSC.PROD_CD  = #{prodCd}
+        </if>
+		AND     TSSSC.STORE_CD    (+) =   TMP.STORE_CD
+		AND     TSSSC.PROD_CD     (+) =   TMP.PROD_CD
+		AND      TMS.STORE_CD      =   TSSSC.STORE_CD
+		ORDER
+		BY      TSSSC.STORE_CD
+    </select>
+
+</mapper>

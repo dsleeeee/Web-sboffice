@@ -8,7 +8,11 @@
 
 <div class="subCon" ng-controller="instockConfmCtrl">
   <div class="searchBar flddUnfld">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl">${menuNm}</a>
+    <%-- 조회 --%>
+    <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="searchInstockConfmList()">
+        <s:message code="cmm.search"/>
+    </button>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -99,10 +103,12 @@
   </table>
 
   <div class="mt10 pdb20 oh bb">
-    <%-- 조회 --%>
-    <button class="btn_blue fr" id="btnSearch" ng-click="searchInstockConfmList()">
-      <s:message code="cmm.search"/></button>
+
   </div>
+
+	<div class="mt20 oh sb-select dkbr">
+		<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 --%>
+	</div>
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
@@ -117,20 +123,20 @@
         item-formatter="_itemFormatter">
 
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="instockConfm.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.slipNo"/>" binding="slipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.slipFg"/>" binding="slipFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.slipKind"/>" binding="slipKind" width="70" align="center" is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.dlvrNm"/>" binding="dlvrCd" width="70" align="center" is-read-only="true" data-map="dlvrMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.reqDate"/>" binding="reqDate" width="90" align="center" is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.outDate"/>" binding="outDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.inDate"/>" binding="inDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.orderTot"/>" binding="orderTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.mgrTot"/>" binding="mgrTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.outTot"/>" binding="outTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.inTot"/>" binding="inTot" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="instockConfm.remark"/>" binding="remark" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.storeCd"/>"  binding="storeCd"   width="0"   align="center"  is-read-only="true"                                     visible="false" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.slipNo"/>"   binding="slipNo"    width="100" align="center"  is-read-only="true"                                                     ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.slipFg"/>"   binding="slipFg"    width="100" align="center"  is-read-only="true"                                     visible="false" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.slipKind"/>" binding="slipKind"  width="70"  align="center"  is-read-only="true" data-map="slipKindMap"                              ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.procFg"/>"   binding="procFg"    width="70"  align="center"  is-read-only="true" data-map="procFgMap"                                ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.dlvrNm"/>"   binding="dlvrCd"    width="70"  align="center"  is-read-only="true" data-map="dlvrMap"                                  ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.reqDate"/>"  binding="reqDate"   width="90"  align="center"  is-read-only="true"                     format="date"   visible="false" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.outDate"/>"  binding="outDate"   width="90"  align="center"  is-read-only="true"                     format="date"                   ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.inDate"/>"   binding="inDate"    width="90"  align="center"  is-read-only="true"                     format="date"                   ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.orderTot"/>" binding="orderTot"  width="120" align="right"   is-read-only="true" data-type="Number"  format="n0"     aggregate="Sum" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.mgrTot"/>"   binding="mgrTot"    width="120" align="right"   is-read-only="true" data-type="Number"  format="n0"     aggregate="Sum" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.outTot"/>"   binding="outTot"    width="120" align="right"   is-read-only="true" data-type="Number"  format="n0"     aggregate="Sum" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.inTot"/>"    binding="inTot"     width="120" align="right"   is-read-only="true" data-type="Number"  format="n0"     aggregate="Sum" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="instockConfm.remark"/>"   binding="remark"    width="150" align="left"    is-read-only="true"                                                     ></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>

@@ -75,14 +75,21 @@
                             item-formatter="_itemFormatter">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="dayPeriod.prodClassNm"/>" binding="prodClassNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayPeriod.prodClassNm"/>" binding="prodClassNm" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmtPer"/>" binding="realSaleAmtPer" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmtPer"/>" binding="realSaleAmtPer" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                             <wj-flex-grid-column header="<s:message code="dayPeriod.prodClassCd"/>" binding="prodClassCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
                         </wj-flex-grid>
+
+                        <%-- ColumnPicker 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                            <jsp:param name="pickerTarget" value="dayPeriodProdClassCtrl"/>
+                        </jsp:include>
+                        <%--// ColumnPicker 사용시 include --%>
+
                     </div>
                 </div>
             </div>
@@ -107,10 +114,17 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="dayPeriod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayPeriod.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayPeriod.saleQty"/>" binding="saleQty" width="100" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayPeriod.realSaleAmt"/>" binding="realSaleAmt" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
+
+                    <%-- ColumnPicker 사용시 include --%>
+                    <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                        <jsp:param name="pickerTarget" value="dayPeriodProdClassDetailCtrl"/>
+                    </jsp:include>
+                    <%--// ColumnPicker 사용시 include --%>
+
                 </div>
             </div>
 
@@ -124,4 +138,8 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodProdClass.js?ver=20200207" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodProdClass.js?ver=20200326.04" charset="utf-8"></script>
+
+<%-- 상품분류 팝업 --%>
+<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
+<%--</c:import>--%>

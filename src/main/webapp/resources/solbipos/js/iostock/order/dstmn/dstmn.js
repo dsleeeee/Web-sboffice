@@ -7,7 +7,9 @@ var app = agrid.getApp();
 app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dstmnCtrl', $scope, $http, true));
+
   $scope.slipFg = 1;
+  $scope.hqOfficeCd = gvHqOfficeCd;
 
   var srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
   var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
@@ -67,6 +69,7 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 배송기사
     comboParams = {}; // 여러번 조회시 초기화를 해줘야함...
+    comboParams.hqOfficeCd = $scope.hqOfficeCd;
     var url     = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo,map", "srchDlvrCd", "dlvrMap", url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -108,7 +111,15 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
           var params    = {};
           params.slipFg = $scope.slipFg;
           params.slipNo = selectedRow.slipNo;
+          params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+          params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+          if($scope.procFg < '20'){
+        	  params.reqDate = selectedRow.reqDate;
+          }else{
+        	  params.reqDate = selectedRow.outDate;
+          }         
           $scope._broadcast('dstmnDtlCtrl', params);
+
         }
       }
     });
@@ -196,6 +207,8 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     var params       = {};
     params.slipFg    = $scope.slipFg;
     params.strSlipNo = strSlipNo;
+    params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+    params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
 
     // 상품
     if (reportFg === 'prod') {

@@ -13,6 +13,8 @@ import kr.co.solbipos.sale.status.appr.payMethod.cash.service.ApprCashVO;
 public interface ApprCashMapper {
     /** 코너별매출 일자별 탭 - 리스트 조회 */
     List<DefaultMap<String>> getApprCashList(ApprCashVO apprCashVO);
+    /** 코너별매출 일자별 탭 - 엑셀  조회 */
+    List<DefaultMap<String>> getApprCashExcelList(ApprCashVO apprCashVO);
 
-	List<DefaultMap<String>> getCornerNmList(ApprCashVO apprCashVO);
+    List<DefaultMap<String>> getCornerNmList(ApprCashVO apprCashVO);
 }

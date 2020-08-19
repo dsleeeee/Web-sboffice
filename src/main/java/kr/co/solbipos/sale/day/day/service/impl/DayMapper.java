@@ -44,6 +44,15 @@ public interface DayMapper {
     /** 일자별(시간대별 탭) - 시간대별 리스트 조회 */
     List<DefaultMap<String>> getDayTimeList(DayVO dayVO);
 
+    /** 일자별(상품분류 탭) - 상품분류 MAX(depth) 값 가져오기 */
+    int getDayProdClassMaxLevel(DayVO dayVO);
+
+    /** 일자별(상품분류 탭) - 분류레벨에 따른 상품분류 가져오기 */
+    List<DefaultMap<String>> getDayProdClassLevel(DayVO dayVO);
+
+    /** 일자별(상품분류 탭) - 상품분류별 리스트 조회 */
+    List<DefaultMap<String>> getDayProdClassList(DayVO dayVO);
+
     /** 코너별 - 코너별 매출조회 */
     List<DefaultMap<Object>> getDayCornerList(DayVO dayVO);
 

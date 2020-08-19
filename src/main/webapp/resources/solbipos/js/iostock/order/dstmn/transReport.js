@@ -8,6 +8,8 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.slipFg     = data.slipFg;
     $scope.stmtAcctFg = data.stmtAcctFg;
     $scope.strSlipNo  = data.strSlipNo;
+    $scope.startDate = data.startDate;
+    $scope.endDate = data.endDate;
 
     $scope.wjTransReportLayer.show(true);
 
@@ -28,7 +30,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -74,7 +81,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     var params    = {};
     params.slipNo = $scope.strSlipNo;
     params.slipFg = $scope.slipFg;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -110,7 +122,12 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.prodList = function () {
     var params    = {};
     params.slipNo = $scope.strSlipNo;
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }	
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -212,7 +229,8 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
         var prodListHeaderHtml = '<table class="w100">' // 상품리스트 header html
           + '<colgroup>'
           + '<col style="width:5%;">'
-          + '<col style="width:35%;">'
+          + '<col style="width:25%;">'
+          + '<col style="width:10%;">'
           + '<col style="width:10%;">'
           + '<col style="width:10%;">'
           + '<col style="width:7%;">'
@@ -223,6 +241,7 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
           + '<tr class="h30">'
           + '<th class="tc">No.</th>'
           + '<th class="tc">품목 및 규격</th>'
+          + '<th class="tc">원산지</th>'
           + '<th class="tc">단위</th>'
           + '<th class="tc">단가</th>'
           + '<th class="tc">수량</th>'
@@ -250,6 +269,7 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
                 + '<td></td>'
                 + '<td></td>'
                 + '<td></td>'
+                + '<td></td>'
                 + '</tr>';
             } else {
               var item   = prodList[n];
@@ -262,13 +282,14 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
               prodListHtml += '<tr class="h25">'
                 + '<td class="tc">' + (n + 1) + '</td>'
                 + '<td class="tl"><input type="text" value="' + prodNm + '" class="w100" readonly></td>'
+                + '<td class="tc">' + '</td>' // 박정은 20.03.12 (수정 예정)
                 + '<td class="tc">' + item.poUnitFgNm + '</td>'
                 + '<td class="tr">' + addComma(item.outSplyUprc) + '</td>'
                 + '<td class="tr">' + addComma(item.outTotQty) + '</td>'
                 + '<td class="tr">' + addComma(item.outAmt) + '</td>'
                 + '<td class="tr">' + addComma(item.outVat) + '</td>'
-                // + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
-                + '<td class="tl"></td>'
+                 + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
+//                + '<td class="tl"></td>'
                 + '</tr>';
               pageTotAmt = parseInt(pageTotAmt) + parseInt(item.outAmt);
               pageTotVat = parseInt(pageTotVat) + parseInt(item.outVat);
@@ -334,15 +355,14 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
       + '<td class="tc">인수자</td>'
       + '<td class="tc">담당자</td>'
       + '<td rowspan="4" class="tc br0"></td>'
-      + '<td class="tc">전표번호</td>'
-      + '<td class="tc">' + slipInfo.slipNo + '</td>'
+      + '<td rowspan="2" class="tc">조회기간</td>'
+      + '<td class="tc">' + $scope.startDate + '</td>'
       + '</tr>'
       + '<tr class="h25">'
       + '<td rowspan="3" class="tc">' + nvl(slipInfo.dlvrNm, '') + '</td>'
       + '<td rowspan="3" class="tc"></td>'
       + '<td rowspan="3" class="tc"></td>'
-      + '<td class="tc">출고일자</td>'
-      + '<td class="tc">' + getFormatDate(slipInfo.outDate) + '</td>'
+      + '<td class="tc">' + $scope.endDate + '</td>'
       + '</tr>'
       + '<tr class="h25">'
       + '<td class="tc">발행일시</td>'
@@ -492,5 +512,4 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
     // and print it
     doc.print();
   };
-
 }]);

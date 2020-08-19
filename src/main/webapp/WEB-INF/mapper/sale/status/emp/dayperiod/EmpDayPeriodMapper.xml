@@ -36,9 +36,45 @@
 			    </if>
 			    GROUP BY TSDE.STORE_CD, TSDE.EMP_NO, TSDE.EMP_NM
 		       ) M
-		WHERE TMS.STORE_CD = M.STORE_CD
+		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND		TMS.STORE_CD = M.STORE_CD
 		ORDER BY M.REAL_SALE_AMT DESC
 	    <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    
+    <select id="getEmpDayPeriodExcelList" parameterType="empDayPeriodVO" resultType="DefaultMap">
+        SELECT M.STORE_CD
+		     , TMS.STORE_NM
+		     , M.EMP_NO
+		     , M.EMP_NM
+		     , M.BILL_CNT
+		     , M.REAL_SALE_AMT
+		  FROM TB_MS_STORE TMS
+		     , (
+		        SELECT TSDE.STORE_CD
+		             , TSDE.EMP_NO
+		             , TSDE.EMP_NM
+		             , SUM(TSDE.BILL_CNT) AS BILL_CNT
+		             , SUM(TSDE.REAL_SALE_AMT) AS REAL_SALE_AMT
+				FROM TB_SL_DAILY_EMPLOYEE TSDE
+				WHERE TSDE.HQ_OFFICE_CD = #{hqOfficeCd}
+				<if test='arrStoreCd != null and arrStoreCd != ""'>
+					AND TSDE.STORE_CD IN
+		            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+		            	#{item}
+		            </foreach>
+		        </if>
+				<if test='startDate != null and startDate != ""'>
+			    AND TSDE.SALE_DATE >= #{startDate}
+			    </if>
+			    <if test='endDate != null and endDate != ""'>
+			    AND TSDE.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+			    </if>
+			    GROUP BY TSDE.STORE_CD, TSDE.EMP_NO, TSDE.EMP_NM
+		       ) M
+		WHERE 	TMS.HQ_OFFICE_CD = #{hqOfficeCd}
+		AND		TMS.STORE_CD = M.STORE_CD
+		ORDER BY M.REAL_SALE_AMT DESC
     </select>
     
     <select id="getEmpDayPeriodDtlList" parameterType="empDayPeriodVO" resultType="DefaultMap">
@@ -54,6 +90,7 @@
 	   <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM TB_SL_SALE_HDR TSSH
 		 WHERE 1=1
+		 AND TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
 		 <if test='storeCd != null and storeCd != ""'>
 		 AND TSSH.STORE_CD = #{storeCd}
 		 </if>
@@ -66,6 +103,31 @@
 		 AND TSSH.EMP_NO = #{empNo}
 		 ORDER BY TSSH.SALE_DATE DESC, TSSH.POS_NO, TSSH.BILL_NO
 	   <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+   
+     <select id="getEmpDayPeriodDtlExcelList" parameterType="empDayPeriodVO" resultType="DefaultMap">
+        SELECT TSSH.SALE_DATE
+             , TSSH.STORE_CD
+		     , TSSH.POS_NO
+		     , TSSH.BILL_NO
+		     , DECODE(TSSH.SALE_YN,'Y','매출','반품') AS SALE_YN
+		     , TSSH.TOT_SALE_AMT
+		     , TSSH.TOT_DC_AMT
+		     , TSSH.REAL_SALE_AMT
+		  FROM TB_SL_SALE_HDR TSSH
+		 WHERE 1=1
+		 AND TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+		 <if test='storeCd != null and storeCd != ""'>
+		 AND TSSH.STORE_CD = #{storeCd}
+		 </if>
+		 <if test='startDate != null and startDate != ""'>
+		 AND TSSH.SALE_DATE >= #{startDate}
+		 </if>
+		 <if test='endDate != null and endDate != ""'>
+         AND TSSH.SALE_DATE <![CDATA[<= ]]>  #{endDate}
+         </if>
+		 AND TSSH.EMP_NO = #{empNo}
+		 ORDER BY TSSH.SALE_DATE DESC, TSSH.POS_NO, TSSH.BILL_NO
     </select>
     
     <select id="getEmpMebList" parameterType="empDayPeriodVO" resultType="DefaultMap">

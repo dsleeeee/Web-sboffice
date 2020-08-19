@@ -12,6 +12,7 @@ import kr.co.solbipos.stock.disuse.disuse.service.DisuseService;
 import kr.co.solbipos.stock.disuse.disuse.service.DisuseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("disuseService")
+@Transactional
 public class DisuseServiceImpl implements DisuseService {
     private final DisuseMapper disuseMapper;
     private final MessageService messageService;
@@ -114,6 +116,7 @@ public class DisuseServiceImpl implements DisuseService {
 
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            disuseVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = disuseMapper.getHqDisuseRegistList(disuseVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -145,6 +148,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setDisuseTitle(disuseVO.getDisuseTitle());
                 disuseHdVO.setSeqNo(disuseVO.getSeqNo());
                 disuseHdVO.setProcFg("0");
+                disuseHdVO.setDisuseStorageCd(disuseVO.getDisuseStorageCd());
                 disuseHdVO.setStorageCd(disuseVO.getStorageCd());
                 disuseHdVO.setRegId(sessionInfoVO.getUserId());
                 disuseHdVO.setRegDt(currentDt);
@@ -258,6 +262,7 @@ public class DisuseServiceImpl implements DisuseService {
         List<DefaultMap<String>> result = new ArrayList<DefaultMap<String>>();
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            disuseVO.setAreaFg(sessionInfoVO.getAreaFg());
             result = disuseMapper.getHqDisuseRegistList(disuseVO);
         }
         else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
@@ -321,6 +326,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setRegDt(currentDt);
                 disuseHdVO.setModId(sessionInfoVO.getUserId());
                 disuseHdVO.setModDt(currentDt);
+                disuseHdVO.setStatus(disuseVO.getStatus());
             }
 
             disuseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -373,17 +379,20 @@ public class DisuseServiceImpl implements DisuseService {
             returnResult += result;
             i++;
         }
-
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            // HD 수정
-            result = disuseMapper.updateHqDisuseHd(disuseHdVO);
+        
+        //삭제가 아닐경우만
+        if(!StringUtil.getOrBlank(disuseHdVO.getStatus()).equals("DELETE")) {
+	        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+	            // HD 수정
+	            result = disuseMapper.updateHqDisuseHd(disuseHdVO);
+	        }
+	        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+	            // HD 수정
+	            result = disuseMapper.updateStDisuseHd(disuseHdVO);
+	        }
+	        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
-            // HD 수정
-            result = disuseMapper.updateStDisuseHd(disuseHdVO);
-        }
-        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
+        
         return returnResult;
     }
 
@@ -445,7 +454,7 @@ public class DisuseServiceImpl implements DisuseService {
         disuseHdVO.setDisuseTitle(excelUploadVO.getTitle());
         disuseHdVO.setSeqNo(Integer.parseInt(seqNo));
         disuseHdVO.setProcFg("0");
-        disuseHdVO.setStorageCd("000");
+        disuseHdVO.setStorageCd("999");
         disuseHdVO.setRegId(sessionInfoVO.getUserId());
         disuseHdVO.setRegDt(currentDt);
         disuseHdVO.setModId(sessionInfoVO.getUserId());
@@ -459,6 +468,7 @@ public class DisuseServiceImpl implements DisuseService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 등록
+            	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.insertStDisuseHd(disuseHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -470,6 +480,7 @@ public class DisuseServiceImpl implements DisuseService {
             }
             else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                 // HD 수정
+            	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.updateStDisuseHd(disuseHdVO);
             }
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

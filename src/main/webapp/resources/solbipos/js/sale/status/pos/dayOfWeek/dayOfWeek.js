@@ -112,12 +112,12 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("posDayOfWeekCtrlSrch", function (event, data) {
-		
+
 	    if( $("#posDayOfWeekSelectStoreCd").val() === ''){
 	   	 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	   	 	return false;
-	    }  
-		
+	    }
+
 		$scope.searchPosDayOfWeekList(false);
 
 		var storeCd = $("#posDayOfWeekSelectStoreCd").val();
@@ -136,7 +136,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		params.listScale = $scope.posDayOfWeekListScale; //-페이지 스케일 갯수
 		params.arrPosCd = $scope.comboArray; //-포스정보
 		params.isPageChk = isPageChk;
-			
+
 		//등록일자 '전체기간' 선택에 따른 params
 		if(!$scope.isChecked){
 			params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
@@ -154,16 +154,17 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 			var flex = $scope.flex;
 			//row수가 0이면
 			if(flex.rows.length === 0){
-				
+
 				var grid = wijmo.Control.getControl("#posDayOfWeekGrid");
 				//컬럼 삭제
 				while(grid.columns.length > 6){
 			          grid.columns.removeAt(grid.columns.length-1);
 			    }
 			}
-
 		});
-		$scope._setPagingInfo('curr', 1);
+
+		// 설정기간별(포스별 매출) 바 차트
+	    $scope._broadcast("posDayOfWeekChartCtrl", params);
 	};
 
 	//전체기간 체크박스 클릭이벤트
@@ -250,11 +251,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			storePosCd = $("#posDayOfWeekSelectPosCd").val();
 	    			storePosNm = $("#posDayOfWeekSelectPosName").val();
 
-	    			if (!checkInt) {
+//	    			if (!checkInt) {
 	    				$scope.makeDataGrid();
-	    			} else {
-	    				checkInt = false;
-	    			}
+//	    			} else {
+//	    				checkInt = false;
+//	    			}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -311,25 +312,27 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 			  }
 		  }
-		  
+
 		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
 		    	var ht = grid.hitTest(e);
 		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
-	
+
 		    		var col         = ht.panel.columns[ht.col];
 		    		var selectedRow = grid.rows[ht.row].dataItem;
-			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);			   		
-			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g); 
-			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);			   		
-			   		
+			   		var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
+			   		var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
+			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+
 		    		var params      = {};
-		    		params.chkPop	= "posPop";    		
-					params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
-					params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+		    		params.chkPop	= "posPop";
+		    		if(!$scope.isChecked){
+		    			params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
+		    			params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+		    		}
 		    		params.yoil     = selectedRow.dayName;
 
-		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") { 
+		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
 			    		params.storeCd   = storeCd;
 			    		params.posNo	 = posNo;
 		    			$scope._broadcast('saleComProdCtrl', params); // 수량
@@ -338,7 +341,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 		    			$scope._broadcast('saleComProdCtrl', params);
 		    		}
 		    	}
-		    	
+
 		    	/* 머지된 헤더 셀 클릭시 정렬 비활성화
 		    	 * 헤더 cellType: 2 && 머지된 row 인덱스: 0, 1 && 동적 생성된 column 인덱스 4 초과
 		    	 * 머지영역 클릭시 소트 비활성화, 다른 영역 클릭시 소트 활성화
@@ -349,7 +352,7 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	    			grid.allowSorting = true;
 	    		}
 		  });
-		  	
+
 		  grid.itemFormatter = function (panel, r, c, cell) {
 
 			  if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -435,4 +438,151 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 			  }
 		  }
 	  }
+}]);
+
+/** 요일별 차트 (포스별 바) controller */
+app.controller('posDayOfWeekChartCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
+	angular.extend(this, new RootController('posDayOfWeekChartCtrl', $scope, $http, $timeout, true));
+
+	//메인그리드 조회후 상세그리드 조회.
+	$scope.initChart = function(s, args){
+		s.plotMargin = 'auto auto 50 auto';
+		s.axisX.labelAngle = 0;
+	    //s.axisX.overlappingLabels = wijmo.chart.OverlappingLabels.Show;
+
+	    var chartAnimation = new wijmo.chart.animation.ChartAnimation(s, {
+	        animationMode: wijmo.chart.animation.AnimationMode.All,
+	        easing: wijmo.chart.animation.Easing.Linear,
+	        duration: 400
+	    });
+
+	    /*var axisY2 = new wijmo.chart.Axis();
+	    axisY2.position = 'Right';
+	    axisY2.title = '판매수량';
+	    axisY2.format = 'n0';
+	    axisY2.min = 0;
+	    axisY2.axisLine = true;
+
+	    getSeries("saleCntMon").axisY = axisY2;
+	    getSeries("saleCntTue").axisY = axisY2;
+	    getSeries("saleCntWed").axisY = axisY2;
+	    getSeries("saleCntThu").axisY = axisY2;
+	    getSeries("saleCntFri").axisY = axisY2;
+	    getSeries("saleCntSat").axisY = axisY2;
+	    getSeries("saleCntSun").axisY = axisY2;
+
+	    function getSeries(binding) {
+	        var seriesTemp = s.series;
+	        //
+	        for (var i = 0; i < seriesTemp.length; i++) {
+	            if (seriesTemp[i].binding == binding) {
+	                return seriesTemp[i];
+	            }
+	        }
+	        //
+	        return null;
+	    }*/
+
+	}
+
+	// 다른 컨트롤러의 broadcast 받기
+	$scope.$on("posDayOfWeekChartCtrl", function (event, data) {
+
+		var isPageChk = true;
+
+		if(data != undefined) {
+
+			$scope.startDate = data.startDate;
+			$scope.endDate = data.endDate;
+			$scope.storeCd = data.storeCd;
+			$scope.posNo = data.posNo;
+			isPageChk = data.isPageChk;
+
+		}
+
+	    $scope.posDayOfWeekBarChartList(isPageChk);
+	    // 기능수행 종료 : 반드시 추가
+	    //event.preventDefault();
+	  });
+
+
+	  // 코너별매출일자별 리스트 조회
+	  $scope.posDayOfWeekBarChartList = function (isPageChk) {
+
+		  // 파라미터
+		  var params          = {};
+		  params.listScale    = 10;
+		  params.posNo        = $scope.posNo;
+		  params.storeCd      = $scope.storeCd;
+		  params.startDate    = $scope.startDate;
+		  params.endDate      = $scope.endDate;
+
+		  if (isPageChk != null && isPageChk != undefined) {
+			  params.isPageChk    = isPageChk;
+		  } else {
+			  params.isPageChk    = true;
+		  }
+
+		  // 조회 수행 : 조회URL, 파라미터, 콜백함수
+		  $scope._inquiryMain("/sale/status/pos/dayOfWeek/chartList.sb", params);
+	  };
+
+	$scope.rendered = function(s, e) {
+
+		var pArea =  s.hostElement.querySelector('.wj-plot-area > rect');
+		var pAreaWidth = pArea.width.baseVal.value;
+		var groupWidth = pAreaWidth / (s.collectionView.items.length || 1);
+
+		var labels = document.querySelectorAll('.wj-axis-x .wj-label');
+		var widthMax = new Array();
+
+        labels.forEach(function(value, key, parent) {
+
+        	var x = +value.getAttribute('x');
+            var y = +value.getAttribute('y');
+            var text = value.innerHTML.split(' - ');
+            value.innerHTML = '';
+
+            widthMax[key] = new Array();
+
+            text.forEach(function(item, index) {
+
+                var e = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                //e.setAttribute("x", (x + 0).toString());
+                e.setAttribute('y', (y + (15 * index)).toString());
+                e.innerHTML = item;
+                value.appendChild(e);
+
+                var bbox = e.getBoundingClientRect();
+                var extent = e.getExtentOfChar(0);
+                var boxWidth = e.getComputedTextLength();
+                var gap = 0;
+
+                gap = (groupWidth - boxWidth) / 2;
+                widthMax[key][index] = gap;
+
+                e.setAttribute('x', (x + gap).toString());
+            });
+        });
+
+        labels.forEach(function(value, key, parent) {
+
+        	var children = value.childNodes;
+
+        	for (var i = 0; i < children.length; i++) {
+        		var e = value.childNodes[i];
+        		var extent = e.getExtentOfChar(0);
+
+        		e.setAttribute('x', extent.x - widthMax[key][0] + 30);
+        	}
+        });
+
+        s.tooltip.content = function (ht) {
+        	var title = ht.name;
+			var nameArr = ht._xfmt.split(" - ");
+			var value = ht.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return "<b>" + title + "</b><br><br>" + nameArr[0] + "<br>" + nameArr[1] + "<br><br>" + value;
+		}
+    }
+
 }]);

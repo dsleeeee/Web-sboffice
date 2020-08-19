@@ -12,7 +12,17 @@
     </div>
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
-      <h3 class="h3_tbl brt"><s:message code="hqEmp.hqEmpInfo"/></h3>
+      <%--<h3 class="h3_tbl brt"><s:message code="hqEmp.hqEmpInfo"/></h3>--%>
+
+      <%-- 사원기초정보 탭 --%>
+      <div class="tabType1">
+        <ul>
+          <%-- 사원기초정보 탭 --%>
+          <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
+          <%-- 메뉴권한 탭 --%>
+          <li><a id="hqEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="hqEmp.menuSetting" /></a></li>
+        </ul>
+      </div>
 
       <%-- 상세 --%>
       <div id="dtlArea" style="height: 266px; overflow-y: auto;">
@@ -221,5 +231,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=2018112101" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=2018112103" charset="utf-8"></script>
 

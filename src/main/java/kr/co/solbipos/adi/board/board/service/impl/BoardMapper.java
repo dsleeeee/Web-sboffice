@@ -1,9 +1,7 @@
 package kr.co.solbipos.adi.board.board.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.pay.coupon.service.PayMethodClassVO;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
-import kr.co.solbipos.sys.board.boardMaster.service.BoardMasterVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -62,7 +60,7 @@ public interface BoardMapper {
     int getBoardInfoSaveDelete(BoardVO boardVO);
 
     /** 게시판 전체 댓글 delete */
-    int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
+//    int getBoardDetailAnswerSaveTotDelete(BoardVO boardVO);
 
 
     /** 게시판 공개대상 insert */
@@ -78,9 +76,6 @@ public interface BoardMapper {
     int getBoardPartStoreSaveDelete(BoardVO boardVO);
 
 
-    /** 게시판 신규등록시 boardSeqNo 가져오기 */
-    String getBoardAtchBoardSeqNo(BoardVO boardVO);
-
     /** 첨부파일 저장시 IDX (자동채번) */
     String getBoardAtchIdx(BoardVO boardVO);
 
@@ -94,9 +89,6 @@ public interface BoardMapper {
 
     /** 게시판 댓글번호 조회(자동채번) */
     String getBoardAnswerIdx(BoardVO boardVO);
-
-    /** 아이디에 따른 작성자 조회 */
-    String getBoardUserNm(BoardVO boardVO);
 
     /** 게시판 댓글 저장 isert */
     int getBoardDetailAnswerSaveInsert(BoardVO boardVO);

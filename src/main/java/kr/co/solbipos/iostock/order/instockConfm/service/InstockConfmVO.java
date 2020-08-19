@@ -6,13 +6,23 @@ public class InstockConfmVO extends PageVO {
 
     private static final long serialVersionUID = 4310590106291441717L;
 
+	/**
+     * 소속구분<br>
+     * M : 시스템<br>
+     * A : 대리점<br>
+     * H : 본사<br>
+     * S : 매장, 가맹점
+     */
+    private String orgnFg;
+
     /** 본사코드 */
     private String hqOfficeCd;
     /** 전표번호 YYMM(4)+SEQ(6) */
     private String slipNo;
     /** 매장코드 */
     private String storeCd;
-    /** 매장명 */
+
+	/** 매장명 */
     private String storeNm;
     /** 사원번호 MD사원 */
     private String empNo;
@@ -146,6 +156,46 @@ public class InstockConfmVO extends PageVO {
     private String penaltyCd;
     /** 패널티금액 반품시 */
     private Integer penaltyAmt;
+    /** 입고창고코드 */
+    private String inStorageCd;
+    
+
+    /** 창고 갯수 */
+    //private int	storageCnt;
+
+    /** 창고별 배열값-창고코드 */
+    private String  arrStorageCd;
+
+    /** 창고별 배열값-창고명 */
+    private String  arrStorageNm;
+
+    /** 창고별 배열값-입고수량 주문단위 */
+    private String  arrInUnitQty;
+
+    /** 창고별 배열값-입고수량 나머지 */
+    private String  arrInEtcQty;
+
+    /** 창고별 배열값-입고수량 합계 */
+    private String  arrInTotQty;
+
+    /** 창고별 배열값-입고금액 */
+    private String  arrInAmt;
+
+    /** 창고별 배열값-입고금액 부가세 */
+    private String  arrInVat;
+
+    /** 창고별 배열값-입고금액 합계 */
+    private String  arrInTot;
+
+
+
+
+    public String getOrgnFg() {
+		return orgnFg;
+	}
+	public void setOrgnFg(String orgnFg) {
+		this.orgnFg = orgnFg;
+	}
 
     /**
      * @return the hqOfficeCd
@@ -1126,4 +1176,60 @@ public class InstockConfmVO extends PageVO {
     public void setPenaltyAmt(Integer penaltyAmt) {
         this.penaltyAmt = penaltyAmt;
     }
+	public String getArrStorageCd() {
+		return arrStorageCd;
+	}
+	public void setArrStorageCd(String arrStorageCd) {
+		this.arrStorageCd = arrStorageCd;
+	}
+	public String getArrStorageNm() {
+		return arrStorageNm;
+	}
+	public void setArrStorageNm(String arrStorageNm) {
+		this.arrStorageNm = arrStorageNm;
+	}
+	public String getArrInUnitQty() {
+		return arrInUnitQty;
+	}
+	public void setArrInUnitQty(String arrInUnitQty) {
+		this.arrInUnitQty = arrInUnitQty;
+	}
+	public String getArrInEtcQty() {
+		return arrInEtcQty;
+	}
+	public void setArrInEtcQty(String arrInEtcQty) {
+		this.arrInEtcQty = arrInEtcQty;
+	}
+	public String getArrInTotQty() {
+		return arrInTotQty;
+	}
+	public void setArrInTotQty(String arrInTotQty) {
+		this.arrInTotQty = arrInTotQty;
+	}
+	public String getArrInAmt() {
+		return arrInAmt;
+	}
+	public void setArrInAmt(String arrInAmt) {
+		this.arrInAmt = arrInAmt;
+	}
+	public String getArrInVat() {
+		return arrInVat;
+	}
+	public void setArrInVat(String arrInVat) {
+		this.arrInVat = arrInVat;
+	}
+	public String getArrInTot() {
+		return arrInTot;
+	}
+	public void setArrInTot(String arrInTot) {
+		this.arrInTot = arrInTot;
+	}
+	public String getInStorageCd() {
+		return inStorageCd;
+	}
+	public void setInStorageCd(String inStorageCd) {
+		this.inStorageCd = inStorageCd;
+	}
+	
+	
 }

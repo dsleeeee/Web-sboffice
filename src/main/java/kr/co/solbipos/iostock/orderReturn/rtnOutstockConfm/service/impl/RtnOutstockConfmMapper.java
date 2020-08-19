@@ -1,6 +1,8 @@
 package kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
+import kr.co.solbipos.iostock.orderReturn.rtnDstbCloseProd.service.RtnDstbCloseProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnOutstockConfm.service.RtnOutstockConfmVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -18,7 +20,10 @@ public interface RtnOutstockConfmMapper {
 
     /** 반품매장출고 - 반품매장출고시 DTL 수정 */
     int updateOutstockDtlConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
-
+    
+    /** 반품매장출고 - 반품매장출고시 PROD 수정 */
+    int updateOutstockProdConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
     /** 반품매장출고 - 반품매장출고시 HD 수정 */
     int updateOutstockConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
 
@@ -42,4 +47,16 @@ public interface RtnOutstockConfmMapper {
 
     /** 반품매장출고 - 반품매장출고 이후 저장시 HD 수정 */
     int updateOutstockAfterHd(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
+    /** 반품등록 PROD 수정 */
+    int savetRtnStoreOrderProd(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
+    /** 반품등록 PROD 수정 */
+    int deleteOrderProd(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
+    /** 반품등록 PROD 수정 */
+    int deleteOutStockProd(RtnOutstockConfmVO rtnOutstockConfmVO);
+    
+    /** 반품등록 PROD 입력 */
+    int insertOutStockProd(RtnOutstockConfmVO rtnOutstockConfmVO);
 }
