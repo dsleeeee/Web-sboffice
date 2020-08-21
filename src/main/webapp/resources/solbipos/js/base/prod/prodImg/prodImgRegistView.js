@@ -191,45 +191,69 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         // type - F: 상품이미지 파일이 등록되어있으면 '선택취소' 버튼 클릭 시 동작 안하도록
 
         if(type === "F"){
-            if(imgFg === "001"){
-                if($("#hdProdFileNm").val() !== ""){
-                    return;
+            if(imgFg === "001") {
+                if ($("#hdProdFileNm").val() !== "") { // 기존 이미지 파일이 있는 경우
+                    if ($("#fileProd").val() !== "") { // 새 첨부 이미지를 넣고 선택 취소 시,
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    } else {
+                        return;
+                    }
                 }
             }
 
             if(imgFg === "002"){
                 if($("#hdKioskFileNm").val() !== "") {
-                    return;
+                    if($("#fileKiosk").val() !== ""){
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    }else{
+                        return;
+                    }
                 }
             }
 
             if(imgFg === "003"){
                 if($("#hdDidFileNm").val() !== ""){
-                    return;
+                    if($("#fileDid").val() !== ""){
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    }else{
+                        return;
+                    }
                 }
             }
         }
 
-        var element =  "";
+        var element = "";
 
         // 이미지와 첨부파일 초기화
-        if(imgFg === "001"){
+        if (imgFg === "001") {
             $("#imgProd").html("No Image");
             $("#hdProdFileNm").val("");
             element = "fileProd";
-        }else if(imgFg === "002"){
+        } else if (imgFg === "002") {
             $("#imgKiosk").html("No Image");
             $("#hdKioskFileNm").val("");
             element = "fileKiosk";
-        }else{
+        } else {
             $("#imgDid").html("No Image");
             $("#hdDidFileNm").val("");
             element = "fileDid";
         }
 
-        // 첨부파일 초기화
+        $scope.resetFile(element);
+
+    }
+    
+    // 브라우저에 따른 첨부파일 초기화
+    $scope.resetFile = function(element){
+
         var agent = navigator.userAgent.toLowerCase();
-        
+
         if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
             // ie 일때
             $("#" + element).replaceWith( $("#" + element).clone(true) );
