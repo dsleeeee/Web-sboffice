@@ -305,7 +305,7 @@
         /* USE : PayInfoMapper.getPointList */
         <![CDATA[
         SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
-        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE
@@ -350,7 +350,7 @@
         /* USE : PayInfoMapper.getPrepaidList */
         <![CDATA[
         SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
-        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE
@@ -395,7 +395,7 @@
         /* USE : PayInfoMapper.getPostpaidList */
         <![CDATA[
         SELECT 	tsspp.CORNR_CD, tmc.CORNR_NM
-        ,       tsspp.MEMBR_NO, tmm.MEMBR_NM
+        ,       tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE

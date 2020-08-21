@@ -20,7 +20,7 @@
         /* MembrNonBilClctMapper.getMembrNonBilClctList */
         SELECT
         tmmpb.MEMBR_NO,
-        tmm.MEMBR_NM,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
         SUM(tmmpb.POSTPAID_AMT) AS POSTPAID_AMT,
         SUM(tmmpb.POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
         SUM(tmmpb.POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT,
@@ -46,7 +46,7 @@
         </if>
         <if test='membrNm != null and membrNm != ""'>
             <![CDATA[
-                AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+                AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
             ]]>
         </if>
         <if test='membrNo != null and membrNo != ""'>

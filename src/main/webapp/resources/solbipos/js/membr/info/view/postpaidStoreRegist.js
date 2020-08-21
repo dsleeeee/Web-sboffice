@@ -74,8 +74,6 @@ app.controller('postpaidStoreRegistCtrl', ['$scope', '$http', function ($scope, 
       return false;
     }
 
-    console.log(params);
-
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/membr/info/view/postpaid/deletePostpaidStore.sb", params, function(){
       $scope.allSearch()

@@ -103,7 +103,7 @@
     <select id="getMembrDcList" parameterType="dcInfoVO" resultType="DefaultMap">
         /* USE : DcInfoMapper.getMembrDcList */
         <![CDATA[
-        SELECT  tmm.MEMBR_NO, tmm.MEMBR_NM
+        SELECT  tmm.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE

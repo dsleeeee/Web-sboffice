@@ -2,6 +2,7 @@ package kr.co.solbipos.membr.anals.membrProd.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.membr.anals.membrProd.service.MembrProdVO;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,6 @@ public interface MembrProdMapper {
 
     /** 회원 상품 구매내역*/
     List<DefaultMap<Object>> getMembrProdList(MembrProdVO membrProdVO);
+
+    DefaultMap<Object> getMembrProdDetail(RegistVO registVO);
 }

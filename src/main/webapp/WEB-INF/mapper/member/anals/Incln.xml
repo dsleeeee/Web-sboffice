@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.membr.anals.incln.service.impl.InclnMapper">
+
+  <select id="getInclnList" parameterType="InclnVO" resultType="DefaultMap">
+
+    SELECT
+        C.LV1_CD
+        ,C.LV1_NM
+        ,C.LV2_CD
+        ,C.LV2_NM
+        ,A.LV3_CD
+        ,A.LV3_NM
+        <if test='option == ("AMT")'>
+        <![CDATA[
+        ,SUM_SALE_AMT AS SUM_SALE
+        ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_F"
+        ,SUM( CASE WHEN GENDR_FG = 'G' THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_GENDR_G"
+        ,SUM( CASE WHEN AGE > 10 AND AGE < 21 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETEENS"
+        ,SUM( CASE WHEN AGE > 20 AND AGE < 31 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETWENTIES"
+        ,SUM( CASE WHEN AGE > 30 AND AGE < 41 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGETHIRTIES"
+        ,SUM( CASE WHEN AGE > 40 AND AGE < 51 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGEFORTIES"
+        ,SUM( CASE WHEN AGE > 50 AND AGE < 61 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGEFIFTIES"
+        ,SUM( CASE WHEN AGE > 60 THEN SUM_SALE_AMT ELSE 0 END ) AS "SUM_AGESIXTIES"
+        ]]>
+        </if>
+        <if test='option == "QTY"'>
+        <![CDATA[
+        ,SUM_SALE_QTY AS SUM_SALE
+        ,SUM( CASE WHEN GENDR_FG = 'F' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_F"
+        ,SUM( CASE WHEN GENDR_FG = 'G' THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_GENDR_G"
+        ,SUM( CASE WHEN AGE > 10 AND AGE < 21 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETEENS"
+        ,SUM( CASE WHEN AGE > 20 AND AGE < 31 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETWENTIES"
+        ,SUM( CASE WHEN AGE > 30 AND AGE < 41 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGETHIRTIES"
+        ,SUM( CASE WHEN AGE > 40 AND AGE < 51 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGEFORTIES"
+        ,SUM( CASE WHEN AGE > 50 AND AGE < 61 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGEFIFTIES"
+        ,SUM( CASE WHEN AGE > 60 THEN SUM_SALE_QTY ELSE 0 END ) AS "SUM_AGESIXTIES"
+        ]]>
+        </if>
+    FROM
+        (
+        SELECT
+            tmmph.SALE_DATE,
+            thp.PROD_CLASS_CD AS LV3_CD,
+            thpc.PROD_CLASS_NM AS LV3_NM,
+            tmm.MEMBR_NO,
+            tmm.GENDR_FG,
+            SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM,
+            TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 ) AS AGE,
+            SUM( tssd.SALE_QTY ) AS SUM_SALE_QTY,
+            SUM( tssd.SALE_AMT ) AS SUM_SALE_AMT
+        FROM
+            TB_MB_MEMBER_POINT_HIST tmmph
+        LEFT JOIN TB_SL_SALE_DTL tssd ON tssd.STORE_CD = tmmph.STORE_CD
+            AND tssd.BILL_NO = tmmph.BILL_NO
+            AND tssd.POS_NO = tmmph.POS_NO
+        LEFT JOIN TB_HQ_PRODUCT thp ON thp.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
+            AND thp.HQ_BRAND_CD = tssd.HQ_BRAND_CD
+            AND thp.PROD_CD = tssd.PROD_CD
+        LEFT JOIN TB_HQ_PRODUCT_CLASS thpc ON thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
+            AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        LEFT JOIN TB_MB_MEMBER tmm ON tmm.MEMBR_NO = tmmph.MEMBR_NO
+            AND tmm.MEMBR_ORGN_CD = tmmph.MEMBR_ORGN_CD
+        WHERE
+            tmmph.POINT_CHG_FG IN ( '4', '6' )
+            AND tssd.SALE_DATE BETWEEN #{startDate}
+            AND #{endDate}
+        GROUP BY
+            thpc.PROD_CLASS_CD,
+            tmm.MEMBR_NO,
+            tmm.MEMBR_NM,
+            tmm.GENDR_FG,
+            thp.PROD_CLASS_CD,
+            thpc.PROD_CLASS_NM,
+            tmmph.SALE_DATE,
+            TO_CHAR( SYSDATE, 'yyyy' ) - SUBSTR( tmm.BIRTHDAY, 0, 4 )
+        ) A,
+        (SELECT
+            A.P_PROD_CLASS_CD AS LV1_CD,
+            ( SELECT SF_GET_PROD_CLASSES ( 'H', #{hqOfficeCd}, A.P_PROD_CLASS_CD ) FROM DUAL ) AS LV1_NM,
+            A.PROD_CLASS_CD AS LV2_CD,
+            A.PROD_CLASS_NM AS LV2_NM,
+            B.PROD_CLASS_CD AS LV3_CD,
+            B.PROD_CLASS_NM AS LV3_NM
+        FROM
+        (
+            SELECT
+                HQ_OFFICE_CD,
+                P_PROD_CLASS_CD,
+                PROD_CLASS_CD,
+                PROD_CLASS_NM
+                FROM
+                TB_HQ_PRODUCT_CLASS
+            WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD = '00000' )
+            ) A,
+                TB_HQ_PRODUCT_CLASS B
+            WHERE
+                B.P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD IN ( SELECT PROD_CLASS_CD FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND P_PROD_CLASS_CD = '00000' ) )
+                AND A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                AND A.PROD_CLASS_CD = B.P_PROD_CLASS_CD
+        ) C
+    WHERE
+        C.LV3_CD = A.LV3_CD
+    GROUP BY
+        C.LV1_CD,
+        C.LV1_NM,
+        C.LV2_CD,
+        C.LV2_NM,
+        A.LV3_CD,
+        A.LV3_NM,
+        SUM_SALE_QTY,
+        SUM_SALE_AMT
+  </select>
+
+</mapper>

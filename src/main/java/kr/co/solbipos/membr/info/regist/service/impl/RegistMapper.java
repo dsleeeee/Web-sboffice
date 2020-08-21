@@ -150,4 +150,20 @@ public interface RegistMapper {
 
     /** 회원정보 등록,수정시 본사코드 A0007만 */
     String registSposBillPtn(RegistVO registVO);
+
+    DefaultMap<String> getMemberSelect(RegistVO registVO);
+
+    List<DefaultMap<String>> getCardList(RegistVO registVO);
+
+    int insertMembrDlvr(RegistVO registVO);
+
+    int insertMembrDlvrTel(RegistVO registVO);
+
+    List<DefaultMap<String>> getDlvrList(RegistVO registVO);
+
+    List<DefaultMap<String>> getDlvrTelList(RegistVO registVO);
+
+    List getMembrLzoneList(RegistVO registVO);
+
+    List getDlvrMzoneList(RegistVO registVO);
 }

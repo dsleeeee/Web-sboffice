@@ -24,7 +24,7 @@
                tmmpb.STORE_CD,
                tms.STORE_NM,
                tmmpb.MEMBR_NO,
-               tmm.MEMBR_NM,
+                SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
                NVL(tmmpb.POSTPAID_AMT, 0) AS POSTPAID_AMT,
                NVL(tmmpb.POSTPAID_IN_AMT, 0) AS POSTPAID_IN_AMT,
                NVL(tmmpb.POSTPAID_BAL_AMT, 0) AS POSTPAID_BAL_AMT,
@@ -51,7 +51,7 @@
            AND tmm.MEMBR_NO = #{membrNo}
       </if>
       <if test='membrNm != null and membrNm.toString() != ""'>
-           AND tmm.MEMBR_NM = #{membrNm}
+           AND SBPENC.D(tmm.MEMBR_NM) = #{membrNm}
       </if>
            AND tmmtb.MEMBR_ORGN_CD (+)= tmmpb.HQ_OFFICE_CD
            AND tmmtb.MEMBR_NO (+)= tmmpb.MEMBR_NO
