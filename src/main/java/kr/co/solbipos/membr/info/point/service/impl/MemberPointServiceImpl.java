@@ -1,9 +1,5 @@
 package kr.co.solbipos.membr.info.point.service.impl;
 
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static org.apache.commons.lang3.time.DateUtils.isSameLocalTime;
-
-import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
@@ -11,13 +7,10 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.membr.info.excelUpload.service.MemberExcelUploadVO;
 import kr.co.solbipos.membr.info.point.service.MemberPointService;
 import kr.co.solbipos.membr.info.point.service.MemberPointVO;
-import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
 import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import kr.co.solbipos.membr.info.regist.service.impl.RegistMapper;
-import org.aspectj.apache.bcel.generic.LOOKUPSWITCH;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("MemberPointService")
 @Transactional
