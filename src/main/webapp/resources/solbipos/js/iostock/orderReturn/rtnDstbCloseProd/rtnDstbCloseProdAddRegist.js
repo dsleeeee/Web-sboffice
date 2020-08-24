@@ -7,6 +7,26 @@ app.controller('rtnDstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', 
     {id: "Y", name: messages["rtnDstbCloseProd.addRegist.orderFgY"]},
     {id: "N", name: messages["rtnDstbCloseProd.addRegist.orderFgN"]},
   ], 'id', 'name');
+  
+  $scope.orderFgMap = new wijmo.grid.DataMap([
+	    {id: "Y", name: messages["dstbCloseProd.addRegist.orderFgY"]},
+	    {id: "N", name: messages["dstbCloseProd.addRegist.orderFgN"]},
+	  ], 'id', 'name');
+	  
+	  $scope.orderFgMap1 = new wijmo.grid.DataMap([
+	    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg1Y"]},	//마감
+	    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//미마감
+	  ], 'id', 'name');
+
+	  $scope.orderFgMap2 = new wijmo.grid.DataMap([
+	    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg2Y"]},	//특정일 가능
+	    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//특정일 불가
+	  ], 'id', 'name');
+	  
+	  $scope.orderFgMap3 = new wijmo.grid.DataMap([
+	    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg3Y"]},	//가능요일
+	    {id: "N", name: messages["dstbCloseProd.dtl.orderFg3N"]},	//불가요일
+	  ], 'id', 'name');  
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -35,21 +55,11 @@ app.controller('rtnDstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', 
 
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {
-//        var col = s.columns[e.col];
-//        if (col.binding === "mgrSplyUprc" || col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") { // 분배수량 수정시
-//          var item = s.rows[e.row].dataItem;
-//          $scope.calcAmt(item);
-//        }
-    	  
-      	  var col = s.columns[e.col];
-          var str = col.binding;
-          var idx = 0;
-
-          if(str.indexOf('arr') != -1){	//입고수량 수정시
-          	idx = str.lastIndexOf('_');
-              var item = s.rows[e.row].dataItem;
-              $scope.calcAmt(item, str.substring(idx+1));
-          }
+        var col = s.columns[e.col];
+        if (col.binding === "mgrSplyUprc" || col.binding === "mgrUnitQty" || col.binding === "mgrEtcQty") { // 분배수량 수정시
+          var item = s.rows[e.row].dataItem;
+          $scope.calcAmt(item);
+        }    	  
       }
 
       s.collectionView.commitEdit();
@@ -59,161 +69,28 @@ app.controller('rtnDstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', 
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-  
-  
-  //Grid Header 2줄 - START	----------------------------------------------------------------
-  s.allowMerging  = 2;
-  s.columnHeaders.rows.push(new wijmo.grid.Row());
-  
-  //첫째줄 Header 생성
-  var dataItem = {};
-      dataItem.prodCd         	= messages["rtnStoreOrder.dtl.prodCd"        ];	//상품코드
-      dataItem.prodNm         	= messages["rtnStoreOrder.dtl.prodNm"        ];	//상품명
-      dataItem.orderSplyUprc  	= messages["rtnStoreOrder.dtl.orderSplyUprc" ];	//공급단가
-      
-      dataItem.prevOrderUnitQty   = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
-      dataItem.prevOrderEtcQty    = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
-      dataItem.prevOrderTotQty    = messages["rtnStoreOrder.dtl.prevOrderUnitQty"		 ]; //기반품수량
-           
-      dataItem.orderUnitQty     	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
-      dataItem.orderEtcQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
-      dataItem.orderTotQty      	= messages["rtnStoreOrder.dtl.orderUnitQty"		 ]; //반품수량
-
-      dataItem.orderAmt        	= messages["rtnStoreOrder.dtl.orderAmt"      ];	//금액
-      dataItem.orderVat         	= messages["rtnStoreOrder.dtl.orderVat"      ];	//VAT
-      dataItem.orderTot         	= messages["rtnStoreOrder.dtl.orderTot"      ];	//합계
-      dataItem.saleUprc        	= messages["rtnStoreOrder.dtl.saleUprc"      ];	//판매단가
-      dataItem.poUnitFg       	= messages["rtnStoreOrder.dtl.poUnitFg"      ]; //반품단위
-      dataItem.poUnitQty      	= messages["rtnStoreOrder.dtl.poUnitQty"     ]; //입수
-      
-      dataItem.safeStockUnitQty   = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
-      dataItem.safeStockEtcQty    = messages["rtnStoreOrder.dtl.safeStock"	 ]; //안전재고
-           
-      dataItem.storeCurUnitQty   = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고
-      dataItem.storeCurEtcQty    = messages["rtnStoreOrder.dtl.storeCurrQty"	 ]; //매장재고      
-      dataItem.remark         	= messages["rtnStoreOrder.dtl.remark"        ]; //비고
-      dataItem.poMinQty        	= messages["rtnStoreOrder.dtl.poMinQty"      ]; //발주최소수량
-      dataItem.vatFg01        	= messages["rtnStoreOrder.dtl.vatFg"         ]; //상품부가세구분
-      dataItem.envst0011        	= messages["rtnStoreOrder.dtl.envst0011"     ]; //출고가-부가세포함여부
-  s.columnHeaders.rows[0].dataItem = dataItem;
-  //Grid Header 2줄 - END		----------------------------------------------------------------
-  
-  s.itemFormatter = function (panel, r, c, cell) {
-      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-        //align in center horizontally and vertically
-        panel.rows[r].allowMerging    = true;
-        panel.columns[c].allowMerging = true;
-        wijmo.setCss(cell, {
-          display    : 'table',
-          tableLayout: 'fixed'
-        });
-        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-        wijmo.setCss(cell.children[0], {
-          display      : 'table-cell',
-          verticalAlign: 'middle',
-          textAlign    : 'center'
-        });
-      }
-      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-        // GroupRow 인 경우에는 표시하지 않는다.
-        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-          cell.textContent = '';
-        } else {
-          if (!isEmpty(panel._rows[r]._data.rnum)) {
-            cell.textContent = (panel._rows[r]._data.rnum).toString();
-          } else {
-            cell.textContent = (r + 1).toString();
-          }
-        }
-      }
-      // readOnly 배경색 표시
-      else if (panel.cellType === wijmo.grid.CellType.Cell) {
-        var col = panel.columns[c];
-        if (col.isReadOnly) {
-          wijmo.addClass(cell, 'wj-custom-readonly');
-        }
-      }
-    }
-  
   };
   
   // 금액 계산
-  
-  $scope.calcAmt = function (item, idx) {
-	  	//$scope.flex.collectionView.editItem(item);
+  $scope.calcAmt = function (item) {
+    var mgrSplyUprc = parseInt(item.mgrSplyUprc);
+    var poUnitQty   = parseInt(item.poUnitQty);
+    var vat01       = parseInt(item.vatFg01);
+    var envst0011   = parseInt(item.envst0011);
 
-		  var orderSplyUprc = parseInt(item.orderSplyUprc);
-		  var poUnitQty     = parseInt(item.poUnitQty);
-		  var vat01         = parseInt(item.vatFg01);
-		  var envst0011     = parseInt(item.envst0011);
-		  
-	      var unitQty     = parseInt(nvl(eval('item.arrOrderUnitQty_' + idx), 0)) * parseInt(item.poUnitQty);
-	      var etcQty      = parseInt(nvl(eval('item.arrOrderEtcQty_'  + idx), 0));
-	      var totQty      = parseInt(unitQty + etcQty);
-	      var tempAmt  	  = Math.round(totQty * orderSplyUprc / poUnitQty);
-	      var orderAmt 	  = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-	      var orderVat 	  = Math.round(tempAmt * vat01 / (10 + envst0011));
-	      var orderTot    = parseInt(orderAmt + orderVat);
+    var unitQty = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
+    var etcQty  = parseInt(nvl(item.mgrEtcQty, 0));
+    var totQty  = parseInt(unitQty + etcQty);
+    var tempAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+    var mgrAmt  = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+    var mgrVat  = Math.round(tempAmt * vat01 / (10 + envst0011));
+    var mgrTot  = parseInt(mgrAmt + mgrVat);
 
-	      eval('item.arrOrderTotQty_'	+ idx + ' = totQty;');		//총입고수량
-	      eval('item.arrOrderAmt_' 		+ idx + ' = orderAmt;'	); 	//금액
-	      eval('item.arrOrderVat_' 		+ idx + ' = orderVat;'	); 	//VAT
-	      eval('item.arrOrderTot_'		+ idx + ' = orderTot;'	);	//합계
-
-	      //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - START
-		        //console.log('global_storage_cnt:' + global_storage_cnt);
-		        var arrOrderUnitQty= 0;
-		        var arrOrderEtcQty	= 0;
-		        var arrOrderTotQty = 0;
-		        var arrOrderAmt	= 0;
-		        var arrOrderVat	= 0;
-		        var arrOrderTot	= 0;
-
-		        for(var i=0; i<global_storage_cnt; i++){
-		        	eval('arrOrderUnitQty	+= parseInt(nvl(item.arrOrderUnitQty_'	+ i + ',0));');
-		        	eval('arrOrderEtcQty	+= parseInt(nvl(item.arrOrderEtcQty_'	+ i + ',0));');
-		        	eval('arrOrderTotQty	+= parseInt(nvl(item.arrOrderTotQty_'	+ i + ',0));');
-		        	eval('arrOrderAmt		+= parseInt(nvl(item.arrOrderAmt_'		+ i + ',0));');
-		        	eval('arrOrderVat		+= parseInt(nvl(item.arrOrderVat_'		+ i + ',0));');
-		        	eval('arrOrderTot		+= parseInt(nvl(item.arrOrderTot_'		+ i + ',0));');
-		        }
-		        item.orderUnitQty	= arrOrderUnitQty;  //입고수량 - 단위
-		        item.orderEtcQty    = arrOrderEtcQty;   //입고수량 - 나머지
-		        
-//		        item.orderTotQty    = arrOrderTotQty;   //총입고수량
-//		        item.orderAmt       = arrOrderAmt;		//금액
-//		        item.orderVat       = arrOrderVat;    	//VAT
-//		        item.orderTot       = arrOrderTot;    	//합계
-		        
-		        item.orderTotQty = totQty;   // 총수량
-		        item.orderAmt    = orderAmt; // 금액
-		        item.orderVat    = orderVat; // VAT
-		        item.orderTot    = orderTot; // 합계
-		        
-		    //전체합계 setting - Header명 '입고수량' 부분 (입고수량, 금액, VAT, 합계) - END
-
-		    //$scope.flex.collectionView.commitEdit();
-	  };	//$scope.calcAmt	--------------------------------------------------------------------------------------------------------------------------
-//  $scope.calcAmt = function (item) {
-//    var mgrSplyUprc = parseInt(item.mgrSplyUprc);
-//    var poUnitQty   = parseInt(item.poUnitQty);
-//    var vat01       = parseInt(item.vatFg01);
-//    var envst0011   = parseInt(item.envst0011);
-//
-//    var unitQty = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
-//    var etcQty  = parseInt(nvl(item.mgrEtcQty, 0));
-//    var totQty  = parseInt(unitQty + etcQty);
-//    var tempAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
-//    var mgrAmt  = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
-//    var mgrVat  = Math.round(tempAmt * vat01 / (10 + envst0011));
-//    var mgrTot  = parseInt(mgrAmt + mgrVat);
-//
-//    item.mgrTotQty = totQty; // 총분배수량
-//    item.mgrAmt    = mgrAmt; // 금액
-//    item.mgrVat    = mgrVat; // VAT
-//    item.mgrTot    = mgrTot; // 합계
-//  };
+    item.mgrTotQty = totQty; // 총분배수량
+    item.mgrAmt    = mgrAmt; // 금액
+    item.mgrVat    = mgrVat; // VAT
+    item.mgrTot    = mgrTot; // 합계
+  };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("rtnDstbCloseProdAddRegistCtrl", function (event, data) {
@@ -245,222 +122,58 @@ app.controller('rtnDstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', 
     params.prodCd  = $scope.prodCd;
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
-    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquirySub("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddRegist/list.sb", params, function () {
-    	global_storage_cnt	= 0;	//매장의 창고 갯수
-
-    	var arrProdCd		= new Array( new Array(), new Array() );
-        var arrStorageCd	= new Array( new Array(), new Array() );
-        var arrStorageNm	= new Array( new Array(), new Array() );
-        var arrOrderUnitQty	= new Array( new Array(), new Array() );
-        var arrOrderEtcQty	= new Array( new Array(), new Array() );
-        var arrOrderTotQty	= new Array( new Array(), new Array() );
-        var arrOrderAmt		= new Array( new Array(), new Array() );
-        var arrOrderVat		= new Array( new Array(), new Array() );
-        var arrOrderTot		= new Array( new Array(), new Array() );
-//        var arrCurrQty		= new Array( new Array(), new Array() );
-      
-        var grid 			= $scope.flex;
-        var item;
-    	for(var i=0; i<grid.collectionView.items.length; i++){
-            item 				= grid.collectionView.items[i];
-
-            arrProdCd[i] 		= item.prodCd;
-            arrStorageCd[i] 	= item.arrStorageCd.split("^");
-            arrStorageNm[i] 	= item.arrStorageNm.split("^");
-            arrOrderUnitQty[i] 	= item.arrOrderUnitQty.split("^");	//입고수량 - 주문딘위
-            arrOrderEtcQty[i] 	= item.arrOrderEtcQty.split("^");	//입고수량 - 나머지
-            arrOrderTotQty[i] 	= item.arrOrderTotQty.split("^");	//입고수량 - 합계
-            arrOrderAmt[i] 		= item.arrOrderAmt.split("^");		//입고금액
-            arrOrderVat[i] 		= item.arrOrderVat.split("^");		//입고금액 - 부가세
-            arrOrderTot[i] 		= item.arrOrderTot.split("^");		//입고금액 - 합계
-//            arrCurrQty[i] 		= item.arrCurrQty.split("^");		//재고수량
-    	}
-
-    	global_storage_cnt	= arrStorageCd[0].length;
-    	/*
-		  	while(grid.columns.length > 14){	//'비고'가 14번째	-> 숨겨져 있는 column도 포함해야 함. -> 아래처럼 변경
-		  		grid.columns.removeAt(grid.columns.length-1);
-		  	}
-		  	*/
-		  	while(grid.columns.length > 30){	//이 상세화면이 다시 열리는 경우를 대비하여, 추가된 칼럼 삭제해야 함. ('arrInTot'이 28번재)
-		  		grid.columns.removeAt(grid.columns.length-1);
-		  	}
-
-        for(var i=0; i<arrStorageCd.length; i++){
-        	for(var j=0; j<arrStorageCd[i].length; j++){
-        		/*
-            	console.log(i + '-' + j +
-            			' Prod:'		+ arrProdCd   	[i]		+
-            			' & Cd:'    	+ arrStorageCd	[i][j]	+
-                        ' & Nm:' 		+ arrStorageNm	[i][j]  +
-                        ' & UnitQty:' 	+ arrOrderUnitQty	[i][j]  +
-                        ' & EtcQty:'  	+ arrOrderEtcQty	[i][j]  +
-                        ' & TotQty:'  	+ arrOrderTotQty	[i][j]  +
-                        ' & Amt:'     	+ arrOrderAmt		[i][j]  +
-                        ' & Vat:'     	+ arrOrderVat		[i][j]  +
-                        ' & Tot:'     	+ arrOrderTot		[i][j]  );
-				*/
-            	if(i == 0){
-            		//입고수량, 금액, VAT, 합계
-//            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.currQty"],	binding:"arrCurrQty_"		+ j,	width:80,    align:"right",    isReadOnly:true,		aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//재고수량 - 주문딘위
-            		grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrOrderUnitQty_"	+ j,	width:50,    align:"right",    isReadOnly:false,	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 주문딘위
-                	grid.columns.push( new wijmo.grid.Column({header:messages["rtnInstockConfm.dtl.outUnitQty"],binding:"arrOrderEtcQty_"	+ j,    width:50,    align:"right",    isReadOnly:false,  	aggregate:"Sum", dataType:"Number", format:"n0", maxLength:5}) );					//입고수량 - 나머지
-                  //grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTotQty"], binding:"arrOrderTotQty_"	+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum"}) );					//입고수량 - 합계
-                  //grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTotQty"], binding:"arrOrderTotQty_"	+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", visible:"false"}) );	//입고수량 - 합계
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inAmt"],	binding:"arrOrderAmt_"		+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inVat"],    binding:"arrOrderVat_"		+ j,    width:70,    align:"right",    isReadOnly:true,   	aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액 - 부가세
-                	grid.columns.push( new wijmo.grid.Column({header:messages["instockConfm.dtl.inTot"],	binding:"arrOrderTot_"		+ j,    width:70,    align:"right",    isReadOnly:true,		aggregate:"Sum", dataType:"Number", format:"n0"}) );					//입고금액 - 합계
-            	}
-            	
-//            	grid.columnHeaders.setCellData(0, 'arrCurrQty_'			+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderUnitQty_'	+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderEtcQty_'		+ j, arrStorageNm[i][j]);
-              //grid.columnHeaders.setCellData(0, 'arrOrderTotQty_'	+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderAmt_'		+ j, arrStorageNm[i][j]);
-            	grid.columnHeaders.setCellData(0, 'arrOrderVat_'		+ j, arrStorageNm[i][j]);
-                grid.columnHeaders.setCellData(0, 'arrOrderTot_'		+ j, arrStorageNm[i][j]);
-                
-//                grid.setCellData(i, 'arrCurrQty_'		+ j,	arrCurrQty[i][j]);
-                grid.setCellData(i, 'arrOrderUnitQty_'	+ j,	arrOrderUnitQty[i][j]);
-                grid.setCellData(i, 'arrOrderEtcQty_'	+ j,	arrOrderEtcQty	[i][j]);
-                grid.setCellData(i, 'arrOrderAmt_'		+ j,	arrOrderAmt	[i][j]);
-                grid.setCellData(i, 'arrOrderVat_'		+ j,	arrOrderVat	[i][j]);
-                grid.setCellData(i, 'arrOrderTot_'		+ j,	arrOrderTot	[i][j]);
-
-        	}	//for(var j=0; j<arrStorageCd[i].length; j++){
-        }		//for(var i=0; i<arrStorageCd.length; i++){
-
-        /*
-		console.log('panel.cellType: ' + wijmo.grid.CellType.None			);	//0
-		console.log('panel.cellType: ' + wijmo.grid.CellType.Cell			);	//1
-		console.log('panel.cellType: ' + wijmo.grid.CellType.ColumnHeader	);	//2
-		console.log('panel.cellType: ' + wijmo.grid.CellType.RowHeader		);	//3
-		console.log('panel.cellType: ' + wijmo.grid.CellType.TopLeft		);	//4
-		console.log('panel.cellType: ' + wijmo.grid.CellType.ColumnFooter	);	//5
-		console.log('panel.cellType: ' + wijmo.grid.CellType.BottomLeft		);	//6
-
-		//console.log('panel.cellType: ' + r + ' - ' + c + ' - ' + panel.cellType);
-		if (panel.cellType === wijmo.grid.CellType.ColumnFooter) {
-			console.log('### ColumnFooter:' + panel.getCellData(r,c) );
-		}
-
-		s.columnHeaders.rows[0].allowMerging    = true;
-		*/
-
-        ///*
-        grid.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows   [r].allowMerging = true;
-                panel.columns[c].allowMerging = true;
-
-                wijmo.setCss(cell,  {
-                                        display		: 'table',
-                                        tableLayout : 'fixed'
-                                    });
-
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-
-                wijmo.setCss(cell.children[0],	{
-				  									display 		: 'table-cell',
-				  									verticalAlign 	: 'middle',
-				  									textAlign		: 'center'
-			  									});
-
-            } else if (panel.cellType === wijmo.grid.CellType.RowHeader) {	//로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {			//GroupRow 인 경우에는 표시하지 않음
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-
-            } else if (panel.cellType === wijmo.grid.CellType.Cell) {	//readOnly 배경색 표시
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }	//grid.itemFormatter = function (panel, r, c, cell) {
-        //*/
-
-        //[합계]란에 새로 추가한 column들의 '합계'가 계산되지 않아 추가해 보았으나, 원인은 'dataType'등을 넣어주면 되는 것이었음.
-		//grid.columnFooters.rows.push(new wijmo.grid.GroupRow());	//add the new GroupRow to the grid's 'columnFooters' panel
-		//grid.bottomLeftCells.setCellData(0, 0, '합계');			//add a sigma to the header to show that this is a summary row
-
-        $scope.flex.refresh();
-
-    });		//$scope._inquirySub("/iostock/order/instockConfm/instockConfmDtl/list.sb", params, function () {
-  };	//$scope.searchInstockConfmDtlList	------------------------------------------
-
+    
+    $scope._inquirySub("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddRegist/list.sb", params, function () {    	
+    });
+  };
+  
   // 저장 전 값 체크
   $scope.save = function () {
     var params = [];
-
+    var orderFg = 0;
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
-//      if (item.mgrUnitQty === null && item.mgrEtcQty === null) {
-//        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.require.mgrQty"]); // 분배수량을 입력해주세요.
-//        return false;
-//      }
-//      if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
-//        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-//        return false;
-//      }
-//      if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
-//        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.not.overMgrTot"]); // 분배금액이 너무 큽니다.
-//        return false;
-//      }
+      if (item.mgrUnitQty === null && item.mgrEtcQty === null) {
+        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.require.mgrQty"]); // 분배수량을 입력해주세요.
+        return false;
+      }
+      if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
+        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
+        return false;
+      }
+      if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
+        $scope._popMsg(messages["rtnDstbCloseProd.addRegist.not.overMgrTot"]); // 분배금액이 너무 큽니다.
+        return false;
+      }
+      if (item.orderFg === 'N') orderFg++;
 
       item.reqDate   = $scope.reqDate;
       item.slipFg    = $scope.slipFg;
-      item.storeCd   = $scope.storeCd;
+//      item.storeCd   = $scope.storeCd;
       item.empNo     = "0000";
       item.storageCd = "999";
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      
-      var arrOrderUnitQty	= "";	//입고수량 주문단위
-      var arrOrderEtcQty	= "";	//입고수량 나머지
-      var arrOrderTotQty 	= "";	//입고수량 합계
-      var arrOrderAmt		= "";	//입고금액
-      var arrOrderVat		= "";	//입고금액 부가세
-      var arrOrderTot		= "";	//입고금액 합계
-      
-      for(var k=0; k<global_storage_cnt; k++){
-    	  if(k==0){
-    		  eval('arrOrderUnitQty	= parseInt(nvl(item.arrOrderUnitQty_'	+ k + ',0));');
-    		  eval('arrOrderEtcQty	= parseInt(nvl(item.arrOrderEtcQty_'	+ k + ',0));');
-    		  eval('arrOrderTotQty	= parseInt(nvl(item.arrOrderTotQty_'	+ k + ',0));');
-    		  eval('arrOrderAmt		= parseInt(nvl(item.arrOrderAmt_'		+ k + ',0));');
-    		  eval('arrOrderVat		= parseInt(nvl(item.arrOrderVat_'		+ k + ',0));');
-    		  eval('arrOrderTot		= parseInt(nvl(item.arrOrderTot_'		+ k + ',0));');
-    	  }else{
-    		  eval('arrOrderUnitQty += "^" + parseInt(nvl(item.arrOrderUnitQty_'	+ k + ',0));');
-    		  eval('arrOrderEtcQty	+= "^" + parseInt(nvl(item.arrOrderEtcQty_'		+ k + ',0));');
-    		  eval('arrOrderTotQty	+= "^" + parseInt(nvl(item.arrOrderTotQty_'		+ k + ',0));');
-    		  eval('arrOrderAmt		+= "^" + parseInt(nvl(item.arrOrderAmt_'		+ k + ',0));');
-    		  eval('arrOrderVat		+= "^" + parseInt(nvl(item.arrOrderVat_'		+ k + ',0));');
-    		  eval('arrOrderTot		+= "^" + parseInt(nvl(item.arrOrderTot_'		+ k + ',0));');
-    	  }
-      }
-      item.arrOrderUnitQty 	= arrOrderUnitQty;
-      item.arrOrderEtcQty 	= arrOrderEtcQty;
-      item.arrOrderTotQty 	= arrOrderTotQty;
-      item.arrOrderAmt 		= arrOrderAmt;
-      item.arrOrderVat		= arrOrderVat;
-      item.arrOrderTot 		= arrOrderTot;
+//      item.outStorageCd	= $scope.save.rtnDstbClose.storeAddOutStorageCd;
       
       params.push(item);
     }
 
-    $scope._save("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddRegist/save.sb", params, function () {
-      $scope.saveRtnDstbCloseProdAddRegistCallback()
-    });
+    if( orderFg > 0 ) {   
+    	// 출고요청일이 불가인 매장이 있습니다. 저장하시겠습니까?
+    	var msg = messages["dstbCloseProd.addRegist.txt5"];	
+    	s_alert.popConf(msg, function () {
+    		$scope._save("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddRegist/save.sb", params, function () {
+      	      $scope.saveRtnDstbCloseProdAddRegistCallback()
+    		});
+        });
+    } else {
+    	$scope._save("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddRegist/save.sb", params, function () {
+    	      $scope.saveRtnDstbCloseProdAddRegistCallback()
+    	});       	
+    }
+    
+    
   };
 
   // 저장 후 콜백 함수
@@ -485,7 +198,12 @@ app.controller('rtnDstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', 
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

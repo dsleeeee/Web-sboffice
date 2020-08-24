@@ -125,123 +125,93 @@ public class RtnDstbCloseStoreServiceImpl implements RtnDstbCloseStoreService {
         int result = 0;
         String currentDt = currentDateTimeString();
         
-        String[] storageCd;
-        String[] storageNm;
-        String[] storageOrderUnitQty;
-        String[] storageOrderEtcQty;
-        String[] storageOrderTotQty;
-        String[] storageOrderAmt;
-        String[] storageOrderVat;
-        String[] storageOrderTot;
+//        String[] storageCd;
+//        String[] storageNm;
+//        String[] storageOrderUnitQty;
+//        String[] storageOrderEtcQty;
+//        String[] storageOrderTotQty;
+//        String[] storageOrderAmt;
+//        String[] storageOrderVat;
+//        String[] storageOrderTot;
 
         for (RtnDstbCloseStoreVO rtnDstbCloseStoreVO : rtnDstbCloseStoreVOs) {
             int slipFg       = rtnDstbCloseStoreVO.getSlipFg();
             int poUnitQty    = rtnDstbCloseStoreVO.getPoUnitQty();
-            int mgrSplyUprc  = rtnDstbCloseStoreVO.getOrderSplyUprc();
-            int prevUnitQty  = (rtnDstbCloseStoreVO.getPrevOrderUnitQty() == null ? 0 : rtnDstbCloseStoreVO.getPrevOrderUnitQty());
-            int prevEtcQty   = (rtnDstbCloseStoreVO.getPrevOrderEtcQty()  == null ? 0 : rtnDstbCloseStoreVO.getPrevOrderEtcQty());
-            int unitQty      = (rtnDstbCloseStoreVO.getOrderUnitQty()     == null ? 0 : rtnDstbCloseStoreVO.getOrderUnitQty());
-            int etcQty       = (rtnDstbCloseStoreVO.getOrderEtcQty()      == null ? 0 : rtnDstbCloseStoreVO.getOrderEtcQty());
-            int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
-            int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
-            int orderTotQty  = (rtnDstbCloseStoreVO.getOrderTotQty()   == null ? 0 : rtnDstbCloseStoreVO.getOrderTotQty()) * slipFg;
-            Long orderAmt    = (rtnDstbCloseStoreVO.getOrderAmt()      == null ? 0 : rtnDstbCloseStoreVO.getOrderAmt())    * slipFg;
-            Long orderVat    = (rtnDstbCloseStoreVO.getOrderVat()      == null ? 0 : rtnDstbCloseStoreVO.getOrderVat())    * slipFg;
-            Long orderTot    = (rtnDstbCloseStoreVO.getOrderTot()      == null ? 0 : rtnDstbCloseStoreVO.getOrderTot())    * slipFg;
+            int mgrSplyUprc  = rtnDstbCloseStoreVO.getMgrSplyUprc();
+            int prevMgrUnitQty  = (rtnDstbCloseStoreVO.getPrevMgrUnitQty() == null ? 0 : rtnDstbCloseStoreVO.getPrevMgrUnitQty());
+            int prevMgrEtcQty   = (rtnDstbCloseStoreVO.getPrevMgrEtcQty()  == null ? 0 : rtnDstbCloseStoreVO.getPrevMgrEtcQty());
+            int prevMgrTotQty	= prevMgrUnitQty + prevMgrEtcQty;
+//            int unitQty      = (rtnDstbCloseStoreVO.getOrderUnitQty()     == null ? 0 : rtnDstbCloseStoreVO.getOrderUnitQty());
+//            int etcQty       = (rtnDstbCloseStoreVO.getOrderEtcQty()      == null ? 0 : rtnDstbCloseStoreVO.getOrderEtcQty());
+//            int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
+//            int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
+//            int orderTotQty  = (rtnDstbCloseStoreVO.getOrderTotQty()   == null ? 0 : rtnDstbCloseStoreVO.getOrderTotQty()) * slipFg;
+//            Long orderAmt    = (rtnDstbCloseStoreVO.getOrderAmt()      == null ? 0 : rtnDstbCloseStoreVO.getOrderAmt())    * slipFg;
+//            Long orderVat    = (rtnDstbCloseStoreVO.getOrderVat()      == null ? 0 : rtnDstbCloseStoreVO.getOrderVat())    * slipFg;
+//            Long orderTot    = (rtnDstbCloseStoreVO.getOrderTot()      == null ? 0 : rtnDstbCloseStoreVO.getOrderTot())    * slipFg;
             
-            rtnDstbCloseStoreVO.setOrderUnitQty(orderUnitQty);
-            rtnDstbCloseStoreVO.setOrderEtcQty(orderEtcQty);
-            rtnDstbCloseStoreVO.setOrderTotQty(orderTotQty);
-            rtnDstbCloseStoreVO.setOrderAmt(orderAmt);
-            rtnDstbCloseStoreVO.setOrderVat(orderVat);
-            rtnDstbCloseStoreVO.setOrderTot(orderTot);
+//            rtnDstbCloseStoreVO.setOrderUnitQty(orderUnitQty);
+//            rtnDstbCloseStoreVO.setOrderEtcQty(orderEtcQty);
+//            rtnDstbCloseStoreVO.setOrderTotQty(orderTotQty);
+//            rtnDstbCloseStoreVO.setOrderAmt(orderAmt);
+//            rtnDstbCloseStoreVO.setOrderVat(orderVat);
+//            rtnDstbCloseStoreVO.setOrderTot(orderTot);
             rtnDstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
             rtnDstbCloseStoreVO.setRegDt(currentDt);
             rtnDstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
             rtnDstbCloseStoreVO.setModDt(currentDt);
             rtnDstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                
-        	if(rtnDstbCloseStoreVO.getOrderTotQty() != 0 && rtnDstbCloseStoreVO.getOrderTotQty() != null) {
+          	
+//        		rtnDstbCloseStoreVO.setStorageCd				(rtnDstbCloseStoreVO.getOutStorageCd()					);	//창고코드
+//            	rtnDstbCloseStoreVO.setSlipFg		        	(1								);	//전표구분 1:주문 -1:반품
+              
 
-                //TB_PO_HQ_STORE_ORDER_PROD - START
-            	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-	            storageCd           	= rtnDstbCloseStoreVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-	            storageNm           	= rtnDstbCloseStoreVO.getArrStorageNm().split("\\^");
-	            storageOrderUnitQty     = rtnDstbCloseStoreVO.getArrOrderUnitQty().split("\\^");
-	            storageOrderEtcQty      = rtnDstbCloseStoreVO.getArrOrderEtcQty().split("\\^");
-	            storageOrderTotQty      = rtnDstbCloseStoreVO.getArrOrderTotQty().split("\\^");
-	            storageOrderAmt         = rtnDstbCloseStoreVO.getArrOrderAmt().split("\\^");
-	            storageOrderVat         = rtnDstbCloseStoreVO.getArrOrderVat().split("\\^");
-	            storageOrderTot         = rtnDstbCloseStoreVO.getArrOrderTot().split("\\^");
-	
-	            for(int k=0; k<storageCd.length; k++) {
-
-	            	rtnDstbCloseStoreVO.setStorageCd				(storageCd[k]					);	//창고코드
-	            	rtnDstbCloseStoreVO.setSlipFg		        	(1								);	//전표구분 1:주문 -1:반품
-
-	            	rtnDstbCloseStoreVO.setOrderUnitQty		        (Integer.parseInt	(storageOrderUnitQty	[k]));	//입고수량 주문단위
-	            	rtnDstbCloseStoreVO.setOrderEtcQty		        (Integer.parseInt	(storageOrderEtcQty		[k]));	//입고수량 나머지
-	            	rtnDstbCloseStoreVO.setOrderTotQty		        (Integer.parseInt	(storageOrderTotQty		[k]));	//입고수량합계 낱개
-	            	rtnDstbCloseStoreVO.setOrderAmt			        (Long.parseLong		(storageOrderAmt		[k]));	//입고금액
-	            	rtnDstbCloseStoreVO.setOrderVat			        (Long.parseLong		(storageOrderVat		[k]));	//입고금액VAT
-	            	rtnDstbCloseStoreVO.setOrderTot			        (Long.parseLong		(storageOrderTot		[k]));	//입고금액합계
-
-	            	rtnDstbCloseStoreVO.setRegId			        (sessionInfoVO.getUserId());
-	            	rtnDstbCloseStoreVO.setRegDt			        (currentDt	);
-	            	rtnDstbCloseStoreVO.setModId			        (sessionInfoVO.getUserId());
-	            	rtnDstbCloseStoreVO.setModDt			        (currentDt	);
-		            			            	
-	            	if(rtnDstbCloseStoreVO.getPrevOrderTotQty() != null) {
-	            		result = rtnDstbCloseStoreMapper.updateRtnStoreOrderProd(rtnDstbCloseStoreVO);
-	            		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-	            	}else {
-	            		result = rtnDstbCloseStoreMapper.savetRtnStoreOrderProd(rtnDstbCloseStoreVO);
-	            		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-	            	}
-          
-	            	rtnDstbCloseStoreVO.setOrderUnitQty		        (Integer.parseInt	(storageOrderUnitQty	[k]));	//입고수량 주문단위
-	            	rtnDstbCloseStoreVO.setOrderEtcQty		        (Integer.parseInt	(storageOrderEtcQty		[k]));	//입고수량 나머지
-	            	rtnDstbCloseStoreVO.setOrderTotQty		        (Integer.parseInt	(storageOrderTotQty		[k]));	//입고수량합계 낱개
-	            	rtnDstbCloseStoreVO.setOrderAmt			        (Long.parseLong		(storageOrderAmt		[k]));	//입고금액
-	            	rtnDstbCloseStoreVO.setOrderVat			        (Long.parseLong		(storageOrderVat		[k]));	//입고금액VAT
-	            	rtnDstbCloseStoreVO.setOrderTot			        (Long.parseLong		(storageOrderTot		[k]));	//입고금액합계
-
-	            	rtnDstbCloseStoreVO.setRegId			        (sessionInfoVO.getUserId());
-	            	rtnDstbCloseStoreVO.setRegDt			        (currentDt	);
-	            	rtnDstbCloseStoreVO.setModId			        (sessionInfoVO.getUserId());
-	            	rtnDstbCloseStoreVO.setModDt			        (currentDt	);
-	            			                
-	                int mgrUnitQty   = (rtnDstbCloseStoreVO.getOrderUnitQty() == null ? 0 : rtnDstbCloseStoreVO.getOrderUnitQty()) * slipFg;
-	                int mgrEtcQty    = (rtnDstbCloseStoreVO.getOrderEtcQty()  == null ? 0 : rtnDstbCloseStoreVO.getOrderEtcQty())  * slipFg;
-	                int mgrTotQty    = (rtnDstbCloseStoreVO.getOrderTotQty()  == null ? 0 : rtnDstbCloseStoreVO.getOrderTotQty())  * slipFg;
-	                Long mgrAmt      = (rtnDstbCloseStoreVO.getOrderAmt()     == null ? 0 : rtnDstbCloseStoreVO.getOrderAmt())     * slipFg;
-	                Long mgrVat      = (rtnDstbCloseStoreVO.getOrderVat()     == null ? 0 : rtnDstbCloseStoreVO.getOrderVat())     * slipFg;
-	                Long mgrTot      = (rtnDstbCloseStoreVO.getOrderTot()     == null ? 0 : rtnDstbCloseStoreVO.getOrderTot())     * slipFg;
-		                
-	                if(mgrTotQty < 0) {
-	                	rtnDstbCloseStoreVO.setStorageCd("999");
-	                    rtnDstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
-	                    rtnDstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
-	                    rtnDstbCloseStoreVO.setMgrTotQty(mgrTotQty);
-	                    rtnDstbCloseStoreVO.setMgrAmt(mgrAmt);
-	                    rtnDstbCloseStoreVO.setMgrVat(mgrVat);
-	                    rtnDstbCloseStoreVO.setMgrTot(mgrTot);
-	                    rtnDstbCloseStoreVO.setMgrSplyUprc(mgrSplyUprc);
-	                    rtnDstbCloseStoreVO.setProcFg("10");
-	                    rtnDstbCloseStoreVO.setDstbFg("0");
-	                    rtnDstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
-	                    rtnDstbCloseStoreVO.setRegDt(currentDt);
-	                    rtnDstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
-	                    rtnDstbCloseStoreVO.setModDt(currentDt);
-	                    rtnDstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-	                    result = rtnDstbCloseStoreMapper.insertDstbAdd(rtnDstbCloseStoreVO);
-	                    if (result <= 0)
-	                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                int mgrUnitQty   = (rtnDstbCloseStoreVO.getMgrUnitQty() == null ? 0 : rtnDstbCloseStoreVO.getMgrUnitQty()) * slipFg;
+                int mgrEtcQty    = (rtnDstbCloseStoreVO.getMgrEtcQty()  == null ? 0 : rtnDstbCloseStoreVO.getMgrEtcQty())  * slipFg;
+                int mgrTotQty    = (rtnDstbCloseStoreVO.getMgrTotQty()  == null ? 0 : rtnDstbCloseStoreVO.getMgrTotQty())  * slipFg;
+                Long mgrAmt      = (rtnDstbCloseStoreVO.getMgrAmt()     == null ? 0 : rtnDstbCloseStoreVO.getMgrAmt())     * slipFg;
+                Long mgrVat      = (rtnDstbCloseStoreVO.getMgrVat()     == null ? 0 : rtnDstbCloseStoreVO.getMgrVat())     * slipFg;
+                Long mgrTot      = (rtnDstbCloseStoreVO.getMgrTot()     == null ? 0 : rtnDstbCloseStoreVO.getMgrTot())     * slipFg;
 	                
-	                }
-	            }                   
-            }          
+                if(mgrTotQty < 0) {
+                	
+//                	rtnDstbCloseStoreVO.setOrderUnitQty(mgrUnitQty);
+//                    rtnDstbCloseStoreVO.setOrderEtcQty(mgrEtcQty);
+//                    rtnDstbCloseStoreVO.setOrderTotQty(mgrTotQty);
+//                    rtnDstbCloseStoreVO.setOrderAmt(mgrAmt);
+//                    rtnDstbCloseStoreVO.setOrderVat(mgrVat);
+//                    rtnDstbCloseStoreVO.setOrderTot(mgrTot);
+//              		
+//                  	if(prevMgrTotQty > 0) {
+//                  		result = rtnDstbCloseStoreMapper.updateRtnStoreOrderProd(rtnDstbCloseStoreVO);
+//                  		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                  	}else {
+//                  		result = rtnDstbCloseStoreMapper.savetRtnStoreOrderProd(rtnDstbCloseStoreVO);
+//                		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//                  	}   
+                  	
+                	
+                	rtnDstbCloseStoreVO.setStorageCd("999");
+                    rtnDstbCloseStoreVO.setMgrUnitQty(mgrUnitQty);
+                    rtnDstbCloseStoreVO.setMgrEtcQty(mgrEtcQty);
+                    rtnDstbCloseStoreVO.setMgrTotQty(mgrTotQty);
+                    rtnDstbCloseStoreVO.setMgrAmt(mgrAmt);
+                    rtnDstbCloseStoreVO.setMgrVat(mgrVat);
+                    rtnDstbCloseStoreVO.setMgrTot(mgrTot);
+                    rtnDstbCloseStoreVO.setMgrSplyUprc(mgrSplyUprc);
+                    rtnDstbCloseStoreVO.setProcFg("10");
+                    rtnDstbCloseStoreVO.setDstbFg("0");
+                    rtnDstbCloseStoreVO.setRegId(sessionInfoVO.getUserId());
+                    rtnDstbCloseStoreVO.setRegDt(currentDt);
+                    rtnDstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
+                    rtnDstbCloseStoreVO.setModDt(currentDt);
+                    rtnDstbCloseStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+                    result = rtnDstbCloseStoreMapper.insertDstbAdd(rtnDstbCloseStoreVO);
+                    if (result <= 0)
+                        throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                
+                }                       
             returnResult += result;
         }
         return returnResult;

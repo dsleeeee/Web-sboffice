@@ -156,6 +156,9 @@ public class RtnDstbCloseStoreVO extends PageVO {
     /** 창고별 배열값-입고금액 합계 */
     private String  arrOrderTot;
     
+    /** 창고코드 */
+    private String outStorageCd;
+    
     /**
      * @return the hqOfficeCd
      */
@@ -1022,6 +1025,14 @@ public class RtnDstbCloseStoreVO extends PageVO {
 
 	public void setSaleUprc(String saleUprc) {
 		this.saleUprc = saleUprc;
+	}
+
+	public String getOutStorageCd() {
+		return outStorageCd;
+	}
+
+	public void setOutStorageCd(String outStorageCd) {
+		this.outStorageCd = outStorageCd;
 	}
     
     

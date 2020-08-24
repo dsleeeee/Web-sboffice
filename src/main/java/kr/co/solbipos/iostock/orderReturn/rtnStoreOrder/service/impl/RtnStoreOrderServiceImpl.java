@@ -143,8 +143,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
-	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
-	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setStoreCd		        (rtnStoreOrderDtlVO .getStoreCd 		()		);	//매장코드
+	                prodVO.setSlipFg		        (rtnStoreOrderDtlVO .getSlipFg			()		);	//전표구분 1:주문 -1:반품
 	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
 	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
 	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
@@ -177,8 +177,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
-	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
-	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setStoreCd		        (rtnStoreOrderDtlVO .getStoreCd 		()		);	//매장코드
+	                prodVO.setSlipFg		        (rtnStoreOrderDtlVO .getSlipFg			()		);	//전표구분 1:주문 -1:반품	                
 	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
 	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
 	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
@@ -314,8 +314,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
-	                prodVO.setStoreCd		        (sessionInfoVO		.getStoreCd			()		);	//매장코드
-	                prodVO.setSlipFg		        (1												);	//전표구분 1:주문 -1:반품
+	                prodVO.setStoreCd		        (rtnStoreOrderDtlVO .getStoreCd			()		);	//매장코드
+	                prodVO.setSlipFg		        (rtnStoreOrderDtlVO .getSlipFg			()		);	//전표구분 1:주문 -1:반품
 	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
 	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
 	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);

@@ -35,6 +35,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
 
     // 출고창고
     url = '/iostock/order/instockConfm/instockConfm/getInStorageCombo.sb';
+    comboParams.storeCd = $scope.storeCd;
     
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
     $scope._queryCombo("combo", "saveDtlRtnRegOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -206,6 +207,15 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
           return false;
         }
       }
+      
+      var comboParams         = {};
+      // 출고창고
+      url = '/iostock/order/instockConfm/instockConfm/getInStorageCombo.sb';
+      comboParams.storeCd = $scope.storeCd;
+      
+      // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+      $scope._queryCombo("combo", "saveDtlRtnRegOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+      
       $scope.orderProcFgCheck(); // 반품진행구분 체크
     }
     else { // 페이징처리에서 broadcast 호출시
@@ -227,8 +237,6 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-
-    // ajax 통신 설정
     
     // ajax 통신 설정
     $http({

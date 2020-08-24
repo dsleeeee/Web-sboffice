@@ -1018,7 +1018,7 @@
          (	 
          	 #{storageCd},
          	 #{prodCd},
-         	 '1',        	 
+         	 #{slipFg},        	 
          	 #{reqDate},
          	 #{storeCd},
              #{poUnitFg},
@@ -1068,7 +1068,7 @@
         )
         SELECT  '001'         
         ,       tmp.PROD_CD    
-        ,       '1'
+        ,       #{slipFg}
         ,   	#{date}
         ,   	#{storeCd}
         ,       tmp.PO_UNIT_FG  
