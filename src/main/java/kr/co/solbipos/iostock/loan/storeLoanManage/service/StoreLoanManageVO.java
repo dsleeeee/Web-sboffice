@@ -46,6 +46,9 @@ public class StoreLoanManageVO extends PageVO {
     private String availableOrderAmt;
     /** 주문중지구분 */
     private Boolean orderCloseYn;
+    
+    /** 1회주문한도삭제여부 */
+    private Boolean maxOrderAmtYn;
 
     /**
      * @return the hqOfficeCd
@@ -199,6 +202,20 @@ public class StoreLoanManageVO extends PageVO {
      */
     public void setAvailableOrderAmt(String availableOrderAmt) {
         this.availableOrderAmt = availableOrderAmt;
+    }
+
+    /**
+     * @return the maxOrderAmtYn
+     */
+    public Boolean getMaxOrderAmtYn() {
+        return maxOrderAmtYn;
+    }
+
+    /**
+     * @param maxOrderAmtYn the maxOrderAmtYn to set
+     */
+    public void setMaxOrderAmtYn(Boolean maxOrderAmtYn) {
+        this.maxOrderAmtYn = maxOrderAmtYn;
     }
 
     /**

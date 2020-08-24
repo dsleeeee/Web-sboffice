@@ -82,10 +82,10 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
   // 분배가능상품 리스트 조회
   $scope.searchRtnDstbCloseProdAddProdList = function () {
 	
-    if ($("#rtnDstbCloseProdAddProdSelectStoreCd").val() === "") {
-        $scope._popMsg(messages["rtnDstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
-        return false;
-    }
+//    if ($("#rtnDstbCloseProdAddProdSelectStoreCd").val() === "") {
+//        $scope._popMsg(messages["rtnDstbCloseStore.add.require.selectStore"]); // 매장을 선택해 주세요.
+//        return false;
+//    }
 
     // 파라미터
     var params     = {};
@@ -95,19 +95,22 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
-	    var dstbFg = response.data.data;
-	    
-	    if(dstbFg < 1){ // 마감이 아닐때
-		    // 조회 수행 : 조회URL, 파라미터, 콜백함수
-		    $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);
-	    }else{
-	    	$scope._popMsg(messages["rtnDstbCloseStore.add.txt2"]); // 이미 마감된 매장입니다.
-	    	// 그리드 초기화
-		    var rtnDstbCloseProdAddProdScope = agrid.getScope('rtnDstbCloseProdAddProdCtrl');
-		    rtnDstbCloseProdAddProdScope.dtlGridDefault();
-	    }
-    });
+    $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);
+    
+//    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+//    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
+//	    var dstbFg = response.data.data;
+//	    
+//	    if(dstbFg < 1){ // 마감이 아닐때
+//		    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+//		    $scope._inquiryMain("/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd/list.sb", params);
+//	    }else{
+//	    	$scope._popMsg(messages["rtnDstbCloseStore.add.txt2"]); // 이미 마감된 매장입니다.
+//	    	// 그리드 초기화
+//		    var rtnDstbCloseProdAddProdScope = agrid.getScope('rtnDstbCloseProdAddProdCtrl');
+//		    rtnDstbCloseProdAddProdScope.dtlGridDefault();
+//	    }
+//    });
   };
   
   // 그리드 초기화
@@ -163,7 +166,12 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
     if (url) {
       comboUrl = url;
     }
-
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }
+    
     // ajax 통신 설정
     $http({
       method : 'POST', //방식

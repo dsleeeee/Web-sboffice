@@ -201,12 +201,13 @@ public class InstockConfmController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
-
+        
+        String storeCd	=	(sessionInfoVO.getStoreCd() == null ?  iostockCmmVO.getStoreCd() : sessionInfoVO.getStoreCd());
         iostockCmmVO.setSelectTable("TB_MS_STORAGE");
         iostockCmmVO.setSelectCd("STORAGE_CD");
         iostockCmmVO.setSelectNm("STORAGE_NM");
         iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'"
-            						+ " AND STORE_CD='"+ sessionInfoVO.getStoreCd() +"' "        		
+            						+ " AND STORE_CD='"+ storeCd +"' "        		
         		);
             list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
 

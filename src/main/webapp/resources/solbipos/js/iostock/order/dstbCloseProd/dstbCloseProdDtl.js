@@ -8,6 +8,21 @@ app.controller('dstbCloseProdDtlCtrl', ['$scope', '$http', '$timeout', function 
     {id: "N", name: messages["dstbCloseProd.dtl.orderFgN"]},
   ], 'id', 'name');
 
+  $scope.orderFgMap1 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg1Y"]},	//마감
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//미마감
+  ], 'id', 'name');
+
+  $scope.orderFgMap2 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg2Y"]},	//특정일 가능
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//특정일 불가
+  ], 'id', 'name');
+  
+  $scope.orderFgMap3 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg3Y"]},	//가능요일
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg3N"]},	//불가요일
+  ], 'id', 'name');
+  
   $scope.procFgMap = new wijmo.grid.DataMap([
     {id: "00", name: messages["dstbCloseProd.dtl.procFgReg"]},
     {id: "10", name: messages["dstbCloseProd.dtl.procFgMd"]},
@@ -121,7 +136,8 @@ app.controller('dstbCloseProdDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 저장 전 값 체크
   $scope.save = function () {
     var params = [];
-
+    var orderFg = 0;
+    
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
@@ -137,16 +153,29 @@ app.controller('dstbCloseProdDtlCtrl', ['$scope', '$http', '$timeout', function 
         $scope._popMsg(messages["dstbCloseProd.dtl.not.overMgrTot"]); // 분배금액이 너무 큽니다.
         return false;
       }
-
+      if (item.orderFg === 'N') orderFg++;
+      
       item.status  = "U";
       item.reqDate = $scope.reqDate;
       item.slipFg  = $scope.slipFg;
       params.push(item);
     }
+    
+    if( orderFg > 0 ) {   
+    	// 출고요청일이 불가인 매장이 있습니다. 저장하시겠습니까?
+    	var msg = messages["dstbCloseProd.dtl.txt5"];	
+    	s_alert.popConf(msg, function () {
+    	    $scope._save("/iostock/order/dstbCloseProd/dstbCloseProdDtl/save.sb", params, function () {
+    	        $scope.saveDstbCloseProdDtlCallback()
+    	    });
+        });
+    } else {
+        $scope._save("/iostock/order/dstbCloseProd/dstbCloseProdDtl/save.sb", params, function () {
+            $scope.saveDstbCloseProdDtlCallback()
+        });        	
+    }
+    
 
-    $scope._save("/iostock/order/dstbCloseProd/dstbCloseProdDtl/save.sb", params, function () {
-      $scope.saveDstbCloseProdDtlCallback()
-    });
   };
 
   // 저장 후 콜백 함수

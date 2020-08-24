@@ -29,7 +29,7 @@
           <th><s:message code="rtnDstbCloseProd.add.store"/></th>
           <td>
             <%-- 매장선택 모듈 싱글 선택 사용시 include --%>
-            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreS.jsp" flush="true">
+            <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
               <jsp:param name="targetId" value="rtnDstbCloseProdAddProdSelectStore"/>
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
@@ -125,7 +125,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseProd/rtnDstbCloseProdAddProd.js?ver=20200824.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

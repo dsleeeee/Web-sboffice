@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.membr.info.chgBatch.service.impl.ChgBatchMapper">
+    <select id="getMemberClassList" parameterType="membrClassVO" resultType="DefaultMap">
+        /* ChgBatchMapper.getMemberClassList */
+        SELECT MEMBR_CLASS_CD AS VALUE,
+               MEMBR_CLASS_NM AS NAME
+          FROM TB_MB_MEMBER_CLASS
+         WHERE USE_YN = 'Y'
+           AND MEMBR_ORGN_CD = #{membrOrgnCd}
+         ORDER BY DEFLT_YN DESC
+    </select>
+
+    <!-- 등록매장 조회 -->
+    <!--
+        TABLE    :
+    -->
+    <select id="getMemberChgBatchList" parameterType="ChgBatchVO" resultType="DefaultMap">
+        /* ChgBatchMapper.getMembrChgBatchList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmm.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        tmm.MEMBR_CLASS_CD,
+        tmmc.MEMBR_CLASS_NM,
+        tmm.MEMBR_CARD_NO,
+        tmm.SHORT_NO,
+        tmm.MEMBR_ORGN_CD,
+        tmm.REG_STORE_CD,
+        tms.STORE_NM AS REG_STORE_NM,
+        tmm.POST_NO,
+        SBPENC.D(tmm.ADDR) AS ADDR,
+        SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
+        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+        tmm.EMAIL_ADDR,
+        tmm.EMAIL_RECV_YN,
+        TO_CHAR(TO_DATE(tmm.BIRTHDAY), 'YYYY-MM-DD') AS BIRTHDAY,
+        tmm.GENDR_FG,
+        tmm.SMS_RECV_YN,
+        tmm.WEDDING_YN,
+        tmm.WEDDINGDAY,
+        tmm.LUNAR_YN,
+        tmm.USE_YN,
+        tmm.MEMBR_NICKNM,
+        tmm.MEMBER_ENG_NM,
+        tmm.REMARK,
+        tmmp.TOT_SAVE_POINT,
+        tmmp.TOT_USE_POINT,
+        tmmp.AVABL_POINT,
+        tmmp.TOT_ADJ_POINT,
+        tmmp.FIRST_SALE_DATE,
+        tmmp.LAST_SALE_DATE,
+        TO_CHAR(TO_DATE(tmm.REG_DT, 'YYYY-MM-DD HH24MISS'), 'YYYY-MM-DD') AS REG_DT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MB_MEMBER tmm,
+        TB_MB_MEMBER_CLASS tmmc,
+        TB_MS_STORE tms,
+        TB_MB_MEMBER_CARD tmmcd,
+        TB_MB_MEMBER_POINT tmmp
+        WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+            AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
+        </if>
+        <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            AND tmmc.MEMBR_ORGN_CD (+)= #{storeCd}
+        </if>
+        AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD = tmm.REG_STORE_CD
+        AND tmm.MEMBR_CARD_NO = tmmcd.MEMBR_CARD_NO(+)
+        AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
+        <if test='storeCd != null and storeCd != ""'>
+            AND tmm.REG_STORE_CD = #{storeCd}
+        </if>
+        <if test='membrCardNo != null and membrCardNo != ""'>
+            AND tmm.MEMBR_CARD_NO LIKE '%'||#{membrCardNo}||'%'
+        </if>
+        <if test='membrNo != null and membrNo != ""'>
+            AND tmm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            AND SBPENC.D ( tmm.MEMBR_NM  ) LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test='telNo != null and telNo != ""'>
+            AND  SBPENC.D(tmm.TEL_NO) LIKE '%'||#{telNo}||'%'
+        </if>
+        <if test='emailAddr != null and emailAddr.toString() != ""'>
+            AND tmm.EMAIL_ADDR LIKE '%'||#{emailAddr}||'%'
+        </if>
+        <if test='regStoreCd != null and regStoreCd.toString() != ""'>
+            AND tmm.REG_STORE_CD IN
+            <foreach collection="regStoreCds" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='membrClassCd != null and membrClassCd.toString() != ""'>
+            AND tmm.MEMBR_CLASS_CD = #{membrClassCd}
+        </if>
+        <if test='gendrFg != null and gendrFg.toString() != ""'>
+            AND tmm.GENDR_FG = #{gendrFg}
+        </if>
+        <if test='emailRecvYn != null and emailRecvYn.toString() != ""'>
+            AND tmm.EMAIL_RECV_YN = #{emailRecvYn}
+        </if>
+        <if test='smsRecvYn != null and smsRecvYn.toString() != ""'>
+            AND tmm.SMS_RECV_YN = #{smsRecvYn}
+        </if>
+        <if test='periodType != null and periodType.toString() != ""'>
+            <if test='periodType.getCode() == "reg"'>
+                AND tmm.REG_DT BETWEEN #{periodStartDate}||'000000' AND #{periodEndDate}||'999999'
+            </if>
+            <if test='periodType.getCode() == "last"'>
+            </if>
+        </if>
+        <if test='anvType != null and anvType.toString() != ""'>
+            <if test='anvType.getCode() == "1"'>
+                AND tmm.BIRTHDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+            </if>
+            <if test='anvType.getCode() == "2"'>
+                AND tmm.WEDDINGDAY BETWEEN #{anvStartDate} AND #{anvEndDate}
+            </if>
+        </if>
+        <if test='useYn != null and useYn != ""'>
+            AND tmm.USE_YN = #{useYn}
+        </if>
+        ORDER BY tmm.MEMBR_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 수정-->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="updateChgBatchInfo" parameterType="ChgBatchVO">
+        /* ChgBatchMapper.updateChgBatchInfo */
+       UPDATE TB_MB_MEMBER tmm
+           SET tmm.MEMBR_NM = SBPENC.E(#{membrNm}),
+               tmm.MEMBR_NICKNM = #{membrNicknm},
+               tmm.MEMBR_CLASS_CD = #{membrClassCd},
+               tmm.MEMBR_CARD_NO = #{membrCardNo},
+               tmm.REG_STORE_CD = #{regStoreCd},
+               tmm.POST_NO = #{postNo},
+               tmm.ADDR = SBPENC.E(#{addr}),
+               tmm.ADDR_DTL = SBPENC.E(#{addrDtl}),
+               tmm.BIRTHDAY = #{birthday},
+               tmm.LUNAR_YN = #{lunarYn},
+               tmm.GENDR_FG = #{gendrFg},
+               tmm.EMAIL_ADDR = #{emailAddr},
+               tmm.SHORT_NO = #{shortNo},
+                tmm.TEL_NO = SBPENC.E(#{telNo}),
+               tmm.WEDDING_YN = #{weddingYn},
+               tmm.WEDDINGDAY = #{weddingday},
+               tmm.EMAIL_RECV_YN = #{emailRecvYn},
+               tmm.SMS_RECV_YN = #{smsRecvYn},
+               tmm.USE_YN = #{useYn},
+               tmm.REMARK = #{remark},
+               tmm.MOD_ID = #{modId},
+               tmm.MOD_DT = #{modDt}
+         WHERE tmm.MEMBR_NO = #{membrNo}
+           AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+    </update>
+
+</mapper>

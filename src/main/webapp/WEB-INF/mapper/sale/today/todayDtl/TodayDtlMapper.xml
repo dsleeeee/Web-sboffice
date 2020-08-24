@@ -231,7 +231,7 @@
         ,       tssh.TOT_TIP_AMT
         ,       tssh.TOT_ETC_AMT
         ,       DECODE(tssh.MEMBR_YN, 'Y', tsshm.MEMBR_NO, NULL) AS MEMBR_NO
-        ,       DECODE(tssh.MEMBR_YN, 'Y', tsshm.MEMBR_NM, NULL) AS MEMBR_NM
+        ,       DECODE(tssh.MEMBR_YN, 'Y', SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM, NULL) AS MEMBR_NM
         ,       tmt.TBL_NM AS TBL_NM
         ,       tssh.TOT_GUEST_CNT
         ,       DECODE(NVL(tssh.TOT_GUEST_CNT,0), 0, 0, DECODE(tssh.SALE_YN, 'Y', ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT), -(ROUND(tssh.REAL_SALE_AMT / tssh.TOT_GUEST_CNT)))) AS GUEST_UPRC

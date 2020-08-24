@@ -230,7 +230,9 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
           }
         }
-        $scope.orderProcFgCheck(); // 주문진행구분 체크
+//        $scope.orderProcFgCheck(); // 주문진행구분 체크
+        // 물량오류 처리 함수
+        $scope.saveVolmErr(); 
       }
     }, function errorCallback(response) {
       // called asynchronously if an error occurs

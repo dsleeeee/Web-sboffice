@@ -81,11 +81,11 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
         // 회원 등록 및 수정 팝업 핸들러 추가
-        $scope.memberRegistLayer.shown.addHandler(function (s) {
-            setTimeout(function() {
-                $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
-            }, 50)
-        });
+        // $scope.memberRegistLayer.shown.addHandler(function (s) {
+        //     setTimeout(function() {
+        //         $scope._broadcast('memberRegistCtrl', $scope.getSelectedMember());
+        //     }, 50)
+        // });
     });
 
 }]);

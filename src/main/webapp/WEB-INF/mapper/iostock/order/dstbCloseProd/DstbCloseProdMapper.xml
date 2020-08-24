@@ -89,6 +89,9 @@
         ,       tphsd.PROC_FG
         ,       tphsd.REMARK
         ,       DECODE(NVL(suborder.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG
+        ,       DECODE(NVL(suborder1.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG1
+        ,       DECODE(NVL(suborder2.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG2
+        ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3
         FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_STORE tms
@@ -129,6 +132,27 @@
                     GROUP
                     BY      STORE_CD
                 ) suborder
+        ,       (   SELECT  tms.STORE_CD, DECODE(NVL(tphsc.ORDER_CLOSE_FG, 'N'), 'Y', 1, 0) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_CLOSE tphsc
+					,       TB_MS_STORE tms
+					WHERE   tphsc.HQ_OFFICE_CD  =   #{hqOfficeCd}
+					AND     tphsc.CLOSE_DATE    =   #{reqDate}
+					AND     tms.HQ_OFFICE_CD    =	tphsc.HQ_OFFICE_CD
+				) suborder1
+        ,       (   SELECT  tphsos.STORE_CD, DECODE(NVL(tphsos.OUTSTOCK_REQ_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+					WHERE   tphsos.HQ_OFFICE_CD     = #{hqOfficeCd}
+					AND     tphsos.SPECIFIC_DATE    = #{reqDate}
+					GROUP
+					BY      tphsos.STORE_CD, tphsos.OUTSTOCK_REQ_YN
+        		) suborder2
+        ,       (  	SELECT  tphsod.STORE_CD, COUNT(STORE_CD) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_ORDER_DAYS tphsod
+					WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
+					AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
+					GROUP
+					BY      tphsod.STORE_CD 
+        		) suborder3                 
         ,       TB_HQ_ENVST the
         WHERE   tphsd.HQ_OFFICE_CD   =   #{hqOfficeCd}
         AND     tphsd.REQ_DATE       =   #{reqDate}
@@ -143,6 +167,9 @@
         AND     tsssc.STORE_CD   (+) =   tphsd.STORE_CD
         AND     tsssc.PROD_CD    (+) =   tphsd.PROD_CD
         AND     suborder.STORE_CD(+) =   tphsd.STORE_CD
+        AND     suborder1.STORE_CD   (+) =   tms.STORE_CD
+        AND     suborder2.STORE_CD   (+) =   tms.STORE_CD
+        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD          
         AND     the.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     the.ENVST_CD         =   '0011'
         ORDER BY tphsd.PROD_CD
@@ -302,6 +329,10 @@
         ,       TRUNC(DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) / tmp.PO_UNIT_QTY) AS STORE_CUR_UNIT_QTY
         ,       MOD  (DECODE(SIGN(tsssc.CURR_QTY),-1,0,tsssc.CURR_QTY) , tmp.PO_UNIT_QTY) AS STORE_CUR_ETC_QTY
         ,       DECODE(NVL(suborder.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG
+        ,       DECODE(NVL(suborder1.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG1
+        ,       DECODE(NVL(suborder2.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG2
+        ,       DECODE(NVL(suborder3.ORDER_FG, 0), 0, 'Y', 'N') AS ORDER_FG3
+        
         ,       'N' AS CONFIRM_YN
         FROM    TB_MS_STORE tms
         ,       TB_MS_PRODUCT tmp
@@ -352,6 +383,27 @@
                     GROUP
                     BY      STORE_CD
                 ) suborder
+        ,       (   SELECT  tms.STORE_CD, DECODE(NVL(tphsc.ORDER_CLOSE_FG, 'N'), 'Y', 1, 0) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_CLOSE tphsc
+					,       TB_MS_STORE tms
+					WHERE   tphsc.HQ_OFFICE_CD  =   #{hqOfficeCd}
+					AND     tphsc.CLOSE_DATE    =   #{reqDate}
+					AND     tms.HQ_OFFICE_CD    =	tphsc.HQ_OFFICE_CD
+				) suborder1
+        ,       (   SELECT  tphsos.STORE_CD, DECODE(NVL(tphsos.OUTSTOCK_REQ_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
+					WHERE   tphsos.HQ_OFFICE_CD     = #{hqOfficeCd}
+					AND     tphsos.SPECIFIC_DATE    = #{reqDate}
+					GROUP
+					BY      tphsos.STORE_CD, tphsos.OUTSTOCK_REQ_YN
+        		) suborder2
+        ,       (  	SELECT  tphsod.STORE_CD, COUNT(STORE_CD) AS ORDER_FG
+					FROM    TB_PO_HQ_STORE_ORDER_DAYS tphsod
+					WHERE   tphsod.HQ_OFFICE_CD = #{hqOfficeCd}
+					AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
+					GROUP
+					BY      tphsod.STORE_CD 
+        		) suborder3         
         ,       TB_HQ_ENVST the
         WHERE   tms.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     tmp.STORE_CD            =   tms.STORE_CD
@@ -363,6 +415,9 @@
         AND     tsssc.STORE_CD      (+) =   tmp.STORE_CD
         AND     tsssc.PROD_CD       (+) =   tmp.PROD_CD
         AND     suborder.STORE_CD   (+) =   tms.STORE_CD
+        AND     suborder1.STORE_CD   (+) =   tms.STORE_CD
+        AND     suborder2.STORE_CD   (+) =   tms.STORE_CD
+        AND     suborder3.STORE_CD   (+) =   tms.STORE_CD                        
         AND     the.HQ_OFFICE_CD        =   #{hqOfficeCd}
         AND     the.ENVST_CD            =   '0011'
         ]]>

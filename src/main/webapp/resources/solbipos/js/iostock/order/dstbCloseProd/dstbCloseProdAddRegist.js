@@ -7,6 +7,21 @@ app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', fun
     {id: "Y", name: messages["dstbCloseProd.addRegist.orderFgY"]},
     {id: "N", name: messages["dstbCloseProd.addRegist.orderFgN"]},
   ], 'id', 'name');
+  
+  $scope.orderFgMap1 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg1Y"]},	//마감
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//미마감
+  ], 'id', 'name');
+
+  $scope.orderFgMap2 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg2Y"]},	//특정일 가능
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg2N"]},	//특정일 불가
+  ], 'id', 'name');
+  
+  $scope.orderFgMap3 = new wijmo.grid.DataMap([
+    {id: "Y", name: messages["dstbCloseProd.dtl.orderFg3Y"]},	//가능요일
+    {id: "N", name: messages["dstbCloseProd.dtl.orderFg3N"]},	//불가요일
+  ], 'id', 'name');  
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -107,35 +122,51 @@ app.controller('dstbCloseProdAddRegistCtrl', ['$scope', '$http', '$timeout', fun
 
   // 저장 전 값 체크
   $scope.save = function () {
-    var params = [];
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
 
-      if (item.mgrUnitQty === null && item.mgrEtcQty === null) {
-        $scope._popMsg(messages["dstbCloseProd.addRegist.require.mgrQty"]); // 분배수량을 입력해주세요.
-        return false;
-      }
-      if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
-        $scope._popMsg(messages["dstbCloseProd.addRegist.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
-        return false;
-      }
-      if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
-        $scope._popMsg(messages["dstbCloseProd.addRegist.not.overMgrTot"]); // 분배금액이 너무 큽니다.
-        return false;
-      }
+    	var params = [];
+    	var orderFg = 0;
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
 
-      item.reqDate   = $scope.reqDate;
-      item.slipFg    = $scope.slipFg;
-      item.empNo     = "0000";
-      item.storageCd = "999";	//전체재고용 창고코드 (001 -> 000 -> 999)
-      item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      params.push(item);
-    }
+          if (item.mgrUnitQty === null && item.mgrEtcQty === null) {
+            $scope._popMsg(messages["dstbCloseProd.addRegist.require.mgrQty"]); // 분배수량을 입력해주세요.
+            return false;
+          }
+          if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
+            $scope._popMsg(messages["dstbCloseProd.addRegist.not.mgrEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
+            return false;
+          }
+          if (item.mgrTot !== null && (parseInt(item.mgrTot) > 9999999999)) {
+            $scope._popMsg(messages["dstbCloseProd.addRegist.not.overMgrTot"]); // 분배금액이 너무 큽니다.
+            return false;
+          }          
+          if (item.orderFg === 'N') orderFg++;
 
-    $scope._save("/iostock/order/dstbCloseProd/dstbCloseProdAddRegist/save.sb", params, function () {
-      $scope.saveDstbCloseProdAddRegistCallback()
-    });
+          item.reqDate   = $scope.reqDate;
+          item.slipFg    = $scope.slipFg;
+          item.empNo     = "0000";
+          item.storageCd = "999";	//전체재고용 창고코드 (001 -> 000 -> 999)
+          item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+          params.push(item);
+        }                
+        
+        if( orderFg > 0 ) {   
+        	// 출고요청일이 불가인 매장이 있습니다. 저장하시겠습니까?
+        	var msg = messages["dstbCloseProd.addRegist.txt5"];	
+        	s_alert.popConf(msg, function () {
+            	$scope._save("/iostock/order/dstbCloseProd/dstbCloseProdAddRegist/save.sb", params, function () {
+            		$scope.saveDstbCloseProdAddRegistCallback()
+            	});
+            });
+        } else {
+        	$scope._save("/iostock/order/dstbCloseProd/dstbCloseProdAddRegist/save.sb", params, function () {
+        		$scope.saveDstbCloseProdAddRegistCallback()
+        	});        	
+        }
+        
+        
+       
   };
 
 

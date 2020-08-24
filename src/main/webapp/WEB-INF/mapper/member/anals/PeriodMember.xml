@@ -20,7 +20,7 @@
         /* PeriodMembrMapper.getPeriodMembrList */
         SELECT
         tsshm.MEMBR_NO,
-        tsshm.MEMBR_NM,
+        SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
         tsshm.MEMBR_CARD_NO,
         COUNT(MEMBR_NO) AS SALE_COUNT,
         SUM(tssd.SALE_AMT) AS SALE_AMT,

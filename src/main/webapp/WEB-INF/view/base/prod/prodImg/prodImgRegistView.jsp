@@ -5,7 +5,10 @@
 
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
-<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg.getCode()}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
 <div class="subCon" ng-controller="prodImgCtrl">
     <%--searchTbl--%>
@@ -29,7 +32,7 @@
         <%-- 등록 일자 --%>
         <tr>
             <th><s:message code="prodImg.regDate" /></th>
-            <td colspan="3">
+            <td colspan="3" style="text-align: left;">
                 <div class="sb-select">
             <span class="txtIn w110px">
               <wj-input-date
@@ -154,6 +157,7 @@
 
             <label id="prodInfo"></label>
             <input type="hidden" id="hdProdCd"/>
+            <input type="hidden" id="hdProdNm"/>
 
             <table class='tblType01 mt20' id="imgTbl" style="display: none;">
                 <colgroup>
@@ -172,31 +176,46 @@
                         <td><div class="imgCell" id="imgKiosk"></div></td>
                         <td><div class="imgCell" id="imgDid"></div></td>
                     </tr>
+                    <f:form id="regForm" name="regForm" >
                     <tr>
                         <td>
-                            <div class="btnSet">
-                                <span><a href="#" class="btn_gray" ng-click="regImg('001')"><s:message code="prodImg.regImg" /></a></span>
-                                <span><a href="#" class="btn_gray" ng-click="delImg('001')"><s:message code="cmm.del" /></a></span>
-                            </div>
+                            <input type="file" id="fileProd" name="fileProd" class="form-control" accept="image/x-png" onchange="imagePreview(this, '001')"/>
+                            <input type="hidden" id="hdProdFileNm" />
                         </td>
                         <td>
-                            <div class="btnSet">
-                                <span><a href="#" class="btn_gray" ng-click="regImg('002')"><s:message code="prodImg.regImg" /></a></span>
-                                <span><a href="#" class="btn_gray" ng-click="delImg('002')"><s:message code="cmm.del" /></a></span>
-                            </div>
+                            <input type="file" id="fileKiosk" name="fileKiosk" class="form-control" accept="image/x-png" onchange="imagePreview(this, '002')"/>
+                            <input type="hidden" id="hdKioskFileNm" />
                         </td>
                         <td>
-                            <div class="btnSet">
-                                <span><a href="#" class="btn_gray" ng-click="regImg('003')"><s:message code="prodImg.regImg" /></a></span>
-                                <span><a href="#" class="btn_gray" ng-click="delImg('003')"><s:message code="cmm.del" /></a></span>
-                            </div>
+                            <input type="file" id="fileDid" name="fileDid" class="form-control" accept="image/x-png" onchange="imagePreview(this, '003')"/>
+                            <input type="hidden" id="hdDidFileNm" />
                         </td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <button type="button" class="btn_skyblue" ng-click="imgCancel('001', 'F')"><s:message code="cmm.selectCancel" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="regImg('001')"><s:message code="prodImg.regImg" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="delImg('001')"><s:message code="cmm.del" /></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn_skyblue" ng-click="imgCancel('002', 'F')"><s:message code="cmm.selectCancel" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="regImg('002')"><s:message code="prodImg.regImg" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="delImg('002')"><s:message code="cmm.del" /></button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn_skyblue" ng-click="imgCancel('003', 'F')"><s:message code="cmm.selectCancel" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="regImg('003')"><s:message code="prodImg.regImg" /></button>
+                            <button type="button" class="btn_skyblue" ng-click="delImg('003')"><s:message code="cmm.del" /></button>
+                        </td>
+                    </tr>
+                    </f:form>
+                    <tr>
+
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-
 </div>
 <script>
 </script>
@@ -219,9 +238,19 @@
         height:auto;
         vertical-align: middle;
     }
+    .btnSet{
+        margin-top:7px;
+    }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200813.18" charset="utf-8"></script>
+<script>
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
+    var userId = "${userId}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodImg/prodImgRegistView.js?ver=20200819.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

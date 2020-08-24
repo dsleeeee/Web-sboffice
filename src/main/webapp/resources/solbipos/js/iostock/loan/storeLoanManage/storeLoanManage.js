@@ -42,7 +42,20 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
         }
       }
     });
-
+    
+    // keydown event listener
+    s.addEventListener(s.hostElement, 'keydown', function(e) {
+       if (e.keyCode == wijmo.Key.Delete && !e.target.getAttribute("aria-readonly")) {
+          var binding = $scope.flex.getColumn(s.selection._col).binding;
+          if (binding == 'remark'){
+             s.selectedItems[0].remark = "";
+          } else {
+             $scope.flex.setCellData(s.selection._row, binding, '0');
+          }
+          e.preventDefault();
+       }
+    });
+        
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
@@ -126,7 +139,33 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
     }
 
     $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", params, function () {
-      $scope.searchStoreLoanManage()
+      $scope.searchStoreLoanManage();
+    });
+  };
+  
+//삭제
+  $scope.fnDel = function () {
+    var msg = messages["loan.delLimitLoanAmtMsg"]; // 선택하신 자료를 삭제합니다. 삭제하시겠습니까?
+    s_alert.popConf(msg, function() {
+    	var params = [];
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+          var item = $scope.flex.collectionView.itemsEdited[i];
+          
+          if (item.gChk === true) {
+        	  if (item.limitLoanAmt !== null ) {
+                  $scope._popMsg(messages["loan.delLimitLoanAmt.txt"]); // 여신한도액이 있는 자료만 삭제할 수 있습니다.
+                  return false;
+              }
+        	  item.status    = "U";
+        	  item.empNo     = "0000";
+        	  item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
+        	  item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+        	  params.push(item);
+          }
+        }
+        $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/delLimitLoanAmt.sb", params, function () {
+          $scope.searchStoreLoanManage()
+        }); 
     });
   };
 

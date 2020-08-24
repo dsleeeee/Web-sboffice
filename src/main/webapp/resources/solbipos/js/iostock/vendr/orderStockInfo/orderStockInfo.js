@@ -295,7 +295,9 @@ app.controller('orderStockInfoDtlCtrl', ['$scope', '$http', '$timeout', function
           params.prodCd    = selectedRow.prodCd;
           params.prodNm    = selectedRow.prodNm;
           params.slipNo    = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? '' : $scope.slipNo);    // 무발주가 아닌 경우 파라미터 세팅
-          params.inSlipNo  = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.inSlipNo : '');  // 무발주인 경우 파라미터 세팅
+//          params.inSlipNo  = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.inSlipNo : '');  // 무발주인 경우 파라미터 세팅
+          params.inSlipNo  = selectedRow.inSlipNo;
+          
           params.startDate = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.startDate : ''); // 무발주인 경우 파라미터 세팅
           params.endDate   = ($scope.slipNo === messages['orderStockInfo.dtl.notOrderInstock'] ? $scope.endDate : '');   // 무발주인 경우 파라미터 세팅
           $scope._broadcast('prodInstockInfoCtrl', params);
@@ -314,6 +316,7 @@ app.controller('orderStockInfoDtlCtrl', ['$scope', '$http', '$timeout', function
     s.columnHeaders.rows[0].dataItem = {
       prodCd     : messages["orderStockInfo.dtl.prodCd"],
       prodNm     : messages["orderStockInfo.dtl.prodNm"],
+      slipNo     : messages["orderStockInfo.dtl.slipNO"],
       inCnt      : messages["orderStockInfo.dtl.inCnt"],
       inLastDate : messages["orderStockInfo.dtl.inLastDate"],
       orderTotQty: messages["orderStockInfo.dtl.order"],

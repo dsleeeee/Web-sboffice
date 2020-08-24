@@ -26,6 +26,8 @@ public interface StoreLoanManageService {
     List<DefaultMap<String>> getStoreLoanManageList(StoreLoanManageVO storeLoanManageVO);
 
     int saveLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO);
+    
+    int delLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장여신 상세 현황 조회 */
     List<DefaultMap<String>> getStoreLoanManageDtlList(StoreLoanManageVO storeLoanManageVO);

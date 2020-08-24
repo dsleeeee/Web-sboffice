@@ -154,6 +154,24 @@ function dateToDaystring(date){
   return(year + "-"+ monthStr  + "-"+ dayStr );
 }
 
+/**
+ * 날짜를 날짜형태 문자열로 변형 (yyyymmdd)
+ * @param date
+ * @returns {number}
+ */
+function getFormatDateString(date){
+
+    var date = new Date(date);
+
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString();
+    var day = date.getDate().toString();
+
+    var monthStr = month.leftPad("0",2);
+    var dayStr = day.leftPad("0",2);
+
+    return(year + monthStr  + dayStr );
+}
 
 /**
  * 문자열을 날짜로 변경

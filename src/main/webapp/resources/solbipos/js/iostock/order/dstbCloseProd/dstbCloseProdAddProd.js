@@ -80,10 +80,10 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
 
   // 분배가능상품 리스트 조회
   $scope.searchDstbCloseProdAddProdList = function () {
-	if ($("#dstbCloseProdAddProdSelectStoreCd").val() === "") {
-	    $scope._popMsg(messages["rtnDstbCloseProd.add.require.selectStore"]); // 매장을 선택해 주세요.
-	    return false;
-	}
+//	if ($("#dstbCloseProdAddProdSelectStoreCd").val() === "") {
+//	    $scope._popMsg(messages["rtnDstbCloseProd.add.require.selectStore"]); // 매장을 선택해 주세요.
+//	    return false;
+//	}
     // 파라미터
     var params     = {};
     params.storeCd = $("#dstbCloseProdAddProdSelectStoreCd").val();
@@ -92,20 +92,24 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
-	    var dstbFg = response.data.data;
-	    
-	    
-	    if(dstbFg < 1){ // 마감이 아닐때
-	    	// 조회 수행 : 조회URL, 파라미터, 콜백함수
-		    $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);
-	    }else{
-	    	$scope._popMsg(messages["rtnDstbCloseProd.add.txt2"]); // 이미 마감된 매장입니다.
-	    	// 그리드 초기화
-		    var dstbCloseProdAddProdScope = agrid.getScope('dstbCloseProdAddProdCtrl');
-		    dstbCloseProdAddProdScope.dtlGridDefault();
-	    }
-    });
+    $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);
+    
+    
+//    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+//    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
+//	    var dstbFg = response.data.data;
+//	    
+//	    alert("dstbFg :::"+dstbFg)
+//	    if(dstbFg < 1){ // 마감이 아닐때
+//	    	// 조회 수행 : 조회URL, 파라미터, 콜백함수
+//		    $scope._inquiryMain("/iostock/order/dstbCloseProd/dstbCloseProdAddProd/list.sb", params);
+//	    }else{
+//	    	$scope._popMsg(messages["rtnDstbCloseProd.add.txt2"]); // 이미 마감된 매장입니다.
+//	    	// 그리드 초기화
+//		    var dstbCloseProdAddProdScope = agrid.getScope('dstbCloseProdAddProdCtrl');
+//		    dstbCloseProdAddProdScope.dtlGridDefault();
+//	    }
+//    });
   };
   
   // 그리드 초기화
@@ -160,6 +164,11 @@ app.controller('dstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', funct
     var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
     if (url) {
       comboUrl = url;
+    }
+    
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
     }
 
     // ajax 통신 설정

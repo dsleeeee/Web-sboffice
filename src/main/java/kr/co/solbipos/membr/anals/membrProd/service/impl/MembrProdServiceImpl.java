@@ -5,6 +5,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.membrProd.service.MembrProdService;
 import kr.co.solbipos.membr.anals.membrProd.service.MembrProdVO;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,5 +49,14 @@ public class MembrProdServiceImpl implements MembrProdService {
         }
 
         return mapper.getMembrProdList(membrProdVO);
+    }
+
+    @Override
+    public DefaultMap<Object> getMembrProdDetail(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+        registVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            registVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        return mapper.getMembrProdDetail(registVO);
     }
 }

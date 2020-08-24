@@ -24,6 +24,11 @@ var useYnComboData = [
     {"name": "미사용", "value": "N"}
 ];
 
+function imagePreview(imgVal, imgFg){
+    var scope = agrid.getScope('prodImgCtrl');
+    scope.imgPreview(imgVal, imgFg);
+}
+
 app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -75,7 +80,6 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
-
     };
 
     $scope.$on("prodImgCtrl", function(event, data) {
@@ -85,6 +89,20 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품 목록 조회
     $scope.searchProdList = function(){
+
+        // 상품이미지 영역 숨기기
+        $("#imgTbl").css("display", "none");
+
+        //상품코드, 이름 초기화
+        $("#prodInfo").text("");
+        $("#hdProdCd").val("");
+        $("#hdProdNm").val("");
+
+        // 이미지와 첨부파일 초기화
+        $scope.imgCancel("001", 'A');
+        $scope.imgCancel("002", 'A');
+        $scope.imgCancel("003", 'A');
+        
         // 파라미터
         var params = {};
         params.listScale = 15;
@@ -116,12 +134,14 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
         //상품코드, 이름 셋팅
         $("#prodInfo").text("[" + prodCd + "] " + prodNm);
         $("#hdProdCd").val(prodCd);
+        $("#hdProdNm").val(prodNm);
 
-        // 이미지 초기화
-        $("#imgProd").html("No Image");
-        $("#imgKiosk").html("No Image");
-        $("#imgDid").html("No Image");
-        
+
+        // 이미지와 첨부파일 초기화
+        $scope.imgCancel("001", 'A');
+        $scope.imgCancel("002", 'A');
+        $scope.imgCancel("003", 'A');
+
         var params = {};
         params.prodCd = prodCd;
 
@@ -134,28 +154,295 @@ app.controller('prodImgCtrl', ['$scope', '$http', function ($scope, $http) {
 
                     if(list[i].imgFg === "001"){
                         $("#imgProd").html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' class='imgPic'>");
+                        $("#hdProdFileNm").val(list[i].imgFileNm);
                     }
 
                     if(list[i].imgFg === "002"){
                         $("#imgKiosk").html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' class='imgPic'>");
+                        $("#hdKioskFileNm").val(list[i].imgFileNm);
                     }
 
                     if(list[i].imgFg === "003"){
                         $("#imgDid").html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' class='imgPic'>");
+                        $("#hdDidFileNm").val(list[i].imgFileNm);
                     }
                 }
             }
         });
     }
 
+    // 첨부 이미지 미리보기
+    $scope.imgPreview = function (imgVal, imgFg) {
+        if(imgVal.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                if(imgFg === '001') $("#imgProd").html("<img src='" +  e.target.result + "' class='imgPic'>");
+                if(imgFg === '002') $("#imgKiosk").html("<img src='" +  e.target.result + "' class='imgPic'>");
+                if(imgFg === '003') $("#imgDid").html("<img src='" +  e.target.result + "' class='imgPic'>");
+            };
+            reader.readAsDataURL(imgVal.files[0]);
+        }
+    };
+
+    // 이미지 선택취소
+    $scope.imgCancel = function(imgFg, type){
+
+        // type - A: 무조건 상품이미지 관련 데이터 초기화(상품리스트 조회, 상품코드 클릭 시 해당)
+        // type - F: 상품이미지 파일이 등록되어있으면 '선택취소' 버튼 클릭 시 동작 안하도록
+
+        if(type === "F"){
+            if(imgFg === "001") {
+                if ($("#hdProdFileNm").val() !== "") { // 기존 이미지 파일이 있는 경우
+                    if ($("#fileProd").val() !== "") { // 새 첨부 이미지를 넣고 선택 취소 시,
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            if(imgFg === "002"){
+                if($("#hdKioskFileNm").val() !== "") {
+                    if($("#fileKiosk").val() !== ""){
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    }else{
+                        return;
+                    }
+                }
+            }
+
+            if(imgFg === "003"){
+                if($("#hdDidFileNm").val() !== ""){
+                    if($("#fileDid").val() !== ""){
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+                        return;
+                    }else{
+                        return;
+                    }
+                }
+            }
+        }
+
+        var element = "";
+
+        // 이미지와 첨부파일 초기화
+        if (imgFg === "001") {
+            $("#imgProd").html("No Image");
+            $("#hdProdFileNm").val("");
+            element = "fileProd";
+        } else if (imgFg === "002") {
+            $("#imgKiosk").html("No Image");
+            $("#hdKioskFileNm").val("");
+            element = "fileKiosk";
+        } else {
+            $("#imgDid").html("No Image");
+            $("#hdDidFileNm").val("");
+            element = "fileDid";
+        }
+
+        $scope.resetFile(element);
+
+    }
+    
+    // 브라우저에 따른 첨부파일 초기화
+    $scope.resetFile = function(element){
+
+        var agent = navigator.userAgent.toLowerCase();
+
+        if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+            // ie 일때
+            $("#" + element).replaceWith( $("#" + element).clone(true) );
+        } else {
+            // other browser 일때
+            $("#" + element).val("");
+        }
+    }
+
     // 이미지 등록
     $scope.regImg = function(imgFg){
-        alert(imgFg);
+
+        var fileSize = 0;
+        var element = "";
+        var errMsg = "";
+
+        if(imgFg === "001"){
+            fileSize = 500;
+            element = "fileProd";
+            errMsg = messages["prodImg.fileSizeChk.500.msg"];
+        }else if(imgFg === "002"){
+            fileSize = 300;
+            element = "fileKiosk";
+            errMsg = messages["prodImg.fileSizeChk.300.msg"];
+        }else{
+            fileSize = 300;
+            element = "fileDid";
+            errMsg = messages["prodImg.fileSizeChk.300.msg"];
+        }
+
+        // 이미지 파일 여부 체크
+        if (isNull($("#" + element)[0].files[0])) {
+            $scope._popMsg(messages["prodImg.require.msg"]);
+            return;
+        }
+
+        // 상품이미지 크기제한 체크
+        if (!isNull($("#" + element)[0].files[0])) {
+            var maxSize = fileSize * 1024;
+            var fileSize = $("#" + element)[0].files[0].size;
+            if (fileSize > maxSize) {
+                $scope._popMsg(errMsg);
+                return;
+            }
+        }
+
+        // 이미지(.png) 확장자 체크
+        var reg = /(.*?)\.(png|PNG)$/;
+
+        if(! $("#" + element).val().match(reg)) {
+           $scope._popMsg(messages["prodImg.fileExtensionChk.msg"]);
+           return;
+        } 
+        
+
+        // 이미지를 등록하시겠습니까?
+        var msg = messages["prodImg.fileReg.msg"];
+        s_alert.popConf(msg, function () {
+
+            var formData = new FormData($("#regForm")[0]);
+
+            formData.append("orgnFg", orgnFg); // sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 추가, form태그가 원인??
+            formData.append("hqOfficeCd", hqOfficeCd);
+            formData.append("storeCd", storeCd);
+            formData.append("imgFg", imgFg);
+            formData.append("prodCd", $("#hdProdCd").val());
+            formData.append("imgFgType", element);
+            formData.append("userId", userId);
+
+            $scope.$broadcast('loadingPopupActive');
+
+            $.ajax({
+                url: "/base/prod/prodImg/prodImg/saveProdImg.sb",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(result) {
+
+                    if (result.status === "OK") {
+                        $scope._popMsg("등록되었습니다.");
+
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+
+                        $scope.$broadcast('loadingPopupInactive');
+                        $scope.close();
+                    }
+                    else if (result.status === "FAIL") {
+                        $scope._popMsg('Ajax Fail By HTTP Request');
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else if (result.status === "SERVER_ERROR") {
+                        $scope._popMsg(result.message);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else {
+                        var msg = result.status + " : " + result.message;
+                        $scope._popMsg(msg);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                },
+                error : function(result){
+                    $scope._popMsg("error");
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },function(){
+                $scope._popMsg("Ajax Fail By HTTP Request");
+                $scope.$broadcast('loadingPopupInactive');
+            });
+        });
     }
 
     // 이미지 삭제
     $scope.delImg = function(imgFg){
-        alert(imgFg);
+
+        // 등록한 이미지가 없을때 삭제버튼 클릭 시 동작 안하도록
+        if(imgFg === "001"){
+            if($("#hdProdFileNm").val() === ""){
+                return;
+            }
+        }else if(imgFg === "002"){
+            if($("#hdKioskFileNm").val() === ""){
+                return;
+            }
+        }else{
+            if($("#hdDidFileNm").val() === ""){
+                return;
+            }
+        }
+
+        // 이미지를 삭제하시겠습니까?
+        var msg = messages["prodImg.fileDel.msg"];
+        s_alert.popConf(msg, function () {
+
+            var formData = new FormData($("#regForm")[0]);
+
+            formData.append("orgnFg", orgnFg); // sessionInfoVO에 있는 orgnFg 값을 제대로 읽어오지 못하는 현상때문에 추가, form태그가 원인??
+            formData.append("hqOfficeCd", hqOfficeCd);
+            formData.append("storeCd", storeCd);
+            formData.append("imgFg", imgFg);
+            formData.append("prodCd", $("#hdProdCd").val());
+            formData.append("userId", userId);
+
+            $scope.$broadcast('loadingPopupActive');
+
+            $.ajax({
+                url: "/base/prod/prodImg/prodImg/delProdImg.sb",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(result) {
+
+                    if (result.status === "OK") {
+                        // 삭제 되었습니다.
+                        $scope._popMsg(messages["cmm.delSucc"]);
+
+                        // 재조회
+                        $scope.getProdImg($("#hdProdCd").val(), $("#hdProdNm").val());
+
+                        $scope.$broadcast('loadingPopupInactive');
+                        $scope.close();
+                    }
+                    else if (result.status === "FAIL") {
+                        $scope._popMsg('Ajax Fail By HTTP Request');
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else if (result.status === "SERVER_ERROR") {
+                        $scope._popMsg(result.message);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                    else {
+                        var msg = result.status + " : " + result.message;
+                        $scope._popMsg(msg);
+                        $scope.$broadcast('loadingPopupInactive');
+                    }
+                },
+                error : function(result){
+                    $scope._popMsg("error");
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+            },function(){
+                $scope._popMsg("Ajax Fail By HTTP Request");
+                $scope.$broadcast('loadingPopupInactive');
+            });
+        });
     }
 
     // 상품분류정보 팝업

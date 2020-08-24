@@ -106,7 +106,7 @@
 <script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberVendorMapping.js?ver=20191223.20" charset="utf-8"></script>
 
 <%-- 매장 등록/수정 --%>
-<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/membr/info/view/memberRegist.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>

@@ -377,7 +377,7 @@
     <select id="getDayPointList" parameterType="payInfoVO" resultType="DefaultMap">
         /* USE : PayInfoMapper.getDayPointList */
         <![CDATA[
-        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        SELECT 	tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE
@@ -438,7 +438,7 @@
     <select id="getDayPrepaidList" parameterType="payInfoVO" resultType="DefaultMap">
         /* USE : PayInfoMapper.getDayPrepaidList */
         <![CDATA[
-        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        SELECT 	tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE
@@ -499,7 +499,7 @@
     <select id="getDayPostpaidList" parameterType="payInfoVO" resultType="DefaultMap">
         /* USE : PayInfoMapper.getDayPostpaidList */
         <![CDATA[
-        SELECT 	tsspp.MEMBR_NO, tmm.MEMBR_NM
+        SELECT 	tsspp.MEMBR_NO, SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM
         ,       tmm.MEMBR_CLASS_CD, tmmc.MEMBR_CLASS_NM
         ,       tmmc.POINT_SAVE_FG, tcn.NMCODE_NM AS POINT_SAVE_FG_NM
         ,       tmmc.DC_RATE

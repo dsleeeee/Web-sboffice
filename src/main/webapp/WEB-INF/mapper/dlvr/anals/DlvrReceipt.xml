@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.dlvr.anals.dlvrReceipt.service.impl.DlvrReceiptMapper">
+    <select id="getDlvrReceiptList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
+        /* DlvrReceiptMapper.getDlvrReceiptList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        D.HQ_OFFICE_CD,
+        D.HQ_BRAND_CD,
+        D.POS_NO,
+        SBPENC.D(H.DLVR_ADDR) AS DLVR_ADDR,
+        H.BILL_COUNT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+        SELECT
+        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR, tsshd.POS_NO, COUNT(tsshd.BILL_NO) AS BILL_COUNT
+        FROM
+        TB_SL_SALE_HDR_DLVR tsshd
+        WHERE
+        tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+        <if test = 'hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+        </if>
+        <if test = 'storeCd != null and storeCd != ""'>
+            AND tsshd.STORE_CD = #{storeCd}
+        </if>
+        GROUP BY
+        tsshd.HQ_OFFICE_CD, tsshd.HQ_BRAND_CD, SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR, tsshd.POS_NO) H,
+        (
+        SELECT
+        tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tssh.POS_NO, SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM
+        TB_SL_SALE_HDR tssh, TB_SL_SALE_HDR_DLVR tsshd
+        WHERE
+        tssh.HQ_OFFICE_CD = tsshd.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsshd.HQ_BRAND_CD
+        AND tssh.POS_NO = tsshd.POS_NO
+        AND tssh.BILL_NO = tsshd.BILL_NO
+        GROUP BY
+        tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tssh.POS_NO, tssh.BILL_NO) D
+        WHERE
+        H.HQ_OFFICE_CD = D.HQ_OFFICE_CD
+        AND H.HQ_BRAND_CD = D.HQ_BRAND_CD
+        AND H.POS_NO = D.POS_NO
+        GROUP BY
+        D.HQ_OFFICE_CD,
+        D.HQ_BRAND_CD,
+        D.POS_NO,
+        H.DLVR_ADDR,
+        H.BILL_COUNT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+    <select id="getDlvrReceiptDetailList" parameterType="dlvrReceiptVO" resultType="DefaultMap">
+        /* DlvrReceiptMapper.getDlvrReceiptDetailList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tsshd.SALE_DATE, tssh.POS_NO, tsshd.BILL_NO, SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM, tce.EMP_NM, SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        TB_SL_SALE_HDR tssh, TB_SL_SALE_HDR_DLVR tsshd, TB_CM_EMPLOYEE tce, TB_SL_SALE_HDR_MEMBR tsshm
+        WHERE
+        tsshd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
+        AND tsshd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
+        AND tsshd.POS_NO = tssh.POS_NO
+        AND tsshd.BILL_NO = tssh.BILL_NO
+        AND tsshd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD(+)
+        AND tsshd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD(+)
+        AND tsshd.POS_NO = tsshm.POS_NO(+)
+        AND tsshd.BILL_NO = tsshm.BILL_NO(+)
+        AND tsshd.STORE_CD = tsshm.STORE_CD(+)
+        AND tsshd.SALE_DATE = tsshm.SALE_DATE(+)
+        AND tsshd.DLVR_EMP_NO = tce.EMP_NO
+        AND tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsshd.HQ_BRAND_CD = #{hqBrandCd}
+        AND tsshd.POS_NO = #{posNo}
+        AND tsshd.SALE_DATE BETWEEN #{periodStartDate} AND #{periodEndDate}
+        GROUP BY
+        tssh.HQ_OFFICE_CD, tssh.HQ_BRAND_CD, tsshd.SALE_DATE, tssh.POS_NO, tsshd.BILL_NO, tsshm.MEMBR_NM, tce.EMP_NM
+        ORDER BY tsshd.SALE_DATE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+</mapper>
