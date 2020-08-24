@@ -503,7 +503,9 @@
 				,       B.IN_VAT        AS  A_IN_VAT
 				,       B.IN_TOT        AS  A_IN_TOT
 				FROM    (
-				        SELECT  tphvod.HQ_OFFICE_CD, tphvod.SLIP_NO, tphvod.PROD_CD, thp.PROD_NM, tphvod.PO_UNIT_FG, tphvod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
+				        SELECT  tphvod.HQ_OFFICE_CD
+				        , 		#{slipNo}	AS SLIP_NO
+				        , 		tphvod.PROD_CD, thp.PROD_NM, tphvod.PO_UNIT_FG, tphvod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
 				        ,       tphvod.SLIP_FG, thp.PO_MIN_QTY
 				        ,       thp.LAST_COST_UPRC
 				        ,       tphvod.COST_UPRC AS ORDER_COST_UPRC
