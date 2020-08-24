@@ -122,6 +122,8 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.prodList = function () {
     var params    = {};
     params.slipNo = $scope.strSlipNo;
+    params.startDate	=	$scope.startDate;
+    params.endDate		=	$scope.endDate;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -279,15 +281,33 @@ app.controller('transReportCtrl', ['$scope', '$http', '$timeout', function ($sco
               //   prodNm = prodNm.substr(0, nmLimit) + '..';
               // }
               // console.log(prodList[n]);
+              var outUnitQty = (item.outUnitQty === undefined || item.outUnitQty == null || item.outUnitQty.length <= 0) ? nvl(item.outUnitQty,0) : addComma(item.outUnitQty);
+              var outEtcQty = (item.outEtcQty === undefined || item.outEtcQty == null || item.outEtcQty.length <= 0) ? nvl(item.outEtcQty,0) : addComma(item.outEtcQty);
+              var outTotQty = (item.outTotQty === undefined || item.outTotQty == null || item.outTotQty.length <= 0) ? item.outTotQty : addComma(item.outTotQty);
+              var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? item.outAmt : addComma(item.outAmt);
+              var outVat = (item.outVat === undefined || item.outVat == null || item.outVat.length <= 0) ? item.outVat : addComma(item.outVat);
+              var outQty = 0;
+              if(outEtcQty == 0){
+            	  outQty	=	outUnitQty;
+              } else {
+            	  outQty	=	outUnitQty+'('+ outEtcQty+')';
+              } 
+//              console.log("outUnitQty ::"+outUnitQty)
+              console.log("outQty ::"+outQty)
+//              console.log("outTotQty ::"+outTotQty)              
               prodListHtml += '<tr class="h25">'
                 + '<td class="tc">' + (n + 1) + '</td>'
                 + '<td class="tl"><input type="text" value="' + prodNm + '" class="w100" readonly></td>'
                 + '<td class="tc">' + '</td>' // 박정은 20.03.12 (수정 예정)
                 + '<td class="tc">' + item.poUnitFgNm + '</td>'
                 + '<td class="tr">' + addComma(item.outSplyUprc) + '</td>'
-                + '<td class="tr">' + addComma(item.outTotQty) + '</td>'
-                + '<td class="tr">' + addComma(item.outAmt) + '</td>'
-                + '<td class="tr">' + addComma(item.outVat) + '</td>'
+//                + '<td class="tr">' + addComma(item.outTotQty) + '</td>'
+//                + '<td class="tr">' + addComma(item.outAmt) + '</td>'
+//                + '<td class="tr">' + addComma(item.outVat) + '</td>'
+//                + '<td class="tr">' + outTotQty + '</td>'
+            	+ '<td class="tr">' + outQty + '</td>'
+                + '<td class="tr">' + outAmt + '</td>'
+                + '<td class="tr">' + outVat + '</td>'                
                  + '<td class="tl"><input type="text" value="' + nvl(item.remark,'') + '" class="w100" readonly></td>'
 //                + '<td class="tl"></td>'
                 + '</tr>';
