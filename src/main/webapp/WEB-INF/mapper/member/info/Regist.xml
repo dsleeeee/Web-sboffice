@@ -88,7 +88,7 @@
         TB_MS_STORE tms,
         TB_MB_MEMBER_CARD tmmcd,
         TB_MB_MEMBER_POINT tmmp
-        WHERE tmm.MEMBR_ORGN_CD = #{hqOfficeCd}
+        WHERE tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
           AND tmmc.MEMBR_ORGN_CD (+)= #{membrOrgnCd}
         <!-- <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
             AND tmmc.MEMBR_ORGN_CD (+)= #{hqOfficeCd}
