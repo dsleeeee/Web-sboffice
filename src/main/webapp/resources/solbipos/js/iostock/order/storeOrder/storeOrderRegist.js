@@ -27,7 +27,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
 
   $scope.srchRegStartDate = wcombo.genDate("#srchRegStartDate");
   $scope.srchRegEndDate   = wcombo.genDate("#srchRegEndDate");
-
+  
+  $scope.reset = function() {
+  	$scope.searchStoreLoan('Y');
+  }
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
@@ -145,6 +149,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storeOrderRegistCtrl", function (event, data) {
 
+	  $scope.reset();
     // 그리드 초기화
     var cv          = new wijmo.collections.CollectionView([]);
     cv.trackChanges = true;
@@ -397,6 +402,17 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
   $scope.saveStoreOrderRegist = function () {
     var params   = [];
     var orderTot = 0;
+    var grid 			= $scope.flex;
+    
+    for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
+    	var item =  $scope.flex.collectionView.items[i]; 
+    	if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
+            $scope._popMsg(messages["storeOrder.dtl.prodCd"] +"["+item.prodCd+"]" +" "+ messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
+            grid.select(i,6,i,6 );
+            return false;
+        }    	
+    }
+    
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
@@ -405,10 +421,11 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         continue;
       }
 
-      if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
-        $scope._popMsg(messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
-        return false;
-      }
+//      if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
+//        $scope._popMsg(messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
+//        grid.select(i,6,i,6 );
+//        return false;
+//      }
       if (item.orderEtcQty !== null && (parseInt(item.orderEtcQty) >= parseInt(item.poUnitQty))) {
         $scope._popMsg(messages["storeOrder.dtl.not.orderEtcQty"]); // 낱개수량은 입수량보다 작아야 합니다.
         return false;

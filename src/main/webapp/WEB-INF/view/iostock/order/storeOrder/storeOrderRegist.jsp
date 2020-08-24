@@ -191,8 +191,8 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.safeStock"/>" binding="safeStockEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.storeCurrQty"/>" binding="storeCurEtcQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="100" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>            
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
@@ -211,7 +211,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderRegist.js?ver=20200824.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
