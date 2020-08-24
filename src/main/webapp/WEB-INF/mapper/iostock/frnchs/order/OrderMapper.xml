@@ -19,7 +19,13 @@
 		     , M.SLIP_FG
 		     , M.SLIP_FG_NM
 		     , M.PROC_FG
-		     , (SELECT NMCODE_NM FROM TB_CM_NMCODE TCM WHERE TCM.NMCODE_GRP_CD = '113' AND TCM.NMCODE_CD = M.PROC_FG) AS PROC_FG_NM
+		     /* , (SELECT NMCODE_NM FROM TB_CM_NMCODE TCM WHERE TCM.NMCODE_GRP_CD = '113' AND TCM.NMCODE_CD = M.PROC_FG) AS PROC_FG_NM*/
+		     , CASE WHEN (M.PROC_FG = '00' OR M.PROC_FG = '10') AND M.OUTSTOCK_PROC_FG IS NULL 	THEN '주문등록'
+		     		WHEN M.PROC_FG = '20' AND M.OUTSTOCK_PROC_FG IS NULL 	THEN '분배확정'
+                    WHEN M.OUTSTOCK_PROC_FG = '10' 	THEN '분배확정' 
+                    WHEN M.OUTSTOCK_PROC_FG = '20' 	THEN '출고확정' 
+                    WHEN M.OUTSTOCK_PROC_FG = '30' 	THEN '입고확정' 
+                    END PROC_FG_NM
 		     , M.SLIP_NO
 		     , M.OUT_DT
 		     , TO_CHAR(TO_DATE(M.OUT_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS OUT_DT_FM
@@ -33,6 +39,7 @@
 		     , M.IN_TOT_QTY
 		     , M.IN_TOT
 		     , M.PENALTY_AMT
+		     , M.OUTSTOCK_PROC_FG
 		     <include refid="CmmSQL.PagingTemplateCount"/>
 		  FROM (
 		        SELECT A.REQ_DATE
@@ -51,6 +58,7 @@
 		             , NULL   AS IN_TOT_QTY
 		             , NULL   AS IN_TOT
 		             , NULL   AS PENALTY_AMT
+		             , NULL   AS OUTSTOCK_PROC_FG
 		          FROM TB_PO_HQ_STORE_ORDER A
 		         WHERE A.PROC_FG = '00'
 		         AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.HQ_OFFICE_CD = #{hqOfficeCd} AND Z.STORE_CD = A.STORE_CD)
@@ -78,6 +86,7 @@
 		             , B.IN_TOT_QTY
 		             , B.IN_TOT
 		             , B.PENALTY_AMT
+		             , B.OUTSTOCK_PROC_FG     
 		          FROM (
 		                SELECT TPHSD.HQ_OFFICE_CD
 		                     , TPHSD.REQ_DATE       /* 출고요청일자 */
@@ -116,6 +125,7 @@
 		                     , B.IN_TOT
 		                     , B.IN_DT
 		                     , (SELECT SUM(PENALTY_AMT) FROM TB_PO_HQ_STORE_OUTSTOCK_DTL Z WHERE Z.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND Z.SLIP_NO = B.SLIP_NO) AS PENALTY_AMT
+		                     , B.PROC_FG    AS OUTSTOCK_PROC_FG
 		                  FROM TB_PO_HQ_STORE_OUTSTOCK B
 		                 WHERE B.HQ_OFFICE_CD = #{hqOfficeCd}
 		                 ) B
