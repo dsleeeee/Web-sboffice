@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    KioskOption.xml
+    키오스크옵션관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.08.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.kioskOption.service.impl.KioskOptionMapper">
+
+    <!-- 상품목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_BARCD,
+                   TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD
+        COMMENTS : [본사]상품, [본사]상품_판매금액, [본사]상품_분류, [본사]상품_바코드,
+                   [매장]상품, [매장]상품_판매금액, [매장]상품_분류, [매장]상품_바코드
+    -->
+    <select id="getKioskOptionList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+        /* KioskOptionMapper.getKioskOptionList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thp.PROD_CD,
+                thp.PROD_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                thpb.BAR_CD
+                FROM TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                                    SELECT
+                                    HQ_OFFICE_CD,
+                                    PROD_CD,
+                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE 1=1
+                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                    <![CDATA[
+                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                    ]]>
+                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                                    ) thpsp ON
+                                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                    AND thp.PROD_CD = thpsp.PROD_CD
+                                    ,
+                (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    BARCD_CD AS BAR_CD
+                    FROM TB_HQ_PRODUCT_BARCD
+                    WHERE 1=1
+                ) thpb
+                WHERE 1=1
+                AND thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD = thp.PROD_CD
+                AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
+                <if test='chkDt != true'>
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate} AND #{endDate}
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn}
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                )
+                </if>
+                ORDER BY thp.PROD_CD
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                tmpb.BAR_CD
+                FROM TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN (
+                                    SELECT
+                                    STORE_CD,
+                                    PROD_CD,
+                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                    FROM TB_MS_PRODUCT_SALE_PRICE
+                                    WHERE 1=1
+                                    AND STORE_CD = #{storeCd}
+                                    <![CDATA[
+                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                    ]]>
+                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    GROUP BY STORE_CD, PROD_CD
+                                    ) tmpsp ON
+                                    tmp.STORE_CD = tmpsp.STORE_CD
+                                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                                    ,
+                (
+                    SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    BARCD_CD AS BAR_CD
+                    FROM TB_MS_PRODUCT_BARCD
+                    WHERE 1=1
+                ) tmpb
+                WHERE 1=1
+                AND tmpb.STORE_CD = tmp.STORE_CD
+                AND tmpb.PROD_CD = tmp.PROD_CD
+                AND tmp.STORE_CD = #{storeCd}
+                <if test='chkDt != true'>
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                            AND tmp.REG_DT BETWEEN #{startDate} AND #{endDate}
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND tmpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn}
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                )
+                </if>
+                ORDER BY tmp.PROD_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크옵션 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION, TB_HQ_PRODUCT_SALE_PRICE,
+                   TB_MS_PRODUCT_OPTION, TB_MS_PRODUCT_SALE_PRICE
+        COMMENTS : [본사]마스터-키오스크옵션상품, [본사]상품_판매금액,
+                   [매장]마스터-키오스크옵션상품, [매장]상품_판매금액
+    -->
+    <select id="getKioskOptionDetailList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+        /* KioskOptionMapper.getKioskOptionDetailList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thpo.PROD_CD,
+                thpo.OPTION_PROD_CD,
+                (SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CD = thpo.OPTION_PROD_CD) AS OPTION_PROD_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                thpo.OPTION_FG
+                FROM TB_HQ_PRODUCT_OPTION thpo
+                LEFT OUTER JOIN (
+                                    SELECT
+                                    HQ_OFFICE_CD,
+                                    PROD_CD,
+                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                    FROM TB_HQ_PRODUCT_SALE_PRICE
+                                    WHERE 1=1
+                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                    <![CDATA[
+                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                    ]]>
+                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    GROUP BY HQ_OFFICE_CD, PROD_CD
+                                    ) thpsp ON
+                                    thpo.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                    AND thpo.PROD_CD = thpsp.PROD_CD
+                WHERE 1=1
+                AND thpo.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND thpo.PROD_CD = #{prodCd}
+                ORDER BY thpo.OPTION_FG, thpo.DISP_SEQ
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmpo.PROD_CD,
+                tmpo.OPTION_PROD_CD,
+                (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_CD = tmpo.OPTION_PROD_CD) AS OPTION_PROD_NM,
+                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
+                tmpo.OPTION_FG
+                FROM TB_MS_PRODUCT_OPTION tmpo
+                LEFT OUTER JOIN (
+                                    SELECT
+                                    STORE_CD,
+                                    PROD_CD,
+                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                    FROM TB_MS_PRODUCT_SALE_PRICE
+                                    WHERE 1=1
+                                    AND STORE_CD = #{storeCd}
+                                    <![CDATA[
+                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                    ]]>
+                                    AND SALE_PRC_FG = #{salePrcFg}
+                                    GROUP BY STORE_CD, PROD_CD
+                                    ) tmpsp ON
+                                    tmpo.STORE_CD = tmpsp.STORE_CD
+                                    AND tmpo.PROD_CD = tmpsp.PROD_CD
+                WHERE 1=1
+                AND tmpo.STORE_CD = #{storeCd}
+                AND tmpo.PROD_CD = #{prodCd}
+                ORDER BY tmpo.OPTION_FG, tmpo.DISP_SEQ
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크옵션 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION, TB_MS_PRODUCT_OPTION
+        COMMENTS : [본사]마스터-키오스크옵션상품, [매장]마스터-키오스크옵션상품
+    -->
+    <delete id="getKioskOptionSaveDelete" parameterType="KioskOptionVO">
+        /* KioskOptionMapper.getKioskOptionSaveDelete */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM TB_HQ_PRODUCT_OPTION
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND PROD_CD = #{prodCd}
+                AND OPTION_PROD_CD = #{optionProdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM TB_MS_PRODUCT_OPTION
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND OPTION_PROD_CD = #{optionProdCd}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크옵션 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION, TB_MS_PRODUCT_OPTION
+        COMMENTS : [본사]마스터-키오스크옵션상품, [매장]마스터-키오스크옵션상품
+    -->
+    <update id="getKioskOptionSaveUpdate" parameterType="KioskOptionVO">
+        /* KioskOptionMapper.getKioskOptionSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE
+                TB_HQ_PRODUCT_OPTION
+                SET
+                DISP_SEQ = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                AND PROD_CD = #{prodCd}
+                AND OPTION_PROD_CD = #{optionProdCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE
+                TB_MS_PRODUCT_OPTION
+                SET
+                DISP_SEQ = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND OPTION_PROD_CD = #{optionProdCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 키오스크옵션 상품등록 팝업 - 상품목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT,  TB_HQ_PRODUCT_CLASS, TB_HQ_PRODUCT_BARCD, TB_HQ_PRODUCT_OPTION,
+                   TB_MS_PRODUCT,  TB_MS_PRODUCT_CLASS, TB_MS_PRODUCT_BARCD, TB_MS_PRODUCT_OPTION
+        COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드, [본사]마스터-키오스크옵션상품,
+                   [매장]상품, [매장]상품_분류, [매장]상품_바코드, [매장]마스터-키오스크옵션상품
+    -->
+    <select id="getKioskOptionProdList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+        /* KioskOptionMapper.getKioskOptionProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                thp.PROD_CD AS OPTION_PROD_CD,
+                thp.PROD_NM AS OPTION_PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_HQ_PRODUCT thp,
+                (
+                    SELECT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    BARCD_CD AS BAR_CD
+                    FROM TB_HQ_PRODUCT_BARCD
+                    WHERE 1=1
+                ) thpb
+                WHERE 1=1
+                AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                AND thpb.PROD_CD (+)= thp.PROD_CD
+                AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
+                <if test="optionProdCd != null and optionProdCd != ''">
+                    AND thp.PROD_CD LIKE '%'|| #{optionProdCd} ||'%'
+                </if>
+                <if test="optionProdNm != null and optionProdNm != ''">
+                    AND thp.PROD_NM LIKE '%'|| #{optionProdNm} ||'%'
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND thpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_HQ_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND HQ_OFFICE_CD = #{membrOrgnCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                )
+                </if>
+                AND NOT EXISTS
+                (
+                    SELECT 1
+                    FROM TB_HQ_PRODUCT_OPTION
+                    WHERE 1=1
+                    AND HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND OPTION_PROD_CD = thp.PROD_CD
+                    AND PROD_CD = #{prodCd}
+                )
+                ORDER BY thp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                tmp.PROD_CD AS OPTION_PROD_CD,
+                tmp.PROD_NM AS OPTION_PROD_NM
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_MS_PRODUCT tmp,
+                (
+                    SELECT
+                    STORE_CD,
+                    PROD_CD,
+                    BARCD_CD AS BAR_CD
+                    FROM TB_MS_PRODUCT_BARCD
+                    WHERE 1=1
+                ) tmpb
+                WHERE 1=1
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                AND tmp.STORE_CD = #{storeCd}
+                <if test="optionProdCd != null and optionProdCd != ''">
+                    AND tmp.PROD_CD LIKE '%'|| #{optionProdCd} ||'%'
+                </if>
+                <if test="optionProdNm != null and optionProdNm != ''">
+                    AND tmp.PROD_NM LIKE '%'|| #{optionProdNm} ||'%'
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND tmpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE 1=1
+                                                AND STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd}
+                                                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD
+                                                )
+                </if>
+                AND NOT EXISTS
+                (
+                    SELECT 1
+                    FROM TB_MS_PRODUCT_OPTION
+                    WHERE 1=1
+                    AND STORE_CD = tmp.STORE_CD
+                    AND OPTION_PROD_CD = tmp.PROD_CD
+                    AND PROD_CD = #{prodCd}
+                )
+                ORDER BY tmp.PROD_CD
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 표기순번 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION, TB_MS_PRODUCT_OPTION
+        COMMENTS : [본사]마스터-키오스크옵션상품, [매장]마스터-키오스크옵션상품
+    -->
+    <select id="getKioskOptionProdDispSeq" parameterType="KioskOptionVO" resultType="DefaultMap">
+        /* KioskOptionMapper.getKioskOptionProdDispSeq */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                (NVL(MAX(thpo.DISP_SEQ), 0) + 1) AS DISP_SEQ
+                FROM TB_HQ_PRODUCT_OPTION thpo
+                WHERE 1=1
+                AND thpo.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND thpo.PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                (NVL(MAX(tmpo.DISP_SEQ), 0) + 1) AS DISP_SEQ
+                FROM TB_MS_PRODUCT_OPTION tmpo
+                WHERE 1=1
+                AND tmpo.STORE_CD = #{storeCd}
+                AND tmpo.PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크옵션 상품등록 팝업 - 키오스크옵션 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION, TB_MS_PRODUCT_OPTION
+        COMMENTS : [본사]마스터-키오스크옵션상품, [매장]마스터-키오스크옵션상품
+    -->
+    <insert id="getKioskOptionProdSave" parameterType="KioskOptionVO">
+        /* KioskOptionMapper.getKioskOptionProdSave */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_OPTION
+                (
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    OPTION_PROD_CD,
+                    OPTION_FG,
+                    DISP_SEQ,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{membrOrgnCd},
+                    #{prodCd},
+                    #{optionProdCd},
+                    #{optionFg},
+                    #{dispSeq},
+                    '',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_OPTION
+                (
+                    STORE_CD,
+                    PROD_CD,
+                    OPTION_PROD_CD,
+                    OPTION_FG,
+                    DISP_SEQ,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                ) VALUES (
+                    #{storeCd},
+                    #{prodCd},
+                    #{optionProdCd},
+                    #{optionFg},
+                    #{dispSeq},
+                    '',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+</mapper>
