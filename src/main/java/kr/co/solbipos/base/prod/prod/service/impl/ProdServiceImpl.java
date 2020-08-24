@@ -604,8 +604,8 @@ public class ProdServiceImpl implements ProdService {
             // C:\Users\김설아\.IntelliJIdea2018.3\system\tomcat\Unnamed_sboffice\work\Catalina\localhost\ROOT\FileRoot\prod_img\A0001\001\1597125734220.jpg
 
             // 저장 경로 설정 (디비 저장용)
-            String path_table = multi.getSession().getServletContext().getRealPath("prod_img/" + path_folder + "/001/");
-            // http://neo.solbipos.com/prod_img/A0001/001/1597125734220.jpg
+            String path_table = multi.getRequestURL().toString().replace(multi.getRequestURI(),"") + "/ProdImg/" + path_folder + "/001/";
+            // http://192.168.0.85:10001/ProdImg/A0001/001
 
             // 업로드 되는 파일명
             String newFileName = "";
