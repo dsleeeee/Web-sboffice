@@ -90,7 +90,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.status = "I";
         params.gChk = true;
-        params.recipesCd="자동채번"
+        params.recipesCd="자동채번";
         params.recipesNm = "";
         params.orgplceNm = "";
 

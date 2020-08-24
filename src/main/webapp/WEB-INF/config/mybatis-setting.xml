@@ -238,6 +238,8 @@
     <typeAlias alias="menuRankVO" type="kr.co.solbipos.base.prod.menuRank.service.MenuRankVO"/>
     <!-- 기초관리 > 상품관리 > 상품이미지관리 -->
     <typeAlias alias="prodImgVO" type="kr.co.solbipos.base.prod.prodImg.service.ProdImgVO"/>
+    <!-- 기초관리 > 상품관리 > 키오스크옵션관리 -->
+    <typeAlias alias="kioskOptionVO" type="kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
