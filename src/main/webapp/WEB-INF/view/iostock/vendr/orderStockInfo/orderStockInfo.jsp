@@ -114,6 +114,7 @@
               <!-- define columns -->
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.slipNo"/>" binding="inSlipNo" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inCnt"/>" binding="inCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.inLastDate"/>" binding="inLastDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="orderStockInfo.dtl.orderTotQty"/>" binding="orderTotQty" width="40" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -139,7 +140,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/orderStockInfo/orderStockInfo.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/orderStockInfo/orderStockInfo.js?ver=20200824.01" charset="utf-8"></script>
 
 <%-- 입고 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/orderStockInfo/prodInstockInfo.jsp">

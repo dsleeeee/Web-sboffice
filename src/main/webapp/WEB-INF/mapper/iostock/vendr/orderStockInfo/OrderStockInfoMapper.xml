@@ -18,7 +18,7 @@
                 <![CDATA[
                 SELECT  NVL(tphvo.SLIP_NO,'무발주') AS SLIP_NO, tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
                 ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
-                ,       '' AS IN_SLIP_NO
+                ,       tphvi.SLIP_NO AS IN_SLIP_NO
                 ,       COUNT(tphvi.SLIP_NO) AS IN_CNT
                 ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE) AS IN_LAST_DATE
                 ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
@@ -55,7 +55,7 @@
                 <![CDATA[
                 GROUP BY NVL(tphvo.SLIP_NO,'무발주'), tphvo.ORDER_DATE, tphvo.VENDR_CD, thv.VENDR_NM
                 ,       tphvo.PROC_FG, tphvo.SLIP_FG, tphvo.DTL_CNT
-                ,       ''
+                ,       tphvi.SLIP_NO
                 ,       DECODE(tphvi.SLIP_NO, NULL, NULL, tphvo.IN_LAST_DATE)
                 ,       tphvo.ORDER_AMT, tphvo.ORDER_VAT, tphvo.ORDER_TOT
                 ,       DECODE(tphvi.PROC_FG, '1', tphvi.IN_AMT)
@@ -190,36 +190,65 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <![CDATA[
-                SELECT  tphvod.PROD_CD, thp.PROD_NM
-                ,       COUNT(DECODE(tphvid.PROD_CD, tphvod.PROD_CD, tphvi.SLIP_NO)) AS IN_CNT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvo.IN_LAST_DATE) AS IN_LAST_DATE
-                ,       tphvod.ORDER_TOT_QTY, tphvod.ORDER_AMT, tphvod.ORDER_VAT, tphvod.ORDER_TOT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT_QTY) AS IN_TOT_QTY
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_AMT) AS IN_AMT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_VAT) AS IN_VAT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT) AS IN_TOT
-                FROM    TB_PO_HQ_VENDR_ORDER tphvo
-                ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
-                ,       TB_PO_HQ_VENDR_INSTOCK tphvi
-                ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
-                ,       TB_HQ_PRODUCT thp
-                WHERE   tphvo.HQ_OFFICE_CD    = #{hqOfficeCd}
-                AND     tphvo.SLIP_NO         = #{slipNo}
-                AND     tphvod.HQ_OFFICE_CD   = tphvo.HQ_OFFICE_CD
-                AND     tphvod.SLIP_NO        = tphvo.SLIP_NO
-                AND     tphvi.HQ_OFFICE_CD (+)= tphvo.HQ_OFFICE_CD
-                AND     tphvi.ORDER_SLIP_NO(+)= tphvo.SLIP_NO
-                AND     tphvi.PROC_FG      (+)= '1'
-                AND     thp.HQ_OFFICE_CD      = tphvod.HQ_OFFICE_CD
-                AND     thp.PROD_CD           = tphvod.PROD_CD
-                GROUP BY tphvod.PROD_CD, thp.PROD_NM
-                ,       DECODE(tphvi.PROC_FG, '1', tphvo.IN_LAST_DATE)
-                ,       tphvod.ORDER_TOT_QTY, tphvod.ORDER_AMT, tphvod.ORDER_VAT, tphvod.ORDER_TOT
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT_QTY)
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_AMT)
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_VAT)
-                ,       DECODE(tphvi.PROC_FG, '1', tphvod.IN_TOT)
-                ORDER BY tphvod.PROD_CD
+                SELECT  o.PROD_CD
+				,       thp.PROD_NM
+				,		i.SLIP_NO		AS  IN_SLIP_NO
+				,       COUNT(DECODE(i.PROD_CD, o.PROD_CD, i.SLIP_NO))  AS IN_CNT
+				,       DECODE(i.PROC_FG, '1', o.IN_LAST_DATE) AS IN_LAST_DATE
+				,       o.ORDER_TOT_QTY, o.ORDER_AMT, o.ORDER_VAT, o.ORDER_TOT
+				,       DECODE(i.PROC_FG, '1', i.IN_TOT_QTY) AS IN_TOT_QTY
+				,       DECODE(i.PROC_FG, '1', i.IN_AMT) AS IN_AMT
+				,       DECODE(i.PROC_FG, '1', i.IN_VAT) AS IN_VAT
+				,       DECODE(i.PROC_FG, '1', i.IN_TOT) AS IN_TOT
+				FROM    (
+				        SELECT  tphvo.HQ_OFFICE_CD
+				        ,       tphvo.SLIP_NO
+				        ,       tphvod.PROD_CD
+				        ,       tphvo.IN_LAST_DATE
+				        ,       tphvod.ORDER_TOT_QTY
+				        ,       tphvod.ORDER_AMT
+				        ,       tphvod.ORDER_VAT
+				        ,       tphvod.ORDER_TOT        
+				        FROM    TB_PO_HQ_VENDR_ORDER tphvo
+				        ,       TB_PO_HQ_VENDR_ORDER_DTL tphvod
+				        WHERE   tphvod.HQ_OFFICE_CD     = tphvo.HQ_OFFICE_CD
+				        AND     tphvod.SLIP_NO          = tphvo.SLIP_NO
+				        AND     tphvo.HQ_OFFICE_CD      = #{hqOfficeCd}
+				        AND     tphvo.SLIP_NO           = #{slipNo}        
+				        )   o
+				,       (
+				        SELECT  tphvi.HQ_OFFICE_CD
+				        ,       tphvi.SLIP_NO
+				        ,       tphvi.ORDER_SLIP_NO
+				        ,       tphvid.PROD_CD
+				        ,       tphvi.PROC_FG
+				        ,       tphvid.IN_TOT_QTY
+				        ,       tphvid.IN_AMT
+				        ,       tphvid.IN_VAT
+				        ,       tphvid.IN_TOT        
+				        FROM    TB_PO_HQ_VENDR_INSTOCK tphvi
+				        ,       TB_PO_HQ_VENDR_INSTOCK_DTL tphvid
+				        WHERE   tphvid.HQ_OFFICE_CD     = #{hqOfficeCd}
+				        AND     tphvid.SLIP_NO          = #{inSlipNo}
+				        AND     tphvi.ORDER_SLIP_NO     = #{slipNo}
+				        AND     tphvid.HQ_OFFICE_CD   = tphvi.HQ_OFFICE_CD
+				        AND     tphvid.SLIP_NO        = tphvi.SLIP_NO
+				        )   i
+				,       TB_HQ_PRODUCT thp        
+				WHERE   i.HQ_OFFICE_CD  (+) =   o.HQ_OFFICE_CD
+				AND     i.ORDER_SLIP_NO (+) =   o.SLIP_NO
+				AND     i.PROD_CD       (+) =   o.PROD_CD
+				AND     thp.HQ_OFFICE_CD    =   o.HQ_OFFICE_CD
+				AND     thp.PROD_CD         =   o.PROD_CD
+				GROUP BY o.PROD_CD, thp.PROD_NM
+				,       i.SLIP_NO
+				,       DECODE(i.PROC_FG, '1', o.IN_LAST_DATE) 
+				,       o.ORDER_TOT_QTY, o.ORDER_AMT, o.ORDER_VAT, o.ORDER_TOT
+				,       DECODE(i.PROC_FG, '1', i.IN_TOT_QTY) 
+				,       DECODE(i.PROC_FG, '1', i.IN_AMT) 
+				,       DECODE(i.PROC_FG, '1', i.IN_VAT) 
+				,       DECODE(i.PROC_FG, '1', i.IN_TOT) 
+				ORDER BY o.PROD_CD                
                 ]]>
             </when>
             <!-- 가맹점 -->
