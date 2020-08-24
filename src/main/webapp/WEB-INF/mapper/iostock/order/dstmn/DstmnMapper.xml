@@ -272,6 +272,13 @@
                 #{item}
             </foreach>
         </if>
+        <if test='startDate != null and startDate != ""'>
+    			AND tphso.OUT_DATE <![CDATA[ >= ]]> REPLACE(#{startDate}, '-','')
+   		</if>
+   		<if test='endDate != null and endDate != ""'>
+   			AND tphso.OUT_DATE <![CDATA[<= ]]> REPLACE(#{endDate}, '-','')
+   		</if>
+        
         <![CDATA[
         AND     tphsod.HQ_OFFICE_CD =   tphso.HQ_OFFICE_CD
         AND     tphsod.SLIP_NO      =   tphso.SLIP_NO
@@ -322,6 +329,12 @@
                 #{item}
             </foreach>
         </if>
+        <if test='startDate != null and startDate != ""'>
+    			AND tphso.OUT_DATE <![CDATA[ >= ]]> REPLACE(#{startDate}, '-','')
+   		</if>
+   		<if test='endDate != null and endDate != ""'>
+   			AND tphso.OUT_DATE <![CDATA[<= ]]> REPLACE(#{endDate}, '-','')
+   		</if>
         <![CDATA[
         AND     tphsod.HQ_OFFICE_CD     =   tphso.HQ_OFFICE_CD
         AND     tphsod.SLIP_NO          =   tphso.SLIP_NO
@@ -357,7 +370,8 @@
         ,        SUM(tphsod.OUT_UNIT_QTY*tphsod.SLIP_FG) AS OUT_UNIT_QTY
         ,        SUM(tphsod.OUT_ETC_QTY *tphsod.SLIP_FG) AS OUT_ETC_QTY
         ,        MAX(tphsod.REMARK) AS REMARK
-        FROM     TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
+        FROM     TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,        TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
         ,        TB_HQ_PRODUCT thp
         ,        TB_HQ_NMCODE thn
         WHERE    tphsod.HQ_OFFICE_CD    =   #{hqOfficeCd}
@@ -368,7 +382,15 @@
                 #{item}
             </foreach>
         </if>
+        <if test='startDate != null and startDate != ""'>
+    			AND tphso.OUT_DATE <![CDATA[ >= ]]> REPLACE(#{startDate}, '-','')
+   		</if>
+   		<if test='endDate != null and endDate != ""'>
+   			AND tphso.OUT_DATE <![CDATA[<= ]]> REPLACE(#{endDate}, '-','')
+   		</if>
         <![CDATA[
+        AND     tphsod.HQ_OFFICE_CD     =   tphso.HQ_OFFICE_CD
+        AND     tphsod.SLIP_NO          =   tphso.SLIP_NO
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD

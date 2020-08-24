@@ -47,6 +47,11 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.orderFg"/>" binding="orderFg" width="80" align="center" is-read-only="true" data-map="orderFgMap"></wj-flex-grid-column>
+            
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg1"/>"     binding="orderFg1"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap1"                                      ></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg2"/>"     binding="orderFg2"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap2"                                      ></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg3"/>"     binding="orderFg3"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap3"                                      ></wj-flex-grid-column>
+            
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.mgrSplyUprc"/>" binding="mgrSplyUprc" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrUnitQty"/>" binding="prevMgrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.prevMgrEtcQty"/>" binding="prevMgrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
@@ -59,10 +64,10 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.splyUprc"/>" binding="splyUprc" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.hqStock"/>" binding="hqUnitStock" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.hqStock"/>" binding="hqEtcStock" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeStock"/>" binding="storeUnitStock" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeStock"/>" binding="storeEtcStock" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.hqStock"/>" binding="hdCurUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.hqStock"/>" binding="hdCurEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeStock"/>" binding="storeCurUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.storeStock"/>" binding="storeCurEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.confirmYn"/>" binding="confirmYn" width="60" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.addRegist.remark"/>" binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
@@ -84,4 +89,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdAddRegist.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdAddRegist.js?ver=20200824.01" charset="utf-8"></script>

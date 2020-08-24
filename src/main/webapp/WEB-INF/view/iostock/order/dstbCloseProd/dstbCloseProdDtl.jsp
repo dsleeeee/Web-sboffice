@@ -48,6 +48,11 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.storeCd"/>"     binding="storeCd"           width="80"  align="center"  is-read-only="true"                                                                     ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.storeNm"/>"     binding="storeNm"           width="150" align="left"    is-read-only="true"                                                                     ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg"/>"     binding="orderFg"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap"                                           ></wj-flex-grid-column>
+            
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg1"/>"     binding="orderFg1"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap1"                                      ></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg2"/>"     binding="orderFg2"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap2"                                      ></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg3"/>"     binding="orderFg3"           width="100"	align="center"  is-read-only="true"     data-map="orderFgMap3"                                      ></wj-flex-grid-column>
+			                                    
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrSplyUprc"/>" binding="mgrSplyUprc"       width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0" max-length=10                   ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrUnitQty"/>"  binding="mgrUnitQty"        width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0" max-length=8    aggregate="Sum" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.mgrEtcQty"/>"   binding="mgrEtcQty"         width="70"  align="right"   is-read-only="false"    data-type="Number"  format="n0" max-length=8    aggregate="Sum" ></wj-flex-grid-column>
@@ -77,4 +82,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbCloseProd/dstbCloseProdDtl.js?ver=20200824.01" charset="utf-8"></script>
