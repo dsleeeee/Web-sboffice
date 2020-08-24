@@ -218,7 +218,7 @@ app.controller('reqDateCopyDaysCtrl', ['$scope', '$http', function ($scope, $htt
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
-    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+    	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
     // ajax 통신 설정
@@ -244,7 +244,9 @@ app.controller('reqDateCopyDaysCtrl', ['$scope', '$http', function ($scope, $htt
 app.controller('reqDateCopySpecificCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('reqDateCopySpecificCtrl', $scope, $http, true));
-
+  
+  $scope.hqOfficeCd = gvHqOfficeCd;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -338,24 +340,29 @@ app.controller('reqDateCopySpecificCtrl', ['$scope', '$http', function ($scope, 
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-    
+
+    params.hqOfficeCd	=	$scope.hqOfficeCd;
+    $scope._save("/iostock/order/outstockReqDate/specificDate/copy.sb", params, function () {
+    	$scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
+//        $scope.searchspecificDateList()
+      });
     // ajax 통신 설정
-    $http({
-      method : 'POST', //방식
-      url    : '/iostock/order/outstockReqDate/specificDate/copy.sb', /* 통신할 URL */
-      data   : params, /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
-        $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-      $scope._popMsg(messages["cmm.saveFail"]);
-      return false;
-    }).then(function () {
-    });
+//    $http({
+//      method : 'POST', //방식
+//      url    : '/iostock/order/outstockReqDate/specificDate/copy.sb', /* 통신할 URL */
+//      data   : params, /* 파라메터로 보낼 데이터 */
+//      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+//    }).then(function successCallback(response) {
+//      if ($scope._httpStatusCheck(response, true)) {
+//        $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
+//      }
+//    }, function errorCallback(response) {
+//      // called asynchronously if an error occurs
+//      // or server returns response with an error status.
+//      $scope._popMsg(messages["cmm.saveFail"]);
+//      return false;
+//    }).then(function () {
+//    });
   };
 
 }]);

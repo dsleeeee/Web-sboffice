@@ -10,12 +10,14 @@ import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateServi
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 @Service("outstockReqDateService")
+@Transactional
 public class OutstockReqDateServiceImpl implements OutstockReqDateService {
     @Autowired
     OutstockReqDateMapper outstockReqDateMapper;
@@ -170,7 +172,10 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
         String currentDt = currentDateTimeString();
 
         for (OutstockReqDateVO outstockReqDateVO : outstockReqDateVOs) {
-            outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        	outstockReqDateVO.setHqOfficeCd(outstockReqDateVO.getHqOfficeCd());
+        	if(!StringUtil.getOrBlank(sessionInfoVO.getHqOfficeCd()).equals("")){
+        		outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        	}
             outstockReqDateVO.setRegId(sessionInfoVO.getUserId());
             outstockReqDateVO.setRegDt(currentDt);
             outstockReqDateVO.setModId(sessionInfoVO.getUserId());
@@ -189,7 +194,7 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
 
                     // 등록
                     result = outstockReqDateMapper.insertCopySpecificDate(outstockReqDateVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                 }
             }
 
@@ -210,7 +215,11 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        outstockReqDateVO.setHqOfficeCd(outstockReqDateVO.getHqOfficeCd());
+    	if(!StringUtil.getOrBlank(sessionInfoVO.getHqOfficeCd()).equals("")){
+    		outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    	}
+//        outstockReqDateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         outstockReqDateVO.setRegId(sessionInfoVO.getUserId());
         outstockReqDateVO.setRegDt(currentDt);
         outstockReqDateVO.setModId(sessionInfoVO.getUserId());
@@ -229,7 +238,7 @@ public class OutstockReqDateServiceImpl implements OutstockReqDateService {
 
                 // 등록
                 result = outstockReqDateMapper.insertCopyDays(outstockReqDateVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if(result < 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             }
         }
 

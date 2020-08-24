@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="baseUrl" value="/iostock/order/outstockReqDate/reqDateCopy/"/>
 
 
@@ -126,6 +127,6 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20200824.01" charset="utf-8"></script>
 
 
