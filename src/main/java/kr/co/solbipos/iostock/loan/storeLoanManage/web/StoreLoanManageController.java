@@ -119,6 +119,28 @@ public class StoreLoanManageController {
 
         return returnJson(Status.OK, result);
     }
+    
+    /**
+     * 매장여신관리 - 여신 삭제
+     *
+     * @param request
+     * @param response
+     * @param storeLoanManageVOs
+     * @param model
+     * @return Result
+     * @author 안동관
+     * @since 2018. 08. 20.
+     */
+    @RequestMapping(value = "/storeLoanManage/delLimitLoanAmt.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result delStoreLoanManageList(@RequestBody StoreLoanManageVO[] storeLoanManageVOs, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = storeLoanManageService.delLoanManageList(storeLoanManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }    
 
     /**
      * 매장여신관리 - 상세현황 조회

@@ -65,6 +65,35 @@ public class StoreLoanManageServiceImpl implements StoreLoanManageService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+    
+    /** 매장여신 삭제 */
+    @Override
+    public int delLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int returnResult = 0;
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( StoreLoanManageVO storeLoanManageVO : storeLoanManageVOs ) {
+
+            storeLoanManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeLoanManageVO.setRegDt(currentDt);
+            storeLoanManageVO.setRegId(sessionInfoVO.getUserId());
+            storeLoanManageVO.setModDt(currentDt);
+            storeLoanManageVO.setModId(sessionInfoVO.getUserId());
+
+            // 삭제
+            if ( storeLoanManageVO.getStatus() == GridDataFg.UPDATE ) {
+            	if(storeLoanManageVO.getgChk()){
+            		result = storeLoanManageMapper.deleteStoreLoanManage(storeLoanManageVO);	
+            	}                
+            }
+            returnResult += result;
+        }
+
+        return returnResult;
+
+    }
 
     /** 매장여신관리 상세 현황 조회 */
     @Override
