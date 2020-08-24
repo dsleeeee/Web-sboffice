@@ -3,6 +3,10 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <div class="wj-dialog-body" id="basicView" name="basicView" class="subCon" ng-controller="memberBasicCtrl">
     <%-- body --%>
     <div style="height:400px; overflow-y: auto;">
@@ -324,5 +328,9 @@
             <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
     </div>
 </div>
-<script type="text/javascript"
-        src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20191223.17 charset='utf-8'"></script>
+<script>
+    var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
+    var hqOfficeCd = "${hqOfficeCd}";
+</script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200824.01 charset='utf-8'"></script>
