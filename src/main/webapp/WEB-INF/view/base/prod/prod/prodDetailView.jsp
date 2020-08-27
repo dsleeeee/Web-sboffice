@@ -342,7 +342,7 @@
             <td id="_costUprc">
               {{prodDetail.costUprc}}
             </td>
-            <%--최종판매단가--%>
+            <%--최종원가단가--%>
             <th>
               <s:message code="prod.lastCostUprc"/>
             </th>

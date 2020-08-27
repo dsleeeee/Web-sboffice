@@ -439,7 +439,7 @@
                        popover-trigger="'mouseenter'"
                        uib-popover="<s:message code="prod.costUprc" />은(는) 필수 입력항목 입니다."/>
               </td>
-              <%--최종판매단가--%>
+              <%--최종원가단가--%>
               <th><s:message code="prod.lastCostUprc"/></th>
               <td>
                 <input type="text" id="prodModifyLastCostUprc" name="lastCostUprc" class="sb-input w100"

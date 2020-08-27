@@ -66,7 +66,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
         // params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
         params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
         params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
-        params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
+        params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
         params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
         params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
         params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고
@@ -151,7 +151,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
             params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
             params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
             params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
-            params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종판매단가
+            params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
             params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
             // params.defaultStock = $("#prodModifyDefaultStock").val(); // 초기재고 -> 현재 저장,조회 로직 빠져있음
@@ -226,7 +226,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#prodModifyCostUprc").focus();
           return false;
         }
-        // 최종판매단가
+        // 최종원가단가
         if (isNull($("#prodModifyLastCostUprc").val())) {
           $scope._popMsg(messages["prod.lastCostUprcChk.msg"]);
           $("#prodModifyLastCostUprc").focus();
@@ -305,7 +305,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           // $("#prodModifySaleUprc").val("0"); // 판매단가
           $("#prodModifySplyUprc").val("0"); // 공급단가
           $("#prodModifyCostUprc").val("0"); // 원가단가
-          $("#prodModifyLastCostUprc").val("0"); // 최종판매단가
+          $("#prodModifyLastCostUprc").val("0"); // 최종원가단가
           $("#prodModifyPoUnitQty").val("1"); // 발주단위수량
           $("#prodModifyPoMinQty").val("1"); // 최소발주수량
           $("#prodModifyDefaultStock").val("0"); // 초기재고
