@@ -27,7 +27,7 @@
                 thp.PROD_CD,
                 thp.PROD_NM,
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                thpb.BAR_CD
+                (SELECT BARCD_CD AS  FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_CD = thp.PROD_CD) AS BAR_CD
                 FROM TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
                                     SELECT
@@ -46,18 +46,7 @@
                                     ) thpsp ON
                                     thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
                                     AND thp.PROD_CD = thpsp.PROD_CD
-                                    ,
-                (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    BARCD_CD AS BAR_CD
-                    FROM TB_HQ_PRODUCT_BARCD
-                    WHERE 1=1
-                ) thpb
                 WHERE 1=1
-                AND thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
                 AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
@@ -97,7 +86,7 @@
                 tmp.PROD_CD,
                 tmp.PROD_NM,
                 NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
-                tmpb.BAR_CD
+                (SELECT BARCD_CD AS  FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.PROD_CD) AS BAR_CD
                 FROM TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
                                     SELECT
@@ -116,18 +105,7 @@
                                     ) tmpsp ON
                                     tmp.STORE_CD = tmpsp.STORE_CD
                                     AND tmp.PROD_CD = tmpsp.PROD_CD
-                                    ,
-                (
-                    SELECT
-                    STORE_CD,
-                    PROD_CD,
-                    BARCD_CD AS BAR_CD
-                    FROM TB_MS_PRODUCT_BARCD
-                    WHERE 1=1
-                ) tmpb
                 WHERE 1=1
-                AND tmpb.STORE_CD = tmp.STORE_CD
-                AND tmpb.PROD_CD = tmp.PROD_CD
                 AND tmp.STORE_CD = #{storeCd}
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
@@ -324,14 +302,7 @@
                 thp.PROD_NM AS OPTION_PROD_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
-                (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    BARCD_CD AS BAR_CD
-                    FROM TB_HQ_PRODUCT_BARCD
-                    WHERE 1=1
-                ) thpb
+                TB_HQ_PRODUCT_BARCD thpb
                 WHERE 1=1
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                 AND thpb.PROD_CD (+)= thp.PROD_CD
@@ -343,7 +314,7 @@
                     AND thp.PROD_NM LIKE '%'|| #{optionProdNm} ||'%'
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND thpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                    AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
@@ -377,14 +348,7 @@
                 tmp.PROD_NM AS OPTION_PROD_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
-                (
-                    SELECT
-                    STORE_CD,
-                    PROD_CD,
-                    BARCD_CD AS BAR_CD
-                    FROM TB_MS_PRODUCT_BARCD
-                    WHERE 1=1
-                ) tmpb
+                TB_MS_PRODUCT_BARCD tmpb
                 WHERE 1=1
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
                 AND tmpb.PROD_CD (+)= tmp.PROD_CD
@@ -396,7 +360,7 @@
                     AND tmp.PROD_NM LIKE '%'|| #{optionProdNm} ||'%'
                 </if>
                 <if test="barCd != null and barCd != ''">
-                    AND tmpb.BAR_CD LIKE '%'|| #{barCd} ||'%'
+                    AND tmpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
