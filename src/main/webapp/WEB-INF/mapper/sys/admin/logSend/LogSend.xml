@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    LogSend.xml
+    POS 시스템 로그 송신 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2020.08.25      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.logSend.service.impl.LogSendMapper">
+
+    <!-- 매장별 포스목록 조회 -->
+    <!--
+      TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_POS, TB_CM_POS_VERSN_STORE
+      PARAM    : logSendVO
+      COMMENTS : 매장별 포스 목록을 조회한다.
+    -->
+    <select id="getPosList" parameterType="logSendVO" resultType="defaultMap">
+        /* LogSendMapper.getPosList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.HQ_OFFICE_CD,
+                tho.HQ_OFFICE_NM,
+                tmp.STORE_CD,
+                tmp.STORE_NM,
+                tmp.POS_NO,
+                tmp.POS_VER_NO,
+                tmp.SYS_STAT_FG,
+                tmp.DB_SEND_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+          FROM TB_HQ_OFFICE tho,
+                (SELECT tms.HQ_OFFICE_CD,
+                         tms.STORE_CD,
+                         tms.STORE_NM,
+                         tmp.POS_NO,
+                         tmp.POS_VER_NO,
+                         tms.SYS_STAT_FG,
+                         (CASE WHEN tmp.DB_SEND_YN IS NULL THEN 'N' ELSE tmp.DB_SEND_YN END) AS DB_SEND_YN
+                   FROM TB_MS_POS tmp,
+                         TB_MS_STORE tms
+                  WHERE tms.STORE_CD = tmp.STORE_CD) tmp
+         WHERE tho.HQ_OFFICE_CD = tmp.HQ_OFFICE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+            AND tmp.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+            AND tho.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND tmp.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND tmp.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND tmp.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tmp.HQ_OFFICE_CD, tmp.STORE_CD, tmp.POS_NO
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- [POS-DB] 간 로그 송신 구분을 등록 -->
+    <!--
+        TABLE    : TB_MS_POS
+        PARAM    : logSendVO
+        COMMENTS : [POS-DB] 간 로그 송신 구분을 등록한다.
+    -->
+    <update id="updateLogSend" parameterType="logSendVO">
+        /* USE : LogSendMapper.updateLogSend */
+        UPDATE TB_MS_POS
+           SET DB_SEND_YN = #{dbSendYn}
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{posNo}
+    </update>
+
+</mapper>
