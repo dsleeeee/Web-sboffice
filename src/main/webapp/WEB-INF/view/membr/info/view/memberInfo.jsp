@@ -259,7 +259,7 @@
                             id="useYn"
                             ng-model="useYn"
                             control="useYnCombo"
-                            items-source="_getComboData('useYn')"
+                            items-source="_getComboData('useYnComboData')"
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
@@ -511,7 +511,7 @@
 
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.12" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">

@@ -214,17 +214,17 @@
                         </div>
                     </td>
                 </tr>
-                    <%--            <tr>--%>
-                    <%--              &lt;%&ndash; 거래처 매핑코드 &ndash;%&gt;--%>
-                    <%--              <th><s:message code="regist.membr.mappingCd" /></th>--%>
-                    <%--              <td>--%>
-                    <%--                <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>--%>
-                    <%--                <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />--%>
-                    <%--                <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />--%>
-                    <%--              </td>--%>
-                    <%--              <th></th>--%>
-                    <%--              <td></td>--%>
-                    <%--            </tr>--%>
+                <tr>
+                        <%-- 거래처 매핑코드 --%>
+                    <th><s:message code="regist.membr.mappingCd" /></th>
+                    <td>
+                        <input type="text" id="rCdNmPartner" class="sb-input w100" ng-model="member.lnPartner" readonly="readonly" ng-click="searchMemberMappingCd()"/>
+                        <input type="hidden" id="rCdCompany" ng-model="member.cdCompany" />
+                        <input type="hidden" id="rCdPartner" ng-model="member.cdPartner" />
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
                 <tr>
                         <%-- E-mail --%>
                     <th><s:message code="regist.email"/></th>
@@ -333,4 +333,4 @@
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200824.01 charset='utf-8'"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200824.05 charset='utf-8'"></script>
