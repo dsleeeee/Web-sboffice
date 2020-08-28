@@ -511,8 +511,7 @@
 
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.07"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberInfo.js?ver=20191223.08" charset="utf-8"></script>
 
 <%-- 후불적용매장등록 --%>
 <c:import url="/WEB-INF/view/membr/info/view/postpaidStoreRegist.jsp">

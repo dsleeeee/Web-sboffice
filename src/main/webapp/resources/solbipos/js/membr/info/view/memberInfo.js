@@ -254,8 +254,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.emailRecvYn = $scope.emailRecvYn;
     params.smsRecvYn = $scope.smsRecvYn;
     params.gendrFg = $scope.gendrFg;
-    // params.useYn = $scope.useYn;
-    params.useYn = 'Y';
+    params.useYn = $scope.useYn;
+    //params.useYn = 'Y';
 
     // console.log('params ', params);
 
