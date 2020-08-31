@@ -1658,22 +1658,27 @@
                tms.ENVST_VAL AS SEL_ENVST_VAL,
                tce3.ENVST_CD_CNT
           FROM (
-          SELECT tce.ENVST_GRP_CD,
-                 tce.ENVST_CD,
-                 tce.ENVST_NM,
-                 tce.ENVST_FG,
-                 tce.TARGT_FG,
-                 tce.DIRCT_IN_YN,
-                 tce.REMARK,
-                 tcd.ENVST_VAL_CD,
-                 tcd.ENVST_VAL_NM,
-                 tcd.DEFLT_YN
-            FROM TB_CM_ENVST tce,
-                 TB_CM_ENVST_DTL tcd
-           WHERE tce.TARGT_FG IN ('S','C','X')
-             AND tce.ENVST_FG = #{envstFg}
-             AND tce.USE_YN = 'Y'
-             AND tcd.ENVST_CD (+)= tce.ENVST_CD
+          SELECT *
+           FROM  (
+             SELECT tce.ENVST_GRP_CD,
+                    tce.ENVST_CD,
+                    tce.ENVST_NM,
+                    tce.ENVST_FG,
+                    tce.TARGT_FG,
+                    tce.DIRCT_IN_YN,
+                    tce.REMARK,
+                    tcd.ENVST_VAL_CD,
+                    tcd.ENVST_VAL_NM,
+                    tcd.DEFLT_YN,
+                    DECODE(tce.DIRCT_IN_YN, 'Y', 'Y', tcd.USE_YN) DTL_USE_YN
+               FROM TB_CM_ENVST tce,
+                    TB_CM_ENVST_DTL tcd
+              WHERE tce.TARGT_FG IN ('S','C','X')
+                AND tce.ENVST_FG = #{envstFg}
+                AND tce.USE_YN = 'Y'
+                AND tcd.ENVST_CD (+)= tce.ENVST_CD
+                 ) tce2
+           WHERE tce2.DTL_USE_YN = 'Y'
                ) tce2,
               (
           SELECT tce.ENVST_GRP_CD,
