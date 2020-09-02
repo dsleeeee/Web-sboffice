@@ -54,7 +54,7 @@
   </div>
 </div>
 <script>
-var preter = [
+var prter = [
   {"name":"주방프린터","value":"0"},
   {"name":"라벨프린터","value":"1"}
 ];
@@ -64,4 +64,4 @@ var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.13" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.15" charset="utf-8"></script>

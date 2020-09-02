@@ -102,16 +102,12 @@
     </wj-combo-box>
 
     <%-- 매장환경 복사 --%>
-    <button class="btn_skyblue fr"  id="copyBtn" ng-click="copyStoreEnv()"  >
+    <button class="btn_skyblue ml5 fr"  id="copyBtn" ng-click="copyStoreEnv()"  >
       <s:message code="storeView.copy.store" />
     </button>
 
-    <%-- 엑셀 다운로드 //todo --%>
-    <%--
-    <button class="btn_skyblue fr" id="excelBtn">
-      <s:message code="cmm.excel.down" />
-    </button>
-    --%>
+    <%-- 엑셀다운로드 --%>
+    <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
   </div>
 
   <%-- 회원목록 그리드 --%>
@@ -151,14 +147,42 @@
   </div>
   <%--//페이지 리스트--%>
 
+  <%-- 엑셀다운로드 그리드 --%>
+  <div class="w100 mt10 mb20" style="display:none;" ng-controller="storeListExcelCtrl">
+    <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+              control="excelFlex"
+              autoGenerateColumns="false"
+              selection-mode="Row"
+              initialized="initGrid(s,e)"
+              items-source="data"
+              item-formatter="_itemFormatter">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="storeView.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeNm"/>" binding="storeNm" width="120" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.storeTypeNm"/>" binding="storeTypeNm" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.clsFgNmG"/>" binding="clsFg" width="80" data-map="clsFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.bizNo"/>" binding="bizNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.ownerNm"/>" binding="ownerNm" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.telNo"/>" binding="telNo" width="5"  is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.address"/>" binding="address" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.posVerNo"/>" binding="posVerNo" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysStatFgNm"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysOpenDate"/>" binding="sysOpenDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sysClosureDate"/>" binding="sysClosureDate"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeView.sms"/>" binding="gChk" visible="false" width="40" align="center"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+  </div>
+
 </div>
 <script>
 var clsFg = ${ccu.getCommCodeSelect("001")};
 var sysStatFg = ${ccu.getCommCodeSelect("005")};
 var areaCd = ${ccu.getCommCodeSelect("061")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20190114.02" charset="utf-8"></script>
-
+<script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20190114.04" charset="utf-8"></script>
 
 <%-- 매장 상세정보 --%>
 <c:import url="/WEB-INF/view/base/store/view/dtl.jsp">

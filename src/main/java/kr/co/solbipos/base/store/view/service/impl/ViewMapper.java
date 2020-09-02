@@ -34,6 +34,9 @@ public interface ViewMapper {
     /** 매장정보 목록 조회 */
     List<DefaultMap<String>> getViewList(ViewVO viewVO);
 
+    /** 매장정보 리스트 엑셀 조회 */
+    List<DefaultMap<String>> getStoreListExcel(ViewVO viewVO);
+
     /** 매장정보 상세 조회 */
     DefaultMap<String> getViewDetail(ViewVO viewVO);
 

@@ -10,7 +10,7 @@
 <div class="wj-dialog-body" id="basicView" name="basicView" class="subCon" ng-controller="memberBasicCtrl">
     <%-- body --%>
     <div style="height:400px; overflow-y: auto;">
-        <f:form id="regForm" name="regForm" ng-submit="submit()">
+        <f:form id="regForm" name="regForm">
             <%--                    <h3 class="h3_tbl"><s:message code="storeManage.basicInfo"/></h3>--%>
             <table class="searchTbl">
                 <colgroup>
@@ -333,4 +333,10 @@
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200824.05 charset='utf-8'"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200901.01 charset='utf-8'"></script>
+
+<%-- 회원 매핑코드 조회 --%>
+<c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

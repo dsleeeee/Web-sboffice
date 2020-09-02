@@ -53,6 +53,45 @@
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 매장정보 리스트 엑셀 조회(조회에서 페이징만 제거) -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : 매장정보조회한다.(엑셀용)
+    -->
+    <select id="getStoreListExcel" parameterType="viewVO" resultType="DefaultMap">
+        /* USE : ViewMapper.getStoreListExcel */
+        SELECT tms.STORE_CD,
+        tms.STORE_NM,
+        tms.CLS_FG,
+        tms.BIZ_NO ,
+        tms.OWNER_NM,
+        tms.TEL_NO,
+        tms.POST_NO || ') ' || tms.ADDR || tms.ADDR_DTL  AS ADDRESS,
+        tmp.POS_VER_NO,
+        tms.SYS_STAT_FG,
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
+        TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE
+        FROM TB_MS_STORE tms,
+        TB_MS_POS tmp
+        WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
+        AND tmp.STORE_CD (+)= tms.STORE_CD
+        AND tmp.POS_NO (+)= '01' -- 기본포스(포스 최신버전 가져오기 위함)
+        AND tmp.USE_YN (+)= 'Y'
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM  LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='clsFg != null and clsFg != ""'>
+            AND tms.CLS_FG = #{clsFg}
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
 
     <!-- 매장정보상세조회  -->
     <!--
