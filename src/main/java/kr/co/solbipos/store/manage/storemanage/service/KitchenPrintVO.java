@@ -46,6 +46,10 @@ public class KitchenPrintVO extends CmmVO {
     private UseYn prterCheckYn;
     /** 사용여부  (Y:사용, N:미사용) */
     private UseYn useYn;
+    /** 프린터구분*/
+    private String prterFg;
+    /** 라벨프린터*/
+    private String prterLabelKindFg;
 
 
     /**
@@ -197,4 +201,19 @@ public class KitchenPrintVO extends CmmVO {
         this.useYn = useYn;
     }
 
+    public String getPrterFg() {
+        return prterFg;
+    }
+
+    public void setPrterFg(String prterFg) {
+        this.prterFg = prterFg;
+    }
+
+    public String getPrterLabelKindFg() {
+        return prterLabelKindFg;
+    }
+
+    public void setPrterLabelKindFg(String prterLabelKindFg) {
+        this.prterLabelKindFg = prterLabelKindFg;
+    }
 }

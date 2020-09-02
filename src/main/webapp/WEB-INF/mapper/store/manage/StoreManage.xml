@@ -2320,6 +2320,8 @@
                tmp.PRTER_OUTPUT_QTY,
                tmp.PRTER_CHECK_YN,
                tmp.USE_YN,
+               tmp.PRTER_FG,
+               tmp.PRTER_LABEL_KIND_FG,
                NVL(tmpr.CNT, 0) AS CNT
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
@@ -2355,6 +2357,8 @@
             PRTER_OUTPUT_QTY,
             PRTER_CHECK_YN,
             USE_YN,
+            PRTER_FG,
+            PRTER_LABEL_KIND_FG,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -2374,6 +2378,8 @@
             #{prterOutputQty},
             #{prterCheckYn},
             #{useYn},
+            #{prterFg},
+            #{prterLabelKindFg},
             #{regDt},
             #{regId},
             #{modDt},
@@ -2400,6 +2406,8 @@
                PRTER_OUTPUT_QTY = #{prterOutputQty},
                PRTER_CHECK_YN = #{prterCheckYn},
                USE_YN = #{useYn},
+               PRTER_FG = #{prterFg},
+               PRTER_LABEL_KIND_FG = #{prterLabelKindFg},
                MOD_DT = #{modDt},
                MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
