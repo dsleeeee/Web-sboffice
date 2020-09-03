@@ -28,6 +28,9 @@ public interface ViewService {
     /** 매장정보 리스트조회 */
     List<DefaultMap<String>> getViewList(ViewVO viewVO, SessionInfoVO sessionInfoVO);
 
+    /** 매장정보 리스트 엑셀 조회 */
+    List<DefaultMap<String>> getStoreListExcel(ViewVO viewVO, SessionInfoVO sessionInfoVO);
+
     /** 매장정보 상세조회 */
     DefaultMap<String> getViewDetail(ViewVO viewVO);
 

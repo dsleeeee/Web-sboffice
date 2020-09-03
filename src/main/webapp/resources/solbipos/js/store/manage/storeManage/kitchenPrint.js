@@ -108,7 +108,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.$broadcast('loadingPopupInactive');
 
         // 그리드 DataMap 설정
-        $scope.prterDataMap = new wijmo.grid.DataMap(preter, 'value', 'name');
+        $scope.prterDataMap = new wijmo.grid.DataMap(prter, 'value', 'name');
         $scope.prterKindDataMap = new wijmo.grid.DataMap(prterKind, 'value', 'name');
         $scope.prterLabelKindDataMap = new wijmo.grid.DataMap(prterLabelKind, 'value', 'name');
         $scope.prterPortDataMap = new wijmo.grid.DataMap(prterPort, 'value', 'name');
@@ -145,7 +145,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     var params        = {};
     params.gChk       = true;
     params.posNo      ="01";
-    params.preterFg = "0";
+    params.prterFg = "0";
     params.prterKindFg  ="00";
     params.prterLabelKindFg  ="00";
     params.prterPortFg  = "00";

@@ -77,12 +77,12 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     /*********************************************************
      * 회원 등록을 위한 폼 리셋
      * *******************************************************/
-    $scope.resetForm = async function () {
+    $scope.resetForm = function () {
 
-        await $("#regForm")[0].reset();
+         $("#regForm")[0].reset();
         // $("#memberInfoTitle").text("");
 
-        $scope.$apply(await function () {
+        $scope.$apply(function () {
             $scope.member.membrNo = '자동채번';
             $scope.member.beforeBizNo = '';
             $scope.basicRegStoreCdCombo.selectedIndex = 0;
@@ -339,13 +339,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 수정
         else if ($scope.saveMode === "MOD") {
-            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, async function (result) {
+            $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
                 var scope = agrid.getScope('memberCtrl');
-                await $scope._popMsg(messages["cmm.saveSucc"]);
-                await $scope.$emit("responseGet", result.data.data, $scope.saveMode);
-                await $scope.memberRegistLayer.hide();
-                await $scope.$broadcast("memberCtrl");
-                await $scope.$broadcast("memberChgBatchCtrl");
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                $scope.$emit("responseGet", result.data.data, $scope.saveMode);
+                $scope.memberRegistLayer.hide();
+                $scope.$broadcast("memberCtrl");
+                $scope.$broadcast("memberChgBatchCtrl");
                 // $scope.memberInfoDetailLayer.hide();
                 // memberInfoScope.getMemberList();
             });
@@ -359,9 +359,9 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // form 변화
-    $scope.$watch('member', () => {
+    /*$scope.$watch('member', () => {
         console.log("==감지==", $scope.member);
-    }, true);
+    }, true);*/
 
 
     /*********************************************************
