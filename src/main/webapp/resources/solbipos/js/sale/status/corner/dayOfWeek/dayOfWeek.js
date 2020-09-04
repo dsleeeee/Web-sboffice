@@ -72,12 +72,12 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
         	params.yoil	 	 = selectedRow.yoil;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
     			params.arrStoreCornr	 = arrStoreCornr;
-    			params.storeCd	 = $("#cornerDayOfWeekSelectStoreCd").val();
+    			params.storeCd	 = selectedRow.storeCd; //$("#cornerDayOfWeekSelectStoreCd").val();
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {
             	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
             	if(gvOrgnFg == "S"){
-            		params.storeCd	 = $("#cornerDayOfWeekSelectStoreCd").val();
+            		params.storeCd	 = selectedRow.storeCd; //$("#cornerDayOfWeekSelectStoreCd").val();
             	}
             	$scope._broadcast('saleComProdCtrl', params);
             }
@@ -278,6 +278,11 @@ app.controller('cornerDayOfWeekCtrl', ['$scope', '$http', '$timeout', function (
 	    params.storeCd = storeCd;
 	    params.cornrCd = cornrCd;
 	    params.hqOfficeCd = $("#HqOfficeCd").val();
+	    
+	    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
 	    
 	    // ajax 통신 설정
 	    $http({

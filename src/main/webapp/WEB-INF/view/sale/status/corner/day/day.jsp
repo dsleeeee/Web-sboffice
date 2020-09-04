@@ -117,6 +117,7 @@
           frozen-columns="4"
           item-formatter="_itemFormatter">
           <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="corner.storeCd"/>"          binding="storeCd"          width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.saleDate"/>"          binding="saleDate"          width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.totRealSaleAmt"/>"    binding="totRealSaleAmt"    width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -164,4 +165,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20190125.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/day/day.js?ver=20200904.01" charset="utf-8"></script>

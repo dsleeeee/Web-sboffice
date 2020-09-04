@@ -67,12 +67,12 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
         	params.endDate   = selectedRow.saleDate;
         	if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
     			params.arrStoreCornr	 = arrStoreCornr;
-    			params.storeCd	 = $("#cornerDaySelectStoreCd").val();
+    			params.storeCd	 = selectedRow.storeCd; //$("#cornerDaySelectStoreCd").val();
             	$scope._broadcast('saleComProdCtrl', params);
             }else if(col.binding.substring(0, 7) === "saleQty") {
             	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
             	if(gvOrgnFg == "S"){
-            		params.storeCd	 = $("#cornerDaySelectStoreCd").val();
+            		params.storeCd	 = selectedRow.storeCd; //$("#cornerDaySelectStoreCd").val();
             	}
         		$scope._broadcast('saleComProdCtrl', params);
             }
@@ -275,7 +275,12 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 	    params.storeCd = storeCd;
 	    params.cornrCd = cornrCd;
 	    params.hqOfficeCd = $("#HqOfficeCd").val();
-
+	    
+	    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+	    
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식

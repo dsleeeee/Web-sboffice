@@ -101,6 +101,7 @@
 				frozen-columns="4"
 				item-formatter="_itemFormatter">
 				<!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="tableDayOfWeek.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="tableDayOfWeek.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -117,5 +118,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20190125.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/dayOfWeek/dayOfWeek.js?ver=20200904.01" charset="utf-8"></script>
 

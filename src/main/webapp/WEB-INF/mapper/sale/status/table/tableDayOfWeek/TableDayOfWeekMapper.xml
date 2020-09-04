@@ -5,7 +5,8 @@
 <mapper namespace="kr.co.solbipos.sale.status.table.dayOfWeek.service.impl.TableDayOfWeekMapper">
 
 	<select id="getTableDayOfWeekList" parameterType="tableDayOfWeekVO" resultType="DefaultMap">
-		SELECT 	TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
+		SELECT 	TSDT.STORE_CD
+				, TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
 				, CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
     				WHEN '일' THEN 1
     				WHEN '월' THEN 2
@@ -39,7 +40,7 @@
    			  AND TSDT.SALE_DATE >= #{startDate}
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]> -->
-		GROUP BY TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+		GROUP BY TSDT.STORE_CD, TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
 		ORDER BY DAY_ORDER
 	</select>
 

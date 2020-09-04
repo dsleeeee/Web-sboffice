@@ -14,7 +14,8 @@
        /* USE : CornerDayOfWeekMapper.getCornerDayOfWeekList */
        <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
+       SELECT TSDCP.STORE_CD
+       		  ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
               ,CASE TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
                                     WHEN '일' THEN 1
                                     WHEN '월' THEN 2
@@ -52,7 +53,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-        GROUP BY TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+        GROUP BY TSDCP.STORE_CD, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
         ORDER BY DAY_ORDER 
         ]]>
         <include refid="CmmSQL.PagingTemplateBottom"/>
