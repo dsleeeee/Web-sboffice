@@ -161,12 +161,18 @@
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.remark"/>" 	 binding="remark" width="200" align="left" is-read-only="false" max-length=300></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.vatFg"/>" 	 binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderUnitQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderEtcQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderTotQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderAmt" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderVat" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="rtnOutstockConfm.dtl.envst0011"/>" binding="orderTot" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            
+<!--             <wj-flex-grid-column header=""                                                  binding="arrStorageCd"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrStorageNm"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+			
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrcurrQty"  		width="200" align="left"   	is-read-only="true"     visible="false" 												></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderUnitQty"  	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderEtcQty"   	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderTotQty"   	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderAmt"      	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderVat"      	width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column> -->
+<!-- 			<wj-flex-grid-column header=""                                                  binding="arrOrderTot"      	width="200" align="left"   	is-read-only="true"     visible="false"         										></wj-flex-grid-column> -->
 
           </wj-flex-grid>
         </div>
@@ -177,7 +183,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20200805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockConfm/rtnOutstockConfmDtl.js?ver=20200904.01" charset="utf-8"></script>
 
 <%-- 거래명세표 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/transReport.jsp">

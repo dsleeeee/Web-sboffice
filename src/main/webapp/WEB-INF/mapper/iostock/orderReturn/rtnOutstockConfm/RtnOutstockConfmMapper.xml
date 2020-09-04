@@ -716,7 +716,7 @@
         /* USE : RtnDstbCloseStoreMapper.savetRtnStoreOrderProd */
        MERGE INTO TB_PO_HQ_STORE_ORDER_PROD TPHSOP
         USING DUAL
-           ON (TPHSOP.REQ_DATE = #{reqDate} AND TPHSOP.STORE_CD = #{storeCd} AND TPHSOP.SLIP_FG = 1 AND TPHSOP.PROD_CD = #{prodCd} AND TPHSOP.STORAGE_CD = #{storageCd})
+           ON (TPHSOP.REQ_DATE = #{reqDate} AND TPHSOP.STORE_CD = #{storeCd} AND TPHSOP.SLIP_FG = -1 AND TPHSOP.PROD_CD = #{prodCd} AND TPHSOP.STORAGE_CD = #{storageCd})
          WHEN MATCHED THEN
        UPDATE
           SET TPHSOP.PO_UNIT_QTY 	= #{poUnitQty},
@@ -825,7 +825,7 @@
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
         WHERE   REQ_DATE    = #{reqDate}
         AND     STORE_CD    = #{storeCd}
-        AND     SLIP_FG     = '1'
+        AND     SLIP_FG     = '-1'
 	</delete>
 	
 	<delete id="deleteOutStockProd" parameterType="rtnOutstockConfmVO">
