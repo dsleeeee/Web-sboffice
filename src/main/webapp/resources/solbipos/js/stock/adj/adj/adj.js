@@ -58,6 +58,7 @@ app.controller('adjCtrl', ['$scope', '$http', function ($scope, $http) {
           var params     = {};
           params.adjDate = selectedRow.adjDate;
           params.seqNo   = selectedRow.seqNo;
+          params.adjStorageCd     = selectedRow.adjStorageCd;
           $scope._broadcast('adjDtlCtrl', params);
         }
       }

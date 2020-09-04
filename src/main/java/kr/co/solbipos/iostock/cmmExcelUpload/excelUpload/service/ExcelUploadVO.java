@@ -58,6 +58,10 @@ public class ExcelUploadVO extends PageVO {
     private String vendrCd;
     /** 부가세여부 */
     private Integer vatFg;
+    
+    private String adjStorageCd;
+    
+    private String disuseStorageCd;
 
     /**
      * @return the orgnFg
@@ -380,4 +384,23 @@ public class ExcelUploadVO extends PageVO {
     public void setVatFg(Integer vatFg) {
         this.vatFg = vatFg;
     }
+
+	public String getAdjStorageCd() {
+		return adjStorageCd;
+	}
+
+	public void setAdjStorageCd(String adjStorageCd) {
+		this.adjStorageCd = adjStorageCd;
+	}
+
+	public String getDisuseStorageCd() {
+		return disuseStorageCd;
+	}
+
+	public void setDisuseStorageCd(String disuseStorageCd) {
+		this.disuseStorageCd = disuseStorageCd;
+	}
+    
+	
+    
 }

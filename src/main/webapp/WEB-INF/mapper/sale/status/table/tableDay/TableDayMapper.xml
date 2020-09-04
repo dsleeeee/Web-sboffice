@@ -5,7 +5,8 @@
 <mapper namespace="kr.co.solbipos.sale.status.table.day.service.impl.TableDayMapper">
 	<select id="getTableDayList" parameterType="tableDayVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT SALE_DATE SALE_DATE
+		SELECT STORE_CD 
+			, SALE_DATE SALE_DATE
        		, TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
        		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
@@ -39,7 +40,7 @@
    			  AND TSDT.SALE_DATE <= #{endDate}
    			  ]]> -->
 		GROUP
-		BY 	  SALE_DATE
+		BY 	  STORE_CD, SALE_DATE
 		ORDER
 		BY    SALE_DATE DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
@@ -47,7 +48,8 @@
 
 	<select id="getTableDayExcelList" parameterType="tableDayVO" resultType="DefaultMap">
 
-        SELECT SALE_DATE SALE_DATE
+        SELECT TSDT.STORE_CD
+        	, SALE_DATE SALE_DATE
             , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
             , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
@@ -69,7 +71,7 @@
                 AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
               </if>
         GROUP
-        BY    SALE_DATE
+        BY    TSDT.STORE_CD, SALE_DATE
         ORDER
         BY    SALE_DATE DESC
     </select>

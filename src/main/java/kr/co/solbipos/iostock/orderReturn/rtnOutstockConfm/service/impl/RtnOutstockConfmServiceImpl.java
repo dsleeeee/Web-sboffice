@@ -175,7 +175,7 @@ public class RtnOutstockConfmServiceImpl implements RtnOutstockConfmService {
 //            if(orderTotQty != 0) {
             	
             	rtnOutstockConfmVO.setStorageCd					(rtnOutstockConfmVO	.getOutStorageCd()			);	//창고코드
-            	rtnOutstockConfmVO.setSlipFg		        	(1												);	//전표구분 1:주문 -1:반품
+            	rtnOutstockConfmVO.setSlipFg		        	(-1												);	//전표구분 1:주문 -1:반품
 
 //            	rtnOutstockConfmVO.setPoUnitQty					(poUnitQty);
             	

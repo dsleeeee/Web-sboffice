@@ -13,7 +13,8 @@
     <select id="getCornerDayList" parameterType="cornerDayVO" resultType="DefaultMap">
        <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
+       SELECT STORE_CD
+       		  ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
               ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
               ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
@@ -43,7 +44,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        GROUP BY TSDCP.STORE_CD, TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
         ]]>
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -85,7 +86,8 @@
     -->
     <select id="getCornerDayExcelList" parameterType="cornerDayVO" resultType="DefaultMap">
        <![CDATA[
-       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
+       SELECT TSDCP.STORE_CD
+       		  , TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE  
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
               ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
               ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
@@ -114,7 +116,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        GROUP BY TSDCP.STORE_CD, TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
         ]]>
     </select>

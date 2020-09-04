@@ -116,9 +116,7 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    		//params.storeCd = $scope.arrTableCd[Math.floor(ht.col/3) - 1];
 	    		var storeTable   = $("#tableDaySelectTableCd").val().split(",");    		
 	    		var storeTableOrg   = 	$("#tableDaySelectTableCdOrg").val().split(",");
-	    		var storeCd			=	$("#tableDaySelectStoreCd").val();
-	    		
-	    		
+	    		var storeCd			=	selectedRow.storeCd; //$("#tableDaySelectStoreCd").val();
 
 	    		if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
 	    			var arrStore= [];
@@ -266,7 +264,12 @@ app.controller('tableDayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    params.storeCd = storeCd;
 	    params.tableCd = tableCd;
 	    params.hqOfficeCd = $("#HqOfficeCd").val();
-
+	    
+	    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+	    
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식

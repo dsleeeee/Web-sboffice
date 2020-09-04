@@ -149,6 +149,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setAdjTitle(adjVO.getAdjTitle());
                 adjHdVO.setSeqNo(adjVO.getSeqNo());
                 adjHdVO.setProcFg("0");
+                adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
                 adjHdVO.setStorageCd(adjVO.getStorageCd());
                 adjHdVO.setRegId(sessionInfoVO.getUserId());
                 adjHdVO.setRegDt(currentDt);
@@ -323,6 +324,7 @@ public class AdjServiceImpl implements AdjService {
                 adjHdVO.setAdjTitle(adjVO.getAdjTitle());
                 adjHdVO.setSeqNo(adjVO.getSeqNo());
                 adjHdVO.setStorageCd(adjVO.getStorageCd());
+                adjHdVO.setAdjStorageCd(adjVO.getAdjStorageCd());
                 adjHdVO.setRegId(sessionInfoVO.getUserId());
                 adjHdVO.setRegDt(currentDt);
                 adjHdVO.setModId(sessionInfoVO.getUserId());
@@ -456,6 +458,7 @@ public class AdjServiceImpl implements AdjService {
         adjHdVO.setSeqNo(Integer.parseInt(seqNo));
         adjHdVO.setProcFg("0");
         adjHdVO.setStorageCd("999");
+        adjHdVO.setAdjStorageCd(excelUploadVO.getAdjStorageCd());
         adjHdVO.setRegId(sessionInfoVO.getUserId());
         adjHdVO.setRegDt(currentDt);
         adjHdVO.setModId(sessionInfoVO.getUserId());
@@ -472,7 +475,7 @@ public class AdjServiceImpl implements AdjService {
             	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.insertStAdjHd(adjHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         else {
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
@@ -484,7 +487,7 @@ public class AdjServiceImpl implements AdjService {
             	adjHdVO.setAdjStorageCd("001");
                 result = adjMapper.updateStAdjHd(adjHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return result;
