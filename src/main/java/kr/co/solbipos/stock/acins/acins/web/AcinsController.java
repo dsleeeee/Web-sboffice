@@ -6,6 +6,9 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.stock.acins.acins.service.AcinsService;
 import kr.co.solbipos.stock.acins.acins.service.AcinsVO;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,11 +48,13 @@ import java.util.List;
 public class AcinsController {
     private final SessionService sessionService;
     private final AcinsService acinsService;
+    private final IostockCmmService iostockCmmService;
 
     @Autowired
-    public AcinsController(SessionService sessionService, AcinsService acinsService) {
+    public AcinsController(SessionService sessionService, AcinsService acinsService, IostockCmmService iostockCmmService) {
         this.sessionService = sessionService;
         this.acinsService = acinsService;
+        this.iostockCmmService = iostockCmmService;
     }
 
     /**
@@ -271,4 +278,42 @@ public class AcinsController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+    
+    /**
+     * 다이나믹 콤보조회 - 출고창고 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   iostockCmmVO
+     * @return  String
+     * @author  M2M
+     * @since   2020. 08. 27.
+     */
+    @RequestMapping(value = "/acins/getOutStorageCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOutStorageCombo(HttpServletRequest request, HttpServletResponse response,
+        Model model, IostockCmmVO iostockCmmVO) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
+        iostockCmmVO.setSelectTable("TB_HQ_STORAGE");
+        iostockCmmVO.setSelectCd("STORAGE_CD");
+        iostockCmmVO.setSelectNm("STORAGE_NM");
+        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+sessionInfoVO.getHqOfficeCd()+"'");
+//        iostockCmmVO.setSelectWhere("HQ_OFFICE_CD='"+iostockCmmVO.getHqOfficeCd()+"'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
+        }
+        else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
+            iostockCmmVO.setSelectTable("TB_MS_STORAGE");
+            iostockCmmVO.setSelectCd("STORAGE_CD");
+            iostockCmmVO.setSelectNm("STORAGE_NM");
+            iostockCmmVO.setSelectWhere("STORE_CD='"+sessionInfoVO.getStoreCd()+"'");
+            list = iostockCmmService.selectDynamicCodeList(iostockCmmVO, sessionInfoVO);
+        }
+
+
+        return ReturnUtil.returnListJson(Status.OK, list, iostockCmmVO);
+    }    
 }

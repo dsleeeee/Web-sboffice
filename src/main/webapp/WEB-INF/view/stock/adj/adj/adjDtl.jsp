@@ -35,6 +35,25 @@
                      uib-popover="<s:message code="adj.dtl.adjTitle"/>은(는) 필수 입력항목 입니다."/>
             </td>
           </tr>
+          <tr>
+			<th><s:message code="adj.dtl.adjStorageCd"/><em class="imp">*</em></th>
+            <td colspan="3">
+            	<span class="txtIn w150px sb-select fl mr5">
+	            <wj-combo-box
+	                id="acinsDtlAdjStorageCd"
+	                ng-model="acins.dtl.adjStorageCd"
+	                items-source="_getComboData('acinsDtlAdjStorageCd')"
+	                display-member-path="name"
+	                selected-value-path="value"
+	                is-editable="false"
+	                initialized="_initComboBox(s)"
+	                selected-index-changed="selectedIndexChanged(s)"
+	                >
+	              </wj-combo-box>    
+	            </span>        	
+            </td>
+          </tr>
+          
           </tbody>
         </table>
       </form>
@@ -97,4 +116,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/adj/adj/adjDtl.js?ver=2020094.01" charset="utf-8"></script>

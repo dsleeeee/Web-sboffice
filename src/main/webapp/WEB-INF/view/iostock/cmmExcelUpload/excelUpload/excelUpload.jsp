@@ -1249,6 +1249,12 @@
                             $scope.valueCheckErrPopup(msg);
                             return false;
                         }
+                        
+                        if (tempProdCd  === item.prodBarcdCd) {        
+                  		  msg = "상품코드/바코드(이)가 중복 데이터가 존재합니다."; 
+                            $scope.valueCheckErrPopup(msg);
+                            return false;
+                        } 
                     }
                 }
 

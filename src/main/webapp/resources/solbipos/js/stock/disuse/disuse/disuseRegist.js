@@ -257,7 +257,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       disuseDtlScope.searchDisuseDtlList();
     }
 
-    $scope.wjDisuseRegistLayer.hide(true);
+//    $scope.wjDisuseRegistLayer.hide(true);
   };
 
 
@@ -315,12 +315,19 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 그리드의 상품을 찾아서 폐기수 수정
   $scope.modifyDisuseQty = function (addQty) {
+	
+	// 숫자가 아닌 값
+	var numChkexp = /[^0-9]/g;
+	if (numChkexp.test(nvl(addQty, 0))) {
+		return false;
+	}
+	
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       var item = $scope.flex.collectionView.items[i];
       if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
         $scope.flex.collectionView.editItem(item);
 
-        item.disuseQty = parseInt(nvl(item.disuseQty, 0)) + parseInt(addQty);
+        item.disuseQty = parseInt(nvl(item.disuseQty, 0)) + parseInt(nvl(addQty, 0));
 
         $scope.calcAmt(item);
         $scope.flex.collectionView.commitEdit();
@@ -418,6 +425,10 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
       var msg = messages["disuse.reg.disuseTitle"] + messages["cmm.require.text"]; // 폐기제목을 입력하세요.
       $scope._popMsg(msg);
       return false;
+    } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
+        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"]; 
+        $scope._popMsg(msg);
+        return false;
     }
 
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
@@ -455,6 +466,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.disuseTitle;
     params.addQtyFg = $scope.addQtyFg;
+    params.disuseStorageCd    = $("#registSelectStorageCd").val();
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){

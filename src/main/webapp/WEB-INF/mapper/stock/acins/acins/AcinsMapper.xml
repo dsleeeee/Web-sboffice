@@ -17,6 +17,7 @@
         ,       tshai.ACINS_TITLE, tshai.PROC_FG, tshai.DTL_CNT
         ,       tshai.ADJ_CNT, tshai.CONFM_DATE
         ,       SUBSTR(tshai.REG_DT,0,8) AS REG_DATE
+        ,		tshai.ADJ_STORAGE_CD
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -43,6 +44,7 @@
         ,       tssai.ACINS_TITLE, tssai.PROC_FG, tssai.DTL_CNT
         ,       tssai.ADJ_CNT, tssai.CONFM_DATE
         ,       SUBSTR(tssai.REG_DT,0,8) AS REG_DATE
+        ,		tssai.ADJ_STORAGE_CD        
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         WHERE   tssai.STORE_CD    = #{storeCd}
         AND     tssai.ACINS_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -65,7 +67,7 @@
     <select id="getHqProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE
+        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
         WHERE   tshai.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tshai.ACINS_DATE    = #{acinsDate}
@@ -83,7 +85,7 @@
     <select id="getStProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE
+        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
         WHERE   tssai.STORE_CD      = #{storeCd}
         AND     tssai.ACINS_DATE    = #{acinsDate}
@@ -349,10 +351,12 @@
         ,       tshaid.ADJ_AMT
         ,       tshaid.REMARK
         ,       'U' AS ACINS_PROD_STATUS
+        ,		tshai.ADJ_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-        FROM    TB_ST_HQ_ACTUAL_INSPECTION_DTL tshaid
+        FROM    TB_ST_HQ_ACTUAL_INSPECTION		tshai
+        ,		TB_ST_HQ_ACTUAL_INSPECTION_DTL 	tshaid
         ,       TB_HQ_PRODUCT thp
         ,       (	SELECT	tshsm.PROD_CD
                     ,		tshsm.AVG_COST_UPRC
@@ -379,6 +383,9 @@
         WHERE   tshaid.HQ_OFFICE_CD     =   #{hqOfficeCd}
         AND     tshaid.ACINS_DATE       =   #{acinsDate}
         AND     tshaid.SEQ_NO           =   #{seqNo}
+        AND		tshaid.HQ_OFFICE_CD     =   tshai.HQ_OFFICE_CD
+        AND     tshaid.ACINS_DATE       =   tshai.ACINS_DATE
+        AND     tshaid.SEQ_NO           =   tshai.SEQ_NO        
         AND     tshaid.HQ_OFFICE_CD     =   thp.HQ_OFFICE_CD
         AND     tshaid.PROD_CD          =   thp.PROD_CD
         AND     tshsm.PROD_CD       (+) =   tshaid.PROD_CD
@@ -417,10 +424,12 @@
         ,       tssaid.ADJ_AMT
         ,       tssaid.REMARK
         ,       'U' AS ACINS_PROD_STATUS
+        ,		tssai.ADJ_STORAGE_CD
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-        FROM    TB_ST_STORE_ACTUAL_INSPECTION_DTL tssaid
+        FROM    TB_ST_STORE_ACTUAL_INSPECTION		tssai
+        ,		TB_ST_STORE_ACTUAL_INSPECTION_DTL 	tssaid
         ,       TB_MS_PRODUCT tmp
         ,       (   SELECT  tsssm.PROD_CD
                     ,       tsssm.AVG_COST_UPRC
@@ -447,6 +456,9 @@
         WHERE   tssaid.STORE_CD         =   #{storeCd}
         AND     tssaid.ACINS_DATE       =   #{acinsDate}
         AND     tssaid.SEQ_NO           =   #{seqNo}
+        AND		tssaid.STORE_CD     	=   tssai.STORE_CD
+        AND     tssaid.ACINS_DATE       =   tssai.ACINS_DATE
+        AND     tssaid.SEQ_NO           =   tssai.SEQ_NO           
         AND     tssaid.STORE_CD         =   tmp.STORE_CD
         AND     tssaid.PROD_CD          =   tmp.PROD_CD
         AND     tsssm.PROD_CD       (+) =   tssaid.PROD_CD
@@ -828,6 +840,7 @@
                     AND     tshaid.SEQ_NO       =   #{seqNo}
                 )
         ,       ACINS_TITLE = #{acinsTitle}
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
@@ -858,6 +871,7 @@
                     AND     tshaid.SEQ_NO       =   #{seqNo}
                 )
         ,       ACINS_TITLE = #{acinsTitle}
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})

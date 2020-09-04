@@ -306,12 +306,19 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 그리드의 상품을 찾아서 조정수 수정
   $scope.modifyAdjQty = function (addQty) {
+	  
+	// 숫자가 아닌 값
+	var numChkexp = /[^0-9]/g;
+	if (numChkexp.test(nvl(addQty, 0))) {
+		return false;
+	}  
+	  
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       var item = $scope.flex.collectionView.items[i];
       if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
         $scope.flex.collectionView.editItem(item);
 
-        item.adjQty = parseInt(nvl(item.adjQty, 0)) + parseInt(addQty);
+        item.adjQty = parseInt(nvl(item.adjQty, 0)) + parseInt(nvl(addQty, 0));
 
         $scope.calcAmt(item);
         $scope.flex.collectionView.commitEdit();
@@ -409,6 +416,10 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       var msg = messages["adj.reg.adjTitle"] + messages["cmm.require.text"]; // 조정제목을 입력하세요.
       $scope._popMsg(msg);
       return false;
+    } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
+        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"]; 
+        $scope._popMsg(msg);
+        return false;
     }
 
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
@@ -446,7 +457,8 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.adjTitle;
     params.addQtyFg = $scope.addQtyFg;
-
+    params.adjStorageCd    = $("#registSelectStorageCd").val();
+    
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
     
     //가상로그인 session 설정

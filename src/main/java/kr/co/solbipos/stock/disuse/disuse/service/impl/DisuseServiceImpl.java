@@ -322,6 +322,7 @@ public class DisuseServiceImpl implements DisuseService {
                 disuseHdVO.setDisuseTitle(disuseVO.getDisuseTitle());
                 disuseHdVO.setSeqNo(disuseVO.getSeqNo());
                 disuseHdVO.setStorageCd(disuseVO.getStorageCd());
+                disuseHdVO.setDisuseStorageCd(disuseVO.getDisuseStorageCd());
                 disuseHdVO.setRegId(sessionInfoVO.getUserId());
                 disuseHdVO.setRegDt(currentDt);
                 disuseHdVO.setModId(sessionInfoVO.getUserId());
@@ -455,6 +456,7 @@ public class DisuseServiceImpl implements DisuseService {
         disuseHdVO.setSeqNo(Integer.parseInt(seqNo));
         disuseHdVO.setProcFg("0");
         disuseHdVO.setStorageCd("999");
+        disuseHdVO.setDisuseStorageCd(excelUploadVO.getDisuseStorageCd());        
         disuseHdVO.setRegId(sessionInfoVO.getUserId());
         disuseHdVO.setRegDt(currentDt);
         disuseHdVO.setModId(sessionInfoVO.getUserId());
@@ -471,7 +473,7 @@ public class DisuseServiceImpl implements DisuseService {
             	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.insertStDisuseHd(disuseHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         else {
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
@@ -483,7 +485,7 @@ public class DisuseServiceImpl implements DisuseService {
             	disuseHdVO.setDisuseStorageCd("001");
                 result = disuseMapper.updateStDisuseHd(disuseHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return result;

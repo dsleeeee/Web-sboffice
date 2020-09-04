@@ -94,6 +94,7 @@
         <wj-flex-grid-column header="<s:message code="disuse.dtlCnt"/>" binding="dtlCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="disuse.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+		<wj-flex-grid-column header="<s:message code="disuse.disuseStorageCd"/>" binding="disuseStorageCd" width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>        
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -114,7 +115,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20200904.01" charset="utf-8"></script>
 
 <%-- 폐기 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/disuse/disuse/disuseDtl.jsp">

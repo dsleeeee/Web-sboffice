@@ -95,6 +95,7 @@
         <wj-flex-grid-column header="<s:message code="acins.adjCnt"/>" binding="adjCnt" width="50" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.regDate"/>" binding="regDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="acins.confmDate"/>" binding="confmDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="acins.adjStorageCd"/>" binding="adjStorageCd" width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -115,7 +116,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acins.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/acins/acins/acins.js?ver=20200904.01" charset="utf-8"></script>
 
 <%-- 실사 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/acins/acins/acinsDtl.jsp">

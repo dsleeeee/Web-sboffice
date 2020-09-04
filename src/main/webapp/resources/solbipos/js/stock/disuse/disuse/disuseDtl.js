@@ -3,9 +3,21 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('disuseDtlCtrl', $scope, $http, true));
 
+  var global_disuseStorageCd;	  
+  var global_disuseTitle;
+  
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+	  
+	  var comboParams             = {};
+	    
+	  // 출고창고
+	  var url = '/stock/acins/acins/acins/getOutStorageCombo.sb';
+	    
+	  // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
+	  $scope._queryCombo("combo", "disuseDtlAdjStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
+	   
+	  
     s.cellEditEnded.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
@@ -48,6 +60,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.disuseDate = data.disuseDate;
       $scope.seqNo      = data.seqNo;
+      $scope.disuse.dtl.disuseStorageCd	=	data.disuseStorageCd;
 
       $scope.procFgCheck(); // 폐기 진행구분 체크
     }
@@ -93,6 +106,9 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.btnDtlConfirm = false;
           }
           $scope.disuseTitle = response.data.data.disuseTitle;
+          $scope.disuse.dtl.disuseStorageCd	=	response.data.data.disuseStorageCd;
+          global_disuseTitle 			= 	response.data.data.disuseTitle;         
+          global_disuseStorageCd 		=	response.data.data.disuseStorageCd;          
         }
       }
     }, function errorCallback(response) {
@@ -119,6 +135,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     var params        = {};
     params.disuseDate = $scope.disuseDate;
     params.seqNo      = $scope.seqNo;
+    params.disuseStorageCd     = $scope.disuse.dtl.disuseStorageCd;    
     params.listScale  = 50;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -143,6 +160,19 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.status = "U";
       $scope.flex.collectionView.commitEdit();
     }
+    
+    if ($scope.flex.collectionView.itemsEdited.length <= 0 && 
+        	(global_disuseStorageCd	!= $scope.disuse.dtl.disuseStorageCd ||
+        	 global_disuseTitle  	!= $scope.disuseTitle)
+        	) {
+        	
+        	var item = $scope.flex.collectionView.items[0];
+            if (item === null) return false;
+
+            $scope.flex.collectionView.editItem(item);
+            item.status = "U";
+            $scope.flex.collectionView.commitEdit();
+        }    
 
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -158,6 +188,7 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
       item.disuseDate  = $scope.disuseDate;
       item.seqNo       = $scope.seqNo;
       item.disuseTitle = $scope.disuseTitle;
+      item.disuseStorageCd = $scope.disuse.dtl.disuseStorageCd;      
       item.storageCd   = "999";	//001	->	999
       item.hqBrandCd   = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.confirmFg   = confirmFg;
@@ -186,6 +217,11 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 확정
   $scope.confirm = function () {
+	if($scope.flex.collectionView.items.length == 0) {
+		alert("확정하시려면 상품을 추가 해주세요.")
+		return false;
+	}	  
+	  
     var msg = messages["disuse.dtl.confirmMsg"]; // 확정하시겠습니까?
     var checkLenth = 0;
     s_alert.popConf(msg, function () {
@@ -216,6 +252,82 @@ app.controller('disuseDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     params.callParent = 'disuseDtl';
     $scope._broadcast('disuseRegistCtrl', params);
   };
+  
+  //DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
+  // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
+  // comboId : combo 생성할 ID
+  // gridMapId : grid 에서 사용할 Map ID
+  // url : 데이터 조회할 url 정보. 명칭관리 조회시에는 url 필요없음.
+  // params : 데이터 조회할 url에 보낼 파라미터
+  // option : A - combo 최상위에 전체라는 텍스트를 붙여준다. S - combo 최상위에 선택이라는 텍스트를 붙여준다. A 또는 S 가 아닌 경우는 데이터값만으로 생성
+  // callback : queryCombo 후 callback 할 함수
+  $scope._queryCombo = function (comboFg, comboId, gridMapId, url, params, option, callback) {
+    var comboUrl = "/iostock/cmm/iostockCmm/getCombo.sb";
+    if (url) {
+      comboUrl = url;
+    }
+    //가상로그인 session 설정
+    if(document.getElementsByName('sessionId')[0]){
+    	params.sid = document.getElementsByName('sessionId')[0].value;
+    }  
+    
+    // ajax 통신 설정
+    $http({
+      method : 'POST', //방식
+      url    : comboUrl, /* 통신할 URL */
+      params : params, /* 파라메터로 보낼 데이터 */
+      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+    }).then(function successCallback(response) {
+      if ($scope._httpStatusCheck(response, true)) {
+        if (!$.isEmptyObject(response.data.data.list)) {
+          var list       = response.data.data.list;
+          var comboArray = [];
+          var comboData  = {};
+
+          if (comboFg.indexOf("combo") >= 0 && nvl(comboId, '') !== '') {
+            comboArray = [];
+            if (option === "A") {
+              comboData.name  = messages["cmm.all"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            } else if (option === "S") {
+              comboData.name  = messages["cmm.select"];
+              comboData.value = "";
+              comboArray.push(comboData);
+            }
+
+            for (var i = 0; i < list.length; i++) {
+              comboData       = {};
+              comboData.name  = list[i].nmcodeNm;
+              comboData.value = list[i].nmcodeCd;
+              comboArray.push(comboData);
+            }
+            $scope._setComboData(comboId, comboArray);
+          }
+
+          if (comboFg.indexOf("map") >= 0 && nvl(gridMapId, '') !== '') {
+            comboArray = [];
+            for (var i = 0; i < list.length; i++) {
+              comboData      = {};
+              comboData.id   = list[i].nmcodeCd;
+              comboData.name = list[i].nmcodeNm;
+              comboArray.push(comboData);
+            }
+            $scope[gridMapId] = new wijmo.grid.DataMap(comboArray, 'id', 'name');
+          }
+        }
+      }
+    }, function errorCallback(response) {
+      $scope._popMsg(messages["cmm.error"]);
+      return false;
+    }).then(function () {
+      if (typeof callback === 'function') {
+        $timeout(function () {
+          callback();
+        }, 10);
+      }
+    });
+  };  
 
 
 }]);
