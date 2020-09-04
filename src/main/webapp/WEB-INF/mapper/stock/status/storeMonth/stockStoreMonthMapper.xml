@@ -105,6 +105,7 @@
 				     , TB_MS_PRODUCT_BARCD TMPB
                  WHERE TPSSM.STORE_CD     = TMP.STORE_CD
                    AND TPSSM.PROD_CD      = TMP.PROD_CD
+                   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = TPSSM.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
                    AND TMP.PROD_CLASS_CD = A.LV3_CD
                    AND TPSSM.STORE_CD     = TMPB.STORE_CD(+)
                    AND TPSSM.PROD_CD      = TMPB.PROD_CD(+)
