@@ -164,7 +164,7 @@
             '', --ORGPLCE_CD
             '', --SDATTR_CLASS_CD
             '', --SDSEL_GRP_CD
-            'N',
+            'Y', --POINT_SAVE_YN
             '', -- PROD_DC_FG
              #{vatFg},
             'N',
@@ -172,15 +172,15 @@
             '0',
             #{prodTypeFg},
             'Y',
-            'N', --STOCK_PROD_YN
-            'N',
+            'Y', --STOCK_PROD_YN
+            'N', --SIDE_PROD_YN
             '1', --SET_PROD_FG
             #{costUprc},
             '0', --LAST_COST_UPRC
             #{splyUprc},
-            'N',
+            'Y', --SPLY_UPRC_USE_YN
             #{poProdFg},
-            '', --PO_UNIT_FG
+            '1', --PO_UNIT_FG
             '1',
             '', --PO_UNIT_ALLOW_FG
             '1', --PO_MIN_QTY

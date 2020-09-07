@@ -84,7 +84,7 @@
                     item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
                     <c:if test="${prodNoEnvFg == 'MANUAL'}">
                         <wj-flex-grid-column header="<s:message code="simpleProd.prodCd"/>" binding="prodCd" width="100" align="center"></wj-flex-grid-column>
                     </c:if>
