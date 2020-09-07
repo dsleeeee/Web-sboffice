@@ -242,7 +242,7 @@
     <!-- 기초관리 > 상품관리 > 키오스크옵션관리 -->
     <typeAlias alias="kioskOptionVO" type="kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO"/>
     <!-- 기초관리 > 상품관리 > 간편상품등록 -->
-    <!--<typeAlias alias="simpleProdVO" type="kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO"/>-->
+    <typeAlias alias="simpleProdVO" type="kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
