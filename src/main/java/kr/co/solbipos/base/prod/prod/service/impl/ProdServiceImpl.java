@@ -235,7 +235,7 @@ public class ProdServiceImpl implements ProdService {
 
                 // 상품분류 매장에 UPDATE
                 prodMapper.updateClsHqToStore(prodVO);
-        }
+            }
 
             //매장 상품 바코드 저장(바코드정보가 있을 경우만)
             if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
