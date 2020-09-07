@@ -17,6 +17,7 @@
         ,       tsha.ADJ_TITLE, tsha.PROC_FG, tsha.DTL_CNT
         ,       tsha.CONFM_DATE
         ,       SUBSTR(tsha.REG_DT,0,8) AS REG_DATE
+        ,		tsha.ADJ_STORAGE_CD        
         FROM    TB_ST_HQ_ADJUST tsha
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -43,6 +44,7 @@
         ,       tssa.ADJ_TITLE, tssa.PROC_FG, tssa.DTL_CNT
         ,       tssa.CONFM_DATE
         ,       SUBSTR(tssa.REG_DT,0,8) AS REG_DATE
+        ,		tssa.ADJ_STORAGE_CD          
         FROM    TB_ST_STORE_ADJUST tssa
         WHERE   STORE_CD  = #{storeCd}
         AND     ADJ_DATE  BETWEEN #{startDate} AND #{endDate}
@@ -65,7 +67,7 @@
     <select id="getHqProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE
+        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE, tsha.ADJ_STORAGE_CD
         FROM    TB_ST_HQ_ADJUST tsha
         WHERE   tsha.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tsha.ADJ_DATE      = #{adjDate}
@@ -83,7 +85,7 @@
     <select id="getStProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE
+        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD
         FROM    TB_ST_STORE_ADJUST tssa
         WHERE   tssa.STORE_CD      = #{storeCd}
         AND     tssa.ADJ_DATE      = #{adjDate}
@@ -343,10 +345,12 @@
         ,       tshad.ADJ_AMT
         ,       tshad.REMARK
         ,       'U' AS ADJ_PROD_STATUS
+        ,		tsha.ADJ_STORAGE_CD        
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-        FROM    TB_ST_HQ_ADJUST_DTL tshad
+        FROM    TB_ST_HQ_ADJUST		tsha
+        ,		TB_ST_HQ_ADJUST_DTL tshad
         ,       TB_HQ_PRODUCT thp
         ,       (   SELECT  tshsm.PROD_CD
                     ,       tshsm.AVG_COST_UPRC
@@ -373,6 +377,9 @@
         WHERE   tshad.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     tshad.ADJ_DATE          =   #{adjDate}
         AND     tshad.SEQ_NO            =   #{seqNo}
+        AND		tshad.HQ_OFFICE_CD     =   tsha.HQ_OFFICE_CD
+        AND     tshad.ADJ_DATE       	=   tsha.ADJ_DATE
+        AND     tshad.SEQ_NO           =   tsha.SEQ_NO         
         AND     tshad.HQ_OFFICE_CD      =   thp.HQ_OFFICE_CD
         AND     tshad.PROD_CD           =   thp.PROD_CD
         AND     tshsm.PROD_CD       (+) =   tshad.PROD_CD
@@ -409,10 +416,12 @@
         ,       tssad.ADJ_AMT
         ,       tssad.REMARK
         ,       'U' AS ADJ_PROD_STATUS
+        ,		tssa.ADJ_STORAGE_CD        
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-        FROM    TB_ST_STORE_ADJUST_DTL tssad
+        FROM    TB_ST_STORE_ADJUST		tssa
+        ,		TB_ST_STORE_ADJUST_DTL tssad
         ,       TB_MS_PRODUCT tmp
         ,       (   SELECT  tsssm.PROD_CD
                     ,       tsssm.AVG_COST_UPRC
@@ -439,6 +448,9 @@
         WHERE   tssad.STORE_CD          =   #{storeCd}
         AND     tssad.ADJ_DATE          =   #{adjDate}
         AND     tssad.SEQ_NO            =   #{seqNo}
+        AND		tssad.STORE_CD     		=   tssa.STORE_CD
+        AND     tssad.ADJ_DATE       	=   tssa.ADJ_DATE
+        AND     tssad.SEQ_NO           	=   tssa.SEQ_NO           
         AND     tssad.STORE_CD          =   tmp.STORE_CD
         AND     tssad.PROD_CD           =   tmp.PROD_CD
         AND     tsssm.PROD_CD       (+) =   tssad.PROD_CD
@@ -803,6 +815,7 @@
                     AND     tshad.SEQ_NO        =   #{seqNo}
                 )
         ,       ADJ_TITLE   = #{adjTitle}
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})
@@ -832,6 +845,7 @@
                     AND     tssad.SEQ_NO        =   #{seqNo}
                 )
         ,       ADJ_TITLE   = #{adjTitle}
+        ,       ADJ_STORAGE_CD = #{adjStorageCd}        
         ,       PROC_FG     = #{procFg}
         ,       CONFM_DATE  = DECODE(#{procFg}, '0', NULL, SUBSTR(#{modDt}, 0, 8))
         ,       CONFM_ID    = DECODE(#{procFg}, '0', NULL, #{modId})

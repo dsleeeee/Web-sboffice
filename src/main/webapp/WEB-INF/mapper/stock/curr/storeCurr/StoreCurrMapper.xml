@@ -24,7 +24,7 @@
         ,       tsssc.STORE_CD
         ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
         ,       tmp.COST_UPRC
-        ,       tmv.VENDR_NM
+/*        ,       tmv.VENDR_NM	*/
         ,       tmpb.BARCD_CD
         ,       tmp.PO_UNIT_QTY
         ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
@@ -93,6 +93,7 @@
         ,		TB_ST_STORE_STOCK_CUR tsssc
         ,       TB_MS_PRODUCT tmp
         ,       TB_MS_PRODUCT_BARCD tmpb
+        /*
         ,       (   SELECT	tmvp.PROD_CD
                     ,		LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmv.VENDR_CD) AS VENDR_NM
                     FROM	TB_MS_VENDOR tmv
@@ -102,6 +103,7 @@
                     GROUP
                     BY      tmvp.PROD_CD
                 ) tmv
+                */
         WHERE   tmp.STORE_CD          =   tsssc.STORE_CD
 		AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})        
         AND     tsssc.STORAGE_CD      =   '999'        
@@ -110,7 +112,9 @@
         AND     tmp.USE_YN            =   'Y'
         AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
         AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
+        /*
         AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
+        */
         AND 	tmp.PROD_CLASS_CD = A.PROD_CLASS_CD(+)
         <if test="storeCd != null and storeCd != ''">
 			AND TMP.STORE_CD IN

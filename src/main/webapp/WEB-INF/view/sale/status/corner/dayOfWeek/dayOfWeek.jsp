@@ -113,6 +113,7 @@
           frozen-columns="3"
           item-formatter="_itemFormatter">
           <!-- define columns -->
+          <wj-flex-grid-column header="<s:message code="corner.storeCd"/>"           binding="storeCd"           width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.yoil"/>"              binding="yoil"              width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.totRealSaleAmt"/>"    binding="totRealSaleAmt"    width="150" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="corner.totSaleQty"/>"        binding="totSaleQty"        width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -136,4 +137,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20190125.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20200904.01" charset="utf-8"></script>

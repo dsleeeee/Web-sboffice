@@ -115,4 +115,74 @@ app.controller('storeListCtrl', ['$scope', '$http', function ($scope, $http) {
       }, 50)
     });
   });
+
+  // <-- 엑셀다운로드 호출 -->
+  $scope.excelDownload = function(){
+    var params       = {};
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope._broadcast('storeListExcelCtrl', params);
+  };
+  // <-- //엑셀다운로드 호출 -->
+
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('storeListExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('storeListExcelCtrl', $scope, $http, true));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
+    $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+  };
+
+  // <-- 검색 호출 -->
+  $scope.$on("storeListExcelCtrl", function(event, data) {
+    $scope.getStoreListExcel();
+    event.preventDefault();
+  });
+
+  $scope.getStoreListExcel = function(){
+    var params = {};
+
+    $scope._inquiryMain("/base/store/view/view/getStoreListExcel.sb", params, function() {
+
+      if ($scope.excelFlex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+      $timeout(function()	{
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.excelFlex,
+            {
+              includeColumnHeaders: 	true,
+              includeCellStyles	: 	false,
+              includeColumns      :	function (column) {
+                return column.visible;
+              }
+            },
+            '매장정보_'+getToday()+'.xlsx',
+            function () {
+              $timeout(function () {
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+              }, 10);
+            }
+        );
+      }, 10);
+
+    });
+  };
+  // <-- //검색 호출 -->
+
 }]);

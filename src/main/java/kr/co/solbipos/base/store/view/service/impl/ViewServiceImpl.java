@@ -63,6 +63,15 @@ public class ViewServiceImpl implements ViewService {
         return viewMapper.getViewList(viewVO);
     }
 
+    /** 매장정보 리스트 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreListExcel(ViewVO viewVO, SessionInfoVO sessionInfoVO){
+
+        viewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return viewMapper.getStoreListExcel(viewVO);
+    }
+
     /** 매장정보 상세조회 */
     @Override
     public DefaultMap<String> getViewDetail(ViewVO viewVO)

@@ -5,7 +5,8 @@
 <mapper namespace="kr.co.solbipos.sale.status.table.month.service.impl.TableMonthMapper">
 	<select id="getTableMonthList" parameterType="tableMonthVO" resultType="DefaultMap">
 		<include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT SALE_YM SALE_YM
+		SELECT STORE_CD
+			, SALE_YM SALE_YM
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
        		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
        		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
@@ -33,14 +34,15 @@
    			  AND TSDT.SALE_YM <= TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
    			  ]]> -->
 		GROUP
-		BY 	  SALE_YM
+		BY 	  STORE_CD, SALE_YM
 		ORDER
 		BY    SALE_YM DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
 	</select>
 
     <select id="getTableMonthExcelList" parameterType="tableMonthVO" resultType="DefaultMap">
-        SELECT SALE_YM SALE_YM
+        SELECT STORE_CD
+        	, SALE_YM SALE_YM
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
             , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
             , NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
@@ -67,7 +69,7 @@
               AND TSDT.SALE_YM <= TO_CHAR(TO_DATE(#{endDate}, 'YYYYMMDD'),'YYYYMM')
               ]]> -->
         GROUP
-        BY    SALE_YM
+        BY    STORE_CD, SALE_YM
         ORDER
         BY    SALE_YM DESC
     </select>

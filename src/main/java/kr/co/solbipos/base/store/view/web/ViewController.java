@@ -102,6 +102,27 @@ public class ViewController {
     }
 
     /**
+     * 매장정보 리스트 엑셀 조회
+     *
+     * @param viewVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/view/getStoreListExcel.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreListExcel(ViewVO viewVO, HttpServletRequest request,
+                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = viewService.getStoreListExcel(viewVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, viewVO);
+    }
+
+    /**
      * 매장정보 상세조회
      *
      * @param viewVO

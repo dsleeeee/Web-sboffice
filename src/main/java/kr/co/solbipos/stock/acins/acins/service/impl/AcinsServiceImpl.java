@@ -323,6 +323,7 @@ public class AcinsServiceImpl implements AcinsService {
                 acinsHdVO.setAcinsTitle(acinsVO.getAcinsTitle());
                 acinsHdVO.setSeqNo(acinsVO.getSeqNo());
                 acinsHdVO.setStorageCd(acinsVO.getStorageCd());
+                acinsHdVO.setAdjStorageCd(acinsVO.getAdjStorageCd());
                 acinsHdVO.setRegId(sessionInfoVO.getUserId());
                 acinsHdVO.setRegDt(currentDt);
                 acinsHdVO.setModId(sessionInfoVO.getUserId());
@@ -456,6 +457,7 @@ public class AcinsServiceImpl implements AcinsService {
         acinsHdVO.setSeqNo(Integer.parseInt(seqNo));
         acinsHdVO.setProcFg("0");
         acinsHdVO.setStorageCd("999");
+        acinsHdVO.setAdjStorageCd(excelUploadVO.getAdjStorageCd());
         acinsHdVO.setRegId(sessionInfoVO.getUserId());
         acinsHdVO.setRegDt(currentDt);
         acinsHdVO.setModId(sessionInfoVO.getUserId());
@@ -472,7 +474,7 @@ public class AcinsServiceImpl implements AcinsService {
             	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.insertStAcinsHd(acinsHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         else {
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
@@ -484,7 +486,7 @@ public class AcinsServiceImpl implements AcinsService {
             	acinsHdVO.setAdjStorageCd("001");
                 result = acinsMapper.updateStAcinsHd(acinsHdVO);
             }
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
         return result;

@@ -35,7 +35,9 @@
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.posNo"/>" binding="posNo" data-map="posDataMap" width="80" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNo"/>" binding="prterNo" width="40" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterNm"/>" binding="prterNm" ></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.prterKind"/>" binding="prterKindFg" data-map="prterKindDataMap" width="110" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.prterFg"/>" binding="prterFg" data-map="prterDataMap" width="110" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint"/>" binding="prterKindFg" data-map="prterKindDataMap" width="110" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.lblPrter"/>" binding="prterLabelKindFg" data-map="prterLabelKindDataMap" width="110" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterPort"/>" binding="prterPortFg" data-map="prterPortDataMap" width="90" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterSpeed"/>" binding="prterSpeedFg" data-map="prterSpeedDataMap" width="90" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.prterOutputQty"/>" binding="prterOutputQty"  width="80" align="center"></wj-flex-grid-column>
@@ -52,9 +54,14 @@
   </div>
 </div>
 <script>
+var prter = [
+  {"name":"주방프린터","value":"0"},
+  {"name":"라벨프린터","value":"1"}
+];
 var prterKind   = ${cnv.getEnvCodeExcpAll("4030")};
+var prterLabelKind  = ${cnv.getEnvCodeExcpAll("4052")};
 var prterPort   = ${cnv.getEnvCodeExcpAll("4031")};
 var prterSpeed  = ${cnv.getEnvCodeExcpAll("4032")};
 var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20181128.15" charset="utf-8"></script>

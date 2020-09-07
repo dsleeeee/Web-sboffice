@@ -36,7 +36,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   $scope._getComboDataQuery('077', 'periodType', 'A');
   $scope._getComboDataQuery('076', 'weddingYn', 'A');
   $scope._getComboDataQuery('055', 'gendrFg', 'A');
-  $scope._getComboDataQuery('067', 'useYn', 'A');
+  $scope._getComboDataQuery('067', 'useYnComboData', 'A');
 
   // 선택 회원
   $scope.selectedMember;
@@ -254,8 +254,8 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     params.emailRecvYn = $scope.emailRecvYn;
     params.smsRecvYn = $scope.smsRecvYn;
     params.gendrFg = $scope.gendrFg;
-    // params.useYn = $scope.useYn;
-    params.useYn = 'Y';
+    params.useYn = $scope.useYn;
+    //params.useYn = 'Y';
 
     // console.log('params ', params);
 

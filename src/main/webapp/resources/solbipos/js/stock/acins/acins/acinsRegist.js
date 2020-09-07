@@ -257,7 +257,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       acinsDtlScope.searchAcinsDtlList();
     }
 
-    $scope.wjAcinsRegistLayer.hide(true);
+//    $scope.wjAcinsRegistLayer.hide(true);
   };
 
 
@@ -335,12 +335,19 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 그리드의 상품을 찾아서 실사수 수정
   $scope.modifyAcinsQty = function (addQty) {
+	  
+	// 숫자가 아닌 값
+	var numChkexp = /[^0-9]/g;
+	if (numChkexp.test(nvl(addQty, 0))) {
+		return false;
+	}	  
+	  
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       var item = $scope.flex.collectionView.items[i];
       if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
         $scope.flex.collectionView.editItem(item);
 
-        item.acinsQty = parseInt(nvl(item.acinsQty, 0)) + parseInt(addQty);
+        item.acinsQty = parseInt(nvl(item.acinsQty, 0)) + parseInt(nvl(addQty, 0));
 
         $scope.calcAmt(item);
         $scope.flex.collectionView.commitEdit();
@@ -438,6 +445,10 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var msg = messages["acins.reg.acinsTitle"] + messages["cmm.require.text"]; // 실사제목을 입력하세요.
       $scope._popMsg(msg);
       return false;
+    } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
+        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"]; 
+        $scope._popMsg(msg);
+        return false;
     }
 
     var excelUploadScope = agrid.getScope('excelUploadCtrl');
@@ -475,6 +486,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.seqNo    = $scope.seqNo;
     params.title    = $scope.acinsTitle;
     params.addQtyFg = $scope.addQtyFg;
+    params.adjStorageCd    = $("#registSelectStorageCd").val();
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){

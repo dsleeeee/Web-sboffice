@@ -58,6 +58,7 @@ app.controller('acinsCtrl', ['$scope', '$http', function ($scope, $http) {
           var params       = {};
           params.acinsDate = selectedRow.acinsDate;
           params.seqNo     = selectedRow.seqNo;
+          params.adjStorageCd     = selectedRow.adjStorageCd;
           $scope._broadcast('acinsDtlCtrl', params);
         }
       }

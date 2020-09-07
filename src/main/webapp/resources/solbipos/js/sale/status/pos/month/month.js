@@ -217,7 +217,12 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    params.storeCd = storeCd;
 	    params.PosNo = posCd;
 	    params.hqOfficeCd = $("#posMonthSelectHqOfficeCd").val();
-
+	    
+	    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+	    
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식
@@ -306,6 +311,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
 		  // 그리드 클릭 이벤트-------------------------------------------------------------------------------------------------
 		  grid.addEventListener(grid.hostElement, 'mousedown', function (e) {
+			  
 		    	var ht = grid.hitTest(e);
 		    	if (ht.cellType === wijmo.grid.CellType.Cell) {
 
@@ -316,7 +322,7 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
 
 		    		var params       = {};
-		    		params.chkPop	= "posPop";
+		    		params.chkPop	= "posMonthPop";
 		    		params.saleMonth   = selectedRow.yearMonth;
 
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
@@ -580,7 +586,12 @@ app.controller('posMonthExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    params.storeCd = storeCd;
 	    params.PosNo = posCd;
 	    params.hqOfficeCd = $("#posMonthSelectHqOfficeCd").val();
-
+	    
+	    //가상로그인 session 설정
+	    if(document.getElementsByName('sessionId')[0]){
+	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+	    }
+	    
 	    // ajax 통신 설정
 	    $http({
 	    	method : 'POST', //방식
@@ -679,7 +690,7 @@ app.controller('posMonthExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 			   		var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
 
 		    		var params       = {};
-		    		params.chkPop	= "posPop";
+		    		params.chkPop	= "posMonthPop";
 		    		params.saleMonth   = selectedRow.yearMonth;
 
 		    		if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {

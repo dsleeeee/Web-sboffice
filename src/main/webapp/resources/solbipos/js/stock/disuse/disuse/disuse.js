@@ -58,6 +58,7 @@ app.controller('disuseCtrl', ['$scope', '$http', function ($scope, $http) {
           var params        = {};
           params.disuseDate = selectedRow.disuseDate;
           params.seqNo      = selectedRow.seqNo;
+          params.disuseStorageCd      = selectedRow.disuseStorageCd;
           $scope._broadcast('disuseDtlCtrl', params);
         }
       }

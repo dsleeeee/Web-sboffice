@@ -15,7 +15,9 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
   angular.extend(this, new RootController('kitchenPrintCtrl', $scope, $http, false));
 
   // 그리드 DataMap 설정
+  $scope.prterDataMap;
   $scope.prterKindDataMap;
+  $scope.prterLabelKindDataMap;
   $scope.prterPortDataMap;
   $scope.prterSpeedDataMap;
   $scope.useYnFgDataMap;
@@ -106,7 +108,9 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.$broadcast('loadingPopupInactive');
 
         // 그리드 DataMap 설정
+        $scope.prterDataMap = new wijmo.grid.DataMap(prter, 'value', 'name');
         $scope.prterKindDataMap = new wijmo.grid.DataMap(prterKind, 'value', 'name');
+        $scope.prterLabelKindDataMap = new wijmo.grid.DataMap(prterLabelKind, 'value', 'name');
         $scope.prterPortDataMap = new wijmo.grid.DataMap(prterPort, 'value', 'name');
         $scope.prterSpeedDataMap = new wijmo.grid.DataMap(prterSpeed, 'value', 'name');
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
@@ -141,7 +145,9 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
     var params        = {};
     params.gChk       = true;
     params.posNo      ="01";
+    params.prterFg = "0";
     params.prterKindFg  ="00";
+    params.prterLabelKindFg  ="00";
     params.prterPortFg  = "00";
     params.prterSpeedFg = "0";
     params.prterOutputQty = "1";
