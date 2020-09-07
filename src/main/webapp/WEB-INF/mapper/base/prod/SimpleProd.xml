@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SimpleProd.xml
+    간편상품등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.08.26     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.simpleProd.service.impl.SimpleProdMapper">
+
+    <!-- 검증결과 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <delete id="getSimpleProdCheckDeleteAll" parameterType="SimpleProdVO">
+        /* SimpleProdMapper.getSimpleProdCheckDeleteAll */
+        DELETE
+        TB_TMP_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </delete>
+
+    <!-- 상품코드 자동채번 -->
+    <!--
+      TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <select id="getProdCd"  parameterType="SimpleProdVO" resultType="String">
+        /* SimpleProdMapper.getProdCd */
+        SELECT
+        NVL(MAX(PROD_CD),0) + 1 AS PROD_CD
+        FROM TB_TMP_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </select>
+
+    <!-- 상품명 중복체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+        COMMENTS : [본사]상품, [매장]상품
+    -->
+    <select id="getProdNmCnt"  parameterType="SimpleProdVO" resultType="Integer">
+        /* SimpleProdMapper.getProdNmCnt */
+        SELECT
+        COUNT(1) AS CNT
+        FROM
+        (
+            SELECT PROD_NM
+            FROM TB_HQ_PRODUCT
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{membrOrgnCd}
+            UNION ALL
+            SELECT PROD_NM
+            FROM TB_MS_PRODUCT
+            WHERE 1=1
+            <if test='storeCd != null and storeCd != ""'>
+                <![CDATA[
+                    AND STORE_CD = #{storeCd}
+                ]]>
+            </if>
+        )
+        WHERE 1=1
+        AND PROD_NM = #{prodNm}
+    </select>
+
+    <!-- 바코드 중복체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
+        COMMENTS : [본사]상품_바코드, [매장]상품_바코드
+    -->
+    <select id="getBarCdCnt"  parameterType="SimpleProdVO" resultType="Integer">
+        /* SimpleProdMapper.getBarCdCnt */
+        SELECT
+        COUNT(1) AS CNT
+        FROM
+        (
+            SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD
+            UNION ALL
+            SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD
+        )
+        WHERE 1=1
+        AND BARCD_CD = #{barCd}
+    </select>
+
+    <!-- 검증결과 저장 -->
+    <!--
+        TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <insert id="getSimpleProdCheckSave" parameterType="SimpleProdVO">
+        /* SimpleProdMapper.getSimpleProdCheckSave */
+         INSERT INTO TB_TMP_PRODUCT
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            RESULT,
+            PROD_CD,
+            PROD_NM,
+            HQ_BRAND_CD,
+            PROD_CLASS_CD,
+            CORNR_CD,
+            ORGPLCE_CD,
+            SDATTR_CLASS_CD,
+            SDSEL_GRP_CD,
+            POINT_SAVE_YN,
+            PROD_DC_FG,
+            VAT_FG,
+            PROD_TIP_YN,
+            PROD_PACK_AMT,
+            PROD_DLVR_AMT,
+            PROD_TYPE_FG,
+            SALE_PROD_YN,
+            STOCK_PROD_YN,
+            SIDE_PROD_YN,
+            SET_PROD_FG,
+            COST_UPRC,
+            LAST_COST_UPRC,
+            SPLY_UPRC,
+            SPLY_UPRC_USE_YN,
+            PO_PROD_FG,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            PO_UNIT_ALLOW_FG,
+            PO_MIN_QTY,
+            SAFE_STOCK_QTY,
+            STOCK_UNIT_FG,
+            USE_YN,
+            REMARK,
+            SALE_UPRC,
+            BARCD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{membrOrgnCd},
+            #{storeCd},
+            #{result},
+            #{prodCd},
+            #{prodNm},
+            '0000000', --HQ_BRAND_CD
+            #{prodClassCd},
+            '', --CORNR_CD
+            '', --ORGPLCE_CD
+            '', --SDATTR_CLASS_CD
+            '', --SDSEL_GRP_CD
+            'N',
+            '', -- PROD_DC_FG
+             #{vatFg},
+            'N',
+            '0',
+            '0',
+            #{prodTypeFg},
+            'Y',
+            'N', --STOCK_PROD_YN
+            'N',
+            '1', --SET_PROD_FG
+            #{costUprc},
+            '0', --LAST_COST_UPRC
+            #{splyUprc},
+            'N',
+            #{poProdFg},
+            '', --PO_UNIT_FG
+            '1',
+            '', --PO_UNIT_ALLOW_FG
+            '1', --PO_MIN_QTY
+            '0', --SAFE_STOCK_QTY
+            '', --STOCK_UNIT_FG
+            'Y',
+            '',
+            #{saleUprc},
+            #{barCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <select id="getSimpleProdList"  parameterType="SimpleProdVO" resultType="DefaultMap">
+        /* SimpleProdMapper.getSimpleProdList */
+        SELECT
+        SESSION_ID,
+        SEQ,
+        HQ_OFFICE_CD,
+        STORE_CD,
+        RESULT,
+        PROD_CD,
+        PROD_NM,
+        HQ_BRAND_CD,
+        PROD_CLASS_CD,
+        CORNR_CD,
+        ORGPLCE_CD,
+        SDATTR_CLASS_CD,
+        SDSEL_GRP_CD,
+        POINT_SAVE_YN,
+        PROD_DC_FG,
+        VAT_FG,
+        PROD_TIP_YN,
+        PROD_PACK_AMT,
+        PROD_DLVR_AMT,
+        PROD_TYPE_FG,
+        SALE_PROD_YN,
+        STOCK_PROD_YN,
+        SIDE_PROD_YN,
+        SET_PROD_FG,
+        COST_UPRC,
+        LAST_COST_UPRC,
+        SPLY_UPRC,
+        SPLY_UPRC_USE_YN,
+        PO_PROD_FG,
+        PO_UNIT_FG,
+        PO_UNIT_QTY,
+        PO_UNIT_ALLOW_FG,
+        PO_MIN_QTY,
+        SAFE_STOCK_QTY,
+        STOCK_UNIT_FG,
+        USE_YN,
+        REMARK,
+        SALE_UPRC,
+        BARCD_CD AS BAR_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID
+        FROM TB_TMP_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </select>
+
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    : TB_TMP_PRODUCT
+        COMMENTS : [임시]간편상품등록
+    -->
+    <delete id="getSimpleProdCheckDelete" parameterType="SimpleProdVO">
+        /* SimpleProdMapper.getSimpleProdCheckDelete */
+        DELETE
+        TB_TMP_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+        AND PROD_CD = #{prodCd}
+    </delete>
+
+</mapper>

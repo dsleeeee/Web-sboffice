@@ -242,7 +242,7 @@
     <!-- 기초관리 > 상품관리 > 키오스크옵션관리 -->
     <typeAlias alias="kioskOptionVO" type="kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO"/>
     <!-- 기초관리 > 상품관리 > 간편상품등록 -->
-    <!--<typeAlias alias="simpleProdVO" type="kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO"/>-->
+    <typeAlias alias="simpleProdVO" type="kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
@@ -567,7 +567,7 @@
     <typeAlias alias="todayDtlVO" type="kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO"/>
     <typeAlias alias="todayBillSaleDtlVO" type="kr.co.solbipos.sale.today.todayBillSaleDtl.service.TodayBillSaleDtlVO"/>
 
-    <!-- 기간별매출 -->
+    <!-- 매출관리 > 매출현황 > 기간별매출 -->
     <typeAlias alias="dayVO" type="kr.co.solbipos.sale.day.day.service.DayVO"/>
     <typeAlias alias="dayOfWeekVO" type="kr.co.solbipos.sale.day.dayOfWeek.service.DayOfWeekVO"/>
     <typeAlias alias="monthVO" type="kr.co.solbipos.sale.day.month.service.MonthVO"/>
