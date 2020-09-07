@@ -42,7 +42,7 @@
                                class="sb-input w100" maxlength="30" required>
                     </td>
                         <%-- 회원명영문 --%>
-                    <th><s:message code="regist.membr.nm.eng"/><em class="imp">*</em></th>
+                    <th><s:message code="regist.membr.nm.eng"/><%--<em class="imp">*</em>--%></th>
                     <td>
                         <input type="text" id="rMemberEngNm" name="memberEngNm" ng-model="member.memberEngNm"
                                class="sb-input w100" maxlength="30" required>
@@ -50,12 +50,12 @@
                 </tr>
                 <tr>
                         <%-- 회원카드번호 --%>
-                    <th><s:message code="regist.membr.card.no"/><em class="imp">*</em></th>
+                    <th><s:message code="regist.membr.card.no"/><%--<em class="imp">*</em>--%></th>
                     <td>
                         <input type="text" id="basicMembrCardNo" name="membrCardNo" ng-model="member.membrCardNo"
                                class="sb-input w100" maxlength="30" required>
                     </td>
-                        <%-- 카드사용구분 --%>
+                        <%-- 회원카드구분 --%>
                     <th><s:message code="regist.membr.card.yn"/></th>
                     <td>
                         <div class="sb-select">
@@ -74,7 +74,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회사단축번호 --%>
+                        <%-- 회원단축번호 --%>
                     <th><s:message code="regist.membr.stortNo"/></th>
                     <td>
                         <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.stortNo"
@@ -111,7 +111,7 @@
                                placeholder="<s:message code='storeManage.bizNo.comment' />" required/>
                     </td>
                         <%-- 핸드폰번호 --%>
-                    <th><s:message code="regist.phone.no"/><em class="imp">*</em></th>
+                    <th><s:message code="regist.phone.no"/><%--<em class="imp">*</em>--%></th>
                     <td>
                         <input type="text" id="phoneNo" class="sb-input w100" ng-model="member.phoneNo"
                                maxlength="15"/>
@@ -157,8 +157,7 @@
                     <th><s:message code="regist.lunarYn"/></th>
                     <td>
                         <div class="sb-input">
-                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N"
-                                   checked="checked">
+                            <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="N" checked="checked">
                             <label><s:message code="regist.solar"/></label>
                             <input type="radio" name="lunarYn" ng-model="member.lunarYn" value="Y">
                             <label class="mr5"><s:message code="regist.lunar"/></label>
@@ -181,7 +180,7 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 회원등급 --%>
+                    <%-- 회원등급 --%>
                     <th><s:message code="regist.memberClass"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -197,7 +196,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 사용여부 --%>
+                    <%-- 사용여부 --%>
                     <th><s:message code="regist.useYn"/><em class="imp">*</em></th>
                     <td>
                         <div class="sb-select">
@@ -333,7 +332,7 @@
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200901.01 charset='utf-8'"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200902.01 charset='utf-8'"></script>
 
 <%-- 회원 매핑코드 조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">

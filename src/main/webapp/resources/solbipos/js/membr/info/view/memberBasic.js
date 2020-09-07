@@ -88,18 +88,19 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.basicRegStoreCdCombo.selectedIndex = 0;
             $scope.member.membrNm = '';
             $scope.member.membrNicknm = '';
+            $scope.rMembrcardYn.selectedIndex = 0;
             $scope.member.telNo = '';
+            $scope.member.phoneNo = '01000000000';
             $scope.genderCombo.selectedIndex = 0;
             $scope.weddingYnCombo.selectedIndex = 0;
             $scope.weddingDayCombo.selectedValue = new Date();
             $scope.weddingDayCombo.refresh();
             $scope.weddingDayCombo.isReadOnly = true;
-            $scope.member.lunarYn = 0;
             $scope.birthdayCombo.selectedValue = new Date();
             $scope.birthdayCombo.refresh();
             $scope.member.birthday = new Date();
             $scope.rMemberClassSelectCombo.selectedIndex = 0;
-            $scope.useYnCombo.selectedValue = 'Y';
+            $scope.useYnCombo.selectedIndex = 1;
             $scope.member.lnPartner = '';
             $scope.member.cdCompany = '';
             $scope.member.cdPartner = '';
@@ -166,16 +167,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         // 신규등록일 경우
         //if( $.isEmptyObject($scope.selectedMember) ){
 
-        // 등록매장을 선택해주세요.
-        var msg = messages["regist.reg.store.cd"] + messages["cmm.require.select"];
-        if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
+        // 회원명을 입력하세요.
+        var msg = messages["regist.membr.nm"] + messages["cmm.require.text"];
+        if (isNull($scope.member.membrNm)) {
             $scope._popMsg(msg);
             return false;
         }
 
-        // 회원명을 입력하세요.
-        var msg = messages["regist.membr.nm"] + messages["cmm.require.text"];
-        if (isNull($scope.member.membrNm)) {
+        // 등록매장을 선택해주세요.
+        var msg = messages["regist.reg.store.cd"] + messages["cmm.require.select"];
+        if (isNull($scope.basicRegStoreCdCombo.selectedValue)) {
             $scope._popMsg(msg);
             return false;
         }
@@ -188,11 +189,11 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 회원명(영문)
-        if (nvl($scope.member.memberEngNm, '') === '') {
+        /*if (nvl($scope.member.memberEngNm, '') === '') {
             msg = messages["member.excel.nm.en"] + messages["excelUpload.require.data"];
             $scope._popMsg(msg);
             return false;
-        }
+        }*/
 
         // 회원명 영문 최대길이 체크
         if (nvl($scope.member.memberEngNm, '') !== '' && nvl($scope.member.memberEngNm + '', '').getByteLengthForOracle() > 50) {
@@ -203,10 +204,12 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 회원명 영문
         var numChkexp = /[^a-z]/gi;
-        if (numChkexp.test($scope.member.memberEngNm)) {
-            msg = messages["member.excel.nm.en"] + messages["cmm.require.en"];
-            $scope._popMsg(msg);
-            return false;
+        if (nvl($scope.member.memberEngNm, '') !== '') {
+            if (numChkexp.test($scope.member.memberEngNm)) {
+                msg = messages["member.excel.nm.en"] + messages["cmm.require.en"];
+                $scope._popMsg(msg);
+                return false;
+            }
         }
 
         /*// 전화번호를 입력하세요.
@@ -232,20 +235,20 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }*/
 
         // 핸드폰번호를 입력하세요.
-        var msg = messages["regist.phone.no"] + messages["cmm.require.text"];
+        /*var msg = messages["regist.phone.no"] + messages["cmm.require.text"];
         if (isNull($scope.member.phoneNo)) {
             $scope._popMsg(msg);
             return false;
-        }
+        }*/
 
         // 핸드폰번호
-        var numChkregexp = /^\d{3}[-]?\d{3,4}[-]?\d{4}$/g;
+        /*var numChkregexp = /^\d{3}[-]?\d{3,4}[-]?\d{4}$/g;
         if (!numChkregexp.test($scope.member.phoneNo)) {
             console.log($scope.member.phoneNo);
             console.log(numChkregexp.test($scope.member.phoneNo));
             $scope._popMsg(messages["cmm.not.phoneNo"]);
             return false;
-        }
+        }*/
 
         // 핸드폰번호 최대길이 체크
         if (nvl($scope.member.phoneNo, '') !== '' && nvl($scope.member.phoneNo + '', '').getByteLengthForOracle() > 14) {
@@ -255,18 +258,20 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 회원카드번호를 입력하세요.
-        var msg = messages["regist.membr.card.no"] + messages["cmm.require.text"];
+        /*var msg = messages["regist.membr.card.no"] + messages["cmm.require.text"];
         if (isNull($scope.member.membrCardNo)) {
             $scope._popMsg(msg);
             return false;
-        }
+        }*/
 
         // 회원카드번호는 숫자만 입력할 수 있습니다.
         var msg = messages["regist.membr.card.no"] + messages["cmm.require.number"];
         var numChkregexp = /[^0-9]/g;
-        if (numChkregexp.test($scope.member.membrCardNo)) {
-            $scope._popMsg(msg);
-            return false;
+        if (!isNull($scope.member.membrCardNo)) {
+            if (numChkregexp.test($scope.member.membrCardNo)) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
 
         // 이메일 최대길이 체크

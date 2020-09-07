@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    KioskKeyMap.xml
+    키오스크키맵관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2020.09.03     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.prod.kioskKeyMap.service.impl.KioskKeyMapMapper">
+    <!-- 키오스크용 포스 조회 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST, TB_MS_POS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크용도로 사용중인 포스를 조회한다.
+    -->
+    <select id="getKioskPosList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+      /* USE : KioskKeyMapMapper.getKioskPosList */
+      SELECT tmp.POS_NO AS NAME,
+              tmp.POS_NO AS VALUE
+        FROM TB_MS_POS_ENVST tmpe,
+              TB_MS_POS tmp
+       WHERE tmpe.STORE_CD = #{storeCd}
+         AND tmp.STORE_CD = tmpe.STORE_CD
+         AND tmp.POS_NO = tmpe.POS_NO
+         AND tmpe.ENVST_CD = '4019'  <!-- 포스용도 -->
+         AND tmpe.ENVST_VAL = '6'    <!-- 6: KIOSK -->
+    </select>
+
+    <!-- 키오스크 카테고리(분류) 조회 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(분류)를 가져온다.
+    -->
+    <select id="getKioskCategory" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getKioskCategory */
+        SELECT STORE_CD,
+                POS_NO,
+                TU_CLS_CD,
+                TU_CLS_NM,
+                TU_PAGE,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                INDEX_NO,
+                CLS_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+        FROM TB_MS_KIOSK_CLS tmkc
+       WHERE STORE_CD = #{storeCd}
+         AND POS_NO = #{posNo}
+   ORDER BY INDEX_NO
+    </select>
+
+    <!-- 키오스크 카테고리(분류) 저장 - 생성 시 카테고리 코드 생성 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 새로운 키오스크 카테고리(분류) 생성 시 카테고리 코드를 생성한다.
+    -->
+    <select id="getKioskCategoryCode" parameterType="kioskKeyMapVO" resultType="String">
+      /* USE : KioskKeyMapMapper.getKioskCategoryCode */
+      SELECT LPAD(NVL(MAX(TU_CLS_CD), '0') + 1, 2, '0')
+        FROM TB_MS_KIOSK_CLS
+       WHERE STORE_CD = #{storeCd}
+         AND  POS_NO = #{posNo}
+    </select>
+
+    <!-- 키오스크 카테고리(분류) 저장 - 생성 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 새로운 키오스크 카테고리(분류) 생성한다.
+    -->
+    <insert id="insertKioskCategory" parameterType="kioskKeyMapVO">
+      /* USE : KioskKeyMapMapper.insertKioskCategory */
+      INSERT INTO TB_MS_KIOSK_CLS
+      (
+            STORE_CD,
+            POS_NO,
+            TU_CLS_CD,
+            TU_CLS_NM,
+            TU_PAGE,
+            X,
+            Y,
+            WIDTH,
+            HEIGHT,
+            INDEX_NO,
+            CLS_FG,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+      )
+      VALUES
+      (
+            #{storeCd},
+            #{posNo},
+            #{tuClsCd},
+            #{tuClsNm},
+            #{tuPage},
+            #{x},
+            #{y},
+            #{width},
+            #{height},
+            #{indexNo},
+            #{clsFg},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+      )
+    </insert>
+
+    <!-- 키오스크 카테고리(분류) 저장 - 수정 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(분류) 수정한다.
+    -->
+    <update id="updateKioskCategory" parameterType="kioskKeyMapVO">
+      /* USE : KioskKeyMapMapper.updateKioskCategory */
+      UPDATE TB_MS_KIOSK_CLS
+         SET TU_CLS_NM = #{tuClsNm},
+              TU_PAGE = #{tuPage},
+              X = #{x},
+              Y = #{y},
+              WIDTH = #{width},
+              HEIGHT = #{height},
+              INDEX_NO = #{indexNo},
+              CLS_FG = #{clsFg},
+              MOD_DT = #{modDt},
+              MOD_ID = #{modId}
+       WHERE STORE_CD = #{storeCd}
+         AND POS_NO = #{posNo}
+         AND TU_CLS_CD = #{tuClsCd}
+    </update>
+
+    <!-- 키오스크 카테고리(분류) 저장 - 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(분류) 삭제한다.
+    -->
+    <delete id="deleteKioskCategory" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteKioskCategory */
+        DELETE TB_MS_KIOSK_CLS
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{posNo}
+           AND TU_CLS_CD = #{tuClsCd}
+    </delete>
+
+    <!-- 키오스크 키(등록상품) 조회 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 키(등록상품)를 가져온다.
+    -->
+    <select id="getKioskKey" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getKioskKey */
+        SELECT STORE_CD,
+                POS_NO,
+                TU_CLS_CD,
+                TU_KEY_CD,
+                PROD_CD,
+                TU_PAGE,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                INDEX_NO,
+                CLS_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+        FROM TB_MS_KIOSK_KEY tmkk
+       WHERE STORE_CD = #{storeCd}
+         AND POS_NO = #{posNo}
+         AND TU_CLS_CD = #{tuClsCd}
+   ORDER BY INDEX_NO
+    </select>
+</mapper>
