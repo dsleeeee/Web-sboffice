@@ -1293,39 +1293,71 @@
     <insert id="copyStoreFnkey" parameterType="storeFnkeyVO" >
         /* USE : StoreManageMapper.copyStoreFnkey */
         <![CDATA[
-        INSERT INTO TB_MS_STORE_FNKEY
-        (
-            STORE_CD,
-            FNKEY_NO,
-            FNKEY_NM,
-            FNKEY_FG,
-            POS_FG,
-            AUTH_YN,
-            IMG_FILE_NM,
-            DISP_SEQ,
-            POSI_ADJ_YN,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd} AS STORE_CD,
-               tmsf.FNKEY_NO,
-               tmsf.FNKEY_NM,
-               tmsf.FNKEY_FG,
-               tmsf.POS_FG,
-               tmsf.AUTH_YN,
-               tmsf.IMG_FILE_NM,
-               tmsf.DISP_SEQ,
-               tmsf.POSI_ADJ_YN,
-               tmsf.USE_YN,
-               #{regDt},
-               #{regId},
-               #{modDt},
-               #{modId}
-          FROM TB_MS_STORE_FNKEY tmsf
-         WHERE tmsf.STORE_CD  = #{copyStoreCd}
+        MERGE INTO TB_MS_STORE_FNKEY A
+        USING (
+                    SELECT #{storeCd} AS STORE_CD,
+                           tmsf.FNKEY_NO,
+                           tmsf.FNKEY_NM,
+                           tmsf.FNKEY_FG,
+                           tmsf.POS_FG,
+                           tmsf.AUTH_YN,
+                           tmsf.IMG_FILE_NM,
+                           tmsf.DISP_SEQ,
+                           tmsf.POSI_ADJ_YN,
+                           tmsf.USE_YN
+                      FROM TB_MS_STORE_FNKEY tmsf
+                     WHERE tmsf.STORE_CD  = #{copyStoreCd}
+                ) B
+        ON     (            B.FNKEY_NO   =   A.FNKEY_NO
+                    AND     B.STORE_CD   =   A.STORE_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE SET
+                 A.FNKEY_NM       = B.FNKEY_NM,
+                 A.FNKEY_FG       = B.FNKEY_FG,
+                 A.POS_FG         = B.POS_FG,
+                 A.AUTH_YN        = B.AUTH_YN,
+                 A.IMG_FILE_NM    = B.IMG_FILE_NM,
+                 A.DISP_SEQ       = B.DISP_SEQ,
+                 A.POSI_ADJ_YN    = B.POSI_ADJ_YN,
+                 A.USE_YN         = B.USE_YN,
+                 A.REG_DT         = #{regDt},
+                 A.REG_ID         = #{regId},
+                 A.MOD_DT         = #{modDt},
+                 A.MOD_ID         = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT  (
+                    STORE_CD,
+                    FNKEY_NO,
+                    FNKEY_NM,
+                    FNKEY_FG,
+                    POS_FG,
+                    AUTH_YN,
+                    IMG_FILE_NM,
+                    DISP_SEQ,
+                    POSI_ADJ_YN,
+                    USE_YN,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+        VALUES (
+                    B.STORE_CD,
+                    B.FNKEY_NO,
+                    B.FNKEY_NM,
+                    B.FNKEY_FG,
+                    B.POS_FG,
+                    B.AUTH_YN,
+                    B.IMG_FILE_NM,
+                    B.DISP_SEQ,
+                    B.POSI_ADJ_YN,
+                    B.USE_YN,
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
         ]]>
     </insert>
 
