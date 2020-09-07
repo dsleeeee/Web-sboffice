@@ -122,4 +122,26 @@ public class KioskKeyMapController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 키오스크 키(등록상품) 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2020. 09. 07.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKey(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = kioskKeyMapService.getKioskKey(kioskKeyMapVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
 }

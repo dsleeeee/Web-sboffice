@@ -26,8 +26,11 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
                 if (col.binding === 'tuClsCd') {
-                    wijmo.addClass(e.cell, 'wijLink');
+                    if(item.tuClsCd !== '자동채번') {
+                        wijmo.addClass(e.cell, 'wijLink');
+                    }
                 }
             }
         });
@@ -37,10 +40,13 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             var ht = s.hitTest(e);
             if (ht.cellType === wijmo.grid.CellType.Cell) {
                 var col = ht.panel.columns[ht.col];
+                var item = s.rows[e.row].dataItem;
                 if (col.binding === "tuClsCd") {
-                    var selectedData = s.rows[ht.row].dataItem;
-                    $scope._broadcast('kioskKeyMapProdKeyCtrl', selectedData);
-                    event.preventDefault();
+                    if(item.tuClsCd !== '자동채번') {
+                        var selectedData = s.rows[ht.row].dataItem;
+                        $scope._broadcast('kioskKeyMapKeyCtrl', selectedData);
+                        event.preventDefault();
+                    }
                 }
             }
         });
@@ -196,16 +202,16 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
 
 //
-app.controller('kioskKeyMapProdKeyCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('kioskKeyMapKeyCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('kioskKeyMapProdKeyCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('kioskKeyMapKeyCtrl', $scope, $http, true));
 
     $scope.initGrid = function (s, e) {
 
     };
 
-    $scope.$on("kioskKeyMapProdKeyCtrl", function(event, data) {
+    $scope.$on("kioskKeyMapKeyCtrl", function(event, data) {
 
         alert(data.tuClsCd);
 
@@ -215,16 +221,16 @@ app.controller('kioskKeyMapProdKeyCtrl', ['$scope', '$http', '$timeout', functio
 
 
 //
-app.controller('kioskKeyMapProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('kioskKeyProdCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('kioskKeyMapProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('kioskKeyProdCtrl', $scope, $http, true));
 
     $scope.initGrid = function (s, e) {
 
     };
 
-    $scope.$on("kioskKeyMapProdCtrl", function(event, data) {
+    $scope.$on("kioskKeyProdCtrl", function(event, data) {
 
     });
 

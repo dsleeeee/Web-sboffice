@@ -84,14 +84,14 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="kioskKeyMapProdKeyCtrl">
+    <div class="wj-TblWrap mt20 mb20 w30 fl" ng-controller="kioskKeyMapKeyCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: hidden;">
             111
 
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="kioskKeyMapProdCtrl">
+    <div class="wj-TblWrap mt20 mb20 w40 fr" ng-controller="kioskKeyProdCtrl">
         <div class="wj-TblWrapBr ml10 pd20" style="height:480px; overflow-y: hidden;">
             222
 
@@ -106,4 +106,4 @@
     var kioskPosList = ${kioskPosList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200904.26" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200904.27" charset="utf-8"></script>

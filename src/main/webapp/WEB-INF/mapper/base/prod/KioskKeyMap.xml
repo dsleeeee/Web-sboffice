@@ -157,4 +157,34 @@
            AND TU_CLS_CD = #{tuClsCd}
     </delete>
 
+    <!-- 키오스크 키(등록상품) 조회 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 키(등록상품)를 가져온다.
+    -->
+    <select id="getKioskKey" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : KioskKeyMapMapper.getKioskKey */
+        SELECT STORE_CD,
+                POS_NO,
+                TU_CLS_CD,
+                TU_KEY_CD,
+                PROD_CD,
+                TU_PAGE,
+                X,
+                Y,
+                WIDTH,
+                HEIGHT,
+                INDEX_NO,
+                CLS_FG,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+        FROM TB_MS_KIOSK_KEY tmkk
+       WHERE STORE_CD = #{storeCd}
+         AND POS_NO = #{posNo}
+         AND TU_CLS_CD = #{tuClsCd}
+   ORDER BY INDEX_NO
+    </select>
 </mapper>

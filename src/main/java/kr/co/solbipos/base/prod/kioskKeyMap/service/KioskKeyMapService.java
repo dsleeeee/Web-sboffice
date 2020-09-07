@@ -32,4 +32,7 @@ public interface KioskKeyMapService {
 
     /** 키오스크 카테고리(분류) 저장 */
     int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키(등록상품) 조회 */
+    List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 }

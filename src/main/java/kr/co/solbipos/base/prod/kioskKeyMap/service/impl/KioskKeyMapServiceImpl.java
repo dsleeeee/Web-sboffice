@@ -116,4 +116,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 키오스크 키(등록상품) 조회 */
+    @Override
+    public List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return kioskKeyMapMapper.getKioskKey(kioskKeyMapVO);
+    }
 }

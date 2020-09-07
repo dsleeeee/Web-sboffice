@@ -46,4 +46,7 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 카테고리(분류) 저장 - 삭제 */
     int deleteKioskCategory(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키(등록상품) 조회 */
+    List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO);
 }

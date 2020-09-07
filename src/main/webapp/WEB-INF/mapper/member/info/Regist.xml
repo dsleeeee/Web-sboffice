@@ -99,7 +99,9 @@
         AND tmmc.MEMBR_CLASS_CD (+)= tmm.MEMBR_CLASS_CD
         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tms.STORE_CD = tmm.REG_STORE_CD
+        AND tmm.MEMBR_ORGN_CD = tmmcd.MEMBR_ORGN_CD(+)
         AND tmm.MEMBR_CARD_NO = tmmcd.MEMBR_CARD_NO(+)
+        AND tmm.MEMBR_ORGN_CD = tmmp.MEMBR_ORGN_CD(+)
         AND tmm.MEMBR_NO = tmmp.MEMBR_NO(+)
         <if test='storeCd != null and storeCd != ""'>
             AND tmm.REG_STORE_CD = #{storeCd}
