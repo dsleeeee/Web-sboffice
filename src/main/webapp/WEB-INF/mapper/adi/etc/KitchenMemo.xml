@@ -31,7 +31,7 @@
          AND (HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD IS NULL)
       </if>
       <if test="regFg != null and regFg.toString() == 'STORE'">
-         AND (HQ_OFFICE_CD = #{hqOfficeCd} OR STORE_CD = #{storeCd})
+         AND (STORE_CD = #{storeCd} OR (HQ_OFFICE_CD = DECODE(#{hqOfficeCd}, '00000', 'NONE', #{hqOfficeCd}) AND STORE_CD IS NULL))
       </if>
     </where>
        ORDER BY KITCHN_MEMO_CD ASC
