@@ -62,7 +62,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
                     // 값이 있으면 링크 효과
                     if (item[("result")] !== '검증전' && item[("result")] !== '검증성공') {
-                        wijmo.addClass(e.cell, 'wijLink-red');
+                        wijmo.addClass(e.cell, 'wij_gridText-red');
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                     }
                 }
@@ -211,7 +211,10 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].costUprc)) { result = messages["simpleProd.costUprcInChk"]; } // 숫자만 입력해주세요.
+                if (numChkexp.test($scope.flex.collectionView.items[i].costUprc)) {
+                    $scope.flex.collectionView.items[i].costUprc = "";
+                    result = messages["simpleProd.costUprcInChk"]; // 원가단가 숫자만 입력해주세요.
+                }
             }
 
             // 공급단가
@@ -220,7 +223,10 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].splyUprc)) { result = messages["simpleProd.splyUprcInChk"]; } // 숫자만 입력해주세요.
+                if (numChkexp.test($scope.flex.collectionView.items[i].splyUprc)) {
+                    $scope.flex.collectionView.items[i].splyUprc = "";
+                    result = messages["simpleProd.splyUprcInChk"]; // 공급단가 숫자만 입력해주세요.
+                }
             }
 
             // 발주상품구분
@@ -235,7 +241,10 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             } else {
                 // 숫자만 입력
                 var numChkexp = /[^0-9]/g;
-                if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) { result = messages["simpleProd.saleUprcInChk"]; } // 숫자만 입력해주세요.
+                if (numChkexp.test($scope.flex.collectionView.items[i].saleUprc)) {
+                    $scope.flex.collectionView.items[i].saleUprc = "";
+                    result = messages["simpleProd.saleUprcInChk"]; // 판매단가 숫자만 입력해주세요.
+                }
             }
 
             // 상품명

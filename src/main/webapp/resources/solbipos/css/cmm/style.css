@@ -883,14 +883,13 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
 .wj-cell .v-center {position: relative; top: 50%; transform: translateY(-50%); white-space: pre-wrap; color:#222; font-size:12px;}
 .wj-cells .wj-row .wj-cell.wj-group {text-align:left!important;}
 
+/* 그리드 링크 컬러 추가 /블루/블랙/레드 */
 .wijLink {
     color: #2c59ff!important;
     text-decoration:underline;
     cursor:pointer;
 }
 
-
-/* 그리드 링크 컬러 추가 / 블랙/레드 */
 .wijLink-red {
     color: #ff0000 !important;
     text-decoration:underline;
@@ -901,6 +900,21 @@ div.commtWrap .btn_skyblue {width:140px; position:absolute; top:0px; right:0px; 
     color: #222 !important;
     text-decoration:underline;
     cursor:pointer;
+}
+
+
+/* 그리드 텍스트 컬러 추가 /블루/블랙/레드 */
+
+.wij_gridText-blue {
+    color: #0000ff !important;
+}
+
+.wij_gridText-black {
+    color: #000000 !important;
+}
+
+.wij_gridText-red {
+    color: #ff0000 !important;
 }
 
 

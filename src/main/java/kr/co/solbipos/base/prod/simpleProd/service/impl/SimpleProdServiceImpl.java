@@ -9,6 +9,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
+import kr.co.solbipos.base.prod.prod.service.enums.ProdEnvFg;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdNoEnvFg;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdService;
 import kr.co.solbipos.base.prod.simpleProd.service.SimpleProdVO;
@@ -123,7 +124,6 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     prodCd = simpleProdMapper.getProdCd(simpleProdVO);
                     simpleProdVO.setProdCd(prodCd);
                 }
-
             // 수동채번인 경우 중복체크
             } else if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.MANUAL) {
                 // 값이 있을때만
@@ -211,6 +211,12 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     prodVO.setStoreCd(sessionInfoVO.getStoreCd());
                 }
 
+                // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
+                prodVO.setWorkMode(WorkModeFg.REG_PROD);
+
+                // 상품등록 본사 통제여부
+                ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+
                 // 판매가 본사 통제여부
                 PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
@@ -246,9 +252,6 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setEndDate("99991231");
                 prodVO.setSaleUprc(simpleProdVO.getSaleUprc());
 
-                // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
-                prodVO.setWorkMode(WorkModeFg.REG_PROD);
-
                 // 매장에서 매장상품 등록시에 가격관리 구분 등록
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ)  prodVO.setPrcCtrlFg("H"); //본사
                 else                                        prodVO.setPrcCtrlFg("S"); //매장
@@ -261,6 +264,20 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
                     int barCdResult = prodMapper.saveProdBarcd(prodVO);
                     if (barCdResult <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+
+                // [상품등록 - 본사통제시] 본사에서 상품정보 수정시 매장에 수정정보 내려줌
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ  && prodEnvstVal == ProdEnvFg.HQ) {
+
+                    String procResult = prodMapper.insertHqProdToStoreProd(prodVO);
+
+                    // 상품분류 매장에 INSERT
+                    prodMapper.insertClsHqToStore(prodVO);
+
+                    // 매장 상품 바코드 저장(바코드정보가 있을 경우만)
+                    if(prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0){
+                        prodMapper.saveProdBarcdStore(prodVO);
+                    }
                 }
 
                 // 상품 판매가 저장
