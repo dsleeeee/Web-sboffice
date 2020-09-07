@@ -5,7 +5,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 import kr.co.solbipos.sale.day.day.enums.SaleTimeFg;
 
 /**
- * @Class Name : OperVO.java
+ * @Class Name : DayOfWeekVO.java
  * @Description : 매출관리 > 매출현황 > 기간별매출 > 요일별탭
  * @Modification Information
  * @
