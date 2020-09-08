@@ -237,12 +237,20 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope._popMsg(messages["prod.poUnitQtyChk.msg"]);
           $("#prodModifyPoUnitQty").focus();
           return false;
+        } else if ($("#prodModifyPoUnitQty").val() < 1) {
+            $scope._popMsg(messages["prod.poUnitQtySizeChk.msg"]);
+            $("#prodModifyPoUnitQty").focus();
+            return false;
         }
         // 최소발주수량
         if (isNull($("#prodModifyPoMinQty").val())) {
           $scope._popMsg(messages["prod.poMinQtyChk.msg"]);
           $("#prodModifyPoMinQty").focus();
           return false;
+        } else if ($("#prodModifyPoMinQty").val() < 1) {
+            $scope._popMsg(messages["prod.poMinQtySizeChk.msg"]);
+            $("#prodModifyPoMinQty").focus();
+            return false;
         }
         // 초기재고
         if (isNull($("#prodModifyDefaultStock").val())) {
