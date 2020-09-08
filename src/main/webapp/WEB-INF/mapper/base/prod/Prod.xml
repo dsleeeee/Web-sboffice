@@ -305,6 +305,7 @@
                     IMG_URL || IMG_FILE_NM AS IMG_URL
                     FROM TB_HQ_PRODUCT_IMAGE
                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND IMG_FG = '001'
                     ) thpi ON
                     thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
                     AND thp.PROD_CD = thpi.PROD_CD
@@ -383,6 +384,7 @@
                     IMG_URL || IMG_FILE_NM AS IMG_URL
                     FROM TB_MS_PRODUCT_IMAGE
                     WHERE STORE_CD = #{storeCd}
+                    AND IMG_FG = '001'
                     ) tmpi ON
                     tmp.STORE_CD = tmpi.STORE_CD
                     AND tmp.PROD_CD = tmpi.PROD_CD
@@ -1922,6 +1924,7 @@
                     WHERE 1=1
                     AND thpi.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpi.PROD_CD = #{prodCd}
+                    AND thpi.IMG_FG = '001'
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "STORE"'>
@@ -1930,6 +1933,7 @@
                     WHERE 1=1
                     AND tmpi.STORE_CD = #{storeCd}
                     AND tmpi.PROD_CD = #{prodCd}
+                    AND tmpi.IMG_FG = '001'
                 </if>
             </when>
         </choose>
@@ -2028,6 +2032,7 @@
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
                     AND PROD_CD = #{prodCd}
+                    AND IMG_FG = '001'
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "STORE"'>
@@ -2042,6 +2047,7 @@
                     WHERE 1=1
                     AND STORE_CD = #{storeCd}
                     AND PROD_CD = #{prodCd}
+                    AND IMG_FG = '001'
                 </if>
             </when>
         </choose>
@@ -2063,6 +2069,7 @@
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
                     AND PROD_CD = #{prodCd}
+                    AND IMG_FG = '001'
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "STORE"'>
@@ -2071,6 +2078,7 @@
                     WHERE 1=1
                     AND STORE_CD = #{storeCd}
                     AND PROD_CD = #{prodCd}
+                    AND IMG_FG = '001'
                 </if>
             </when>
         </choose>
@@ -2094,6 +2102,7 @@
                     WHERE 1=1
                     AND thpi.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND thpi.PROD_CD = #{prodCd}
+                    AND thpi.IMG_FG = '001'
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "STORE"'>
@@ -2104,6 +2113,7 @@
                     WHERE 1=1
                     AND tmpi.STORE_CD = #{storeCd}
                     AND tmpi.PROD_CD = #{prodCd}
+                    AND tmpi.IMG_FG = '001'
                 </if>
             </when>
         </choose>
