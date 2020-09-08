@@ -106,6 +106,53 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             simpleProdVO.setSessionId(sessionInfoVO.getUserId());
             simpleProdVO.setSeq(i);
 
+            // 바코드 중복체크
+            // 값이 있을때만
+            if (simpleProdVO.getBarCd() != null && !"".equals(simpleProdVO.getBarCd())) {
+                int barCdCnt = simpleProdMapper.getBarCdCnt(simpleProdVO);
+                if(barCdCnt > 0) {
+                    simpleProdVO.setResult("저장된 동일한 바코드가 존재합니다.");
+                }
+            }
+
+            // 상품명 중복체크
+            if(String.valueOf(true).equals(simpleProdVO.getChkProdNm())) {
+                // 값이 있을때만
+                if (simpleProdVO.getProdNm() != null && !"".equals(simpleProdVO.getProdNm())) {
+                    int prodNmCnt = simpleProdMapper.getProdNmCnt(simpleProdVO);
+                    if (prodNmCnt > 0) {
+                        simpleProdVO.setResult("저장된 동일한 상품명이 존재합니다.");
+                    }
+                }
+            }
+
+            // 원가단가 길이체크
+            // 값이 있을때만
+            if (simpleProdVO.getCostUprc() != null && !"".equals(simpleProdVO.getCostUprc())) {
+                if(simpleProdVO.getCostUprc() > 9999999999999999.0) {
+                    simpleProdVO.setCostUprc(0.0);
+                    simpleProdVO.setResult("원가단가 길이가 너무 깁니다.");
+                }
+            }
+
+            // 공급단가 길이체크
+            // 값이 있을때만
+            if (simpleProdVO.getSplyUprc() != null && !"".equals(simpleProdVO.getSplyUprc())) {
+                if(simpleProdVO.getSplyUprc() > 9999999999999999.0) {
+                    simpleProdVO.setSplyUprc(0.0);
+                    simpleProdVO.setResult("공급단가 길이가 너무 깁니다.");
+                }
+            }
+
+            // 판매단가 길이체크
+            // 값이 있을때만
+            if (simpleProdVO.getSaleUprc() != null && !"".equals(simpleProdVO.getSaleUprc())) {
+                if (simpleProdVO.getSaleUprc().length() > 16) {
+                    simpleProdVO.setSaleUprc("");
+                    simpleProdVO.setResult("판매단가 길이가 너무 깁니다.");
+                }
+            }
+
 
             ProdVO prodVO = new ProdVO();
             prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -117,7 +164,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
                 String prodCd = prodMapper.getProdCd(prodVO);
                 // 순차적으로
-                if(simpleProdVO.getSeq()== 1) {
+                if(simpleProdVO.getSeq() == 1) {
                     simpleProdVO.setProdCd(prodCd);
                 } else {
                     // 상품코드 자동채번
@@ -136,26 +183,13 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
             }
 
-
-            // 상품명 중복체크
-            if(String.valueOf(true).equals(simpleProdVO.getChkProdNm())) {
-                // 값이 있을때만
-                if (simpleProdVO.getProdNm() != null && !"".equals(simpleProdVO.getProdNm())) {
-                    int prodNmCnt = simpleProdMapper.getProdNmCnt(simpleProdVO);
-                    if (prodNmCnt > 0) {
-                        simpleProdVO.setResult("저장된 동일한 상품명이 존재합니다.");
-                    }
-                }
-            }
-
-            // 바코드 중복체크
-            // 값이 있을때만
-            if (simpleProdVO.getBarCd() != null && !"".equals(simpleProdVO.getBarCd())) {
-                int barCdCnt = simpleProdMapper.getBarCdCnt(simpleProdVO);
-                if(barCdCnt > 0) {
-                    simpleProdVO.setResult("저장된 동일한 바코드가 존재합니다.");
-                }
-            }
+            if(simpleProdVO.getStoreCd() == null) { simpleProdVO.setStoreCd(""); }
+            if(simpleProdVO.getProdCd() == null) { simpleProdVO.setProdCd(""); }
+            if(simpleProdVO.getProdNm() == null) { simpleProdVO.setProdNm(""); }
+            if(simpleProdVO.getSaleUprc() == null) { simpleProdVO.setSaleUprc(""); }
+            if(simpleProdVO.getSplyUprc() == null) { simpleProdVO.setSplyUprc(0.0); }
+            if(simpleProdVO.getCostUprc() == null) { simpleProdVO.setCostUprc(0.0); }
+            if(simpleProdVO.getBarCd() == null) { simpleProdVO.setBarCd(""); }
 
             if (simpleProdVO.getResult() == null || simpleProdVO.getResult() == "") {
                 simpleProdVO.setResult("검증성공");

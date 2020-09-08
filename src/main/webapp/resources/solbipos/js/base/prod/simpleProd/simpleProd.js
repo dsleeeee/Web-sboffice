@@ -42,6 +42,12 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#divSimpleProdAuth").css("display", "block");
     }
 
+    if($scope.prodEnvstVal === 'HQ') {
+        $("#lblSimpleProdAuth").text("'본사통제'");
+    } else if($scope.prodEnvstVal === 'STORE') {
+        $("#lblSimpleProdAuth").text("'매장통제'");
+    }
+
     // 상품명 중복체크
     $scope.isChecked = true;
 
