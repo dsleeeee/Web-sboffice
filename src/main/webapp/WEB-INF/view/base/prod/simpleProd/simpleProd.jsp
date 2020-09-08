@@ -14,7 +14,7 @@
     <div class="elseCon">
         <p class="lgTxt">죄송합니다.<br />요청하신 페이지에 권한이 없습니다.</p>
         <p class="smTxt mt20">
-            본사 환경설정 (20 : 본사통제구분-상품등록) 이 '본사통제' 입니다.<br />
+            본사 환경설정 (20 : 본사통제구분-상품등록) 이 <label id="lblSimpleProdAuth"></label> 입니다.<br />
             해당 페이지에 접근할 수 없습니다.<br />
             ${sessionScope.sessionInfo.currentMenu.resrceCd}
         </p>
@@ -132,7 +132,7 @@
     var vatFgData = ${ccu.getCommCodeExcpAll("039")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20200907.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20200907.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
