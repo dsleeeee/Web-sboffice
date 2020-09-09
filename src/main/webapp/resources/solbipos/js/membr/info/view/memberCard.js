@@ -129,12 +129,12 @@ app.controller('memberCardCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 카드번호
         var msg = messages["regist.card.new.no"] + messages["regist.card.add.new"];
-        $scope.data.items.forEach(e => {
+        /*$scope.data.items.forEach(e => {
             if(e.oldCstCardNo == $scope.member.membrCardNo) {
                 $scope._popMsg(msg);
                 return false;
             }
-        });
+        });*/
 
         // 카드번호 최대길이 체크
         if (nvl($scope.member.membrCardNo, '') !== '' && nvl($scope.member.membrCardNo + '', '').getByteLengthForOracle() > 16) {

@@ -135,4 +135,4 @@
     <%--var cstCardStatFg = ${ccu.getCommCode("301")};--%>
 </script>
 <script type="text/javascript"
-        src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20191223.17 charset='utf-8'"></script>
+        src="/resource/solbipos/js/membr/info/view/memberCard.js?ver=20191223.18 charset='utf-8'"></script>
