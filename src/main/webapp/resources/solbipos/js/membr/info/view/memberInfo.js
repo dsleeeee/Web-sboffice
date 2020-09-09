@@ -75,7 +75,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         if ( col.binding === "membrNo" ||  col.binding === "membrNm") {
           var selectedData = s.rows[ht.row].dataItem;
           $scope.setSelectedMember(selectedData);
-          $scope._broadcast('responseGet', selectedData);
+          $scope._broadcast('memberBasicCtrl', selectedData);
           $scope.memberRegistLayer.show(true);
           // $scope.memberInfoDetailLayer.show(true);
           event.preventDefault();
@@ -281,11 +281,11 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     });
 
     // 회원 등록 및 수정 팝업 핸들러 추가
-    $scope.memberRegistLayer.shown.addHandler(function (s) {
+    /*$scope.memberRegistLayer.shown.addHandler(function (s) {
       setTimeout(function() {
         $scope._broadcast('memberRegistInfo', $scope.getSelectedMember());
       }, 50)
-    });
+    });*/
 
     // 후불회원등록 팝업 핸들러 추가
     $scope.postpaidStoreRegistLayer.shown.addHandler(function (s) {
@@ -298,7 +298,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
   // 신규회원 등록
   $scope.registMember = function(){
     $scope.setSelectedMember(null);
-    $scope._broadcast('responseGet', {});
+    $scope._broadcast('memberBasicCtrl', {});
     $scope.memberRegistLayer.show(true);
   };
 

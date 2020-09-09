@@ -47,6 +47,7 @@ app.controller('memberVendorMappingCtrl', ['$scope', '$http', function ($scope, 
                 // 회원명,회원번호 클릭시 상세정보 조회
                 if ( col.binding === "membrNo" || col.binding === "membrNm") {
                     $scope.setSelectedMember(s.rows[ht.row].dataItem);
+                    $scope._broadcast('memberBasicCtrl', s.rows[ht.row].dataItem);
                     $scope.memberRegistLayer.show(true);
                     event.preventDefault();
                 }
