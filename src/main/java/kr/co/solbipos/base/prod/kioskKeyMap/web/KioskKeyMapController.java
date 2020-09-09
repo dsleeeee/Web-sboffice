@@ -9,6 +9,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import kr.co.solbipos.sale.day.day.service.DayVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -124,7 +127,7 @@ public class KioskKeyMapController {
     }
 
     /**
-     * 키오스크 키(등록상품) 조회
+     * 키오스크 키 조회
      *
      * @param kioskKeyMapVO
      * @param request
@@ -143,5 +146,46 @@ public class KioskKeyMapController {
         List<DefaultMap<Object>> result = kioskKeyMapService.getKioskKey(kioskKeyMapVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
+    }
+
+    /**
+     * 키오스크 미등록상품 조회
+     *
+     * @param kioskKeyMapVO
+     * @param request
+     * @author  이다솜
+     * @since   2020. 09. 07.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskProdList(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskKeyMapService.getKioskProdList(kioskKeyMapVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크 키 등록
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2020. 09. 07.
+     */
+    @RequestMapping(value = "/kioskKeyMap/saveKioskKey.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskKey(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.saveKioskKey(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

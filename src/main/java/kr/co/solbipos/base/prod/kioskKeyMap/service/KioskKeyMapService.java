@@ -3,6 +3,8 @@ package kr.co.solbipos.base.prod.kioskKeyMap.service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 
 import java.util.List;
@@ -33,6 +35,13 @@ public interface KioskKeyMapService {
     /** 키오스크 카테고리(분류) 저장 */
     int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
-    /** 키오스크 키(등록상품) 조회 */
+    /** 키오스크 키 조회 */
     List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 미등록상품 조회 */
+    List<DefaultMap<String>> getKioskProdList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 키 등록 */
+    int saveKioskKey(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
 }

@@ -12,14 +12,19 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
+import kr.co.solbipos.base.prod.prodImg.service.ProdImgVO;
 import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
@@ -117,12 +122,84 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
     }
 
-    /** 키오스크 키(등록상품) 조회 */
+    /** 키오스크 키 조회 */
     @Override
     public List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
         kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return kioskKeyMapMapper.getKioskKey(kioskKeyMapVO);
+    }
+
+    /**  키오스크 미등록상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getKioskProdList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        kioskKeyMapVO.setOrgnFg(orgnFg);
+        kioskKeyMapVO.setHqOfficeCd(hqOfficeCd);
+        kioskKeyMapVO.setStoreCd(storeCd);
+
+        /*
+          단독매장의 경우 SALE_PRC_FG = '2' (매장판매가 셋팅)
+          프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
+          본사통제구분이 '본사'일때, SALE_PRC_FG = '1' (본사판매가 셋팅)
+          본사통제구분이 '매장'일때, SALE_PRC_FG = '2' (매장판매가 셋팅)
+        */
+        if("00000".equals(hqOfficeCd)) { // 단독매장
+            kioskKeyMapVO.setSalePrcFg("2");
+        } else {
+
+            // 상품가격 본사통제여부 확인(1 : 본사통제, 2 : 매장통제)
+            String envstVal = StringUtil.getOrBlank(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+            if( StringUtil.isEmpties(storeCd)) { // 본사일때
+                kioskKeyMapVO.setSalePrcFg("1");
+            } else {                             // 매장일때
+                if("1".equals(envstVal)) kioskKeyMapVO.setSalePrcFg("1");
+                else                     kioskKeyMapVO.setSalePrcFg("2");
+            }
+        }
+        return kioskKeyMapMapper.getKioskProdList(kioskKeyMapVO);
+    }
+
+    /** 키오스크 키 등록 */
+    @Override
+    public int saveKioskKey(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        int procCnt = 0;
+
+        for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskKeyMapVO.setClsFg("K"); // K: KIOSK
+            kioskKeyMapVO.setRegDt(dt);
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapVO.setModDt(dt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 키오스크 키 관련 코드 조회
+            DefaultMap<String> keyValue = kioskKeyMapMapper.getKioskKeyCode(kioskKeyMapVO);
+
+            kioskKeyMapVO.setTuKeyCd(keyValue.get("tuKeyCd"));
+            kioskKeyMapVO.setIndexNo(String.valueOf(keyValue.get("indexNo")));
+
+            // 페이지 수 계산
+            int indexNo = Integer.parseInt(String.valueOf(keyValue.get("indexNo")));
+            kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 4) + 1)));
+
+            int result = kioskKeyMapMapper.saveKioskKey(kioskKeyMapVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return procCnt;
+
     }
 }

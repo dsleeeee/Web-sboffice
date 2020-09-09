@@ -332,7 +332,7 @@
     var orgnCd = "${orgnCd}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200902.01 charset='utf-8'"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20200903.01 charset='utf-8'"></script>
 
 <%-- 회원 매핑코드 조회 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberMapping.jsp">

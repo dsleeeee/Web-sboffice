@@ -79,10 +79,10 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
      * *******************************************************/
     $scope.resetForm = function () {
 
-         $("#regForm")[0].reset();
+        // $("#regForm")[0].reset();
         // $("#memberInfoTitle").text("");
 
-        $scope.$apply(function () {
+        //$scope.$apply(function () {
             $scope.member.membrNo = '자동채번';
             $scope.member.beforeBizNo = '';
             $scope.basicRegStoreCdCombo.selectedIndex = 0;
@@ -122,7 +122,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
 
-        });
+        //});
     };
 
     /*********************************************************
@@ -145,8 +145,18 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $("#memberInfoTitle").text("[" + memberDetailInfo.membrNo + "] " + memberDetailInfo.membrNm);
 
-            memberDetailInfo.birthday = stringToDate(memberDetailInfo.birthday);
-            memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+            // 결혼기념일과 생일 (기존값 없으면 오늘날짜로 셋팅)
+            if(memberDetailInfo.weddingday === null || memberDetailInfo.weddingday === ""){
+                memberDetailInfo.weddingday = getCurDate('-') // 오늘날짜로 셋팅
+            }else{
+                memberDetailInfo.weddingday = stringToDate(memberDetailInfo.weddingday);
+            }
+            
+            if(memberDetailInfo.birthday === null || memberDetailInfo.birthday === ""){
+                memberDetailInfo.birthday = getCurDate('-') // 오늘날짜로 셋팅
+            }else{
+                memberDetailInfo.birthday = stringToDate(memberDetailInfo.birthday);
+            }
 
             $scope.member = memberDetailInfo;
 
