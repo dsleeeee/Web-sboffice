@@ -274,7 +274,7 @@ public class ProdServiceImpl implements ProdService {
         }
 
         // 신규상품 이미지 등록시
-        result = Long.parseLong(prodVO.getProdCd());
+        //result = Long.parseLong(prodVO.getProdCd());
 
         return result;
     }
