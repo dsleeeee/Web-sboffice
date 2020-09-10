@@ -246,7 +246,7 @@
     <!-- 기초관리 > 상품관리 > 키오스크키맵관리 -->
     <typeAlias alias="KioskKeyMapVO" type="kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO"/>
     <!-- 기초관리 > 상품관리 > 상품엑셀업로드 -->
-    <typeAlias alias="prodExcelUploadVO" type="kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO"/>
+    <!--<typeAlias alias="prodExcelUploadVO" type="kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO"/>-->
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
