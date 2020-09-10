@@ -26,53 +26,53 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
-                    thp.HQ_OFFICE_CD,
-                    thp.PROD_CD,
-                    thp.PROD_NM,
-                    thp.HQ_BRAND_CD,
-                    thb.HQ_BRAND_NM,
-                    thp.PROD_CLASS_CD,
-                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
-                    NVL(thp.COST_UPRC, 0) COST_UPRC,
-                    NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
-                    thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
-                    thp.SIDE_PROD_YN,
-                    thp.SDATTR_CLASS_CD,
-                    thp.SDSEL_GRP_CD,
-                    thp.PO_UNIT_FG,
-                    thp.REG_DT,
-                    thp.USE_YN,
-                   (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT
-                    <include refid="CmmSQL.PagingTemplateCount"/>
+                thp.HQ_OFFICE_CD,
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thp.HQ_BRAND_CD,
+                thb.HQ_BRAND_NM,
+                thp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(thp.COST_UPRC, 0) COST_UPRC,
+                NVL(thp.SPLY_UPRC, 0) SPLY_UPRC,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                thp.SIDE_PROD_YN,
+                thp.SDATTR_CLASS_CD,
+                thp.SDSEL_GRP_CD,
+                thp.PO_UNIT_FG,
+                thp.REG_DT,
+                thp.USE_YN,
+                (SELECT COUNT(thps.STORE_CD) FROM TB_HQ_PRODUCT_STORE thps WHERE thps.HQ_OFFICE_CD = thp.HQ_OFFICE_CD AND thps.PROD_CD = thp.PROD_CD ) AS STORE_CNT
+                <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
-                    TB_HQ_PRODUCT thp
+                TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
-                    SELECT
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                            START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE
-                        HQ_OFFICE_CD = #{hqOfficeCd}
-                        <![CDATA[
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_HQ_PRODUCT_SALE_PRICE
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY
-                        HQ_OFFICE_CD, PROD_CD
-                    ) thpsp ON
-                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                    AND thp.PROD_CD = thpsp.PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                HQ_OFFICE_CD, PROD_CD
+                ) thpsp ON
+                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 WHERE
-                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -88,30 +88,30 @@
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND EXISTS (
-                                SELECT 1
-                                FROM
-                                    TB_HQ_PRODUCT_BARCD
-                                WHERE
-                                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                                    AND PROD_CD = thp.PROD_CD
-                                    AND BARCD_CD = #{barCd}
-                                ) --바코드
+                    SELECT 1
+                    FROM
+                    TB_HQ_PRODUCT_BARCD
+                    WHERE
+                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND PROD_CD = thp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                    PROD_CLASS_CD
-                                                FROM
-                                                    TB_HQ_PRODUCT_CLASS
-                                                WHERE
-                                                    HQ_OFFICE_CD = #{hqOfficeCd}
-                                                START WITH
-                                                    PROD_CLASS_CD = #{prodClassCd}
-                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
-                                                CONNECT BY
-                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
-                                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
-                                            )
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM
+                    TB_HQ_PRODUCT_CLASS
+                    WHERE
+                    HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH
+                    PROD_CLASS_CD = #{prodClassCd}
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                    AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -119,62 +119,62 @@
                 <if test="hqBrandNm != null and hqBrandNm != ''">
                     AND thb.HQ_BRAND_NM LIKE '%'||#{hqBrandNm}||'%' -- 브랜드명
                 </if>
-                    ORDER BY thp.PROD_CD ASC
+                ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
                 SELECT
-                    tmp.STORE_CD,
-                    tmp.PROD_CD,
-                    tmp.PROD_NM,
-                    tms.HQ_OFFICE_CD,
-                    tmp.HQ_BRAND_CD,
-                    thb.HQ_BRAND_NM,
-                    tmp.PROD_CLASS_CD,
-                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
-                    NVL(tmp.COST_UPRC, 0) COST_UPRC,
-                    NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
-                    tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
-                    tmp.SIDE_PROD_YN,
-                    tmp.SDATTR_CLASS_CD,
-                    tmp.SDSEL_GRP_CD,
-                    tmp.PO_UNIT_FG,
-                    tmp.REG_DT,
-                    tmp.USE_YN
+                tmp.STORE_CD,
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                tms.HQ_OFFICE_CD,
+                tmp.HQ_BRAND_CD,
+                thb.HQ_BRAND_NM,
+                tmp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(tmp.COST_UPRC, 0) COST_UPRC,
+                NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+                tmp.SIDE_PROD_YN,
+                tmp.SDATTR_CLASS_CD,
+                tmp.SDSEL_GRP_CD,
+                tmp.PO_UNIT_FG,
+                tmp.REG_DT,
+                tmp.USE_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
-                    TB_MS_PRODUCT tmp
+                TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
-                    SELECT
-                        STORE_CD,
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                            START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_MS_PRODUCT_SALE_PRICE
-                    WHERE
-                        STORE_CD = #{storeCd}
-                        <![CDATA[
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_MS_PRODUCT_SALE_PRICE
+                WHERE
+                STORE_CD = #{storeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY
-                        STORE_CD, PROD_CD
-                    ) thpsp ON
-                    tmp.STORE_CD = thpsp.STORE_CD
-                    AND tmp.PROD_CD = thpsp.PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) thpsp ON
+                tmp.STORE_CD = thpsp.STORE_CD
+                AND tmp.PROD_CD = thpsp.PROD_CD
                 INNER JOIN TB_MS_STORE tms ON
-                    tms.STORE_CD  = tmp.STORE_CD
+                tms.STORE_CD  = tmp.STORE_CD
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                    thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                    AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
                 WHERE
-                    tmp.STORE_CD = #{storeCd}
+                tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -190,35 +190,35 @@
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND EXISTS (
-                                SELECT 1
-                                FROM
-                                    TB_MS_PRODUCT_BARCD
-                                WHERE
-                                    STORE_CD = tmp.STORE_CD
-                                    AND PROD_CD = tmp.PROD_CD
-                                    AND BARCD_CD = #{barCd}
-                                ) --바코드
+                    SELECT 1
+                    FROM
+                    TB_MS_PRODUCT_BARCD
+                    WHERE
+                    STORE_CD = tmp.STORE_CD
+                    AND PROD_CD = tmp.PROD_CD
+                    AND BARCD_CD = #{barCd}
+                    ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND tmp.PROD_CLASS_CD IN (
-                                                SELECT
-                                                    PROD_CLASS_CD
-                                                FROM
-                                                    TB_MS_PRODUCT_CLASS
-                                                WHERE
-                                                    STORE_CD = #{storeCd}
-                                                START WITH
-                                                    PROD_CLASS_CD = #{prodClassCd}
-                                                    AND STORE_CD = #{storeCd}
-                                                CONNECT BY
-                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
-                                                    AND STORE_CD = #{storeCd}
-                                            )
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM
+                    TB_MS_PRODUCT_CLASS
+                    WHERE
+                    STORE_CD = #{storeCd}
+                    START WITH
+                    PROD_CLASS_CD = #{prodClassCd}
+                    AND STORE_CD = #{storeCd}
+                    CONNECT BY
+                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD
+                    AND STORE_CD = #{storeCd}
+                    )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
                 </if>
-                  ORDER BY tmp.PROD_CD ASC
+                ORDER BY tmp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -237,161 +237,161 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thp.HQ_OFFICE_CD,       -- 본사코드
-                    thp.PROD_CD,            -- 상품코드
-                    thp.PROD_NM,            -- 상품명
-                    thp.PROD_CLASS_CD,      -- 상품분류코드
-                    ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
-                    ( SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
-                    thp.CORNR_CD,           -- 코너코드
-                    thp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
-                    thp.SDATTR_CLASS_CD,    -- 사이드속성분류코드
-                    thp.SDSEL_GRP_CD,       -- 사이드선택그룹코드
-                    thp.POINT_SAVE_YN,
-                    thp.PROD_DC_FG,
-                    thp.VAT_FG,                                     -- 과세여부
-                    thp.PROD_TIP_YN,
-                    thp.PROD_PACK_AMT,
-                    thp.PROD_DLVR_AMT,
-                    thp.PROD_TYPE_FG,                               -- 상품유형구분
-                    thp.SALE_PROD_YN,                               -- 판매상품여부
-                    thp.STOCK_PROD_YN,                              -- 재고관리여부
-                    thp.SIDE_PROD_YN,
-                    thp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
-                    NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
-                    NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
-                    NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
-                    thp.SPLY_UPRC_USE_YN,
-                    thp.PO_PROD_FG,                                 -- 주문상품구분
-                    thp.PO_UNIT_FG,                                 -- 주문단위
-                    thp.PO_UNIT_QTY,
-                    thp.PO_UNIT_ALLOW_FG,
-                    thp.PO_MIN_QTY,                 -- 최소주문
-                    thp.SAFE_STOCK_QTY,             -- 안전재고
-                    0 AS DEFAULT_STOCK,             -- todo 초기재고
-                    thp.STOCK_UNIT_FG,
-                    thp.USE_YN,                     -- 사용여부
-                    NVL(thp.REMARK, '') AS REMARK,  -- 비고
-                    thp.REG_DT,
-                    thpi.IMG_URL
+                thp.HQ_OFFICE_CD,       -- 본사코드
+                thp.PROD_CD,            -- 상품코드
+                thp.PROD_NM,            -- 상품명
+                thp.PROD_CLASS_CD,      -- 상품분류코드
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
+                ( SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
+                thp.CORNR_CD,           -- 코너코드
+                thp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
+                thp.SDATTR_CLASS_CD,    -- 사이드속성분류코드
+                thp.SDSEL_GRP_CD,       -- 사이드선택그룹코드
+                thp.POINT_SAVE_YN,
+                thp.PROD_DC_FG,
+                thp.VAT_FG,                                     -- 과세여부
+                thp.PROD_TIP_YN,
+                thp.PROD_PACK_AMT,
+                thp.PROD_DLVR_AMT,
+                thp.PROD_TYPE_FG,                               -- 상품유형구분
+                thp.SALE_PROD_YN,                               -- 판매상품여부
+                thp.STOCK_PROD_YN,                              -- 재고관리여부
+                thp.SIDE_PROD_YN,
+                thp.SET_PROD_FG,                                -- 세트상품구분
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                NVL(thp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
+                NVL(thp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
+                NVL(thp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
+                thp.SPLY_UPRC_USE_YN,
+                thp.PO_PROD_FG,                                 -- 주문상품구분
+                thp.PO_UNIT_FG,                                 -- 주문단위
+                thp.PO_UNIT_QTY,
+                thp.PO_UNIT_ALLOW_FG,
+                thp.PO_MIN_QTY,                 -- 최소주문
+                thp.SAFE_STOCK_QTY,             -- 안전재고
+                0 AS DEFAULT_STOCK,             -- todo 초기재고
+                thp.STOCK_UNIT_FG,
+                thp.USE_YN,                     -- 사용여부
+                NVL(thp.REMARK, '') AS REMARK,  -- 비고
+                thp.REG_DT,
+                thpi.IMG_URL
                 FROM
-                    TB_HQ_PRODUCT thp
+                TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
-                    SELECT
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                            START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE
-                        HQ_OFFICE_CD = #{hqOfficeCd}
-                        <![CDATA[
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_HQ_PRODUCT_SALE_PRICE
+                WHERE
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY
-                        HQ_OFFICE_CD, PROD_CD
-                    ) thpsp ON
-                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                    AND thp.PROD_CD = thpsp.PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                HQ_OFFICE_CD, PROD_CD
+                ) thpsp ON
+                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpsp.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    IMG_URL || IMG_FILE_NM AS IMG_URL
-                    FROM TB_HQ_PRODUCT_IMAGE
-                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND IMG_FG = '001'
-                    ) thpi ON
-                    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
-                    AND thp.PROD_CD = thpi.PROD_CD
+                SELECT
+                HQ_OFFICE_CD,
+                PROD_CD,
+                IMG_URL || IMG_FILE_NM AS IMG_URL
+                FROM TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND IMG_FG = '001'
+                ) thpi ON
+                thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
+                AND thp.PROD_CD = thpi.PROD_CD
                 WHERE
-                    thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thp.PROD_CD = #{prodCd}
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = #{prodCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmp.STORE_CD,           -- 매장코드
-                    tmp.PROD_CD,            -- 상품코드
-                    tmp.PROD_NM,            -- 상품명
-                    tmp.PROD_CLASS_CD,      -- 상품분류코드
-                    ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
-                    ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
-                    tmp.CORNR_CD,           -- 코너코드
-                    tmp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
-                    tmp.SDATTR_CLASS_CD,
-                    tmp.SDSEL_GRP_CD,
-                    tmp.POINT_SAVE_YN,
-                    tmp.PROD_DC_FG,
-                    tmp.VAT_FG,                                     -- 과세여부
-                    tmp.PROD_TIP_YN,
-                    tmp.PROD_PACK_AMT,
-                    tmp.PROD_DLVR_AMT,
-                    tmp.PROD_TYPE_FG,                               -- 상품유형
-                    tmp.SALE_PROD_YN,                               -- 판매상품여부
-                    tmp.STOCK_PROD_YN,                              -- 재고관리여부
-                    tmp.SIDE_PROD_YN,
-                    tmp.SET_PROD_FG,                                -- 세트상품구분
-                    NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
-                    NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
-                    NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
-                    NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
-                    tmp.SPLY_UPRC_USE_YN,
-                    tmp.PO_PROD_FG,                                 -- 주문상품구분
-                    tmp.PO_UNIT_FG,                                 -- 주문단위
-                    tmp.PO_UNIT_QTY,
-                    tmp.PO_UNIT_ALLOW_FG,
-                    tmp.PO_MIN_QTY,                 -- 최소주문
-                    tmp.SAFE_STOCK_QTY,             -- 안전재고
-                    0 AS DEFAULT_STOCK,             -- todo 초기재고
-                    tmp.STOCK_UNIT_FG,
-                    tmp.USE_YN,                     -- 사용여부
-                    NVL(tmp.REMARK, '') AS REMARK,  -- 비고
-                    tmp.REG_DT,
-                    tmpi.IMG_URL
+                tmp.STORE_CD,           -- 매장코드
+                tmp.PROD_CD,            -- 상품코드
+                tmp.PROD_NM,            -- 상품명
+                tmp.PROD_CLASS_CD,      -- 상품분류코드
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_CD_NM,
+                ( SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}) AS BAR_CD,
+                tmp.CORNR_CD,           -- 코너코드
+                tmp.ORGPLCE_CD,         -- 원산지 구분 -- TODO 원산지명 조회 필요
+                tmp.SDATTR_CLASS_CD,
+                tmp.SDSEL_GRP_CD,
+                tmp.POINT_SAVE_YN,
+                tmp.PROD_DC_FG,
+                tmp.VAT_FG,                                     -- 과세여부
+                tmp.PROD_TIP_YN,
+                tmp.PROD_PACK_AMT,
+                tmp.PROD_DLVR_AMT,
+                tmp.PROD_TYPE_FG,                               -- 상품유형
+                tmp.SALE_PROD_YN,                               -- 판매상품여부
+                tmp.STOCK_PROD_YN,                              -- 재고관리여부
+                tmp.SIDE_PROD_YN,
+                tmp.SET_PROD_FG,                                -- 세트상품구분
+                NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,           -- 최초판매단가
+                NVL(tmp.COST_UPRC, 0) AS COST_UPRC,             -- 원가단가
+                NVL(tmp.LAST_COST_UPRC, 0) AS LAST_COST_UPRC,   -- 최종원가단가
+                NVL(tmp.SPLY_UPRC, 0) AS SPLY_UPRC,             -- 판매단가
+                tmp.SPLY_UPRC_USE_YN,
+                tmp.PO_PROD_FG,                                 -- 주문상품구분
+                tmp.PO_UNIT_FG,                                 -- 주문단위
+                tmp.PO_UNIT_QTY,
+                tmp.PO_UNIT_ALLOW_FG,
+                tmp.PO_MIN_QTY,                 -- 최소주문
+                tmp.SAFE_STOCK_QTY,             -- 안전재고
+                0 AS DEFAULT_STOCK,             -- todo 초기재고
+                tmp.STOCK_UNIT_FG,
+                tmp.USE_YN,                     -- 사용여부
+                NVL(tmp.REMARK, '') AS REMARK,  -- 비고
+                tmp.REG_DT,
+                tmpi.IMG_URL
                 FROM
-                    TB_MS_PRODUCT tmp
+                TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (
-                    SELECT
-                        STORE_CD,
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
-                            ORDER BY
-                            START_DATE DESC ) AS SALE_UPRC
-                    FROM
-                        TB_MS_PRODUCT_SALE_PRICE
-                    WHERE
-                        STORE_CD = #{storeCd}
-                        <![CDATA[
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST
+                ORDER BY
+                START_DATE DESC ) AS SALE_UPRC
+                FROM
+                TB_MS_PRODUCT_SALE_PRICE
+                WHERE
+                STORE_CD = #{storeCd}
+                <![CDATA[
                         AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                         ]]>
-                        AND SALE_PRC_FG = #{salePrcFg}
-                    GROUP BY
-                        STORE_CD, PROD_CD
-                    ) tmpsp ON
-                    tmp.STORE_CD = tmpsp.STORE_CD
-                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                AND SALE_PRC_FG = #{salePrcFg}
+                GROUP BY
+                STORE_CD, PROD_CD
+                ) tmpsp ON
+                tmp.STORE_CD = tmpsp.STORE_CD
+                AND tmp.PROD_CD = tmpsp.PROD_CD
                 LEFT OUTER JOIN (
-                    SELECT
-                    STORE_CD,
-                    PROD_CD,
-                    IMG_URL || IMG_FILE_NM AS IMG_URL
-                    FROM TB_MS_PRODUCT_IMAGE
-                    WHERE STORE_CD = #{storeCd}
-                    AND IMG_FG = '001'
-                    ) tmpi ON
-                    tmp.STORE_CD = tmpi.STORE_CD
-                    AND tmp.PROD_CD = tmpi.PROD_CD
+                SELECT
+                STORE_CD,
+                PROD_CD,
+                IMG_URL || IMG_FILE_NM AS IMG_URL
+                FROM TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND IMG_FG = '001'
+                ) tmpi ON
+                tmp.STORE_CD = tmpi.STORE_CD
+                AND tmp.PROD_CD = tmpi.PROD_CD
                 WHERE
-                    tmp.STORE_CD = #{storeCd}
-                    AND tmp.PROD_CD = #{prodCd}
-        </when>
+                tmp.STORE_CD = #{storeCd}
+                AND tmp.PROD_CD = #{prodCd}
+            </when>
         </choose>
     </select>
 
@@ -407,36 +407,36 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
-                    thpup.HQ_OFFICE_CD,
-                    thpup.PROD_CD,
-                    thpup.UNIT_PROD_CD,
-                    thpup.SET_PROD_FG,
-                    thpup.UNIT_PROD_QTY,
-                    thpup.DISP_SEQ
+                thpup.HQ_OFFICE_CD,
+                thpup.PROD_CD,
+                thpup.UNIT_PROD_CD,
+                thpup.SET_PROD_FG,
+                thpup.UNIT_PROD_QTY,
+                thpup.DISP_SEQ
                 FROM
-                    TB_HQ_PRODUCT_UNITST_PROD thpup
+                TB_HQ_PRODUCT_UNITST_PROD thpup
                 WHERE
-                    thpup.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thpup.PROD_CD = #{prodCd}
+                thpup.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thpup.PROD_CD = #{prodCd}
                 ORDER BY
-                    thpup.DISP_SEQ
+                thpup.DISP_SEQ
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT
-                    tmpup.STORE_CD,
-                    tmpup.PROD_CD,
-                    tmpup.UNIT_PROD_CD,
-                    tmpup.SET_PROD_FG,
-                    tmpup.UNIT_PROD_QTY,
-                    tmpup.DISP_SEQ
+                tmpup.STORE_CD,
+                tmpup.PROD_CD,
+                tmpup.UNIT_PROD_CD,
+                tmpup.SET_PROD_FG,
+                tmpup.UNIT_PROD_QTY,
+                tmpup.DISP_SEQ
                 FROM
-                    TB_MS_PRODUCT_UNITST_PROD tmpup
+                TB_MS_PRODUCT_UNITST_PROD tmpup
                 WHERE
-                    tmpup.STORE_CD = #{storeCd}
-                    AND tmpup.PROD_CD = #{prodCd}
+                tmpup.STORE_CD = #{storeCd}
+                AND tmpup.PROD_CD = #{prodCd}
                 ORDER BY
-                    tmpup.DISP_SEQ
+                tmpup.DISP_SEQ
             </when>
         </choose>
     </select>
@@ -453,23 +453,23 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-                  FROM TB_HQ_PRODUCT
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                FROM TB_HQ_PRODUCT
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <!-- 가맹점 (매장 등록 상품의 경우 상품코드가 '9'로 시작) -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <!-- 단독매장 -->
                 <if test='hqOfficeCd != null and hqOfficeCd == "0000"'>
                     SELECT LPAD(NVL(MAX(TO_NUMBER(PROD_CD)),0) + 1, 13, '0') AS PROD_CD
-                      FROM TB_MS_PRODUCT
-                     WHERE STORE_CD = #{storeCd}
+                    FROM TB_MS_PRODUCT
+                    WHERE STORE_CD = #{storeCd}
                 </if>
                 <!-- 단독매장이 아닐 경우 -->
                 <if test='hqOfficeCd != null and hqOfficeCd != "0000"'>
-                SELECT '9' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(PROD_CD, 2, 13))),0) + 1, 12, '0') AS PROD_CD
-                  FROM TB_MS_PRODUCT
-                 WHERE STORE_CD = #{storeCd}
-                   AND PROD_CD LIKE '9%'
+                    SELECT '9' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(PROD_CD, 2, 13))),0) + 1, 12, '0') AS PROD_CD
+                    FROM TB_MS_PRODUCT
+                    WHERE STORE_CD = #{storeCd}
+                    AND PROD_CD LIKE '9%'
                 </if>
             </when>
         </choose>
@@ -487,249 +487,249 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO
-                    TB_HQ_PRODUCT thp
+                TB_HQ_PRODUCT thp
                 USING DUAL ON
-                    (
-                        thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thp.PROD_CD = #{prodCd}
-                    )
+                (
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = #{prodCd}
+                )
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                        PROD_NM = #{prodNm},
-                        PROD_CLASS_CD  = #{prodClassCd},
-                        CORNR_CD = #{cornrCd},
-                        ORGPLCE_CD = #{orgplceCd},
-                        SDATTR_CLASS_CD = #{sdattrClassCd},
-                        SDSEL_GRP_CD = #{sdselGrpCd},
-                        POINT_SAVE_YN = #{pointSaveYn, jdbcType=VARCHAR},
-                        PROD_DC_FG = #{prodDcFg},
-                        VAT_FG = #{vatFg},
-                        PROD_TIP_YN = #{prodTipYn, jdbcType=VARCHAR},
-                        PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
-                        PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
-                        PROD_TYPE_FG = #{prodTypeFg},
-                        SALE_PROD_YN = #{saleProdYn},
-                        STOCK_PROD_YN = #{stockProdYn},
-                        SIDE_PROD_YN = #{sideProdYn, jdbcType=VARCHAR},
-                        SET_PROD_FG = #{setProdFg},
-                        COST_UPRC = #{costUprc, jdbcType=NUMERIC},
-                        LAST_COST_UPRC = #{lastCostUprc, jdbcType=NUMERIC},
-                        SPLY_UPRC = #{splyUprc, jdbcType=NUMERIC},
-                        SPLY_UPRC_USE_YN = #{splyUprcUseYn, jdbcType=VARCHAR},
-                        PO_PROD_FG = #{poProdFg},
-                        PO_UNIT_FG = #{poUnitFg},
-                        PO_UNIT_QTY = #{poUnitQty, jdbcType=NUMERIC},
-                        PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
-                        PO_MIN_QTY = #{poMinQty, jdbcType=NUMERIC},
-                        SAFE_STOCK_QTY = #{safeStockQty, jdbcType=NUMERIC},
-                        STOCK_UNIT_FG = #{stockUnitFg},
-                        USE_YN = #{useYn},
-                        REMARK = #{remark},
-                        MOD_DT = #{modDt},
-                        MOD_ID = #{modId}
-                  WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        PROD_NM,
-                        PROD_CLASS_CD,
-                        CORNR_CD,
-                        ORGPLCE_CD,
-                        SDATTR_CLASS_CD,
-                        SDSEL_GRP_CD,
-                        POINT_SAVE_YN,
-                        PROD_DC_FG,
-                        VAT_FG,
-                        PROD_TIP_YN,
-                        PROD_PACK_AMT,
-                        PROD_DLVR_AMT,
-                        PROD_TYPE_FG,
-                        SALE_PROD_YN,
-                        STOCK_PROD_YN,
-                        SIDE_PROD_YN,
-                        SET_PROD_FG,
-                        COST_UPRC,
-                        LAST_COST_UPRC,
-                        SPLY_UPRC,
-                        SPLY_UPRC_USE_YN,
-                        PO_PROD_FG,
-                        PO_UNIT_FG,
-                        PO_UNIT_QTY,
-                        PO_UNIT_ALLOW_FG,
-                        PO_MIN_QTY,
-                        SAFE_STOCK_QTY,
-                        STOCK_UNIT_FG,
-                        USE_YN,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{hqOfficeCd},
-                        #{prodCd},
-                        #{prodNm},
-                        #{prodClassCd},
-                        '00',
-                        #{orgplceCd},
-                        #{sdattrClassCd},
-                        #{sdselGrpCd},
-                        #{pointSaveYn, jdbcType=VARCHAR},
-                        #{prodDcFg},
-                        #{vatFg},
-                        #{prodTipYn, jdbcType=VARCHAR},
-                        #{prodPackAmt, jdbcType=NUMERIC},
-                        #{prodDlvrAmt, jdbcType=NUMERIC},
-                        #{prodTypeFg},
-                        #{saleProdYn},
-                        #{stockProdYn},
-                        #{sideProdYn, jdbcType=VARCHAR},
-                        #{setProdFg},
-                        #{costUprc, jdbcType=NUMERIC},
-                        #{lastCostUprc, jdbcType=NUMERIC},
-                        #{splyUprc, jdbcType=NUMERIC},
-                        #{splyUprcUseYn, jdbcType=VARCHAR},
-                        #{poProdFg},
-                        #{poUnitFg},
-                        #{poUnitQty, jdbcType=NUMERIC},
-                        #{poUnitAllowFg},
-                        #{poMinQty, jdbcType=NUMERIC},
-                        #{safeStockQty, jdbcType=NUMERIC},
-                        #{stockUnitFg},
-                        #{useYn},
-                        #{remark},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                UPDATE
+                SET
+                PROD_NM = #{prodNm},
+                PROD_CLASS_CD  = #{prodClassCd},
+                CORNR_CD = #{cornrCd},
+                ORGPLCE_CD = #{orgplceCd},
+                SDATTR_CLASS_CD = #{sdattrClassCd},
+                SDSEL_GRP_CD = #{sdselGrpCd},
+                POINT_SAVE_YN = #{pointSaveYn, jdbcType=VARCHAR},
+                PROD_DC_FG = #{prodDcFg},
+                VAT_FG = #{vatFg},
+                PROD_TIP_YN = #{prodTipYn, jdbcType=VARCHAR},
+                PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
+                PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
+                PROD_TYPE_FG = #{prodTypeFg},
+                SALE_PROD_YN = #{saleProdYn},
+                STOCK_PROD_YN = #{stockProdYn},
+                SIDE_PROD_YN = #{sideProdYn, jdbcType=VARCHAR},
+                SET_PROD_FG = #{setProdFg},
+                COST_UPRC = #{costUprc, jdbcType=NUMERIC},
+                LAST_COST_UPRC = #{lastCostUprc, jdbcType=NUMERIC},
+                SPLY_UPRC = #{splyUprc, jdbcType=NUMERIC},
+                SPLY_UPRC_USE_YN = #{splyUprcUseYn, jdbcType=VARCHAR},
+                PO_PROD_FG = #{poProdFg},
+                PO_UNIT_FG = #{poUnitFg},
+                PO_UNIT_QTY = #{poUnitQty, jdbcType=NUMERIC},
+                PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
+                PO_MIN_QTY = #{poMinQty, jdbcType=NUMERIC},
+                SAFE_STOCK_QTY = #{safeStockQty, jdbcType=NUMERIC},
+                STOCK_UNIT_FG = #{stockUnitFg},
+                USE_YN = #{useYn},
+                REMARK = #{remark},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                HQ_OFFICE_CD,
+                PROD_CD,
+                PROD_NM,
+                PROD_CLASS_CD,
+                CORNR_CD,
+                ORGPLCE_CD,
+                SDATTR_CLASS_CD,
+                SDSEL_GRP_CD,
+                POINT_SAVE_YN,
+                PROD_DC_FG,
+                VAT_FG,
+                PROD_TIP_YN,
+                PROD_PACK_AMT,
+                PROD_DLVR_AMT,
+                PROD_TYPE_FG,
+                SALE_PROD_YN,
+                STOCK_PROD_YN,
+                SIDE_PROD_YN,
+                SET_PROD_FG,
+                COST_UPRC,
+                LAST_COST_UPRC,
+                SPLY_UPRC,
+                SPLY_UPRC_USE_YN,
+                PO_PROD_FG,
+                PO_UNIT_FG,
+                PO_UNIT_QTY,
+                PO_UNIT_ALLOW_FG,
+                PO_MIN_QTY,
+                SAFE_STOCK_QTY,
+                STOCK_UNIT_FG,
+                USE_YN,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{hqOfficeCd},
+                #{prodCd},
+                #{prodNm},
+                #{prodClassCd},
+                '00',
+                #{orgplceCd},
+                #{sdattrClassCd},
+                #{sdselGrpCd},
+                #{pointSaveYn, jdbcType=VARCHAR},
+                #{prodDcFg},
+                #{vatFg},
+                #{prodTipYn, jdbcType=VARCHAR},
+                #{prodPackAmt, jdbcType=NUMERIC},
+                #{prodDlvrAmt, jdbcType=NUMERIC},
+                #{prodTypeFg},
+                #{saleProdYn},
+                #{stockProdYn},
+                #{sideProdYn, jdbcType=VARCHAR},
+                #{setProdFg},
+                #{costUprc, jdbcType=NUMERIC},
+                #{lastCostUprc, jdbcType=NUMERIC},
+                #{splyUprc, jdbcType=NUMERIC},
+                #{splyUprcUseYn, jdbcType=VARCHAR},
+                #{poProdFg},
+                #{poUnitFg},
+                #{poUnitQty, jdbcType=NUMERIC},
+                #{poUnitAllowFg},
+                #{poMinQty, jdbcType=NUMERIC},
+                #{safeStockQty, jdbcType=NUMERIC},
+                #{stockUnitFg},
+                #{useYn},
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO
-                    TB_MS_PRODUCT tmp
+                TB_MS_PRODUCT tmp
                 USING DUAL ON
-                    (
-                        tmp.STORE_CD = #{storeCd}
-                        AND tmp.PROD_CD = #{prodCd}
-                    )
+                (
+                tmp.STORE_CD = #{storeCd}
+                AND tmp.PROD_CD = #{prodCd}
+                )
                 WHEN MATCHED THEN
-                    UPDATE
-                    SET
-                        PROD_NM = #{prodNm},
-                        PROD_CLASS_CD  = #{prodClassCd},
-                        CORNR_CD = #{cornrCd},
-                        ORGPLCE_CD = #{orgplceCd},
-                        SDATTR_CLASS_CD = #{sdattrClassCd},
-                        SDSEL_GRP_CD = #{sdselGrpCd},
-                        POINT_SAVE_YN = #{pointSaveYn},
-                        PROD_DC_FG = #{prodDcFg},
-                        VAT_FG = #{vatFg},
-                        PROD_TIP_YN = #{prodTipYn},
-                        PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
-                        PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
-                        PROD_TYPE_FG = #{prodTypeFg},
-                        SALE_PROD_YN = #{saleProdYn},
-                        STOCK_PROD_YN = #{stockProdYn},
-                        SIDE_PROD_YN = #{sideProdYn},
-                        SET_PROD_FG = #{setProdFg},
-                        PRC_CTRL_FG = #{prcCtrlFg},
-                        COST_UPRC = #{costUprc},
-                        LAST_COST_UPRC = #{lastCostUprc},
-                        SPLY_UPRC = #{splyUprc},
-                        SPLY_UPRC_USE_YN = #{splyUprcUseYn},
-                        PO_PROD_FG = #{poProdFg},
-                        PO_UNIT_FG = #{poUnitFg},
-                        PO_UNIT_QTY = #{poUnitQty},
-                        PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
-                        PO_MIN_QTY = #{poMinQty},
-                        SAFE_STOCK_QTY = #{safeStockQty},
-                        STOCK_UNIT_FG = #{stockUnitFg},
-                        USE_YN = #{useYn},
-                        REMARK = #{remark},
-                        MOD_DT = #{modDt},
-                        MOD_ID = #{modId}
+                UPDATE
+                SET
+                PROD_NM = #{prodNm},
+                PROD_CLASS_CD  = #{prodClassCd},
+                CORNR_CD = #{cornrCd},
+                ORGPLCE_CD = #{orgplceCd},
+                SDATTR_CLASS_CD = #{sdattrClassCd},
+                SDSEL_GRP_CD = #{sdselGrpCd},
+                POINT_SAVE_YN = #{pointSaveYn},
+                PROD_DC_FG = #{prodDcFg},
+                VAT_FG = #{vatFg},
+                PROD_TIP_YN = #{prodTipYn},
+                PROD_PACK_AMT = #{prodPackAmt, jdbcType=NUMERIC},
+                PROD_DLVR_AMT = #{prodDlvrAmt, jdbcType=NUMERIC},
+                PROD_TYPE_FG = #{prodTypeFg},
+                SALE_PROD_YN = #{saleProdYn},
+                STOCK_PROD_YN = #{stockProdYn},
+                SIDE_PROD_YN = #{sideProdYn},
+                SET_PROD_FG = #{setProdFg},
+                PRC_CTRL_FG = #{prcCtrlFg},
+                COST_UPRC = #{costUprc},
+                LAST_COST_UPRC = #{lastCostUprc},
+                SPLY_UPRC = #{splyUprc},
+                SPLY_UPRC_USE_YN = #{splyUprcUseYn},
+                PO_PROD_FG = #{poProdFg},
+                PO_UNIT_FG = #{poUnitFg},
+                PO_UNIT_QTY = #{poUnitQty},
+                PO_UNIT_ALLOW_FG = #{poUnitAllowFg},
+                PO_MIN_QTY = #{poMinQty},
+                SAFE_STOCK_QTY = #{safeStockQty},
+                STOCK_UNIT_FG = #{stockUnitFg},
+                USE_YN = #{useYn},
+                REMARK = #{remark},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                    INSERT
-                    (
-                        STORE_CD,
-                        PROD_CD,
-                        PROD_NM,
-                        PROD_CLASS_CD,
-                        CORNR_CD,
-                        ORGPLCE_CD,
-                        SDATTR_CLASS_CD,
-                        SDSEL_GRP_CD,
-                        POINT_SAVE_YN,
-                        PROD_DC_FG,
-                        VAT_FG,
-                        PROD_TIP_YN,
-                        PROD_PACK_AMT,
-                        PROD_DLVR_AMT,
-                        PROD_TYPE_FG,
-                        SALE_PROD_YN,
-                        STOCK_PROD_YN,
-                        SIDE_PROD_YN,
-                        SET_PROD_FG,
-                        PRC_CTRL_FG,
-                        COST_UPRC,
-                        LAST_COST_UPRC,
-                        SPLY_UPRC,
-                        SPLY_UPRC_USE_YN,
-                        PO_PROD_FG,
-                        PO_UNIT_FG,
-                        PO_UNIT_QTY,
-                        PO_UNIT_ALLOW_FG,
-                        PO_MIN_QTY,
-                        SAFE_STOCK_QTY,
-                        STOCK_UNIT_FG,
-                        USE_YN,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    ) VALUES (
-                        #{storeCd},
-                        #{prodCd},
-                        #{prodNm},
-                        #{prodClassCd},
-                        '00',
-                        #{orgplceCd},
-                        #{sdattrClassCd},
-                        #{sdselGrpCd},
-                        'N',
-                        #{prodDcFg},
-                        #{vatFg},
-                        #{prodTipYn},
-                        #{prodPackAmt, jdbcType=NUMERIC},
-                        #{prodDlvrAmt, jdbcType=NUMERIC},
-                        #{prodTypeFg},
-                        #{saleProdYn},
-                        #{stockProdYn},
-                        'N',
-                        #{setProdFg},
-                        #{prcCtrlFg},
-                        #{costUprc},
-                        #{lastCostUprc},
-                        #{splyUprc},
-                        #{splyUprcUseYn},
-                        #{poProdFg},
-                        #{poUnitFg},
-                        #{poUnitQty},
-                        #{poUnitAllowFg},
-                        #{poMinQty},
-                        #{safeStockQty},
-                        #{stockUnitFg},
-                        #{useYn},
-                        #{remark},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                INSERT
+                (
+                STORE_CD,
+                PROD_CD,
+                PROD_NM,
+                PROD_CLASS_CD,
+                CORNR_CD,
+                ORGPLCE_CD,
+                SDATTR_CLASS_CD,
+                SDSEL_GRP_CD,
+                POINT_SAVE_YN,
+                PROD_DC_FG,
+                VAT_FG,
+                PROD_TIP_YN,
+                PROD_PACK_AMT,
+                PROD_DLVR_AMT,
+                PROD_TYPE_FG,
+                SALE_PROD_YN,
+                STOCK_PROD_YN,
+                SIDE_PROD_YN,
+                SET_PROD_FG,
+                PRC_CTRL_FG,
+                COST_UPRC,
+                LAST_COST_UPRC,
+                SPLY_UPRC,
+                SPLY_UPRC_USE_YN,
+                PO_PROD_FG,
+                PO_UNIT_FG,
+                PO_UNIT_QTY,
+                PO_UNIT_ALLOW_FG,
+                PO_MIN_QTY,
+                SAFE_STOCK_QTY,
+                STOCK_UNIT_FG,
+                USE_YN,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+                ) VALUES (
+                #{storeCd},
+                #{prodCd},
+                #{prodNm},
+                #{prodClassCd},
+                '00',
+                #{orgplceCd},
+                #{sdattrClassCd},
+                #{sdselGrpCd},
+                'N',
+                #{prodDcFg},
+                #{vatFg},
+                #{prodTipYn},
+                #{prodPackAmt, jdbcType=NUMERIC},
+                #{prodDlvrAmt, jdbcType=NUMERIC},
+                #{prodTypeFg},
+                #{saleProdYn},
+                #{stockProdYn},
+                'N',
+                #{setProdFg},
+                #{prcCtrlFg},
+                #{costUprc},
+                #{lastCostUprc},
+                #{splyUprc},
+                #{splyUprcUseYn},
+                #{poProdFg},
+                #{poUnitFg},
+                #{poUnitQty},
+                #{poUnitAllowFg},
+                #{poMinQty},
+                #{safeStockQty},
+                #{stockUnitFg},
+                #{useYn},
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+                )
             </when>
         </choose>
     </update>
@@ -968,93 +968,93 @@
     <select id="getStoreList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreList */
         SELECT tms.HQ_OFFICE_CD,
-               tho.HQ_OFFICE_NM,
-               tms.STORE_CD,
-               tms.STORE_NM,
-               NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN,
-               thpsp.SALE_UPRC AS HQ_SALE_UPRC,
-               tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
-           <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
-               tmpsp.SALE_UPRC AS SALE_UPRC, -- 등록매장은 매장판매가
-               tmpsp.SALE_UPRC AS SALE_UPRC_B,
-           </if>
-           <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
-               CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                    ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
-               CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                    ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B,
-           </if>
-               thps.STORE_CD
-          FROM TB_MS_STORE tms,
-               TB_HQ_OFFICE tho,
-               TB_HQ_PRODUCT_STORE thps,
-               (
-               SELECT thp.HQ_OFFICE_CD ,
-                      thp.PROD_CD,
-                      thpsp.SALE_UPRC
-                 FROM TB_HQ_PRODUCT thp,
-                      (
-                       SELECT HQ_OFFICE_CD , PROD_CD,
-                              MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                         FROM TB_HQ_PRODUCT_SALE_PRICE
-                        WHERE 1 = 1
-                         <![CDATA[
+        tho.HQ_OFFICE_NM,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        NVL2(thps.STORE_CD, 'Y', 'N') AS REG_YN,
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+        tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+        <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
+            tmpsp.SALE_UPRC AS SALE_UPRC, -- 등록매장은 매장판매가
+            tmpsp.SALE_UPRC AS SALE_UPRC_B,
+        </if>
+        <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
+            CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+            ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+            CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+            ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B,
+        </if>
+        thps.STORE_CD
+        FROM TB_MS_STORE tms,
+        TB_HQ_OFFICE tho,
+        TB_HQ_PRODUCT_STORE thps,
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        thp.PROD_CD,
+        thpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT HQ_OFFICE_CD , PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        <![CDATA[
                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                           ]]>
-                          AND SALE_PRC_FG = '1'
-                        GROUP BY HQ_OFFICE_CD, PROD_CD
-                      ) thpsp
-                WHERE 1=1
-                  AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                  AND thpsp.PROD_CD = thp.PROD_CD
-               ) thpsp, -- 본사 판매가
-               (
-               SELECT thp.HQ_OFFICE_CD ,
-                      tmpsp.STORE_CD,
-                      thp.PROD_CD,
-                      tmpsp.SALE_UPRC
-                 FROM TB_HQ_PRODUCT thp,
-                      (
-                      SELECT STORE_CD , PROD_CD,
-                             MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                        FROM TB_MS_PRODUCT_SALE_PRICE
-                       WHERE 1 = 1
-                        <![CDATA[
+        AND SALE_PRC_FG = '1'
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ) thpsp, -- 본사 판매가
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        tmpsp.STORE_CD,
+        thp.PROD_CD,
+        tmpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT STORE_CD , PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE 1 = 1
+        <![CDATA[
                          AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                          AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                          ]]>
-                         AND SALE_PRC_FG = '1'
-                       GROUP BY STORE_CD, PROD_CD
-                      ) tmpsp
-                WHERE 1=1
-                  AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                  AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
-                  AND tmpsp.PROD_CD = thp.PROD_CD
-               ) tmpsp
-         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
-           AND thps.STORE_CD (+)= tms.STORE_CD
-           AND thps.PROD_CD (+)= #{prodCd}
-           AND thpsp.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
-           AND thpsp.PROD_CD (+)= #{prodCd}
-           AND tmpsp.HQ_OFFICE_CD (+)= #{hqOfficeCd}
-           AND tmpsp.STORE_CD (+)= tms.STORE_CD
-           AND tmpsp.PROD_CD (+)= #{prodCd}
+        AND SALE_PRC_FG = '1'
+        GROUP BY STORE_CD, PROD_CD
+        ) tmpsp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+        AND tmpsp.PROD_CD = thp.PROD_CD
+        ) tmpsp
+        WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thps.HQ_OFFICE_CD (+)= tms.HQ_OFFICE_CD
+        AND thps.STORE_CD (+)= tms.STORE_CD
+        AND thps.PROD_CD (+)= #{prodCd}
+        AND thpsp.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+)= #{prodCd}
+        AND tmpsp.HQ_OFFICE_CD (+)= #{hqOfficeCd}
+        AND tmpsp.STORE_CD (+)= tms.STORE_CD
+        AND tmpsp.PROD_CD (+)= #{prodCd}
         <if test='storeCd != null and storeCd.toString() != ""'>
-           AND tms.STORE_CD = #{storeCd}
+            AND tms.STORE_CD = #{storeCd}
         </if>
         <if test='storeNm != null and storeNm.toString() != ""'>
-           AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
-           AND thps.STORE_CD IS NOT NULL
+            AND thps.STORE_CD IS NOT NULL
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "N"'>
-           AND thps.STORE_CD IS NULL
+            AND thps.STORE_CD IS NULL
         </if>
-         ORDER BY tms.STORE_CD ASC
+        ORDER BY tms.STORE_CD ASC
     </select>
 
     <!-- 상품 적용 매장 등록 -->
@@ -1414,7 +1414,7 @@
 
     <!-- 상품코드 중복체크 -->
     <!--
-          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_MS_STORE
           PARAM    : prodVO
           COMMENTS : 상품코드 수동입력 시 중복되는 상품코드가 있는지 체크 (중복체크)
     -->
@@ -1436,14 +1436,53 @@
                    AND PROD_CD = #{prodCd}
             </when>
         </choose>-->
-        SELECT COUNT(1) AS CNT
+        <!--SELECT COUNT(1) AS CNT
         FROM (
                 SELECT PROD_CD FROM TB_HQ_PRODUCT
                 UNION ALL
                 SELECT PROD_CD FROM TB_MS_PRODUCT
               )
         WHERE 1=1
-          AND PROD_CD = #{prodCd}
+          AND PROD_CD = #{prodCd}-->
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
+                UNION ALL
+                (
+                SELECT
+                tmp.PROD_CD
+                FROM TB_MS_PRODUCT tmp,
+                TB_MS_STORE tms
+                WHERE 1=1
+                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tmp.STORE_CD = tms.STORE_CD
+                AND tmp.PROD_CD = #{prodCd}
+                )
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
+                UNION ALL
+                SELECT PROD_CD FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}
+                )
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
+                SELECT COUNT(1) AS CNT
+                FROM TB_MS_PRODUCT
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
     </select>
 
     <!-- 상품 바코드 존재 여부 확인 -->
@@ -1528,71 +1567,71 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 MERGE INTO TB_HQ_PRODUCT_BARCD
                 USING DUAL ON (
-                        HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND PROD_CD = #{prodCd}
+                HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
                 )
                 WHEN MATCHED THEN
-                        UPDATE
-                        SET BARCD_CD = #{barCd}
-                            , BARCD_NM = #{prodNm}
-                            , MOD_DT = #{modDt}
-                            , MOD_ID = #{modId}
+                UPDATE
+                SET BARCD_CD = #{barCd}
+                , BARCD_NM = #{prodNm}
+                , MOD_DT = #{modDt}
+                , MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                        INSERT (
-                                    HQ_OFFICE_CD
-                                    , PROD_CD
-                                    , BARCD_CD
-                                    , BARCD_NM
-                                    , UNIT_QTY
-                                    , REG_DT
-                                    , REG_ID
-                                    , MOD_DT
-                                    , MOD_ID )
-                        VALUES (
-                                    #{hqOfficeCd}
-                                    , #{prodCd}
-                                    , #{barCd}
-                                    , #{prodNm}
-                                    , '1'
-                                    , #{regDt}
-                                    , #{regId}
-                                    , #{modDt}
-                                    , #{modId} )
+                INSERT (
+                HQ_OFFICE_CD
+                , PROD_CD
+                , BARCD_CD
+                , BARCD_NM
+                , UNIT_QTY
+                , REG_DT
+                , REG_ID
+                , MOD_DT
+                , MOD_ID )
+                VALUES (
+                #{hqOfficeCd}
+                , #{prodCd}
+                , #{barCd}
+                , #{prodNm}
+                , '1'
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId} )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 MERGE INTO TB_MS_PRODUCT_BARCD
                 USING DUAL ON (
-                        STORE_CD = #{storeCd}
-                        AND PROD_CD = #{prodCd}
+                STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
                 )
                 WHEN MATCHED THEN
-                        UPDATE
-                        SET BARCD_CD = #{barCd}
-                            , BARCD_NM = #{prodNm}
-                            , MOD_DT = #{modDt}
-                            , MOD_ID = #{modId}
+                UPDATE
+                SET BARCD_CD = #{barCd}
+                , BARCD_NM = #{prodNm}
+                , MOD_DT = #{modDt}
+                , MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
-                          INSERT (
-                                      STORE_CD
-                                    , PROD_CD
-                                    , BARCD_CD
-                                    , BARCD_NM
-                                    , UNIT_QTY
-                                    , REG_DT
-                                    , REG_ID
-                                    , MOD_DT
-                                    , MOD_ID )
-                          VALUES (
-                                      #{storeCd}
-                                    , #{prodCd}
-                                    , #{barCd}
-                                    , #{prodNm}
-                                    , '1'
-                                    , #{regDt}
-                                    , #{regId}
-                                    , #{modDt}
-                                    , #{modId} )
+                INSERT (
+                STORE_CD
+                , PROD_CD
+                , BARCD_CD
+                , BARCD_NM
+                , UNIT_QTY
+                , REG_DT
+                , REG_ID
+                , MOD_DT
+                , MOD_ID )
+                VALUES (
+                #{storeCd}
+                , #{prodCd}
+                , #{barCd}
+                , #{prodNm}
+                , '1'
+                , #{regDt}
+                , #{regId}
+                , #{modDt}
+                , #{modId} )
             </when>
         </choose>
 
@@ -1685,90 +1724,90 @@
         COMMENTS : 매장 적용 대상인 상품을 조회한다.
     -->
     <select id="getStoreProdRegList" parameterType="prodVO" resultType="DefaultMap">
-    /* USE : ProdMapper.getStoreProdRegList */
+        /* USE : ProdMapper.getStoreProdRegList */
         SELECT  tmp.STORE_CD,
-                 tmp.PROD_CD,
-                 tmp.PROD_NM,
-                 NVL2(thps.PROD_CD, 'Y', 'N') AS REG_YN,
-                 thps.PROD_CD,
-                 thpsp.SALE_UPRC AS HQ_SALE_UPRC,
-                 tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
-                 CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                 ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
-                 CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                 ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
-           FROM TB_MS_PRODUCT tmp,
-                (
-                    SELECT STORE_CD, PROD_CD
-                      FROM TB_HQ_PRODUCT_STORE
-                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                       AND STORE_CD = #{storeCd}
-                ) thps,
-                (
-                    SELECT thp.HQ_OFFICE_CD ,
-                            thp.PROD_CD,
-                            thpsp.SALE_UPRC
-                      FROM TB_HQ_PRODUCT thp,
-                            (
-                                 SELECT HQ_OFFICE_CD,
-                                         PROD_CD,
-                                         MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                   FROM TB_HQ_PRODUCT_SALE_PRICE
-                                  WHERE 1=1
-                                  <![CDATA[
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        NVL2(thps.PROD_CD, 'Y', 'N') AS REG_YN,
+        thps.PROD_CD,
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+        tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+        CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+        ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+        CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+        ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
+        FROM TB_MS_PRODUCT tmp,
+        (
+        SELECT STORE_CD, PROD_CD
+        FROM TB_HQ_PRODUCT_STORE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+        ) thps,
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        thp.PROD_CD,
+        thpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT HQ_OFFICE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1=1
+        <![CDATA[
                                     AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                     AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                   ]]>
-                                    AND SALE_PRC_FG = '1'
-                                    AND HQ_OFFICE_CD = #{hqOfficeCd}
-                              GROUP BY HQ_OFFICE_CD, PROD_CD
-                            ) thpsp
-                     WHERE 1=1
-                        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpsp.PROD_CD = thp.PROD_CD
-                ) thpsp,
-                (
-                    SELECT thp.HQ_OFFICE_CD ,
-                            tmpsp.STORE_CD,
-                            thp.PROD_CD,
-                            tmpsp.SALE_UPRC
-                      FROM TB_HQ_PRODUCT thp,
-                            (
-                                    SELECT STORE_CD,
-                                            PROD_CD,
-                                            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                      FROM TB_MS_PRODUCT_SALE_PRICE
-                                     WHERE 1=1
-                                     <![CDATA[
+        AND SALE_PRC_FG = '1'
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ) thpsp,
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        tmpsp.STORE_CD,
+        thp.PROD_CD,
+        tmpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT STORE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE 1=1
+        <![CDATA[
                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                      ]]>
-                                       AND SALE_PRC_FG = '1'
-                                       AND STORE_CD = #{storeCd}
-                                 GROUP BY STORE_CD, PROD_CD
-                            ) tmpsp
-                    WHERE 1=1
-                      AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                      AND tmpsp.STORE_CD = #{storeCd}
-                      AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
-                      AND tmpsp.PROD_CD = thp.PROD_CD
-                ) tmpsp
-          WHERE thps.STORE_CD (+)= tmp.STORE_CD
-            AND thps.PROD_CD (+)= tmp.PROD_CD
-            AND tmp.STORE_CD = #{storeCd}
-            --AND tmp.USE_YN = 'Y'
-            AND thpsp.PROD_CD (+)= tmp.PROD_CD
-            AND tmpsp.STORE_CD (+)= tmp.STORE_CD
-            AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND SALE_PRC_FG = '1'
+        AND STORE_CD = #{storeCd}
+        GROUP BY STORE_CD, PROD_CD
+        ) tmpsp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tmpsp.STORE_CD = #{storeCd}
+        AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+        AND tmpsp.PROD_CD = thp.PROD_CD
+        ) tmpsp
+        WHERE thps.STORE_CD (+)= tmp.STORE_CD
+        AND thps.PROD_CD (+)= tmp.PROD_CD
+        AND tmp.STORE_CD = #{storeCd}
+        --AND tmp.USE_YN = 'Y'
+        AND thpsp.PROD_CD (+)= tmp.PROD_CD
+        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
         <if test='prodCd != null and prodCd.toString() != ""'>
             AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
         <if test='prodNm != null and prodNm.toString() != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
-           AND thps.PROD_CD IS NOT NULL
-           ORDER BY tmp.PROD_CD ASC
+        AND thps.PROD_CD IS NOT NULL
+        ORDER BY tmp.PROD_CD ASC
     </select>
 
     <!-- 매장 미적용 상품 조회 -->
@@ -1780,84 +1819,84 @@
     <select id="getStoreProdNoRegList" parameterType="prodVO" resultType="DefaultMap">
         /* USE : ProdMapper.getStoreProdNoRegList */
         SELECT thp.PROD_CD,
-                thp.PROD_NM,
-                thpsp.SALE_UPRC AS HQ_SALE_UPRC,
-                tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
-                CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
-                CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
-                ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
-          FROM TB_HQ_PRODUCT thp,
-                (
-                      SELECT thp.HQ_OFFICE_CD ,
-                              thp.PROD_CD,
-                              thpsp.SALE_UPRC
-                      FROM TB_HQ_PRODUCT thp,
-                            (
-                                    SELECT HQ_OFFICE_CD,
-                                            PROD_CD,
-                                            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                      FROM TB_HQ_PRODUCT_SALE_PRICE
-                                     WHERE 1=1
-                                     <![CDATA[
+        thp.PROD_NM,
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,
+        tmpsp.SALE_UPRC AS STORE_SALE_UPRC,
+        CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+        ELSE tmpsp.SALE_UPRC END AS SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
+        CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
+        ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        thp.PROD_CD,
+        thpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT HQ_OFFICE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_HQ_PRODUCT_SALE_PRICE
+        WHERE 1=1
+        <![CDATA[
                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                      ]]>
-                                       AND SALE_PRC_FG = '1'
-                                       AND HQ_OFFICE_CD = #{hqOfficeCd}
-                                 GROUP BY HQ_OFFICE_CD, PROD_CD
-                            ) thpsp
-                      WHERE 1=1
-                        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpsp.PROD_CD = thp.PROD_CD
-                ) thpsp,
-                (
-                        SELECT thp.HQ_OFFICE_CD ,
-                                tmpsp.STORE_CD,
-                                thp.PROD_CD,
-                                tmpsp.SALE_UPRC
-                          FROM TB_HQ_PRODUCT thp,
-                                (
-                                SELECT STORE_CD,
-                                        PROD_CD,
-                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                  FROM TB_MS_PRODUCT_SALE_PRICE
-                                 WHERE 1=1
-                                <![CDATA[
+        AND SALE_PRC_FG = '1'
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        GROUP BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ) thpsp,
+        (
+        SELECT thp.HQ_OFFICE_CD ,
+        tmpsp.STORE_CD,
+        thp.PROD_CD,
+        tmpsp.SALE_UPRC
+        FROM TB_HQ_PRODUCT thp,
+        (
+        SELECT STORE_CD,
+        PROD_CD,
+        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+        FROM TB_MS_PRODUCT_SALE_PRICE
+        WHERE 1=1
+        <![CDATA[
                                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
                                 ]]>
-                                   AND SALE_PRC_FG = '1'
-                                   AND STORE_CD = #{storeCd}
-                             GROUP BY STORE_CD, PROD_CD
-                                ) tmpsp
-                        WHERE 1=1
-                          AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                          AND tmpsp.STORE_CD = #{storeCd}
-                          AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
-                          AND tmpsp.PROD_CD = thp.PROD_CD
-                ) tmpsp
-         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
-           --AND thp.USE_YN = 'Y'
-           AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
-           AND thpsp.PROD_CD (+) = thp.PROD_CD
-           AND tmpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
-           AND tmpsp.PROD_CD (+)= thp.PROD_CD
-           AND thp.PROD_CD NOT IN (
-                                       SELECT tmp.PROD_CD
-                                         FROM TB_MS_PRODUCT tmp,
-                                               (  SELECT STORE_CD,
-                                                           PROD_CD
-                                                     FROM TB_HQ_PRODUCT_STORE
-                                                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                                      AND STORE_CD = #{storeCd} ) thps
-                                        WHERE thps.STORE_CD (+)= tmp.STORE_CD
-                                          AND thps.PROD_CD (+)= tmp.PROD_CD
-                                          AND tmp.STORE_CD = #{storeCd}
-                                          --AND tmp.USE_YN = 'Y'
-                                          AND thps.PROD_CD IS NOT NULL
-                                    )
+        AND SALE_PRC_FG = '1'
+        AND STORE_CD = #{storeCd}
+        GROUP BY STORE_CD, PROD_CD
+        ) tmpsp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tmpsp.STORE_CD = #{storeCd}
+        AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
+        AND tmpsp.PROD_CD = thp.PROD_CD
+        ) tmpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        --AND thp.USE_YN = 'Y'
+        AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+) = thp.PROD_CD
+        AND tmpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND tmpsp.PROD_CD (+)= thp.PROD_CD
+        AND thp.PROD_CD NOT IN (
+        SELECT tmp.PROD_CD
+        FROM TB_MS_PRODUCT tmp,
+        (  SELECT STORE_CD,
+        PROD_CD
+        FROM TB_HQ_PRODUCT_STORE
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd} ) thps
+        WHERE thps.STORE_CD (+)= tmp.STORE_CD
+        AND thps.PROD_CD (+)= tmp.PROD_CD
+        AND tmp.STORE_CD = #{storeCd}
+        --AND tmp.USE_YN = 'Y'
+        AND thps.PROD_CD IS NOT NULL
+        )
         <if test='prodCd != null and prodCd.toString() != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
@@ -1952,58 +1991,58 @@
                 <if test='orgnFg == "HQ"'>
                     INSERT INTO TB_HQ_PRODUCT_IMAGE
                     (
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        IMG_FG,
-                        IMG_URL,
-                        IMG_FILE_NM,
-                        IMG_CHG_DT,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
                     ) VALUES (
-                        #{hqOfficeCd},
-                        #{prodCd},
-                        '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
-                        #{filePath},
-                        #{fileNm} ||'.'|| #{fileExt},
-                        #{modDt},
-                        '',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
+                    #{filePath},
+                    #{fileNm} ||'.'|| #{fileExt},
+                    #{modDt},
+                    '',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
                     )
                 </if>
                 <!-- 매장 -->
                 <if test='orgnFg == "STORE"'>
                     INSERT INTO TB_MS_PRODUCT_IMAGE
                     (
-                        STORE_CD,
-                        PROD_CD,
-                        IMG_FG,
-                        IMG_URL,
-                        IMG_FILE_NM,
-                        IMG_CHG_DT,
-                        REMARK,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
                     ) VALUES (
-                        #{storeCd},
-                        #{prodCd},
-                        '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
-                        #{filePath},
-                        #{fileNm} ||'.'|| #{fileExt},
-                        #{modDt},
-                        '',
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
+                    #{storeCd},
+                    #{prodCd},
+                    '001', --001: 기본이미지, 002: KIOSK이미지, 003: DID이미지
+                    #{filePath},
+                    #{fileNm} ||'.'|| #{fileExt},
+                    #{modDt},
+                    '',
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
                     )
                 </if>
             </when>
@@ -2097,7 +2136,7 @@
                 <if test='orgnFg == "HQ"'>
                     SELECT
                     SUBSTR(thpi.IMG_URL, INSTR(thpi.IMG_URL, '\prod_img')) || thpi.IMG_FILE_NM AS PATH_FULL
---                     SUBSTR(thpi.IMG_URL, INSTR(thpi.IMG_URL, '\A0001')) || thpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
+                    --                     SUBSTR(thpi.IMG_URL, INSTR(thpi.IMG_URL, '\A0001')) || thpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
                     FROM TB_HQ_PRODUCT_IMAGE thpi
                     WHERE 1=1
                     AND thpi.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2108,7 +2147,7 @@
                 <if test='orgnFg == "STORE"'>
                     SELECT
                     SUBSTR(tmpi.IMG_URL, INSTR(tmpi.IMG_URL, '\prod_img')) || tmpi.IMG_FILE_NM AS PATH_FULL
---                     SUBSTR(tmpi.IMG_URL, INSTR(tmpi.IMG_URL, '\S000002')) || tmpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
+                    --                     SUBSTR(tmpi.IMG_URL, INSTR(tmpi.IMG_URL, '\S000002')) || tmpi.IMG_FILE_NM AS PATH_FULL --로컬 테스트시
                     FROM TB_MS_PRODUCT_IMAGE tmpi
                     WHERE 1=1
                     AND tmpi.STORE_CD = #{storeCd}

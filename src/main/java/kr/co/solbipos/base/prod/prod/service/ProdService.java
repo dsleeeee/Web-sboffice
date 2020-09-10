@@ -39,7 +39,8 @@ public interface ProdService {
 
     /** 상품정보 저장 */
 //    int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
-    long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+//    long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+    String saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 상품 적용/미적용 매장 조회 */
     List<DefaultMap<String>> getStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
@@ -54,7 +55,7 @@ public interface ProdService {
     int updateStoreSaleUprc(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 
     /** 상품코드 중복체크 */
-    int getProdCdCnt(ProdVO prodVO);
+    int getProdCdCnt(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 적용/미적용 상품 조회 */
     List<DefaultMap<String>> getStoreProdBatchList(ProdVO prodVO, SessionInfoVO sessionInfoVO);

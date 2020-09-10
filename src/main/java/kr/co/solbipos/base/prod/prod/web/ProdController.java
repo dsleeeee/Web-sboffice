@@ -135,9 +135,12 @@ public class ProdController {
     @RequestMapping(value = "/save.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveProductInfo(@RequestBody ProdVO prodVO, HttpServletRequest request) {
+
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
 //        int result = prodService.saveProductInfo(prodVO, sessionInfoVO);
-        long result = prodService.saveProductInfo(prodVO, sessionInfoVO);
+//        long result = prodService.saveProductInfo(prodVO, sessionInfoVO);
+        String result = prodService.saveProductInfo(prodVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -223,9 +226,11 @@ public class ProdController {
      */
     @ResponseBody
     @RequestMapping(value = "/getProdCdCnt.sb", method = RequestMethod.POST)
-    public Result getProdCdCnt(ProdVO prodVO) {
+    public Result getProdCdCnt(ProdVO prodVO, HttpServletRequest request) {
 
-        int prodCdCnt= prodService.getProdCdCnt(prodVO);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int prodCdCnt= prodService.getProdCdCnt(prodVO, sessionInfoVO);
 
         return returnJson(Status.OK, prodCdCnt);
     }

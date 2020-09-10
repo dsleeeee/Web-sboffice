@@ -278,6 +278,7 @@ public class ProdServiceImpl implements ProdService {
 //        result = Long.parseLong(prodVO.getProdCd());
         String resultProdCd = prodVO.getProdCd();
 
+//        return result;
         return resultProdCd;
     }
 
@@ -453,7 +454,14 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 상품코드 중복체크 */
-    public int getProdCdCnt(ProdVO prodVO){
+    public int getProdCdCnt(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return prodMapper.getProdCdCnt(prodVO);
     }
 
