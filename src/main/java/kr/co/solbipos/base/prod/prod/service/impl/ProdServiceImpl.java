@@ -150,7 +150,8 @@ public class ProdServiceImpl implements ProdService {
     /** 상품정보 저장 */
     @Override
 //    public int saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
-    public long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+//    public long saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+    public String saveProductInfo(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         String currentDt = currentDateTimeString();
 
@@ -274,9 +275,10 @@ public class ProdServiceImpl implements ProdService {
         }
 
         // 신규상품 이미지 등록시
-        result = Long.parseLong(prodVO.getProdCd());
+//        result = Long.parseLong(prodVO.getProdCd());
+        String resultProdCd = prodVO.getProdCd();
 
-        return result;
+        return resultProdCd;
     }
 
     /** 상품 적용/미적용 매장 조회 */
@@ -451,7 +453,14 @@ public class ProdServiceImpl implements ProdService {
     }
 
     /** 상품코드 중복체크 */
-    public int getProdCdCnt(ProdVO prodVO){
+    public int getProdCdCnt(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
         return prodMapper.getProdCdCnt(prodVO);
     }
 

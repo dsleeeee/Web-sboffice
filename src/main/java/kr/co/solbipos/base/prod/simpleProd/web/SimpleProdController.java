@@ -59,8 +59,6 @@ public class SimpleProdController {
 
         // 상품등록 본사 통제여부
         ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
-        // 판매가 본사 통제여부
-//        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
 
         // 상품코드 채번방식
         ProdNoEnvFg prodNoEnvFg;
@@ -71,7 +69,6 @@ public class SimpleProdController {
         }
 
         model.addAttribute("prodEnvstVal", prodEnvstVal);
-//        model.addAttribute("priceEnvstVal", priceEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
         return "base/prod/simpleProd/simpleProd";

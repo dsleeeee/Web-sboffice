@@ -1414,7 +1414,7 @@
 
     <!-- 상품코드 중복체크 -->
     <!--
-          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
+          TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_MS_STORE
           PARAM    : prodVO
           COMMENTS : 상품코드 수동입력 시 중복되는 상품코드가 있는지 체크 (중복체크)
     -->
@@ -1436,14 +1436,53 @@
                    AND PROD_CD = #{prodCd}
             </when>
         </choose>-->
-        SELECT COUNT(1) AS CNT
+        <!--SELECT COUNT(1) AS CNT
         FROM (
                 SELECT PROD_CD FROM TB_HQ_PRODUCT
                 UNION ALL
                 SELECT PROD_CD FROM TB_MS_PRODUCT
               )
         WHERE 1=1
-          AND PROD_CD = #{prodCd}
+          AND PROD_CD = #{prodCd}-->
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                        SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
+                        UNION ALL
+                        (
+                            SELECT
+                            tmp.PROD_CD
+                            FROM TB_MS_PRODUCT tmp,
+                            TB_MS_STORE tms
+                            WHERE 1=1
+                            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND tmp.STORE_CD = tms.STORE_CD
+                            AND tmp.PROD_CD = #{prodCd}
+                        )
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                        SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
+                        UNION ALL
+                        SELECT PROD_CD FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}
+                    )
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
+                SELECT COUNT(1) AS CNT
+                FROM TB_MS_PRODUCT
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
     </select>
 
     <!-- 상품 바코드 존재 여부 확인 -->

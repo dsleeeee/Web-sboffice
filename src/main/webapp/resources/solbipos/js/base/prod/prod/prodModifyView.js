@@ -120,7 +120,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       var params    = {};
-      params.prodCd = $scope.prodModifyInfo.prodCd
+      params.prodCd = $scope.prodModifyInfo.prodCd;
 
       $scope._postJSONQuery.withPopUp( "/base/prod/prod/prod/getProdCdCnt.sb", params, function(response){
 

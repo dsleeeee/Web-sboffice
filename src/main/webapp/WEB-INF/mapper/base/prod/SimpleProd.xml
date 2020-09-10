@@ -52,50 +52,98 @@
 
     <!-- 상품명 중복체크 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
-        COMMENTS : [본사]상품, [매장]상품
+        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_MS_STORE
+        COMMENTS : [본사]상품, [매장]상품, [매장]매장 정보
     -->
     <select id="getProdNmCnt"  parameterType="SimpleProdVO" resultType="Integer">
         /* SimpleProdMapper.getProdNmCnt */
-        SELECT
-        COUNT(1) AS CNT
-        FROM
-        (
-            SELECT PROD_NM
-            FROM TB_HQ_PRODUCT
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{membrOrgnCd}
-            UNION ALL
-            SELECT PROD_NM
-            FROM TB_MS_PRODUCT
-            WHERE 1=1
-            <if test='storeCd != null and storeCd != ""'>
-                <![CDATA[
-                    AND STORE_CD = #{storeCd}
-                ]]>
-            </if>
-        )
-        WHERE 1=1
-        AND PROD_NM = #{prodNm}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                    SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
+                    UNION ALL
+                    (
+                        SELECT
+                        tmp.PROD_NM
+                        FROM TB_MS_PRODUCT tmp,
+                        TB_MS_STORE tms
+                        WHERE 1=1
+                        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+                        AND tmp.STORE_CD = tms.STORE_CD
+                        AND tmp.PROD_NM = #{prodNm}
+                    )
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd != "00000"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                    SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
+                    UNION ALL
+                    SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_NM = #{prodCd}
+                )
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd == "00000"'>
+                SELECT COUNT(1) AS CNT
+                FROM TB_MS_PRODUCT
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PROD_NM = #{prodNm}
+            </when>
+        </choose>
     </select>
 
     <!-- 바코드 중복체크 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD
-        COMMENTS : [본사]상품_바코드, [매장]상품_바코드
+        TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD, TB_MS_STORE
+        COMMENTS : [본사]상품_바코드, [매장]상품_바코드, [매장]매장 정보
     -->
     <select id="getBarCdCnt"  parameterType="SimpleProdVO" resultType="Integer">
         /* SimpleProdMapper.getBarCdCnt */
-        SELECT
-        COUNT(1) AS CNT
-        FROM
-        (
-            SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD
-            UNION ALL
-            SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD
-        )
-        WHERE 1=1
-        AND BARCD_CD = #{barCd}
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                    SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
+                    UNION ALL
+                    (
+                        SELECT
+                        tmpb.BARCD_CD
+                        FROM TB_MS_PRODUCT_BARCD tmpb,
+                        TB_MS_STORE tms
+                        WHERE 1=1
+                        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+                        AND tmpb.STORE_CD = tms.STORE_CD
+                        AND tmpb.BARCD_CD = #{barCd}
+                    )
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd != "00000"'>
+                SELECT
+                COUNT(1) AS CNT
+                FROM (
+                    SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
+                    UNION ALL
+                    SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND BARCD_CD = #{barCd}
+                )
+            </when>
+            <!--  단독매장 -->
+            <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd == "00000"'>
+                SELECT COUNT(1) AS CNT
+                FROM TB_MS_PRODUCT_BARCD
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND BARCD_CD = #{barCd}
+            </when>
+        </choose>
     </select>
 
     <!-- 검증결과 저장 -->
@@ -181,7 +229,7 @@
             'Y', --SPLY_UPRC_USE_YN
             #{poProdFg},
             '1', --PO_UNIT_FG
-            '1',
+            '1', --PO_UNIT_QTY
             '', --PO_UNIT_ALLOW_FG
             '1', --PO_MIN_QTY
             '0', --SAFE_STOCK_QTY
