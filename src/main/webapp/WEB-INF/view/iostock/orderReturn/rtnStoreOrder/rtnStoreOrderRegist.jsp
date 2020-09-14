@@ -8,10 +8,12 @@
 
 <wj-popup id="wjRtnStoreOrderRegistLayer" control="wjRtnStoreOrderRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="rtnStoreOrderRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="rtnStoreOrderRegistCtrl">
+
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="rtnStoreOrder.dtl.registTitle"/>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
+
     <div class="wj-dialog-body sc2" style="height: 600px;">
       <p class="s14 bk mb5 fl">[<s:message code="rtnStoreOrder.dtl.orderReturn"/>] <s:message code="rtnStoreOrder.dtl.addProd"/></p>
       <p id="registSubTitle" class="s14 bk mb5 fl"></p>
@@ -130,15 +132,14 @@
         <button type="button" class="btn_blue fr" id="btnSearch" ng-click="searchRtnStoreOrderRegistList();"><s:message code="cmm.search"/></button>
       </div>
 
-      <ul class="txtSty3 mt10">
+      <ul class="txtSty3 mt5">
         <li class="red"><s:message code="rtnStoreOrder.dtl.txt1"/></li>
         <li class="red"><s:message code="rtnStoreOrder.dtl.txt2"/></li>
-        <li class="red"><s:message code="rtnStoreOrder.dtl.txt3"/></li>
-        <li class="red"><s:message code="rtnStoreOrder.dtl.txt4"/></li>
+        <li class="red"><s:message code="rtnStoreOrder.dtl.txt3"/> <s:message code="rtnStoreOrder.dtl.txt4"/></li>
         <li class="red"><s:message code="rtnStoreOrder.dtl.txt5"/></li>
       </ul>
 
-      <div class="mt40 tr">
+      <div class="tr mt5">
 			<%--출고창고 --%>
           	<p class="s14 bk fl mr5 lh30"><s:message code="rtnStoreOrder.dtl.outStorage"/></p>
           	<span class="txtIn w150px sb-select fl mr5">
@@ -204,6 +205,7 @@
         </div>
         <%--//위즈모 테이블--%>
       </div>
+
       <%-- 페이지 리스트 --%>
       <div class="pageNum mt20">
         <%-- id --%>
@@ -212,15 +214,16 @@
       </div>
       <%--//페이지 리스트--%>
     </div>
+
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist.js?ver=20200824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist.js?ver=20200914.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 
-<%-- 수불 엑셀업로드 공통 팝업 --%>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
+<%-- 공통팝업 수불/재고 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.jsp">
 </c:import>

@@ -410,7 +410,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     if($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
     }
 
@@ -433,7 +433,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
 
   /** 엑셀업로드 관련 공통 함수 */
   $scope.excelTextUpload = function (prcsFg) {
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
       /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'order';
 
@@ -442,7 +442,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       excelUploadScope.excelFormDownload(uploadFg);
     }
     else{
-      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      var msg = messages["excelUploadMPS.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg   = uploadFg;
         excelUploadScope.storeCd    = $scope.storeCd;
@@ -477,7 +477,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
 
     $http({
       method : 'POST', //방식
@@ -508,7 +508,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'order';
-    $scope._broadcast('excelUploadErrInfoCtrl', params);
+    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
   };
 
 
