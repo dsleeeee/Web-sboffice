@@ -49,15 +49,25 @@ public interface KioskKeyMapMapper {
     /** 키오스크 카테고리(분류) 저장 - 삭제 */
     int deleteKioskCategory(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키오스크 키 조회 */
-    List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO);
+    /** 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, 카테고리에 속한 키맵도 삭제 */
+    int deleteAllKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키오스크 미등록상품 조회 */
+    /** 키오스크 키맵 조회 */
+    List<DefaultMap<Object>> getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 상품 조회 */
     List<DefaultMap<String>> getKioskProdList(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키오스크 키 관련 코드 조회 */
-    DefaultMap<String> getKioskKeyCode(KioskKeyMapVO kioskKeyMapVO);
+    /** 키오스크 키맵 수정 */
+    int updateKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
 
-    /** 키오스크 키 등록 */
-    int saveKioskKey(KioskKeyMapVO kioskKeyMapVO);
+    /** 키오스크 키맵 삭제 */
+    int deleteKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 관련 코드 조회 */
+    DefaultMap<String> getKioskKeyMapCode(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 키맵 등록 */
+    int saveKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
+
 }
