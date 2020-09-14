@@ -82,7 +82,6 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
-        String procResult;
         String currentDt = currentDateTimeString();
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
@@ -111,7 +110,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += kioskKeyMapMapper.deleteKioskCategory(kioskKeyMapVO);
 
-                // 해당 카테고리(분류)에 해당하는 상품도 삭제?
+                // 해당 카테고리(분류)에 해당하는 상품도 삭제
+                kioskKeyMapMapper.deleteAllKioskKeyMap(kioskKeyMapVO);
             }
         }
 
@@ -122,16 +122,48 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }
     }
 
-    /** 키오스크 키 조회 */
+    /** 키오스크 키맵 조회 */
     @Override
-    public List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<Object>> getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
         kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        return kioskKeyMapMapper.getKioskKey(kioskKeyMapVO);
+        return kioskKeyMapMapper.getKioskKeyMap(kioskKeyMapVO);
     }
 
-    /**  키오스크 미등록상품 조회 */
+    /** 키오스크 키맵 수정 */
+    @Override
+    public int updateKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskKeyMapVO.setClsFg("K"); // K: KIOSK
+            kioskKeyMapVO.setModDt(currentDt);
+            kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
+
+            // 페이지 수 계산
+            int indexNo = Integer.parseInt(kioskKeyMapVO.getIndexNo());
+            kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 16) + 1)));
+
+            if ( kioskKeyMapVO.getStatus() == GridDataFg.UPDATE ) { // 수정
+                result += kioskKeyMapMapper.updateKioskKeyMap(kioskKeyMapVO);
+
+            } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
+                result += kioskKeyMapMapper.deleteKioskKeyMap(kioskKeyMapVO);
+            }
+        }
+
+        if ( result == kioskKeyMapVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /**  키오스크 상품 조회 */
     @Override
     public List<DefaultMap<String>> getKioskProdList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
@@ -167,9 +199,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return kioskKeyMapMapper.getKioskProdList(kioskKeyMapVO);
     }
 
-    /** 키오스크 키 등록 */
+    /** 키오스크 키맵 등록 */
     @Override
-    public int saveKioskKey(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+    public int saveKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
 
         String dt = currentDateTimeString();
 
@@ -186,16 +218,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
             // 키오스크 키 관련 코드 조회
-            DefaultMap<String> keyValue = kioskKeyMapMapper.getKioskKeyCode(kioskKeyMapVO);
+            DefaultMap<String> keyValue = kioskKeyMapMapper.getKioskKeyMapCode(kioskKeyMapVO);
 
             kioskKeyMapVO.setTuKeyCd(keyValue.get("tuKeyCd"));
             kioskKeyMapVO.setIndexNo(String.valueOf(keyValue.get("indexNo")));
 
             // 페이지 수 계산
             int indexNo = Integer.parseInt(String.valueOf(keyValue.get("indexNo")));
-            kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 4) + 1)));
+            kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 16) + 1)));
 
-            int result = kioskKeyMapMapper.saveKioskKey(kioskKeyMapVO);
+            int result = kioskKeyMapMapper.saveKioskKeyMap(kioskKeyMapVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 

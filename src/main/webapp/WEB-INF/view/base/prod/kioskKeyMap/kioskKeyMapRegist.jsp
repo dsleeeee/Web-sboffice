@@ -10,7 +10,7 @@
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl"><s:message code="kioskKeyMap.kioskKeyMapRegist" /></a>
             <%-- 조회 --%>
-            <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="btnSearchCls()"><s:message code="cmm.search"/></button>
+            <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="_pageView('kioskKeyMapRegistCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
 
         <table class="searchTbl">
@@ -41,8 +41,8 @@
         </table>
 
         <div class="wj-TblWrap mt20 mb20 w25 fl">
-            <div class="wj-TblWrapBr mr10 pd20" style="height:530px;">
-                <div class="updownSet oh mb10">
+            <div class="wj-TblWrapBr mr10 pd20" style="height:540px;">
+                <div class="updownSet oh mb10" id="divBtnCls" style="visibility: hidden;">
                     <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
                         <s:message code="cmm.up" />
                     </button>
@@ -63,7 +63,7 @@
                     </button>
                 </div>
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:388px; overflow-x: hidden; overflow-y: hidden;">
+                    <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
                         <wj-flex-grid
                                 autoGenerateColumns="false"
                                 control="flex"
@@ -85,25 +85,25 @@
         </div>
     </div>
 
-    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="kioskKeyCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:530px; overflow-y: hidden;">
+    <div class="wj-TblWrap mt20 mb20 w35 fl" ng-controller="kioskKeyMapCtrl">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:540px; overflow-y: hidden;">
             <span class="fl bk lh30" id="spanTuKeyCls"></span>
-            <div class="updownSet oh mb10">
-                <button class="btn_up" id="btnUpKey" ng-click="rowMoveUpKey()" >
+            <div class="updownSet oh mb10" id="divBtnKeyMap" style="visibility: hidden;">
+                <button class="btn_up" id="btnUpKeyMap" ng-click="rowMoveUpKeyMap()" >
                     <s:message code="cmm.up" />
                 </button>
-                <button class="btn_down" id="btnDownKey" ng-click="rowMoveDownKey()">
+                <button class="btn_down" id="btnDownKeyMap" ng-click="rowMoveDownKeyMap()">
                     <s:message code="cmm.down" />
                 </button>
-                <button class="btn_skyblue" id="btnDelKey" ng-click="delRowKey()">
+                <button class="btn_skyblue" id="btnDelKeyMap" ng-click="delRowKeyMap()">
                     <s:message code="cmm.delete" />
                 </button>
-                <button class="btn_skyblue" id="btnSaveKey" ng-click="saveKey()">
+                <button class="btn_skyblue" id="btnSaveKeyMap" ng-click="saveKeyMap()">
                     <s:message code="cmm.save" />
                 </button>
             </div>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:388px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -111,12 +111,13 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridKeyMap">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuKeyCd"/>" binding="tuKeyCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuKeyCd"/>" binding="tuKeyCd" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="180" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -126,7 +127,7 @@
     </div>
 
     <div class="wj-TblWrap mt20 mb20 w40 fl" ng-controller="kioskProdCtrl">
-        <div class="wj-TblWrapBr ml10 pd20" style="height:530px; overflow-y: hidden;">
+        <div class="wj-TblWrapBr ml10 pd20" style="height:540px; overflow-y: hidden;">
 
             <table class="tblType01">
                 <colgroup>
@@ -243,18 +244,20 @@
                             </div>
                         </td>
                         <td colspan="2" align="right">
-                            <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('kioskProdCtrl', 1)">
-                                <s:message code="cmm.search" />
-                            </button>
-                            <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
-                                <s:message code="kioskKeyMap.prodReg" />
-                            </button>
+                            <div id="divBtnProd" style="visibility: hidden;">
+                                <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('kioskProdCtrl', 1)">
+                                    <s:message code="cmm.search" />
+                                </button>
+                                <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
+                                    <s:message code="kioskKeyMap.prodReg" />
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:280px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:290px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -262,14 +265,15 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter">
+                            item-formatter="_itemFormatter"
+                            id="wjGridProd">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="180" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="65" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="65" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.prodNm"/>" binding="prodNm" width="175" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -292,7 +296,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200904.56" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
