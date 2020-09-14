@@ -152,10 +152,10 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
           var item = $scope.flex.collectionView.itemsEdited[i];
           
           if (item.gChk === true) {
-        	  if (item.limitLoanAmt !== null ) {
-                  $scope._popMsg(messages["loan.delLimitLoanAmt.txt"]); // 여신한도액이 있는 자료만 삭제할 수 있습니다.
-                  return false;
-              }
+        	  // if (item.limitLoanAmt !== null ) {
+              //     $scope._popMsg(messages["loan.delLimitLoanAmt.txt"]); // 여신한도액이 있는 자료만 삭제할 수 있습니다.
+              //     return false;
+              // }
         	  item.status    = "U";
         	  item.empNo     = "0000";
         	  item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')

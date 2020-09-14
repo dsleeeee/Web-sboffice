@@ -278,7 +278,7 @@
    		<if test='endDate != null and endDate != ""'>
    			AND tphso.OUT_DATE <![CDATA[<= ]]> REPLACE(#{endDate}, '-','')
    		</if>
-        
+
         <![CDATA[
         AND     tphsod.HQ_OFFICE_CD =   tphso.HQ_OFFICE_CD
         AND     tphsod.SLIP_NO      =   tphso.SLIP_NO
@@ -311,7 +311,7 @@
         ,       tms.BIZ_NO AS SUPPLIED_BIZ_NO
         ,       tms.ADDR || tms.ADDR_DTL AS SUPPLIED_ADDR
         ,       tphdc.DLVR_NM
-        ,       tphsod.REMARK
+        ,       tphso.REMARK
         ,       NVL(SUM(tphsod.OUT_AMT),0) AS TOT_AMT
         ,       NVL(SUM(tphsod.OUT_VAT),0) AS TOT_VAT
         ,       NVL(SUM(tphsod.OUT_TOT),0) AS TOT_TOT
@@ -350,7 +350,7 @@
         ,       tms.BIZ_NO
         ,       tms.ADDR || tms.ADDR_DTL
         ,       tphdc.DLVR_NM
-        ,       tphsod.REMARK
+        ,       tphso.REMARK
         ORDER BY tphso.SLIP_NO
         ]]>
     </select>
