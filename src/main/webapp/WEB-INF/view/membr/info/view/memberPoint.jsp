@@ -7,7 +7,11 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp"></c:import>
+
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
+</c:import>
+
 <%--<div ng-controller="memberExcelUploadCtrl"></div>--%>
 <div class="subCon" ng-controller="memberPointCtrl">
     <%-- 조회조건 --%>
@@ -220,6 +224,7 @@
         </div>
     </div>
 </div>
+
 <script>
     var recvDataMap = ${ccu.getCommCodeSelect("072")};
     <%--수신, 미수신--%>
