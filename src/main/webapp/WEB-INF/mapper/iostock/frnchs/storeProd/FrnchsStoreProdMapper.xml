@@ -5,7 +5,7 @@
 <mapper namespace="kr.co.solbipos.iostock.frnchs.storeProd.service.impl.FrnchsStoreProdMapper">
 	<!-- 매장 상품별 입출고내역 -  매장 상품별 입출고내역 리스트 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT 
+        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT
         PARAM    : frnchsStoreProdVO
         COMMENTS : 매장 상품별 입출고내역 -  매장 상품별 입출고내역 리스트를 조회한다.
     -->
@@ -28,7 +28,7 @@
              , SUM(A.PENALTY_AMT)  AS PENALTY_AMT
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[     
+        <![CDATA[
           FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
              , TB_MS_PRODUCT Z
          WHERE A.STORE_CD = Z.STORE_CD
@@ -36,7 +36,7 @@
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
-           <if test='prodClassCd != null and prodClassCd != ""'> 
+           <if test='prodClassCd != null and prodClassCd != ""'>
                 AND Z.PROD_CLASS_CD IN  (
                                SELECT              PROD_CLASS_CD
                                FROM                TB_HQ_PRODUCT_CLASS
@@ -70,10 +70,10 @@
            ]]>
           <include refid="CmmSQL.PagingTemplateBottom"/>
      </select>
-     
+
     <!-- 매장 상품별 입출고내역 -  매장 상품별 입출고내역 엑셀리스트 조회 -->
     <!--
-        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT 
+        TABLE    : TB_SL_DAILY_PROD , TB_MS_PRODUCT_CLASS , TB_MS_PRODUCT
         PARAM    : frnchsStoreProdVO
         COMMENTS : 매장 상품별 입출고내역 -  매장 상품별 입출고내역 엑셀리스트를 조회한다.
     -->
@@ -94,7 +94,7 @@
              , SUM(A.IN_TOT)       AS IN_TOT
              , SUM(A.PENALTY_AMT)  AS PENALTY_AMT
         ]]>
-        <![CDATA[     
+        <![CDATA[
           FROM TB_PO_HQ_STORE_OUTSTOCK_DTL A
              , TB_MS_PRODUCT Z
          WHERE A.STORE_CD = Z.STORE_CD
@@ -102,7 +102,7 @@
            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
            AND EXISTS (SELECT * FROM TB_PO_HQ_STORE_OUTSTOCK M WHERE M.HQ_OFFICE_CD = A.HQ_OFFICE_CD AND M.SLIP_NO = A.SLIP_NO AND M.OUT_DATE >= #{startDate} AND M.OUT_DATE <![CDATA[<=]]> #{endDate} )
-           <if test='prodClassCd != null and prodClassCd != ""'> 
+           <if test='prodClassCd != null and prodClassCd != ""'>
                 AND Z.PROD_CLASS_CD IN  (
                                SELECT              PROD_CLASS_CD
                                FROM                TB_HQ_PRODUCT_CLASS
@@ -170,6 +170,7 @@
              , TB_MS_PRODUCT TMP
          WHERE TPHSOD.HQ_OFFICE_CD = #{hqOfficeCd}
         ]]>
+           AND TPHSO.OUT_DATE >= #{startDate} AND TPHSO.OUT_DATE <![CDATA[<=]]> #{endDate}
            <if test='storeCd != null and storeCd !=""'>
               AND TPHSOD.STORE_CD = #{storeCd}
            </if>
