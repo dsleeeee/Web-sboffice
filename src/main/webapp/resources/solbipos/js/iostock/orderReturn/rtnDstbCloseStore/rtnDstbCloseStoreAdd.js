@@ -143,7 +143,32 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       }
     }
   };
-  
+
+  // 금액 계산
+  $scope.calcAmt = function (item) {
+    /** 수량이 없는 경우 계산하지 않음.
+     null 또는 undefined 가 나올수 있으므로 확실하게 확인하기 위해 nvl 처리로 null 로 바꿔서 비교 */
+    if (nvl(item.mgrUnitQty, null) === null && (item.poUnitQty !== 1 && nvl(item.mgrEtcQty, null) === null)) return false;
+
+    var mgrSplyUprc = parseInt(item.mgrSplyUprc);
+    var poUnitQty   = parseInt(item.poUnitQty);
+    var vat01       = parseInt(item.vatFg01);
+    var envst0011   = parseInt(item.envst0011);
+
+    var unitQty    = parseInt(nvl(item.mgrUnitQty, 0)) * parseInt(item.poUnitQty);
+    var etcQty     = parseInt(nvl(item.mgrEtcQty, 0));
+    var totQty     = parseInt(unitQty + etcQty);
+    var tempMgrAmt = Math.round(totQty * mgrSplyUprc / poUnitQty);
+    var mgrAmt     = tempMgrAmt - Math.round(tempMgrAmt * vat01 * envst0011 / 11);
+    var mgrVat     = Math.round(tempMgrAmt * vat01 / (10 + envst0011));
+    var mgrTot     = parseInt(mgrAmt + mgrVat);
+
+    item.mgrTotQty = totQty; // 총수량
+    item.mgrAmt    = mgrAmt; // 금액
+    item.mgrVat    = mgrVat; // VAT
+    item.mgrTot    = mgrTot; // 합계
+  };
+
 //  $scope.calcAmt = function (item, idx) {
 //	  	//$scope.flex.collectionView.editItem(item);
 //
