@@ -148,7 +148,7 @@ public class TableDayController {
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
 					+ "' THEN SALE_CNT END), '0') AS SALE_CNT_T" + i + "\n";
 			sQuery1 += " ,NVL(SUM(CASE STORE_CD||'||'||TBL_CD WHEN '" + tableDayVO.getArrTableCd()[i]
-					+ "' THEN GUEST_CNT_1 END), '0') AS GUEST_CNT_1_T" + i + "\n";
+					+ "' THEN TOT_GUEST_CNT END), '0') AS GUEST_CNT_1_T" + i + "\n";
 		}
 
 		tableDayVO.setsQuery1(sQuery1);
