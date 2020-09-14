@@ -9,7 +9,7 @@
 			, SALE_YM SALE_YM
        		, NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
        		, NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-       		, NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
+       		, NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
        		${sQuery1}
      	<include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_SL_MONTHLY_TABLE TSDT
@@ -45,7 +45,7 @@
         	, SALE_YM SALE_YM
             , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
             , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-            , NVL(SUM(GUEST_CNT_1), 0) TOT_GUEST_CNT
+            , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
             ${sQuery1}
         FROM TB_SL_MONTHLY_TABLE TSDT
         WHERE 1 = 1
