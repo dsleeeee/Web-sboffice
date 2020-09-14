@@ -49,7 +49,7 @@
                     <button class="btn_down" id="btnDownCls" ng-click="rowMoveDownCls()">
                         <s:message code="cmm.down" />
                     </button>
-                    <button class="btn_skyblue" id="btnBlankCls" ng-click="blankRowCls()">
+                    <button class="btn_skyblue" id="btnBlankCls" ng-click="blankRowCls()" style="display: none;">
                         <s:message code="kioskKeyMap.blank" />
                     </button>
                     <button class="btn_skyblue" id="btnAddCls" ng-click="addRowCls()">
@@ -296,7 +296,7 @@
     var prodTypeFg = ${ccu.getCommCode("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20200905.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

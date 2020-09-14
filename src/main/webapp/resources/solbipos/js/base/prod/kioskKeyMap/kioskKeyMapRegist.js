@@ -226,6 +226,17 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         $scope.flex.collectionView.commitEdit();
 
+        // 생성, 수정 Validation Check
+        for (var m = 0; m < $scope.flex.collectionView.itemCount; m++) {
+            //if(params[m].status !== 'D') {
+                if(  $scope.flex.collectionView.items[m].tuClsNm === null  || $scope.flex.collectionView.items[m].tuClsNm === '') {
+                    $scope._popMsg(messages['kioskKeyMap.require.category.msg']); // 카테고리명을 입력해주세요.
+                    return;
+                }
+            //}
+        }
+
+
         // 파라미터 설정
         var params = [];
 
@@ -260,16 +271,6 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             $scope.flex.collectionView.itemsAdded[i].posNo = $scope.posNo;
             $scope.flex.collectionView.itemsAdded[i].status = 'I';
             params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-
-        // 생성, 수정 Validation Check
-        for (var m = 0; m < params.length; m++) {
-            if(params[m].status !== 'D') {
-                if(  params[m].tuClsNm === null  || params[m].tuClsNm === '') {
-                    $scope._popMsg(messages['kioskKeyMap.require.category.msg']); // 카테고리명을 입력해주세요.
-                    return false;
-                }
-            }
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -521,6 +522,8 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskProdList.sb", params, function() {
 
+            // 공백 상품 일단 주석 처리_(2020.09.14)
+            /*
             // 공백 상품 추가
             var params = {};
 
@@ -545,6 +548,7 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.flex.collectionView.items[0] = tmpItem;
             $scope.flex.collectionView.commitEdit();
             $scope.flex.collectionView.refresh();
+            */
 
         }, false);
 
