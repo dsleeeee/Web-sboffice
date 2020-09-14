@@ -127,7 +127,7 @@ public class KioskKeyMapController {
     }
 
     /**
-     * 키오스크 키 조회
+     * 키오스크 키맵 조회
      *
      * @param kioskKeyMapVO
      * @param request
@@ -136,20 +136,42 @@ public class KioskKeyMapController {
      * @author  이다솜
      * @since   2020. 09. 07.
      */
-    @RequestMapping(value = "/kioskKeyMap/getKioskKey.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/kioskKeyMap/getKioskKeyMap.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getKioskKey(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
+    public Result getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = kioskKeyMapService.getKioskKey(kioskKeyMapVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = kioskKeyMapService.getKioskKeyMap(kioskKeyMapVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, result);
     }
 
     /**
-     * 키오스크 미등록상품 조회
+     * 키오스크 키맵 수정
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2020. 09. 10.
+     */
+    @RequestMapping(value = "/kioskKeyMap/updateKioskKeyMap.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateKioskKeyMap(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.updateKioskKeyMap(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크 상품 조회
      *
      * @param kioskKeyMapVO
      * @param request
@@ -168,7 +190,7 @@ public class KioskKeyMapController {
     }
 
     /**
-     * 키오스크 키 등록
+     * 키오스크 키맵 등록
      *
      * @param kioskKeyMapVOs
      * @param request
@@ -177,14 +199,14 @@ public class KioskKeyMapController {
      * @author  이다솜
      * @since   2020. 09. 07.
      */
-    @RequestMapping(value = "/kioskKeyMap/saveKioskKey.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/kioskKeyMap/saveKioskKeyMap.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveKioskKey(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+    public Result saveKioskKeyMap(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
                                        HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = kioskKeyMapService.saveKioskKey(kioskKeyMapVOs, sessionInfoVO);
+        int result = kioskKeyMapService.saveKioskKeyMap(kioskKeyMapVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

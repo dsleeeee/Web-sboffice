@@ -35,13 +35,16 @@ public interface KioskKeyMapService {
     /** 키오스크 카테고리(분류) 저장 */
     int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
-    /** 키오스크 키 조회 */
-    List<DefaultMap<Object>> getKioskKey(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+    /** 키오스크 키맵 조회 */
+    List<DefaultMap<Object>> getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
-    /** 키오스크 미등록상품 조회 */
+    /** 키오스크 키맵 수정 */
+    int updateKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 상품 조회 */
     List<DefaultMap<String>> getKioskProdList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
-    /** 키오스크 키 등록 */
-    int saveKioskKey(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+    /** 키오스크 키맵 등록 */
+    int saveKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
 }

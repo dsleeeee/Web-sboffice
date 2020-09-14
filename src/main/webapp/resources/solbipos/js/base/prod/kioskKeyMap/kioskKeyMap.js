@@ -3,7 +3,7 @@
  */
 var app = agrid.getApp();
 
-app.controller('kioskKeyMapCtrl', ['$scope', function ($scope) {
+app.controller('kioskKeyMapManageCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#kioskKeyMapRegistView").show();
