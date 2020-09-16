@@ -144,7 +144,7 @@
     -->
     <select id="getOutstockConfmDtlList" parameterType="outstockConfmVO" resultType="DefaultMap">
         /* USE : OutstockConfmMapper.getOutstockConfmDtlList */
-        <!-- 
+        <!--
         <![CDATA[
         SELECT   tphsod.SLIP_NO, tphsod.SLIP_FG, tphsod.PROD_CD, thp.PROD_NM, tphsod.SEQ
         ,        tphsod.PO_UNIT_FG, tphsod.PO_UNIT_QTY, thp.PO_UNIT_ALLOW_FG
@@ -193,7 +193,7 @@
         BY       tphsod.PROD_CD, tphsod.SEQ
         ]]>
          -->
-         <!-- 
+         <!--
 		SELECT  A.SLIP_NO
 		,		A.SLIP_FG
 		,		A.SLIP_KIND
@@ -356,7 +356,7 @@
 							LEFT
 			                OUTER
 			                JOIN    (
-			                
+
 			                 SELECT  Y.HQ_OFFICE_CD
                                 ,       Y.PROD_CD
                                 ,       Y.STORAGE_CD
@@ -367,7 +367,7 @@
                                 ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_AMT,'62',Y.IN_AMT * -1,Y.IN_AMT)),0)		            AS	IN_AMT
                                 ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_VAT,'62',Y.IN_VAT * -1,Y.IN_VAT)),0)		            AS	IN_VAT
                                 ,       NVL(SUM(DECODE(Y.OCCR_FG,'61',Y.IN_TOT,'62',Y.IN_TOT * -1,Y.IN_TOT)),0)		            AS	IN_TOT
-                                FROM    TB_PO_HQ_STORE_OUTSTOCK_PROD    Y                                
+                                FROM    TB_PO_HQ_STORE_OUTSTOCK_PROD    Y
                                 WHERE   Y.HQ_OFFICE_CD  =	#{hqOfficeCd}
                                 AND     Y.SLIP_NO       =	#{slipNo}
                                 AND     Y.OCCR_FG       IN   ('13', '61', '62')
@@ -375,8 +375,8 @@
                                 BY      Y.HQ_OFFICE_CD
                                 ,       Y.SLIP_FG
                                 ,       Y.PROD_CD
-                                ,       Y.STORAGE_CD 
-			                
+                                ,       Y.STORAGE_CD
+
 			                )	Y
 			                ON      X.HQ_OFFICE_CD  =   Y.HQ_OFFICE_CD
 			                AND     X.STORAGE_CD    =    Y.STORAGE_CD
@@ -426,11 +426,11 @@
 		,      A.IN_TOT
 		,      A.REMARK
 		,      A.ENVST0011
-		,      A.BARCD_CD  
+		,      A.BARCD_CD
         ORDER
         BY		A.PROD_CD
-         --> 
-         
+         -->
+
 				SELECT	A.SLIP_NO
 				,		A.SLIP_FG
 				,		A.SLIP_KIND
@@ -518,8 +518,24 @@
 				        AND      the.ENVST_CD           =   '0011'
 						)	A
 		        ORDER
-		        BY		A.PROD_CD						
+		        BY		A.PROD_CD
     </select>
+
+    <!-- 출고확정 - 출고확정전 확정상태 확인 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 전 전표의 상태가 출고확정 전인지 확인
+    -->
+    <select id="getOutstockConfirmCnt" parameterType="outstockConfmVO" resultType="Integer">
+        /* USE : OutstockConfmMapper.getOutstockConfirmCnt */
+        SELECT  COUNT(1) AS CNT
+        FROM    TB_PO_HQ_STORE_OUTSTOCK
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        AND     PROC_FG         >   '10'
+    </select>
+
 
     <!-- 출고확정 - 출고확정 DTL 수정 -->
     <!--
@@ -557,7 +573,26 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
-	
+
+
+
+	<!-- 출고확정 - 출고확정 PROD 입력 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정전 이전 창고 값 삭제
+    -->
+    <delete id="deleteOutstockProdConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.deleteOutstockProdConfirm */
+        DELETE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     SLIP_NO       =     #{slipNo}
+        AND     STORAGE_CD    !=    #{outStorageCd}
+        AND     OCCR_FG       =     #{occrFg}
+        AND     CONFM_YN      !=    'Y'
+    </delete>
+
+
 	<!-- 출고확정 - 출고확정 PROD 입력 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
@@ -587,12 +622,12 @@
 			MOD_DT,
 			MOD_ID
          )
-		SELECT 
+		SELECT
 		    #{hqOfficeCd}
 			, SLIP_NO
 			, PROD_CD
 			, #{outStorageCd}
-			, #{occrFg}	
+			, #{occrFg}
 			, STORE_CD
 			, '1'
 			, 'Y'
@@ -610,7 +645,110 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
-	
+
+	<!-- 출고확정 - 출고확정 PROD 입력 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정시 PROD를 입력한다.
+                   이미 TB_PO_HQ_STORE_OUTSTOCK_PROD 값이 있는 경우가 있음으로 merge로 진행
+    -->
+    <update id="mergeOutstockProdConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.mergeOutstockProdConfirm */
+        MERGE INTO TB_PO_HQ_STORE_OUTSTOCK_PROD A
+        USING   (
+                    SELECT  #{hqOfficeCd}           AS HQ_OFFICE_CD
+                    ,       SLIP_NO                 AS SLIP_NO
+                    ,       PROD_CD                 AS PROD_CD
+                    ,       #{outStorageCd}         AS STORAGE_CD
+                    ,       #{occrFg}               AS OCCR_FG
+                    ,       STORE_CD                AS STORE_CD
+                    ,       '1'                     AS SLIP_FG
+                    ,       'Y'                     AS CONFM_YN
+                    ,       SUM(OUT_UNIT_QTY)            AS IN_UNIT_QTY
+                    ,       SUM(OUT_ETC_QTY )            AS IN_ETC_QTY
+                    ,       SUM(OUT_TOT_QTY )            AS IN_TOT_QTY
+                    ,       SUM(OUT_AMT     )            AS IN_AMT
+                    ,       SUM(OUT_VAT     )            AS IN_VAT
+                    ,       SUM(OUT_TOT     )            AS IN_TOT
+                    ,       #{regDt}                AS REG_DT
+                    ,       #{regId}                AS REG_ID
+                    ,       #{modDt}                AS MOD_DT
+                    ,       #{modId}                AS MOD_ID
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    AND     SLIP_NO         =   #{slipNo}
+                    GROUP
+                    BY      #{hqOfficeCd}
+                    ,       SLIP_NO
+                    ,       PROD_CD
+                    ,       #{outStorageCd}
+                    ,       #{occrFg}
+                    ,       STORE_CD
+                    ,       '1'
+                    ,       'Y'
+                    ,       #{regDt}
+                    ,       #{regId}
+                    ,       #{modDt}
+                    ,       #{modId}
+                ) B
+        ON      (           A.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                AND         A.SLIP_NO       =   B.SLIP_NO
+                AND         A.PROD_CD       =   B.PROD_CD
+                --AND         A.STORAGE_CD    =   B.STORAGE_CD
+                AND         A.OCCR_FG       =   B.OCCR_FG
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.STORAGE_CD    =   B.STORAGE_CD
+        ,       A.CONFM_YN      =   'Y'
+        ,       A.MOD_DT        =   #{modDt}
+        ,       A.MOD_ID        =   #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.HQ_OFFICE_CD
+        ,       A.SLIP_NO
+        ,       A.PROD_CD
+        ,       A.STORAGE_CD
+        ,       A.OCCR_FG
+        ,       A.STORE_CD
+        ,       A.SLIP_FG
+        ,       A.CONFM_YN
+        ,       A.IN_UNIT_QTY
+        ,       A.IN_ETC_QTY
+        ,       A.IN_TOT_QTY
+        ,       A.IN_AMT
+        ,       A.IN_VAT
+        ,       A.IN_TOT
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        )
+        VALUES
+        (
+                B.HQ_OFFICE_CD
+        ,       B.SLIP_NO
+        ,       B.PROD_CD
+        ,       B.STORAGE_CD
+        ,       B.OCCR_FG
+        ,       B.STORE_CD
+        ,       B.SLIP_FG
+        ,       B.CONFM_YN
+        ,       B.IN_UNIT_QTY
+        ,       B.IN_ETC_QTY
+        ,       B.IN_TOT_QTY
+        ,       B.IN_AMT
+        ,       B.IN_VAT
+        ,       B.IN_TOT
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </update>
+
     <!-- 출고확정 - 출고확정 자동입고 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
@@ -724,29 +862,44 @@
         WHERE   HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     SLIP_NO       =   #{slipNo}
     </update>
-    
+
+
+	<!-- 출고확정 - PROD 입력전에 이전값 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - PROD 입력전에 이전값 삭제
+    -->
+    <delete id="deleteOutstockProdAll" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.deleteOutstockProdAll */
+        DELETE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     SLIP_NO       =     #{slipNo}
+        AND     CONFM_YN      !=    'Y'
+    </delete>
+
     <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
 
 	        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
 	        PARAM    : instockConfmProdVO
-	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
+	        COMMENTS : 저장시, 창고별 입고상품 정보를 저장한다. -
     -->
 	<update id="mergeInstockConfmProd" parameterType="outstockConfmVO">
 	    MERGE INTO TB_PO_HQ_STORE_OUTSTOCK_PROD	A
 	    USING DUAL ON           (
-	                                    A.HQ_OFFICE_CD	= #{hqOfficeCd}
+	                                    A.HQ_OFFICE_CD	    = #{hqOfficeCd}
 	                                    AND A.SLIP_NO		= #{slipNo}
 	                                    AND A.PROD_CD  		= #{prodCd}
 	                                    AND A.STORAGE_CD  	= #{storageCd}
 	                                    AND A.OCCR_FG		= #{occrFg}
 	                            )
-	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = #{confmYn},
-	    									A.IN_UNIT_QTY	= #{inUnitQty},
-											A.IN_ETC_QTY	= #{inEtcQty},
-											A.IN_TOT_QTY	= #{inTotQty},
-											A.IN_AMT		= #{inAmt},
-											A.IN_VAT		= #{inVat},
-											A.IN_TOT		= #{inTot},
+	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = 'N',
+	    									A.IN_UNIT_QTY	= A.IN_UNIT_QTY	+#{inUnitQty},
+											A.IN_ETC_QTY	= A.IN_ETC_QTY	+#{inEtcQty},
+											A.IN_TOT_QTY	= A.IN_TOT_QTY	+#{inTotQty},
+											A.IN_AMT		= A.IN_AMT		+#{inAmt},
+											A.IN_VAT		= A.IN_VAT		+#{inVat},
+											A.IN_TOT		= A.IN_TOT		+#{inTot},
 	                                        A.MOD_DT    	= #{modDt},
 	                                        A.MOD_ID    	= #{modId}
 	    WHEN NOT MATCHED THEN   INSERT  (
@@ -777,7 +930,7 @@
 											#{occrFg},		<!-- 발생구분(30:매장입고) -->
 											#{storeCd},
 											#{slipFg},
-											#{confmYn},
+											'N',
 											#{inUnitQty},
 											#{inEtcQty},
 											#{inTotQty},
@@ -790,4 +943,22 @@
 	                                        #{modId}
 	                                    )
 	</update>
+
+    <!-- 출고확정 - 출고확정 이후 저장시 HD 수정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockConfmVO
+        COMMENTS : 출고확정 - 출고확정 이후 저장시 HD의 비고, 본사비고, 배송기사를 수정한다.
+    -->
+    <update id="updateOutstockProdConfirm" parameterType="outstockConfmVO">
+        /* USE : OutstockConfmMapper.updateOutstockProdConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        SET     CONFM_YN        =   'Y'
+        ,       MOD_DT          =   #{modDt}
+        ,       MOD_ID          =   #{modId}
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        AND     CONFM_YN        !=  'Y'
+    </update>
+
 </mapper>

@@ -180,7 +180,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -206,13 +206,13 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     }).then(function () {
       // "complete" code here
     });
-    
+
 //    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 //    $scope._postJSONQuery.withPopUp( "/iostock/order/dstbCloseProd/dstbCloseProdAddProd/dstbList.sb", params, function(response){
 //	    var dstbFg = response.data.data;
-//	    
+//
 //	    if(dstbFg < 1){ // 마감이 아닐때
-//	    	
+//
 //		    // ajax 통신 설정
 //		    $http({
 //		      method : 'POST', //방식
@@ -238,7 +238,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
 //		    }).then(function () {
 //		      // "complete" code here
 //		    });
-//	    
+//
 //	    }else{
 //	    	$scope._popMsg(messages["dstbCloseStore.add.txt2"]); // 이미 마감된 매장입니다.
 //	    	// 그리드 초기화
@@ -246,10 +246,10 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
 //		    dstbCloseStoreAddScope.dtlGridDefault();
 //	    }
 //    });
-    
-    
+
+
   };
-  
+
   //그리드 초기화
   $scope.dtlGridDefault = function () {
     $timeout(function () {
@@ -282,7 +282,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       if (item.mgrTotQty !== null && item.mgrTotQty !== "0" && (parseInt(item.mgrTotQty) < parseInt(item.poMinQty))) {
-        $scope._popMsg(messages["dstbCloseStore.add.not.minMgrQty"]); // 분배수량은 최소주문수량 이상 입력하셔야 합니다.
+        $scope._popMsg(messages["dstbCloseStore.add.not.minMgrQty"]+"<br>"+ "["+item.prodCd+"]" + item.prodNm+" "+messages["dstbCloseStore.add.poMinQty"]+"( "+item.poMinQty+" )"); // 분배수량은 최소주문수량 이상 입력하셔야 합니다.
         return false;
       }
       if (item.mgrEtcQty !== null && (parseInt(item.mgrEtcQty) >= parseInt(item.poUnitQty))) {
@@ -455,12 +455,12 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
     params.storeCd = $("#dstbCloseStoreAddSelectStoreCd").val();
     params.slipFg  = $scope.slipFg;
     params.date    = $scope.reqDate;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
 
     $http({

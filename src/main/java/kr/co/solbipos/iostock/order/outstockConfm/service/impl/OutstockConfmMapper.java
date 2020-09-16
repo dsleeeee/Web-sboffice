@@ -17,15 +17,27 @@ public interface OutstockConfmMapper {
     /** 출고확정 리스트 조회 */
     List<DefaultMap<String>> getOutstockConfmList(OutstockConfmVO outstockConfmVO);
 
+    /** 출고확정 - 출고확정전 상태 확인 */
+    int getOutstockConfirmCnt(OutstockConfmVO outstockConfmVO);
+
     /** 출고확정 - 출고확정시 DTL 수정 */
     int updateOutstockDtlConfirm(OutstockConfmVO outstockConfmVO);
 
     /** 출고확정 - 출고확정시 HD 수정 */
     int updateOutstockConfirm(OutstockConfmVO outstockConfmVO);
-    
+
+    /** 출고확정 - 출고확정전 PROD 수정 확정하지 않는 데이터 삭제*/
+    int deleteOutstockProdConfirm(OutstockConfmVO outstockConfmVO);
+
     /** 출고확정 - 출고확정시 PROD 수정 */
     int insertOutstockProdConfirm(OutstockConfmVO outstockConfmVO);
-    
+
+    /** 출고확정 - 출고확정시 PROD 수정 */
+    int mergeOutstockProdConfirm(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정시 PROD 수정 CONFIRM_YN만 처리 */
+    int updateOutstockProdConfirm(OutstockConfmVO outstockConfmVO);
+
     /** 출고확정 - 출고확정 자동입고 DTL 수정*/
     int updateAutoInstockDtl(OutstockConfmVO outstockConfmVO);
 
@@ -46,7 +58,10 @@ public interface OutstockConfmMapper {
 
     /** 출고확정 - 출고확정 이후 저장시 HD 수정 */
     int updateOutstockAfterHd(OutstockConfmVO outstockConfmVO);
-    
+
+    /** 출고확정 - 출고 처리전 prod삭제 */
+    int deleteOutstockProdAll(OutstockConfmVO outstockConfmVO);
+
     /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeInstockConfmProd(OutstockConfmVO outstockConfmVO);
 }

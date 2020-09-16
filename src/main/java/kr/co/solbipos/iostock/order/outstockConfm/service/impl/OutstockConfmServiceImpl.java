@@ -26,7 +26,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class OutstockConfmServiceImpl implements OutstockConfmService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
+
     private final OutstockConfmMapper outstockConfmMapper;
     private final CmmEnvMapper cmmEnvMapper;
     private final MessageService messageService;
@@ -71,35 +71,48 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
             outstockConfmVO.setProcFg("10");
             outstockConfmVO.setUpdateProcFg("20");
-            
+
             String slipKind	= outstockConfmVO.getSlipKind();
             String occrFg	= (slipKind.equals("1") ? "02" : "13");
             outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
             outstockConfmVO.setOccrFg(occrFg);
-            // DTL의 진행구분 수정. 수주확정 -> 출고확정
-            result = outstockConfmMapper.updateOutstockDtlConfirm(outstockConfmVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            // 확정상태 확인 PROC_FG > 10
+            result = outstockConfmMapper.getOutstockConfirmCnt(outstockConfmVO);
 
-            // HD의 진행구분 수정. 수주확정 -> 출고확정
-            result = outstockConfmMapper.updateOutstockConfirm(outstockConfmVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            
-            //PROD 입력. 수주확정 -> 출고확정
-            result = outstockConfmMapper.insertOutstockProdConfirm(outstockConfmVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-            
-            // 자동입고인 경우 입고로 수정
-            if(StringUtil.getOrBlank(envst1043).equals("A")) {
-                outstockConfmVO.setProcFg("20");
-                outstockConfmVO.setUpdateProcFg("30");
-
-                // DTL의 진행구분 수정. 출고확정 -> 입고확정
-                result = outstockConfmMapper.updateAutoInstockDtl(outstockConfmVO);
+            // result 1이상이면 이미 출고확정 이후 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
+            if(result <= 0)
+            {
+                // DTL의 진행구분 수정. 수주확정 -> 출고확정
+                result = outstockConfmMapper.updateOutstockDtlConfirm(outstockConfmVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                // HD의 진행구분 수정. 출고확정 -> 입고확정
-                result = outstockConfmMapper.updateAutoInstock(outstockConfmVO);
+                // HD의 진행구분 수정. 수주확정 -> 출고확정
+                result = outstockConfmMapper.updateOutstockConfirm(outstockConfmVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                //PROD 입력전 다른 창고데이터는 삭제 진행(SLIP_NO, PROD_CD, <> STORAGE_CD, <> OCCR_FG)
+                //저장시 불필요한 창고 정보는 삭제 하기 때문에 필요없는 로직
+                //result = outstockConfmMapper.deleteOutstockProdConfirm(outstockConfmVO);
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                //PROD 입력. 수주확정 -> 출고확정
+                //result = outstockConfmMapper.insertOutstockProdConfirm(outstockConfmVO);
+                result = outstockConfmMapper.mergeOutstockProdConfirm(outstockConfmVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                // 자동입고인 경우 입고로 수정
+                if(StringUtil.getOrBlank(envst1043).equals("A")) {
+                    outstockConfmVO.setProcFg("20");
+                    outstockConfmVO.setUpdateProcFg("30");
+
+                    // DTL의 진행구분 수정. 출고확정 -> 입고확정
+                    result = outstockConfmMapper.updateAutoInstockDtl(outstockConfmVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // HD의 진행구분 수정. 출고확정 -> 입고확정
+                    result = outstockConfmMapper.updateAutoInstock(outstockConfmVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
             }
 
             returnResult += result;
@@ -117,10 +130,10 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
     /** 출고확정 상세 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getOutstockConfmDtlList(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO) {
-        
+
     	// regId, regDt, modId, modDt, hqOfficd, storeCd 세팅
     	outstockConfmVO = setSessionValue(outstockConfmVO, sessionInfoVO, null);
-    	
+
         return outstockConfmMapper.getOutstockConfmDtlList(outstockConfmVO);
     }
 
@@ -140,7 +153,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         String envst1043 = cmmEnvMapper.getHqEnvst(hqEnvstVO);
 
         OutstockConfmVO outstockConfmHdVO = new OutstockConfmVO();
-        
+
         //TB_PO_HQ_STORE_OUTSTOCK_PROD Insert or Update에 사용
 //        String[] storageCd;
 //        String[] storageNm;
@@ -150,7 +163,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 //        String[] storageInAmt;
 //        String[] storageInVat;
 //        String[] storageInTot;
-        
+
         for (OutstockConfmVO outstockConfmVO : outstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
@@ -166,6 +179,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                 outstockConfmHdVO.setRegDt(currentDt);
                 outstockConfmHdVO.setModId(sessionInfoVO.getUserId());
                 outstockConfmHdVO.setModDt(currentDt);
+
             }
 
             int slipFg     	= outstockConfmVO.getSlipFg();
@@ -194,9 +208,6 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             result = outstockConfmMapper.updateOutstockConfmDtl(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            returnResult += result;
-            i++;
-            
             outstockConfmVO.setHqOfficeCd			(outstockConfmHdVO	.getHqOfficeCd	()		);	//본사코드
             outstockConfmVO.setSlipNo				(outstockConfmHdVO	.getSlipNo		()		);	//전표번호
             outstockConfmVO.setProdCd				(outstockConfmVO	.getProdCd		()		);	//상품코드
@@ -216,8 +227,19 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         	LOGGER.debug("### getProperties: " + outstockConfmVO.getProperties() );
 
+            if(i == 0) {
+                //dtl->prod 시에 dtl(seq)과prod(prod)의 키값이 달라서 전체 삭제후 적제 필요 20200916
+                result = outstockConfmMapper.deleteOutstockProdAll(outstockConfmVO);
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
         	result = outstockConfmMapper.mergeInstockConfmProd(outstockConfmVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+
+            returnResult += result;
+            i++;
+
             //TB_PO_HQ_STORE_OUTSTOCK_PROD - START
         	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
 //            storageCd           = outstockConfmVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
@@ -284,6 +306,10 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             result = outstockConfmMapper.updateOutstockConfirm(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
+            //PROD 입력. 수주확정 -> 출고확정
+            result = outstockConfmMapper.updateOutstockProdConfirm(outstockConfmHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
             // 자동입고인 경우 입고로 수정
             if(StringUtil.getOrBlank(envst1043).equals("A")) {
                 outstockConfmHdVO.setProcFg("20");
@@ -326,7 +352,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
         return returnResult;
     }
-    
+
     /** regId, regDt, modId, modDt, hqOfficd, storeCd, areaFg 세팅  */
     public OutstockConfmVO setSessionValue(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO, String currentDt) {
         if(StringUtil.getOrBlank(currentDt).equals("")) {
@@ -343,5 +369,5 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
         outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
 
         return outstockConfmVO;
-    }    
+    }
 }
