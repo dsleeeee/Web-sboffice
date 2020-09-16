@@ -51,13 +51,19 @@ public interface VolmErrMapper {
     /** 물량오류관리 - 본사 조정 HD 등록 */
     int insertVolmErrHqAdjustHd(VolmErrVO volmErrVO);
 
+    /** 물량오류관리 - 본사 조정 HD 확정업데이트 */
+    int updateVolmErrHqAdjustHd(VolmErrVO volmErrVO);
+
     /** 물량오류관리 - 매장 조정 DTL 등록 */
     int insertVolmErrStoreAdjustDtl(VolmErrVO volmErrVO);
 
     /** 물량오류관리 - 매장 조정 HD 등록 */
     int insertVolmErrStoreAdjustHd(VolmErrVO volmErrVO);
-    
+
+    /** 물량오류관리 - 매장 조정 HD 확정업데이트 */
+    int updateVolmErrStoreAdjustHd(VolmErrVO volmErrVO);
+
     /** 조정관리 - 조정 신규 SEQ 조회(본사) */
-    String getHqNewSeqNo(VolmErrVO volmErrVO);    
+    String getHqNewSeqNo(VolmErrVO volmErrVO);
 
 }

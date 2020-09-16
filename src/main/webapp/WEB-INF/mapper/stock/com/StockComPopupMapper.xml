@@ -40,7 +40,7 @@
             </when>
 	    </choose>
     </select>
-    
+
     <!-- 일자별수불현황 - 본사입고 팝업 리스트 조회  -->
     <sql id="getDailyIoStockHqInfoList01">
     /* USE : StockComPopupMapper.getDailyIoStockHqInfoList01, 본사입고 */
@@ -531,7 +531,7 @@
 	    ORDER
 	    BY      B.PROD_CD
     </sql>
-    
+
     <!-- 일자별수불현황 - 일자별수불현황 매장 팝업 리스트 조회  -->
     <select id="getDailyIoStockStoreInfoList" parameterType="dailyIoStockVO" resultType="DefaultMap">
         <choose>
@@ -571,31 +571,31 @@
         <choose>
             <when test='ioOccrFg == "03" or ioOccrFg == "12"'> <!-- 매장입고 or 매장반품 From-->
                 <include refid="getDailyIoStockStoreFrom3,12"/>
-            </when>                                 
-            <when test='ioOccrFg == "06" or ioOccrFg == "18"'> <!-- 사입입고 or 사입반품 From-->             
+            </when>
+            <when test='ioOccrFg == "06" or ioOccrFg == "18"'> <!-- 사입입고 or 사입반품 From-->
                 <include refid="getDailyIoStockStoreFrom6,18"/>
-            </when>                                 
-            <when test='ioOccrFg == "04"'> <!-- 매장판매 From-->            
+            </when>
+            <when test='ioOccrFg == "04"'> <!-- 매장판매 From-->
 <!--                 <include refid='getDailyIoStockStoreFrom4'/> -->
-            </when>                                 
-            <when test='ioOccrFg == "14"'> <!-- 매장이입 From-->            
+            </when>
+            <when test='ioOccrFg == "14"'> <!-- 매장이입 From-->
                 <include refid="getDailyIoStockStoreFrom14"/>
-            </when>                        
-            <when test='ioOccrFg == "17"'> <!-- 매장이출 From-->    
+            </when>
+            <when test='ioOccrFg == "17"'> <!-- 매장이출 From-->
                 <include refid="getDailyIoStockStoreFrom17"/>
-            </when>                                 
-            <when test='ioOccrFg == "21"'> <!-- 재고폐기 From-->             
+            </when>
+            <when test='ioOccrFg == "21"'> <!-- 재고폐기 From-->
                 <include refid="getDailyIoStockStoreFrom21"/>
-            </when>                                
-            <when test='ioOccrFg == "22"'> <!-- 재고조정 From-->            
+            </when>
+            <when test='ioOccrFg == "22"'> <!-- 재고조정 From-->
                 <include refid="getDailyIoStockStoreFrom22"/>
-            </when>                                
-            <when test='ioOccrFg == "19"'> <!-- 세트생성 From-->           
+            </when>
+            <when test='ioOccrFg == "19"'> <!-- 세트생성 From-->
                 <include refid="getDailyIoStockStoreFrom19"/>
             </when>
         </choose>
     </select>
-    
+
     <!-- 일자별수불현황 - 매장입고, 매장반품 팝업 Select절  -->
     <sql id="getDailyIoStockStoreSelect3,12">
     /* USE : StockComPopupMapper.getDailyIoStockStoreSelect3,12  매장입고,매장반품 */
@@ -729,7 +729,7 @@
     <sql id="hqProdClassList">
     /* USE : StockComPopupMapper.hqProdClassList  본사 상품분류 */
         FROM    (
-                <![CDATA[	    			 
+                <![CDATA[
 							SELECT  A.HQ_OFFICE_CD
 							,       A.PROD_CLASS_CD
 							,		NULL	LV1_CD
@@ -745,18 +745,18 @@
 							,       DECODE	(A.LV ,1  ,NULL
 							                    ,2  ,NULL
 							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-							             	)  AS  LV3_NM                    
+							             	)  AS  LV3_NM
 							FROM    (
 							        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 							        FROM    (
 							                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_HQ_PRODUCT_CLASS				
+							                    FROM    TB_HQ_PRODUCT_CLASS
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
-							        CONNECT BY 
+							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-							        )   A					
+							        )   A
 				   			]]>
                 )   A
     </sql>
@@ -779,19 +779,19 @@
 						              )  AS  LV2_NM
 						,       DECODE(A.LV ,1  ,NULL
 						                    ,2  ,NULL
-						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM                    
+						                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1))  AS  LV3_NM
 						FROM    (
 						        SELECT  LEVEL LV,  STORE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 						        FROM    (
 						                    SELECT  STORE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-						                    FROM    TB_MS_PRODUCT_CLASS						
-						                    WHERE   STORE_CD    =  #{storeCd} 
+						                    FROM    TB_MS_PRODUCT_CLASS
+						                    WHERE   STORE_CD    =  #{storeCd}
 						                )
 						        START WITH  P_PROD_CLASS_CD ='00000'
-						        CONNECT BY 
+						        CONNECT BY
 						        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
 						        )   A
-        			]]>	
+        			]]>
                 )   A
     </sql>
 
@@ -861,7 +861,7 @@
                 ,       TB_PO_STORE_VENDR_INSTOCK_DTL TPSVID
                 ,       TB_MS_PRODUCT TMP
                 ,       TB_MS_PRODUCT_BARCD TMPB
-                WHERE   TPSVI.STORE_CD      =   #{storeCd}  
+                WHERE   TPSVI.STORE_CD      =   #{storeCd}
                 <if test="ioOccrFg == '06'">
                 AND     TPSVI.SLIP_FG       =   '1'       /* 입고:1, 출고:-1 */
                 </if>
@@ -911,7 +911,7 @@
                 ,       TB_HQ_PRODUCT THP
                 ,       TB_HQ_PRODUCT_BARCD THPB
                 WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
-                AND     TPSM.IN_STORE_CD    =   #{storeCd}  
+                AND     TPSM.IN_STORE_CD    =   #{storeCd}
                 <if test="saleDate != '' and saleDate != null">
                     AND TPSM.MOVE_DATE      =   #{saleDate}
                 </if>
@@ -955,7 +955,7 @@
                 ,       TB_HQ_PRODUCT THP
                 ,       TB_HQ_PRODUCT_BARCD THPB
                 WHERE   TPSM.HQ_OFFICE_CD   =   #{hqOfficeCd}
-                AND     TPSM.OUT_TOT_QTY    =   #{storeCd}   
+                AND     TPSM.OUT_TOT_QTY    =   #{storeCd}
                 <if test="saleDate != '' and saleDate != null">
                     AND TPSM.MOVE_DATE      =   #{saleDate}
                 </if>
@@ -998,7 +998,7 @@
                 ,       TB_ST_STORE_DISUSE_DTL TSSDD
                 <!-- ,       TB_MS_PRODUCT TMP -->
                 ,       TB_MS_PRODUCT_BARCD TMPB
-                WHERE   TSSD.STORE_CD       =   #{storeCd}  
+                WHERE   TSSD.STORE_CD       =   #{storeCd}
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSD.DISUSE_DATE    =   #{saleDate}
                 </if>
@@ -1042,7 +1042,7 @@
                 ,       TB_ST_STORE_ADJUST_DTL TSSAD
                 ,       TB_MS_PRODUCT TMP
                 ,       TB_MS_PRODUCT_BARCD TMPB
-                WHERE   TSSA.STORE_CD       =   #{storeCd}  
+                WHERE   TSSA.STORE_CD       =   #{storeCd}
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSA.ADJ_DATE       =   #{saleDate}
                 </if>
@@ -1086,7 +1086,7 @@
                 ,       TB_ST_STORE_SETPROD_COMPOSITION_DTL TSSSCD
                 ,       TB_MS_PRODUCT TMP
                 ,       TB_MS_PRODUCT_BARCD TMPB
-                WHERE   TSSSC.STORE_CD      =   #{storeCd}  
+                WHERE   TSSSC.STORE_CD      =   #{storeCd}
                 <if test="saleDate != '' and saleDate != null">
                     AND TSSSC.SET_DATE      =   #{saleDate}
                 </if>
@@ -1145,7 +1145,7 @@
 		      </if>
 		      FROM   TB_PO_HQ_STOCK   TPHS
 		       ,	 TB_HQ_PRODUCT    THP
-		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}  
+		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
 		      AND	  TPHS.HQ_OFFICE_CD	  =   THP.HQ_OFFICE_CD
 		      AND	  TPHS.PROD_CD		  =   #{prodCd}
 		      AND	  TPHS.PROD_CD		  =   THP.PROD_CD
@@ -1182,14 +1182,14 @@
 		      </if>
 		      FROM   TB_PO_HQ_STOCK   TPHS
 		       ,	 TB_HQ_PRODUCT    THP
-		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd} 
+		      WHERE   TPHS.HQ_OFFICE_CD   =   #{hqOfficeCd}
 		      AND	  TPHS.HQ_OFFICE_CD	  =   THP.HQ_OFFICE_CD
 		      AND	  TPHS.PROD_CD		  =   #{prodCd}
 		      AND	  TPHS.PROD_CD		  =   THP.PROD_CD
 		      AND      TPHS.IO_PROC_DATE   >   #{endDate}
 		      )   A
     </select>
-    
+
     <!-- 현재고현황 - 매장 재고현황 팝업 리스트 조회  -->
     <select id="getCmmStoreStockStatusList" parameterType="stockManageViewStoreVO" resultType="DefaultMap">
         /* USE : StockComPopupMapper.getCmmStoreStockStatusList */
@@ -1651,8 +1651,33 @@
 
     <sql id="getCmmQtyDtlList21">
     	/* USE : StockComPopupMapper.getCmmQtyDtlList21, 재고조정 */
+        <!-- 1. 수불의 재고조정은 재고실사/조정 두개의 값을 같이 가지고 있음. 2. 재고현황은 확정된 값만 나옴 -->
     	<choose>
     		<when test="storeCd == null or storeCd == ''"> <!-- 본사 팝업 -->
+                SELECT TSHAI.ACINS_DATE AS ADJ_DATE
+                     , TSHAI.SEQ_NO
+                     , TSHAI.ACINS_TITLE
+                     , DECODE(TSHAI.PROC_FG,'0','입력','확정') AS PROD_FG_NM
+                     , SUM(TSHAID.ADJ_QTY) AS ADJ_QTY
+                     , SUM(TSHAID.ADJ_AMT) AS ADJ_AMT
+                  FROM TB_ST_HQ_ACTUAL_INSPECTION TSHAI
+                     , TB_ST_HQ_ACTUAL_INSPECTION_DTL TSHAID
+                 WHERE TSHAI.HQ_OFFICE_CD    = #{hqOfficeCd}
+                   AND TSHAI.HQ_OFFICE_CD    = TSHAID.HQ_OFFICE_CD
+                   AND TSHAI.ACINS_DATE      = TSHAID.ACINS_DATE
+                   AND TSHAI.SEQ_NO          = TSHAID.SEQ_NO
+                   AND TSHAI.PROC_FG         = '1'
+				   <if test="prodCd != null and prodCd != ''">
+				   AND TSHAID.PROD_CD		= #{prodCd}		/* 상품코드 */
+				   </if>
+				   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+				   AND TSHAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
+				   </if>
+                 GROUP BY TSHAI.ACINS_DATE
+                     , TSHAI.SEQ_NO
+                     , TSHAI.ACINS_TITLE
+                     , TSHAI.PROC_FG
+                 UNION ALL
 		    	SELECT TSHA.ADJ_DATE
 					 , TSHA.SEQ_NO
 					 , TSHA.ADJ_TITLE
@@ -1665,6 +1690,7 @@
 				   AND TSHA.HQ_OFFICE_CD    = TSHAD.HQ_OFFICE_CD
 				   AND TSHA.ADJ_DATE     	= TSHAD.ADJ_DATE
 				   AND TSHA.SEQ_NO			= TSHAD.SEQ_NO
+                   AND TSHA.PROC_FG         = '1'
 				   <if test="prodCd != null and prodCd != ''">
 				   AND TSHAD.PROD_CD		= #{prodCd}		/* 상품코드 */
 				   </if>
@@ -1675,10 +1701,34 @@
 					 , TSHA.SEQ_NO
 					 , TSHA.ADJ_TITLE
 					 , TSHA.PROC_FG
-				 ORDER BY TSHA.ADJ_DATE DESC
+				 ORDER BY ADJ_DATE DESC
 		 	</when>
 
 		 	<when test="storeCd != null and storeCd != ''"> <!-- 매장 팝업 -->
+		 		SELECT TSSAI.ACINS_DATE AS ADJ_DATE
+					 , TSSAI.SEQ_NO
+					 , TSSAI.ACINS_TITLE AS TITLE
+					 , DECODE(TSSAI.PROC_FG,'0','입력','확정') AS PROD_FG_NM
+					 , SUM(TSSAID.ADJ_QTY) AS ADJ_QTY
+					 , SUM(TSSAID.ADJ_AMT) AS ADJ_AMT
+				  FROM TB_ST_STORE_ACTUAL_INSPECTION TSSAI
+				     , TB_ST_STORE_ACTUAL_INSPECTION_DTL TSSAID
+				 WHERE TSSAI.STORE_CD    	= #{storeCd}
+				   AND TSSAI.STORE_CD    	= TSSAID.STORE_CD
+				   AND TSSAI.ACINS_DATE     	= TSSAID.ACINS_DATE
+				   AND TSSAI.SEQ_NO			= TSSAID.SEQ_NO
+                   AND TSSAI.PROC_FG        = '1'
+				   <if test="prodCd != null and prodCd != ''">
+						AND TSSAID.PROD_CD		= #{prodCd}		/* 상품코드 */
+				   </if>
+				   <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+						AND TSSAI.ACINS_DATE BETWEEN #{startDate} AND #{endDate}
+				   </if>
+				 GROUP BY TSSAI.ACINS_DATE
+					 , TSSAI.SEQ_NO
+					 , TSSAI.ACINS_TITLE
+					 , TSSAI.PROC_FG
+                 UNION ALL
 		 		SELECT TSSA.ADJ_DATE
 					 , TSSA.SEQ_NO
 					 , TSSA.ADJ_TITLE AS TITLE
@@ -1691,6 +1741,7 @@
 				   AND TSSA.STORE_CD    	= TSSAD.STORE_CD
 				   AND TSSA.ADJ_DATE     	= TSSAD.ADJ_DATE
 				   AND TSSA.SEQ_NO			= TSSAD.SEQ_NO
+                   AND TSSA.PROC_FG         = '1'
 				   <if test="prodCd != null and prodCd != ''">
 						AND TSSAD.PROD_CD		= #{prodCd}		/* 상품코드 */
 				   </if>
@@ -1701,7 +1752,7 @@
 					 , TSSA.SEQ_NO
 					 , TSSA.ADJ_TITLE
 					 , TSSA.PROC_FG
-				 ORDER BY TSSA.ADJ_DATE DESC
+				 ORDER BY ADJ_DATE DESC
 		 	</when>
 		 </choose>
     </sql>
@@ -1873,7 +1924,7 @@
 
     <sql id="getProdLevel">
         (
-          <![CDATA[	    			 
+          <![CDATA[
 							SELECT  A.HQ_OFFICE_CD
 							,       A.PROD_CLASS_CD
 							,		NULL	LV1_CD
@@ -1889,22 +1940,22 @@
 							,       DECODE	(A.LV ,1  ,NULL
 							                    ,2  ,NULL
 							                    ,3  ,SUBSTR(A.AC,INSTR(A.AC,'^',1,3)+1)
-							             	)  AS  LV3_NM                    
+							             	)  AS  LV3_NM
 							FROM    (
 							        SELECT  LEVEL LV,  HQ_OFFICE_CD,    PROD_CLASS_CD,   SYS_CONNECT_BY_PATH(PROD_CLASS_NM, '^')  AS AC
 							        FROM    (
 							                    SELECT  HQ_OFFICE_CD,   PROD_CLASS_CD, PROD_CLASS_NM, P_PROD_CLASS_CD
-							                    FROM    TB_HQ_PRODUCT_CLASS				
+							                    FROM    TB_HQ_PRODUCT_CLASS
 							                    WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
 							                )
 							        START WITH  P_PROD_CLASS_CD ='00000'
-							        CONNECT BY 
+							        CONNECT BY
 							        PRIOR       PROD_CLASS_CD   =   P_PROD_CLASS_CD
-							        )   A					
+							        )   A
 				   			]]>
            )
     </sql>
-    
+
     <select id="getCmmViewDtlList" parameterType="stockManageViewVO" resultType="DefaultMap">
     	<choose>
     		<when test="hqGbn==1">
@@ -1920,7 +1971,7 @@
     		</when>
     	</choose>
     </select>
-    
+
     <sql id="getCmmAcinsViewDtlList">
     	/* USE : StockComPopupMapper.getCmmAcinsViewDtlList */
     	<choose>
@@ -1978,7 +2029,7 @@
 			</when>
 		</choose>
 	</sql>
-	
+
 	<sql id="getCmmAdjViewDtlList">
     	/* USE : StockComPopupMapper.getCmmAdjViewDtlList */
     	<choose>
@@ -2034,7 +2085,7 @@
 			</when>
 		</choose>
 	</sql>
-	
+
 	<sql id="getCmmDisuseViewDtlList">
     	/* USE : StockComPopupMapper.getCmmDisuseViewDtlList */
     	<choose>
@@ -2090,7 +2141,7 @@
 			</when>
 		</choose>
 	</sql>
-	
+
 	<!-- 창고선택 조회 -->
     <!--
         TABLE    : TB_HQ_STORAGE
@@ -2108,7 +2159,7 @@
 	              AND   HQ_OFFICE_CD      =   #{hqOfficeCd}
 	              AND   USE_YN = 'Y'
 	              AND   STORAGE_CD   >   '000'
-				  AND   STORAGE_CD   <![CDATA[<]]>    '999'    
+				  AND   STORAGE_CD   <![CDATA[<]]>    '999'
 	         	ORDER BY STORAGE_CD
             </when>
             <!-- 가맹점 -->
@@ -2118,7 +2169,7 @@
 				AND     STORE_CD      =   #{storeCd}
 				AND     USE_YN = 'Y'
 				AND     STORAGE_CD   >=   '000'
-				AND     STORAGE_CD   <![CDATA[<]]>    '999'    
+				AND     STORAGE_CD   <![CDATA[<]]>    '999'
 				ORDER BY STORE_CD
 		    </when>
         </choose>

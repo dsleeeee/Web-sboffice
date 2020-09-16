@@ -268,14 +268,14 @@
         ,       ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))
         */
         ,DECODE(OUT_VAT, 0, ROUND(OUT_TOT / DECODE( OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))), CEIL (ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 * 10))
-       ,DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 )) 
-      , ROUND(OUT_TOT / DECODE( OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) 
-       ,OUT_SPLY_UPRC 
-       ,TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY) 
-      , MOD ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY) 
-       ,(OUT_TOT_QTY - IN_TOT_QTY) 
-      , DECODE(OUT_VAT, 0, ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))), CEIL (ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 * 10)) 
-      , DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 )) 
+       ,DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)) / 11 ))
+      , ROUND(OUT_TOT / DECODE( OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)))
+       ,OUT_SPLY_UPRC
+       ,TRUNC((OUT_TOT_QTY - IN_TOT_QTY) / PO_UNIT_QTY)
+      , MOD ((OUT_TOT_QTY - IN_TOT_QTY) , PO_UNIT_QTY)
+       ,(OUT_TOT_QTY - IN_TOT_QTY)
+      , DECODE(OUT_VAT, 0, ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))), CEIL (ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 * 10))
+      , DECODE(OUT_VAT, 0, 0, FLOOR(ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY), 0, NULL, OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY))) / 11 ))
       , ROUND(OUT_TOT / DECODE(OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY),0,NULL,OUT_TOT_QTY * (OUT_TOT_QTY - IN_TOT_QTY)))
         ,       #{regDt}
         ,       #{regId}
@@ -339,7 +339,8 @@
 
 
 
-    <insert id="insertVolmErrHqAdjustDtl" parameterType="volmErrVO">        
+    <insert id="insertVolmErrHqAdjustDtl" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.insertVolmErrHqAdjustDtl */
         INSERT INTO TB_ST_HQ_ADJUST_DTL
         (
             HQ_OFFICE_CD,
@@ -394,7 +395,8 @@
 		AND		A.SEQ           = #{seq}
     </insert>
 
-    <insert id="insertVolmErrHqAdjustHd" parameterType="volmErrVO">    	
+    <insert id="insertVolmErrHqAdjustHd" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.insertVolmErrHqAdjustHd */
         INSERT INTO TB_ST_HQ_ADJUST
         (
             HQ_OFFICE_CD,
@@ -417,9 +419,9 @@
         SELECT  A.HQ_OFFICE_CD,
                 '999',														<!-- 000:매대, 001:대표창고, 999:전체재고용 창고 -->
                 #{outDate},  				<!-- A.ADJ_DATE -->
-                #{seqNo},               
+                #{seqNo},
                 #{hdRemark},
-                '1',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
+                '0',						<!-- PROC_FG - 처리구분 (0:입력, 1:확정) -->
                 '1',						<!-- ADJ_FG - 조정구분 (0:조정 1:물량오류) -->
                 COUNT(A.PROD_CD),
                 SUM  (A.ADJ_AMT),
@@ -452,6 +454,15 @@
                 #{modId},
                 THS.STORAGE_CD
     </insert>
+
+    <update id="updateVolmErrHqAdjustHd" parameterType="volmErrVO">
+        /* USE : VolmErrMapper.updateVolmErrHqAdjustHd */
+        UPDATE  TB_ST_HQ_ADJUST
+        SET     PROC_FG         =   '1'
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     ADJ_DATE      = #{outDate}
+        AND     SEQ_NO        = #{seqNo}
+    </update>
 
 
     <!-- 조정관리 - 조정등록 신규 SEQ 조회(본사) -->
