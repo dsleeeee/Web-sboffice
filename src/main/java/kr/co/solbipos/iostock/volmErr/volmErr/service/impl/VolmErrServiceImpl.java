@@ -115,7 +115,7 @@ public class VolmErrServiceImpl implements VolmErrService {
         //확정여부를 체크한 경우
         if(confirmFg.equals("Y")) {
         	//물량오류 로직 수정 START - 20200423
-        	
+
             //출고수량을 입고수량으로 수정
             result = volmErrMapper.updateOutToIn(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -126,56 +126,55 @@ public class VolmErrServiceImpl implements VolmErrService {
 
             //출고정보 HD 집계 수정
             result = volmErrMapper.updateVolmErrHdSum(volmErrHdVO);
-//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));        	
-        	
-            volmErrHdVO.setUpdateProcFg	("1");			//처리구분 (0:입력, 1:확정)
-            
-            result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            
-        	
-            String errFg 		= "";            
+
+            volmErrHdVO.setUpdateProcFg("1");			//처리구분 (0:입력, 1:확정)
+
+            String errFg 		= "";
             String seqNo 		= "";
-            
+
             if(hqNewAdjustFg.equals("Y")) {
                 // 신규 seq 조회
             	VolmErrVO newSeqNoVO = new VolmErrVO();
                 newSeqNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
                 newSeqNoVO.setOutDate(volmErrHdVO.getOutDate());
-                
-                seqNo = volmErrMapper.getHqNewSeqNo(newSeqNoVO);                
-                	
+
+                seqNo = volmErrMapper.getHqNewSeqNo(newSeqNoVO);
+
 	            for(VolmErrVO tmpVO : volmErrVOs) {
 	            	LOGGER.debug("### volmErrVO.getProperties(): " + tmpVO.getProperties()	);
 	            	errFg = tmpVO.getErrFg();
-	            	
+
 	            	tmpVO.setSeqNo	(Integer.parseInt(seqNo)	);
 	            	tmpVO.setRegId	( volmErrHdVO.getRegId()	);
 	            	tmpVO.setRegDt	( volmErrHdVO.getRegDt()	);
 	            	tmpVO.setModId	( volmErrHdVO.getModId()	);
-	            	tmpVO.setModDt	( volmErrHdVO.getModDt()	);            	
-	            	
+	            	tmpVO.setModDt	( volmErrHdVO.getModDt()	);
+
 	            	if(errFg.equals("O4") || errFg.equals("O5")) {
-	            		
+
 	                    result = volmErrMapper.insertVolmErrHqAdjustDtl(tmpVO);
-	                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            		            		
-	            	}            	
-	
+	                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	            	}
+
 	            }
-                        
+
                 //본사 조정 HD 등록 (TB_ST_HQ_ADJUST)
             	//if("".equals(volmErrHdVO.getHdRemark()))
             	//	volmErrHdVO.setHdRemark("물량오류관리");
             	volmErrHdVO.setHdRemark("물량오류관리");
             	volmErrHdVO.setSeqNo(Integer.parseInt(seqNo));
             	volmErrHdVO.setAreaFg(sessionInfoVO.getAreaFg());
-            	
-            	
-                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);                
-                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            	
+
+
+                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);
+                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                result = volmErrMapper.updateVolmErrHqAdjustHd(volmErrHdVO);
+                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             }
-            
-        	//물량오류 로직 수정 END - 20200423        	        	
+
+        	//물량오류 로직 수정 END - 20200423
             String newSlipNo 	= "";
             if(newSlipNoFg.equals("Y")) {
                 //전표번호 생성
@@ -187,14 +186,14 @@ public class VolmErrServiceImpl implements VolmErrService {
 
 			    newSlipNo = volmErrMapper.getNewSlipNo(newSlipNoVO);
 
-			    volmErrHdVO.setNewSlipNo	(newSlipNo);
-                volmErrHdVO.setUpdateProcFg	("1");			//처리구분 (0:입력, 1:확정)
-
+			    volmErrHdVO.setNewSlipNo(newSlipNo);
+                volmErrHdVO.setUpdateProcFg("1");			//처리구분 (0:입력, 1:확정)
+//System.out.println("volmErrHdVO.getNewSlipNo:"+volmErrHdVO.getNewSlipNo());
                 result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
 //                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             }
-                        
-        	
+
+
             //출고수량을 입고수량으로 수정
 //            result = volmErrMapper.updateOutToIn(volmErrHdVO);
 //            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -293,6 +292,12 @@ public class VolmErrServiceImpl implements VolmErrService {
 //                result = volmErrMapper.insertVolmErrHqAdjustHd(volmErrHdVO);
 //                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 //            }
+
+            //모두 완료 후 최종 확정
+            result = volmErrMapper.updateVolmErrNewSlipNo(volmErrHdVO);
+//            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+
 
         }	//if(confirmFg.equals("Y"))
 

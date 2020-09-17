@@ -123,7 +123,16 @@ app.controller('orderCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 	  };
 
 	  //조회조건 진행상태
-	  $scope._queryCombo("combo", "srchOrderProcFgDisplay", null, "/iostock/frnchs/order/srchOrderProcFg/list.sb", null, "A", null);
+	  //$scope._queryCombo("combo", "srchOrderProcFgDisplay", null, "/iostock/frnchs/order/srchOrderProcFg/list.sb", null, "A", null);
+	  //조회조건 진행상태
+	  $scope._setComboData("srchOrderProcFgDisplay", [
+	    {"name": messages["cmm.all"], "value": ""}, // 전체
+	    {"name": messages["orderStockInfo.orderReg"], "value": "00"}, // 주문등록
+	    {"name": messages["orderStockInfo.procFgDstbConfm"], "value": "10"}, // 분배확정
+	    {"name": messages["orderStockInfo.procFgOutConfm"], "value": "20"}, // 출고확정
+	    {"name": messages["orderStockInfo.procFgInConfm"], "value": "30"}  // 입고확정
+	  ]);
+
 }]);
 
 
@@ -256,7 +265,7 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
       }
     }
-    
+
     $scope.displayChg();
   };
 
@@ -345,7 +354,7 @@ app.controller('orderMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     $scope._broadcast('orderExcelCtrl',params);
   };
-  
+
   $scope.displayChg = function () {
 	  var check = $('input[name=displayFg]:checked').val();
 	  var grid = wijmo.Control.getControl("#orderDtlGrid");
@@ -551,7 +560,7 @@ app.controller('orderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.isPageChk = isPageChk;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/order/ioStockDtl/list.sb", params);
-    
+
     //$scope.excelFg = true;
   };
 

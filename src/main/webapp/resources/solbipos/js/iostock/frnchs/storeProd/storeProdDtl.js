@@ -115,6 +115,7 @@ app.controller('frnchsStoreProdDtlCtrl', ['$scope', '$http', '$timeout', functio
         params.tblCd    	= $scope.tblCd;
         params.saleDate 	= $scope.saleDate;
         params.saleDay     	= $scope.saleDay;
+        params.prodCd     	= $scope.prodCd;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/frnchs/storeprod/storeprod/frnchsStoreProdDtlList.sb", params);
   };

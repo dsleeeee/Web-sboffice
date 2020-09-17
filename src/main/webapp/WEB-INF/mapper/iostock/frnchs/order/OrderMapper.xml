@@ -22,9 +22,9 @@
 		     /* , (SELECT NMCODE_NM FROM TB_CM_NMCODE TCM WHERE TCM.NMCODE_GRP_CD = '113' AND TCM.NMCODE_CD = M.PROC_FG) AS PROC_FG_NM*/
 		     , CASE WHEN (M.PROC_FG = '00' OR M.PROC_FG = '10') AND M.OUTSTOCK_PROC_FG IS NULL 	THEN '주문등록'
 		     		WHEN M.PROC_FG = '20' AND M.OUTSTOCK_PROC_FG IS NULL 	THEN '분배확정'
-                    WHEN M.OUTSTOCK_PROC_FG = '10' 	THEN '분배확정' 
-                    WHEN M.OUTSTOCK_PROC_FG = '20' 	THEN '출고확정' 
-                    WHEN M.OUTSTOCK_PROC_FG = '30' 	THEN '입고확정' 
+                    WHEN M.OUTSTOCK_PROC_FG = '10' 	THEN '분배확정'
+                    WHEN M.OUTSTOCK_PROC_FG = '20' 	THEN '출고확정'
+                    WHEN M.OUTSTOCK_PROC_FG = '30' 	THEN '입고확정'
                     END PROC_FG_NM
 		     , M.SLIP_NO
 		     , M.OUT_DT
@@ -69,7 +69,7 @@
                        </foreach>
                    </if>
 		        UNION ALL
-		
+
 		        SELECT A.REQ_DATE
 		             , A.STORE_CD
 		             , A.SLIP_FG
@@ -86,7 +86,7 @@
 		             , B.IN_TOT_QTY
 		             , B.IN_TOT
 		             , B.PENALTY_AMT
-		             , B.OUTSTOCK_PROC_FG     
+		             , B.OUTSTOCK_PROC_FG
 		          FROM (
 		                SELECT TPHSD.HQ_OFFICE_CD
 		                     , TPHSD.REQ_DATE       /* 출고요청일자 */
@@ -152,9 +152,9 @@
                    AND M.SLIP_FG = #{slipFg}
                 </if>
                 <if test='procFg != null and procFg != ""'>
-                   AND M.PROC_FG = #{procFg}
+                   AND DECODE(M.OUTSTOCK_PROC_FG, NULL, DECODE(M.PROC_FG, '20', '10', '10', '00', '00', '00', M.OUTSTOCK_PROC_FG), M.OUTSTOCK_PROC_FG) = #{procFg}
                 </if>
-		 ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG 
+		 ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG
 		 <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -210,7 +210,7 @@
 		    AND A.PROD_CD = Z.PROD_CD
 		  <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
-    
+
     <!-- 본사 주문대비 입출고현황 - 조회조건 진행상황 콤보 리스트 조회 -->
     <!--
         TABLE    : TB_CM_NMCODE
@@ -220,8 +220,8 @@
     <select id="getSrchOrderProcFgList" parameterType="orderVO" resultType="DefaultMap">
         SELECT NMCODE_NM, NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '113'
     </select>
-    
-    
+
+
     <!-- 주문대비 입출고현황 - 주문대비 입출고현황 엑셀리스트 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER, TB_PO_HQ_STORE_DISTRIBUTE, TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE
@@ -278,7 +278,7 @@
                        </foreach>
                    </if>
                 UNION ALL
-        
+
                 SELECT A.REQ_DATE
                      , A.STORE_CD
                      , A.SLIP_FG
@@ -361,7 +361,7 @@
                 <if test='procFg != null and procFg != ""'>
                    AND M.PROC_FG = #{procFg}
                 </if>
-         ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG 
+         ORDER BY M.REQ_DATE, M.STORE_CD, M.SLIP_FG
     </select>
 
 

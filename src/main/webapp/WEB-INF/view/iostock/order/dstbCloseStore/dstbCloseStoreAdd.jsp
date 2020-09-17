@@ -190,7 +190,7 @@
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrUnitQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.storeCurrQty"/>" binding="storeCurrEtcQty" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.remark"/>" binding="remark" width="200" align="left" max-length=300></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.poMinQty"/>" binding="poMinQty" width="70" align="right" is-read-only="true" visible="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.vatFg"/>" binding="vatFg01" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseStore.add.envst0011"/>" binding="envst0011" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 
