@@ -36,7 +36,7 @@
        		    <span class="txtIn"><input id="srchRankStartDate" class="w120px"></span>
                 <span class="rg">~</span>
                 <span class="txtIn"><input id="srchRankEndDate" class="w120px"></span>
-            	<span class="chk ml10">
+            	<span class="chk ml10" style="display: none;">
 					<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 	              	<label for="chkDt">
                 		<s:message code="cmm.all.day" />
@@ -84,7 +84,7 @@
               	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
               	<%-- 결제수단 전체보기 --%>
                 <span class="chk pst4">
-                    <input type="checkbox"  ng-model="isCheckedPayAll" ng-change="totalPay()" />
+                    <input type="checkbox"  ng-model="isCheckedPayAll"/>
                     <label for="totalPay()">전체결제수단 표시</label>
                 </span>
           	</td>
@@ -127,7 +127,7 @@
           <wj-flex-grid-column header="<s:message code="store.totSaleAmt"/>" 	binding="totSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.totDcAmt"/>"		binding="totDcAmt" 		width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="store.realSaleAmt"/>" 	binding="realSaleAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
- 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+ 		  <wj-flex-grid-column header="<s:message code="store.openDay"/>" 		binding="saleDateCnt" 		width="100" align="center" is-read-only="true"></wj-flex-grid-column>
   		  <wj-flex-grid-column header="<s:message code="store.openDayAmt"/>" 	binding="realSaleAmtAvg" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
    		  <wj-flex-grid-column header="<s:message code="store.billCnt"/>" 		binding="billCnt" 		width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
    		  <wj-flex-grid-column header="<s:message code="store.totBillAmt"/>" 	binding="totBillAmt" 	width="120" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -194,4 +194,4 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.02" charset="utf-8"></script>

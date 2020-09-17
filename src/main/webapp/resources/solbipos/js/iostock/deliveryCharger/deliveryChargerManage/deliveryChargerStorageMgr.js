@@ -52,6 +52,7 @@ app.controller('dlvrStorageMgrCtrl', ['$scope', '$http', function ($scope, $http
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/iostock/deliveryCharger/deliveryChargerManage/dlvrStorageMgr/save.sb", params, function () {
       $scope.callbackSearch();
+      $scope.wjDlvrStorageMgrLayer.hide();
     });
   };
 

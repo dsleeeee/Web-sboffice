@@ -60,7 +60,7 @@
 			<div class="w100 mt10" ng-controller="goalQryCtrl">
 				<div class="w100 mt10">
 			        <%--위즈모 테이블--%>
-			        <div class="wj-gridWrap" style="height: 920px;">
+			        <div class="wj-gridWrap" style="height: 920px; overflow-x: hidden; overflow-y: hidden;">
 						<wj-flex-grid
 						    loaded-rows="loadedRows(s,e)"
 				            autoGenerateColumns="false"
@@ -162,7 +162,7 @@
 				<div class="w100 mt10" ng-controller="goalDtl1Ctrl">
 					<div class="w100 mt10">
 				        <%--위즈모 테이블--%>
-				        <div class="wj-gridWrap" style="height: 620px;">
+				        <div class="wj-gridWrap" style="height: 620px; overflow-x: hidden; overflow-y: hidden;">
 							<wj-flex-grid
 							    id="goalDtl1Grid"
 					            autoGenerateColumns="false"
@@ -194,7 +194,7 @@
 				<div class="w100 mt10" ng-controller="goalDtl2Ctrl">
 					<div class="w100 mt10">
 				        <%--위즈모 테이블--%>
-				        <div class="wj-gridWrap" style="height: 620px;">
+				        <div class="wj-gridWrap" style="height: 620px; overflow-x: hidden; overflow-y: hidden;">
 							<wj-flex-grid
 							    id="goalDtl2Grid"
 					            autoGenerateColumns="false"

@@ -43,6 +43,11 @@ app.controller('prodStrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("prodStrl", function (event, data) {
+
+  	  // 초기화
+	  $scope.srchPopProdCd = "";
+	  $scope.srchPopProdNm = "";
+
 	  //화면구분값
 	  $("#gubun").val(data.gubun);
 	  $("#storeCd").val(data.storeCd);
@@ -145,8 +150,8 @@ app.controller('prodDtlStrl', ['$scope', '$http','$timeout', function ($scope, $
 		     params.prodClassCd   = $("#prodClassCd").val();
 	    }
 
-	    params.srchPopProdCd    = $("#srchPopProdCd").val();
-	    params.srchPopProdNm    = $("#srchPopProdNm").val();
+		  params.srchPopProdCd    = $scope.srchPopProdCd;
+		  params.srchPopProdNm    = $scope.srchPopProdNm;
 	    console.log(params);
 	    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 	    $scope._inquirySub("/sale/com/popup/prodNm/view.sb", params);

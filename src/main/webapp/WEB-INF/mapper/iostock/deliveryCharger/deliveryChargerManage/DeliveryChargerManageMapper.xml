@@ -42,7 +42,7 @@
             AND tphdc.DLVR_NM LIKE '%'||#{dlvrNm}||'%'
         </if>
         <if test='carNo != null and carNo != ""'>
-            AND tphdc.CAR_NO = #{carNo}
+            AND tphdc.CAR_NO LIKE '%'|| #{carNo} ||'%'
         </if>
         GROUP BY tphdc.DLVR_CD, tphdc.DLVR_NM
         ,        tphdc.CAR_NO, tphdc.USE_YN

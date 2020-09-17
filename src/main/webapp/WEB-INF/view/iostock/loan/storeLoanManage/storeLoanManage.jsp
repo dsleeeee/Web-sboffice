@@ -86,7 +86,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 200px;">
+    <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -102,16 +102,16 @@
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 			binding="gChk" 		width="30" 	align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>" binding="limitLoanAmt" width="70" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="70" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmtYn"/>" binding="maxOrderAmtYn" width="70" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.orderFg"/>" binding="orderFg" width="70" align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.noOutstockAmtFg"/>" binding="noOutstockAmtFg" width="70" align="center" is-read-only="false" data-map="noOutstockAmtFg"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>" binding="orderCloseYn" width="70" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.remark"/>" binding="remark" width="150" align="left" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>" binding="limitLoanAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="90" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmtYn"/>" binding="maxOrderAmtYn" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.orderFg"/>" binding="orderFg" width="90" align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.noOutstockAmtFg"/>" binding="noOutstockAmtFg" width="90" align="center" is-read-only="false" data-map="noOutstockAmtFg"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>" binding="orderCloseYn" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.remark"/>" binding="remark" width="100" align="left" is-read-only="false"></wj-flex-grid-column>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

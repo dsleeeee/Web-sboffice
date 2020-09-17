@@ -30,7 +30,7 @@
 		        <button class="btn_skyblue" style="display: none;" id="btnSave"	ng-click="save()"		><s:message code="cmm.save" 	/></button>
 			</div>
 
-		    <div class="wj-gridWrap" style="height:315px">	<%-- 개발시 높이 조절해서 사용   &   tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어서 사용 --%>
+		    <div class="wj-gridWrap" style="height:315px; overflow-x: hidden; overflow-y: hidden;">	<%-- 개발시 높이 조절해서 사용   &   tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어서 사용 --%>
 		        <div class="row">
 			        <wj-flex-grid	id					="grid_payline"
 			        				autoGenerateColumns	="false"
@@ -84,7 +84,7 @@
 		_itemFormatter	Original
 		itemFormatter	Custom
 --%>
-        	<div class="wj-gridWrap" style="height:680px">	<%-- 개발시 높이 조절해서 사용   &   tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어서 사용 --%>
+        	<div class="wj-gridWrap" style="height:680px; overflow-x: hidden; overflow-y: hidden;">	<%-- 개발시 높이 조절해서 사용   &   tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어서 사용 --%>
 		        <wj-flex-grid	autoGenerateColumns	="false"
 						        control				="flex"
 						        initialized			="initGrid(s,e)"

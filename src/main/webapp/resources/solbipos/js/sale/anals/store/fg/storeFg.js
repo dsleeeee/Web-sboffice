@@ -224,10 +224,12 @@ app.controller('storeFgCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
   // 상품분류정보 선택취소
   $scope.delProd = function(){
+    $("#srchStoreFgProdNm").val("");
+    $("#srchStoreFgProdCd").val("");
+    $("#srchStoreFgProdClassCd").val("");
     //$scope.prodCd = "";
-	$("#srchStoreFgProdCd").val("");
-    $scope.prodCdNm = "";
-    $scope.prodClassCd = "";
+    //$scope.prodCdNm = "";
+    //$scope.prodClassCd = "";
   }
 
   //매장선택 모듈 팝업 사용시 정의

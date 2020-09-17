@@ -182,7 +182,7 @@
 
             <%--위즈모 테이블--%>
 		    <div class="w100" id="wjWrapType1" ng-controller="versusPeriodWeekChartCtrl">
-		    	<div class="wj-gridWrap" style="display:none;" >
+		    	<div class="wj-gridWrap" style="display:none; overflow-x: hidden; overflow-y: hidden;">
 		    		<wj-flex-grid
 						id="versusPeriodWeekChartGrid"
 						autoGenerateColumns="false"
@@ -238,7 +238,7 @@ $(document).ready(function() {
 
 });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/week/versusPeriodWeek.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/week/versusPeriodWeek.js?ver=20190125.04" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

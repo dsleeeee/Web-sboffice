@@ -110,7 +110,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 280px;">	<%-- 400px -> 280px --%>
+        <div class="wj-gridWrap" style="height: 280px; overflow-x: hidden; overflow-y: hidden;">	<%-- 400px -> 280px --%>
           <wj-flex-grid
             autoGenerateColumns	="false"
             selection-mode		="Row"
