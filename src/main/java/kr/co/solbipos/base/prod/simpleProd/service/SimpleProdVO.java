@@ -106,6 +106,9 @@ public class SimpleProdVO extends PageVO {
     /** 공급단가사용여부 */
     private String splyUprcUseYn;
 
+    /** 발주단위구분 */
+    private String poUnitFg;
+
     /** 발주단위수량 */
     private Integer poUnitQty;
 
@@ -253,6 +256,10 @@ public class SimpleProdVO extends PageVO {
     public void setSplyUprcUseYn(String splyUprcUseYn) {
         this.splyUprcUseYn = splyUprcUseYn;
     }
+
+    public String getPoUnitFg() { return poUnitFg; }
+
+    public void setPoUnitFg(String poUnitFg) { this.poUnitFg = poUnitFg; }
 
     public Integer getPoUnitQty() { return poUnitQty; }
 

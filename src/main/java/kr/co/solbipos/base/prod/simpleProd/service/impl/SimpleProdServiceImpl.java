@@ -278,6 +278,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setSetProdFg(simpleProdVO.getSetProdFg());
                 prodVO.setLastCostUprc(simpleProdVO.getLastCostUprc());
                 prodVO.setSplyUprcUseYn(simpleProdVO.getSplyUprcUseYn());
+                prodVO.setPoUnitFg(simpleProdVO.getPoUnitFg());
                 prodVO.setPoUnitQty(simpleProdVO.getPoUnitQty());
                 prodVO.setPoMinQty(simpleProdVO.getPoMinQty());
                 prodVO.setSafeStockQty(simpleProdVO.getSafeStockQty());

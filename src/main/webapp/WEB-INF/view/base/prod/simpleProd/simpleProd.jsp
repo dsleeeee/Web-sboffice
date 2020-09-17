@@ -108,6 +108,7 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.setProdFg"/>" binding="setProdFg" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.lastCostUprc"/>" binding="lastCostUprc" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.splyUprcUseYn"/>" binding="lastCostUprc" width="100" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.poUnitFg"/>" binding="poUnitFg" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poUnitQty"/>" binding="poUnitQty" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.poMinQty"/>" binding="poMinQty" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.safeStockQty"/>" binding="safeStockQty" width="100" align="center" visible="false"></wj-flex-grid-column>
