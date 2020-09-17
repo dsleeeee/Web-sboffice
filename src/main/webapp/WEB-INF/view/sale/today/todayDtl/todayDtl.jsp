@@ -71,7 +71,7 @@
       </tbody>
     </table>
 
-    <div class="wj-TblWrap mt10" style="height: 400px;">
+    <div class="wj-TblWrap mt10" style="height: 500px;">
 
       <div class="w100 mt10">
         <div class="wj-TblWrapBr">
@@ -132,7 +132,7 @@
       <div class="w100 mt10" ng-controller="todayDtlDetailCtrl">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 300px;">
+          <div class="wj-gridWrap" style="height: 200px;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"

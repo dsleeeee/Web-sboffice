@@ -33,7 +33,7 @@
                     <span class="txtIn"><input id="srchHourStartDate" class="w120px"></span>
                     <span class="rg">~</span>
                     <span class="txtIn"><input id="srchHourEndDate" class="w120px"></span>
-                    <span class="chk ml10">
+                    <span class="chk ml10" style="display: none;">
 										<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 		              	<label for="chkDt">
 	                		<s:message code="cmm.all.day" />
@@ -52,26 +52,8 @@
             	</span>
 			</td>
         </tr>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-          <tr>
-              <%-- 매장코드 --%>
-              <th><s:message code="day.time.store"/></th>
-              <td>
-                      <%-- 매장선택 모듈 싱글 선택 사용시 include
-                           param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
-                                        displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
-                                        modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
-                                        closeFunc - 팝업 닫기시 호출할 함수
-                      --%>
-                  <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                      <jsp:param name="targetId" value="dayTimeSelectStore"/>
-                  </jsp:include>
-                      <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-              </td>
-        </c:if>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="dayTimeSelectStoreCd" value="${sessionInfo.storeCd}"/>
-        </c:if>
+        <tr>
+            <%-- 시간대 --%>
             <th><s:message code="day.time.time"/></th>
             <td>
                 <div class="sb-select fl w200px">
@@ -86,6 +68,27 @@
                     </wj-combo-box>
                 </div>
             </td>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 매장코드 --%>
+                <th><s:message code="day.time.store"/></th>
+                <td>
+                      <%-- 매장선택 모듈 싱글 선택 사용시 include
+                           param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
+                                        displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
+                                        modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
+                                        closeFunc - 팝업 닫기시 호출할 함수
+                      --%>
+                  <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                      <jsp:param name="targetId" value="dayTimeSelectStore"/>
+                  </jsp:include>
+                      <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                </td>
+            </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="dayTimeSelectStoreCd" value="${sessionInfo.storeCd}"/>
+                <th></th>
+                <td></td>
+            </c:if>
         </tr>
         </tbody>
     </table>

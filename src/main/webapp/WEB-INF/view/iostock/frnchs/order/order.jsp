@@ -108,7 +108,7 @@
       </tbody>
     </table>
 
-    <div class="wj-TblWrap">
+    <div class="wj-TblWrap" style="overflow-y: hidden; overflow-x: hidden;">
 
       <div class="w100 mt20" ng-controller="orderMainCtrl">
 	    <div class="mt20 oh sb-select dkbr">

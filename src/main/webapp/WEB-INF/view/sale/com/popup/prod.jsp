@@ -13,11 +13,11 @@
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
+    <div class="wj-dialog-body sc2" style="height: 360px;">
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             id="prodPopGrid"
             autoGenerateColumns="false"
@@ -32,8 +32,8 @@
             <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodCd"/>" 		binding="prodCd"		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.prodCd"/>" 		binding="prodCd"		width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="saleComPopup.prodNm"/>" 		binding="prodNm"		width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="saleComPopup.realSaleAmt"/>" 	binding="realSaleAmt" 	width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </wj-flex-grid>

@@ -20,7 +20,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px;">
+        <div class="wj-gridWrap" style="height: 370px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -31,13 +31,13 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="prodInstockInfo.instockDate"/>" binding="instockDate" width="*" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInstockInfo.slipFg"/>" binding="slipFg" width="50" align="center" is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInstockInfo.costUprc"/>" binding="costUprc" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInstockInfo.inTotQty"/>" binding="inTotQty" width="50" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInstockInfo.instockDate"/>" binding="instockDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInstockInfo.slipFg"/>" binding="slipFg" width="60" align="center" is-read-only="true" data-map="slipFgMap"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInstockInfo.costUprc"/>" binding="costUprc" width="*" align="right" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInstockInfo.inTotQty"/>" binding="inTotQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodInstockInfo.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="prodInstockInfo.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="prodInstockInfo.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInstockInfo.inTot"/>" binding="inTot" width="*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>

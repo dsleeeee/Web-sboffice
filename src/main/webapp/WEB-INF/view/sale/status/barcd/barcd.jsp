@@ -32,7 +32,7 @@
 		            <span class="txtIn"><input id="srchBarcdStartDate" class="w120px"></span>
 		                <span class="rg">~</span>
 		            <span class="txtIn"><input id="srchBarcdEndDate" class="w120px"></span>
-		            <span class="chk ml10">
+		            <span class="chk ml10" style="display: none;">
 		                <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
 		                <label for="chkDt">
 		                    <s:message code="cmm.all.day" />
@@ -133,8 +133,8 @@
                       <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="totSaleQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -168,8 +168,8 @@
                       <wj-flex-grid-column header="<s:message code="prodrank.prodClassLNm"/>" 	binding="lv1Nm" 		width="150" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassMNm"/>" 	binding="lv2Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           			  <wj-flex-grid-column header="<s:message code="prodrank.prodClassSNm"/>" 	binding="lv3Nm" 		width="200" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="200" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+          			  <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>"      binding="prodCd"        width="150" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>"      binding="prodNm"        width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="totSaleQty"    width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                       <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"   width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -218,7 +218,7 @@
                           is-read-only="true"
                           item-formatter="_itemFormatter">
                           <!-- define columns -->
-                          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>"   binding="saleDate"      width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>"   binding="saleDate"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="day.dayTotal.storeCd"/>"    binding="storeCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="day.dayTotal.storeNm"/>"    binding="storeNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.prodNm"/>" binding="prodNm"        width="100" align="right"  is-read-only="true"></wj-flex-grid-column>
@@ -253,7 +253,7 @@
                           is-read-only="true"
                           item-formatter="_itemFormatter">
                           <!-- define columns -->
-                          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>"   binding="saleDate"      width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                          <wj-flex-grid-column header="<s:message code="day.dayTotal.saleDate"/>"   binding="saleDate"      width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="day.dayTotal.storeCd"/>"    binding="storeCd"       width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="day.dayTotal.storeNm"/>"    binding="storeNm"       width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                           <wj-flex-grid-column header="<s:message code="todayBillSaleDtl.prodNm"/>" binding="prodNm"        width="100" align="right"  is-read-only="true"></wj-flex-grid-column>

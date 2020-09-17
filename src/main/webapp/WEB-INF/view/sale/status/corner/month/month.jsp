@@ -52,7 +52,7 @@
                       format="y">
               </wj-input-date>
             </span>
-            <span class="chk ml10">
+            <span class="chk ml10" style="display: none;">
 				<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 				<label for="chkDt">
 					<s:message code="cmm.all.day" />

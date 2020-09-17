@@ -14,10 +14,10 @@
             <a href="#" class="wj-hide btn_close"></a>
         </div>
 
-        <div class="wj-dialog-body sc2" style="height: 450px;">
+        <div class="wj-dialog-body sc2">
             <div class="w100 mt10 mb20">
                 <%--위즈모 테이블--%>
-                <div class="wj-gridWrap" style="height: 390px;">
+                <div class="wj-gridWrap" style="height: 390px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                         autoGenerateColumns="false"
                         selection-mode="Row"
@@ -31,8 +31,8 @@
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.prodStatus"/>" binding="prodStatus" width="90" align="center" data-map="prodStatusMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.vendrProdStatus"/>" binding="vendrProdStatus" width="90" align="center" data-map="vendrProdStatusMap" visible="{{vendrProdStatusVisibleFg}}"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.stockProdYn"/>" binding="stockProdYn" width="90" align="center" data-map="stockProdYnMap"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.poProdFg"/>" binding="poProdFg" width="90" align="center" data-map="poProdFgMap"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.useYn"/>" binding="useYn" width="60" align="center" data-map="useYnMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.poProdFg"/>" binding="poProdFg" width="100" align="center" data-map="poProdFgMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.useYn"/>" binding="useYn" width="80" align="center" data-map="useYnMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.prodBarcdCd"/>" binding="prodBarcdCd" width="150" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.unitQty"/>" binding="unitQty" width="70" align="right" data-type="Number" format="n0" visible="{{unitQtyVisibleFg}}"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="excelUploadMPSErrInfo.etcQty"/>" binding="etcQty" width="70" align="right" data-type="Number" format="n0" visible="{{etcQtyVisibleFg}}"></wj-flex-grid-column>

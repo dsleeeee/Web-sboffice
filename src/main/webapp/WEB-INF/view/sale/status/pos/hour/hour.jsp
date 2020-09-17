@@ -28,7 +28,7 @@
 						<span class="txtIn"><input id="srchPosHourStartDate" class="w120px"></span>
 						<span class="rg">~</span>
 						<span class="txtIn"><input id="srchPosHourEndDate" class="w120px"></span>
-						<span class="chk ml10">
+						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt">
 								<s:message code="cmm.all.day" />
@@ -139,12 +139,10 @@
 	<%--//페이지 리스트--%>
 </div>
 
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>
+
 <%-- 수량합계 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">
-  <c:param name="menuCd" value="${menuCd}"/>
-  <c:param name="menuNm" value="${menuNm}"/>
+	<c:param name="menuCd" value="${menuCd}"/>
+	<c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-
-<script type="text/javascript">
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/hour/hour.js?ver=20190125.02" charset="utf-8"></script>

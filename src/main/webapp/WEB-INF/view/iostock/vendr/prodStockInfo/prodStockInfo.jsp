@@ -69,7 +69,7 @@
   <div class="w100 mt10">
     <div class="wj-TblWrapBr">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -80,7 +80,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="prodStockInfo.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodStockInfo.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitFg"/>" binding="poUnitFg" width="50" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodStockInfo.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>

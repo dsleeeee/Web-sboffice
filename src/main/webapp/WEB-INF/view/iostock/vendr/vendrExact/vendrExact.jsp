@@ -57,7 +57,7 @@
             <s:message code="vendrExact.regExcclcAmt"/></button>
         </div>
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 350px;">
+        <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -68,13 +68,13 @@
             item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="vendrExact.vendrNm"/>" binding="vendrNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.vendrNm"/>" binding="vendrNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.prevUnExcclcTot"/>" binding="prevUnExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.inExcclcTot"/>" binding="inExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.payExcclcTot"/>" binding="payExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.totExcclcTot"/>" binding="totExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.afterExcclcTot"/>" binding="afterExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum" word-wrap="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrExact.nowUnExcclcTot"/>" binding="nowUnExcclcTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.inExcclcTot"/>" binding="inExcclcTot" width="0" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.payExcclcTot"/>" binding="payExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.totExcclcTot"/>" binding="totExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.afterExcclcTot"/>" binding="afterExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum" word-wrap="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrExact.nowUnExcclcTot"/>" binding="nowUnExcclcTot" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrExact.vendr"/>" binding="vendrCd" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
@@ -95,7 +95,7 @@
         <span class="fl bk lh30"><s:message code='vendrExact.vendrExactDtl'/></span>
       </div>
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 350px;">
+      <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"

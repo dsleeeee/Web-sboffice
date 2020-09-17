@@ -6,18 +6,18 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/com/popup/"/>
 
-<wj-popup id="prodHourLayer" control="prodHourLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:600px;">
+<wj-popup id="prodHourLayer" control="prodHourLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:550px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdHourCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="saleComPopup.prod"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
+    <div class="wj-dialog-body sc2" style="height: 360px;">
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 300px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             id="prodPopGrid"
             autoGenerateColumns="false"

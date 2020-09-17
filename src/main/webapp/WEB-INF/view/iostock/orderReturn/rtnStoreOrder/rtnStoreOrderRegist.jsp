@@ -81,8 +81,7 @@
                 selected-value-path="value"
                 is-editable="false"
                 initialized="_initComboBox(s)"
-                selected-index-changed="selectedIndexChanged(s, e)"
-              >
+                selected-index-changed="selectedIndexChanged(s, e)">
               </wj-combo-box>
             </span>
             <p id="option2OrdLayer" class="s14 bk lh30 fl ml10" style="display: none;"><s:message code="rtnStoreOrder.dtl.reqDate"/></p>
@@ -165,7 +164,7 @@
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 500px;">
+        <div class="wj-gridWrap" style="height: 500px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

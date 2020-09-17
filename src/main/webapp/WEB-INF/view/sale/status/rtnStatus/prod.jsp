@@ -54,7 +54,7 @@
                       format="y">
               </wj-input-date>
             </span>
-            <span class="chk ml10">
+            <span class="chk ml10" style="display: none;">
                 <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                 <label for="chkDt">
                     <s:message code="cmm.all.day" />
@@ -100,8 +100,8 @@
     <div class="">
         <%-- wj grid start --%>
         <div class="mt20 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
+            <%-- 페이지 스케일  --%>
+            <wj-combo-box
                 class="w100px fl"
                 id="rtnStatusProdListScaleBox"
                 ng-model="rtnStatusProdListScale"
@@ -112,50 +112,50 @@
                 control="listScaleCombo"
                 is-editable="true"
                 text-changed="_checkValidation(s)">
-        </wj-combo-box>
-        <%-- 엑셀 다운로드 //TODO --%>
-        <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
-        </button>
+            </wj-combo-box>
+            <%-- 엑셀 다운로드 //TODO --%>
+            <button class="btn_skyblue fr" ng-click="excelDownloadDay()"><s:message code="cmm.excel.down" />
+            </button>
         </div>
         <div class="wj-gridWrap2 mt20">
-               <wj-flex-grid
-                 id="rtnStatusProdGrid"
-                 autoGenerateColumns="false"
-                 selection-mode="Row"
-                 items-source="data"
-                 control="flex"
-                 initialized="initGrid(s,e)"
-                 is-read-only="true"
-                 item-formatter="_itemFormatter">
-                 <!-- define columns -->
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                 <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-               </wj-flex-grid>
-               <%-- ColumnPicker 사용시 include --%>
-               <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-                 <jsp:param name="pickerTarget" value="rtnStatusProdCtrl"/>
-               </jsp:include>
-               <%--// ColumnPicker 사용시 include --%>
+            <wj-flex-grid
+                id="rtnStatusProdGrid"
+                autoGenerateColumns="false"
+                selection-mode="Row"
+                items-source="data"
+                control="flex"
+                initialized="initGrid(s,e)"
+                is-read-only="true"
+                item-formatter="_itemFormatter">
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm"/>"      binding="lv1Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm1"/>"     binding="lv2Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.prodClassNm2"/>"     binding="lv3Nm"           width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.prodCd"/>"           binding="prodCd"          width="*" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.prodNm"/>"           binding="prodNm"          width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.barcdCd"/>"          binding="barcdCd"         width="*" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.totSaleQty"/>"       binding="cnt"             width="*" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="rtnStatus.realSaleAmt"/>"      binding="realSaleAmt"     width="*" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            </wj-flex-grid>
+            <%-- ColumnPicker 사용시 include --%>
+            <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+                <jsp:param name="pickerTarget" value="rtnStatusProdCtrl"/>
+            </jsp:include>
+            <%--// ColumnPicker 사용시 include --%>
         </div>
         <%-- //wj grid end --%>
     </div>
     <!-- //contents end -->
 
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <ul id="rtnStatusProdCtrlPager" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
+    <%-- 페이지 리스트 --%>
+    <div class="pageNum mt20">
+        <ul id="rtnStatusProdCtrlPager" data-size="10">
+        </ul>
+    </div>
+    <%--//페이지 리스트--%>
 
-  <%-- 엑셀 리스트 --%>
-  <div class="wj-gridWrap2 mt20" style="display:none;" ng-controller="rtnStatusProdExcelCtrl">
+    <%-- 엑셀 리스트 --%>
+    <div class="wj-gridWrap2 mt20" style="display:none;" ng-controller="rtnStatusProdExcelCtrl">
   		<wj-flex-grid
   			id="rtnStatusProdExcelGrid"
             autoGenerateColumns="false"
@@ -179,7 +179,4 @@
    <%-- //엑셀 리스트 --%>
 </div>
 
-<script type="text/javascript">
-</script>
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/prod.js" charset="utf-8"></script>
-

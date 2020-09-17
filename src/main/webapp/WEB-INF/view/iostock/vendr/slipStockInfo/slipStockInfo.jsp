@@ -96,11 +96,11 @@
       </tbody>
     </table>
 
-    <div class="wj-TblWrap" style="height: 300px;">
+    <div class="wj-TblWrap">
       <div class="w100 mt10">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 250px;">
+          <div class="wj-gridWrap" style="height: 250px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -137,7 +137,7 @@
       <div class="w100 mt10" ng-controller="slipStockInfoDtlCtrl">
         <div class="wj-TblWrapBr">
           <%--위즈모 테이블--%>
-          <div class="wj-gridWrap" style="height: 250px;">
+          <div class="wj-gridWrap" style="height: 250px; overflow-y: hidden; overflow-x: hidden;">
             <wj-flex-grid
               autoGenerateColumns="false"
               selection-mode="Row"
@@ -148,12 +148,12 @@
               item-formatter="_itemFormatter">
 
               <!-- define columns -->
-              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.prodCd"/>" binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitFg"/>" binding="poUnitFg" width="50" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitQty"/>" binding="poUnitQty" width="50" align="right" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitFg"/>" binding="poUnitFg" width="70" align="center" is-read-only="true" data-map="poUnitFgMap"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.poUnitQty"/>" binding="poUnitQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.costUprc"/>" binding="costUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTotQty"/>" binding="inTotQty" width="40" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTotQty"/>" binding="inTotQty" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inVat"/>" binding="inVat" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="slipStockInfo.dtl.inTot"/>" binding="inTot" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
