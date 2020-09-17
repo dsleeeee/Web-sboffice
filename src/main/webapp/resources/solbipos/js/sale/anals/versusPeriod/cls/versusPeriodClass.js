@@ -244,8 +244,8 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/versusPeriod/class/versusPeriodClassList.sb", params);
 
-    var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
-    var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일)\n";
+    var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일) ";
+    var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일) ";
     var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";
     var compStartToEnd = "(" + compStartDateDash + " ~ " + compEndDateDash + ")";
 
@@ -680,8 +680,8 @@ app.controller('versusPeriodClassDtlCtrl', ['$scope', '$http', '$timeout', funct
 
     $scope.flex.refresh();
 
-    var days = "(" + $scope.dateDiff($scope.startDate, $scope.endDate) + "일)\n";
-    var compDays = "(" + $scope.dateDiff($scope.compStartDate, $scope.compEndDate) + "일)\n";
+    var days = "(" + $scope.dateDiff($scope.startDate, $scope.endDate) + "일) ";
+    var compDays = "(" + $scope.dateDiff($scope.compStartDate, $scope.compEndDate) + "일) ";
     var srchStartToEnd = "(" + $scope.startDate + " ~ " + $scope.endDate + ")";
     var compStartToEnd = "(" + $scope.compStartDate + " ~ " + $scope.compEndDate + ")";
 

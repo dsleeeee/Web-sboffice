@@ -110,6 +110,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         else {
           // 배송기사 리스트 그리드 조회
+          $scope.wjDlvrRegistLayer.hide(true);
           var dlvrChgrScope = agrid.getScope('dlvrChgrListCtrl');
           dlvrChgrScope.searchDlvrChgrList();
         }
@@ -141,7 +142,7 @@ app.controller('dlvrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
       }).then(function successCallback(response) {
         if ($scope._httpStatusCheck(response, true)) {
-          s_alert.pop(messages["cmm.saveSucc"]);
+          s_alert.pop(messages["cmm.delSucc"]);
           $scope.popupClose();
         }
       }, function errorCallback(response) {
@@ -260,7 +261,7 @@ function valueCheck() {
 
   /** 전화번호를 정확히 입력해주세요. */
   var msg = messages["deliveryCharger.telNo"] + " " + messages["deliveryCharger.validCheck"];
-  if ($("#telNo").val() !== "" && $("#telNo").val().length < 10) {
+  if ($("#telNo").val() !== "" && $("#telNo").val().length < 7) {
     s_alert.popOk(msg, function () {
       $("#telNo").select();
     });

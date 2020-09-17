@@ -148,7 +148,7 @@
 
 		<%--위즈모 테이블--%>
 	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 350px;">
+	      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          id="versusPeriodClassGrid"
 	          loaded-rows="loadedRows(s,e)"
@@ -201,15 +201,15 @@
 		    </wj-combo-box>
 
 		    <%-- 엑셀 다운로드 //TODO --%>
-		    <button class="btn_skyblue fr" ng-click="excelDownloadVersusPeriodClassDtl()"><s:message code="cmm.excel.down" />
-		    </button>
-		    <button class="btn_skyblue fr" id="btnVersusPeriodClassChartSearch" ng-click="_broadcast('versusPeriodClassChartCtrlSrch')"><s:message code="cmm.chart" />
-		    </button>
+			<button class="btn_skyblue fr mr5" ng-click="excelDownloadVersusPeriodClassDtl()"><s:message code="cmm.excel.down" />
+			</button>
+			<button class="btn_skyblue fr" id="btnVersusPeriodClassChartSearch" ng-click="_broadcast('versusPeriodClassChartCtrlSrch')"><s:message code="cmm.chart" />
+			</button>
 		</div>
 
 		<%--위즈모 테이블--%>
 	    <div class="w100 mt10">
-	      <div class="wj-gridWrap" style="height: 350px;">
+	      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          id="versusPeriodClassDtlGrid"
 	          autoGenerateColumns="false"
@@ -340,7 +340,7 @@
 
     });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20190125.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20190126.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

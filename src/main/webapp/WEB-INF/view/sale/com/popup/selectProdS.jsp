@@ -48,7 +48,7 @@
     <div id="gridRepresent" class="w50 fl" style="width:49%;">
     <%-- 상품대분류 --%>
     	<div class="w100 mt10">
-      	<div class="wj-gridWrap" style="height: 250px;">
+      	<div class="wj-gridWrap" style="height: 250px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          loaded-rows="loadedRows(s,e)"
 	          autoGenerateColumns="false"
@@ -75,7 +75,7 @@
 	  <div id="gridDetail" class="w50 fr" style="width:49%;">
 	   <%-- 상품상세 --%>
      	<div class="w100 mt10" ng-controller="prodDtlStrl">
-     	<div class="wj-gridWrap" style="height: 250px;">
+     	<div class="wj-gridWrap" style="height: 250px; overflow-x: hidden; overflow-y: hidden;">
 	        <wj-flex-grid
 	          id="prodDtlGrid"
 	          autoGenerateColumns="false"
@@ -102,4 +102,4 @@
 </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/selectProdS.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/selectProdS.js?ver=20190207.11" charset="utf-8"></script>

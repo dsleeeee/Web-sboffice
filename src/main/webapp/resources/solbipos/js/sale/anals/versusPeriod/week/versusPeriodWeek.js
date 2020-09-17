@@ -209,8 +209,8 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/versusPeriod/week/list.sb", params, function() {});
 
-    var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일)\n";
-    var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일)\n";
+    var days = "(" + $scope.dateDiff(srchStartDateDash, srchEndDateDash) + "일) ";
+    var compDays = "(" + $scope.dateDiff(compStartDateDash, compEndDateDash) + "일) ";
     var srchStartToEnd = "(" + srchStartDateDash + " ~ " + srchEndDateDash + ")";
     var compStartToEnd = "(" + compStartDateDash + " ~ " + compEndDateDash + ")";
 

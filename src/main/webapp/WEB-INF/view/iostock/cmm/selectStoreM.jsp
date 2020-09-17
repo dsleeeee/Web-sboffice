@@ -25,7 +25,7 @@
         </div>
 
         <%--위즈모 테이블--%>
-        <div class="theGrid mt10" style="height: 400px;">
+        <div class="theGrid mt10" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

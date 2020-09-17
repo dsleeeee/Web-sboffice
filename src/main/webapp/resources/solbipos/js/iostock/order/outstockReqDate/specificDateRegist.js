@@ -97,7 +97,7 @@ function valueCheck() {
 
   /** 설명의 길이가 너무 깁니다. */
   var msg = messages["outstockReqDate.specificDateRemark"]+" "+messages["outstockReqDate.textOver"];
-  if ($("#specificDateRemark").val().getByteLengthForOracle() > 18) {
+  if ($("#specificDateRemark").val().getByteLengthForOracle() > 300) {
     s_alert.popOk(msg, function () {
       $("#specificDateRemark").select();
     });

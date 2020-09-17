@@ -52,7 +52,7 @@
             <th><s:message code="outstockReqDate.specificDateRemark"/><em class="imp">*</em></th>
             <td colspan="3">
               <div>
-                <textarea id="specificDateRemark" class="w100 tArea1" style="height:100px;" ng-model="speDate.specificDateRemark"></textarea>
+                <textarea id="specificDateRemark" class="w100 tArea1" style="height:100px;" ng-model="speDate.specificDateRemark" maxlength="100"></textarea>
               </div>
             </td>
           </tr>
@@ -71,4 +71,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20181224.05" charset="utf-8"></script>

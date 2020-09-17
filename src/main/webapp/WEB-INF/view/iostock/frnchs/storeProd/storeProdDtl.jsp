@@ -6,14 +6,14 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/iostock/frnchs/store/"/>
 
-<wj-popup id="frnchsStoreProdDtlLayer" control="frnchsStoreProdDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup id="frnchsStoreProdDtlLayer" control="frnchsStoreProdDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px; height:520px;">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="frnchsStoreProdDtlCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="frnchsStoreProd.dtl"/>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
+    <div class="wj-dialog-body sc2">
     <div>
       <div class="fl"><s:message code="frnchsStoreProd.dtl"/> (<s:message code="frnchsStoreProd.prodCd"/> : {{prodCd}} <s:message code="frnchsStoreProd.prodNm"/> : {{prodNm}})</div>
       <div class="fr">
@@ -30,7 +30,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

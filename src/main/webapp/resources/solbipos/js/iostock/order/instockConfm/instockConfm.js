@@ -93,6 +93,7 @@ app.controller('instockConfmCtrl', ['$scope', '$http', '$timeout', function ($sc
     var params       = {};
     params.slipFg    = $scope.slipFg;
     // params.procFg    = "20";
+    params.vendrCd = $("#instockConfmSelectVendrCd").val();
     params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
 

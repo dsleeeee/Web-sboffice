@@ -69,9 +69,14 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
-    $scope._save("/iostock/order/outstockReqDate/specificDate/save.sb", params, function () {
-      $scope.searchspecificDateList()
-    });
+    $.postJSONArray("/iostock/order/outstockReqDate/specificDate/save.sb", params, function(result) {
+          s_alert.pop( messages["cmm.saveSucc"] );
+          $scope.searchspecificDateList();
+        },
+        function(result) {
+          s_alert.pop(result.data.msg);
+        });
+
   };
 
   // 특정일 삭제
@@ -84,9 +89,13 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
       }
-      $scope._save("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function () {
-        $scope.searchspecificDateList()
-      });
+      $.postJSONArray("/iostock/order/outstockReqDate/specificDate/delete.sb", params, function(result) {
+            s_alert.pop( messages["cmm.delSucc"] );
+            $scope.searchspecificDateList();
+          },
+          function(result) {
+            s_alert.pop(result.data.msg);
+          });
     });
   };
 

@@ -31,7 +31,7 @@
 						<span class="txtIn"><input id="srchStoreFgStartDate" class="w120px"></span>
 						<span class="rg">~</span>
 						<span class="txtIn"><input id="srchStoreFgEndDate" class="w120px"></span>
-						<span class="chk ml10">
+						<span class="chk ml10" style="display: none;">
 							<input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
 							<label for="chkDt"><s:message code="cmm.all.day" /></label>
 						</span>
@@ -121,7 +121,7 @@
 
 	</div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20190125.03" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">

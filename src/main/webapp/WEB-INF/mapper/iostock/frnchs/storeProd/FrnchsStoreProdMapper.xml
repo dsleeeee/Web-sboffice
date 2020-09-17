@@ -48,10 +48,10 @@
                            )
            </if>
            <if test='prodCd != null and prodCd !=""'>
-              AND Z.PROD_CD = #{prodCd}
+              AND Z.PROD_CD LIKE '%' || #{prodCd} || '%'
            </if>
            <if test='prodNm != null and prodNm !=""'>
-              AND Z.PROD_NM = #{prodNm}
+              AND Z.PROD_NM LIKE '%' || #{prodNm} || '%'
            </if>
            <if test='storeCd != null and storeCd !=""'>
               AND A.STORE_CD IN

@@ -30,7 +30,7 @@
             <span class="txtIn"><input id="srchApprNcardStartDate" class="w120px"></span>
                 <span class="rg">~</span>
             <span class="txtIn"><input id="srchApprNcardEndDate" class="w120px"></span>
-            <span class="chk ml10">
+            <span class="chk ml10" style="display: none;">
                 <input type="checkbox" ng-model="isChecked" ng-change="isChkDt()" />
                 <label for="chkDt">
                     <s:message code="cmm.all.day" />
