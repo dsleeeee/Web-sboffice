@@ -19,13 +19,13 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
         var comboParams = {};
         var url         = '/iostock/order/outstockConfm/outstockConfm/getDlvrCombo.sb';
         $scope._queryCombo("combo", "srchDtlDlvrCd", null, url, comboParams, "S");  //명칭관리 조회시 URL 없이 그룹코드만 넘긴다.		//파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
-        
+
         // 입고창고
         var url = '/iostock/order/instockConfm/instockConfm/getInStorageCombo.sb';
-        
+
         // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
         $scope._queryCombo("combo", "saveDtlInStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-        
+
         comboParams             = {};
         comboParams.nmcodeGrpCd = "097";
         url                     = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
@@ -48,7 +48,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
             }
         });
 
-        
+
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
@@ -59,13 +59,13 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
             }
             s.collectionView.commitEdit();
         });
-                
 
-		
+
+
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());	//add the new GroupRow to the grid's 'columnFooters' panel
         s.bottomLeftCells.setCellData(0, 0, '합계');				//add a sigma to the header to show that this is a summary row
 
-       
+
         //Header column merge (출고수량, 입고수량)
         s.allowMerging                          = 'ColumnHeaders';
         s.columnHeaders.rows[0].allowMerging    = true;
@@ -106,7 +106,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
 
 	        //s.columnHeaders.rows[0].allowMerging    = true;
 	        //s.columnHeaders.rows[1].allowMerging    = true;
- 		
+
     };	//$scope.initGrid	--------------------------------------------------------------------------------------------------------------------------
 
 
@@ -130,7 +130,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
         item.inAmt      = inAmt;    //금액
         item.inVat      = inVat;    //VAT
         item.inTot      = inTot;    //합계
-    };    
+    };
     //$scope.calcAmt		--------------------------------------------------------------------------------------------------------------------------
 
 
@@ -234,10 +234,10 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
             } else {
             	global_storage_cnt	= 0;	//매장의 창고 갯수
 
-            	
+
                 var grid 			= $scope.flex;
                 var item;
-            	
+
                 for(var i=0; i<grid.collectionView.items.length; i++){
             		//console.log('$scope.calcAmt - Before: ' + i);
                 	$scope.calcAmt($scope.flex.collectionView.items[i], i);
@@ -292,7 +292,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
 
         for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
         	var item =  $scope.flex.collectionView.items[i];
-        	
+
             if (item.inUnitQty === null && item.inEtcQty === null) {
                 $scope._popMsg(messages["instockConfm.dtl.require.inQty"]); //입고수량을 입력해주세요.
                 return false;
@@ -306,6 +306,24 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
                 return false;
             }
 
+            var outSplyUprc = parseInt(item.outSplyUprc);
+            var poUnitQty   = parseInt(item.poUnitQty);
+            var vat01       = parseInt(item.vatFg01);
+            var envst0011   = parseInt(item.envst0011);
+
+            var unitQty     = parseInt(nvl(item.inUnitQty, 0)) * parseInt(item.poUnitQty);
+            var etcQty      = parseInt(nvl(item.inEtcQty,  0));
+            var totQty      = parseInt(unitQty + etcQty);
+            var tempAmt     = Math.round(totQty * outSplyUprc / poUnitQty);
+            var inAmt       = tempAmt - Math.round(tempAmt * vat01 * envst0011 / 11);
+            var inVat       = Math.round(tempAmt * vat01 / (10 + envst0011));
+            var inTot       = parseInt(inAmt + inVat);
+
+            item.inTotQty   = totQty;   //총입고수량
+            item.inAmt      = inAmt;    //금액
+            item.inVat      = inVat;    //VAT
+            item.inTot      = inTot;    //합계
+
             item.status     = "U";
             item.inDate     = wijmo.Globalize.format($scope.dtlInDate.value, 'yyyyMMdd');
             item.hdRemark   = $scope.hdRemark;
@@ -315,7 +333,7 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
             params.push(item);
 
         }
-        
+
         $scope._save("/iostock/order/instockConfm/instockConfmDtl/save.sb", params, function () {
             $scope.saveInstockConfmDtlCallback()
         });
