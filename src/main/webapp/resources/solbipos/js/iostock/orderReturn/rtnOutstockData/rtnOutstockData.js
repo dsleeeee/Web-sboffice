@@ -60,6 +60,8 @@ app.controller('rtnOutstockDataCtrl', ['$scope', '$http', function ($scope, $htt
           params.storeCd   = selectedRow.storeCd;
           params.storeNm   = selectedRow.storeNm;
           params.slipFg    = $scope.slipFg;
+          params.reqDate   = selectedRow.reqDate;
+
           $scope._broadcast('rtnOutstockDataDtlCtrl', params);
         }
       }

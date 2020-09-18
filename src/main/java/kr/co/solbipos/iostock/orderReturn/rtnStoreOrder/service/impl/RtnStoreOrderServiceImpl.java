@@ -33,7 +33,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
+
     private final RtnStoreOrderMapper rtnStoreOrderMapper;
     private final DstbCloseStoreMapper dstbCloseStoreMapper;
     private final OutstockDataMapper outstockDataMapper;
@@ -73,8 +73,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         String currentDt = currentDateTimeString();
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
         RtnStoreOrderProdVO	prodVO;
-                
-        
+
+
         int i = 0;
         for (RtnStoreOrderDtlVO rtnStoreOrderDtlVO : rtnStoreOrderDtlVOs) {
             // HD 저장을 위한 파라미터 세팅
@@ -139,7 +139,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             if(insFg.equals("I")) {
             	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.insertRtnStoreOrderDtl(rtnStoreOrderDtlVO);
-	                
+
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
@@ -161,24 +161,24 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	            	prodVO.setRegDt			        (currentDt	);
 	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setModDt			        (currentDt	);
-	                
+
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
 	            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(prodVO);
 	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
-	                
-	            }	                           
+
+	            }
             }
             // 수정
             else if(insFg.equals("U")) {
             	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.updateRtnStoreOrderDtl(rtnStoreOrderDtlVO);
-	                
+
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
 	                prodVO.setStoreCd		        (rtnStoreOrderDtlVO .getStoreCd 		()		);	//매장코드
-	                prodVO.setSlipFg		        (rtnStoreOrderDtlVO .getSlipFg			()		);	//전표구분 1:주문 -1:반품	                
+	                prodVO.setSlipFg		        (rtnStoreOrderDtlVO .getSlipFg			()		);	//전표구분 1:주문 -1:반품
 	                prodVO.setProdCd				(rtnStoreOrderDtlVO	.getProdCd			()		);	//상품코드
 	                prodVO.setStorageCd				(rtnStoreOrderDtlVO	.getOutStorageCd	()		);	//창고코드
 	                prodVO.setPoUnitFg				(rtnStoreOrderDtlVO	.getPoUnitFg		()		);
@@ -195,12 +195,12 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	            	prodVO.setRegDt			        (currentDt	);
 	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setModDt			        (currentDt	);
-	                
+
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
 	            	result = rtnStoreOrderMapper.updateRtnStoreOrderProd(prodVO);
 	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-	                
-	                
+
+
             	}
             }
             // 삭제
@@ -236,11 +236,11 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
             }
         }
-        
+
         return returnResult;
 
     }
-    
+
     /** 반품등록 반품상품상세 저장 */
     @Override
     public int saveRtnStoreOrderDtl(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO) {
@@ -249,9 +249,9 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         String currentDt = currentDateTimeString();
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
         RtnStoreOrderProdVO	prodVO;
-        
+
         int i = 0;
-        
+
         for (RtnStoreOrderDtlVO rtnStoreOrderDtlVO : rtnStoreOrderDtlVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
@@ -266,9 +266,9 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
             }
-            
+
             String insFg = "";
-            
+
             if(rtnStoreOrderDtlVO.getPrevOrderTotQty() != null) {
                 // 기반품수량이 있으면서 반품수량이 0 이나 null 인 경우 삭제
                 int orderTotQty = (rtnStoreOrderDtlVO.getOrderTotQty() == null ? 0 : rtnStoreOrderDtlVO.getOrderTotQty());
@@ -277,7 +277,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 	insFg = "D";
                 }
             }
-            
+
             if(!insFg.equals("D")) {
 	            int slipFg       = rtnStoreOrderDtlVO.getSlipFg();
 	            int poUnitQty    = rtnStoreOrderDtlVO.getPoUnitQty();
@@ -291,7 +291,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	            Long orderAmt    = (rtnStoreOrderDtlVO.getOrderAmt()      == null ? 0 : rtnStoreOrderDtlVO.getOrderAmt())    * slipFg;
 	            Long orderVat    = (rtnStoreOrderDtlVO.getOrderVat()      == null ? 0 : rtnStoreOrderDtlVO.getOrderVat())    * slipFg;
 	            Long orderTot    = (rtnStoreOrderDtlVO.getOrderTot()      == null ? 0 : rtnStoreOrderDtlVO.getOrderTot())    * slipFg;
-	
+
 	            rtnStoreOrderDtlVO.setOrderUnitQty(orderUnitQty);
 	            rtnStoreOrderDtlVO.setOrderEtcQty(orderEtcQty);
 	            rtnStoreOrderDtlVO.setOrderTotQty(orderTotQty);
@@ -303,14 +303,14 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	            rtnStoreOrderDtlVO.setModId(sessionInfoVO.getUserId());
 	            rtnStoreOrderDtlVO.setModDt(currentDt);
 	            rtnStoreOrderDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-	            
+
             }
-            
+
             if(insFg.equals("U")) {
 	            // 수정
 	        	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
 	                result = rtnStoreOrderMapper.updateRtnStoreOrderDtl(rtnStoreOrderDtlVO);
-	                
+
 	                prodVO = new RtnStoreOrderProdVO();
 
 	                prodVO.setReqDate				(rtnStoreOrderDtlVO	.getReqDate			()		);	//
@@ -332,18 +332,18 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	            	prodVO.setRegDt			        (currentDt	);
 	            	prodVO.setModId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setModDt			        (currentDt	);
-	                
+
 	            	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
 	            	result = rtnStoreOrderMapper.savetRtnStoreOrderProd(prodVO);
 	                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-	                	                
+
 	        	}
             }else if(insFg.equals("D")) {
                 result = rtnStoreOrderMapper.deleteRtnStoreOrderDtl(rtnStoreOrderDtlVO);
                 //PROD삭제
                 rtnStoreOrderMapper.deleteRtnStoreOrderProd(rtnStoreOrderDtlVO);
             }
-            
+
             returnResult += result;
             i++;
         }
@@ -370,11 +370,11 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
             }
         }
-        
+
         return returnResult;
     }
-    
-    
+
+
     /** 반품등록 반품진행구분 조회 */
     @Override
     public DefaultMap<String> getOrderProcFgCheck(RtnStoreOrderVO rtnStoreOrderVO) {
@@ -397,7 +397,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         rtnStoreOrderVO.setRegDt(currentDt);
         rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
         rtnStoreOrderVO.setModDt(currentDt);
-       
+
         // 반품진행구분 체크
         DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
 
@@ -418,7 +418,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
         // 분배자료 생성
         // TODO 분배자료 생성시 매장을 관리하는 MD 의 사원번호와 창고코드 조회하여 데이터 넣어줘야함.
-        DstbReqVO dstbReqVO = new DstbReqVO();       
+        DstbReqVO dstbReqVO = new DstbReqVO();
         dstbReqVO.setHqBrandCd(sessionInfoVO.getHqOfficeCd());
         dstbReqVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dstbReqVO.setStoreCd(rtnStoreOrderVO.getStoreCd());
@@ -470,7 +470,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             OutstockDataVO 	maxSlipNoVO = new OutstockDataVO();
             				maxSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             				maxSlipNoVO.setYymm(yymm);
-            				
+
             String 			maxSlipNo = outstockDataMapper.getMaxSlipNo(maxSlipNoVO);
             Long 			maxSlipNoIdx = Long.valueOf(maxSlipNo.substring(4));
             int slipNoIdx = 0;
@@ -485,8 +485,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             outstockDataVO.setModId		(dstbCloseStoreVO.getModId		() );
             outstockDataVO.setModDt		(dstbCloseStoreVO.getModDt		() );
             outstockDataVO.setReqDate	(dstbCloseStoreVO.getReqDate	() );
-            
-            // 직배송거래처 및 배송기사 조회
+
+            // 등록된 분배자료 기준으로 출고 자료 생성 - 분배자료확인(직배송거래처 및 배송기사 조회)
             List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
 
             for(int i=0; i < storeVendrDlvrList.size(); i++) {
@@ -502,7 +502,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 outstockDataVO.setVendrCd(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
+
                 outstockDataVO.setOutDate	(rtnStoreOrderVO.getReqDate());	//출고일자 (수불기준일자)
                 // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
                 result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);
@@ -515,11 +515,11 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 outstockDataVO.setRemark	(rtnStoreOrderVO.getRemark ());	//비고
                 result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
+
                 // TB_PO_HQ_STORE_OUTSTOCK_PROD 자료입력
                 result = outstockDataMapper.insertRtnStoreOutStockProd(outstockDataVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                
+
             }
 
         }
@@ -555,10 +555,10 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
         // 엑셀업로드 한 수량을 주문수량으로 입력
         result = rtnStoreOrderMapper.insertRtnStoreOrderToExcelUploadData(excelUploadVO);
-        
+
         // 엑셀업로드 한 수량을 주문수량으로 PROD입력
         result = rtnStoreOrderMapper.insertExlRtnStoreOrderProd(excelUploadVO);
-        
+
         // 엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
         int dtlCnt = 0;
         String hdExist = "N";
@@ -588,18 +588,18 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             hdExist = rtnStoreOrderMapper.getHdExist(rtnStoreOrderVO);
             // HD 내용이 존재하는 경우 update
             if(hdExist.equals("Y")) {
-                result = rtnStoreOrderMapper.updateRtnStoreOrder(rtnStoreOrderVO);              
-                
+                result = rtnStoreOrderMapper.updateRtnStoreOrder(rtnStoreOrderVO);
+
             }
             // HD 내용이 없는 경우 insert
             else if(hdExist.equals("N")) {
-                result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);               
+                result = rtnStoreOrderMapper.insertRtnStoreOrder(rtnStoreOrderVO);
             }
         }
-        
+
         // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
         result = rtnStoreOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
-        
+
         return result;
     }
 }

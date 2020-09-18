@@ -113,7 +113,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             $scope.uprcVisibleFg        = false; // 단가
             $scope.remarkVisibleFg      = false; // 비고
 
-            params.prodBarcdCd = '상품코드입력';
+            params.prodBarcdCd = '00000001'; //상품코드가 0으로 시작하는 엑셀양식 문제로 수정
             params.unitQty     = 0;
             params.etcQty      = 0;
         }
@@ -128,7 +128,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             $scope.uprcVisibleFg        = true;  // 단가
             $scope.remarkVisibleFg      = false; // 비고
 
-            params.prodBarcdCd = '상품코드입력';
+            params.prodBarcdCd = '00000001';
             params.unitQty     = 0;
             params.etcQty      = 0;
             params.uprc        = 0;
@@ -144,7 +144,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             $scope.uprcVisibleFg        = false; // 단가
             $scope.remarkVisibleFg      = true;  // 비고
 
-            params.prodBarcdCd = '상품코드입력';
+            params.prodBarcdCd = '00000001';
             params.qty         = 0;
         }
         // 거래처 발주, 거래처 입고
@@ -158,7 +158,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             $scope.uprcVisibleFg        = true;  // 단가
             $scope.remarkVisibleFg      = false; // 비고
 
-            params.prodBarcdCd = '상품코드입력';
+            params.prodBarcdCd = '00000001';
             params.unitQty     = 0;
             params.etcQty      = 0;
             params.uprc        = 0;

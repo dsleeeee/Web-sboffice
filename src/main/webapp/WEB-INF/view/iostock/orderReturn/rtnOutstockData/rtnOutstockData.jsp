@@ -72,7 +72,7 @@
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 					binding="gChk" 		width="40" 	align="center" 	is-read-only="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" 	binding="storeNm" 	width="180" align="left" 	is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" 	binding="reqDate" 	width="0" 	align="left" 	is-read-only="true" disabled="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.reqDate"/>" 	binding="reqDate" 	width="0" 	align="left" 	is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.sysStatFg"/>" binding="sysStatFg" width="70" 	align="center" 	is-read-only="true" data-map="sysStatFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbAmt"/>" 	binding="dstbAmt" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.dstbVat"/>" 	binding="dstbVat" 	width="90" 	align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

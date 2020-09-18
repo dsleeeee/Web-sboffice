@@ -21,7 +21,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Service("rtnInstockConfmService")
 public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-	
+
     private final RtnInstockConfmMapper rtnInstockConfmMapper;
     private final MessageService messageService;
 
@@ -62,9 +62,9 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
         String penaltyFg = "";
 
         RtnInstockConfmVO rtnInstockConfmHdVO = new RtnInstockConfmVO();
-        
+
         //TB_PO_HQ_STORE_OUTSTOCK_PROD Insert or Update에 사용
-        
+
         for (RtnInstockConfmVO rtnInstockConfmVO : rtnInstockConfmVOs) {
             // HD 저장을 위한 파라미터 세팅
             if(i == 0) {
@@ -108,9 +108,12 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             result = rtnInstockConfmMapper.updateRtnInstockConfmDtl(rtnInstockConfmVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            returnResult += result;
-            i++;
-            
+            if(i == 0) {
+                //dtl->prod 시에 dtl(seq)과prod(prod)의 키값이 달라서 전체 삭제후 적제 필요
+                result = rtnInstockConfmMapper.deleteRtnInstockProdAll(rtnInstockConfmVO);
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
 //            rtnInstockConfmVO.setHqOfficeCd			(rtnInstockConfmVO	.getHqOfficeCd	()		);	//본사코드
 //            rtnInstockConfmVO.setSlipNo				(rtnInstockConfmVO	.getSlipNo		()		);	//전표번호
 //            rtnInstockConfmVO.setProdCd				(rtnInstockConfmVO		.getProdCd		()	);	//상품코드
@@ -136,7 +139,10 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
         	result = rtnInstockConfmMapper.mergeInstockConfmProd(rtnInstockConfmVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            
+
+            returnResult += result;
+            i++;
+
         }
 
         // HD 수정
@@ -155,7 +161,12 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
 
             // HD의 진행구분 수정. 출고확정 -> 입고확정
             result = rtnInstockConfmMapper.updateInstockConfirm(rtnInstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));           
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+            // PROD의 진행구분 수정. 수주확정 -> 출고확정
+            result = rtnInstockConfmMapper.updateInstockProdConfirm(rtnInstockConfmHdVO);
+            if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
         }
 
         return returnResult;

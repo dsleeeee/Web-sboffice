@@ -80,13 +80,13 @@
         AND     tmp.PROD_CD         =   tphsd.PROD_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         ORDER
         BY      tphsd.STORE_CD, tphsd.PROD_CD, DSTB_SPLY_UPRC DESC, tphsd.SEQ
@@ -147,13 +147,13 @@
         AND     tphdcs.STORAGE_CD   (+) =   tphsd.STORAGE_CD
         ]]>
         <if test='dateFg == "req"'>
-            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND tphsd.REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <![CDATA[
         GROUP
@@ -181,13 +181,13 @@
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
         <if test='dateFg == "req"'>
-            AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='dateFg == "mod"'>
-            AND MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND PROD_CD IN  (   SELECT  PROD_CD
@@ -234,7 +234,7 @@
         ,       #{modDt}        ,       #{modId}
         FROM    (   SELECT  #{hqOfficeCd}   ,       #{slipNo}       ,       STORE_CD        ,       SLIP_FG
                     ,       DSTB_FG         ,       STORAGE_CD      ,       HQ_BRAND_CD     ,       PROD_CD         ,       PO_UNIT_FG      ,       PO_UNIT_QTY
-                    ,       REMARK          ,       #{outDate}		
+                    ,       REMARK          ,       #{outDate}
                     ,       ORDER_SPLY_UPRC ,       ORDER_UNIT_QTY  ,       ORDER_ETC_QTY   ,       ORDER_TOT_QTY   ,       ORDER_AMT       ,       ORDER_VAT       ,       ORDER_TOT
                     ,       MD_SPLY_UPRC    ,       MD_UNIT_QTY     ,       MD_ETC_QTY      ,       MD_TOT_QTY      ,       MD_AMT          ,       MD_VAT          ,       MD_TOT
                     ,       MGR_SPLY_UPRC   ,       MGR_UNIT_QTY    ,       MGR_ETC_QTY     ,       MGR_TOT_QTY     ,       MGR_AMT         ,       MGR_VAT         ,       MGR_TOT
@@ -282,7 +282,7 @@
         GROUP
         BY      SLIP_FG
     </insert>
-    
+
     <!-- 반품자료생성 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
@@ -292,7 +292,7 @@
     <insert id="insertRtnStoreOutStockProd" parameterType="rtnOutstockDataVO">
         /* USE : RtnOutstockDataMapper.insertRtnStoreOutStockProd */
         INSERT INTO TB_PO_HQ_STORE_OUTSTOCK_PROD
-        (      
+        (
         	HQ_OFFICE_CD
 			,SLIP_NO
 			,PROD_CD
@@ -311,27 +311,27 @@
 			,MOD_DT
 			,MOD_ID
         )
-        SELECT  
-        	#{hqOfficeCd}           
-        	,   #{slipNo}    
-        	,	PROD_CD   
-        	,	STORAGE_CD    
-        	,	'12'
-        	,   STORE_CD   
-        	,	'-1'     
- 			,	ORDER_UNIT_QTY
- 			,  	ORDER_ETC_QTY
-  			,	ORDER_TOT_QTY
-  			,	ORDER_AMT
-  			,	ORDER_VAT
-  			,	ORDER_TOT
-        	,   #{regDt}                
-        	,   #{regId}
-        	,   #{modDt}                
-        	,   #{modId}
-        FROM    TB_PO_HQ_STORE_ORDER_PROD
-        WHERE   REQ_DATE    =   #{reqDate}
-        AND     STORE_CD    =   #{storeCd}
-
+        SELECT  #{hqOfficeCd}
+        ,       #{slipNo}
+        ,       PROD_CD
+        ,       '001'
+        ,       '12'
+        ,       STORE_CD
+        ,       '-1'
+        ,       SUM(OUT_UNIT_QTY)
+        ,       SUM(OUT_ETC_QTY)
+        ,       SUM(OUT_TOT_QTY )
+        ,       SUM(OUT_AMT )
+        ,       SUM(OUT_VAT )
+        ,       SUM(OUT_TOT )
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        GROUP
+        BY      PROD_CD, STORE_CD
     </insert>
 </mapper>

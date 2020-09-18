@@ -31,7 +31,13 @@ public interface RtnInstockConfmMapper {
 
     /** 입고확정 - 입고확정시 HD 수정 */
     int updateInstockConfirm(RtnInstockConfmVO rtnInstockConfmVO);
-    
+
+    /** 입고확정 - 입고확정시 PROD 수정 */
+    int updateInstockProdConfirm(RtnInstockConfmVO rtnInstockConfmVO);
+
+    /** 입고확정 - PROD 삭제 */
+    int deleteRtnInstockProdAll(RtnInstockConfmVO rtnInstockConfmVO);
+
     /** 입고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeInstockConfmProd(RtnInstockConfmVO rtnInstockConfmVO);
 }

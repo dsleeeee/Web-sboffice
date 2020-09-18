@@ -73,7 +73,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             outstockConfmVO.setUpdateProcFg("20");
 
             String slipKind	= outstockConfmVO.getSlipKind();
-            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            String occrFg	= (slipKind.equals("1") ? "13" : "13");
             outstockConfmVO.setAreaFg(sessionInfoVO.getAreaFg());
             outstockConfmVO.setOccrFg(occrFg);
             // 확정상태 확인 PROC_FG > 10
@@ -184,7 +184,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
 
             int slipFg     	= outstockConfmVO.getSlipFg();
             String slipKind	= outstockConfmVO.getSlipKind();
-            String occrFg	= (slipKind.equals("1") ? "02" : "13");
+            String occrFg	= (slipKind.equals("1") ? "13" : "13"); //출고 확정은 13
             int outUnitQty 	= (outstockConfmVO.getOutUnitQty() == null ? 0 : outstockConfmVO.getOutUnitQty()) * slipFg;
             int outEtcQty  	= (outstockConfmVO.getOutEtcQty()  == null ? 0 : outstockConfmVO.getOutEtcQty()) * slipFg;
             int outTotQty  	= (outstockConfmVO.getOutTotQty()  == null ? 0 : outstockConfmVO.getOutTotQty()) * slipFg;

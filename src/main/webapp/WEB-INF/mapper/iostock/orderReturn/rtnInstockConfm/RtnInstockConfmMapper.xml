@@ -43,7 +43,7 @@
                     AND     tphso.OUT_DATE      BETWEEN #{startDate} AND #{endDate}
                     AND     tphsod.HQ_OFFICE_CD = tphso.HQ_OFFICE_CD
                     AND     tphsod.SLIP_NO      = tphso.SLIP_NO
-        
+
                     <if test='slipFg != null and slipFg != ""'>
                         AND tphso.SLIP_FG = #{slipFg}
                     </if>
@@ -195,7 +195,7 @@
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         -->
-		
+
 		            SELECT  A.SLIP_NO,
 		                    A.SLIP_FG,
 		                    A.STORE_CD,
@@ -286,7 +286,7 @@
 		                        AND     C.PROD_CD          (+) = A.PROD_CD
 		                        AND     D.HQ_OFFICE_CD         = #{hqOfficeCd}
 		                        AND     D.ENVST_CD             = '0011'			<!-- 출고가-부가세포함여부 -->
-		                    )   A		                    
+		                    )   A
 		ORDER BY    A.PROD_CD
     </select>
 
@@ -346,7 +346,7 @@
         COMMENTS : 반품본사입고 - 반품본사입고시 DTL의 진행구분을 수정한다.
     -->
     <update id="updateInstockDtlConfirm" parameterType="rtnInstockConfmVO">
-        /* USE : RtnInstockConfmMapper.updateInstockConfirm */
+        /* USE : RtnInstockConfmMapper.updateInstockDtlConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG         = #{updateProcFg},
                 MOD_DT          = #{modDt},
@@ -373,14 +373,28 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     SLIP_NO       = #{slipNo}
     </update>
-    
-    <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
 
+	<!-- 반품본사입고 - PROD 입력전에 이전값 삭제 -->
+    <!--
+        TABLE    : instockConfmProdVO
+        PARAM    : rtnStoreOrderDtlVO
+        COMMENTS : 반품본사입고 - PROD 입력전에 이전값 삭제
+    -->
+    <delete id="deleteRtnInstockProdAll" parameterType="rtnInstockConfmVO">
+        /* USE : RtnInstockConfmMapper.deleteRtnInstockProdAll */
+        DELETE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     SLIP_NO       =     #{slipNo}
+        AND     CONFM_YN      !=    'Y'
+    </delete>
+
+    <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
 	        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
 	        PARAM    : instockConfmProdVO
 	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
     -->
 	<update id="mergeInstockConfmProd" parameterType="rtnInstockConfmVO">
+        /* USE : RtnInstockConfmMapper.mergeInstockConfmProd */
 	    MERGE INTO TB_PO_HQ_STORE_OUTSTOCK_PROD	A
 	    USING DUAL ON           (
 	                                        A.HQ_OFFICE_CD	= #{hqOfficeCd}
@@ -389,13 +403,13 @@
 	                                    AND A.STORAGE_CD  	= #{storageCd}
 	                                    AND A.OCCR_FG		= #{occrFg}
 	                            )
-	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = #{confmYn},
-	    									A.IN_UNIT_QTY	= #{inUnitQty},
-											A.IN_ETC_QTY	= #{inEtcQty},
-											A.IN_TOT_QTY	= #{inTotQty},
-											A.IN_AMT		= #{inAmt},
-											A.IN_VAT		= #{inVat},
-											A.IN_TOT		= #{inTot},
+	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = 'N',
+	    									A.IN_UNIT_QTY	= A.IN_UNIT_QTY	+ #{inUnitQty},
+											A.IN_ETC_QTY	= A.IN_ETC_QTY	+ #{inEtcQty},
+											A.IN_TOT_QTY	= A.IN_TOT_QTY	+ #{inTotQty},
+											A.IN_AMT		= A.IN_AMT		+ #{inAmt},
+											A.IN_VAT		= A.IN_VAT		+ #{inVat},
+											A.IN_TOT		= A.IN_TOT		+ #{inTot},
 	                                        A.MOD_DT    	= #{modDt},
 	                                        A.MOD_ID    	= #{modId}
 	    WHEN NOT MATCHED THEN   INSERT  (
@@ -426,7 +440,7 @@
 											#{occrFg},		<!-- 발생구분(30:매장입고) -->
 											#{storeCd},
 											#{slipFg},
-											#{confmYn},
+											'N',
 											#{inUnitQty},
 											#{inEtcQty},
 											#{inTotQty},
@@ -439,4 +453,23 @@
 	                                        #{modId}
 	                                    )
 	</update>
+
+	<!-- 반품본사입고 - 반품본사입고 PROD 확정 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : rtnInstockConfmVO
+        COMMENTS : 반품본사입고 - 반품본사입고시 PROD의 진행구분을 수정한다.
+    -->
+    <update id="updateInstockProdConfirm" parameterType="rtnInstockConfmVO">
+        /* USE : RtnInstockConfmMapper.updateInstockProdConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        SET     CONFM_YN        = 'Y',
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId}
+        WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     SLIP_NO       = #{slipNo}
+        AND     OCCR_FG	  	  = '02'
+        AND     CONFM_YN      != 'Y'
+    </update>
+
 </mapper>
