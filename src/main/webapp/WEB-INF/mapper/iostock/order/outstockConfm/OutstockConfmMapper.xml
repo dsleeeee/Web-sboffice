@@ -944,11 +944,11 @@
 	                                    )
 	</update>
 
-    <!-- 출고확정 - 출고확정 이후 저장시 HD 수정 -->
+    <!-- 출고확정 - 출고확정 PROD 확정 처리 -->
     <!--
-        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
         PARAM    : outstockConfmVO
-        COMMENTS : 출고확정 - 출고확정 이후 저장시 HD의 비고, 본사비고, 배송기사를 수정한다.
+        COMMENTS : 출고확정 - PROD 출고확정
     -->
     <update id="updateOutstockProdConfirm" parameterType="outstockConfmVO">
         /* USE : OutstockConfmMapper.updateOutstockProdConfirm */

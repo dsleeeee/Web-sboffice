@@ -159,7 +159,7 @@
         ORDER
         BY       tphsod.PROD_CD, tphsod.SEQ
         -->
-        
+
 		SELECT  A.SLIP_NO,
 		                    A.SLIP_FG,
 		                    A.SLIP_KIND,
@@ -303,6 +303,21 @@
         AND     SLIP_NO		= #{slipNo}
     </update>
 
+    <!-- 입고확정 - 입고확정상태 확인 PROC_FG > 20 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
+        PARAM    : instockConfmVO
+        COMMENTS : 입고확정 - 입고확정 전에 입고확정상태 확인
+    -->
+    <select id="getInstockConfirmCnt" parameterType="instockConfmVO" resultType="Integer">
+        /* USE : InstockConfmMapper.getInstockConfirmCnt */
+        SELECT  COUNT(1) AS CNT
+        FROM    TB_PO_HQ_STORE_OUTSTOCK
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        AND     PROC_FG         >   '20'
+    </select>
+
     <!-- 입고확정 - 입고확정시 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
@@ -310,7 +325,7 @@
         COMMENTS : 입고확정 - 입고확정시 DTL의 진행구분을 수정한다.
     -->
     <update id="updateInstockDtlConfirm" parameterType="instockConfmVO">
-        /* USE : InstockConfmMapper.updateInstockConfirm */
+        /* USE : InstockConfmMapper.updateInstockDtlConfirm */
         UPDATE  TB_PO_HQ_STORE_OUTSTOCK_DTL
         SET     PROC_FG     = #{updateProcFg},
                 MOD_DT      = #{modDt},
@@ -422,7 +437,19 @@
         AND     tphso.SLIP_NO       =   #{slipNo}
     </insert>
 
-
+	<!-- 입고확정 - PROD 입력전에 이전값 삭제 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : outstockConfmVO
+        COMMENTS : 입고확정확정 - PROD 입력전에 이전값 삭제
+    -->
+    <delete id="deleteInstockProdAll" parameterType="instockConfmProdVO">
+        /* USE : InstockConfmMapper.deleteInstockProdAll */
+        DELETE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+        AND     SLIP_NO       =     #{slipNo}
+        AND     CONFM_YN      !=    'Y'
+    </delete>
 
     <!-- 창고별 입고상품 저장  ( TB_PO_HQ_STORE_OUTSTOCK_PROD - [본사_수불] 출고전표_매장출고내역_상품 )
 
@@ -431,6 +458,7 @@
 	        COMMENTS : 입고확정(또는 저장)시, 창고별 입고상품 정보를 저장한다.
     -->
 	<update id="mergeInstockConfmProd" parameterType="instockConfmProdVO">
+        /* USE : InstockConfmMapper.mergeInstockConfmProd */
 	    MERGE INTO TB_PO_HQ_STORE_OUTSTOCK_PROD	A
 	    USING DUAL ON           (
 	                                        A.HQ_OFFICE_CD	= #{hqOfficeCd}
@@ -439,13 +467,13 @@
 	                                    AND A.STORAGE_CD  	= #{storageCd}
 	                                    AND A.OCCR_FG		= #{occrFg}
 	                            )
-	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = #{confmYn},
-	    									A.IN_UNIT_QTY	= #{inUnitQty},
-											A.IN_ETC_QTY	= #{inEtcQty},
-											A.IN_TOT_QTY	= #{inTotQty},
-											A.IN_AMT		= #{inAmt},
-											A.IN_VAT		= #{inVat},
-											A.IN_TOT		= #{inTot},
+	    WHEN     MATCHED THEN   UPDATE	SET	A.CONFM_YN      = 'N',
+	    									A.IN_UNIT_QTY	= A.IN_UNIT_QTY	+ #{inUnitQty},
+											A.IN_ETC_QTY	= A.IN_ETC_QTY	+ #{inEtcQty},
+											A.IN_TOT_QTY	= A.IN_TOT_QTY	+ #{inTotQty},
+											A.IN_AMT		= A.IN_AMT		+ #{inAmt},
+											A.IN_VAT		= A.IN_VAT		+ #{inVat},
+											A.IN_TOT		= A.IN_TOT		+ #{inTot},
 	                                        A.MOD_DT    	= #{modDt},
 	                                        A.MOD_ID    	= #{modId}
 	    WHEN NOT MATCHED THEN   INSERT  (
@@ -476,7 +504,7 @@
 											#{occrFg},		<!-- 발생구분(30:매장입고) -->
 											#{storeCd},
 											#{slipFg},
-											#{confmYn},
+											'N',
 											#{inUnitQty},
 											#{inEtcQty},
 											#{inTotQty},
@@ -490,6 +518,21 @@
 	                                    )
 	</update>
 
-
+    <!-- 입고확정 - 입고확정 PROD 확정 처리 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_PROD
+        PARAM    : instockConfmVO
+        COMMENTS : 입고확정 - PROD 입고확정
+    -->
+    <update id="updateInstockProdConfirm" parameterType="instockConfmVO">
+        /* USE : InstockConfmMapper.updateInstockProdConfirm */
+        UPDATE  TB_PO_HQ_STORE_OUTSTOCK_PROD
+        SET     CONFM_YN        =   'Y'
+        ,       MOD_DT          =   #{modDt}
+        ,       MOD_ID          =   #{modId}
+        WHERE   HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     SLIP_NO         =   #{slipNo}
+        AND     CONFM_YN        !=  'Y'
+    </update>
 
 </mapper>

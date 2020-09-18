@@ -84,7 +84,7 @@ public class InstockConfmServiceImpl implements InstockConfmService {
 
             int 	slipFg    	= instockConfmVO.getSlipFg();
             String 	slipKind	= instockConfmVO.getSlipKind();
-            
+
             int 	inUnitQty 	= (instockConfmVO.getInUnitQty() == null ? 0 : instockConfmVO.getInUnitQty()) * slipFg;
             int 	inEtcQty  	= (instockConfmVO.getInEtcQty()  == null ? 0 : instockConfmVO.getInEtcQty ()) * slipFg;
             int 	inTotQty  	= (instockConfmVO.getInTotQty()  == null ? 0 : instockConfmVO.getInTotQty ()) * slipFg;
@@ -115,9 +115,6 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             result = instockConfmMapper.updateInstockConfmDtl(instockConfmVO);
             if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
-            returnResult += result;
-            i++;
-            
         	prodVO = new InstockConfmProdVO();	//Key - HQ_OFFICE_CD, SLIP_NO, PROD_CD, STORAGE_CD
 
             prodVO.setHqOfficeCd			(InstockConfmHdVO	.getHqOfficeCd	()		);	//본사코드
@@ -141,10 +138,18 @@ public class InstockConfmServiceImpl implements InstockConfmService {
         	prodVO.setModId			        (userId		);
         	prodVO.setModDt			        (currentDt	);
 
+            if(i == 0) {
+                //dtl->prod 시에 dtl(seq)과prod(prod)의 키값이 달라서 전체 삭제후 적제 필요 20200916
+                result = instockConfmMapper.deleteInstockProdAll(prodVO);
+                //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+
         	LOGGER.debug("### getProperties: " + prodVO.getProperties() );
-    		result = instockConfmMapper.mergeInstockConfmProd(prodVO);		            		            	
-    		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));            
-            
+    		result = instockConfmMapper.mergeInstockConfmProd(prodVO);
+    		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+            returnResult += result;
+            i++;
         }
 
         //HD 수정
@@ -156,23 +161,37 @@ public class InstockConfmServiceImpl implements InstockConfmService {
             InstockConfmHdVO.setProcFg("20");		//10:수주확정, 20:출고확정, 30:입고확정
             InstockConfmHdVO.setUpdateProcFg("30");
 
-            //DTL의 진행구분 수정. 출고확정 -> 입고확정
-            result = instockConfmMapper.updateInstockDtlConfirm(InstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+            // 입고확정상태 확인 PROC_FG > 20
+            // 이미 확정한 경우 저장 및 확정하면 안됨 exception 처리 진행.
+            result = instockConfmMapper.getInstockConfirmCnt(InstockConfmHdVO);
+            // 이미 입고확정된 내역입니다.
+            if(result > 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.modifyFail"));
 
-            //HD의 진행구분 수정. 출고확정 -> 입고확정
-            result = instockConfmMapper.updateInstockConfirm(InstockConfmHdVO);
-            if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-
-            //출고수량과 입고수량이 다른 상품이 있는 경우 물량오류로 등록
-            if(instockErrCnt > 0) {
-                //물량오류 DTL 등록
-                result = instockConfmMapper.insertInstockErrDtl(InstockConfmHdVO);
+            // result 1이상이면 이미 입고확정 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
+            if(result <= 0)
+            {
+                //DTL의 진행구분 수정. 출고확정 -> 입고확정
+                result = instockConfmMapper.updateInstockDtlConfirm(InstockConfmHdVO);
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
-                //물량오류 HD 등록
-                result = instockConfmMapper.insertInstockErrHd(InstockConfmHdVO);
+                //HD의 진행구분 수정. 출고확정 -> 입고확정
+                result = instockConfmMapper.updateInstockConfirm(InstockConfmHdVO);
                 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                //PROD 진행구분 수정. 수주확정 -> 출고확정
+                result = instockConfmMapper.updateInstockProdConfirm(InstockConfmHdVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                //출고수량과 입고수량이 다른 상품이 있는 경우 물량오류로 등록
+                if(instockErrCnt > 0) {
+                    //물량오류 DTL 등록
+                    result = instockConfmMapper.insertInstockErrDtl(InstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                    //물량오류 HD 등록
+                    result = instockConfmMapper.insertInstockErrHd(InstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                }
             }
         }
 

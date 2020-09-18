@@ -306,7 +306,7 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
             result = outstockConfmMapper.updateOutstockConfirm(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-            //PROD 입력. 수주확정 -> 출고확정
+            //PROD 진행구분 수정. 수주확정 -> 출고확정
             result = outstockConfmMapper.updateOutstockProdConfirm(outstockConfmHdVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 

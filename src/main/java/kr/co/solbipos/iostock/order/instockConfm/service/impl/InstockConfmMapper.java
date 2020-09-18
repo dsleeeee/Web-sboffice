@@ -26,6 +26,9 @@ public interface InstockConfmMapper {
     /** 입고확정 - 입고확정 상세 HD 수정 */
     int updateInstockConfmHd(InstockConfmVO instockConfmVO);
 
+    /** 입고확정 - 입고확정상태 확인 PROC_FG > 20 */
+    int getInstockConfirmCnt(InstockConfmVO instockConfmVO);
+
     /** 입고확정 - 입고확정시 DTL 수정 */
     int updateInstockDtlConfirm(InstockConfmVO instockConfmVO);
 
@@ -38,6 +41,12 @@ public interface InstockConfmMapper {
     /** 입고확정 - 물량오류 HD 등록 */
     int insertInstockErrHd(InstockConfmVO instockConfmVO);
 
+    /** 입고확정 - 상품 삭제 */
+    int deleteInstockProdAll(InstockConfmProdVO instockConfmProdVO);
+
     /** 입고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int mergeInstockConfmProd(InstockConfmProdVO instockConfmProdVO);
+
+    /** 입고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int updateInstockProdConfirm(InstockConfmVO instockConfmVO);
 }

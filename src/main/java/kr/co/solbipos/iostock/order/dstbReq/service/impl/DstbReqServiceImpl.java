@@ -67,6 +67,7 @@ public class DstbReqServiceImpl implements DstbReqService {
                 dstbReqVO.setRegDt(currentDt);
                 dstbReqVO.setModId(sessionInfoVO.getUserId());
                 dstbReqVO.setModDt(currentDt);
+                dstbReqVO.setRemark(orderProcFg.get("remark"));
 
                 if(orderProcFg.get("procFg").equals("00")) {
                     // MD수량 관련 내용을 주문내역으로 수정
@@ -79,6 +80,7 @@ public class DstbReqServiceImpl implements DstbReqService {
                 storeOrderVO.setProcFg("20");
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
+                storeOrderVO.setRemark(orderProcFg.get("remark"));
                 result = storeOrderMapper.updateStoreOrder(storeOrderVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 returnResult += result;
