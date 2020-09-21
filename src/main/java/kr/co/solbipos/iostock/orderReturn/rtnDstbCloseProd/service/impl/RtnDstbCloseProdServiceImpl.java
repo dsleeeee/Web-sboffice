@@ -186,8 +186,9 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
             	rtnDstbCloseProdVO.setOrderAmt			        (mgrAmt);	//입고금액
             	rtnDstbCloseProdVO.setOrderVat			        (mgrVat);	//입고금액VAT
             	rtnDstbCloseProdVO.setOrderTot			        (mgrTot);	//입고금액합계
+                rtnDstbCloseProdVO.setStorageCd("001"); //매장주문 정보는 재고처리안함 기본값 001 세팅
 
-            	if(prevMgrTotQty > 0) {
+                if(prevMgrTotQty > 0) {
             		result = rtnDstbCloseProdMapper.updateRtnStoreOrderProd(rtnDstbCloseProdVO);
             		 if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
             	}else {

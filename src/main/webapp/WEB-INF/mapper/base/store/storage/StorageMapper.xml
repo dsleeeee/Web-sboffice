@@ -21,8 +21,9 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
 		FROM TB_HQ_STORAGE THS,
 			 TB_HQ_EMPLOYEE THE
-		WHERE THS.MOD_ID = THE.USER_ID
-    	  AND THS.HQ_OFFICE_CD = #{hqOfficeCd}
+		WHERE THS.HQ_OFFICE_CD = #{hqOfficeCd}
+    	  AND THE.HQ_OFFICE_CD (+) = THS.HQ_OFFICE_CD
+          AND THE.USER_ID (+) = THS.MOD_ID
         <if test="storageCd != null and storageCd != ''">
     	  AND THS.STORAGE_CD = #{storageCd}
         </if>
@@ -54,8 +55,9 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_STORAGE TMS,
              TB_MS_EMPLOYEE TME
-        WHERE TMS.MOD_ID = TME.USER_ID
-          AND TMS.STORE_CD = #{storeCd}
+        WHERE TMS.STORE_CD = #{storeCd}
+          AND TME.STORE_CD (+) = TMS.STORE_CD
+          AND TME.USER_ID (+) = TMS.MOD_ID
         <if test="storageCd != null and storageCd != ''">
           AND TMS.STORAGE_CD = #{storageCd}
         </if>
