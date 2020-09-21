@@ -34,6 +34,8 @@
             </jsp:include>
             <%--// 매장선택 모듈 싱글 선택 사용시 include --%>
           </td>
+          <td></td>
+          <td></td>
 <%--           <td colspan="2"><p class="s14"><s:message code="rtnDstbCloseProd.add.txt1"/></p></td> --%>
         </tr>
         <tr>
@@ -92,7 +94,7 @@
       <%--<div class="wj-TblWrap ml20 mr20 pdb20">--%>
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 500px;">
+        <div class="wj-gridWrap" style="height: 280px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
