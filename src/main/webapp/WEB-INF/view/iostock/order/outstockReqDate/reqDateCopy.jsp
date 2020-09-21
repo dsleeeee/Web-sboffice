@@ -59,7 +59,8 @@
 
   <div class="w100" ng-controller="reqDateCopyDaysCtrl">
     <%--위즈모 테이블--%>
-    <div class="theGrid mt10" style="height: 120px;">
+  <div class="w100 mt10">
+    <div class="wj-gridWrap" style="height: 120px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -96,7 +97,8 @@
 
   <div class="w100" ng-controller="reqDateCopySpecificCtrl">
     <%--위즈모 테이블--%>
-    <div class="theGrid mt10" style="height: 300px;">
+   <div class="w100 mt10">
+     <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -124,6 +126,8 @@
       <%--// ColumnPicker 사용시 include --%>
     </div>
     <%--//위즈모 테이블--%>
+  </div>
+  </div>
   </div>
 </div>
 

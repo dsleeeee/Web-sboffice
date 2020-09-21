@@ -139,7 +139,7 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    $scope.storeCd			= data.storeCd; // 매장코드
 	    $scope.storeNm			= data.storeNm; // 매장명
 	    $scope.storeCd  		= data.storeCd; // 매장코드
-	    $scope.hqOfficeCd		= $("#hqOfficeCode").val(); // 본사코드
+	    $scope.hqOfficeCd		= hqOfficeCd; // 본사코드
 	    
 	    $scope.prodCodeDtlLayer.show(true);
 

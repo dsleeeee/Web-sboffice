@@ -120,8 +120,10 @@ app.controller('prodQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 	  
 	  $scope.drawGrid = function(grid, arrBinding){
 		  for(var i=0; i<arrBinding.length; i++){
-			  if(arrBinding[i].includes('Qty') || arrBinding[i].includes('Tot')){
-				  grid.columns.push(new wijmo.grid.Column({header: messages["periodIostock." + arrBinding[i]], binding: arrBinding[i],	width:"*" , align: (arrBinding[i].includes('Qty') ? "center" : "right") , isReadOnly: "true" , aggregate:"Sum"}));
+			  //if(arrBinding[i].includes('Qty') || arrBinding[i].includes('Tot')){
+			  if(arrBinding[i].indexOf('Qty') >= 0 || arrBinding[i].indexOf('Tot') >= 0){
+				  //grid.columns.push(new wijmo.grid.Column({header: messages["periodIostock." + arrBinding[i]], binding: arrBinding[i],	width:"*" , align: (arrBinding[i].includes('Qty') ? "center" : "right") , isReadOnly: "true" , aggregate:"Sum"}));
+				  grid.columns.push(new wijmo.grid.Column({header: messages["periodIostock." + arrBinding[i]], binding: arrBinding[i],	width:"*" , align: (arrBinding[i].indexOf('Qty') >=0 ? "center" : "right") , isReadOnly: "true" , aggregate:"Sum"}));
 			  } else{
 				  grid.columns.push(new wijmo.grid.Column({header: messages["periodIostock." + arrBinding[i]], binding: arrBinding[i],	width:"*" , align: "center" , isReadOnly: "true"}));
 			  }

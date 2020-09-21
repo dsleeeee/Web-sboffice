@@ -373,7 +373,7 @@
     </select>
     
     <select id="getHqCurrExcelList" parameterType="hqCurrVO" resultType="DefaultMap">
-        /* USE : HqCurrMapper.getHqCurrList */
+        /* USE : HqCurrMapper.getHqCurrExcelList */
         SELECT  A.LV1_CD
 		, 		A.LV1_NM
 		, 		A.LV2_CD

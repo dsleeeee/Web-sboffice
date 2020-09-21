@@ -291,7 +291,12 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		for(var i=0; i<columns.length; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
 			if(includeWord !== "" && includeWord !== "poUnitQty"){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
-				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				//srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				if(srchSrchOption.indexOf(includeWord) >= 0){
+					columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				}else{
+					columns[i].visible = false;
+				}
 			}
 		}
 	};
@@ -452,7 +457,12 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		for(var i=0; i<columns.length; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
 			if(includeWord !== "" && includeWord !== "poUnitQty"){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
-				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				//srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				if(srchSrchOption.indexOf(includeWord) >= 0){
+					columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+				}else{
+					columns[i].visible = false;
+				}
 			}
 		}
 	};

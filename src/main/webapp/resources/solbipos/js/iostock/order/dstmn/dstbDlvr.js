@@ -44,6 +44,12 @@ app.controller('dstbDlvrCtrl', ['$scope', '$http', function ($scope, $http) {
         strDlvrCd += (strDlvrCd === '' ? '' : ',') + item.dlvrCd;
       }
     }
+    
+    // 배송기사 선택 체크
+    if(strDlvrCd === '' || isEmptyObject(strDlvrCd)){
+      s_alert.pop(messages["dstmn.dstbDlvr.check.msg"]);
+      return;
+    }
 
     var params       = {};
     params.strSlipNo = $scope.strSlipNo;

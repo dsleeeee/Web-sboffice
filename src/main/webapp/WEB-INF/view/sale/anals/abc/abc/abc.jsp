@@ -103,7 +103,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap1">
+          <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
               id="abcGrid"
               autoGenerateColumns="false"
