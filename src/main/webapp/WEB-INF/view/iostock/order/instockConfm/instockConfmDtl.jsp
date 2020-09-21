@@ -27,7 +27,7 @@
             <input type="text" id="hdRemark" name="hdRemark" ng-model="hdRemark" class="sb-input w100" maxlength="200"/>
           </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <th><s:message code="instockConfm.dtl.dlvrNm"/></th>
           <td colspan="3">
             <span class="txtIn w150px sb-select fl mr5">
