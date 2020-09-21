@@ -109,7 +109,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-y: hidden; overflow-x: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -127,7 +127,7 @@
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.outEtcQty"/>" 	binding="outEtcQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.inUnitQty"/>" 	binding="inUnitQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.inEtcQty"/>" 		binding="inEtcQty" 		width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0"	aggregate="Sum"	></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.errFg"/>" 		binding="errFg" 		width="100" align="center" 	is-read-only="false"	data-map="errFgMap"								></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.errFg"/>" 		binding="errFg" 		width="150" align="center" 	is-read-only="false"	data-map="errFgMap"								></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.remark"/>" 		binding="remark" 		width="200" align="left" 	is-read-only="false"	max-length=300									></wj-flex-grid-column>
 
           </wj-flex-grid>

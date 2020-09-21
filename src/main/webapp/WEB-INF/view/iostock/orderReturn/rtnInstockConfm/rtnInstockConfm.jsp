@@ -104,7 +104,7 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
       <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
@@ -116,15 +116,15 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.storeCd"/>" 	binding="storeCd"   width="0" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipNo"/>" 	binding="slipNo"    width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipNo"/>" 	binding="slipNo"    width="80" align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipFg"/>" 	binding="slipFg"    width="100" align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.slipKind"/>" 	binding="slipKind"  width="70" 	align="center" 	is-read-only="true" data-map="slipKindMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.procFg"/>" 	binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.storeNm"/>" 	binding="storeNm" 	width="180" align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.dlvrNm"/>" 	binding="dlvrCd" 	width="70" 	align="center" 	is-read-only="true" data-map="dlvrMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.reqDate"/>" 	binding="reqDate" 	width="90" 	align="center" 	is-read-only="true" format="date" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.outDate"/>" 	binding="outDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.inDate"/>" 	binding="inDate" 	width="90" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.outDate"/>" 	binding="outDate" 	width="80" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnInstockConfm.inDate"/>" 	binding="inDate" 	width="80" 	align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.orderTot"/>" 	binding="orderTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.mgrTot"/>" 	binding="mgrTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnInstockConfm.outTot"/>" 	binding="outTot" 	width="130" align="right" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>

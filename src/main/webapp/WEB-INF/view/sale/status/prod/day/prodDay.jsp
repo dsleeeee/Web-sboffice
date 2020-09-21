@@ -54,23 +54,17 @@
 				</td>
 			</tr>
 			<tr>
-	        <%-- 상품코드 --%>
-	        <th><s:message code="prodcalss.prodCd" /></th>
-	        <td><input type="text" id="srchDayProdCd" class="sb-input w100" maxlength="13"/></td>
-	        <%-- 상품명 --%>
-	        <th><s:message code="prodcalss.prodNm" /></th>
-	        <td><input type="text" id="srchDayProdNm" class="sb-input w100" maxlength="100"/></td>
+                <%-- 상품코드 --%>
+                <th><s:message code="prodcalss.prodCd" /></th>
+                <td><input type="text" id="srchDayProdCd" class="sb-input w100" maxlength="13"/></td>
+                <%-- 상품명 --%>
+                <th><s:message code="prodcalss.prodNm" /></th>
+                <td><input type="text" id="srchDayProdNm" class="sb-input w100" maxlength="100"/></td>
 	      	</tr>
-
 	        <tr>
 	        	<%-- 분류조회 --%>
 		        <th><s:message code="prod.prodClass" /></th>
-		        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
 		        <td>
-		        </c:if>
-		        <c:if test="${sessionInfo.orgnFg != 'HQ'}">
-		        <td colspan="3">
-		        </c:if>
 		          <input type="text" class="sb-input w70" id="srchProdDayCd" ng-model="prodDayCdNm" ng-click="popUpProdDay()" style="float: left;"
 		                 placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
 		          <input type="hidden" id="_prodDayCd" name="prodDayCd" ng-model="prodDayCdModel" disabled />
@@ -78,14 +72,18 @@
 		        </td>
 	            <%-- 매장코드 --%>
 	            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-	          	<th><s:message code="todayBillSaleDtl.store"/></th>
-	          	<td>
-	            	<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-	             		<jsp:param name="targetId" value="pordDaySelectStore"/>
-	            	</jsp:include>
-	              	<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-	          	</td>
+					<th><s:message code="todayBillSaleDtl.store"/></th>
+					<td>
+						<jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+							<jsp:param name="targetId" value="pordDaySelectStore"/>
+						</jsp:include>
+						<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+					</td>
 	          	</c:if>
+				<c:if test="${sessionInfo.orgnFg != 'HQ'}">
+					<td></td>
+					<td></td>
+				</c:if>
 	        </tr>
 	      	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 	        	<input type="hidden" id="pordDaySelectStoreCd" value="${sessionInfo.storeCd}"/>
