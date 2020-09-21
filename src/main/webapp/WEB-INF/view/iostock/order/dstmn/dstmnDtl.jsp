@@ -59,7 +59,7 @@
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <%-- 배송기사 --%>
           <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
           <td>

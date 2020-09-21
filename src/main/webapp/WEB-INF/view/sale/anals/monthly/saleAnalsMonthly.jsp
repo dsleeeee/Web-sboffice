@@ -83,9 +83,9 @@
 		  	<span class="bk">{{_selectedMonth}}</span><s:message code="saleAnalsMonthly.month"/>
 		  </div>
 		  <%-- 엑셀다운로드 //TODO--%>
-		  <span class="fr">
+		  <%--<span class="fr">
 		  	<button class="btn_skyblue" id="btnExcel"><s:message code="cmm.excel.down" /></button>
-		  </span>
+		  </span>--%>
 	  </div>
 
 	  <table class="tbl-cal">
