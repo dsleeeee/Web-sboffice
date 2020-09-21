@@ -70,7 +70,7 @@
                 </td>
             </tr>
             --%>
-            <tr>
+            <tr style="display: none;">
                 <th>
                     TEST용 <s:message code="cmm.search.date" />
                 </th>

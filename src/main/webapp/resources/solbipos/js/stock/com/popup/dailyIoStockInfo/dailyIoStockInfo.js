@@ -112,7 +112,7 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 	  for(var i=0; i<arrBinding.length; i++){
 		  var aggregate = arrSum[i];
 		  if(aggregate == ""){
-			  grid.columns.push(new wijmo.grid.Column({header: messages["dailyIostock." + arrBinding[i]], binding: arrBinding[i], width: arrWidth[i] , align: arrAlign[i], isReadOnly: "true", format: ((arrBinding[i].includes('barcdCd')||arrBinding[i].includes('prodCd')) ? "d" : "")}));
+			  grid.columns.push(new wijmo.grid.Column({header: messages["dailyIostock." + arrBinding[i]], binding: arrBinding[i], width: arrWidth[i] , align: arrAlign[i], isReadOnly: "true", format: ((arrBinding[i].indexOf('barcdCd') >= 0 ||arrBinding[i].indexOf('prodCd') >= 0) ? "d" : "")}));
 		  }else{
 			  grid.columns.push(new wijmo.grid.Column({header: messages["dailyIostock." + arrBinding[i]], binding: arrBinding[i], width: arrWidth[i] , align: arrAlign[i], isReadOnly: "true", aggregate: "Sum"}));
 		  }

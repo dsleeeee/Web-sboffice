@@ -63,8 +63,8 @@
         </span>
       </td>
     </tr>
-    <tr>
-      <%-- 기사 --%>
+    <tr style="display: none;">
+      <%-- 배송기사 --%>
       <th><s:message code="dstmn.dlvrNm"/></th>
       <td>
         <span class="txtIn w150px sb-select fl mr5">

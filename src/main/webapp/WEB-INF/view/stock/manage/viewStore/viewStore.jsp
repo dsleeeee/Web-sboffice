@@ -108,7 +108,7 @@
 
     <%--위즈모 테이블 : 수정해야함--%>
     <div id="wjGridWrap" class="mt10">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           control="flex"
