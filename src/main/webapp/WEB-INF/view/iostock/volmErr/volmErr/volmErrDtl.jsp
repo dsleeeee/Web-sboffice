@@ -126,7 +126,7 @@
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.outUnitQty"/>" 	binding="outUnitQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.outEtcQty"/>" 	binding="outEtcQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.inUnitQty"/>" 	binding="inUnitQty" 	width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0" aggregate="Sum"	></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inEtcQty"/>" 		binding="inEtcQty" 		width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0"	aggregate="Sum"	></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="volmErr.dtl.inEtcQty"/>"     binding="inEtcQty" 		width="80" 	align="right" 	is-read-only="true" 	data-type="Number" 	format="n0"	aggregate="Sum"	></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.errFg"/>" 		binding="errFg" 		width="150" align="center" 	is-read-only="false"	data-map="errFgMap"								></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="volmErr.dtl.remark"/>" 		binding="remark" 		width="200" align="left" 	is-read-only="false"	max-length=300									></wj-flex-grid-column>
 
@@ -139,4 +139,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20200921.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20200922.02" charset="utf-8"></script>

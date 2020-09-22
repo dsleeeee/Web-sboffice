@@ -41,6 +41,27 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     //Header column merge (출고수량, 입고수량)
     s.allowMerging                          = 'ColumnHeaders';
     s.columnHeaders.rows[0].allowMerging    = true;
+
+      // 그리드 링크 효과
+      s.formatItem.addHandler(function (s, e) {
+          if (e.panel === s.cells) {
+              var col = s.columns[e.col];
+
+              // 처리구분
+              if (col.binding === "errFg") {
+                  if ($scope.procFg === "0" && gvOrgnFg !=="S") {    //procFgMap(0:입력, 1:확정)
+                      s.rows[e.row].isReadOnly = false;
+                  }else if($scope.procFg === "0" && gvOrgnFg ==="S"){
+                      wijmo.addClass(e.cell, 'wj-custom-readonly');
+                      s.rows[e.row].isReadOnly = true;
+                  }
+                  else {
+                      wijmo.addClass(e.cell, 'wj-custom-readonly');
+                      s.rows[e.row].isReadOnly = true;
+                  }
+              }
+          }
+      });
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -75,55 +96,51 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         console.log('data.procFg ==     : ' + data.procFg === $scope.procFg );
         console.log('data.procFg ==     : ' + data.procFg ==  $scope.procFg );
         */
-    
     if ($scope.procFg === "0" && gvOrgnFg !=="S") {    //procFgMap(0:입력, 1:확정)
-	      //console.log('000 $scope.procFg === "0"');
-	      $("#volmErrBtnLayer").show();
-	      $scope.volmErrConfirmFg   = true;
-	      $scope.btnDtlSave         = true;
-	    }else if($scope.procFg === "0" && gvOrgnFg ==="S"){
-	    	$("#volmErrBtnExcelLayer").show();
-	    	var flex = $scope.flex;
-	    	flex.formatItem.addHandler(function (s, e) {
-				if (e.panel === s.cells) {
-					var col = s.columns[e.col];
-					if (col.binding === "errFg") { // 실매출
-						wijmo.addClass(e.cell, 'wj-custom-readonly');
-						s.rows[e.row].isReadOnly = true;
-			        }
-				}
-			});
-	    }
-	    else {
-	      //console.log('000 else');
-	    	var flex = $scope.flex;
-	    	flex.formatItem.addHandler(function (s, e) {
-				if (e.panel === s.cells) {
-					var col = s.columns[e.col];
-					if (col.binding === "errFg") { // 실매출
-						wijmo.addClass(e.cell, 'wj-custom-readonly');
-						s.rows[e.row].isReadOnly = true;
-			        }
-				}
-			});
-	    	
-	      $("#volmErrBtnLayer").hide();
-	      $scope.volmErrConfirmFg   = false;
-	      $scope.btnDtlSave         = false;
-	      
-	      $("#volmErrBtnExcelLayer").hide();
-	    }
+        //console.log('000 $scope.procFg === "0"');
+        $("#volmErrBtnLayer").show();
+        $scope.volmErrConfirmFg   = true;
+        $scope.btnDtlSave         = true;
+    } else if($scope.procFg === "0" && gvOrgnFg ==="S") {
+        $("#volmErrBtnExcelLayer").show();
+        // var flex = $scope.flex;
+        // flex.formatItem.addHandler(function (s, e) {
+        // 	if (e.panel === s.cells) {
+        // 		var col = s.columns[e.col];
+        // 		if (col.binding === "errFg") { // 실매출
+        // 			wijmo.addClass(e.cell, 'wj-custom-readonly');
+        // 			s.rows[e.row].isReadOnly = true;
+        //         }
+        // 	}
+        // });
+    } else {
+        //console.log('000 else');
+        // var flex = $scope.flex;
+        // flex.formatItem.addHandler(function (s, e) {
+        // 	if (e.panel === s.cells) {
+        // 		var col = s.columns[e.col];
+        // 		if (col.binding === "errFg") { // 실매출
+        // 			wijmo.addClass(e.cell, 'wj-custom-readonly');
+        // 			s.rows[e.row].isReadOnly = true;
+        //         }
+        // 	}
+        // });
+        $("#volmErrBtnLayer").hide();
+        $scope.volmErrConfirmFg   = false;
+        $scope.btnDtlSave         = false;
+        $("#volmErrBtnExcelLayer").hide();
+    }
 
-	    $("#volmErrConfirmFg"   ).prop("checked", false);
-	    $("#divDtlOutDate"      ).hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
+    $("#volmErrConfirmFg"   ).prop("checked", false);
+    $("#divDtlOutDate"      ).hide(); //페이지 호출시 출고일자는 일단 무조건 hide 처리.
    
     // 물량오류 처리구분 콤보박스 조회 및 생성. slipFg 가 있어야 하므로 상세페이지를 호출할때 조회하도록 함.
     var comboParams         = {};
-        comboParams.nmcodeGrpCd = "089";
-        comboParams.nmcodeItem1 = $scope.slipFg;
-        
-        // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
-        $scope._queryCombo("map", null, "errFgMap", "/iostock/cmm/iostockCmm/getCombo.sb", comboParams);
+    comboParams.nmcodeGrpCd = "089";
+    comboParams.nmcodeItem1 = $scope.slipFg;
+
+    // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
+    $scope._queryCombo("map", null, "errFgMap", "/iostock/cmm/iostockCmm/getCombo.sb", comboParams);
         
     $scope.searchVolmErrDtlList();
     
