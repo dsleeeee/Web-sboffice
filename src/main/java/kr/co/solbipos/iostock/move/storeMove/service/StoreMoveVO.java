@@ -99,7 +99,10 @@ public class StoreMoveVO extends PageVO {
     private String outEnvst0011;
     /** 출고가-부가세구분(이입매장) */
     private String inEnvst0011;
-
+    /** 공급단가 */
+    private Integer splyUprc;
+    /** 공급단가 */
+    private Integer prevSplyUprc;
     /**
      * @return the hqOfficeCd
      */
@@ -742,5 +745,33 @@ public class StoreMoveVO extends PageVO {
      */
     public void setInEnvst0011(String inEnvst0011) {
         this.inEnvst0011 = inEnvst0011;
+    }
+
+    /**
+     * @return the splyUprc
+     */
+    public Integer getSplyUprc() {
+        return splyUprc;
+    }
+
+    /**
+     * @param splyUprc the splyUprc to set
+     */
+    public void setSplyUprc(Integer splyUprc) {
+        this.splyUprc = splyUprc;
+    }
+
+    /**
+     * @return the prevSplyUprc
+     */
+    public Integer getPrevSplyUprc() {
+        return prevSplyUprc;
+    }
+
+    /**
+     * @param prevSplyUprc the splyUprc to set
+     */
+    public void setPrevSplyUprc(Integer prevSplyUprc) {
+        this.prevSplyUprc = prevSplyUprc;
     }
 }

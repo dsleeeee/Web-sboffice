@@ -81,8 +81,8 @@ public class StoreMoveServiceImpl implements StoreMoveService {
             int outTotQty     = (storeMoveVO.getOutTotQty()     == null ? 0 : storeMoveVO.getOutTotQty());
             int prevOutTotQty = (storeMoveVO.getPrevOutTotQty() == null ? 0 : storeMoveVO.getPrevOutTotQty());
 
-            // 수량 변경이 있는 경우만 DTL 수정
-            if(prevOutTotQty != outTotQty) {
+            // 수량, 단가 변경이 있는 경우만 DTL 수정
+            if(prevOutTotQty != outTotQty || storeMoveVO.getPrevSplyUprc() != storeMoveVO.getSplyUprc()) {
                 int outSplyUprc  = storeMoveVO.getOutSplyUprc();
                 int inSplyUprc   = storeMoveVO.getInSplyUprc();
                 int poUnitQty    = storeMoveVO.getPoUnitQty();

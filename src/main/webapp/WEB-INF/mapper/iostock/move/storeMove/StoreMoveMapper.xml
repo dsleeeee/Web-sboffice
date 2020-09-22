@@ -104,6 +104,7 @@
         ,       tpsmd.OUT_SPLY_UPRC
         ,       tpsmd.IN_SPLY_UPRC
         ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC )) AS SPLY_UPRC
+        ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_SPLY_UPRC , tpsmd.IN_SPLY_UPRC )) AS PREV_SPLY_UPRC
         ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_AMT       , tpsmd.IN_AMT       )) AS AMT
         ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_VAT       , tpsmd.IN_VAT       )) AS VAT
         ,       TO_NUMBER(DECODE(tpsm.OUT_STORE_CD, #{sessionStoreCd}, tpsmd.OUT_TOT       , tpsmd.IN_TOT       )) AS TOT

@@ -160,6 +160,7 @@
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.totQty"/>" binding="outTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.totQty"/>" binding="prevOutTotQty" width="70" align="right" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.splyUprc"/>" binding="splyUprc" width="70" align="right" max-length=8 data-type="Number" format="n0"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeMove.dtl.prevSplyUprc"/>" binding="prevSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.outSplyUprc"/>" binding="outSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.inSplyUprc"/>" binding="inSplyUprc" width="70" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeMove.dtl.amt"/>" binding="amt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
