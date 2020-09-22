@@ -20,7 +20,7 @@
           <span class="fl bk lh30"><s:message code="posFunc.fnkeyFg" /></span>
         </div>
         <%-- 그리드 --%>
-        <div id="funcListGrid"></div>
+        <div id="funcListGrid" style="height:481px; overflow-x: hidden;"></div>
       </div>
     </div>
 
@@ -54,17 +54,17 @@
   var funcListHeader =
       [
         {binding:"nmcodeCd", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
-        {binding:"nmcodeNm", header:"<s:message code='posFunc.fnkeyNm' />", width:"*"},
+        {binding:"nmcodeNm", header:"<s:message code='posFunc.fnkeyNm' />", width:150},
       ];
 
   var funAuthHeader =
       [
-        {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:"*"},
-        {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:"*"},
+        {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:70},
+        {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:150},
         {binding:"dispSeq", header:"<s:message code='posFunc.dispSeq' />", visible:false, width:"*"},
         {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false},
-        {binding:"authYn", header:"<s:message code='posFunc.authYn' />", dataType:wijmo.DataType.Boolean, width:70},
-        {binding:"buttons", header:"<s:message code='posFunc.setting.auth' />", width:"*", align:"center"},
+        {binding:"authYn", header:"<s:message code='posFunc.authYn' />", dataType:wijmo.DataType.Boolean, width:60},
+        {binding:"buttons", header:"<s:message code='posFunc.setting.auth' />", width:110, align:"center"},
         {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false}
       ];
 
