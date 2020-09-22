@@ -301,7 +301,8 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 		for(var i=0; i<columns.length; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : "";
 			if((includeWord === "Qty" || includeWord === "Tot") && includeWord !== "poUnitQty"){
-				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false;
+				srchSrchOption.indexOf
+				(includeWord) ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
 	};
@@ -447,7 +448,7 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 		for(var i=0; i<columns.length; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : "";
 			if((includeWord === "Qty" || includeWord === "Tot") && includeWord !== "poUnitQty"){
-				srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false;
+				srchSrchOption.indexOf(includeWord) ? columns[i].visible = true : columns[i].visible = false;
 			}
 		}
 	};

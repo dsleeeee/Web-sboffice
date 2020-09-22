@@ -157,7 +157,7 @@
 
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="mt10">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="height:320px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
           id="storePeriodGrid"
           autoGenerateColumns="false"
