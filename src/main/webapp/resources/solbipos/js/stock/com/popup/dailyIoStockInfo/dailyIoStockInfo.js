@@ -52,14 +52,14 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
     	var list = response.data.data.list;
     	var length = response.data.data.list.length;
     	var grid = wijmo.Control.getControl("#storeDtlGrid");
-    	
+
     	if(length != "" || length != null){
     		while(grid.columns.length > 0){
     			grid.columns.removeAt(grid.columns.length-1);
     		}
-    		
+
     		$scope.changeColumns(grid);
-    		
+
     		var data = new wijmo.collections.CollectionView(list);
     		data.trackChanges = true;
             $scope.data = data;
@@ -68,13 +68,13 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 		}
     });
   };
-  
+
   $scope.changeColumns = function(grid){
 	  var arrBinding;
 	  var arrWidth = [100, 100, 100, 100, 150, 150, 150, 100, 100, 100, 80, 80];
 	  var arrAlign = ["center", "center", "center", "center", "center", "center", "center", "center", "center", "center", "right", "right"];
 	  var arrSum = ["", "", "", "", "", "", "", "", "", "", "Sum", "Sum"];
-	  
+
 	  if($scope.orgnFg == "H") { // 본사 권한
 		    switch($scope.ioOccrFg) {
 		    case "01" : {arrBinding=["slipNo", "instockDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 본사입고(전표번호, 입고일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
@@ -98,6 +98,7 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 			case "18" : {arrBinding=["slipNo", "rtnDate", "vendrCd", "vendrNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 사입반품(전표번호, 반품일, 거래처코드, 거래처명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
 //			!!!!!!!!!!!!!!!!!!!!!!!!!!! 아직 컬럼 정보 및 쿼리 안받음 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //			case "11" : {arrBinding=["saleDate", "dlvrPackFg"]; break;} // 매장판매(영업일자, 배달포장구분)
+			case "11" : {arrBinding=["saleDate", "storeCd", "storeNm", "qty", "amt"]; break;} // 매장판매(매출일자, 매장코드, 매장명, 수량, 금액)
 			case "04" : {arrBinding=["slipNo", "inConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "inTotQty", "inTot"]; break;} // 매장이입(전표번호, 이입일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
 			case "14" : {arrBinding=["slipNo", "outConfmDt", "hqOfficeCd", "hqOfficeNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "outTotQty", "outTot"]; break;} // 매장이출(전표번호, 이출일, 본사코드, 본사명, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 수량, 금액)
 			case "17" : {arrBinding=["disuseDate", "seqNo", "title", "prodFgNm", "lv1Nm", "lv2Nm", "lv3Nm", "prodCd", "prodNm", "barcdCd", "disuseQty", "disuseAmt"]; break;} // 재고폐기(폐기일, 차수, 제목, 구분, 대분류, 중분류, 소분류, 상품코드, 상품명, 바코드, 폐기수량, 폐기금액)
@@ -107,7 +108,7 @@ app.controller('dailyIoStockInfoCtrl', ['$scope', '$http', '$timeout', function 
 	  }
 	  $scope.drawGrid(grid, arrBinding, arrWidth, arrAlign, arrSum);
   };
-  
+
   $scope.drawGrid = function(grid, arrBinding, arrWidth, arrAlign, arrSum){
 	  for(var i=0; i<arrBinding.length; i++){
 		  var aggregate = arrSum[i];

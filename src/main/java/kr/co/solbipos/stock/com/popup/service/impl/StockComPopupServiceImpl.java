@@ -50,7 +50,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 			return stockComPopupMapper.getCmmStoreStockStatusList(hqCurrVO);
 		}
     }
-    
+
     @Override
 	public List<DefaultMap<String>> getCmmStoreStockStatusList(HqCurrVO hqCurrVO, SessionInfoVO sessionInfoVO) {
 		hqCurrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -69,7 +69,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 
 	@Override
 	public List<DefaultMap<String>> getCmmQtyDtlList(PeriodIostockVO periodIostockVO, SessionInfoVO sessionInfoVO) {
-
+System.out.println("periodIostockVO.getColCode:"+periodIostockVO.getColCode());
 		return stockComPopupMapper.getCmmQtyDtlList(periodIostockVO);
 	}
 
@@ -78,7 +78,7 @@ public class StockComPopupServiceImpl implements StockComPopupService {
 			SessionInfoVO sessionInfoVO) {
 		return stockComPopupMapper.getCmmViewDtlList(stockManageViewVO);
 	}
-	
+
     @Override
     public List<DefaultMap<String>> selectStorageList(StockManageViewVO stockManageViewVO, SessionInfoVO sessionInfoVO) {
     	stockManageViewVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

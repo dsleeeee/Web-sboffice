@@ -1388,6 +1388,10 @@
     		<when test="colCode=='18'">
     			<include refid="getCmmQtyDtlList18"/>
     		</when>
+
+    		<when test="colCode=='11'">
+    			<include refid="getCmmQtyDtlList11"/>
+    		</when>
     	</choose>
 
 
@@ -1914,6 +1918,30 @@
 			 , TPSVI.INSTOCK_DATE
 			 , TPSVI.VENDR_CD
 		 ORDER BY TPSVI.SLIP_NO, TPSVI.INSTOCK_DATE DESC
+    </sql>
+
+    <sql id="getCmmQtyDtlList11">
+        /* USE : StockComPopupMapper.getCmmQtyDtlList11, 매장판매 */
+        SELECT  TSDP.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSDP.STORE_CD) AS STORE_NM
+        ,       TSDP.SALE_DATE
+        ,       SUM(TSDP.TOT_SALE_QTY)      AS  IN_TOT_QTY
+        ,       SUM(TSDP.REAL_SALE_AMT)     AS  IN_TOT
+        FROM    TB_SL_DAILY_PROD TSDP
+        WHERE   TSDP.STORE_CD   =   #{storeCd}
+
+       <if test="prodCd != null and prodCd != ''">
+            AND TSDP.PROD_CD    =   #{prodCd}   /* 상품코드 */
+       </if>
+       <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+            AND TSDP.SALE_DATE  BETWEEN #{startDate}    AND #{endDate}
+       </if>
+         GROUP
+         BY     TSDP.STORE_CD
+         ,      TSDP.SALE_DATE
+         ORDER
+         BY     TSDP.STORE_CD
+         ,      TSDP.SALE_DATE DESC
     </sql>
 
     <sql id="getProdLevel">
