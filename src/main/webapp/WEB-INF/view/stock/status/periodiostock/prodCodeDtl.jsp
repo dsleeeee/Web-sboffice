@@ -6,6 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="baseUrl" value="/stock/status/periodiostock/"/>
 
 <wj-popup id="prodCodeDtlLayer" control="prodCodeDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
@@ -56,8 +57,6 @@
 	        </c:if>
         </tbody>
       </table>
-      
-      <input type="hidden" id="hqOfficeCode" value="${sessionInfo.hqOfficeCd}"/>
 
       <div class="tr mt20 fr">
         <div id="volmErrBtnLayer" style="display: none;">
@@ -84,7 +83,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 240px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"
@@ -147,5 +146,8 @@
     </div>
   </div>
 </wj-popup>
+<script type="text/javascript">
+	var hqOfficeCd = "${hqOfficeCd}";
+</script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodCodeDtl.js?ver=20200319.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodCodeDtl.js?ver=20200319.02" charset="utf-8"></script>

@@ -153,7 +153,7 @@
 
 	    <%-- gird 1 --%>
 	    <div class="w100 mt10" id="wjWrapType2">
-	        <div class="wj-gridWrap">
+	        <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
 	            <wj-flex-grid
 	              id="monthIostockMainGrid"
 	              loaded-rows="loadedRows(s,e)"

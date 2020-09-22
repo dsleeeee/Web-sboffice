@@ -65,8 +65,8 @@
         </span>
       </td>
     </tr>
-    <tr>
-      <%-- 기사 --%>
+    <tr style="display: none;">
+      <%-- 배송기사 --%>
       <th><s:message code="instockConfm.dlvrNm"/></th>
       <td>
         <span class="txtIn w150px sb-select fl mr5">
@@ -81,10 +81,12 @@
           </wj-combo-box>
         </span>
       </td>
+    </tr>
+    <tr>
       <%--TODO 거래처 로그인시 처리로직 필요 --%>
       <%-- 거래처 --%>
       <th><s:message code="instockConfm.vendr"/></th>
-      <td>
+      <td colspan="3">
         <%-- 거래처선택 모듈 싱글 선택 사용시 include
              param 정의 : targetId - angular 콘트롤러 및 input 생성시 사용할 타켓id
                           displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
@@ -112,8 +114,9 @@
 
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
-    <div class="wj-gridWrap" style="height: 350px;">
-      <wj-flex-grid
+    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+
+    <wj-flex-grid
         autoGenerateColumns="false"
         selection-mode="Row"
         items-source="data"

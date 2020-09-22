@@ -7,13 +7,13 @@ var app = agrid.getApp();
 app.controller('storePeriodQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 	  // 상위 객체 상속 : T/F 는 picker
 	  angular.extend(this, new RootController('storePeriodQtyDtlCtrl', $scope, $http, true));
-	  
+
 	  // grid 초기화 : 생성되기전 초기화되면서 생성된다
 	  $scope.initGrid = function (s, e) {
 
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("storePeriodQtyDtlCtrl");
-		
+
 		// 총매출열에 CSS 추가
 		wijmo.addClass(s.columns[2], 'wijLink');
 		// add the new GroupRow to the grid's 'columnFooters' panel
@@ -38,29 +38,29 @@ app.controller('storePeriodQtyDtlCtrl', ['$scope', '$http', '$timeout', function
 
 	    $scope.storePeriodQtyDtlLayer.show(true);
 	    $scope.searchStorePeriodQtyDtlList();
-	    
+
 	    // 기능수행 종료 : 반드시 추가
 	    event.preventDefault();
 	  });
-	  
+
 	  $scope.searchStorePeriodQtyDtlList = function() {
 		  var params      	= {};
 		    params.prodCd			= $scope.prodCd;
 		    params.prodNm 			= $scope.prodNm;
 		    params.poUnitQty 		= $scope.poUnitQty;
 		    params.qtyFg			= $scope.qtyFg;
-		    
+
 		    // 조회 수행 : 조회URL, 파라미터, 콜백함수
 		    $scope._postJSONQuery.withOutPopUp("/stock/status/storeperiod/prod/storeperiodQtyDtlList.sb", params, function(response) {
 		    	var list = response.data.data.list;
 		    	var length = response.data.data.list.length;
 		    	var grid = wijmo.Control.getControl("#storePeriodQtyDtlGrid");
-		    	
+
 		    	if(length != "" || length != null){
 		    		while(grid.columns.length > 0){
 		    			grid.columns.removeAt(grid.columns.length-1);
 		    		}
-		    		
+
 		    		//첫째줄 헤더 생성
 		    		if($scope.colQty == "03") { // 매장입고
 						// 입고일, 본사코드, 본사명
@@ -83,9 +83,10 @@ app.controller('storePeriodQtyDtlCtrl', ['$scope', '$http', '$timeout', function
 				   		grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.vendrCd"], binding: "vendrCd", width:"*" , align: "center" , isReadOnly: "true"}));
 				   		grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.vendrNm"], binding: "vendrNm", width:"*" , align: "center" , isReadOnly: "true"}));
 					} else if($scope.colQty == "11") { // 매장판매
-						// 영업일자, 배달포장구분
-						grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.saleDate"], binding: "saleDate", width:"*" , align: "center" , isReadOnly: "true"}));
-				   		grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.dlvrPackFg"], binding: "dlvrPackFg", width:"*" , align: "center" , isReadOnly: "true"}));
+						// 영업일자, 매장코드, 매장명
+                        grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.saleDate"], binding: "saleDate", width:"*" , align: "center" , isReadOnly: "true"}));
+                        grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.storeCd"], binding: "storeCd",	width:"*" , align: "center" , isReadOnly: "true"}));
+                        grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.storeNm"], binding: "storeNm",	width:"*" , align: "center" , isReadOnly: "true"}));
 					} else if($scope.colQty == "04") { // 매장이입
 						// 이입일, 매장코드, 매장명
 						grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.moveInDate"], binding: "saleDate",	width:"*" , align: "center" , isReadOnly: "true"}));
@@ -113,7 +114,7 @@ app.controller('storePeriodQtyDtlCtrl', ['$scope', '$http', '$timeout', function
 						grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.createDate"], binding: "saleDate", width:"*" , align: "center" , isReadOnly: "true"}));
 				   		grid.columns.push(new wijmo.grid.Column({header: messages["storePeriod.fg"], binding: "fg", width:"*" , align: "center" , isReadOnly: "true"}));
 					}
-		    		
+
 		    		// 데이터 뿌리기
 		    		var data = new wijmo.collections.CollectionView(list);
 		    		data.trackChanges = true;

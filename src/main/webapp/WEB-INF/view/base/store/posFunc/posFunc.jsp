@@ -111,7 +111,7 @@
           {binding:"hqOfficeCd", header:"<s:message code='posFunc.hqOfficeCd' />", visible:false},
           {binding:"hqOfficeNm", header:"<s:message code='posFunc.hqOfficeNm' />", visible:false},
           {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", width:80},
-          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:"*"},
+          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:150},
           {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:60, visible:false},
           {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:60}
           //{binding:"sysOpenDate", header:"<s:message code='posFunc.sysOpenDate' />", width:"*"}

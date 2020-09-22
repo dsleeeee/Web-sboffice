@@ -13,7 +13,7 @@
 	<div class="searchBar flddUnfld">
 		<a href="#" class="open fl"><s:message code="periodIostock.periodIostock"/></a>
 		<%-- 조회 --%>
-    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('periodiostockCtrlSrch')"><s:message code="cmm.search"/></button>
+    	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('periodiostockCtrl')"><s:message code="cmm.search"/></button>
 	</div>
 	<table class="searchTbl">
 		<colgroup>
@@ -143,7 +143,7 @@
 
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="w100 mt10">
-      <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -294,7 +294,7 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prod.js?ver=20200312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prod.js?ver=20200312.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

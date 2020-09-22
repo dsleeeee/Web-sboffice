@@ -17,7 +17,7 @@ app.controller('cmmQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
     s.columnFooters.rows.push(new wijmo.grid.GroupRow());
     // add a sigma to the header to show that this is a summary row
     s.bottomLeftCells.setCellData(0, 0, '합계');
-    
+
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -27,7 +27,7 @@ app.controller('cmmQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.prodNm 			= data.prodNm;
     $scope.poUnitQty 		= data.poUnitQty;
     $scope.qtyFg			= data.qtyFg;
-    
+
     $scope.cmmQtyDtlLayer.show(true);
     $scope.searchCmmQtyDtlList();
     // 기능수행 종료 : 반드시 추가
@@ -48,9 +48,9 @@ app.controller('cmmQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope._postJSONQuery.withOutPopUp("/stock/com/popup/cmmQtyDtl/getCmmQtyDtlList.sb", params, function(response) {
     	var length = response.data.data.list.length;
    	 	var grid = wijmo.Control.getControl("#qtyDtlGrid");
-   	 	
+
    	  if(length != "" || length != null){
-	 		
+
 			while(grid.columns.length > 4){
 				grid.columns.removeAt(grid.columns.length-1);
 			}
@@ -88,9 +88,9 @@ app.controller('cmmQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
 		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.amt"], 		binding: 'amt', 		align: "right" , isReadOnly: "true", aggregate: "Sum" }));
 		   	}else if($scope.qtyFg == "ioOccrQty11"){ // 매장판매
 		   		$scope.popNm = messages["cmmQtyDtl.accStoreSale"];
-		   	 	grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.slipNo"], 		binding: 'slipNo', 		align: "center" , isReadOnly: "true"}));
-		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.saleDate"], 	binding: 'saleDate', 	align: "center" , isReadOnly: "true"}));
-		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.dlvrPackFg"], 	binding: 'dlvrPackFg', 	align: "center" , isReadOnly: "true"}));
+		   	 	grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.saleDate"], 		binding: 'saleDate', 		align: "center" , isReadOnly: "true"}));
+		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.storeCd"], 	binding: 'storeCd', 	align: "center" , isReadOnly: "true"}));
+		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.storeNm"], 	binding: 'storeNm', 	align: "center" , isReadOnly: "true"}));
 		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.qty"], 		binding: 'qty', 		align: "right" , isReadOnly: "true", aggregate: "Sum" }));
 		   		grid.columns.push(new wijmo.grid.Column({header: messages["cmmQtyDtl.amt"], 		binding: 'amt', 		align: "right" , isReadOnly: "true", aggregate: "Sum" }));
 		   	}else if($scope.qtyFg == "ioOccrQty04"){ // 매장이입
@@ -138,14 +138,14 @@ app.controller('cmmQtyDtlCtrl', ['$scope', '$http', '$timeout', function ($scope
 		}else{
 			$scope._popMsg(response.data.message);
 		}
-   	 
+
     });
-    
+
     // 주문대비 입출고현황 그리드 조회 후 상세내역 그리드 초기화
 //    var orderDtlScope = agrid.getScope('cmmQtyDtlCtrl');
 //    orderDtlScope.dtlGridDefault();
   };
-  
+
   //그리드 초기화
   $scope.dtlGridDefault = function () {
     $timeout(function () {

@@ -150,7 +150,7 @@
 
     <div class="w100 mt10">
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap2">
+      <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           id="apprAcquireMcouponGrid"
           autoGenerateColumns="false"

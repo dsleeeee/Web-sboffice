@@ -59,7 +59,7 @@
             <input type="text" id="hqRemark" name="hqRemark" ng-model="hqRemark" class="sb-input w100" maxlength="300"/>
           </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <%-- 배송기사 --%>
           <th><s:message code="outstockConfm.dtl.dlvrNm"/></th>
           <td>
@@ -159,7 +159,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 400px;">
+        <div class="wj-gridWrap" style="height: 400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             autoGenerateColumns="false"
             selection-mode="Row"

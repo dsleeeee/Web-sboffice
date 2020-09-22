@@ -95,7 +95,7 @@
 
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="mt10">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           id="stockManageViewGrid"
           autoGenerateColumns="false"

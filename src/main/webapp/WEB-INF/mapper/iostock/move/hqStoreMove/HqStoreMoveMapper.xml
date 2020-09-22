@@ -29,7 +29,7 @@
             AND tpsm.DLVR_FG = #{dlvrFg}
         </if>
         <if test='procFg != null and procFg != ""'>
-            AND tphso.PROC_FG = #{procFg}
+            AND tpsm.PROC_FG = #{procFg}
         </if>
         <if test='outStoreCd != null and outStoreCd != ""'>
             AND tmsout.STORE_CD = #{outStoreCd}

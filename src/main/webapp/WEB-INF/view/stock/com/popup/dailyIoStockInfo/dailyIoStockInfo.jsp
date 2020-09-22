@@ -13,7 +13,7 @@
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
-    <div class="wj-dialog-body sc2" style="height: 400px;">
+    <div class="wj-dialog-body sc2" style="height: 450px;">
      <%-- 날짜, 체크박스 표 --%>
 	<table class="searchTbl" style="text-align: center;">
 		<colgroup>
@@ -60,7 +60,7 @@
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 300px;">
+        <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
             id="storeDtlGrid"
             autoGenerateColumns="false"
@@ -87,4 +87,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.js?ver=20190207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.js?ver=20190207.03" charset="utf-8"></script>

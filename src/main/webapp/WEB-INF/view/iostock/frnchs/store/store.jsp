@@ -37,10 +37,10 @@
             </div>
             </td>
         </tr>
-        <tr>
+        <tr style="display: none;">
           <%-- 전표구분 --%>
 	      <th><s:message code="frnchsStore.slipKind"/></th>
-	      <td>
+	      <td colspan="3">
 	        <div class="sb-select">
 	          <span class="txtIn w150px">
 	            <wj-combo-box
@@ -55,28 +55,25 @@
 	          </span>
 	        </div>
 	      </td>
+        </tr>
+        <tr>
             <%-- 매장코드 멀티 선택 팝업 --%>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <th><s:message code="todayBillSaleDtl.store"/></th>
-            <td>
-                <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
-                    <jsp:param name="targetId" value="frnchsStoreSelectStore"/>
-                </jsp:include>
-                <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
-            </td>
+                <th><s:message code="todayBillSaleDtl.store"/></th>
+                <td>
+                    <jsp:include page="/WEB-INF/view/iostock/cmm/selectStoreM.jsp" flush="true">
+                        <jsp:param name="targetId" value="frnchsStoreSelectStore"/>
+                    </jsp:include>
+                        <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+                </td>
             </c:if>
-        </tr>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="frnchsStoreSelectStoreCd" value="${sessionInfo.storeCd}"/>
-        </c:if>
-
-        <tr>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="frnchsStoreSelectStoreCd" value="${sessionInfo.storeCd}"/>
+            </c:if>
             <%-- 매장명 --%>
             <th><s:message code="frnchsStore.storeNm" /></th>
-            <td colspan="3">
-	            <span class="txtIn w35">
-	                <input type="text" id="storeNm" class="sb-input w100" maxlength="100" />
-	            </span>
+            <td>
+                <input type="text" id="storeNm" class="sb-input w100" maxlength="100" />
             </td>
         </tr>
         </tbody>
@@ -175,7 +172,7 @@
 
     <%--위즈모 테이블--%>
     <div id="wjWrapType1" class="w100 mt10">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           control="flex"

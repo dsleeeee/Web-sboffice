@@ -29,7 +29,7 @@
           </div>
         </div>
         <%-- 그리드 --%>
-        <div id="posFuncGrid" style="height:500px;"></div>
+        <div id="posFuncGrid" style="height:500px; overflow-x: hidden;"></div>
       </div>
     </div>
     <%-- 오른쪽 --%>
@@ -72,7 +72,9 @@
             <button class="btn_skyblue" id="btnFuncDelete"><s:message code="cmm.delete" /></button>
             <button class="btn_skyblue" id="btnFuncSave"><s:message code="cmm.save" /></button>
           </div>
+          <div style="overflow-x: auto;">
           <div id="funcKeyGraph" class="funcKeyWrap funcKeyLine2 mt10"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,7 +90,7 @@
   var posFuncHeader =
     [
       {binding: "fnkeyFg", header: "<s:message code='posFunc.fnkeyFg' />", visible: false, width: "*" },
-      {binding: "fnkeyNm", header: "<s:message code='posFunc.fnkeyNm' />", width: "*"},
+      {binding: "fnkeyNm", header: "<s:message code='posFunc.fnkeyNm' />", width: 145},
       {binding: "array", header: "<s:message code='posFunc.array' />", width: "*", visible: false},
       {binding: "totCnt", header: "<s:message code='posFunc.func.cnt' />", width: 60},
       {binding: "regCnt", header: "<s:message code='posFunc.regist.cnt' />", width: 60}
@@ -106,13 +108,13 @@
         binding: "fnkeyNo",
         header: "<s:message code='posFunc.fnkeyNo' />",
         isReadOnly: true,
-        width: "*"
+        width: 80
       },
       {
         binding: "fnkeyNm",
         header: "<s:message code='posFunc.fnkeyNm' />",
         isReadOnly: true,
-        width: "*"
+        width: 200
       },
       {
         binding: "existFgBefore",

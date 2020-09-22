@@ -23,10 +23,10 @@
   </div>
   <table class="searchTbl">
     <colgroup>
-      <col class="w10" />
-      <col class="w40" />
-      <col class="w10" />
-      <col class="w40" />
+      <col class="w15" />
+      <col class="w35" />
+      <col class="w15" />
+      <col class="w35" />
     </colgroup>
     <tbody>
     <tr id="trTouchKeyGrp">
@@ -92,15 +92,15 @@
           </div>
         </div>
         <div class="updownSet mt5">
-          <span class="fl bk lh30 s14 ml5"><s:message code="touchKey.class"/> :</span>
-          <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input fl w60 ml5" style="font-size: 13px;"
+          <%--<span class="fl bk lh30 s14 ml5"><s:message code="touchKey.class"/> :</span>--%>
+          <input type="text" id="_prodClassCdNm" name="prodClassCdNm" class="sb-input fl w70 ml5" style="font-size: 13px;"
                  ng-model="prodClassInfo.prodClassCdNm"
                  ng-click="popUpProdClass()"
                  placeholder="상품분류 선택" ng-readonly="true">
         </div>
         <div class="updownSet mt5">
-            <span class="fl bk lh30 s14 ml5">&nbsp;&nbsp;&nbsp;<s:message code="touchKey.grid.prodNm"/> :</span>
-            <input type="text" id="_prodNm" name="prodNm" class="sb-input fl w60 ml5" style="font-size: 13px;" ng-model="prodClassInfo.prodNm">
+            <%--<span class="fl bk lh30 s14 ml5">&nbsp;&nbsp;&nbsp;<s:message code="touchKey.grid.prodNm"/> :</span>--%>
+            <input type="text" id="_prodNm" name="prodNm" class="sb-input fl w70 ml5" style="font-size: 13px;" ng-model="prodClassInfo.prodNm" placeholder="상품명">
             <button class="btn_skyblue fl ml5" id="btnSearch">
                 <s:message code="cmm.search" />
             </button>

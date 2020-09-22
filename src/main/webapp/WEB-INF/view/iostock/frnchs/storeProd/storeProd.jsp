@@ -99,7 +99,7 @@
 
     <%--위즈모 테이블--%>
     <div id="wjWrapType2" class="w100 mt10">
-      <div class="wj-gridWrap">
+      <div class="wj-gridWrap" style="overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           control="flex"

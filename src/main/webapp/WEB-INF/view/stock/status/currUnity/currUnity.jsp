@@ -101,7 +101,7 @@
 
     <%--위즈모 테이블--%>
     <div class="w100 mt10" id="wjWrapType1">
-    <div class="wj-gridWrap" style="height: 350px;">
+    <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
       <wj-flex-grid
         id="currUnityMainGrid"
         loaded-rows="loadedRows(s,e)"
@@ -205,7 +205,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px;">
+          <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
               id="currUnityHqDtlGrid"
               autoGenerateColumns="false"
@@ -295,7 +295,7 @@
 
         <%--위즈모 테이블--%>
         <div class="w100 mt10">
-          <div class="wj-gridWrap" style="height: 350px;">
+          <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
               id="currUnityStoreDtlGrid"
               autoGenerateColumns="false"

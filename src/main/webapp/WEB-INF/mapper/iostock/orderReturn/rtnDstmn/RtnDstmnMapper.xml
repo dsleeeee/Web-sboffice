@@ -93,12 +93,6 @@
                     <if test='dlvrCd != null and dlvrCd != ""'>
                         AND tphso.DLVR_CD = #{dlvrCd}
                     </if>
-                    <if test='storeCd != null and storeCd != ""'>
-                        AND tms.STORE_CD = #{storeCd}
-                    </if>
-                    <if test='storeNm != null and storeNm != ""'>
-                        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-                    </if>
         <![CDATA[
                     GROUP
                     BY      tphsod.HQ_OFFICE_CD, tphsod.SLIP_NO

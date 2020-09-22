@@ -62,7 +62,7 @@
 
       <div class="w100 mt10 mb20">
         <%--위즈모 테이블--%>
-        <div class="wj-gridWrap" style="height: 250px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height: 200px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
           	id="prodQtyDtlGrid"
             autoGenerateColumns="false"
@@ -94,4 +94,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodQtyDtl.js?ver=20200319.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodQtyDtl.js?ver=20200319.02" charset="utf-8"></script>
