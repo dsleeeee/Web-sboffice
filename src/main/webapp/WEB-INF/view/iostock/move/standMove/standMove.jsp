@@ -93,8 +93,8 @@
         <wj-flex-grid-column header="<s:message code="standMove.moveDate"/>"binding="moveDate" 	width="*" align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="standMove.slipNo"/>" 	binding="slipNo" 	width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="standMove.slipFg"/>" 	binding="slipFg" 	width="*" align="center" 	is-read-only="true" data-map="ioFgMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="standMove.dtlCnt"/>" 	binding="dtlCnt" 	width="*" align="center" 	is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="standMove.confmYn"/>" binding="confmYn" 	width="*" align="center" 	is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="standMove.dtlCnt"/>" 	binding="dtlCnt" 	width="*" align="center" 	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="standMove.confmYn"/>" binding="confmYn" 	width="*" align="center" 	is-read-only="true" data-map="confmYnDataMap" ></wj-flex-grid-column>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -106,7 +106,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/move/standMove/standMove.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/move/standMove/standMove.js?ver=20200921.01" charset="utf-8"></script>
 
 
 

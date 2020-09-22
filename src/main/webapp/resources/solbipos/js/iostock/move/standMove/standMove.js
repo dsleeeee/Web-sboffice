@@ -3,6 +3,12 @@
  */
 var app = agrid.getApp();
 
+// 확정여부
+var confmYnData = [
+  {"name":"사용","value":"Y"},
+  {"name":"미사용","value":"N"}
+];
+
 /** 매장이동관리 그리드 controller */
 app.controller('standMoveCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -41,6 +47,9 @@ app.controller('standMoveCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // picker 사용시 호출 : 미사용시 호출안함
     $scope._makePickColumns("standMoveCtrl");
+
+    // 그리드 DataMap 설정
+    $scope.confmYnDataMap = new wijmo.grid.DataMap(confmYnData, 'value', 'name'); // 확정여부
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
