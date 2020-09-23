@@ -10,6 +10,8 @@ import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockService;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
+import kr.co.solbipos.stock.adj.adj.service.AdjVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -365,4 +367,5 @@ public class VendrInstockController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+       
 }

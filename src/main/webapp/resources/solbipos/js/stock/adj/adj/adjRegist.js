@@ -117,6 +117,8 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
             return false;
           }
           $scope.adjTitle = response.data.data.adjTitle;
+          $("#registSelectStorageCd").val(response.data.data.adjStorageCd);
+          $("#registSelectStorageNm").val(response.data.data.storageNm);          
         }
       }
     }, function errorCallback(response) {
@@ -389,7 +391,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
     }
 
@@ -422,7 +424,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
         return false;
     }
 
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'adj';
 
@@ -430,7 +432,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     if (prcsFg === 'excelFormDown') {
       excelUploadScope.excelFormDownload(uploadFg);
     } else {
-      var msg = messages["excelUploadMPS.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg = uploadFg;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
@@ -459,7 +461,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.addQtyFg = $scope.addQtyFg;
     params.adjStorageCd    = $("#registSelectStorageCd").val();
     
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -492,7 +494,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'adj';
-    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
+    $scope._broadcast('excelUploadErrInfoCtrl', params);
   };
 
 

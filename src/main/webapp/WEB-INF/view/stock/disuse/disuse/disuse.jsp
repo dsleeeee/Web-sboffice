@@ -115,7 +115,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20200904.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuse.js?ver=20200904.02" charset="utf-8"></script>
 
 <%-- 폐기 상세 레이어 --%>
 <c:import url="/WEB-INF/view/stock/disuse/disuse/disuseDtl.jsp">

@@ -68,6 +68,8 @@ public interface VendrInstockHqMapper {
     /** 거래처 입고/반출등록 - 입고/반출상품 PROD 등록 */
     int insertVendrInstockProd(VendrInstockVO vendrInstockVO);
     
+    int mergeVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
     /** 거래처 입고/반출등록 - 입고/반출상품 DTL 수정 */
     int updateVendrInstockDtl(VendrInstockVO vendrInstockVO);
     
@@ -115,4 +117,6 @@ public interface VendrInstockHqMapper {
     
     /** TB_PO_STORE_VENDR_INSTOCK_PROD 확정여부 'Y' */
     int saveVendrInstockProd(VendrInstockVO vendrInstockVO);
+    
+    
 }

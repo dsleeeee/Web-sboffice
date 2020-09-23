@@ -88,6 +88,21 @@
           <label for="storeSplyChk"><s:message code="vendrInstock.reg.storeSplyUprcCheck"/></label>
         </span>
         </c:if>
+        <%--출고창고 --%>
+	   	<p class="s14 bk fl mr5 lh30"><s:message code="outstockConfm.dtl.outStorage"/></p>
+	   	<span class="txtIn w150px sb-select fl mr5">
+	       <wj-combo-box
+	         id="saveDtlOutStorageCd"
+	         ng-model="save.dtl.outStorageCd"
+	         items-source="_getComboData('saveDtlOutStorageCd')"
+	         display-member-path="name"
+	         selected-value-path="value"
+	         is-editable="false"
+	         initialized="_initComboBox(s)"
+	         selected-index-changed="selectedIndexChanged(s)"
+	         >
+	       </wj-combo-box>
+	     </span>
         <%-- 최종원가를 발주원가로 세팅 --%>
         <button type="button" class="btn_skyblue ml5" id="btnLastCostToCostUprc" ng-click="setLastCostToCostUprc()">
           <s:message code="vendrInstock.reg.lastCostToCostUprc"/></button>
@@ -118,8 +133,8 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>"		binding="prevInUnitQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>"		binding="prevInEtcQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.costUprc"/>" 	binding="costUprc" width="110" align="right" is-read-only="false" max-length=8></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>" 		binding="inUnitQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>" 		binding="inEtcQty" width="60" align="right" is-read-only="true" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.unitQty"/>" 		binding="inUnitQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="vendrInstock.reg.etcQty"/>" 		binding="inEtcQty" width="60" align="right" is-read-only="false" max-length=8 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.prevInTotQty"/>" binding="prevInTotQty" width="0" align="left" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inTotQty"/>" 	binding="inTotQty" width="0" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.inAmt"/>" 		binding="inAmt" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -128,17 +143,7 @@
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vatFg"/>" 		binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.vendrVatFg01"/>" binding="vendrVatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vendrInstock.reg.storeSplyUprc"/>"binding="splyUprc" width="70" align="right" is-read-only="false" visible="{{storeSplyChk}}" max-length=8></wj-flex-grid-column>
-			
-			<wj-flex-grid-column header=""                                                  binding="arrStorageCd"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrStorageNm"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-
-			<wj-flex-grid-column header=""                                                  binding="arrInUnitQty"  width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrInEtcQty"   width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrInTotQty"   width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-
-			<wj-flex-grid-column header=""                                                  binding="arrInAmt"      width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrInVat"      width="200" align="left"   	is-read-only="true"     visible="false"                                                 ></wj-flex-grid-column>
-			<wj-flex-grid-column header=""                                                  binding="arrInTot"      width="200" align="left"   	is-read-only="true"     visible="false"                                                	></wj-flex-grid-column>			
+					
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
@@ -154,12 +159,12 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20200910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/vendr/vendrInstock/vendrInstockProdReg.js?ver=20181224.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>
 
-<%-- 공통팝업 수불/재고 엑셀업로드 --%>
-<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.jsp">
+<%-- 수불 엑셀업로드 공통 팝업 --%>
+<c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUpload/excelUpload.jsp">
 </c:import>

@@ -67,11 +67,14 @@
     <select id="getHqProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
         /* USE : DisuseMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE, tshd.DISUSE_STORAGE_CD
+        SELECT  tshd.PROC_FG, tshd.DISUSE_TITLE, tshd.DISUSE_STORAGE_CD, ths.STORAGE_NM
         FROM    TB_ST_HQ_DISUSE tshd
+        ,       TB_HQ_STORAGE               ths        
         WHERE   tshd.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tshd.DISUSE_DATE   = #{disuseDate}
         AND     tshd.SEQ_NO        = #{seqNo}
+		AND     tshd.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
+		AND     tshd.DISUSE_STORAGE_CD    = ths.STORAGE_CD         
         ]]>
     </select>
 
@@ -85,11 +88,14 @@
     <select id="getStProcFgCheck" parameterType="disuseVO" resultType="DefaultMap">
         /* USE : DisuseMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE, tssd.DISUSE_STORAGE_CD
+        SELECT  tssd.PROC_FG, tssd.DISUSE_TITLE, tssd.DISUSE_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_DISUSE tssd
+        ,       TB_MS_STORAGE               tms        
         WHERE   tssd.STORE_CD      = #{storeCd}
         AND     tssd.DISUSE_DATE   = #{disuseDate}
         AND     tssd.SEQ_NO        = #{seqNo}
+        AND		tssd.STORE_CD		= tms.STORE_CD
+        AND		tssd.DISUSE_STORAGE_CD = tms.STORAGE_CD         
         ]]>
     </select>
 

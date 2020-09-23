@@ -78,6 +78,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       $scope.autoAddChk  = false;
       $scope.acinsTitle  = '';
 
+
       // 신규등록이면 실사구분 disabled 시킨다.
       if ($scope.callParent === "acins") {
         $scope.readAcinsFg = true;
@@ -122,6 +123,8 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
             return false;
           }
           $scope.acinsTitle = response.data.data.acinsTitle;
+          $("#registSelectStorageCd").val(response.data.data.adjStorageCd);
+          $("#registSelectStorageNm").val(response.data.data.storageNm);
         }
       }
     }, function errorCallback(response) {
@@ -246,6 +249,8 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     if ($scope.callParent === "acins") {
       var acinsScope = agrid.getScope('acinsCtrl');
       acinsScope.searchAcinsList();
+      
+      $scope.wjAcinsRegistLayer.hide(true);
     }
     // 실사상세내역 페이지에서 호출한 경우
     else if ($scope.callParent === "acinsDtl") {
@@ -255,6 +260,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var acinsDtlScope = agrid.getScope('acinsDtlCtrl');
       acinsDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
       acinsDtlScope.searchAcinsDtlList();
+      
     }
 
 //    $scope.wjAcinsRegistLayer.hide(true);
@@ -418,7 +424,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
     }
 
@@ -451,7 +457,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
         return false;
     }
 
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'acins';
 
@@ -459,7 +465,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     if (prcsFg === 'excelFormDown') {
       excelUploadScope.excelFormDownload(uploadFg);
     } else {
-      var msg = messages["excelUploadMPS.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg = uploadFg;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
@@ -493,7 +499,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
-    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadCtrl');
 
     $http({
       method : 'POST', //방식
@@ -521,7 +527,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'acins';
-    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
+    $scope._broadcast('excelUploadErrInfoCtrl', params);
   };
 
 

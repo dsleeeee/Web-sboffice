@@ -67,11 +67,14 @@
     <select id="getHqProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE, tsha.ADJ_STORAGE_CD
+        SELECT  tsha.PROC_FG, tsha.ADJ_TITLE, tsha.ADJ_STORAGE_CD, ths.STORAGE_NM
         FROM    TB_ST_HQ_ADJUST tsha
+        ,       TB_HQ_STORAGE               ths
         WHERE   tsha.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tsha.ADJ_DATE      = #{adjDate}
         AND     tsha.SEQ_NO        = #{seqNo}
+		AND     tsha.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
+		AND     tsha.ADJ_STORAGE_CD    = ths.STORAGE_CD         
         ]]>
     </select>
 
@@ -85,11 +88,14 @@
     <select id="getStProcFgCheck" parameterType="adjVO" resultType="DefaultMap">
         /* USE : AdjMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD
+        SELECT  tssa.PROC_FG, tssa.ADJ_TITLE, tssa.ADJ_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_ADJUST tssa
+        ,       TB_MS_STORAGE               tms        
         WHERE   tssa.STORE_CD      = #{storeCd}
         AND     tssa.ADJ_DATE      = #{adjDate}
         AND     tssa.SEQ_NO        = #{seqNo}
+        AND		tssa.STORE_CD		= tms.STORE_CD
+        AND		tssa.ADJ_STORAGE_CD = tms.STORAGE_CD        
         ]]>
     </select>
 

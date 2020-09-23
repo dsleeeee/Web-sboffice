@@ -67,11 +67,14 @@
     <select id="getHqProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getHqProcFgCheck */
         <![CDATA[
-        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD
+        SELECT  tshai.PROC_FG, tshai.ACINS_TITLE, tshai.ADJ_STORAGE_CD, ths.STORAGE_NM
         FROM    TB_ST_HQ_ACTUAL_INSPECTION tshai
+		,       TB_HQ_STORAGE               ths        
         WHERE   tshai.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     tshai.ACINS_DATE    = #{acinsDate}
         AND     tshai.SEQ_NO        = #{seqNo}
+		AND     tshai.HQ_OFFICE_CD      = ths.HQ_OFFICE_CD
+		AND     tshai.ADJ_STORAGE_CD    = ths.STORAGE_CD        
         ]]>
     </select>
 
@@ -85,11 +88,14 @@
     <select id="getStProcFgCheck" parameterType="acinsVO" resultType="DefaultMap">
         /* USE : AcinsMapper.getStProcFgCheck */
         <![CDATA[
-        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD
+        SELECT  tssai.PROC_FG, tssai.ACINS_TITLE, tssai.ADJ_STORAGE_CD, tms.STORAGE_NM
         FROM    TB_ST_STORE_ACTUAL_INSPECTION tssai
+        ,       TB_MS_STORAGE               tms        
         WHERE   tssai.STORE_CD      = #{storeCd}
         AND     tssai.ACINS_DATE    = #{acinsDate}
         AND     tssai.SEQ_NO        = #{seqNo}
+        AND		tssai.STORE_CD		= tms.STORE_CD
+        AND		tssai.ADJ_STORAGE_CD = tms.STORAGE_CD 
         ]]>
     </select>
 

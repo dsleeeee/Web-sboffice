@@ -194,30 +194,7 @@
         /* USE : VendrInstockStoreMapper.getVendrInstockProdRegList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-		SELECT	A.PROD_CD
-		,		A.PROD_NM
-		,		A.VAT_FG01
-		,		A.COST_UPRC
-		,		A.LAST_COST_UPRC
-		,		A.PO_UNIT_ALLOW_FG
-		,		A.PO_UNIT_FG
-		,		A.PO_UNIT_QTY
-		,		A.VENDR_VAT_FG01
-		,		A.PREV_IN_UNIT_QTY
-		,		A.PREV_IN_ETC_QTY
-		,		A.PREV_IN_TOT_QTY
-		,		A.IN_AMT
-		,		A.IN_VAT
-		,		A.IN_TOT
-		,		LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
-		,		LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
-		FROM	(
+		
 				SELECT  A.PROD_CD
 				,		A.PROD_NM
 				,		A.VAT_FG01
@@ -233,15 +210,7 @@
 				,		A.IN_AMT
 				,		A.IN_VAT
 				,		A.IN_TOT
-				,		B.PROD_CD       AS  A_PROD_CD
-				,       B.STORAGE_CD    AS  A_STORAGE_CD
-				,       B.STORAGE_NM    AS  A_STORAGE_NM
-				,       B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY
-				,       B.IN_ETC_QTY    AS  A_IN_ETC_QTY
-				,       B.IN_TOT_QTY    AS  A_IN_TOT_QTY
-				,       B.IN_AMT        AS  A_IN_AMT
-				,       B.IN_VAT        AS  A_IN_VAT
-				,       B.IN_TOT        AS  A_IN_TOT
+
 				FROM	(        
 				        SELECT  tmvp.STORE_CD
 				        ,		NVL(tpsvid.SLIP_NO,#{slipNo})	AS SLIP_NO
@@ -301,52 +270,8 @@
 				                                        START WITH  tmpc.P_PROD_CLASS_CD = #{prodClassCd}
 				                                        CONNECT BY  tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
 				                                      )
-				        </if>
-				        
-				        )	A
-				        LEFT OUTER JOIN
-				        (
-						SELECT  X.STORE_CD,
-				                      X.STORAGE_CD,
-				                      X.STORAGE_NM,
-				                      NVL(Y.SLIP_NO,#{slipNo})				AS SLIP_NO,
-				                      Y.PROD_CD,
-				                      NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
-				                      NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
-				                      NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
-				                      NVL(Y.IN_AMT,       0)  AS IN_AMT,
-				                      NVL(Y.IN_VAT,       0)  AS IN_VAT,
-				                      NVL(Y.IN_TOT,       0)  AS IN_TOT
-				              FROM            TB_MS_STORAGE                   X
-				              LEFT OUTER JOIN TB_PO_STORE_VENDR_INSTOCK_PROD    	Y
-				              ON              X.STORE_CD	= Y.STORE_CD
-				              AND             X.STORAGE_CD    = Y.STORAGE_CD
-				              AND             Y.STORE_CD  = #{storeCd}
-				              AND             Y.SLIP_NO       = #{slipNo}
-				--                AND             Y.SLIP_FG       = '1'
-				              WHERE   X.STORE_CD  = #{storeCd}
-				              AND     X.USE_YN    = 'Y'
-				          )   B
-				          ON      A.STORE_CD  	= B.STORE_CD
-				          AND     A.SLIP_NO     = B.SLIP_NO
-				          AND     A.PROD_CD     = (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
-					)	A
-			GROUP
-			BY		A.PROD_CD
-			,		A.PROD_NM
-			,		A.VAT_FG01
-			,		A.COST_UPRC
-			,		A.LAST_COST_UPRC
-			,		A.PO_UNIT_ALLOW_FG
-			,		A.PO_UNIT_FG
-			,		A.PO_UNIT_QTY
-			,		A.VENDR_VAT_FG01
-			,		A.PREV_IN_UNIT_QTY
-			,		A.PREV_IN_ETC_QTY
-			,		A.PREV_IN_TOT_QTY
-			,		A.IN_AMT
-			,		A.IN_VAT
-			,		A.IN_TOT
+				        </if>				        
+				        )	A				        
 			ORDER
 			BY      A.PROD_CD   
         
@@ -417,37 +342,7 @@
         BY      tpsvid.PROD_CD
         ]]>
          -->
-		SELECT	A.PROD_CD
-		,		A.PROD_NM
-		,		A.PO_UNIT_FG
-		,		A.PO_UNIT_QTY
-		,		A.PO_UNIT_ALLOW_FG
-		,		A.SLIP_FG
-		,		A.PO_MIN_QTY
-		,		A.LAST_COST_UPRC
-		,		A.ORDER_COST_UPRC
-		,		A.ORDER_UNIT_QTY
-		,		A.ORDER_ETC_QTY
-		,		A.ORDER_TOT_QTY
-		,		A.COST_UPRC
-		,		A.IN_UNIT_QTY
-		,		A.IN_ETC_QTY
-		,		A.IN_TOT_QTY
-		,		A.PREV_IN_TOT_QTY
-		,		A.IN_AMT
-		,		A.IN_VAT
-		,		A.IN_TOT
-		,		A.VAT_FG01
-		,		A.VENDR_VAT_FG01
-		,		LISTAGG(                                     A.A_STORAGE_CD,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_CD
-		,		LISTAGG(                                     A.A_STORAGE_NM,                  '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_STORAGE_NM
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_UNIT_QTY    ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_UNIT_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_ETC_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_ETC_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT_QTY     ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT_QTY
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_AMT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_AMT
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_VAT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_VAT
-		,		LISTAGG(CASE A.PROD_CD WHEN A.A_PROD_CD THEN A.A_IN_TOT         ELSE 0 END,   '^')  WITHIN GROUP(ORDER BY A.A_STORAGE_CD)   AS ARR_IN_TOT
-		FROM	(
+		
 				SELECT	A.PROD_CD
 				,		A.PROD_NM
 				,		A.PO_UNIT_FG
@@ -470,15 +365,6 @@
 				,		A.IN_TOT
 				,		A.VAT_FG01
 				,		A.VENDR_VAT_FG01
-				,		B.PROD_CD       AS  A_PROD_CD
-				,       B.STORAGE_CD    AS  A_STORAGE_CD
-				,       B.STORAGE_NM    AS  A_STORAGE_NM
-				,       B.IN_UNIT_QTY   AS  A_IN_UNIT_QTY
-				,       B.IN_ETC_QTY    AS  A_IN_ETC_QTY
-				,       B.IN_TOT_QTY    AS  A_IN_TOT_QTY
-				,       B.IN_AMT        AS  A_IN_AMT
-				,       B.IN_VAT        AS  A_IN_VAT
-				,       B.IN_TOT        AS  A_IN_TOT
 				FROM    (
 				        SELECT  tpsvod.STORE_CD, tpsvod.SLIP_NO, tpsvod.PROD_CD, tmp.PROD_NM, tpsvod.PO_UNIT_FG, tpsvod.PO_UNIT_QTY, tmp.PO_UNIT_ALLOW_FG
 				        ,       tpsvod.SLIP_FG, tmp.PO_MIN_QTY
@@ -510,58 +396,7 @@
 				        AND     tmp.PROD_CD         =   tpsvod.PROD_CD
 				        AND     tmv.STORE_CD        =   tpsvod.STORE_CD
 				        AND     tmv.VENDR_CD        =   #{vendrCd}
-						)	A
-			            LEFT OUTER JOIN
-			            (
-							SELECT  X.STORE_CD,
-			                        X.STORAGE_CD,
-			                        X.STORAGE_NM,
-			                        --Y.HQ_OFFICE_CD,			                        
-			                        NVL(Y.SLIP_NO,'20040001')	AS SLIP_NO,
-			                        Y.PROD_CD,
-			                        --Y.STORAGE_CD,
-			                        NVL(Y.IN_UNIT_QTY,  0)  AS IN_UNIT_QTY,
-			                        NVL(Y.IN_ETC_QTY,   0)  AS IN_ETC_QTY,
-			                        NVL(Y.IN_TOT_QTY,   0)  AS IN_TOT_QTY,
-			                        NVL(Y.IN_AMT,       0)  AS IN_AMT,
-			                        NVL(Y.IN_VAT,       0)  AS IN_VAT,
-			                        NVL(Y.IN_TOT,       0)  AS IN_TOT
-			                FROM            TB_MS_STORAGE                   	X
-			                LEFT OUTER JOIN TB_PO_STORE_VENDR_INSTOCK_PROD    	Y
-			                ON              X.STORE_CD		= Y.STORE_CD
-			                AND             X.STORAGE_CD    = Y.STORAGE_CD
-			                AND             Y.STORE_CD  	= #{storeCd}
-			                AND             Y.SLIP_NO       = #{slipNo}
-			                WHERE   X.STORE_CD  = #{storeCd}
-			                AND     X.USE_YN    = 'Y'
-			            )   B
-			            ON      A.STORE_CD  	= B.STORE_CD
-			            AND     A.SLIP_NO       = B.SLIP_NO
-			            AND     A.PROD_CD       = (CASE NVL(B.PROD_CD,'X') WHEN 'X' THEN A.PROD_CD ELSE B.PROD_CD END)
-				)	A
-		GROUP
-		BY		A.PROD_CD
-		,		A.PROD_NM
-		,		A.PO_UNIT_FG
-		,		A.PO_UNIT_QTY
-		,		A.PO_UNIT_ALLOW_FG
-		,		A.SLIP_FG
-		,		A.PO_MIN_QTY
-		,		A.LAST_COST_UPRC
-		,		A.ORDER_COST_UPRC
-		,		A.ORDER_UNIT_QTY
-		,		A.ORDER_ETC_QTY
-		,		A.ORDER_TOT_QTY
-		,		A.COST_UPRC
-		,		A.IN_UNIT_QTY
-		,		A.IN_ETC_QTY
-		,		A.IN_TOT_QTY
-		,		A.PREV_IN_TOT_QTY
-		,		A.IN_AMT
-		,		A.IN_VAT
-		,		A.IN_TOT
-		,		A.VAT_FG01
-		,		A.VENDR_VAT_FG01
+						)	A			            
 		ORDER
 		BY      A.PROD_CD         
     </select>
@@ -1013,7 +848,7 @@
             #{storeCd},
             #{slipNo},
             #{prodCd},
-            #{storageCd},
+            #{outStorageCd},
             #{occrFg},
             #{slipFg},
             #{costUprc},
@@ -1031,6 +866,69 @@
             #{modId}
         )
     </insert>
+    
+    <update id="mergeVendrInstockProd" parameterType="vendrInstockVO">
+	    MERGE INTO TB_PO_STORE_VENDR_INSTOCK_PROD	A
+	    USING DUAL ON           (
+	                                    A.STORE_CD	= #{storeCd}
+	                                    AND A.SLIP_NO		= #{slipNo}
+	                                    AND A.PROD_CD  		= #{prodCd}
+	                                    AND A.STORAGE_CD  	= #{outStorageCd}
+	                                    AND A.OCCR_FG		= #{occrFg}
+	                            )
+	    WHEN     MATCHED THEN   UPDATE	SET	A.COST_UPRC   = #{costUprc},
+	    									A.IN_UNIT_QTY	= #{inUnitQty},
+											A.IN_ETC_QTY	= #{inEtcQty},
+											A.IN_TOT_QTY	= #{inTotQty},
+											A.IN_AMT		= #{inAmt},
+											A.IN_VAT		= #{inVat},
+											A.IN_TOT		= #{inTot},
+	                                        A.MOD_DT    	= #{modDt},
+	                                        A.MOD_ID    	= #{modId}
+	    WHEN NOT MATCHED THEN   INSERT  (
+								            STORE_CD,
+								            SLIP_NO,
+								            PROD_CD,
+								            STORAGE_CD,
+								            OCCR_FG,  
+								            SLIP_FG,
+								            COST_UPRC,
+								            PO_UNIT_FG,
+								            PO_UNIT_QTY,
+								            IN_UNIT_QTY,
+								            IN_ETC_QTY,
+								            IN_TOT_QTY,
+								            IN_AMT,
+								            IN_VAT,
+								            IN_TOT,
+								            REG_DT,
+								            REG_ID,
+								            MOD_DT,
+								            MOD_ID
+								        )
+								        VALUES
+								        (
+								            #{storeCd},
+								            #{slipNo},
+								            #{prodCd},
+								            #{outStorageCd},
+								            #{occrFg},
+								            #{slipFg},
+								            #{costUprc},
+								            #{poUnitFg},
+								            #{poUnitQty},
+								            #{inUnitQty},
+								            #{inEtcQty},
+								            #{inTotQty},
+								            #{inAmt},
+								            #{inVat},
+								            #{inTot},
+								            #{regDt},
+								            #{regId},
+								            #{modDt},
+								            #{modId}
+								        )
+	</update> 
     
     <!-- 거래처 입고/반출등록 - 입고/반출정보 DTL 수정 -->
     <!--
@@ -1074,7 +972,7 @@
         ,       MOD_DT      = #{modDt}
         ,       MOD_ID      = #{modId}
         WHERE   STORE_CD    = #{storeCd}
-        AND 	STORAGE_CD  = #{storageCd}
+        AND 	STORAGE_CD  = #{outStorageCd}
         AND     SLIP_NO     = #{slipNo}
         AND     PROD_CD     = #{prodCd}
     </update>
@@ -1108,6 +1006,18 @@
         AND     SLIP_NO   = #{slipNo}
         AND     PROD_CD   = #{prodCd}
     </delete>
+    
+    <delete id="deleteVendrInstockProd" parameterType="vendrInstockVO">
+        /* USE : VendrInstockStoreMapper.deleteVendrInstockProd */
+        DELETE  TB_PO_STORE_VENDR_INSTOCK_PROD
+        WHERE   STORE_CD  		= 	#{storeCd}
+        AND     SLIP_NO       	= 	#{slipNo}
+        AND     PROD_CD       	= 	#{prodCd}
+        AND		OCCR_FG			=	#{occrFg}
+		<if test='delFg != null and delFg == "Y"'>
+		AND		STORAGE_CD		!=	#{outStorageCd}
+		</if>        
+    </delete>    
 	
     <!-- 거래처 입고/반출등록 - 입고/반출정보 진행상태 변경시 거래처정산 데이터 등록 -->
     <!--

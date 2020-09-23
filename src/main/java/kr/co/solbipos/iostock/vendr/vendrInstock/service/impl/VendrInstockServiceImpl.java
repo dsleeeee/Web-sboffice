@@ -343,16 +343,6 @@ public class VendrInstockServiceImpl implements VendrInstockService {
         String currentDt = currentDateTimeString();
         VendrInstockVO vendrInstockHdVO = new VendrInstockVO();
         
-        //TB_PO_HQ_VENDR_INSTOCK_DTL Insert or Update에 사용
-        String[] storageCd;
-        String[] storageNm;
-        String[] storageInUnitQty;
-        String[] storageInEtcQty;
-        String[] storageInTotQty;
-        String[] storageInAmt;
-        String[] storageInVat;
-        String[] storageInTot;
-        
         // regId, regDt, modId, modDt, hqOfficd, storeCd 세팅
         vendrInstockHdVO = setSessionValue(vendrInstockHdVO, sessionInfoVO, currentDt);
 
@@ -403,21 +393,21 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                     int unitQty      = (vendrInstockVO.getInUnitQty()     == null ? 0 : Math.abs(vendrInstockVO.getInUnitQty()));
                     int etcQty       = (vendrInstockVO.getInEtcQty()      == null ? 0 : Math.abs(vendrInstockVO.getInEtcQty()));
                     
-                    /*                     
+                                       
                     int orderUnitQty = ((prevUnitQty + unitQty) + Integer.valueOf((prevEtcQty + etcQty) / poUnitQty)) * slipFg;
                     int orderEtcQty  = Integer.valueOf((prevEtcQty + etcQty) % poUnitQty) * slipFg;
                     int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : prevTotQty	+	Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
                     Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : prevAmt	+	Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
                     Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : prevVat	+	Math.abs(vendrInstockVO.getInVat()))    * slipFg;
                     Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : prevTot	+	Math.abs(vendrInstockVO.getInTot()))    * slipFg;
-                    */
                     
-                    int orderUnitQty = (unitQty + Integer.valueOf(etcQty) / poUnitQty) * slipFg;
-                    int orderEtcQty  = Integer.valueOf(etcQty % poUnitQty) * slipFg;
-                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
-                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
-                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
-                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
+                    
+//                    int orderUnitQty = (unitQty + Integer.valueOf(etcQty) / poUnitQty) * slipFg;
+//                    int orderEtcQty  = Integer.valueOf(etcQty % poUnitQty) * slipFg;
+//                    int orderTotQty  = (vendrInstockVO.getInTotQty()   == null ? 0 : Math.abs(vendrInstockVO.getInTotQty())) * slipFg;
+//                    Long orderAmt    = (vendrInstockVO.getInAmt()      == null ? 0 : Math.abs(vendrInstockVO.getInAmt()))    * slipFg;
+//                    Long orderVat    = (vendrInstockVO.getInVat()      == null ? 0 : Math.abs(vendrInstockVO.getInVat()))    * slipFg;
+//                    Long orderTot    = (vendrInstockVO.getInTot()      == null ? 0 : Math.abs(vendrInstockVO.getInTot()))    * slipFg;
                     
                     
                     
@@ -442,94 +432,113 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                         result = vendrInstockHqMapper.insertVendrInstockDtl(vendrInstockVO);
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         
+                        
+                        vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+                        
+                        
+                        vendrInstockVO.setDelFg					("Y");
+                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));                        
+                        
+                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         //창고별 상품저장
                         //TB_PO_HQ_VENDR_INSTOCK_PROD - START
                     	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
-        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
-        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
-        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
-        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
-        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
-        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
-
-        	            for(int k=0; k<storageCd.length; k++) {
-        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
-        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
-        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
-        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
-        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
-        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
-
-        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
-
-        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
-        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
-
-        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setRegDt			        (currentDt	);
-        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setModDt			        (currentDt	);
-
-        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
-        	            	
-    	            		result = vendrInstockHqMapper.insertVendrInstockProd(vendrInstockVO);
-    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-        	            }
+//        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
+//        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
+//        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
+//        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
+//        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
+//        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
+//        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
+//        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
+//
+//        	            for(int k=0; k<storageCd.length; k++) {
+//        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
+//        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
+//        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
+//        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
+//        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
+//        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+//
+//        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
+//        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
+//
+//        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
+//        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//
+//        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setRegDt			        (currentDt	);
+//        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setModDt			        (currentDt	);
+//
+//        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
+//        	            	
+//    	            		result = vendrInstockHqMapper.insertVendrInstockProd(vendrInstockVO);
+//    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//        	            }
         	        //TB_PO_HQ_VENDR_INSTOCK_PROD - END
                     }
                     else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                         result = vendrInstockStoreMapper.insertVendrInstockDtl(vendrInstockVO);
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         
+    		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)                        
+//                        result = vendrInstockStoreMapper.insertVendrInstockProd(vendrInstockVO);
+    		            vendrInstockVO.setDelFg					("Y");
+                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
+                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        
+                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                        
                         //창고별 상품저장
                         //TB_PO_STORE_VENDR_INSTOCK_PROD - START
                     	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
-        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
-        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
-        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
-        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
-        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
-        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
-
-        	            for(int k=0; k<storageCd.length; k++) {
-        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
-        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
-        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
-        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
-        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
-        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
-
-        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
-
-        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
-        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
-
-        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setRegDt			        (currentDt	);
-        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setModDt			        (currentDt	);
-
-        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
-        	            	
-    	            		result = vendrInstockStoreMapper.insertVendrInstockProd(vendrInstockVO);
-    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-        	            }
+//        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
+//        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
+//        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
+//        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
+//        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
+//        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
+//        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
+//        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
+//
+//        	            for(int k=0; k<storageCd.length; k++) {
+//        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
+//        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
+//        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
+//        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
+//        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
+//        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+//
+//        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
+//        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setSlipFg		        (vendrInstockVO.getSlipFg()					);	//전표구분 1:주문 -1:반품
+//
+//        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
+//        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//
+//        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setRegDt			        (currentDt	);
+//        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setModDt			        (currentDt	);
+//
+//        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
+//        	            	
+//    	            		result = vendrInstockStoreMapper.insertVendrInstockProd(vendrInstockVO);
+//    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//        	            }
         	        //TB_PO_STORE_VENDR_INSTOCK_PROD - END
                     }
                 }
@@ -539,96 +548,115 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                         result = vendrInstockHqMapper.updateVendrInstockDtl(vendrInstockVO);
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         
+    		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)                        
+//                        result = vendrInstockHqMapper.updateVendrInstockProd(vendrInstockVO);
+    		            vendrInstockVO.setDelFg					("Y");
+                        result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
+                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        
+                        result = vendrInstockHqMapper.mergeVendrInstockProd(vendrInstockVO);
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+                        
                         //창고별 상품저장
                         //TB_PO_HQ_VENDR_INSTOCK_PROD - START
                     	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
-        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
-        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
-        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
-        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
-        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
-        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
-        	                    	            
-        	            for(int k=0; k<storageCd.length; k++) {
-        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
-        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
-        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
-        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
-        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
-        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
-
-        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-//        		            vendrInstockVO.setOccrFg				("01"										);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품        		            
-        		            
-        		            vendrInstockVO.setInUnitQty		        (prevUnitQty +	Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-        		            vendrInstockVO.setInEtcQty		        (prevEtcQty +	Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-        		            vendrInstockVO.setInTotQty		        (prevTotQty +	Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-        		            vendrInstockVO.setInAmt			        (prevAmt +	Long.parseLong		(storageInAmt		[k]));	//입고금액
-        		            vendrInstockVO.setInVat			        (prevVat +	Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-        		            vendrInstockVO.setInTot			        (prevTot +	Long.parseLong		(storageInTot		[k]));	//입고금액합계
-
-        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setRegDt			        (currentDt	);
-        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setModDt			        (currentDt	);
-
-        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
-
-    	            		result = vendrInstockHqMapper.updateVendrInstockProd(vendrInstockVO);
-    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-        	            }
+//        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
+//        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
+//        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
+//        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
+//        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
+//        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
+//        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
+//        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
+//        	                    	            
+//        	            for(int k=0; k<storageCd.length; k++) {
+//        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
+//        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
+//        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
+//        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
+//        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
+//        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+//
+//        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
+////        		            vendrInstockVO.setOccrFg				("01"										);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품        		            
+//        		            
+//        		            vendrInstockVO.setInUnitQty		        (prevUnitQty +	Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//        		            vendrInstockVO.setInEtcQty		        (prevEtcQty +	Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//        		            vendrInstockVO.setInTotQty		        (prevTotQty +	Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//        		            vendrInstockVO.setInAmt			        (prevAmt +	Long.parseLong		(storageInAmt		[k]));	//입고금액
+//        		            vendrInstockVO.setInVat			        (prevVat +	Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//        		            vendrInstockVO.setInTot			        (prevTot +	Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//
+//        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setRegDt			        (currentDt	);
+//        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setModDt			        (currentDt	);
+//
+//        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
+//
+//    	            		result = vendrInstockHqMapper.updateVendrInstockProd(vendrInstockVO);
+//    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//        	            }
         	        //TB_PO_HQ_VENDR_INSTOCK_PROD - END
                     }
                     else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) { // 매장
                         result = vendrInstockStoreMapper.updateVendrInstockDtl(vendrInstockVO);
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         
+    		            
+                        vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)                        
+//                        result = vendrInstockStoreMapper.updateVendrInstockProd(vendrInstockVO);
+                        vendrInstockVO.setDelFg					("Y");
+                        result = vendrInstockStoreMapper.deleteVendrInstockProd(vendrInstockVO);
+                        if(result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        
+                        result = vendrInstockStoreMapper.mergeVendrInstockProd(vendrInstockVO);
+	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+	            		
                         //창고별 상품저장
                         //TB_PO_STORE_VENDR_INSTOCK_PROD - START
                     	// ^ 로 사용하는  구분자를 별도의 constant로 구현하지 않았음. (추후 굳이 변경할 필요가 없다고 생각되기에)
-        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
-        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
-        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
-        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
-        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
-        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
-        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
-        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
-        	                   	            
-        	            for(int k=0; k<storageCd.length; k++) {
-        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
-        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
-        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
-        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
-        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
-        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
-
-        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
-//        		            vendrInstockVO.setOccrFg				("06"										);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
-        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
-
-        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
-        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
-        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
-        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
-        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
-        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
-
-        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setRegDt			        (currentDt	);
-        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
-        		            vendrInstockVO.setModDt			        (currentDt	);
-
-        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
-
-    	            		result = vendrInstockStoreMapper.updateVendrInstockProd(vendrInstockVO);
-    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-        	            }
+//        	            storageCd           = vendrInstockVO.getArrStorageCd().split("\\^");	//split의 인자로 들어가는 String Token이 regex 정규식이기 때문에, 특수문자임을 명시적으로 알려주어야 함.
+//        	            storageNm           = vendrInstockVO.getArrStorageNm().split("\\^");
+//        	            storageInUnitQty    = vendrInstockVO.getArrInUnitQty().split("\\^");
+//        	            storageInEtcQty     = vendrInstockVO.getArrInEtcQty	().split("\\^");
+//        	            storageInTotQty     = vendrInstockVO.getArrInTotQty	().split("\\^");
+//        	            storageInAmt        = vendrInstockVO.getArrInAmt	().split("\\^");
+//        	            storageInVat        = vendrInstockVO.getArrInVat	().split("\\^");
+//        	            storageInTot        = vendrInstockVO.getArrInTot	().split("\\^");
+//        	                   	            
+//        	            for(int k=0; k<storageCd.length; k++) {
+//        		            LOGGER.debug("### storageInUnitQty: " + storageInUnitQty[k]	);
+//        		            LOGGER.debug("### storageInEtcQty : " + storageInEtcQty	[k]	);
+//        		            LOGGER.debug("### storageInTotQty : " + storageInTotQty	[k]	);
+//        		            LOGGER.debug("### storageInAmt    : " + storageInAmt	[k]	);
+//        		            LOGGER.debug("### storageInVat    : " + storageInVat	[k]	);
+//        		            LOGGER.debug("### storageInTot    : " + storageInTot	[k]	);
+//
+//        		            vendrInstockVO.setStorageCd				(storageCd[k]								);	//창고코드
+////        		            vendrInstockVO.setOccrFg				("06"										);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "06" : "18"	);	//발생구분(03:매장입고)
+//        		            vendrInstockVO.setSlipFg		        (1											);	//전표구분 1:주문 -1:반품
+//
+//        		            vendrInstockVO.setInUnitQty		        (Integer.parseInt	(storageInUnitQty	[k]));	//입고수량 주문단위
+//        		            vendrInstockVO.setInEtcQty		        (Integer.parseInt	(storageInEtcQty	[k]));	//입고수량 나머지
+//        		            vendrInstockVO.setInTotQty		        (Integer.parseInt	(storageInTotQty	[k]));	//입고수량합계 낱개
+//        		            vendrInstockVO.setInAmt			        (Long.parseLong		(storageInAmt		[k]));	//입고금액
+//        		            vendrInstockVO.setInVat			        (Long.parseLong		(storageInVat		[k]));	//입고금액VAT
+//        		            vendrInstockVO.setInTot			        (Long.parseLong		(storageInTot		[k]));	//입고금액합계
+//
+//        		            vendrInstockVO.setRegId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setRegDt			        (currentDt	);
+//        		            vendrInstockVO.setModId			        (sessionInfoVO.getUserId());
+//        		            vendrInstockVO.setModDt			        (currentDt	);
+//
+//        	            	LOGGER.debug("### getProperties: " + vendrInstockVO.getProperties() );
+//
+//    	            		result = vendrInstockStoreMapper.updateVendrInstockProd(vendrInstockVO);
+//    	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+//        	            }
         	        //TB_PO_STORE_VENDR_INSTOCK_PROD - END
                     }
                 }
@@ -639,7 +667,7 @@ public class VendrInstockServiceImpl implements VendrInstockService {
                         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                         vendrInstockVO.setOccrFg				(vendrInstockVO.getSlipFg()	== 1 ? "01" : "16"	);	//발생구분(03:매장입고)
-                        
+                        vendrInstockVO.setDelFg					("N");
                         result = vendrInstockHqMapper.deleteVendrInstockProd(vendrInstockVO);
 	            		if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
                         
