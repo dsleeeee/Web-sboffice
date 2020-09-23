@@ -1160,10 +1160,10 @@
     <!--  거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_STORE_VENDR_ORDER_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
         /* USE : VendrOrderMapper.insertExcelUploadAddQty */
         <choose>
             <!-- 본사 -->
@@ -1255,10 +1255,10 @@
     <!--  거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteVendrOrderToExcelUploadData" parameterType="excelUploadVO">
+    <delete id="deleteVendrOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : VendrOrderMapper.deleteVendrOrderToExcelUploadData */
         <choose>
             <!-- 본사 -->
@@ -1291,10 +1291,10 @@
     <!--
         TABLE    : TB_PO_HQ_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
                    TB_PO_STORE_VENDR_ORDER_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 발주등록 엑셀업로드 - 엑셀업로드 한 수량을 발주수량으로 입력한다.
     -->
-    <insert id="insertVendrOrderToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertVendrOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : VendrOrderMapper.insertVendrOrderToExcelUploadData */
         <selectKey resultType="int" keyProperty="vatFg" order="BEFORE">
             <!-- 본사 -->
@@ -1512,10 +1512,10 @@
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
                    TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploadVO
+        PARAM    : excelUploaMPSVO
         COMMENTS : 거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : VendrOrderMapper.deleteExcelUploadCompleteData */
         <choose>
             <!-- 본사 -->

@@ -1,7 +1,7 @@
 package kr.co.solbipos.iostock.order.storeOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
@@ -71,18 +71,18 @@ public interface StoreOrderMapper {
     int insertDstbRegist(DstbReqVO dstbReqVO);
 
     /** 주문등록 엑셀업로드 - 엑셀업로드 수량추가 */
-    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+    int insertExcelUploadAddQty(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
-    int deleteStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int deleteStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 엑셀업로드시 여신 체크 */
-    DefaultMap<String> storeLoanCheck(ExcelUploadVO excelUploadVO);
+    DefaultMap<String> storeLoanCheck(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 */
-    int insertStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int insertStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
-    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
+    int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
 
 }

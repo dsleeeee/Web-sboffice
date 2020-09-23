@@ -7,7 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -270,36 +270,36 @@ public class VendrOrderServiceImpl implements VendrOrderService {
 
     /** 거래처 발주등록 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadVO.setRegDt(currentDt);
-        excelUploadVO.setModId(sessionInfoVO.getUserId());
-        excelUploadVO.setModDt(currentDt);
+        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setRegDt(currentDt);
+        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setModDt(currentDt);
 
         // 수량추가인 경우
-        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
-            result = vendrOrderMapper.insertExcelUploadAddQty(excelUploadVO);
+        if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
+            result = vendrOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
         }
 
         // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-        result = vendrOrderMapper.deleteVendrOrderToExcelUploadData(excelUploadVO);
+        result = vendrOrderMapper.deleteVendrOrderToExcelUploadData(excelUploadMPSVO);
 
         // 엑셀업로드 한 수량을 발주수량으로 입력
-        result = vendrOrderMapper.insertVendrOrderToExcelUploadData(excelUploadVO);
+        result = vendrOrderMapper.insertVendrOrderToExcelUploadData(excelUploadMPSVO);
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = vendrOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        result = vendrOrderMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
 
         VendrOrderVO vendrOrderHdVO = new VendrOrderVO();
-        vendrOrderHdVO.setSlipNo(excelUploadVO.getSlipNo());
+        vendrOrderHdVO.setSlipNo(excelUploadMPSVO.getSlipNo());
 
         /** regId, regDt, modId, modDt, hqOfficd, storeCd, orgnFg 세팅  */
         vendrOrderHdVO = setSessionValue(vendrOrderHdVO, sessionInfoVO, currentDt);

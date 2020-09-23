@@ -6,7 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockService;
 import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import kr.co.solbipos.iostock.volmErr.volmErr.service.VolmErrService;
@@ -351,7 +351,7 @@ public class VendrInstockController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   excelUploadVO
+     * @param   excelUploadMPSVO
      * @return  String
      * @author  안동관
      * @since   2018. 12. 18.
@@ -359,11 +359,11 @@ public class VendrInstockController {
     @RequestMapping(value = "/vendrInstockProdReg/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
-        Model model, ExcelUploadVO excelUploadVO) {
+        Model model, ExcelUploadMPSVO excelUploadMPSVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = vendrInstockService.excelUpload(excelUploadVO, sessionInfoVO);
+        int result = vendrInstockService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

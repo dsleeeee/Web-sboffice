@@ -522,10 +522,10 @@
     <!--  분배마감 - 엑셀업로드 한 수량을 분배수량으로 입력 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 분배마감 - 엑셀업로드 한 수량을 분배수량으로 입력한다.
     -->
-    <insert id="insertDstbToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertDstbToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : DstbCloseStoreMapper.insertDstbToExcelUploadData */
         <selectKey resultType="int" keyProperty="seq" order="BEFORE">
             SELECT  NVL(MAX(tphsd.SEQ), 0)+1 AS SEQ
@@ -611,10 +611,10 @@
     <!--  분배마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPS
         COMMENTS : 분배마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : DstbCloseStoreMapper.deleteExcelUploadCompleteData */
         DELETE  TB_PO_TEMP_EXCEL
         WHERE   SESSION_ID  = #{sessionId}

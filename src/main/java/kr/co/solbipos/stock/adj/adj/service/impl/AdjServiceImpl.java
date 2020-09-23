@@ -7,7 +7,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjService;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -402,39 +402,39 @@ public class AdjServiceImpl implements AdjService {
 
     /** 조정관리 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadVO.setRegDt(currentDt);
-        excelUploadVO.setModId(sessionInfoVO.getUserId());
-        excelUploadVO.setModDt(currentDt);
+        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setRegDt(currentDt);
+        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setModDt(currentDt);
 
-        String seqNo = StringUtil.getOrBlank(excelUploadVO.getSeqNo());
+        String seqNo = StringUtil.getOrBlank(excelUploadMPSVO.getSeqNo());
         String insFg = (seqNo.equals("") ? "I" : "U");
         if(!seqNo.equals("")) {
             // 수량추가인 경우
-            if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
-                result = adjMapper.insertExcelUploadAddQty(excelUploadVO);
+            if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
+                result = adjMapper.insertExcelUploadAddQty(excelUploadMPSVO);
             }
 
             // 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-            result = adjMapper.deleteAdjToExcelUploadData(excelUploadVO);
+            result = adjMapper.deleteAdjToExcelUploadData(excelUploadMPSVO);
         }
 
         // 신규등록인 경우
         if(seqNo.equals("")) {
             // 신규 seq 조회
             AdjVO newSeqNoVO = new AdjVO();
-            newSeqNoVO.setHqOfficeCd(excelUploadVO.getHqOfficeCd());
-            newSeqNoVO.setStoreCd(excelUploadVO.getStoreCd());
-            newSeqNoVO.setAdjDate(excelUploadVO.getDate());
+            newSeqNoVO.setHqOfficeCd(excelUploadMPSVO.getHqOfficeCd());
+            newSeqNoVO.setStoreCd(excelUploadMPSVO.getStoreCd());
+            newSeqNoVO.setAdjDate(excelUploadMPSVO.getDate());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
                 seqNo = adjMapper.getHqNewSeqNo(newSeqNoVO);
             }
@@ -443,22 +443,22 @@ public class AdjServiceImpl implements AdjService {
             }
         }
 
-        excelUploadVO.setSeqNo(Integer.parseInt(seqNo));
+        excelUploadMPSVO.setSeqNo(Integer.parseInt(seqNo));
         // 엑셀업로드 한 수량을 조정수량으로 입력
-        result = adjMapper.insertAdjToExcelUploadData(excelUploadVO);
+        result = adjMapper.insertAdjToExcelUploadData(excelUploadMPSVO);
 
         // 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = adjMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        result = adjMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
 
         AdjVO adjHdVO = new AdjVO();
         adjHdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         adjHdVO.setStoreCd(sessionInfoVO.getStoreCd());
-        adjHdVO.setAdjDate(excelUploadVO.getDate());
-        adjHdVO.setAdjTitle(excelUploadVO.getTitle());
+        adjHdVO.setAdjDate(excelUploadMPSVO.getDate());
+        adjHdVO.setAdjTitle(excelUploadMPSVO.getTitle());
         adjHdVO.setSeqNo(Integer.parseInt(seqNo));
         adjHdVO.setProcFg("0");
         adjHdVO.setStorageCd("999");
-        adjHdVO.setAdjStorageCd(excelUploadVO.getAdjStorageCd());
+        adjHdVO.setAdjStorageCd(excelUploadMPSVO.getAdjStorageCd());
         adjHdVO.setRegId(sessionInfoVO.getUserId());
         adjHdVO.setRegDt(currentDt);
         adjHdVO.setModId(sessionInfoVO.getUserId());

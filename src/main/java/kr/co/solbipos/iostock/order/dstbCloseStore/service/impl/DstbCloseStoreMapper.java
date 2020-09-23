@@ -1,7 +1,7 @@
 package kr.co.solbipos.iostock.order.dstbCloseStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -46,9 +46,9 @@ public interface DstbCloseStoreMapper {
     int deleteDstbAdd(DstbCloseStoreVO dstbCloseStoreVO);
 
     /** 분배마감 엑셀업로드 - 엑셀업로드 한 수량을 분배수량으로 입력 */
-    int insertDstbToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int insertDstbToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 분배마감 엑셀업로드 - 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
-    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
+    int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
 
 }

@@ -12,7 +12,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreService;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 
@@ -170,24 +170,24 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
 
     /** 분배마감 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadVO.setRegDt(currentDt);
-        excelUploadVO.setModId(sessionInfoVO.getUserId());
-        excelUploadVO.setModDt(currentDt);
+        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setRegDt(currentDt);
+        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setModDt(currentDt);
 
         // 엑셀업로드 한 수량을 분배수량으로 입력
-        result = dstbCloseStoreMapper.insertDstbToExcelUploadData(excelUploadVO);
+        result = dstbCloseStoreMapper.insertDstbToExcelUploadData(excelUploadMPSVO);
 
         // 분배수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = dstbCloseStoreMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        result = dstbCloseStoreMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
 
         return result;
     }

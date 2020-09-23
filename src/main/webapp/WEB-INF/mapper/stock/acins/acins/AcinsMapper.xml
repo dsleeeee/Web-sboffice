@@ -893,10 +893,10 @@
     <!--  실사관리 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_ST_STORE_ACTUAL_INSPECTION_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 실사관리 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
         /* USE : AcinsMapper.insertExcelUploadAddQty */
         <choose>
             <!-- 본사 -->
@@ -978,10 +978,10 @@
     <!--  실사관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 실사관리 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteAcinsToExcelUploadData" parameterType="excelUploadVO">
+    <delete id="deleteAcinsToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : AcinsMapper.deleteAcinsToExcelUploadData */
         <choose>
             <!-- 본사 -->
@@ -1016,10 +1016,10 @@
     <!--
         TABLE    : TB_ST_HQ_ACTUAL_INSPECTION_DTL, TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_CUR, TB_ST_HQ_STOCK_MONTHLY
                    TB_ST_STORE_ACTUAL_INSPECTION_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT, TB_ST_STORE_STOCK_CUR, TB_ST_STORE_STOCK_MONTHLY
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 실사관리 엑셀업로드 - 엑셀업로드 한 수량을 실사수량으로 입력한다.
     -->
-    <insert id="insertAcinsToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertAcinsToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : AcinsMapper.insertAcinsToExcelUploadData */
         <choose>
             <!-- 본사 -->
@@ -1168,10 +1168,10 @@
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_HQ_PRODUCT
                    TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploadVO
+        PARAM    : excelUploaMPSVO
         COMMENTS : 실사관리 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : AcinsMapper.deleteExcelUploadCompleteData */
         <choose>
             <!-- 본사 -->

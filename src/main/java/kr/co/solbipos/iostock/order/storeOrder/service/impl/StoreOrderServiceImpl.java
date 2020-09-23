@@ -17,7 +17,7 @@ import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.impl.DstbCloseStoreMapper;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
@@ -383,34 +383,34 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
     /** 주문등록 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadVO excelUploadVO, SessionInfoVO sessionInfoVO) {
+    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
 
-        excelUploadVO.setSessionId(sessionInfoVO.getSessionId());
-        excelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        excelUploadVO.setStoreCd(sessionInfoVO.getStoreCd());
-        excelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        excelUploadVO.setRegId(sessionInfoVO.getUserId());
-        excelUploadVO.setRegDt(currentDt);
-        excelUploadVO.setModId(sessionInfoVO.getUserId());
-        excelUploadVO.setModDt(currentDt);
+        excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
+        excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        excelUploadMPSVO.setStoreCd(sessionInfoVO.getStoreCd());
+        excelUploadMPSVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        excelUploadMPSVO.setRegId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setRegDt(currentDt);
+        excelUploadMPSVO.setModId(sessionInfoVO.getUserId());
+        excelUploadMPSVO.setModDt(currentDt);
 
         //수량추가인 경우
-        if(StringUtil.getOrBlank(excelUploadVO.getAddQtyFg()).equals("add")) {
-            result = storeOrderMapper.insertExcelUploadAddQty(excelUploadVO);
+        if(StringUtil.getOrBlank(excelUploadMPSVO.getAddQtyFg()).equals("add")) {
+            result = storeOrderMapper.insertExcelUploadAddQty(excelUploadMPSVO);
         }
 
         //기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제
-        result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadVO);
+        result = storeOrderMapper.deleteStoreOrderToExcelUploadData(excelUploadMPSVO);
 
         //여신 체크
         StoreOrderVO storeOrderLoanVO = new StoreOrderVO();
-        storeOrderLoanVO.setReqDate		(excelUploadVO.getDate		()	);
-        storeOrderLoanVO.setSlipFg		(excelUploadVO.getSlipFg	()	);
-        storeOrderLoanVO.setHqOfficeCd	(excelUploadVO.getHqOfficeCd() 	);
-        storeOrderLoanVO.setStoreCd		(excelUploadVO.getStoreCd	() 	);
+        storeOrderLoanVO.setReqDate		(excelUploadMPSVO.getDate		()	);
+        storeOrderLoanVO.setSlipFg		(excelUploadMPSVO.getSlipFg	()	);
+        storeOrderLoanVO.setHqOfficeCd	(excelUploadMPSVO.getHqOfficeCd() 	);
+        storeOrderLoanVO.setStoreCd		(excelUploadMPSVO.getStoreCd	() 	);
 
         DefaultMap<String> storeLoan = storeOrderMapper.getStoreLoan(storeOrderLoanVO);
         /*
@@ -426,14 +426,14 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                     availableOrderAmt = storeLoan.getLong("availableOrderAmt") - storeLoan.getLong("prevOrderTot");
                 }
             }
-            DefaultMap<String> storeOrder = storeOrderMapper.storeLoanCheck(excelUploadVO);
+            DefaultMap<String> storeOrder = storeOrderMapper.storeLoanCheck(excelUploadMPSVO);
             orderAmt = storeOrder.getLong("orderTot");
             if(orderAmt > availableOrderAmt) {
                 throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
             }
         }
 
-//        DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadVO);
+//        DefaultMap<String> storeLoan = storeOrderMapper.storeLoanCheck(excelUploadMPSVO);
 //        if(storeLoan.getStr("isExist").equals("Y")) {
 //            if(storeLoan.getLong("orderTot") > storeLoan.getLong("currLoanAmt")) {
 //                throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.excelLoanOver")); // 주문총금액이 여신잔여 금액을 초과하였습니다. 업로드 된 자료는 처리되지 않았습니다.
@@ -452,7 +452,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
             	availableOrderAmt = availableOrderAmt - storeLoan.getLong("prevOrderTot");
             }
 
-            DefaultMap<String> storeOrder = storeOrderMapper.storeLoanCheck(excelUploadVO);
+            DefaultMap<String> storeOrder = storeOrderMapper.storeLoanCheck(excelUploadMPSVO);
             orderAmt = storeOrder.getLong("orderTot");
 
             if(orderAmt > availableOrderAmt) {
@@ -461,10 +461,10 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         }
 
         //엑셀업로드 한 수량을 주문수량으로 입력
-        result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadVO);
+        result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadMPSVO);
 
         //주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
-        result = storeOrderMapper.deleteExcelUploadCompleteData(excelUploadVO);
+        result = storeOrderMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
 
         //엑셀업로드 한 내용이 있으면 DTL 자료를 기반으로 주문 HD 생성, 업데이트, 삭제
         int dtlCnt = 0;
@@ -476,11 +476,11 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         storeOrderVO.setRegDt(currentDt);
         storeOrderVO.setModId(sessionInfoVO.getUserId());
         storeOrderVO.setModDt(currentDt);
-        storeOrderVO.setReqDate(excelUploadVO.getDate());
-        storeOrderVO.setSlipFg(excelUploadVO.getSlipFg());
+        storeOrderVO.setReqDate(excelUploadMPSVO.getDate());
+        storeOrderVO.setSlipFg(excelUploadMPSVO.getSlipFg());
         storeOrderVO.setEmpNo("0000");
         storeOrderVO.setProcFg("00");
-        storeOrderVO.setRemark(excelUploadVO.getHdRemark());
+        storeOrderVO.setRemark(excelUploadMPSVO.getHdRemark());
 
         //주문요청일의 상품건수 조회
         dtlCnt = storeOrderMapper.getDtlCnt(storeOrderVO);

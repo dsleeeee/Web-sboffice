@@ -1,7 +1,7 @@
 package kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderProdVO;
@@ -69,20 +69,20 @@ public interface RtnStoreOrderMapper {
     int insertDstbRegist(DstbReqVO dstbReqVO);
 
     /** 반품등록 엑셀업로드 - 엑셀업로드 수량추가 */
-    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+    int insertExcelUploadAddQty(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
-    int deleteStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int deleteStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 반품등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 */
-    int insertRtnStoreOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int insertRtnStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
-    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
+    int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
     
     /** 반품등록 PROD 등록 */
-    int insertExlRtnStoreOrderProd(ExcelUploadVO excelUploadVO);
+    int insertExlRtnStoreOrderProd(ExcelUploadMPSVO excelUploadMPSVO);
     
     /** 반품등록 PROD 삭제 */
-    int deleteExlRtnStoreOrderProd(ExcelUploadVO excelUploadVO);
+    int deleteExlRtnStoreOrderProd(ExcelUploadMPSVO excelUploadMPSVO);
 }

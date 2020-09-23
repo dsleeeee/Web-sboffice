@@ -1,7 +1,7 @@
 package kr.co.solbipos.iostock.vendr.vendrOrder.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -63,16 +63,16 @@ public interface VendrOrderMapper {
     DefaultMap<String> getVendrOrderReportInfo(VendrOrderVO vendrOrderVO);
 
     /** 거래처 발주등록 엑셀업로드 - 엑셀업로드 수량추가 */
-    int insertExcelUploadAddQty(ExcelUploadVO excelUploadVO);
+    int insertExcelUploadAddQty(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 거래처 발주등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제 */
-    int deleteVendrOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int deleteVendrOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 거래처 발주등록 엑셀업로드 - 엑셀업로드 한 수량을 발주수량으로 입력 */
-    int insertVendrOrderToExcelUploadData(ExcelUploadVO excelUploadVO);
+    int insertVendrOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 거래처 발주등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 */
-    int deleteExcelUploadCompleteData(ExcelUploadVO excelUploadVO);
+    int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 거래처 발주등록 - 진행상태 조회 */
     String getChkProcFg(VendrOrderVO vendrOrderVO);

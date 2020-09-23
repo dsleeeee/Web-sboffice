@@ -6,7 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreService;
 import kr.co.solbipos.iostock.order.dstbCloseStore.service.DstbCloseStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -227,7 +227,7 @@ public class DstbCloseStoreController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   excelUploadVO
+     * @param   excelUploadMPSVO
      * @return  String
      * @author  안동관
      * @since   2018. 12. 14.
@@ -235,11 +235,11 @@ public class DstbCloseStoreController {
     @RequestMapping(value = "/dstbCloseStoreAdd/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
-        Model model, ExcelUploadVO excelUploadVO) {
+        Model model, ExcelUploadMPSVO excelUploadMPSVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = dstbCloseStoreService.excelUpload(excelUploadVO, sessionInfoVO);
+        int result = dstbCloseStoreService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

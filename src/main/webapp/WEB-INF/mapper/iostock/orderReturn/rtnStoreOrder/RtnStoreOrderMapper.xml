@@ -1043,7 +1043,7 @@
         PARAM    : rtnStoreOrderDtlVO
         COMMENTS : 반품등록 반품상품 엑셀업로드 PROD를 등록한다.
     -->
-    <insert id="insertExlRtnStoreOrderProd" parameterType="excelUploadVO">
+    <insert id="insertExlRtnStoreOrderProd" parameterType="excelUploadMPSVO">
         /* USE : RtnStoreOrderMapper.savetExlRtnStoreOrderProd */         
 		INSERT INTO TB_PO_HQ_STORE_ORDER_PROD
         (   
@@ -1454,10 +1454,10 @@
     <!--  반품등록 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 반품등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 주문된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.insertExcelUploadAddQty */
         INSERT INTO TB_PO_TEMP_EXCEL
         (
@@ -1506,10 +1506,10 @@
     <!--  반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+    <delete id="deleteStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.deleteStoreOrderToExcelUploadData */
         DELETE  TB_PO_HQ_STORE_ORDER_DTL
         WHERE   REQ_DATE      = #{date}
@@ -1525,10 +1525,10 @@
 	<!--  반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_PROD, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 반품등록 엑셀업로드 - 기존 주문데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteExlRtnStoreOrderProd" parameterType="excelUploadVO">
+    <delete id="deleteExlRtnStoreOrderProd" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.deleteExlRtnStoreOrderProd */
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
         WHERE   REQ_DATE      = #{date}
@@ -1544,10 +1544,10 @@
     <!--  반품등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 반품등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력한다.
     -->
-    <insert id="insertRtnStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertRtnStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.insertRtnStoreOrderToExcelUploadData */
         INSERT INTO TB_PO_HQ_STORE_ORDER_DTL
         (   REQ_DATE            ,   STORE_CD        ,   SLIP_FG
@@ -1623,10 +1623,10 @@
     <!--  반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 반품등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.deleteExcelUploadCompleteData */
         DELETE  TB_PO_TEMP_EXCEL
         WHERE   SESSION_ID  = #{sessionId}
