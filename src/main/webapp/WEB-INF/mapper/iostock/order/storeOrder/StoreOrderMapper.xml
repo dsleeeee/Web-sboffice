@@ -869,10 +869,10 @@
     <!--  주문등록 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 주문등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.insertExcelUploadAddQty */
         INSERT INTO TB_PO_TEMP_EXCEL
         (
@@ -921,10 +921,10 @@
     <!--  주문등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_ORDER_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 주문등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+    <delete id="deleteStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.deleteStoreOrderToExcelUploadData */
         DELETE  TB_PO_HQ_STORE_ORDER_DTL
         WHERE   REQ_DATE      = #{date}
@@ -944,7 +944,7 @@
         PARAM    : storeOrderVO
         COMMENTS : 주문등록 엑셀업로드 - 여신을 조회한다.
     -->
-    <select id="storeLoanCheck" parameterType="excelUploadVO" resultType="DefaultMap">
+    <select id="storeLoanCheck" parameterType="excelUploadMPSVO" resultType="DefaultMap">
         /* USE : storeOrderMapper.storeLoanCheck */
         <![CDATA[
         SELECT  NVL(tphsod.ORDER_TOT, 0) + NVL(tpte.ORDER_TOT, 0) AS ORDER_TOT
@@ -1003,10 +1003,10 @@
     <!--  주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_HQ_STORE_ORDER_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력한다.
     -->
-    <insert id="insertStoreOrderToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.insertStoreOrderToExcelUploadData */
         INSERT INTO TB_PO_HQ_STORE_ORDER_DTL
         (   REQ_DATE            ,   STORE_CD        ,   SLIP_FG
@@ -1082,10 +1082,10 @@
     <!--  주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : storeOrderMapper.deleteExcelUploadCompleteData */
         DELETE  TB_PO_TEMP_EXCEL
         WHERE   SESSION_ID  = #{sessionId}

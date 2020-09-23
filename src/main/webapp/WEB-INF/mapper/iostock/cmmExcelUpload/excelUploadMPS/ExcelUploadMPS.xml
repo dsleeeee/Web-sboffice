@@ -14,7 +14,7 @@
     <!-- 엑셀업로드 - 엑셀업로드 입력 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 엑셀업로드 한 데이터를 입력한다.
     -->
     <insert id="insertExcelUpload" parameterType="excelUploadMPSVO">
@@ -60,7 +60,7 @@
     <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE 한다.
     -->
     <update id="updateExcelUploadProdCd" parameterType="excelUploadMPSVO">
@@ -96,7 +96,7 @@
     <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 바코드인 경우 상품코드를 찾아 PROD_CD 컬럼에 UPDATE 한다.
     -->
     <update id="updateExcelUploadBarcdCd" parameterType="excelUploadMPSVO">
@@ -132,7 +132,7 @@
     <!-- 엑셀업로드 - UPRC 를 LAST_COST_UPRC 로 UPDATE -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : UPRC 를 LAST_COST_UPRC 로 UPDATE 한다.
     -->
     <update id="updateExcelUploadUprc" parameterType="excelUploadMPSVO">
@@ -170,7 +170,7 @@
     <!-- 엑셀업로드 - 현재 세션ID 와 동일한 데이터 삭제 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 현재 세션ID 와 동일한 데이터를 삭제한다.
     -->
     <delete id="deleteExcelUpload" parameterType="excelUploadMPSVO">
@@ -182,7 +182,7 @@
     <!-- 엑셀업로드 - 엑셀업로드 실패내역 조회 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 엑셀업로드 실패내역을 조회한다.
     -->
     <select id="getExcelUploadErrInfoList" parameterType="excelUploadMPSVO" resultType="DefaultMap">

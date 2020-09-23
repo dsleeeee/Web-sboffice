@@ -9,7 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmService;
 import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderService;
 import kr.co.solbipos.iostock.vendr.vendrOrder.service.VendrOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -369,7 +369,7 @@ public class VendrOrderController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   excelUploadVO
+     * @param   excelUploadMPSVO
      * @return  String
      * @author  안동관
      * @since   2018. 12. 18.
@@ -377,11 +377,11 @@ public class VendrOrderController {
     @RequestMapping(value = "/vendrOrderProdReg/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
-        Model model, ExcelUploadVO excelUploadVO) {
+        Model model, ExcelUploadMPSVO excelUploadMPSVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = vendrOrderService.excelUpload(excelUploadVO, sessionInfoVO);
+        int result = vendrOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

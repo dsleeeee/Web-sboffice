@@ -1082,10 +1082,10 @@
     <!--  거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 수량추가 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_PO_STORE_VENDR_INSTOCK_DTL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 수량추가인 경우 기존에 등록된 내역을 TEMP 테이블에 입력한다.
     -->
-    <insert id="insertExcelUploadAddQty" parameterType="excelUploadVO">
+    <insert id="insertExcelUploadAddQty" parameterType="excelUploadMPSVO">
         /* USE : VendrInstockStoreMapper.insertExcelUploadAddQty */
         INSERT INTO TB_PO_TEMP_EXCEL
         (   SESSION_ID
@@ -1131,10 +1131,10 @@
     <!--  거래처 입고/반출등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품 삭제 -->
     <!--
         TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 기존 데이터중 엑셀업로드 한 데이터와 같은 상품은 삭제한다.
     -->
-    <delete id="deleteVendrInstockToExcelUploadData" parameterType="excelUploadVO">
+    <delete id="deleteVendrInstockToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : VendrInstockStoreMapper.deleteVendrInstockToExcelUploadData */
         DELETE  TB_PO_STORE_VENDR_INSTOCK_DTL
         WHERE   STORE_CD      = #{storeCd}
@@ -1150,10 +1150,10 @@
     <!--  거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력 -->
     <!--
         TABLE    : TB_PO_STORE_VENDR_INSTOCK_DTL, TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 엑셀업로드 한 수량을 입고수량으로 입력한다.
     -->
-    <insert id="insertVendrInstockToExcelUploadData" parameterType="excelUploadVO">
+    <insert id="insertVendrInstockToExcelUploadData" parameterType="excelUploadMPSVO">
         /* USE : VendrInstockStoreMapper.insertVendrInstockToExcelUploadData */
         <selectKey resultType="int" keyProperty="vatFg" order="BEFORE">
             SELECT  DECODE(VAT_INCLD_YN,'Y',1,0) AS VAT_FG
@@ -1248,10 +1248,10 @@
     <!--  거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제 -->
     <!--
         TABLE    : TB_PO_TEMP_EXCEL, TB_MS_PRODUCT
-        PARAM    : excelUploadVO
+        PARAM    : excelUploadMPSVO
         COMMENTS : 거래처 입고/반출등록 엑셀업로드 - 정상 입력된 데이터 TEMP 테이블에서 삭제한다.
     -->
-    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadVO">
+    <delete id="deleteExcelUploadCompleteData" parameterType="excelUploadMPSVO">
         /* USE : VendrInstockStoreMapper.deleteExcelUploadCompleteData */
         DELETE  TB_PO_TEMP_EXCEL
         WHERE   SESSION_ID  = #{sessionId}

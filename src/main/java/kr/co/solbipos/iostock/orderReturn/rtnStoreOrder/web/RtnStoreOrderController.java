@@ -7,7 +7,7 @@ import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO;
+import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderService;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
@@ -263,7 +263,7 @@ public class RtnStoreOrderController {
      * @param   request
      * @param   response
      * @param   model
-     * @param   excelUploadVO
+     * @param   excelUploadMPSVO
      * @return  String
      * @author  안동관
      * @since   2018. 12. 10.
@@ -271,11 +271,11 @@ public class RtnStoreOrderController {
     @RequestMapping(value = "/rtnStoreOrderRegist/excelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result excelUpload(HttpServletRequest request, HttpServletResponse response,
-        Model model, ExcelUploadVO excelUploadVO) {
+        Model model, ExcelUploadMPSVO excelUploadMPSVO) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = rtnStoreOrderService.excelUpload(excelUploadVO, sessionInfoVO);
+        int result = rtnStoreOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
