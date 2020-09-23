@@ -400,7 +400,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     if ($scope.flex.rows.length <= 0) {
-      $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
       return false;
     }
 
@@ -433,7 +433,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
         return false;
     }
 
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐. */
     var uploadFg = 'disuse';
 
@@ -441,7 +441,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     if (prcsFg === 'excelFormDown') {
       excelUploadScope.excelFormDownload(uploadFg);
     } else {
-      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      var msg = messages["excelUploadMPS.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg = uploadFg;
         /** 부모컨트롤러 값을 넣으면 업로드가 완료된 후 uploadCallBack 이라는 함수를 호출해준다. */
@@ -475,7 +475,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
     
     $http({
       method : 'POST', //방식
@@ -503,7 +503,7 @@ app.controller('disuseRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'disuse';
-    $scope._broadcast('excelUploadErrInfoCtrl', params);
+    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
   };
 
 
