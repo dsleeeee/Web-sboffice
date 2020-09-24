@@ -38,6 +38,7 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
     // DB에서 조회해 온 값으로 세팅하는 경우에는 초기화하지 않기 위해 slipSearchYn 변수를 사용.
     $scope.slipSearchYn = 'N';
 
+    // 입고
     if($scope.slipFg === 1) {
       $scope.btnSaveShowFg                         = true;  // 저장
       $scope.btnDelShowFg                          = false; // 삭제
@@ -49,9 +50,12 @@ app.controller('vendrInstockDtlCtrl', ['$scope', '$http', '$timeout', function (
 
       $("#vendrInstockDtlSelectVendrCd").val('');
       $("#vendrInstockDtlSelectVendrNm").val('선택');
-    } else {
+    // 반출
+    } else if($scope.slipFg === -1) {
+    // } else {
       $scope.btnSaveShowFg                         = true;  // 저장
       $scope.btnDelShowFg                          = false; // 삭제
+      $scope.procLayerIfFg                         = false; // 진행상태내역
       $scope.vendrInstockDtlRtnSelectVendrNmDisabled  = false; // 반출 거래처선택 모듈 input
       $scope.vendrInstockDtlRtnSelectVendrBtnDisabled = false; // 반출 선택취소
 

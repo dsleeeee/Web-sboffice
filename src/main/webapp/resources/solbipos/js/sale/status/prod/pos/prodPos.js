@@ -83,7 +83,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 					wijmo.addClass(cell, 'wj-custom-readonly');
 				}
 			}
-		}
+		};
 		// <-- //그리드 헤더2줄 -->
 
 		// 그리드 클릭 이벤트
@@ -169,16 +169,16 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		// 조회 수행 : 조회URL, 파라미터, 콜백함수
 		$scope._inquiryMain("/sale/status/prod/prodPos/list.sb", params, function() {
 
-			var flex = $scope.flex;
+			// var flex = $scope.flex;
 			//row수가 0이면
-			if(flex.rows.length === 0){
-
-				var grid = wijmo.Control.getControl("#posProdGrid");
-				//컬럼 삭제
-				while(grid.columns.length > 6){
-			          grid.columns.removeAt(grid.columns.length-1);
-			    }
-			}
+			// if(flex.rows.length === 0){
+			//
+			// 	var grid = wijmo.Control.getControl("#posProdGrid");
+			// 	//컬럼 삭제
+			// 	while(grid.columns.length > 6){
+			//           grid.columns.removeAt(grid.columns.length-1);
+			//     }
+			// }
 
 		});
 	};
@@ -255,6 +255,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
+					storePosCount = list.length;
 	    			if(gridSet){
 	    				$scope.makeDataGrid();
 	    			}
@@ -283,7 +284,8 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		  var arrPosCd = storePosCd.split(',');
 		  var arrPosNm = storePosNm.split(',');
 
-		  if (arrPosCd != null) {
+		  if (storePosCount > 0) {
+		  // if (arrPosCd != null) {
 
 			  for(var i = 1; i < arrPosCd.length + 1; i++) {
 
@@ -359,53 +361,54 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
 	  };
-	  
-		  $scope.loadedRows = function (s, e) {
 
-			  var rowLength = s.rows.length;
-			  var arrPosCd = storePosCd.split(',');
-			  var arrPosNm = storePosNm.split(',');
+	  $scope.loadedRows = function (s, e) {
 
-			  if (arrPosCd != null) {
+		  var rowLength = s.rows.length;
+		  var arrPosCd = storePosCd.split(',');
+		  var arrPosNm = storePosNm.split(',');
 
-				  for(var i = 1; i < arrPosCd.length + 1; i++) {
+		  if (arrPosCd != null) {
 
-					  var colValue = arrPosCd[i-1];
-					  var colName = arrPosNm[i-1];
-					  var colSplit = colName.split('||');
+			  for(var i = 1; i < arrPosCd.length + 1; i++) {
 
-					  for(var j = 0; j < rowLength; j++) {
+				  var colValue = arrPosCd[i-1];
+				  var colName = arrPosNm[i-1];
+				  var colSplit = colName.split('||');
 
-						  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
-						  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
-						  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
-						  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+				  for(var j = 0; j < rowLength; j++) {
 
-						  if (saleAmt == null || saleAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
-						  }
+					  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
+					  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
+					  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
+					  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
 
-						  if (dcAmt == null || dcAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
-						  }
+					  if (saleAmt == null || saleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
+					  }
 
-						  if (realSaleAmt == null || realSaleAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
-						  }
+					  if (dcAmt == null || dcAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
+					  }
 
-						  if (saleCnt == null || saleCnt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
-						  }
+					  if (realSaleAmt == null || realSaleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
+					  }
+
+					  if (saleCnt == null || saleCnt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
 					  }
 				  }
 			  }
+		  }
 	  };
-		 $scope.excelDownloadPos = function () {
-			  var params       = {};
-		    /* 엑셀다운로드 */
-		    $scope._broadcast('prodPosExcelCtrl', params);    
-		  };	  
-		  
+
+	 $scope.excelDownloadPos = function () {
+		  var params       = {};
+		/* 엑셀다운로드 */
+		$scope._broadcast('prodPosExcelCtrl', params);
+	  };
+
 }]);
 
 /** 상품별(포스별 매출) controller */
@@ -568,6 +571,7 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	    			storePosCd = $("#posProdSelectPosCd").val();
 	    			storePosNm = $("#posProdSelectPosName").val();
+					storePosCount = list.length;
 
 	    			$scope.makeDataGrid();
 	    			
@@ -591,7 +595,7 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
   			  $scope.ChkProdClassDisplay ? columns[i].visible = true : columns[i].visible = false;
   		  }
   	  }
-    }
+    };
 
 	
 
@@ -610,7 +614,8 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 		  var arrPosCd = storePosCd.split(',');
 		  var arrPosNm = storePosNm.split(',');
 
-		  if (arrPosCd != null) {
+		  if (storePosCount > 0) {
+		  // if (arrPosCd != null) {
 
 			  for(var i = 1; i < arrPosCd.length + 1; i++) {
 
@@ -679,51 +684,52 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				  }
 			  }
 
-		  }
+		  };
 
 		  $scope.excelFlex.refresh();
 
 		  // 기능수행 종료 : 반드시 추가
 		  event.preventDefault();
-	  }
-		  $scope.loadedRows = function (s, e) {
+	  };
 
-			  var rowLength = s.rows.length;
-			  var arrPosCd = storePosCd.split(',');
-			  var arrPosNm = storePosNm.split(',');
+	  $scope.loadedRows = function (s, e) {
 
-			  if (arrPosCd != null) {
+		  var rowLength = s.rows.length;
+		  var arrPosCd = storePosCd.split(',');
+		  var arrPosNm = storePosNm.split(',');
 
-				  for(var i = 1; i < arrPosCd.length + 1; i++) {
+		  if (arrPosCd != null) {
 
-					  var colValue = arrPosCd[i-1];
-					  var colName = arrPosNm[i-1];
-					  var colSplit = colName.split('||');
+			  for(var i = 1; i < arrPosCd.length + 1; i++) {
 
-					  for(var j = 0; j < rowLength; j++) {
+				  var colValue = arrPosCd[i-1];
+				  var colName = arrPosNm[i-1];
+				  var colSplit = colName.split('||');
 
-						  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
-						  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
-						  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
-						  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+				  for(var j = 0; j < rowLength; j++) {
 
-						  if (saleAmt == null || saleAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
-						  }
+					  var saleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", false);
+					  var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
+					  var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
+					  var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
 
-						  if (dcAmt == null || dcAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
-						  }
+					  if (saleAmt == null || saleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
+					  }
 
-						  if (realSaleAmt == null || realSaleAmt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
-						  }
+					  if (dcAmt == null || dcAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
+					  }
 
-						  if (saleCnt == null || saleCnt == "") {
-							  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
-						  }
+					  if (realSaleAmt == null || realSaleAmt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
+					  }
+
+					  if (saleCnt == null || saleCnt == "") {
+						  s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
 					  }
 				  }
 			  }
+		  }
 	  }
 }]);
