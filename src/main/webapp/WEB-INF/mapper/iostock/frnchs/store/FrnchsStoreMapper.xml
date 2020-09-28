@@ -136,7 +136,7 @@
 	 			, TMP.PROD_NM							/* 상품명 */
 				, TMP.ORGPLCE_CD						/* 원산지코드 */
 				, NULL						AS ORGPLCE_NM /* 원산지명 ###확인필요 */
-				, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = TMP.STORE_CD AND NMCODE_CD = TMP.PO_UNIT_FG)  AS PO_UNIT_FG_NM    /* 주문단위 */
+				, (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = TMP.PO_UNIT_FG)  AS PO_UNIT_FG_NM    /* 주문단위 */
 				, TMP.PO_UNIT_QTY						/* 입수 */
 				, TMP.SPLY_UPRC						/* 공급단가 */
 			    , SUM(TPHSOD.OUT_TOT_QTY)  AS TOT_QTY	/* 수량 */

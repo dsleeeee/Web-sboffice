@@ -132,6 +132,7 @@ public class StoreMoveController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         List<DefaultMap<String>> list = storeMoveService.getStoreMoveDtlList(storeMoveVO);
 
@@ -201,6 +202,7 @@ public class StoreMoveController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        storeMoveVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         List<DefaultMap<String>> list = storeMoveService.getStoreMoveRegistList(storeMoveVO);
 

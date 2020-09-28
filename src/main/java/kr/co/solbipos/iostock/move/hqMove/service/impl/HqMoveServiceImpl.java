@@ -211,14 +211,15 @@ public class HqMoveServiceImpl implements HqMoveService {
                 hqStoreMoveHdVO.setModId(sessionInfoVO.getUserId());
                 hqStoreMoveHdVO.setModDt(currentDt);
             }
-
-            // 나머지수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
+            // 단위수량과 낱개수량은 null 이 들어올수 있으므로 null 인 경우 0으로 변환.
+            int outUnitQty = (hqMoveVO.getOutUnitQty() == null ? 0 : hqMoveVO.getOutUnitQty());
             int outEtcQty = (hqMoveVO.getOutEtcQty() == null ? 0 : hqMoveVO.getOutEtcQty());
 
             hqMoveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             hqMoveVO.setSlipNo(newSlipNo);
+            hqMoveVO.setOutUnitQty(outUnitQty);
             hqMoveVO.setOutEtcQty(outEtcQty);
-            hqMoveVO.setInUnitQty(hqMoveVO.getOutUnitQty());
+            hqMoveVO.setInUnitQty(outUnitQty);
             hqMoveVO.setInEtcQty(outEtcQty);
             hqMoveVO.setInTotQty(hqMoveVO.getOutTotQty());
             hqMoveVO.setRegFg(sessionInfoVO.getOrgnFg());

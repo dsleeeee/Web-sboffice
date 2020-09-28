@@ -103,6 +103,9 @@ public class StoreMoveVO extends PageVO {
     private Integer splyUprc;
     /** 공급단가 */
     private Integer prevSplyUprc;
+    /** 매장코드 */
+    private String storeCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -773,5 +776,13 @@ public class StoreMoveVO extends PageVO {
      */
     public void setPrevSplyUprc(Integer prevSplyUprc) {
         this.prevSplyUprc = prevSplyUprc;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
     }
 }

@@ -85,7 +85,7 @@ app.controller('prodCtrl', ['$scope', '$http', function ($scope, $http) {
   // 주문상품구분 콤보박스
   $scope._getComboDataQuery('092', 'poProdFgComboData');
   // 주문단위 콤보박스
-  $scope._getComboDataQuery('093', 'poUnitFgComboData');
+  $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData');
   // 과세여부 콤보박스
   $scope._getComboDataQuery('039', 'vatFgComboData');
   // 품절여부 콤보박스

@@ -29,6 +29,7 @@ public class MonthIostockServiceImpl implements MonthIostockService {
 	public List<DefaultMap<String>> monthIostockList(MonthIostockVO monthIostockVO, SessionInfoVO sessionInfoVO) {
 		monthIostockVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 		monthIostockVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		monthIostockVO.setStoreCd(sessionInfoVO.getStoreCd());
 		// 거래처 멀티 선택
         if(!StringUtil.getOrBlank(monthIostockVO.getVendrCd()).equals("")) {
         	monthIostockVO.setArrVendrCd(monthIostockVO.getVendrCd().split(","));

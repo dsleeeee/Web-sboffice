@@ -157,7 +157,7 @@
         AND     thv.HQ_OFFICE_CD    =   tphvid.HQ_OFFICE_CD
         AND     thv.VENDR_CD        =   #{vendrCd}
         AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
-        AND     thn.NMCODE_GRP_CD(+)=   '097'
+        AND     thn.NMCODE_GRP_CD(+)=   '093'
         AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
         ORDER
         BY      tphvid.PROD_CD

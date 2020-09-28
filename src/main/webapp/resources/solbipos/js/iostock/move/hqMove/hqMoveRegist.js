@@ -14,7 +14,7 @@ app.controller('hqMoveRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
-    comboParams.nmcodeGrpCd = "097";
+    comboParams.nmcodeGrpCd = "093";
     var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
@@ -154,15 +154,16 @@ app.controller('hqMoveRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
     item.inTot     = inTot; // 이입합계
     
 	if (nvl(item.outTotQty, null) > nvl(item.outCurrQty, null)){
-		alert("이동할 수량이 현재 수량보다 많습니다.");
-		item.outUnitQty = null;
-	    item.outTotQty  = null; // 총수량
-	    item.outAmt     = null; // 이출금액
-	    item.outVat     = null; // 이출VAT
-	    item.outTot     = null; // 이출합계
-	    item.inAmt      = null; // 이입금액
-	    item.inVat      = null; // 이입VAT
-	    item.inTot      = null; // 이입합계
+        $scope._popMsg("이동할 수량이 현재 수량보다 많습니다.");
+		item.outUnitQty = undefined; // 단위
+		item.outEtcQty = undefined;  // 낱개
+        item.outTotQty = undefined; // 총수량
+	    item.outAmt = undefined; // 이출금액
+	    item.outVat = undefined; // 이출VAT
+	    item.outTot = undefined; // 이출합계
+	    item.inAmt = undefined; // 이입금액
+	    item.inVat = undefined; // 이입VAT
+	    item.inTot = undefined; // 이입합계
 		return false;  
 	}
   };
@@ -237,17 +238,22 @@ app.controller('hqMoveRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
         return false;
       }
 
-      item.status     = "U";
-      item.moveDate   = wijmo.Globalize.format($scope.moveDate.value, 'yyyyMMdd');
-      item.outStorageCd = $scope.outStorageCd;
-      item.inStorageCd  = $scope.inStorageCd;
-      item.dlvrFg     = $scope.regDlvrFg;
-      item.remark     = $scope.hdRemark;
-      item.storageCd  = "001";
-      item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-      item.confirmFg  = confirmFg;
+      // 단위, 낱개 중 하나라도 값이 있는 경우에만 INSERT
+     if((item.outUnitQty !== "" && item.outUnitQty !== null && item.outUnitQty !== undefined && item.outUnitQty !== 0) ||
+          (item.outEtcQty !== "" && item.outEtcQty !== null && item.outEtcQty !== undefined  && item.outEtcQty !== 0)){
 
-      params.push(item);
+         item.status = "U";
+         item.moveDate = wijmo.Globalize.format($scope.moveDate.value, 'yyyyMMdd');
+         item.outStorageCd = $scope.outStorageCd;
+         item.inStorageCd = $scope.inStorageCd;
+         item.dlvrFg = $scope.regDlvrFg;
+         item.remark = $scope.hdRemark;
+         item.storageCd = "001";
+         item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+         item.confirmFg = confirmFg;
+
+         params.push(item);
+      }
     }
 
     $scope._save("/iostock/move/hqMove/hqMoveRegist/save.sb", params, function () {

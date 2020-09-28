@@ -157,7 +157,6 @@
         AND     tmv.STORE_CD    =   tpsvid.STORE_CD
         AND     tmv.VENDR_CD    =   #{vendrCd}
         AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
-        /* AND     tmsn.NMCODE_GRP_CD (+)=   '097'  20200309 097 -> 093 수정 */
         AND     tmsn.NMCODE_GRP_CD (+)=   '093'
         AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
         ORDER

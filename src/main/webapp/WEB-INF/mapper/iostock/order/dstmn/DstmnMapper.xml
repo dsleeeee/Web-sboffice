@@ -199,7 +199,7 @@
         AND      the.HQ_OFFICE_CD       =   #{hqOfficeCd}
         AND      the.ENVST_CD           =   '0011'
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
-        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_GRP_CD   (+)=   '093'
         AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         ORDER
         BY       tphsod.SLIP_NO, tphsod.PROD_CD, tphsod.SEQ
@@ -394,7 +394,7 @@
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
-        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_GRP_CD   (+)=   '093'
         AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         GROUP
         BY       tphsod.PROD_CD, thp.PROD_NM
@@ -436,7 +436,7 @@
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
-        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_GRP_CD   (+)=   '093'
         AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         AND      tms.STORE_CD           =   tphsod.STORE_CD
         GROUP
@@ -480,7 +480,7 @@
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
-        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_GRP_CD   (+)=   '093'
         AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         AND      tms.STORE_CD           =   tphsod.STORE_CD
         GROUP
@@ -559,7 +559,7 @@
         AND      thp.HQ_OFFICE_CD       =   tphsod.HQ_OFFICE_CD
         AND      thp.PROD_CD            =   tphsod.PROD_CD
         AND      thn.HQ_OFFICE_CD    (+)=   thp.HQ_OFFICE_CD
-        AND      thn.NMCODE_GRP_CD   (+)=   '097'
+        AND      thn.NMCODE_GRP_CD   (+)=   '093'
         AND      thn.NMCODE_CD       (+)=   thp.PO_UNIT_FG
         AND      tms.STORE_CD           =   tphsod.STORE_CD
         AND      tphdc.HQ_OFFICE_CD     =   tphso.HQ_OFFICE_CD
