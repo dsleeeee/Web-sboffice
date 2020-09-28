@@ -100,9 +100,12 @@ public class StoreMoveVO extends PageVO {
     /** 출고가-부가세구분(이입매장) */
     private String inEnvst0011;
     /** 공급단가 */
-//    private Integer splyUprc;
+    private Integer splyUprc;
     /** 공급단가 */
-//    private Integer prevSplyUprc;
+    private Integer prevSplyUprc;
+    /** 매장코드 */
+    private String storeCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -747,31 +750,39 @@ public class StoreMoveVO extends PageVO {
         this.inEnvst0011 = inEnvst0011;
     }
 
-//    /**
-//     * @return the splyUprc
-//     */
-//    public Integer getSplyUprc() {
-//        return splyUprc;
-//    }
-//
-//    /**
-//     * @param splyUprc the splyUprc to set
-//     */
-//    public void setSplyUprc(Integer splyUprc) {
-//        this.splyUprc = splyUprc;
-//    }
-//
-//    /**
-//     * @return the prevSplyUprc
-//     */
-//    public Integer getPrevSplyUprc() {
-//        return prevSplyUprc;
-//    }
-//
-//    /**
-//     * @param prevSplyUprc the splyUprc to set
-//     */
-//    public void setPrevSplyUprc(Integer prevSplyUprc) {
-//        this.prevSplyUprc = prevSplyUprc;
-//    }
+    /**
+     * @return the splyUprc
+     */
+    public Integer getSplyUprc() {
+        return splyUprc;
+    }
+
+    /**
+     * @param splyUprc the splyUprc to set
+     */
+    public void setSplyUprc(Integer splyUprc) {
+        this.splyUprc = splyUprc;
+    }
+
+    /**
+     * @return the prevSplyUprc
+     */
+    public Integer getPrevSplyUprc() {
+        return prevSplyUprc;
+    }
+
+    /**
+     * @param prevSplyUprc the splyUprc to set
+     */
+    public void setPrevSplyUprc(Integer prevSplyUprc) {
+        this.prevSplyUprc = prevSplyUprc;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
 }

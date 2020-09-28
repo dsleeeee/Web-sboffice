@@ -27,6 +27,7 @@ public class ProdFrnchsServiceImpl implements ProdFrnchsService {
     @Override
     public List<DefaultMap<String>> getProdFrnchsList(ProdFrnchsVO prodFrnchsVO, SessionInfoVO sessionInfoVO) {
         prodFrnchsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodFrnchsVO.setStoreCd(sessionInfoVO.getStoreCd());
         prodFrnchsVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         // 매장 멀티 선택

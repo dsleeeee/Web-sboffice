@@ -17,7 +17,7 @@
 		,	A.PO_UNIT_QTY                                                                           
 		,	A.CURR_AMT                       
 		,	A.PO_UNIT_FG
-		,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */                                                           
+		,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
 		,	A.SAFE_STOCK_QTY                                                      
 		,	A.CURR_QTY              
 		,	A.ACC_VENDR_IN_QTY      
@@ -225,7 +225,7 @@
         ,   A.PO_UNIT_QTY                                                                           
         ,   A.CURR_AMT                       
         ,   A.PO_UNIT_FG   
-        ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */                                                        
+        ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
         ,   A.SAFE_STOCK_QTY                                                      
         ,   A.CURR_QTY              
         /*,   A.ACC_VENDR_IN_QTY      
@@ -474,7 +474,7 @@
         ,   A.PO_UNIT_QTY                                                                           
         ,   A.CURR_AMT                       
         ,   A.PO_UNIT_FG  
-        ,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */                                                         
+        ,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
         ,   A.SAFE_STOCK_QTY                                                      
         ,   A.CURR_QTY              
         ,   A.ACC_VENDR_IN_QTY      
@@ -680,7 +680,7 @@
         ,   A.PO_UNIT_QTY                                                                           
         ,   A.CURR_AMT                       
         ,   A.PO_UNIT_FG
-        ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */                                                           
+        ,	(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
         ,   A.SAFE_STOCK_QTY                                                      
         ,   A.CURR_QTY              
         /*,   A.ACC_VENDR_IN_QTY      

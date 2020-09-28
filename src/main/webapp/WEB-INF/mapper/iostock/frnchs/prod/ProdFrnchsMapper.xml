@@ -23,7 +23,7 @@
 	 		<when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
 	 		, (SELECT NMCODE_NM
 	 		     FROM TB_MS_STORE_NMCODE
-	 		    WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM	
+	 		    WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM
 	 		</when>
 	 	</choose>
 			, A.PO_UNIT_QTY
@@ -41,12 +41,15 @@
    		<if test='orgnFg != null and orgnFg == "H"'>
    			AND A.HQ_OFFICE_CD = #{hqOfficeCd}
    		</if>
+        <if test='orgnFg != null and orgnFg == "S"'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
         <if test='storeCd != null and storeCd != ""'>
-			AND A.STORE_CD IN
-               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                   	#{item}
-               </foreach>
-		</if>
+            AND A.STORE_CD IN
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
 <!-- 		<if test='prodClassCd != null and prodClassCd != ""'> -->
 <!--    			AND Z.PROD_CLASS_CD = #{prodClassCd} -->
 <!-- 		</if> -->
@@ -179,7 +182,7 @@
             <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
             , (SELECT NMCODE_NM
                  FROM TB_MS_STORE_NMCODE
-                WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM   
+                WHERE NMCODE_GRP_CD = '093' AND STORE_CD = A.STORE_CD AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM
             </when>
         </choose>
             , A.PO_UNIT_QTY
@@ -196,11 +199,14 @@
         <if test='orgnFg != null and orgnFg == "H"'>
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
+        <if test='orgnFg != null and orgnFg == "S"'>
+            AND A.STORE_CD = #{storeCd}
+        </if>
         <if test='storeCd != null and storeCd != ""'>
             AND A.STORE_CD IN
-               <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
-                    #{item}
-               </foreach>
+            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
 <!--        <if test='prodClassCd != null and prodClassCd != ""'> -->
 <!--                AND Z.PROD_CLASS_CD = #{prodClassCd} -->

@@ -21,7 +21,7 @@ app.controller('dstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', function
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     var comboParams         = {};
-    comboParams.nmcodeGrpCd = "097";
+    comboParams.nmcodeGrpCd = "093";
     var url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.

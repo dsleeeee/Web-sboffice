@@ -255,7 +255,7 @@
                 AND     thv.HQ_OFFICE_CD    =   tphvod.HQ_OFFICE_CD
                 AND     thv.VENDR_CD        =   #{vendrCd}
                 AND     thn.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
-                AND     thn.NMCODE_GRP_CD(+)=   '097'
+                AND     thn.NMCODE_GRP_CD(+)=   '093'
                 AND     thn.NMCODE_CD    (+)=   thp.PO_UNIT_FG
                 ORDER
                 BY      tphvod.PROD_CD
@@ -287,7 +287,7 @@
                 AND     tmv.STORE_CD          =   tpsvod.STORE_CD
                 AND     tmv.VENDR_CD          =   #{vendrCd}
                 AND     tmsn.STORE_CD      (+)=   tmp.STORE_CD
-                AND     tmsn.NMCODE_GRP_CD (+)=   '097'
+                AND     tmsn.NMCODE_GRP_CD (+)=   '093'
                 AND     tmsn.NMCODE_CD     (+)=   tmp.PO_UNIT_FG
                 ORDER
                 BY      tpsvod.PROD_CD

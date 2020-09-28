@@ -95,7 +95,7 @@
         <![CDATA[
         SELECT  tpsmd.PROD_CD, thp.PROD_NM
         ,       thp.PO_UNIT_FG
-        ,       (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = thp.PO_UNIT_FG) AS PO_UNIT_FG_NM, thp.PO_UNIT_QTY
+        ,       (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = thp.PO_UNIT_FG) AS PO_UNIT_FG_NM, thp.PO_UNIT_QTY
         ,       DECODE(thp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       TO_NUMBER(tpsmd.OUT_UNIT_QTY) AS OUT_UNIT_QTY
         ,       TO_NUMBER(tpsmd.OUT_ETC_QTY)  AS OUT_ETC_QTY
@@ -140,7 +140,7 @@
         SELECT   tmpout.PROD_CD, tmpout.PROD_NM
         ,        tmpout.VAT_FG AS VAT_FG01
         ,        tmpout.PO_UNIT_FG
-        ,        (SELECT NMCODE_NM FROM TB_CM_NMCODE TCN WHERE TCN.PARENT_CD = '093' AND TCN.NMCODE_CD = tmpout.PO_UNIT_FG) AS PO_UNIT_FG_NM, tmpout.PO_UNIT_QTY
+        ,        (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmpout.PO_UNIT_FG) AS PO_UNIT_FG_NM, tmpout.PO_UNIT_QTY
         ,        tmpout.PO_PROD_FG
         ,        tmpout.SPLY_UPRC AS OUT_SPLY_UPRC, tmseout.ENVST_VAL AS OUT_ENVST0011
         ,        tmpin.SPLY_UPRC AS IN_SPLY_UPRC, tmsein.ENVST_VAL AS IN_ENVST0011

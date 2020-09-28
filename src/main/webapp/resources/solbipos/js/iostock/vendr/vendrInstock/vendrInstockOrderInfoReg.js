@@ -14,7 +14,7 @@ app.controller('vendrInstockOrderInfoRegCtrl', ['$scope', '$http', '$timeout', f
     $scope._queryCombo("combo", "saveDtlOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
     
     comboParams         = {};
-    comboParams.nmcodeGrpCd = "097";
+    comboParams.nmcodeGrpCd = "093";
     url = '/iostock/cmm/iostockCmm/getOrgnCombo.sb';
     // 파라미터 (comboFg, comboId, gridMapId, url, params, option)
     $scope._queryCombo("map", null, 'poUnitFgMap', url, comboParams, "A"); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
