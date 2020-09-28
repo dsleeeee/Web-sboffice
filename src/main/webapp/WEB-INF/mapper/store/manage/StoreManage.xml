@@ -1370,47 +1370,90 @@
     -->
     <insert id="copyPosFnkey" parameterType="posFnkeyVO" >
         /* USE : StoreManageMapper.copyPosFnkey */
-        INSERT INTO TB_MS_POS_FNKEY
+        MERGE INTO TB_MS_POS_FNKEY A
+        USING
         (
-            STORE_CD,
-            POS_NO,
-            FNKEY_NO,
-            FNKEY_FG,
-            DISP_SEQ,
-            X,
-            Y,
-            WIDTH,
-            HEIGHT,
-            STYLE_CD,
-            IMG_NM,
-            USE_YN,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        SELECT #{storeCd} AS STORE_CD,
-        tmpf.POS_NO,
-        tmpf.FNKEY_NO,
-        tmpf.FNKEY_FG,
-        tmpf.DISP_SEQ,
-        tmpf.X,
-        tmpf.Y,
-        tmpf.WIDTH,
-        tmpf.HEIGHT,
-        tmpf.STYLE_CD,
-        tmpf.IMG_NM,
-        tmpf.USE_YN,
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
+        SELECT #{storeCd}     AS STORE_CD
+        ,       tmpf.POS_NO     AS POS_NO
+        ,       tmpf.FNKEY_NO   AS FNKEY_NO
+        ,       tmpf.FNKEY_FG   AS FNKEY_FG
+        ,       tmpf.DISP_SEQ   AS DISP_SEQ
+        ,       tmpf.X          AS X
+        ,       tmpf.Y          AS Y
+        ,       tmpf.WIDTH      AS WIDTH
+        ,       tmpf.HEIGHT     AS HEIGHT
+        ,       tmpf.STYLE_CD   AS STYLE_CD
+        ,       tmpf.IMG_NM     AS IMG_NM
+        ,       tmpf.USE_YN     AS USE_YN
+        ,       #{regDt}        AS REG_DT
+        ,       #{regId}        AS REG_ID
+        ,       #{modDt}        AS MOD_DT
+        ,       #{modId}        AS MOD_ID
         FROM TB_MS_POS_FNKEY tmpf
         WHERE tmpf.STORE_CD = #{copyStoreCd}
         AND tmpf.POS_NO IN
         <foreach collection="arrPosNo" item="item" open="(" close=")" separator=",">
             LPAD(#{item}, 2, '0')
         </foreach>
+        ) B
+        ON
+        (
+            A.STORE_CD  =   B.STORE_CD
+            AND A.POS_NO    =   B.POS_NO
+            AND A.FNKEY_NO  =   B.FNKEY_NO
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.FNKEY_FG      =   B.FNKEY_FG
+        ,       A.DISP_SEQ      =   B.DISP_SEQ
+        ,       A.X             =   B.X
+        ,       A.Y             =   B.Y
+        ,       A.WIDTH         =   B.WIDTH
+        ,       A.HEIGHT        =   B.HEIGHT
+        ,       A.STYLE_CD      =   B.STYLE_CD
+        ,       A.IMG_NM        =   B.IMG_NM
+        ,       A.USE_YN        =   B.USE_YN
+        ,       A.MOD_DT        =   B.MOD_DT
+        ,       A.MOD_ID        =   B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.STORE_CD
+            ,   A.POS_NO
+            ,   A.FNKEY_NO
+            ,   A.FNKEY_FG
+            ,   A.DISP_SEQ
+            ,   A.X
+            ,   A.Y
+            ,   A.WIDTH
+            ,   A.HEIGHT
+            ,   A.STYLE_CD
+            ,   A.IMG_NM
+            ,   A.USE_YN
+            ,   A.REG_DT
+            ,   A.REG_ID
+            ,   A.MOD_DT
+            ,   A.MOD_ID
+        )
+        VALUES
+        (
+            B.STORE_CD
+            ,   B.POS_NO
+            ,   B.FNKEY_NO
+            ,   B.FNKEY_FG
+            ,   B.DISP_SEQ
+            ,   B.X
+            ,   B.Y
+            ,   B.WIDTH
+            ,   B.HEIGHT
+            ,   B.STYLE_CD
+            ,   B.IMG_NM
+            ,   B.USE_YN
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+        )
     </insert>
 
     <!-- 매장설정 XML 복사 -->
