@@ -226,7 +226,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseRegist.js?ver=20200923.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/disuse/disuse/disuseRegist.js?ver=20200923.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

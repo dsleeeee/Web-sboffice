@@ -107,7 +107,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -163,7 +163,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.vendrCd     = $("#acinsRegistSelectVendrCd").val();
     params.listScale   = $scope.listScale;
     params.storageCd    = $("#registSelectStorageCd").val();
-    
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/stock/acins/acins/acinsRegist/list.sb", params);
   };
@@ -171,7 +171,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 조회버튼으로 조회시
   $scope.fnSearch = function () {
-	  	  
+
 	if($("#registSelectStorageCd").val() === ""){
 	  alert("창고를 선택하여 주십시요.");
 	  return false;
@@ -197,12 +197,32 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       return false;
     }
     var params = [];
+
+
+    // 체크만 되어있는 경우 체크 풀기
+    // 추가된 상품 가져오기
+    for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+      var item = $scope.flex.collectionView.itemsAdded[i];
+      if (item.acinsQty === null) {
+          item.gChk = false;
+      }
+    }
+    // 수정된 상품 가져오기
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      var item = $scope.flex.collectionView.itemsEdited[i];
+      if (item.acinsQty === null) {
+          item.gChk = false;
+      }
+    }
+
     // 추가된 상품 가져오기
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       var item = $scope.flex.collectionView.itemsAdded[i];
 
       // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.gChk === true && item.acinsProdStatus === 'U') {
+      if (item.acinsQty === null || item.acinsQty === '') {
+        item.status = "R";
+      } else if (item.gChk === true && item.acinsProdStatus === 'U') {
         item.status = "D";
       } else {
         item.status = "U";
@@ -214,7 +234,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $("#registSelectStorageCd").val();
 
-      params.push(item);
+      if(item.status !== "R") params.push(item);
     }
 
     // 수정된 상품 가져오기
@@ -222,7 +242,9 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.gChk === true && item.acinsProdStatus === 'U') {
+      if (item.acinsQty === null || item.acinsQty === '') {
+        item.status = "R";
+      } else if (item.gChk === true && item.acinsProdStatus === 'U') {
         item.status = "D";
       } else {
         item.status = "U";
@@ -234,12 +256,20 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       item.hqBrandCd  = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $("#registSelectStorageCd").val();
 
-      params.push(item);
+      if(item.status !== "R") params.push(item);
     }
     console.log(params);
-    $scope._save("/stock/acins/acins/acinsRegist/save.sb", params, function () {
-      $scope.saveRegistCallback()
-    });
+    if(params.length > 0 || ($scope.seqNo  !== null && $scope.seqNo !== ''))
+    {
+        $scope._save("/stock/acins/acins/acinsRegist/save.sb", params, function () {
+          $scope.saveRegistCallback()
+        });
+    }
+    else
+    {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
+    }
   };
 
 
@@ -249,7 +279,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     if ($scope.callParent === "acins") {
       var acinsScope = agrid.getScope('acinsCtrl');
       acinsScope.searchAcinsList();
-      
+
       $scope.wjAcinsRegistLayer.hide(true);
     }
     // 실사상세내역 페이지에서 호출한 경우
@@ -260,7 +290,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       var acinsDtlScope = agrid.getScope('acinsDtlCtrl');
       acinsDtlScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
       acinsDtlScope.searchAcinsDtlList();
-      
+
     }
 
 //    $scope.wjAcinsRegistLayer.hide(true);
@@ -341,13 +371,13 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 그리드의 상품을 찾아서 실사수 수정
   $scope.modifyAcinsQty = function (addQty) {
-	  
+
 	// 숫자가 아닌 값
 	var numChkexp = /[^0-9]/g;
 	if (numChkexp.test(nvl(addQty, 0))) {
 		return false;
-	}	  
-	  
+	}
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       var item = $scope.flex.collectionView.items[i];
       if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
@@ -452,7 +482,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
       $scope._popMsg(msg);
       return false;
     } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
-        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"]; 
+        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"];
         $scope._popMsg(msg);
         return false;
     }
@@ -493,12 +523,12 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
     params.title    = $scope.acinsTitle;
     params.addQtyFg = $scope.addQtyFg;
     params.adjStorageCd    = $("#registSelectStorageCd").val();
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
 
     $http({
@@ -537,7 +567,7 @@ app.controller('acinsRegistCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope.acinsRegistSelectVendrShow = function () {
     $scope._broadcast('acinsRegistSelectVendrCtrl');
   };
-  
+
   // 창고선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

@@ -96,12 +96,12 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params     = {};
     params.adjDate = $scope.adjDate;
     params.seqNo   = $scope.seqNo;
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -118,7 +118,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
           }
           $scope.adjTitle = response.data.data.adjTitle;
           $("#registSelectStorageCd").val(response.data.data.adjStorageCd);
-          $("#registSelectStorageNm").val(response.data.data.storageNm);          
+          $("#registSelectStorageNm").val(response.data.data.storageNm);
         }
       }
     }, function errorCallback(response) {
@@ -169,7 +169,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
 		  alert("창고를 선택하여 주십시요.");
 		  return false;
 		}
-		
+
     if ($scope.flex.collectionView.itemsEdited.length > 0 || $scope.flex.collectionView.itemsAdded.length > 0) {
       var msg = messages["adj.reg.searchMsg"]; // 저장되지 않은 자료가 있습니다. 조회하시겠습니까?
       s_alert.popConf(msg, function () {
@@ -196,7 +196,9 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       var item = $scope.flex.collectionView.itemsAdded[i];
 
       // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.gChk === true && item.adjProdStatus === 'U') {
+      if (item.adjQty === null || item.adjQty === '') {
+        item.status = "R";
+      } else if (item.gChk === true && item.adjProdStatus === 'U') {
         item.status = "D";
       } else {
         item.status = "U";
@@ -208,7 +210,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $("#registSelectStorageCd").val();
 
-      params.push(item);
+      if(item.status !== "R") params.push(item);
     }
 
     // 수정된 상품 가져오기
@@ -216,7 +218,9 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       var item = $scope.flex.collectionView.itemsEdited[i];
 
       // 체크박스가 체크되어 있으면서 기존에 등록되어 있던 상품은 삭제한다.
-      if (item.gChk === true && item.adjProdStatus === 'U') {
+      if (item.adjQty === null || item.adjQty === '') {
+        item.status = "R";
+      } else if (item.gChk === true && item.adjProdStatus === 'U') {
         item.status = "D";
       } else {
         item.status = "U";
@@ -228,12 +232,20 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
       item.adjStorageCd = $("#registSelectStorageCd").val();
 
-      params.push(item);
+      if(item.status !== "R") params.push(item);
     }
 
-    $scope._save("/stock/adj/adj/adjRegist/save.sb", params, function () {
-      $scope.saveRegistCallback()
-    });
+    if(params.length > 0 || ($scope.seqNo  !== null && $scope.seqNo !== ''))
+    {
+        $scope._save("/stock/adj/adj/adjRegist/save.sb", params, function () {
+          $scope.saveRegistCallback()
+        });
+    }
+    else
+    {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
+    }
   };
 
 
@@ -308,13 +320,13 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 그리드의 상품을 찾아서 조정수 수정
   $scope.modifyAdjQty = function (addQty) {
-	  
+
 	// 숫자가 아닌 값
 	var numChkexp = /[^0-9]/g;
 	if (numChkexp.test(nvl(addQty, 0))) {
 		return false;
-	}  
-	  
+	}
+
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       var item = $scope.flex.collectionView.items[i];
       if (item.prodCd === $scope.prodBarcdCd || item.barcdCd === $scope.prodBarcdCd) {
@@ -419,7 +431,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
       $scope._popMsg(msg);
       return false;
     } else if (nvl($("#registSelectStorageCd").val(),'') === '' && prcsFg !== 'excelFormDown') {
-        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"]; 
+        var msg = messages["hqMove.outStorage"] + messages["cmm.require.text"];
         $scope._popMsg(msg);
         return false;
     }
@@ -460,14 +472,14 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.title    = $scope.adjTitle;
     params.addQtyFg = $scope.addQtyFg;
     params.adjStorageCd    = $("#registSelectStorageCd").val();
-    
+
     var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
-    
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     $http({
       method : 'POST', //방식
       url    : '/stock/adj/adj/adjRegist/excelUpload.sb', /* 통신할 URL */
@@ -504,7 +516,7 @@ app.controller('adjRegistCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope.adjRegistSelectVendrShow = function () {
     $scope._broadcast('adjRegistSelectVendrCtrl');
   };
-   
+
   // 창고선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
