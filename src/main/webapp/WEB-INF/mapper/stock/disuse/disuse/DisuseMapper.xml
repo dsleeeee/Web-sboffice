@@ -455,7 +455,7 @@
         AND     tssdd.DISUSE_DATE       =   #{disuseDate}
         AND     tssdd.SEQ_NO            =   #{seqNo}
         AND		tssdd.STORE_CD     	=   tssd.STORE_CD
-        AND     tssdd.ACINS_DATE       =   tssd.ACINS_DATE
+        AND     tssdd.DISUSE_DATE       =   tssd.DISUSE_DATE
         AND     tssdd.SEQ_NO           =   tssd.SEQ_NO         
         AND     tssdd.STORE_CD          =   tmp.STORE_CD
         AND     tssdd.PROD_CD           =   tmp.PROD_CD
