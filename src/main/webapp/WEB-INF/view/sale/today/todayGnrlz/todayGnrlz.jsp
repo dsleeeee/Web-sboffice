@@ -59,7 +59,7 @@
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 100px;">
+      <div class="wj-gridWrap" style="height: 100px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -92,7 +92,7 @@
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 150px;">
+      <div class="wj-gridWrap" style="height: 150px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -124,7 +124,7 @@
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 150px;">
+      <div class="wj-gridWrap" style="height: 150px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
@@ -158,7 +158,7 @@
       </div>
 
       <%--위즈모 테이블--%>
-      <div class="wj-gridWrap" style="height: 500px;">
+      <div class="wj-gridWrap" style="height: 500px; overflow-x: hidden; overflow-y: hidden;">
         <wj-flex-grid
           autoGenerateColumns="false"
           selection-mode="Row"
