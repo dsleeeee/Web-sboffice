@@ -125,6 +125,11 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       var item = $scope.flex.collectionView.itemsEdited[i];
 
+      if(item.maxOrderAmtYn === true && item.limitLoanAmt === null){
+        $scope._popMsg(messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
+        return false;
+      }
+
       if (item.limitLoanAmt !== null && item.maxOrderAmt === null) {
         $scope._popMsg(messages["loan.maxOrderAmt"]+" "+messages["cmm.require.text"]); // 1회주문한도액을 입력해주세요.
         return false;
