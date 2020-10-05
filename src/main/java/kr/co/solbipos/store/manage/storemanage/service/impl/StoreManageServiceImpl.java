@@ -204,6 +204,14 @@ public class StoreManageServiceImpl implements StoreManageService{
             storeManageVO.setPosEmpNo(pEmpNo);
             storeManageVO.setPosUserPwd(pUserPwd);
 
+            // 단독매장
+            if(storeManageVO.getHqOfficeCd().equals("00000")) {
+                storeManageVO.setAuthGrpCd("000004");
+            // 매장
+            } else {
+                storeManageVO.setAuthGrpCd("000008");
+            }
+
             // 마스터 관련 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
             // 신규 매장정보 저장
