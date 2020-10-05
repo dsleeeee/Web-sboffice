@@ -190,15 +190,15 @@ app.controller('hqMoveRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
   // 매장이동관리 신규등록 상품 리스트 조회
   $scope.searchHqMoveRegistList = function () {
     if ($("#hqMoveRegistOutSelectStorageCd").val() === "") {
-      $scope._popMsg(messages["hqMove.selectOutStore"]); // 이출창고을 선택해주세요.
+      $scope._popMsg(messages["hqMove.selectOutStore"]); // 출고창고을 선택해주세요.
       return false;
     }
     if ($("#hqMoveRegistInSelectStorageCd").val() === "") {
-      $scope._popMsg(messages["hqMove.selectOutStore"]); // 이입창고을 선택해주세요.
+      $scope._popMsg(messages["hqMove.selectInStore"]); // 입고창고을 선택해주세요.
       return false;
     }
-    if ($("#hqMoveRegistOutSelectStorageCd").val() === $("#hqMoveRegistInSelectStoreCd").val()) {
-      $scope._popMsg(messages["hqMove.selectInOutStore"]); // 이출창고와 이입창고는 동일할 수 없습니다.
+    if ($("#hqMoveRegistOutSelectStorageCd").val() === $("#hqMoveRegistInSelectStorageCd").val()) {
+      $scope._popMsg(messages["hqMove.selectInOutStore"]); // 출고창고와 입고창고는 동일할 수 없습니다.
       return false;
     }
 
