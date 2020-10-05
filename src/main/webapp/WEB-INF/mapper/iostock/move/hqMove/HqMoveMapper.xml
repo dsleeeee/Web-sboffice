@@ -161,11 +161,11 @@
             AND tmpout.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         <if test='slipNo != null and slipNo != ""'>
-            AND tmpout.PROD_CD NOT IN (   SELECT  PROD_CD
-                                          FROM    TB_PO_STORE_MOVE_DTL
+            AND tmpout.PROD_CD NOT IN (  SELECT  PROD_CD
+                                          FROM    TB_PO_HQ_MOVE_DTL
                                           WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                                           AND     SLIP_NO      = #{slipNo}
-                                      )
+                                        )
         </if>
         ORDER BY tmpout.PROD_CD
     </select>
