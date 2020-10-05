@@ -103,7 +103,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="storageManage.storageCd"/>"   binding="storageCd" width="90"   align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storageManage.storageNm"/>"   binding="storageNm" width="200"  align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storageManage.useYn"/>"       binding="useYn"     width="100"  align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storageManage.useYn"/>"       binding="useYn"     data-map="useYnDataMap" width="100"  align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storageManage.lastModId"/>"   binding="empNm"     width="150"  align="center" is-read-only="true" format="d"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storageManage.lastModDate"/>" binding="modDt"     width="200"  align="center" is-read-only="true"></wj-flex-grid-column>
        </wj-flex-grid>
@@ -127,7 +127,7 @@
 
 
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/storage/storage.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/storage/storage.js?ver=20200929.01" charset="utf-8"></script>
 
 <%-- 창고 등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/storage/pop/regStorage.jsp">
