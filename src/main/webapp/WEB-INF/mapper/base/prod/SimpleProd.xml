@@ -215,11 +215,11 @@
             'Y', --POINT_SAVE_YN
             '', -- PROD_DC_FG
              #{vatFg},
-            'N',
-            '0',
-            '0',
+            'N', --PROD_TIP_YN
+            '0', --PROD_PACK_AMT
+            '0', --PROD_DLVR_AMT
             #{prodTypeFg},
-            'Y',
+            'Y', --SALE_PROD_YN
             'Y', --STOCK_PROD_YN
             'N', --SIDE_PROD_YN
             '1', --SET_PROD_FG
@@ -234,8 +234,8 @@
             '1', --PO_MIN_QTY
             '0', --SAFE_STOCK_QTY
             '', --STOCK_UNIT_FG
-            'Y',
-            '',
+            'Y', --USE_YN
+            '', --REMARK
             #{saleUprc},
             #{barCd},
             #{regDt},
