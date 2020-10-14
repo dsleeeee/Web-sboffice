@@ -545,7 +545,7 @@
         (
             #{userId},
             #{userPwd},
-            '000008',
+            #{authGrpCd},
             0,
             #{regDt},
             '99',

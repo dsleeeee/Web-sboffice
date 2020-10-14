@@ -119,7 +119,12 @@ public class StoreEmpServiceImpl implements StoreEmpService {
 
         if(storeEmpVO.getWebUseYn() == UseYn.Y ) {
 
-            storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD); //todo 매장권한코드 추후 수정 필요
+            // 단독매장
+            if(sessionInfoVO.getHqOfficeCd().equals("00000")) {
+                storeEmpVO.setAuthGrpCd("000004");
+            } else {
+                storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD); //todo 매장권한코드 추후 수정 필요 // 000008
+            }
 
             // 비밀번호 정책 체크
             EmpResult pwdChgResult = passwordPolicy(storeEmpVO);

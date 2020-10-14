@@ -124,6 +124,9 @@ public class StoreManageVO extends PageVO {
     /** 직영구분 */
     private String directManageYn;
 
+    /** 권한 그룹 코드 */
+    private String authGrpCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -688,4 +691,8 @@ public class StoreManageVO extends PageVO {
     public void setDirectManageYn(String directManageYn) {
         this.directManageYn = directManageYn;
     }
+
+    public String getAuthGrpCd() { return authGrpCd; }
+
+    public void setAuthGrpCd(String authGrpCd) { this.authGrpCd = authGrpCd; }
 }
