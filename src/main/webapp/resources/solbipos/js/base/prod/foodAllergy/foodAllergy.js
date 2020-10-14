@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : recpOrigin.js
- * 설  명 : 원산지관리 JavaScript
+ * 파일명 : foodAllergy.js
+ * 설  명 : 식품 알레르기 정보관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2020.07.10     김설아      1.0
+ * 2020.10.06     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -13,16 +13,16 @@
  */
 var app = agrid.getApp();
 
-// 재료-상품 등록에 추가버튼, '재료코드' 미선택시 막을려고 ("V":선택, "N":미선택)
+// 알레르기-상품 등록에 추가버튼, '재료코드' 미선택시 막을려고 ("V":선택, "N":미선택)
 var addSelected = "N";
 
 /**
- *  원산지관리 그리드 생성
+ *  식품 알레르기 정보관리 그리드 생성
  */
-app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('foodAllergyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('recpOriginCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('foodAllergyCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -51,34 +51,34 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
                     var params      = {};
                     params.recipesCd = selectedRow.recipesCd;
                     params.recipesNm = selectedRow.recipesNm;
-                    params.orgplceNm = selectedRow.orgplceNm;
+                    params.allergieNm = selectedRow.allergieNm;
 
-                    var storeScope = agrid.getScope('recpOriginDetailCtrl');
-                    storeScope._broadcast('recpOriginDetailCtrl', params);
+                    var storeScope = agrid.getScope('foodAllergyDetailCtrl');
+                    storeScope._broadcast('foodAllergyDetailCtrl', params);
                     event.preventDefault();
                 }
             }
         });
 
         // 조회
-        $scope.searchRecpOrigin();
+        $scope.searchFoodAllergy();
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("recpOriginCtrl", function(event, data) {
-        $scope.searchRecpOrigin();
+    $scope.$on("foodAllergyCtrl", function(event, data) {
+        $scope.searchFoodAllergy();
         event.preventDefault();
     });
 
-    $scope.searchRecpOrigin = function(){
+    $scope.searchFoodAllergy = function(){
         var params = {};
 
-        $scope._inquiryMain("/base/prod/recpOrigin/recpOrigin/getRecpOriginList.sb", params, function() {
+        $scope._inquiryMain("/base/prod/foodAllergy/foodAllergy/getFoodAllergyList.sb", params, function() {
             addSelected = "N";
             $scope.$apply(function() {
-                var storeScope = agrid.getScope('recpOriginDetailCtrl');
+                var storeScope = agrid.getScope('foodAllergyDetailCtrl');
                 storeScope._gridDataInit();
-                storeScope._broadcast('recpOriginDetailCtrl', null);
+                storeScope._broadcast('foodAllergyDetailCtrl', null);
             });
         }, false);
     };
@@ -92,7 +92,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
         params.gChk = true;
         params.recipesCd="자동채번";
         params.recipesNm = "";
-        params.orgplceNm = "";
+        params.allergieNm = "";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params);
@@ -101,7 +101,7 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
+        $scope._popConfirm(messages["foodAllergy.delConfirm"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
 
@@ -120,11 +120,11 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.save = function() {
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].recipesNm === "") {
-                $scope._popMsg(messages["recpOrigin.recipesNmBlank"]);
+                $scope._popMsg(messages["foodAllergy.recipesNmBlank"]);
                 return false;
             }
-            if($scope.flex.collectionView.items[i].orgplceNm === "") {
-                $scope._popMsg(messages["recpOrigin.orgplceNmBlank"]);
+            if($scope.flex.collectionView.items[i].allergieNm === "") {
+                $scope._popMsg(messages["foodAllergy.allergieNmBlank"]);
                 return false;
             }
         }
@@ -145,23 +145,24 @@ app.controller('recpOriginCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/recpOrigin/recpOrigin/getRecpOriginSave.sb", params, function(){ $scope.allSearch() });
+        $scope._save("/base/prod/foodAllergy/foodAllergy/getFoodAllergySave.sb", params, function(){ $scope.allSearch() });
     };
 
     // 재조회
     $scope.allSearch = function () {
-        $scope.searchRecpOrigin();
+        $scope.searchFoodAllergy();
     };
     // <-- //그리드 저장 -->
 }]);
 
+
 /**
- *  재료-상품 등록 그리드 생성
+ *  알레르기-상품 등록 그리드 생성
  */
-app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('foodAllergyDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('recpOriginDetailCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('foodAllergyDetailCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -169,7 +170,7 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("recpOriginDetailCtrl", function(event, data) {
+    $scope.$on("foodAllergyDetailCtrl", function(event, data) {
         $scope.setSelectedStore(data);
 
         if(!$.isEmptyObject($scope.selectedStore) ) {
@@ -178,22 +179,22 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
         if(addSelected === "Y") {
             $("#lblRecipesCd").text(" ( [ " + $scope.selectedStore.recipesCd + " ]");
             $("#lblRecipesNm").text($scope.selectedStore.recipesNm + " / ");
-            $("#lblOrgplceNm").text($scope.selectedStore.orgplceNm + " )");
+            $("#lblAllergieNm").text($scope.selectedStore.allergieNm + " )");
         } else if(addSelected === "N") {
             $("#lblRecipesCd").text("");
             $("#lblRecipesNm").text("");
-            $("#lblOrgplceNm").text("");
+            $("#lblAllergieNm").text("");
         }
 
-        $scope.searchRecpOriginDetail();
+        $scope.searchFoodAllergyDetail();
         event.preventDefault();
     });
 
-    $scope.searchRecpOriginDetail = function(){
+    $scope.searchFoodAllergyDetail = function(){
         var params = {};
         params.recipesCd = $scope.selectedStore.recipesCd;
 
-        $scope._inquiryMain("/base/prod/recpOrigin/recpOrigin/getRecpOriginDetailList.sb", params, function() {}, false);
+        $scope._inquiryMain("/base/prod/foodAllergy/foodAllergy/getFoodAllergyDetailList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -213,21 +214,21 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
         }
 
         if(addSelected === "Y") {
-            $scope.wjRecpProdLayer.show(true);
+            $scope.wjFoodAllergyProdLayer.show(true);
             event.preventDefault();
         } else if(addSelected === "N" ) {
-                $scope._popMsg(messages["recpOrigin.recipesCdBlank"]);
-                return false;
+            $scope._popMsg(messages["foodAllergy.recipesCdBlank"]);
+            return false;
         }
     };
 
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
-        // 재료-상품 등록 팝업 핸들러 추가
-        $scope.wjRecpProdLayer.shown.addHandler(function (s) {
+        // 알레르기-상품 등록 팝업 핸들러 추가
+        $scope.wjFoodAllergyProdLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('recpProdCtrl', $scope.getSelectedStore());
+                $scope._broadcast('foodAllergyProdCtrl', $scope.getSelectedStore());
             }, 50)
         });
     });
@@ -235,7 +236,7 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
 
     // <-- 그리드 행 삭제 -->
     $scope.del = function(){
-        $scope._popConfirm(messages["recpOrigin.delConfirm"], function() {
+        $scope._popConfirm(messages["foodAllergy.delConfirm"], function() {
             for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
                 var item = $scope.flex.collectionView.items[i];
 
@@ -260,6 +261,6 @@ app.controller('recpOriginDetailCtrl', ['$scope', '$http', function ($scope, $ht
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/recpOrigin/recpOrigin/getRecpOriginDetailSave.sb", params, function(){});
+        $scope._save("/base/prod/foodAllergy/foodAllergy/getFoodAllergyDetailSave.sb", params, function(){});
     };
 }]);

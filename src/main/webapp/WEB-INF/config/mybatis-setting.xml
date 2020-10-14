@@ -247,6 +247,8 @@
     <typeAlias alias="KioskKeyMapVO" type="kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO"/>
     <!-- 기초관리 > 상품관리 > 상품엑셀업로드 -->
     <!--<typeAlias alias="prodExcelUploadVO" type="kr.co.solbipos.base.prod.prodExcelUpload.service.ProdExcelUploadVO"/>-->
+    <!-- 기초관리 > 상품관리 > 식품 알레르기 정보관리 -->
+    <typeAlias alias="foodAllergyVO" type="kr.co.solbipos.base.prod.foodAllergy.service.FoodAllergyVO"/>
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>
