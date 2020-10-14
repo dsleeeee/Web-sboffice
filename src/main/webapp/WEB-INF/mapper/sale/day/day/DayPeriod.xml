@@ -118,14 +118,19 @@
                         TB_HQ_PRODUCT thp,
                         TB_HQ_PRODUCT_CLASS thpc,
                         (
-                            SELECT
-                            thpc.PROD_CLASS_CD,
-                            SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD, '/') PATH
-                            FROM TB_HQ_PRODUCT_CLASS thpc
-                            WHERE 1=1
-                            AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
-                            START WITH thpc.P_PROD_CLASS_CD = '00000'
-                            CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                            SELECT A.PROD_CLASS_CD
+                            ,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH
+                            FROM
+                            (
+                                SELECT P_PROD_CLASS_CD
+                                ,       PROD_CLASS_CD
+                                ,       PROD_CLASS_NM
+                                FROM   TB_HQ_PRODUCT_CLASS
+                                WHERE  1=1
+                                AND    HQ_OFFICE_CD = #{membrOrgnCd}
+                            )  A
+                            WHERE CONNECT_BY_ISLEAF = 1
+                            CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
                         ) thpc_p
                         WHERE 1=1
                         AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
@@ -152,14 +157,19 @@
                     TB_HQ_PRODUCT thp,
                     TB_HQ_PRODUCT_CLASS thpc,
                     (
-                        SELECT
-                        thpc.PROD_CLASS_CD,
-                        SYS_CONNECT_BY_PATH (thpc.PROD_CLASS_CD, '/') PATH
-                        FROM TB_HQ_PRODUCT_CLASS thpc
-                        WHERE 1=1
-                        AND thpc.HQ_OFFICE_CD = #{membrOrgnCd}
-                        START WITH thpc.P_PROD_CLASS_CD = '00000'
-                        CONNECT BY thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                        SELECT A.PROD_CLASS_CD
+                        ,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH
+                        FROM
+                        (
+                            SELECT P_PROD_CLASS_CD
+                            ,       PROD_CLASS_CD
+                            ,       PROD_CLASS_NM
+                            FROM   TB_MS_PRODUCT_CLASS
+                            WHERE  1=1
+                            AND    STORE_CD = #{storeCd}
+                        )  A
+                        WHERE CONNECT_BY_ISLEAF = 1
+                        CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD
                     ) thpc_p
                     WHERE 1=1
                     AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
