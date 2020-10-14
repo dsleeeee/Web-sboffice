@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-  <div id="posFuncAuthArea" style="display:none;">
+  <div id="posFuncAuthArea" style="display:none;"  ng-controller="funcAuthCtrl">
     <h2 class="h2_tit" id="posFuncAuthTitle"></h2>
 
     <%--============================================= 탭 =============================================--%>
@@ -14,36 +14,21 @@
     </ul>
 
     <%-- 왼쪽  --%>
-    <div class="w30 fl ">
-      <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
-        <div class="updownSet mb10">
-          <span class="fl bk lh30"><s:message code="posFunc.fnkeyFg" /></span>
-        </div>
-        <%-- 그리드 --%>
-        <div id="funcListGrid" style="height:481px; overflow-x: hidden;"></div>
+    <div class="wj-TblWrapBr oh mr10 pd20" style="height:560px;">
+      <div class="updownSet mb10">
+        <span class="fl bk lh30"><s:message code="posFunc.fnkeyFg" /></span>
       </div>
-    </div>
-
-    <%-- 오른쪽 --%>
-    <div class="w70 fr">
-      <div class="wj-TblWrapBr oh ml20 pd20" style="height:560px; ">
-        <div class="updownSet mb10">
-          <%-- 저장버튼 --%>
-          <button class="btn_skyblue" id="btnSave"><s:message code="cmm.save" /></button>
-        </div>
-        <%-- 그리드 --%>
-        <div id="funcAuthGrid" style="height:481px; overflow-x: hidden;"></div>
-        <div id="funcKeyDiv" style="display:none"></div>
-      </div>
+      <%-- 그리드 --%>
+      <div id="funcListGrid" style="height:481px; overflow-x: hidden;"></div>
     </div>
   </div>
 
 <%-- grid button --%>
-<div id="tplBtnEditMode" style="display:none">
+<%--<div id="tplBtnEditMode" style="display:none">
   <button id="btnEnvSetting" class="btn btn-primary btn-sm">
     <span class="glyphicon glyphicon-ok"></span> <s:message code='posFunc.regist.auth' />
   </button>
-</div>
+</div>--%>
 
 <script>
 
@@ -54,26 +39,13 @@
   var funcListHeader =
       [
         {binding:"nmcodeCd", header:"<s:message code='posFunc.fnkeyFg' />", visible:false, width:"*"},
-        {binding:"nmcodeNm", header:"<s:message code='posFunc.fnkeyNm' />", width:150},
-      ];
-
-  var funAuthHeader =
-      [
-        {binding:"fnkeyNo", header:"<s:message code='posFunc.fnkeyNo' />", isReadOnly:true, width:70},
-        {binding:"fnkeyNm", header:"<s:message code='posFunc.fnkeyNm' />", isReadOnly:true, width:150},
-        {binding:"dispSeq", header:"<s:message code='posFunc.dispSeq' />", visible:false, width:"*"},
-        {binding:"useYn", header:"<s:message code='posFunc.useYn' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false},
-        {binding:"authYn", header:"<s:message code='posFunc.authYn' />", dataType:wijmo.DataType.Boolean, width:60},
-        {binding:"buttons", header:"<s:message code='posFunc.setting.auth' />", width:110, align:"center"},
-        {binding:"gChk", header:"<s:message code='cmm.chk' />", dataType:wijmo.DataType.Boolean, width:"*", visible:false}
+        {binding:"nmcodeNm", header:"<s:message code='posFunc.fnkeyNm' />", width:300},
       ];
 
   <%-- 그리드 생성 --%>
   var funcListGrid = wgrid.genGrid("#funcListGrid", funcListHeader);
-  var funcAuthGrid = wgrid.genGrid("#funcAuthGrid", funAuthHeader);
 
   funcListGrid.isReadOnly = true;
-  funcAuthGrid.isReadOnly = false;
 
   <%-- 그리드 포맷 --%>
   funcListGrid.formatItem.addHandler(function(s, e) {
@@ -86,19 +58,6 @@
     }
   });
 
-  funcAuthGrid.formatItem.addHandler(function(s, e) {
-    if (e.panel === s.cells) {
-      var col = s.columns[e.col];
-      var item = s.rows[e.row].dataItem;
-
-      if( col.binding === "buttons"){
-        e.cell.innerHTML = document.getElementById('tplBtnEditMode').innerHTML;
-        e.cell.dataItem = item;
-      }
-
-    }
-  });
-
   <%-- 그리드 선택 이벤트 --%>
   funcListGrid.addEventListener(funcListGrid.hostElement, 'click', function(e) {
     var ht = funcListGrid.hitTest(e);
@@ -106,20 +65,15 @@
       var col = ht.panel.columns[ht.col];
       if( col.binding === "nmcodeNm" ) {
         selectedRow = funcListGrid.rows[ht.row].dataItem;
-        getPosFuncAuthDetail();
-      }
-    }
-  });
+        var params = {};
+        params.storeCd = selectedStore.storeCd;
+        params.nmcodeCd = selectedRow.nmcodeCd;
+        params.nmcodeNm = selectedRow.nmcodeNm;
 
-  <%-- 환경설정 버튼 클릭 --%>
-  funcAuthGrid.addEventListener(funcAuthGrid.hostElement, 'click', function(e) {
-    var ht = funcAuthGrid.hitTest(e);
-    var row = ht.row;
-    if( ht.cellType === wijmo.grid.CellType.Cell) {
-      var col = ht.panel.columns[ht.col];
-      if( col.binding === "buttons") {
-        selectedFnkey = funcAuthGrid.rows[ht.row].dataItem;
-        openSetAuthLayer();
+        // 포스기능 키 목록 조회
+        var scope = agrid.getScope("funcAuthCtrl");
+        scope._broadcast('funcAuthCtrl' , params );
+
       }
     }
   });
@@ -142,7 +96,7 @@
 
           var list = result.data.list;
           funcListGrid.itemsSource = new wijmo.collections.CollectionView(list);
-          funcAuthGrid.itemsSource = new wijmo.collections.CollectionView([]);
+          //funcAuthGrid.itemsSource = new wijmo.collections.CollectionView([]);
           funcListGrid.collectionView.trackChanges = true;
 
           selectedRow = "";
@@ -154,64 +108,6 @@
     );
   }
 
-  <%-- 포스기능인증 목록 상세 조회 --%>
-  function getPosFuncAuthDetail() {
-
-    var param = {};
-
-    param.storeCd = selectedStore.storeCd;
-    param.fnkeyFg = selectedRow.nmcodeCd;
-
-    $.postJSON("/base/store/posfunc/auth/getPosConfAuthDetail.sb", param,
-        function(result) {
-          var list = result.data.list;
-          funcAuthGrid.itemsSource = new wijmo.collections.CollectionView(list);
-          funcAuthGrid.collectionView.trackChanges = true;
-        },
-        function (result) {
-          s_alert.pop(result.message);
-          return;
-        }
-    );
-  }
-
-
-  <%-- 저장버튼 클릭 --%>
-  $("#posFuncAuthArea #btnSave").click(function(){
-
-    if(!selectedRow) {
-      s_alert.pop("<s:message code='posFunc.require.fnkeyNo' />");
-      return;
-    }
-
-    var paramArr = new Array();
-
-    for(var i = 0; i < funcAuthGrid.collectionView.itemCount; i ++) {
-      funcAuthGrid.collectionView.editItem(funcAuthGrid.collectionView.items[i]);
-
-      funcAuthGrid.collectionView.items[i].status = 'U';
-      funcAuthGrid.collectionView.items[i].dispSeq = (i+1);
-
-      funcAuthGrid.collectionView.items[i].storeCd = selectedStore.storeCd;
-      funcAuthGrid.collectionView.items[i].fnkeyFg = selectedRow.nmcodeCd;
-
-      funcAuthGrid.collectionView.commitEdit();
-      paramArr.push(funcAuthGrid.collectionView.items[i]);
-    }
-
-    $.postJSONArray("/base/store/posfunc/auth/savePosAuthConf.sb", paramArr,
-        function(result) {
-          s_alert.pop("<s:message code='cmm.saveSucc' />");
-          funcAuthGrid.collectionView.clearChanges();
-          getPosFuncDetail();
-        },
-        function(result) {
-          s_alert.pop(result.message);
-        }
-    );
-  });
-
-
   function hidePosFuncAuth(){
     $("#posFuncAuthArea").hide();
   }
@@ -221,4 +117,30 @@
     hidePosFuncAuth();
     showPosFuncList()
   });
+</script>
+
+
+<script>
+  /**
+   * get application
+   */
+  var app = agrid.getApp();
+
+  /** 매장선택 controller */
+  app.controller('funcAuthCtrl', ['$scope', '$http', function ($scope, $http) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('funcAuthCtrl', $scope, $http, true));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {};
+
+    $scope.$on('funcAuthCtrl', function (event, data) {
+
+      $scope._broadcast('posFuncAuthDtlCtrl', data);
+
+      // 기능수행 종료 : 반드시 추가
+      event.preventDefault();
+    });
+
+  }]);
 </script>
