@@ -92,7 +92,9 @@
 
     $.postJSONArray("/base/store/posfunc/auth/saveAuthEmp.sb", paramArr, function(result) {
           s_alert.pop("<s:message code='cmm.saveSucc' />");
-          getPosAuthData();
+          //getPosAuthData();
+          $("#posAuthDim").hide();
+          $("#posAuthLayer").hide();
         },
         function(result) {
           s_alert.pop(result.message);

@@ -45,7 +45,7 @@
   </table>
 
   <div class="wj-TblWrap mt40">
-    <div class="w30 fl" style="overflow-x: visible">
+    <div class="w40 fl" style="overflow-x: visible">
       <div class="wj-TblWrapBr mr10 pd20" style="height:700px;">
         <div class="sb-select dkbr mb10 oh">
           <%-- 페이지스케일 --%>
@@ -69,17 +69,17 @@
       </div>
     </div>
 
-    <div class="w70 fr">
+    <div class="w60 fr">
       <div class="wj-TblWrapBr ml10 pd20" style="height:700px;">
+        <%-- 포스기능 인증관리--%>
+        <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
+          <c:param name="menuCd" value="${menuCd}"/>
+          <c:param name="menuNm" value="${menuNm}"/>
+          <c:param name="baseUrl" value="${baseUrl}"/>
+        </c:import>
+
       <%-- 포스기능 사용관리--%>
       <c:import url="/WEB-INF/view/base/store/posFunc/posFuncUseManage.jsp">
-        <c:param name="menuCd" value="${menuCd}"/>
-        <c:param name="menuNm" value="${menuNm}"/>
-        <c:param name="baseUrl" value="${baseUrl}"/>
-      </c:import>
-
-      <%-- 포스기능 인증관리--%>
-      <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuth.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
         <c:param name="baseUrl" value="${baseUrl}"/>
@@ -111,7 +111,7 @@
           {binding:"hqOfficeCd", header:"<s:message code='posFunc.hqOfficeCd' />", visible:false},
           {binding:"hqOfficeNm", header:"<s:message code='posFunc.hqOfficeNm' />", visible:false},
           {binding:"storeCd", header:"<s:message code='posFunc.storeCd' />", width:80},
-          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:150},
+          {binding:"storeNm", header:"<s:message code='posFunc.storeNm' />", width:180},
           {binding:"clsFg", header:"<s:message code='posFunc.clsFg' />", dataMap:clsFgDataMap, width:60, visible:false},
           {binding:"sysStatFg", header:"<s:message code='posFunc.sysStatFg' />", dataMap:sysStatFgDataMap, width:60}
           //{binding:"sysOpenDate", header:"<s:message code='posFunc.sysOpenDate' />", width:"*"}
@@ -147,6 +147,10 @@
 
     <%-- 매장 목록 조회 --%>
     function search(index) {
+
+      // 오른쪽 화면 숨기기
+      $("#posFuncManageArea").hide();
+      $("#posFuncAuthArea").hide();
 
       if($("#srchHqOfficeCd").val().length > 5) {
         s_alert.pop("<s:message code='posFunc.hqOfficeCd'/><s:message code='cmm.regexp' arguments='5'/>");
@@ -230,13 +234,18 @@
           },
           function (result) {
             s_alert.pop(result.message);
-
           }
       );
     }
   });
 
 </script>
+
+<%-- 포스기능 인증관리 상세 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuthDtl.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 
 <%-- 인증허용대상 설정 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/posFunc/posFuncAuthSetting.jsp">

@@ -73,11 +73,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 세션 가져오기
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        // 세션 값 확인, 로그 검증용(가상로그인의 경우 매장/대리점 구분이 안되어 로그 남김)
-        LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
-
-        //정상 세션값 확인시
-        //LOGGER.info("getSessionId : {},getUserId : {},getUserPwd : {},getUserNm : {},getAuthGrpCd : {},getArrStoreCdList : {},getOrgnFg : {},getOrgnGrpCd : {},getOrgnGrpNm : {},getOrgnCd : {},getOrgnNm : {},getStoreCd : {},getStoreNm : {},getHqOfficeCd : {},getHqOfficeNm : {},getEmpNo : {},getLastLoginDt : {},getLastPwdChgDt : {},getLoginFailCnt : {},getUserStatFg : {},getUseYn : {},getLoginIp : {},getBrwsrInfo : {},getLoginResult : {},getStartDate : {},getEndDate : {},getMenuData : {},getMenuTreeData : {},getBkmkMenuData : {},getBkmkMenuTreeData : {},getFixedMenuData : {},getHistoryMenuData : {},getCurrentMenu : {},getvUserId : {},getvLogindIds : {},getHwAuthKey : {},getpAgencyCd : {},getAreaFg : {}", sessionInfoVO.getSessionId(), sessionInfoVO.getUserId(), "NOT CHECK", sessionInfoVO.getUserNm(), sessionInfoVO.getAuthGrpCd(), sessionInfoVO.getArrStoreCdList(), sessionInfoVO.getOrgnFg(), sessionInfoVO.getOrgnGrpCd(), sessionInfoVO.getOrgnGrpNm(), sessionInfoVO.getOrgnCd(), sessionInfoVO.getOrgnNm(), sessionInfoVO.getStoreCd(), sessionInfoVO.getStoreNm(), sessionInfoVO.getHqOfficeCd(), sessionInfoVO.getHqOfficeNm(), sessionInfoVO.getEmpNo(), sessionInfoVO.getLastLoginDt(), sessionInfoVO.getLastPwdChgDt(), sessionInfoVO.getLoginFailCnt(), sessionInfoVO.getUserStatFg(), sessionInfoVO.getUseYn(), sessionInfoVO.getLoginIp(), sessionInfoVO.getBrwsrInfo(), sessionInfoVO.getLoginResult(), sessionInfoVO.getStartDate(), sessionInfoVO.getEndDate(), sessionInfoVO.getMenuData(), sessionInfoVO.getMenuTreeData(), sessionInfoVO.getBkmkMenuData(), sessionInfoVO.getBkmkMenuTreeData(), sessionInfoVO.getFixedMenuData(), sessionInfoVO.getHistoryMenuData(), sessionInfoVO.getCurrentMenu(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds(), sessionInfoVO.getHwAuthKey(), sessionInfoVO.getpAgencyCd(), sessionInfoVO.getAreaFg());
 
         // 세션 상태
         boolean isSessionValid = true;
@@ -108,7 +103,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 response.sendRedirect("/");
                 return false;
             }
+
+        }else{
+            // (세션이 있는 경우만) 세션 값 확인, 로그 검증용(가상로그인의 경우 매장/대리점 구분이 안되어 로그 남김)
+            LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
+            //정상 세션값 확인시
+            //LOGGER.info("getSessionId : {},getUserId : {},getUserPwd : {},getUserNm : {},getAuthGrpCd : {},getArrStoreCdList : {},getOrgnFg : {},getOrgnGrpCd : {},getOrgnGrpNm : {},getOrgnCd : {},getOrgnNm : {},getStoreCd : {},getStoreNm : {},getHqOfficeCd : {},getHqOfficeNm : {},getEmpNo : {},getLastLoginDt : {},getLastPwdChgDt : {},getLoginFailCnt : {},getUserStatFg : {},getUseYn : {},getLoginIp : {},getBrwsrInfo : {},getLoginResult : {},getStartDate : {},getEndDate : {},getMenuData : {},getMenuTreeData : {},getBkmkMenuData : {},getBkmkMenuTreeData : {},getFixedMenuData : {},getHistoryMenuData : {},getCurrentMenu : {},getvUserId : {},getvLogindIds : {},getHwAuthKey : {},getpAgencyCd : {},getAreaFg : {}", sessionInfoVO.getSessionId(), sessionInfoVO.getUserId(), "NOT CHECK", sessionInfoVO.getUserNm(), sessionInfoVO.getAuthGrpCd(), sessionInfoVO.getArrStoreCdList(), sessionInfoVO.getOrgnFg(), sessionInfoVO.getOrgnGrpCd(), sessionInfoVO.getOrgnGrpNm(), sessionInfoVO.getOrgnCd(), sessionInfoVO.getOrgnNm(), sessionInfoVO.getStoreCd(), sessionInfoVO.getStoreNm(), sessionInfoVO.getHqOfficeCd(), sessionInfoVO.getHqOfficeNm(), sessionInfoVO.getEmpNo(), sessionInfoVO.getLastLoginDt(), sessionInfoVO.getLastPwdChgDt(), sessionInfoVO.getLoginFailCnt(), sessionInfoVO.getUserStatFg(), sessionInfoVO.getUseYn(), sessionInfoVO.getLoginIp(), sessionInfoVO.getBrwsrInfo(), sessionInfoVO.getLoginResult(), sessionInfoVO.getStartDate(), sessionInfoVO.getEndDate(), sessionInfoVO.getMenuData(), sessionInfoVO.getMenuTreeData(), sessionInfoVO.getBkmkMenuData(), sessionInfoVO.getBkmkMenuTreeData(), sessionInfoVO.getFixedMenuData(), sessionInfoVO.getHistoryMenuData(), sessionInfoVO.getCurrentMenu(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds(), sessionInfoVO.getHwAuthKey(), sessionInfoVO.getpAgencyCd(), sessionInfoVO.getAreaFg());
         }
+
         // 유져 조회 날짜 저장
         sessionInfoVO = setUserSelectDate(request, sessionInfoVO);
 
