@@ -4,6 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}" />
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 <c:set var="gvOrgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="prodEnvstVal" value="${prodEnvstVal}" />
@@ -142,7 +143,7 @@
   var prodEnvstVal = "${prodEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/abc/abc/abc.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/abc/abc/abc.js?ver=20201019.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

@@ -45,7 +45,7 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
   $scope.initGrid = function (s, e) {
 
 	// 콤보박스 데이터 Set
-	$scope._setComboData('abclistScaleBox', gvListScaleBoxData);
+	// $scope._setComboData('abclistScaleBox', gvListScaleBoxData);
 	$scope._setComboData("srchAbcDisplay", vSortFg);
 
 	// picker 사용시 호출 : 미사용시 호출안함
@@ -107,6 +107,9 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
     params.gradeB = $("#abcGradeB").val();
     params.gradeC = $("#abcGradeC").val();
     params.sortFg   = $scope.sortFg;
+    if($scope.sortFg === null) {
+        params.sortFg   = "1";
+    }
     params.storeCd = $("#abcSelectStoreCd").val();
     params.isPageChk = isPageChk;
 
