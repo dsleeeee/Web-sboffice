@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdExcelUpload.xml
+    상품엑셀업로드
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2020.09.09     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodExcelUpload.service.impl.ProdExcelUploadMapper">
+
+    <!-- 검증결과 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_PRODUCT
+        COMMENTS : [임시]상품엑셀업로드
+    -->
+    <delete id="getProdExcelUploadCheckDeleteAll" parameterType="ProdExcelUploadVO">
+        /* ProdExcelUploadMapper.getProdExcelUploadCheckDeleteAll */
+        DELETE
+        TB_TMP_EXCEL_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </delete>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_PRODUCT
+        COMMENTS : [임시]상품엑셀업로드
+    -->
+    <select id="getProdExcelUploadList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+        /* ProdExcelUploadMapper.getProdExcelUploadList */
+        SELECT
+        SESSION_ID,
+        SEQ,
+        HQ_OFFICE_CD,
+        STORE_CD,
+        RESULT,
+        NVL(PROD_CD, '') AS PROD_CD,
+        NVL(PROD_NM, '') AS PROD_NM,
+        HQ_BRAND_CD,
+        PROD_CLASS_CD,
+        CORNR_CD,
+        ORGPLCE_CD,
+        SDATTR_CLASS_CD,
+        SDSEL_GRP_CD,
+        POINT_SAVE_YN,
+        PROD_DC_FG,
+        VAT_FG,
+        PROD_TIP_YN,
+        PROD_PACK_AMT,
+        PROD_DLVR_AMT,
+        PROD_TYPE_FG,
+        SALE_PROD_YN,
+        STOCK_PROD_YN,
+        SIDE_PROD_YN,
+        SET_PROD_FG,
+        NVL(COST_UPRC, '') AS COST_UPRC,
+        LAST_COST_UPRC,
+        NVL(SPLY_UPRC, '') AS SPLY_UPRC,
+        SPLY_UPRC_USE_YN,
+        PO_PROD_FG,
+        PO_UNIT_FG,
+        PO_UNIT_QTY,
+        PO_UNIT_ALLOW_FG,
+        PO_MIN_QTY,
+        SAFE_STOCK_QTY,
+        STOCK_UNIT_FG,
+        USE_YN,
+        REMARK,
+        NVL(SALE_UPRC, '') AS SALE_UPRC,
+        NVL(BARCD_CD, '') AS BAR_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID,
+        VENDR_CD,
+        START_STOCK_QTY
+        FROM TB_TMP_EXCEL_PRODUCT
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{membrOrgnCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </select>
+
+    <!-- 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_PRODUCT
+        COMMENTS : [임시]상품엑셀업로드
+    -->
+    <insert id="getProdExcelUploadAddSave" parameterType="ProdExcelUploadVO">
+        /* ProdExcelUploadMapper.getProdExcelUploadAddSave */
+        INSERT INTO TB_TMP_EXCEL_PRODUCT
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            RESULT,
+            PROD_CD,
+            PROD_NM,
+            HQ_BRAND_CD,
+            PROD_CLASS_CD,
+            CORNR_CD,
+            ORGPLCE_CD,
+            SDATTR_CLASS_CD,
+            SDSEL_GRP_CD,
+            POINT_SAVE_YN,
+            PROD_DC_FG,
+            VAT_FG,
+            PROD_TIP_YN,
+            PROD_PACK_AMT,
+            PROD_DLVR_AMT,
+            PROD_TYPE_FG,
+            SALE_PROD_YN,
+            STOCK_PROD_YN,
+            SIDE_PROD_YN,
+            SET_PROD_FG,
+            COST_UPRC,
+            LAST_COST_UPRC,
+            SPLY_UPRC,
+            SPLY_UPRC_USE_YN,
+            PO_PROD_FG,
+            PO_UNIT_FG,
+            PO_UNIT_QTY,
+            PO_UNIT_ALLOW_FG,
+            PO_MIN_QTY,
+            SAFE_STOCK_QTY,
+            STOCK_UNIT_FG,
+            USE_YN,
+            REMARK,
+            SALE_UPRC,
+            BARCD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            VENDR_CD,
+            START_STOCK_QTY
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{membrOrgnCd},
+            #{storeCd},
+            #{result},
+            #{prodCd},
+            #{prodNm},
+            '0000000', --HQ_BRAND_CD
+            #{prodClassCd},
+            '', --CORNR_CD
+            '', --ORGPLCE_CD
+            '', --SDATTR_CLASS_CD
+            '', --SDSEL_GRP_CD
+            'Y', --POINT_SAVE_YN
+            '', -- PROD_DC_FG
+             #{vatFg},
+            'N', --PROD_TIP_YN
+            '0', --PROD_PACK_AMT
+            '0', --PROD_DLVR_AMT
+            #{prodTypeFg},
+            #{saleProdYn},
+            #{stockProdYn},
+            'N', --SIDE_PROD_YN
+            '1', --SET_PROD_FG
+            #{costUprc},
+            '0', --LAST_COST_UPRC
+            #{splyUprc},
+            'Y', --SPLY_UPRC_USE_YN
+            #{poProdFg},
+            #{poUnitFg},
+            '1', --PO_UNIT_QTY
+            '', --PO_UNIT_ALLOW_FG
+            #{poMinQty},
+            #{safeStockQty},
+            '', --STOCK_UNIT_FG
+            'Y', --USE_YN
+            #{remark}, --REMARK
+            #{saleUprc},
+            #{barCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{vendrCd},
+            #{startStockQty}
+        )
+    </insert>
+
+    <!-- 상품분류코드 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <!--<select id="getCheckProdClassCd"  parameterType="ProdExcelUploadVO" resultType="String">-->
+        <!--/* ProdExcelUploadMapper.getCheckProdClassCd */-->
+        <!--<choose>-->
+            <!--&lt;!&ndash; 본사 &ndash;&gt;-->
+            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
+
+            <!--</when>-->
+            <!--&lt;!&ndash; 매장 &ndash;&gt;-->
+            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
+
+            <!--</when>-->
+        <!--</choose>-->
+    <!--</select>-->
+
+    <!-- 상품분류 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <!--<select id="getProdClassCd"  parameterType="ProdExcelUploadVO" resultType="Integer">-->
+        <!--/* ProdExcelUploadMapper.getProdClassCd */-->
+        <!--<choose>-->
+            <!--&lt;!&ndash; 본사 &ndash;&gt;-->
+            <!--<when test='orgnFg != null and orgnFg == "H"'>-->
+                <!--SELECT A.PROD_CLASS_CD-->
+                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/') PATH-->
+                <!--FROM-->
+                <!--(-->
+                    <!--SELECT P_PROD_CLASS_CD-->
+                    <!--,       PROD_CLASS_CD-->
+                    <!--,       PROD_CLASS_NM-->
+                    <!--FROM   TB_HQ_PRODUCT_CLASS-->
+                    <!--WHERE  1=1-->
+                    <!--AND    HQ_OFFICE_CD = #{membrOrgnCd}-->
+                <!--)  A-->
+                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
+            <!--</when>-->
+            <!--&lt;!&ndash; 매장 &ndash;&gt;-->
+            <!--<when test='orgnFg != null and orgnFg == "S"'>-->
+                <!--SELECT A.PROD_CLASS_CD-->
+                <!--,       SYS_CONNECT_BY_PATH (A.PROD_CLASS_CD,'/ ') PATH-->
+                <!--FROM-->
+                <!--(-->
+                    <!--SELECT P_PROD_CLASS_CD-->
+                    <!--,       PROD_CLASS_CD-->
+                    <!--,       PROD_CLASS_NM-->
+                    <!--FROM   TB_MS_PRODUCT_CLASS-->
+                    <!--WHERE  1=1-->
+                    <!--AND    STORE_CD = #{storeCd}-->
+                <!--)  A-->
+                <!--WHERE CONNECT_BY_ISLEAF = 1-->
+                <!--CONNECT BY NOCYCLE PRIOR P_PROD_CLASS_CD = PROD_CLASS_CD-->
+            <!--</when>-->
+        <!--</choose>-->
+    <!--</select>-->
+
+    <!-- 상품유형 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getProdTypeFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* ProdExcelUploadMapper.getProdTypeFg */
+        SELECT COUNT(*)
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '008'
+        AND NMCODE_NM = #{prodTypeFg}
+    </select>
+
+    <!-- 판매상품여부 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getSaleProdYn"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* ProdExcelUploadMapper.getSaleProdYn */
+        SELECT COUNT(*)
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '067'
+        AND NMCODE_NM = #{saleProdYn}
+    </select>
+
+    <!-- 발주상품구분 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getPoProdFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* ProdExcelUploadMapper.getPoProdFg */
+        SELECT COUNT(*)
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '092'
+        AND NMCODE_NM = #{poProdFg}
+    </select>
+
+    <!-- 과세여부 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getVatFg"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* ProdExcelUploadMapper.getVatFg */
+        SELECT COUNT(*)
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '039'
+        AND NMCODE_NM = #{vatFg}
+    </select>
+
+    <!-- 재고관리여부 조회 -->
+    <!--
+      TABLE    : TB_CM_NMCODE
+        COMMENTS : [공통]명칭코드
+    -->
+    <select id="getStockProdYn"  parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* ProdExcelUploadMapper.getStockProdYn */
+        SELECT COUNT(*)
+        FROM TB_CM_NMCODE
+        WHERE NMCODE_GRP_CD = '067'
+        AND NMCODE_NM = #{stockProdYn}
+    </select>
+
+</mapper>
