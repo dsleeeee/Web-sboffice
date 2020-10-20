@@ -154,15 +154,19 @@ public class SimpleProdServiceImpl implements SimpleProdService {
             }
 
 
+            // ProdVO
             ProdVO prodVO = new ProdVO();
             prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 prodVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
+
             // 자동채번인 경우 상품코드 조회
             if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {
+                // 자동채번 Start
                 String prodCd = prodMapper.getProdCd(prodVO);
+
                 // 순차적으로
                 if(simpleProdVO.getSeq() == 1) {
                     simpleProdVO.setProdCd(prodCd);

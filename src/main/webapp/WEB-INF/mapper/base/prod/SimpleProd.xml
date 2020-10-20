@@ -62,29 +62,31 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
                 COUNT(1) AS CNT
-                FROM (
-                SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
-                UNION ALL
+                FROM
                 (
-                SELECT
-                tmp.PROD_NM
-                FROM TB_MS_PRODUCT tmp,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tmp.STORE_CD = tms.STORE_CD
-                AND tmp.PROD_NM = #{prodNm}
-                )
+                    SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
+                    UNION ALL
+                    (
+                        SELECT
+                        tmp.PROD_NM
+                        FROM TB_MS_PRODUCT tmp,
+                        TB_MS_STORE tms
+                        WHERE 1=1
+                        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+                        AND tmp.STORE_CD = tms.STORE_CD
+                        AND tmp.PROD_NM = #{prodNm}
+                    )
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd != "00000"'>
                 SELECT
                 COUNT(1) AS CNT
-                FROM (
-                SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
-                UNION ALL
-                SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_NM = #{prodCd}
+                FROM
+                (
+                    SELECT PROD_NM FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND PROD_NM = #{prodNm}
+                    UNION ALL
+                    SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_NM = #{prodNm}
                 )
             </when>
             <!--  단독매장 -->
@@ -110,29 +112,31 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT
                 COUNT(1) AS CNT
-                FROM (
-                SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
-                UNION ALL
+                FROM
                 (
-                SELECT
-                tmpb.BARCD_CD
-                FROM TB_MS_PRODUCT_BARCD tmpb,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tmpb.STORE_CD = tms.STORE_CD
-                AND tmpb.BARCD_CD = #{barCd}
-                )
+                    SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
+                    UNION ALL
+                    (
+                        SELECT
+                        tmpb.BARCD_CD
+                        FROM TB_MS_PRODUCT_BARCD tmpb,
+                        TB_MS_STORE tms
+                        WHERE 1=1
+                        AND tms.HQ_OFFICE_CD = #{membrOrgnCd}
+                        AND tmpb.STORE_CD = tms.STORE_CD
+                        AND tmpb.BARCD_CD = #{barCd}
+                    )
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and membrOrgnCd != "00000"'>
                 SELECT
                 COUNT(1) AS CNT
-                FROM (
-                SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
-                UNION ALL
-                SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND BARCD_CD = #{barCd}
+                FROM
+                (
+                    SELECT BARCD_CD FROM TB_HQ_PRODUCT_BARCD WHERE HQ_OFFICE_CD = #{membrOrgnCd} AND BARCD_CD = #{barCd}
+                    UNION ALL
+                    SELECT BARCD_CD FROM TB_MS_PRODUCT_BARCD WHERE STORE_CD = #{storeCd} AND BARCD_CD = #{barCd}
                 )
             </when>
             <!--  단독매장 -->
